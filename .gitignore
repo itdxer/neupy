@@ -1,0 +1,21 @@
+# Python cache
+__pycache__
+*.pyc
+*.py~
+
+# Package build data
+dist/
+build/
+*.egg-info/
+
+# Other
+.tox/*
+.DS_Store
+.python-version
+examples/drafts
+
+# Site
+site/blog/*
+site/drafts/*
+site/source/docs/*
+site/build/*
