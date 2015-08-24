@@ -1,0 +1,202 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="viewport" content="width=device-width">
+        <title>neuralpy.algorithms.backprop.weights.weight_elimination module &mdash; NeuralPy</title>
+            <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../_static/tinkerer.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../_static/plugins.js"></script>
+        <script src="../_static/main.js"></script>
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+<style media="screen" type="text/css">
+    #fork_me { display: none; }
+    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
+    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
+
+    .docutils { width: 100%; }
+    .docutils td { padding: 10px; }
+    .section { word-wrap:break-word; }
+    .descname { font-weight: bold; }
+    .highlight-python + .figure { margin-top: 20px; }
+    .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+    .dataframe td { padding: 5px; }
+</style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../pages/home.html">NeuralPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
+          </header>
+      <nav role="navigation">
+            <ul><li class="main-nav">
+                  <a href="../pages/home.html">Home</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../page1.html">Tutorials</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../pages/documentation.html">Documentation</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../pages/installation.html">Installation</a>
+                </li>
+              </ul>
+          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+    <div class="section" id="module-neuralpy.algorithms.backprop.weights.weight_elimination">
+<span id="neuralpy-algorithms-backprop-weights-weight-elimination-module"></span><h1>neuralpy.algorithms.backprop.weights.weight_elimination module</h1>
+<dl class="class">
+<dt id="neuralpy.algorithms.backprop.weights.weight_elimination.WeightElimination">
+<em class="property">class </em><span class="descclassname">neuralpy.algorithms.backprop.weights.weight_elimination.</span><span class="descname">WeightElimination</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/weights/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralpy.algorithms.backprop.weights.base.html#neuralpy.algorithms.backprop.weights.base.WeightUpdateConfigurable" title="neuralpy.algorithms.backprop.weights.base.WeightUpdateConfigurable"><span class="xref py py-class docutils literal"><span class="pre">neuralpy.algorithms.backprop.weights.base.WeightUpdateConfigurable</span></span></a></p>
+<p>Weight elimination algorithm penalizes large weights and limits the
+freedom in network. The algorithm is able to solve one of the possible
+problems of network overfitting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>decay_rate</strong> : float</p>
+<blockquote>
+<div><p>Controls the effect of penalties on the update network weights.
+Defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
+</div></blockquote>
+<p><strong>zero_weight</strong> : float</p>
+<blockquote>
+<div><p>Second important parameter for weights penalization. Defaults
+to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><p class="first last"><strong>It works with any algorithm based on backpropagation.     Class can&#8217;t work without it.</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="neuralpy.algorithms.backprop.weights.weight_decay.html#neuralpy.algorithms.backprop.weights.weight_decay.WeightDecay" title="neuralpy.algorithms.backprop.weights.weight_decay.WeightDecay"><span class="xref py py-class docutils literal"><span class="pre">WeightDecay</span></span></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neuralpy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Backpropagation</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">optimizations</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">WeightElimination</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="neuralpy.algorithms.backprop.weights.weight_elimination.WeightElimination.decay_rate">
+<span class="descname">decay_rate</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/weights/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neuralpy.algorithms.backprop.weights.weight_elimination.WeightElimination.layer_weight_update">
+<span class="descname">layer_weight_update</span><span class="sig-paren">(</span><em>delta</em>, <em>layer_number</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/weights/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neuralpy.algorithms.backprop.weights.weight_elimination.WeightElimination.options">
+<span class="descname">options</span><em class="property"> = {'zero_weight': Option(class_name='WeightElimination', value=1), 'decay_rate': Option(class_name='WeightElimination', value=0.1)}</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/weights/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neuralpy.algorithms.backprop.weights.weight_elimination.WeightElimination.zero_weight">
+<span class="descname">zero_weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/weights/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+    <div class="postmeta">
+        
+        
+        
+        </div></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Posts</h1>
+    <ul><li>
+            <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
+        </li><li>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+        </li></ul>
+</div>
+</section><section><div class="widget">
+    <h1>Cheat sheet</h1>
+    <ul>
+        <li><a href="../docs/algorithms.html#algorithms">Algorithms</a></li>
+        <li><a href="../docs/algorithms.html#layers">Layers</a></li>
+        <li><a href="../docs/algorithms.html#error-functions">Error functions</a></li>
+    </ul>
+</div></section><section><div class="widget">
+    <h1>Installation</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neural-python</pre>
+        </div>
+    </div>
+    <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
+</div></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+    <a id="fork_me" href="http://github.com/itdxer/neuralpy">
+        <img alt="Fork me" src="../_static/img/github-fork-green.png" />
+    </a></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

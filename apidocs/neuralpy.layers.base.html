@@ -1,0 +1,234 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="viewport" content="width=device-width">
+        <title>neuralpy.layers.base module &mdash; NeuralPy</title>
+            <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../_static/tinkerer.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../_static/plugins.js"></script>
+        <script src="../_static/main.js"></script>
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+<style media="screen" type="text/css">
+    #fork_me { display: none; }
+    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
+    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
+
+    .docutils { width: 100%; }
+    .docutils td { padding: 10px; }
+    .section { word-wrap:break-word; }
+    .descname { font-weight: bold; }
+    .highlight-python + .figure { margin-top: 20px; }
+    .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+    .dataframe td { padding: 5px; }
+</style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../pages/home.html">NeuralPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
+          </header>
+      <nav role="navigation">
+            <ul><li class="main-nav">
+                  <a href="../pages/home.html">Home</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../page1.html">Tutorials</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../pages/documentation.html">Documentation</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../pages/installation.html">Installation</a>
+                </li>
+              </ul>
+          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+    <div class="section" id="module-neuralpy.layers.base">
+<span id="neuralpy-layers-base-module"></span><h1>neuralpy.layers.base module</h1>
+<dl class="class">
+<dt id="neuralpy.layers.base.BaseLayer">
+<em class="property">class </em><span class="descclassname">neuralpy.layers.base.</span><span class="descname">BaseLayer</span><span class="sig-paren">(</span><em>input_size</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralpy.network.connections.html#neuralpy.network.connections.ChainConnection" title="neuralpy.network.connections.ChainConnection"><span class="xref py py-class docutils literal"><span class="pre">neuralpy.network.connections.ChainConnection</span></span></a>, <span class="xref py py-class docutils literal"><span class="pre">neuralpy.core.config.BaseConfigurable</span></span></p>
+<p>Base class for all layers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_size</strong> : int</p>
+<blockquote>
+<div><p>Layer input size.</p>
+</div></blockquote>
+<p><strong>weight</strong> : 2D array-like or None</p>
+<blockquote>
+<div><p>Define your layer weights. <cite>None</cite> means that your weights will be
+generate randomly dependence on property <cite>init_method</cite>.
+<cite>None</cite> by default.</p>
+</div></blockquote>
+<p><strong>init_method</strong> : {&#8216;gauss&#8217;, &#8216;bounded&#8217;, &#8216;ortho&#8217;}</p>
+<blockquote>
+<div><p>Weight initialization method.
+<cite>gauss</cite> will generate random weights dependence on Standard
+Normal Distribution.
+<cite>bounded</cite> generate uniform random weghts in initialized bounds.
+<cite>ortho</cite> generate random orthogonal matrix.</p>
+</div></blockquote>
+<p><strong>random_weight_bound</strong> : tuple of two int</p>
+<blockquote class="last">
+<div><p>Available only for <cite>init_method</cite> eqaul to <cite>bounded</cite>, defaults
+to <cite>(0, 1)</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neuralpy.layers.base.BaseLayer.init_method">
+<span class="descname">init_method</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neuralpy.layers.base.BaseLayer.initialize">
+<span class="descname">initialize</span><span class="sig-paren">(</span><em>with_bias=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neuralpy.layers.base.BaseLayer.input_size">
+<span class="descname">input_size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neuralpy.layers.base.BaseLayer.options">
+<span class="descname">options</span><em class="property"> = {'init_method': Option(class_name='BaseLayer', value=gauss), 'input_size': Option(class_name='BaseLayer', value=None), 'weight': Option(class_name='BaseLayer', value=None), 'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1])}</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neuralpy.layers.base.BaseLayer.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neuralpy.layers.base.BaseLayer.preformat_input">
+<span class="descname">preformat_input</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neuralpy.layers.base.BaseLayer.random_weight_bound">
+<span class="descname">random_weight_bound</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neuralpy.layers.base.BaseLayer.relate_to">
+<span class="descname">relate_to</span><span class="sig-paren">(</span><em>right_layer</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neuralpy.layers.base.BaseLayer.shared_docs">
+<span class="descname">shared_docs</span><em class="property"> = {'layer_params': &quot;input_size : int\n        Layer input size.\n    weight : 2D array-like or None\n        Define your layer weights. `None` means that your weights will be\n        generate randomly dependence on property `init_method`.\n        `None` by default.\n    init_method : {'gauss', 'bounded', 'ortho'}\n        Weight initialization method.\n        `gauss` will generate random weights dependence on Standard\n        Normal Distribution.\n        `bounded` generate uniform random weghts in initialized bounds.\n        `ortho` generate random orthogonal matrix.\n    random_weight_bound : tuple of two int\n        Available only for `init_method` eqaul to `bounded`, defaults\n        to `(0, 1)`.\n    &quot;}</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neuralpy.layers.base.BaseLayer.summator">
+<span class="descname">summator</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neuralpy.layers.base.BaseLayer.weight">
+<span class="descname">weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neuralpy.layers.base.BaseLayer.weight_without_bias">
+<span class="descname">weight_without_bias</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+    <div class="postmeta">
+        
+        
+        
+        </div></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Posts</h1>
+    <ul><li>
+            <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
+        </li><li>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+        </li></ul>
+</div>
+</section><section><div class="widget">
+    <h1>Cheat sheet</h1>
+    <ul>
+        <li><a href="../docs/algorithms.html#algorithms">Algorithms</a></li>
+        <li><a href="../docs/algorithms.html#layers">Layers</a></li>
+        <li><a href="../docs/algorithms.html#error-functions">Error functions</a></li>
+    </ul>
+</div></section><section><div class="widget">
+    <h1>Installation</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neural-python</pre>
+        </div>
+    </div>
+    <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
+</div></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+    <a id="fork_me" href="http://github.com/itdxer/neuralpy">
+        <img alt="Fork me" src="../_static/img/github-fork-green.png" />
+    </a></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>
