@@ -1,0 +1,1 @@
+recursive-include neuralpy/commands/new_project_template *

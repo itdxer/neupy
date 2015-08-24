@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+data/*
+
+# iPython notebook
+.ipynb_checkpoints
+notebook/drafts/*

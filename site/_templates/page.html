@@ -1,0 +1,27 @@
+{%- extends "!page.html" -%}
+
+{%- set script_files = script_files + ["_static/js/google_analytics.js", "_static/js/script.js", "_static/js/copybutton.js"] -%}
+
+{%- block extrahead -%}
+    {{ super() }}
+<style media="screen" type="text/css">
+    #fork_me { display: none; }
+    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
+    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
+
+    .docutils { width: 100%; }
+    .docutils td { padding: 10px; }
+    .section { word-wrap:break-word; }
+    .descname { font-weight: bold; }
+    .highlight-python + .figure { margin-top: 20px; }
+    .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+    .dataframe td { padding: 5px; }
+</style>
+{%- endblock -%}
+
+{%- block footer -%}
+    {{ super() }}
+    <a id="fork_me" href="http://github.com/itdxer/neuralpy">
+        <img alt="Fork me" src="{{ pathto('_static/img/github-fork-green.png', 1) }}" />
+    </a>
+{%- endblock -%}
