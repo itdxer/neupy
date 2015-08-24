@@ -20,7 +20,7 @@ def get_requirements():
 
 setup(
     # Info
-    name='neuralpy',
+    name='neural-python',
     version=neuralpy.__version__,
     description=neuralpy.__doc__,
 
