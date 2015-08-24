@@ -11,9 +11,10 @@ $ pip install neural-python
 
 ## Links
 
-* Documentation
-* Issues
-* Tutorials
+* [Documentation](http://neuralpy.com)
+* [Issues](https://github.com/itdxer/neuralpy/issues)
+* [Tutorials](http://neuralpy.com/archive.html)
+* [Available algorithms](http://neuralpy.com/docs/algorithms.html)
 
 ## Dependence
 
