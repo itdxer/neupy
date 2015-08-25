@@ -4,6 +4,8 @@ NeuralPy
 NeuralPy is a Python library for Artificial Neural Networks.
 You can run and test different Neural Network algorithms.
 
+|Travis|_
+
 .. |Travis| image:: https://api.travis-ci.org/itdxer/neuralpy.png?branch=master
 .. _Travis: https://travis-ci.org/itdxer/neuralpy
 
