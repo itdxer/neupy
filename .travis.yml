@@ -12,7 +12,7 @@ before_install:
   - sudo apt-get install -qq libatlas-dev libatlas-base-dev gfortran
 install:
   - pip install --no-deps scikit-learn
-  - pip install --verbose -r requirements/test.txt
+  - pip install -r requirements/test.txt
 script: tox
 addons:
   apt:
