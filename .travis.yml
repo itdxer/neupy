@@ -8,3 +8,9 @@ before_install:
   - sudo apt-get install libatlas-base-dev gfortran
 install: "pip install -r requirements/test.txt"
 script: tox
+addons:
+  apt:
+    packages:
+      - libatlas3gf-base
+      - libatlas-dev
+      - python-scipy
