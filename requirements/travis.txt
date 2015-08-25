@@ -1,8 +1,6 @@
 scikit-learn>=0.15.2
 pandas==0.16.0
 
-matplotlib>=1.4.0
-
 # Test
 tox==1.8.1
 dill==0.2.3

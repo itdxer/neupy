@@ -12,10 +12,13 @@ install:
   - sudo apt-get install -qq libatlas-dev libatlas-base-dev gfortran
 
   # Some issue for scikit-learn dependencies
-  - pip install --no-deps scikit-learn
-  - sudo apt-get install python-numpy python-scipy python-matplotlib
+  - pip install --no-deps scikit-learn --cache-dir $HOME/.pip-cache
+  - pip install --no-deps matplotlib>=1.4.0 --cache-dir $HOME/.pip-cache
+  - pip install --no-deps scipy>=0.14.0 --cache-dir $HOME/.pip-cache
 
-  - pip install -r requirements/travis.txt
+  - sudo apt-get install python-numpy python-scipy
+
+  - pip install -r requirements/travis.txt --cache-dir $HOME/.pip-cache
 script:
   - nosetests -v tests
   - flake8 neuralpy/ --exclude=neuralpy/commands/new_project_template/,__init__.py
@@ -25,3 +28,6 @@ addons:
       - libatlas3gf-base
       - libatlas-dev
       - python-scipy
+cache:
+  directories:
+    - $HOME/.pip-cache/
