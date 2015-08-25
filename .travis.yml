@@ -10,12 +10,23 @@ before_install:
 
   - pip install --install-option="--no-cython-compile" Cython
   - sudo apt-get install -qq libatlas-dev libatlas-base-dev gfortran
+
+  - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+  - chmod +x miniconda.sh
+  - ./miniconda.sh -b
+  - export PATH=/home/travis/miniconda/bin:$PATH
+  - conda update --yes conda
+  # The next couple lines fix a crash with multiprocessing on Travis and are not specific to using Miniconda
+  - sudo rm -rf /dev/shm
+  - sudo ln -s /run/shm /dev/shm
 install:
   # Some issue for scikit-learn dependencies
   - pip install --no-deps scikit-learn
-  - travis_wait pip install scipy>=0.14.0
+  - conda install --yes python=$TRAVIS_PYTHON_VERSION scipy>=0.14.0 numpy>=1.9.0 matplotlib>=1.4.0
   - pip install -r requirements/test.txt
-script: tox
+script:
+  - nosetests -v tests
+  - flake8 neuralpy/ --exclude=neuralpy/commands/new_project_template/,__init__.py
 addons:
   apt:
     packages:
