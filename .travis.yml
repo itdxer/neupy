@@ -11,6 +11,7 @@ before_install:
   - pip install --install-option="--no-cython-compile" Cython
   - sudo apt-get install -qq libatlas-dev libatlas-base-dev gfortran
 install:
+  # Some issue for scikit-learn dependencies
   - pip install --no-deps scikit-learn
   - pip install -r requirements/test.txt
 script: tox
