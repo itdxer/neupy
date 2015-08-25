@@ -1,37 +1,44 @@
-# NeuralPy
+NeuralPy
+========
 
 NeuralPy is a Python library for Artificial Neural Networks.
 You can run and test different Neural Network algorithms.
 
-![](https://travis-ci.org/itdxer/neuralpy.svg?branch=master)
+.. |Travis| image:: https://api.travis-ci.org/itdxer/neuralpy.png?branch=master
+.. _Travis: https://travis-ci.org/itdxer/neuralpy
 
-## Installation
+Installation
+------------
 
-```
-$ pip install neural-python
-```
+.. code-block:: bash
 
-## Links
+    $ pip install neural-python
 
-* [Documentation](http://neuralpy.com)
-* [Issues](https://github.com/itdxer/neuralpy/issues)
-* [Tutorials](http://neuralpy.com/archive.html)
-* [Available algorithms](http://neuralpy.com/docs/algorithms.html)
+Links
+-----
 
-## Dependence
+* `Documentation <http://neuralpy.com>`_
+* `Issues <https://github.com/itdxer/neuralpy/issues>`_
+* `Tutorials <http://neuralpy.com/archive.html>`_
+* `Available algorithms <http://neuralpy.com/docs/algorithms.html>`_
+
+Dependence
+----------
 
 * Python 2.7, 3.2, 3.3, 3.4
 * NumPy >= 1.9.0
 * SciPy >= 0.14.0
 * Matplotlib >= 1.4.0
 
-## Next steps
+Next steps
+----------
 
 * Bug fixing and version stabilization
 * Speeding up algorithms
 * Adding more algorithms
 
-## Library support
+Library support
+---------------
 
 * Radial Basis Functions Networks (RBFN)
 * Backpropagation and different optimization for it
@@ -42,7 +49,8 @@ $ pip install neural-python
 * Weight control algorithms for backpropagation
 * Basic Linear Networks
 
-## Algorithms
+Algorithms
+----------
 
 * Backpropagation
 
@@ -105,9 +113,10 @@ $ pip install neural-python
   * Instar
   * Hebb
 
-## Tests:
+Tests
+-----
 
-```
-$ pip install tox
-$ tox
-```
+.. code-block:: bash
+
+    $ pip install tox
+    $ tox

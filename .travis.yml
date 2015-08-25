@@ -11,7 +11,8 @@ before_install:
   - pip install --install-option="--no-cython-compile" Cython
   - sudo apt-get install -qq libatlas-dev libatlas-base-dev gfortran
 install:
-  - travis_wait pip install -r requirements/test.txt
+  - pip install --no-deps scikit-learn
+  - pip install --verbose -r requirements/test.txt
 script: tox
 addons:
   apt:
