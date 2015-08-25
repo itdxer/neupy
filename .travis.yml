@@ -6,7 +6,7 @@ python:
   - "3.4"
 before_install:
   - sudo apt-get install libatlas-base-dev gfortran
-install: "pip install -r requirements/test.txt"
+install: "travis_wait pip install -r requirements/test.txt"
 script: tox
 addons:
   apt:
