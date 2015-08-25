@@ -13,6 +13,7 @@ before_install:
 install:
   # Some issue for scikit-learn dependencies
   - pip install --no-deps scikit-learn
+  - travis_wait pip install scipy>=0.14.0
   - pip install -r requirements/test.txt
 script: tox
 addons:
