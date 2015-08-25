@@ -15,7 +15,7 @@ install:
   - pip install --no-deps scikit-learn
   - sudo apt-get install python-numpy python-scipy python-matplotlib
 
-  - pip install -r requirements/test.txt
+  - pip install -r requirements/travis.txt
 script:
   - nosetests -v tests
   - flake8 neuralpy/ --exclude=neuralpy/commands/new_project_template/,__init__.py
