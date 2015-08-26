@@ -3,7 +3,7 @@ from functools import partial
 import numpy as np
 from sklearn import datasets, cross_validation, preprocessing
 
-from neuralpy import algorithms
+from neuralpy import algorithms, layers
 
 from utils import compare_networks
 from base import BaseTestCase
@@ -27,14 +27,14 @@ class QuickPropTestCase(BaseTestCase):
             step=0.1,
             upper_bound=1,
             use_raw_predict_at_error=False,
-            shuffle_data=True,
+            shuffle_data=False,
             verbose=False
         )
         qp.train(x_train, y_train, epochs=100)
 
         result = qp.predict(x_test)
         error = qp.error(result, y_test)
-        self.assertAlmostEqual(0.0026, error, places=4)
+        self.assertAlmostEqual(0.0049, error, places=4)
 
     def test_compare_quickprop_and_bp(self):
         x_train, _, y_train, _ = self.data
@@ -48,7 +48,7 @@ class QuickPropTestCase(BaseTestCase):
             connection=self.connection,
             step=0.1,
             use_raw_predict_at_error=False,
-            shuffle_data=True,
+            shuffle_data=False,
             # Test configurations
             epochs=100,
             verbose=False,

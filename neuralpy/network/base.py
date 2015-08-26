@@ -9,10 +9,11 @@ from neuralpy.core.base import BaseSkeleton
 from neuralpy.core.config import Configurable
 from neuralpy.core.properties import (NonNegativeIntProperty, FuncProperty,
                                       NumberProperty, BoolProperty)
-from neuralpy.layers import BaseLayer
-from neuralpy.network.utils import iter_until_converge, shuffle
-from neuralpy.network.connections import FAKE_CONNECTION, LayerConnection
+from neuralpy.layers import BaseLayer, OutputLayer
 from neuralpy.functions import normilize_error_output, mse
+from .utils import iter_until_converge, shuffle
+from .connections import (FAKE_CONNECTION, LayerConnection,
+                          NetworkConnectionError)
 
 
 __all__ = ('BaseNetwork',)
@@ -36,6 +37,44 @@ def train_epoch_end(network):
 
 def train_end(network):
     network.logs.log("TRAIN", "End train")
+
+
+def clean_layers(connection):
+    """ Clean layers connections and format transform them into one format.
+    Also this function validate layers connections.
+
+    Parameters
+    ----------
+    connection : list, tuple or object
+        Layers connetion in different formats.
+
+    Returns
+    -------
+    object
+        Cleaned layers connection.
+    """
+    if connection == FAKE_CONNECTION:
+        return connection
+
+    if isinstance(connection, tuple):
+        connection = list(connection)
+
+    islist = isinstance(connection, list)
+
+    if islist and isinstance(connection[0], BaseLayer):
+        chain_connection = connection.pop()
+        for layer in reversed(connection):
+            chain_connection = LayerConnection(layer, chain_connection)
+        connection = chain_connection
+
+    elif islist and isinstance(connection[0], LayerConnection):
+        pass
+
+    if not isinstance(connection.output_layer, OutputLayer):
+        raise NetworkConnectionError("Final layer must be OutputLayer class "
+                                     "instance.")
+
+    return connection
 
 
 class NetworkSignals(Configurable):
@@ -70,18 +109,7 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
     shuffle_data = BoolProperty(default=False)
 
     def __init__(self, connection, **options):
-        islist = isinstance(connection, (list, tuple))
-
-        if islist and isinstance(connection[0], BaseLayer):
-            chain_connection = connection.pop()
-            for layer in reversed(connection):
-                chain_connection = LayerConnection(layer, chain_connection)
-            connection = chain_connection
-
-        elif islist and isinstance(connection[0], LayerConnection):
-            pass
-
-        self.connection = connection
+        self.connection = clean_layers(connection)
 
         self.errors_in = []
         self.errors_out = []

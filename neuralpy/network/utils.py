@@ -1,7 +1,7 @@
 import numpy as np
 
 
-__all__ = ('add_bias_column', 'iter_until_converge')
+__all__ = ('add_bias_column', 'iter_until_converge', 'shuffle')
 
 
 def add_bias_column(data):

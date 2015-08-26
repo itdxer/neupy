@@ -1,6 +1,6 @@
 from numpy import zeros, round as np_round, where
 
-from neuralpy.network.connections import ConnectionError
+from neuralpy.network.connections import NetworkConnectionError
 from neuralpy.layers.base import BaseLayer
 from neuralpy.core.properties import (NumberBoundProperty,
                                       NonNegativeIntProperty,
@@ -23,7 +23,7 @@ class OutputLayer(BaseLayer):
         return
 
     def relate_to(self, right_layer):
-        raise ConnectionError("Can't connect from output layer")
+        raise NetworkConnectionError("Can't connect from output layer")
 
     def format_output(self, value):
         return value

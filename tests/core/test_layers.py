@@ -5,7 +5,7 @@ from scipy import stats
 import numpy as np
 
 from neuralpy.algorithms import Backpropagation
-from neuralpy.network.connections import ConnectionError
+from neuralpy.network.connections import NetworkConnectionError
 from neuralpy.layers import *
 
 from base import BaseTestCase
@@ -94,7 +94,7 @@ class LayersTestCase(BaseTestCase):
     def test_output_layers(self):
         layer = OutputLayer(1)
 
-        with self.assertRaises(ConnectionError):
+        with self.assertRaises(NetworkConnectionError):
             layer.relate_to(OutputLayer(1))
 
         self.assertEqual(layer.format_output(1), 1)
@@ -151,3 +151,12 @@ class LayersTestCase(BaseTestCase):
         input_layer.initialize()
         weight = input_layer.weight
         self.assertEqualArrays(np.eye(10), weight.dot(weight.T).round(10))
+
+    def test_without_output_layer(self):
+        with self.assertRaises(NetworkConnectionError):
+            network = Backpropagation(
+                connection=(
+                    layers.SigmoidLayer(10),
+                    layers.SigmoidLayer(1),
+                )
+            )
