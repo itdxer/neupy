@@ -1,6 +1,8 @@
+from __future__ import division
+
 import copy
 
-import numpy as np
+from numpy import where, sign, abs as np_abs
 
 from neuralpy.core.properties import NonNegativeNumberProperty
 from .backpropagation import Backpropagation
@@ -49,7 +51,7 @@ class Quickprop(Backpropagation):
 
     def layer_weight_update(self, delta, layer_number):
         if not hasattr(self, 'prev_gradients'):
-            weight_delta = self.gradients[layer_number]
+            weight_delta = delta
         else:
             gradient = self.gradients[layer_number]
             prev_gradient = self.prev_gradients[layer_number]
@@ -58,8 +60,9 @@ class Quickprop(Backpropagation):
                 gradient / (prev_gradient - gradient)
             )
             upper_bound = self.upper_bound
-            weight_delta = np.where(
-                weight_delta < upper_bound, weight_delta, upper_bound
+            weight_delta = where(
+                np_abs(weight_delta) < upper_bound, weight_delta,
+                sign(weight_delta) * upper_bound
             )
 
         self.weight_deltas.append(weight_delta)
