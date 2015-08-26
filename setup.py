@@ -22,7 +22,8 @@ setup(
     # Info
     name='neural-python',
     version=neuralpy.__version__,
-    description=neuralpy.__doc__,
+    license='MIT',
+    url='http://neuralpy.com',
 
     # Author
     author='Yurii Shevhcuk',
@@ -38,4 +39,20 @@ setup(
     entry_points={
         'console_scripts': ['neuralpy = neuralpy.commands.main:main'],
     },
+
+    # Other
+    setup_cfg=True,
+    classifiers=[
+        'Intended Audience :: Developers',
+        'Natural Language :: English',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+    ],
 )
