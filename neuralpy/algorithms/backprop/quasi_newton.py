@@ -16,17 +16,18 @@ def bfgs(quasi_update, weight_delta, gradient_delta):
     gradient_delta_t = gradient_delta.T
     weight_delta_t = weight_delta.T
 
-    coef = (1. / weight_delta_t * gradient_delta).item(0)
+    coef = (1. / gradient_delta_t.dot(weight_delta)).item(0)
 
-    param1 = ident_matrix - (weight_delta * gradient_delta_t * coef)
-    param2 = ident_matrix - (weight_delta_t * gradient_delta * coef)
-    param3 = (gradient_delta * gradient_delta_t * coef)
+    param1 = ident_matrix - weight_delta.dot(gradient_delta_t).dot(coef)
+    param2 = ident_matrix - gradient_delta.dot(weight_delta_t).dot(coef)
+    param3 = weight_delta.dot(weight_delta_t).dot(coef)
 
-    return param1.T * quasi_update * param2 + param3
+    return param1.T.dot(quasi_update).dot(param2) + param3
 
 
 def dfp(quasi_update, weight_delta, gradient_delta):
     gradient_delta_t = gradient_delta.T
+    quasi_dot_gradient = quasi_update * gradient_delta
 
     param1 = (
         weight_delta * weight_delta.T
@@ -34,9 +35,9 @@ def dfp(quasi_update, weight_delta, gradient_delta):
         gradient_delta_t * weight_delta
     )
     param2 = (
-        quasi_update * gradient_delta * gradient_delta_t * quasi_update
+        quasi_dot_gradient * gradient_delta_t * quasi_update
     ) / (
-        gradient_delta_t * quasi_update * gradient_delta
+        gradient_delta_t * quasi_dot_gradient
     )
 
     return quasi_update + param1 - param2
@@ -56,8 +57,9 @@ def psb(quasi_update, weight_delta, gradient_delta):
 
 
 def sr1(quasi_update, weight_delta, gradient_delta):
-    param = weight_delta - quasi_update * gradient_delta
-    return quasi_update + (param * param.T) / (param.T * gradient_delta)
+    param = weight_delta - quasi_update.dot(gradient_delta)
+    param_t = param.T
+    return quasi_update + (param * param_t) / (param_t.dot(gradient_delta))
 
 
 class QuasiNewton(Backpropagation):

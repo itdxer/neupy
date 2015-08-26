@@ -1,47 +1,34 @@
 import numpy as np
 
-from neuralpy import algorithms
-from neuralpy.functions import cross_entropy_error
-from neuralpy.layers import *
+from sklearn import datasets, metrics
+from sklearn.cross_validation import StratifiedShuffleSplit
+from neuralpy import algorithms, layers
 
 from data import simple_input_train, simple_target_train
 from base import BaseTestCase
 
 
 class QuasiNewtonTestCase(BaseTestCase):
-    def setUp(self):
-        super(QuasiNewtonTestCase, self).setUp()
-
-        weight1 = np.array([
-            [-0.3262846, -0.3899363, -1.31438701, -0.43736622,  0.1234716],
-            [-0.31548075, -0.66254391,  0.78722273, -0.51545504, -0.51205823],
-            [-0.38036544,  0.34930878,  1.20590571,  0.55030264, -0.94516753],
-            [-2.05032326, -0.10582341, -0.33530722,  0.74043659, -0.74645546]
-        ])
-        weight2 = np.array([
-            [-0.25706768,  0.2581464],
-            [0.43860057, -0.16620158],
-            [-0.87493652,  0.58832669],
-            [-1.17300652, -0.21716063],
-            [0.66715383, -1.46908589],
-            [-1.23662587, -0.85808783]
-        ])
-
-        input_layer = SigmoidLayer(3, weight=weight1)
-        hidden_layer = SigmoidLayer(5, weight=weight2)
-
-        self.connection = input_layer > hidden_layer > OutputLayer(2)
-
     def test_quasi_newton(self):
-        nw = algorithms.QuasiNewton(
-            self.connection,
-            step=0.5,
-            error=cross_entropy_error,
+        X, y = datasets.make_classification(n_samples=1000, n_features=10)
+        shuffle_split = StratifiedShuffleSplit(y, 1, train_size=0.6)
+        # import pdb;pdb.set_trace()
+        train_index, test_index = next(shuffle_split.__iter__())
+        x_train, x_test = X[train_index], X[test_index]
+        y_train, y_test = y[train_index], y[test_index]
+
+        qnnet = algorithms.QuasiNewton(
+            connection=[
+                layers.SigmoidLayer(10),
+                layers.SigmoidLayer(100),
+                layers.OutputLayer(1)
+            ],
+            step=0.3,
             use_raw_predict_at_error=False,
-            shuffle_data=False,
-            update_function='dfp'
+            shuffle_data=True,
+            update_function='dfp',
         )
-        nw.train(simple_input_train, simple_target_train, epochs=150)
-        result = np.round(nw.predict(simple_input_train), 3)
-        norm = np.linalg.norm(result - simple_target_train)
-        self.assertGreater(1e-1, norm)
+        qnnet.train(x_train, y_train, epochs=100)
+        result = qnnet.predict(x_test).round()
+        roc_curve_score = metrics.roc_auc_score(result, y_test)
+        self.assertAlmostEqual(0.92, roc_curve_score, places=2)
