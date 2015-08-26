@@ -1,4 +1,3 @@
-from neuralpy.layers import SigmoidLayer, OutputLayer
 from neuralpy.algorithms import Backpropagation
 
 from base import BaseTestCase
@@ -23,9 +22,3 @@ class BasicNetworkTestCase(BaseTestCase):
 
         with self.assertRaises(TypeError):
             network.shuffle_data = 1
-
-    def test_list_of_layers(self):
-        bpnet = Backpropagation([SigmoidLayer(2), SigmoidLayer(3),
-                                 SigmoidLayer(1), OutputLayer(10)])
-        self.assertEqual([layer.input_size for layer in bpnet.layers],
-                         [2, 3, 1, 10])

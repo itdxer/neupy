@@ -4,8 +4,7 @@ from six import with_metaclass
 
 
 __all__ = ('LayerConnection', 'ReccurentConnection', 'Connection',
-           'ChainConnection', 'FAKE_CONNECTION', 'NetworkConnectionError',
-           'clean_layers')
+           'ChainConnection', 'FAKE_CONNECTION', 'NetworkConnectionError')
 
 
 FAKE_CONNECTION = [None]
@@ -92,13 +91,13 @@ class LayerConnection(Connection):
     @property
     def input_layer(self):
         if isinstance(self.left, Connection):
-            return self.left.left_layer
+            return self.left.input_layer
         return self.left
 
     @property
     def output_layer(self):
         if isinstance(self.right, Connection):
-            return self.right.right_layer
+            return self.right.output_layer
         return self.right
 
 
