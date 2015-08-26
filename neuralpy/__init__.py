@@ -1,7 +1,5 @@
 """
-# NeuralPy
-
-Artificial Neural Network library implemented in Python.
+NeuralPy is the Artificial Neural Network library implemented in Python.
 """
 
 

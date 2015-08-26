@@ -24,6 +24,7 @@ setup(
     version=neuralpy.__version__,
     license='MIT',
     url='http://neuralpy.com',
+    summary=neuralpy.__doc__,
 
     # Author
     author='Yurii Shevhcuk',
@@ -34,6 +35,7 @@ setup(
     install_requires=get_requirements(),
     include_package_data=True,
     zip_safe=False,
+    keywords=['neural networks'],
 
     # Command
     entry_points={

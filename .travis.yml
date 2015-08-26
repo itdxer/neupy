@@ -4,30 +4,24 @@ python:
   - "3.2"
   - "3.3"
   - "3.4"
-before_install:
-  - pip install --upgrade pip
-  - pip install --upgrade pip setuptools
 install:
-  - pip install --install-option="--no-cython-compile" Cython
-  - sudo apt-get install -qq libatlas-dev libatlas-base-dev gfortran
+  - sudo apt-get update
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    else
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
 
-  # Some issue for scikit-learn dependencies
-  - pip install --no-deps scikit-learn --cache-dir $HOME/.pip-cache
-  - pip install --no-deps matplotlib>=1.4.0 --cache-dir $HOME/.pip-cache
-  - pip install --no-deps scipy>=0.14.0 --cache-dir $HOME/.pip-cache
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
 
-  - sudo apt-get install python-numpy python-scipy
-
-  - pip install -r requirements/travis.txt --cache-dir $HOME/.pip-cache
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION --file requirements/travis.txt
+  - source activate test-environment
+  - python setup.py install
 script:
   - nosetests -v tests
   - flake8 neuralpy/ --exclude=neuralpy/commands/new_project_template/,__init__.py
-addons:
-  apt:
-    packages:
-      - libatlas3gf-base
-      - libatlas-dev
-      - python-scipy
-cache:
-  directories:
-    - $HOME/.pip-cache/
