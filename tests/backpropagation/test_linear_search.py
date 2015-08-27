@@ -12,11 +12,11 @@ class LinearSearchTestCase(BaseTestCase):
     def test_linear_search(self):
         methods = [
             ('golden', 0.20976),
-            ('brent', 0.20976),
+            ('brent', 0.21190),
         ]
 
         for method_name, valid_error in methods:
-            np.random.seed(0)
+            np.random.seed(self.random_seed)
 
             dataset = datasets.load_boston()
             data, target = dataset.data, dataset.target
@@ -36,7 +36,7 @@ class LinearSearchTestCase(BaseTestCase):
                     layers.SigmoidLayer(50),
                     layers.OutputLayer(1),
                 ],
-                method=method_name,
+                search_method=method_name,
                 show_epoch=25,
                 optimizations=[algorithms.LinearSearch],
             )

@@ -26,7 +26,7 @@ cgnet = algorithms.ConjugateGradient(
         layers.SigmoidLayer(50),
         layers.OutputLayer(1),
     ],
-    method='golden',
+    search_method='golden',
     show_epoch=25,
     optimizations=[algorithms.LinearSearch],
 )

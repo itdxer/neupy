@@ -106,7 +106,7 @@ class ConjugateGradient(Backpropagation):
     ...         layers.SigmoidLayer(50),
     ...         layers.OutputLayer(1),
     ...     ],
-    ...     method='golden',
+    ...     search_method='golden',
     ...     update_function='fletcher_reeves',
     ...     optimizations=[algorithms.LinearSearch],
     ...     verbose=False

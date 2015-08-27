@@ -17,7 +17,7 @@ class LinearSearch(SingleStep):
     tol : float
         Tolerance for termination, default to ``0.3``. Can be any number
         greater that zero.
-    method : 'gloden', 'brent'
+    search_method : 'gloden', 'brent'
         Linear search method. Can be ``golden`` for golden search or ``brent``
         for Brent's search, default to ``golden``.
 
@@ -57,7 +57,7 @@ class LinearSearch(SingleStep):
     ...         layers.SigmoidLayer(50),
     ...         layers.OutputLayer(1),
     ...     ],
-    ...     method='golden',
+    ...     search_method='golden',
     ...     optimizations=[algorithms.LinearSearch],
     ...     verbose=False
     ... )
@@ -77,7 +77,8 @@ class LinearSearch(SingleStep):
     :network:`ConjugateGradient`
     """
     tol = NonNegativeNumberProperty(default=0.3)
-    method = ChoiceProperty(default='golden', choices=['golden', 'brent'])
+    search_method = ChoiceProperty(choices=['golden', 'brent'],
+                                   default='golden')
 
     def set_weights(self, new_weights):
         for layer, new_weight in zip(self.train_layers, new_weights):
@@ -94,9 +95,11 @@ class LinearSearch(SingleStep):
 
     def update_weights(self, weight_deltas):
         weights = [layer.weight for layer in self.train_layers]
+
         res = minimize_scalar(
-            self.check_updates, args=(weights, weight_deltas), tol=self.tol,
-            method='golden', options={'xtol': self.tol}
+            self.check_updates, args=(weights, weight_deltas),
+            tol=self.tol, method=self.search_method,
+            options={'xtol': self.tol}
         )
 
         self.set_weights(weights)

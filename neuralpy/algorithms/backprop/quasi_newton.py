@@ -110,9 +110,8 @@ class QuasiNewton(Backpropagation):
     )
 
     def learn(self, output_train, target_train):
-        weight_deltas = super(QuasiNewton, self).learn(
-            output_train, target_train
-        )
+        weight_deltas = super(QuasiNewton, self).learn(output_train,
+                                                       target_train)
         train_layers = self.train_layers
 
         weight = matrix_list_in_one_vector(
@@ -127,9 +126,8 @@ class QuasiNewton(Backpropagation):
             weight_delta = asmatrix(weight - self.prev_weight).T
             gradient_delta = asmatrix(gradient - self.prev_gradient).T
 
-            quasi_update = self.update_function(
-                self.prev_quasi_update, weight_delta, gradient_delta
-            )
+            quasi_update = self.update_function(self.prev_quasi_update,
+                                                weight_delta, gradient_delta)
         else:
             update_vector_size = sum(
                 mul(*layer.size) for layer in train_layers
