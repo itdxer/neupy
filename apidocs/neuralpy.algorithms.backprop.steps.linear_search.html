@@ -102,7 +102,7 @@ iteration it will chose one which was better.</p>
 <div><p>Tolerance for termination, default to <span class="docutils literal"><span class="pre">0.3</span></span>. Can be any number
 greater that zero.</p>
 </div></blockquote>
-<p><strong>method</strong> : &#8216;gloden&#8217;, &#8216;brent&#8217;</p>
+<p><strong>search_method</strong> : &#8216;gloden&#8217;, &#8216;brent&#8217;</p>
 <blockquote>
 <div><p>Linear search method. Can be <span class="docutils literal"><span class="pre">golden</span></span> for golden search or <span class="docutils literal"><span class="pre">brent</span></span>
 for Brent&#8217;s search, default to <span class="docutils literal"><span class="pre">golden</span></span>.</p>
@@ -145,7 +145,7 @@ for Brent&#8217;s search, default to <span class="docutils literal"><span class=
 <span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">SigmoidLayer</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
 <span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">OutputLayer</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="p">],</span>
-<span class="gp">... </span>    <span class="n">method</span><span class="o">=</span><span class="s">&#39;golden&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">search_method</span><span class="o">=</span><span class="s">&#39;golden&#39;</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">optimizations</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LinearSearch</span><span class="p">],</span>
 <span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span>
 <span class="gp">... </span><span class="p">)</span>
@@ -179,13 +179,13 @@ for Brent&#8217;s search, default to <span class="docutils literal"><span class=
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neuralpy.algorithms.backprop.steps.linear_search.LinearSearch.method">
-<span class="descname">method</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/steps/linear_search.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neuralpy.algorithms.backprop.steps.linear_search.LinearSearch.options">
+<span class="descname">options</span><em class="property"> = {'tol': Option(class_name='LinearSearch', value=0.3), 'search_method': Option(class_name='LinearSearch', value=golden)}</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/steps/linear_search.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neuralpy.algorithms.backprop.steps.linear_search.LinearSearch.options">
-<span class="descname">options</span><em class="property"> = {'method': Option(class_name='LinearSearch', value=golden), 'tol': Option(class_name='LinearSearch', value=0.3)}</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/steps/linear_search.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neuralpy.algorithms.backprop.steps.linear_search.LinearSearch.search_method">
+<span class="descname">search_method</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/steps/linear_search.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
