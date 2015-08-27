@@ -24,7 +24,7 @@ setup(
     version=neuralpy.__version__,
     license='MIT',
     url='http://neuralpy.com',
-    summary=neuralpy.__doc__,
+    description=neuralpy.__doc__,
 
     # Author
     author='Yurii Shevhcuk',
