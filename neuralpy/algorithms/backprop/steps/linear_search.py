@@ -90,19 +90,17 @@ class LinearSearch(SingleStep):
 
         super(LinearSearch, self).update_weights(delta)
         predicted_output = self.predict(self.input_train)
-
         return self.error(predicted_output, self.target_train)
 
     def update_weights(self, weight_deltas):
-        weights = [layer.weight for layer in self.train_layers]
-
+        real_weights = [layer.weight for layer in self.train_layers]
         res = minimize_scalar(
-            self.check_updates, args=(weights, weight_deltas),
+            self.check_updates, args=(real_weights, weight_deltas),
             tol=self.tol, method=self.search_method,
             options={'xtol': self.tol}
         )
 
-        self.set_weights(weights)
+        self.set_weights(real_weights)
         self.step = res.x
 
         return super(LinearSearch, self).update_weights(weight_deltas)

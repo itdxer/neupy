@@ -1,6 +1,7 @@
 import copy
 
 import numpy as np
+from scipy import interpolate
 from matplotlib import pyplot as plt
 
 
@@ -36,9 +37,9 @@ def compare_networks(default_class, tested_class, data, **kwargs):
     errors2 = network.normalized_errors_in()
 
     if is_comparison_plot:
-        error_range = np.arange(len(errors1))
-        plt.plot(error_range, errors1)
-        plt.plot(error_range, errors2)
+        error_range = np.arange(max(len(errors1), len(errors2)))
+        plt.plot(error_range[:len(errors1)], errors1)
+        plt.plot(error_range[:len(errors2)], errors2)
         plt.show()
 
     return network_default_error, network_tested_error

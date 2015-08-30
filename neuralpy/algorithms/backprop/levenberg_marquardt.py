@@ -157,8 +157,8 @@ class LevenbergMarquardt(Backpropagation):
                 weight[0:1, :] -= jacoby_delta[row:row + weight_out_size, :].T
                 row += weight_out_size
 
-    def train_epoch_updates(self, input_train, target_train):
-        super(LevenbergMarquardt, self).train_epoch_updates(
+    def after_weight_update(self, input_train, target_train):
+        super(LevenbergMarquardt, self).after_weight_update(
             input_train, target_train
         )
 

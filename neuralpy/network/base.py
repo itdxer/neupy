@@ -262,19 +262,25 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
             self.input_train = input_train
             self.target_train = target_train
 
-            if compute_error_out:
-                errors_out.append(
-                    error_func(predict(input_test), target_test)
-                )
+            try:
+                error = train_epoch(input_train, target_train)
 
-            error = train_epoch(input_train, target_train)
-            errors.append(error)
-            self.train_epoch_time = time() - epoch_start_time
+                if compute_error_out:
+                    error_out = error_func(predict(input_test), target_test)
+                    errors_out.append(error_out)
 
-            if epoch % show_epoch == 0 or epoch == last_epoch:
-                train_epoch_end_signal(self)
+                errors.append(error)
+                self.train_epoch_time = time() - epoch_start_time
 
-            self.epoch = epoch + 1
+                if epoch % show_epoch == 0 or epoch == last_epoch:
+                    train_epoch_end_signal(self)
+
+                self.epoch = epoch + 1
+
+            except StopIteration as err:
+                logs.log("TRAIN", "Epoch #{} stopped. {}".format(self.epoch,
+                                                                 str(err)))
+                break
 
         self.train_end_signal(self)
 

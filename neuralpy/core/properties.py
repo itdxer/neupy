@@ -6,7 +6,7 @@ from neuralpy.helpers.base import preformat_value
 
 
 __all__ = ('Property', 'CheckSizeProperty', 'NumberProperty', 'BoolProperty',
-           'SimpleNumberProperty', 'FuncProperty', 'NumberBoundProperty',
+           'BetweenZeroAndOneProperty', 'FuncProperty', 'NumberBoundProperty',
            'ArrayProperty', 'ListOfTypesProperty', 'ListProperty',
            'DictProperty', 'IntProperty', 'StringProperty',
            'NonNegativeIntProperty', 'NonNegativeNumberProperty',
@@ -216,7 +216,7 @@ class CheckSizeProperty(Property):
             ))
 
 
-class SimpleNumberProperty(NumberProperty, CheckSizeProperty):
+class BetweenZeroAndOneProperty(NumberProperty, CheckSizeProperty):
     min_size = 0
     max_size = 1
 

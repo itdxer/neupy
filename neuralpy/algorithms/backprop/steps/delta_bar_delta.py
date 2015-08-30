@@ -1,4 +1,4 @@
-from neuralpy.core.properties import (SimpleNumberProperty,
+from neuralpy.core.properties import (BetweenZeroAndOneProperty,
                                       NonNegativeNumberProperty)
 from .base import MultiSteps
 
@@ -7,6 +7,6 @@ __all__ = ('DeltaBarDelta',)
 
 
 class DeltaBarDelta(MultiSteps):
-    beta = SimpleNumberProperty(default=0.5)
+    beta = BetweenZeroAndOneProperty(default=0.5)
     increase_factor = NonNegativeNumberProperty(default=0.1)
-    decrease_factor = SimpleNumberProperty(default=0.9)
+    decrease_factor = BetweenZeroAndOneProperty(default=0.9)

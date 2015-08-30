@@ -144,7 +144,7 @@ class ConjugateGradient(Backpropagation):
         super(ConjugateGradient, self).init_layers()
         self.n_weights = sum(mul(*layer.size) for layer in self.train_layers)
 
-    def learn(self, output_train, target_train):
+    def get_weight_delta(self, output_train, target_train):
         gradients = super(ConjugateGradient, self).get_gradient(output_train,
                                                                 target_train)
         epoch = self.epoch

@@ -3,7 +3,7 @@ import copy
 from numpy import where, sign, ones, clip
 
 from neuralpy.core.properties import (NonNegativeNumberProperty,
-                                      SimpleNumberProperty)
+                                      BetweenZeroAndOneProperty)
 from .backpropagation import Backpropagation
 
 
@@ -68,7 +68,7 @@ class RPROP(Backpropagation):
     # This properties increase/decrease step by deviding it to
     # some coeffitient.
     increase_factor = NonNegativeNumberProperty(min_size=1, default=1.2)
-    decrease_factor = SimpleNumberProperty(default=0.5)
+    decrease_factor = BetweenZeroAndOneProperty(default=0.5)
 
     def init_layers(self):
         super(RPROP, self).init_layers()

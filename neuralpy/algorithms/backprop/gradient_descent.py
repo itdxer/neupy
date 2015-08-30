@@ -73,11 +73,11 @@ class MinibatchGradientDescent(Backpropagation):
 
         train_batch = self.train_batch
         update_weights = self.update_weights
-        train_epoch_updates = self.train_epoch_updates
+        after_weight_update = self.after_weight_update
 
         for input_data, target_data in batches:
             weight_delta = train_batch(input_data, target_data)
             update_weights(weight_delta)
-            train_epoch_updates(input_train, target_train)
+            after_weight_update(input_train, target_train)
 
         return self.error(self.predict_for_error(input_train), target_train)

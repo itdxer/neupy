@@ -2,7 +2,7 @@ from __future__ import division
 
 from numpy import dot, zeros, ones, inf, logical_and, sort, unique
 
-from neuralpy.core.properties import (SimpleNumberProperty,
+from neuralpy.core.properties import (BetweenZeroAndOneProperty,
                                       NonNegativeIntProperty)
 from neuralpy.network.base import BaseNetwork
 from neuralpy.network.types import Clustering
@@ -57,7 +57,7 @@ class ART1(Clustering, BaseNetwork):
     >>> artnet.predict(data)
     array([ 0.,  1.,  1.])
     """
-    rho = SimpleNumberProperty(default=0.5)
+    rho = BetweenZeroAndOneProperty(default=0.5)
     n_clusters = NonNegativeIntProperty(default=2, min_size=2)
 
     def __init__(self, **options):

@@ -1,7 +1,7 @@
 from numpy import zeros
 from numpy.linalg import norm
 
-from neuralpy.core.properties import (SimpleNumberProperty,
+from neuralpy.core.properties import (BetweenZeroAndOneProperty,
                                       NonNegativeNumberProperty)
 from .base import MultiSteps
 
@@ -47,7 +47,7 @@ class LeakStepAdaptation(MultiSteps):
     ... )
     >>>
     """
-    leak_size = SimpleNumberProperty(default=0.5)
+    leak_size = BetweenZeroAndOneProperty(default=0.5)
     alpha = NonNegativeNumberProperty(default=0.5)
     beta = NonNegativeNumberProperty(default=0.5)
 
@@ -58,8 +58,8 @@ class LeakStepAdaptation(MultiSteps):
         for layer in self.train_layers:
             updates.append(zeros(layer.size))
 
-    def train_epoch_updates(self, input_train, target_train):
-        super(LeakStepAdaptation, self).train_epoch_updates(input_train,
+    def after_weight_update(self, input_train, target_train):
+        super(LeakStepAdaptation, self).after_weight_update(input_train,
                                                             target_train)
         alpha = self.alpha
         beta = self.beta

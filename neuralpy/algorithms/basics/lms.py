@@ -38,7 +38,7 @@ class LMS(SimpleTwoLayerNetwork):
     --------
     :network:`Perceptron` : Perceptron Neural Network.
     """
-    def learn(self, output_train, target_train):
+    def get_weight_delta(self, output_train, target_train):
         input_data = self.input_data
 
         minimized_input = input_data / np.linalg.norm(input_data) ** 2

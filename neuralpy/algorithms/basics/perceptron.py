@@ -33,6 +33,6 @@ class Perceptron(SimpleTwoLayerNetwork):
     array([[-1],
            [ 1]])
     """
-    def learn(self, output_train, target_train):
+    def get_weight_delta(self, output_train, target_train):
         error_result = self.error(output_train, target_train)
         return np.dot(self.input_data.T, error_result)

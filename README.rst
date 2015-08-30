@@ -77,6 +77,7 @@ Algorithms
   * Adaptive Learning Rate
   * Error difference Update
   * Linear search by Golden Search or Brent
+  * Wolfe line search
   * Search than converge
   * Simple Step Minimization
 

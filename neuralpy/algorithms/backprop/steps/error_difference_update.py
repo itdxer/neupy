@@ -1,5 +1,5 @@
 from neuralpy.core.properties import (NonNegativeNumberProperty,
-                                      SimpleNumberProperty)
+                                      BetweenZeroAndOneProperty)
 from .base import SingleStep
 
 
@@ -46,7 +46,7 @@ class ErrorDifferenceStepUpdate(SingleStep):
     """
     update_for_smaller_error = NonNegativeNumberProperty(default=1.05,
                                                          min_size=1)
-    update_for_bigger_error = SimpleNumberProperty(default=0.7)
+    update_for_bigger_error = BetweenZeroAndOneProperty(default=0.7)
     error_difference = NonNegativeNumberProperty(default=1.04, min_size=1)
 
     def new_step(self):
@@ -69,8 +69,8 @@ class ErrorDifferenceStepUpdate(SingleStep):
 
         return current_step
 
-    def train_epoch_updates(self, input_train, target_train):
-        super(ErrorDifferenceStepUpdate, self).train_epoch_updates(
+    def after_weight_update(self, input_train, target_train):
+        super(ErrorDifferenceStepUpdate, self).after_weight_update(
             input_train, target_train
         )
         self.step = self.new_step()

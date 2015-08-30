@@ -3,7 +3,7 @@ from __future__ import division
 from numpy import dot, asmatrix, reshape, where
 from scipy.sparse import lil_matrix
 
-from neuralpy.core.properties import SimpleNumberProperty
+from neuralpy.core.properties import BetweenZeroAndOneProperty
 from .backpropagation import Backpropagation
 
 
@@ -93,9 +93,9 @@ class HessianDiagonal(Backpropagation):
     --------
     :network:`Backpropagation` : Backpropagation algorithm.
     """
-    min_eigenvalue = SimpleNumberProperty(default=1e-10)
+    min_eigenvalue = BetweenZeroAndOneProperty(default=1e-10)
 
-    def learn(self, output_train, target_train):
+    def get_weight_delta(self, output_train, target_train):
         weight_deltas = []
         gradients = self.gradients = []
         state_delta = self.delta = []

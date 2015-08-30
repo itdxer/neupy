@@ -48,8 +48,8 @@ class SearchThenConverge(SingleStep):
     epochs_step_minimizator = NonNegativeIntProperty(min_size=1, default=100)
     rate_coefitient = NumberProperty(default=0.2)
 
-    def train_epoch_updates(self, input_train, target_train):
-        super(SearchThenConverge, self).train_epoch_updates(
+    def after_weight_update(self, input_train, target_train):
+        super(SearchThenConverge, self).after_weight_update(
             input_train, target_train
         )
 

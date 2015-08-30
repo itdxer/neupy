@@ -171,16 +171,20 @@ class MixtureOfExperts(BaseEnsemble):
                 # It's simple hack and probably could broke other
                 # algorithms, but now it works fine, but I need
                 # change it later
-                weight_delta = network.learn(total_output * probs[:, i:i + 1],
-                                             target_data * probs[:, i:i + 1])
+                weight_delta = network.get_weight_delta(
+                    total_output * probs[:, i:i + 1],
+                    target_data * probs[:, i:i + 1]
+                )
                 network.update_weights(weight_delta)
-                network.train_epoch_updates(input_data, target_data)
+                network.after_weight_update(input_data, target_data)
 
             # The same as at comment above
-            weight_delta = gating_network.learn(total_output * probs,
-                                                target_data * probs)
+            weight_delta = gating_network.get_weight_delta(
+                total_output * probs,
+                target_data * probs
+            )
             gating_network.update_weights(weight_delta)
-            gating_network.train_epoch_updates(input_data, target_data)
+            gating_network.after_weight_update(input_data, target_data)
 
     def predict(self, input_data):
         probs = self.gating_network.predict(input_data)

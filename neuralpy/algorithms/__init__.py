@@ -16,6 +16,7 @@ from .backprop.steps.search_then_converge import *
 from .backprop.steps.error_difference_update import *
 from .backprop.steps.leak_step import *
 from .backprop.steps.linear_search import *
+from .backprop.steps.wolfe_search import *
 
 from .memory.discrete_hopfield_network import *
 from .memory.bam import *

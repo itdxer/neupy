@@ -4,7 +4,7 @@ from neuralpy.network.connections import NetworkConnectionError
 from neuralpy.layers.base import BaseLayer
 from neuralpy.core.properties import (NumberBoundProperty,
                                       NonNegativeIntProperty,
-                                      SimpleNumberProperty)
+                                      BetweenZeroAndOneProperty)
 
 
 __all__ = ('OutputLayer', 'CompetitiveOutputLayer', 'StepOutputLayer',
@@ -61,7 +61,7 @@ class StepOutputLayer(OutputLayer):
     {layer_params}
     """
     output_bounds = NumberBoundProperty(default=(0, 1))
-    critical_point = SimpleNumberProperty(default=0.5)
+    critical_point = BetweenZeroAndOneProperty(default=0.5)
 
     def format_output(self, value):
         lower_bound, upper_bound = self.output_bounds

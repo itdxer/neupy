@@ -46,7 +46,7 @@ class ModifiedRelaxation(SimpleTwoLayerNetwork):
     """
     dead_zone_radius = NonNegativeNumberProperty(default=0.1)
 
-    def learn(self, output_train, target_train):
+    def get_weight_delta(self, output_train, target_train):
         input_data = self.input_data
         update = np.where(
             np.abs(self.summated) >= self.dead_zone_radius,

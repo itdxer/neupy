@@ -1,3 +1,5 @@
+from itertools import chain
+
 from numpy import dot
 
 from neuralpy.core.properties import ListProperty
@@ -44,16 +46,18 @@ class Backpropagation(SupervisedLearning, FeedForwardNetwork):
     shared_docs = {"optimizations": __opt_params}
 
     optimizations = ListProperty(default=None)
+    default_optimizations = []
 
     def __new__(cls, connection, options=None, **kwargs):
-        # Argument `options` is a simple hack for `__reduce__`.
+        # Argument `options` is a simple hack for the `__reduce__` method.
         # `__reduce__` can't retore class with keyword arguments and
-        # it will put them as `dict` argument in `options` and we will
-        # translate it to kwargs. The same hack at `__init__` method.
+        # it will put them as `dict` argument in the `options` and method
+        # will translate it to kwargs. The same hack is at the
+        # `__init__` method.
         if options is None:
             options = kwargs
 
-        optimizations = options.get('optimizations', None)
+        optimizations = options.get('optimizations', cls.default_optimizations)
         if not optimizations:
             return super(Backpropagation, cls).__new__(cls)
 
@@ -86,6 +90,20 @@ class Backpropagation(SupervisedLearning, FeedForwardNetwork):
     def __init__(self, connection, options=None, **kwargs):
         if options is None:
             options = kwargs
+
+        default_optimizations = self.default_optimizations
+        optimizations = options.get('optimizations', default_optimizations)
+
+        if optimizations != default_optimizations:
+            optimizations_merged = []
+            for algorithm in chain(optimizations, default_optimizations):
+                types = [alg.optimization_type for alg in optimizations_merged]
+                if algorithm.optimization_type not in types:
+                    optimizations_merged.append(algorithm)
+        else:
+            optimizations_merged = optimizations
+
+        options['optimizations'] = optimizations_merged
         super(Backpropagation, self).__init__(connection, **options)
 
     def get_gradient(self, output_train, target_train):
@@ -110,7 +128,7 @@ class Backpropagation(SupervisedLearning, FeedForwardNetwork):
 
         return self.gradients
 
-    def learn(self, output_train, target_train):
+    def get_weight_delta(self, output_train, target_train):
         gradients = self.get_gradient(output_train, target_train)
         return [-gradient for gradient in gradients]
 

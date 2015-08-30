@@ -34,24 +34,24 @@ class FeedForwardNetwork(BaseNetwork):
     # ----------------- Active Neural Network State ---------------- #
 
     @abstractmethod
-    def learn(self, output_train, target_train):
+    def get_weight_delta(self, output_train, target_train):
         pass
 
     @abstractmethod
     def update_weights(self, weight_delta):
         pass
 
-    def train_epoch_updates(self, input_train, target_train):
+    def after_weight_update(self, input_train, target_train):
         pass
 
     def train_epoch(self, input_train, target_train):
         output_train = self.predict_for_error(input_train)
         self.output_train = output_train
 
-        self.weight_delta = self.learn(output_train, target_train)
+        self.weight_delta = self.get_weight_delta(output_train, target_train)
 
         self.update_weights(self.weight_delta)
-        self.train_epoch_updates(input_train, target_train)
+        self.after_weight_update(input_train, target_train)
 
         return self.error(output_train, target_train)
 

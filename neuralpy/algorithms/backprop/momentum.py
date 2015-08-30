@@ -1,6 +1,6 @@
 import copy
 
-from neuralpy.core.properties import SimpleNumberProperty
+from neuralpy.core.properties import BetweenZeroAndOneProperty
 from .backpropagation import Backpropagation
 
 
@@ -43,7 +43,7 @@ class Momentum(Backpropagation):
     --------
     :network:`Backpropagation` : Backpropagation algorithm.
     """
-    momentum = SimpleNumberProperty(default=0.9)
+    momentum = BetweenZeroAndOneProperty(default=0.9)
 
     def layer_weight_update(self, delta, layer_number):
         update = super(Momentum, self).layer_weight_update(delta,
