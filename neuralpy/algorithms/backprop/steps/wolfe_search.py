@@ -11,7 +11,27 @@ __all__ = ('WolfeSearch',)
 
 
 class WolfeSearch(SingleStep):
-    maxstep = NonNegativeNumberProperty(default=10)
+    """ Wolfe line search for the step selection.
+
+    Parameters
+    ----------
+    maxstep : float
+        Maximum step value. Defaults to ``50``.
+    c1 : float
+        Parameter for Armijo condition rule. Defaults to ``1e-4``.
+    c2 : float
+        Parameter for curvature condition rule. Defaults to ``0.9``.
+
+    Attributes
+    ----------
+    {first_step}
+
+    Warns
+    -----
+    {bp_depending}
+    """
+
+    maxstep = NonNegativeNumberProperty(default=50)
     c1 = BetweenZeroAndOneProperty(default=1e-4)
     c2 = BetweenZeroAndOneProperty(default=0.9)
 
