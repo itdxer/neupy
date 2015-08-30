@@ -1,5 +1,7 @@
 from scipy.optimize import line_search
 
+from neuralpy.core.properties import (NonNegativeNumberProperty,
+                                      BetweenZeroAndOneProperty)
 from neuralpy.algorithms.utils import (matrix_list_in_one_vector,
                                        vector_to_list_of_matrix)
 from .base import SingleStep
@@ -9,6 +11,10 @@ __all__ = ('WolfeSearch',)
 
 
 class WolfeSearch(SingleStep):
+    maxstep = NonNegativeNumberProperty(default=10)
+    c1 = BetweenZeroAndOneProperty(default=1e-4)
+    c2 = BetweenZeroAndOneProperty(default=0.9)
+
     def set_weights(self, new_weights):
         for layer, new_weight in zip(self.train_layers, new_weights):
             layer.weight = new_weight.copy()
@@ -42,9 +48,15 @@ class WolfeSearch(SingleStep):
                           self.get_gradient_by_weights,
                           xk=weights_vector,
                           pk=matrix_list_in_one_vector(weight_deltas),
-                          gfk=gradients_vetor)
+                          gfk=gradients_vetor,
+                          amax=self.maxstep,
+                          c1=self.c1,
+                          c2=self.c2)
 
-        self.step = (res[0] if res[0] is not None else self.step)
+        step = (res[0] if res[0] is not None else self.step)
+        # SciPy some times ignore `amax` argument and return
+        # bigger result
+        self.step = min(self.maxstep, step)
         self.set_weights(real_weights)
 
         return super(WolfeSearch, self).update_weights(weight_deltas)
