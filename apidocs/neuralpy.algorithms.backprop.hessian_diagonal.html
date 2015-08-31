@@ -245,8 +245,8 @@ disables output.</p>
 </tbody>
 </table>
 <dl class="method">
-<dt id="neuralpy.algorithms.backprop.hessian_diagonal.HessianDiagonal.learn">
-<span class="descname">learn</span><span class="sig-paren">(</span><em>output_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/hessian_diagonal.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neuralpy.algorithms.backprop.hessian_diagonal.HessianDiagonal.get_weight_delta">
+<span class="descname">get_weight_delta</span><span class="sig-paren">(</span><em>output_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/hessian_diagonal.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -256,7 +256,7 @@ disables output.</p>
 
 <dl class="attribute">
 <dt id="neuralpy.algorithms.backprop.hessian_diagonal.HessianDiagonal.options">
-<span class="descname">options</span><em class="property"> = {'show_epoch': Option(class_name='BaseNetwork', value=1), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'error': Option(class_name='BaseNetwork', value=mse), 'optimizations': Option(class_name='Backpropagation', value=None), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False), 'step': Option(class_name='BaseNetwork', value=0.1), 'use_bias': Option(class_name='BaseNetwork', value=True), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'min_eigenvalue': Option(class_name='HessianDiagonal', value=1e-10), 'verbose': Option(class_name='Verbose', value=True)}</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/hessian_diagonal.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'use_bias': Option(class_name='BaseNetwork', value=True), 'min_eigenvalue': Option(class_name='HessianDiagonal', value=1e-10), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'error': Option(class_name='BaseNetwork', value=mse), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False), 'verbose': Option(class_name='Verbose', value=True), 'step': Option(class_name='BaseNetwork', value=0.1), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'optimizations': Option(class_name='Backpropagation', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/hessian_diagonal.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

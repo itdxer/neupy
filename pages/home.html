@@ -88,9 +88,21 @@
 <h1>Home</h1>
 <p>NeuralPy is a Python library for Artificial Neural Networks.
 You can run and test different Neural Network algorithms.</p>
-<div class="section" id="issues">
-<h2>Issues</h2>
-<p>Issue tracker available on github.</p>
+<p><a class="reference external" href="https://travis-ci.org/itdxer/neuralpy"><img alt="Travis" src="https://api.travis-ci.org/itdxer/neuralpy.png?branch=master" /></a></p>
+<div class="section" id="installation">
+<h2>Installation</h2>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install neural-python
+</pre></div>
+</div>
+</div>
+<div class="section" id="links">
+<h2>Links</h2>
+<ul class="simple">
+<li><a class="reference external" href="http://neuralpy.com">Documentation</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neuralpy/issues">Issues</a></li>
+<li><a class="reference external" href="http://neuralpy.com/archive.html">Tutorials</a></li>
+<li><a class="reference external" href="http://neuralpy.com/docs/algorithms.html">Available algorithms</a></li>
+</ul>
 </div>
 <div class="section" id="dependence">
 <h2>Dependence</h2>
@@ -99,6 +111,14 @@ You can run and test different Neural Network algorithms.</p>
 <li>NumPy &gt;= 1.9.0</li>
 <li>SciPy &gt;= 0.14.0</li>
 <li>Matplotlib &gt;= 1.4.0</li>
+</ul>
+</div>
+<div class="section" id="next-steps">
+<h2>Next steps</h2>
+<ul class="simple">
+<li>Bug fixing and version stabilization</li>
+<li>Speeding up algorithms</li>
+<li>Adding more algorithms</li>
 </ul>
 </div>
 <div class="section" id="library-support">
@@ -121,7 +141,7 @@ You can run and test different Neural Network algorithms.</p>
 <li>Classic Gradient Descent</li>
 <li>Mini-batch Gradient Descent</li>
 <li>Conjugate Gradient</li>
-<li>quasi-Newton</li>
+<li>quasi-Newton (BFGS, DFP, PSB, SR1)</li>
 <li>Levenberg-Marquardt</li>
 <li>Hessian diagonal</li>
 <li>Momentum</li>
@@ -139,6 +159,7 @@ You can run and test different Neural Network algorithms.</p>
 <li>Adaptive Learning Rate</li>
 <li>Error difference Update</li>
 <li>Linear search by Golden Search or Brent</li>
+<li>Wolfe line search</li>
 <li>Search than converge</li>
 <li>Simple Step Minimization</li>
 </ul>
@@ -180,13 +201,12 @@ You can run and test different Neural Network algorithms.</p>
 </li>
 </ul>
 </div>
-<div class="section" id="next-steps">
-<h2>Next steps</h2>
-<ul class="simple">
-<li>Bug fixing and version stabilization</li>
-<li>Speeding up algorithms</li>
-<li>Adding more algorithms</li>
-</ul>
+<div class="section" id="tests">
+<h2>Tests</h2>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install tox
+<span class="nv">$ </span>tox
+</pre></div>
+</div>
 </div>
 </div>
 

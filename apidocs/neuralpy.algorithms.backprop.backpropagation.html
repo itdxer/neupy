@@ -182,6 +182,11 @@ disables output.</p>
 </tr>
 </tbody>
 </table>
+<dl class="attribute">
+<dt id="neuralpy.algorithms.backprop.backpropagation.Backpropagation.default_optimizations">
+<span class="descname">default_optimizations</span><em class="property"> = []</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/backpropagation.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="neuralpy.algorithms.backprop.backpropagation.Backpropagation.get_class_name">
 <span class="descname">get_class_name</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/backpropagation.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -190,6 +195,11 @@ disables output.</p>
 <dl class="method">
 <dt id="neuralpy.algorithms.backprop.backpropagation.Backpropagation.get_gradient">
 <span class="descname">get_gradient</span><span class="sig-paren">(</span><em>output_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/backpropagation.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neuralpy.algorithms.backprop.backpropagation.Backpropagation.get_weight_delta">
+<span class="descname">get_weight_delta</span><span class="sig-paren">(</span><em>output_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/backpropagation.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -202,11 +212,6 @@ disables output.</p>
 <span class="descname">layer_weight_update</span><span class="sig-paren">(</span><em>delta</em>, <em>layer_number</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/backpropagation.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="neuralpy.algorithms.backprop.backpropagation.Backpropagation.learn">
-<span class="descname">learn</span><span class="sig-paren">(</span><em>output_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/backpropagation.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
 <dl class="attribute">
 <dt id="neuralpy.algorithms.backprop.backpropagation.Backpropagation.optimizations">
 <span class="descname">optimizations</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/backpropagation.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -214,7 +219,7 @@ disables output.</p>
 
 <dl class="attribute">
 <dt id="neuralpy.algorithms.backprop.backpropagation.Backpropagation.options">
-<span class="descname">options</span><em class="property"> = {'show_epoch': Option(class_name='BaseNetwork', value=1), 'error': Option(class_name='BaseNetwork', value=mse), 'optimizations': Option(class_name='Backpropagation', value=None), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False), 'step': Option(class_name='BaseNetwork', value=0.1), 'use_bias': Option(class_name='BaseNetwork', value=True), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'verbose': Option(class_name='Verbose', value=True)}</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/backpropagation.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'use_bias': Option(class_name='BaseNetwork', value=True), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'error': Option(class_name='BaseNetwork', value=mse), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False), 'verbose': Option(class_name='Verbose', value=True), 'step': Option(class_name='BaseNetwork', value=0.1), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'optimizations': Option(class_name='Backpropagation', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neuralpy/neuralpy/algorithms/backprop/backpropagation.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

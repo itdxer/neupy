@@ -32,6 +32,7 @@ Algorithms
     :network:`LeakStepAdaptation`, Leak Step Adaptation
     :network:`ErrorDifferenceStepUpdate`, Error difference Update
     :network:`LinearSearch`, Linear search by Golden Search or Brent
+    :network:`WolfeSearch`, Wolfe line search
     :network:`SearchThenConverge`, Search than converge
     :network:`SimpleStepMinimization`, Simple Step Minimization
 
