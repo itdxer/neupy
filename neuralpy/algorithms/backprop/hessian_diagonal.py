@@ -105,7 +105,7 @@ class HessianDiagonal(Backpropagation):
         prev_weight = None
         update_second_order = None
 
-        for i, layer in enumerate(reversed(self.train_layers), 1):
+        for i, layer in enumerate(reversed(self.train_layers), start=1):
             summated_data = self.summated_data[-i]
             current_layer_input = self.layer_outputs[-i]
             weight = layer.weight_without_bias.T

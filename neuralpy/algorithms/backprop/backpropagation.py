@@ -112,7 +112,7 @@ class Backpropagation(SupervisedLearning, FeedForwardNetwork):
 
         update = self.error.deriv(output_train, target_train)
 
-        for i, layer in enumerate(reversed(self.train_layers), 1):
+        for i, layer in enumerate(reversed(self.train_layers), start=1):
             summated_data = self.summated_data[-i]
             current_layer_input = self.layer_outputs[-i]
 

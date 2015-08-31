@@ -1,4 +1,4 @@
-from numpy import eye, newaxis, sign
+from numpy import eye, newaxis, sign, isinf
 from numpy.linalg import norm
 
 from neuralpy.core.properties import (ChoiceProperty,
@@ -18,7 +18,7 @@ def bfgs(quasi_update, weight_delta, gradient_delta, maxrho=1e4):
 
     rho = (1. / gradient_delta.dot(weight_delta))
 
-    if abs(rho) > maxrho:
+    if isinf(rho):
         rho = maxrho * sign(rho)
 
     # print(rho)
@@ -44,7 +44,7 @@ def dfp(quasi_update, weight_delta, gradient_delta, **options):
         gradient_delta_t.dot(weight_delta)
     )
     param2 = (
-        quasi_dot_gradient.dot(gradient_delta_t).dot(quasi_update)
+        quasi_dot_gradient.dot(gradient_delta_t) * quasi_update
     ) / (
         gradient_delta_t.dot(quasi_dot_gradient)
     )

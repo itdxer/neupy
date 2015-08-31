@@ -35,8 +35,8 @@ class QuasiNewtonTestCase(BaseTestCase):
 
         qnnet = algorithms.QuasiNewton(
             connection=[
-                layers.SigmoidLayer(10),
-                layers.SigmoidLayer(40),
+                layers.SigmoidLayer(10, init_method='ortho'),
+                layers.SigmoidLayer(20, init_method='ortho'),
                 layers.OutputLayer(1)
             ],
             step=0.1,
@@ -47,6 +47,7 @@ class QuasiNewtonTestCase(BaseTestCase):
 
             update_function='bfgs',
             h0_scale=5,
+            gradient_tol=1e-5,
         )
         qnnet.train(x_train, y_train, x_test, y_test, epochs=100)
         result = qnnet.predict(x_test).round()

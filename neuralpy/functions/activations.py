@@ -1,6 +1,6 @@
 from __future__ import division
 
-from numpy import where, exp, log, cosh, tanh as np_tanh
+from numpy import where, exp, log, cosh, tanh as np_tanh, clip
 
 from neuralpy.functions import with_derivative
 
@@ -86,7 +86,9 @@ def sigmoid_deriv(x, alpha=1):
 
 @with_derivative(sigmoid_deriv)
 def sigmoid(x, alpha=1.):
-    return 1 / (1 + exp(-alpha * x))
+    output = 1 / (1 + exp(-alpha * x))
+    # Fix for infinite results
+    return clip(output, 0, 1)
 
 
 def tanh_second_deriv(x, alpha=1):
