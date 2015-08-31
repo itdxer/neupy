@@ -49,7 +49,7 @@ class QuasiNewtonTestCase(BaseTestCase):
             h0_scale=5,
             gradient_tol=1e-5,
         )
-        qnnet.train(x_train, y_train, x_test, y_test, epochs=100)
+        qnnet.train(x_train, y_train, x_test, y_test, epochs=10)
         result = qnnet.predict(x_test).round()
 
         roc_curve_score = metrics.roc_auc_score(result, y_test)

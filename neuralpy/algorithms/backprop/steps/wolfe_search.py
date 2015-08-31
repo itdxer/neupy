@@ -29,6 +29,48 @@ class WolfeSearch(SingleStep):
     Warns
     -----
     {bp_depending}
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from sklearn import datasets, metrics
+    >>> from sklearn.cross_validation import StratifiedShuffleSplit
+    >>> from neuralpy import algorithms, layers
+    >>>
+    >>> np.random.seed(0)
+    >>>
+    >>> X, y = datasets.make_classification(n_samples=100, n_features=10,
+    ...                                     random_state=33)
+    >>> shuffle_split = StratifiedShuffleSplit(y, 1, train_size=0.6,
+    ...                                        random_state=33)
+    >>>
+    >>> train_index, test_index = next(shuffle_split.__iter__())
+    >>> x_train, x_test = X[train_index], X[test_index]
+    >>> y_train, y_test = y[train_index], y[test_index]
+    >>>
+    ... qnnet = algorithms.QuasiNewton(
+    ...     connection=[
+    ...         layers.SigmoidLayer(10, init_method='ortho'),
+    ...         layers.SigmoidLayer(20, init_method='ortho'),
+    ...         layers.OutputLayer(1)
+    ...     ],
+    ...     step=0.1,
+    ...     use_raw_predict_at_error=False,
+    ...     shuffle_data=True,
+    ...     show_epoch=20,
+    ...     verbose=False,
+    ...
+    ...     update_function='bfgs',
+    ...     h0_scale=5,
+    ...     gradient_tol=1e-5,
+    ...     optimizations=[algorithms.WolfeSearch]
+    ... )
+    >>> qnnet.train(x_train, y_train, x_test, y_test, epochs=10)
+    >>> result = qnnet.predict(x_test).round()
+    >>>
+    >>> roc_curve_score = metrics.roc_auc_score(result, y_test)
+    >>> metrics.roc_auc_score(result, y_test)
+    0.91666666666666674
     """
 
     maxstep = NonNegativeNumberProperty(default=50)

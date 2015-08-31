@@ -13,6 +13,7 @@ Submodules
    neuralpy.algorithms.backprop.steps.linear_search
    neuralpy.algorithms.backprop.steps.search_then_converge
    neuralpy.algorithms.backprop.steps.simple_step_minimization
+   neuralpy.algorithms.backprop.steps.wolfe_search
 
 Module contents
 ---------------
