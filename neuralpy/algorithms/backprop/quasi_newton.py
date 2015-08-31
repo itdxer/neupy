@@ -1,4 +1,4 @@
-from numpy import eye, newaxis, sign, isinf
+from numpy import eye, newaxis, sign, isinf, clip
 from numpy.linalg import norm
 
 from neuralpy.core.properties import (ChoiceProperty,
@@ -21,7 +21,6 @@ def bfgs(quasi_update, weight_delta, gradient_delta, maxrho=1e4):
     if isinf(rho):
         rho = maxrho * sign(rho)
 
-    # print(rho)
     gradient_delta_t = gradient_delta[newaxis, :]
     gradient_delta = gradient_delta[:, newaxis]
     weight_delta_t = weight_delta[newaxis, :]
@@ -34,8 +33,11 @@ def bfgs(quasi_update, weight_delta, gradient_delta, maxrho=1e4):
     return param1.dot(quasi_update).dot(param2) + param3
 
 
-def dfp(quasi_update, weight_delta, gradient_delta, **options):
-    gradient_delta_t = gradient_delta.T
+def dfp(quasi_update, weight_delta, gradient_delta, maxnum=1e5):
+    gradient_delta_t = gradient_delta[newaxis, :]
+    gradient_delta = gradient_delta[:, newaxis]
+    weight_delta = weight_delta[:, newaxis]
+
     quasi_dot_gradient = quasi_update.dot(gradient_delta)
 
     param1 = (
@@ -43,11 +45,13 @@ def dfp(quasi_update, weight_delta, gradient_delta, **options):
     ) / (
         gradient_delta_t.dot(weight_delta)
     )
-    param2 = (
-        quasi_dot_gradient.dot(gradient_delta_t) * quasi_update
-    ) / (
-        gradient_delta_t.dot(quasi_dot_gradient)
+    param2_numerator = clip(
+        quasi_dot_gradient.dot(gradient_delta_t) * quasi_update,
+        a_min=-maxnum,
+        a_max=maxnum
     )
+    param2_denominator = gradient_delta_t.dot(quasi_dot_gradient)
+    param2 = param2_numerator / param2_denominator
 
     return quasi_update + param1 - param2
 

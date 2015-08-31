@@ -88,7 +88,7 @@ def sigmoid_deriv(x, alpha=1):
 def sigmoid(x, alpha=1.):
     output = 1 / (1 + exp(-alpha * x))
     # Fix for infinite results
-    return clip(output, 0, 1)
+    return clip(output, a_min=0, a_max=1)
 
 
 def tanh_second_deriv(x, alpha=1):

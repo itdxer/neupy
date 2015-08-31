@@ -30,7 +30,7 @@ class QuasiNewtonTestCase(BaseTestCase):
         self.X, self.y = X, y
         self.data = (x_train, x_test, y_train, y_test)
 
-    def test_quasi_newton(self):
+    def test_quasi_newton_bfgs(self):
         x_train, x_test, y_train, y_test = self.data
 
         qnnet = algorithms.QuasiNewton(
@@ -50,6 +50,33 @@ class QuasiNewtonTestCase(BaseTestCase):
             gradient_tol=1e-5,
         )
         qnnet.train(x_train, y_train, x_test, y_test, epochs=100)
+        result = qnnet.predict(x_test).round()
+
+        roc_curve_score = metrics.roc_auc_score(result, y_test)
+        self.assertAlmostEqual(0.92, roc_curve_score, places=2)
+
+    def test_quasi_newton_dfp(self):
+        x_train, x_test, y_train, y_test = self.data
+
+        qnnet = algorithms.QuasiNewton(
+            connection=[
+                layers.SigmoidLayer(10, init_method='ortho'),
+                layers.SigmoidLayer(30, init_method='ortho'),
+                layers.OutputLayer(1)
+            ],
+            step=0.1,
+            use_raw_predict_at_error=False,
+            shuffle_data=True,
+            show_epoch=20,
+            verbose=False,
+
+            update_function='bfgs',
+            h0_scale=2,
+            gradient_tol=1e-5,
+
+            maxstep=20,
+        )
+        qnnet.train(x_train, y_train, x_test, y_test, epochs=10)
         result = qnnet.predict(x_test).round()
 
         roc_curve_score = metrics.roc_auc_score(result, y_test)
@@ -104,8 +131,16 @@ class QuasiNewtonTestCase(BaseTestCase):
             ),
             UpdateFunction(
                 func=dfp,
-                input_values=[],
-                output_value=[],
+                input_values=[
+                    np.eye(3),
+                    np.array([0.1, 0.2, 0.3]),
+                    np.array([0.3, -0.3, -0.5])
+                ],
+                output_value=np.array([
+                    [0.73514212, -0.11111111, -0.16666667],
+                    [-0.11111111, 0.56847545, -0.33333333],
+                    [-0.16666667, -0.33333333, -0.08139535],
+                ]),
                 is_symmetric=True
             ),
         )
