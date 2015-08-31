@@ -21,14 +21,9 @@ def bfgs(inverse_hessian, weight_delta, gradient_delta, maxrho=1e4):
     if isinf(rho):
         rho = maxrho * sign(rho)
 
-    gradient_delta_t = gradient_delta[newaxis, :]
-    gradient_delta = gradient_delta[:, newaxis]
-    weight_delta_t = weight_delta[newaxis, :]
-    weight_delta = weight_delta[:, newaxis]
-
-    param1 = ident_matrix - weight_delta * gradient_delta_t * rho
-    param2 = ident_matrix - gradient_delta * weight_delta_t * rho
-    param3 = rho * weight_delta * weight_delta_t
+    param1 = ident_matrix - outer(weight_delta, gradient_delta) * rho
+    param2 = ident_matrix - outer(gradient_delta, weight_delta) * rho
+    param3 = rho * outer(weight_delta, weight_delta)
 
     return param1.dot(inverse_hessian).dot(param2) + param3
 
@@ -58,13 +53,13 @@ def dfp(inverse_hessian, weight_delta, gradient_delta, maxnum=1e5):
 
 def psb(inverse_hessian, weight_delta, gradient_delta, **options):
     gradient_delta_t = gradient_delta.T
-    param = weight_delta - inverse_hessian * gradient_delta
+    param = weight_delta - inverse_hessian.dot(gradient_delta)
 
-    devider = (1. / (gradient_delta_t * gradient_delta)).item(0)
-    param1 = param * gradient_delta_t + gradient_delta * param.T
+    devider = (1. / inner(gradient_delta, gradient_delta)).item(0)
+    param1 = outer(param, gradient_delta) + outer(gradient_delta, param)
     param2 = (
-        gradient_delta_t * param
-    ).item(0) * gradient_delta * gradient_delta_t
+        inner(gradient_delta, param)
+    ).item(0) * outer(gradient_delta, gradient_delta_t)
 
     return inverse_hessian + param1 * devider - param2 * devider ** 2
 
