@@ -1,4 +1,4 @@
-from numpy import eye, newaxis, sign, isinf, clip
+from numpy import eye, newaxis, sign, isinf, clip, inner, outer
 from numpy.linalg import norm
 
 from neuralpy.core.properties import (ChoiceProperty,
@@ -13,8 +13,8 @@ from .backpropagation import Backpropagation
 __all__ = ('QuasiNewton',)
 
 
-def bfgs(quasi_update, weight_delta, gradient_delta, maxrho=1e4):
-    ident_matrix = eye(quasi_update.shape[0], dtype=int)
+def bfgs(inverse_hessian, weight_delta, gradient_delta, maxrho=1e4):
+    ident_matrix = eye(inverse_hessian.shape[0], dtype=int)
 
     rho = (1. / gradient_delta.dot(weight_delta))
 
@@ -30,15 +30,15 @@ def bfgs(quasi_update, weight_delta, gradient_delta, maxrho=1e4):
     param2 = ident_matrix - gradient_delta * weight_delta_t * rho
     param3 = rho * weight_delta * weight_delta_t
 
-    return param1.dot(quasi_update).dot(param2) + param3
+    return param1.dot(inverse_hessian).dot(param2) + param3
 
 
-def dfp(quasi_update, weight_delta, gradient_delta, maxnum=1e5):
+def dfp(inverse_hessian, weight_delta, gradient_delta, maxnum=1e5):
     gradient_delta_t = gradient_delta[newaxis, :]
     gradient_delta = gradient_delta[:, newaxis]
     weight_delta = weight_delta[:, newaxis]
 
-    quasi_dot_gradient = quasi_update.dot(gradient_delta)
+    quasi_dot_gradient = inverse_hessian.dot(gradient_delta)
 
     param1 = (
         weight_delta.dot(weight_delta.T)
@@ -46,19 +46,19 @@ def dfp(quasi_update, weight_delta, gradient_delta, maxnum=1e5):
         gradient_delta_t.dot(weight_delta)
     )
     param2_numerator = clip(
-        quasi_dot_gradient.dot(gradient_delta_t) * quasi_update,
+        quasi_dot_gradient.dot(gradient_delta_t) * inverse_hessian,
         a_min=-maxnum,
         a_max=maxnum
     )
     param2_denominator = gradient_delta_t.dot(quasi_dot_gradient)
     param2 = param2_numerator / param2_denominator
 
-    return quasi_update + param1 - param2
+    return inverse_hessian + param1 - param2
 
 
-def psb(quasi_update, weight_delta, gradient_delta, **options):
+def psb(inverse_hessian, weight_delta, gradient_delta, **options):
     gradient_delta_t = gradient_delta.T
-    param = weight_delta - quasi_update * gradient_delta
+    param = weight_delta - inverse_hessian * gradient_delta
 
     devider = (1. / (gradient_delta_t * gradient_delta)).item(0)
     param1 = param * gradient_delta_t + gradient_delta * param.T
@@ -66,18 +66,17 @@ def psb(quasi_update, weight_delta, gradient_delta, **options):
         gradient_delta_t * param
     ).item(0) * gradient_delta * gradient_delta_t
 
-    return quasi_update + param1 * devider - param2 * devider ** 2
+    return inverse_hessian + param1 * devider - param2 * devider ** 2
 
 
-def sr1(quasi_update, weight_delta, gradient_delta, epsilon=1e-8):
-    param = weight_delta - quasi_update.dot(gradient_delta)
-    param_t = param.T
-    denominator = param_t.dot(gradient_delta)
+def sr1(inverse_hessian, weight_delta, gradient_delta, epsilon=1e-8):
+    param = weight_delta - inverse_hessian.dot(gradient_delta)
+    denominator = inner(param, gradient_delta)
 
     if abs(denominator) < epsilon * norm(param) * norm(gradient_delta):
-        return quasi_update
+        return inverse_hessian
 
-    return quasi_update + param.dot(param_t) / denominator
+    return inverse_hessian + outer(param, param) / denominator
 
 
 class QuasiNewton(Backpropagation):
@@ -154,19 +153,19 @@ class QuasiNewton(Backpropagation):
             # In first epoch we didn't have previous weights and
             # gradients. For this reason we skip quasi coefitient
             # computation.
-            quasi_update = self.update_function(
-                self.prev_quasi_update,
+            inverse_hessian = self.update_function(
+                self.prev_inverse_hessian,
                 weight - self.prev_weight,
                 gradient - self.prev_gradient
             )
         else:
-            quasi_update = self.h0_scale * eye(weight.size, dtype=int)
+            inverse_hessian = self.h0_scale * eye(weight.size, dtype=int)
 
         self.prev_weight = weight.copy()
         self.prev_gradient = gradient.copy()
-        self.prev_quasi_update = quasi_update
+        self.prev_inverse_hessian = inverse_hessian
 
         return vector_to_list_of_matrix(
-            -quasi_update.dot(gradient),
+            -inverse_hessian.dot(gradient),
             (layer.size for layer in train_layers)
         )
