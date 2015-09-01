@@ -7,7 +7,7 @@ import numpy as np
 from sklearn import datasets, metrics
 from sklearn.cross_validation import StratifiedShuffleSplit
 from neuralpy import algorithms, layers
-from neuralpy.algorithms.backprop.quasi_newton import bfgs, dfp, sr1, psb
+from neuralpy.algorithms.backprop import quasi_newton as qn
 
 from data import simple_input_train, simple_target_train
 from utils import compare_networks
@@ -158,7 +158,7 @@ class QuasiNewtonTestCase(BaseTestCase):
                                     "is_symmetric")
         testcases = (
             UpdateFunction(
-                func=bfgs,
+                func=qn.bfgs,
                 input_values=[
                     np.eye(3),
                     np.array([0.1, 0.2, 0.3]),
@@ -172,7 +172,7 @@ class QuasiNewtonTestCase(BaseTestCase):
                 is_symmetric=True
             ),
             UpdateFunction(
-                func=sr1,
+                func=qn.sr1,
                 input_values=[
                     np.eye(3),
                     np.array([0.1, 0.2, 0.3]),
@@ -186,7 +186,7 @@ class QuasiNewtonTestCase(BaseTestCase):
                 is_symmetric=False
             ),
             UpdateFunction(
-                func=psb,
+                func=qn.psb,
                 input_values=[
                     np.eye(3),
                     np.array([0.12, 0.29, 0.33]),
@@ -200,7 +200,7 @@ class QuasiNewtonTestCase(BaseTestCase):
                 is_symmetric=True
             ),
             UpdateFunction(
-                func=dfp,
+                func=qn.dfp,
                 input_values=[
                     np.eye(3),
                     np.array([0.1, 0.2, 0.3]),
