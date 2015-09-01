@@ -158,14 +158,14 @@ class MixtureOfExperts(BaseEnsemble):
             total_output = 0
             outputs = []
 
-            for i, network in enunerate(self.networks):
+            for i, network in enumerate(self.networks):
                 output = network.predict(input_data)
                 outputs.append(output)
                 total_output += multiply(output, probs[:, i:i + 1])
 
             outputs = concatenate(outputs, axis=1)
 
-            for i, network in enunerate(self.networks):
+            for i, network in enumerate(self.networks):
                 # This is simple solution for error derivative update
                 # g * (expected - actual) = g * expected - g * actual
                 # It's simple hack and probably could broke other
@@ -190,7 +190,7 @@ class MixtureOfExperts(BaseEnsemble):
         probs = self.gating_network.predict(input_data)
         total_output = 0
 
-        for i, network in enunerate(self.networks):
+        for i, network in enumerate(self.networks):
             output = network.predict(input_data)
             total_output += multiply(output, probs[:, i:i + 1])
 

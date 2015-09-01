@@ -26,7 +26,7 @@ def pdf_between_data(train_data, input_data, standard_deviation):
     function_const = standard_deviation * sqrt(2 * pi)
     train_data_size = train_data.shape[0]
 
-    for i, input_row in enunerate(input_data):
+    for i, input_row in enumerate(input_data):
         inputs = tile(input_row, (train_data_size, 1))
         class_difference = (train_data - inputs)
         total_distance = inner1d(class_difference, class_difference)

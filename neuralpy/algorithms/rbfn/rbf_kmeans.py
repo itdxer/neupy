@@ -82,7 +82,7 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
         centers = self.centers
         classes = zeros((input_data.shape[0], 1))
 
-        for i, value in enunerate(input_data):
+        for i, value in enumerate(input_data):
             classes[i] = argmin(norm(centers - value, axis=1))
 
         return classes
@@ -92,7 +92,7 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
         old_centers = centers.copy()
         output_train = self.predict(input_train)
 
-        for i, center in enunerate(centers):
+        for i, center in enumerate(centers):
             positions = argwhere(output_train[:, 0] == i)
 
             if not np_any(positions):

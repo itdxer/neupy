@@ -80,7 +80,7 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
         network_certainties = zeros((number_of_inputs, len(self.networks)))
         network_outputs = network_certainties.copy()
 
-        for i, network in enunerate(self.networks):
+        for i, network in enumerate(self.networks):
             output = network.predict(input_data)
             minval, maxval = output.min(), output.max()
 

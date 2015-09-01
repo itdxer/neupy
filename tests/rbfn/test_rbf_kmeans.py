@@ -53,7 +53,7 @@ class RBFKMeansTestCase(BaseTestCase):
         if self.draw_plot:
             classes = nw.predict(self.data)
 
-            for i, center in enunerate(nw.centers):
+            for i, center in enumerate(nw.centers):
                 positions = np.argwhere(classes[:, 0] == i)
                 class_data = np.take(self.data, positions[:, 0], axis=0)
                 plt.plot(class_data[:, 0], class_data[:, 1], 'o')

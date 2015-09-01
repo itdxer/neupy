@@ -173,7 +173,7 @@ def process_docstring(app, what, name, obj, options, lines):
         r'\`(.+?)(|\s<.+?>)\`'.format(labels_regexp)
     )
 
-    for i, line in enunerate(lines):
+    for i, line in enumerate(lines):
         # Replace values one by one to make sure that there is no overlaps.
         replacement = regexp.search(line)
         while replacement:
