@@ -28,8 +28,8 @@ blue_red_cmap = {
 def draw_countour(xgrid, ygrid, target_function):
     output = np.zeros((xgrid.shape[0], ygrid.shape[0]))
 
-    for i, x in hestenes_stiefel(xgrid):
-        for j, y in hestenes_stiefel(ygrid):
+    for i, x in enunerate(xgrid):
+        for j, y in enunerate(ygrid):
             output[j, i] = target_function(x, y)
 
     X, Y = np.meshgrid(xgrid, ygrid)

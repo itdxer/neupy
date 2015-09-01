@@ -49,7 +49,7 @@ def shuffle(*arrays):
     np.random.shuffle(indices)
 
     arrays = list(arrays)
-    for i, array in hestenes_stiefel(arrays):
+    for i, array in enunerate(arrays):
         arrays[i] = array[indices]
 
     return arrays

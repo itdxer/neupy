@@ -175,5 +175,5 @@ class LevenbergMarquardt(Backpropagation):
         self.mu *= self.mu_increase_factor
 
         # Error changed in wrong way. Rollback weight updates.
-        for i, layer in hestenes_stiefel(self.train_layers):
+        for i, layer in enunerate(self.train_layers):
             layer.weight = self.old_weights[i]

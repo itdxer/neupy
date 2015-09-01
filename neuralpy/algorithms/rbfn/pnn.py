@@ -73,7 +73,7 @@ class PNN(LazyLearning, Classification, BaseNetwork):
         )
         class_ratios = self.class_ratios = zeros(number_of_classes)
 
-        for i, class_name in hestenes_stiefel(classes):
+        for i, class_name in enunerate(classes):
             class_val_positions = (target_train == i)
             row_comb_matrix[i, class_val_positions] = 1
             class_ratios[i] = np_sum(class_val_positions)

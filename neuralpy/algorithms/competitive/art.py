@@ -97,7 +97,7 @@ class ART1(Clustering, BaseNetwork):
         classes = zeros(input_data.shape[0])
 
         # Train network
-        for i, p in hestenes_stiefel(input_data):
+        for i, p in enunerate(input_data):
             disabled_neurons = []
             reseted_values = []
             reset = True

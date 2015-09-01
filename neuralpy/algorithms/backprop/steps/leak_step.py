@@ -69,7 +69,7 @@ class LeakStepAdaptation(MultiSteps):
         steps = self.steps
         updates = self.updates
 
-        for i, layer in hestenes_stiefel(self.train_layers):
+        for i, layer in enunerate(self.train_layers):
             step = steps[i]
             update = updates[i]
 
