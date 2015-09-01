@@ -59,6 +59,7 @@ Algorithms
   * Classic Gradient Descent
   * Mini-batch Gradient Descent
   * Conjugate Gradient
+
     * Fletcher-Reeves
     * Polak-Ribiere
     * Hestenes-Stiefel
@@ -67,6 +68,7 @@ Algorithms
     * Dai-Yuan
 
   * quasi-Newton
+
     * BFGS
     * DFP
     * PSB
