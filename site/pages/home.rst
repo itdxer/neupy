@@ -59,7 +59,19 @@ Algorithms
   * Classic Gradient Descent
   * Mini-batch Gradient Descent
   * Conjugate Gradient
-  * quasi-Newton (BFGS, DFP, PSB, SR1)
+    * Fletcher-Reeves
+    * Polak-Ribiere
+    * Hestenes-Stiefel
+    * Conjugate Descent
+    * Liu-Storey
+    * Dai-Yuan
+
+  * quasi-Newton
+    * BFGS
+    * DFP
+    * PSB
+    * SR1
+
   * Levenberg-Marquardt
   * Hessian diagonal
   * Momentum

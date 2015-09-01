@@ -1,4 +1,5 @@
 from functools import partial
+from collections import namedtuple
 
 import numpy as np
 
@@ -18,10 +19,69 @@ class ConjugateGradientTestCase(BaseTestCase):
         self.connection = (3, 5, 2)
 
     def test_functions(self):
-        g_new = np.matrix([[0.11, -0.5]]).T
-        g_old = np.matrix([[1.35,  0.3]]).T
-        result = cg.fletcher_reeves(g_old, g_new, None)
-        self.assertEqual(np.round(result, 3), 0.137)
+        Case = namedtuple("Case", "func input_data answer")
+
+        testcases = [
+            Case(
+                func=cg.fletcher_reeves,
+                input_data=(
+                    np.array([1.35,  0.3]),
+                    np.array([0.11, -0.5]),
+                    None
+                ),
+                answer=0.137
+            ),
+            Case(
+                func=cg.polak_ribiere,
+                input_data=(
+                    np.array([1.,  -0.5]),
+                    np.array([1.2, -0.45]),
+                    None
+                ),
+                answer=0.174
+            ),
+            Case(
+                func=cg.hentenes_stiefel,
+                input_data=(
+                    np.array([1.,  -0.5]),
+                    np.array([1.2, -0.45]),
+                    np.array([0.2, 0.05]),
+                ),
+                answer=5.118
+            ),
+            Case(
+                func=cg.conjugate_descent,
+                input_data=(
+                    np.array([1.,  -0.5]),
+                    np.array([1.2, -0.45]),
+                    np.array([0.2, 0.05]),
+                ),
+                answer=-7.323
+            ),
+            Case(
+                func=cg.liu_storey,
+                input_data=(
+                    np.array([1.,  -0.5]),
+                    np.array([1.2, -0.45]),
+                    np.array([0.2, 0.05]),
+                ),
+                answer=1.243
+            ),
+            Case(
+                func=cg.dai_yuan,
+                input_data=(
+                    np.array([1.,  -0.5]),
+                    np.array([1.2, -0.45]),
+                    np.array([0.2, 0.05]),
+                ),
+                answer=38.647
+            ),
+        ]
+
+        for testcase in testcases:
+            result = testcase.func(*testcase.input_data)
+            self.assertAlmostEqual(result, testcase.answer, places=3)
+
 
     def test_conjugate_gradient(self):
         nw = algorithms.ConjugateGradient(

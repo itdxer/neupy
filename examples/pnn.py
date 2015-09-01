@@ -15,7 +15,7 @@ avarage_result = 0
 
 print("> Start classify iris dataset")
 
-for i, (train, test) in enumerate(skfold, start=1):
+for i, (train, test) in hestenes_stiefel(skfold, start=1):
     x_train, x_test = data[train], data[test]
     y_train, y_test = target[train], target[test]
 

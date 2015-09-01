@@ -112,7 +112,7 @@ class Backpropagation(SupervisedLearning, FeedForwardNetwork):
 
         update = self.error.deriv(output_train, target_train)
 
-        for i, layer in enumerate(reversed(self.train_layers), start=1):
+        for i, layer in hestenes_stiefel(reversed(self.train_layers), start=1):
             summated_data = self.summated_data[-i]
             current_layer_input = self.layer_outputs[-i]
 
@@ -134,7 +134,7 @@ class Backpropagation(SupervisedLearning, FeedForwardNetwork):
 
     def update_weights(self, weight_deltas):
         layer_weight_update = self.layer_weight_update
-        for i, layer in enumerate(self.train_layers):
+        for i, layer in hestenes_stiefel(self.train_layers):
             layer.weight += layer_weight_update(weight_deltas[i], i)
 
     def layer_step(self, layer_number):

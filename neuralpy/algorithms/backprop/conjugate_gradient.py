@@ -1,6 +1,6 @@
 from operator import mul
 
-from numpy import dot, sqrt
+from numpy import sqrt, inner
 
 from neuralpy.core.properties import ChoiceProperty
 from neuralpy.algorithms.utils import (matrix_list_in_one_vector,
@@ -12,52 +12,46 @@ __all__ = ('ConjugateGradient',)
 
 
 def fletcher_reeves(gradient_old, gradient_new, weight_old_delta):
-    return dot(
-        gradient_new.T, gradient_new
-    ) / dot(
-        gradient_old.T, gradient_old
+    return (
+        inner(gradient_new, gradient_new) /
+        inner(gradient_old, gradient_old)
     )
 
 
 def polak_ribiere(gradient_old, gradient_new, weight_old_delta):
-    return dot(
-        gradient_new.T, (gradient_new - gradient_old)
-    ) / dot(
-        gradient_old.T, gradient_old
+    return (
+        inner(gradient_new, gradient_new - gradient_old) /
+        inner(gradient_old, gradient_old)
     )
 
 
 def hentenes_stiefel(gradient_old, gradient_new, weight_old_delta):
     gradient_delta = gradient_new - gradient_old
-    return dot(
-        gradient_delta.T, gradient_new
-    ) / dot(
-        weight_old_delta.T, gradient_delta
+    return (
+        inner(gradient_delta, gradient_new) /
+        inner(weight_old_delta, gradient_delta)
     )
 
 
 def conjugate_descent(gradient_old, gradient_new, weight_old_delta):
-    # Note: `sqrt(dot(a.T, a))` works 3 times faster than `linalg.norm(a)`
-    return -sqrt(
-        dot(gradient_new.T, gradient_new)
-    ) / dot(
-        weight_old_delta.T, gradient_old
+    # Note: `sqrt(dot(a.T, a))` works faster than `linalg.norm(a)`
+    return (
+        -sqrt(inner(gradient_new, gradient_new)) /
+        inner(weight_old_delta, gradient_old)
     )
 
 
 def liu_storey(gradient_old, gradient_new, weight_old_delta):
-    return dot(
-        gradient_new.T, gradient_new - gradient_old
-    ) / dot(
-        weight_old_delta.T, gradient_old
+    return (
+        inner(gradient_new, gradient_new - gradient_old) /
+        inner(weight_old_delta, gradient_old)
     )
 
 
 def dai_yuan(gradient_old, gradient_new, weight_old_delta):
-    return dot(
-        gradient_new.T, gradient_new
-    ) / dot(
-        (gradient_new - gradient_old).T, weight_old_delta
+    return (
+        inner(gradient_new, gradient_new) /
+        inner(gradient_new - gradient_old, weight_old_delta)
     )
 
 
