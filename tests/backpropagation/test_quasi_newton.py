@@ -70,7 +70,7 @@ class QuasiNewtonTestCase(BaseTestCase):
             show_epoch=20,
             verbose=False,
 
-            update_function='bfgs',
+            update_function='dfp',
             h0_scale=2,
             gradient_tol=1e-5,
 
