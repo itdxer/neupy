@@ -101,7 +101,7 @@ Let's define it and later we will check it step by step.
         for _ in range(noize_level):
             # The farther from the 0.5 value the less likely
             # password recovery
-            noize = np.random.binomial(1, 0.55, len(str2bin(real_password)))
+            noize = np.random.binomial(1, 0.55, bin_password_len)
             data.append(noize)
 
         dhnet = algorithms.DiscreteHopfieldNetwork(mode='full')
@@ -109,13 +109,71 @@ Let's define it and later we will check it step by step.
 
         return dhnet
 
+If you read :ref:`Discrete Hopfield Network tutorial <discrete-hopfield-network>`, you must know that if we add only one vector into the network we will get it dublicated in whole matrix.
+To make it little bit secure we can add the noize into the network.
+For this reason we define one additional parameter ``noize_level`` into the function.
+We encode our password into the binary vector and save it into the ``data`` variable.
+Next we using Binomial distribution generate random binary vectors where probability to get 1 in vector is equal to 55%.
+Parameter ``noize_level`` just control number of noize vectors.
+
+But why do we get random binary vector instead of decoded random word?
+The problem in the similarity between vectors.
+Let's check two approaches with `Hamming distance <https://en.wikipedia.org/wiki/Hamming_distance>`_.
+
+.. code-block:: python
+
+    import string
+    import random
+
+    def hamming_distance(left, right):
+        left, right = np.array(left), np.array(right)
+        if left.shape != right.shape:
+            raise ValueError("Shapes are different")
+        return (left != right).sum()
+
+    def generate_password(min_length=5, max_length=30):
+        symbols = list(
+            string.ascii_letters +
+            string.digits +
+            string.punctuation
+        )
+        password_len = random.randint(min_length, max_length + 1)
+        password = [np.random.choice(symbols) for _ in range(password_len)]
+        return ''.join(password)
+
+
+In addition I add function ``generate_password`` that we use to test distance between randomly generated words.
+
+.. code-block:: python
+
+    >>> hamming_distance(str2bin(generate_password(20, 20)),
+    ...                  str2bin(generate_password(20, 20))))
+    71
+
+As we can see two random generated passwords are very similar to each other (approximetly 70% of bits).
+But If we compare randomly generated password and random binary vector we will see the difference.
+
+.. code-block:: python
+
+    >>> hamming_distance(str2bin(generate_password(20, 20)),
+    ...                  np.random.binomial(1, 0.55, 238))
+    123
+
+Hamming distance is bigger than in previous example.
+Almost 52% of the bits are different.
+The bigger difference between random binary vector and word is improve possibility to recover valid passowrd from the network.
+
 
 Recover password from the network
-----------------------------------
+---------------------------------
 
 
-Problems
---------
+Test it using Monte Carlo
+-------------------------
+
+
+Possible Problems
+-----------------
 
 * Shifted words
 

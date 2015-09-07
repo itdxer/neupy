@@ -31,9 +31,7 @@ def str2bin(text, max_length=30, encoding='ascii'):
     n_leading_zeros = valid_length - len(bin_vector)
     leading_zeros = list(repeat(0, times=n_leading_zeros))
 
-    print(leading_zeros + bin_vector)
     return leading_zeros + bin_vector
-    # return bin_vector
 
 
 def bin2str(array, encoding='ascii'):
@@ -46,9 +44,13 @@ def bin2str(array, encoding='ascii'):
 
 
 def generate_password(min_length=5, max_length=30):
-    symbols = string.ascii_letters + string.digits + string.punctuation
-    password_len = random.randint(min_length, max_length)
-    password = [random.choice(symbols) for _ in range(password_len)]
+    symbols = list(
+        string.ascii_letters +
+        string.digits +
+        string.punctuation
+    )
+    password_len = random.randint(min_length, max_length + 1)
+    password = [np.random.choice(symbols) for _ in range(password_len)]
     return ''.join(password)
 
 
@@ -64,7 +66,7 @@ def save_password(real_password, noize_level=5):
     for _ in range(noize_level):
         # The farther from the 0.5 value the less likely
         # password recovery
-        noize = np.random.binomial(1, 0.5, len(str2bin(real_password)))
+        noize = np.random.binomial(1, 0.55, bin_password_len)
         data.append(noize)
 
     dhnet = algorithms.DiscreteHopfieldNetwork(mode='full')
@@ -80,19 +82,18 @@ def recover_password(dhnet, broken_password):
     try:
         if recovered_password.ndim == 2:
             recovered_password = recovered_password[0, :]
-        # Some times we can have problem with first bit, so we
-        # just fix it
-        recovered_password[0] = 1
         password = bin2str(recovered_password)
 
-    except UnicodeDecodeError:
+    except (UnicodeDecodeError, binascii.Error):
         # Panic mode
         password = generate_password()
 
     return password
 
 
-def cut_password(word, k):
+def cut_password(word, k, fromleft=False):
+    if fromleft:
+        return (word[-k:] if k != 0 else '').rjust(len(word))
     return (word[:k] if k != 0 else '').ljust(len(word))
 
 
@@ -103,7 +104,7 @@ def cripple_password(word, k):
 
 
 if __name__ == '__main__':
-    n_times = 100
+    n_times = 10000
     cases = OrderedDict([
         ('first', (lambda x: x - 1)),
         ('quarter', (lambda x: 3 * x // 4)),
@@ -118,17 +119,13 @@ if __name__ == '__main__':
 
         for case, func in cases.items():
             n_letters = func(len(real_password))
-            broken_password = cut_password(real_password, k=n_letters)
+            broken_password = cut_password(real_password, k=n_letters,
+                                           fromleft=True)
 
             dhnet = save_password(real_password, noize_level=11)
             recovered_password = recover_password(dhnet, broken_password)
 
             if recovered_password != real_password:
                 results[case] += 1
-                # if case == 'first':
-                #     print("`{}` != `{}`".format(
-                #         recovered_password, real_password
-                #     ))
-                #     print(len(real_password))
 
     print(results)

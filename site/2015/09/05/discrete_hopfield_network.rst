@@ -239,7 +239,7 @@ Hallucinations is one of the possible problem in :network:`Discrete Hopfield Net
 Not sure that it is 100% correct term, but I think about it like that.
 Sometimes network output produce something that we didn't teach it.
 
-To understand it we must first of all define Energy Function.
+To understand it we must first of all define the Energy Function.
 
 .. math::
 
