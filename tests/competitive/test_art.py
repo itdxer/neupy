@@ -3,7 +3,7 @@ import os
 import numpy as np
 import pandas as pd
 from sklearn import preprocessing
-from neuralpy.algorithms import ART1
+from neupy.algorithms import ART1
 
 from base import BaseTestCase
 

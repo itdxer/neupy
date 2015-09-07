@@ -1,6 +1,6 @@
 import numpy as np
 
-from neuralpy import layers, algorithms
+from neupy import layers, algorithms
 
 
 input_data = np.array([

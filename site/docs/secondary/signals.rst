@@ -13,7 +13,7 @@ Here is the example where we define two custom signals which will display useful
 
 .. code-block:: python
 
-    from neuralpy import algorithms
+    from neupy import algorithms
 
     def train_epoch_end(network):
         network.logs.data("""

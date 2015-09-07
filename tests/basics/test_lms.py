@@ -1,6 +1,6 @@
 import numpy as np
 
-from neuralpy import algorithms
+from neupy import algorithms
 
 from base import BaseTestCase
 

@@ -1,7 +1,7 @@
 import numpy as np
 
-from neuralpy import algorithms
-from neuralpy.functions import errors
+from neupy import algorithms
+from neupy.functions import errors
 from base import BaseTestCase
 
 

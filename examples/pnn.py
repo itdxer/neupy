@@ -2,7 +2,7 @@ import numpy as np
 from sklearn import datasets
 from sklearn.cross_validation import StratifiedKFold
 
-from neuralpy.algorithms import PNN
+from neupy.algorithms import PNN
 
 
 dataset = datasets.load_iris()

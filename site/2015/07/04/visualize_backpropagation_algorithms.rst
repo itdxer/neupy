@@ -61,7 +61,7 @@ For understanding of the entire content of the article it is not necessary to un
 .. code-block:: python
 
     from functools import partial
-    from neuralpy import algorithms, layers
+    from neupy import algorithms, layers
 
     # Got color from page:
     # http://matplotlib.org/examples/pylab_examples/custom_cmap.html

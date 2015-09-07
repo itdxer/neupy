@@ -11,7 +11,7 @@ import tinkerer
 import tinkerer.paths
 
 # Change this to the name of your blog
-project = 'NeuralPy'
+project = 'NeuPy'
 
 # Change this to the tagline of your blog
 tagline = 'Neural Networks in Python'
@@ -72,6 +72,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.linkcode',
+    'sphinx.ext.mathjax',
     'numpydoc',
     'tinkerer.ext.blog'
 ]
@@ -106,7 +107,7 @@ html_use_index = False
 # **************************************************************
 
 # Add module folder in path to make it visible for autodoc extention
-module_path = os.path.abspath(os.path.join('..', 'neuralpy'))
+module_path = os.path.abspath(os.path.join('..', 'neupy'))
 if module_path not in sys.path:
     sys.path.append(module_path)
 
@@ -124,7 +125,7 @@ numpydoc_class_members_toctree = False
 # Customizations
 # **************************************************************
 
-GITHUB_REPO = 'https://github.com/itdxer/neuralpy'
+GITHUB_REPO = 'https://github.com/itdxer/neupy'
 
 
 def linkcode_resolve(domain, info):
@@ -137,9 +138,9 @@ def linkcode_resolve(domain, info):
 
 def get_module_for_class(classname, moduletype):
     available_module_types = {
-        'network': 'neuralpy.algorithms',
-        'ensemble': 'neuralpy.ensemble',
-        'layer': 'neuralpy.layers',
+        'network': 'neupy.algorithms',
+        'ensemble': 'neupy.ensemble',
+        'layer': 'neupy.layers',
     }
 
     if moduletype not in available_module_types:

@@ -3,7 +3,7 @@ from functools import partial
 import numpy as np
 from sklearn import datasets, cross_validation, preprocessing
 
-from neuralpy import algorithms, layers
+from neupy import algorithms, layers
 
 from utils import compare_networks
 from base import BaseTestCase

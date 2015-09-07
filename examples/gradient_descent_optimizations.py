@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-from neuralpy import algorithms, layers
+from neupy import algorithms, layers
 from plots import draw_countour, weight_quiver
 
 

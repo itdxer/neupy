@@ -1,7 +1,7 @@
 import numpy as np
 
-from neuralpy.layers import TanhLayer, StepOutputLayer
-from neuralpy.algorithms import WeightElimination, Backpropagation
+from neupy.layers import TanhLayer, StepOutputLayer
+from neupy.algorithms import WeightElimination, Backpropagation
 
 from data import xor_input_train, xor_target_train
 from base import BaseTestCase

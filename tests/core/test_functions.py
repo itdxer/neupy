@@ -1,8 +1,8 @@
 import numpy as np
 
-from neuralpy.functions import with_derivative
-from neuralpy.functions import *
-from neuralpy.functions import *
+from neupy.functions import with_derivative
+from neupy.functions import *
+from neupy.functions import *
 
 from base import BaseTestCase
 

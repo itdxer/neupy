@@ -1,6 +1,6 @@
 import numpy as np
 
-from neuralpy.algorithms import Oja
+from neupy.algorithms import Oja
 
 from base import BaseTestCase
 

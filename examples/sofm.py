@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from neuralpy import algorithms, layers
+from neupy import algorithms, layers
 
 
 np.random.seed(0)

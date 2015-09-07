@@ -1,7 +1,7 @@
 import numpy as np
 
-from neuralpy.algorithms import Instar
-from neuralpy.layers import StepLayer, OutputLayer
+from neupy.algorithms import Instar
+from neupy.layers import StepLayer, OutputLayer
 
 from base import BaseTestCase
 

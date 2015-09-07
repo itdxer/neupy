@@ -1,7 +1,7 @@
 import numpy as np
 
-from neuralpy.algorithms import *
-from neuralpy.layers import TanhLayer, StepOutputLayer
+from neupy.algorithms import *
+from neupy.layers import TanhLayer, StepOutputLayer
 
 from data import xor_input_train, xor_target_train
 from base import BaseTestCase

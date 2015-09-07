@@ -1,7 +1,7 @@
 import numpy as np
 
-from neuralpy.algorithms import HebbRule
-from neuralpy.layers import StepLayer, OutputLayer, SigmoidLayer
+from neupy.algorithms import HebbRule
+from neupy.layers import StepLayer, OutputLayer, SigmoidLayer
 
 from base import BaseTestCase
 

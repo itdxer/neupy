@@ -4,7 +4,7 @@ import tempfile
 
 import dill
 from sklearn import datasets, preprocessing
-from neuralpy import algorithms
+from neupy import algorithms
 
 from base import BaseTestCase
 

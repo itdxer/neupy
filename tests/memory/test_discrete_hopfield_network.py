@@ -1,6 +1,6 @@
 import numpy as np
 
-from neuralpy.algorithms import DiscreteHopfieldNetwork
+from neupy.algorithms import DiscreteHopfieldNetwork
 
 from memory.data import *
 from base import BaseTestCase

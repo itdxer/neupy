@@ -1,1 +1,1 @@
-recursive-include neuralpy/commands/new_project_template *
+recursive-include neupy/commands/new_project_template *

@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn import datasets, preprocessing, cross_validation
-from neuralpy import algorithms, layers, ensemble
-from neuralpy.functions import rmsle
+from neupy import algorithms, layers, ensemble
+from neupy.functions import rmsle
 
 from base import BaseTestCase
 

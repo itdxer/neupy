@@ -15,7 +15,7 @@ You just define a list or tuple with the numbers of units for each layer in acco
 
 .. code-block:: python
 
-    from neuralpy import algorithms
+    from neupy import algorithms
     bpnet = algorithms.Backpropagation((2, 4, 1))
 
 The second method is the most useful for tasks when you just want to test your network
@@ -24,7 +24,7 @@ For example it can look like this.
 
 .. code-block:: python
 
-    from neuralpy import algorithms, layers
+    from neupy import algorithms, layers
 
     bpnet = algorithms.Backpropagation(
         [
@@ -41,8 +41,8 @@ And the last one is the most intuitive.
 
 .. code-block:: python
 
-    from neuralpy import algorithms
-    from neuralpy.layers import *
+    from neupy import algorithms
+    from neupy.layers import *
 
     bpnet = algorithms.Backpropagation(
         SigmoidLayer(10) > SigmoidLayer(40) > OutputLayer(2),
@@ -68,7 +68,7 @@ The simplest type of two layers types is an output layer. Below you can see simp
 
 .. code-block:: python
 
-    from neuralpy import layers
+    from neupy import layers
 
     class RoundFloorOutputLayer(layers.OutputLayer):
         def format_output(self, value):
@@ -83,7 +83,7 @@ The example below shows one of the possible way to create a new layer.
 
 .. code-block:: python
 
-    from neuralpy import layers
+    from neupy import layers
 
     def square(x):
         return x ** 2
@@ -99,8 +99,8 @@ But we still can't use it in :network:`Backpropagation` algorithm because we don
 
 .. code-block:: python
 
-    from neuralpy import layers
-    from neuralpy.functions import with_derivative
+    from neupy import layers
+    from neupy.functions import with_derivative
 
     def square_deriv(x):
         return 2 * x
@@ -121,9 +121,9 @@ Using the same example of square function we can make some general case of it.
 
 .. code-block:: python
 
-    from neuralpy import layers
-    from neuralpy.core.properties import DictProperty
-    from neuralpy.functions import with_derivative
+    from neupy import layers
+    from neupy.core.properties import DictProperty
+    from neupy.functions import with_derivative
 
     def square_deriv(x, a=1, b=0, c=0):
         return 2 * a * x + b
@@ -145,7 +145,7 @@ It can be useful if you want to create a layer which will have custom behaviour.
 
 .. code-block:: python
 
-    from neuralpy import layers
+    from neupy import layers
 
     class PlusOneLayer(layers.BaseLayer):
         def output(self, input_value):

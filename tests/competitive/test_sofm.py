@@ -1,9 +1,9 @@
 import numpy as np
 
-from neuralpy.layers import (CompetitiveOutputLayer, LinearLayer, OutputLayer,
+from neupy.layers import (CompetitiveOutputLayer, LinearLayer, OutputLayer,
                              EuclideDistanceLayer, AngleDistanceLayer)
-from neuralpy.algorithms import SOFM
-from neuralpy.algorithms.competitive.sofm import neuron_neighbours
+from neupy.algorithms import SOFM
+from neupy.algorithms.competitive.sofm import neuron_neighbours
 from base import BaseTestCase
 
 

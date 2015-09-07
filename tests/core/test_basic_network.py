@@ -1,4 +1,4 @@
-from neuralpy.algorithms import Backpropagation
+from neupy.algorithms import Backpropagation
 
 from base import BaseTestCase
 

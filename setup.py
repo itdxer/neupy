@@ -2,7 +2,7 @@ import os
 
 from setuptools import setup, find_packages
 
-import neuralpy
+import neupy
 
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -20,11 +20,11 @@ def get_requirements():
 
 setup(
     # Info
-    name='neural-python',
-    version=neuralpy.__version__,
+    name='neupy',
+    version=neupy.__version__,
     license='MIT',
-    url='http://neuralpy.com',
-    description=neuralpy.__doc__,
+    url='http://neupy.com',
+    description=neupy.__doc__,
 
     # Author
     author='Yurii Shevhcuk',
@@ -39,7 +39,7 @@ setup(
 
     # Command
     entry_points={
-        'console_scripts': ['neuralpy = neuralpy.commands.main:main'],
+        'console_scripts': ['neupy = neupy.commands.main:main'],
     },
 
     # Other

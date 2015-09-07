@@ -4,9 +4,9 @@ import unittest
 from scipy import stats
 import numpy as np
 
-from neuralpy.algorithms import Backpropagation
-from neuralpy.network.connections import NetworkConnectionError
-from neuralpy.layers import *
+from neupy.algorithms import Backpropagation
+from neupy.network.connections import NetworkConnectionError
+from neupy.layers import *
 
 from base import BaseTestCase
 

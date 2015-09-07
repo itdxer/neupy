@@ -1,10 +1,10 @@
 import numpy as np
 
-from neuralpy.algorithms import (Backpropagation, WeightDecay,
+from neupy.algorithms import (Backpropagation, WeightDecay,
                                  LeakStepAdaptation)
-from neuralpy.layers import (SigmoidLayer, TanhLayer, StepOutputLayer,
+from neupy.layers import (SigmoidLayer, TanhLayer, StepOutputLayer,
                              OutputLayer)
-from neuralpy.functions import with_derivative
+from neupy.functions import with_derivative
 
 from base import BaseTestCase
 from data import xor_input_train, xor_target_train
