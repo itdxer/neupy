@@ -18,7 +18,7 @@ docs = {
         ``True`` value it displays x-axis in logarithmic scale.
     """,
     "predict": """predict(input_data)
-        Predict input value.
+        Predict value.
     """,
     "fit": """fit(\*args, \*\*kwargs)
         The same as ``train`` method.

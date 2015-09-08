@@ -29,18 +29,28 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
         dhnet = algorithms.DiscreteHopfieldNetwork(mode='full')
         dhnet.train(data)
 
-        self.assertTrue(np.all(zero == dhnet.predict(half_zero)))
-        self.assertTrue(np.all(one == dhnet.predict(half_one)))
-        self.assertTrue(np.all(two == dhnet.predict(half_two)))
+        np.testing.assert_array_almost_equal(zero, dhnet.predict(half_zero))
+        np.testing.assert_array_almost_equal(one, dhnet.predict(half_one))
+        np.testing.assert_array_almost_equal(two, dhnet.predict(half_two))
+
+        multiple_inputs = np.vstack([zero, one, two])
+        np.testing.assert_array_almost_equal(
+            multiple_inputs, dhnet.predict(multiple_inputs)
+        )
 
     def test_discrete_hopfield_random(self):
         data = np.concatenate([zero, one, two], axis=0)
         dhnet = algorithms.DiscreteHopfieldNetwork(mode='random', n_nodes=1000)
         dhnet.train(data)
 
-        self.assertTrue(np.all(zero == dhnet.predict(half_zero)))
-        self.assertTrue(np.all(one == dhnet.predict(half_one)))
-        self.assertTrue(np.all(two == dhnet.predict(half_two)))
+        np.testing.assert_array_almost_equal(zero, dhnet.predict(half_zero))
+        np.testing.assert_array_almost_equal(one, dhnet.predict(half_one))
+        np.testing.assert_array_almost_equal(two, dhnet.predict(half_two))
+
+        multiple_inputs = np.vstack([zero, one, two])
+        np.testing.assert_array_almost_equal(
+            multiple_inputs, dhnet.predict(multiple_inputs)
+        )
 
     def test_energy_function(self):
         input_vector = np.array([[1, 0, 0, 1, 1, 0, 0]])

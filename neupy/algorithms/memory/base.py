@@ -15,7 +15,7 @@ class DiscreteMemory(BaseSkeleton, Configurable):
     * {discrete_data_note}
     """
     __discrete_data_note = """ Input and output data must contains only \
-    binary values which are equal to settings in `discrete_values` property.
+    binary values.
     """
     shared_docs = {'discrete_data_note': __discrete_data_note}
 

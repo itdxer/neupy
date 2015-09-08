@@ -23,6 +23,26 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     """ Discrete Hopfield Network. Memory algorithm which works only with
     binary vectors.
 
+    Parameters
+    ----------
+    mode : {{'full', 'random'}}
+        Indentify pattern recovery mode. ``full`` mode try recovery a pattern
+        using the all input vector. ``random`` mode randomly chose some
+        values from the input vector and repeat this procedure the number
+        of times a given variable ``n_nodes``. Defaults to ``full``.
+    n_nodes : int
+        Available only in ``random`` mode. Identify number of random trials.
+        Defaults to ``100``.
+
+    Methods
+    -------
+    energy(input_data)
+        Compute Discrete Hopfiel Energy.
+    train(input_data)
+        Save input data pattern into the network memory.
+    predict(input_data)
+        Recover data from the memory using input pattern.
+
     Notes
     -----
     * {discrete_data_note}
@@ -99,6 +119,11 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     | *       *
     | *       *
     |   * * *
+
+    See Also
+    --------
+    :ref:`password-recovery`: Password recovery with Discrete Hopfield Network.
+    :ref:`discrete-hopfield-network`: Discrete Hopfield Network tutorial.
     """
     mode = ChoiceProperty(default='full', choices=['random', 'full'])
     n_nodes = NonNegativeIntProperty(default=100)
