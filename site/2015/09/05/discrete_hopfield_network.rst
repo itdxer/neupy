@@ -10,13 +10,12 @@ At this tutorial we are going to understand :network:`Discrete Hopfield Network 
 Architecture
 ------------
 
-For this task we will use :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
-It is the simplest Neural Networks architectures.
-There are two things which you are need to know, how to make the outer and matrix-vector products.
+:network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` is a very simple algorithm.
+To understend it you must to know how to make an outer product and product between matrix and vector.
 That's it.
-Network include just this two operations.
+Network include just these two operations.
 
-`Discrete` means that network can save and predict only binary vectors.
+`Discrete` means that network can save and predict only the binary vectors.
 For this specific network we will use only sign-binary numbers: 1 and -1.
 We can't use zeros, because it can reduce information from the input vector, later in this tutorial I try explain why that is the problem.
 
@@ -63,10 +62,11 @@ It includes just an outer product between input vector and it transpose.
         \right]
     \end{align*}
 
+Where :math:`W` is a weight matrix and :math:`x` is an input vector.
 :math:`x_i` can only be -1 or 1 values, so after outer product matrix always has 1 on the diagonal.
-Information on the diagomal is useles, so we better to remove it.
-For this reason we set up all diagonal values equal to zero.
-The final weight dormula will look like this:
+This values on the diagonal are useles, so we better to remove them.
+For this reason we need to set up all the diagonal values equal to the zero, just to make sure that we don't have any information on the diagonals that can make incorrect contribution into the output result.
+The final weight formula look like this:
 
 .. math::
 
@@ -82,24 +82,27 @@ The final weight dormula will look like this:
         \right]
     \end{align*}
 
-And finally, if we already had some information stored in weights we just add the new weight matrix to the old one.
+If we already had some information stored in the weights, we just add the new weight matrix to the old one.
 
 .. math::
 
     W = W_{old} + W_{new}
 
-But if you need to store multiple vectors inside the network at the same time you don't need to compute weight for every vector and than sum up them.
-For example, if you have a matrix :math:`X` where each row is an input vector, then you can just make product between it transpose and itself.
+But if you need to store multiple vectors inside the network at the same time you don't need to compute weight for each vector and than sum up them.
+If you have a matrix :math:`X \in \Bbb R^{m\times n}` where each row is the input vector, then you can just make product between it transpose and itself.
 
 .. math::
 
-    W = X^T X
+    W = X^T X - m I
+
+
+Where :math:`I` is an identity matrix (:math:`I \in \Bbb R^{n\times n}`), :math:`n` is a number of features in the input vector and :math:`m` is a number of input patterns inside the matrix :math:`X`.
 
 Recovery from memory
 ~~~~~~~~~~~~~~~~~~~~
 
 Recovery operation is also very simple.
-If you have the vector which contains broken information and you nedd to recover it, you can just multiple it by the weight matrix.
+If you have a vector that contains broken information and you need to recovery it, you can just multiply the input vector by the weight matrix.
 
 .. math::
 
@@ -145,7 +148,7 @@ And before use the network output we must filter it throw the :math:`sign` funct
     sign(x) = \left\{
         \begin{array}{lr}
             &1 && : x \ge 0\\
-            &-1 && : x < 1
+            &-1 && : x < 0
         \end{array}
     \right.\\
 
@@ -154,13 +157,13 @@ And before use the network output we must filter it throw the :math:`sign` funct
 That's it.
 Now :math:`y` store the recovered vector :math:`x`.
 
-Maybe now you can see why we can't use zeros in the vector input vectors.
-With 1 and -1 values we don't lose information in the dot product operation, we just collect everything.
-But if we had zeros we would remove all information which is store in the weight column.
-In my experiense you can use it and sometime you will get the corect result, but this situation typicaly would be much rare that for the 1 and -1 values.
+Maybe now you can see why we can't use zeros in the input vectors.
+With 1 and -1 values we don't lose information after dot product operation, we just collect everything inside the weight matrix.
+But if we had zeros, we would remove all information that stored in the weight column even is value associated with zero was correct.
+You can use 0 and 1 values and sometime you will get the corect result, but this situation typicaly would be much rare that for the 1 and -1 values.
 
-Problem
-~~~~~~~
+Memory limit
+------------
 
 Obviously, you can't store infinite number of vectors inside the network.
 There already exists a good rule of thumb.
@@ -168,27 +171,28 @@ Suppose that :math:`n` is the dimention of your input vector, then the formula b
 
 .. math::
 
-    \left \lfloor \frac{n}{2 \cdot log(n)} \right \rfloor
+    l = \left \lfloor \frac{n}{2 \cdot log(n)} \right \rfloor
 
-Formula above doesn't mean that you can't save more values that this formula output produce.
+Formula above doesn't mean that you can't save more values than :math:`l`.
 It is just a good upper bound for typical tasks, but you can find some situations when this rule will fail.
 
 Why does it work?
 -----------------
 
-Let's start with the simple vector :math:`u`.
+Let's start with an example.
+Suppose we have a vector :math:`u`.
 
 .. math::
 
     u = \left[\begin{align*}1 \\ -1 \\ 1 \\ -1\end{align*}\right]
 
-Assume that the network don't have patterns inside of it, so the vector :math:`u` would be the first one.
+Assume that network don't have patterns inside of it, so the vector :math:`u` would be the first one.
 Let's compute weights for the network.
 
 .. math::
 
     \begin{align*}
-        W = u u^T =
+        U = u u^T =
         \left[
             \begin{array}{c}
                 1 \\
@@ -213,37 +217,54 @@ Let's compute weights for the network.
         \right]
     \end{align*}
 
-Basicly outer product just repeat vector 4 times with different scale.
-Values are always equal to 1 or -1, so we get the same vector or just the same with reversed sign.
-Look closer to the matrix :math:`W` that we got.
-First and third column (or row, it doesn't metter) are exacly the asme as input vector.
+Basicly outer product just repeat vector 4 times with excaly the same value or with inversed signs.
+Look closer to the matrix :math:`U` that we got.
+First and third column (or row, it doesn't metter, because matrix is symmetric) are exacly the same as input vector.
 The second and fourth are also the same, but with the opposite sign.
+That beause in the vector :math:`u` we have 1 on the first and third places and -1 on the rest.
 
-And remove ones from the diagonal to make weights valid.
+To make weight from the :math:`U` matrix, we need to remove ones from the diagonal to make them valid.
 
 .. math::
 
-    W = u u^T - I
+    W = U - I
 
-Where :math:`I` is the identity matrix.
+:math:`I` is the identity matrix and :math:`I \in \Bbb R^{n \times n}`, where :math:`n` is a number of features in the input vector.
 
 When we have one stored vector inside the weights we don't realy need to remove ones from the diagonal.
-The main problem would be when we have many vectors stored in the weights.
+The main problem would be when we have more than one vector stored in the weights.
 Each value on the diagonal would be equal to the number of stored vectors inside of it.
-On recovery procedure this diagonal elements will produce a big weight for the output vector, but in fact they don't contain an important information.
+On recovery procedure these diagonal elements will produce the big values for the output vector and eventually they will impair the output result.
 
 Hallucinations
 --------------
 
-Hallucinations is one of the possible problem in :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
-Not sure that it is 100% correct term, but I think about it like that.
+Hallucinations is one of the possible problem in the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
 Sometimes network output produce something that we didn't teach it.
 
-To understand it we must first of all define the Energy Function.
+To understand this phenomenon we must first of all define the Hopfield energy function.
 
 .. math::
 
-    E = \frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n} w_{ij} v_i v_j + \sum_{i=1}^{n} \theta_i v_i
+    E = -\frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n} w_{ij} x_i x_j - \sum_{i=1}^{n} \theta_i x_i
+
+Where :math:`w_{ij}` is a weight value on the :math:`i`-th row and :math:`j`-th column.
+:math:`x_i` is a :math:`i`-th values from the input vector :math:`x`.
+:math:`\theta` is a threshold.
+For the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` we can assume that :math:`\theta` equal to 0.
+For :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` the energy function looks little bit simpler.
+
+.. math::
+
+    E = -\frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n} w_{ij} x_i x_j
+
+In terms of a linear algebra we can write formula for the Energy Function more simplier.
+
+.. math::
+
+    E = -\frac{1}{2} x^T W x
+
+But linear algebra notation works only with the :math:`x` vector, we can't use matrix :math:`X` with the multiple input patterns instead of the :math:`x` in this formula.
 
 Summary
 -------
