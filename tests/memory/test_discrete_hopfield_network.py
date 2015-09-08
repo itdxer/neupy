@@ -49,4 +49,14 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
 
         self.assertEqual(-21, dhnet.energy(input_vector))
         self.assertEqual(3, dhnet.energy(np.array([[0, 0, 0, 0, 0, 0, 0]])))
-        self.assertEqual(-21, dhnet.energy(np.array([[0, 1, 1, 0, 0, 1, 1]])))
+        self.assertEqual(-21, dhnet.energy(np.array([0, 1, 1, 0, 0, 1, 1])))
+
+        np.testing.assert_array_almost_equal(
+            np.array([-21, 3]),
+            dhnet.energy(
+                np.array([
+                    [0, 1, 1, 0, 0, 1, 1],
+                    [0, 0, 0, 0, 0, 0, 0],
+                ])
+            )
+        )

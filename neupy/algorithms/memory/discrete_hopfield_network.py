@@ -19,7 +19,6 @@ def format_data(input_data):
     return input_data
 
 
-
 class DiscreteHopfieldNetwork(DiscreteMemory):
     """ Discrete Hopfield Network. Memory algorithm which works only with
     binary vectors.
@@ -158,8 +157,20 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
                            lower_value=0, upper_value=1)
         return predicted.astype(int)
 
+    def _hopfield_energy(self, input_data):
+        energy_output = -0.5 * input_data.dot(self.weight).dot(input_data.T)
+        return energy_output.item(0)
+
     def energy(self, input_data):
         input_data = bin2sign(input_data)
         input_data = format_data(input_data)
-        energy_value = -0.5 * input_data.dot(self.weight).dot(input_data.T)
-        return energy_value.item(0)
+        nrows, n_features = input_data.shape
+
+        if nrows == 1:
+            return self._hopfield_energy(input_data)
+
+        output = zeros(nrows)
+        for i, row in enumerate(input_data):
+            output[i] = self._hopfield_energy(row)
+
+        return output
