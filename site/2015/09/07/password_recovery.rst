@@ -18,7 +18,9 @@ Let's define a functio that transform string to the binary list.
 
 .. code-block:: python
 
+    import math
     import binascii
+    from itertools import repeat
 
     def str2bin(text, max_length=30, encoding='ascii'):
         if len(text) > max_length:
@@ -114,11 +116,17 @@ To make it little bit secure we can add the noize into the network.
 For this reason we define one additional parameter ``noize_level`` into the function.
 We encode our password into the binary vector and save it into the ``data`` variable.
 Next we using Binomial distribution generate random binary vectors where probability to get 1 in vector is equal to 55%.
-Parameter ``noize_level`` just control number of noize vectors.
+Parameter ``noize_level`` just control number of randomly generated binary vectors.
 
-But why do we get random binary vector instead of decoded random word?
-The problem in the similarity between vectors.
-Let's check two approaches with `Hamming distance <https://en.wikipedia.org/wiki/Hamming_distance>`_.
+And finaly we define :network:`DiscreteHopfieldNetwork` instance.
+We train the network with password binary vector and with all randomly generated binary vectors.
+And that's it.
+Function returns trained network for later usage.
+
+But why do we get random binary vector instead of decoded a random word?
+The problem is in the similarity between two vectors.
+Let's check two approaches and compare them with a `Hamming distance <https://en.wikipedia.org/wiki/Hamming_distance>`_.
+Before that we must define function that compare distance between two vectors.
 
 .. code-block:: python
 
@@ -128,7 +136,7 @@ Let's check two approaches with `Hamming distance <https://en.wikipedia.org/wiki
     def hamming_distance(left, right):
         left, right = np.array(left), np.array(right)
         if left.shape != right.shape:
-            raise ValueError("Shapes are different")
+            raise ValueError("Shapes must be equal")
         return (left != right).sum()
 
     def generate_password(min_length=5, max_length=30):
@@ -142,7 +150,7 @@ Let's check two approaches with `Hamming distance <https://en.wikipedia.org/wiki
         return ''.join(password)
 
 
-In addition I add function ``generate_password`` that we use to test distance between randomly generated words.
+In addition I add function ``generate_password`` that we use in test.
 
 .. code-block:: python
 
@@ -150,7 +158,7 @@ In addition I add function ``generate_password`` that we use to test distance be
     ...                  str2bin(generate_password(20, 20))))
     71
 
-As we can see two random generated passwords are very similar to each other (approximetly 70% of bits).
+As we can see two randomly generated passwords are very similar to each other (approximetly 70% of bits are the same).
 But If we compare randomly generated password and random binary vector we will see the difference.
 
 .. code-block:: python
@@ -163,21 +171,135 @@ Hamming distance is bigger than in previous example.
 Almost 52% of the bits are different.
 The bigger difference between random binary vector and word is improve possibility to recover valid passowrd from the network.
 
-
 Recover password from the network
 ---------------------------------
+
+Now we are going to define the last function which will recover password from the network.
+
+.. code-block:: python
+
+    def recover_password(dhnet, broken_password):
+        test = np.array(str2bin(broken_password))
+        recovered_password = dhnet.predict(test)
+
+        try:
+            if recovered_password.ndim == 2:
+                recovered_password = recovered_password[0, :]
+            password = bin2str(recovered_password)
+
+        except (UnicodeDecodeError, binascii.Error):
+            # Panic mode
+            password = generate_password()
+
+        return password
+
+As input function takes two parameters.
+The first one is the network instance and the second one is broken password.
+In function we can also see ``try ... except`` condition that fix problem if network return broken vector which we can't convert to the string.
+
+Finnaly we can test it.
+
+.. code-block:: python
+
+    >>> np.random.seed(0)
+    >>>
+    >>> dhnet = save_password("$My%Super^Secret*^&Passwd", noize_level=12)
+    >>> recover_password(dhnet, "-My-Super-Secret---Passwd")
+    '$My%Super^Secret*^&Passwd'
+    >>>
+    >>> recover_password(dhnet, "-My-Super")
+    '!!B6Vz=,z#p=hx'
+    >>>
+    >>> recover_password(dhnet, "Invalid")
+    "OML']8X"
+
+
+Everithing looks fine.
+But one problem is clearly exist.
+The example below shows it.
+
+.. code-block:: python
+
+    >>> recover_password(dhnet, "MySuperSecretPasswd")
+    '$M{!Super^Searet*^&Passwd'
+
+Answer is almost right, but two symbols are wrong.
+This is hallucinations.
+We clearly didn't teach the network to this pattern, but it reproduces its.
 
 
 Test it using Monte Carlo
 -------------------------
 
+And now we can test it on a randomly generated passwords.
+For this task we will run Monte Carlo experiment.
+
+.. code-block:: python
+
+    import pprint
+    from operator import itemgetter
+
+    def cutword(word, k, fromleft=False):
+        if fromleft:
+            return (word[-k:] if k != 0 else '').rjust(len(word))
+        return (word[:k] if k != 0 else '').ljust(len(word))
+
+    np.random.seed(0)
+    random.seed(0)
+
+    n_times = 10000
+    cases = OrderedDict([
+        ('exclude-one', (lambda x: x - 1)),
+        ('exclude-quarter', (lambda x: 3 * x // 4)),
+        ('exclude-half', (lambda x: x // 2)),
+        ('just-one-symbol', (lambda x: 1)),
+        ('empty-string', (lambda x: 0)),
+    ])
+    results = OrderedDict.fromkeys(cases.keys(), 0)
+
+    for _ in range(n_times):
+        real_password = generate_password(min_length=25, max_length=25)
+
+        for casename, func in cases.items():
+            n_letters = func(len(real_password))
+            broken_password = cutword(real_password, k=n_letters,
+                                      fromleft=True)
+
+            dhnet = save_password(real_password, noize_level=11)
+            recovered_password = recover_password(dhnet, broken_password)
+
+            if recovered_password != real_password:
+                results[casename] += 1
+
+    print("Number of fails for each test case:")
+    pprint.pprint(results)
+
+
+Your output must be the same as the one below::
+
+    Number of fails for each test case:
+    {'exclude-one': 12,
+     'exclude-quarter': 665,
+     'exclude-half': 5653,
+     'just-one-symbol': 10000,
+     'empty-string': 9999}
+
+From 10000 randomly generated passwords we
 
 Possible Problems
 -----------------
 
-* Shifted words
+There are few possible problems with Discrete Hopfile Network.
 
-* Small percent recovery from empty string
+1. Shifted words are harder to recover than the words with the missed symbols.
+
+2. There already exists small probability to recover the password from the empty string.
+
+
+Download script
+---------------
+
+You can download and test the full script from the `github <https://github.com/itdxer/neuralpy/tree/master/examples/password_recovery.py>`_
 
 
 .. author:: default

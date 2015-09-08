@@ -91,7 +91,7 @@ def recover_password(dhnet, broken_password):
     return password
 
 
-def cut_password(word, k, fromleft=False):
+def cutword(word, k, fromleft=False):
     if fromleft:
         return (word[-k:] if k != 0 else '').rjust(len(word))
     return (word[:k] if k != 0 else '').ljust(len(word))
@@ -104,28 +104,32 @@ def cripple_password(word, k):
 
 
 if __name__ == '__main__':
+    np.random.seed(0)
+    random.seed(0)
+
     n_times = 10000
     cases = OrderedDict([
-        ('first', (lambda x: x - 1)),
-        ('quarter', (lambda x: 3 * x // 4)),
-        ('half', (lambda x: x // 2)),
-        ('just-one', (lambda x: 1)),
-        ('full', (lambda x: 0)),
+        ('exclude-one', (lambda x: x - 1)),
+        ('exclude-quarter', (lambda x: 3 * x // 4)),
+        ('exclude-half', (lambda x: x // 2)),
+        ('just-one-symbol', (lambda x: 1)),
+        ('empty-string', (lambda x: 0)),
     ])
     results = OrderedDict.fromkeys(cases.keys(), 0)
 
     for _ in range(n_times):
         real_password = generate_password(min_length=25, max_length=25)
 
-        for case, func in cases.items():
+        for casename, func in cases.items():
             n_letters = func(len(real_password))
-            broken_password = cut_password(real_password, k=n_letters,
-                                           fromleft=True)
+            broken_password = cutword(real_password, k=n_letters,
+                                      fromleft=True)
 
             dhnet = save_password(real_password, noize_level=11)
             recovered_password = recover_password(dhnet, broken_password)
 
             if recovered_password != real_password:
-                results[case] += 1
+                results[casename] += 1
 
-    print(results)
+    print("Number of fails for each test case:")
+    pprint.pprint(results)
