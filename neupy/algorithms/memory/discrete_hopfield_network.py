@@ -11,6 +11,15 @@ from .base import DiscreteMemory
 __all__ = ('DiscreteHopfieldNetwork',)
 
 
+def format_data(input_data):
+    # Valid number of features for one or two dimentions
+    n_features = input_data.shape[-1]
+    if input_data.ndim == 1:
+        input_data = input_data.reshape((1, n_features))
+    return input_data
+
+
+
 class DiscreteHopfieldNetwork(DiscreteMemory):
     """ Discrete Hopfield Network. Memory algorithm which works only with
     binary vectors.
@@ -108,6 +117,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         self.discrete_validation(input_data)
 
         input_data = bin2sign(input_data)
+        input_data = format_data(input_data)
 
         nrows, n_features = input_data.shape
         nrows_after_update = self.n_remembered_data + nrows
@@ -120,7 +130,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         weight_shape = (n_features, n_features)
 
         if self.weight is None:
-            self.weight = zeros(weight_shape)
+            self.weight = zeros(weight_shape, dtype=int)
 
         if self.weight.shape != weight_shape:
             raise ValueError("Invalid input shapes. Number of input "
@@ -135,11 +145,8 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         input_data = bin2sign(input_data)
 
         if self.mode == 'random':
-            # Valid number of features for one or two dimentions
-            n_features = input_data.shape[-1]
-
-            if input_data.ndim == 1:
-                input_data = input_data.reshape((1, n_features))
+            input_data = format_data(input_data)
+            _, n_features = input_data.shape
 
             data = zeros(input_data.shape)
             for _ in range(self.n_nodes):
@@ -150,3 +157,9 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         predicted = signum(input_data.dot(self.weight),
                            lower_value=0, upper_value=1)
         return predicted.astype(int)
+
+    def energy(self, input_data):
+        input_data = bin2sign(input_data)
+        input_data = format_data(input_data)
+        energy_value = -0.5 * input_data.dot(self.weight).dot(input_data.T)
+        return energy_value.item(0)
