@@ -9,7 +9,7 @@ At this tutorial we are going to build a simple network that will recover passwo
 If you don't familiar with :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` algorithm, you can read :ref:`this tutorial <discrete-hopfield-network>`.
 
 Before run all experiments, we need to setup ``seed`` parameter to make all results reproducible.
-But you can test all outputs without it, jus to make sure that conclutions from your outputs are the same for most of all situations.
+But you can test all outputs without it, just to make sure that conclutions from your outputs are the same for most of all situations.
 
 .. code-block:: python
 
@@ -33,6 +33,8 @@ Versions:
     >>> platform.python_version()
     '3.4.3'
 
+Code works with Python2.7 as well.
+
 Data transformation
 -------------------
 
@@ -43,32 +45,22 @@ Let's define a function that transform a string to the binary list.
 
 .. code-block:: python
 
-    import math
-    import binascii
-    from itertools import repeat
-
-    def str2bin(text, max_length=30, encoding='ascii'):
+    def str2bin(text, max_length=30):
         if len(text) > max_length:
             raise ValueError("Text can't contains more "
                              "than {} symbols".format(max_length))
 
         text = text.rjust(max_length)
-        byte_text = bytearray(text, encoding)
-        binary_string = bin(int(binascii.hexlify(byte_text), 16))
 
-        # Remove 0b symbols from string
-        binary_array = map(int, binary_string[2:])
+        bits_list = []
+        for symbol in text:
+            bits = bin(ord(symbol))
+            # Cut `0b` from the beggining and fill with zeros if they
+            # are missed
+            bits = bits[2:].zfill(8)
+            bits_list.extend(map(int, bits))
 
-        # Python cut leading zeros from the beggining,
-        # so we need put them back
-        letter_bin_len = math.ceil((len(binary_string) - 2) / max_length)
-        valid_length = letter_bin_len * max_length
-        bin_vector = list(binary_array)
-
-        n_leading_zeros = valid_length - len(bin_vector)
-        leading_zeros = list(repeat(0, times=n_leading_zeros))
-
-        return leading_zeros + bin_vector
+        return list(bits_list)
 
 Function above takes 3 parameters.
 First one is a string which we want to encode.
@@ -92,18 +84,20 @@ Now we must add another function that transform binary vector into the string.
 
 .. code-block:: python
 
-    def bin2str(array, encoding='ascii'):
-        string_array = map(str, array)
-        binary_string = ''.join(string_array)
-        binary_string = '0b' + binary_string
-        hex_string = bytearray(hex(int(binary_string, 2)), encoding)
+    def chunker(sequence, size):
+        for position in range(0, len(sequence), size):
+            yield sequence[position:position + size]
 
-        raw_text = binascii.unhexlify(hex_string[2:])
-        return raw_text.lstrip().decode(encoding)
 
-This function takes just two arguments.
-First one is a binary vector.
-The second one is the string encoding that we wouldn't update in this tutorial.
+    def bin2str(array):
+        characters = []
+        for binary_symbol_code in chunker(array, size=8):
+            binary_symbol_str = ''.join(map(str, binary_symbol_code))
+            character = chr(int(binary_symbol_str, base=2))
+            characters.append(character)
+        return ''.join(characters).lstrip()
+
+Function ``bin2str`` takes binary array and returns the string encoded in it.
 
 When we test it we get string ``test`` back.
 
@@ -180,7 +174,7 @@ Before that we must define a function that compare distance between two vectors.
             string.digits +
             string.punctuation
         )
-        password_len = random.randint(min_length, max_length + 1)
+        password_len = random.randrange(min_length, max_length + 1)
         password = [np.random.choice(symbols) for _ in range(password_len)]
         return ''.join(password)
 
@@ -201,10 +195,10 @@ But If we compare randomly generated password and random binary vector we will s
 
     >>> hamming_distance(str2bin(generate_password(20, 20)),
     ...                  np.random.binomial(1, 0.55, 240))
-    122
+    134
 
 Hamming distance is bigger than in the previous example.
-Little bit more than 50% of the bits are different.
+Little bit more than 55% of the bits are different.
 The bigger difference between random binary vector and string is improve probability to recover valid passowrd from the network.
 
 Recover password from the network
@@ -218,16 +212,10 @@ Now we are going to define the last function which will recover password from th
         test = np.array(str2bin(broken_password))
         recovered_password = dhnet.predict(test)
 
-        try:
-            if recovered_password.ndim == 2:
-                recovered_password = recovered_password[0, :]
-            password = bin2str(recovered_password)
+        if recovered_password.ndim == 2:
+            recovered_password = recovered_password[0, :]
 
-        except (UnicodeDecodeError, binascii.Error):
-            # Panic mode
-            password = generate_password()
-
-        return password
+        return bin2str(recovered_password)
 
 As input function takes two parameters.
 The first one is the network instance.
@@ -246,10 +234,10 @@ Finnaly we can test it.
     True
     >>>
     >>> recover_password(dhnet, "-My-Super")
-    'y$!I}v^r(d`v7'
+    '\x19`\xa0\x04Í\x14#ÛE2er\x1eÛe#2m4jV\x07PqsCwd'
     >>>
     >>> recover_password(dhnet, "Invalid")
-    'g9@wx\\/w8k;5P(N-9{A@U'
+    '\x02 \x1d`\x80$Ì\x1c#ÎE¢eò\x0eÛe§:/$ê\x04\x07@5sCu$'
     >>>
     >>> recover_password(dhnet, "MySuperSecretPasswd")
     '$My%Super^Secret*^&Passwd'
@@ -310,9 +298,9 @@ For this task we will run Monte Carlo experiment.
 Your output must be the same as the one below::
 
     Number of fails for each test case:
-    {'exclude-one': 15,
-     'exclude-quarter': 710,
-     'exclude-half': 5663,
+    {'exclude-one': 11,
+     'exclude-quarter': 729,
+     'exclude-half': 5823,
      'just-one-symbol': 9998,
      'empty-string': 10000}
 
@@ -327,6 +315,8 @@ There are few possible problems in the Discrete Hopfile Network.
 1. Shifted words are harder to recover than the words with the missed symbols.
 
 2. There already exists small probability to recover the password from the empty string.
+
+3. Similar binary code representation for the different symbols.
 
 
 Summary

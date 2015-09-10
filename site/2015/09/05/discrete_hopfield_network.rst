@@ -246,7 +246,7 @@ To understand this phenomenon we must first of all define the Hopfield energy fu
 
 .. math::
 
-    E = -\frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n} w_{ij} x_i x_j - \sum_{i=1}^{n} \theta_i x_i
+    E = -\frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n} w_{ij} x_i x_j + \sum_{i=1}^{n} \theta_i x_i
 
 Where :math:`w_{ij}` is a weight value on the :math:`i`-th row and :math:`j`-th column.
 :math:`x_i` is a :math:`i`-th values from the input vector :math:`x`.
@@ -264,7 +264,10 @@ In terms of a linear algebra we can write formula for the Energy Function more s
 
     E = -\frac{1}{2} x^T W x
 
-But linear algebra notation works only with the :math:`x` vector, we can't use matrix :math:`X` with the multiple input patterns instead of the :math:`x` in this formula.
+But linear algebra notation works only with the :math:`x` vector, we can't use matrix :math:`X` with the multiple input patterns instead of the :math:`x` in this formula, beause after product your energies would be on the diagonal and the other values would be useles.
+
+Example
+-------
 
 Summary
 -------
