@@ -5,7 +5,7 @@ Password recovery
 
 .. contents::
 
-At this tutorial we are going to build a simple network that will recover password from a broken one.
+At this tutorial we are going to build a simple neural network that will recover password from a broken one.
 If you don't familiar with a :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` algorithm, you can read :ref:`this tutorial <discrete-hopfield-network>`.
 
 Before run all experiments, we need to setup ``seed`` parameter to make all results reproducible.
@@ -19,7 +19,7 @@ But you can test code without it.
     np.random.seed(0)
     random.seed(0)
 
-If you can't reproduce with your own version of Python and libraries you can install the same as I used:
+If you can't reproduce with your version of Python and libraries you can install the same as I used:
 
 .. code-block:: python
 
@@ -39,9 +39,10 @@ Data transformation
 -------------------
 
 Before build the network that will save and recover the password we must make transformations for the input and output data.
-Lets assume that we are use only ASCII symbols.
-We must make binary vector with a fixed length from a string to make a vector with a constant length.
-Let's define a function that transform a string to the binary list.
+But it's not enough just to encode it, we must set up a constant length for a string, just to make sure that for all usage we will have a vector with a constant length.
+Another notation that we must add is a string encoding.
+For simplicity we will use only ASCII symbols.
+So, let's define a function that transform a string to the binary list.
 
 .. code-block:: python
 
@@ -62,12 +63,12 @@ Let's define a function that transform a string to the binary list.
 
         return list(bits_list)
 
-Function above takes 2 parameters.
+Our function takes 2 parameters.
 First one is a string which we want to encode.
 The second attribute is set up a constant length for the input vector.
-If length of the input string is less than the ``max_length`` value, then function adds spaces at the beginning of the string.
+If length of the input string is less than the ``max_length`` value, then function adds fill the spaces at the beginning of the string.
 
-Let's test ``str2bin`` function.
+Let's check it output.
 
 .. code-block:: python
 
@@ -76,17 +77,17 @@ Let's test ``str2bin`` function.
     >>> len(str2bin("test", max_length=5))
     40
 
-ASCII use 8 bits per symbol and we set up 5 symbols per string, so our vector length always equal to 40.
-As you can see first 8 symbols from output have form ``00100000`` which is space value from the ASCII table.
+ASCII encoding use 8 bits per symbol and we set up 5 symbols per string, so our vector length always equal to 40.
+From the first output, as you can see, first 8 symbols are equal to ``00100000``, that is a space value from the ASCII table.
 
-Now we must add another function that makes inverse transformion from the binary vector to the string.
+After recovery procedure we always get the the binary list.
+So before we go to the network integration, we have to define another function that transform binary list back to the string (which is basicly inverse operation to the previous function).
 
 .. code-block:: python
 
     def chunker(sequence, size):
         for position in range(0, len(sequence), size):
             yield sequence[position:position + size]
-
 
     def bin2str(array):
         characters = []
@@ -104,6 +105,7 @@ If we test it we will get string ``test`` back.
     'test'
 
 Pay attention, function removed all spaces at the beggining of the string before return it.
+We assume that password wouldn't contains the space symbols at the beggining.
 
 Save password into the network
 ------------------------------
@@ -140,20 +142,18 @@ Let's define it and later we will check it step by step.
 If you are already read :ref:`Discrete Hopfield Network tutorial <discrete-hopfield-network>`, you must know that if we add only one vector into the network we will get it dublicated or with reversed signs in the whole matrix.
 To make it little bit secure we can add the noize into the network.
 For this reason we define one additional parameter ``noize_level`` into the function.
+It control number of randomly generated binary vectors.
+At each iteration using Binomial distribution it generate random binary vectors with a 55% probability to get a 1 in the vector.
+Next we collect all noize vectors and transformed password into the one matrix.
+And finaly we save all data in the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
 
-First of all we encode our password into the binary vector and save it into the ``data`` variable.
-Next we using Binomial distribution generate random binary vectors with a 55% probability to get a 1 in the vector.
-Parameter ``noize_level`` just control number of randomly generated binary vectors.
-
-And finaly we define :network:`DiscreteHopfieldNetwork` instance.
-We train the network with password binary vector and with all randomly generated binary vectors.
 And that's it.
-Function returns trained network for later usage.
+Function returns trained network for the later usage.
 
 But why do we use random binary vectors instead of the decoded random strings?
 The problem is in the similarity between two vectors.
 Let's check two approaches and compare them with a `Hamming distance <https://en.wikipedia.org/wiki/Hamming_distance>`_.
-Before that we must define a function that compare distance between two vectors.
+Before that we must define a function that measure distance between two vectors.
 
 .. code-block:: python
 
@@ -177,7 +177,7 @@ Before that we must define a function that compare distance between two vectors.
         return ''.join(password)
 
 
-In addition we add the ``generate_password`` function that we will use for the tests.
+In addition you can see the ``generate_password`` function that we will use for the tests.
 Let's check Hamming distance between two randomly generate password vectors.
 
 .. code-block:: python
@@ -197,7 +197,11 @@ But If we compare randomly generated password and random binary vector we will s
 
 Hamming distance is bigger than in the previous example.
 Little bit more than 55% of the bits are different.
-The bigger difference between random binary vector the higher probability to recover valid passowrd from the network.
+
+The greater the difference between the input vectors easier recovery template from the network.
+For this reason we use randomly generated binary vector instead of random password.
+
+Ofcourse multiple randomly generated passwords would be more secure, because with them more likely to restore a invalid password that would be a good situation for a wrong password pattern.
 
 Recover password from the network
 ---------------------------------
@@ -216,10 +220,10 @@ Now we are going to define the last function which will recover password from th
         return bin2str(recovered_password)
 
 Function takes two parameters.
-The first one is the network instance.
-The second one is a broken password.
+The first one is the network instance from which function will try to recover a passwrod from a broken one.
+And the second parameter is a broken password.
 
-Finnaly we can test it.
+Finnaly we can test it password recovery from the network.
 
 .. code-block:: python
 
@@ -242,8 +246,8 @@ Finnaly we can test it.
     True
 
 Everithing looks fine.
-But one problem sometimes exists.
-Network can produce string that we didn't teach it.
+After multiple running you can rarely find a problem
+Network can produce a string that we didn't teach it.
 This string can looks almost like the password with few different symbols.
 Basicly each trained input vector create local minimum inside of the Discrete Hopfield Network.
 The problem is exists when network creates additional local minimum somewhere between input patterns.
@@ -254,6 +258,7 @@ Test it using Monte Carlo
 
 Let's test it on a randomly generated passwords.
 For this task we can use Monte Carlo experiment.
+At each step we create random password and try to recover it from the broken password.
 
 .. code-block:: python
 
@@ -293,7 +298,6 @@ For this task we can use Monte Carlo experiment.
     print("Number of fails for each test case:")
     pprint.pprint(results)
 
-
 After sumbmission your output must be the same as the one below (if you make all step by step)::
 
     Number of fails for each test case:
@@ -308,31 +312,71 @@ It really depence on the noize which we stored inside the network.
 Randomization can't give you a perfect result.
 Sometimes it can recover password from an empty string, but it also rare situation.
 
+At the last test, on each iteration we cut password from the left side and fill other parts with spaces.
+We can test another approached.
+We can cut password from the right side and we will get output similar to this one::
+
+    Number of fails for each test case:
+    {'exclude-one': 17,
+     'exclude-quarter': 705,
+     'exclude-half': 5815,
+     'just-one-symbol': 9995,
+     'empty-string': 10000}
+
+Results look similar to the orevious test.
+
+Another interesting test could be if you replace some random number of symbols with the spaces::
+
+    Number of fails for each test case:
+    {'exclude-one': 14,
+     'exclude-quarter': 749,
+     'exclude-half': 5760,
+     'just-one-symbol': 9998,
+     'empty-string': 10000}
+
+The result is very similar to the previous two.
+
+And finaly, instead of replacing symbols with spaces we can remove symbols without any replacments.
+Results are not so good::
+
+    Number of fails for each test case:
+    {'exclude-one': 3897,
+     'exclude-quarter': 9464,
+     'exclude-half': 9943,
+     'just-one-symbol': 9998,
+     'empty-string': 9998}
+
+I guess at the first case (``exclude-one``) we just was lucky and after excluding one symbol from the end didn't shift most of all symbols into the wrong possitions.
+So remove symbols it's not a very good idea.
+
+All functions that you need for experiments you can find on the `github <https://github.com/itdxer/neupy/tree/master/examples/password_recovery.py>`_.
+
 Possible Problems
 -----------------
 
 There are few possible problems in the Discrete Hopfile Network.
 
-1. Shifted words are harder to recover than the words with the missed symbols. Better to replace missed symbol with some other instead of remove it.
+1. As we saw from the last experiment, shifted words are harder to recover than the words with the missed symbols. Better to replace missed symbol with some other instead of removing them.
 
 2. There already exists small probability to recover the password from the empty string.
 
 3. Similar binary code representation for the different symbols is a big problem.
-Some times you can have a situation when 2 symbols that are in binary form have difference in one bit. The first idea use a One Hot Encoder. But the problem with it is even bigger. For example we used one of the 94 symbols for the password. If we encode them for each symbol we will get vector with 93 zeros and just 1 active value. The problem that after recovery procedure we must always get a 1 active value which is very unlikely for the network.
+Some times you can have a situation when 2 symbols that are in binary code are differente betweene each other just for a one bit. The first idea use a One Hot Encoder. But the problem with it is even more. For example we used one of the 94 symbols for the password. If we encode each symbol we will get vector with 93 zeros and just 1 active value. The problem that after recovery procedure we must always get a 1 active value, but this situation is very unlikely for the network.
 
 Summary
 -------
 
 Despite some of the problems, network recovers password very good.
 Monte Carlo experiment shows that the fewer symbols we know about the network less probability to recover it.
-Even with a half of the known symbols we can recover password with probability less that 50%.
+
+Even this simple network can be a powerfull tool if you know it limitations.
 
 Download script
 ---------------
 
 You can download and test a full script from the `github <https://github.com/itdxer/neupy/tree/master/examples/password_recovery.py>`_
 
-It didn't contains random ``seed`` initializations, so you will get a different outputs after each run.
+It didn't contain a random ``seed`` initializations, so you will get a different outputs after each run.
 
 .. author:: default
 .. categories:: none

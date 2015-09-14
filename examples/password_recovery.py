@@ -96,6 +96,20 @@ def cripple_password(word, k):
     return ''.join(word_letters_list)
 
 
+def loss_of_chars(word, k):
+    word_with_missed_chars = cripple_password(word, k)
+    broken_word = []
+
+    for symbol in word:
+        if word_with_missed_chars.startswith(symbol):
+            word_with_missed_chars = word_with_missed_chars[1:]
+            broken_word.append(symbol)
+        else:
+            broken_word.append(' ')
+
+    return ''.join(broken_word)
+
+
 if __name__ == '__main__':
     n_times = 10000
     cases = OrderedDict([
