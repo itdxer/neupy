@@ -1,7 +1,7 @@
 from numpy import zeros
 
 from neupy.functions import signum
-from .utils import sign2bin, bin2sign
+from .utils import sign2bin, bin2sign, format_data, hopfield_energy
 from .base import DiscreteMemory
 
 
@@ -26,6 +26,8 @@ class DiscreteBAM(DiscreteMemory):
         The same as ``predict_output``
     predict_input(output_data)
         Based on output date network predict it input.
+    energy(input_data, output_data)
+        Compute Discrete Hopfiel Energy.
 
     Examples
     --------
@@ -115,5 +117,20 @@ class DiscreteBAM(DiscreteMemory):
                              "features - {}".format(wight_nrows, wight_ncols))
 
         self.weight += input_data.T.dot(output_data)
+
+    def energy(self, input_data, output_data):
+        input_data, output_data = bin2sign(input_data), bin2sign(output_data)
+        input_data = format_data(input_data)
+        output_data = format_data(output_data)
+        nrows, n_features = input_data.shape
+
+        if nrows == 1:
+            return hopfield_energy(self.weight, input_data, output_data)
+
+        output = zeros(nrows)
+        for i, rows in enumerate(zip(input_data, output_data)):
+            output[i] = hopfield_energy(self.weight, *rows)
+
+        return output
 
     predict = predict_output
