@@ -25,7 +25,7 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
 
     def test_discrete_hopfield_full(self):
         data = np.concatenate([zero, one, two], axis=0)
-        dhnet = algorithms.DiscreteHopfieldNetwork(mode='full')
+        dhnet = algorithms.DiscreteHopfieldNetwork(mode='sync')
         dhnet.train(data)
 
         np.testing.assert_array_almost_equal(zero, dhnet.predict(half_zero))
@@ -39,7 +39,7 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
 
     def test_discrete_hopfield_random(self):
         data = np.concatenate([zero, one, two], axis=0)
-        dhnet = algorithms.DiscreteHopfieldNetwork(mode='random', n_nodes=1000)
+        dhnet = algorithms.DiscreteHopfieldNetwork(mode='async', n_times=1000)
         dhnet.train(data)
 
         np.testing.assert_array_almost_equal(zero, dhnet.predict(half_zero))

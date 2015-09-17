@@ -18,14 +18,17 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
     Parameters
     ----------
-    mode : {{'full', 'random'}}
-        Indentify pattern recovery mode. ``full`` mode try recovery a pattern
-        using the all input vector. ``random`` mode randomly chose some
+    mode : {{'sync', 'async'}}
+        Indentify pattern recovery mode. ``sync`` mode try recovery a pattern
+        using the all input vector. ``async`` mode randomly chose some
         values from the input vector and repeat this procedure the number
-        of times a given variable ``n_nodes``. Defaults to ``full``.
-    n_nodes : int
-        Available only in ``random`` mode. Identify number of random trials.
+        of times a given variable ``n_times``. Defaults to ``sync``.
+    n_times : int
+        Available only in ``async`` mode. Identify number of random trials.
         Defaults to ``100``.
+    check_limit : bool
+        Option enable a limit of patterns control for the network using
+        logarithmically proportion rule. Defaults to ``True``.
 
     Methods
     -------
@@ -118,8 +121,8 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     :ref:`password-recovery`: Password recovery with Discrete Hopfield Network.
     :ref:`discrete-hopfield-network`: Discrete Hopfield Network tutorial.
     """
-    mode = ChoiceProperty(default='full', choices=['random', 'full'])
-    n_nodes = NonNegativeIntProperty(default=100)
+    mode = ChoiceProperty(default='sync', choices=['async', 'sync'])
+    n_times = NonNegativeIntProperty(default=100)
     check_limit = BoolProperty(default=True)
 
     def __init__(self, **options):
@@ -127,9 +130,9 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         self.n_remembered_data = 0
         self.weight = None
 
-        if 'n_nodes' in options and self.mode != 'random':
-            self.logs.warning("You can use `n_nodes` property only in "
-                              "`random` mode.")
+        if 'n_times' in options and self.mode != 'async':
+            self.logs.warning("You can use `n_times` property only in "
+                              "`async` mode.")
 
     def train(self, input_data):
         self.discrete_validation(input_data)
@@ -164,12 +167,12 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     def predict(self, input_data):
         input_data = bin2sign(input_data)
 
-        if self.mode == 'random':
+        if self.mode == 'async':
             input_data = format_data(input_data)
             _, n_features = input_data.shape
 
             data = zeros(input_data.shape)
-            for _ in range(self.n_nodes):
+            for _ in range(self.n_times):
                 data[:, random.randint(0, n_features - 1)] += 1
 
             input_data = multiply(input_data, data)
