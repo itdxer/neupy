@@ -170,15 +170,18 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         if self.mode == 'async':
             input_data = format_data(input_data)
             _, n_features = input_data.shape
+            output_data = input_data
 
-            data = zeros(input_data.shape)
             for _ in range(self.n_times):
-                data[:, random.randint(0, n_features - 1)] += 1
+                position = random.randint(0, n_features - 1)
+                output_data[:, position] = signum(
+                    output_data.dot(self.weight[:, position]),
+                    lower_value=-1, upper_value=1
+                )
+        else:
+            output_data = input_data.dot(self.weight)
 
-            input_data = multiply(input_data, data)
-
-        predicted = signum(input_data.dot(self.weight),
-                           lower_value=0, upper_value=1)
+        predicted = signum(output_data, lower_value=0, upper_value=1)
         return predicted.astype(int)
 
     def energy(self, input_data):

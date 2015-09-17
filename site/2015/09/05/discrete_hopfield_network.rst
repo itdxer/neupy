@@ -676,6 +676,8 @@ References
 .. [2] Math4IQB. (2013, November 17). Hopfield Networks. Retrieved
      from https://www.youtube.com/watch?v=gfPUWwBkXZY
 
+.. [3] R. Callan. The Essence of Neural Networks. In Pattern Association. pp. 84 - 98, 1999.
+
 .. author:: default
 .. categories:: none
 .. tags:: memory, unsupervised
