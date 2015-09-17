@@ -15,13 +15,7 @@ input_data = np.array([
 class HebbRuleTestCase(BaseTestCase):
     def setUp(self):
         super(HebbRuleTestCase, self).setUp()
-        kwargs = {
-            'function_coef': {
-                'lower_value': 0,
-                'upper_value': 1,
-            }
-        }
-        self.conn = StepLayer(2, **kwargs) > OutputLayer(1)
+        self.conn = StepLayer(2) > OutputLayer(1)
 
     def test_validations(self):
         with self.assertRaises(ValueError):

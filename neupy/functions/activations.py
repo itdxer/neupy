@@ -5,7 +5,7 @@ from numpy import where, exp, log, cosh, tanh as np_tanh, clip
 from neupy.functions import with_derivative
 
 
-__all__ = ('sigmoid', 'linear', 'signum', 'tanh', 'rectifier', 'softplus',
+__all__ = ('sigmoid', 'linear', 'step', 'tanh', 'rectifier', 'softplus',
            'softmax')
 
 
@@ -14,8 +14,8 @@ __all__ = ('sigmoid', 'linear', 'signum', 'tanh', 'rectifier', 'softplus',
 # -----------------------------------------------------#
 
 
-def signum(x, upper_value=1, lower_value=0):
-    return where(x > 0, upper_value, lower_value)
+def step(x):
+    return where(x > 0, 1, 0)
 
 
 def rectifier(x):

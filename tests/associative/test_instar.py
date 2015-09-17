@@ -21,11 +21,7 @@ class HebbRuleTestCase(BaseTestCase):
                 [0],
                 [0],
                 [0],
-            ]),
-            'function_coef': {
-                'lower_value': 0,
-                'upper_value': 1,
-            }
+            ])
         }
         self.conn = StepLayer(4, **kwargs) > OutputLayer(1)
 

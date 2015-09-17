@@ -33,9 +33,8 @@ class LayersTestCase(BaseTestCase):
 
     def test_step_layer(self):
         layer1 = StepLayer(1)
-        layer2 = StepLayer(1, function_coef={'upper_value': 0})
-        self.assertNotEqual(layer1.activation_function(1),
-                            layer2.activation_function(1))
+        self.assertEqual(layer1.activation_function(1).item(0), 1)
+        self.assertEqual(layer1.activation_function(-1).item(0), 0)
 
     def test_linear_layer(self):
         layer = LinearLayer(1)

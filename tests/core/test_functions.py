@@ -51,20 +51,16 @@ class FunctionTestCase(BaseTestCase):
             0.0444
         )
 
-    def test_signum(self):
-        # signum
-        self.assertEqual(signum(-1), 0)
-        self.assertEqual(signum(1), 1)
-        self.assertEqual(signum(1, upper_value=10, lower_value=-10), 10)
-        self.assertEqual(signum(-0.01, upper_value=10, lower_value=-10), -10)
+    def test_step(self):
+        self.assertEqual(step(-1), 0)
+        self.assertEqual(step(0), 0)
+        self.assertEqual(step(1), 1)
 
     def test_linear(self):
-        # linear
         self.assertEqual(linear(-1), -1)
         self.assertEqual(linear.deriv(100), 1)
 
     def test_sigmoid(self):
-        # sigmoid
         self.assertEqual(round(sigmoid(0.7), 3), 0.668)
         self.assertEqual(round(sigmoid(0.7, alpha=-0.1), 3), 0.483)
         self.assertEqual(round(sigmoid.deriv(0.7), 3), 0.222)

@@ -1,6 +1,5 @@
-from numpy import zeros
+from numpy import zeros, sign
 
-from neupy.functions import signum
 from .utils import sign2bin, bin2sign, format_data, hopfield_energy
 from .base import DiscreteMemory
 
@@ -85,7 +84,7 @@ class DiscreteBAM(DiscreteMemory):
             raise AttributeError("Train network before predict values")
 
         lower_value, upper_value = (-1, 1)
-        predicted = signum(predicted_result, upper_value, lower_value)
+        predicted = sign(predicted_result)
 
         return sign2bin(predicted.astype(int))
 

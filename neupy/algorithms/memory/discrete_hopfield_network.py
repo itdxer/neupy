@@ -1,10 +1,10 @@
 from math import log, ceil
 
-from numpy import zeros, fill_diagonal, random, multiply
+from numpy import zeros, fill_diagonal, random, multiply, sign
 
+from neupy.functions import step
 from neupy.core.properties import (ChoiceProperty, NonNegativeIntProperty,
                                    BoolProperty)
-from neupy.functions import signum
 from .utils import bin2sign, hopfield_energy, format_data
 from .base import DiscreteMemory
 
@@ -174,14 +174,13 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
             for _ in range(self.n_times):
                 position = random.randint(0, n_features - 1)
-                output_data[:, position] = signum(
-                    output_data.dot(self.weight[:, position]),
-                    lower_value=-1, upper_value=1
+                output_data[:, position] = sign(
+                    output_data.dot(self.weight[:, position])
                 )
         else:
             output_data = input_data.dot(self.weight)
 
-        predicted = signum(output_data, lower_value=0, upper_value=1)
+        predicted = step(output_data)
         return predicted.astype(int)
 
     def energy(self, input_data):

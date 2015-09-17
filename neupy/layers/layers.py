@@ -3,7 +3,7 @@ from numpy.linalg import norm
 
 from neupy.core.properties import DictProperty
 from neupy.functions import get_partial_for_func
-from neupy.functions import (linear, sigmoid, signum, tanh, rectifier,
+from neupy.functions import (linear, sigmoid, step, tanh, rectifier,
                              softplus, softmax)
 from neupy.layers.base import BaseLayer
 
@@ -65,15 +65,9 @@ class StepLayer(Layer):
 
     Parameters
     ----------
-    function_coef : dict
-        Default configurations for step activation function. There are two
-        values ``upper_value`` and ``lower_value`` which are equal to ``1``
-        and ``-1`` respectively.
     {layer_params}
     """
-    function_coef = DictProperty(default={'upper_value': 1,
-                                          'lower_value': -1})
-    activation_function = signum
+    activation_function = step
 
 
 class TanhLayer(Layer):
