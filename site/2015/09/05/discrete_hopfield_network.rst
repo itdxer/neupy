@@ -556,7 +556,7 @@ Now to make sure that network catch patterns we can introduce the broken pattern
     |
     |
     >>>
-    half_two = np.matrix([
+    >>> half_two = np.matrix([
     ...     0, 0, 0, 0, 0,
     ...     0, 0, 0, 0, 0,
     ...     0, 0, 0, 0, 0,
@@ -635,7 +635,7 @@ You can test it by your own.
 .. code-block:: python
 
     >>> dhnet = algorithms.DiscreteHopfieldNetwork(
-    ...     mode='random',
+    ...     mode='async',
     ...     n_nodes=400
     ... )
     >>>
@@ -672,6 +672,9 @@ References
 ----------
 
 .. [1] \R. Rojas. Neural Networks. In Associative Networks. pp. 311 - 336, 1996.
+
+.. [2] Math4IQB. (2013, November 17). Hopfield Networks. Retrieved
+     from https://www.youtube.com/watch?v=gfPUWwBkXZY
 
 .. author:: default
 .. categories:: none
