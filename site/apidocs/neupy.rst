@@ -15,6 +15,7 @@ Subpackages
     neupy.helpers
     neupy.layers
     neupy.network
+    neupy.plots
 
 Module contents
 ---------------

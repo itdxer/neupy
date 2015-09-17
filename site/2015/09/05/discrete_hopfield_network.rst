@@ -10,19 +10,19 @@ At this tutorial we are going to understand :network:`Discrete Hopfield Network 
 :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` is a type of algorithms which called - `Autoassociative memories <https://en.wikipedia.org/wiki/Autoassociative_memory>`_
 Don't afraid of word `Autoassociative`.
 The idea behind this type of algorithms is simple.
-They can store in `memory` some useful information and later they are able to reproduce it from the partialy broken patterns.
+They can store in `memory` useful information and later they are able to reproduce it from the partialy broken patterns.
 You can think about of it as a human memory.
 For instance, imagine that you see an old picture with a place where you was a long time ago, but this picture is in a very bad quality and with a high blur.
 From the picture you can reconize some objects or places that are very familiar to you.
 It can be a house or a lake or anything else which can clearly create an associations for you.
 With this details other parts of picture begin to make more sense.
-Even if you don't clearly see all objects you can recover a big part of picture from your memory just from the few familiar things.
+Even if you don't clearly see all objects you can recover a big part of picture from your memory just from the few familiar details.
 That what it is all about.
 Autoassociative memory network is a way to think about the human memory and try to build something useful that have a similar behaviour.
 
 On this tutorial you will see only intuition behind the network.
 I avoid all proofs to make this tutorial more simple.
-If you are interesting in Linear Algebra proofs of the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` you can check them at R. Rojas. Neural Networks [1]_ book.
+If you are interesting in proofs of the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` you can check them at R. Rojas. Neural Networks [1]_ book.
 
 Architecture
 ------------
@@ -94,8 +94,8 @@ It includes just an outer product between input vector and it transpose.
 
 :math:`W` is a weight matrix and :math:`x` is an input vector.
 Each value :math:`x_i` from the input vector can be only -1 or 1.
-On the diagonal we have only squared values that mean we will always see ones their.
-Think about it, at any cases they take just one possible state.
+So on the diagonal we have only squared values and that mean we will always see ones on that places.
+Think about it, at any case values on the diagonal take just one possible state.
 In recovery procedure they are perceived as a definite memory state, but in fact they are useles and even can make incorrect contribution into the output result.
 For this reason we need to set up all the diagonal values equal to the zero.
 The final weight formula look like the one below.
@@ -124,10 +124,10 @@ For another pattern we must make exacly the same procedure as before and than ju
 
     W = W_{old} + W_{new}
 
-And this procedure generate us a new weight wich weoulb be valid for both stored patterns.
-Later you can add another patterns using the same steps.
+And this procedure generate us a new weight that would be valid for the both stored patterns.
+Later you can add another patterns using the same algorithm.
 
-But if you need to store the multiple vectors inside the network at the same time you don't need to compute the weight for the each vector and than add them.
+But if you need store the multiple vectors inside the network at the same time you don't need to compute the weight for the each vector and than sum up them.
 If you have a matrix :math:`X \in \Bbb R^{m\times n}` where each row is the input vector, then you can just make product between it transpose and itself.
 
 .. math::
@@ -136,7 +136,10 @@ If you have a matrix :math:`X \in \Bbb R^{m\times n}` where each row is the inpu
 
 
 Where :math:`I` is an identity matrix (:math:`I \in \Bbb R^{n\times n}`), :math:`n` is a number of features in the input vector and :math:`m` is a number of input patterns inside the matrix :math:`X`.
-Ofcourse you must remove all values on the diagonal and in math term it's better to show with the difference between weight and identity. In practice it's not very good to store a big identity matrix (if dimmention is really big) just to set up zeros on the diagonal. Usualy linear algebra libraries give you a possibility set up diagonal without creation of any new matrix and this solution would be more efficient.
+Ofcourse you must remove all values on the diagonal and in math term it's better to show with the difference between weight and identity.
+In practice it's not very good store a big identity matrix (if dimention is really big) just to set up zeros on the diagonal.
+Usualy linear algebra libraries give you a possibility to set up diagonal without additional matrix and this solution would be more efficient.
+For example in NumPy library it's a `numpy.fill_diagonal <http://docs.scipy.org/doc/numpy/reference/generated/numpy.fill_diagonal.html>`_ function
 
 Recovery from memory
 ~~~~~~~~~~~~~~~~~~~~
@@ -144,8 +147,8 @@ Recovery from memory
 Recovery procedure include pattern recovery from the broken one.
 There are already exists two main approaches. First one recover the vector using each value from the vector one time. The second one is a randomized approach. The basic idea is that you iteratively get random value from the input vector and recover it from the network. I will explain each approach in more details.
 
-Full recovery approach
-^^^^^^^^^^^^^^^^^^^^^^
+Synchronous recovery approach
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Full recovery approach is much easier so we are going to check it first.
 To recover your pattern from the memory you can just multiply the weight matrix by the input vector.
@@ -223,8 +226,8 @@ In `voting` procedure we use each row with the bipolar vectors, but if values we
 
 Ofcourse you can use 0 and 1 values and sometime you will get the correct result, but this approach would be worse than with the bipolar values.
 
-Random recovery approach
-^^^^^^^^^^^^^^^^^^^^^^^^
+Asynchronous recovery approach
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Previous approach is good, but it has limitations.
 If you change one value in input vector it can change your output result.
@@ -636,7 +639,7 @@ You can test it by your own.
 
     >>> dhnet = algorithms.DiscreteHopfieldNetwork(
     ...     mode='async',
-    ...     n_nodes=400
+    ...     n_times=400
     ... )
     >>>
     >>> dhnet.train(data)
@@ -658,8 +661,30 @@ You can test it by your own.
     | * * * * *
 
 I catched it from the second time, but sometimes it takes more iterations.
-Usualy to improve the accuracy of this method you can define more number of iterations for the random procedure (``n_nodes`` parameter).
+Usualy to improve the accuracy of this method you can define more number of iterations for the random procedure (``n_times`` parameter).
 Another way is to add additional verification and repeat it if output patter fail expectation.
+
+.. figure:: images/hopfield-energy-vis.png
+    :width: 80%
+    :align: center
+    :alt: Asynchronous Discrete Hopfield Network energy update after each iteration
+
+And finally we can look closer on the network memory using Hinton diagram
+
+.. code-block:: python
+
+    >>> from neupy import plots
+    >>> import matplotlib.pyplot as plt
+    >>>
+    >>> plt.figure(figsize=(14, 12))
+    >>> plt.title("Hinton diagram")
+    >>> plots.hinton(dhnet.weight)
+    >>> plt.show()
+
+.. figure:: images/hinton-diagram.png
+    :width: 80%
+    :align: center
+    :alt: Asynchronous Discrete Hopfield Network energy update after each iteration
 
 Summary
 -------
@@ -676,7 +701,7 @@ References
 .. [2] Math4IQB. (2013, November 17). Hopfield Networks. Retrieved
      from https://www.youtube.com/watch?v=gfPUWwBkXZY
 
-.. [3] R. Callan. The Essence of Neural Networks. In Pattern Association. pp. 84 - 98, 1999.
+.. [3] \R. Callan. The Essence of Neural Networks. In Pattern Association. pp. 84 - 98, 1999.
 
 .. author:: default
 .. categories:: none

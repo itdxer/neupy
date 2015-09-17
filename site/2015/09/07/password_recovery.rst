@@ -134,7 +134,7 @@ Let's define it and later we will check it step by step.
             noize = np.random.binomial(1, 0.55, bin_password_len)
             data.append(noize)
 
-        dhnet = algorithms.DiscreteHopfieldNetwork(mode='full')
+        dhnet = algorithms.DiscreteHopfieldNetwork(mode='sync')
         dhnet.train(np.array(data))
 
         return dhnet

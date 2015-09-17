@@ -36,8 +36,12 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         Compute Discrete Hopfiel Energy.
     train(input_data)
         Save input data pattern into the network memory.
-    predict(input_data)
+    predict(input_data, n_times=None)
         Recover data from the memory using input pattern.
+        For the prediction procedure you can control number of iterations.
+        If you set up this value equal to ``None`` then the value would be
+        equal to the value that you set up for the property with
+        the same name - ``n_times``.
 
     Notes
     -----
@@ -164,15 +168,18 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         fill_diagonal(self.weight, zeros(len(self.weight)))
         self.n_remembered_data = nrows_after_update
 
-    def predict(self, input_data):
+    def predict(self, input_data, n_times=None):
         input_data = bin2sign(input_data)
 
         if self.mode == 'async':
+            if n_times is None:
+                n_times = self.n_times
+
             input_data = format_data(input_data)
             _, n_features = input_data.shape
             output_data = input_data
 
-            for _ in range(self.n_times):
+            for _ in range(n_times):
                 position = random.randint(0, n_features - 1)
                 output_data[:, position] = sign(
                     output_data.dot(self.weight[:, position])
@@ -180,8 +187,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         else:
             output_data = input_data.dot(self.weight)
 
-        predicted = step(output_data)
-        return predicted.astype(int)
+        return step(output_data).astype(int)
 
     def energy(self, input_data):
         input_data = bin2sign(input_data)
