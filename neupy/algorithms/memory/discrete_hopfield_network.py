@@ -2,7 +2,8 @@ from math import log, ceil
 
 from numpy import zeros, fill_diagonal, random, multiply
 
-from neupy.core.properties import ChoiceProperty, NonNegativeIntProperty
+from neupy.core.properties import (ChoiceProperty, NonNegativeIntProperty,
+                                   BoolProperty)
 from neupy.functions import signum
 from .utils import bin2sign, hopfield_energy, format_data
 from .base import DiscreteMemory
@@ -119,6 +120,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     """
     mode = ChoiceProperty(default='full', choices=['random', 'full'])
     n_nodes = NonNegativeIntProperty(default=100)
+    check_limit = BoolProperty(default=True)
 
     def __init__(self, **options):
         super(DiscreteHopfieldNetwork, self).__init__(**options)
@@ -137,11 +139,13 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
         nrows, n_features = input_data.shape
         nrows_after_update = self.n_remembered_data + nrows
-        memory_limit = ceil(n_features / (2 * log(n_features)))
 
-        if nrows_after_update > memory_limit:
-            raise ValueError("You can't memorize more than {0} "
-                             "samples".format(memory_limit))
+        if self.check_limit:
+            memory_limit = ceil(n_features / (2 * log(n_features)))
+
+            if nrows_after_update > memory_limit:
+                raise ValueError("You can't memorize more than {0} "
+                                 "samples".format(memory_limit))
 
         weight_shape = (n_features, n_features)
 

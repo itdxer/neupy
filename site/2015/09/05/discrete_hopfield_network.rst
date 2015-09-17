@@ -7,24 +7,54 @@ Discrete Hopfiel Network
 
 At this tutorial we are going to understand :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` algorithm.
 
-I wouldn't show proofs or complex idea. On this tutorial you will see only intuition
+:network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` is a type of algorithms which called - `Autoassociative memories <https://en.wikipedia.org/wiki/Autoassociative_memory>`_
+Don't afraid of word `Autoassociative`.
+The idea behind this type of algorithms is simple.
+They can store in `memory` some useful information and later they are able to reproduce it from the partialy broken patterns.
+You can think about of it as a human memory.
+For instance, imagine that you see an old picture with a place where you was a long time ago, but this picture is in a very bad quality and with a high blur.
+From the picture you can reconize some objects or places that are very familiar to you.
+It can be a house or a lake or anything else which can clearly create an associations for you.
+With this details other parts of picture begin to make more sense.
+Even if you don't clearly see all objects you can recover a big part of picture from your memory just from the few familiar things.
+That what it is all about.
+Autoassociative memory network is a way to think about the human memory and try to build something useful that have a similar behaviour.
+
+On this tutorial you will see only intuition behind the network.
+I avoid all proofs to make this tutorial more simple.
+If you are interesting in Linear Algebra proofs of the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` you can check them at R. Rojas. Neural Networks [1]_ book.
 
 Architecture
 ------------
 
-:network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` is a very simple algorithm.
-To understend it you must to know how to make an outer product and a product between matrix and vector.
+:network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` is a simple algorithm.
+It simple because you don't need to much background to use it.
+Everything you need to know is just how to make a basic Linear Algebra operations, like outer product or sum of the two matrices.
 
-`Discrete` means that network can save and predict only the binary vectors.
-For this specific network we will use only sign-binary numbers: 1 and -1.
-We can't use zeros, because it can reduce information from the input vector, later in this tutorial I try to explain why that is the problem.
+Let's start with a simple thing.
+What do we know about it so far?
+Just a name and a type.
+From the name we can identify one useful thing about the network.
+It's `Discrete`.
+That mean that network can works only with the binary vectors.
+But for this network we wouldn't use the binary numbers in a tupical form.
+Instead of them we will use the bipolar numbers.
+They are almost the same, but except the 0 we will use -1 to decode a negative state.
+We can't use zeros.
+There are two main reasons for it.
+First one is that zeros reduce the information from the network weight, later in this tutorial we will see it.
+The second one is more complex, it depence on the neature of bipolar vectors.
+Basically they are more likely to be othogonal to each other which is a critical moment for the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
+But as I said before we wouldn't talk about proofs and anything out of basic understanding of the Linear Algebra operations.
 
-By now, let's check how we can train and use :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
+So, let's check how we can train and use the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
 
 Training procedure
 ~~~~~~~~~~~~~~~~~~
 
-First step as usual is the training procedure.
+We can't use the memory without any patterns stored in it.
+So first of all we are going to understand how to train the network.
+For the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` train procedure doesn't require any iterations.
 It includes just an outer product between input vector and it transpose.
 
 .. math::
@@ -62,11 +92,13 @@ It includes just an outer product between input vector and it transpose.
         \right]
     \end{align*}
 
-Where :math:`W` is a weight matrix and :math:`x` is an input vector.
-:math:`x_i` can only be -1 or 1 values, so after outer product matrix always has 1 on the diagonal.
-These values on the diagonal are useles and we better to remove them.
-For this reason we need to set up all the diagonal values equal to the zero, just to make sure that we don't have any information on the diagonals that can make incorrect contribution into the output result.
-The final weight formula look like this:
+:math:`W` is a weight matrix and :math:`x` is an input vector.
+Each value :math:`x_i` from the input vector can be only -1 or 1.
+On the diagonal we have only squared values that mean we will always see ones their.
+Think about it, at any cases they take just one possible state.
+In recovery procedure they are perceived as a definite memory state, but in fact they are useles and even can make incorrect contribution into the output result.
+For this reason we need to set up all the diagonal values equal to the zero.
+The final weight formula look like the one below.
 
 .. math::
 
@@ -85,13 +117,17 @@ The final weight formula look like this:
 
 Where :math:`I` is an identity matrix.
 
-If we already had some information stored in the weights, we just add the new weight matrix to the old one.
+But usualy we need to save more values in the memory.
+For another pattern we must make exacly the same procedure as before and than just add the generated weight matrix to the old one.
 
 .. math::
 
     W = W_{old} + W_{new}
 
-But if you need to store multiple vectors inside the network at the same time you don't need to compute weight for the each vector and than sum up them.
+And this procedure generate us a new weight wich weoulb be valid for both stored patterns.
+Later you can add another patterns using the same steps.
+
+But if you need to store the multiple vectors inside the network at the same time you don't need to compute the weight for the each vector and than add them.
 If you have a matrix :math:`X \in \Bbb R^{m\times n}` where each row is the input vector, then you can just make product between it transpose and itself.
 
 .. math::
@@ -100,16 +136,18 @@ If you have a matrix :math:`X \in \Bbb R^{m\times n}` where each row is the inpu
 
 
 Where :math:`I` is an identity matrix (:math:`I \in \Bbb R^{n\times n}`), :math:`n` is a number of features in the input vector and :math:`m` is a number of input patterns inside the matrix :math:`X`.
+Ofcourse you must remove all values on the diagonal and in math term it's better to show with the difference between weight and identity. In practice it's not very good to store a big identity matrix (if dimmention is really big) just to set up zeros on the diagonal. Usualy linear algebra libraries give you a possibility set up diagonal without creation of any new matrix and this solution would be more efficient.
 
 Recovery from memory
 ~~~~~~~~~~~~~~~~~~~~
 
 Recovery procedure include pattern recovery from the broken one.
-There are already exists two main approaches. First one try to recover vector using each value from vector. The second one is a randomized approach. The basic idea that you try iteratevly get random value from the input vector and recover it from the network. I will explain each approach in more details.
+There are already exists two main approaches. First one recover the vector using each value from the vector one time. The second one is a randomized approach. The basic idea is that you iteratively get random value from the input vector and recover it from the network. I will explain each approach in more details.
 
 Full recovery approach
 ^^^^^^^^^^^^^^^^^^^^^^
 
+Full recovery approach is much easier so we are going to check it first.
 To recover your pattern from the memory you can just multiply the weight matrix by the input vector.
 
 .. math::
@@ -149,19 +187,22 @@ To recover your pattern from the memory you can just multiply the weight matrix 
 
 
 Variable :math:`s` doesn't contain recover pattern.
-As you can see we sum up all information from the weights without any bounds.
-It's crear that value not necessary equal to -1 or 1, so we must do anything else with this output and clip the result.
+As you can see we sum up all information from the weights.
+It's clear that value not necessary equal to -1 or 1, so we must do something else with this output and make the result values as bipolar numbers.
 
-The good question is, What does this operation do?
-Basicly after outer product we save our pattern dublicated :math:`n` times (where :math:`n` is a number of features in input vector) inside the weight (we will see it later in this tutorial).
-After product between :math:`W` and :math:`x` for each value from the vector :math:`x` we get a recovered vector.
-For :math:`x_1` we get a first column from the matrix :math:`W`, for the :math:`x_2` a second column, and so on (Pay attention that we reverse sign before store it if :math:`x_i = -1` and in recovery operation we reverse it back, so in perfect situation it must return exacly the same vector).
-Next we must add all vectors together.
+Let's think about this product operation.
+What does it actualy do?
+Basically after outer product we save our pattern dublicated :math:`n` times (where :math:`n` is a number of features in input vector) inside the weight (we will see it later in this tutorial).
+When we store more patterns we get interception between them (its called a **crosstalk**) and each pattern add some noise to the another patterns.
+So, after product between :math:`W` and :math:`x` for each value from the vector :math:`x` we get a recovered vector with a little bit noise.
+For :math:`x_1` we get a first column from the matrix :math:`W`, for the :math:`x_2` a second column, and so on.
+Pay attention that we reverse sign before store it if :math:`x_i = -1` and in recovery operation we reverse it back, so after recovery procedure sign would be valid.
+Next we add all vectors together.
 This operation looks like voting.
 For example we have 3 vectors.
 If the first two vectors have 1 at first position and the third one has -1 at the same position, so the winner must be value 1.
 We can make the same voting procedure with :math:`sign` function.
-So the output value must be 1 if total value is greater thatn zero and -1 otherwise.
+So the output value must be 1 if total value is greater then zero and -1 otherwise.
 
 .. math::
 
@@ -178,20 +219,19 @@ That's it.
 Now :math:`y` store the recovered vector :math:`x`.
 
 Maybe now you can see why we can't use zeros in the input vectors.
-With 1 and -1 values we don't lose information after dot product operation, we just collect everything inside the weight matrix.
-But if we had zeros, we would remove all information that stored in the weight column even if value associated with zero was correct.
+In `voting` procedure we use each row with the bipolar vectors, but if values were zeros they will ignore column from the weight matrix.
 
-Ofcourse you can use 0 and 1 values and sometime you will get the correct result, but this approach would be worse than the sign-binary one.
+Ofcourse you can use 0 and 1 values and sometime you will get the correct result, but this approach would be worse than with the bipolar values.
 
 Random recovery approach
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Previous approach is not realy common, because it contains some limitations.
-If you change one value in input vector it can completly change your output result.
-The most popular solution is a randomization.
-You randomly select value from your input vector and associated with it column from the weight matrix.
-You repeat this procedure and after some number of iterations you just sum up all vectors that you already select.
-If you have a good chance to select randomly a valid value from input vector then more likely you will get a valid output pattern.
+Previous approach is good, but it has limitations.
+If you change one value in input vector it can change your output result.
+The another popular approach is a randomization.
+You randomly select a value from your input vector and associat it with a column from the weight matrix.
+You repeat this procedure multiple times and after some number of iterations you just sum up all vectors that you are already select.
+In terms of the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` we can say that **neuron fired**
 
 Let's check the example:
 Suppouse we already have a weight matrix :math:`W` with one pattern inside.
@@ -248,8 +288,8 @@ So we multiple the first column by this selected value.
         \right]
     \end{align*}
 
-At the seond iteration we again chose the random value.
-Now we get the third one and we again repate the same precodure
+At the second iteration we again chose the random value.
+Now we get the third one and we again repeat the same precodure
 
 .. math::
 
@@ -317,15 +357,65 @@ Memory limit
 ------------
 
 Obviously, you can't store infinite number of vectors inside the network.
-There already exists a good rule of thumb.
-Suppose that :math:`n` is the dimention (number of features) of your input vector, then the formula below compute the upper limit for the number of input vectors that you are able to save inside the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
+There already exists two good rule of thumbs.
+
+Suppose that :math:`n` is the dimention (number of features) of your input vector and :math:`m` is the number of patterns that you want to save inside the network.
+
+The first rule gives a simple ration between :math:`m` and :math:`n`.
 
 .. math::
 
-    l = \left \lfloor \frac{n}{2 \cdot log(n)} \right \rfloor
+    m \approx 0.18 n
 
-It doesn't mean that you can't save more values than :math:`l`.
+THe main problem with this rule is that proof assume that stored vectors inside the weight are completly random with an equaly probability.
+Unfortunately that is not always right.
+Suppose we save the images of numbers from 0 to 9.
+On pictures colors are black and white, so we can encode them in bipolar vectors.
+Let's assume that vectors can be random.
+But will the probabilities equal of obtaining each value?
+Usualy not.
+More likely that number of white pixels would be greater than number of black.
+Before use this rule you must think about type of your input patterns.
+
+The second formula gives another ration.
+Proportion is logarithmically.
+
+.. math::
+
+    m = \left \lfloor \frac{n}{2 \cdot log(n)} \right \rfloor
+
+It doesn't mean that you can't save more values than :math:`m`.
 It is just a good upper bound for typical tasks, but you can find some situations when this rule will fail.
+
+Hallucinations
+--------------
+
+Hallucinations is one of the possible problem in the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
+Sometimes network output produce something that we didn't teach it.
+
+To understand this phenomenon we must first of all define the Hopfield energy function.
+
+.. math::
+
+    E = -\frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n} w_{ij} x_i x_j + \sum_{i=1}^{n} \theta_i x_i
+
+Where :math:`w_{ij}` is a weight value on the :math:`i`-th row and :math:`j`-th column.
+:math:`x_i` is a :math:`i`-th values from the input vector :math:`x`.
+:math:`\theta` is a threshold.
+For the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` we can assume that :math:`\theta` equal to 0.
+For :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` the energy function looks little bit simpler.
+
+.. math::
+
+    E = -\frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n} w_{ij} x_i x_j
+
+In terms of a linear algebra we can write formula for the Energy Function more simplier.
+
+.. math::
+
+    E = -\frac{1}{2} x^T W x
+
+But linear algebra notation works only with the :math:`x` vector, we can't use matrix :math:`X` with the multiple input patterns instead of the :math:`x` in this formula, beause after product your energies would be on the diagonal and the other values would be useles.
 
 Why does it work?
 -----------------
@@ -387,36 +477,6 @@ The main problem would be when we have more than one vector stored in the weight
 Each value on the diagonal would be equal to the number of stored vectors inside of it.
 On recovery procedure these diagonal elements will produce the big values for the output vector and eventually they will impair the output result.
 
-Hallucinations
---------------
-
-Hallucinations is one of the possible problem in the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
-Sometimes network output produce something that we didn't teach it.
-
-To understand this phenomenon we must first of all define the Hopfield energy function.
-
-.. math::
-
-    E = -\frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n} w_{ij} x_i x_j + \sum_{i=1}^{n} \theta_i x_i
-
-Where :math:`w_{ij}` is a weight value on the :math:`i`-th row and :math:`j`-th column.
-:math:`x_i` is a :math:`i`-th values from the input vector :math:`x`.
-:math:`\theta` is a threshold.
-For the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` we can assume that :math:`\theta` equal to 0.
-For :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` the energy function looks little bit simpler.
-
-.. math::
-
-    E = -\frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n} w_{ij} x_i x_j
-
-In terms of a linear algebra we can write formula for the Energy Function more simplier.
-
-.. math::
-
-    E = -\frac{1}{2} x^T W x
-
-But linear algebra notation works only with the :math:`x` vector, we can't use matrix :math:`X` with the multiple input patterns instead of the :math:`x` in this formula, beause after product your energies would be on the diagonal and the other values would be useles.
-
 Example
 -------
 
@@ -476,7 +536,7 @@ We have 3 images, so now we can train network with these patterns.
     >>> dhnet.train(data)
 
 That's all.
-Now to make sure that network catch patterns we can introduce the _broken_ pattern.
+Now to make sure that network catch patterns we can introduce the broken pattern.
 
 .. code-block:: python
 
@@ -564,7 +624,7 @@ We need to define another pattern and again try to recover it.
 We didn't clearly teach the network for this pattern.
 But if we look closer, it looks like mixed patter of numbers 1 and 2.
 That is exacly hallucination.
-Basicly network create new local minimum some where between numbers 1 and 2 that looks very close two both but still non of them.
+Basically network create new local minimum some where between numbers 1 and 2 that looks very close two both but still non of them.
 
 For the specific input network produce the same output.
 There exists another aproach where we randomly select some of the input patterns and try to mix them.
@@ -607,6 +667,11 @@ Summary
 The :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` is a very simple and you need a little knowlege in linear algebra to understand it.
 
 Also you can check another ':ref:`Password recovery <password-recovery>`' tutorial in which the password is recovered from the memory of the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
+
+References
+----------
+
+.. [1] \R. Rojas. Neural Networks. In Associative Networks. pp. 311 - 336, 1996.
 
 .. author:: default
 .. categories:: none

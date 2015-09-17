@@ -15,14 +15,13 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
         ])
 
         with self.assertRaises(ValueError):
-            # Wrong discrete values for data
-            dhnet = algorithms.DiscreteHopfieldNetwork()
+            # To many data samples comparison to number of feature
+            dhnet = algorithms.DiscreteHopfieldNetwork(check_limit=True)
             dhnet.train(data)
 
-        with self.assertRaises(ValueError):
-            # To many data samples comparison to number of feature
-            dhnet = algorithms.DiscreteHopfieldNetwork()
-            dhnet.train(data)
+        # The same must be OK without validation
+        dhnet = algorithms.DiscreteHopfieldNetwork(check_limit=False)
+        dhnet.train(data)
 
     def test_discrete_hopfield_full(self):
         data = np.concatenate([zero, one, two], axis=0)
