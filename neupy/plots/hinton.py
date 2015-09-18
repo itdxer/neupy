@@ -1,5 +1,5 @@
 """
-Get code from:
+Code source:
 http://matplotlib.org/examples/specialty_plots/hinton_demo.html
 """
 
@@ -13,6 +13,37 @@ __all__ = ('hinton',)
 
 def hinton(matrix, max_weight=None, ax=None):
     """ Draw Hinton diagram for visualizing a weight matrix.
+
+    Parameters
+    ----------
+    matrix: array like
+        Matrix that you want to visualise using Hinton diagram.
+    max_weight : float
+        Maximum value of the matrix. If it's equal to ``None`` than value
+        would be calculated using the maximum from the matrix. Defaults
+        to ``None``.
+    ax : object
+        Matplotlib Axes instantce. If value equal to ``None`` then function
+        generate the new Axes instance. Defaults to ``None``.
+
+    Returns
+    -------
+    object
+        Matplotlib Axes instance.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> import matplotlib.pyplot as plt
+    >>> from neupy import plots
+    >>>
+    >>> weight = np.random.randn(20, 20)
+    >>>
+    >>> plt.style.use('ggplot')
+    >>> plt.title("Hinton diagram")
+    >>> plt.figure(figsize=(16, 12))
+    >>> plots.hinton(weight)
+    >>> plt.show()
     """
     if ax is None:
         ax = plt.gca()
@@ -50,3 +81,5 @@ def hinton(matrix, max_weight=None, ax=None):
         loc='center left',
         bbox_to_anchor=(1, 0.5)
     )
+
+    return ax

@@ -136,21 +136,79 @@ If you have a matrix :math:`X \in \Bbb R^{m\times n}` where each row is the inpu
 
 
 Where :math:`I` is an identity matrix (:math:`I \in \Bbb R^{n\times n}`), :math:`n` is a number of features in the input vector and :math:`m` is a number of input patterns inside the matrix :math:`X`.
-Ofcourse you must remove all values on the diagonal and in math term it's better to show with the difference between weight and identity.
-In practice it's not very good store a big identity matrix (if dimention is really big) just to set up zeros on the diagonal.
+Ofcourse you must remove all values on the diagonal and in math term it's better to show it as the difference between weight and identity.
+In practice it's not very good create an identity matrix just to set up zeros on the diagonal, especially when dimention on the matrix is very big.
 Usualy linear algebra libraries give you a possibility to set up diagonal without additional matrix and this solution would be more efficient.
-For example in NumPy library it's a `numpy.fill_diagonal <http://docs.scipy.org/doc/numpy/reference/generated/numpy.fill_diagonal.html>`_ function
+For example in NumPy library it's a `numpy.fill_diagonal <http://docs.scipy.org/doc/numpy/reference/generated/numpy.fill_diagonal.html>`_ function.
+
+Let's check an example.
+Suppose we have a vector :math:`u`.
+
+.. math::
+
+    u = \left[\begin{align*}1 \\ -1 \\ 1 \\ -1\end{align*}\right]
+
+Assume that network don't have patterns inside of it, so the vector :math:`u` would be the first one.
+Let's compute weights for the network.
+
+.. math::
+
+    \begin{align*}
+        U = u u^T =
+        \left[
+            \begin{array}{c}
+                1 \\
+                -1 \\
+                1 \\
+                -1
+            \end{array}
+        \right]
+        \left[
+            \begin{array}{c}
+                1 & -1 & 1 & -1
+            \end{array}
+        \right]
+        =
+        \left[
+            \begin{array}{cccc}
+                1 & -1 & 1 & -1\\
+                -1 & 1 & -1 & 1\\
+                1 & -1 & 1 & -1\\
+                -1 & 1 & -1 & 1
+            \end{array}
+        \right]
+    \end{align*}
+
+Look closer to the matrix :math:`U` that we got.
+Outer product just repeat vector 4 times with the same or inversed value.
+First and third column (or row, it doesn't metter, because matrix is symmetric) are exacly the same as input vector.
+The second and fourth are also the same, but with the opposite sign.
+That beause in the vector :math:`u` we have 1 on the first and third places and -1 on the rest.
+
+To make weight from the :math:`U` matrix, we need to remove ones from the diagonal.
+
+.. math::
+
+    W = U - I
+
+:math:`I` is the identity matrix and :math:`I \in \Bbb R^{n \times n}`, where :math:`n` is a number of features in the input vector.
+
+When we have one stored vector inside the weights we don't realy need to remove ones from the diagonal.
+The main problem would be when we have more than one vector stored in the weights.
+Each value on the diagonal would be equal to the number of stored vectors inside of it.
+On recovery procedure these diagonal elements will produce the big values for the output vector and eventually they will impair the output result.
 
 Recovery from memory
 ~~~~~~~~~~~~~~~~~~~~
 
-Recovery procedure include pattern recovery from the broken one.
-There are already exists two main approaches. First one recover the vector using each value from the vector one time. The second one is a randomized approach. The basic idea is that you iteratively get random value from the input vector and recover it from the network. I will explain each approach in more details.
+Recovery procedure include pattern recovery procedure from the broken one.
+There are already exists two main approaches, synchronous and asynchronous.
+We are going to understand both of them.
 
-Synchronous recovery approach
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Synchronous
+^^^^^^^^^^^
 
-Full recovery approach is much easier so we are going to check it first.
+Synchronous approach is much easier for understanding, so we are going to check it first.
 To recover your pattern from the memory you can just multiply the weight matrix by the input vector.
 
 .. math::
@@ -189,21 +247,21 @@ To recover your pattern from the memory you can just multiply the weight matrix 
     \end{align*}
 
 
-Variable :math:`s` doesn't contain recover pattern.
-As you can see we sum up all information from the weights.
-It's clear that value not necessary equal to -1 or 1, so we must do something else with this output and make the result values as bipolar numbers.
+Variable :math:`s` doesn't contain recovered pattern.
+Let's think about the result.
+We sum up all information from the weights where each value can be any integer with an absolute value equal or greater to the number of patterns inside the network.
+It's clear that total sum value for :math:`s_i` not necessary equal to -1 or 1, so we must make additional operations that make bipolar vector from the :math:`s`.
 
 Let's think about this product operation.
 What does it actualy do?
-Basically after outer product we save our pattern dublicated :math:`n` times (where :math:`n` is a number of features in input vector) inside the weight (we will see it later in this tutorial).
-When we store more patterns we get interception between them (its called a **crosstalk**) and each pattern add some noise to the another patterns.
+Basically after training procedure we saved our pattern dublicated :math:`n` times (where :math:`n` is a number of features in input vector) inside the weight.
+When we store more patterns we get interception between them (its called a **crosstalk**) and each pattern add noise to the another patterns.
 So, after product between :math:`W` and :math:`x` for each value from the vector :math:`x` we get a recovered vector with a little bit noise.
 For :math:`x_1` we get a first column from the matrix :math:`W`, for the :math:`x_2` a second column, and so on.
-Pay attention that we reverse sign before store it if :math:`x_i = -1` and in recovery operation we reverse it back, so after recovery procedure sign would be valid.
 Next we add all vectors together.
 This operation looks like voting.
 For example we have 3 vectors.
-If the first two vectors have 1 at first position and the third one has -1 at the same position, so the winner must be value 1.
+If the first two vectors have 1 at the first position and the third one has -1 at the same position, so the winner must be value 1.
 We can make the same voting procedure with :math:`sign` function.
 So the output value must be 1 if total value is greater then zero and -1 otherwise.
 
@@ -222,17 +280,18 @@ That's it.
 Now :math:`y` store the recovered vector :math:`x`.
 
 Maybe now you can see why we can't use zeros in the input vectors.
-In `voting` procedure we use each row with the bipolar vectors, but if values were zeros they will ignore column from the weight matrix.
+In `voting` procedure we use each row muliplied by the bipolar number and use them all in voting procedure, but if values were zeros they will ignore column from the weight matrix and we will use only values related to ones in in the input pattern.
 
-Ofcourse you can use 0 and 1 values and sometime you will get the correct result, but this approach would be worse than with the bipolar values.
+Ofcourse you can use 0 and 1 values and sometime you will get the correct result, but this approach would be worse than with the bipolar values, because you ignore columns related to zeros.
 
-Asynchronous recovery approach
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Asynchronous
+^^^^^^^^^^^^
 
 Previous approach is good, but it has limitations.
-If you change one value in input vector it can change your output result.
-The another popular approach is a randomization.
-You randomly select a value from your input vector and associat it with a column from the weight matrix.
+If you change one value in input vector it can change your output result and value wouldn't converge to the minimum.
+Another popular approach is an asynchronous.
+
+You randomly select a value from your input vector and associate it with a column from the weight matrix.
 You repeat this procedure multiple times and after some number of iterations you just sum up all vectors that you are already select.
 In terms of the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` we can say that **neuron fired**
 
@@ -420,66 +479,6 @@ In terms of a linear algebra we can write formula for the Energy Function more s
 
 But linear algebra notation works only with the :math:`x` vector, we can't use matrix :math:`X` with the multiple input patterns instead of the :math:`x` in this formula, beause after product your energies would be on the diagonal and the other values would be useles.
 
-Why does it work?
------------------
-
-Let's start with an example.
-Suppose we have a vector :math:`u`.
-
-.. math::
-
-    u = \left[\begin{align*}1 \\ -1 \\ 1 \\ -1\end{align*}\right]
-
-Assume that network don't have patterns inside of it, so the vector :math:`u` would be the first one.
-Let's compute weights for the network.
-
-.. math::
-
-    \begin{align*}
-        U = u u^T =
-        \left[
-            \begin{array}{c}
-                1 \\
-                -1 \\
-                1 \\
-                -1
-            \end{array}
-        \right]
-        \left[
-            \begin{array}{c}
-                1 & -1 & 1 & -1
-            \end{array}
-        \right]
-        =
-        \left[
-            \begin{array}{cccc}
-                1 & -1 & 1 & -1\\
-                -1 & 1 & -1 & 1\\
-                1 & -1 & 1 & -1\\
-                -1 & 1 & -1 & 1
-            \end{array}
-        \right]
-    \end{align*}
-
-Look closer to the matrix :math:`U` that we got.
-Outer product just repeat vector 4 times with the same or inversed value.
-First and third column (or row, it doesn't metter, because matrix is symmetric) are exacly the same as input vector.
-The second and fourth are also the same, but with the opposite sign.
-That beause in the vector :math:`u` we have 1 on the first and third places and -1 on the rest.
-
-To make weight from the :math:`U` matrix, we need to remove ones from the diagonal.
-
-.. math::
-
-    W = U - I
-
-:math:`I` is the identity matrix and :math:`I \in \Bbb R^{n \times n}`, where :math:`n` is a number of features in the input vector.
-
-When we have one stored vector inside the weights we don't realy need to remove ones from the diagonal.
-The main problem would be when we have more than one vector stored in the weights.
-Each value on the diagonal would be equal to the number of stored vectors inside of it.
-On recovery procedure these diagonal elements will produce the big values for the output vector and eventually they will impair the output result.
-
 Example
 -------
 
@@ -535,11 +534,11 @@ We have 3 images, so now we can train network with these patterns.
 
     >>> data = np.concatenate([zero, one, two], axis=0)
     >>>
-    >>> dhnet = algorithms.DiscreteHopfieldNetwork()
+    >>> dhnet = algorithms.DiscreteHopfieldNetwork(mode='sync')
     >>> dhnet.train(data)
 
 That's all.
-Now to make sure that network catch patterns we can introduce the broken pattern.
+Now to make sure that network memorize patterns right we can define the broken patterns and check how it will recover them.
 
 .. code-block:: python
 
@@ -575,7 +574,6 @@ Now to make sure that network catch patterns we can introduce the broken pattern
     | *
     | * * * * *
 
-We define the same image, but without the lower half of it.
 Now we can reconstruct pattern from the memory.
 
 .. code-block:: python
@@ -601,8 +599,8 @@ Now we can reconstruct pattern from the memory.
 Cool!
 Network catch the pattern right.
 
-From this network we also can catch the hallucination.
-We need to define another pattern and again try to recover it.
+But not always we will get a correct answer.
+Let's define another broken pattern and check network output.
 
 .. code-block:: python
 
@@ -626,31 +624,25 @@ We need to define another pattern and again try to recover it.
 
 We didn't clearly teach the network for this pattern.
 But if we look closer, it looks like mixed patter of numbers 1 and 2.
-That is exacly hallucination.
-Basically network create new local minimum some where between numbers 1 and 2 that looks very close two both but still non of them.
 
-For the specific input network produce the same output.
-There exists another aproach where we randomly select some of the input patterns and try to mix them.
-Somethimes this approach works very well.
-For this specific example you are able to catch the valid output of number 2, but this event would be rare.
-You can test it by your own.
+This problem we solve with the asynchronous network approach.
+We don't necessary need to create a new network, we can just switch it mode.
 
 .. code-block:: python
 
-    >>> dhnet = algorithms.DiscreteHopfieldNetwork(
-    ...     mode='async',
-    ...     n_times=400
-    ... )
+    >>> np.random.seed(0)
     >>>
-    >>> dhnet.train(data)
+    >>> dhnet.mode = 'async'
+    >>> dhnet.n_times = 200
+    >>>
     >>> result = dhnet.predict(half_two)
     >>> draw_bin_image(result.reshape((6, 5)))
-    | * * *
-    |     *
-    |     *
     |   * *
-    | *   *
-    | * * * * *
+    |     *
+    |     *
+    |     *
+    |     *
+    |     *
     >>> result = dhnet.predict(half_two)
     >>> draw_bin_image(result.reshape((6, 5)))
     | * * *
@@ -658,18 +650,20 @@ You can test it by your own.
     |       *
     |   * *
     | *
-    | * * * * *
+    | * * * *
 
-I catched it from the second time, but sometimes it takes more iterations.
-Usualy to improve the accuracy of this method you can define more number of iterations for the random procedure (``n_times`` parameter).
-Another way is to add additional verification and repeat it if output patter fail expectation.
+Our pattern is really close to the minimum of one and two patterns.
+Randomization helps us choose direction but it not nessesary would be right, especialy when the broken pattern close to the one and two patterns.
+
+On plot below you can see first 200 iterations of the recovery procedure.
+Pattern changed it Energy after each iteration and Energy value decreased after each iteration until it reach the local minimum where pattern equal to the 2.
 
 .. figure:: images/hopfield-energy-vis.png
     :width: 80%
     :align: center
     :alt: Asynchronous Discrete Hopfield Network energy update after each iteration
 
-And finally we can look closer on the network memory using Hinton diagram
+And finally we can look closer on the network memory using Hinton diagram.
 
 .. code-block:: python
 
@@ -686,12 +680,43 @@ And finally we can look closer on the network memory using Hinton diagram
     :align: center
     :alt: Asynchronous Discrete Hopfield Network energy update after each iteration
 
+This graph above shows the network weight matrix and all information stored in it.
+You can read Hinton diagram very simple.
+It encode the matrix into more untuitive form.
+Each value decoded in square where size of it encode the absolute value from matrix and color shows the sign on this value.
+White is a positive value, black is a negative value.
+A small clue you can see at the right side of the plot.
+
+Let's go back to the graphic.
+What can you say about the network just looking at this picture?
+First of all you can see that diagonal velues are empty, for this reason there are no squares on these positions.
+Second important thing is that plot is symmetric.
+But that is not all the information that you can find on the graph.
+Can you see another patterns?
+You can find rows or columns with exacly the same squares and colors, like the second and third columns.
+Five columns is also the same, but colors are reversed.
+Not look closer in to the antidiagonal.
+What can you say about it?
+If you think that all squares are white - you are right.
+But why is that true?
+Is there always the same patterns for each memory matrix?
+No, it is a special property of patterns that we store in it.
+If you put a horizontal line on the middle of the each image and split it you will see that values are opposite symmetric.
+For instance, :math:`x_1` opposite symmetric to :math:`x_30`, :math:`x_2` to :math:`x_29`, :math:`x_3` to :math:`x_8` and so on.
+Zero pattern is a perfect example where each value have exacly the same opposite symmetric pair.
+One is almost perfect except one value on the :math:`x_2` position.
+Two is not clearly opposite symmetric if you ignore an empty space.
+But if you check each value you will find that it more that a half of values are symmetric.
+Combination of those value gives us a diagonal with all positive values.
+If we have all perfectly opposite symmetric patterns then squares on the antidiagonal will have the same length.
+
+You can find more interesting things inside this plot.
+I described just the most interesting properties that you can identify on the Hinton diagram.
+
 Summary
 -------
 
-The :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` is a very simple and you need a little knowlege in linear algebra to understand it.
-
-Also you can check another ':ref:`Password recovery <password-recovery>`' tutorial in which the password is recovered from the memory of the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
+In addition you can read another tutorial about a ':ref:`Password recovery <password-recovery>`' from the memory using the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
 
 References
 ----------

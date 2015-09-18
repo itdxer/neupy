@@ -141,6 +141,7 @@ def get_module_for_class(classname, moduletype):
         'network': 'neupy.algorithms',
         'ensemble': 'neupy.ensemble',
         'layer': 'neupy.layers',
+        'plot': 'neupy.plots',
     }
 
     if moduletype not in available_module_types:
@@ -164,9 +165,10 @@ def process_docstring(app, what, name, obj, options, lines):
     * :network:`NetworkClassName`
     * :ensemble:`EnsembleClassName`
     * :layer:`LayerClassName`
+    * :plot:`function_name`
     """
 
-    labels = ['network', 'layer', 'ensemble']
+    labels = ['network', 'layer', 'ensemble', 'plot']
     labels_regexp = '|'.join(labels)
 
     regexp = re.compile(
@@ -192,9 +194,8 @@ def process_docstring(app, what, name, obj, options, lines):
             if not classname:
                 newline_pattern = r':class:`\2 <{}\.\2>`'.format(module)
             else:
-                newline_pattern = r':class:`\2 <{}\.{}>`'.format(
-                    module, classname
-                )
+                newline_pattern = r':class:`\2 <{}\.{}>`'.format(module,
+                                                                 classname)
 
             line = lines[i] = regexp.sub(newline_pattern, line, count=1)
             replacement = regexp.search(line)
