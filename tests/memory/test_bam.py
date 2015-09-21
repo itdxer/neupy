@@ -6,8 +6,8 @@ from memory.data import *
 from base import BaseTestCase
 
 
-zero_hint = np.matrix([[0, 1, 0, 0]])
-one_hint = np.matrix([[1, 0, 0, 0]])
+zero_hint = np.array([[0, 1, 0, 0]])
+one_hint = np.array([[1, 0, 0, 0]])
 
 
 class BAMTestCase(BaseTestCase):
@@ -36,6 +36,10 @@ class BAMTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             dhnet.predict(np.array([-1, 1]))
 
+    def test_train_for_1d_arrays(self):
+        dhnet = algorithms.DiscreteBAM(mode='sync')
+        dhnet.train(zero.ravel(), zero_hint.ravel())
+
     def test_discrete_bam_sync(self):
         bamnet = algorithms.DiscreteBAM(mode='sync')
         bamnet.train(self.data, self.hints)
@@ -57,6 +61,19 @@ class BAMTestCase(BaseTestCase):
             one
         )
 
+        # Test 1d input array prediction
+        np.testing.assert_array_almost_equal(
+            bamnet.predict_input(one_hint.ravel())[0],
+            one
+        )
+
+        # Test 1d output array input prediction
+        np.testing.assert_array_almost_equal(
+            bamnet.predict_output(half_one.ravel())[1],
+            one_hint
+        )
+
+        # Test multiple input values prediction
         input_matrix = np.vstack([one, zero])
         output_matrix = np.vstack([one_hint, zero_hint])
 
@@ -111,6 +128,13 @@ class BAMTestCase(BaseTestCase):
             np.array([[0, 1]])
         ))
 
+        # Test 1d array
+        self.assertEqual(-7, dhnet.energy(
+            np.array([0, 1, 1, 0, 0, 1, 1]),
+            np.array([0, 1])
+        ))
+
+        # Test multiple input values energy calculation
         np.testing.assert_array_almost_equal(
             np.array([-7, 0]),
             dhnet.energy(

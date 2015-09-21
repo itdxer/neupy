@@ -144,8 +144,8 @@ class DiscreteBAM(DiscreteMemory):
         self.discrete_validation(input_data)
         self.discrete_validation(output_data)
 
-        output_data = bin2sign(output_data)
-        input_data = bin2sign(input_data)
+        output_data = bin2sign(format_data(output_data))
+        input_data = bin2sign(format_data(input_data))
 
         _, wight_nrows = input_data.shape
         _, wight_ncols = output_data.shape
