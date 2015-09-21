@@ -1,12 +1,15 @@
+from numpy import where
+
+
 __all__ = ('sign2bin', 'bin2sign', 'hopfield_energy', 'format_data')
 
 
 def sign2bin(matrix):
-    return (matrix + 1) / 2
+    return where(matrix == 1, 1, -1)
 
 
 def bin2sign(matrix):
-    return 2 * matrix - 1
+    return where(matrix == 0, -1, 1)
 
 
 def hopfield_energy(weight, input_data, output_data):

@@ -349,7 +349,7 @@ Results are not so good::
 I guess at the first case (``exclude-one``) we just was lucky and after excluding one symbol from the end didn't shift most of all symbols into the wrong possitions.
 So remove symbols it's not a very good idea.
 
-All functions that you need for experiments you can find on the `github <https://github.com/itdxer/neupy/tree/master/examples/password_recovery.py>`_.
+All functions that you need for experiments you can find on the `github <https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py>`_.
 
 Possible Problems
 -----------------
@@ -374,7 +374,7 @@ Even this simple network can be a powerfull tool if you know it limitations.
 Download script
 ---------------
 
-You can download and test a full script from the `github <https://github.com/itdxer/neupy/tree/master/examples/password_recovery.py>`_
+You can download and test a full script from the `github <https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py>`_
 
 It didn't contain a random ``seed`` initializations, so you will get a different outputs after each run.
 

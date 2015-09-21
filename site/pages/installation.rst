@@ -11,7 +11,7 @@ Install the latest development version
 
 .. code-block:: bash
 
-    $ pip install git+https://github.com/itdxer/neupy
+    $ pip install git+https://github.com/itdxer/neupy.git
 
 Or just from source
 

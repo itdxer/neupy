@@ -1,6 +1,6 @@
 from math import log, ceil
 
-from numpy import zeros, fill_diagonal, random, multiply, sign
+from numpy import zeros, fill_diagonal, random, sign
 
 from neupy.functions import step
 from neupy.core.properties import (ChoiceProperty, NonNegativeIntProperty,

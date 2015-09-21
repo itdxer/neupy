@@ -81,12 +81,8 @@ class DiscreteBAM(DiscreteMemory):
 
     def format_predict(self, predicted_result):
         if self.weight is None:
-            raise AttributeError("Train network before predict values")
-
-        lower_value, upper_value = (-1, 1)
-        predicted = sign(predicted_result)
-
-        return sign2bin(predicted.astype(int))
+            raise AttributeError("Train the network before predict the values")
+        return sign2bin(sign(predicted_result).astype(int))
 
     def predict_input(self, output_data):
         output_data = bin2sign(output_data)
