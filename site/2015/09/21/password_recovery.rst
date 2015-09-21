@@ -8,7 +8,7 @@ Password recovery
 At this tutorial we are going to build a simple neural network that will recover password from a broken one.
 If you don't familiar with a :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` algorithm, you can read :ref:`this tutorial <discrete-hopfield-network>`.
 
-Before run all experiments, we need to setup ``seed`` parameter to make all results reproducible.
+Before run all experiments, we need to set up ``seed`` parameter to make all results reproducible.
 But you can test code without it.
 
 .. code-block:: python
@@ -19,7 +19,7 @@ But you can test code without it.
     np.random.seed(0)
     random.seed(0)
 
-If you can't reproduce with your version of Python and libraries you can install the same as I used:
+If you can't reproduce with your version of Python or libraries you can install the same as I used:
 
 .. code-block:: python
 
@@ -38,11 +38,11 @@ Code works with a Python 2.7 as well.
 Data transformation
 -------------------
 
-Before build the network that will save and recover the password we must make transformations for the input and output data.
-But it's not enough just to encode it, we must set up a constant length for a string, just to make sure that for all usage we will have a vector with a constant length.
-Another notation that we must add is a string encoding.
+Before build the network that will save and recover the password we have to make transformations for the input and output data.
+But it's not enough just to encode it, we should set up a constant length for a string, just to make sure that for all usage we will have a vector with a constant length.
+Another notation that we should add is a string encoding.
 For simplicity we will use only ASCII symbols.
-So, let's define a function that transform a string to the binary list.
+So, let's define a function that transform a string to a binary list.
 
 .. code-block:: python
 
@@ -64,11 +64,11 @@ So, let's define a function that transform a string to the binary list.
         return list(bits_list)
 
 Our function takes 2 parameters.
-First one is a string which we want to encode.
-The second attribute is set up a constant length for the input vector.
-If length of the input string is less than the ``max_length`` value, then function adds fill the spaces at the beginning of the string.
+First one is a string that we want to encode.
+The second attribute is set up a constant length for input vector.
+If length of the input string is less than ``max_length`` value, then function fill the spaces at the beginning of the string.
 
-Let's check it output.
+Let's check ``str2bin`` function output.
 
 .. code-block:: python
 
@@ -97,7 +97,7 @@ So before we go to the network integration, we have to define another function t
             characters.append(character)
         return ''.join(characters).lstrip()
 
-If we test it we will get string ``test`` back.
+If we test it we will get word ``test`` back.
 
 .. code-block:: python
 
@@ -139,7 +139,7 @@ Let's define it and later we will check it step by step.
 
         return dhnet
 
-If you are already read :ref:`Discrete Hopfield Network tutorial <discrete-hopfield-network>`, you must know that if we add only one vector into the network we will get it dublicated or with reversed signs in the whole matrix.
+If you are already read :ref:`Discrete Hopfield Network tutorial <discrete-hopfield-network>`, you should know that if we add only one vector into the network we will get it dublicated or with reversed signs in the whole matrix.
 To make it little bit secure we can add the noize into the network.
 For this reason we define one additional parameter ``noize_level`` into the function.
 It control number of randomly generated binary vectors.
@@ -153,7 +153,7 @@ Function returns trained network for the later usage.
 But why do we use random binary vectors instead of the decoded random strings?
 The problem is in the similarity between two vectors.
 Let's check two approaches and compare them with a `Hamming distance <https://en.wikipedia.org/wiki/Hamming_distance>`_.
-Before that we must define a function that measure distance between two vectors.
+Before that we have to define a function that measure distance between two vectors.
 
 .. code-block:: python
 
@@ -298,7 +298,7 @@ At each step we create random password and try to recover it from the broken pas
     print("Number of fails for each test case:")
     pprint.pprint(results)
 
-After sumbmission your output must be the same as the one below (if you make all step by step)::
+After sumbmission your output should be the same as the one below (if you make all step by step)::
 
     Number of fails for each test case:
     {'exclude-one': 11,
@@ -361,7 +361,7 @@ There are few possible problems in the Discrete Hopfile Network.
 2. There already exists small probability to recover the password from the empty string.
 
 3. Similar binary code representation for the different symbols is a big problem.
-Some times you can have a situation when 2 symbols that are in binary code are differente betweene each other just for a one bit. The first idea use a One Hot Encoder. But the problem with it is even more. For example we used one of the 94 symbols for the password. If we encode each symbol we will get vector with 93 zeros and just 1 active value. The problem that after recovery procedure we must always get a 1 active value, but this situation is very unlikely for the network.
+Some times you can have a situation when 2 symbols that are in binary code are differente betweene each other just for a one bit. The first idea use a One Hot Encoder. But the problem with it is even more. For example we used one of the 94 symbols for the password. If we encode each symbol we will get vector with 93 zeros and just 1 active value. The problem that after recovery procedure we should always get a 1 active value, but this situation is very unlikely for the network.
 
 Summary
 -------

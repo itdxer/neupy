@@ -30,7 +30,7 @@ Architecture
 It's simple because you don't need a lot of background knowledge in Maths to use it.
 Everything you need to know is how to make a basic Linear Algebra operations, like outer product or sum of the two matrices.
 
-Let's beging with a simple thing.
+Let's begin with a simple thing.
 What do we know about this neural network so far?
 Just a name and a type.
 From the name we can identify one useful thing about the network.
@@ -187,7 +187,34 @@ To make weight from the :math:`U` matrix, we need to remove ones from the diagon
 
 .. math::
 
-    W = U - I
+    W = U - I =
+
+    = \left[
+        \begin{array}{cccc}
+            1 & -1 & 1 & -1\\
+            -1 & 1 & -1 & 1\\
+            1 & -1 & 1 & -1\\
+            -1 & 1 & -1 & 1
+        \end{array}
+    \right] -
+    \left[
+        \begin{array}{cccc}
+            1 & 0 & 0 & 0\\
+            0 & 1 & 0 & 0\\
+            0 & 0 & 1 & 0\\
+            0 & 0 & 0 & 1
+        \end{array}
+    \right] =
+
+    = \left[
+        \begin{array}{cccc}
+            0 & -1 & 1 & -1\\
+            -1 & 0 & -1 & 1\\
+            1 & -1 & 0 & -1\\
+            -1 & 1 & -1 & 0
+        \end{array}
+    \right]
+
 
 :math:`I` is the identity matrix and :math:`I \in \Bbb R^{n \times n}`, where :math:`n` is a number of features in the input vector.
 
@@ -277,7 +304,7 @@ Now :math:`y` store the recovered pattern from the input vector :math:`x`.
 Maybe now you can see why we can't use zeros in the input vectors.
 In `voting` procedure we use each row muliplied by the bipolar number and use them all in voting procedure, but if values were zeros they will ignore columns from the weight matrix and we will use only values related to ones in the input pattern.
 
-Ofcourse you can use 0 and 1 values and sometime you will get the correct result, but this approach give you the worse results.
+Of course you can use 0 and 1 values and sometime you will get the correct result, but this approach give you the worse results.
 
 Asynchronous
 ^^^^^^^^^^^^
@@ -288,7 +315,7 @@ Another popular approach is an **asynchronous**.
 This approach is more like a real memory.
 At the same time in network activate just a one random neuron instead of all.
 In terms of neural networks we say that **neuron fired**.
-We ietaratevly repeat this operation multiple time and after some point network will converge to some known pattern.
+We iteratively repeat this operation multiple time and after some point network will converge to some known pattern.
 
 Let's check the example:
 Suppouse we already have a weight matrix :math:`W` with one a patterns :math:`x`  inside of it.
@@ -422,7 +449,7 @@ The second rules use a logarithmic proportion.
     m = \left \lfloor \frac{n}{2 \cdot log(n)} \right \rfloor
 
 Both of these rules is just good assumtions about the neature of the data and it possible limits in memory.
-Ofcourse you can find situations when these rules will fail.
+Of course you can find situations when these rules will fail.
 
 Hallucinations
 --------------
@@ -642,8 +669,8 @@ We don't necessary need to create a new network, we can just simply cswitch it m
     | *
     | * * * *
 
-Our pattern is really close to the minimum of 1 and 2 patterns.
-Randomization helps us choose direction but it not nessesary would be the right ine, especialy when the broken pattern close to the one and two patterns.
+Our broken pattern is really close to the minimum of 1 and 2 patterns.
+Randomization helps us choose direction but it not nessesary would be the right one, especialy when the broken pattern close to the one and two patterns.
 
 On plot below you can see first 200 iterations of the recovery procedure.
 Energy value decreased after each iteration until it reach the local minimum where pattern equal to the 2.
