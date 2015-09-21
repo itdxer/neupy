@@ -24,13 +24,15 @@ class DiscreteBAM(DiscreteMemory):
     train(input_data, output_data)
         Train network and update network weights.
     predict_output(input_data, n_times=None)
-        Based on input date network predict it output.
+        Using input data recover output data. Returns two arguments.
+        First is input data, second is output data.
     predict(input_data, n_times=None)
-        The same as ``predict_output``
+        The same as ``predict_output``.
     predict_input(output_data, n_times=None)
-        Based on output date network predict it input.
+        Using output data recover input data. Returns two arguments.
+        First is input data, second is output data.
     energy(input_data, output_data)
-        Compute Discrete Hopfiel Energy.
+        Calculate Hopfiel Energy for the input and output data.
 
     Notes
     -----
