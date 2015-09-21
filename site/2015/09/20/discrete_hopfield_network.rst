@@ -115,7 +115,7 @@ The final weight formula look like the one below.
 Where :math:`I` is an identity matrix.
 
 But usualy we need to save more values in the memory.
-For different pattern we must make exacly the same procedure as before and than just add the generated weight matrix to the old one.
+For different pattern we have to make exacly the same procedure as before and than just add the generated weight matrix to the old one.
 
 .. math::
 
@@ -272,7 +272,7 @@ To recover your pattern from the memory you need just multiply the weight matrix
 
 Let's think about the result.
 We sum up all information from the weights where each value can be any integer with an absolute value equal or smaller than the number of patterns inside the network.
-It's clear that total sum value for :math:`s_i` not necessary equal to -1 or 1, so we must make additional operations that make bipolar vector from the vector :math:`s`.
+It's clear that total sum value for :math:`s_i` not necessary equal to -1 or 1, so we have to make additional operations that make bipolar vector from the vector :math:`s`.
 
 Let's think about this product operation.
 What does it actualy do?
@@ -283,9 +283,9 @@ For :math:`x_1` we get a first column from the matrix :math:`W`, for the :math:`
 Next we add all vectors together.
 This operation looks like voting.
 For example we have 3 vectors.
-If the first two vectors have 1 at the first position and the third one has -1 at the same position, so the winner must be value 1.
+If the first two vectors have 1 at the first position and the third one has -1 at the same position, so the winner should be value 1.
 We can make the same voting procedure with :math:`sign` function.
-So the output value must be 1 if total value is greater then zero and -1 otherwise.
+So the output value should be 1 if total value is greater then zero and -1 otherwise.
 
 .. math::
 
@@ -440,7 +440,7 @@ On pictures colors are black and white, so we can encode them in bipolar vectors
 Will be the probabilities equal of obtaining each value?
 Usualy not.
 More likely that number of white pixels would be greater than number of black.
-Before use this rule you must think about type of your input patterns.
+Before use this rule you have to think about type of your input patterns.
 
 The second rules use a logarithmic proportion.
 
@@ -457,7 +457,7 @@ Hallucinations
 Hallucinations is one of the main problems in the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
 Sometimes network output can be something that we didn't teach it.
 
-To understand this phenomenon we must first of all define the Hopfield energy function.
+To understand this phenomenon we should first of all define the Hopfield energy function.
 
 .. math::
 
@@ -704,7 +704,7 @@ White is a positive and black is a negative.
 Usualy Hinton diagram helps identify some patterns in the weight matrix.
 
 Let's go back to the graph.
-What can you say about the network just looking at this picture?
+What can you say about the network just by looking at this picture?
 First of all you can see that there is no squares on the diagonal.
 That is because the are equal to zero.
 Second important thing is that plot is symmetric.

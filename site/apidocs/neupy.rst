@@ -17,6 +17,13 @@ Subpackages
     neupy.network
     neupy.plots
 
+Submodules
+----------
+
+.. toctree::
+
+   neupy.utils
+
 Module contents
 ---------------
 

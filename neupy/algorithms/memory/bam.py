@@ -1,6 +1,10 @@
+from random import randint
+
 from numpy import zeros, sign
 
-from .utils import sign2bin, bin2sign, format_data, hopfield_energy
+from neupy.utils import format_data
+from neupy.functions import step
+from .utils import sign2bin, bin2sign, hopfield_energy
 from .base import DiscreteMemory
 
 
@@ -11,22 +15,26 @@ class DiscreteBAM(DiscreteMemory):
     """ Discrete BAM Network with associations.
     Network associate every input with some target value.
 
-    Notes
-    -----
-    *{discrete_data_note}
+    Parameters
+    ----------
+    {discrete_params}
 
     Methods
     -------
     train(input_data, output_data)
         Train network and update network weights.
-    predict_output(input_data)
+    predict_output(input_data, n_times=None)
         Based on input date network predict it output.
-    predict(input_data)
+    predict(input_data, n_times=None)
         The same as ``predict_output``
-    predict_input(output_data)
+    predict_input(output_data, n_times=None)
         Based on output date network predict it input.
     energy(input_data, output_data)
         Compute Discrete Hopfiel Energy.
+
+    Notes
+    -----
+    * {discrete_data_note}
 
     Examples
     --------
@@ -67,30 +75,68 @@ class DiscreteBAM(DiscreteMemory):
     >>> data = np.concatenate([zero, one], axis=0)
     >>> hints = np.concatenate([zero_hint, one_hint], axis=0)
     >>>
-    >>> bamnet = algorithms.DiscreteBAM()
-    >>> bamnet.train(data.copy(), hints.copy())
+    >>> bamnet = algorithms.DiscreteBAM(mode='sync')
+    >>> bamnet.train(data, hints)
     >>>
-    >>> bamnet.predict(half_zero)
+    >>> recovered_zero, recovered_hint = bamnet.predict(half_zero)
+    >>> recovered_hint
     matrix([[0, 1, 0, 0]])
     >>> zero_hint
     matrix([[0, 1, 0, 0]])
     """
-    def __init__(self, **options):
-        super(DiscreteBAM, self).__init__(**options)
-        self.weight = None
 
     def format_predict(self, predicted_result):
+        return step(predicted_result).astype(int)
+
+    def predict_input(self, output_data, n_times=None):
+        return self._predict(input_data=None,
+                             output_data=format_data(output_data),
+                             n_times=n_times)
+
+    def predict_output(self, input_data, n_times=None):
+        return self._predict(input_data=format_data(input_data),
+                             output_data=None,
+                             n_times=n_times)
+
+    def _predict(self, input_data=None, output_data=None, n_times=None):
         if self.weight is None:
-            raise AttributeError("Train the network before predict the values")
-        return sign2bin(sign(predicted_result).astype(int))
+            raise AttributeError("Train network before predict the values")
 
-    def predict_input(self, output_data):
-        output_data = bin2sign(output_data)
-        return self.format_predict(output_data.dot(self.weight.T))
+        if input_data is None and output_data is not None:
+            self.discrete_validation(output_data)
+            output_data = bin2sign(output_data)
+            input_data = sign(output_data.dot(self.weight.T))
 
-    def predict_output(self, input_data):
-        input_data = bin2sign(input_data)
-        return self.format_predict(input_data.dot(self.weight))
+        elif input_data is not None and output_data is None:
+            self.discrete_validation(input_data)
+            input_data = bin2sign(input_data)
+            output_data = sign(input_data.dot(self.weight))
+
+        else:
+            raise ValueError("Input or output data have to be equal to `None`")
+
+        n_output_features = output_data.shape[-1]
+        n_input_features = input_data.shape[-1]
+
+        if self.mode == 'async':
+            if n_times is None:
+                n_times = self.n_times
+
+            for _ in range(n_times):
+                input_position = randint(0, n_input_features - 1)
+                output_position = randint(0, n_output_features - 1)
+
+                input_data[:, input_position] = sign(
+                    output_data.dot(self.weight[input_position, :])
+                )
+                output_data[:, output_position] = sign(
+                    input_data.dot(self.weight[:, output_position])
+                )
+
+        return (
+            self.format_predict(input_data),
+            self.format_predict(output_data),
+        )
 
     def train(self, input_data, output_data):
         self.discrete_validation(input_data)
@@ -114,6 +160,9 @@ class DiscreteBAM(DiscreteMemory):
         self.weight += input_data.T.dot(output_data)
 
     def energy(self, input_data, output_data):
+        self.discrete_validation(input_data)
+        self.discrete_validation(output_data)
+
         input_data, output_data = bin2sign(input_data), bin2sign(output_data)
         input_data = format_data(input_data)
         output_data = format_data(output_data)

@@ -7,7 +7,7 @@ from base import BaseTestCase
 
 
 class DiscreteHopfieldNetworkTestCase(BaseTestCase):
-    def test_errors(self):
+    def test_check_limit_option(self):
         data = np.matrix([
             [1, 1, 0, 1],
             [1, 0, 1, 1],
@@ -22,6 +22,20 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
         # The same must be OK without validation
         dhnet = algorithms.DiscreteHopfieldNetwork(check_limit=False)
         dhnet.train(data)
+
+    def test_input_data_validation(self):
+        dhnet = algorithms.DiscreteHopfieldNetwork()
+        dhnet.weight = np.array([[0, 1], [1, 0]])
+
+        # Invalid discrete input values
+        with self.assertRaises(ValueError):
+            dhnet.train(np.array([-1, 1]))
+
+        with self.assertRaises(ValueError):
+            dhnet.energy(np.array([-1, 1]))
+
+        with self.assertRaises(ValueError):
+            dhnet.predict(np.array([-1, 1]))
 
     def test_discrete_hopfield_sync(self):
         data = np.concatenate([zero, one, two], axis=0)
@@ -46,9 +60,11 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
         np.testing.assert_array_almost_equal(one, dhnet.predict(half_one))
         np.testing.assert_array_almost_equal(two, dhnet.predict(half_two))
 
-        multiple_inputs = np.vstack([zero, one, two])
+        multiple_outputs = np.vstack([zero, one, two])
+        multiple_inputs = np.vstack([half_zero, half_one, half_two])
         np.testing.assert_array_almost_equal(
-            multiple_inputs, dhnet.predict(multiple_inputs)
+            multiple_outputs,
+            dhnet.predict(multiple_inputs),
         )
 
     def test_energy_function(self):

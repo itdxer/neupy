@@ -2,10 +2,10 @@ from math import log, ceil
 
 from numpy import zeros, fill_diagonal, random, sign
 
+from neupy.utils import format_data
 from neupy.functions import step
-from neupy.core.properties import (ChoiceProperty, NonNegativeIntProperty,
-                                   BoolProperty)
-from .utils import bin2sign, hopfield_energy, format_data
+from neupy.core.properties import BoolProperty
+from .utils import bin2sign, hopfield_energy
 from .base import DiscreteMemory
 
 
@@ -18,14 +18,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
     Parameters
     ----------
-    mode : {{'sync', 'async'}}
-        Indentify pattern recovery mode. ``sync`` mode try recovery a pattern
-        using the all input vector. ``async`` mode randomly chose some
-        values from the input vector and repeat this procedure the number
-        of times a given variable ``n_times``. Defaults to ``sync``.
-    n_times : int
-        Available only in ``async`` mode. Identify number of random trials.
-        Defaults to ``100``.
+    {discrete_params}
     check_limit : bool
         Option enable a limit of patterns control for the network using
         logarithmically proportion rule. Defaults to ``True``.
@@ -125,18 +118,11 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     :ref:`password-recovery`: Password recovery with Discrete Hopfield Network.
     :ref:`discrete-hopfield-network`: Discrete Hopfield Network tutorial.
     """
-    mode = ChoiceProperty(default='sync', choices=['async', 'sync'])
-    n_times = NonNegativeIntProperty(default=100)
     check_limit = BoolProperty(default=True)
 
     def __init__(self, **options):
         super(DiscreteHopfieldNetwork, self).__init__(**options)
         self.n_remembered_data = 0
-        self.weight = None
-
-        if 'n_times' in options and self.mode != 'async':
-            self.logs.warning("You can use `n_times` property only in "
-                              "`async` mode.")
 
     def train(self, input_data):
         self.discrete_validation(input_data)
@@ -169,6 +155,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         self.n_remembered_data = nrows_after_update
 
     def predict(self, input_data, n_times=None):
+        self.discrete_validation(input_data)
         input_data = bin2sign(input_data)
 
         if self.mode == 'async':
@@ -181,15 +168,15 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
             for _ in range(n_times):
                 position = random.randint(0, n_features - 1)
-                output_data[:, position] = sign(
-                    output_data.dot(self.weight[:, position])
-                )
+                raw_new_value = output_data.dot(self.weight[:, position])
+                output_data[:, position] = sign(raw_new_value)
         else:
             output_data = input_data.dot(self.weight)
 
         return step(output_data).astype(int)
 
     def energy(self, input_data):
+        self.discrete_validation(input_data)
         input_data = bin2sign(input_data)
         input_data = format_data(input_data)
         nrows, n_features = input_data.shape
