@@ -354,16 +354,8 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
         return self.__class__.__name__
 
     def __repr__(self):
-        options = []
-        for option_name in self.options:
-            option_value = getattr(self, option_name)
-            option_value = preformat_value(option_value)
-
-            option_repr = "{}={}".format(option_name, option_value)
-            options.append(option_repr)
-
         classname = self.get_class_name()
-        options_repr = ', '.join(options)
+        options_repr = self._repr_options()
 
         if self.connection != FAKE_CONNECTION:
             return "{}({}, {})".format(classname, self.connection,
