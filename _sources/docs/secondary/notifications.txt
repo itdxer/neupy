@@ -1,7 +1,7 @@
 Notifications
 =============
 
-In NeuralPy only Twilio SMS notifications are available, but you can use your
+In NeuPy only Twilio SMS notifications are available, but you can use your
 own implementation for anything you need.
 So the basic idea is that you override signal, for example ``train_end_signal``, and define a notification inside the new function.
 
@@ -16,8 +16,8 @@ process will be finished.
 
 .. code-block:: python
 
-    from neuralpy import algorithms
-    from neuralpy.helpers.sms import twilio_sms
+    from neupy import algorithms
+    from neupy.helpers.sms import twilio_sms
 
     send_sms = twilio_sms(
         account_id="MY_ACCOUNT_ID",

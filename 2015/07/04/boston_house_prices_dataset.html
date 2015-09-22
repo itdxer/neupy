@@ -15,20 +15,20 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Artificial Neural Network library implemented in Python">
         <meta name="viewport" content="width=device-width">
-        <title>Boston house-prices dataset &mdash; NeuralPy</title>
+        <title>Boston house-prices dataset &mdash; NeuPy</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/flat.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
             <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
-        <link rel="shortcut icon" href="../../../_static/tinkerer.ico" /><!-- Load modernizr and JQuery -->
+        <link rel="shortcut icon" href="../../../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
         <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="Visualize Backpropagation Algorithms" href="visualize_backpropagation_algorithms.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Visualize Backpropagation Algorithms" href="visualize_backpropagation_algorithms.html" /><link rel="prev" title="Discrete Hopfiel Network" href="../../09/20/discrete_hopfield_network.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.5',
@@ -36,7 +36,7 @@
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -59,6 +59,21 @@
     .highlight-python + .figure { margin-top: 20px; }
     .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
     .dataframe td { padding: 5px; }
+
+    .math .gd { color: #000 !important; } /* Generic.Deleted */
+    .math .m { color: #000 !important; } /* Literal.Number */
+    .math .s { color: #000 !important; } /* Literal.String */
+    .math .mf { color: #000 !important; } /* Literal.Number.Float */
+    .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+    .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+    .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+    .math .sc { color: #000 !important; } /* Literal.String.Char */
+    .math .s2 { color: #000 !important; } /* Literal.String.Double */
+    .math .si { color: #000 !important; } /* Literal.String.Interpol */
+    .math .sx { color: #000 !important; } /* Literal.String.Other */
+    .math .s1 { color: #000 !important; } /* Literal.String.Single */
+    .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+    .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
 </style></head>
     <body role="document">
         <!--[if lt IE 7]>
@@ -67,7 +82,7 @@
 
       <div id="container"><header role="banner">
             <hgroup>
-              <h1><a href="../../../pages/home.html">NeuralPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
+              <h1><a href="../../../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
           </header>
       <nav role="navigation">
             <ul><li class="main-nav">
@@ -323,7 +338,7 @@ We use 85% of data for train.</p>
 </pre></div>
 </div>
 <p>Now we are ready to build Neural Network which will predict house prices.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neuralpy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
 <span class="n">cgnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">ConjugateGradient</span><span class="p">(</span>
     <span class="n">connection</span><span class="o">=</span><span class="p">[</span>
@@ -369,7 +384,7 @@ Also we will add test data into training function to check validation error on e
 The problem is, that last error doesn&#8217;t show us the full picture of prediction accuracy.
 Our output is always between zero and one and we count the results always into Mean Square Error.
 To fix it, we are going to inverse our transformation for predicted and actual values and for accuracy measurment we will use Root Mean Square Logarithmic Error (RMSLE).</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neuralpy.functions.errors</span> <span class="kn">import</span> <span class="n">rmsle</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy.functions.errors</span> <span class="kn">import</span> <span class="n">rmsle</span>
 
 <span class="n">y_predict</span> <span class="o">=</span> <span class="n">cgnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">error</span> <span class="o">=</span> <span class="n">rmsle</span><span class="p">(</span><span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_test</span><span class="p">),</span>
@@ -443,11 +458,15 @@ There are a lot of things which we can do to improve network results, but we wil
                 <a href="../../../tags/supervised.html">supervised</a>, <a href="../../../tags/backpropagation.html">backpropagation</a>, <a href="../../../tags/regression.html">regression</a></span>
         </div>
         </div><ul class="related clearfix">
-            <li class="left"></li>
+            <li class="left"> &laquo; <a href="../../09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a></li>
             <li class="right"><a href="visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="../../09/21/password_recovery.html">Password recovery</a>
+        </li><li>
+            <a href="../../09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
+        </li><li>
             <a href="#">Boston house-prices dataset</a>
         </li><li>
             <a href="visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
@@ -456,15 +475,18 @@ There are a lot of things which we can do to improve network results, but we wil
 </section><section><div class="widget">
     <h1>Cheat sheet</h1>
     <ul>
-        <li><a href="../../../docs/algorithms.html#algorithms">Algorithms</a></li>
-        <li><a href="../../../docs/algorithms.html#layers">Layers</a></li>
-        <li><a href="../../../docs/algorithms.html#error-functions">Error functions</a></li>
+        <li><a href="../../../docs/algorithms.html">Classes and functions</a></li>
+        <ul>
+            <li><a href="../../../docs/algorithms.html#algorithms">Algorithms</a></li>
+            <li><a href="../../../docs/algorithms.html#layers">Layers</a></li>
+            <li><a href="../../../docs/algorithms.html#error-functions">Error functions</a></li>
+        </ul>
     </ul>
 </div></section><section><div class="widget">
     <h1>Installation</h1>
     <div class="highligh-bash">
         <div class="highlight">
-            <pre>pip install neural-python</pre>
+            <pre>pip install neupy</pre>
         </div>
     </div>
     <p>Read more in <a href="../../../pages/documentation.html">Documentation</a>.</p>
@@ -477,7 +499,7 @@ There are a lot of things which we can do to improve network results, but we wil
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
-    <a id="fork_me" href="http://github.com/itdxer/neuralpy">
+    <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../../../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->
 

@@ -19,7 +19,7 @@ There is a simple example for network serialization.
     >>> import dill
     >>> import numpy as np
     >>> from sklearn import datasets, preprocessing
-    >>> from neuralpy import algorithms
+    >>> from neupy import algorithms
     >>>
     >>> np.random.seed(0)
     >>>

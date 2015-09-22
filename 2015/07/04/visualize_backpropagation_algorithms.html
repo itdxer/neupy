@@ -15,14 +15,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Artificial Neural Network library implemented in Python">
         <meta name="viewport" content="width=device-width">
-        <title>Visualize Backpropagation Algorithms &mdash; NeuralPy</title>
+        <title>Visualize Backpropagation Algorithms &mdash; NeuPy</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/flat.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
             <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
-        <link rel="shortcut icon" href="../../../_static/tinkerer.ico" /><!-- Load modernizr and JQuery -->
+        <link rel="shortcut icon" href="../../../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
         <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
@@ -36,7 +36,7 @@
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -59,6 +59,21 @@
     .highlight-python + .figure { margin-top: 20px; }
     .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
     .dataframe td { padding: 5px; }
+
+    .math .gd { color: #000 !important; } /* Generic.Deleted */
+    .math .m { color: #000 !important; } /* Literal.Number */
+    .math .s { color: #000 !important; } /* Literal.String */
+    .math .mf { color: #000 !important; } /* Literal.Number.Float */
+    .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+    .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+    .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+    .math .sc { color: #000 !important; } /* Literal.String.Char */
+    .math .s2 { color: #000 !important; } /* Literal.String.Double */
+    .math .si { color: #000 !important; } /* Literal.String.Interpol */
+    .math .sx { color: #000 !important; } /* Literal.String.Other */
+    .math .s1 { color: #000 !important; } /* Literal.String.Single */
+    .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+    .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
 </style></head>
     <body role="document">
         <!--[if lt IE 7]>
@@ -67,7 +82,7 @@
 
       <div id="container"><header role="banner">
             <hgroup>
-              <h1><a href="../../../pages/home.html">NeuralPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
+              <h1><a href="../../../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
           </header>
       <nav role="navigation">
             <ul><li class="main-nav">
@@ -153,7 +168,7 @@ We need just two weights, so we can visualize them in contour plot.</p>
 <p>Below I will describe several functions that will be needed for visualization later.
 For understanding of the entire content of the article it is not necessary to understand all code below.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">neuralpy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
 <span class="c"># Got color from page:</span>
 <span class="c"># http://matplotlib.org/examples/pylab_examples/custom_cmap.html</span>
@@ -306,7 +321,7 @@ Every network starts at dot with coordinates <cite>(-4, -4)</cite> and finishes 
 <h2><a class="toc-backref" href="#id6">Visualize Backpropagation algorithms</a></h2>
 <div class="section" id="gradient-descent">
 <h3><a class="toc-backref" href="#id7">Gradient Descent</a></h3>
-<p>Let&#8217;s primarily check <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.backpropagation.html#neuralpy.algorithms.backprop.backpropagation.Backpropagation" title="neuralpy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Gradient</span> <span class="pre">Descent</span></span></a>.</p>
+<p>Let&#8217;s primarily check <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Gradient</span> <span class="pre">Descent</span></span></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">prepare_plot</span><span class="p">()</span>
 <span class="n">draw_quiver</span><span class="p">(</span><span class="n">algorithms</span><span class="o">.</span><span class="n">Backpropagation</span><span class="p">,</span> <span class="s">&#39;Gradient Descent&#39;</span><span class="p">,</span> <span class="s">&#39;k&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -327,7 +342,7 @@ Also we can see that small vectors are perpendicular to the contour.</p>
 </div>
 <div class="section" id="momentum">
 <h3><a class="toc-backref" href="#id8">Momentum</a></h3>
-<p>Now let&#8217;s look at another important algorithm - <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.momentum.html#neuralpy.algorithms.backprop.momentum.Momentum" title="neuralpy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a>.</p>
+<p>Now let&#8217;s look at another important algorithm - <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">prepare_plot</span><span class="p">()</span>
 <span class="n">draw_quiver</span><span class="p">(</span><span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">,</span> <span class="s">&#39;Momentum&#39;</span><span class="p">,</span> <span class="s">&#39;m&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -336,9 +351,9 @@ Also we can see that small vectors are perpendicular to the contour.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/momentum-steps.png"><img alt="Momentum steps" src="../../../_images/momentum-steps.png" style="width: 80%;" /></a>
 </div>
-<p><a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.momentum.html#neuralpy.algorithms.backprop.momentum.Momentum" title="neuralpy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> got to the value close to 0.125 by 202 steps, which is almost 4 times fewer steps than previously.
-The basic idea behind <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.momentum.html#neuralpy.algorithms.backprop.momentum.Momentum" title="neuralpy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm, compared to the previous epoch, is that we are strengthening the update if the sign is not changed, and minimize it in another case.</p>
-<p>Even if the number of steps fewer than in <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.backpropagation.html#neuralpy.algorithms.backprop.backpropagation.Backpropagation" title="neuralpy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Backpropagation</span></span></a> we still can&#8217;t clearly see the updates.
+<p><a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> got to the value close to 0.125 by 202 steps, which is almost 4 times fewer steps than previously.
+The basic idea behind <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm, compared to the previous epoch, is that we are strengthening the update if the sign is not changed, and minimize it in another case.</p>
+<p>Even if the number of steps fewer than in <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Backpropagation</span></span></a> we still can&#8217;t clearly see the updates.
 For our eye they are just appeared as a line.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/momentum-steps-zoom.png"><img alt="Momentum steps zoom on increasing weight update size" src="../../../_images/momentum-steps-zoom.png" style="width: 80%;" /></a>
@@ -354,9 +369,9 @@ Also we can encounter a situation when weight update size reduces over epochs.</
 </div>
 <div class="section" id="rprop">
 <h3><a class="toc-backref" href="#id9">RPROP</a></h3>
-<p><a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.momentum.html#neuralpy.algorithms.backprop.momentum.Momentum" title="neuralpy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> makes fewer steps for a prediction, but we still can
+<p><a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> makes fewer steps for a prediction, but we still can
 find minimum in fewer number of steps.
-Now we are going to run <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.rprop.html#neuralpy.algorithms.backprop.rprop.RPROP" title="neuralpy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm.</p>
+Now we are going to run <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">prepare_plot</span><span class="p">()</span>
 <span class="n">draw_quiver</span><span class="p">(</span><span class="n">algorithms</span><span class="o">.</span><span class="n">RPROP</span><span class="p">,</span> <span class="s">&#39;RPROP&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -367,12 +382,12 @@ Now we are going to run <a class="reference internal" href="../../../apidocs/neu
 </div>
 <p>This improvment looks impressive.
 Now we are able to see steps without zooming.
-We got almost the same value as before using just 19 steps, which is 10 times fewer than <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.momentum.html#neuralpy.algorithms.backprop.momentum.Momentum" title="neuralpy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> and 40 times fewer than <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.backpropagation.html#neuralpy.algorithms.backprop.backpropagation.Backpropagation" title="neuralpy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Gradient</span> <span class="pre">Descent</span></span></a>.</p>
-<p>Now we are going to figure out what are the main features of <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.rprop.html#neuralpy.algorithms.backprop.rprop.RPROP" title="neuralpy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> just by looking at the plot above.
-<a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.rprop.html#neuralpy.algorithms.backprop.rprop.RPROP" title="neuralpy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> has a unique step for each weight.
+We got almost the same value as before using just 19 steps, which is 10 times fewer than <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> and 40 times fewer than <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Gradient</span> <span class="pre">Descent</span></span></a>.</p>
+<p>Now we are going to figure out what are the main features of <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> just by looking at the plot above.
+<a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> has a unique step for each weight.
 There are just two steps for each weight in the input layer for this network.
-<a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.rprop.html#neuralpy.algorithms.backprop.rprop.RPROP" title="neuralpy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> will increase the step size if gradient don&#8217;t change the sign before its value, and it will decrease in a different situation.
-This update rule is not the same as for <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.momentum.html#neuralpy.algorithms.backprop.momentum.Momentum" title="neuralpy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm.</p>
+<a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> will increase the step size if gradient don&#8217;t change the sign before its value, and it will decrease in a different situation.
+This update rule is not the same as for <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/rprop-first-6-steps.png"><img alt="RPROP first 6 steps" src="../../../_images/rprop-first-6-steps.png" style="width: 80%;" /></a>
 </div>
@@ -382,7 +397,7 @@ On the every next iterations they have been increased by the same factor, so aft
 <p>Now let&#8217;s check the next epochs from the figure below.
 On the 7th epoch gradient changed the direction, but steps are still the same.
 But we can clearly see that gradient changed the sign for the second weight.
-<a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.rprop.html#neuralpy.algorithms.backprop.rprop.RPROP" title="neuralpy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> updated the step after weight had updated, so the step for the second weight must be fewer for the 8th epoch.</p>
+<a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> updated the step after weight had updated, so the step for the second weight must be fewer for the 8th epoch.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/rprop-6th-to-9th-epochs.png"><img alt="RPROP from 6th to 9th steps" src="../../../_images/rprop-6th-to-9th-epochs.png" style="width: 80%;" /></a>
 </div>
@@ -397,7 +412,7 @@ how steps are dependent on the direction.</p>
 </div>
 <div class="section" id="irprop">
 <h3><a class="toc-backref" href="#id10">iRPROP+</a></h3>
-<p><a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.rprop.html#neuralpy.algorithms.backprop.rprop.IRPROPPlus" title="neuralpy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> is almost the same algorithm as <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.rprop.html#neuralpy.algorithms.backprop.rprop.RPROP" title="neuralpy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> except a small addition.</p>
+<p><a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.IRPROPPlus" title="neupy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> is almost the same algorithm as <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> except a small addition.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">prepare_plot</span><span class="p">()</span>
 <span class="n">draw_quiver</span><span class="p">(</span><span class="n">algorithms</span><span class="o">.</span><span class="n">IRPROPPlus</span><span class="p">,</span> <span class="s">&#39;iRPROP+&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -406,38 +421,38 @@ how steps are dependent on the direction.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/irprop-plus-steps.png"><img alt="iRPROP+ steps" src="../../../_images/irprop-plus-steps.png" style="width: 80%;" /></a>
 </div>
-<p>As in <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.rprop.html#neuralpy.algorithms.backprop.rprop.RPROP" title="neuralpy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.rprop.html#neuralpy.algorithms.backprop.rprop.IRPROPPlus" title="neuralpy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> make exacly the
+<p>As in <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.IRPROPPlus" title="neupy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> make exacly the
 same first 6 steps.</p>
 <p>Now let&#8217;s look at the 7th step in the figure below.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/irprop-plus-6th-to-12th-epochs.png"><img alt="iRPROP+ from 6th to 12th epoch updates." src="../../../_images/irprop-plus-6th-to-12th-epochs.png" style="width: 80%;" /></a>
 </div>
 <p>Second weight (on the y axis) didn&#8217;t change the value.
-On the same epoch <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.rprop.html#neuralpy.algorithms.backprop.rprop.RPROP" title="neuralpy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> changed the gradient comparing to the previous
+On the same epoch <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> changed the gradient comparing to the previous
 epoch and just decreased step value after weight update.
-Instead, <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.rprop.html#neuralpy.algorithms.backprop.rprop.IRPROPPlus" title="neuralpy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> just disabled weight update for current
+Instead, <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.IRPROPPlus" title="neupy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> just disabled weight update for current
 epoch (set it up to <cite>0</cite>).
 And of course it also decreased the step for the second weight.
-Also you can find that vector for the 7th epoch that looks smaller than for the <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.rprop.html#neuralpy.algorithms.backprop.rprop.RPROP" title="neuralpy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm, because we ignored the second weight update.
+Also you can find that vector for the 7th epoch that looks smaller than for the <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm, because we ignored the second weight update.
 If we check the x axis update size we will find that it has the same value
-as in <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.rprop.html#neuralpy.algorithms.backprop.rprop.RPROP" title="neuralpy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm.</p>
+as in <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm.</p>
 <p>On 8th epoch network included again second weight into the update process, because
 compared to the previous epoch gradient didn&#8217;t change its sign.</p>
 <p>Next steps are doing the same job, but 11th epoch differs from others.
-There are a few updates which are related specifically to <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.rprop.html#neuralpy.algorithms.backprop.rprop.IRPROPPlus" title="neuralpy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a>, but the most important we have not seen before.
+There are a few updates which are related specifically to <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.IRPROPPlus" title="neupy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a>, but the most important we have not seen before.
 After weight update on the 11th epoch network error increased, so our update made our prediction worse.
 Now on the 12th epoch network tried to rollback vector update.
 It decreased steps on the 11th epoch and weight update didn&#8217;t go to the same point after the rollback procedure, it just took opposite direction with a smaller step.</p>
 </div>
 <div class="section" id="conjugate-gradient-and-golden-search">
 <h3><a class="toc-backref" href="#id11">Conjugate Gradient and Golden Search</a></h3>
-<p>Now let&#8217;s look at <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.conjugate_gradient.html#neuralpy.algorithms.backprop.conjugate_gradient.ConjugateGradient" title="neuralpy.algorithms.backprop.conjugate_gradient.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> with
-<a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.steps.linear_search.html#neuralpy.algorithms.backprop.steps.linear_search.LinearSearch" title="neuralpy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a>.
+<p>Now let&#8217;s look at <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.conjugate_gradient.html#neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient" title="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> with
+<a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.steps.linear_search.html#neupy.algorithms.backprop.steps.linear_search.LinearSearch" title="neupy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a>.
 Conjugate Gradient in Backpropagation variation is a little bit different than in
 Multivariable Calculus notation and it doesn&#8217;t guarantee converge into n-th steps
 (<cite>n</cite> means dimmention size for specific problem).
-Steps don&#8217;t have a perfect size for <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.conjugate_gradient.html#neuralpy.algorithms.backprop.conjugate_gradient.ConjugateGradient" title="neuralpy.algorithms.backprop.conjugate_gradient.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a>,
-so <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.steps.linear_search.html#neuralpy.algorithms.backprop.steps.linear_search.LinearSearch" title="neuralpy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> is always a good choice for a step selection.</p>
+Steps don&#8217;t have a perfect size for <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.conjugate_gradient.html#neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient" title="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a>,
+so <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.steps.linear_search.html#neupy.algorithms.backprop.steps.linear_search.LinearSearch" title="neupy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> is always a good choice for a step selection.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">prepare_plot</span><span class="p">()</span>
 <span class="n">cgnet_golde_search</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">algorithms</span><span class="o">.</span><span class="n">ConjugateGradient</span><span class="p">,</span>
                              <span class="n">optimizations</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LinearSearch</span><span class="p">])</span>
@@ -460,7 +475,7 @@ We can zoom the plot and find this tiny step update.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/conj-grad-small-step.png"><img alt="Conjugate Gradient with Golden Search small second step" src="../../../_images/conj-grad-small-step.png" style="width: 80%;" /></a>
 </div>
-<p>If we add the same <a class="reference internal" href="../../../apidocs/neuralpy.algorithms.backprop.steps.linear_search.html#neuralpy.algorithms.backprop.steps.linear_search.LinearSearch" title="neuralpy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> algorithm to the classic Gradient Descent we will get to the minimum into a few steps as well.</p>
+<p>If we add the same <a class="reference internal" href="../../../apidocs/neupy.algorithms.backprop.steps.linear_search.html#neupy.algorithms.backprop.steps.linear_search.LinearSearch" title="neupy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> algorithm to the classic Gradient Descent we will get to the minimum into a few steps as well.</p>
 </div>
 </div>
 <div class="section" id="bring-them-all-together">
@@ -540,6 +555,10 @@ Some of the algorithms can be memory or computationally expensive and you have t
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="../../09/21/password_recovery.html">Password recovery</a>
+        </li><li>
+            <a href="../../09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
+        </li><li>
             <a href="boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
             <a href="#">Visualize Backpropagation Algorithms</a>
@@ -548,15 +567,18 @@ Some of the algorithms can be memory or computationally expensive and you have t
 </section><section><div class="widget">
     <h1>Cheat sheet</h1>
     <ul>
-        <li><a href="../../../docs/algorithms.html#algorithms">Algorithms</a></li>
-        <li><a href="../../../docs/algorithms.html#layers">Layers</a></li>
-        <li><a href="../../../docs/algorithms.html#error-functions">Error functions</a></li>
+        <li><a href="../../../docs/algorithms.html">Classes and functions</a></li>
+        <ul>
+            <li><a href="../../../docs/algorithms.html#algorithms">Algorithms</a></li>
+            <li><a href="../../../docs/algorithms.html#layers">Layers</a></li>
+            <li><a href="../../../docs/algorithms.html#error-functions">Error functions</a></li>
+        </ul>
     </ul>
 </div></section><section><div class="widget">
     <h1>Installation</h1>
     <div class="highligh-bash">
         <div class="highlight">
-            <pre>pip install neural-python</pre>
+            <pre>pip install neupy</pre>
         </div>
     </div>
     <p>Read more in <a href="../../../pages/documentation.html">Documentation</a>.</p>
@@ -569,7 +591,7 @@ Some of the algorithms can be memory or computationally expensive and you have t
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
-    <a id="fork_me" href="http://github.com/itdxer/neuralpy">
+    <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../../../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->
 

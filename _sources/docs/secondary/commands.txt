@@ -1,7 +1,7 @@
 Commands
 ========
 
-NeuralPy library provides some simple terminal commands which will help you with development process.
+NeuPy library provides some simple terminal commands which will help you with development process.
 
 help
 ----
@@ -10,13 +10,13 @@ You can always check the list of available commands from terminal.
 
 .. code-block:: bash
 
-    $ neuralpy -h
+    $ neupy -h
 
 Also you can check help description for specific command.
 
 .. code-block:: bash
 
-    $ neuralpy list -h
+    $ neupy list -h
 
 list
 ----
@@ -26,19 +26,19 @@ More information you can also find on `this page <../algorithms.html>`_
 
 .. code-block:: bash
 
-    $ neuralpy list
+    $ neupy list
 
 You can check just one section from this list.
 
 .. code-block:: bash
 
-    $ neuralpy list --section 1
+    $ neupy list --section 1
 
 The same command but shorter version.
 
 .. code-block:: bash
 
-    $ neuralpy list 1
+    $ neupy list 1
 
 new
 ---
@@ -47,7 +47,7 @@ This command will create new project folder.
 
 .. code-block:: bash
 
-    $ neuralpy new
+    $ neupy new
     project_name (default is "application")? testproject
     $ ls
     testproject

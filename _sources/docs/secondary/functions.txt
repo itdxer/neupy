@@ -5,7 +5,7 @@ Each function can be defined with its differential.
 
 .. code-block:: python
 
-    >>> from neuralpy.functions import with_derivative
+    >>> from neupy.functions import with_derivative
     >>>
     >>> def qubic_deriv(x):
     ...     return 3 * x ** 2
@@ -25,7 +25,7 @@ Also you can define derivative for derivative.
 
 .. code-block:: python
 
-    >>> from neuralpy.functions import with_derivative
+    >>> from neupy.functions import with_derivative
     >>>
     >>> def qubic_deriv_deriv(x):
     ...     return 6 * x
