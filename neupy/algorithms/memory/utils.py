@@ -1,4 +1,5 @@
-from numpy import where
+from numpy import where, inner
+from numpy.core.umath_tests import inner1d
 
 
 __all__ = ('sign2bin', 'bin2sign', 'hopfield_energy')
@@ -13,5 +14,4 @@ def bin2sign(matrix):
 
 
 def hopfield_energy(weight, input_data, output_data):
-    energy_output = -0.5 * input_data.dot(weight).dot(output_data.T)
-    return energy_output.item(0)
+    return -0.5 * inner1d(input_data.dot(weight), output_data)
