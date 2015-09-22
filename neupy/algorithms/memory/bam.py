@@ -4,7 +4,7 @@ from numpy import zeros, sign
 
 from neupy.utils import format_data
 from neupy.functions import step
-from .utils import sign2bin, bin2sign, hopfield_energy
+from .utils import bin2sign, hopfield_energy
 from .base import DiscreteMemory
 
 
