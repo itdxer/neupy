@@ -5,10 +5,10 @@ Password recovery
 
 .. contents::
 
-At this tutorial we are going to build a simple neural network that will recover password from a broken one.
-If you don't familiar with a :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` algorithm, you can read :ref:`this tutorial <discrete-hopfield-network>`.
+IN this tutorial we are going to build a simple neural network that will recover password from a broken one.
+If you aren't familiar with a :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` algorithm, you can read :ref:`this tutorial <discrete-hopfield-network>`.
 
-Before run all experiments, we need to set up ``seed`` parameter to make all results reproducible.
+Before running all experiments, we need to set up ``seed`` parameter to make all results reproducible.
 But you can test code without it.
 
 .. code-block:: python
@@ -19,7 +19,7 @@ But you can test code without it.
     np.random.seed(0)
     random.seed(0)
 
-If you can't reproduce with your version of Python or libraries you can install the same as I used:
+If you can't reproduce with your version of Python or libraries you can install those ones that were used in this tutorial:
 
 .. code-block:: python
 
@@ -38,11 +38,11 @@ Code works with a Python 2.7 as well.
 Data transformation
 -------------------
 
-Before build the network that will save and recover the password we have to make transformations for the input and output data.
-But it's not enough just to encode it, we should set up a constant length for a string, just to make sure that for all usage we will have a vector with a constant length.
-Another notation that we should add is a string encoding.
+Before building the network that will save and recover passwords, we should make transformations for input and output data.
+But it wouldn't be enough just to encode it, we should set up a constant length for an input string to make sure that strings will have the same length
+Also we should define what string encoding we will use.
 For simplicity we will use only ASCII symbols.
-So, let's define a function that transform a string to a binary list.
+So, let's define a function that transforms a string into a binary list.
 
 .. code-block:: python
 
@@ -64,9 +64,9 @@ So, let's define a function that transform a string to a binary list.
         return list(bits_list)
 
 Our function takes 2 parameters.
-First one is a string that we want to encode.
-The second attribute is set up a constant length for input vector.
-If length of the input string is less than ``max_length`` value, then function fill the spaces at the beginning of the string.
+First one is the string that we want to encode.
+And second attribute is setting up a constant length for input vector.
+If length of the input string is less than ``max_length`` value, then function fills spaces at the beginning of the string.
 
 Let's check ``str2bin`` function output.
 
@@ -77,11 +77,11 @@ Let's check ``str2bin`` function output.
     >>> len(str2bin("test", max_length=5))
     40
 
-ASCII encoding use 8 bits per symbol and we set up 5 symbols per string, so our vector length always equal to 40.
+ASCII encoding uses 8 bits per symbol and we set up 5 symbols per string, so our vector length equals to 40.
 From the first output, as you can see, first 8 symbols are equal to ``00100000``, that is a space value from the ASCII table.
 
-After recovery procedure we always get the the binary list.
-So before we go to the network integration, we have to define another function that transform binary list back to the string (which is basicly inverse operation to the previous function).
+After preforming recovery procedure we will always be getting a binary list.
+So before we begin to store data in neural network, we should define another function that transforms a binary list back into a string (which is basically inversed operation to the previous function).
 
 .. code-block:: python
 
@@ -97,63 +97,64 @@ So before we go to the network integration, we have to define another function t
             characters.append(character)
         return ''.join(characters).lstrip()
 
-If we test it we will get word ``test`` back.
+If we test this function we will get word ``test`` back.
 
 .. code-block:: python
 
     >>> bin2str(str2bin("test", max_length=5))
     'test'
 
-Pay attention, function removed all spaces at the beggining of the string before return it.
-We assume that password wouldn't contains the space symbols at the beggining.
+Pay attention! Function has removed all spaces at the beggining of the string before bringing them back.
+We assume that password won't contain space at the beggining.
 
-Save password into the network
-------------------------------
+Saving password into the network
+--------------------------------
 
 Now we are ready to save the password into the network.
-For this task we are going to define another function that create network and save password in it.
-Let's define it and later we will check it step by step.
+For this task we are going to define another function that create network and save password inside of it.
+Let's define this function and later we will look at it step by step.
 
 .. code-block:: python
+
 
     import numpy as np
     from neupy import algorithms
 
-    def save_password(real_password, noize_level=5):
-        if noize_level < 1:
-            raise ValueError("`noize_level` must be equal or greater than 1.")
+    def save_password(real_password, noise_level=5):
+        if noise_level < 1:
+            raise ValueError("`noise_level` must be equal or greater than 1.")
 
         binary_password = str2bin(real_password)
         bin_password_len = len(binary_password)
 
         data = [binary_password]
 
-        for _ in range(noize_level):
+        for _ in range(noise_level):
             # The farther from the 0.5 value the less likely
             # password recovery
-            noize = np.random.binomial(1, 0.55, bin_password_len)
-            data.append(noize)
+            noise = np.random.binomial(1, 0.55, bin_password_len)
+            data.append(noise)
 
         dhnet = algorithms.DiscreteHopfieldNetwork(mode='sync')
         dhnet.train(np.array(data))
 
         return dhnet
 
-If you are already read :ref:`Discrete Hopfield Network tutorial <discrete-hopfield-network>`, you should know that if we add only one vector into the network we will get it dublicated or with reversed signs in the whole matrix.
-To make it little bit secure we can add the noize into the network.
-For this reason we define one additional parameter ``noize_level`` into the function.
-It control number of randomly generated binary vectors.
-At each iteration using Binomial distribution it generate random binary vectors with a 55% probability to get a 1 in the vector.
-Next we collect all noize vectors and transformed password into the one matrix.
+If you have already read :ref:`Discrete Hopfield Network tutorial <discrete-hopfield-network>`, you should know that if we add only one vector into the network we will get it dublicated or with reversed signs through the whole matrix.
+To make it a little bit secure we can add some noise into the network.
+For this reason we introduce one additional parameter ``noise_level`` into the function.
+This parameter controls number of randomly generated binary vectors.
+With each iteration using Binomial distribution we generate random binary vector with 55% probability of getting 1 in `noise` vector.
+And then we put all the noise vectors and transformed password into one matrix.
 And finaly we save all data in the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
 
 And that's it.
-Function returns trained network for the later usage.
+Function returns trained network for a later usage.
 
 But why do we use random binary vectors instead of the decoded random strings?
 The problem is in the similarity between two vectors.
 Let's check two approaches and compare them with a `Hamming distance <https://en.wikipedia.org/wiki/Hamming_distance>`_.
-Before that we have to define a function that measure distance between two vectors.
+But before starting we should define a function that measures distance between two vectors.
 
 .. code-block:: python
 
@@ -177,7 +178,7 @@ Before that we have to define a function that measure distance between two vecto
         return ''.join(password)
 
 
-In addition you can see the ``generate_password`` function that we will use for the tests.
+In addition you can see the ``generate_password`` function that we will use for tests.
 Let's check Hamming distance between two randomly generate password vectors.
 
 .. code-block:: python
@@ -186,8 +187,8 @@ Let's check Hamming distance between two randomly generate password vectors.
     ...                  str2bin(generate_password(20, 20)))
     70
 
-As we can see two randomly generated passwords are very similar to each other (approximetly 70% of bits are the same).
-But If we compare randomly generated password and random binary vector we will see the difference.
+As we can see two randomly generated passwords are very similar to each other (approximetly 70% (:math:`100 * (240 - 70) / 240`) of bits are the same).
+But If we compare randomly generated password to random binary vector we will see the difference.
 
 .. code-block:: python
 
@@ -196,17 +197,17 @@ But If we compare randomly generated password and random binary vector we will s
     134
 
 Hamming distance is bigger than in the previous example.
-Little bit more than 55% of the bits are different.
+A little bit more than 55% of the bits are different.
 
-The greater the difference between the input vectors easier recovery template from the network.
+The greater the difference between them the easier recovery procedure for the input vectors patterns from the network.
 For this reason we use randomly generated binary vector instead of random password.
 
-Ofcourse multiple randomly generated passwords would be more secure, because with them more likely to restore a invalid password that would be a good situation for a wrong password pattern.
+Of course it's better to save not randomly generated noise vectors but randomly generated passwords converted into binary vectors, cuz if you use wrong input pattern randomly generated password might be recovered instead of the correct one.
 
-Recover password from the network
----------------------------------
+Recovering password from the network
+------------------------------------
 
-Now we are going to define the last function which will recover password from the network.
+Now we are going to define the last function which will recover a password from the network.
 
 .. code-block:: python
 
@@ -220,15 +221,15 @@ Now we are going to define the last function which will recover password from th
         return bin2str(recovered_password)
 
 Function takes two parameters.
-The first one is the network instance from which function will try to recover a passwrod from a broken one.
+The first one is network example from which function will recover a password from a broken one.
 And the second parameter is a broken password.
 
-Finnaly we can test it password recovery from the network.
+Finnaly we can test password recovery from the network.
 
 .. code-block:: python
 
     >>> my_password = "$My%Super^Secret*^&Passwd"
-    >>> dhnet = save_password(my_password, noize_level=12)
+    >>> dhnet = save_password(my_password, noise_level=12)
     >>> recover_password(dhnet, "-My-Super-Secret---Passwd")
     '$My%Super^Secret*^&Passwd'
     >>> _ == my_password
@@ -246,19 +247,19 @@ Finnaly we can test it password recovery from the network.
     True
 
 Everithing looks fine.
-After multiple running you can rarely find a problem
-Network can produce a string that we didn't teach it.
-This string can looks almost like the password with few different symbols.
-Basicly each trained input vector create local minimum inside of the Discrete Hopfield Network.
-The problem is exists when network creates additional local minimum somewhere between input patterns.
-We cann't defend from being hit into it.
+After multiple times code running you can rarely find a problem.
+Network can produce a string which wasn't taught.
+This string can look almost like a password with a few different symbols.
+The problem appears when network creates additional local minimum somewhere between input patterns.
+We can't prevent it from running into the local minimum.
+For more information about this problem you can check :ref:`tutorial about Discrete Hopfield Network <discrete-hopfield-network>`.
 
 Test it using Monte Carlo
 -------------------------
 
-Let's test it on a randomly generated passwords.
+Let's test our solution with randomly generated passwords.
 For this task we can use Monte Carlo experiment.
-At each step we create random password and try to recover it from the broken password.
+At each step we create random password and try to recover it from a broken password.
 
 .. code-block:: python
 
@@ -289,7 +290,7 @@ At each step we create random password and try to recover it from the broken pas
             broken_password = cutword(real_password, k=n_letters,
                                       fromleft=True)
 
-            dhnet = save_password(real_password, noize_level=11)
+            dhnet = save_password(real_password, noise_level=11)
             recovered_password = recover_password(dhnet, broken_password)
 
             if recovered_password != real_password:
@@ -298,7 +299,7 @@ At each step we create random password and try to recover it from the broken pas
     print("Number of fails for each test case:")
     pprint.pprint(results)
 
-After sumbmission your output should be the same as the one below (if you make all step by step)::
+After sumbmission your output should look the same as the one below (if you followed everything in this tutorial step by step)::
 
     Number of fails for each test case:
     {'exclude-one': 11,
@@ -307,14 +308,14 @@ After sumbmission your output should be the same as the one below (if you make a
      'just-one-symbol': 9998,
      'empty-string': 10000}
 
-On this test we catch two situation when the network recover password from an one symbol, which is not very good.
-It really depence on the noize which we stored inside the network.
-Randomization can't give you a perfect result.
-Sometimes it can recover password from an empty string, but it also rare situation.
+At this test we catch two situations when the network recovers the password from one symbol, which is not very good.
+It really depends on the noise which we stored inside the network.
+Randomization can't give you perfect results.
+Sometimes it can recover a password from an empty string, but such situation is also very rare.
 
-At the last test, on each iteration we cut password from the left side and fill other parts with spaces.
-We can test another approached.
-We can cut password from the right side and we will get output similar to this one::
+In the last test, on each iteration we cut password from the left side and filled other parts with spaces.
+Let's test another approach.
+Let's cut a password from the right side and see what we'll get::
 
     Number of fails for each test case:
     {'exclude-one': 17,
@@ -323,9 +324,9 @@ We can cut password from the right side and we will get output similar to this o
      'just-one-symbol': 9995,
      'empty-string': 10000}
 
-Results look similar to the orevious test.
+Results look similar to the previous test.
 
-Another interesting test could be if you replace some random number of symbols with the spaces::
+Another interesting test can take place if you randomly replace some symbols with spaces::
 
     Number of fails for each test case:
     {'exclude-one': 14,
@@ -336,8 +337,8 @@ Another interesting test could be if you replace some random number of symbols w
 
 The result is very similar to the previous two.
 
-And finaly, instead of replacing symbols with spaces we can remove symbols without any replacments.
-Results are not so good::
+And finally, instead of replacing symbols with spaces we can remove symbols without any replacements.
+Results do not look good::
 
     Number of fails for each test case:
     {'exclude-one': 3897,
@@ -346,37 +347,37 @@ Results are not so good::
      'just-one-symbol': 9998,
      'empty-string': 9998}
 
-I guess at the first case (``exclude-one``) we just was lucky and after excluding one symbol from the end didn't shift most of all symbols into the wrong possitions.
-So remove symbols it's not a very good idea.
+I guess in first case (``exclude-one``) we just got lucky and after eliminating one symbol from the end didn't shift most of the symbols.
+So removing symbols is not a very good idea.
 
-All functions that you need for experiments you can find on the `github <https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py>`_.
+All functions that you need for experiments you can find at the `github <https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py>`_.
 
 Possible Problems
 -----------------
 
-There are few possible problems in the Discrete Hopfile Network.
+There are a few possible problems in the Discrete Hopfile Network.
 
-1. As we saw from the last experiment, shifted words are harder to recover than the words with the missed symbols. Better to replace missed symbol with some other instead of removing them.
+1. As we saw from the last experiments, shifted passwords are harder to recover than the passwords with missed symbols. It's better to replace missed symbols with some other things.
 
-2. There already exists small probability to recover the password from the empty string.
+2. There already exists small probability for recovering passwords from empty strings.
 
-3. Similar binary code representation for the different symbols is a big problem.
-Some times you can have a situation when 2 symbols that are in binary code are differente betweene each other just for a one bit. The first idea use a One Hot Encoder. But the problem with it is even more. For example we used one of the 94 symbols for the password. If we encode each symbol we will get vector with 93 zeros and just 1 active value. The problem that after recovery procedure we should always get a 1 active value, but this situation is very unlikely for the network.
+3. Similar binary code representation for different symbols is a big problem.
+Sometimes you can have a situation where 2 symbols in binary code represantation are different just by one bit. The first solution is to use a One Hot Encoder. But it can give us even more problems. For example, we used symbols from list of 94 symbols for the password. If we encode each symbol we will get a vector with 93 zeros and just 1 active value. The problem is that after the recovery procedure we should always get 1 active value, but this situation is very unlikely to happen.
 
 Summary
 -------
 
-Despite some of the problems, network recovers password very good.
-Monte Carlo experiment shows that the fewer symbols we know about the network less probability to recover it.
+Despite some problems, network recovers passwords very well.
+Monte Carlo experiment shows that the fewer symbols we know the less is probability for recovering them correctly.
 
-Even this simple network can be a powerfull tool if you know it limitations.
+Even this simple network can be a powerful tool if you know its limitations.
 
 Download script
 ---------------
 
 You can download and test a full script from the `github <https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py>`_
 
-It didn't contain a random ``seed`` initializations, so you will get a different outputs after each run.
+It didn't contain a random ``seed`` initialization, so you will get a different outputs after each run.
 
 .. author:: default
 .. categories:: none

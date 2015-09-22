@@ -53,20 +53,20 @@ def generate_password(min_length=5, max_length=30):
     return ''.join(password)
 
 
-def save_password(real_password, noize_level=5):
-    if noize_level < 1:
-        raise ValueError("`noize_level` must be equal or greater than 1.")
+def save_password(real_password, noise_level=5):
+    if noise_level < 1:
+        raise ValueError("`noise_level` must be equal or greater than 1.")
 
     binary_password = str2bin(real_password)
     bin_password_len = len(binary_password)
 
     data = [binary_password]
 
-    for _ in range(noize_level):
+    for _ in range(noise_level):
         # The farther from the 0.5 value the less likely
         # password recovery
-        noize = np.random.binomial(1, 0.55, bin_password_len)
-        data.append(noize)
+        noise = np.random.binomial(1, 0.55, bin_password_len)
+        data.append(noise)
 
     dhnet = algorithms.DiscreteHopfieldNetwork(mode='sync')
     dhnet.train(np.array(data))
@@ -129,7 +129,7 @@ if __name__ == '__main__':
             broken_password = cutword(real_password, k=n_letters,
                                       fromleft=True)
 
-            dhnet = save_password(real_password, noize_level=11)
+            dhnet = save_password(real_password, noise_level=11)
             recovered_password = recover_password(dhnet, broken_password)
 
             if recovered_password != real_password:

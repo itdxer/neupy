@@ -36,7 +36,7 @@ website = 'http://127.0.0.1/blog/html/'
 disqus_shortname = "neupy"
 
 # Change your favicon (new favicon goes in _static directory)
-html_favicon = '_static/tinkerer.ico'
+html_favicon = '_static/favicon.ico'
 
 # Pick another Tinkerer theme or use your own
 html_theme = 'flat'

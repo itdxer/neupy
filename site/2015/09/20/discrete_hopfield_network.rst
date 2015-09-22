@@ -671,6 +671,11 @@ We don't necessary need to create a new network, we can just simply switch its m
 Our broken pattern is really close to the minimum of 1 and 2 patterns.
 Randomization helps us choose direction but it's not nessesary the right one, especialy when the broken pattern is close to 1 and 2 at the same time.
 
+Check last output with number two again.
+Is that a realy valid pattern for number 2?
+Final symbol in output is wrong.
+We are not able to recover patter 2 from this network, because input vector is always much closer to the minimum that looks very similar to pattern 2.
+
 In plot below you can see first 200 iterations of the recovery procedure.
 Energy value was decreasing after each iteration until it reached the local minimum where pattern is equal to 2.
 
@@ -728,8 +733,8 @@ If we have all perfectly opposite symmetric patterns then squares on the antidia
 
 Properties that we've reviewed so far are just the most interesting and maybe other patterns you can encounter on your own.
 
-Summary
--------
+More reading
+------------
 
 In addition you can read another tutorial about a ':ref:`Password recovery <password-recovery>`' from the memory using the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
 
