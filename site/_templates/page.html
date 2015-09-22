@@ -16,12 +16,27 @@
     .highlight-python + .figure { margin-top: 20px; }
     .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
     .dataframe td { padding: 5px; }
+
+    .math .gd { color: #000 !important; } /* Generic.Deleted */
+    .math .m { color: #000 !important; } /* Literal.Number */
+    .math .s { color: #000 !important; } /* Literal.String */
+    .math .mf { color: #000 !important; } /* Literal.Number.Float */
+    .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+    .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+    .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+    .math .sc { color: #000 !important; } /* Literal.String.Char */
+    .math .s2 { color: #000 !important; } /* Literal.String.Double */
+    .math .si { color: #000 !important; } /* Literal.String.Interpol */
+    .math .sx { color: #000 !important; } /* Literal.String.Other */
+    .math .s1 { color: #000 !important; } /* Literal.String.Single */
+    .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+    .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
 </style>
 {%- endblock -%}
 
 {%- block footer -%}
     {{ super() }}
-    <a id="fork_me" href="http://github.com/itdxer/neuralpy">
+    <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="{{ pathto('_static/img/github-fork-green.png', 1) }}" />
     </a>
 {%- endblock -%}

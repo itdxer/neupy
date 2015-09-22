@@ -1,28 +1,28 @@
 Home
 ====
 
-NeuralPy is a Python library for Artificial Neural Networks.
+NeuPy is a Python library for Artificial Neural Networks.
 You can run and test different Neural Network algorithms.
 
 |Travis|_
 
-.. |Travis| image:: https://api.travis-ci.org/itdxer/neuralpy.png?branch=master
-.. _Travis: https://travis-ci.org/itdxer/neuralpy
+.. |Travis| image:: https://api.travis-ci.org/itdxer/neupy.png?branch=master
+.. _Travis: https://travis-ci.org/itdxer/neupy
 
 Installation
 ------------
 
 .. code-block:: bash
 
-    $ pip install neural-python
+    $ pip install neupy
 
 Links
 -----
 
-* `Documentation <http://neuralpy.com>`_
-* `Issues <https://github.com/itdxer/neuralpy/issues>`_
-* `Tutorials <http://neuralpy.com/archive.html>`_
-* `Available algorithms <http://neuralpy.com/docs/algorithms.html>`_
+* `Documentation <http://neupy.com>`_
+* `Issues <https://github.com/itdxer/neupy/issues>`_
+* `Tutorials <http://neupy.com/archive.html>`_
+* `Available algorithms <http://neupy.com/docs/algorithms.html>`_
 
 Dependence
 ----------

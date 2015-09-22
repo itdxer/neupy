@@ -2,8 +2,8 @@ from functools import partial
 
 import numpy as np
 
-from neuralpy.algorithms import LeakStepAdaptation, Backpropagation
-from neuralpy.layers import SigmoidLayer, StepOutputLayer
+from neupy.algorithms import LeakStepAdaptation, Backpropagation
+from neupy.layers import SigmoidLayer, StepOutputLayer
 
 from base import BaseTestCase
 from data import even_input_train, even_target_train

@@ -6,7 +6,10 @@ Classes and functions
 Algorithms
 **********
 
-.. csv-table:: Backpropagation
+Backpropagation
+~~~~~~~~~~~~~~~
+
+.. csv-table::
     :header: "Class name", "Name"
 
     :network:`Backpropagation`, Classic Gradient Descent
@@ -20,13 +23,19 @@ Algorithms
     :network:`IRPROPPlus`, iRPROP+
     :network:`Quickprop`, Quickprop
 
-.. csv-table:: Weight update rules
+Weight update rules
+~~~~~~~~~~~~~~~~~~~
+
+.. csv-table::
     :header: "Class name", "Name"
 
     :network:`WeightDecay`, Weight Decay
     :network:`WeightElimination`, Weight Elimination
 
-.. csv-table:: Learning rate update rules
+Learning rate update rules
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. csv-table::
     :header: "Class name", "Name"
 
     :network:`LeakStepAdaptation`, Leak Step Adaptation
@@ -36,40 +45,58 @@ Algorithms
     :network:`SearchThenConverge`, Search than converge
     :network:`SimpleStepMinimization`, Simple Step Minimization
 
-.. csv-table:: Ensembles
+Ensembles
+~~~~~~~~~
+
+.. csv-table::
     :header: "Class name", "Name"
 
     :ensemble:`MixtureOfExperts`, Mixture of Experts
     :ensemble:`DynamicallyAveragedNetwork`, Dynamically Averaged Network (DAN)
 
-.. csv-table:: Radial Basis Functions Networks (RBFN)
+Radial Basis Functions Networks (RBFN)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. csv-table::
     :header: "Class name", "Name"
 
     :network:`GRNN`, Generalized Regression Neural Network (GRNN)
     :network:`PNN`, Probabilistic Neural Network (PNN)
     :network:`RBFKMeans`, Radial basis function K-means
 
-.. csv-table:: Autoasociative Memory
+Autoasociative Memory
+~~~~~~~~~~~~~~~~~~~~~
+
+.. csv-table::
     :header: "Class name", "Name"
 
     :network:`DiscreteBAM`, Discrete BAM Network
     :network:`CMAC`, CMAC Network
     :network:`DiscreteHopfieldNetwork`, Discrete Hopfield Network
 
-.. csv-table:: Competitive Networks
+Competitive Networks
+~~~~~~~~~~~~~~~~~~~~
+
+.. csv-table::
     :header: "Class name", "Name"
 
     :network:`ART1`, Adaptive Resonance Theory (ART1) Network
     :network:`SOFM`, Self-Organizing Feature Map (SOFM or SOM)
 
-.. csv-table:: Linear networks
+Linear networks
+~~~~~~~~~~~~~~~~
+
+.. csv-table::
     :header: "Class name", "Name"
 
     :network:`Perceptron`, Perceptron
     :network:`LMS`, LMS Network
     :network:`ModifiedRelaxation`, Modified Relaxation Network
 
-.. csv-table:: Associative
+Associative
+~~~~~~~~~~~
+
+.. csv-table::
     :header: "Class name", "Name"
 
     :network:`Oja`, OJA
@@ -80,7 +107,10 @@ Algorithms
 Layers
 ******
 
-.. csv-table:: Input and hidden layers
+Input and hidden layers
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. csv-table::
     :header: "Class name", "Description", "Has derivative?"
 
     ":layer:`LinearLayer`", "Layer with linear activation function.", "No"
@@ -93,7 +123,10 @@ Layers
     ":layer:`EuclideDistanceLayer`", "Layer output equal to Euclide distance between input value and weights.", "No"
     ":layer:`AngleDistanceLayer`", "Layer which output equal to cosine distance between input value and weights.", "No"
 
-.. csv-table:: Output layers
+Output layers
+~~~~~~~~~~~~~
+
+.. csv-table::
     :header: "Class name", "Description"
 
     ":layer:`OutputLayer`", "Simple output layer which does not make any transformations"
@@ -105,7 +138,7 @@ Layers
 Error functions
 ***************
 
-.. csv-table:: Error functions
+.. csv-table::
     :header: "Function name", "Description", "Has derivative?"
 
     "linear_error(actual, expected)", "Compute difference between expected and actual values", "No"

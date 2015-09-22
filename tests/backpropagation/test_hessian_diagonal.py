@@ -1,8 +1,8 @@
 import numpy as np
 
 from sklearn import datasets, cross_validation, preprocessing
-from neuralpy import algorithms, layers
-from neuralpy.functions import rmsle
+from neupy import algorithms, layers
+from neupy.functions import rmsle
 
 from data import simple_input_train, simple_target_train
 from base import BaseTestCase

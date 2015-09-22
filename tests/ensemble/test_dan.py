@@ -1,8 +1,8 @@
 import numpy as np
 
 from sklearn import datasets, preprocessing, cross_validation, metrics
-from neuralpy import algorithms, ensemble, layers
-from neuralpy.layers import TanhLayer, SigmoidLayer, OutputLayer
+from neupy import algorithms, ensemble, layers
+from neupy.layers import TanhLayer, SigmoidLayer, OutputLayer
 
 from base import BaseTestCase
 

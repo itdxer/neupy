@@ -3,10 +3,10 @@ from collections import namedtuple
 
 import numpy as np
 
-from neuralpy import algorithms
-import neuralpy.algorithms.backprop.conjugate_gradient as cg
-from neuralpy.functions import cross_entropy_error
-from neuralpy.layers import *
+from neupy import algorithms
+import neupy.algorithms.backprop.conjugate_gradient as cg
+from neupy.functions import cross_entropy_error
+from neupy.layers import *
 
 from data import simple_input_train, simple_target_train
 from utils import compare_networks

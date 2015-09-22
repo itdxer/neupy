@@ -1,7 +1,7 @@
 Secondary
 =========
 
-This part of documentation contains secondary feature from NeuralPy library.
+This part of documentation contains secondary feature from NeuPy library.
 
 .. toctree::
     :glob:

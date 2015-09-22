@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from neuralpy.algorithms import RBFKMeans
+from neupy.algorithms import RBFKMeans
 
 from base import BaseTestCase
 

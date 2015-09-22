@@ -2,8 +2,8 @@ import numpy as np
 from sklearn import datasets
 from sklearn.cross_validation import train_test_split
 
-from neuralpy.algorithms import GRNN
-from neuralpy.functions import rmsle
+from neupy.algorithms import GRNN
+from neupy.functions import rmsle
 from base import BaseTestCase
 
 

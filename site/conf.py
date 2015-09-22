@@ -11,7 +11,7 @@ import tinkerer
 import tinkerer.paths
 
 # Change this to the name of your blog
-project = 'NeuralPy'
+project = 'NeuPy'
 
 # Change this to the tagline of your blog
 tagline = 'Neural Networks in Python'
@@ -33,10 +33,10 @@ website = 'http://127.0.0.1/blog/html/'
 # **************************************************************
 
 # Add your Disqus shortname to enable comments powered by Disqus
-disqus_shortname = None
+disqus_shortname = "neupy"
 
 # Change your favicon (new favicon goes in _static directory)
-html_favicon = '_static/tinkerer.ico'
+html_favicon = '_static/favicon.ico'
 
 # Pick another Tinkerer theme or use your own
 html_theme = 'flat'
@@ -72,6 +72,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.linkcode',
+    'sphinx.ext.mathjax',
     'numpydoc',
     'tinkerer.ext.blog'
 ]
@@ -106,7 +107,7 @@ html_use_index = False
 # **************************************************************
 
 # Add module folder in path to make it visible for autodoc extention
-module_path = os.path.abspath(os.path.join('..', 'neuralpy'))
+module_path = os.path.abspath(os.path.join('..', 'neupy'))
 if module_path not in sys.path:
     sys.path.append(module_path)
 
@@ -124,7 +125,7 @@ numpydoc_class_members_toctree = False
 # Customizations
 # **************************************************************
 
-GITHUB_REPO = 'https://github.com/itdxer/neuralpy'
+GITHUB_REPO = 'https://github.com/itdxer/neupy'
 
 
 def linkcode_resolve(domain, info):
@@ -137,9 +138,10 @@ def linkcode_resolve(domain, info):
 
 def get_module_for_class(classname, moduletype):
     available_module_types = {
-        'network': 'neuralpy.algorithms',
-        'ensemble': 'neuralpy.ensemble',
-        'layer': 'neuralpy.layers',
+        'network': 'neupy.algorithms',
+        'ensemble': 'neupy.ensemble',
+        'layer': 'neupy.layers',
+        'plot': 'neupy.plots',
     }
 
     if moduletype not in available_module_types:
@@ -163,9 +165,10 @@ def process_docstring(app, what, name, obj, options, lines):
     * :network:`NetworkClassName`
     * :ensemble:`EnsembleClassName`
     * :layer:`LayerClassName`
+    * :plot:`function_name`
     """
 
-    labels = ['network', 'layer', 'ensemble']
+    labels = ['network', 'layer', 'ensemble', 'plot']
     labels_regexp = '|'.join(labels)
 
     regexp = re.compile(
@@ -191,9 +194,8 @@ def process_docstring(app, what, name, obj, options, lines):
             if not classname:
                 newline_pattern = r':class:`\2 <{}\.\2>`'.format(module)
             else:
-                newline_pattern = r':class:`\2 <{}\.{}>`'.format(
-                    module, classname
-                )
+                newline_pattern = r':class:`\2 <{}\.{}>`'.format(module,
+                                                                 classname)
 
             line = lines[i] = regexp.sub(newline_pattern, line, count=1)
             replacement = regexp.search(line)

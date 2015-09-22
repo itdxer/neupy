@@ -1,7 +1,7 @@
 import numpy as np
 
-from neuralpy.algorithms import Instar
-from neuralpy.layers import StepLayer, OutputLayer
+from neupy.algorithms import Instar
+from neupy.layers import StepLayer, OutputLayer
 
 from base import BaseTestCase
 
@@ -21,11 +21,7 @@ class HebbRuleTestCase(BaseTestCase):
                 [0],
                 [0],
                 [0],
-            ]),
-            'function_coef': {
-                'lower_value': 0,
-                'upper_value': 1,
-            }
+            ])
         }
         self.conn = StepLayer(4, **kwargs) > OutputLayer(1)
 

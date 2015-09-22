@@ -1,8 +1,8 @@
 import numpy as np
 from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
-from neuralpy import algorithms, layers
-from neuralpy.functions import rmsle
+from neupy import algorithms, layers
+from neupy.functions import rmsle
 
 
 np.random.seed(0)

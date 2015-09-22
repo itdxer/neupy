@@ -1,6 +1,6 @@
 from functools import partial
 
-from neuralpy import algorithms
+from neupy import algorithms
 
 from data import simple_input_train, simple_target_train
 from utils import compare_networks

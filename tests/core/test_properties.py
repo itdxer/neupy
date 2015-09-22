@@ -1,5 +1,5 @@
-from neuralpy.core.config import Configurable
-from neuralpy.core.properties import *
+from neupy.core.config import Configurable
+from neupy.core.properties import *
 
 from base import BaseTestCase
 

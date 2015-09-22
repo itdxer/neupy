@@ -1,4 +1,4 @@
-from neuralpy.algorithms import Backpropagation
+from neupy.algorithms import Backpropagation
 
 from data import xor_input_train, xor_target_train
 from base import BaseTestCase

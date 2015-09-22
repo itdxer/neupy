@@ -2,8 +2,8 @@ import copy
 
 import numpy as np
 
-from neuralpy import algorithms
-from neuralpy.layers import *
+from neupy import algorithms
+from neupy.layers import *
 
 from data import simple_input_train, simple_target_train
 from utils import compare_networks

@@ -4,7 +4,7 @@ cd - && \
 rm -rf apidocs && \
 sphinx-apidoc -e \
               -o apidocs \
-              ../neuralpy && \
+              ../neupy && \
 tinker --build && \
 export IS_SUCCESS=1
 

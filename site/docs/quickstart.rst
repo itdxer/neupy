@@ -55,7 +55,7 @@ Let the units number be 4.
 
 .. code-block:: python
 
-    >>> from neuralpy import algorithms
+    >>> from neupy import algorithms
     >>> bpnet = algorithms.Backpropagation(
     ...     (2, 4, 1),
     ...     step=0.1,

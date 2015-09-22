@@ -1,9 +1,9 @@
 from functools import partial
 
 import numpy as np
-from neuralpy.layers import (TanhLayer, SigmoidLayer, StepOutputLayer,
+from neupy.layers import (TanhLayer, SigmoidLayer, StepOutputLayer,
                              OutputLayer)
-from neuralpy import algorithms
+from neupy import algorithms
 from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
 

@@ -257,7 +257,7 @@ Now we are ready to build Neural Network which will predict house prices.
 
 .. code-block:: python
 
-    from neuralpy import algorithms, layers
+    from neupy import algorithms, layers
 
     cgnet = algorithms.ConjugateGradient(
         connection=[
@@ -321,7 +321,7 @@ To fix it, we are going to inverse our transformation for predicted and actual v
 
 .. code-block:: python
 
-    from neuralpy.functions.errors import rmsle
+    from neupy.functions.errors import rmsle
 
     y_predict = cgnet.predict(x_test).round(1)
     error = rmsle(target_scaler.inverse_transform(y_test),

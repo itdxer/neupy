@@ -4,9 +4,9 @@ import unittest
 from scipy import stats
 import numpy as np
 
-from neuralpy.algorithms import Backpropagation
-from neuralpy.network.connections import NetworkConnectionError
-from neuralpy.layers import *
+from neupy.algorithms import Backpropagation
+from neupy.network.connections import NetworkConnectionError
+from neupy.layers import *
 
 from base import BaseTestCase
 
@@ -33,9 +33,8 @@ class LayersTestCase(BaseTestCase):
 
     def test_step_layer(self):
         layer1 = StepLayer(1)
-        layer2 = StepLayer(1, function_coef={'upper_value': 0})
-        self.assertNotEqual(layer1.activation_function(1),
-                            layer2.activation_function(1))
+        self.assertEqual(layer1.activation_function(1).item(0), 1)
+        self.assertEqual(layer1.activation_function(-1).item(0), 0)
 
     def test_linear_layer(self):
         layer = LinearLayer(1)

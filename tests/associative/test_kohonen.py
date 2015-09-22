@@ -1,7 +1,7 @@
 import numpy as np
 
-from neuralpy.layers import LinearLayer, CompetitiveOutputLayer
-from neuralpy.algorithms import Kohonen
+from neupy.layers import LinearLayer, CompetitiveOutputLayer
+from neupy.algorithms import Kohonen
 
 from base import BaseTestCase
 

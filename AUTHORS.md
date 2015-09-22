@@ -1,6 +1,6 @@
 # Authors
 
-NeuralPy is written and maintained by Yurii Shevchuk.
+NeuPy is written and maintained by Yurii Shevchuk.
 
 
 Project Leader / Developer:

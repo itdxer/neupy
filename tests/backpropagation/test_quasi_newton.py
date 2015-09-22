@@ -6,8 +6,8 @@ import numpy as np
 
 from sklearn import datasets, metrics
 from sklearn.cross_validation import StratifiedShuffleSplit
-from neuralpy import algorithms, layers
-from neuralpy.algorithms.backprop import quasi_newton as qn
+from neupy import algorithms, layers
+from neupy.algorithms.backprop import quasi_newton as qn
 
 from data import simple_input_train, simple_target_train
 from utils import compare_networks
@@ -70,7 +70,7 @@ class QuasiNewtonTestCase(BaseTestCase):
             show_epoch=20,
             verbose=False,
 
-            update_function='bfgs',
+            update_function='dfp',
             h0_scale=2,
             gradient_tol=1e-5,
 

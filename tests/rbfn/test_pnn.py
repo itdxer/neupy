@@ -5,7 +5,7 @@ from sklearn import datasets
 from sklearn import metrics
 from sklearn.cross_validation import StratifiedKFold, train_test_split
 
-from neuralpy.algorithms import PNN
+from neupy.algorithms import PNN
 from base import BaseTestCase
 
 

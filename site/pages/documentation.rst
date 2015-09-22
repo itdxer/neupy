@@ -10,5 +10,6 @@ Documentation
     ../docs/quickstart
     ../docs/layers
     ../docs/storage
+    ../docs/plots
     ../docs/secondary
     ../docs/algorithms
