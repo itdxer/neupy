@@ -3,8 +3,10 @@ from __future__ import division
 import copy
 
 from numpy import where, sign, abs as np_abs
+from numpy.linalg import norm
 
-from neupy.core.properties import NonNegativeNumberProperty
+from neupy.core.properties import (NonNegativeNumberProperty,
+                                   BetweenZeroAndOneProperty)
 from .backpropagation import Backpropagation
 
 
@@ -48,6 +50,7 @@ class Quickprop(Backpropagation):
     :network:`Backpropagation` : Backpropagation algorithm.
     """
     upper_bound = NonNegativeNumberProperty(default=1)
+    gradient_tol = BetweenZeroAndOneProperty(default=1e-10)
 
     def layer_weight_update(self, delta, layer_number):
         if not hasattr(self, 'prev_gradients'):
@@ -56,12 +59,18 @@ class Quickprop(Backpropagation):
             gradient = self.gradients[layer_number]
             prev_gradient = self.prev_gradients[layer_number]
             prev_weight_delta = self.prev_weight_deltas[layer_number]
+
+            if norm(prev_gradient - gradient) < self.gradient_tol:
+                raise StopIteration("Gradient norm after update is "
+                                    "less than {}".format(self.gradient_tol))
+
             weight_delta = prev_weight_delta * (
                 gradient / (prev_gradient - gradient)
             )
             upper_bound = self.upper_bound
             weight_delta = where(
-                np_abs(weight_delta) < upper_bound, weight_delta,
+                np_abs(weight_delta) < upper_bound,
+                weight_delta,
                 sign(weight_delta) * upper_bound
             )
 
