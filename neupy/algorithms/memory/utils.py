@@ -1,4 +1,4 @@
-from numpy import where, inner
+from numpy import where
 from numpy.core.umath_tests import inner1d
 
 
