@@ -10,7 +10,7 @@ def energy(input_vector):
     return -0.5 * input_vector.dot(weight).dot(input_vector)
 
 
-fig = plt.figure(figsize=(12, 12))
+fig = plt.figure(figsize=(9, 9))
 ax = fig.add_subplot(111, projection='3d')
 x = y = np.arange(-1.0, 1.0, 0.01)
 X, Y = np.meshgrid(x, y)
@@ -18,8 +18,8 @@ energies = map(energy, zip(np.ravel(X), np.ravel(Y)))
 zs = np.array(list(energies))
 Z = zs.reshape(X.shape)
 
-ax.view_init(elev=10., azim=80)
-ax.plot_surface(X, Y, Z, cmap='bwr')
+ax.view_init(elev=6, azim=-72)
+ax.plot_surface(X, Y, Z, cmap='Reds')
 ax.set_xlabel('x1')
 ax.set_ylabel('x2')
 ax.set_zlabel('Energy')
