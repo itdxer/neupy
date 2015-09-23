@@ -36,7 +36,7 @@
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -148,7 +148,7 @@ to <cite>(0, 1)</cite>.</p>
 
 <dl class="attribute">
 <dt id="neupy.layers.layers.Layer.options">
-<span class="descname">options</span><em class="property"> = {'function_coef': Option(class_name='Layer', value=None), 'init_method': Option(class_name='BaseLayer', value=gauss), 'input_size': Option(class_name='BaseLayer', value=None), 'weight': Option(class_name='BaseLayer', value=None), 'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1])}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'input_size': Option(class_name='BaseLayer', value=None), 'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1]), 'function_coef': Option(class_name='Layer', value=None), 'init_method': Option(class_name='BaseLayer', value=gauss), 'weight': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -196,7 +196,7 @@ to <cite>(0, 1)</cite>.</p>
 
 <dl class="attribute">
 <dt id="neupy.layers.layers.LinearLayer.options">
-<span class="descname">options</span><em class="property"> = {'function_coef': Option(class_name='Layer', value=None), 'init_method': Option(class_name='BaseLayer', value=gauss), 'input_size': Option(class_name='BaseLayer', value=None), 'weight': Option(class_name='BaseLayer', value=None), 'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1])}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1]), 'input_size': Option(class_name='BaseLayer', value=None), 'function_coef': Option(class_name='Layer', value=None), 'init_method': Option(class_name='BaseLayer', value=gauss), 'weight': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -255,7 +255,7 @@ to <cite>(0, 1)</cite>.</p>
 
 <dl class="attribute">
 <dt id="neupy.layers.layers.SigmoidLayer.options">
-<span class="descname">options</span><em class="property"> = {'function_coef': Option(class_name='SigmoidLayer', value={'alpha': 1}), 'init_method': Option(class_name='BaseLayer', value=gauss), 'input_size': Option(class_name='BaseLayer', value=None), 'weight': Option(class_name='BaseLayer', value=None), 'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1])}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1]), 'input_size': Option(class_name='BaseLayer', value=None), 'function_coef': Option(class_name='SigmoidLayer', value={'alpha': 1}), 'init_method': Option(class_name='BaseLayer', value=gauss), 'weight': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -303,7 +303,7 @@ to <cite>(0, 1)</cite>.</p>
 
 <dl class="attribute">
 <dt id="neupy.layers.layers.StepLayer.options">
-<span class="descname">options</span><em class="property"> = {'function_coef': Option(class_name='Layer', value=None), 'init_method': Option(class_name='BaseLayer', value=gauss), 'input_size': Option(class_name='BaseLayer', value=None), 'weight': Option(class_name='BaseLayer', value=None), 'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1])}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1]), 'input_size': Option(class_name='BaseLayer', value=None), 'function_coef': Option(class_name='Layer', value=None), 'init_method': Option(class_name='BaseLayer', value=gauss), 'weight': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -362,7 +362,7 @@ to <cite>(0, 1)</cite>.</p>
 
 <dl class="attribute">
 <dt id="neupy.layers.layers.TanhLayer.options">
-<span class="descname">options</span><em class="property"> = {'function_coef': Option(class_name='TanhLayer', value={'alpha': 1}), 'init_method': Option(class_name='BaseLayer', value=gauss), 'input_size': Option(class_name='BaseLayer', value=None), 'weight': Option(class_name='BaseLayer', value=None), 'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1])}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1]), 'input_size': Option(class_name='BaseLayer', value=None), 'function_coef': Option(class_name='TanhLayer', value={'alpha': 1}), 'init_method': Option(class_name='BaseLayer', value=gauss), 'weight': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -410,7 +410,7 @@ to <cite>(0, 1)</cite>.</p>
 
 <dl class="attribute">
 <dt id="neupy.layers.layers.RectifierLayer.options">
-<span class="descname">options</span><em class="property"> = {'function_coef': Option(class_name='Layer', value=None), 'init_method': Option(class_name='BaseLayer', value=gauss), 'input_size': Option(class_name='BaseLayer', value=None), 'weight': Option(class_name='BaseLayer', value=None), 'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1])}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1]), 'input_size': Option(class_name='BaseLayer', value=None), 'function_coef': Option(class_name='Layer', value=None), 'init_method': Option(class_name='BaseLayer', value=gauss), 'weight': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -458,7 +458,7 @@ to <cite>(0, 1)</cite>.</p>
 
 <dl class="attribute">
 <dt id="neupy.layers.layers.SoftplusLayer.options">
-<span class="descname">options</span><em class="property"> = {'function_coef': Option(class_name='Layer', value=None), 'init_method': Option(class_name='BaseLayer', value=gauss), 'input_size': Option(class_name='BaseLayer', value=None), 'weight': Option(class_name='BaseLayer', value=None), 'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1])}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1]), 'input_size': Option(class_name='BaseLayer', value=None), 'function_coef': Option(class_name='Layer', value=None), 'init_method': Option(class_name='BaseLayer', value=gauss), 'weight': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -518,7 +518,7 @@ to <cite>(0, 1)</cite>.</p>
 
 <dl class="attribute">
 <dt id="neupy.layers.layers.SoftmaxLayer.options">
-<span class="descname">options</span><em class="property"> = {'function_coef': Option(class_name='SoftmaxLayer', value={'temp': 1}), 'init_method': Option(class_name='BaseLayer', value=gauss), 'input_size': Option(class_name='BaseLayer', value=None), 'weight': Option(class_name='BaseLayer', value=None), 'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1])}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1]), 'input_size': Option(class_name='BaseLayer', value=None), 'function_coef': Option(class_name='SoftmaxLayer', value={'temp': 1}), 'init_method': Option(class_name='BaseLayer', value=gauss), 'weight': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -562,7 +562,7 @@ to <cite>(0, 1)</cite>.</p>
 </table>
 <dl class="attribute">
 <dt id="neupy.layers.layers.EuclideDistanceLayer.options">
-<span class="descname">options</span><em class="property"> = {'init_method': Option(class_name='BaseLayer', value=gauss), 'input_size': Option(class_name='BaseLayer', value=None), 'weight': Option(class_name='BaseLayer', value=None), 'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1])}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'input_size': Option(class_name='BaseLayer', value=None), 'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1]), 'init_method': Option(class_name='BaseLayer', value=gauss), 'weight': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -611,7 +611,7 @@ to <cite>(0, 1)</cite>.</p>
 </table>
 <dl class="attribute">
 <dt id="neupy.layers.layers.AngleDistanceLayer.options">
-<span class="descname">options</span><em class="property"> = {'init_method': Option(class_name='BaseLayer', value=gauss), 'input_size': Option(class_name='BaseLayer', value=None), 'weight': Option(class_name='BaseLayer', value=None), 'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1])}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'input_size': Option(class_name='BaseLayer', value=None), 'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1]), 'init_method': Option(class_name='BaseLayer', value=gauss), 'weight': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/layers/layers.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -670,7 +670,7 @@ to <cite>(0, 1)</cite>.</p>
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->
 
-      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+      </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
           <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
         <![endif]-->
