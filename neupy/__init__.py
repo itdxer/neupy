@@ -1,5 +1,5 @@
 """
-neupy is the Artificial Neural Network library implemented in Python.
+NeuPy is the Artificial Neural Network library implemented in Python.
 """
 
 
