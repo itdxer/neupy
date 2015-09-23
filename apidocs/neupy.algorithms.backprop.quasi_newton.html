@@ -103,7 +103,7 @@
 <span id="neupy-algorithms-backprop-quasi-newton-module"></span><h1>neupy.algorithms.backprop.quasi_newton module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.backprop.quasi_newton.QuasiNewton">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.backprop.quasi_newton.</span><span class="descname">QuasiNewton</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.backprop.quasi_newton.</span><span class="descname">QuasiNewton</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.backprop.backpropagation.Backpropagation</span></span></a></p>
 <p>Quasi-Newton <a class="reference internal" href="neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Backpropagation</span></span></a> algorithm optimization.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -225,32 +225,32 @@ disables output.</p>
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.quasi_newton.QuasiNewton.default_optimizations">
-<span class="descname">default_optimizations</span><em class="property"> = [&lt;class 'neupy.algorithms.backprop.steps.wolfe_search.WolfeSearch'&gt;]</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">default_optimizations</span><em class="property"> = [&lt;class 'neupy.algorithms.backprop.steps.wolfe_search.WolfeSearch'&gt;]</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.backprop.quasi_newton.QuasiNewton.get_weight_delta">
-<span class="descname">get_weight_delta</span><span class="sig-paren">(</span><em>output_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">get_weight_delta</span><span class="sig-paren">(</span><em>output_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.quasi_newton.QuasiNewton.gradient_tol">
-<span class="descname">gradient_tol</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">gradient_tol</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.quasi_newton.QuasiNewton.h0_scale">
-<span class="descname">h0_scale</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">h0_scale</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.quasi_newton.QuasiNewton.options">
-<span class="descname">options</span><em class="property"> = {'h0_scale': Option(class_name='QuasiNewton', value=1), 'step': Option(class_name='BaseNetwork', value=0.1), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'update_function': Option(class_name='QuasiNewton', value=bfgs), 'use_bias': Option(class_name='BaseNetwork', value=True), 'gradient_tol': Option(class_name='QuasiNewton', value=1e-05), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'verbose': Option(class_name='Verbose', value=True), 'error': Option(class_name='BaseNetwork', value=mse), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'optimizations': Option(class_name='Backpropagation', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=True), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'optimizations': Option(class_name='Backpropagation', value=None), 'h0_scale': Option(class_name='QuasiNewton', value=1), 'update_function': Option(class_name='QuasiNewton', value=bfgs), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'error': Option(class_name='BaseNetwork', value=mse), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'use_bias': Option(class_name='BaseNetwork', value=True), 'step': Option(class_name='BaseNetwork', value=0.1), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False), 'gradient_tol': Option(class_name='QuasiNewton', value=1e-05)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.quasi_newton.QuasiNewton.update_function">
-<span class="descname">update_function</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">update_function</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

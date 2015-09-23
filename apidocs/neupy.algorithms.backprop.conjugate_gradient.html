@@ -103,7 +103,7 @@
 <span id="neupy-algorithms-backprop-conjugate-gradient-module"></span><h1>neupy.algorithms.backprop.conjugate_gradient module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.backprop.conjugate_gradient.</span><span class="descname">ConjugateGradient</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/conjugate_gradient.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.backprop.conjugate_gradient.</span><span class="descname">ConjugateGradient</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/conjugate_gradient.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.backprop.backpropagation.Backpropagation</span></span></a></p>
 <p>Conjugate Gradient algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -245,22 +245,22 @@ disables output.</p>
 </table>
 <dl class="method">
 <dt id="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient.get_weight_delta">
-<span class="descname">get_weight_delta</span><span class="sig-paren">(</span><em>output_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/conjugate_gradient.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">get_weight_delta</span><span class="sig-paren">(</span><em>output_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/conjugate_gradient.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient.init_layers">
-<span class="descname">init_layers</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/conjugate_gradient.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">init_layers</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/conjugate_gradient.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient.options">
-<span class="descname">options</span><em class="property"> = {'step': Option(class_name='BaseNetwork', value=0.1), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'update_function': Option(class_name='ConjugateGradient', value=fletcher_reeves), 'use_bias': Option(class_name='BaseNetwork', value=True), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'verbose': Option(class_name='Verbose', value=True), 'error': Option(class_name='BaseNetwork', value=mse), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'optimizations': Option(class_name='Backpropagation', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/conjugate_gradient.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=True), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'optimizations': Option(class_name='Backpropagation', value=None), 'update_function': Option(class_name='ConjugateGradient', value=fletcher_reeves), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'error': Option(class_name='BaseNetwork', value=mse), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'use_bias': Option(class_name='BaseNetwork', value=True), 'step': Option(class_name='BaseNetwork', value=0.1), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/conjugate_gradient.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient.update_function">
-<span class="descname">update_function</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/conjugate_gradient.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">update_function</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/conjugate_gradient.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

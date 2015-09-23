@@ -103,7 +103,7 @@
 <span id="neupy-algorithms-memory-cmac-module"></span><h1>neupy.algorithms.memory.cmac module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.memory.cmac.CMAC">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.memory.cmac.</span><span class="descname">CMAC</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.memory.cmac.</span><span class="descname">CMAC</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.network.learning.html#neupy.network.learning.SupervisedLearning" title="neupy.network.learning.SupervisedLearning"><span class="xref py py-class docutils literal"><span class="pre">neupy.network.learning.SupervisedLearning</span></span></a>, <a class="reference internal" href="neupy.network.base.html#neupy.network.base.BaseNetwork" title="neupy.network.base.BaseNetwork"><span class="xref py py-class docutils literal"><span class="pre">neupy.network.base.BaseNetwork</span></span></a></p>
 <p>CMAC Network based on memory.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -202,47 +202,47 @@ training your network, defaults to <span class="docutils literal"><span class="p
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.memory.cmac.CMAC.associative_unit_size">
-<span class="descname">associative_unit_size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">associative_unit_size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.memory.cmac.CMAC.get_memory_coords">
-<span class="descname">get_memory_coords</span><span class="sig-paren">(</span><em>quantized_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">get_memory_coords</span><span class="sig-paren">(</span><em>quantized_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.memory.cmac.CMAC.get_result_by_coords">
-<span class="descname">get_result_by_coords</span><span class="sig-paren">(</span><em>coords</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">get_result_by_coords</span><span class="sig-paren">(</span><em>coords</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.memory.cmac.CMAC.options">
-<span class="descname">options</span><em class="property"> = {'step': Option(class_name='BaseNetwork', value=0.1), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'use_bias': Option(class_name='BaseNetwork', value=True), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'verbose': Option(class_name='Verbose', value=True), 'error': Option(class_name='BaseNetwork', value=mse), 'associative_unit_size': Option(class_name='CMAC', value=2), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'quantization': Option(class_name='CMAC', value=10)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=True), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'quantization': Option(class_name='CMAC', value=10), 'error': Option(class_name='BaseNetwork', value=mse), 'associative_unit_size': Option(class_name='CMAC', value=2), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'use_bias': Option(class_name='BaseNetwork', value=True), 'step': Option(class_name='BaseNetwork', value=0.1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.memory.cmac.CMAC.predict">
-<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.memory.cmac.CMAC.quantization">
-<span class="descname">quantization</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">quantization</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.memory.cmac.CMAC.quantize">
-<span class="descname">quantize</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">quantize</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.memory.cmac.CMAC.setup_defaults">
-<span class="descname">setup_defaults</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">setup_defaults</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.memory.cmac.CMAC.train_epoch">
-<span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

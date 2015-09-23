@@ -103,7 +103,7 @@
 <span id="neupy-algorithms-backprop-quickprop-module"></span><h1>neupy.algorithms.backprop.quickprop module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.backprop.quickprop.Quickprop">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.backprop.quickprop.</span><span class="descname">Quickprop</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/quickprop.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.backprop.quickprop.</span><span class="descname">Quickprop</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/quickprop.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.backprop.backpropagation.Backpropagation</span></span></a></p>
 <p>Quickprop <a class="reference internal" href="neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Backpropagation</span></span></a> algorithm optimization.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -214,27 +214,27 @@ disables output.</p>
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.quickprop.Quickprop.gradient_tol">
-<span class="descname">gradient_tol</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/quickprop.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">gradient_tol</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/quickprop.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.backprop.quickprop.Quickprop.layer_weight_update">
-<span class="descname">layer_weight_update</span><span class="sig-paren">(</span><em>delta</em>, <em>layer_number</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/quickprop.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">layer_weight_update</span><span class="sig-paren">(</span><em>delta</em>, <em>layer_number</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/quickprop.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.quickprop.Quickprop.options">
-<span class="descname">options</span><em class="property"> = {'step': Option(class_name='BaseNetwork', value=0.1), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'use_bias': Option(class_name='BaseNetwork', value=True), 'gradient_tol': Option(class_name='Quickprop', value=1e-10), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'verbose': Option(class_name='Verbose', value=True), 'error': Option(class_name='BaseNetwork', value=mse), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'upper_bound': Option(class_name='Quickprop', value=1), 'optimizations': Option(class_name='Backpropagation', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/quickprop.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=True), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'optimizations': Option(class_name='Backpropagation', value=None), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'upper_bound': Option(class_name='Quickprop', value=1), 'error': Option(class_name='BaseNetwork', value=mse), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'use_bias': Option(class_name='BaseNetwork', value=True), 'step': Option(class_name='BaseNetwork', value=0.1), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False), 'gradient_tol': Option(class_name='Quickprop', value=1e-10)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/quickprop.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.backprop.quickprop.Quickprop.update_weights">
-<span class="descname">update_weights</span><span class="sig-paren">(</span><em>weight_deltas</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/quickprop.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">update_weights</span><span class="sig-paren">(</span><em>weight_deltas</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/quickprop.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.quickprop.Quickprop.upper_bound">
-<span class="descname">upper_bound</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/quickprop.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">upper_bound</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/quickprop.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

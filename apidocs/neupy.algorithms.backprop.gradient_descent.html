@@ -103,7 +103,7 @@
 <span id="neupy-algorithms-backprop-gradient-descent-module"></span><h1>neupy.algorithms.backprop.gradient_descent module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.backprop.gradient_descent.MinibatchGradientDescent">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.backprop.gradient_descent.</span><span class="descname">MinibatchGradientDescent</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/gradient_descent.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.backprop.gradient_descent.</span><span class="descname">MinibatchGradientDescent</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/gradient_descent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.backprop.backpropagation.Backpropagation</span></span></a></p>
 <p>Mini-batch Gradient Descent algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -214,27 +214,27 @@ disables output.</p>
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.gradient_descent.MinibatchGradientDescent.batch_size">
-<span class="descname">batch_size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/gradient_descent.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">batch_size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/gradient_descent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.backprop.gradient_descent.MinibatchGradientDescent.iter_batches">
-<span class="descname">iter_batches</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/gradient_descent.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">iter_batches</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/gradient_descent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.gradient_descent.MinibatchGradientDescent.options">
-<span class="descname">options</span><em class="property"> = {'step': Option(class_name='BaseNetwork', value=0.1), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'use_bias': Option(class_name='BaseNetwork', value=True), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'verbose': Option(class_name='Verbose', value=True), 'error': Option(class_name='BaseNetwork', value=mse), 'batch_size': Option(class_name='MinibatchGradientDescent', value=10), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'optimizations': Option(class_name='Backpropagation', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/gradient_descent.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'batch_size': Option(class_name='MinibatchGradientDescent', value=10), 'verbose': Option(class_name='Verbose', value=True), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'optimizations': Option(class_name='Backpropagation', value=None), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'error': Option(class_name='BaseNetwork', value=mse), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'use_bias': Option(class_name='BaseNetwork', value=True), 'step': Option(class_name='BaseNetwork', value=0.1), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/gradient_descent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.backprop.gradient_descent.MinibatchGradientDescent.train_batch">
-<span class="descname">train_batch</span><span class="sig-paren">(</span><em>input_data</em>, <em>target_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/gradient_descent.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">train_batch</span><span class="sig-paren">(</span><em>input_data</em>, <em>target_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/gradient_descent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.backprop.gradient_descent.MinibatchGradientDescent.train_epoch">
-<span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/gradient_descent.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/gradient_descent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

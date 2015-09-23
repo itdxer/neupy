@@ -103,7 +103,7 @@
 <span id="neupy-algorithms-backprop-steps-wolfe-search-module"></span><h1>neupy.algorithms.backprop.steps.wolfe_search module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.backprop.steps.wolfe_search.WolfeSearch">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.backprop.steps.wolfe_search.</span><span class="descname">WolfeSearch</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.backprop.steps.wolfe_search.</span><span class="descname">WolfeSearch</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.backprop.steps.base.html#neupy.algorithms.backprop.steps.base.SingleStep" title="neupy.algorithms.backprop.steps.base.SingleStep"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.backprop.steps.base.SingleStep</span></span></a></p>
 <p>Wolfe line search for the step selection.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -185,42 +185,42 @@
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.steps.wolfe_search.WolfeSearch.c1">
-<span class="descname">c1</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">c1</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.steps.wolfe_search.WolfeSearch.c2">
-<span class="descname">c2</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">c2</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.backprop.steps.wolfe_search.WolfeSearch.check_updates">
-<span class="descname">check_updates</span><span class="sig-paren">(</span><em>new_step</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">check_updates</span><span class="sig-paren">(</span><em>new_step</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.backprop.steps.wolfe_search.WolfeSearch.get_gradient_by_weights">
-<span class="descname">get_gradient_by_weights</span><span class="sig-paren">(</span><em>weights</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">get_gradient_by_weights</span><span class="sig-paren">(</span><em>weights</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.steps.wolfe_search.WolfeSearch.maxstep">
-<span class="descname">maxstep</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">maxstep</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.steps.wolfe_search.WolfeSearch.options">
-<span class="descname">options</span><em class="property"> = {'c2': Option(class_name='WolfeSearch', value=0.9), 'c1': Option(class_name='WolfeSearch', value=0.0001), 'maxstep': Option(class_name='WolfeSearch', value=50)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'c2': Option(class_name='WolfeSearch', value=0.9), 'maxstep': Option(class_name='WolfeSearch', value=50), 'c1': Option(class_name='WolfeSearch', value=0.0001)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.backprop.steps.wolfe_search.WolfeSearch.set_weights">
-<span class="descname">set_weights</span><span class="sig-paren">(</span><em>new_weights</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">set_weights</span><span class="sig-paren">(</span><em>new_weights</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.backprop.steps.wolfe_search.WolfeSearch.update_weights">
-<span class="descname">update_weights</span><span class="sig-paren">(</span><em>weight_deltas</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">update_weights</span><span class="sig-paren">(</span><em>weight_deltas</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/wolfe_search.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

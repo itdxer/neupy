@@ -103,7 +103,7 @@
 <span id="neupy-algorithms-backprop-steps-leak-step-module"></span><h1>neupy.algorithms.backprop.steps.leak_step module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.backprop.steps.leak_step.LeakStepAdaptation">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.backprop.steps.leak_step.</span><span class="descname">LeakStepAdaptation</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.backprop.steps.leak_step.</span><span class="descname">LeakStepAdaptation</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.backprop.steps.base.html#neupy.algorithms.backprop.steps.base.MultiSteps" title="neupy.algorithms.backprop.steps.base.MultiSteps"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.backprop.steps.base.MultiSteps</span></span></a></p>
 <p>Leak Learning Rate Adaptation algorithm for step adaptation procedure
 in backpropagation algortihm. By default every layer has the same value
@@ -161,32 +161,32 @@ matrix norms. Defaults to <span class="docutils literal"><span class="pre">0.5</
 </table>
 <dl class="method">
 <dt id="neupy.algorithms.backprop.steps.leak_step.LeakStepAdaptation.after_weight_update">
-<span class="descname">after_weight_update</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">after_weight_update</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.steps.leak_step.LeakStepAdaptation.alpha">
-<span class="descname">alpha</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">alpha</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.steps.leak_step.LeakStepAdaptation.beta">
-<span class="descname">beta</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">beta</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.backprop.steps.leak_step.LeakStepAdaptation.init_layers">
-<span class="descname">init_layers</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">init_layers</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.steps.leak_step.LeakStepAdaptation.leak_size">
-<span class="descname">leak_size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">leak_size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.steps.leak_step.LeakStepAdaptation.options">
-<span class="descname">options</span><em class="property"> = {'leak_size': Option(class_name='LeakStepAdaptation', value=0.5), 'alpha': Option(class_name='LeakStepAdaptation', value=0.5), 'beta': Option(class_name='LeakStepAdaptation', value=0.5)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/steps/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'leak_size': Option(class_name='LeakStepAdaptation', value=0.5), 'beta': Option(class_name='LeakStepAdaptation', value=0.5), 'alpha': Option(class_name='LeakStepAdaptation', value=0.5)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/steps/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

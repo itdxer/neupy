@@ -103,28 +103,28 @@
 <span id="neupy-algorithms-basics-base-module"></span><h1>neupy.algorithms.basics.base module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.basics.base.SimpleTwoLayerNetwork">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.basics.base.</span><span class="descname">SimpleTwoLayerNetwork</span><span class="sig-paren">(</span><em>layer_sizes</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/basics/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.basics.base.</span><span class="descname">SimpleTwoLayerNetwork</span><span class="sig-paren">(</span><em>layer_sizes</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/basics/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.network.learning.html#neupy.network.learning.SupervisedLearning" title="neupy.network.learning.SupervisedLearning"><span class="xref py py-class docutils literal"><span class="pre">neupy.network.learning.SupervisedLearning</span></span></a>, <a class="reference internal" href="neupy.algorithms.feedforward.html#neupy.algorithms.feedforward.FeedForwardNetwork" title="neupy.algorithms.feedforward.FeedForwardNetwork"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.feedforward.FeedForwardNetwork</span></span></a></p>
 <p>Base class for feedforward neural network without hidden layers.
 Input layer is always <a class="reference internal" href="neupy.layers.layers.html#neupy.layers.layers.StepLayer" title="neupy.layers.layers.StepLayer"><span class="xref py py-class docutils literal"><span class="pre">StepLayer</span></span></a>.</p>
 <dl class="attribute">
 <dt id="neupy.algorithms.basics.base.SimpleTwoLayerNetwork.options">
-<span class="descname">options</span><em class="property"> = {'shuffle_data': Option(class_name='BaseNetwork', value=False), 'step': Option(class_name='BaseNetwork', value=0.1), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'use_bias': Option(class_name='BaseNetwork', value=True), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'verbose': Option(class_name='Verbose', value=True), 'error': Option(class_name='BaseNetwork', value=mse), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/basics/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=True), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'step': Option(class_name='BaseNetwork', value=0.1), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'use_bias': Option(class_name='BaseNetwork', value=True), 'error': Option(class_name='BaseNetwork', value=mse), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/basics/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.basics.base.SimpleTwoLayerNetwork.raw_predict">
-<span class="descname">raw_predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/basics/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">raw_predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/basics/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.basics.base.SimpleTwoLayerNetwork.setup_defaults">
-<span class="descname">setup_defaults</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/basics/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">setup_defaults</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/basics/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.basics.base.SimpleTwoLayerNetwork.update_weights">
-<span class="descname">update_weights</span><span class="sig-paren">(</span><em>weight_deltas</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/basics/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">update_weights</span><span class="sig-paren">(</span><em>weight_deltas</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/basics/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

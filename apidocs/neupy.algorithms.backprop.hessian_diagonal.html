@@ -103,7 +103,7 @@
 <span id="neupy-algorithms-backprop-hessian-diagonal-module"></span><h1>neupy.algorithms.backprop.hessian_diagonal module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.backprop.hessian_diagonal.HessianDiagonal">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.backprop.hessian_diagonal.</span><span class="descname">HessianDiagonal</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/hessian_diagonal.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.backprop.hessian_diagonal.</span><span class="descname">HessianDiagonal</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/hessian_diagonal.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.backprop.backpropagation.Backpropagation</span></span></a></p>
 <p>Hissian diagonal is a Hessian algorithm approximation which require
 only computation of hessian matrix diagonal elements and makes it
@@ -261,17 +261,17 @@ disables output.</p>
 </table>
 <dl class="method">
 <dt id="neupy.algorithms.backprop.hessian_diagonal.HessianDiagonal.get_weight_delta">
-<span class="descname">get_weight_delta</span><span class="sig-paren">(</span><em>output_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/hessian_diagonal.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">get_weight_delta</span><span class="sig-paren">(</span><em>output_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/hessian_diagonal.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.hessian_diagonal.HessianDiagonal.min_eigenvalue">
-<span class="descname">min_eigenvalue</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/hessian_diagonal.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">min_eigenvalue</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/hessian_diagonal.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.hessian_diagonal.HessianDiagonal.options">
-<span class="descname">options</span><em class="property"> = {'min_eigenvalue': Option(class_name='HessianDiagonal', value=1e-10), 'step': Option(class_name='BaseNetwork', value=0.1), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'use_bias': Option(class_name='BaseNetwork', value=True), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'verbose': Option(class_name='Verbose', value=True), 'error': Option(class_name='BaseNetwork', value=mse), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'optimizations': Option(class_name='Backpropagation', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/neupy/algorithms/backprop/hessian_diagonal.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=True), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'optimizations': Option(class_name='Backpropagation', value=None), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'error': Option(class_name='BaseNetwork', value=mse), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'min_eigenvalue': Option(class_name='HessianDiagonal', value=1e-10), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'use_bias': Option(class_name='BaseNetwork', value=True), 'step': Option(class_name='BaseNetwork', value=0.1), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/hessian_diagonal.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
