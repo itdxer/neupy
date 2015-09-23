@@ -11,18 +11,18 @@
             <link>http://127.0.0.1/blog/html/2015/09/21/password_recovery.html</link>
             <guid>http://127.0.0.1/blog/html/2015/09/21/password_recovery.html</guid>
             <title><![CDATA[Password recovery]]></title>
-            <description><![CDATA[<span id="id1"/><h1><a class="toc-backref" href="#id3">Password recovery</a></h1>
+            <description><![CDATA[<span id="id1"/><h1><a class="toc-backref" href="#id2">Password recovery</a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#password-recovery" id="id3">Password recovery</a><ul>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#data-transformation" id="id4">Data transformation</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#saving-password-into-the-network" id="id5">Saving password into the network</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#recovering-password-from-the-network" id="id6">Recovering password from the network</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#test-it-using-monte-carlo" id="id7">Test it using Monte Carlo</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#possible-problems" id="id8">Possible Problems</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#summary" id="id9">Summary</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#download-script" id="id10">Download script</a></li>
+<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#password-recovery" id="id2">Password recovery</a><ul>
+<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#data-transformation" id="id3">Data transformation</a></li>
+<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#saving-password-into-the-network" id="id4">Saving password into the network</a></li>
+<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#recovering-password-from-the-network" id="id5">Recovering password from the network</a></li>
+<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#test-it-using-monte-carlo" id="id6">Test it using Monte Carlo</a></li>
+<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#possible-problems" id="id7">Possible problems</a></li>
+<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#summary" id="id8">Summary</a></li>
+<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#download-script" id="id9">Download script</a></li>
 </ul>
 </li>
 </ul>
@@ -52,7 +52,7 @@ But you can test code without it.</p>
 </div>
 <p>Code works with a Python 2.7 as well.</p>
 <div class="section" id="data-transformation">
-<h2><a class="toc-backref" href="#id4">Data transformation</a></h2>
+<h2><a class="toc-backref" href="#id3">Data transformation</a></h2>
 <p>Before building the network that will save and recover passwords, we should make transformations for input and output data.
 But it wouldn’t be enough just to encode it, we should set up a constant length for an input string to make sure that strings will have the same length
 Also we should define what string encoding we will use.
@@ -113,7 +113,7 @@ So before we begin to store data in neural network, we should define another fun
 We assume that password won’t contain space at the beggining.</p>
 </div>
 <div class="section" id="saving-password-into-the-network">
-<h2><a class="toc-backref" href="#id5">Saving password into the network</a></h2>
+<h2><a class="toc-backref" href="#id4">Saving password into the network</a></h2>
 <p>Now we are ready to save the password into the network.
 For this task we are going to define another function that create network and save password inside of it.
 Let’s define this function and later we will look at it step by step.</p>
@@ -195,7 +195,7 @@ For this reason we use randomly generated binary vector instead of random passwo
 <p>Of course it’s better to save not randomly generated noise vectors but randomly generated passwords converted into binary vectors, cuz if you use wrong input pattern randomly generated password might be recovered instead of the correct one.</p>
 </div>
 <div class="section" id="recovering-password-from-the-network">
-<h2><a class="toc-backref" href="#id6">Recovering password from the network</a></h2>
+<h2><a class="toc-backref" href="#id5">Recovering password from the network</a></h2>
 <p>Now we are going to define the last function which will recover a password from the network.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">recover_password</span><span class="p">(</span><span class="n">dhnet</span><span class="p">,</span> <span class="n">broken_password</span><span class="p">):</span>
     <span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">str2bin</span><span class="p">(</span><span class="n">broken_password</span><span class="p">))</span>
@@ -239,7 +239,7 @@ We can’t prevent it from running into the local minimum.
 For more information about this problem you can check <a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>tutorial about Discrete Hopfield Network</span></a>.</p>
 </div>
 <div class="section" id="test-it-using-monte-carlo">
-<h2><a class="toc-backref" href="#id7">Test it using Monte Carlo</a></h2>
+<h2><a class="toc-backref" href="#id6">Test it using Monte Carlo</a></h2>
 <p>Let’s test our solution with randomly generated passwords.
 For this task we can use Monte Carlo experiment.
 At each step we create random password and try to recover it from a broken password.</p>
@@ -330,25 +330,24 @@ So removing symbols is not a very good idea.</p>
 <p>All functions that you need for experiments you can find at the <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py">github</a>.</p>
 </div>
 <div class="section" id="possible-problems">
-<h2><a class="toc-backref" href="#id8">Possible Problems</a></h2>
+<h2><a class="toc-backref" href="#id7">Possible problems</a></h2>
 <p>There are a few possible problems in the Discrete Hopfile Network.</p>
 <ol class="arabic simple">
 <li>As we saw from the last experiments, shifted passwords are harder to recover than the passwords with missed symbols. It’s better to replace missed symbols with some other things.</li>
 <li>There already exists small probability for recovering passwords from empty strings.</li>
+<li>Similar binary code representation for different symbols is a big problem. Sometimes you can have a situation where two symbols in binary code represantation are different just by one bit. The first solution is to use a One Hot Encoder. But it can give us even more problems. For example, we used symbols from list of 94 symbols for the password. If we encode each symbol we will get a vector with 93 zeros and just one active value. The problem is that after the recovery procedure we should always get 1 active value, but this situation is very unlikely to happen.</li>
 </ol>
-<p>3. Similar binary code representation for different symbols is a big problem.
-Sometimes you can have a situation where 2 symbols in binary code represantation are different just by one bit. The first solution is to use a One Hot Encoder. But it can give us even more problems. For example, we used symbols from list of 94 symbols for the password. If we encode each symbol we will get a vector with 93 zeros and just 1 active value. The problem is that after the recovery procedure we should always get 1 active value, but this situation is very unlikely to happen.</p>
 </div>
 <div class="section" id="summary">
-<h2><a class="toc-backref" href="#id9">Summary</a></h2>
+<h2><a class="toc-backref" href="#id8">Summary</a></h2>
 <p>Despite some problems, network recovers passwords very well.
 Monte Carlo experiment shows that the fewer symbols we know the less is probability for recovering them correctly.</p>
 <p>Even this simple network can be a powerful tool if you know its limitations.</p>
 </div>
 <div class="section" id="download-script">
-<h2><a class="toc-backref" href="#id10">Download script</a></h2>
-<p>You can download and test a full script from the <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py">github</a></p>
-<p>It didn’t contain a random <span class="docutils literal"><span class="pre">seed</span></span> initialization, so you will get a different outputs after each run.</p>
+<h2><a class="toc-backref" href="#id9">Download script</a></h2>
+<p>You can download and test a full script from the <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py">github repository</a>.</p>
+<p>It doesn’t contain a fixed <span class="docutils literal"><span class="pre">seed</span></span> initialization, so you will get different outputs after each run.</p>
 </div>
 ]]></description>
              <pubDate>Mon, 21 Sep 2015 00:00:00 +0300</pubDate>

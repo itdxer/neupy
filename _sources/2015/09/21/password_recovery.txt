@@ -352,7 +352,7 @@ So removing symbols is not a very good idea.
 
 All functions that you need for experiments you can find at the `github <https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py>`_.
 
-Possible Problems
+Possible problems
 -----------------
 
 There are a few possible problems in the Discrete Hopfile Network.
@@ -361,8 +361,7 @@ There are a few possible problems in the Discrete Hopfile Network.
 
 2. There already exists small probability for recovering passwords from empty strings.
 
-3. Similar binary code representation for different symbols is a big problem.
-Sometimes you can have a situation where 2 symbols in binary code represantation are different just by one bit. The first solution is to use a One Hot Encoder. But it can give us even more problems. For example, we used symbols from list of 94 symbols for the password. If we encode each symbol we will get a vector with 93 zeros and just 1 active value. The problem is that after the recovery procedure we should always get 1 active value, but this situation is very unlikely to happen.
+3. Similar binary code representation for different symbols is a big problem. Sometimes you can have a situation where two symbols in binary code represantation are different just by one bit. The first solution is to use a One Hot Encoder. But it can give us even more problems. For example, we used symbols from list of 94 symbols for the password. If we encode each symbol we will get a vector with 93 zeros and just one active value. The problem is that after the recovery procedure we should always get 1 active value, but this situation is very unlikely to happen.
 
 Summary
 -------
@@ -375,9 +374,9 @@ Even this simple network can be a powerful tool if you know its limitations.
 Download script
 ---------------
 
-You can download and test a full script from the `github <https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py>`_
+You can download and test a full script from the `github repository <https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py>`_.
 
-It didn't contain a random ``seed`` initialization, so you will get a different outputs after each run.
+It doesn't contain a fixed ``seed`` initialization, so you will get different outputs after each run.
 
 .. author:: default
 .. categories:: none
