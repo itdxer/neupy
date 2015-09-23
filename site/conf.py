@@ -74,7 +74,8 @@ extensions = [
     'sphinx.ext.linkcode',
     'sphinx.ext.mathjax',
     'numpydoc',
-    'tinkerer.ext.blog'
+    'tinkerer.ext.blog',
+    'tinkerer.ext.disqus',
 ]
 
 # Add other template paths here
