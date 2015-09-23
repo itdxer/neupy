@@ -126,7 +126,7 @@ numpydoc_class_members_toctree = False
 # Customizations
 # **************************************************************
 
-GITHUB_REPO = 'https://github.com/itdxer/neupy'
+GITHUB_REPO = 'https://github.com/itdxer/neupy/tree/master'
 
 
 def linkcode_resolve(domain, info):
