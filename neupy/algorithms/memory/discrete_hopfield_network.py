@@ -128,7 +128,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         self.discrete_validation(input_data)
 
         input_data = bin2sign(input_data)
-        input_data = format_data(input_data)
+        input_data = format_data(input_data, row1d=True)
 
         nrows, n_features = input_data.shape
         nrows_after_update = self.n_remembered_data + nrows
@@ -162,7 +162,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
             if n_times is None:
                 n_times = self.n_times
 
-            input_data = format_data(input_data)
+            input_data = format_data(input_data, row1d=True)
             _, n_features = input_data.shape
             output_data = input_data
 
@@ -178,7 +178,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     def energy(self, input_data):
         self.discrete_validation(input_data)
         input_data = bin2sign(input_data)
-        input_data = format_data(input_data)
+        input_data = format_data(input_data, row1d=True)
         nrows, n_features = input_data.shape
 
         if nrows == 1:

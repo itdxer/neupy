@@ -4,7 +4,7 @@ import sys
 __all__ = ('format_data',)
 
 
-def format_data(input_data, column1d=False):
+def format_data(input_data, row1d=False):
     if input_data is None:
         return
 
@@ -17,7 +17,7 @@ def format_data(input_data, column1d=False):
             input_data = input_data.values
 
     if input_data.ndim == 1:
-        data_shape = (n_features, 1) if column1d else (1, n_features)
+        data_shape = (1, n_features) if row1d else (n_features, 1)
         input_data = input_data.reshape(data_shape)
 
     return input_data

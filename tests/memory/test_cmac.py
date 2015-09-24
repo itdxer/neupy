@@ -25,15 +25,22 @@ class CMACTestCase(BaseTestCase):
 
         self.assertEqual(round(error, 4), 0.0024)
 
-    def test_different_inputs(self):
+    def test_train_different_inputs(self):
+        self.assertInvalidVectorTrain(
+            algorithms.CMAC(),
+            np.array([1, 2, 3]),
+            np.array([1, 2, 3])
+        )
+
+    def test_predict_different_inputs(self):
         cmac = algorithms.CMAC()
 
-        cmac.train(np.array([1, 2, 3]), np.array([1, 2, 3]))
-        cmac.train(np.array([[1, 2, 3]]), np.array([[1, 2, 3]]))
+        data = np.array([[1, 2, 3]]).T
+        target = np.array([[1, 2, 3]]).T
 
-        cmac.train(pd.DataFrame([[1, 2, 3]]), pd.DataFrame([[1, 2, 3]]))
-        cmac.train(pd.DataFrame([1, 2, 3]), pd.DataFrame([1, 2, 3]))
-        cmac.train(pd.DataFrame([[1, 2, 3]]), pd.DataFrame([1, 2, 3]))
+        cmac.train(data, target, epochs=100)
+        self.assertInvalidVectorPred(cmac, np.array([1, 2, 3]), target,
+                                     decimal=2)
 
     def test_cmac_multi_output(self):
         input_train = np.linspace(0, 2 * np.pi, 100)

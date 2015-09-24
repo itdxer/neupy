@@ -92,11 +92,11 @@ class DiscreteBAM(DiscreteMemory):
 
     def predict_input(self, output_data, n_times=None):
         return self._predict(input_data=None,
-                             output_data=format_data(output_data),
+                             output_data=format_data(output_data, row1d=True),
                              n_times=n_times)
 
     def predict_output(self, input_data, n_times=None):
-        return self._predict(input_data=format_data(input_data),
+        return self._predict(input_data=format_data(input_data, row1d=True),
                              output_data=None,
                              n_times=n_times)
 
@@ -144,8 +144,8 @@ class DiscreteBAM(DiscreteMemory):
         self.discrete_validation(input_data)
         self.discrete_validation(output_data)
 
-        output_data = bin2sign(format_data(output_data))
-        input_data = bin2sign(format_data(input_data))
+        output_data = bin2sign(format_data(output_data, row1d=True))
+        input_data = bin2sign(format_data(input_data, row1d=True))
 
         _, wight_nrows = input_data.shape
         _, wight_ncols = output_data.shape
@@ -166,8 +166,8 @@ class DiscreteBAM(DiscreteMemory):
         self.discrete_validation(output_data)
 
         input_data, output_data = bin2sign(input_data), bin2sign(output_data)
-        input_data = format_data(input_data)
-        output_data = format_data(output_data)
+        input_data = format_data(input_data, row1d=True)
+        output_data = format_data(output_data, row1d=True)
         nrows, n_features = input_data.shape
 
         if nrows == 1:

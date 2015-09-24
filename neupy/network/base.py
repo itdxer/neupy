@@ -193,14 +193,14 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
 
         # ----------- Pre-format target data ----------- #
 
-        input_train = format_data(input_train, column1d=True)
-        target_train = format_data(target_train, column1d=True)
+        input_train = format_data(input_train)
+        target_train = format_data(target_train)
 
         if input_test is not None:
-            input_test = format_data(input_test, column1d=True)
+            input_test = format_data(input_test)
 
         if target_test is not None:
-            target_test = format_data(target_test, column1d=True)
+            target_test = format_data(target_test)
 
         # ----------- Validation ----------- #
 

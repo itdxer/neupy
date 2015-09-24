@@ -10,8 +10,8 @@ __all__ = ('mse', 'linear_error', 'cross_entropy_error', 'mae',
 
 
 def _preformat_inputs(actual, predicted):
-    actual = format_data(actual, column1d=True)
-    predicted = format_data(predicted, column1d=True)
+    actual = format_data(actual)
+    predicted = format_data(predicted)
 
     if actual.shape != predicted.shape:
         raise ValueError("Actual and predicted values have different shapes.")
