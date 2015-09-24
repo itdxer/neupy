@@ -38,29 +38,29 @@ class CustomLogger(logging.Logger):
 
     def log(self, name, text, *args, **kwargs):
         message = self._build_log(name, text, color=green)
-        self.info(message, *args, **kwargs)
+        print(message)
 
     def gray_log(self, name, text, *args, **kwargs):
         message = self._build_log(name, text, color=gray)
-        self.info(message, *args, **kwargs)
+        print(message)
 
     def header(self, text, *args, **kwargs):
         message = "\n{text}\n".format(text=underline(bold(text)))
-        self.info(message, *args, **kwargs)
+        print(message)
 
     def simple(self, text):
-        self.info(text)
+        print(text)
 
     def empty(self):
-        self.info("")
+        print("")
 
     def error(self, text, *args, **kwargs):
         message = self._build_log('ERROR', text, color=red)
-        super(CustomLogger, self).error(message, *args, **kwargs)
+        print(message)
 
     def warning(self, text, *args, **kwargs):
         message = self._build_log('WARN', text, color=red)
-        super(CustomLogger, self).warning(message, *args, **kwargs)
+        print(message)
 
     def data(self, text):
         text = text.strip()
