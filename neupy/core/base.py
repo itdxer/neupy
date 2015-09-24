@@ -23,6 +23,14 @@ class BaseSkeleton(ConfigurableWithABC, Verbose):
         self.train(X, y, *args, **kwargs)
         return self
 
+    def transform(self, X, **transform_params):
+        return X
+
+    def fit_transform(self, X, y=None, **fit_params):
+        if y is None:
+            return self.fit(X, **fit_params).transform(X)
+        return self.fit(X, y, **fit_params).transform(X)
+
     def _repr_options(self):
         options = []
         for option_name in self.options:

@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 from neupy import algorithms
 from neupy.functions import errors
@@ -24,7 +25,17 @@ class CMACTestCase(BaseTestCase):
 
         self.assertEqual(round(error, 4), 0.0024)
 
-    def test_cmac_multi_putput(self):
+    def test_different_inputs(self):
+        cmac = algorithms.CMAC()
+
+        cmac.train(np.array([1, 2, 3]), np.array([1, 2, 3]))
+        cmac.train(np.array([[1, 2, 3]]), np.array([[1, 2, 3]]))
+
+        cmac.train(pd.DataFrame([[1, 2, 3]]), pd.DataFrame([[1, 2, 3]]))
+        cmac.train(pd.DataFrame([1, 2, 3]), pd.DataFrame([1, 2, 3]))
+        cmac.train(pd.DataFrame([[1, 2, 3]]), pd.DataFrame([1, 2, 3]))
+
+    def test_cmac_multi_output(self):
         input_train = np.linspace(0, 2 * np.pi, 100)
         input_train = np.reshape(
             np.concatenate([input_train, input_train], axis=0), (100, 2)
