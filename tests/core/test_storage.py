@@ -72,7 +72,7 @@ class StorageTestCase(BaseTestCase):
             self.assertEqual(optimization_classes,
                              restored_bpnet.optimizations)
 
-            bpnet.train(data, target, epochs=10)
+            bpnet.train(data, target, 10)
             real_bpnet_error = bpnet.error(bpnet.predict(data), target)
             updated_input_weight = bpnet.input_layer.weight.copy()
 

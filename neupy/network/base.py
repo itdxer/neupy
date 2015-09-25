@@ -4,7 +4,6 @@ from itertools import groupby
 from numpy import arange
 import matplotlib.pyplot as plt
 
-from neupy.utils import format_data
 from neupy.helpers import preformat_value
 from neupy.core.base import BaseSkeleton
 from neupy.core.config import Configurable
@@ -193,14 +192,11 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
 
         # ----------- Pre-format target data ----------- #
 
-        input_train = format_data(input_train, column1d=True)
-        target_train = format_data(target_train, column1d=True)
+        if target_train is not None and target_train.ndim == 1:
+            target_train = target_train.reshape((target_train.size, 1))
 
-        if input_test is not None:
-            input_test = format_data(input_test, column1d=True)
-
-        if target_test is not None:
-            target_test = format_data(target_test, column1d=True)
+        if target_test is not None and target_test.ndim == 1:
+            target_test = target_test.reshape((target_test.size, 1))
 
         # ----------- Validation ----------- #
 
