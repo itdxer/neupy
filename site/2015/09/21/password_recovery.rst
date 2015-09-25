@@ -5,7 +5,7 @@ Password recovery
 
 .. contents::
 
-IN this tutorial we are going to build a simple neural network that will recover password from a broken one.
+In this tutorial we are going to build a simple neural network that will recover password from a broken one.
 If you aren't familiar with a :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` algorithm, you can read :ref:`this tutorial <discrete-hopfield-network>`.
 
 Before running all experiments, we need to set up ``seed`` parameter to make all results reproducible.

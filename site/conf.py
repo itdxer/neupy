@@ -26,7 +26,7 @@ author = 'Yurii Shevchuk'
 copyright = '2015, ' + author
 
 # Change this to your blog root URL (required for RSS feed)
-website = 'http://127.0.0.1/blog/html/'
+website = 'http://neupy.com'
 
 # **************************************************************
 # More tweaks you can do
