@@ -2,33 +2,33 @@
 <rss version="2.0">
     <channel>
         <title>NeuPy</title>
-        <link>http://127.0.0.1/blog/html/</link>
+        <link>http://neupy.com/</link>
         <description>Neural Networks in Python</description>
         <language>en-us</language>
         <pubDate>Mon, 21 Sep 2015 00:00:00 +0300</pubDate>
         
         <item>
-            <link>http://127.0.0.1/blog/html/2015/09/21/password_recovery.html</link>
-            <guid>http://127.0.0.1/blog/html/2015/09/21/password_recovery.html</guid>
+            <link>http://neupy.com/2015/09/21/password_recovery.html</link>
+            <guid>http://neupy.com/2015/09/21/password_recovery.html</guid>
             <title><![CDATA[Password recovery]]></title>
             <description><![CDATA[<span id="id1"/><h1><a class="toc-backref" href="#id2">Password recovery</a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#password-recovery" id="id2">Password recovery</a><ul>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#data-transformation" id="id3">Data transformation</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#saving-password-into-the-network" id="id4">Saving password into the network</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#recovering-password-from-the-network" id="id5">Recovering password from the network</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#test-it-using-monte-carlo" id="id6">Test it using Monte Carlo</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#possible-problems" id="id7">Possible problems</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#summary" id="id8">Summary</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#download-script" id="id9">Download script</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/09/21/password_recovery.html#password-recovery" id="id2">Password recovery</a><ul>
+<li><a class="reference internal" href="http://neupy.com/2015/09/21/password_recovery.html#data-transformation" id="id3">Data transformation</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/09/21/password_recovery.html#saving-password-into-the-network" id="id4">Saving password into the network</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/09/21/password_recovery.html#recovering-password-from-the-network" id="id5">Recovering password from the network</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/09/21/password_recovery.html#test-it-using-monte-carlo" id="id6">Test it using Monte Carlo</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/09/21/password_recovery.html#possible-problems" id="id7">Possible problems</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/09/21/password_recovery.html#summary" id="id8">Summary</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/09/21/password_recovery.html#download-script" id="id9">Download script</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<p>IN this tutorial we are going to build a simple neural network that will recover password from a broken one.
-If you aren’t familiar with a <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> algorithm, you can read <a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>this tutorial</span></a>.</p>
+<p>In this tutorial we are going to build a simple neural network that will recover password from a broken one.
+If you aren’t familiar with a <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> algorithm, you can read <a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>this tutorial</span></a>.</p>
 <p>Before running all experiments, we need to set up <span class="docutils literal"><span class="pre">seed</span></span> parameter to make all results reproducible.
 But you can test code without it.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">random</span>
@@ -141,13 +141,13 @@ Let’s define this function and later we will look at it step by step.</p>
     <span class="k">return</span> <span class="n">dhnet</span>
 </pre></div>
 </div>
-<p>If you have already read <a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>Discrete Hopfield Network tutorial</span></a>, you should know that if we add only one vector into the network we will get it dublicated or with reversed signs through the whole matrix.
+<p>If you have already read <a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>Discrete Hopfield Network tutorial</span></a>, you should know that if we add only one vector into the network we will get it dublicated or with reversed signs through the whole matrix.
 To make it a little bit secure we can add some noise into the network.
 For this reason we introduce one additional parameter <span class="docutils literal"><span class="pre">noise_level</span></span> into the function.
 This parameter controls number of randomly generated binary vectors.
 With each iteration using Binomial distribution we generate random binary vector with 55% probability of getting 1 in <cite>noise</cite> vector.
 And then we put all the noise vectors and transformed password into one matrix.
-And finaly we save all data in the <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
+And finaly we save all data in the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
 <p>And that’s it.
 Function returns trained network for a later usage.</p>
 <p>But why do we use random binary vectors instead of the decoded random strings?
@@ -236,7 +236,7 @@ Network can produce a string which wasn’t taught.
 This string can look almost like a password with a few different symbols.
 The problem appears when network creates additional local minimum somewhere between input patterns.
 We can’t prevent it from running into the local minimum.
-For more information about this problem you can check <a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>tutorial about Discrete Hopfield Network</span></a>.</p>
+For more information about this problem you can check <a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>tutorial about Discrete Hopfield Network</span></a>.</p>
 </div>
 <div class="section" id="test-it-using-monte-carlo">
 <h2><a class="toc-backref" href="#id6">Test it using Monte Carlo</a></h2>
@@ -354,34 +354,34 @@ Monte Carlo experiment shows that the fewer symbols we know the less is probabil
         </item>
     
         <item>
-            <link>http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html</link>
-            <guid>http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html</guid>
+            <link>http://neupy.com/2015/09/20/discrete_hopfield_network.html</link>
+            <guid>http://neupy.com/2015/09/20/discrete_hopfield_network.html</guid>
             <title><![CDATA[Discrete Hopfiel Network]]></title>
             <description><![CDATA[<span id="discrete-hopfield-network"/><h1><a class="toc-backref" href="#id5">Discrete Hopfiel Network</a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html#discrete-hopfiel-network" id="id5">Discrete Hopfiel Network</a><ul>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html#architecture" id="id6">Architecture</a><ul>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html#training-procedure" id="id7">Training procedure</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html#recovery-from-memory" id="id8">Recovery from memory</a><ul>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html#synchronous" id="id9">Synchronous</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html#asynchronous" id="id10">Asynchronous</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#discrete-hopfiel-network" id="id5">Discrete Hopfiel Network</a><ul>
+<li><a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#architecture" id="id6">Architecture</a><ul>
+<li><a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#training-procedure" id="id7">Training procedure</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#recovery-from-memory" id="id8">Recovery from memory</a><ul>
+<li><a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#synchronous" id="id9">Synchronous</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#asynchronous" id="id10">Asynchronous</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html#memory-limit" id="id11">Memory limit</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html#hallucinations" id="id12">Hallucinations</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html#example" id="id13">Example</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html#more-reading" id="id14">More reading</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/20/discrete_hopfield_network.html#references" id="id15">References</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#memory-limit" id="id11">Memory limit</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#hallucinations" id="id12">Hallucinations</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#example" id="id13">Example</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#more-reading" id="id14">More reading</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#references" id="id15">References</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<p>In this tutorial we are going to learn about <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> algorithm.</p>
-<p><a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> is a type of algorithms which is called - <a class="reference external" href="https://en.wikipedia.org/wiki/Autoassociative_memory">Autoassociative memories</a>
+<p>In this tutorial we are going to learn about <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> algorithm.</p>
+<p><a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> is a type of algorithms which is called - <a class="reference external" href="https://en.wikipedia.org/wiki/Autoassociative_memory">Autoassociative memories</a>
 Don’t be scared of the word <cite>Autoassociative</cite>.
 The idea behind this type of algorithms is very simple.
 It can store useful information in <cite>memory</cite> and later it is able to reproduce this information from partialy broken patterns.
@@ -394,10 +394,10 @@ Though you don’t clearly see all objects in the picture, you start to remember
 That’s what it is all about.
 Autoassociative memory networks is a posibily to interprete functions of memory into neural network model.</p>
 <p>Don’t worry if you have only basic knowledge in Linear Algebra; in this tutorial I’ll try to explain the idea as simple as possible.
-If you are interested in proofs of the <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> you can check them at R. Rojas. Neural Networks <a class="footnote-reference" href="#id2" id="id1">[1]</a> book.</p>
+If you are interested in proofs of the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> you can check them at R. Rojas. Neural Networks <a class="footnote-reference" href="#id2" id="id1">[1]</a> book.</p>
 <div class="section" id="architecture">
 <h2><a class="toc-backref" href="#id6">Architecture</a></h2>
-<p><a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> is an easy algorithm.
+<p><a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> is an easy algorithm.
 It’s simple because you don’t need a lot of background knowledge in Maths for using it.
 Everything you need to know is how to make a basic Linear Algebra operations, like outer product or sum of two matrices.</p>
 <p>Let’s begin with a basic thing.
@@ -413,14 +413,14 @@ We can’t use zeros.
 And there are two main reasons for it.
 The first one is that zeros reduce information from the network weight, later in this tutorial you are going to see it.
 The second one is more complex, it depends on the nature of bipolar vectors.
-Basically they are more likely to be orthogonal to each other which is a critical moment for the <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.
+Basically they are more likely to be orthogonal to each other which is a critical moment for the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.
 But as I mentioned before we won’t talk about proofs or anything not related to basic understanding of Linear Algebra operations.</p>
-<p>So, let’s look at how we can train and use the <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
+<p>So, let’s look at how we can train and use the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
 <div class="section" id="training-procedure">
 <h3><a class="toc-backref" href="#id7">Training procedure</a></h3>
 <p>We can’t use memory without any patterns stored in it.
 So first of all we are going to learn how to train the network.
-For the <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> train procedure doesn’t require any iterations.
+For the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> train procedure doesn’t require any iterations.
 It includes just an outer product between input vector and transposed input vector.</p>
 <div class="math">
 \[\begin{split}\begin{align*}
@@ -743,7 +743,7 @@ Of course you can find situations when these rules will fail.</p>
 </div>
 <div class="section" id="hallucinations">
 <h2><a class="toc-backref" href="#id12">Hallucinations</a></h2>
-<p>Hallucinations is one of the main problems in the <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.
+<p>Hallucinations is one of the main problems in the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.
 Sometimes network output can be something that we hasn’t taught it.</p>
 <p>To understand this phenomena we should firstly define the Hopfield energy function.</p>
 <div class="math">
@@ -752,8 +752,8 @@ Sometimes network output can be something that we hasn’t taught it.</p>
 <span class="math">\(x_i\)</span> is a <span class="math">\(i\)</span>-th values from the input vector <span class="math">\(x\)</span>.
 <span class="math">\(\theta\)</span> is a threshold.
 Threshold defines the bound to the sign function.
-For this reason <span class="math">\(\theta\)</span> is equal to 0 for the <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.
-In terms of a linear algebra we can write formula for the <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> energy Function more simplier.</p>
+For this reason <span class="math">\(\theta\)</span> is equal to 0 for the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.
+In terms of a linear algebra we can write formula for the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> energy Function more simplier.</p>
 <div class="math">
 \[E = -\frac{1}{2} x^T W x\]</div>
 <p>But linear algebra notation works only with the <span class="math">\(x\)</span> vector, we can’t use matrix <span class="math">\(X\)</span> with multiple input patterns instead of the <span class="math">\(x\)</span> in this formula.
@@ -763,7 +763,7 @@ Assume that values for vector <span class="math">\(x\)</span> can be continous i
 Let’s pretend that we have two vectors <cite>[1, -1]</cite> and <cite>[-1, 1]</cite> stored inside the network.
 Below you can see the plot that visualizes energy function for this situation.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/energy-function.png"><img alt="Energy function visualization for the network with two neurons" src="http://127.0.0.1/blog/html/_images/energy-function.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/energy-function.png"><img alt="Energy function visualization for the network with two neurons" src="http://neupy.com/_images/energy-function.png" style="width: 80%;"/></a>
 </div>
 <p>As you can see we have two minimum values at the same points as those patterns that are already stored inside the network.
 But between these two patterns function creates a saddle point somewhere at the point with coordinates <span class="math">\((0, 0)\)</span>.
@@ -940,7 +940,7 @@ We are not able to recover patter 2 from this network, because input vector is a
 <p>In plot below you can see first 200 iterations of the recovery procedure.
 Energy value was decreasing after each iteration until it reached the local minimum where pattern is equal to 2.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/hopfield-energy-vis.png"><img alt="Asynchronous Discrete Hopfield Network energy update after each iteration" src="http://127.0.0.1/blog/html/_images/hopfield-energy-vis.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/hopfield-energy-vis.png"><img alt="Asynchronous Discrete Hopfield Network energy update after each iteration" src="http://neupy.com/_images/hopfield-energy-vis.png" style="width: 80%;"/></a>
 </div>
 <p>And finally we can look closer to the network memory using Hinton diagram.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
@@ -953,7 +953,7 @@ Energy value was decreasing after each iteration until it reached the local mini
 </pre></div>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/hinton-diagram.png"><img alt="Asynchronous Discrete Hopfield Network energy update after each iteration" src="http://127.0.0.1/blog/html/_images/hinton-diagram.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/hinton-diagram.png"><img alt="Asynchronous Discrete Hopfield Network energy update after each iteration" src="http://neupy.com/_images/hinton-diagram.png" style="width: 80%;"/></a>
 </div>
 <p>This graph above shows the network weight matrix and all information stored inside of it.
 Hinton diagram is a very simple technique for the weight visualization in neural networks.
@@ -987,7 +987,7 @@ If we have all perfectly opposite symmetric patterns then squares on the antidia
 </div>
 <div class="section" id="more-reading">
 <h2><a class="toc-backref" href="#id14">More reading</a></h2>
-<p>In addition you can read another tutorial about a ‘<a class="reference internal" href="http://127.0.0.1/blog/html/2015/09/21/password_recovery.html#password-recovery"><span>Password recovery</span></a>‘ from the memory using the <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
+<p>In addition you can read another tutorial about a ‘<a class="reference internal" href="http://neupy.com/2015/09/21/password_recovery.html#password-recovery"><span>Password recovery</span></a>‘ from the memory using the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
 </div>
 <div class="section" id="references">
 <h2><a class="toc-backref" href="#id15">References</a></h2>
@@ -1016,8 +1016,8 @@ from <a class="reference external" href="https://www.youtube.com/watch?v=gfPUWwB
         </item>
     
         <item>
-            <link>http://127.0.0.1/blog/html/2015/07/04/boston_house_prices_dataset.html</link>
-            <guid>http://127.0.0.1/blog/html/2015/07/04/boston_house_prices_dataset.html</guid>
+            <link>http://neupy.com/2015/07/04/boston_house_prices_dataset.html</link>
+            <guid>http://neupy.com/2015/07/04/boston_house_prices_dataset.html</guid>
             <title><![CDATA[Boston house-prices dataset]]></title>
             <description><![CDATA[<h1>Boston house-prices dataset</h1>
 <p>For this tutorial we are going to predict Boston house prices via Conjugate gradient.</p>
@@ -1270,7 +1270,7 @@ We use 85% of data for train.</p>
 </pre></div>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/cgnet-init.png"><img alt="Conjgate Gradient train" src="http://127.0.0.1/blog/html/_images/cgnet-init.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/cgnet-init.png"><img alt="Conjgate Gradient train" src="http://neupy.com/_images/cgnet-init.png" style="width: 80%;"/></a>
 </div>
 <p>We define network with one hidden layer.
 Input size for this layer is 50.
@@ -1288,14 +1288,14 @@ Also we will add test data into training function to check validation error on e
 </pre></div>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/cgnet-train.png"><img alt="Conjgate Gradient train" src="http://127.0.0.1/blog/html/_images/cgnet-train.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/cgnet-train.png"><img alt="Conjgate Gradient train" src="http://neupy.com/_images/cgnet-train.png" style="width: 80%;"/></a>
 </div>
 <p>To make sure that all training processes go in a right way we can check erros updates while the training is in process.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">cgnet</span><span class="o">.</span><span class="n">plot_errors</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/cgnet-error-plot.png"><img alt="Conjgate Gradient train" src="http://127.0.0.1/blog/html/_images/cgnet-error-plot.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/cgnet-error-plot.png"><img alt="Conjgate Gradient train" src="http://neupy.com/_images/cgnet-error-plot.png" style="width: 80%;"/></a>
 </div>
 <p>Error minimization procedure looks fine.
 The problem is, that last error doesn’t show us the full picture of prediction accuracy.
@@ -1367,26 +1367,26 @@ There are a lot of things which we can do to improve network results, but we wil
         </item>
     
         <item>
-            <link>http://127.0.0.1/blog/html/2015/07/04/visualize_backpropagation_algorithms.html</link>
-            <guid>http://127.0.0.1/blog/html/2015/07/04/visualize_backpropagation_algorithms.html</guid>
+            <link>http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html</link>
+            <guid>http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html</guid>
             <title><![CDATA[Visualize Backpropagation Algorithms]]></title>
             <description><![CDATA[<h1><a class="toc-backref" href="#id3">Visualize Backpropagation Algorithms</a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/07/04/visualize_backpropagation_algorithms.html#visualize-backpropagation-algorithms" id="id3">Visualize Backpropagation Algorithms</a><ul>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/07/04/visualize_backpropagation_algorithms.html#checking-data" id="id4">Checking data</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/07/04/visualize_backpropagation_algorithms.html#initialize-contour" id="id5">Initialize contour</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/07/04/visualize_backpropagation_algorithms.html#id1" id="id6">Visualize Backpropagation algorithms</a><ul>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/07/04/visualize_backpropagation_algorithms.html#gradient-descent" id="id7">Gradient Descent</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/07/04/visualize_backpropagation_algorithms.html#momentum" id="id8">Momentum</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/07/04/visualize_backpropagation_algorithms.html#rprop" id="id9">RPROP</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/07/04/visualize_backpropagation_algorithms.html#irprop" id="id10">iRPROP+</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/07/04/visualize_backpropagation_algorithms.html#conjugate-gradient-and-golden-search" id="id11">Conjugate Gradient and Golden Search</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#visualize-backpropagation-algorithms" id="id3">Visualize Backpropagation Algorithms</a><ul>
+<li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#checking-data" id="id4">Checking data</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#initialize-contour" id="id5">Initialize contour</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#id1" id="id6">Visualize Backpropagation algorithms</a><ul>
+<li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#gradient-descent" id="id7">Gradient Descent</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#momentum" id="id8">Momentum</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#rprop" id="id9">RPROP</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#irprop" id="id10">iRPROP+</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#conjugate-gradient-and-golden-search" id="id11">Conjugate Gradient and Golden Search</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/07/04/visualize_backpropagation_algorithms.html#bring-them-all-together" id="id12">Bring them all together</a></li>
-<li><a class="reference internal" href="http://127.0.0.1/blog/html/2015/07/04/visualize_backpropagation_algorithms.html#summary" id="id13">Summary</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#bring-them-all-together" id="id12">Bring them all together</a></li>
+<li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#summary" id="id13">Summary</a></li>
 </ul>
 </li>
 </ul>
@@ -1423,7 +1423,7 @@ There are a lot of things which we can do to improve network results, but we wil
 </pre></div>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/bp-vis-scatter.png"><img alt="Dataset scatter plot" src="http://127.0.0.1/blog/html/_images/bp-vis-scatter.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/bp-vis-scatter.png"><img alt="Dataset scatter plot" src="http://neupy.com/_images/bp-vis-scatter.png" style="width: 80%;"/></a>
 </div>
 <p>From the figure above we can clearly see that all dots are linearly separable and we are able to solve this problem with simple perceptron.
 But a goal of this tutorial is to make clear visualization of learning process for different Backpropagation algorithm variations, so the problem must be as simple as possible, because in other cases it will be complex to visualize.</p>
@@ -1509,7 +1509,7 @@ For understanding of the entire content of the article it is not necessary to un
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/raw-contour-plot.png"><img alt="Approximation function contour plot" class="align-center" src="http://127.0.0.1/blog/html/_images/raw-contour-plot.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/raw-contour-plot.png"><img alt="Approximation function contour plot" class="align-center" src="http://neupy.com/_images/raw-contour-plot.png" style="width: 80%;"/></a>
 <p>The plot above shows the approximation error rate depence on the network weights.
 The best error must be as small as possible.
 The best weights combination for this problem should be near the lower right corner in the blue area.</p>
@@ -1589,19 +1589,19 @@ Every network starts at dot with coordinates <cite>(-4, -4)</cite> and finishes 
 <h2><a class="toc-backref" href="#id6">Visualize Backpropagation algorithms</a></h2>
 <div class="section" id="gradient-descent">
 <h3><a class="toc-backref" href="#id7">Gradient Descent</a></h3>
-<p>Let’s primarily check <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Gradient</span> <span class="pre">Descent</span></span></a>.</p>
+<p>Let’s primarily check <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Gradient</span> <span class="pre">Descent</span></span></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">prepare_plot</span><span class="p">()</span>
 <span class="n">draw_quiver</span><span class="p">(</span><span class="n">algorithms</span><span class="o">.</span><span class="n">Backpropagation</span><span class="p">,</span> <span class="s">'Gradient Descent'</span><span class="p">,</span> <span class="s">'k'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/bp-steps.png"><img alt="Backpropagation steps" src="http://127.0.0.1/blog/html/_images/bp-steps.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/bp-steps.png"><img alt="Backpropagation steps" src="http://neupy.com/_images/bp-steps.png" style="width: 80%;"/></a>
 </div>
 <p>Backpropagation got to the value close to 0.125 using 798 steps and this black curve are just tiny steps of backpropagation algorithm.
 We can zoom it and look closer.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/bp-steps-zoom.png"><img alt="Backpropagation steps on zoom" src="http://127.0.0.1/blog/html/_images/bp-steps-zoom.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/bp-steps-zoom.png"><img alt="Backpropagation steps on zoom" src="http://neupy.com/_images/bp-steps-zoom.png" style="width: 80%;"/></a>
 </div>
 <p>Now we can see a lot of information about backpropagation algorithm.
 All steps for backpropagation algorithm have approximately similar magnitude.
@@ -1610,54 +1610,54 @@ Also we can see that small vectors are perpendicular to the contour.</p>
 </div>
 <div class="section" id="momentum">
 <h3><a class="toc-backref" href="#id8">Momentum</a></h3>
-<p>Now let’s look at another important algorithm - <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a>.</p>
+<p>Now let’s look at another important algorithm - <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">prepare_plot</span><span class="p">()</span>
 <span class="n">draw_quiver</span><span class="p">(</span><span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">,</span> <span class="s">'Momentum'</span><span class="p">,</span> <span class="s">'m'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/momentum-steps.png"><img alt="Momentum steps" src="http://127.0.0.1/blog/html/_images/momentum-steps.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/momentum-steps.png"><img alt="Momentum steps" src="http://neupy.com/_images/momentum-steps.png" style="width: 80%;"/></a>
 </div>
-<p><a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> got to the value close to 0.125 by 202 steps, which is almost 4 times fewer steps than previously.
-The basic idea behind <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm, compared to the previous epoch, is that we are strengthening the update if the sign is not changed, and minimize it in another case.</p>
-<p>Even if the number of steps fewer than in <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Backpropagation</span></span></a> we still can’t clearly see the updates.
+<p><a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> got to the value close to 0.125 by 202 steps, which is almost 4 times fewer steps than previously.
+The basic idea behind <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm, compared to the previous epoch, is that we are strengthening the update if the sign is not changed, and minimize it in another case.</p>
+<p>Even if the number of steps fewer than in <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Backpropagation</span></span></a> we still can’t clearly see the updates.
 For our eye they are just appeared as a line.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/momentum-steps-zoom.png"><img alt="Momentum steps zoom on increasing weight update size" src="http://127.0.0.1/blog/html/_images/momentum-steps-zoom.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/momentum-steps-zoom.png"><img alt="Momentum steps zoom on increasing weight update size" src="http://neupy.com/_images/momentum-steps-zoom.png" style="width: 80%;"/></a>
 </div>
 <p>When we zoom the plot we can see that the direction for weight update vectors is almost the same and gradient sign doesn’t change after each epoch.
 At the end of the zoomed plot above vector is bigger than the first one on the same plot.
 Update vector hasn’t changed the sign before it’s value, so every next update is the same and it is increased by previous gradient magnitude.
 Also we can encounter a situation when weight update size reduces over epochs.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/momentum-steps-zoom-decrease.png"><img alt="Momentum steps zoom on decreasing weight update size" src="http://127.0.0.1/blog/html/_images/momentum-steps-zoom-decrease.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/momentum-steps-zoom-decrease.png"><img alt="Momentum steps zoom on decreasing weight update size" src="http://neupy.com/_images/momentum-steps-zoom-decrease.png" style="width: 80%;"/></a>
 </div>
 <p>In plot above we moved to the part where we can see that weight update vector had changed its direction, so the magnitude of this vector had decreased.</p>
 </div>
 <div class="section" id="rprop">
 <h3><a class="toc-backref" href="#id9">RPROP</a></h3>
-<p><a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> makes fewer steps for a prediction, but we still can
+<p><a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> makes fewer steps for a prediction, but we still can
 find minimum in fewer number of steps.
-Now we are going to run <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm.</p>
+Now we are going to run <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">prepare_plot</span><span class="p">()</span>
 <span class="n">draw_quiver</span><span class="p">(</span><span class="n">algorithms</span><span class="o">.</span><span class="n">RPROP</span><span class="p">,</span> <span class="s">'RPROP'</span><span class="p">,</span> <span class="s">'c'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/rprop-steps.png"><img alt="RPROP steps" src="http://127.0.0.1/blog/html/_images/rprop-steps.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/rprop-steps.png"><img alt="RPROP steps" src="http://neupy.com/_images/rprop-steps.png" style="width: 80%;"/></a>
 </div>
 <p>This improvment looks impressive.
 Now we are able to see steps without zooming.
-We got almost the same value as before using just 19 steps, which is 10 times fewer than <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> and 40 times fewer than <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Gradient</span> <span class="pre">Descent</span></span></a>.</p>
-<p>Now we are going to figure out what are the main features of <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> just by looking at the plot above.
-<a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> has a unique step for each weight.
+We got almost the same value as before using just 19 steps, which is 10 times fewer than <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> and 40 times fewer than <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Gradient</span> <span class="pre">Descent</span></span></a>.</p>
+<p>Now we are going to figure out what are the main features of <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> just by looking at the plot above.
+<a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> has a unique step for each weight.
 There are just two steps for each weight in the input layer for this network.
-<a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> will increase the step size if gradient don’t change the sign before its value, and it will decrease in a different situation.
-This update rule is not the same as for <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm.</p>
+<a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> will increase the step size if gradient don’t change the sign before its value, and it will decrease in a different situation.
+This update rule is not the same as for <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/rprop-first-6-steps.png"><img alt="RPROP first 6 steps" src="http://127.0.0.1/blog/html/_images/rprop-first-6-steps.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/rprop-first-6-steps.png"><img alt="RPROP first 6 steps" src="http://neupy.com/_images/rprop-first-6-steps.png" style="width: 80%;"/></a>
 </div>
 <p>From the figure above you can see that first 6 updates have the same direction, so both steps are increase after each iteration.
 For the first epoch steps are equal to the same value which we set up at network initialization step.
@@ -1665,9 +1665,9 @@ On the every next iterations they have been increased by the same factor, so aft
 <p>Now let’s check the next epochs from the figure below.
 On the 7th epoch gradient changed the direction, but steps are still the same.
 But we can clearly see that gradient changed the sign for the second weight.
-<a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> updated the step after weight had updated, so the step for the second weight must be fewer for the 8th epoch.</p>
+<a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> updated the step after weight had updated, so the step for the second weight must be fewer for the 8th epoch.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/rprop-6th-to-9th-epochs.png"><img alt="RPROP from 6th to 9th steps" src="http://127.0.0.1/blog/html/_images/rprop-6th-to-9th-epochs.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/rprop-6th-to-9th-epochs.png"><img alt="RPROP from 6th to 9th steps" src="http://neupy.com/_images/rprop-6th-to-9th-epochs.png" style="width: 80%;"/></a>
 </div>
 <p>Now let’s look at the 8th epoch.
 It shows us how gradient sign difference on the 7th epoch updated steps.
@@ -1680,47 +1680,47 @@ how steps are dependent on the direction.</p>
 </div>
 <div class="section" id="irprop">
 <h3><a class="toc-backref" href="#id10">iRPROP+</a></h3>
-<p><a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.IRPROPPlus" title="neupy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> is almost the same algorithm as <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> except a small addition.</p>
+<p><a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.IRPROPPlus" title="neupy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> is almost the same algorithm as <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> except a small addition.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">prepare_plot</span><span class="p">()</span>
 <span class="n">draw_quiver</span><span class="p">(</span><span class="n">algorithms</span><span class="o">.</span><span class="n">IRPROPPlus</span><span class="p">,</span> <span class="s">'iRPROP+'</span><span class="p">,</span> <span class="s">'y'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/irprop-plus-steps.png"><img alt="iRPROP+ steps" src="http://127.0.0.1/blog/html/_images/irprop-plus-steps.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/irprop-plus-steps.png"><img alt="iRPROP+ steps" src="http://neupy.com/_images/irprop-plus-steps.png" style="width: 80%;"/></a>
 </div>
-<p>As in <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.IRPROPPlus" title="neupy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> make exacly the
+<p>As in <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.IRPROPPlus" title="neupy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> make exacly the
 same first 6 steps.</p>
 <p>Now let’s look at the 7th step in the figure below.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/irprop-plus-6th-to-12th-epochs.png"><img alt="iRPROP+ from 6th to 12th epoch updates." src="http://127.0.0.1/blog/html/_images/irprop-plus-6th-to-12th-epochs.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/irprop-plus-6th-to-12th-epochs.png"><img alt="iRPROP+ from 6th to 12th epoch updates." src="http://neupy.com/_images/irprop-plus-6th-to-12th-epochs.png" style="width: 80%;"/></a>
 </div>
 <p>Second weight (on the y axis) didn’t change the value.
-On the same epoch <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> changed the gradient comparing to the previous
+On the same epoch <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> changed the gradient comparing to the previous
 epoch and just decreased step value after weight update.
-Instead, <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.IRPROPPlus" title="neupy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> just disabled weight update for current
+Instead, <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.IRPROPPlus" title="neupy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> just disabled weight update for current
 epoch (set it up to <cite>0</cite>).
 And of course it also decreased the step for the second weight.
-Also you can find that vector for the 7th epoch that looks smaller than for the <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm, because we ignored the second weight update.
+Also you can find that vector for the 7th epoch that looks smaller than for the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm, because we ignored the second weight update.
 If we check the x axis update size we will find that it has the same value
-as in <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm.</p>
+as in <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm.</p>
 <p>On 8th epoch network included again second weight into the update process, because
 compared to the previous epoch gradient didn’t change its sign.</p>
 <p>Next steps are doing the same job, but 11th epoch differs from others.
-There are a few updates which are related specifically to <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.IRPROPPlus" title="neupy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a>, but the most important we have not seen before.
+There are a few updates which are related specifically to <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.IRPROPPlus" title="neupy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a>, but the most important we have not seen before.
 After weight update on the 11th epoch network error increased, so our update made our prediction worse.
 Now on the 12th epoch network tried to rollback vector update.
 It decreased steps on the 11th epoch and weight update didn’t go to the same point after the rollback procedure, it just took opposite direction with a smaller step.</p>
 </div>
 <div class="section" id="conjugate-gradient-and-golden-search">
 <h3><a class="toc-backref" href="#id11">Conjugate Gradient and Golden Search</a></h3>
-<p>Now let’s look at <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.conjugate_gradient.html#neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient" title="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> with
-<a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.steps.linear_search.html#neupy.algorithms.backprop.steps.linear_search.LinearSearch" title="neupy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a>.
+<p>Now let’s look at <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.conjugate_gradient.html#neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient" title="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> with
+<a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.steps.linear_search.html#neupy.algorithms.backprop.steps.linear_search.LinearSearch" title="neupy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a>.
 Conjugate Gradient in Backpropagation variation is a little bit different than in
 Multivariable Calculus notation and it doesn’t guarantee converge into n-th steps
 (<cite>n</cite> means dimmention size for specific problem).
-Steps don’t have a perfect size for <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.conjugate_gradient.html#neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient" title="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a>,
-so <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.steps.linear_search.html#neupy.algorithms.backprop.steps.linear_search.LinearSearch" title="neupy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> is always a good choice for a step selection.</p>
+Steps don’t have a perfect size for <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.conjugate_gradient.html#neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient" title="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a>,
+so <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.steps.linear_search.html#neupy.algorithms.backprop.steps.linear_search.LinearSearch" title="neupy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> is always a good choice for a step selection.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">prepare_plot</span><span class="p">()</span>
 <span class="n">cgnet_golde_search</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">algorithms</span><span class="o">.</span><span class="n">ConjugateGradient</span><span class="p">,</span>
                              <span class="n">optimizations</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LinearSearch</span><span class="p">])</span>
@@ -1730,7 +1730,7 @@ so <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.
 </pre></div>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/conj-grad-and-gold-search-steps.png"><img alt="Conjugate Gradient with Golden Search steps" src="http://127.0.0.1/blog/html/_images/conj-grad-and-gold-search-steps.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/conj-grad-and-gold-search-steps.png"><img alt="Conjugate Gradient with Golden Search steps" src="http://neupy.com/_images/conj-grad-and-gold-search-steps.png" style="width: 80%;"/></a>
 </div>
 <p>From the figure above we can see almost perfect step for the specific direction.
 Each of the fifth steps make a great choice for the step size.
@@ -1741,9 +1741,9 @@ But it doing a greate job.</p>
 The reason is that the update for the second epoch was really small compared to others.
 We can zoom the plot and find this tiny step update.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/conj-grad-small-step.png"><img alt="Conjugate Gradient with Golden Search small second step" src="http://127.0.0.1/blog/html/_images/conj-grad-small-step.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/conj-grad-small-step.png"><img alt="Conjugate Gradient with Golden Search small second step" src="http://neupy.com/_images/conj-grad-small-step.png" style="width: 80%;"/></a>
 </div>
-<p>If we add the same <a class="reference internal" href="http://127.0.0.1/blog/html/apidocs/neupy.algorithms.backprop.steps.linear_search.html#neupy.algorithms.backprop.steps.linear_search.LinearSearch" title="neupy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> algorithm to the classic Gradient Descent we will get to the minimum into a few steps as well.</p>
+<p>If we add the same <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.steps.linear_search.html#neupy.algorithms.backprop.steps.linear_search.LinearSearch" title="neupy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> algorithm to the classic Gradient Descent we will get to the minimum into a few steps as well.</p>
 </div>
 </div>
 <div class="section" id="bring-them-all-together">
@@ -1767,7 +1767,7 @@ We can zoom the plot and find this tiny step update.</p>
 </pre></div>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="http://127.0.0.1/blog/html/_images/all-algorithms-steps.png"><img alt="All algorithms steps" src="http://127.0.0.1/blog/html/_images/all-algorithms-steps.png" style="width: 80%;"/></a>
+<a class="reference internal image-reference" href="http://neupy.com/_images/all-algorithms-steps.png"><img alt="All algorithms steps" src="http://neupy.com/_images/all-algorithms-steps.png" style="width: 80%;"/></a>
 </div>
 </div>
 <div class="section" id="summary">
