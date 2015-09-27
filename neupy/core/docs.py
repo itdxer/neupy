@@ -44,9 +44,10 @@ docs = {
     "unsupervised_train_epsilon": """train(input_train, epsilon=1e-5):
         Trains network until it is converged.
     """,
-    "supervised_train_lazy": """train(input_train, target_train):
+    "supervised_train_lazy": """train(input_train, target_train, copy=True):
         Network just stores all the information about the data and use it for \
-        the prediction.
+        the prediction. Parameter ``copy`` copy input data before store it \
+        inside the network.
     """,
 
     # ------------------------------------ #

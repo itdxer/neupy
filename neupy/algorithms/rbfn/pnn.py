@@ -1,6 +1,6 @@
 from numpy import unique, zeros, dot, sum as np_sum
 
-from neupy import layers
+from neupy.utils import format_data
 from neupy.core.properties import NonNegativeNumberProperty
 from neupy.network.base import BaseNetwork
 from neupy.network.connections import FAKE_CONNECTION
@@ -57,13 +57,16 @@ class PNN(LazyLearning, Classification, BaseNetwork):
 
     def __init__(self, **options):
         super(PNN, self).__init__(FAKE_CONNECTION, **options)
-        self.output_layer = layers.OutputLayer(1)
+        # self.output_layer = layers.OutputLayer(1)
         self.classes = None
 
-    def train(self, input_train, target_train):
+    def train(self, input_train, target_train, copy=True):
+        input_train = format_data(input_train, copy=copy)
+        target_train = format_data(target_train, copy=copy)
+
         LazyLearning.train(self, input_train, target_train)
 
-        if target_train.ndim != 1:
+        if target_train.shape[1] != 1:
             raise ValueError("Target value must be in 1 dimention")
 
         classes = self.classes = unique(target_train)
@@ -75,7 +78,7 @@ class PNN(LazyLearning, Classification, BaseNetwork):
 
         for i, class_name in enumerate(classes):
             class_val_positions = (target_train == i)
-            row_comb_matrix[i, class_val_positions] = 1
+            row_comb_matrix[i, class_val_positions.ravel()] = 1
             class_ratios[i] = np_sum(class_val_positions)
 
     def setup_defaults(self):
@@ -93,10 +96,11 @@ class PNN(LazyLearning, Classification, BaseNetwork):
         return raw_output.T / total_output_sum
 
     def raw_predict(self, input_data):
+        input_data = format_data(input_data)
         super(PNN, self).predict(input_data)
 
         if self.classes is None:
-            raise ValueError("Train network before get prediction")
+            raise ValueError("Train network before predict data")
 
         input_data_size = input_data.shape[1]
         train_data_size = self.input_train.shape[1]

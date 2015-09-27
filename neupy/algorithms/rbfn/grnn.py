@@ -64,9 +64,9 @@ class GRNN(LazyLearning, Regression, BaseNetwork):
         del self.train_epoch_end_signal
         super(GRNN, self).setup_defaults()
 
-    def train(self, input_train, target_train):
-        input_train = format_data(input_train)
-        target_train = format_data(target_train)
+    def train(self, input_train, target_train, copy=True):
+        input_train = format_data(input_train, copy=copy)
+        target_train = format_data(target_train, copy=copy)
 
         if target_train.shape[1] != 1:
             raise ValueError("Target value must be one dimentional array")

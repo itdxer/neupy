@@ -43,16 +43,23 @@ class GRNNTestCase(BaseTestCase):
         x_test_before = x_test.copy()
         y_train_before = y_train.copy()
 
-        nw = algorithms.GRNN(std=0.1, verbose=False)
-        nw.train(x_train, y_train)
-        result = nw.predict(x_test)
+        grnnet = algorithms.GRNN(std=0.1, verbose=False)
+        grnnet.train(x_train, y_train)
+        result = grnnet.predict(x_test)
         error = rmsle(result, y_test)
 
+        old_result = result.copy()
         self.assertAlmostEqual(error, 0.4245, places=4)
 
+        # Test problem with variable links
         np.testing.assert_array_equal(x_train, x_train_before)
         np.testing.assert_array_equal(x_test, x_test_before)
         np.testing.assert_array_equal(y_train, y_train_before)
+
+        x_train[:, :] = 0
+        result = grnnet.predict(x_test)
+        total_classes_prob = np.round(result.sum(axis=1), 10)
+        np.testing.assert_array_almost_equal(result, old_result)
 
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(
