@@ -146,12 +146,12 @@ class Backpropagation(SupervisedLearning, FeedForwardNetwork):
     def get_class_name(self):
         return 'Backpropagation'
 
+    def get_params(self, deep=False, with_connection=True):
+        params = super(Backpropagation, self).get_params()
+        if with_connection:
+            params['connection'] = self.connection
+        return params
+
     def __reduce__(self):
-        options = {}
-        for name, option in self.options.items():
-            value = getattr(self, name)
-            # Default values not always valid types. For this reason we
-            # ignore all values which has the same as default.
-            if value != option.value.default:
-                options[name] = value
-        return (Backpropagation, (self.connection, options))
+        args = (self.connection, self.get_params(with_connection=False))
+        return (Backpropagation, args)

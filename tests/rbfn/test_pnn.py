@@ -44,7 +44,7 @@ class PNNTestCase(BaseTestCase):
             x_train, x_test = data[train], data[test]
             y_train, y_test = target[train], target[test]
 
-            nw = PNN(standard_deviation=0.1)
+            nw = PNN(std=0.1)
             nw.train(x_train, y_train)
             result = nw.predict(x_test)
             avarage_result += sum(y_test == result)
@@ -57,7 +57,7 @@ class PNNTestCase(BaseTestCase):
             dataset.data, dataset.target, train_size=0.7
         )
 
-        nw = PNN(standard_deviation=10)
+        nw = PNN(std=10)
         nw.train(x_train, y_train)
         result = nw.predict(x_test)
 
@@ -71,7 +71,7 @@ class PNNTestCase(BaseTestCase):
         )
         number_of_classes = len(np.unique(dataset.target))
 
-        nw = PNN(standard_deviation=10)
+        nw = PNN(std=10)
         nw.train(x_train, y_train)
         result = nw.predict_prob(x_test)
 

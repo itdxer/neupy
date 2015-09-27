@@ -12,7 +12,7 @@ from base import BaseTestCase
 
 class StorageTestCase(BaseTestCase):
     def test_simple_storage(self):
-        bpnet = algorithms.Backpropagation((2, 3, 1), step=0.25)
+        bpnet = algorithms.Backpropagation((2, 3, 1), step=0.25, verbose=False)
         data, target = datasets.make_regression(n_features=2, n_targets=1)
 
         data = preprocessing.MinMaxScaler().fit_transform(data)
@@ -53,7 +53,9 @@ class StorageTestCase(BaseTestCase):
         optimization_classes = [algorithms.WeightDecay,
                                 algorithms.SearchThenConverge]
         bpnet = algorithms.Backpropagation(
-            (3, 5, 1), optimizations=optimization_classes
+            (3, 5, 1),
+            optimizations=optimization_classes,
+            verbose=False,
         )
         data, target = datasets.make_regression(n_features=3, n_targets=1)
 

@@ -18,7 +18,7 @@ class PNN(LazyLearning, Classification, BaseNetwork):
 
     Parameters
     ----------
-    standard_deviation : float
+    std : float
         standard deviation for PDF function, default to 0.1.
     {show_epoch}
     {shuffle_data}
@@ -47,13 +47,13 @@ class PNN(LazyLearning, Classification, BaseNetwork):
     ...     dataset.data, dataset.target, train_size=0.7
     ... )
     >>>
-    >>> nw = PNN(standard_deviation=10, verbose=False)
+    >>> nw = PNN(std=10, verbose=False)
     >>> nw.train(x_train, y_train)
     >>> result = nw.predict(x_test)
     >>> metrics.accuracy_score(y_test, result)
     0.98888888888888893
     """
-    standard_deviation = NonNegativeNumberProperty(default=0.1)
+    std = NonNegativeNumberProperty(default=0.1)
 
     def __init__(self, **options):
         super(PNN, self).__init__(FAKE_CONNECTION, **options)
@@ -107,7 +107,7 @@ class PNN(LazyLearning, Classification, BaseNetwork):
 
         class_ratios = self.class_ratios
         pdf_outputs = pdf_between_data(self.input_train, input_data,
-                                       self.standard_deviation)
+                                       self.std)
         return dot(
             self.row_comb_matrix, pdf_outputs
         ) / class_ratios.reshape((class_ratios.size, 1))

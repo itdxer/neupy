@@ -2,7 +2,7 @@ import numpy as np
 from sklearn import datasets
 from sklearn.cross_validation import train_test_split
 
-from neupy.algorithms import GRNN
+from neupy import algorithms
 from neupy.functions import rmsle
 from base import BaseTestCase
 
@@ -12,37 +12,61 @@ class GRNNTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             # Wrong: size of target data not the same as size of
             # input data.
-            GRNN().train(
+            algorithms.GRNN(verbose=False).train(
                 np.array([[0], [0]]), np.array([0])
             )
 
         with self.assertRaises(ValueError):
             # Wrong: 2-D target vector (must be 1-D)
-            GRNN().train(
+            algorithms.GRNN(verbose=False).train(
                 np.array([[0], [0]]), np.array([[0]])
             )
 
         with self.assertRaises(AttributeError):
             # Wrong: can't use iterative learning process for this
             # algorithm
-            GRNN().train_epoch()
+            algorithms.GRNN(verbose=False).train_epoch()
 
         with self.assertRaises(ValueError):
             # Wrong: invalid feature size for prediction data
-            grnet = GRNN()
+            grnet = algorithms.GRNN(verbose=False)
             grnet.train(np.array([[0], [0]]), np.array([0]))
             grnet.predict(np.array([[0]]))
 
     def test_simple_grnn(self):
         dataset = datasets.load_diabetes()
         x_train, x_test, y_train, y_test = train_test_split(
-            dataset.data, dataset.target, train_size=0.7,
-            random_state=0
+            dataset.data, dataset.target, train_size=0.7
         )
 
-        nw = GRNN(standard_deviation=0.1)
+        x_train_before = x_train.copy()
+        x_test_before = x_test.copy()
+        y_train_before = y_train.copy()
+
+        nw = algorithms.GRNN(std=0.1, verbose=False)
         nw.train(x_train, y_train)
         result = nw.predict(x_test)
         error = rmsle(result, y_test)
 
         self.assertAlmostEqual(error, 0.4245, places=4)
+
+        np.testing.assert_array_equal(x_train, x_train_before)
+        np.testing.assert_array_equal(x_test, x_test_before)
+        np.testing.assert_array_equal(y_train, y_train_before)
+
+    def test_train_different_inputs(self):
+        self.assertInvalidVectorTrain(
+            algorithms.GRNN(verbose=False),
+            np.array([1, 2, 3]),
+            np.array([1, 2, 3])
+        )
+
+    def test_predict_different_inputs(self):
+        grnnet = algorithms.GRNN(verbose=False)
+
+        data = np.array([[1, 2, 3]]).T
+        target = np.array([[1, 2, 3]]).T
+
+        grnnet.train(data, target)
+        self.assertInvalidVectorPred(grnnet, data.ravel(), target,
+                                     decimal=2)

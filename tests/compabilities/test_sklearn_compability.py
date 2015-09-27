@@ -1,4 +1,7 @@
-from sklearn import datasets, preprocessing, metrics
+from operator import itemgetter
+
+import numpy as np
+from sklearn import datasets, preprocessing, metrics, grid_search
 from sklearn.cross_validation import train_test_split
 from sklearn.pipeline import Pipeline
 from neupy import algorithms, layers, ensemble
@@ -8,8 +11,6 @@ from base import BaseTestCase
 
 
 class SklearnCompatibilityTestCase(BaseTestCase):
-    verbose = False
-
     def test_pipeline(self):
         dataset = datasets.load_diabetes()
         target_scaler = preprocessing.MinMaxScaler()
@@ -27,7 +28,8 @@ class SklearnCompatibilityTestCase(BaseTestCase):
                 layers.OutputLayer(1),
             ],
             use_bias=True,
-            show_epoch=100
+            show_epoch=100,
+            verbose=False,
         )
         pipeline = Pipeline([
             ('min_max_scaler', preprocessing.MinMaxScaler()),
@@ -62,3 +64,31 @@ class SklearnCompatibilityTestCase(BaseTestCase):
         result = pipeline.predict(x_test)
         ensemble_result = metrics.accuracy_score(y_test, result)
         self.assertAlmostEqual(0.9222, ensemble_result, places=4)
+
+    def test_grid_search(self):
+        def scorer(network, X, y):
+            result = network.predict(X)
+            return rmsle(result, y)
+
+        dataset = datasets.load_diabetes()
+        x_train, x_test, y_train, y_test = train_test_split(
+            dataset.data, dataset.target, train_size=0.7
+        )
+
+        grnnet = algorithms.GRNN(std=0.5, verbose=False)
+        grnnet.train(x_train, y_train)
+        error = scorer(grnnet, x_test, y_test)
+
+        self.assertAlmostEqual(0.513, error, places=3)
+
+        random_search = grid_search.RandomizedSearchCV(
+            grnnet,
+            param_distributions={'std': np.arange(1e-2, 1, 1e-4)},
+            n_iter=10,
+            scoring=scorer
+        )
+        random_search.fit(dataset.data, dataset.target)
+        scores = random_search.grid_scores_
+
+        best_score = min(scores, key=itemgetter(1))
+        self.assertAlmostEqual(0.452, best_score[1], places=3)

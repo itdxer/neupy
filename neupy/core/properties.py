@@ -33,9 +33,9 @@ class Property(object):
                 availabe_types = availabe_types.__name__
 
             raise TypeError(
-                "Wrong data type `{0}` for `{1}` property. Expected types: "
-                "{2}".format(value.__class__.__name__, self.name,
-                             availabe_types)
+                "Wrong data type `{0}` for `{1}` property. Expected "
+                "types: {2}".format(value.__class__.__name__, self.name,
+                                    availabe_types)
             )
 
         self.validate(value)

@@ -40,7 +40,7 @@ class BaseTestCase(unittest.TestCase):
         if 'epochs' in train_args and 'epochs' not in train_kwargs:
             train_kwargs['epochs'] = 5
 
-        for test_args in test_vectors:
+        for i, test_args in enumerate(test_vectors, start=1):
             if target is None:
                 net.train(test_args, **train_kwargs)
             else:
@@ -50,7 +50,7 @@ class BaseTestCase(unittest.TestCase):
                                 rows1d=False):
         test_vectors = create_vectors(input_vector, rows1d=rows1d)
 
-        for test_vector in test_vectors:
+        for i, test_vector in enumerate(test_vectors, start=1):
             np.testing.assert_array_almost_equal(
                 net.predict(test_vector),
                 target,
