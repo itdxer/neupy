@@ -80,7 +80,7 @@ class HebbRuleTestCase(BaseTestCase):
             StepLayer(5) > OutputLayer(1),
             n_unconditioned=2,
         )
-        self.assertEqualArrays(
+        np.testing.assert_array_equal(
             hn.input_layer.weight,
             np.array([[1, 1, 0, 0, 0]]).T
         )
@@ -91,4 +91,4 @@ class HebbRuleTestCase(BaseTestCase):
             StepLayer(5, weight=random_weight) > OutputLayer(1),
             n_unconditioned=2,
         )
-        self.assertEqualArrays(hn.input_layer.weight, random_weight)
+        np.testing.assert_array_equal(hn.input_layer.weight, random_weight)

@@ -28,9 +28,6 @@ class BaseTestCase(unittest.TestCase):
         if not self.verbose:
             logging.disable(logging.CRITICAL)
 
-    def assertEqualArrays(self, actual, expected):
-        self.assertTrue(np.all(actual == expected))
-
     def assertInvalidVectorTrain(self, net, input_vector, target=None,
                                  decimal=5, rows1d=False, **train_kwargs):
         test_vectors = create_vectors(input_vector, rows1d=rows1d)

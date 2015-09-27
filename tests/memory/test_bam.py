@@ -36,13 +36,11 @@ class BAMTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             dhnet.predict(np.array([-1, 1]))
 
-    def test_train_for_1d_arrays(self):
-        dhnet = algorithms.DiscreteBAM(mode='sync')
-        dhnet.train(zero.ravel(), zero_hint.ravel())
-
     def test_discrete_bam_sync(self):
         bamnet = algorithms.DiscreteBAM(mode='sync')
         bamnet.train(self.data, self.hints)
+        data_before = self.data.copy()
+        hints_before = self.hints.copy()
 
         np.testing.assert_array_almost_equal(
             bamnet.predict(half_zero)[1],
@@ -76,6 +74,8 @@ class BAMTestCase(BaseTestCase):
         # Test multiple input values prediction
         input_matrix = np.vstack([one, zero])
         output_matrix = np.vstack([one_hint, zero_hint])
+        output_matrix_before = output_matrix.copy()
+        input_matrix_before = input_matrix.copy()
 
         np.testing.assert_array_almost_equal(
             bamnet.predict_input(output_matrix)[0],
@@ -86,12 +86,21 @@ class BAMTestCase(BaseTestCase):
             output_matrix
         )
 
+        np.testing.assert_array_equal(self.data, data_before)
+        np.testing.assert_array_equal(self.hints, hints_before)
+        np.testing.assert_array_equal(output_matrix, output_matrix_before)
+        np.testing.assert_array_equal(input_matrix, input_matrix_before)
+
     def test_discrete_bam_async(self):
         bamnet = algorithms.DiscreteBAM(mode='async', n_times=400)
+        data_before = self.data.copy()
+        hints_before = self.hints.copy()
         bamnet.train(self.data, self.hints)
 
         input_matrix = np.vstack([one, zero])
         output_matrix = np.vstack([one_hint, zero_hint])
+        output_matrix_before = output_matrix.copy()
+        input_matrix_before = input_matrix.copy()
 
         np.testing.assert_array_almost_equal(
             bamnet.predict_input(output_matrix)[0],
@@ -101,6 +110,11 @@ class BAMTestCase(BaseTestCase):
             bamnet.predict_output(input_matrix)[1],
             output_matrix
         )
+
+        np.testing.assert_array_equal(self.data, data_before)
+        np.testing.assert_array_equal(self.hints, hints_before)
+        np.testing.assert_array_equal(output_matrix, output_matrix_before)
+        np.testing.assert_array_equal(input_matrix, input_matrix_before)
 
     def test_argument_in_predict_method(self):
         dhnet = algorithms.DiscreteBAM(mode='async', n_times=1)
