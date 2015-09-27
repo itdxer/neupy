@@ -22,23 +22,6 @@ __all__ = ('BaseNetwork',)
 
 # ----------------- Signals ---------------- #
 
-def train_epoch_end(network):
-    network.logs.data("""
-        Epoch {epoch}
-        Error in:  {error}
-        Error out: {error_out}
-        Epoch time: {epoch_time} sec
-    """.format(
-        epoch=network.epoch,
-        error=network.last_error_in() or '-',
-        error_out=network.last_error_out() or '-',
-        epoch_time=round(network.train_epoch_time, 5)
-    ))
-
-
-def train_end(network):
-    network.logs.log("TRAIN", "End train")
-
 
 def clean_layers(connection):
     """ Clean layers connections and format transform them into one format.
@@ -85,8 +68,8 @@ class NetworkSignals(Configurable):
     ----------
     {full_signals}
     """
-    train_epoch_end_signal = FuncProperty(default=train_epoch_end)
-    train_end_signal = FuncProperty(default=train_end)
+    train_epoch_end_signal = FuncProperty()
+    train_end_signal = FuncProperty()
 
 
 class BaseNetwork(BaseSkeleton, NetworkSignals):
@@ -232,7 +215,7 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
         logs = self.logs
         logs.header("Start train")
         logs.log("TRAIN", "Train data size: {}".format(input_train.shape[0]))
-        logs.log("TRAIN", "Number of features: {}".format(
+        logs.log("TRAIN", "Number of input features: {}".format(
             input_train.shape[1]
         ))
 
@@ -252,6 +235,7 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
         error_func = self.error
         train_epoch = self.train_epoch
         train_epoch_end_signal = self.train_epoch_end_signal
+        train_end_signal = self.train_end_signal
 
         for epoch in iterepochs:
             epoch_start_time = time()
@@ -277,6 +261,19 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
                 self.train_epoch_time = time() - epoch_start_time
 
                 if epoch % show_epoch == 0 or epoch == last_epoch:
+                    logs.data("""
+                        Epoch {epoch}
+                        Error in:  {error}
+                        Error out: {error_out}
+                        Epoch time: {epoch_time} sec
+                    """.format(
+                        epoch=self.epoch,
+                        error=self.last_error_in() or '-',
+                        error_out=self.last_error_out() or '-',
+                        epoch_time=round(self.train_epoch_time, 5)
+                    ))
+
+                if train_epoch_end_signal is not None:
                     train_epoch_end_signal(self)
 
                 self.epoch = epoch + 1
@@ -286,7 +283,10 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
                                                                  str(err)))
                 break
 
-        self.train_end_signal(self)
+        if train_end_signal is not None:
+            train_end_signal(self)
+
+        logs.log("TRAIN", "End train")
 
     # ----------------- Errors ----------------- #
 

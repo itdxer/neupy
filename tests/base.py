@@ -1,18 +1,21 @@
-import logging
 import random
+import inspect
+import logging
 import unittest
 
 import numpy as np
 import pandas as pd
 
 
-def create_test_vectors(vector):
+def create_vectors(vector, rows1d=False):
+    shape2d = (1, len(vector)) if rows1d else (len(vector), 1)
     return [
         vector,
-        vector.reshape((len(vector), 1)),
-        pd.DataFrame(vector),
+        vector.reshape(shape2d),
+        pd.DataFrame(vector.reshape(shape2d)),
         pd.Series(vector)
     ]
+
 
 class BaseTestCase(unittest.TestCase):
     verbose = False
@@ -29,13 +32,15 @@ class BaseTestCase(unittest.TestCase):
         self.assertTrue(np.all(actual == expected))
 
     def assertInvalidVectorTrain(self, net, input_vector, target=None,
-                                 decimal=5, **train_kwargs):
-        test_vectors = create_test_vectors(input_vector)
-        if target is not None:
-            test_vectors = zip(test_vectors,
-                               create_test_vectors(input_vector))
+                                 decimal=5, rows1d=False, **train_kwargs):
+        test_vectors = create_vectors(input_vector, rows1d=rows1d)
 
-        if 'epochs' not in train_kwargs:
+        if target is not None:
+            target_vectors = create_vectors(input_vector, rows1d=rows1d)
+            test_vectors = zip(test_vectors, target_vectors)
+
+        train_args = inspect.getargspec(net.train).args
+        if 'epochs' in train_args and 'epochs' not in train_kwargs:
             train_kwargs['epochs'] = 5
 
         for test_args in test_vectors:
@@ -44,8 +49,9 @@ class BaseTestCase(unittest.TestCase):
             else:
                 net.train(*test_args, **train_kwargs)
 
-    def assertInvalidVectorPred(self, net, input_vector, target, decimal=5):
-        test_vectors = create_test_vectors(input_vector)
+    def assertInvalidVectorPred(self, net, input_vector, target, decimal=5,
+                                rows1d=False):
+        test_vectors = create_vectors(input_vector, rows1d=rows1d)
 
         for test_vector in test_vectors:
             np.testing.assert_array_almost_equal(

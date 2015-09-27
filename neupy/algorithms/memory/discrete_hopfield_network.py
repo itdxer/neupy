@@ -147,8 +147,8 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
         if self.weight.shape != weight_shape:
             raise ValueError("Invalid input shapes. Number of input "
-                             "features must be equal to {} and output "
-                             "features - {}".format(*weight_shape))
+                             "features must be equal to {} and {} output "
+                             "features".format(*weight_shape))
 
         self.weight = input_data.T.dot(input_data)
         fill_diagonal(self.weight, zeros(len(self.weight)))
@@ -156,13 +156,12 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
     def predict(self, input_data, n_times=None):
         self.discrete_validation(input_data)
-        input_data = bin2sign(input_data)
+        input_data = format_data(bin2sign(input_data), row1d=True)
 
         if self.mode == 'async':
             if n_times is None:
                 n_times = self.n_times
 
-            input_data = format_data(input_data, row1d=True)
             _, n_features = input_data.shape
             output_data = input_data
 

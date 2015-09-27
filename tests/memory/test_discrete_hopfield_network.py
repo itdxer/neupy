@@ -108,3 +108,17 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
             zero,
             dhnet.predict(half_zero, n_times=100)
         )
+
+    def test_train_different_inputs(self):
+        self.assertInvalidVectorTrain(
+            algorithms.DiscreteHopfieldNetwork(check_limit=False),
+            np.array([1, 0, 0, 1]),
+            rows1d=True
+        )
+
+    def test_predict_different_inputs(self):
+        dhnet = algorithms.DiscreteHopfieldNetwork()
+        data = np.array([[1, 0, 0, 1]])
+        dhnet.train(data)
+        self.assertInvalidVectorPred(dhnet, np.array([1, 0, 0, 1]), data,
+                                     rows1d=True)

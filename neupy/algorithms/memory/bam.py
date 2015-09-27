@@ -156,8 +156,8 @@ class DiscreteBAM(DiscreteMemory):
 
         if self.weight.shape != weight_shape:
             raise ValueError("Invalid input shapes. Number of input "
-                             "features must be equal to {} and output "
-                             "features - {}".format(wight_nrows, wight_ncols))
+                             "features must be equal to {} and {} output "
+                             "features".format(wight_nrows, wight_ncols))
 
         self.weight += input_data.T.dot(output_data)
 

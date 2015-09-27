@@ -1,6 +1,6 @@
 from itertools import chain
 
-from numpy import dot
+from numpy import dot, multiply
 
 from neupy.core.properties import ListProperty
 from neupy.algorithms.feedforward import FeedForwardNetwork
@@ -118,7 +118,7 @@ class Backpropagation(SupervisedLearning, FeedForwardNetwork):
 
             deriv = layer.activation_function.deriv(summated_data)
 
-            delta = deriv * update
+            delta = multiply(deriv, update)
             update = dot(delta, layer.weight_without_bias.T)
 
             gradient = dot(current_layer_input.T, delta)

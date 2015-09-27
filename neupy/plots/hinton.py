@@ -72,7 +72,7 @@ def hinton(matrix, max_weight=None, ax=None):
     white = Rectangle((0, 0), 1, 1, linewidth=1, linestyle='solid',
                       facecolor='#ffffff')
     black = Rectangle((0, 0), 1, 1, color='#000000')
-    plt.legend(
+    ax.legend(
         [white, black],
         [
             'Positive value\nMax: {}'.format(matrix.max()),

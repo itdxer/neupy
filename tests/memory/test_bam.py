@@ -3,7 +3,7 @@ import numpy as np
 from neupy import algorithms
 
 from memory.data import *
-from base import BaseTestCase
+from base import BaseTestCase, create_vectors
 
 
 zero_hint = np.array([[0, 1, 0, 0]])
@@ -148,3 +148,26 @@ class BAMTestCase(BaseTestCase):
                 ])
             )
         )
+
+    def test_train_different_inputs(self):
+        self.assertInvalidVectorTrain(
+            algorithms.DiscreteBAM(),
+            np.array([1, 0, 0, 1]),
+            np.array([1, 0]),
+            rows1d=True
+        )
+
+    def test_predict_different_inputs(self):
+        bamnet = algorithms.DiscreteBAM()
+
+        data = np.array([[1, 0, 0, 1]])
+        target = np.array([[1, 0]])
+
+        bamnet.train(data, target)
+        test_vectors = create_vectors(data.reshape(data.size), rows1d=True)
+
+        for test_vector in test_vectors:
+            np.testing.assert_array_almost_equal(
+                bamnet.predict(test_vector)[1],
+                target
+            )
