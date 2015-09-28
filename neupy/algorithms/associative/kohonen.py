@@ -1,5 +1,6 @@
 from numpy import reshape, nonzero
 
+from neupy.utils import format_data
 from .base import BaseAssociative
 
 
@@ -57,11 +58,14 @@ class Kohonen(BaseAssociative):
            [ 0.,  0.,  1.],
            [ 0.,  0.,  1.]])
     """
+
     def update_indexes(self, layer_output):
         _, index_y = nonzero(layer_output)
         return index_y
 
     def train_epoch(self, input_train, target_train):
+        input_train = format_data(input_train)
+
         weight = self.input_layer.weight
         predict = self.predict
         update_indexes = self.update_indexes

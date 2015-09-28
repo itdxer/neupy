@@ -1,5 +1,6 @@
 from numpy import reshape
 
+from neupy.utils import format_data
 from neupy.core.properties import NonNegativeIntProperty
 from neupy.layers import StepLayer
 from neupy.network.base import BaseNetwork
@@ -29,7 +30,7 @@ class BaseAssociative(UnsupervisedLearning, BaseNetwork):
         return super(BaseAssociative, self).train(input_train, epochs, epsilon)
 
     def predict(self, input_data):
-        result = input_data
+        result = format_data(input_data)
         for layer in self.layers:
             result = layer.output(result)
         return result
@@ -61,6 +62,8 @@ class BaseStepAssociative(BaseAssociative):
             )
 
     def train_epoch(self, input_train, target_train):
+        input_train = format_data(input_train)
+
         weight = self.input_layer.weight
         unconditioned = self.n_unconditioned
         predict = self.predict

@@ -19,7 +19,7 @@ class GRNN(LazyLearning, Regression, BaseNetwork):
     ----------
     std : float
         standard deviation for PDF function, default to 0.1.
-    {full_params}
+    {verbose}
 
     Methods
     -------

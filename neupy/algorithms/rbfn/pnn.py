@@ -20,9 +20,6 @@ class PNN(LazyLearning, Classification, BaseNetwork):
     ----------
     std : float
         standard deviation for PDF function, default to 0.1.
-    {show_epoch}
-    {shuffle_data}
-    {full_signals}
     {verbose}
 
     Methods
