@@ -1,6 +1,7 @@
 from numpy import dot, abs as np_abs
 from numpy.random import randn
 
+from neupy.utils import format_data
 from neupy.core.properties import NonNegativeIntProperty, ArrayProperty
 from neupy.network.base import BaseNetwork
 from neupy.network.learning import UnsupervisedLearning
@@ -32,13 +33,10 @@ class Oja(UnsupervisedLearning, BaseNetwork):
 
     Methods
     -------
-    train(input_train, epsilon=1e-5):
-        Train network. As result it returns compresed data.
     reconstruct(input_data):
         Reconstruct your minimized data.
-    {fit}
-    {last_error}
-    {plot_errors}
+    {unsupervised_train_epsilon}
+    {full_methods}
 
     Raises
     ------
@@ -60,7 +58,8 @@ class Oja(UnsupervisedLearning, BaseNetwork):
     ...     verbose=False
     ... )
     >>>
-    >>> minimized = ojanet.train(data, epsilon=1e-5)
+    >>> ojanet.train(data, epsilon=1e-5)
+    >>> minimized = ojanet.predict(data)
     >>> minimized
     array([[-2.82843122],
            [-1.41421561],
@@ -87,7 +86,7 @@ class Oja(UnsupervisedLearning, BaseNetwork):
     def train_epoch(self, input_data, target_train):
         weights = self.weights
 
-        self.minimized = minimized = dot(input_data, weights)
+        minimized = dot(input_data, weights)
         reconstruct = dot(minimized, weights.T)
         error = input_data - reconstruct
 
@@ -96,7 +95,7 @@ class Oja(UnsupervisedLearning, BaseNetwork):
         return np_abs(error) / (input_data.shape[0] * input_data.shape[1])
 
     def train(self, input_data, epsilon=1e-5):
-        self.minimized = None
+        input_data = format_data(input_data)
         n_input_features = input_data.shape[1]
 
         if self.weights is None:
@@ -111,12 +110,11 @@ class Oja(UnsupervisedLearning, BaseNetwork):
 
         super(Oja, self).train(input_data, epsilon=epsilon)
 
-        return self.minimized
-
     def reconstruct(self, input_data):
         if self.weights is None:
-            raise ValueError("Train network before reconstruct data.")
+            raise ValueError("Train network before use reconstruct method.")
 
+        input_data = format_data(input_data)
         if input_data.shape[1] != self.minimized_data_size:
             raise ValueError(
                 "Invalid input data feature space, expected "
@@ -128,4 +126,8 @@ class Oja(UnsupervisedLearning, BaseNetwork):
         return dot(input_data, self.weights.T)
 
     def predict(self, input_data):
-        raise AttributeError("Can't predict value for Oja network.")
+        if self.weights is None:
+            raise ValueError("Train network before use prediction method.")
+
+        input_data = format_data(input_data)
+        return dot(input_data, self.weights)

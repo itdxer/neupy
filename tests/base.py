@@ -37,8 +37,12 @@ class BaseTestCase(unittest.TestCase):
             test_vectors = zip(test_vectors, target_vectors)
 
         train_args = inspect.getargspec(net.train).args
+
         if 'epochs' in train_args and 'epochs' not in train_kwargs:
             train_kwargs['epochs'] = 5
+
+        elif 'epsilon' in train_args and 'epsilon' not in train_kwargs:
+            train_kwargs['epsilon'] = 0.1
 
         for i, test_args in enumerate(test_vectors, start=1):
             if target is None:
