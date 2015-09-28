@@ -112,11 +112,11 @@ class PNNTestCase(BaseTestCase):
         )
 
     def test_predict_different_inputs(self):
-        grnnet = algorithms.PNN(verbose=False)
+        pnnet = algorithms.PNN(verbose=False)
 
         data = np.array([[1, 2, 3]]).T
         target = np.array([[1, 0, 1]]).T
 
-        grnnet.train(data, target)
-        self.assertInvalidVectorPred(grnnet, data.ravel(), target.ravel(),
+        pnnet.train(data, target)
+        self.assertInvalidVectorPred(pnnet, data.ravel(), target.ravel(),
                                      decimal=2)

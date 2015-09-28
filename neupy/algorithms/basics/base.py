@@ -1,3 +1,4 @@
+from neupy.utils import format_data
 from neupy.algorithms.feedforward import FeedForwardNetwork
 from neupy.network.learning import SupervisedLearning
 from neupy.functions import linear_error
@@ -29,8 +30,9 @@ class SimpleTwoLayerNetwork(SupervisedLearning, FeedForwardNetwork):
         del self.use_raw_predict_at_error
 
     def raw_predict(self, input_data):
-        input_layer = self.input_layer
+        input_data = format_data(input_data)
 
+        input_layer = self.input_layer
         input_data = input_layer.preformat_input(input_data)
 
         self.input_data = input_data

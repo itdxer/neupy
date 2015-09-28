@@ -2,6 +2,7 @@ from __future__ import division
 
 from numpy import dot, zeros, ones, inf, logical_and, sort, unique
 
+from neupy.utils import format_data
 from neupy.core.properties import (BetweenZeroAndOneProperty,
                                    NonNegativeIntProperty)
 from neupy.network.base import BaseNetwork
@@ -64,6 +65,8 @@ class ART1(Clustering, BaseNetwork):
         super(ART1, self).__init__(FAKE_CONNECTION, **options)
 
     def train(self, input_data):
+        input_data = format_data(input_data)
+
         if input_data.ndim != 2:
             raise ValueError("Input value must be 2 dimentional, got "
                              "{0}".format(input_data.ndim))
