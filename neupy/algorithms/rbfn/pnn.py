@@ -83,13 +83,17 @@ class PNN(LazyLearning, Classification, BaseNetwork):
 
     def setup_defaults(self):
         # Remove properties from BaseNetwork
-        del self.use_bias
-        del self.error
         del self.step
+        del self.error
+        del self.use_bias
+        del self.show_epoch
+        del self.train_end_signal
+        del self.train_epoch_end_signal
         super(PNN, self).setup_defaults()
 
     def predict_prob(self, input_data):
         raw_output = self.raw_predict(input_data)
+
         total_output_sum = raw_output.sum(axis=0).reshape(
             (raw_output.shape[1], 1)
         )
