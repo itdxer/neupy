@@ -4,6 +4,7 @@ from numpy import (zeros, argmin, argwhere, take, sum as np_sum,
                    any as np_any, abs as np_abs)
 from numpy.linalg import norm
 
+from neupy.utils import format_data
 from neupy.core.properties import NonNegativeIntProperty
 from neupy.network.base import BaseNetwork
 from neupy.network.connections import FAKE_CONNECTION
@@ -79,6 +80,8 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
         super(RBFKMeans, self).setup_defaults()
 
     def predict(self, input_data):
+        input_data = format_data(input_data)
+
         centers = self.centers
         classes = zeros((input_data.shape[0], 1))
 
@@ -105,6 +108,7 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
 
     def train(self, input_train, epsilon=1e-5):
         n_clusters = self.n_clusters
+        input_train = format_data(input_train)
 
         if input_train.shape[0] <= n_clusters:
             raise ValueError("Count of clusters must be less than count of "
