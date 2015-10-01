@@ -11,7 +11,7 @@ from matplotlib.patches import Rectangle
 __all__ = ('hinton',)
 
 
-def hinton(matrix, max_weight=None, ax=None):
+def hinton(matrix, max_weight=None, ax=None, add_legend=True):
     """ Draw Hinton diagram for visualizing a weight matrix.
 
     Parameters
@@ -68,18 +68,19 @@ def hinton(matrix, max_weight=None, ax=None):
     ax.autoscale_view()
     ax.invert_yaxis()
 
-    # Define a legend for the plot
-    white = Rectangle((0, 0), 1, 1, linewidth=1, linestyle='solid',
-                      facecolor='#ffffff')
-    black = Rectangle((0, 0), 1, 1, color='#000000')
-    ax.legend(
-        [white, black],
-        [
-            'Positive value\nMax: {}'.format(matrix.max()),
-            'Negative value\nMin: {}'.format(matrix.min())
-        ],
-        loc='center left',
-        bbox_to_anchor=(1, 0.5)
-    )
+    if add_legend:
+        # Define a legend for the plot
+        white = Rectangle((0, 0), 1, 1, linewidth=1, linestyle='solid',
+                          facecolor='#ffffff')
+        black = Rectangle((0, 0), 1, 1, color='#000000')
+        ax.legend(
+            [white, black],
+            [
+                'Positive value\nMax: {}'.format(matrix.max()),
+                'Negative value\nMin: {}'.format(matrix.min())
+            ],
+            loc='center left',
+            bbox_to_anchor=(1, 0.5)
+        )
 
     return ax
