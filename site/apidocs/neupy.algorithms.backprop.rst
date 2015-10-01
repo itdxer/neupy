@@ -6,8 +6,8 @@ Subpackages
 
 .. toctree::
 
-    neupy.algorithms.backprop.steps
-    neupy.algorithms.backprop.weights
+    neupy.algorithms.steps
+    neupy.algorithms.weights
 
 Submodules
 ----------

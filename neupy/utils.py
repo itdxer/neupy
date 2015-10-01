@@ -3,7 +3,7 @@ import sys
 import numpy as np
 
 
-__all__ = ('format_data',)
+__all__ = ('format_data', 'is_row1d')
 
 
 def format_data(input_data, row1d=False, copy=False):
@@ -25,3 +25,9 @@ def format_data(input_data, row1d=False, copy=False):
         input_data = input_data.reshape(data_shape)
 
     return input_data
+
+
+def is_row1d(layer):
+    if layer is None:
+        return False
+    return (layer.input_size != 1)

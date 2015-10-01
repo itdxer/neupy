@@ -42,7 +42,7 @@ class BaseTestCase(unittest.TestCase):
         test_vectors = create_vectors(input_vector, row1d=row1d)
 
         if target is not None:
-            target_vectors = create_vectors(input_vector, row1d=row1d)
+            target_vectors = create_vectors(target, row1d=row1d)
             test_vectors = zip(test_vectors, target_vectors)
 
         train_args = inspect.getargspec(net.train).args

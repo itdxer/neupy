@@ -14,7 +14,9 @@ def _preformat_inputs(actual, predicted):
     predicted = format_data(predicted)
 
     if actual.shape != predicted.shape:
-        raise ValueError("Actual and predicted values have different shapes.")
+        raise ValueError("Actual and predicted values have different shapes. "
+                         "Actual shape {}, predicted shape {}"
+                         "".format(actual.shape, predicted.shape))
 
     return actual, predicted
 

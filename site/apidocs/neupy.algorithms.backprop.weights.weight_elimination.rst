@@ -1,7 +1,7 @@
-neupy.algorithms.backprop.weights.weight_elimination module
+neupy.algorithms.weights.weight_elimination module
 ===========================================================
 
-.. automodule:: neupy.algorithms.backprop.weights.weight_elimination
+.. automodule:: neupy.algorithms.weights.weight_elimination
     :members:
     :undoc-members:
     :show-inheritance:

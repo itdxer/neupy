@@ -1,7 +1,7 @@
-neupy.algorithms.backprop.steps.base module
+neupy.algorithms.steps.base module
 ===========================================
 
-.. automodule:: neupy.algorithms.backprop.steps.base
+.. automodule:: neupy.algorithms.steps.base
     :members:
     :undoc-members:
     :show-inheritance:
