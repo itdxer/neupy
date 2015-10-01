@@ -30,7 +30,9 @@ class BaseAssociative(UnsupervisedLearning, BaseNetwork):
         return super(BaseAssociative, self).train(input_train, epochs, epsilon)
 
     def predict(self, input_data):
-        result = format_data(input_data)
+        row1d = (self.input_layer.input_size != 1)
+        result = format_data(input_data, row1d=row1d)
+
         for layer in self.layers:
             result = layer.output(result)
         return result

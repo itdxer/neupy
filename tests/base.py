@@ -7,14 +7,22 @@ import numpy as np
 import pandas as pd
 
 
-def create_vectors(vector, rows1d=False):
-    shape2d = (1, len(vector)) if rows1d else (len(vector), 1)
-    return [
-        vector,
+def create_vectors(vector, row1d=False):
+    shape2d = (1, vector.size) if row1d else (vector.size, 1)
+
+    vectors_list = []
+    if vector.ndim == 1:
+        vectors_list.extend([
+            vector,
+            pd.Series(vector)
+        ])
+
+    vectors_list.extend([
         vector.reshape(shape2d),
-        pd.DataFrame(vector.reshape(shape2d)),
-        pd.Series(vector)
-    ]
+        pd.DataFrame(vector.reshape(shape2d))
+    ])
+
+    return vectors_list
 
 
 class BaseTestCase(unittest.TestCase):
@@ -29,11 +37,12 @@ class BaseTestCase(unittest.TestCase):
             logging.disable(logging.CRITICAL)
 
     def assertInvalidVectorTrain(self, net, input_vector, target=None,
-                                 decimal=5, rows1d=False, **train_kwargs):
-        test_vectors = create_vectors(input_vector, rows1d=rows1d)
+                                 decimal=5, row1d=False, **train_kwargs):
+
+        test_vectors = create_vectors(input_vector, row1d=row1d)
 
         if target is not None:
-            target_vectors = create_vectors(input_vector, rows1d=rows1d)
+            target_vectors = create_vectors(input_vector, row1d=row1d)
             test_vectors = zip(test_vectors, target_vectors)
 
         train_args = inspect.getargspec(net.train).args
@@ -51,8 +60,8 @@ class BaseTestCase(unittest.TestCase):
                 net.train(*test_args, **train_kwargs)
 
     def assertInvalidVectorPred(self, net, input_vector, target, decimal=5,
-                                rows1d=False):
-        test_vectors = create_vectors(input_vector, rows1d=rows1d)
+                                row1d=False):
+        test_vectors = create_vectors(input_vector, row1d=row1d)
 
         for i, test_vector in enumerate(test_vectors, start=1):
             np.testing.assert_array_almost_equal(

@@ -168,7 +168,7 @@ class BAMTestCase(BaseTestCase):
             algorithms.DiscreteBAM(),
             np.array([1, 0, 0, 1]),
             np.array([1, 0]),
-            rows1d=True
+            row1d=True
         )
 
     def test_predict_different_inputs(self):
@@ -178,7 +178,7 @@ class BAMTestCase(BaseTestCase):
         target = np.array([[1, 0]])
 
         bamnet.train(data, target)
-        test_vectors = create_vectors(data.reshape(data.size), rows1d=True)
+        test_vectors = create_vectors(data.reshape(data.size), row1d=True)
 
         for test_vector in test_vectors:
             np.testing.assert_array_almost_equal(

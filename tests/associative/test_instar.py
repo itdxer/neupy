@@ -1,7 +1,6 @@
 import numpy as np
 
-from neupy.algorithms import Instar
-from neupy.layers import StepLayer, OutputLayer
+from neupy import algorithms, layers
 
 from base import BaseTestCase
 
@@ -15,31 +14,47 @@ input_data = np.array([
 class HebbRuleTestCase(BaseTestCase):
     def setUp(self):
         super(HebbRuleTestCase, self).setUp()
-        kwargs = {
-            'weight': np.array([
-                [3],
-                [0],
-                [0],
-                [0],
-            ])
-        }
-        self.conn = StepLayer(4, **kwargs) > OutputLayer(1)
+        kwargs = {'weight': np.array([[3, 0, 0, 0]]).T}
+        self.conn = layers.StepLayer(4, **kwargs) > layers.OutputLayer(1)
 
     def test_learning_process(self):
-        hn = Instar(
+        inet = algorithms.Instar(
             self.conn,
             n_unconditioned=1,
             step=1,
+            verbose=False
         )
 
-        hn.train(input_data, epochs=10)
+        inet.train(input_data, epochs=10)
 
-        self.assertEqual(hn.predict(np.array([[0, 1, -1, -1]]))[0, 0], 1)
-        self.assertTrue(np.all(
-            hn.input_layer.weight == np.array([
-                [3],
-                [1],
-                [-1],
-                [-1],
-            ])
-        ))
+        test_input = np.array([[0, 1, -1, -1]])
+        self.assertEqual(inet.predict(test_input), 1)
+
+        np.testing.assert_array_equal(
+            inet.input_layer.weight,
+            np.array([[3, 1, -1, -1]]).T
+        )
+
+    def test_train_different_inputs(self):
+        self.assertInvalidVectorTrain(
+            algorithms.Instar(
+                layers.StepLayer(4) > layers.OutputLayer(1),
+                n_unconditioned=1,
+                step=1,
+                verbose=False
+            ),
+            np.array([[0, 1, -1, -1]]),
+            row1d=True,
+        )
+
+    def test_predict_different_inputs(self):
+        inet = algorithms.Instar(
+            self.conn,
+            n_unconditioned=1,
+            step=1,
+            verbose=False
+        )
+
+        inet.train(input_data, epochs=10)
+        self.assertInvalidVectorPred(inet, np.array([0, 1, -1, -1]), 1,
+                                     row1d=True)
