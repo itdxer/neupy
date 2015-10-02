@@ -60,7 +60,7 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
 
     for (x, y), weight in np.ndenumerate(matrix):
         color = 'white' if weight > 0 else 'black'
-        size = np.sqrt(np.abs(weight / max_weight))
+        size = min(np.sqrt(np.abs(weight / max_weight)), 1)
         rect = plt.Rectangle([x - size / 2, y - size / 2], size, size,
                              facecolor=color, edgecolor=color)
         ax.add_patch(rect)
@@ -76,8 +76,8 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
         ax.legend(
             [white, black],
             [
-                'Positive value\nMax: {}'.format(matrix.max()),
-                'Negative value\nMin: {}'.format(matrix.min())
+                'Positive value\nMax: {}'.format(matrix.max().round(2)),
+                'Negative value\nMin: {}'.format(matrix.min().round(2))
             ],
             loc='center left',
             bbox_to_anchor=(1, 0.5)
