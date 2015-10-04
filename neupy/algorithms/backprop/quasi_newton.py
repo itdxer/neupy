@@ -5,7 +5,7 @@ from neupy.core.properties import (ChoiceProperty, NonNegativeNumberProperty,
                                    BetweenZeroAndOneProperty)
 from neupy.algorithms.utils import (matrix_list_in_one_vector,
                                     vector_to_list_of_matrix)
-from .steps.wolfe_search import WolfeSearch
+from ..steps.wolfe_search import WolfeSearch
 from .backpropagation import Backpropagation
 
 

@@ -2,7 +2,7 @@ import numpy as np
 
 from neupy.layers import (CompetitiveOutputLayer, LinearLayer, OutputLayer,
                              EuclideDistanceLayer, AngleDistanceLayer)
-from neupy.algorithms import SOFM
+from neupy import algorithms
 from neupy.algorithms.competitive.sofm import neuron_neighbours
 from base import BaseTestCase
 
@@ -14,6 +14,14 @@ input_data = np.array([
     [0.9806, -0.1961],
     [-0.5812, -0.8137],
     [-0.8137, -0.5812],
+])
+answers = np.array([
+    [0., 1., 0.],
+    [0., 1., 0.],
+    [1., 0., 0.],
+    [1., 0., 0.],
+    [0., 0., 1.],
+    [0., 0., 1.],
 ])
 
 
@@ -55,38 +63,39 @@ class SOFMTestCase(BaseTestCase):
 
     def test_invalid_attrs(self):
         with self.assertRaises(ValueError):
-            SOFM(LinearLayer(2) > OutputLayer(3), learning_radius=-1)
+            algorithms.SOFM(
+                LinearLayer(2) > OutputLayer(3),
+                learning_radius=-1,
+                verbose=False
+            )
 
         with self.assertRaises(ValueError):
-            SOFM(LinearLayer(2) > OutputLayer(2), learning_radius=1)
+            algorithms.SOFM(
+                LinearLayer(2) > OutputLayer(2),
+                learning_radius=1,
+                verbose=False
+            )
 
         with self.assertRaises(ValueError):
-            SOFM(
+            algorithms.SOFM(
                 LinearLayer(2) > CompetitiveOutputLayer(4),
                 learning_radius=-1,
                 features_grid=(2, 3),
+                verbose=False
             )
 
     def test_sofm(self):
         input_layer = LinearLayer(2, weight=self.weight)
         output_layer = CompetitiveOutputLayer(3)
 
-        sn = SOFM(
+        sn = algorithms.SOFM(
             input_layer > output_layer,
             learning_radius=0,
-            features_grid=(3, 1)
+            features_grid=(3, 1),
+            verbose=False
         )
 
         sn.train(input_data, epochs=100)
-
-        answers = np.array([
-            [0., 1., 0.],
-            [0., 1., 0.],
-            [1., 0., 0.],
-            [1., 0., 0.],
-            [0., 0., 1.],
-            [0., 0., 1.],
-        ])
 
         for data, answer in zip(input_data, answers):
             network_output = sn.predict(np.reshape(data, (2, 1)).T)
@@ -105,10 +114,11 @@ class SOFMTestCase(BaseTestCase):
         input_layer = EuclideDistanceLayer(2, weight=weight)
         output_layer = CompetitiveOutputLayer(6)
 
-        sn = SOFM(
+        sn = algorithms.SOFM(
             input_layer > output_layer,
             learning_radius=1,
-            features_grid=(3, 2)
+            features_grid=(3, 2),
+            verbose=False
         )
 
         sn.train(input_data, epochs=10)
@@ -131,10 +141,11 @@ class SOFMTestCase(BaseTestCase):
         input_layer = AngleDistanceLayer(2, weight=self.weight)
         output_layer = CompetitiveOutputLayer(3)
 
-        sn = SOFM(
+        sn = algorithms.SOFM(
             input_layer > output_layer,
             learning_radius=1,
-            features_grid=(3, 1)
+            features_grid=(3, 1),
+            verbose=False
         )
 
         sn.train(input_data, epochs=10)
@@ -152,3 +163,36 @@ class SOFMTestCase(BaseTestCase):
             network_output = sn.predict(np.reshape(data, (2, 1)).T)
             correct_result = np.reshape(answer, (3, 1)).T
             self.assertTrue(np.all(network_output == correct_result))
+
+    def test_train_different_inputs(self):
+        input_layer = LinearLayer(1)
+        output_layer = CompetitiveOutputLayer(1)
+
+        self.assertInvalidVectorTrain(
+            algorithms.SOFM(input_layer > output_layer, verbose=False),
+            input_data.ravel()
+        )
+    #
+    def test_predict_different_inputs(self):
+        input_layer = LinearLayer(1)
+        output_layer = CompetitiveOutputLayer(2)
+
+        sofmnet = algorithms.SOFM(input_layer > output_layer, verbose=False)
+        target = np.array([
+            [1, 0],
+            [1, 0],
+            [0, 1],
+            [1, 0],
+            [1, 0],
+            [1, 0],
+            [1, 0],
+            [0, 1],
+            [0, 1],
+            [0, 1],
+            [0, 1],
+            [0, 1],
+        ])
+
+        sofmnet.train(input_data.ravel())
+        self.assertInvalidVectorPred(sofmnet, input_data.ravel(), target,
+                                     decimal=2)

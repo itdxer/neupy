@@ -1,4 +1,4 @@
-neupy.algorithms.backprop.weights package
+neupy.algorithms.weights package
 =========================================
 
 Submodules
@@ -6,14 +6,14 @@ Submodules
 
 .. toctree::
 
-   neupy.algorithms.backprop.weights.base
-   neupy.algorithms.backprop.weights.weight_decay
-   neupy.algorithms.backprop.weights.weight_elimination
+   neupy.algorithms.weights.base
+   neupy.algorithms.weights.weight_decay
+   neupy.algorithms.weights.weight_elimination
 
 Module contents
 ---------------
 
-.. automodule:: neupy.algorithms.backprop.weights
+.. automodule:: neupy.algorithms.weights
     :members:
     :undoc-members:
     :show-inheritance:

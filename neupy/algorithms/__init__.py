@@ -8,15 +8,15 @@ from .backprop.rprop import *
 from .backprop.quickprop import *
 from .backprop.momentum import *
 
-from .backprop.weights.weight_decay import *
-from .backprop.weights.weight_elimination import *
+from .weights.weight_decay import *
+from .weights.weight_elimination import *
 
-from .backprop.steps.simple_step_minimization import *
-from .backprop.steps.search_then_converge import *
-from .backprop.steps.error_difference_update import *
-from .backprop.steps.leak_step import *
-from .backprop.steps.linear_search import *
-from .backprop.steps.wolfe_search import *
+from .steps.simple_step_minimization import *
+from .steps.search_then_converge import *
+from .steps.error_difference_update import *
+from .steps.leak_step import *
+from .steps.linear_search import *
+from .steps.wolfe_search import *
 
 from .memory.discrete_hopfield_network import *
 from .memory.bam import *

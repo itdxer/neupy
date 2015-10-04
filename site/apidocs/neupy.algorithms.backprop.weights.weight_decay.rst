@@ -1,7 +1,7 @@
-neupy.algorithms.backprop.weights.weight_decay module
+neupy.algorithms.weights.weight_decay module
 =====================================================
 
-.. automodule:: neupy.algorithms.backprop.weights.weight_decay
+.. automodule:: neupy.algorithms.weights.weight_decay
     :members:
     :undoc-members:
     :show-inheritance:

@@ -35,7 +35,7 @@ class FunctionTestCase(BaseTestCase):
 
         self.assertEqual(mse(data1, data2), 13 / 3.)
         square_error_deriv = mse.deriv(data1, data2)
-        self.assertEqualArrays(square_error_deriv,
+        np.testing.assert_array_equal(square_error_deriv,
                                np.array([[6], [0], [-4]]) / 3.)
 
         data1 = np.array([[0.99], [0.01], [0.5]])
@@ -96,4 +96,4 @@ class FunctionTestCase(BaseTestCase):
 
         actual = softmax(np.array([[1, 2, 3]]))
         expected = np.array([[0.09,  0.2447, 0.6652]])
-        self.assertEqualArrays(np.round(actual, 4), expected)
+        np.testing.assert_array_equal(np.round(actual, 4), expected)

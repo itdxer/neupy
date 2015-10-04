@@ -1,7 +1,7 @@
 import numpy as np
 
 from neupy.layers import LinearLayer, CompetitiveOutputLayer
-from neupy.algorithms import Kohonen
+from neupy import algorithms
 
 from base import BaseTestCase
 
@@ -28,7 +28,7 @@ class KohonenTestCase(BaseTestCase):
         self.conn = input_layer > output_layer
 
     def test_kohonen_success(self):
-        kh = Kohonen(self.conn, step=0.5)
+        kh = algorithms.Kohonen(self.conn, step=0.5, verbose=False)
 
         # test one iteration update
         data = np.reshape(input_data[0, :], (1, input_data.shape[1]))
@@ -39,3 +39,31 @@ class KohonenTestCase(BaseTestCase):
                 [-0.7071, 0.84385,  0.0000],
             ])
         ))
+
+    def test_train_different_inputs(self):
+        self.assertInvalidVectorTrain(
+            algorithms.Kohonen(
+                LinearLayer(1) > CompetitiveOutputLayer(2),
+                step=0.5,
+                verbose=False
+            ),
+            np.array([1, 2, 3])
+        )
+
+    def test_predict_different_inputs(self):
+        knet = algorithms.Kohonen(
+            LinearLayer(1) > CompetitiveOutputLayer(2),
+            step=0.5,
+            verbose=False,
+        )
+
+        data = np.array([[1, 1, 1]]).T
+        target = np.array([
+            [1, 0],
+            [1, 0],
+            [1, 0],
+        ])
+
+        knet.train(data, epochs=100)
+        self.assertInvalidVectorPred(knet, data.ravel(), target,
+                                     decimal=2)

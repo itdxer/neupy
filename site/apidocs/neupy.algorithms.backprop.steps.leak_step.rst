@@ -1,7 +1,7 @@
-neupy.algorithms.backprop.steps.leak_step module
+neupy.algorithms.steps.leak_step module
 ================================================
 
-.. automodule:: neupy.algorithms.backprop.steps.leak_step
+.. automodule:: neupy.algorithms.steps.leak_step
     :members:
     :undoc-members:
     :show-inheritance:

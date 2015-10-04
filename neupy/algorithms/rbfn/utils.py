@@ -7,7 +7,7 @@ from numpy.core.umath_tests import inner1d
 __all__ = ('pdf_between_data',)
 
 
-def pdf_between_data(train_data, input_data, standard_deviation):
+def pdf_between_data(train_data, input_data, std):
     """ Compute PDF between two samples.
 
     Parameters
@@ -16,14 +16,14 @@ def pdf_between_data(train_data, input_data, standard_deviation):
         train sample
     input_data : array
         input sample
-    standard_deviation : float
+    std : float
         standard deviation for PDF
     """
     # Note: This implementation works faster than 3D arrays
     # and use less memory.
     results = zeros((train_data.shape[0], input_data.shape[0]))
-    variance = standard_deviation ** 2
-    function_const = standard_deviation * sqrt(2 * pi)
+    variance = std ** 2
+    function_const = std * sqrt(2 * pi)
     train_data_size = train_data.shape[0]
 
     for i, input_row in enumerate(input_data):

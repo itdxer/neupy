@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from neupy.algorithms import RBFKMeans
+from neupy import algorithms
 
 from base import BaseTestCase
 
@@ -27,17 +27,18 @@ class RBFKMeansTestCase(BaseTestCase):
     def test_validation(self):
         with self.assertRaises(ValueError):
             # More clusters than samples
-            nw = RBFKMeans(n_clusters=1000)
+            nw = algorithms.RBFKMeans(n_clusters=1000, verbose=False)
             nw.train(self.data, epsilon=1e-5)
 
         with self.assertRaises(ValueError):
             # Number of clusters the same as number of samples
-            nw = RBFKMeans(n_clusters=self.data.shape[0])
+            nw = algorithms.RBFKMeans(n_clusters=self.data.shape[0],
+                                      verbose=False)
             nw.train(self.data, epsilon=1e-5)
 
         with self.assertRaises(ValueError):
             # One cluster
-            nw = RBFKMeans(n_clusters=1)
+            nw = algorithms.RBFKMeans(n_clusters=1, verbose=False)
             nw.train(self.data, epsilon=1e-5)
 
     def test_classification(self):
@@ -46,7 +47,7 @@ class RBFKMeansTestCase(BaseTestCase):
             [0.48166667,  0.76666667],
         ])
 
-        nw = RBFKMeans(n_clusters=2)
+        nw = algorithms.RBFKMeans(n_clusters=2, verbose=False)
         nw.train(self.data, epsilon=1e-5)
         self.assertTrue(np.all(result == np.round(nw.centers, 8)))
 
@@ -63,3 +64,18 @@ class RBFKMeansTestCase(BaseTestCase):
 
             plt.axis([0, 1, 0, 1])
             plt.show()
+
+    def test_train_different_inputs(self):
+        self.assertInvalidVectorTrain(
+            algorithms.RBFKMeans(n_clusters=2, verbose=False),
+            np.array([1, 2, 10]),
+        )
+
+    def test_predict_different_inputs(self):
+        kmnet = algorithms.RBFKMeans(verbose=False, n_clusters=2)
+
+        data = np.array([[1, 2, 10]]).T
+        target = np.array([[0, 0, 1]]).T
+
+        kmnet.train(data)
+        self.assertInvalidVectorPred(kmnet, data.ravel(), target, decimal=2)

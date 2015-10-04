@@ -19,7 +19,7 @@ class FeedForwardNetwork(BaseNetwork):
     """
     shared_docs = {'raw_predict_param': __raw_predict_param}
 
-    use_raw_predict_at_error = BoolProperty(default=False)
+    use_raw_predict_at_error = BoolProperty(default=True)
 
     def __init__(self, connection, **options):
         islist_of_integers = (

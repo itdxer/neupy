@@ -3,6 +3,7 @@ import platform
 import tempfile
 
 import dill
+import numpy as np
 from sklearn import datasets, preprocessing
 from neupy import algorithms
 
@@ -11,7 +12,7 @@ from base import BaseTestCase
 
 class StorageTestCase(BaseTestCase):
     def test_simple_storage(self):
-        bpnet = algorithms.Backpropagation((2, 3, 1), step=0.25)
+        bpnet = algorithms.Backpropagation((2, 3, 1), step=0.25, verbose=False)
         data, target = datasets.make_regression(n_features=2, n_targets=1)
 
         data = preprocessing.MinMaxScaler().fit_transform(data)
@@ -28,7 +29,7 @@ class StorageTestCase(BaseTestCase):
 
             self.assertEqual(0.25, restored_bpnet.step)
             self.assertEqual([2, 3, 1], layers_sizes)
-            self.assertEqualArrays(test_layer_weights,
+            np.testing.assert_array_equal(test_layer_weights,
                                    restored_bpnet.input_layer.weight)
 
             bpnet.train(data, target, epochs=5)
@@ -43,7 +44,7 @@ class StorageTestCase(BaseTestCase):
             actual = restored_bpnet2.predict(data)
             restored_bpnet_error = restored_bpnet2.error(actual, target)
 
-            self.assertEqualArrays(updated_input_weight,
+            np.testing.assert_array_equal(updated_input_weight,
                                    restored_bpnet2.input_layer.weight)
             # Error must be big, because we didn't normalize data
             self.assertEqual(real_bpnet_error, restored_bpnet_error)
@@ -52,7 +53,9 @@ class StorageTestCase(BaseTestCase):
         optimization_classes = [algorithms.WeightDecay,
                                 algorithms.SearchThenConverge]
         bpnet = algorithms.Backpropagation(
-            (3, 5, 1), optimizations=optimization_classes
+            (3, 5, 1),
+            optimizations=optimization_classes,
+            verbose=False,
         )
         data, target = datasets.make_regression(n_features=3, n_targets=1)
 
@@ -72,7 +75,7 @@ class StorageTestCase(BaseTestCase):
             self.assertEqual(optimization_classes,
                              restored_bpnet.optimizations)
 
-            bpnet.train(data, target, 10)
+            bpnet.train(data, target, epochs=10)
             real_bpnet_error = bpnet.error(bpnet.predict(data), target)
             updated_input_weight = bpnet.input_layer.weight.copy()
 
@@ -84,7 +87,7 @@ class StorageTestCase(BaseTestCase):
             actual = restored_bpnet2.predict(data)
             restored_bpnet_error = restored_bpnet2.error(actual, target)
 
-            self.assertEqualArrays(updated_input_weight,
+            np.testing.assert_array_equal(updated_input_weight,
                                    restored_bpnet2.input_layer.weight)
             # Error must be big, because we didn't normalize data
             self.assertEqual(real_bpnet_error, restored_bpnet_error)

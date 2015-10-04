@@ -1,6 +1,7 @@
 from __future__ import division
 from numpy import log, sqrt, abs as np_abs, sum as np_sum
 
+from neupy.utils import format_data
 from neupy.functions import with_derivative
 
 
@@ -9,14 +10,13 @@ __all__ = ('mse', 'linear_error', 'cross_entropy_error', 'mae',
 
 
 def _preformat_inputs(actual, predicted):
-    if actual.ndim == 1:
-        actual = actual.reshape((-1, 1))
-
-    if predicted.ndim == 1:
-        predicted = predicted.reshape((-1, 1))
+    actual = format_data(actual)
+    predicted = format_data(predicted)
 
     if actual.shape != predicted.shape:
-        raise ValueError("Actual and predicted values have different shapes.")
+        raise ValueError("Actual and predicted values have different shapes. "
+                         "Actual shape {}, predicted shape {}"
+                         "".format(actual.shape, predicted.shape))
 
     return actual, predicted
 

@@ -1,5 +1,6 @@
 from numpy import concatenate, array
 
+from neupy.utils import format_data
 from neupy.core.properties import NonNegativeIntProperty
 from neupy.network.learning import SupervisedLearning
 from neupy.network.connections import FAKE_CONNECTION
@@ -76,6 +77,8 @@ class CMAC(SupervisedLearning, BaseNetwork):
         super(CMAC, self).setup_defaults()
 
     def predict(self, input_data):
+        input_data = format_data(input_data)
+
         get_memory_coords = self.get_memory_coords
         get_result_by_coords = self.get_result_by_coords
         predicted = []

@@ -19,7 +19,7 @@ for i, (train, test) in enumerate(skfold, start=1):
     x_train, x_test = data[train], data[test]
     y_train, y_test = target[train], target[test]
 
-    pnn_network = PNN(standard_deviation=0.1, verbose=False)
+    pnn_network = PNN(std=0.1, verbose=False)
     pnn_network.train(x_train, y_train)
     result = pnn_network.predict(x_test)
     print("Test #{:<2}: {}/{}".format(

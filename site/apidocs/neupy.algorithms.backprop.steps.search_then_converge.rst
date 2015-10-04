@@ -1,7 +1,7 @@
-neupy.algorithms.backprop.steps.search_then_converge module
+neupy.algorithms.steps.search_then_converge module
 ===========================================================
 
-.. automodule:: neupy.algorithms.backprop.steps.search_then_converge
+.. automodule:: neupy.algorithms.steps.search_then_converge
     :members:
     :undoc-members:
     :show-inheritance:
