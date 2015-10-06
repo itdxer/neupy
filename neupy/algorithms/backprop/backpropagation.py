@@ -119,6 +119,10 @@ class Backpropagation(SupervisedLearning, FeedForwardNetwork):
             deriv = layer.activation_function.deriv(summated_data)
 
             delta = multiply(deriv, update)
+
+            if delta.ndim == 3:
+                delta = delta.sum(axis=2).T
+
             update = dot(delta, layer.weight_without_bias.T)
 
             gradient = dot(current_layer_input.T, delta)

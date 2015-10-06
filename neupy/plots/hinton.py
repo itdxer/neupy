@@ -58,7 +58,7 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
     ax.xaxis.set_major_locator(plt.NullLocator())
     ax.yaxis.set_major_locator(plt.NullLocator())
 
-    for (x, y), weight in np.ndenumerate(matrix):
+    for (y, x), weight in np.ndenumerate(matrix):
         color = 'white' if weight > 0 else 'black'
         size = min(np.sqrt(np.abs(weight / max_weight)), 1)
         rect = plt.Rectangle([x - size / 2, y - size / 2], size, size,
@@ -69,18 +69,30 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
     ax.invert_yaxis()
 
     if add_legend:
-        # Define a legend for the plot
+        max_value = matrix.max().round(2)
+        min_value = matrix.min().round(2)
+
         white = Rectangle((0, 0), 1, 1, linewidth=1, linestyle='solid',
                           facecolor='#ffffff')
-        black = Rectangle((0, 0), 1, 1, color='#000000')
-        ax.legend(
-            [white, black],
-            [
-                'Positive value\nMax: {}'.format(matrix.max().round(2)),
-                'Negative value\nMin: {}'.format(matrix.min().round(2))
-            ],
-            loc='center left',
-            bbox_to_anchor=(1, 0.5)
-        )
+        rectangles = [white]
+
+        if min_value < 0:
+            black = Rectangle((0, 0), 1, 1, color='#000000')
+            rectangles.append(black)
+            rect_description = [
+                'Positive value\n'
+                'Max: {}'.format(max_value),
+                'Negative value\n'
+                'Min: {}'.format(min_value),
+            ]
+        else:
+            rect_description = [
+                'Positive value\n'
+                'Max: {}\n'
+                'Min: {}'.format(max_value, min_value),
+            ]
+
+        ax.legend(rectangles, rect_description, loc='center left',
+                  bbox_to_anchor=(1, 0.5))
 
     return ax

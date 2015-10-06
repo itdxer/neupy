@@ -329,14 +329,14 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
     def normalized_errors_out(self):
         return self._normalized_errors(self.errors_out)
 
-    def plot_errors(self, use_semilog=False):
+    def plot_errors(self, logx=False):
         if not self.errors_in:
             return
 
         errors_in = self.normalized_errors_in()
         errors_out = self.normalized_errors_out()
         errors_range = arange(len(errors_in))
-        plot_function = plt.semilogx if use_semilog else plt.plot
+        plot_function = plt.semilogx if logx else plt.plot
 
         line_error_in, = plot_function(errors_range, errors_in)
 

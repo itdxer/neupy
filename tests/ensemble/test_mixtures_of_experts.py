@@ -9,18 +9,27 @@ from base import BaseTestCase
 class MixtureOfExpertsTestCase(BaseTestCase):
     def test_handle_errors(self):
         networks = [
-            algorithms.Backpropagation((1, 20, 1), step=0.2),
-            algorithms.Backpropagation((1, 20, 1), step=0.2),
+            algorithms.Backpropagation(
+                (1, 20, 1),
+                step=0.2,
+                verbose=False
+            ),
+            algorithms.Backpropagation(
+                (1, 20, 1),
+                step=0.2,
+                verbose=False
+            ),
         ]
 
         with self.assertRaises(ValueError):
             # Ivalid network (not Backpropagation)
             ensemble.MixtureOfExperts(
                 networks=networks + [
-                    algorithms.GRNN()
+                    algorithms.GRNN(verbose=False)
                 ],
                 gating_network=algorithms.Backpropagation(
                     layers.SigmoidLayer(1) > layers.OutputLayer(3),
+                    verbose=False,
                 )
             )
 
@@ -28,10 +37,15 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             # Ivalid number of outputs in third network
             ensemble.MixtureOfExperts(
                 networks=networks + [
-                    algorithms.Backpropagation((1, 20, 2), step=0.2)
+                    algorithms.Backpropagation(
+                        (1, 20, 2),
+                        step=0.2,
+                        verbose=False
+                    )
                 ],
                 gating_network=algorithms.Backpropagation(
                     layers.SigmoidLayer(1) > layers.OutputLayer(3),
+                    verbose=False,
                 )
             )
 
@@ -41,6 +55,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                 networks=networks,
                 gating_network=algorithms.Backpropagation(
                     layers.SoftmaxLayer(1) > layers.OutputLayer(1),
+                    verbose=False,
                 )
             )
 
@@ -50,6 +65,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                 networks=networks,
                 gating_network=algorithms.Backpropagation(
                     layers.SigmoidLayer(1) > layers.OutputLayer(2),
+                    verbose=False,
                 )
             )
 
@@ -58,7 +74,8 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             ensemble.MixtureOfExperts(
                 networks=networks,
                 gating_network=algorithms.Backpropagation(
-                    layers.SoftmaxLayer(1) > layers.RoundOutputLayer(2)
+                    layers.SoftmaxLayer(1) > layers.RoundOutputLayer(2),
+                    verbose=False,
                 )
             )
 
@@ -67,12 +84,16 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             ensemble.MixtureOfExperts(
                 networks=networks + [
                     algorithms.Backpropagation(
-                        (1, 20, 1), step=0.2, error=rmsle
+                        (1, 20, 1),
+                        step=0.2,
+                        error=rmsle,
+                        verbose=False,
                     )
                 ],
                 gating_network=algorithms.Backpropagation(
                     layers.SigmoidLayer(1) > layers.OutputLayer(3),
-                )
+                    verbose=False,
+                ),
             )
 
         with self.assertRaises(ValueError):
@@ -81,16 +102,18 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                 networks=networks,
                 gating_network=algorithms.Backpropagation(
                     layers.SoftmaxLayer(1) > layers.OutputLayer(2),
-                    error=rmsle
-                )
+                    error=rmsle,
+                    verbose=False
+                ),
             )
 
         moe = ensemble.MixtureOfExperts(
             # Ivalid gating network output layer
             networks=networks,
             gating_network=algorithms.Backpropagation(
-                layers.SoftmaxLayer(1) > layers.OutputLayer(2)
-            )
+                layers.SoftmaxLayer(1) > layers.OutputLayer(2),
+                verbose=False
+            ),
         )
         with self.assertRaises(ValueError):
             # Wrong number of train input features
@@ -120,9 +143,13 @@ class MixtureOfExpertsTestCase(BaseTestCase):
 
         # -------------- Train single Backpropagation -------------- #
 
-        moe = algorithms.Backpropagation((insize, 20, outsize), step=0.1)
-        moe.train(x_train, y_train, epochs=n_epochs)
-        network_output = moe.predict(x_test)
+        bpnet = algorithms.Backpropagation(
+            (insize, 20, outsize),
+            step=0.1,
+            verbose=False
+        )
+        bpnet.train(x_train, y_train, epochs=n_epochs)
+        network_output = bpnet.predict(x_test)
         network_error = rmsle(output_scaler.inverse_transform(network_output),
                               scaled_y_test)
 
@@ -130,18 +157,28 @@ class MixtureOfExpertsTestCase(BaseTestCase):
 
         moe = ensemble.MixtureOfExperts(
             networks=[
-                algorithms.Backpropagation((insize, 20, outsize), step=0.1),
-                algorithms.Backpropagation((insize, 20, outsize), step=0.1),
+                algorithms.Backpropagation(
+                    (insize, 20, outsize),
+                    step=0.1,
+                    verbose=False
+                ),
+                algorithms.Backpropagation(
+                    (insize, 20, outsize),
+                    step=0.1,
+                    verbose=False
+                ),
             ],
             gating_network=algorithms.Backpropagation(
                 layers.SoftmaxLayer(insize) > layers.OutputLayer(2),
-                step=0.1
+                step=0.1,
+                verbose=False
             )
         )
         moe.train(x_train, y_train, epochs=n_epochs)
         ensemble_output = moe.predict(x_test)
         ensemlbe_error = rmsle(
-            output_scaler.inverse_transform(ensemble_output), scaled_y_test
+            output_scaler.inverse_transform(ensemble_output),
+            scaled_y_test
         )
 
         self.assertGreater(network_error, ensemlbe_error)

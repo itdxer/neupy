@@ -10,11 +10,11 @@ docs = {
         Returns the last error network result after training procedure
         or ``None`` value if you try to get it before network training.
     """,
-    "plot_errors": """plot_errors(use_semilog=False)
+    "plot_errors": """plot_errors(logx=False)
         Draws the error rate update plot. It always shows network
         learning progress. When you add cross validation data set
         into training function it displays validation data set error as
-        separated curve. If parameter ``use_semilog`` is equal to the
+        separated curve. If parameter ``logx`` is equal to the
         ``True`` value it displays x-axis in logarithmic scale.
     """,
     "predict": """predict(input_data)

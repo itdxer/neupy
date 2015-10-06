@@ -1,6 +1,7 @@
 from __future__ import division
 
-from numpy import where, exp, log, cosh, tanh as np_tanh, clip
+from numpy import (where, exp, log, cosh, tanh as np_tanh, clip, zeros,
+                   diag, outer)
 
 from neupy.functions import with_derivative
 
@@ -38,7 +39,13 @@ def linear(x):
 
 def softmax_deriv(x, temp=1):
     softmax_result = softmax(x, temp)
-    return softmax_result * (1 - softmax_result)
+    nrows, ncols = x.shape
+    full_deriv = zeros((ncols, nrows, ncols))
+    for i, (softmax_output, row) in enumerate(zip(softmax_result, x)):
+        full_deriv[:, i, :] = (
+            diag(softmax_output) - outer(softmax_output, softmax_output)
+        )
+    return full_deriv
 
 
 @with_derivative(softmax_deriv)
@@ -79,7 +86,7 @@ def second_sigmoid_deriv(x, alpha=1):
 
 
 @with_derivative(second_sigmoid_deriv)
-def sigmoid_deriv(x, alpha=1):
+def sigmoid_deriv(x, alpha=1.):
     sigmoig_output = sigmoid(x, alpha=alpha)
     return alpha * sigmoig_output * (1 - sigmoig_output)
 
