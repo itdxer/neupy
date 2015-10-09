@@ -41,18 +41,18 @@ class BaseLayer(with_metaclass(LayerMeta, ChainConnection, BaseConfigurable)):
     __layer_params = """input_size : int
         Layer input size.
     weight : 2D array-like or None
-        Define your layer weights. `None` means that your weights will be
-        generate randomly dependence on property `init_method`.
-        `None` by default.
+        Define your layer weights. ``None`` means that your weights will be
+        generate randomly dependence on property ``init_method``.
+        ``None`` by default.
     init_method : {'gauss', 'bounded', 'ortho'}
         Weight initialization method.
-        `gauss` will generate random weights dependence on Standard
+        ``gauss`` will generate random weights dependence on Standard
         Normal Distribution.
-        `bounded` generate uniform random weghts in initialized bounds.
-        `ortho` generate random orthogonal matrix.
+        ``bounded`` generate uniform random weghts in initialized bounds.
+        ``ortho`` generate random orthogonal matrix.
     random_weight_bound : tuple of two int
-        Available only for `init_method` eqaul to `bounded`, defaults
-        to `(0, 1)`.
+        Available only for ``init_method`` eqaul to ``bounded``, defaults
+        to ``(0, 1)``.
     """
     shared_docs = {'layer_params': __layer_params}
 

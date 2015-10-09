@@ -14,12 +14,12 @@ __all__ = ('Layer', 'LinearLayer', 'SigmoidLayer', 'StepLayer', 'TanhLayer',
 
 
 class Layer(BaseLayer):
-    """ Base class for neural network layers.
+    """ The base class of neural network layers.
 
     Parameters
     ----------
     function_coef : dict
-        Default settings for activation function.
+        The default settings for the activation function.
     {layer_params}
     """
 
@@ -36,7 +36,7 @@ class Layer(BaseLayer):
 
 
 class LinearLayer(Layer):
-    """ Layer with linear activation function.
+    """ The layer with the linear activation function.
 
     Parameters
     ----------
@@ -46,14 +46,14 @@ class LinearLayer(Layer):
 
 
 class SigmoidLayer(Layer):
-    """ Layer with sigmoid activation function.
+    """ The layer with the sigmoid activation function.
 
     Parameters
     ----------
     function_coef : dict
-        Default configurations for signoid activation function. There is one
-        value name ``alpha`` (default is ``1``). `alpha` control your
-        function shape.
+        The default configurations for the sigmoid activation function.
+        There is one available parameter ``alpha`` (defaults to ``1``).
+        Parameter ``alpha`` controls function shape.
     {layer_params}
     """
     function_coef = DictProperty(default={'alpha': 1})
@@ -61,7 +61,7 @@ class SigmoidLayer(Layer):
 
 
 class StepLayer(Layer):
-    """ Layer with step activation function.
+    """ The layer with the the step activation function.
 
     Parameters
     ----------
@@ -71,14 +71,14 @@ class StepLayer(Layer):
 
 
 class TanhLayer(Layer):
-    """ Layer with `tanh` activation function.
+    """ The layer with the `tanh` activation function.
 
     Parameters
     ----------
     function_coef : dict
-        Default configurations for sigmoid activation function. There is one
-        value name ``alpha`` (default is ``1``). `alpha` control your
-        function shape.
+        The default configurations for the sigmoid activation function.
+        There is one available parameter ``alpha`` (defaults to ``1``).
+        Parameter `alpha` controls function shape.
     {layer_params}
     """
     function_coef = DictProperty(default={'alpha': 1})
@@ -86,7 +86,7 @@ class TanhLayer(Layer):
 
 
 class RectifierLayer(Layer):
-    """ Layer with rectifier activation function.
+    """ The layer with the rectifier activation function.
 
     Parameters
     ----------
@@ -96,7 +96,7 @@ class RectifierLayer(Layer):
 
 
 class SoftplusLayer(Layer):
-    """ Layer with softplus activation function.
+    """ The layer with the softplus activation function.
 
     Parameters
     ----------
@@ -106,15 +106,16 @@ class SoftplusLayer(Layer):
 
 
 class SoftmaxLayer(Layer):
-    """ Layer with softmax activation function.
+    """ The layer with the softmax activation function.
 
     Parameters
     ----------
     function_coef : dict
-        Default configurations for softmax activation function. There is one
-        value name ``temp`` (default is ``1``). Smaller ``temp`` value will
-        make your winner probability closer to ``1``. To big ``temp`` value
-        will make all your probabilities closer to equal values.
+        The default configurations for the softmax activation function.
+        There is one available parameter ``temp`` (defaults to ``1``).
+        Lower ``temp`` value will make your winner probability closer
+        to ``1``. Higher ``temp`` value will make all probabilities
+        values equal to each other.
     {layer_params}
     """
     function_coef = DictProperty(default={'temp': 1})
@@ -122,8 +123,8 @@ class SoftmaxLayer(Layer):
 
 
 class EuclideDistanceLayer(BaseLayer):
-    """ Layer output equal to Euclide distance between input value
-    and weights.
+    """ The layer compute Euclide distance between the input
+    value and weights.
 
     Parameters
     ----------
@@ -136,7 +137,7 @@ class EuclideDistanceLayer(BaseLayer):
 
 
 class AngleDistanceLayer(BaseLayer):
-    """ Layer which output equal to cosine distance between input value
+    """ The layer compute cosine distance between the input value
     and weights.
 
     Parameters
