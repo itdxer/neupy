@@ -50,7 +50,7 @@ class BaseLayer(with_metaclass(LayerMeta, ChainConnection, BaseConfigurable)):
         Normal Distribution.
         ``bounded`` generate uniform random weghts in initialized bounds.
         ``ortho`` generate random orthogonal matrix.
-    random_weight_bound : tuple of two int
+    bounds : tuple of two float
         Available only for ``init_method`` eqaul to ``bounded``, defaults
         to ``(0, 1)``.
     """
@@ -58,7 +58,7 @@ class BaseLayer(with_metaclass(LayerMeta, ChainConnection, BaseConfigurable)):
 
     input_size = IntProperty()
     weight = ArrayProperty(default=None)
-    random_weight_bound = NumberBoundProperty(default=(0, 1))
+    bounds = NumberBoundProperty(default=(0, 1))
     init_method = ChoiceProperty(default=GAUSSIAN,
                                  choices=[GAUSSIAN, BOUNDED, ORTHOGONAL])
 
@@ -102,7 +102,7 @@ class BaseLayer(with_metaclass(LayerMeta, ChainConnection, BaseConfigurable)):
             return randn(*self.size)
 
         elif init_method == BOUNDED:
-            return random_bounded(self.size, *self.random_weight_bound)
+            return random_bounded(self.size, *self.bounds)
 
         elif init_method == ORTHOGONAL:
             return random_orthogonal(self.size)

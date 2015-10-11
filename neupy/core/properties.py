@@ -6,11 +6,11 @@ from neupy.helpers.base import preformat_value
 
 
 __all__ = ('Property', 'CheckSizeProperty', 'NumberProperty', 'BoolProperty',
-           'BetweenZeroAndOneProperty', 'FuncProperty', 'NumberBoundProperty',
+           'BetweenZeroAndOneProperty', 'FuncProperty', 'IntBoundProperty',
            'ArrayProperty', 'ListOfTypesProperty', 'ListProperty',
            'DictProperty', 'IntProperty', 'StringProperty',
            'NonNegativeIntProperty', 'NonNegativeNumberProperty',
-           'ChoiceProperty')
+           'ChoiceProperty', 'NumberBoundProperty')
 
 
 class Property(object):
@@ -130,8 +130,12 @@ class ListOfTypesProperty(Property):
             ))
 
 
+class IntBoundProperty(ListOfTypesProperty):
+    pass
+
+
 class NumberBoundProperty(ListOfTypesProperty):
-    count_of_values = 2
+    inner_list_type = (int, float)
 
 
 class VectorProperty(Property):

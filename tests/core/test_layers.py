@@ -130,14 +130,14 @@ class LayersTestCase(BaseTestCase):
         self.assertTrue(stats.mstats.normaltest(input_layer.weight))
 
         input_layer = SigmoidLayer(30, init_method='bounded',
-                                   random_weight_bound=(-10, 10))
+                                   bounds=(-10, 10))
         connection = input_layer > OutputLayer(10)
         input_layer.initialize()
         self.assertLessEqual(-10, np.min(input_layer.weight))
         self.assertGreaterEqual(10, np.max(input_layer.weight))
 
         input_layer = SigmoidLayer(30, init_method='ortho',
-                                   random_weight_bound=(-10, 10))
+                                   bounds=(-10, 10))
         connection = input_layer > OutputLayer(10)
         input_layer.initialize()
         weight = input_layer.weight
@@ -145,7 +145,7 @@ class LayersTestCase(BaseTestCase):
         np.testing.assert_array_equal(np.eye(10), weight.T.dot(weight).round(10))
 
         input_layer = SigmoidLayer(10, init_method='ortho',
-                                   random_weight_bound=(-10, 10))
+                                   bounds=(-10, 10))
         connection = input_layer > OutputLayer(30)
         input_layer.initialize()
         weight = input_layer.weight

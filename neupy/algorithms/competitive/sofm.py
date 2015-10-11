@@ -2,7 +2,7 @@ from operator import mul
 
 from numpy import ogrid, reshape, nonzero
 
-from neupy.core.properties import NonNegativeIntProperty, NumberBoundProperty
+from neupy.core.properties import NonNegativeIntProperty, IntBoundProperty
 from neupy.layers import CompetitiveOutputLayer
 from neupy.algorithms import Kohonen
 
@@ -79,7 +79,7 @@ class SOFM(Kohonen):
     {last_error}
     """
     learning_radius = NonNegativeIntProperty(default=0)
-    features_grid = NumberBoundProperty()
+    features_grid = IntBoundProperty()
     # # None - mean that this property is the same as default step
     # neighbours_step = NumberProperty()
 

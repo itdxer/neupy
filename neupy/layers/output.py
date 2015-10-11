@@ -2,7 +2,7 @@ from numpy import zeros, round as np_round, where
 
 from neupy.network.connections import NetworkConnectionError
 from neupy.layers.base import BaseLayer
-from neupy.core.properties import (NumberBoundProperty, NonNegativeIntProperty,
+from neupy.core.properties import (IntBoundProperty, NonNegativeIntProperty,
                                    BetweenZeroAndOneProperty)
 
 
@@ -59,7 +59,7 @@ class StepOutputLayer(OutputLayer):
         Critical point is setup step function bias.
     {layer_params}
     """
-    output_bounds = NumberBoundProperty(default=(0, 1))
+    output_bounds = IntBoundProperty(default=(0, 1))
     critical_point = BetweenZeroAndOneProperty(default=0.5)
 
     def format_output(self, value):
