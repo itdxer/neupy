@@ -1,8 +1,8 @@
-import io
 import sys
 from contextlib import contextmanager
 from collections import namedtuple
 
+import six
 from neupy import algorithms
 
 from data import xor_zero_input_train, xor_zero_target_train
@@ -12,7 +12,7 @@ from base import BaseTestCase
 @contextmanager
 def catch_stdout():
     old_out = sys.stdout
-    out = io.StringIO()
+    out = six.StringIO()
     sys.stdout = out
 
     yield out

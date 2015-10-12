@@ -1,3 +1,5 @@
+from __future__ import division
+
 from time import time
 from itertools import groupby
 
