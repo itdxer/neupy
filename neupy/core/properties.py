@@ -1,5 +1,6 @@
 import types
 
+import six
 import numpy as np
 
 from neupy.helpers.base import preformat_value
@@ -75,7 +76,7 @@ class Property(object):
 
 
 class StringProperty(Property):
-    expected_type = str
+    expected_type = six.string_types
 
 
 class IntProperty(Property):

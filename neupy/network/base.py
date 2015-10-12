@@ -1,6 +1,7 @@
 from time import time
 from itertools import groupby
 
+import six
 from numpy import arange
 import matplotlib.pyplot as plt
 
@@ -8,8 +9,8 @@ from neupy.utils import format_data, is_row1d
 from neupy.helpers import preformat_value
 from neupy.core.base import BaseSkeleton
 from neupy.core.config import Configurable
-from neupy.core.properties import (NonNegativeIntProperty, FuncProperty,
-                                   NumberProperty, BoolProperty)
+from neupy.core.properties import (Property, FuncProperty, NumberProperty,
+                                   BoolProperty)
 from neupy.layers import BaseLayer, OutputLayer
 from neupy.functions import normilize_error_output, mse
 from .utils import iter_until_converge, shuffle
@@ -61,6 +62,46 @@ def clean_layers(connection):
     return connection
 
 
+def parse_show_epoch_property(value, n_epochs):
+    if isinstance(value, int):
+        return value
+
+    number_end_position = value.index('time')
+    # Ignore grammar mistakes like `2 time`, this error could be
+    # really annoying
+    n_epochs_to_check = int(value[:number_end_position].strip())
+
+    if n_epochs <= n_epochs_to_check:
+        return 1
+
+    return (n_epochs / n_epochs_to_check)
+
+
+class ShowEpochProperty(Property):
+    expected_type = tuple([int] + [six.string_types])
+
+    def validate(self, value):
+        if not isinstance(value, six.string_types):
+            if value < 1:
+                raise ValueError("Property `{}` value should be integer "
+                                 "greater than zero or string. See the "
+                                 "documentation for more information."
+                                 "".format(self.name))
+            return
+
+        valid_endings = ('times', 'time')
+        number_end_position = value.index('time')
+        number_part = value[:number_end_position].strip()
+
+        if not value.endswith(valid_endings) or not number_part.isdigit():
+            valid_endings_formated = ', '.join(valid_endings)
+            raise ValueError(
+                "Property `{}` in string format should be a number with one "
+                "of those endings: {}. For example: `10 times`."
+                "".format(self.name, valid_endings_formated)
+            )
+
+
 class NetworkSignals(Configurable):
     """ Network signals.
 
@@ -89,7 +130,7 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
     step = NumberProperty(default=0.1)
 
     # Training settings
-    show_epoch = NonNegativeIntProperty(min_size=1, default=1)
+    show_epoch = ShowEpochProperty(min_size=1, default='10 times')
     shuffle_data = BoolProperty(default=False)
 
     def __init__(self, connection, **options):
@@ -199,23 +240,30 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
 
         # ----------- Predefine parameters ----------- #
 
+        show_epoch = self.show_epoch
+        logs = self.logs
+        compute_error_out = (input_test is not None and
+                             target_test is not None)
+        predict = self.predict
+
         if epochs is not None:
             self.epoch = 0
             iterepochs = range(self.epoch, epochs)
             last_epoch = epochs - 1
-            predict = self.predict
-            compute_error_out = (input_test is not None and
-                                 target_test is not None)
+            show_epoch = parse_show_epoch_property(show_epoch, epochs)
 
         if epsilon is not None:
             iterepochs = iter_until_converge(self, epsilon)
             last_epoch = None
-            predict = None
-            compute_error_out = None
+
+            if isinstance(show_epoch, six.string_types):
+                show_epoch = 100
+                logs.warning("Can't use `show_epoch` value in converging "
+                             "mode. Set up 100 to `show_epoch` property "
+                             "by default.")
 
         # ----------- Train process ----------- #
 
-        logs = self.logs
         logs.header("Start train")
         logs.log("TRAIN", "Train data size: {}".format(input_train.shape[0]))
         logs.log("TRAIN", "Number of input features: {}".format(
@@ -231,7 +279,6 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
         # variables.
         errors = self.errors_in
         errors_out = self.errors_out
-        show_epoch = self.show_epoch
         shuffle_data = self.shuffle_data
 
         # Methods

@@ -61,9 +61,20 @@ docs = {
     "step": """step : float
         Learns step, defaults to ``0.1``.
     """,
-    "show_epoch": """show_epoch : int
-        This option controls how offen you'd see the epoch updates
-        information in the terminal, defaults to ``1``
+    "show_epoch": """show_epoch : int or str
+        This property controls how often the network will display information
+        about training. There are two main syntaxes for this property.
+        You can describe it as positive integer number and it
+        will describe how offen would you like to see summary output in
+        terminal. For instance, number `100` mean that network will show you
+        summary in 100, 200, 300 ... epochs. String value should be in a
+        specific format. It should contain the number of times that the output
+        will be displayed in the terminal. The second part is just
+        a syntax word ``time`` or ``times`` just to make text readable.
+        For instance, value ``'2 times'`` mean that the network will show
+        output twice with approximately equal period of epochs and one
+        additional output would be after the finall epoch.
+        Defaults to ``'10 times'``.
     """,
     "shuffle_data": """shuffle_data : bool
         If it's ``True`` class shuffles all your training data before
