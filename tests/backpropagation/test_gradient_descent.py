@@ -30,6 +30,7 @@ class GradientDescentTestCase(BaseTestCase):
            step=0.1,
            use_raw_predict_at_error=True,
            shuffle_data=True,
+           verbose=False,
            # Test configurations
            epochs=40,
            # is_comparison_plot=True
@@ -51,7 +52,8 @@ class GradientDescentTestCase(BaseTestCase):
         sgd_network = algorithms.MinibatchGradientDescent(
             SigmoidLayer(in_size) > SigmoidLayer(300) > OutputLayer(out_size),
             step=0.2,
-            batch_size=10
+            batch_size=10,
+            verbose=False,
         )
         sgd_network.train(x_train, y_train, x_test, y_test, epochs=10)
         result = sgd_network.predict(x_test)

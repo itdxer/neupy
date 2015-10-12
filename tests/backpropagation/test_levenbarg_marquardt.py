@@ -9,8 +9,6 @@ from base import BaseTestCase
 
 
 class LevenbergMarquardtTestCase(BaseTestCase):
-    verbose = False
-
     def test_levenberg_marquardt(self):
         dataset = datasets.load_diabetes()
         data, target = dataset.data, dataset.target
@@ -34,7 +32,8 @@ class LevenbergMarquardtTestCase(BaseTestCase):
             mu_increase_factor=2,
             mu=0.1,
             show_epoch=10,
-            use_bias=False
+            use_bias=False,
+            verbose=False,
         )
         lmnet.train(x_train, y_train, epochs=100)
         y_predict = lmnet.predict(x_test)

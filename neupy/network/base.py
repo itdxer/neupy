@@ -74,7 +74,7 @@ def parse_show_epoch_property(value, n_epochs):
     if n_epochs <= n_epochs_to_check:
         return 1
 
-    return (n_epochs / n_epochs_to_check)
+    return int(round(n_epochs / n_epochs_to_check))
 
 
 class ShowEpochProperty(Property):
