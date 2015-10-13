@@ -98,10 +98,15 @@ class ShowEpochProperty(Property):
         if not value.endswith(valid_endings) or not number_part.isdigit():
             valid_endings_formated = ', '.join(valid_endings)
             raise ValueError(
-                "Property `{}` in string format should be a number with one "
-                "of those endings: {}. For example: `10 times`."
+                "Property `{}` in string format should be a positive number "
+                "with one of those endings: {}. For example: `10 times`."
                 "".format(self.name, valid_endings_formated)
             )
+
+        if int(number_part) < 1:
+            raise ValueError("Part that related to the number in `{}` "
+                             "property should be an integer greater or "
+                             "equal to one.".format(self.name))
 
 
 class NetworkSignals(Configurable):

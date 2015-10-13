@@ -52,6 +52,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
     def test_show_epoch_invalid_cases(self):
         wrong_input_values = (
             'time 10', 'good time', '100', 'super power',
+            '0 times', '-1 times',
             0, -100,
         )
 
