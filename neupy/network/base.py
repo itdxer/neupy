@@ -91,6 +91,10 @@ class ShowEpochProperty(Property):
                                  "".format(self.name))
             return
 
+        if 'time' not in value:
+            raise ValueError("`{}` value has invalid string format."
+                             "".format(self.name))
+
         valid_endings = ('times', 'time')
         number_end_position = value.index('time')
         number_part = value[:number_end_position].strip()

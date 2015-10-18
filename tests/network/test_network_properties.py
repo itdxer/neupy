@@ -28,7 +28,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
             Case(show_epoch='10 times', should_be_n_times=11, n_epochs=100),
             Case(show_epoch='1 time', should_be_n_times=2, n_epochs=10),
             Case(show_epoch='1 times', should_be_n_times=2, n_epochs=10),
-            # Equal to the number of epochs
+            # Should be equal to the number of epochs
             Case(show_epoch='100 times', should_be_n_times=10, n_epochs=10),
             Case(show_epoch=5, should_be_n_times=3, n_epochs=10),
             Case(show_epoch=100, should_be_n_times=2, n_epochs=10),
