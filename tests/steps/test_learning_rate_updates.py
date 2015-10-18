@@ -37,7 +37,7 @@ class LearningRateUpdatesTestCase(BaseTestCase):
             use_raw_predict_at_error=True,
             optimizations=[SimpleStepMinimization]
         )
-        network.train(xor_input_train, xor_target_train, epochs=101)
+        network.train(xor_input_train, xor_target_train, epochs=100)
         self.assertEqual(network.step, self.first_step / 3)
 
     def test_quadration_learning_rate_minimiation(self):
@@ -48,7 +48,7 @@ class LearningRateUpdatesTestCase(BaseTestCase):
             rate_coefitient=0.2,
             optimizations=[SearchThenConverge]
         )
-        network.train(xor_input_train, xor_target_train, epochs=7)
+        network.train(xor_input_train, xor_target_train, epochs=6)
         self.assertEqual(network.step, 0.18)
 
     def test_error_difference_update(self):

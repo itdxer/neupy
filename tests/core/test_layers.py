@@ -142,14 +142,20 @@ class LayersTestCase(BaseTestCase):
         input_layer.initialize()
         weight = input_layer.weight
         # Can't be orthogonal in both ways for rectangular matrix.
-        np.testing.assert_array_equal(np.eye(10), weight.T.dot(weight).round(10))
+        np.testing.assert_array_equal(
+            np.eye(10),
+            weight.T.dot(weight).round(10)
+        )
 
         input_layer = SigmoidLayer(10, init_method='ortho',
                                    bounds=(-10, 10))
         connection = input_layer > OutputLayer(30)
         input_layer.initialize()
         weight = input_layer.weight
-        np.testing.assert_array_equal(np.eye(10), weight.dot(weight.T).round(10))
+        np.testing.assert_array_equal(
+            np.eye(10),
+            weight.dot(weight.T).round(10)
+        )
 
     def test_without_output_layer(self):
         with self.assertRaises(NetworkConnectionError):

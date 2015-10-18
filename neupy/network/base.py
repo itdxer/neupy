@@ -258,9 +258,9 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
         predict = self.predict
 
         if epochs is not None:
-            self.epoch = 0
-            iterepochs = range(self.epoch, epochs)
-            last_epoch = epochs - 1
+            self.epoch = 1
+            iterepochs = range(self.epoch, epochs + 1)
+            last_epoch = epochs
             show_epoch = parse_show_epoch_property(show_epoch, epochs)
 
         if epsilon is not None:
@@ -321,7 +321,7 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
                 errors.append(error)
                 self.train_epoch_time = time() - epoch_start_time
 
-                if epoch % show_epoch == 0 or epoch == last_epoch:
+                if epoch % show_epoch == 0 or epoch in (1, last_epoch):
                     logs.data("""
                         Epoch {epoch}
                         Error in:  {error}
