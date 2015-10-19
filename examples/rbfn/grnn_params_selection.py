@@ -41,7 +41,7 @@ random_search = grid_search.RandomizedSearchCV(
     grnnet,
     param_distributions={'std': np.arange(1e-2, 1, 1e-4)},
     n_iter=400,
-    scoring=scorer
+    scoring=scorer,
 )
 random_search.fit(dataset.data, dataset.target)
 report(random_search.grid_scores_)

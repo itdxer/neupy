@@ -1,11 +1,14 @@
 import numpy as np
 from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
+import matplotlib.pyplot as plt
 from neupy import algorithms, layers
 from neupy.functions import rmsle
 
 
 np.random.seed(0)
+
+plt.style.use('ggplot')
 
 dataset = datasets.load_boston()
 data, target = dataset.data, dataset.target
@@ -28,6 +31,7 @@ cgnet = algorithms.ConjugateGradient(
     ],
     search_method='golden',
     show_epoch=25,
+    verbose=True,
     optimizations=[algorithms.LinearSearch],
 )
 

@@ -59,6 +59,7 @@ Let the units number be 4.
     >>> bpnet = algorithms.Backpropagation(
     ...     (2, 4, 1),
     ...     step=0.1,
+    ...     verbose=True,
     ...     show_epoch=1000,
     ... )
 

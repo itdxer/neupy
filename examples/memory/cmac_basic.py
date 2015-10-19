@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from neupy import algorithms
 
 
+plt.style.use('ggplot')
+
 np.random.seed(0)
 
 input_train = np.reshape(np.linspace(0, 2 * np.pi, 100), (100, 1))
@@ -17,7 +19,7 @@ cmac = algorithms.CMAC(
     associative_unit_size=10,
     step=0.2,
     verbose=True,
-    show_epoch=25
+    show_epoch='4 times'
 )
 cmac.train(input_train, target_train, epochs=100)
 predicted_test = cmac.predict(input_test)

@@ -90,9 +90,10 @@ class VerboseProperty(BoolProperty):
 
 
 class Verbose(Configurable):
-    verbose = VerboseProperty(default=True)
+    verbose = VerboseProperty(default=False)
 
     def __init__(self, **options):
         logger_name = str(id(self))
         self.logs = logging.getLogger(logger_name)
+        self.logs.propagate = self.verbose
         super(Verbose, self).__init__(**options)

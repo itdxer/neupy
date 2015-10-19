@@ -67,5 +67,5 @@ class Instar(BaseStepAssociative):
         update_from_column = unconditioned - self.use_bias
         weight = self.input_layer.weight[unconditioned:, :]
         return self.step * dot(
-            (input_row[:, update_from_column:].T - weight), layer_output
+            (input_row[:, update_from_column:].T - weight), layer_output.T
         )

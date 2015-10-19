@@ -31,6 +31,7 @@ sofmnet = algorithms.SOFM(
     step=0.1,
     show_epoch=100,
     shuffle_data=True,
+    verbose=True
 )
 
 plt.plot(input_data.T[0:1, :], input_data.T[1:2, :], 'ko')

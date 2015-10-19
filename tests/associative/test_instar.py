@@ -35,6 +35,36 @@ class HebbRuleTestCase(BaseTestCase):
             np.array([[3, 1, -1, -1]]).T
         )
 
+    def test_multiple_outputs(self):
+        input_data = np.array([
+            [-0.1961, 0.9806],
+        ])
+        input_size, output_size = (2, 3)
+        input_layer = layers.StepLayer(
+            input_size,
+            weight=np.array([
+                [0.7071, 0.7071, -1],
+                [-0.7071, 0.7071, 0],
+            ])
+        )
+        output_layer = layers.CompetitiveOutputLayer(output_size)
+        hamming_network = algorithms.Instar(
+            input_layer > output_layer,
+            step=0.5,
+            n_unconditioned=1,
+            verbose=False
+        )
+        hamming_network.train(input_data, epochs=1)
+        np.testing.assert_array_almost_equal(
+            hamming_network.input_layer.weight,
+            np.array([
+                [0.7071, 0.7071, -1],
+                [-0.5704, 0.8439, 0.1368]
+            ]),
+            decimal=4
+        )
+
+
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(
             algorithms.Instar(

@@ -55,8 +55,9 @@ docs = {
     # ------------------------------------ #
 
     "verbose": """verbose : bool
-        Verbose output for network. Defaults to ``True``. ``False``
-        disables output.
+        Property controls verbose output interminal.
+        ``True`` enable informative output in the terminal and ``False`` -
+        disable it. Defaults to ``False``.
     """,
     "step": """step : float
         Learns step, defaults to ``0.1``.

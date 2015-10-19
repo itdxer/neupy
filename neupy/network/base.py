@@ -218,7 +218,7 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
         if self.connection == FAKE_CONNECTION:
             return
 
-        for layer in self.layers:
+        for layer in self.train_layers:
             layer.initialize(with_bias=self.use_bias)
 
     # ----------------- Neural Network Train ---------------- #
