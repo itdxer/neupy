@@ -14,10 +14,11 @@ class SklearnCompatibilityTestCase(BaseTestCase):
     def test_pipeline(self):
         dataset = datasets.load_diabetes()
         target_scaler = preprocessing.MinMaxScaler()
+        target = dataset.target.reshape(-1, 1)
 
         x_train, x_test, y_train, y_test = train_test_split(
             dataset.data,
-            target_scaler.fit_transform(dataset.target),
+            target_scaler.fit_transform(target),
             train_size=0.85
         )
 

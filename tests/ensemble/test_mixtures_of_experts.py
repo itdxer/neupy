@@ -132,7 +132,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         output_scaler = preprocessing.MinMaxScaler()
         x_train, x_test, y_train, y_test = cross_validation.train_test_split(
             input_scaler.fit_transform(data),
-            output_scaler.fit_transform(target),
+            output_scaler.fit_transform(target.reshape(-1, 1)),
             train_size=0.8
         )
 

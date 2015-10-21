@@ -10,6 +10,7 @@ from base import BaseTestCase
 class PandasCompatibilityTestCase(BaseTestCase):
     def test_pandas_for_bp(self):
         dataset = datasets.load_diabetes()
+        target = dataset.target.reshape(-1, 1)
 
         input_scaler = preprocessing.MinMaxScaler()
         target_scaler = preprocessing.MinMaxScaler()
@@ -18,7 +19,7 @@ class PandasCompatibilityTestCase(BaseTestCase):
         input_columns = ['column_' + str(i) for i in range(n_features)]
 
         pandas_data = pd.DataFrame(dataset.data, columns=input_columns)
-        pandas_data['target'] = target_scaler.fit_transform(dataset.target)
+        pandas_data['target'] = target_scaler.fit_transform(target)
         pandas_data[input_columns] = input_scaler.fit_transform(
             pandas_data[input_columns]
         )

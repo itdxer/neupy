@@ -41,7 +41,7 @@ class GradientDescentTestCase(BaseTestCase):
         data, targets = datasets.make_regression(n_samples=4000)
         scaler = preprocessing.MinMaxScaler(feature_range=(0, 1))
         data = scaler.fit_transform(data)
-        targets = scaler.fit_transform(targets)
+        targets = scaler.fit_transform(targets.reshape(-1, 1))
         x_train, x_test, y_train, y_test = train_test_split(
             data, targets, train_size=0.7
         )

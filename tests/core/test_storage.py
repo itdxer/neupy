@@ -16,7 +16,8 @@ class StorageTestCase(BaseTestCase):
         data, target = datasets.make_regression(n_features=2, n_targets=1)
 
         data = preprocessing.MinMaxScaler().fit_transform(data)
-        target = preprocessing.MinMaxScaler().fit_transform(target)
+        target_scaler = preprocessing.MinMaxScaler()
+        target = target_scaler.fit_transform(target.reshape(-1, 1))
 
         with tempfile.NamedTemporaryFile() as temp:
             test_layer_weights = bpnet.input_layer.weight.copy()
@@ -60,7 +61,8 @@ class StorageTestCase(BaseTestCase):
         data, target = datasets.make_regression(n_features=3, n_targets=1)
 
         data = preprocessing.MinMaxScaler().fit_transform(data)
-        target = preprocessing.MinMaxScaler().fit_transform(target)
+        target_scaler = preprocessing.MinMaxScaler()
+        target = target_scaler.fit_transform(target.reshape(-1, 1))
 
         with tempfile.NamedTemporaryFile() as temp:
             valid_class_name = bpnet.__class__.__name__

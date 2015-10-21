@@ -74,22 +74,31 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
 
         white = Rectangle((0, 0), 1, 1, linewidth=1, linestyle='solid',
                           facecolor='#ffffff')
-        rectangles = [white]
+        black = Rectangle((0, 0), 1, 1, color='#000000')
 
-        if min_value < 0:
-            black = Rectangle((0, 0), 1, 1, color='#000000')
-            rectangles.append(black)
+        if min_value < 0 and max_value > 0:
+            rectangles = [white, black]
             rect_description = [
                 'Positive value\n'
                 'Max: {}'.format(max_value),
                 'Negative value\n'
                 'Min: {}'.format(min_value),
             ]
-        else:
+
+        elif min_value >= 0:
+            rectangles = [white]
             rect_description = [
                 'Positive value\n'
-                'Max: {}\n'
-                'Min: {}'.format(max_value, min_value),
+                'Min: {}\n'
+                'Max: {}'.format(min_value, max_value),
+            ]
+
+        else:
+            rectangles = [black]
+            rect_description = [
+                'Negative value\n'
+                'Min: {}\n'
+                'Max: {}'.format(min_value, max_value),
             ]
 
         ax.legend(rectangles, rect_description, loc='center left',

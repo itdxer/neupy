@@ -15,7 +15,8 @@ class QuickPropTestCase(BaseTestCase):
         data, target = datasets.make_regression(n_samples=1500, n_features=5,
                                                 n_informative=5, n_targets=1,
                                                 random_state=33)
-        target = preprocessing.MinMaxScaler().fit_transform(target)
+        target_scaler = preprocessing.MinMaxScaler()
+        target = target_scaler.fit_transform(target.reshape(-1, 1))
         self.data = cross_validation.train_test_split(data, target,
                                                       train_size=0.75)
         self.connection = (5, 10, 1)
