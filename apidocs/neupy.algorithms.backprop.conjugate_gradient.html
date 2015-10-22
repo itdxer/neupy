@@ -131,10 +131,21 @@ passing through the output layer. Defaults to <span class="docutils literal"><sp
 <blockquote>
 <div><p>Learns step, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
 </div></blockquote>
-<p><strong>show_epoch</strong> : int</p>
+<p><strong>show_epoch</strong> : int or str</p>
 <blockquote>
-<div><p>This option controls how offen you&#8217;d see the epoch updates
-information in the terminal, defaults to <span class="docutils literal"><span class="pre">1</span></span></p>
+<div><p>This property controls how often the network will display information
+about training. There are two main syntaxes for this property.
+You can describe it as positive integer number and it
+will describe how offen would you like to see summary output in
+terminal. For instance, number <cite>100</cite> mean that network will show you
+summary in 100, 200, 300 ... epochs. String value should be in a
+specific format. It should contain the number of times that the output
+will be displayed in the terminal. The second part is just
+a syntax word <span class="docutils literal"><span class="pre">time</span></span> or <span class="docutils literal"><span class="pre">times</span></span> just to make text readable.
+For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that the network will show
+output twice with approximately equal period of epochs and one
+additional output would be after the finall epoch.
+Defaults to <span class="docutils literal"><span class="pre">'10</span> <span class="pre">times'</span></span>.</p>
 </div></blockquote>
 <p><strong>shuffle_data</strong> : bool</p>
 <blockquote>
@@ -159,8 +170,9 @@ training your network, defaults to <span class="docutils literal"><span class="p
 </div></blockquote>
 <p><strong>verbose</strong> : bool</p>
 <blockquote class="last">
-<div><p>Verbose output for network. Defaults to <span class="docutils literal"><span class="pre">True</span></span>. <span class="docutils literal"><span class="pre">False</span></span>
-disables output.</p>
+<div><p>Property controls verbose output interminal.
+<span class="docutils literal"><span class="pre">True</span></span> enable informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> -
+disable it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -171,7 +183,7 @@ disables output.</p>
 <dl class="last docutils">
 <dt><a class="reference internal" href="neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Backpropagation</span></span></a></dt>
 <dd>Backpropagation algorithm.</dd>
-<dt><a class="reference internal" href="neupy.algorithms.backprop.steps.linear_search.html#neupy.algorithms.backprop.steps.linear_search.LinearSearch" title="neupy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">LinearSearch</span></span></a></dt>
+<dt><a class="reference internal" href="neupy.algorithms.steps.linear_search.html#neupy.algorithms.steps.linear_search.LinearSearch" title="neupy.algorithms.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">LinearSearch</span></span></a></dt>
 <dd>Linear Search important algorithm for step     selection in Conjugate Gradient algorithm.</dd>
 </dl>
 </div>
@@ -238,8 +250,8 @@ disables output.</p>
 <tr class="row-even"><td>last_error()</td>
 <td>Returns the last error network result after training procedure or <span class="docutils literal"><span class="pre">None</span></span> value if you try to get it before network training.</td>
 </tr>
-<tr class="row-odd"><td>plot_errors(use_semilog=False)</td>
-<td>Draws the error rate update plot. It always shows network learning progress. When you add cross validation data set into training function it displays validation data set error as separated curve. If parameter <span class="docutils literal"><span class="pre">use_semilog</span></span> is equal to the <span class="docutils literal"><span class="pre">True</span></span> value it displays x-axis in logarithmic scale.</td>
+<tr class="row-odd"><td>plot_errors(logx=False)</td>
+<td>Draws the error rate update plot. It always shows network learning progress. When you add cross validation data set into training function it displays validation data set error as separated curve. If parameter <span class="docutils literal"><span class="pre">logx</span></span> is equal to the <span class="docutils literal"><span class="pre">True</span></span> value it displays x-axis in logarithmic scale.</td>
 </tr>
 </tbody>
 </table>
@@ -255,7 +267,7 @@ disables output.</p>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=True), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=False), 'use_bias': Option(class_name='BaseNetwork', value=True), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'optimizations': Option(class_name='Backpropagation', value=None), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=train_epoch_end), 'error': Option(class_name='BaseNetwork', value=mse), 'update_function': Option(class_name='ConjugateGradient', value=fletcher_reeves), 'step': Option(class_name='BaseNetwork', value=0.1), 'train_end_signal': Option(class_name='NetworkSignals', value=train_end), 'shuffle_data': Option(class_name='BaseNetwork', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/conjugate_gradient.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'error': Option(class_name='BaseNetwork', value=mse), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=True), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'train_end_signal': Option(class_name='NetworkSignals', value=None), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=None), 'update_function': Option(class_name='ConjugateGradient', value=fletcher_reeves), 'verbose': Option(class_name='Verbose', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=10 times), 'step': Option(class_name='BaseNetwork', value=0.1), 'use_bias': Option(class_name='BaseNetwork', value=True), 'optimizations': Option(class_name='Backpropagation', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/backprop/conjugate_gradient.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

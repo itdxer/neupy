@@ -116,27 +116,32 @@
 </div></blockquote>
 <p><strong>weight</strong> : 2D array-like or None</p>
 <blockquote>
-<div><p>Define your layer weights. <cite>None</cite> means that your weights will be
-generate randomly dependence on property <cite>init_method</cite>.
-<cite>None</cite> by default.</p>
+<div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
+generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
+<span class="docutils literal"><span class="pre">None</span></span> by default.</p>
 </div></blockquote>
 <p><strong>init_method</strong> : {&#8216;gauss&#8217;, &#8216;bounded&#8217;, &#8216;ortho&#8217;}</p>
 <blockquote>
 <div><p>Weight initialization method.
-<cite>gauss</cite> will generate random weights dependence on Standard
+<span class="docutils literal"><span class="pre">gauss</span></span> will generate random weights dependence on Standard
 Normal Distribution.
-<cite>bounded</cite> generate uniform random weghts in initialized bounds.
-<cite>ortho</cite> generate random orthogonal matrix.</p>
+<span class="docutils literal"><span class="pre">bounded</span></span> generate uniform random weghts in initialized bounds.
+<span class="docutils literal"><span class="pre">ortho</span></span> generate random orthogonal matrix.</p>
 </div></blockquote>
-<p><strong>random_weight_bound</strong> : tuple of two int</p>
+<p><strong>bounds</strong> : tuple of two float</p>
 <blockquote class="last">
-<div><p>Available only for <cite>init_method</cite> eqaul to <cite>bounded</cite>, defaults
-to <cite>(0, 1)</cite>.</p>
+<div><p>Available only for <span class="docutils literal"><span class="pre">init_method</span></span> eqaul to <span class="docutils literal"><span class="pre">bounded</span></span>, defaults
+to <span class="docutils literal"><span class="pre">(0,</span> <span class="pre">1)</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
+<dl class="attribute">
+<dt id="neupy.layers.base.BaseLayer.bounds">
+<span class="descname">bounds</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="neupy.layers.base.BaseLayer.init_method">
 <span class="descname">init_method</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -154,7 +159,7 @@ to <cite>(0, 1)</cite>.</p>
 
 <dl class="attribute">
 <dt id="neupy.layers.base.BaseLayer.options">
-<span class="descname">options</span><em class="property"> = {'input_size': Option(class_name='BaseLayer', value=None), 'init_method': Option(class_name='BaseLayer', value=gauss), 'random_weight_bound': Option(class_name='BaseLayer', value=[0, 1]), 'weight': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'bounds': Option(class_name='BaseLayer', value=[0, 1]), 'init_method': Option(class_name='BaseLayer', value=gauss), 'weight': Option(class_name='BaseLayer', value=None), 'input_size': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -167,11 +172,6 @@ to <cite>(0, 1)</cite>.</p>
 <span class="descname">preformat_input</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="neupy.layers.base.BaseLayer.random_weight_bound">
-<span class="descname">random_weight_bound</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="neupy.layers.base.BaseLayer.relate_to">
 <span class="descname">relate_to</span><span class="sig-paren">(</span><em>right_layer</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -179,7 +179,7 @@ to <cite>(0, 1)</cite>.</p>
 
 <dl class="attribute">
 <dt id="neupy.layers.base.BaseLayer.shared_docs">
-<span class="descname">shared_docs</span><em class="property"> = {'layer_params': &quot;input_size : int\n        Layer input size.\n    weight : 2D array-like or None\n        Define your layer weights. `None` means that your weights will be\n        generate randomly dependence on property `init_method`.\n        `None` by default.\n    init_method : {'gauss', 'bounded', 'ortho'}\n        Weight initialization method.\n        `gauss` will generate random weights dependence on Standard\n        Normal Distribution.\n        `bounded` generate uniform random weghts in initialized bounds.\n        `ortho` generate random orthogonal matrix.\n    random_weight_bound : tuple of two int\n        Available only for `init_method` eqaul to `bounded`, defaults\n        to `(0, 1)`.\n    &quot;}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">shared_docs</span><em class="property"> = {'layer_params': &quot;input_size : int\n        Layer input size.\n    weight : 2D array-like or None\n        Define your layer weights. ``None`` means that your weights will be\n        generate randomly dependence on property ``init_method``.\n        ``None`` by default.\n    init_method : {'gauss', 'bounded', 'ortho'}\n        Weight initialization method.\n        ``gauss`` will generate random weights dependence on Standard\n        Normal Distribution.\n        ``bounded`` generate uniform random weghts in initialized bounds.\n        ``ortho`` generate random orthogonal matrix.\n    bounds : tuple of two float\n        Available only for ``init_method`` eqaul to ``bounded``, defaults\n        to ``(0, 1)``.\n    &quot;}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">

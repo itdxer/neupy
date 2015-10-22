@@ -196,14 +196,9 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="neupy.core.properties.NumberBoundProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">NumberBoundProperty</span><span class="sig-paren">(</span><em>name=None</em>, <em>default=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.core.properties.IntBoundProperty">
+<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">IntBoundProperty</span><span class="sig-paren">(</span><em>name=None</em>, <em>default=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.ListOfTypesProperty" title="neupy.core.properties.ListOfTypesProperty"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.ListOfTypesProperty</span></span></a></p>
-<dl class="attribute">
-<dt id="neupy.core.properties.NumberBoundProperty.count_of_values">
-<span class="descname">count_of_values</span><em class="property"> = 2</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
@@ -287,9 +282,8 @@
 <dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.Property" title="neupy.core.properties.Property"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.Property</span></span></a></p>
 <dl class="attribute">
 <dt id="neupy.core.properties.StringProperty.expected_type">
-<span class="descname">expected_type</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>alias of <span class="xref py py-class docutils literal"><span class="pre">str</span></span></p>
-</dd></dl>
+<span class="descname">expected_type</span><em class="property"> = (&lt;class 'str'&gt;,)</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -322,6 +316,17 @@
 <dl class="attribute">
 <dt id="neupy.core.properties.ChoiceProperty.choices">
 <span class="descname">choices</span><em class="property"> = {}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.core.properties.NumberBoundProperty">
+<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">NumberBoundProperty</span><span class="sig-paren">(</span><em>name=None</em>, <em>default=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.ListOfTypesProperty" title="neupy.core.properties.ListOfTypesProperty"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.ListOfTypesProperty</span></span></a></p>
+<dl class="attribute">
+<dt id="neupy.core.properties.NumberBoundProperty.inner_list_type">
+<span class="descname">inner_list_type</span><em class="property"> = (&lt;class 'int'&gt;, &lt;class 'float'&gt;)</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

@@ -1,14 +1,6 @@
 neupy.algorithms.backprop package
 =================================
 
-Subpackages
------------
-
-.. toctree::
-
-    neupy.algorithms.backprop.steps
-    neupy.algorithms.backprop.weights
-
 Submodules
 ----------
 

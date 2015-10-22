@@ -1265,6 +1265,7 @@ We use 85% of data for train.</p>
     <span class="p">],</span>
     <span class="n">method</span><span class="o">=</span><span class="s">'golden'</span><span class="p">,</span>
     <span class="n">show_epoch</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
     <span class="n">optimizations</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LinearSearch</span><span class="p">],</span>
 <span class="p">)</span>
 </pre></div>
@@ -1715,12 +1716,12 @@ It decreased steps on the 11th epoch and weight update didn’t go to the same p
 <div class="section" id="conjugate-gradient-and-golden-search">
 <h3><a class="toc-backref" href="#id11">Conjugate Gradient and Golden Search</a></h3>
 <p>Now let’s look at <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.conjugate_gradient.html#neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient" title="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> with
-<a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.steps.linear_search.html#neupy.algorithms.backprop.steps.linear_search.LinearSearch" title="neupy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a>.
+<a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.steps.linear_search.html#neupy.algorithms.steps.linear_search.LinearSearch" title="neupy.algorithms.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a>.
 Conjugate Gradient in Backpropagation variation is a little bit different than in
 Multivariable Calculus notation and it doesn’t guarantee converge into n-th steps
 (<cite>n</cite> means dimmention size for specific problem).
 Steps don’t have a perfect size for <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.conjugate_gradient.html#neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient" title="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a>,
-so <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.steps.linear_search.html#neupy.algorithms.backprop.steps.linear_search.LinearSearch" title="neupy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> is always a good choice for a step selection.</p>
+so <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.steps.linear_search.html#neupy.algorithms.steps.linear_search.LinearSearch" title="neupy.algorithms.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> is always a good choice for a step selection.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">prepare_plot</span><span class="p">()</span>
 <span class="n">cgnet_golde_search</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">algorithms</span><span class="o">.</span><span class="n">ConjugateGradient</span><span class="p">,</span>
                              <span class="n">optimizations</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LinearSearch</span><span class="p">])</span>
@@ -1743,7 +1744,7 @@ We can zoom the plot and find this tiny step update.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="http://neupy.com/_images/conj-grad-small-step.png"><img alt="Conjugate Gradient with Golden Search small second step" src="http://neupy.com/_images/conj-grad-small-step.png" style="width: 80%;"/></a>
 </div>
-<p>If we add the same <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.backprop.steps.linear_search.html#neupy.algorithms.backprop.steps.linear_search.LinearSearch" title="neupy.algorithms.backprop.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> algorithm to the classic Gradient Descent we will get to the minimum into a few steps as well.</p>
+<p>If we add the same <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.steps.linear_search.html#neupy.algorithms.steps.linear_search.LinearSearch" title="neupy.algorithms.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> algorithm to the classic Gradient Descent we will get to the minimum into a few steps as well.</p>
 </div>
 </div>
 <div class="section" id="bring-them-all-together">
