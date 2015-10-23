@@ -1,5 +1,5 @@
 neupy.algorithms.weights.base module
-=============================================
+====================================
 
 .. automodule:: neupy.algorithms.weights.base
     :members:

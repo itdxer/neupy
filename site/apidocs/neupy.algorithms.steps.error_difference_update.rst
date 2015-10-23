@@ -1,5 +1,5 @@
 neupy.algorithms.steps.error_difference_update module
-==============================================================
+=====================================================
 
 .. automodule:: neupy.algorithms.steps.error_difference_update
     :members:

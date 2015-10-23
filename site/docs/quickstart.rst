@@ -60,13 +60,13 @@ Let the units number be 4.
     ...     (2, 4, 1),
     ...     step=0.1,
     ...     verbose=True,
-    ...     show_epoch=1000,
+    ...     show_epoch='4 times',
     ... )
 
 As you can see from code additionaly we set up ``step`` and ``show_epoch`` parameters.
 ``step`` parameter control learning rate.
 ``show_epoch`` controls the frequency display in the terminal training.
-If we set the value up to ``1000`` we will see network progress for every ``1000`` epoch.
+We set the value up to ``'4 times'`` that mean we will see network progress 4 times and one additional for the final iteration.
 
 We set up network connections as tuple of layers sizes, but we don't put in activation function.
 That is because :network:`Backpropagation` use the most common sigmoid layer by
@@ -107,7 +107,7 @@ In the output you can see many useful information about learning procedures.
 First of all there is simple information about input data and number of training epochs.
 Also ther you can see information about every 1000 training epoch.
 In addition training output always shows the last training epoch.
-Each epoch output has three values: Error in, Error out and Epoch time.
+Each epoch output has three values: Train error, Validation error and Epoch time.
 Epoch time shows for how long the process was active in the specific epoch.
 There are also two types of errors.
 First one displays error for your training dataset and second one for validation dataset.

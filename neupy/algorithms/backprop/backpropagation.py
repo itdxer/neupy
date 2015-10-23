@@ -91,19 +91,20 @@ class Backpropagation(SupervisedLearning, FeedForwardNetwork):
         if options is None:
             options = kwargs
 
-        default_optimizations = self.default_optimizations
-        optimizations = options.get('optimizations', default_optimizations)
+        self.optimizations = default_optimizations = self.default_optimizations
 
-        if optimizations != default_optimizations:
+        if default_optimizations and 'optimizations' in options:
             optimizations_merged = []
+            optimizations = options['optimizations']
+
             for algorithm in chain(optimizations, default_optimizations):
                 types = [alg.optimization_type for alg in optimizations_merged]
+
                 if algorithm.optimization_type not in types:
                     optimizations_merged.append(algorithm)
-        else:
-            optimizations_merged = optimizations
 
-        options['optimizations'] = optimizations_merged
+            options['optimizations'] = optimizations_merged
+
         super(Backpropagation, self).__init__(connection, **options)
 
     def get_gradient(self, output_train, target_train):

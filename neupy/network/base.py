@@ -324,8 +324,8 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
                 if epoch % show_epoch == 0 or epoch in (1, last_epoch):
                     logs.data("""
                         Epoch {epoch}
-                        Error in:  {error}
-                        Error out: {error_out}
+                        Train error:  {error}
+                        Validation error: {error_out}
                         Epoch time: {epoch_time} sec
                     """.format(
                         epoch=self.epoch,
@@ -397,17 +397,19 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
         plot_function = plt.semilogx if logx else plt.plot
 
         line_error_in, = plot_function(errors_range, errors_in)
+        title_text = 'Learning error after each epoch'
 
         if errors_out:
             line_error_out, = plot_function(errors_range, errors_out)
             plt.legend(
                 [line_error_in, line_error_out],
-                ['Error in', 'Error out']
+                ['Train error', 'Validation error']
             )
+            title_text = 'Learning errors after each epoch'
 
+        plt.title(title_text)
         plt.xlim(0)
 
-        plt.title('Train errors')
         plt.ylabel('Error')
         plt.xlabel('Epoch')
 

@@ -12,6 +12,8 @@ Subpackages
     neupy.algorithms.competitive
     neupy.algorithms.memory
     neupy.algorithms.rbfn
+    neupy.algorithms.steps
+    neupy.algorithms.weights
 
 Submodules
 ----------

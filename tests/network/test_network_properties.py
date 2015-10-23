@@ -47,7 +47,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
                 terminal_output = out.getvalue()
 
             self.assertEqual(case.should_be_n_times,
-                             terminal_output.count("Error in"))
+                             terminal_output.count("Train error"))
 
     def test_show_epoch_invalid_cases(self):
         wrong_input_values = (

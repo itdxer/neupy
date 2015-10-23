@@ -1,7 +1,7 @@
-neupy.algorithms.steps.base module
+neupy.algorithms.steps.linear_search module
 ===========================================
 
-.. automodule:: neupy.algorithms.steps.base
+.. automodule:: neupy.algorithms.steps.linear_search
     :members:
     :undoc-members:
     :show-inheritance:

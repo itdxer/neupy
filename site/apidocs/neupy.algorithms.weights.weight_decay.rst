@@ -1,5 +1,5 @@
 neupy.algorithms.weights.weight_decay module
-=====================================================
+============================================
 
 .. automodule:: neupy.algorithms.weights.weight_decay
     :members:

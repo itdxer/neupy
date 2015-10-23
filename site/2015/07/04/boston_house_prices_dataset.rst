@@ -265,7 +265,7 @@ Now we are ready to build Neural Network which will predict house prices.
             layers.SigmoidLayer(50),
             layers.OutputLayer(1),
         ],
-        method='golden',
+        search_method='golden',
         show_epoch=25,
         verbose=True,
         optimizations=[algorithms.LinearSearch],
