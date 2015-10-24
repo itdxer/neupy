@@ -212,21 +212,29 @@ class FunctionTestCase(BaseTestCase):
         )
 
     def test_rectifier(self):
+        test_matrix1 = np.array([
+            [-10, -0.33, 0, -1],
+            [10, 0, 1, 0.33],
+        ])
         self.assertEqual(rectifier(1), 1)
         self.assertEqual(rectifier(0), 0)
         self.assertEqual(rectifier(-1), 0)
 
         np.testing.assert_array_almost_equal(
-            rectifier(
-                np.array([
-                    [-10, -0.33, 0, -1],
-                    [10, 0, 1, 0.33],
-                ])
-            ),
+            rectifier(test_matrix1),
             np.array([
                 [0, 0, 0, 0],
                 [10, 0, 1, 0.33],
             ])
+        )
+
+        test_matrix2 = np.array([
+            [-10, -0.33, 1e-5, -1],
+            [10, -1e-5, 1, 0.33],
+        ])
+        np.testing.assert_array_almost_equal(
+            rectifier.deriv(test_matrix2),
+            differentiate(rectifier, test_matrix2)
         )
 
     def test_softplus_scalar(self):

@@ -19,13 +19,18 @@ def step(x):
     return where(x > 0, 1, 0)
 
 
-def rectifier(x):
-    return where(x < 0, 0, x)
-
-
 # -----------------------------------------------------#
 #              Functions with derivatives              #
 # -----------------------------------------------------#
+
+
+def rectifier_deriv(x):
+    return where(x <= 0, 0, 1)
+
+
+@with_derivative(rectifier_deriv)
+def rectifier(x):
+    return where(x < 0, 0, x)
 
 
 def linear_deriv(x):
