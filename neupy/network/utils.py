@@ -40,7 +40,7 @@ def iter_until_converge(network, epsilon, max_epochs):
                 "Epoch #{} stopped. Network didn't converge "
                 "after {} iterations".format(network.epoch, max_epochs)
             )
-            break
+            return
 
     if np.isnan(error) or np.isinf(error):
         network.logs.log("TRAIN", "Epoch #{} stopped. Network error value is "
