@@ -27,21 +27,24 @@ def add_bias_column(data):
 def iter_until_converge(network, epsilon, max_epochs):
     # Trigger first iteration and store first error term
     yield network.epoch
-    network.epoch += 1
     error = network.last_error()
 
     while error > epsilon:
-        yield network.epoch
         network.epoch += 1
+        yield network.epoch
         error = abs(network.last_error() - error)
 
-        if network.epoch >= max_epochs:
+        if network.epoch >= max_epochs and error < epsilon:
             network.logs.log(
                 "TRAIN",
                 "Epoch #{} stopped. Network didn't converge "
                 "after {} iterations".format(network.epoch, max_epochs)
             )
             break
+
+    if np.isnan(error) or np.isinf(error):
+        network.logs.log("TRAIN", "Epoch #{} stopped. Network error value is "
+                                  "invalid".format(network.epoch))
     else:
         network.logs.log("TRAIN", "Epoch #{} stopped. Network converged."
                                   "".format(network.epoch))
