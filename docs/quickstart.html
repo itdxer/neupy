@@ -146,14 +146,14 @@ Let the units number be 4.</p>
 <span class="gp">... </span>    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">show_epoch</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">show_epoch</span><span class="o">=</span><span class="s">&#39;4 times&#39;</span><span class="p">,</span>
 <span class="gp">... </span><span class="p">)</span>
 </pre></div>
 </div>
 <p>As you can see from code additionaly we set up <span class="docutils literal"><span class="pre">step</span></span> and <span class="docutils literal"><span class="pre">show_epoch</span></span> parameters.
 <span class="docutils literal"><span class="pre">step</span></span> parameter control learning rate.
 <span class="docutils literal"><span class="pre">show_epoch</span></span> controls the frequency display in the terminal training.
-If we set the value up to <span class="docutils literal"><span class="pre">1000</span></span> we will see network progress for every <span class="docutils literal"><span class="pre">1000</span></span> epoch.</p>
+We set the value up to <span class="docutils literal"><span class="pre">'4</span> <span class="pre">times'</span></span> that mean we will see network progress 4 times and one additional for the final iteration.</p>
 <p>We set up network connections as tuple of layers sizes, but we don&#8217;t put in activation function.
 That is because <a class="reference internal" href="../apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Backpropagation</span></span></a> use the most common sigmoid layer by
 default for tuple structure.
@@ -178,7 +178,7 @@ Let set up <span class="docutils literal"><span class="pre">5000</span></span> e
 First of all there is simple information about input data and number of training epochs.
 Also ther you can see information about every 1000 training epoch.
 In addition training output always shows the last training epoch.
-Each epoch output has three values: Error in, Error out and Epoch time.
+Each epoch output has three values: Train error, Validation error and Epoch time.
 Epoch time shows for how long the process was active in the specific epoch.
 There are also two types of errors.
 First one displays error for your training dataset and second one for validation dataset.
