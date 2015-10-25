@@ -5,7 +5,7 @@ class SupervisedLearning(object):
     """ Mixin for Supervised Neural Network algorithms.
     """
     def train(self, input_train, target_train, input_test=None,
-              target_test=None, epochs=None, epsilon=None):
+              target_test=None, epochs=100, epsilon=None):
         self._train(input_train=input_train, target_train=target_train,
                     input_test=input_test, target_test=target_test,
                     epochs=epochs, epsilon=epsilon)
@@ -14,7 +14,7 @@ class SupervisedLearning(object):
 class UnsupervisedLearning(object):
     """ Mixin for Unsupervised Neural Network algorithms.
     """
-    def train(self, input_train, epochs=None, epsilon=None):
+    def train(self, input_train, epochs=100, epsilon=None):
         self._train(input_train=input_train, target_train=None,
                     input_test=None, target_test=None,
                     epochs=epochs, epsilon=epsilon)

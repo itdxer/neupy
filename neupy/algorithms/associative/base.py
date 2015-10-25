@@ -23,7 +23,7 @@ class BaseAssociative(UnsupervisedLearning, BaseNetwork):
         self.use_bias = False
         super(BaseAssociative, self).setup_defaults()
 
-    def train(self, input_train, epochs=None, epsilon=None):
+    def train(self, input_train, epochs=100, epsilon=None):
         if epsilon is not None:
             raise AttributeError("You can't converge this algorithm. Use "
                                  "`epochs` parameter.")

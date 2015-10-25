@@ -94,7 +94,7 @@ class Oja(UnsupervisedLearning, BaseNetwork):
 
         return np_abs(error) / (input_data.shape[0] * input_data.shape[1])
 
-    def train(self, input_data, epsilon=1e-5):
+    def train(self, input_data, epsilon=1e-2, epochs=100):
         input_data = format_data(input_data)
         n_input_features = input_data.shape[1]
 
@@ -108,7 +108,7 @@ class Oja(UnsupervisedLearning, BaseNetwork):
                 )
             )
 
-        super(Oja, self).train(input_data, epsilon=epsilon)
+        super(Oja, self).train(input_data, epsilon=epsilon, epochs=epochs)
 
     def reconstruct(self, input_data):
         if self.weights is None:

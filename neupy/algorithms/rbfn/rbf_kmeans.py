@@ -106,7 +106,7 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
 
         return np_abs(old_centers - centers)
 
-    def train(self, input_train, epsilon=1e-5):
+    def train(self, input_train, epsilon=1e-5, epochs=100):
         n_clusters = self.n_clusters
         input_train = format_data(input_train)
 
@@ -115,4 +115,5 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
                              "input data.")
 
         self.centers = input_train[:n_clusters, :].copy()
-        super(RBFKMeans, self).train(input_train, epsilon=epsilon)
+        super(RBFKMeans, self).train(input_train, epsilon=epsilon,
+                                     epochs=epochs)

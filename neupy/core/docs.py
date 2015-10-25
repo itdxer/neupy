@@ -41,8 +41,11 @@ docs = {
     "unsupervised_train_epochs": """train(input_train, epochs=100):
         Trains network with fixed number of epochs.
     """,
-    "unsupervised_train_epsilon": """train(input_train, epsilon=1e-5):
-        Trains network until it is converged.
+    "unsupervised_train_epsilon": """train(input_train, epsilon=1e-5, \
+    epochs=100):
+        Trains network until it converge. Parameter ``epochs`` control
+        maximum number of iterations, just to make sure that network will
+        stop training procedure if it can't converge.
     """,
     "supervised_train_lazy": """train(input_train, target_train, copy=True):
         Network just stores all the information about the data and use it for \

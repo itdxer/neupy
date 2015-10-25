@@ -64,3 +64,29 @@ class NetworkPropertiesTestCase(BaseTestCase):
                     verbose=False,
                     show_epoch=wrong_input_value
                 )
+
+    def test_network_convergence(self):
+        with catch_stdout() as out:
+            bpnet = algorithms.Backpropagation(
+                (2, 3, 1),
+                step=0.1,
+                verbose=True,
+                show_epoch=100
+            )
+            bpnet.train(xor_zero_input_train, xor_zero_target_train,
+                        epochs=3, epsilon=1e-5)
+            terminal_output = out.getvalue()
+        self.assertEqual(1, terminal_output.count("Network didn't converge"))
+
+        with catch_stdout() as out:
+            bpnet = algorithms.Backpropagation(
+                (2, 3, 1),
+                step=0.1,
+                verbose=True,
+                show_epoch=100
+            )
+            bpnet.train(xor_zero_input_train, xor_zero_target_train,
+                        epochs=1e3, epsilon=1e-3)
+            terminal_output = out.getvalue()
+
+        self.assertEqual(1, terminal_output.count("Network converged"))

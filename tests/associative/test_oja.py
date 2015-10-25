@@ -29,12 +29,18 @@ class OjaTestCase(BaseTestCase):
             verbose=False
         )
 
-        ojanet.train(self.data, epsilon=1e-5)
+        ojanet.train(self.data, epsilon=1e-5, epochs=100)
         minimized_data = ojanet.predict(self.data)
-        self.assertTrue(np.all(np.round(minimized_data, 2) == self.result))
+        np.testing.assert_array_almost_equal(
+            minimized_data, self.result,
+            decimal=2
+        )
 
         reconstructed = ojanet.reconstruct(minimized_data)
-        self.assertTrue(np.allclose(reconstructed, self.data))
+        np.testing.assert_array_almost_equal(
+            reconstructed, self.data,
+            decimal=3
+        )
 
     def test_oja_exceptions(self):
         ojanet = algorithms.Oja(minimized_data_size=1, step=0.01,
@@ -71,7 +77,7 @@ class OjaTestCase(BaseTestCase):
         data = np.array([[1, 2, 3]]).T
         target = np.array([[1, 2, 3]]).T
 
-        ojanet.train(data)
+        ojanet.train(data, epsilon=0.1, epochs=1000)
         self.assertInvalidVectorPred(ojanet, data.ravel(), target,
                                      decimal=2)
 
@@ -83,7 +89,7 @@ class OjaTestCase(BaseTestCase):
         target = np.array([[1, 2, 3]]).T
         input_vector = data.ravel()
 
-        ojanet.train(data, epsilon=0.1)
+        ojanet.train(data, epsilon=0.1, epochs=1000)
 
         test_vectors = create_vectors(input_vector)
 

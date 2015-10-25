@@ -23,7 +23,18 @@ from .connections import (FAKE_CONNECTION, LayerConnection,
 __all__ = ('BaseNetwork',)
 
 
-# ----------------- Signals ---------------- #
+def show_training_summary(network):
+    network.logs.data("""
+        Epoch {epoch}
+        Train error:  {error}
+        Validation error: {error_out}
+        Epoch time: {epoch_time} sec
+    """.format(
+        epoch=network.epoch,
+        error=network.last_error_in() or '-',
+        error_out=network.last_error_out() or '-',
+        epoch_time=round(network.train_epoch_time, 5)
+    ))
 
 
 def clean_layers(connection):
@@ -224,7 +235,7 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
     # ----------------- Neural Network Train ---------------- #
 
     def _train(self, input_train, target_train=None, input_test=None,
-               target_test=None, epochs=None, epsilon=None):
+               target_test=None, epochs=100, epsilon=None):
 
         # ----------- Pre-format target data ----------- #
 
@@ -240,14 +251,11 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
         if target_test is not None:
             target_test = format_data(target_test, row1d=target_row1d)
 
-        # ----------- Validation ----------- #
+        # ----------- Validate input values ----------- #
 
-        if epochs is None and epsilon is None:
-            epochs = 100
-
-        if epochs is not None and epsilon is not None:
-            raise ValueError("You can't user `epochs` and `epsilon` "
-                             "attributes in one train process.")
+        if epsilon is not None and epochs <= 2:
+            raise ValueError("Network should train at teast 3 epochs before "
+                             "check the difference between errors")
 
         # ----------- Predefine parameters ----------- #
 
@@ -256,22 +264,20 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
         compute_error_out = (input_test is not None and
                              target_test is not None)
         predict = self.predict
-
-        if epochs is not None:
-            self.epoch = 1
-            iterepochs = range(self.epoch, epochs + 1)
-            last_epoch = epochs
-            show_epoch = parse_show_epoch_property(show_epoch, epochs)
+        self.epoch = 1
 
         if epsilon is not None:
-            iterepochs = iter_until_converge(self, epsilon)
-            last_epoch = None
+            iterepochs = iter_until_converge(self, epsilon, max_epochs=epochs)
 
             if isinstance(show_epoch, six.string_types):
                 show_epoch = 100
                 logs.warning("Can't use `show_epoch` value in converging "
                              "mode. Set up 100 to `show_epoch` property "
                              "by default.")
+
+        else:
+            iterepochs = range(self.epoch, epochs + 1)
+            show_epoch = parse_show_epoch_property(show_epoch, epochs)
 
         # ----------- Train process ----------- #
 
@@ -286,19 +292,18 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
 
         logs.empty()
 
-        # Optimizations for long loops. Set constant properties to
-        # variables.
+        # Optimizations for long loops
         errors = self.errors_in
         errors_out = self.errors_out
         shuffle_data = self.shuffle_data
 
-        # Methods
         error_func = self.error
         train_epoch = self.train_epoch
         train_epoch_end_signal = self.train_epoch_end_signal
         train_end_signal = self.train_end_signal
 
         for epoch in iterepochs:
+            self.epoch = epoch
             epoch_start_time = time()
 
             if shuffle_data:
@@ -321,28 +326,21 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
                 errors.append(error)
                 self.train_epoch_time = time() - epoch_start_time
 
-                if epoch % show_epoch == 0 or epoch in (1, last_epoch):
-                    logs.data("""
-                        Epoch {epoch}
-                        Train error:  {error}
-                        Validation error: {error_out}
-                        Epoch time: {epoch_time} sec
-                    """.format(
-                        epoch=self.epoch,
-                        error=self.last_error_in() or '-',
-                        error_out=self.last_error_out() or '-',
-                        epoch_time=round(self.train_epoch_time, 5)
-                    ))
+                if epoch % show_epoch == 0 or epoch == 1:
+                    show_training_summary(self)
 
                 if train_epoch_end_signal is not None:
                     train_epoch_end_signal(self)
 
-                self.epoch = epoch + 1
-
             except StopIteration as err:
-                logs.log("TRAIN", "Epoch #{} stopped. {}".format(self.epoch,
-                                                                 str(err)))
+                logs.log("TRAIN", "Epoch #{} stopped. {}"
+                                  "".format(self.epoch, str(err)))
                 break
+
+        # Don't need to show the summary information if it where
+        # shown previously
+        if epoch % show_epoch != 0 and epoch != 1:
+            show_training_summary(self)
 
         if train_end_signal is not None:
             train_end_signal(self)

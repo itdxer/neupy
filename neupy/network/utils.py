@@ -24,14 +24,27 @@ def add_bias_column(data):
     return np.concatenate((bias_vector, np.asarray(data)), axis=1)
 
 
-def iter_until_converge(network, epsilon):
-    epoch = network.epoch
-    error = epsilon + 1
+def iter_until_converge(network, epsilon, max_epochs):
+    # Trigger first iteration and store first error term
+    yield network.epoch
+    network.epoch += 1
+    error = network.last_error()
 
-    while np.any(error > epsilon):
-        yield epoch
-        epoch = epoch + 1
-        error = network.last_error()
+    while error > epsilon:
+        yield network.epoch
+        network.epoch += 1
+        error = abs(network.last_error() - error)
+
+        if network.epoch >= max_epochs:
+            network.logs.log(
+                "TRAIN",
+                "Epoch #{} stopped. Network didn't converge "
+                "after {} iterations".format(network.epoch, max_epochs)
+            )
+            break
+    else:
+        network.logs.log("TRAIN", "Epoch #{} stopped. Network converged."
+                                  "".format(network.epoch))
 
 
 def shuffle(*arrays):
