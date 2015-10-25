@@ -34,7 +34,7 @@ def iter_until_converge(network, epsilon, max_epochs):
         yield network.epoch
         error = abs(network.last_error() - error)
 
-        if network.epoch >= max_epochs and error < epsilon:
+        if network.epoch >= max_epochs and error > epsilon:
             network.logs.log(
                 "TRAIN",
                 "Epoch #{} stopped. Network didn't converge "
