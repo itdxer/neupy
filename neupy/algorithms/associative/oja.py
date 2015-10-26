@@ -1,4 +1,4 @@
-from numpy import dot, abs as np_abs
+from numpy import dot, abs as np_abs, sum as np_sum
 from numpy.random import randn
 
 from neupy.utils import format_data
@@ -17,6 +17,8 @@ class Oja(UnsupervisedLearning, BaseNetwork):
     Notes
     -----
     * In practice use step as very small value. For example ``1e-7``.
+    * Normalize the input data before use Oja algorithm. Input data
+    shouldn't contains large values.
 
     Parameters
     ----------
@@ -92,7 +94,13 @@ class Oja(UnsupervisedLearning, BaseNetwork):
 
         weights += self.step * dot(error.T, minimized)
 
-        return np_abs(error) / (input_data.shape[0] * input_data.shape[1])
+        mae = np_sum(np_abs(error)) / input_data.size
+
+        del minimized
+        del reconstruct
+        del error
+
+        return mae
 
     def train(self, input_data, epsilon=1e-2, epochs=100):
         input_data = format_data(input_data)

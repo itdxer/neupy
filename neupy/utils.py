@@ -19,6 +19,7 @@ def format_data(input_data, row1d=False, copy=False):
 
         if isinstance(input_data, (pandas.Series, pandas.DataFrame)):
             input_data = input_data.values
+
     if input_data.ndim == 1:
         data_shape = (1, n_features) if row1d else (n_features, 1)
         input_data = input_data.reshape(data_shape)
