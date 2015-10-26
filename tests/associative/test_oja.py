@@ -77,7 +77,7 @@ class OjaTestCase(BaseTestCase):
         data = np.array([[1, 2, 3]]).T
         target = np.array([[1, 2, 3]]).T
 
-        ojanet.train(data, epsilon=0.1, epochs=1000)
+        ojanet.train(data, epsilon=0.01, epochs=100)
         self.assertInvalidVectorPred(ojanet, data.ravel(), target,
                                      decimal=2)
 
@@ -89,7 +89,7 @@ class OjaTestCase(BaseTestCase):
         target = np.array([[1, 2, 3]]).T
         input_vector = data.ravel()
 
-        ojanet.train(data, epsilon=0.1, epochs=1000)
+        ojanet.train(data, epsilon=0.01, epochs=100)
 
         test_vectors = create_vectors(input_vector)
 
