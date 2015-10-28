@@ -39,6 +39,38 @@ def show_training_summary(network):
     ))
 
 
+def show_epoch_summary(network, show_epoch):
+    delay_limit = 1  # in seconds
+    prev_summary_time = None
+    delay_history_length = 10
+    terminal_output_delays = deque(maxlen=delay_history_length)
+
+    while True:
+        now = time()
+
+        if prev_summary_time is not None:
+            time_delta = now - prev_summary_time
+            terminal_output_delays.append(time_delta)
+
+        show_training_summary(network)
+        prev_summary_time = now
+
+        if len(terminal_output_delays) == delay_history_length:
+            prev_summary_time = None
+            average_delay = mean(terminal_output_delays)
+
+            if average_delay < delay_limit:
+                show_epoch *= ceil(delay_limit / average_delay)
+                network.logs.warning(
+                    "Too many outputs in a terminal. Set "
+                    "up logging after each {} epoch"
+                    "".format(show_epoch)
+                )
+                terminal_output_delays.clear()
+
+        yield show_epoch
+
+
 def shuffle_train_data(input_train, target_train):
     if target_train is None:
         return shuffle(input_train), None
@@ -276,13 +308,7 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
         compute_error_out = (input_test is not None and
                              target_test is not None)
         predict = self.predict
-        self.epoch = 1
-        last_shown_epoch_number = 0
-
-        delay_limit = 1  # in seconds
-        last_summary_time = None
-        n_delay_time_history = 10
-        terminal_output_delays = deque(maxlen=n_delay_time_history)
+        last_epoch_shown = 0
 
         if epsilon is not None:
             iterepochs = iter_until_converge(self, epsilon, max_epochs=epochs)
@@ -294,8 +320,10 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
                              "by default.")
 
         else:
-            iterepochs = range(self.epoch, epochs + 1)
+            iterepochs = range(1, epochs + 1)
             show_epoch = parse_show_epoch_property(show_epoch, epochs)
+
+        epoch_summary = show_epoch_summary(self, show_epoch)
 
         # ----------- Train process ----------- #
 
@@ -343,29 +371,8 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
                 self.train_epoch_time = time() - epoch_start_time
 
                 if epoch % show_epoch == 0 or epoch == 1:
-                    current_time = time()
-
-                    if last_summary_time is not None:
-                        terminal_output_delays.append(
-                            current_time - last_summary_time
-                        )
-
-                    show_training_summary(self)
-                    last_shown_epoch_number = epoch
-                    last_summary_time = current_time
-
-                    if len(terminal_output_delays) == n_delay_time_history:
-                        last_summary_time = None
-                        average_delay = mean(terminal_output_delays)
-
-                        if average_delay < delay_limit:
-                            show_epoch *= ceil(delay_limit / average_delay)
-                            logs.warning(
-                                "Too many outputs in a terminal. Set "
-                                "up logging after each {} epoch"
-                                "".format(show_epoch)
-                            )
-                            terminal_output_delays.clear()
+                    show_epoch = next(epoch_summary)
+                    last_epoch_shown = epoch
 
                 if train_epoch_end_signal is not None:
                     train_epoch_end_signal(self)
@@ -375,7 +382,7 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
                                   "".format(self.epoch, str(err)))
                 break
 
-        if epoch != last_shown_epoch_number:
+        if epoch != last_epoch_shown:
             show_training_summary(self)
 
         if train_end_signal is not None:
