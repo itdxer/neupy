@@ -329,12 +329,14 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
 
         logs.header("Start train")
         logs.log("TRAIN", "Train data size: {}".format(input_train.shape[0]))
-        logs.log("TRAIN", "Number of input features: {}".format(
-            input_train.shape[1]
-        ))
 
-        if epochs is not None:
+        if input_test is not None:
+            logs.log("TRAIN", "Test data size: {}".format(input_test.shape[0]))
+
+        if epsilon is None:
             logs.log("TRAIN", "Total epochs: {}".format(epochs))
+        else:
+            logs.log("TRAIN", "Max epochs: {}".format(epochs))
 
         logs.empty()
 
@@ -379,7 +381,7 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
 
             except StopIteration as err:
                 logs.log("TRAIN", "Epoch #{} stopped. {}"
-                                  "".format(self.epoch, str(err)))
+                                  "".format(epoch, str(err)))
                 break
 
         if epoch != last_epoch_shown:
