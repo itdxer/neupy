@@ -1,10 +1,12 @@
 from __future__ import division
 
+from math import ceil
 from time import time
 from itertools import groupby
+from collections import deque
 
 import six
-from numpy import arange
+from numpy import arange, mean
 import matplotlib.pyplot as plt
 
 from neupy.utils import format_data, is_row1d
@@ -35,6 +37,12 @@ def show_training_summary(network):
         error_out=network.last_error_out() or '-',
         epoch_time=round(network.train_epoch_time, 5)
     ))
+
+
+def shuffle_train_data(input_train, target_train):
+    if target_train is None:
+        return shuffle(input_train), None
+    return shuffle(input_train, target_train)
 
 
 def clean_layers(connection):
@@ -168,13 +176,20 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
         self.output_layer = self.layers[-1]
         self.train_layers = self.layers[:-1]
 
-        # Setup initialized options
         super(BaseNetwork, self).__init__(**options)
-        logs = self.logs
-
         self.setup_defaults()
 
-        available_classes = [c.__name__ for c in self.__class__.__mro__]
+        if self.verbose:
+            self.show_network_options(highlight_options=options)
+
+        self.init_layers()
+
+    def show_network_options(self, highlight_options=None):
+        available_classes = [cls.__name__ for cls in self.__class__.__mro__]
+        logs = self.logs
+
+        if highlight_options is None:
+            highlight_options = {}
 
         def classname_grouper(option):
             classname = option[1].class_name
@@ -202,9 +217,9 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
             logs.simple("{}:".format(clsname))
 
             for key, data in sorted(class_options):
-                if key in options:
+                if key in highlight_options:
                     logger = logs.log
-                    value = options[key]
+                    value = highlight_options[key]
                 else:
                     logger = logs.gray_log
                     value = data.value
@@ -214,11 +229,8 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
                 )
             logs.empty()
 
-        self.init_layers()
-        super(BaseNetwork, self).__init__()
-
     def setup_defaults(self):
-        """ Setup default values before populate options.
+        """ Setup default values before populate the options.
         """
 
     # ----------------- Neural Network Layers ---------------- #
@@ -265,6 +277,12 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
                              target_test is not None)
         predict = self.predict
         self.epoch = 1
+        last_shown_epoch_number = 0
+
+        delay_limit = 1  # in seconds
+        last_summary_time = None
+        n_delay_time_history = 10
+        terminal_output_delays = deque(maxlen=n_delay_time_history)
 
         if epsilon is not None:
             iterepochs = iter_until_converge(self, epsilon, max_epochs=epochs)
@@ -307,11 +325,8 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
             epoch_start_time = time()
 
             if shuffle_data:
-                if target_train is not None:
-                    input_train, target_train = shuffle(input_train,
-                                                        target_train)
-                else:
-                    input_train, = shuffle(input_train)
+                input_train, target_train = shuffle_train_data(input_train,
+                                                               target_train)
 
             self.input_train = input_train
             self.target_train = target_train
@@ -320,14 +335,37 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
                 error = train_epoch(input_train, target_train)
 
                 if compute_error_out:
-                    error_out = error_func(predict(input_test), target_test)
+                    predicted_test = predict(input_test)
+                    error_out = error_func(predicted_test, target_test)
                     errors_out.append(error_out)
 
                 errors.append(error)
                 self.train_epoch_time = time() - epoch_start_time
 
                 if epoch % show_epoch == 0 or epoch == 1:
+                    current_time = time()
+
+                    if last_summary_time is not None:
+                        terminal_output_delays.append(
+                            current_time - last_summary_time
+                        )
+
                     show_training_summary(self)
+                    last_shown_epoch_number = epoch
+                    last_summary_time = current_time
+
+                    if len(terminal_output_delays) == n_delay_time_history:
+                        last_summary_time = None
+                        average_delay = mean(terminal_output_delays)
+
+                        if average_delay < delay_limit:
+                            show_epoch *= ceil(delay_limit / average_delay)
+                            logs.warn(
+                                "Too many outputs in a terminal. Set "
+                                "up logging after each {} epoch"
+                                "".format(show_epoch)
+                            )
+                            terminal_output_delays.clear()
 
                 if train_epoch_end_signal is not None:
                     train_epoch_end_signal(self)
@@ -337,9 +375,7 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
                                   "".format(self.epoch, str(err)))
                 break
 
-        # Don't need to show the summary information if it where
-        # shown previously
-        if epoch % show_epoch != 0 and epoch != 1:
+        if epoch != last_shown_epoch_number:
             show_training_summary(self)
 
         if train_end_signal is not None:

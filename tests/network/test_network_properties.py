@@ -3,6 +3,7 @@ from contextlib import contextmanager
 from collections import namedtuple
 
 import six
+import numpy as np
 from neupy import algorithms
 
 from data import xor_zero_input_train, xor_zero_target_train
@@ -90,3 +91,17 @@ class NetworkPropertiesTestCase(BaseTestCase):
             terminal_output = out.getvalue()
 
         self.assertEqual(1, terminal_output.count("Network converged"))
+
+    def test_terminal_output_frequency(self):
+        with catch_stdout() as out:
+            data = np.random.random((1000, 2))
+            target = np.random.random((1000, 1))
+            bpnet = algorithms.Backpropagation(
+                (2, 1, 1),
+                verbose=True,
+                show_epoch=1
+            )
+            bpnet.train(data, target, epochs=100)
+            terminal_output = out.getvalue()
+
+        self.assertEqual(1, terminal_output.count("Too many outputs"))
