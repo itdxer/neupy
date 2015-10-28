@@ -360,7 +360,7 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
 
                         if average_delay < delay_limit:
                             show_epoch *= ceil(delay_limit / average_delay)
-                            logs.warn(
+                            logs.warning(
                                 "Too many outputs in a terminal. Set "
                                 "up logging after each {} epoch"
                                 "".format(show_epoch)
@@ -406,8 +406,8 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
         if not len(errors) or isinstance(errors[0], float):
             return errors
 
-        self.logs.warn("Your errors bad formated for plot output. "
-                       "They will be normilized.")
+        self.logs.warning("Your errors bad formated for plot output. "
+                          "They will be normilized.")
 
         normilized_errors = []
         for error in errors:
