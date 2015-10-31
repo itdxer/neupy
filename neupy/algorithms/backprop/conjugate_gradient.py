@@ -64,12 +64,12 @@ class ConjugateGradient(Backpropagation):
     'hentenes_stiefel', 'conjugate_descent', 'liu_storey', 'dai_yuan'}}
         Update function. Defaults to ``fletcher_reeves``.
     {optimizations}
-    {raw_predict_param}
     {full_params}
 
     Methods
     -------
     {supervised_train}
+    {raw_predict}
     {full_methods}
 
     Examples

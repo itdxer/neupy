@@ -51,7 +51,6 @@ class BackpropagationTestCase(BaseTestCase):
         network = Backpropagation(
             (input_layer > hidden_layer > output),
             step=0.3,
-            use_raw_predict_at_error=True,
             verbose=False
         )
 

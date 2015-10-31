@@ -24,7 +24,6 @@ class WolfeSearchTestCase(BaseTestCase):
             # Network configurations
             connection=(3, 10, 2),
             step=0.2,
-            use_raw_predict_at_error=False,
             shuffle_data=True,
             verbose=False,
             # Test configurations

@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 from neupy.utils import format_data, is_row1d
 from neupy.helpers import preformat_value
 from neupy.core.base import BaseSkeleton
-from neupy.core.config import Configurable
 from neupy.core.properties import (Property, FuncProperty, NumberProperty,
                                    BoolProperty)
 from neupy.layers import BaseLayer, OutputLayer
@@ -131,6 +130,9 @@ def parse_show_epoch_property(value, n_epochs):
 
 
 class ShowEpochProperty(Property):
+    """ Class helps validate specific syntax for `show_epoch`
+    property from ``BaseNetwork`` class.
+    """
     expected_type = tuple([int] + [six.string_types])
 
     def validate(self, value):
@@ -164,18 +166,7 @@ class ShowEpochProperty(Property):
                              "equal to one.".format(self.name))
 
 
-class NetworkSignals(Configurable):
-    """ Network signals.
-
-    Parameters
-    ----------
-    {full_signals}
-    """
-    train_epoch_end_signal = FuncProperty()
-    train_end_signal = FuncProperty()
-
-
-class BaseNetwork(BaseSkeleton, NetworkSignals):
+class BaseNetwork(BaseSkeleton):
     """ Base class Network algorithms.
 
     Parameters
@@ -195,12 +186,15 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
     show_epoch = ShowEpochProperty(min_size=1, default='10 times')
     shuffle_data = BoolProperty(default=False)
 
+    # Signals
+    train_epoch_end_signal = FuncProperty()
+    train_end_signal = FuncProperty()
+
     def __init__(self, connection, **options):
         self.connection = clean_layers(connection)
 
         self.errors_in = []
         self.errors_out = []
-        self.epoch = 0
         self.train_epoch_time = None
 
         self.layers = list(self.connection)
@@ -280,6 +274,8 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
 
     def _train(self, input_train, target_train=None, input_test=None,
                target_test=None, epochs=100, epsilon=None):
+        """ Main method for the Neural Network training.
+        """
 
         # ----------- Pre-format target data ----------- #
 
@@ -303,6 +299,7 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
 
         # ----------- Predefine parameters ----------- #
 
+        self.epoch = 1
         show_epoch = self.show_epoch
         logs = self.logs
         compute_error_out = (input_test is not None and
@@ -331,7 +328,8 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
         logs.log("TRAIN", "Train data size: {}".format(input_train.shape[0]))
 
         if input_test is not None:
-            logs.log("TRAIN", "Test data size: {}".format(input_test.shape[0]))
+            logs.log("TRAIN", "Validation data size: {}"
+                              "".format(input_test.shape[0]))
 
         if epsilon is None:
             logs.log("TRAIN", "Total epochs: {}".format(epochs))
@@ -350,6 +348,9 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
         train_epoch_end_signal = self.train_epoch_end_signal
         train_end_signal = self.train_end_signal
 
+        self.input_train = input_train
+        self.target_train = target_train
+
         for epoch in iterepochs:
             self.epoch = epoch
             epoch_start_time = time()
@@ -357,9 +358,8 @@ class BaseNetwork(BaseSkeleton, NetworkSignals):
             if shuffle_data:
                 input_train, target_train = shuffle_train_data(input_train,
                                                                target_train)
-
-            self.input_train = input_train
-            self.target_train = target_train
+                self.input_train = input_train
+                self.target_train = target_train
 
             try:
                 error = train_epoch(input_train, target_train)

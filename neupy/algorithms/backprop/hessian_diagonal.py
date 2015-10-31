@@ -23,12 +23,12 @@ class HessianDiagonal(Backpropagation):
         produce huge number in hessian diagonal elements. This
         parameter control diagonal elements size. Defaults to ``1e-10``.
     {optimizations}
-    {raw_predict_param}
     {full_params}
 
     Methods
     -------
     {supervised_train}
+    {raw_predict}
     {full_methods}
 
     Examples
@@ -76,7 +76,6 @@ class HessianDiagonal(Backpropagation):
     ...         layers.OutputLayer(1)
     ...     ],
     ...     step=1.5,
-    ...     use_raw_predict_at_error=False,
     ...     shuffle_data=False,
     ...     verbose=False,
     ...     min_eigenvalue=1e-10

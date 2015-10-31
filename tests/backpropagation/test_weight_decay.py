@@ -29,7 +29,6 @@ class WeightDecayTestCase(BaseTestCase):
             input_layer > hidden_layer > output,
             step=0.3,
             decay_rate=0.0001,
-            use_raw_predict_at_error=True,
             optimizations=[WeightDecay]
         )
         network.train(xor_input_train, xor_target_train, epochs=500)

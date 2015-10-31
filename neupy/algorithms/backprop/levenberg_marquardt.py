@@ -21,12 +21,12 @@ class LevenbergMarquardt(Backpropagation):
         Factor to decrease the mu if update decrese the error, otherwise
         increse mu by the same factor.
     {optimizations}
-    {raw_predict_param}
     {full_params}
 
     Methods
     -------
     {supervised_train}
+    {raw_predict}
     {full_methods}
 
     Examples

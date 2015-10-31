@@ -1,8 +1,7 @@
 from functools import partial
 
 import numpy as np
-from neupy.layers import (TanhLayer, SigmoidLayer, StepOutputLayer,
-                             OutputLayer)
+from neupy.layers import TanhLayer, SigmoidLayer, StepOutputLayer, OutputLayer
 from neupy import algorithms
 from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
@@ -17,7 +16,7 @@ class GradientDescentTestCase(BaseTestCase):
         super(GradientDescentTestCase, self).setUp()
         output = StepOutputLayer(1, output_bounds=(-1, 1))
         self.connection = TanhLayer(2) > TanhLayer(5) > output
-    #
+
     def test_stochastic_gradient_descent(self):
         network_default_error, network_tested_error = compare_networks(
            # Test classes
@@ -28,7 +27,6 @@ class GradientDescentTestCase(BaseTestCase):
            # Network configurations
            connection=self.connection,
            step=0.1,
-           use_raw_predict_at_error=True,
            shuffle_data=True,
            verbose=False,
            # Test configurations

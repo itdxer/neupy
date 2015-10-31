@@ -15,12 +15,12 @@ class Momentum(Backpropagation):
     momentum : float
         Control previous gradient ratio. Defaults to ``0.9``.
     {optimizations}
-    {raw_predict_param}
     {full_params}
 
     Methods
     -------
     {supervised_train}
+    {raw_predict}
     {full_methods}
 
     Examples

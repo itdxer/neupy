@@ -138,6 +138,8 @@ def linkcode_resolve(domain, info):
 
 
 def get_module_for_class(classname, moduletype):
+    """ Return model for class just using its name and module type.
+    """
     available_module_types = {
         'network': 'neupy.algorithms',
         'ensemble': 'neupy.ensemble',
@@ -209,6 +211,9 @@ def preprocess_texts(app, docname, source):
 
 
 def setup(app):
+    """ Function with reserved name that would be trigger by Sphinx
+    if it will find such function in configuration file.
+    """
     app.connect('autodoc-process-docstring', process_docstring)
     app.connect('source-read', preprocess_texts)
 

@@ -6,8 +6,11 @@ import six
 import numpy as np
 from neupy import algorithms
 
-from data import xor_zero_input_train, xor_zero_target_train
 from base import BaseTestCase
+
+
+xor_zero_input_train = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+xor_zero_target_train = np.array([[1, 0, 0, 1]]).T
 
 
 @contextmanager

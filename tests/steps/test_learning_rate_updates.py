@@ -34,7 +34,6 @@ class LearningRateUpdatesTestCase(BaseTestCase):
             self.connection,
             step=self.first_step,
             epochs_step_minimizator=50,
-            use_raw_predict_at_error=True,
             optimizations=[SimpleStepMinimization]
         )
         network.train(xor_input_train, xor_target_train, epochs=100)
@@ -58,7 +57,6 @@ class LearningRateUpdatesTestCase(BaseTestCase):
             update_for_smaller_error=1.05,
             update_for_bigger_error=0.7,
             error_difference=1.04,
-            use_raw_predict_at_error=True,
             optimizations=[ErrorDifferenceStepUpdate]
         )
         network.train(xor_input_train, xor_target_train, epochs=200)

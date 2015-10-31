@@ -20,6 +20,10 @@ docs = {
     "predict": """predict(input_data)
         Predict value.
     """,
+    "raw_predict": """raw_predict(input_data)
+        Make a raw prediction. Ignore any post processing results related
+        to the final output layer.
+    """,
     "fit": """fit(\*args, \*\*kwargs)
         The same as ``train`` method.
     """,

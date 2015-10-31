@@ -29,7 +29,6 @@ class QuasiNewtonTestCase(BaseTestCase):
                 layers.OutputLayer(1)
             ],
             step=1.5,
-            use_raw_predict_at_error=False,
             shuffle_data=False,
             verbose=False,
             min_eigenvalue=1e-10

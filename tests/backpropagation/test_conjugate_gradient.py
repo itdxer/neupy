@@ -88,7 +88,6 @@ class ConjugateGradientTestCase(BaseTestCase):
             self.connection,
             step=5,
             error=cross_entropy_error,
-            use_raw_predict_at_error=False,
             shuffle_data=True,
             update_function='polak_ribiere'
         )
@@ -111,7 +110,6 @@ class ConjugateGradientTestCase(BaseTestCase):
             connection=self.connection,
             step=1,
             error=cross_entropy_error,
-            use_raw_predict_at_error=False,
             shuffle_data=True,
             # Test configurations
             epochs=50,

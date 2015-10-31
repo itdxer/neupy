@@ -28,7 +28,6 @@ class QuickPropTestCase(BaseTestCase):
             (5, 10, 1),
             step=0.1,
             upper_bound=1,
-            use_raw_predict_at_error=False,
             shuffle_data=True,
             # verbose=True,
         )
@@ -49,7 +48,6 @@ class QuickPropTestCase(BaseTestCase):
             # Network configurations
             connection=self.connection,
             step=0.1,
-            use_raw_predict_at_error=False,
             shuffle_data=True,
             # Test configurations
             epochs=100,

@@ -23,7 +23,6 @@ class RPROPTestCase(BaseTestCase):
             increase_factor=1.1,
             decrease_factor=0.1,
             step=1,
-            use_raw_predict_at_error=True,
             verbose=False
         )
 
@@ -40,7 +39,6 @@ class RPROPTestCase(BaseTestCase):
             # Network configurations
             connection=self.connection,
             step=1,
-            use_raw_predict_at_error=False,
             shuffle_data=True,
             verbose=False,
             # Test configurations
@@ -56,7 +54,6 @@ class RPROPTestCase(BaseTestCase):
             increase_factor=1.1,
             decrease_factor=0.1,
             step=1,
-            use_raw_predict_at_error=True,
             verbose=False
         )
         nw = algorithms.IRPROPPlus(copy.deepcopy(self.connection), **options)

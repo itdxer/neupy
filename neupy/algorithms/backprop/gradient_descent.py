@@ -15,12 +15,12 @@ class MinibatchGradientDescent(Backpropagation):
     batch_size : int
         Setup batch size for learning process, defaults to ``10``.
     {optimizations}
-    {raw_predict_param}
     {full_params}
 
     Methods
     -------
     {supervised_train}
+    {raw_predict}
     {full_methods}
 
     Examples
@@ -54,11 +54,11 @@ class MinibatchGradientDescent(Backpropagation):
     def train_batch(self, input_data, target_data):
         deltas = [np.zeros(l.weight.shape) for l in self.train_layers]
 
-        predict_for_error = self.predict_for_error
+        raw_predict = self.raw_predict
         get_gradient = self.get_gradient
 
         for input_row, target_row in zip(input_data, target_data):
-            output_train = predict_for_error(input_data)
+            output_train = raw_predict(input_data)
 
             self.output_train = output_train
 
@@ -80,4 +80,4 @@ class MinibatchGradientDescent(Backpropagation):
             update_weights(weight_delta)
             after_weight_update(input_train, target_train)
 
-        return self.error(self.predict_for_error(input_train), target_train)
+        return self.error(self.raw_predict(input_train), target_train)

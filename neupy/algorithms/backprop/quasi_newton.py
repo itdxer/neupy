@@ -87,12 +87,12 @@ class QuasiNewton(Backpropagation):
         In the gradient less than this value algorithm will stop training
         procedure. Defaults to ``1e-5``.
     {optimizations}
-    {raw_predict_param}
     {full_params}
 
     Methods
     -------
     {supervised_train}
+    {raw_predict}
     {full_methods}
 
     Examples

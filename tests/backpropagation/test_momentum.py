@@ -29,7 +29,6 @@ class MomentumTestCase(BaseTestCase):
             (input_layer > hidden_layer > output),
             step=0.1,
             momentum=0.1,
-            use_raw_predict_at_error=True,
         )
 
         network2.train(xor_input_train, xor_target_train, epochs=300)

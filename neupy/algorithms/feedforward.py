@@ -1,6 +1,5 @@
 from abc import abstractmethod
 
-from neupy.core.properties import BoolProperty
 from neupy.layers.utils import generate_layers
 from neupy.network.base import BaseNetwork
 
@@ -9,17 +8,8 @@ __all__ = ('FeedForwardNetwork',)
 
 
 class FeedForwardNetwork(BaseNetwork):
-    """ Base class for fedd forward neural network.
+    """ Base class for the feed forward neural network.
     """
-
-    __raw_predict_param = """use_raw_predict_at_error : bool
-        If the value is specified as a ``True``, it means that learning
-        algorithm will use the results obtained by the network without
-        passing through the output layer. Defaults to ``False``.
-    """
-    shared_docs = {'raw_predict_param': __raw_predict_param}
-
-    use_raw_predict_at_error = BoolProperty(default=True)
 
     def __init__(self, connection, **options):
         islist_of_integers = (
@@ -45,7 +35,7 @@ class FeedForwardNetwork(BaseNetwork):
         pass
 
     def train_epoch(self, input_train, target_train):
-        output_train = self.predict_for_error(input_train)
+        output_train = self.raw_predict(input_train)
         self.output_train = output_train
 
         self.weight_delta = self.get_weight_delta(output_train, target_train)
@@ -71,10 +61,5 @@ class FeedForwardNetwork(BaseNetwork):
         return input_data
 
     def predict(self, input_data):
-        raw_output = self.raw_predict(input_data)
-        return self.output_layer.output(raw_output)
-
-    def predict_for_error(self, input_data):
-        if self.use_raw_predict_at_error:
-            return self.raw_predict(input_data)
-        return self.predict(input_data)
+        raw_prediction = self.raw_predict(input_data)
+        return self.output_layer.output(raw_prediction)

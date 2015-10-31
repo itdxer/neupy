@@ -17,12 +17,12 @@ class RPROP(Backpropagation):
     ----------
     {rprop_params}
     {optimizations}
-    {raw_predict_param}
     {full_params}
 
     Methods
     -------
     {supervised_train}
+    {raw_predict}
     {full_methods}
 
     Examples
@@ -143,6 +143,7 @@ class IRPROPPlus(RPROP):
     Methods
     -------
     {supervised_train}
+    {raw_predict}
     {full_methods}
 
     Examples

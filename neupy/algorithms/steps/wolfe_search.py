@@ -55,7 +55,6 @@ class WolfeSearch(SingleStep):
     ...         layers.OutputLayer(1)
     ...     ],
     ...     step=0.1,
-    ...     use_raw_predict_at_error=False,
     ...     shuffle_data=True,
     ...     show_epoch=20,
     ...     verbose=False,

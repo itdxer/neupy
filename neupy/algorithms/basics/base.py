@@ -26,9 +26,6 @@ class SimpleTwoLayerNetwork(SupervisedLearning, FeedForwardNetwork):
         self.input_layer = self.layers[0]
         self.error = linear_error
 
-    def setup_defaults(self):
-        del self.use_raw_predict_at_error
-
     def raw_predict(self, input_data):
         input_data = format_data(input_data)
 

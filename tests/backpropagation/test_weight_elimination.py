@@ -29,7 +29,6 @@ class WeightEliminationTestCase(BaseTestCase):
             input_layer > hidden_layer > output,
             step=0.3,
             zero_weight=20,
-            use_raw_predict_at_error=True,
             optimizations=[WeightElimination]
         )
         network.train(xor_input_train, xor_target_train, epochs=350)

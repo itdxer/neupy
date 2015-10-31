@@ -21,12 +21,12 @@ class Quickprop(Backpropagation):
     upper_bound : float
         Maximum possible value for weight update. Defaults to ``1``.
     {optimizations}
-    {raw_predict_param}
     {full_params}
 
     Methods
     -------
     {supervised_train}
+    {raw_predict}
     {full_methods}
 
     Examples
