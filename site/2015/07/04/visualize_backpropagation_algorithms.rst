@@ -485,5 +485,5 @@ Some of the algorithms can be memory or computationally expensive and you have t
 
 .. author:: default
 .. categories:: none
-.. tags:: supervised, backpropagation
+.. tags:: supervised, backpropagation, visualization
 .. comments::

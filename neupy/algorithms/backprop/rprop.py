@@ -1,5 +1,3 @@
-import copy
-
 from numpy import where, sign, ones, clip
 
 from neupy.core.properties import (NonNegativeNumberProperty,
@@ -118,7 +116,10 @@ class RPROP(Backpropagation):
         )
         gradient[negative_gradients] = 0
 
-        self.weight_deltas.append(output.copy())
+        self.weight_deltas.append(output)
+
+        del negative_gradients
+        del grad_product
 
         return output
 
@@ -126,9 +127,9 @@ class RPROP(Backpropagation):
         self.weight_deltas = []
         super(RPROP, self).update_weights(weight_deltas)
 
-        self.prev_weight_deltas = copy.copy(self.weight_deltas)
-        self.prev_gradients = copy.copy(self.gradients)
-        self.prev_steps = copy.copy(self.steps)
+        self.prev_weight_deltas = self.weight_deltas
+        self.prev_gradients = self.gradients
+        self.prev_steps = self.steps
 
 
 class IRPROPPlus(RPROP):
