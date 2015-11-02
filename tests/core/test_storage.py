@@ -53,7 +53,16 @@ class StorageTestCase(BaseTestCase):
     def test_dynamic_classes(self):
         test_classes = {
             algorithms.Backpropagation: {},
+            algorithms.MinibatchGradientDescent: {'batch_size': 10},
+            algorithms.Momentum: {'momentum': 0.5},
             algorithms.RPROP: {'maximum_step': 1},
+            algorithms.IRPROPPlus: {'maximum_step': 1},
+            algorithms.ConjugateGradient: {
+                'update_function': 'fletcher_reeves'
+            },
+            algorithms.QuasiNewton: {'update_function': 'bfgs'},
+            algorithms.HessianDiagonal: {'min_eigenvalue': 1e-5},
+            algorithms.LevenbergMarquardt: {'mu': 0.01},
         }
 
         for algorithm_class, algorithm_params in test_classes.items():
