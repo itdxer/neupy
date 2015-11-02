@@ -51,45 +51,55 @@ class StorageTestCase(BaseTestCase):
             self.assertEqual(real_bpnet_error, restored_bpnet_error)
 
     def test_dynamic_classes(self):
-        optimization_classes = [algorithms.WeightDecay,
-                                algorithms.SearchThenConverge]
-        bpnet = algorithms.Backpropagation(
-            (3, 5, 1),
-            optimizations=optimization_classes,
-            verbose=False,
-        )
-        data, target = datasets.make_regression(n_features=3, n_targets=1)
+        test_classes = {
+            algorithms.Backpropagation: {},
+            algorithms.RPROP: {'maximum_step': 1},
+        }
 
-        data = preprocessing.MinMaxScaler().fit_transform(data)
-        target_scaler = preprocessing.MinMaxScaler()
-        target = target_scaler.fit_transform(target.reshape(-1, 1))
+        for algorithm_class, algorithm_params in test_classes.items():
+            optimization_classes = [algorithms.WeightDecay,
+                                    algorithms.SearchThenConverge]
 
-        with tempfile.NamedTemporaryFile() as temp:
-            valid_class_name = bpnet.__class__.__name__
-            dill.dump(bpnet, temp)
-            temp.file.seek(0)
+            bpnet = algorithm_class(
+                (3, 5, 1),
+                optimizations=optimization_classes,
+                verbose=False,
+                **algorithm_params
+            )
+            data, target = datasets.make_regression(n_features=3, n_targets=1)
 
-            restored_bpnet = dill.load(temp)
-            restored_class_name = restored_bpnet.__class__.__name__
-            temp.file.seek(0)
+            data = preprocessing.MinMaxScaler().fit_transform(data)
+            target_scaler = preprocessing.MinMaxScaler()
+            target = target_scaler.fit_transform(target.reshape(-1, 1))
 
-            self.assertEqual(valid_class_name, restored_class_name)
-            self.assertEqual(optimization_classes,
-                             restored_bpnet.optimizations)
+            with tempfile.NamedTemporaryFile() as temp:
+                valid_class_name = bpnet.__class__.__name__
+                dill.dump(bpnet, temp)
+                temp.file.seek(0)
 
-            bpnet.train(data, target, epochs=10)
-            real_bpnet_error = bpnet.error(bpnet.predict(data), target)
-            updated_input_weight = bpnet.input_layer.weight.copy()
+                restored_bpnet = dill.load(temp)
+                restored_class_name = restored_bpnet.__class__.__name__
+                temp.file.seek(0)
 
-            dill.dump(bpnet, temp)
-            temp.file.seek(0)
+                self.assertEqual(valid_class_name, restored_class_name)
+                self.assertEqual(optimization_classes,
+                                 restored_bpnet.optimizations)
 
-            restored_bpnet2 = dill.load(temp)
-            temp.file.seek(0)
-            actual = restored_bpnet2.predict(data)
-            restored_bpnet_error = restored_bpnet2.error(actual, target)
+                bpnet.train(data, target, epochs=10)
+                real_bpnet_error = bpnet.error(bpnet.predict(data), target)
+                updated_input_weight = bpnet.input_layer.weight.copy()
 
-            np.testing.assert_array_equal(updated_input_weight,
-                                   restored_bpnet2.input_layer.weight)
-            # Error must be big, because we didn't normalize data
-            self.assertEqual(real_bpnet_error, restored_bpnet_error)
+                dill.dump(bpnet, temp)
+                temp.file.seek(0)
+
+                restored_bpnet2 = dill.load(temp)
+                temp.file.seek(0)
+                actual = restored_bpnet2.predict(data)
+                restored_bpnet_error = restored_bpnet2.error(actual, target)
+
+                np.testing.assert_array_equal(
+                    updated_input_weight,
+                    restored_bpnet2.input_layer.weight
+                )
+                # Error must be big, because we didn't normalize data
+                self.assertEqual(real_bpnet_error, restored_bpnet_error)

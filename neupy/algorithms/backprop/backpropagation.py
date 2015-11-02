@@ -84,6 +84,7 @@ class Backpropagation(SupervisedLearning, FeedForwardNetwork):
         )
         mro_classes = tuple(list(optimizations) + [cls])
         new_class = type(new_class_name, mro_classes, {})
+        new_class.main_class = cls
 
         return super(Backpropagation, new_class).__new__(new_class)
 
@@ -159,4 +160,11 @@ class Backpropagation(SupervisedLearning, FeedForwardNetwork):
 
     def __reduce__(self):
         args = (self.connection, self.get_params(with_connection=False))
-        return (Backpropagation, args)
+
+        # Main class should be different if we construct it dynamicaly
+        if hasattr(self, 'main_class'):
+            main_class = self.main_class
+        else:
+            main_class = self.__class__
+
+        return (main_class, args)
