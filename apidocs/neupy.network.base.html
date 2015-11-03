@@ -104,7 +104,7 @@
 <dl class="class">
 <dt id="neupy.network.base.BaseNetwork">
 <em class="property">class </em><span class="descclassname">neupy.network.base.</span><span class="descname">BaseNetwork</span><span class="sig-paren">(</span><em>connection</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="neupy.core.base.html#neupy.core.base.BaseSkeleton" title="neupy.core.base.BaseSkeleton"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.base.BaseSkeleton</span></span></a>, <span class="xref py py-class docutils literal"><span class="pre">neupy.network.base.NetworkSignals</span></span></p>
+<dd><p>Bases: <a class="reference internal" href="neupy.core.base.html#neupy.core.base.BaseSkeleton" title="neupy.core.base.BaseSkeleton"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.base.BaseSkeleton</span></span></a></p>
 <p>Base class Network algorithms.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -219,7 +219,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 
 <dl class="attribute">
 <dt id="neupy.network.base.BaseNetwork.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'use_bias': Option(class_name='BaseNetwork', value=True), 'train_end_signal': Option(class_name='NetworkSignals', value=None), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'error': Option(class_name='BaseNetwork', value=mse), 'show_epoch': Option(class_name='BaseNetwork', value=10 times), 'step': Option(class_name='BaseNetwork', value=0.1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'train_epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=10 times), 'step': Option(class_name='BaseNetwork', value=0.1), 'verbose': Option(class_name='Verbose', value=False), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'use_bias': Option(class_name='BaseNetwork', value=True), 'error': Option(class_name='BaseNetwork', value=mse)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -235,12 +235,17 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <dl class="method">
 <dt id="neupy.network.base.BaseNetwork.setup_defaults">
 <span class="descname">setup_defaults</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Setup default values before populate options.</p>
+<dd><p>Setup default values before populate the options.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.network.base.BaseNetwork.show_epoch">
 <span class="descname">show_epoch</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.network.base.BaseNetwork.show_network_options">
+<span class="descname">show_network_options</span><span class="sig-paren">(</span><em>highlight_options=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -251,6 +256,16 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <dl class="attribute">
 <dt id="neupy.network.base.BaseNetwork.step">
 <span class="descname">step</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.network.base.BaseNetwork.train_end_signal">
+<span class="descname">train_end_signal</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.network.base.BaseNetwork.train_epoch_end_signal">
+<span class="descname">train_epoch_end_signal</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

@@ -58,8 +58,6 @@ First type includes layers that have weights and activation function.
 The second one is output layers.
 Output layer is always the final layer in network structure and it just makes final output transformation for neural network.
 The output layer doesn't have weights or activation function.
-In :network:`Backpropagation` based algorithms exist ``use_raw_predict_at_error`` option which you can use to control an output that network will use.
-For example your last layer can be :layer:`CompetitiveOutputLayer` that better to ignore in learning process and make your output closer to a real answer without transformation.
 
 Create custom layers
 ********************

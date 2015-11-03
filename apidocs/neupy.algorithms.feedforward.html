@@ -105,7 +105,7 @@
 <dt id="neupy.algorithms.feedforward.FeedForwardNetwork">
 <em class="property">class </em><span class="descclassname">neupy.algorithms.feedforward.</span><span class="descname">FeedForwardNetwork</span><span class="sig-paren">(</span><em>connection</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/feedforward.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.network.base.html#neupy.network.base.BaseNetwork" title="neupy.network.base.BaseNetwork"><span class="xref py py-class docutils literal"><span class="pre">neupy.network.base.BaseNetwork</span></span></a></p>
-<p>Base class for fedd forward neural network.</p>
+<p>Base class for the feed forward neural network.</p>
 <dl class="method">
 <dt id="neupy.algorithms.feedforward.FeedForwardNetwork.after_weight_update">
 <span class="descname">after_weight_update</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/feedforward.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -118,7 +118,7 @@
 
 <dl class="attribute">
 <dt id="neupy.algorithms.feedforward.FeedForwardNetwork.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'train_end_signal': Option(class_name='NetworkSignals', value=None), 'use_raw_predict_at_error': Option(class_name='FeedForwardNetwork', value=True), 'error': Option(class_name='BaseNetwork', value=mse), 'use_bias': Option(class_name='BaseNetwork', value=True), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=10 times), 'step': Option(class_name='BaseNetwork', value=0.1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/feedforward.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'show_epoch': Option(class_name='BaseNetwork', value=10 times), 'step': Option(class_name='BaseNetwork', value=0.1), 'use_bias': Option(class_name='BaseNetwork', value=True), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'error': Option(class_name='BaseNetwork', value=mse), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'train_epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'verbose': Option(class_name='Verbose', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/feedforward.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -127,18 +127,8 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="neupy.algorithms.feedforward.FeedForwardNetwork.predict_for_error">
-<span class="descname">predict_for_error</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/feedforward.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="neupy.algorithms.feedforward.FeedForwardNetwork.raw_predict">
 <span class="descname">raw_predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/feedforward.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.algorithms.feedforward.FeedForwardNetwork.shared_docs">
-<span class="descname">shared_docs</span><em class="property"> = {'raw_predict_param': 'use_raw_predict_at_error : bool\n        If the value is specified as a ``True``, it means that learning\n        algorithm will use the results obtained by the network without\n        passing through the output layer. Defaults to ``False``.\n    '}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/feedforward.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -149,11 +139,6 @@
 <dl class="method">
 <dt id="neupy.algorithms.feedforward.FeedForwardNetwork.update_weights">
 <span class="descname">update_weights</span><span class="sig-paren">(</span><em>weight_delta</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/feedforward.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.algorithms.feedforward.FeedForwardNetwork.use_raw_predict_at_error">
-<span class="descname">use_raw_predict_at_error</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/feedforward.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

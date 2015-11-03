@@ -170,7 +170,12 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li>In practice use step as very small value. For example <span class="docutils literal"><span class="pre">1e-7</span></span>.</li>
+<li>Normalize the input data before use Oja algorithm. Input data</li>
 </ul>
+<p>shouldn&#8217;t contains large values.
+* Set up smaller values for weights if error for a few first iterations
+is big compare to the input values scale. For example, if your input data
+have values between 0 and 1 error value equal to 100 is big.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
@@ -231,7 +236,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 
 <dl class="attribute">
 <dt id="neupy.algorithms.associative.oja.Oja.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'minimized_data_size': Option(class_name='Oja', value=None), 'train_end_signal': Option(class_name='NetworkSignals', value=None), 'error': Option(class_name='BaseNetwork', value=mse), 'use_bias': Option(class_name='BaseNetwork', value=True), 'weights': Option(class_name='Oja', value=None), 'train_epoch_end_signal': Option(class_name='NetworkSignals', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=10 times), 'step': Option(class_name='BaseNetwork', value=0.1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/oja.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'weights': Option(class_name='Oja', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=10 times), 'step': Option(class_name='BaseNetwork', value=0.1), 'use_bias': Option(class_name='BaseNetwork', value=True), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'error': Option(class_name='BaseNetwork', value=mse), 'minimized_data_size': Option(class_name='Oja', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'train_epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'verbose': Option(class_name='Verbose', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/oja.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
