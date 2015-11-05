@@ -1,6 +1,6 @@
 from neupy.utils import format_data
 from neupy.network.learning import SupervisedLearning
-from neupy.functions import linear_error
+from neupy.network.errors import linear_error
 from neupy.layers import Step, Output
 
 

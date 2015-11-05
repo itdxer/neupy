@@ -3,7 +3,7 @@ from math import log, ceil
 from numpy import zeros, fill_diagonal, random, sign
 
 from neupy.utils import format_data
-from neupy.functions import step
+from neupy.network.utils import step
 from neupy.core.properties import BoolProperty
 from .utils import bin2sign, hopfield_energy
 from .base import DiscreteMemory

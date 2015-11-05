@@ -19,9 +19,8 @@ from neupy.core.properties import (Property, FuncProperty, NumberProperty,
                                    BoolProperty, ChoiceProperty)
 from neupy.layers import BaseLayer, Output
 from neupy.layers.utils import generate_layers
-from neupy.functions import (normilize_error_output, mse, binary_crossentropy,
-                             categorical_crossentropy)
-from .utils import iter_until_converge, shuffle
+from .errors import mse, binary_crossentropy, categorical_crossentropy
+from .utils import iter_until_converge, shuffle, normilize_error_output
 from .connections import (FAKE_CONNECTION, LayerConnection,
                           NetworkConnectionError)
 

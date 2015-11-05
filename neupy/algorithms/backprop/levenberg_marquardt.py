@@ -3,7 +3,6 @@ from operator import mul
 from numpy import zeros, asmatrix, identity, tile, dot, concatenate
 
 from neupy.core.properties import NonNegativeNumberProperty
-from neupy.functions import mse
 from neupy.algorithms import Backpropagation
 
 
@@ -93,12 +92,6 @@ class LevenbergMarquardt(Backpropagation):
     """
     mu = NonNegativeNumberProperty(default=0.01)
     mu_increase_factor = NonNegativeNumberProperty(default=5, min_size=1)
-
-    def setup_defaults(self):
-        super(LevenbergMarquardt, self).setup_defaults()
-        # Can use only squared error
-        del self.error
-        self.error = mse  # `error` isn't a property instance after deletion.
 
     def init_layers(self):
         super(LevenbergMarquardt, self).init_layers()

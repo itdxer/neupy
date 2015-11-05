@@ -4,7 +4,7 @@ import theano.tensor as T
 from numpy import arccos, dot, reshape
 from numpy.linalg import norm
 
-from neupy.functions import step
+from neupy.network.utils import step
 from neupy.core.properties import DictProperty
 from neupy.layers.base import BaseLayer
 

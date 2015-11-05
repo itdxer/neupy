@@ -3,7 +3,7 @@ from random import randint
 from numpy import zeros, sign
 
 from neupy.utils import format_data
-from neupy.functions import step
+from neupy.network.utils import step
 from .utils import bin2sign, hopfield_energy
 from .base import DiscreteMemory
 
