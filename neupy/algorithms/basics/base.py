@@ -1,16 +1,15 @@
 from neupy.utils import format_data
-from neupy.algorithms.feedforward import FeedForwardNetwork
 from neupy.network.learning import SupervisedLearning
 from neupy.functions import linear_error
-from neupy.layers import StepLayer, OutputLayer
+from neupy.layers import Step, Output
 
 
 __all__ = ('SimpleTwoLayerNetwork',)
 
 
-class SimpleTwoLayerNetwork(SupervisedLearning, FeedForwardNetwork):
+class SimpleTwoLayerNetwork(SupervisedLearning):
     """ Base class for feedforward neural network without hidden layers.
-    Input layer is always :layer:`StepLayer`.
+    Input layer is always :layer:`Step`.
     """
     def __init__(self, layer_sizes, **options):
         if len(layer_sizes) != 2:
@@ -19,7 +18,7 @@ class SimpleTwoLayerNetwork(SupervisedLearning, FeedForwardNetwork):
         input_layer_size, output_layer_size = layer_sizes
 
         super(SimpleTwoLayerNetwork, self).__init__(
-            StepLayer(input_layer_size) > OutputLayer(output_layer_size),
+            Step(input_layer_size) > Output(output_layer_size),
             **options
         )
 

@@ -46,8 +46,8 @@ class Instar(BaseStepAssociative):
     >>>
     >>>
     >>> scaler = {{'lower_value': 0, 'upper_value': 1}}
-    >>> input_layer = layers.StepLayer(4, function_coef=scaler)
-    >>> output_layer = layers.OutputLayer(1)
+    >>> input_layer = layers.Step(4, function_coef=scaler)
+    >>> output_layer = layers.Output(1)
     >>>
     >>> instnet = algorithms.Instar(
     ...     input_layer > output_layer,

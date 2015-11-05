@@ -12,7 +12,7 @@ class HebbRule(BaseStepAssociative):
 
     Notes
     -----
-    * First layer must always be :layer:`StepLayer`.
+    * First layer must always be :layer:`Step`.
     * Network must contains exacly 2 layers.
     * Network always generate weights which contains ``0`` weight for \
     conditioned stimulus and ``1`` otherwise. This setup helps you controll \
@@ -59,7 +59,7 @@ class HebbRule(BaseStepAssociative):
     ... ])
     >>>
     >>> hebbnet = algorithms.HebbRule(
-    ...     layers.StepLayer(2) > layers.OutputLayer(1),
+    ...     layers.Step(2) > layers.Output(1),
     ...     n_unconditioned=1,
     ...     step=0.1,
     ...     decay_rate=0.8,

@@ -96,9 +96,9 @@ class ConjugateGradient(Backpropagation):
     >>>
     >>> cgnet = algorithms.ConjugateGradient(
     ...     connection=[
-    ...         layers.SigmoidLayer(13),
-    ...         layers.SigmoidLayer(50),
-    ...         layers.OutputLayer(1),
+    ...         layers.Sigmoid(13),
+    ...         layers.Sigmoid(50),
+    ...         layers.Output(1),
     ...     ],
     ...     search_method='golden',
     ...     update_function='fletcher_reeves',

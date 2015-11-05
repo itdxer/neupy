@@ -8,7 +8,7 @@ class ParametersTestCase(BaseTestCase):
     def test_base_properties(self):
         class A(Configurable):
             basic_propepty = Property(expected_type=int)
-            size_propepty = CheckSizeProperty(min_size=-1, max_size=1)
+            size_propepty = BoundedProperty(min_size=-1, max_size=1)
             list_of_properties = ListOfTypesProperty(inner_list_type=str,
                                                      count=3)
 

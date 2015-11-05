@@ -17,8 +17,8 @@ input_data = np.array([
 ])
 
 
-input_layer = layers.LinearLayer(2)
-output_layer = layers.CompetitiveOutputLayer(3)
+input_layer = layers.Linear(2)
+output_layer = layers.CompetitiveOutput(3)
 
 sofmnet = algorithms.SOFM(
     # Connection

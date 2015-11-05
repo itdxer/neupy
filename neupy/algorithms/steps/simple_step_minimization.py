@@ -42,10 +42,10 @@ class SimpleStepMinimization(SingleStep):
     """
     epochs_step_minimizator = NonNegativeIntProperty(min_size=1, default=100)
 
-    def after_weight_update(self, input_train, target_train):
-        super(SimpleStepMinimization, self).after_weight_update(
-            input_train, target_train
-        )
-        self.step = self.first_step / (
-            1 + self.epoch / self.epochs_step_minimizator
-        )
+    def init_train_updates(self):
+        updates = super(SimpleStepMinimization, self).init_train_updates()
+        variables = self.variables
+        updates.append((variables.step, self.first_step / (
+            1 + variables.epoch / self.epochs_step_minimizator
+        )))
+        return updates

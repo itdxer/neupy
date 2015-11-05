@@ -1,7 +1,7 @@
 from numpy import multiply, concatenate
 
 from neupy import algorithms
-from neupy.layers import SoftmaxLayer, OutputLayer
+from neupy.layers import Softmax, Output
 from neupy.functions import errors
 from .base import BaseEnsemble
 
@@ -19,8 +19,8 @@ class MixtureOfExperts(BaseEnsemble):
         List of networks based on :network:`Backpropagation` algorithm.
     gating_network : object
         2 Layer Neural Network based on :network:`Backpropagation` which
-        has :layer:`SoftmaxLayer` as first one and the last one must be
-        the :layer:`OutputLayer`. Output layer size must be equal to number
+        has :layer:`Softmax` as first one and the last one must be
+        the :layer:`Output`. Output layer size must be equal to number
         of networks in model. Also important to say that in every network
         input size must be equal.
 
@@ -63,7 +63,7 @@ class MixtureOfExperts(BaseEnsemble):
     >>> moe = ensemble.MixtureOfExperts(
     ...     networks=networks,
     ...     gating_network=algorithms.Backpropagation(
-    ...         layers.SoftmaxLayer(insize) > layers.OutputLayer(n_networks),
+    ...         layers.Softmax(insize) > layers.Output(n_networks),
     ...         step=0.1,
     ...         verbose=False,
     ...     )
@@ -102,16 +102,16 @@ class MixtureOfExperts(BaseEnsemble):
 
             network.verbose = False
 
-        if gating_network.input_layer.__class__ != SoftmaxLayer:
+        if gating_network.input_layer.__class__ != Softmax:
             raise ValueError(
-                "Input layer must be `SoftmaxLayer`, got `{0}`".format(
+                "Input layer must be `Softmax`, got `{0}`".format(
                     gating_network.input_layer.__class__.__name__
                 )
             )
 
-        if gating_network.output_layer.__class__ != OutputLayer:
+        if gating_network.output_layer.__class__ != Output:
             raise ValueError(
-                "First layer must be `OutputLayer`, got `{0}`".format(
+                "First layer must be `Output`, got `{0}`".format(
                     gating_network.output_layer.__class__.__name__
                 )
             )

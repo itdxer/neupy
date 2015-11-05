@@ -32,9 +32,9 @@ class PandasCompatibilityTestCase(BaseTestCase):
 
         bpnet = algorithms.Backpropagation(
             connection=[
-                layers.SigmoidLayer(10),
-                layers.SigmoidLayer(40),
-                layers.OutputLayer(1),
+                layers.Sigmoid(10),
+                layers.Sigmoid(40),
+                layers.Output(1),
             ],
             use_bias=True,
             show_epoch=100

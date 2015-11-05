@@ -28,10 +28,10 @@ For example it can look like this.
 
     bpnet = algorithms.Backpropagation(
         [
-            layers.SigmoidLayer(10),
-            layers.SigmoidLayer(40),
-            layers.SoftmaxLayer(2),
-            layers.OutputLayer(2)
+            layers.Sigmoid(10),
+            layers.Sigmoid(40),
+            layers.Softmax(2),
+            layers.Output(2)
         ],
         step=0.2,
         shuffle_data=True
@@ -45,7 +45,7 @@ And the last one is the most intuitive.
     from neupy.layers import *
 
     bpnet = algorithms.Backpropagation(
-        SigmoidLayer(10) > SigmoidLayer(40) > OutputLayer(2),
+        Sigmoid(10) > Sigmoid(40) > Output(2),
         step=0.2,
         shuffle_data=True
     )
@@ -68,11 +68,11 @@ The simplest type of two layers types is an output layer. Below you can see simp
 
     from neupy import layers
 
-    class RoundFloorOutputLayer(layers.OutputLayer):
+    class RoundFloorOutput(layers.Output):
         def format_output(self, value):
             return value.astype(int)
 
-The base class is :layer:`OutputLayer`.
+The base class is :layer:`Output`.
 This layer has one useful method - ``format_output``.
 Attribute ``value`` contains the raw output from network and method can manage to perform some useful transformation to provide different output.
 

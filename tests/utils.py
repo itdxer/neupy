@@ -25,16 +25,16 @@ def compare_networks(default_class, tested_class, data, **kwargs):
     default_connections = copy.deepcopy(network.connection)
     network.train(*data, epochs=epochs)
 
-    network_default_error = network.last_error_in()
-    errors1 = network.normalized_errors_in()
+    network_default_error = network.last_error()
+    errors1 = network.errors_in
 
     # Compute result for test network (which must be faster)
     kwargs['connection'] = default_connections
     network = tested_class(**kwargs)
 
     network.train(*data, epochs=epochs)
-    network_tested_error = network.last_error_in()
-    errors2 = network.normalized_errors_in()
+    network_tested_error = network.last_error()
+    errors2 = network.errors_out
 
     if is_comparison_plot:
         error_range = np.arange(max(len(errors1), len(errors2)))

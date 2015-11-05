@@ -1,7 +1,7 @@
 import numpy as np
 
 from neupy import algorithms
-from neupy.layers import StepLayer, OutputLayer, SigmoidLayer
+from neupy.layers import Step, Output, Sigmoid
 
 from base import BaseTestCase
 
@@ -15,13 +15,13 @@ input_data = np.array([
 class HebbRuleTestCase(BaseTestCase):
     def setUp(self):
         super(HebbRuleTestCase, self).setUp()
-        self.conn = StepLayer(2) > OutputLayer(1)
+        self.conn = Step(2) > Output(1)
 
     def test_validations(self):
         with self.assertRaises(ValueError):
             # Wrong: too many layers
             algorithms.HebbRule(
-                SigmoidLayer(2) > SigmoidLayer(2) > OutputLayer(2),
+                Sigmoid(2) > Sigmoid(2) > Output(2),
                 n_unconditioned=1,
                 verbose=False
             )
@@ -34,7 +34,7 @@ class HebbRuleTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             # Wrong: Only step layers in connections
             algorithms.HebbRule(
-                SigmoidLayer(2) > OutputLayer(2),
+                Sigmoid(2) > Output(2),
                 n_unconditioned=2,
                 verbose=False
             )
@@ -42,7 +42,7 @@ class HebbRuleTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             # Wrong: #features must be bigger than #unconditioned features.
             algorithms.HebbRule(
-                StepLayer(2) > OutputLayer(2),
+                Step(2) > Output(2),
                 n_unconditioned=2,
                 verbose=False
             )
@@ -88,7 +88,7 @@ class HebbRuleTestCase(BaseTestCase):
     def test_weights(self):
         # Test default weights
         hn = algorithms.HebbRule(
-            StepLayer(5) > OutputLayer(1),
+            Step(5) > Output(1),
             n_unconditioned=2,
             verbose=False,
         )
@@ -100,7 +100,7 @@ class HebbRuleTestCase(BaseTestCase):
         # Test custom weights
         random_weight = np.random.random((5, 1))
         hn = algorithms.HebbRule(
-            StepLayer(5, weight=random_weight) > OutputLayer(1),
+            Step(5, weight=random_weight) > Output(1),
             n_unconditioned=2,
             verbose=False,
         )

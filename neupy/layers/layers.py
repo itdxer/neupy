@@ -1,16 +1,16 @@
+from functools import partial
+
+import theano.tensor as T
 from numpy import arccos, dot, reshape
 from numpy.linalg import norm
 
+from neupy.functions import step
 from neupy.core.properties import DictProperty
-from neupy.functions import get_partial_for_func
-from neupy.functions import (linear, sigmoid, step, tanh, rectifier,
-                             softplus, softmax)
 from neupy.layers.base import BaseLayer
 
 
-__all__ = ('Layer', 'LinearLayer', 'SigmoidLayer', 'StepLayer', 'TanhLayer',
-           'RectifierLayer', 'SoftplusLayer', 'SoftmaxLayer',
-           'EuclideDistanceLayer', 'AngleDistanceLayer')
+__all__ = ('Layer', 'Linear', 'Sigmoid', 'Step', 'Tanh', 'Relu', 'Softplus',
+           'Softmax', 'EuclideDistanceLayer', 'AngleDistanceLayer')
 
 
 class Layer(BaseLayer):
@@ -29,23 +29,23 @@ class Layer(BaseLayer):
         super(Layer, self).__init__(*args, **kwargs)
 
         if self.function_coef is not None:
-            partial_func = get_partial_for_func(self.activation_function)
+            partial_func = partial(self.activation_function)
             self.activation_function = partial_func(
                 self.activation_function, **self.function_coef
             )
 
 
-class LinearLayer(Layer):
+class Linear(Layer):
     """ The layer with the linear activation function.
 
     Parameters
     ----------
     {layer_params}
     """
-    activation_function = linear
+    activation_function = (lambda x: x)
 
 
-class SigmoidLayer(Layer):
+class Sigmoid(Layer):
     """ The layer with the sigmoid activation function.
 
     Parameters
@@ -56,11 +56,11 @@ class SigmoidLayer(Layer):
         Parameter ``alpha`` controls function shape.
     {layer_params}
     """
-    function_coef = DictProperty(default={'alpha': 1})
-    activation_function = sigmoid
+    # function_coef = DictProperty(default={'alpha': 1})
+    activation_function = T.nnet.sigmoid
 
 
-class StepLayer(Layer):
+class Step(Layer):
     """ The layer with the the step activation function.
 
     Parameters
@@ -70,7 +70,7 @@ class StepLayer(Layer):
     activation_function = step
 
 
-class TanhLayer(Layer):
+class Tanh(Layer):
     """ The layer with the `tanh` activation function.
 
     Parameters
@@ -81,31 +81,31 @@ class TanhLayer(Layer):
         Parameter `alpha` controls function shape.
     {layer_params}
     """
-    function_coef = DictProperty(default={'alpha': 1})
-    activation_function = tanh
+    # function_coef = DictProperty(default={'alpha': 1})
+    activation_function = T.tanh
 
 
-class RectifierLayer(Layer):
+class Relu(Layer):
     """ The layer with the rectifier activation function.
 
     Parameters
     ----------
     {layer_params}
     """
-    activation_function = rectifier
+    activation_function = T.nnet.relu
 
 
-class SoftplusLayer(Layer):
+class Softplus(Layer):
     """ The layer with the softplus activation function.
 
     Parameters
     ----------
     {layer_params}
     """
-    activation_function = softplus
+    activation_function = T.nnet.softplus
 
 
-class SoftmaxLayer(Layer):
+class Softmax(Layer):
     """ The layer with the softmax activation function.
 
     Parameters
@@ -118,8 +118,8 @@ class SoftmaxLayer(Layer):
         values equal to each other.
     {layer_params}
     """
-    function_coef = DictProperty(default={'temp': 1})
-    activation_function = softmax
+    # function_coef = DictProperty(default={'temp': 1})
+    activation_function = T.nnet.softmax
 
 
 class EuclideDistanceLayer(BaseLayer):

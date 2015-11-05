@@ -1,6 +1,6 @@
 import numpy as np
 
-from neupy.layers import TanhLayer, StepOutputLayer
+from neupy.layers import Tanh, StepOutput
 from neupy.algorithms import WeightElimination, Backpropagation
 
 from data import xor_input_train, xor_target_train
@@ -21,9 +21,9 @@ class WeightEliminationTestCase(BaseTestCase):
             [-0.42770718]
         ])
 
-        input_layer = TanhLayer(2, weight=weight1)
-        hidden_layer = TanhLayer(3, weight=weight2)
-        output = StepOutputLayer(1, output_bounds=(-1, 1))
+        input_layer = Tanh(2, weight=weight1)
+        hidden_layer = Tanh(3, weight=weight2)
+        output = StepOutput(1, output_bounds=(-1, 1))
 
         network = Backpropagation(
             input_layer > hidden_layer > output,
@@ -32,4 +32,4 @@ class WeightEliminationTestCase(BaseTestCase):
             optimizations=[WeightElimination]
         )
         network.train(xor_input_train, xor_target_train, epochs=350)
-        self.assertEqual(round(network.last_error_in(), 2), 0)
+        self.assertAlmostEqual(network.last_error(), 0, places=2)

@@ -54,7 +54,7 @@ class PNN(LazyLearning, Classification, BaseNetwork):
 
     def __init__(self, **options):
         super(PNN, self).__init__(FAKE_CONNECTION, **options)
-        # self.output_layer = layers.OutputLayer(1)
+        # self.output_layer = layers.Output(1)
         self.classes = None
 
     def train(self, input_train, target_train, copy=True):

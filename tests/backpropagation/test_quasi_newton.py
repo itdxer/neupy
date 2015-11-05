@@ -35,9 +35,9 @@ class QuasiNewtonTestCase(BaseTestCase):
 
         qnnet = algorithms.QuasiNewton(
             connection=[
-                layers.SigmoidLayer(10, init_method='ortho'),
-                layers.SigmoidLayer(20, init_method='ortho'),
-                layers.OutputLayer(1)
+                layers.Sigmoid(10, init_method='ortho'),
+                layers.Sigmoid(20, init_method='ortho'),
+                layers.Output(1)
             ],
             step=0.1,
             shuffle_data=True,
@@ -59,9 +59,9 @@ class QuasiNewtonTestCase(BaseTestCase):
 
         qnnet = algorithms.QuasiNewton(
             connection=[
-                layers.SigmoidLayer(10, init_method='ortho'),
-                layers.SigmoidLayer(30, init_method='ortho'),
-                layers.OutputLayer(1)
+                layers.Sigmoid(10, init_method='ortho'),
+                layers.Sigmoid(30, init_method='ortho'),
+                layers.Output(1)
             ],
             step=0.1,
             shuffle_data=True,
@@ -85,9 +85,9 @@ class QuasiNewtonTestCase(BaseTestCase):
 
         qnnet = algorithms.QuasiNewton(
             connection=[
-                layers.SigmoidLayer(10, init_method='ortho'),
-                layers.SigmoidLayer(30, init_method='ortho'),
-                layers.OutputLayer(1)
+                layers.Sigmoid(10, init_method='ortho'),
+                layers.Sigmoid(30, init_method='ortho'),
+                layers.Output(1)
             ],
             step=0.1,
             shuffle_data=True,
@@ -111,9 +111,9 @@ class QuasiNewtonTestCase(BaseTestCase):
 
         qnnet = algorithms.QuasiNewton(
             connection=[
-                layers.SigmoidLayer(10, init_method='ortho'),
-                layers.SigmoidLayer(30, init_method='ortho'),
-                layers.OutputLayer(1)
+                layers.Sigmoid(10, init_method='ortho'),
+                layers.Sigmoid(30, init_method='ortho'),
+                layers.Output(1)
             ],
             step=0.1,
             shuffle_data=True,

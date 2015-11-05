@@ -15,7 +15,7 @@ class HebbRuleTestCase(BaseTestCase):
     def setUp(self):
         super(HebbRuleTestCase, self).setUp()
         kwargs = {'weight': np.array([[3, 0, 0, 0]]).T}
-        self.conn = layers.StepLayer(4, **kwargs) > layers.OutputLayer(1)
+        self.conn = layers.Step(4, **kwargs) > layers.Output(1)
 
     def test_learning_process(self):
         inet = algorithms.Instar(
@@ -40,14 +40,14 @@ class HebbRuleTestCase(BaseTestCase):
             [-0.1961, 0.9806],
         ])
         input_size, output_size = (2, 3)
-        input_layer = layers.StepLayer(
+        input_layer = layers.Step(
             input_size,
             weight=np.array([
                 [0.7071, 0.7071, -1],
                 [-0.7071, 0.7071, 0],
             ])
         )
-        output_layer = layers.CompetitiveOutputLayer(output_size)
+        output_layer = layers.CompetitiveOutput(output_size)
         hamming_network = algorithms.Instar(
             input_layer > output_layer,
             step=0.5,
@@ -68,7 +68,7 @@ class HebbRuleTestCase(BaseTestCase):
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(
             algorithms.Instar(
-                layers.StepLayer(4) > layers.OutputLayer(1),
+                layers.Step(4) > layers.Output(1),
                 n_unconditioned=1,
                 step=1,
                 verbose=False

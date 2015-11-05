@@ -38,12 +38,14 @@ class WeightDecay(WeightUpdateConfigurable):
     """
     decay_rate = NonNegativeNumberProperty(default=0.1)
 
-    def layer_weight_update(self, delta, layer_number):
-        weight_update = super(WeightDecay, self).layer_weight_update(
-            delta, layer_number
-        )
+    def init_train_updates(self):
+        updates = super(WeightDecay, self).init_train_updates()
+        variables = self.variables
+        modified_updates = []
 
-        weight = self.train_layers[layer_number].weight
-        step = self.layer_step(layer_number)
+        for update_var, update_func in updates:
+            if update_var.name in ('w', 'b'):
+                update_func += -variables.step * self.decay_rate * update_var
+            modified_updates.append((update_var, update_func))
 
-        return -step * self.decay_rate * weight + weight_update
+        return modified_updates

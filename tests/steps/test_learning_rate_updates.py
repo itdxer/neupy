@@ -1,7 +1,7 @@
 import numpy as np
 
 from neupy.algorithms import *
-from neupy.layers import TanhLayer, StepOutputLayer
+from neupy.layers import Tanh, StepOutput
 
 from data import xor_input_train, xor_target_train
 from base import BaseTestCase
@@ -24,9 +24,9 @@ class LearningRateUpdatesTestCase(BaseTestCase):
             [0.83986252],
         ])
         # Layers
-        input_layer = TanhLayer(2, weight=self.weight1)
-        hidden_layer = TanhLayer(3, weight=self.weight2)
-        output = StepOutputLayer(1, output_bounds=(-1, 1))
+        input_layer = Tanh(2, weight=self.weight1)
+        hidden_layer = Tanh(3, weight=self.weight2)
+        output = StepOutput(1, output_bounds=(-1, 1))
         self.connection = input_layer > hidden_layer > output
 
     def test_simple_learning_rate_minimization(self):
@@ -60,4 +60,4 @@ class LearningRateUpdatesTestCase(BaseTestCase):
             optimizations=[ErrorDifferenceStepUpdate]
         )
         network.train(xor_input_train, xor_target_train, epochs=200)
-        self.assertEqual(round(network.last_error_in(), 5), 0)
+        self.assertAlmostEqual(network.last_error(), 0, places=5)

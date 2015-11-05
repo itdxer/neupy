@@ -6,11 +6,11 @@ from neupy.core.properties import (IntBoundProperty, NonNegativeIntProperty,
                                    BetweenZeroAndOneProperty)
 
 
-__all__ = ('OutputLayer', 'CompetitiveOutputLayer', 'StepOutputLayer',
-           'RoundOutputLayer')
+__all__ = ('Output', 'CompetitiveOutput', 'StepOutput', 'RoundedOutput',
+           'ArgmaxOutput')
 
 
-class OutputLayer(BaseLayer):
+class Output(BaseLayer):
     """ Simples output layer class which does not make any transformations.
     Output from this layer is the same as input.
 
@@ -22,7 +22,8 @@ class OutputLayer(BaseLayer):
         return
 
     def relate_to(self, right_layer):
-        raise NetworkConnectionError("Can't connect from output layer")
+        raise NetworkConnectionError("Can't create connection "
+                                     "from output layer")
 
     def format_output(self, value):
         return value
@@ -31,7 +32,7 @@ class OutputLayer(BaseLayer):
         return self.format_output(value)
 
 
-class CompetitiveOutputLayer(OutputLayer):
+class CompetitiveOutput(Output):
     """ Competitive layer output. Layer output will return the result where
     all zero values and one value which has greatest value will be one.
 
@@ -46,7 +47,7 @@ class CompetitiveOutputLayer(OutputLayer):
         return output
 
 
-class StepOutputLayer(OutputLayer):
+class StepOutput(Output):
     """ The behaviour for this layer is the same as for step function.
 
     Parameters
@@ -67,7 +68,7 @@ class StepOutputLayer(OutputLayer):
         return where(value < self.critical_point, lower_bound, upper_bound)
 
 
-class RoundOutputLayer(OutputLayer):
+class RoundedOutput(Output):
     """ Round output layer value.
 
     Parameters
@@ -80,3 +81,17 @@ class RoundOutputLayer(OutputLayer):
 
     def format_output(self, value):
         return np_round(value, self.decimal_places)
+
+
+class ArgmaxOutput(Output):
+    """ Return number of feature that have maximum value for each sample.
+
+    Parameters
+    ----------
+    decimal_places : int
+    The precision in decimal digits for output value.
+    {layer_params}
+    """
+
+    def format_output(self, value):
+        return value.argmax(axis=1)

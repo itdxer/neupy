@@ -25,9 +25,9 @@ class LevenbergMarquardtTestCase(BaseTestCase):
         # Network
         lmnet = algorithms.LevenbergMarquardt(
             connection=[
-                layers.SigmoidLayer(10),
-                layers.SigmoidLayer(40),
-                layers.OutputLayer(1),
+                layers.Sigmoid(10),
+                layers.Sigmoid(40),
+                layers.Output(1),
             ],
             mu_increase_factor=2,
             mu=0.1,

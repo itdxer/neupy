@@ -3,7 +3,7 @@ from operator import mul
 from numpy import ogrid, reshape, nonzero
 
 from neupy.core.properties import NonNegativeIntProperty, IntBoundProperty
-from neupy.layers import CompetitiveOutputLayer
+from neupy.layers import CompetitiveOutput
 from neupy.algorithms import Kohonen
 
 
@@ -61,7 +61,7 @@ class SOFM(Kohonen):
     Notes
     -----
     * Network architecture must contains two layers.
-    * Second layer must be :layer:`CompetitiveOutputLayer`.
+    * Second layer must be :layer:`CompetitiveOutput`.
 
     Parameters
     ----------
@@ -86,8 +86,8 @@ class SOFM(Kohonen):
     def __init__(self, connection, **options):
         super(SOFM, self).__init__(connection, **options)
 
-        if not isinstance(self.output_layer, CompetitiveOutputLayer):
-            raise ValueError("Output layer must be `CompetitiveOutputLayer`")
+        if not isinstance(self.output_layer, CompetitiveOutput):
+            raise ValueError("Output layer must be `CompetitiveOutput`")
 
         if self.features_grid is not None:
             if mul(*self.features_grid) != self.output_layer.input_size:

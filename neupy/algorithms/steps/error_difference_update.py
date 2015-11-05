@@ -55,7 +55,7 @@ class ErrorDifferenceStepUpdate(SingleStep):
         if not self.errors_in:
             return current_step
 
-        last_error = self.last_error_in()
+        last_error = self.last_error()
         previous_error = self.previous_error()
 
         if previous_error is None:

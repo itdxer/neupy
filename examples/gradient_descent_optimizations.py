@@ -44,8 +44,8 @@ def save_weight_in_epoch(net):
 
 def get_connection():
     """ Generate new connections every time when we call it """
-    input_layer = layers.SigmoidLayer(2, weight=default_weight.copy())
-    output_layer = layers.OutputLayer(1)
+    input_layer = layers.Sigmoid(2, weight=default_weight.copy())
+    output_layer = layers.Output(1)
     return input_layer > output_layer
 
 

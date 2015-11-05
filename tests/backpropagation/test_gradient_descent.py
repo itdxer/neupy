@@ -1,7 +1,7 @@
 from functools import partial
 
 import numpy as np
-from neupy.layers import TanhLayer, SigmoidLayer, StepOutputLayer, OutputLayer
+from neupy.layers import Tanh, Sigmoid, StepOutput, Output
 from neupy import algorithms
 from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
@@ -14,8 +14,8 @@ from base import BaseTestCase
 class GradientDescentTestCase(BaseTestCase):
     def setUp(self):
         super(GradientDescentTestCase, self).setUp()
-        output = StepOutputLayer(1, output_bounds=(-1, 1))
-        self.connection = TanhLayer(2) > TanhLayer(5) > output
+        output = StepOutput(1, output_bounds=(-1, 1))
+        self.connection = Tanh(2) > Tanh(5) > output
 
     def test_stochastic_gradient_descent(self):
         network_default_error, network_tested_error = compare_networks(
@@ -48,7 +48,7 @@ class GradientDescentTestCase(BaseTestCase):
         out_size = targets.shape[1] if len(targets.shape) > 1 else 1
 
         sgd_network = algorithms.MinibatchGradientDescent(
-            SigmoidLayer(in_size) > SigmoidLayer(300) > OutputLayer(out_size),
+            Sigmoid(in_size) > Sigmoid(300) > Output(out_size),
             step=0.2,
             batch_size=10,
             verbose=False,

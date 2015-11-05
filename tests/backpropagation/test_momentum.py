@@ -1,6 +1,6 @@
 import numpy as np
 
-from neupy.layers import TanhLayer, StepOutputLayer
+from neupy.layers import Tanh, StepOutput
 from neupy.algorithms import Momentum
 
 from data import xor_input_train, xor_target_train
@@ -21,9 +21,9 @@ class MomentumTestCase(BaseTestCase):
             [0.1479949]
         ])
 
-        input_layer = TanhLayer(2, weight=weight1)
-        hidden_layer = TanhLayer(3, weight=weight2)
-        output = StepOutputLayer(1, output_bounds=(-1, 1))
+        input_layer = Tanh(2, weight=weight1)
+        hidden_layer = Tanh(3, weight=weight2)
+        output = StepOutput(1, output_bounds=(-1, 1))
 
         network2 = Momentum(
             (input_layer > hidden_layer > output),
@@ -32,4 +32,4 @@ class MomentumTestCase(BaseTestCase):
         )
 
         network2.train(xor_input_train, xor_target_train, epochs=300)
-        self.assertEqual(round(network2.last_error_in(), 2), 0)
+        self.assertEqual(round(network2.last_error(), 2), 0)

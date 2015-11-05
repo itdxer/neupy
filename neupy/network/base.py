@@ -4,18 +4,23 @@ from math import ceil
 from time import time
 from itertools import groupby
 from collections import deque
+from abc import abstractmethod
 
 import six
-from numpy import arange, mean
+import theano
+import theano.tensor as T
+import numpy as np
 import matplotlib.pyplot as plt
 
-from neupy.utils import format_data, is_row1d
+from neupy.utils import format_data, is_row1d, asfloat, AttributeKeyDict
 from neupy.helpers import preformat_value
 from neupy.core.base import BaseSkeleton
 from neupy.core.properties import (Property, FuncProperty, NumberProperty,
-                                   BoolProperty)
-from neupy.layers import BaseLayer, OutputLayer
-from neupy.functions import normilize_error_output, mse
+                                   BoolProperty, ChoiceProperty)
+from neupy.layers import BaseLayer, Output
+from neupy.layers.utils import generate_layers
+from neupy.functions import (normilize_error_output, mse, binary_crossentropy,
+                             categorical_crossentropy)
 from .utils import iter_until_converge, shuffle
 from .connections import (FAKE_CONNECTION, LayerConnection,
                           NetworkConnectionError)
@@ -32,8 +37,8 @@ def show_training_summary(network):
         Epoch time: {epoch_time} sec
     """.format(
         epoch=network.epoch,
-        error=network.last_error_in() or '-',
-        error_out=network.last_error_out() or '-',
+        error=network.last_error() or '-',
+        error_out=network.last_validation_error() or '-',
         epoch_time=round(network.train_epoch_time, 5)
     ))
 
@@ -56,7 +61,7 @@ def show_epoch_summary(network, show_epoch):
 
         if len(terminal_output_delays) == delay_history_length:
             prev_summary_time = None
-            average_delay = mean(terminal_output_delays)
+            average_delay = np.mean(terminal_output_delays)
 
             if average_delay < delay_limit:
                 show_epoch *= ceil(delay_limit / average_delay)
@@ -93,6 +98,13 @@ def clean_layers(connection):
     if connection == FAKE_CONNECTION:
         return connection
 
+    is_list_of_integers = (
+        isinstance(connection, (list, tuple)) and
+        isinstance(connection[0], int)
+    )
+    if is_list_of_integers:
+        connection = generate_layers(list(connection))
+
     if isinstance(connection, tuple):
         connection = list(connection)
 
@@ -107,8 +119,8 @@ def clean_layers(connection):
     elif islist and isinstance(connection[0], LayerConnection):
         pass
 
-    if not isinstance(connection.output_layer, OutputLayer):
-        raise NetworkConnectionError("Final layer must be OutputLayer class "
+    if not isinstance(connection.output_layer, Output):
+        raise NetworkConnectionError("Final layer must be Output class "
                                      "instance.")
 
     return connection
@@ -178,7 +190,11 @@ class BaseNetwork(BaseSkeleton):
     {plot_errors}
     {last_error}
     """
-    error = FuncProperty(default=mse)
+    error = ChoiceProperty(default='mse', choices={
+        'mse': mse,
+        'binary_crossentropy': binary_crossentropy,
+        'categorical_crossentropy': categorical_crossentropy,
+    })
     use_bias = BoolProperty(default=True)
     step = NumberProperty(default=0.1)
 
@@ -209,6 +225,7 @@ class BaseNetwork(BaseSkeleton):
             self.show_network_options(highlight_options=options)
 
         self.init_layers()
+        self.init_variables()
 
     def show_network_options(self, highlight_options=None):
         available_classes = [cls.__name__ for cls in self.__class__.__mro__]
@@ -259,7 +276,37 @@ class BaseNetwork(BaseSkeleton):
         """ Setup default values before populate the options.
         """
 
-    # ----------------- Neural Network Layers ---------------- #
+    def init_variables(self):
+        network_input = T.matrix('x')
+        network_output = T.matrix('y')
+
+        self.variables = AttributeKeyDict(
+            network_input=network_input,
+            network_output=network_output,
+            step=theano.shared(name='step', value=asfloat(self.step)),
+            epoch=theano.shared(name='epoch', value=1, borrow=True),
+        )
+
+        layer_input = network_input
+        for layer in self.train_layers:
+            layer_input = layer.output(layer_input)
+
+        raw_predict = layer_input
+        self.cost = self.error(network_output, layer_input)
+
+        self.train_epoch = theano.function(
+            inputs=[network_input, network_output],
+            outputs=self.cost,
+            updates=self.init_train_updates(),
+        )
+        self.prediction_error = theano.function(
+            inputs=[network_input, network_output],
+            outputs=self.cost
+        )
+        self.raw_predict = theano.function(
+            inputs=[network_input],
+            outputs=raw_predict
+        )
 
     def init_layers(self):
         """ Initialize layers.
@@ -270,7 +317,13 @@ class BaseNetwork(BaseSkeleton):
         for layer in self.train_layers:
             layer.initialize(with_bias=self.use_bias)
 
-    # ----------------- Neural Network Train ---------------- #
+    @abstractmethod
+    def init_train_updates(self):
+        pass
+
+    def predict(self, input_data):
+        raw_prediction = self.raw_predict(input_data)
+        return self.output_layer.output(raw_prediction)
 
     def _train(self, input_train, target_train=None, input_test=None,
                target_test=None, epochs=100, epsilon=None):
@@ -304,7 +357,6 @@ class BaseNetwork(BaseSkeleton):
         logs = self.logs
         compute_error_out = (input_test is not None and
                              target_test is not None)
-        predict = self.predict
         last_epoch_shown = 0
 
         if epsilon is not None:
@@ -343,7 +395,7 @@ class BaseNetwork(BaseSkeleton):
         errors_out = self.errors_out
         shuffle_data = self.shuffle_data
 
-        error_func = self.error
+        prediction_error = self.prediction_error
         train_epoch = self.train_epoch
         train_epoch_end_signal = self.train_epoch_end_signal
         train_end_signal = self.train_end_signal
@@ -354,6 +406,7 @@ class BaseNetwork(BaseSkeleton):
         for epoch in iterepochs:
             self.epoch = epoch
             epoch_start_time = time()
+            self.variables.epoch.set_value(epoch)
 
             if shuffle_data:
                 input_train, target_train = shuffle_train_data(input_train,
@@ -365,8 +418,7 @@ class BaseNetwork(BaseSkeleton):
                 error = train_epoch(input_train, target_train)
 
                 if compute_error_out:
-                    predicted_test = predict(input_test)
-                    error_out = error_func(predicted_test, target_test)
+                    error_out = prediction_error(input_test, target_test)
                     errors_out.append(error_out)
 
                 errors.append(error)
@@ -398,13 +450,10 @@ class BaseNetwork(BaseSkeleton):
         if errors and errors[-1] is not None:
             return normilize_error_output(errors[-1])
 
-    def last_error_in(self):
-        return self._last_error(self.errors_in)
-
     def last_error(self):
         return self._last_error(self.errors_in)
 
-    def last_error_out(self):
+    def last_validation_error(self):
         return self._last_error(self.errors_out)
 
     def previous_error(self):
@@ -415,8 +464,7 @@ class BaseNetwork(BaseSkeleton):
         if not len(errors) or isinstance(errors[0], float):
             return errors
 
-        self.logs.warning("Your errors bad formated for plot output. "
-                          "They will be normilized.")
+        self.logs.warning("Errors are not scalers. They would be normilized.")
 
         normilized_errors = []
         for error in errors:
@@ -424,19 +472,13 @@ class BaseNetwork(BaseSkeleton):
 
         return normilized_errors
 
-    def normalized_errors_in(self):
-        return self._normalized_errors(self.errors_in)
-
-    def normalized_errors_out(self):
-        return self._normalized_errors(self.errors_out)
-
     def plot_errors(self, logx=False):
         if not self.errors_in:
             return
 
-        errors_in = self.normalized_errors_in()
-        errors_out = self.normalized_errors_out()
-        errors_range = arange(len(errors_in))
+        errors_in = self._normalized_errors(self.errors_in)
+        errors_out = self._normalized_errors(self.errors_out)
+        errors_range = np.arange(len(errors_in))
         plot_function = plt.semilogx if logx else plt.plot
 
         line_error_in, = plot_function(errors_range, errors_in)

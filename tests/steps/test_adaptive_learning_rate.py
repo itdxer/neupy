@@ -29,9 +29,9 @@ class LeakStepAdaptationTestCase(BaseTestCase):
             (even_input_train, even_target_train),
             # Network configurations
             connection=[
-                layers.SigmoidLayer(2),
-                layers.TanhLayer(3),
-                layers.OutputLayer(1)
+                layers.Sigmoid(2),
+                layers.Tanh(3),
+                layers.Output(1)
             ],
             step=0.1,
             shuffle_data=True,

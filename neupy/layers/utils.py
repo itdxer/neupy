@@ -5,11 +5,12 @@ from neupy.network.connections import LayerConnection
 from neupy.helpers import import_class
 
 
-__all__ = ('generate_layers', 'random_orthogonal', 'random_bounded')
+__all__ = ('generate_layers', 'random_orthogonal', 'random_bounded',
+           'generate_weight')
 
 
-DEFAULT_LAYER_CLASS = "neupy.layers.SigmoidLayer"
-DEFAULT_OUTPUT_LAYER_CLASS = "neupy.layers.OutputLayer"
+DEFAULT_LAYER_CLASS = "neupy.layers.Sigmoid"
+DEFAULT_OUTPUT_LAYER_CLASS = "neupy.layers.Output"
 
 
 def generate_layers(layers_sizes):
@@ -18,7 +19,12 @@ def generate_layers(layers_sizes):
     Parameters
     ----------
     layers_sizes : list or tuple
-        Ordered lsit of network connection structure.
+        Ordered list of network connection structure.
+
+    Returns
+    -------
+    LayerConnection
+        Constructed connection.
     """
 
     if len(layers_sizes) < 2:
@@ -37,25 +43,105 @@ def generate_layers(layers_sizes):
     return connection
 
 
-def random_orthogonal(size):
+def random_orthogonal(shape):
     """ Build random orthogonal 2D matrix.
 
     Parameters
     ----------
-    size : tuple
+    shape : tuple
         Generated matrix shape.
+
+    Returns
+    -------
+    ndarray
+        Orthogonalized random matrix.
     """
-    if len(size) != 2:
-        raise ValueError("Size must be a tuple which contains 2"
-                         "integer values.")
-    rand_matrix = randn(*size)
+
+    if len(shape) not in (1, 2):
+        raise ValueError("Shape attribute should be a tuple which contains "
+                         "1 or 2 integer values.")
+
+    rand_matrix = randn(*shape)
+
+    if len(shape):
+        return rand_matrix
+
+    nrows, ncols = shape
     u, _, v = svd(rand_matrix, full_matrices=False)
-    ortho_base = u if size[0] > size[1] else v
-    return ortho_base[:size[0], :size[1]]
+    ortho_base = u if nrows > ncols else v
+
+    return ortho_base[:nrows, :ncols]
 
 
-def random_bounded(size, left_bound=0, right_bound=1):
+def random_bounded(shape, bounds=(0, 1)):
     """ Generate uniform random matrix which values between bounds.
+
+    Parameters
+    ----------
+    shape : tuple
+        Generated matrix shape.
+    bounds : list or tuple
+        Set up generated weights between bounds. Values should be tuple or
+        list that contains two numbers. Defaults to ``(0, 1)``.
+
+    Returns
+    -------
+    ndarray
+        Random matrix between selected bounds.
     """
-    random_weight = random(size)
+
+    if not (isinstance(bounds, (list, tuple)) and len(bounds) == 2):
+        raise ValueError("`{}` is invalid value for `bounds` parameter. "
+                         "Value should be a tuple or a list that contains "
+                         "two numbers.".format(bounds))
+
+    left_bound, right_bound = bounds
+    random_weight = random(shape)
     return random_weight * (right_bound - left_bound) + left_bound
+
+
+GAUSSIAN = 'gauss'
+BOUNDED = 'bounded'
+ORTHOGONAL = 'ortho'
+
+VALID_INIT_METHODS = (GAUSSIAN, BOUNDED, ORTHOGONAL)
+
+
+def generate_weight(shape, bounds=None, init_method=GAUSSIAN):
+    """ Generate random weights for neural network connections.
+
+    Parameters
+    ----------
+    shape : tuple of int
+        Weight shape.
+    bounds : tuple of int
+        Available only for ``init_method`` equal to ``bounded``.
+        Value identify minimum and maximum possible value in random weights.
+    init_method : {{'bounded', 'gauss', 'ortho'}}
+        Weight initialization method.
+        ``gauss`` will generate random weights from Standard Normal
+        Distribution.
+        ``bounded`` generate random weights from Uniform distribution.
+        ``ortho`` generate random orthogonal matrix.
+        Defaults to ``gauss``.
+
+    Returns
+    -------
+    ndarray
+        Random weight.
+    """
+
+    if init_method not in VALID_INIT_METHODS:
+        raise ValueError("Undefined initialization method `{}`. Available: {}"
+                         "".format(init_method, VALID_INIT_METHODS))
+
+    if init_method == GAUSSIAN:
+        weight = randn(*shape)
+
+    elif init_method == BOUNDED:
+        weight = random_bounded(shape, bounds)
+
+    elif init_method == ORTHOGONAL:
+        weight = random_orthogonal(shape)
+
+    return weight

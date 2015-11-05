@@ -13,7 +13,7 @@ from base import BaseTestCase
 class RPROPTestCase(BaseTestCase):
     def setUp(self):
         super(RPROPTestCase, self).setUp()
-        self.connection = SigmoidLayer(3) > SigmoidLayer(10) > OutputLayer(2)
+        self.connection = Sigmoid(3) > Sigmoid(10) > Output(2)
 
     def test_rprop(self):
         nw = algorithms.RPROP(
@@ -27,7 +27,7 @@ class RPROPTestCase(BaseTestCase):
         )
 
         nw.train(simple_input_train, simple_target_train, epochs=100)
-        self.assertGreater(1e-4, nw.last_error_in())
+        self.assertGreater(1e-4, nw.last_error())
 
     def test_compare_bp_and_rprop(self):
         network_default_error, network_tested_error = compare_networks(
@@ -59,11 +59,11 @@ class RPROPTestCase(BaseTestCase):
         nw = algorithms.IRPROPPlus(copy.deepcopy(self.connection), **options)
 
         nw.train(simple_input_train, simple_target_train, epochs=100)
-        irprop_plus_error = nw.last_error_in()
-        self.assertGreater(1e-4, nw.last_error_in())
+        irprop_plus_error = nw.last_error()
+        self.assertGreater(1e-4, nw.last_error())
 
         nw = algorithms.RPROP(copy.deepcopy(self.connection), **options)
 
         nw.train(simple_input_train, simple_target_train, epochs=100)
-        rprop_error = nw.last_error_in()
+        rprop_error = nw.last_error()
         self.assertGreater(rprop_error, irprop_plus_error)

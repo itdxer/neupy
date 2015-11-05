@@ -113,13 +113,13 @@ Input and hidden layers
 .. csv-table::
     :header: "Class name", "Description", "Has derivative?"
 
-    ":layer:`LinearLayer`", "Layer with linear activation function.", "No"
-    ":layer:`SigmoidLayer`", "Layer with sigmoid activation function.", "Yes"
-    ":layer:`StepLayer`", "Layer with step activation function.", "No"
-    ":layer:`TanhLayer`", "Layer with tanh activation function.", "Yes"
-    ":layer:`RectifierLayer`", "Layer with rectifier activation function.", "No"
-    ":layer:`SoftplusLayer`", "Layer with softplus activation function.", "Yes"
-    ":layer:`SoftmaxLayer`", "Layer with softmax activation function.", "Yes"
+    ":layer:`Linear`", "Layer with linear activation function.", "No"
+    ":layer:`Sigmoid`", "Layer with sigmoid activation function.", "Yes"
+    ":layer:`Step`", "Layer with step activation function.", "No"
+    ":layer:`Tanh`", "Layer with tanh activation function.", "Yes"
+    ":layer:`Rectifier`", "Layer with rectifier activation function.", "No"
+    ":layer:`Softplus`", "Layer with softplus activation function.", "Yes"
+    ":layer:`Softmax`", "Layer with softmax activation function.", "Yes"
     ":layer:`EuclideDistanceLayer`", "Layer output equal to Euclide distance between input value and weights.", "No"
     ":layer:`AngleDistanceLayer`", "Layer which output equal to cosine distance between input value and weights.", "No"
 
@@ -129,10 +129,10 @@ Output layers
 .. csv-table::
     :header: "Class name", "Description"
 
-    ":layer:`OutputLayer`", "Simple output layer which does not make any transformations"
-    ":layer:`CompetitiveOutputLayer`", "Competitive layer output"
-    ":layer:`StepOutputLayer`", "The behaviour for this output layer is the same as for step function."
-    ":layer:`RoundOutputLayer`", "Layer round output value."
+    ":layer:`Output`", "Simple output layer which does not make any transformations"
+    ":layer:`CompetitiveOutput`", "Competitive layer output"
+    ":layer:`StepOutput`", "The behaviour for this output layer is the same as for step function."
+    ":layer:`RoundedOutput`", "Layer round output value."
 
 
 Error functions

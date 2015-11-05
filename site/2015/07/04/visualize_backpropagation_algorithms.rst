@@ -125,7 +125,7 @@ For understanding of the entire content of the article it is not necessary to un
         )
 
     bp_network = algorithms.Backpropagation(
-        layers.SigmoidLayer(2) > layers.OutputLayer(1),
+        layers.Sigmoid(2) > layers.Output(1),
         **network_settings
     )
     network_target_function = partial(target_function, bp_network)
@@ -198,8 +198,8 @@ And the last important function will do the rest of the work.
     def draw_quiver(network_class, name, color='r'):
         global weights
 
-        input_layer = layers.SigmoidLayer(2, weight=default_weight.copy())
-        output_layer = layers.OutputLayer(1)
+        input_layer = layers.Sigmoid(2, weight=default_weight.copy())
+        output_layer = layers.Output(1)
 
         bpn = network_class(
             input_layer > output_layer,

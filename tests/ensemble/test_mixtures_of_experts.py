@@ -28,7 +28,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                     algorithms.GRNN(verbose=False)
                 ],
                 gating_network=algorithms.Backpropagation(
-                    layers.SigmoidLayer(1) > layers.OutputLayer(3),
+                    layers.Sigmoid(1) > layers.Output(3),
                     verbose=False,
                 )
             )
@@ -44,7 +44,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                     )
                 ],
                 gating_network=algorithms.Backpropagation(
-                    layers.SigmoidLayer(1) > layers.OutputLayer(3),
+                    layers.Sigmoid(1) > layers.Output(3),
                     verbose=False,
                 )
             )
@@ -54,7 +54,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             ensemble.MixtureOfExperts(
                 networks=networks,
                 gating_network=algorithms.Backpropagation(
-                    layers.SoftmaxLayer(1) > layers.OutputLayer(1),
+                    layers.Softmax(1) > layers.Output(1),
                     verbose=False,
                 )
             )
@@ -64,7 +64,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             ensemble.MixtureOfExperts(
                 networks=networks,
                 gating_network=algorithms.Backpropagation(
-                    layers.SigmoidLayer(1) > layers.OutputLayer(2),
+                    layers.Sigmoid(1) > layers.Output(2),
                     verbose=False,
                 )
             )
@@ -74,7 +74,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             ensemble.MixtureOfExperts(
                 networks=networks,
                 gating_network=algorithms.Backpropagation(
-                    layers.SoftmaxLayer(1) > layers.RoundOutputLayer(2),
+                    layers.Softmax(1) > layers.RoundedOutput(2),
                     verbose=False,
                 )
             )
@@ -91,7 +91,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                     )
                 ],
                 gating_network=algorithms.Backpropagation(
-                    layers.SigmoidLayer(1) > layers.OutputLayer(3),
+                    layers.Sigmoid(1) > layers.Output(3),
                     verbose=False,
                 ),
             )
@@ -101,7 +101,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                 # Ivalid gating error function
                 networks=networks,
                 gating_network=algorithms.Backpropagation(
-                    layers.SoftmaxLayer(1) > layers.OutputLayer(2),
+                    layers.Softmax(1) > layers.Output(2),
                     error=rmsle,
                     verbose=False
                 ),
@@ -111,7 +111,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             # Ivalid gating network output layer
             networks=networks,
             gating_network=algorithms.Backpropagation(
-                layers.SoftmaxLayer(1) > layers.OutputLayer(2),
+                layers.Softmax(1) > layers.Output(2),
                 verbose=False
             ),
         )
@@ -169,7 +169,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                 ),
             ],
             gating_network=algorithms.Backpropagation(
-                layers.SoftmaxLayer(insize) > layers.OutputLayer(2),
+                layers.Softmax(insize) > layers.Output(2),
                 step=0.1,
                 verbose=False
             )

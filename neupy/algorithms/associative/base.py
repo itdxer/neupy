@@ -2,7 +2,7 @@ from numpy import reshape
 
 from neupy.utils import format_data, is_row1d
 from neupy.core.properties import NonNegativeIntProperty
-from neupy.layers import StepLayer
+from neupy.layers import Step
 from neupy.network.base import BaseNetwork
 from neupy.network.learning import UnsupervisedLearning
 
@@ -50,8 +50,8 @@ class BaseStepAssociative(BaseAssociative):
         input_layer = self.input_layer
         n_unconditioned = self.n_unconditioned
 
-        if not isinstance(input_layer, StepLayer):
-            raise ValueError("Input layer must be `StepLayer`")
+        if not isinstance(input_layer, Step):
+            raise ValueError("Input layer must be `Step`")
 
         if input_layer.input_size <= n_unconditioned:
             raise ValueError(

@@ -1,17 +1,17 @@
 from itertools import chain
 
-from numpy import dot, multiply
+import theano.tensor as T
 
 from neupy.core.properties import ListProperty
-from neupy.algorithms.feedforward import FeedForwardNetwork
 from neupy.network.learning import SupervisedLearning
+from neupy.network.base import BaseNetwork
 from . import optimization_types
 
 
 __all__ = ('Backpropagation',)
 
 
-class Backpropagation(SupervisedLearning, FeedForwardNetwork):
+class Backpropagation(SupervisedLearning, BaseNetwork):
     """ Backpropagation algorithm.
 
     Parameters
@@ -108,46 +108,19 @@ class Backpropagation(SupervisedLearning, FeedForwardNetwork):
 
         super(Backpropagation, self).__init__(connection, **options)
 
-    def get_gradient(self, output_train, target_train):
-        self.delta = []
-        self.gradients = []
+    def init_train_updates(self):
+        updates = [(self.variables.epoch, self.variables.epoch + 1)]
+        step = self.variables.step
 
-        update = self.error.deriv(output_train, target_train)
+        for layer in self.train_layers:
+            grad_w = T.grad(self.cost, wrt=layer.weight)
+            updates.append((layer.weight, layer.weight - step * grad_w))
 
-        for i, layer in enumerate(reversed(self.train_layers), start=1):
-            summated_data = self.summated_data[-i]
-            current_layer_input = self.layer_outputs[-i]
+            if layer.use_bias:
+                grad_b = T.grad(self.cost, wrt=layer.bias)
+                updates.append((layer.bias, layer.bias - step * grad_b))
 
-            deriv = layer.activation_function.deriv(summated_data)
-
-            delta = multiply(deriv, update)
-
-            if delta.ndim == 3:
-                delta = delta.sum(axis=2).T
-
-            update = dot(delta, layer.weight_without_bias.T)
-
-            gradient = dot(current_layer_input.T, delta)
-
-            self.gradients.insert(0, gradient)
-            self.delta.insert(0, delta)
-
-        return self.gradients
-
-    def get_weight_delta(self, output_train, target_train):
-        gradients = self.get_gradient(output_train, target_train)
-        return [-gradient for gradient in gradients]
-
-    def update_weights(self, weight_deltas):
-        layer_weight_update = self.layer_weight_update
-        for i, layer in enumerate(self.train_layers):
-            layer.weight += layer_weight_update(weight_deltas[i], i)
-
-    def layer_step(self, layer_number):
-        return self.step
-
-    def layer_weight_update(self, delta, layer_number):
-        return self.layer_step(layer_number) * delta
+        return updates
 
     def get_class_name(self):
         return 'Backpropagation'

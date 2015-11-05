@@ -6,7 +6,7 @@ import numpy as np
 from neupy.helpers.base import preformat_value
 
 
-__all__ = ('Property', 'CheckSizeProperty', 'NumberProperty', 'BoolProperty',
+__all__ = ('Property', 'BoundedProperty', 'NumberProperty', 'BoolProperty',
            'BetweenZeroAndOneProperty', 'FuncProperty', 'IntBoundProperty',
            'ArrayProperty', 'ListOfTypesProperty', 'ListProperty',
            'DictProperty', 'IntProperty', 'StringProperty',
@@ -144,9 +144,8 @@ class VectorProperty(Property):
 
     def validate(self, value):
         if value.ndim != 1:
-            raise ValueError(
-                "Value `{}` must be 1-D shape vector".format(self.name)
-            )
+            raise ValueError("Value `{}` must be 1-D shape vector"
+                             "".format(self.name))
 
 
 class Matrix2DProperty(Property):
@@ -154,9 +153,8 @@ class Matrix2DProperty(Property):
 
     def validate(self, value):
         if value.ndim != 2:
-            raise ValueError(
-                "Value `{}` must be 2-D shape array/matrix".format(self.name)
-            )
+            raise ValueError("Value `{}` should be 2-D shape "
+                             "array/matrix".format(self.name))
 
 
 # -----------------------------------------------------#
@@ -201,7 +199,7 @@ class ChoiceProperty(Property):
 # -----------------------------------------------------#
 
 
-class CheckSizeProperty(Property):
+class BoundedProperty(Property):
     min_size = -np.inf
     max_size = np.inf
 
@@ -212,7 +210,7 @@ class CheckSizeProperty(Property):
         if max_size is not None:
             self.max_size = max_size
 
-        super(CheckSizeProperty, self).__init__(*args, **kwargs)
+        super(BoundedProperty, self).__init__(*args, **kwargs)
 
     def validate(self, value):
         if not self.min_size <= value <= self.max_size:
@@ -221,14 +219,14 @@ class CheckSizeProperty(Property):
             ))
 
 
-class BetweenZeroAndOneProperty(NumberProperty, CheckSizeProperty):
+class BetweenZeroAndOneProperty(NumberProperty, BoundedProperty):
     min_size = 0
     max_size = 1
 
 
-class NonNegativeIntProperty(IntProperty, CheckSizeProperty):
+class NonNegativeIntProperty(IntProperty, BoundedProperty):
     min_size = 0
 
 
-class NonNegativeNumberProperty(NumberProperty, CheckSizeProperty):
+class NonNegativeNumberProperty(NumberProperty, BoundedProperty):
     min_size = 0

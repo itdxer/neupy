@@ -71,9 +71,9 @@ class HessianDiagonal(Backpropagation):
     >>>
     >>> nw = algorithms.HessianDiagonal(
     ...     connection=[
-    ...         layers.SigmoidLayer(10),
-    ...         layers.SigmoidLayer(20),
-    ...         layers.OutputLayer(1)
+    ...         layers.Sigmoid(10),
+    ...         layers.Sigmoid(20),
+    ...         layers.Output(1)
     ...     ],
     ...     step=1.5,
     ...     shuffle_data=False,

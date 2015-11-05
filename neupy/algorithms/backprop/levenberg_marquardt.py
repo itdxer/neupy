@@ -68,9 +68,9 @@ class LevenbergMarquardt(Backpropagation):
     >>> # Network
     ... lmnet = algorithms.LevenbergMarquardt(
     ...     connection=[
-    ...         layers.SigmoidLayer(10),
-    ...         layers.SigmoidLayer(40),
-    ...         layers.OutputLayer(1),
+    ...         layers.Sigmoid(10),
+    ...         layers.Sigmoid(40),
+    ...         layers.Output(1),
     ...     ],
     ...     mu_increase_factor=2,
     ...     mu=0.1,
@@ -168,7 +168,7 @@ class LevenbergMarquardt(Backpropagation):
         output_train = self.predict(input_train)
         error = self.error(output_train, target_train)
 
-        if error < self.last_error_in():
+        if error < self.last_error():
             self.mu /= self.mu_increase_factor
             return
 

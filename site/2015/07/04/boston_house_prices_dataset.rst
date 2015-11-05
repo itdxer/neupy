@@ -261,9 +261,9 @@ Now we are ready to build Neural Network which will predict house prices.
 
     cgnet = algorithms.ConjugateGradient(
         connection=[
-            layers.SigmoidLayer(13),
-            layers.SigmoidLayer(50),
-            layers.OutputLayer(1),
+            layers.Sigmoid(13),
+            layers.Sigmoid(50),
+            layers.Output(1),
         ],
         search_method='golden',
         show_epoch=25,

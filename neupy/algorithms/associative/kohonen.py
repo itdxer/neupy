@@ -45,7 +45,7 @@ class Kohonen(BaseAssociative):
     ... ])
     >>>
     >>> kohonet = algorithms.Kohonen(
-    ...     layers.LinearLayer(2) > layers.CompetitiveOutputLayer(3),
+    ...     layers.Linear(2) > layers.CompetitiveOutput(3),
     ...     step=0.5,
     ...     verbose=False
     ... )

@@ -31,7 +31,7 @@ class BackPropAlgsTestCase(BaseTestCase):
     def test_predict_different_inputs(self):
         for bp_algorithm_class in self.bp_algorithms:
             network = bp_algorithm_class(
-                layers.LinearLayer(2) > layers.OutputLayer(1),
+                layers.Linear(2) > layers.Output(1),
                 verbose=False,
                 use_bias=False
             )

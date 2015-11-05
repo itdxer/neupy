@@ -2,7 +2,7 @@ import numpy as np
 
 from sklearn import datasets, preprocessing, cross_validation, metrics
 from neupy import algorithms, ensemble, layers
-from neupy.layers import TanhLayer, SigmoidLayer, OutputLayer
+from neupy.layers import Tanh, Sigmoid, Output
 
 from base import BaseTestCase
 
@@ -33,7 +33,7 @@ class DANTestCase(BaseTestCase):
             # Output between -1 and 1
             dan = ensemble.DynamicallyAveragedNetwork([
                 algorithms.Backpropagation(
-                    SigmoidLayer(4) > TanhLayer(10) > OutputLayer(1),
+                    Sigmoid(4) > Tanh(10) > Output(1),
                     step=0.01
                 ),
                 algorithms.RPROP((4, 10, 1), step=0.1)
