@@ -8,6 +8,9 @@ dist/
 build/
 *.egg-info/
 
+# Tests
+*-failed-diff.png
+
 # Other
 .tox/*
 .DS_Store
