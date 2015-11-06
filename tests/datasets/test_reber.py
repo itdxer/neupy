@@ -1,7 +1,7 @@
 import math
 
 from neupy.datasets import (make_reber, is_valid_by_reber,
-                               make_reber_classification)
+                            make_reber_classification)
 
 from base import BaseTestCase
 

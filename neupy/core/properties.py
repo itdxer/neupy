@@ -169,7 +169,7 @@ class ChoiceProperty(Property):
         super(ChoiceProperty, self).__init__(*args, **kwargs)
         choices = self.choices
 
-        if isinstance(choices, (list, tuple)):
+        if isinstance(choices, (list, tuple, set)):
             self.choices = dict(zip(choices, choices))
 
         if not isinstance(self.choices, dict):

@@ -1,5 +1,3 @@
-import os
-
 import numpy as np
 import pandas as pd
 from sklearn import preprocessing
@@ -7,8 +5,6 @@ from neupy import algorithms
 
 from base import BaseTestCase
 
-
-BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
 data = np.array([
     [0, 1, 0],
@@ -46,8 +42,7 @@ class ARTTestCase(BaseTestCase):
             self.assertEqual(result, answer)
 
     def test_art1_on_real_problem(self):
-        path_to_data = os.path.join(BASEDIR, '..', 'data', 'lenses.csv')
-        data = pd.read_csv(path_to_data, index_col=[0], sep=' ', header=None)
+        data = pd.DataFrame(lenses, index=0, header=None)
 
         encoder = preprocessing.OneHotEncoder()
         enc_data = encoder.fit_transform(data.values[:, 1:]).toarray()

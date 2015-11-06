@@ -1,4 +1,4 @@
-from numpy import zeros, round as np_round, where
+import numpy as np
 
 from neupy.network.connections import NetworkConnectionError
 from neupy.layers.base import BaseLayer
@@ -16,20 +16,15 @@ class Output(BaseLayer):
 
     Parameters
     ----------
-    {layer_params}
+    {input_size_param}
     """
-    def initialize(self, *args, **kwargs):
-        return
 
     def relate_to(self, right_layer):
         raise NetworkConnectionError("Can't create connection "
                                      "from output layer")
 
-    def format_output(self, value):
-        return value
-
     def output(self, value):
-        return self.format_output(value)
+        return value
 
 
 class CompetitiveOutput(Output):
@@ -38,10 +33,10 @@ class CompetitiveOutput(Output):
 
     Parameters
     ----------
-    {layer_params}
+    {input_size_param}
     """
-    def format_output(self, value):
-        output = zeros(value.shape)
+    def output(self, value):
+        output = np.zeros(value.shape, dtype=np.int0)
         max_args = value.argmax(axis=1)
         output[range(value.shape[0]), max_args] = 1
         return output
@@ -57,15 +52,17 @@ class StepOutput(Output):
         identify lower output value and the second one - bigger. Defaults
         to ``(0, 1)``.
     critical_point : float
-        Critical point is setup step function bias.
-    {layer_params}
+        Critical point is set up step function bias. Value equal to this
+        point should be equal to the lower bound. Defaults to ``0``.
+    {input_size_param}
     """
     output_bounds = IntBoundProperty(default=(0, 1))
-    critical_point = BetweenZeroAndOneProperty(default=0.5)
+    critical_point = BetweenZeroAndOneProperty(default=0)
 
-    def format_output(self, value):
+    def output(self, value):
         lower_bound, upper_bound = self.output_bounds
-        return where(value < self.critical_point, lower_bound, upper_bound)
+        return np.where(value <= self.critical_point,
+                        lower_bound, upper_bound)
 
 
 class RoundedOutput(Output):
@@ -75,12 +72,12 @@ class RoundedOutput(Output):
     ----------
     decimal_places : int
         The precision in decimal digits for output value.
-    {layer_params}
+    {input_size_param}
     """
     decimal_places = NonNegativeIntProperty(default=0)
 
-    def format_output(self, value):
-        return np_round(value, self.decimal_places)
+    def output(self, value):
+        return np.round(value, self.decimal_places)
 
 
 class ArgmaxOutput(Output):
@@ -90,8 +87,8 @@ class ArgmaxOutput(Output):
     ----------
     decimal_places : int
     The precision in decimal digits for output value.
-    {layer_params}
+    {input_size_param}
     """
 
-    def format_output(self, value):
+    def output(self, value):
         return value.argmax(axis=1)

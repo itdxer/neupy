@@ -69,11 +69,11 @@ The simplest type of two layers types is an output layer. Below you can see simp
     from neupy import layers
 
     class RoundFloorOutput(layers.Output):
-        def format_output(self, value):
+        def output(self, value):
             return value.astype(int)
 
 The base class is :layer:`Output`.
-This layer has one useful method - ``format_output``.
+This layer has one useful method - ``output``.
 Attribute ``value`` contains the raw output from network and method can manage to perform some useful transformation to provide different output.
 
 Other layers should have activation function.

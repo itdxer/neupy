@@ -48,6 +48,7 @@ def asfloat(value):
         Output would be input value converted to float type configured by
         theano floatX variable.
     """
+
     if isinstance(value, (np.matrix, np.ndarray)):
         return value.astype(theano.config.floatX)
 

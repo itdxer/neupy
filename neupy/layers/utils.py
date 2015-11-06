@@ -63,7 +63,7 @@ def random_orthogonal(shape):
 
     rand_matrix = randn(*shape)
 
-    if len(shape):
+    if len(shape) == 1:
         return rand_matrix
 
     nrows, ncols = shape

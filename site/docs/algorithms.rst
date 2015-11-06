@@ -117,7 +117,7 @@ Input and hidden layers
     ":layer:`Sigmoid`", "Layer with sigmoid activation function.", "Yes"
     ":layer:`Step`", "Layer with step activation function.", "No"
     ":layer:`Tanh`", "Layer with tanh activation function.", "Yes"
-    ":layer:`Rectifier`", "Layer with rectifier activation function.", "No"
+    ":layer:`Relu`", "Layer with rectifier activation function.", "No"
     ":layer:`Softplus`", "Layer with softplus activation function.", "Yes"
     ":layer:`Softmax`", "Layer with softmax activation function.", "Yes"
     ":layer:`EuclideDistanceLayer`", "Layer output equal to Euclide distance between input value and weights.", "No"
@@ -133,17 +133,15 @@ Output layers
     ":layer:`CompetitiveOutput`", "Competitive layer output"
     ":layer:`StepOutput`", "The behaviour for this output layer is the same as for step function."
     ":layer:`RoundedOutput`", "Layer round output value."
+    ":layer:`ArgmaxOutput`", "Return number of feature that have maximum value for each sample."
 
 
 Error functions
 ***************
 
 .. csv-table::
-    :header: "Function name", "Description", "Has derivative?"
+    :header: "Function name", "Description"
 
-    "linear_error(actual, expected)", "Compute difference between expected and actual values", "No"
-    "mae(actual, expected)", "Mean absolute error", "No"
-    "mse(actual, expected)", "Mean square error", "Yes"
-    "cross_entropy_error(actual, expected, epsilon=1e-10)", "Cross entropy error", "Yes"
-    "kullback_leibler(actual, expected)", "Kullback-Leibler error", "Yes"
-    "rmsle(actual, expected)", "Root mean squared logarithmic error", "Yes"
+    "mse", "Mean square error"
+    "categorical_crossentropy", "Cross entropy error"
+    "binary_crossentropy", "Cross entropy error"

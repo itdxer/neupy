@@ -1,18 +1,7 @@
 import copy
 
 import numpy as np
-from scipy import interpolate
 from matplotlib import pyplot as plt
-
-
-def remove_last_zeros(array):
-    while len(array) and array[-1] == 0:
-        array.pop()
-    return array
-
-
-def errors_stable_at(array):
-    return len(remove_last_zeros(array))
 
 
 def compare_networks(default_class, tested_class, data, **kwargs):
@@ -43,7 +32,3 @@ def compare_networks(default_class, tested_class, data, **kwargs):
         plt.show()
 
     return network_default_error, network_tested_error
-
-
-def is_array_or_matrix(value):
-    return isinstance(value, (np.ndarray, np.matrix))
