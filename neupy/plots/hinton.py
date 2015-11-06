@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 
+from neupy.utils import format_data
+
 
 __all__ = ('hinton',)
 
@@ -47,6 +49,8 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
     """
     if ax is None:
         ax = plt.gca()
+
+    matrix = format_data(matrix, row1d=False)
 
     if max_weight is None:
         max_value = np.abs(matrix).max()
