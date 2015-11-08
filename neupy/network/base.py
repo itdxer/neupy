@@ -178,7 +178,7 @@ class ShowEpochProperty(Property):
 
 
 class BaseNetwork(BaseSkeleton):
-    """ Base class Network algorithms.
+    """ Base class for Neural Network algorithms.
 
     Parameters
     ----------
@@ -227,6 +227,15 @@ class BaseNetwork(BaseSkeleton):
         self.init_variables()
 
     def show_network_options(self, highlight_options=None):
+        """ Display all available parameters options for Neural Network.
+
+        Parameters
+        ----------
+        highlight_options : list
+            List of enabled options. In that case all options from that
+            list would be marked with a green color.
+        """
+
         available_classes = [cls.__name__ for cls in self.__class__.__mro__]
         logs = self.logs
 
@@ -276,6 +285,10 @@ class BaseNetwork(BaseSkeleton):
         """
 
     def init_variables(self):
+        """ Initialize all variables and methods that depence
+        on Theano.
+        """
+
         network_input = T.matrix('x')
         network_output = T.matrix('y')
 
@@ -318,9 +331,15 @@ class BaseNetwork(BaseSkeleton):
 
     @abstractmethod
     def init_train_updates(self):
-        pass
+        """ Initialize function update in Theano format that would be use
+        after each trainig epoch.
+        """
 
     def predict(self, input_data):
+        """ Return prediction results for the input data. Output result also
+        include postprocessing step related to the final layer that
+        transform output to convenient format for end-use.
+        """
         raw_prediction = self.raw_predict(input_data)
         return self.output_layer.output(raw_prediction)
 
@@ -445,19 +464,18 @@ class BaseNetwork(BaseSkeleton):
 
     # ----------------- Errors ----------------- #
 
-    def _last_error(self, errors):
-        if errors and errors[-1] is not None:
-            return normilize_error_output(errors[-1])
-
     def last_error(self):
-        return self._last_error(self.errors_in)
+        if self.errors_in:
+            return self.errors_in[-1]
 
     def last_validation_error(self):
-        return self._last_error(self.errors_out)
+        if self.errors_out:
+            return self.errors_out[-1]
 
     def previous_error(self):
-        errors = self.errors_in
-        return normilize_error_output(errors[-2]) if len(errors) > 2 else None
+        errors_in = self.errors_in
+        if len(errors_in) > 2:
+            return normilize_error_output(errors_in[-2])
 
     def _normalized_errors(self, errors):
         if not len(errors) or isinstance(errors[0], float):
@@ -465,11 +483,8 @@ class BaseNetwork(BaseSkeleton):
 
         self.logs.warning("Errors are not scalers. They would be normilized.")
 
-        normilized_errors = []
-        for error in errors:
-            normilized_errors.append(normilize_error_output(error))
-
-        return normilized_errors
+        normilized_errors = map(normilize_error_output, errors)
+        return list(normilized_errors)
 
     def plot_errors(self, logx=False):
         if not self.errors_in:

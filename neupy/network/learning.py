@@ -32,6 +32,15 @@ class LazyLearning(object):
         self.target_train = None
         super(LazyLearning, self).__init__(*args, **kwargs)
 
+    def init_layers(self):
+        pass
+
+    def init_variables(self):
+        pass
+
+    def init_train_updates(self):
+        pass
+
     def setup_defaults(self):
         del self.shuffle_data
 

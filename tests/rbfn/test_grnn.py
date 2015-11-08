@@ -1,9 +1,8 @@
 import numpy as np
-from sklearn import datasets
+from sklearn import datasets, metrics
 from sklearn.cross_validation import train_test_split
 
 from neupy import algorithms
-from neupy.functions import rmsle
 from base import BaseTestCase
 
 
@@ -46,10 +45,10 @@ class GRNNTestCase(BaseTestCase):
         grnnet = algorithms.GRNN(std=0.1, verbose=False)
         grnnet.train(x_train, y_train)
         result = grnnet.predict(x_test)
-        error = rmsle(result, y_test)
+        error = metrics.mean_absolute_error(result, y_test)
 
         old_result = result.copy()
-        self.assertAlmostEqual(error, 0.4245, places=4)
+        self.assertAlmostEqual(error, 46.3358, places=4)
 
         # Test problem with variable links
         np.testing.assert_array_equal(x_train, x_train_before)
