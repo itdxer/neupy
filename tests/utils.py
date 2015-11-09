@@ -7,6 +7,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.testing.compare import compare_images
 
+from neupy import algorithms, layers
+
+from data import xor_input_train, xor_target_train
+
 
 def compare_networks(default_class, tested_class, data, **kwargs):
     epochs = kwargs.pop('epochs', 100)
@@ -52,3 +56,18 @@ def image_comparison(original_image_path, figsize=(10, 10), tol=1e-3):
         if error:
             raise AssertionError("Image comparison failed. \n"
                                  "Information: {}".format(error))
+
+
+def reproducible_network_train(seed=0, **additional_params):
+    np.random.seed(seed)
+    network = algorithms.RPROP(
+        connection=[
+            layers.Tanh(2),
+            layers.Tanh(5),
+            layers.StepOutput(1, output_bounds=(-1, 1))
+        ],
+        step=0.3,
+        **additional_params
+    )
+    network.train(xor_input_train, xor_target_train, epochs=500)
+    return network

@@ -39,7 +39,6 @@ class BaseLayer(with_metaclass(LayerMeta, ChainConnection, BaseConfigurable)):
         super(BaseLayer, self).__init__()
 
         self.input_size = input_size
-        self.use_bias = False
 
         # Default variables which will change after initialization
         self.relate_to_layer = None

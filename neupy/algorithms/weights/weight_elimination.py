@@ -6,7 +6,7 @@ __all__ = ('WeightElimination',)
 
 
 class WeightElimination(WeightUpdateConfigurable):
-    """ Weight elimination algorithm penalizes large weights and limits the
+    """ Weight Elimination algorithm penalizes large weights and limits the
     freedom in network. The algorithm is able to solve one of the possible
     problems of network overfitting.
 
@@ -17,7 +17,10 @@ class WeightElimination(WeightUpdateConfigurable):
         Defaults to ``0.1``.
     zero_weight : float
         Second important parameter for weights penalization. Defaults
-        to ``1``.
+        to ``1``. Small value can make all weights close to zero. Big value
+        will make less significant contribution in weight update. That mean
+        with a big value ``zero_weight`` network allow higher values for
+        the weights.
 
     Warns
     -----
@@ -42,18 +45,21 @@ class WeightElimination(WeightUpdateConfigurable):
     decay_rate = NonNegativeNumberProperty(default=0.1)
     zero_weight = NonNegativeNumberProperty(default=1)
 
-    def layer_weight_update(self, delta, layer_number):
-        weight_update = super(WeightElimination, self).layer_weight_update(
-            delta, layer_number
-        )
+    def init_train_updates(self):
+        updates = super(WeightElimination, self).init_train_updates()
+        variables = self.variables
+        modified_updates = []
 
-        weight = self.train_layers[layer_number].weight
-        step = self.layer_step(layer_number)
-        decay_koef = self.decay_rate * step
+        decay_koef = self.decay_rate * variables.step
         zero_weight_square = self.zero_weight ** 2
 
-        return weight_update + decay_koef * (
-            (2 * weight / zero_weight_square) / (
-                1 + (weight ** 2) / zero_weight_square
-            ) ** 2
-        )
+        for update_var, update_func in updates:
+            if update_var.name in ('weight', 'bias'):
+                update_func -= decay_koef * (
+                    (2 * update_var / zero_weight_square) / (
+                        1 + (update_var ** 2) / zero_weight_square
+                    ) ** 2
+                )
+            modified_updates.append((update_var, update_func))
+
+        return modified_updates

@@ -194,7 +194,6 @@ class BaseNetwork(BaseSkeleton):
         'binary_crossentropy': binary_crossentropy,
         'categorical_crossentropy': categorical_crossentropy,
     })
-    use_bias = BoolProperty(default=True)
     step = NumberProperty(default=0.1)
 
     # Training settings
@@ -214,6 +213,7 @@ class BaseNetwork(BaseSkeleton):
 
         self.layers = list(self.connection)
         self.input_layer = self.layers[0]
+        self.hidden_layers = self.layers[1:-1]
         self.output_layer = self.layers[-1]
         self.train_layers = self.layers[:-1]
 
@@ -296,7 +296,7 @@ class BaseNetwork(BaseSkeleton):
             network_input=network_input,
             network_output=network_output,
             step=theano.shared(name='step', value=asfloat(self.step)),
-            epoch=theano.shared(name='epoch', value=1, borrow=True),
+            epoch=theano.shared(name='epoch', value=1, borrow=False),
         )
 
         layer_input = network_input
@@ -327,7 +327,7 @@ class BaseNetwork(BaseSkeleton):
             return
 
         for layer in self.train_layers:
-            layer.initialize(with_bias=self.use_bias)
+            layer.initialize()
 
     @abstractmethod
     def init_train_updates(self):
@@ -417,6 +417,7 @@ class BaseNetwork(BaseSkeleton):
         train_epoch = self.train_epoch
         train_epoch_end_signal = self.train_epoch_end_signal
         train_end_signal = self.train_end_signal
+        epoch_variable = self.variables.epoch
 
         self.input_train = input_train
         self.target_train = target_train
@@ -424,7 +425,7 @@ class BaseNetwork(BaseSkeleton):
         for epoch in iterepochs:
             self.epoch = epoch
             epoch_start_time = time()
-            self.variables.epoch.set_value(epoch)
+            epoch_variable.set_value(epoch)
 
             if shuffle_data:
                 input_train, target_train = shuffle_train_data(input_train,

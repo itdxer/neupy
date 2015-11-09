@@ -44,7 +44,7 @@ class WeightDecay(WeightUpdateConfigurable):
         modified_updates = []
 
         for update_var, update_func in updates:
-            if update_var.name in ('w', 'b'):
+            if update_var.name in ('weight', 'bias'):
                 update_func += -variables.step * self.decay_rate * update_var
             modified_updates.append((update_var, update_func))
 

@@ -53,12 +53,11 @@ class Layer(BaseLayer):
     bounds = NumberBoundProperty(default=(0, 1))
     init_method = ChoiceProperty(default=GAUSSIAN, choices=VALID_INIT_METHODS)
 
-    def initialize(self, with_bias=False):
-        self.use_bias = with_bias
+    def initialize(self):
         output_size = self.relate_to_layer.input_size
-
         weight = self.weight
         bias = self.bias
+        self.step = None
 
         if not isinstance(weight, theano_shared_class):
             if weight is None:
@@ -66,22 +65,20 @@ class Layer(BaseLayer):
                 weight = generate_weight(weight_shape, self.bounds,
                                          self.init_method)
 
-            self.weight = theano.shared(value=asfloat(weight), name='w',
+            self.weight = theano.shared(value=asfloat(weight), name='weight',
                                         borrow=True)
 
-        if with_bias and not isinstance(bias, theano_shared_class):
+        if not isinstance(bias, theano_shared_class):
             if bias is None:
                 bias_shape = (output_size,)
                 bias = generate_weight(bias_shape, self.bounds,
                                        self.init_method)
 
-            self.bias = theano.shared(value=asfloat(bias), name='b',
+            self.bias = theano.shared(value=asfloat(bias), name='bias',
                                       borrow=True)
 
     def output(self, input_value):
-        summated = T.dot(input_value, self.weight)
-        if self.use_bias:
-            summated += self.bias
+        summated = T.dot(input_value, self.weight) + self.bias
         return self.activation_function(summated)
 
 

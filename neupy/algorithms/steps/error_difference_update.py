@@ -1,4 +1,4 @@
-from neupy.core.properties import (NonNegativeNumberProperty,
+from neupy.core.properties import (BoundedProperty,
                                    BetweenZeroAndOneProperty)
 from .base import SingleStep
 
@@ -44,22 +44,18 @@ class ErrorDifferenceStepUpdate(SingleStep):
     ... )
     >>>
     """
-    update_for_smaller_error = NonNegativeNumberProperty(default=1.05,
-                                                         min_size=1)
+    update_for_smaller_error = BoundedProperty(default=1.05, min_size=1)
     update_for_bigger_error = BetweenZeroAndOneProperty(default=0.7)
-    error_difference = NonNegativeNumberProperty(default=1.04, min_size=1)
+    error_difference = BoundedProperty(default=1.04, min_size=1)
 
     def new_step(self):
         current_step = self.step
 
-        if not self.errors_in:
+        if len(self.errors_in) < 2:
             return current_step
 
         last_error = self.last_error()
         previous_error = self.previous_error()
-
-        if previous_error is None:
-            return current_step
 
         elif last_error < previous_error:
             return self.update_for_smaller_error * current_step

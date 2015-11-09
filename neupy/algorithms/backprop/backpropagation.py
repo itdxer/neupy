@@ -109,18 +109,22 @@ class Backpropagation(SupervisedLearning, BaseNetwork):
         super(Backpropagation, self).__init__(connection, **options)
 
     def init_train_updates(self):
-        updates = [(self.variables.epoch, self.variables.epoch + 1)]
+        updates = []
         step = self.variables.step
+        layer_update = self.layer_update
 
         for layer in self.train_layers:
-            grad_w = T.grad(self.cost, wrt=layer.weight)
-            updates.append((layer.weight, layer.weight - step * grad_w))
-
-            if layer.use_bias:
-                grad_b = T.grad(self.cost, wrt=layer.bias)
-                updates.append((layer.bias, layer.bias - step * grad_b))
+            updates.extend(layer_update(layer))
 
         return updates
+
+    def layer_update(self, layer):
+        step = layer.step or self.variables.step
+        grad_w, grad_b = T.grad(self.cost, wrt=[layer.weight, layer.bias])
+        return [
+            (layer.weight, layer.weight - step * grad_w),
+            (layer.bias, layer.bias - step * grad_b),
+        ]
 
     def get_class_name(self):
         return 'Backpropagation'

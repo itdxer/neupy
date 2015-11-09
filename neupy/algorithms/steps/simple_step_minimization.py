@@ -45,7 +45,8 @@ class SimpleStepMinimization(SingleStep):
     def init_train_updates(self):
         updates = super(SimpleStepMinimization, self).init_train_updates()
         variables = self.variables
-        updates.append((variables.step, self.first_step / (
+        new_step = self.first_step / (
             1 + variables.epoch / self.epochs_step_minimizator
-        )))
+        )
+        updates.append((variables.step, new_step))
         return updates

@@ -13,7 +13,7 @@ even_target_train = np.array([[-1], [-1], [1], [1], [-1]])
 
 
 class LeakStepAdaptationTestCase(BaseTestCase):
-    def test_adaptive_learning_rate(self):
+    def test_leak_step_adaptation(self):
         network_default_error, network_tested_error = compare_networks(
             # Test classes
             algorithms.Backpropagation,
