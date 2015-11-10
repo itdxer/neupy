@@ -25,29 +25,11 @@ class BackpropagationTestCase(BaseTestCase):
             network.shuffle_data = 1
 
     def test_backpropagation(self):
-        output = StepOutput(1, output_bounds=(-1, 1))
-
-        bias1 = np.array([0.31319847, -1.17858149, 0.71556407])
-        weight1 = np.array([
-            [1.60798015, 0.16304449, -0.22483005],
-            [-0.90144173, 0.58500625, -0.01724167]
-        ])
-        bias2 = np.array([-1.34351428])
-        weight2 = np.array([
-            [0.45506056],
-            [0.24790366],
-            [-0.74360389]
-        ])
-
-        input_layer = Tanh(2, weight=weight1, bias=bias1)
-        hidden_layer = Tanh(3, weight=weight2, bias=bias2)
-
         network = Backpropagation(
-            (input_layer > hidden_layer > output),
+            (Tanh(2) > Tanh(3) > StepOutput(1, output_bounds=(-1, 1))),
             step=0.3,
             verbose=False
         )
-
         network.train(xor_input_train, xor_target_train, epochs=1000)
         self.assertAlmostEqual(network.last_error(), 0, places=2)
 
