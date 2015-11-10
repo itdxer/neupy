@@ -11,7 +11,7 @@ def format_data(input_data, row1d=False, copy=False):
     if input_data is None:
         return
 
-    input_data = np.array(input_data, copy=copy)
+    input_data = np.array(asfloat(input_data), copy=copy)
 
     # Valid number of features for one or two dimentions
     n_features = input_data.shape[-1]

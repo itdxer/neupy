@@ -20,7 +20,7 @@ docs = {
     "predict": """predict(input_data)
         Predict value.
     """,
-    "raw_predict": """raw_predict(input_data)
+    "predict_raw": """predict_raw(input_data)
         Make a raw prediction. Ignore any post processing results related
         to the final output layer.
     """,
@@ -94,7 +94,7 @@ docs = {
     "use_bias": """use_bias : bool
         Uses bias in the network, defualts to ``True``.
     """,
-    "train_epoch_end_signal": """train_epoch_end_signal : function
+    "epoch_end_signal": """epoch_end_signal : function
         Calls this function when train epoch finishes.
     """,
     "train_end_signal": """train_end_signal : function
@@ -136,12 +136,12 @@ docs.update({
         docs,
         [
             'step', 'show_epoch', 'shuffle_data',
-            'error', 'use_bias', 'train_epoch_end_signal',
+            'error', 'use_bias', 'epoch_end_signal',
             'train_end_signal', 'verbose'
         ]
     ),
     'full_signals': joindocs(
-        docs, ['train_epoch_end_signal', 'train_end_signal']
+        docs, ['epoch_end_signal', 'train_end_signal']
     ),
     'full_methods': joindocs(
         docs, ['fit', 'predict', 'last_error', 'plot_errors']

@@ -73,11 +73,11 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
         self.centers = None
         super(RBFKMeans, self).__init__(FAKE_CONNECTION, **options)
 
-    def setup_defaults(self):
+    def init_properties(self):
         del self.use_bias
         del self.error
         del self.step
-        super(RBFKMeans, self).setup_defaults()
+        super(RBFKMeans, self).init_properties()
 
     def predict(self, input_data):
         input_data = format_data(input_data)

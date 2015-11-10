@@ -41,7 +41,7 @@ class LazyLearning(object):
     def init_train_updates(self):
         pass
 
-    def setup_defaults(self):
+    def init_properties(self):
         del self.shuffle_data
 
     def train(self, input_train, target_train):

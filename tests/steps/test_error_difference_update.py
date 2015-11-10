@@ -7,19 +7,14 @@ from base import BaseTestCase
 
 
 class LearningRateUpdatesTestCase(BaseTestCase):
-    def setUp(self):
-        super(LearningRateUpdatesTestCase, self).setUp()
-        self.first_step = 0.3
-        self.connection = [
-            layers.Tanh(2),
-            layers.Tanh(3),
-            layers.StepOutput(1, output_bounds=(-1, 1))
-        ]
-
     def test_error_difference_update(self):
         network = algorithms.Backpropagation(
-            self.connection,
-            step=self.first_step,
+            [
+                layers.Tanh(2),
+                layers.Tanh(3),
+                layers.StepOutput(1, output_bounds=(-1, 1))
+            ],
+            step=0.3,
             update_for_smaller_error=1.05,
             update_for_bigger_error=0.7,
             error_difference=1.04,

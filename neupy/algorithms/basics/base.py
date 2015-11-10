@@ -25,7 +25,7 @@ class SimpleTwoLayerNetwork(SupervisedLearning):
         self.input_layer = self.layers[0]
         self.error = linear_error
 
-    def raw_predict(self, input_data):
+    def predict_raw(self, input_data):
         input_data = format_data(input_data)
 
         input_layer = self.input_layer

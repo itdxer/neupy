@@ -67,3 +67,6 @@ class RPROPTestCase(BaseTestCase):
         nw.train(simple_input_train, simple_target_train, epochs=100)
         rprop_error = nw.last_error()
         self.assertGreater(rprop_error, irprop_plus_error)
+
+    def test_rprop_exceptions(self):
+        raise NotImplementedError()

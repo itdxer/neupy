@@ -71,10 +71,10 @@ class CMAC(SupervisedLearning, BaseNetwork):
         self.weights = {}
         super(CMAC, self).__init__(FAKE_CONNECTION, **options)
 
-    def setup_defaults(self):
+    def init_properties(self):
         del self.use_bias
         del self.error
-        super(CMAC, self).setup_defaults()
+        super(CMAC, self).init_properties()
 
     def predict(self, input_data):
         input_data = format_data(input_data)

@@ -2,7 +2,6 @@ from numpy import multiply, concatenate
 
 from neupy import algorithms
 from neupy.layers import Softmax, Output
-from neupy.functions import errors
 from .base import BaseEnsemble
 
 

@@ -26,14 +26,14 @@ Here is the example where we define two custom signals which will display useful
 
     bpnet = algorithms.ConjugateGradient(
         (2, 5, 1),
-        train_epoch_end_signal=train_epoch_end,
+        epoch_end_signal=train_epoch_end,
         train_end_signal=train_epoch_end,
         show_epoch=100,
         verbose=True
     )
 
 We define two new functions that rewrite all outputs and display their own information on every trigger signal.
-Also we define parameter ``show_epoch`` that will control ``train_epoch_end_signal`` signal frequency.
+Also we define parameter ``show_epoch`` that will control ``epoch_end_signal`` signal frequency.
 It's useful when there are a lot of epochs in network and we don't want to see each of them.
 
 Property ``verbose`` just control logging output, but doesn't make any effect on signals.

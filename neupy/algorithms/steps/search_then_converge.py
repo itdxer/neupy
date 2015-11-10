@@ -1,13 +1,13 @@
 from __future__ import division
 
 from neupy.core.properties import NonNegativeIntProperty, NumberProperty
-from .base import SingleStep
+from .base import LearningRateConfigurable
 
 
 __all__ = ('SearchThenConverge',)
 
 
-class SearchThenConverge(SingleStep):
+class SearchThenConverge(LearningRateConfigurable):
     """ Algorithm minimize learning step. Similar to
     :network:`SimpleStepMinimization`, but more complicated step update rule.
 
@@ -48,17 +48,20 @@ class SearchThenConverge(SingleStep):
     epochs_step_minimizator = NonNegativeIntProperty(min_size=1, default=100)
     rate_coefitient = NumberProperty(default=0.2)
 
-    def after_weight_update(self, input_train, target_train):
-        super(SearchThenConverge, self).after_weight_update(
-            input_train, target_train
-        )
+    def init_train_updates(self):
+        updates = super(SearchThenConverge, self).init_train_updates()
 
-        first_step = self.first_step
+        first_step = self.step
         epochs_step_minimizator = self.epochs_step_minimizator
 
-        epoch_value = self.epoch / epochs_step_minimizator
-        rated_value = (self.rate_coefitient / first_step) * epoch_value
+        step = self.variables.step
+        epoch = self.variables.epoch
 
-        self.step = first_step * (1 + rated_value) / (
-            1 + rated_value + epochs_step_minimizator * epoch_value ** 2
+        epoch_value = epoch / epochs_step_minimizator
+        rated_value = 1 + (self.rate_coefitient / first_step) * epoch_value
+        step_update_condition = (first_step * rated_value) / (
+            rated_value + epochs_step_minimizator * epoch_value ** 2
         )
+
+        updates.append((step, step_update_condition))
+        return updates

@@ -4,13 +4,13 @@ from neupy.core.properties import (NonNegativeNumberProperty,
                                    BetweenZeroAndOneProperty)
 from neupy.algorithms.utils import (matrix_list_in_one_vector,
                                     vector_to_list_of_matrix)
-from .base import SingleStep
+from .base import LearningRateConfigurable
 
 
 __all__ = ('WolfeSearch',)
 
 
-class WolfeSearch(SingleStep):
+class WolfeSearch(LearningRateConfigurable):
     """ Wolfe line search for the step selection.
 
     Parameters

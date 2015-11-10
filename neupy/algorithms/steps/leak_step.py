@@ -3,13 +3,13 @@ from numpy.linalg import norm
 
 from neupy.core.properties import (BetweenZeroAndOneProperty,
                                    NonNegativeNumberProperty)
-from .base import MultiSteps
+from .base import LearningRateConfigurable
 
 
 __all__ = ('LeakStepAdaptation',)
 
 
-class LeakStepAdaptation(MultiSteps):
+class LeakStepAdaptation(LearningRateConfigurable):
     """ Leak Learning Rate Adaptation algorithm for step adaptation procedure
     in backpropagation algortihm. By default every layer has the same value
     as ``step`` parameter in network, but after first training epoch they

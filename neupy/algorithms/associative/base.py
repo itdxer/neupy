@@ -18,10 +18,10 @@ class BaseAssociative(UnsupervisedLearning, BaseNetwork):
 
         super(BaseAssociative, self).__init__(connection, **options)
 
-    def setup_defaults(self):
+    def init_properties(self):
         del self.use_bias
         self.use_bias = False
-        super(BaseAssociative, self).setup_defaults()
+        super(BaseAssociative, self).init_properties()
 
     def train(self, input_train, epochs=100, epsilon=None):
         if epsilon is not None:

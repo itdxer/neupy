@@ -17,7 +17,7 @@ class SignalsTestCase(BaseTestCase):
 
         network = Backpropagation(
             connection=(2, 2, 1),
-            train_epoch_end_signal=print_message,
+            epoch_end_signal=print_message,
         )
 
         network.train(xor_input_train, xor_target_train, epochs=epochs)

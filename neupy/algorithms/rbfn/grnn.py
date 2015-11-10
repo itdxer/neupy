@@ -55,14 +55,14 @@ class GRNN(LazyLearning, Regression, BaseNetwork):
     def __init__(self, **options):
         super(GRNN, self).__init__(FAKE_CONNECTION, **options)
 
-    def setup_defaults(self):
+    def init_properties(self):
         del self.error
         del self.step
         del self.use_bias
         del self.show_epoch
         del self.train_end_signal
-        del self.train_epoch_end_signal
-        super(GRNN, self).setup_defaults()
+        del self.epoch_end_signal
+        super(GRNN, self).init_properties()
 
     def train(self, input_train, target_train, copy=True):
         input_train = format_data(input_train, copy=copy)

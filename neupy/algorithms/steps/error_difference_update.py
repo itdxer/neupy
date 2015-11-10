@@ -1,12 +1,16 @@
+import theano
+from theano.ifelse import ifelse
+import numpy as np
+
 from neupy.core.properties import (BoundedProperty,
                                    BetweenZeroAndOneProperty)
-from .base import SingleStep
+from .base import LearningRateConfigurable
 
 
 __all__ = ('ErrorDifferenceStepUpdate',)
 
 
-class ErrorDifferenceStepUpdate(SingleStep):
+class ErrorDifferenceStepUpdate(LearningRateConfigurable):
     """ This algorithm make step update base on error difference between
     epochs.
 
@@ -48,25 +52,38 @@ class ErrorDifferenceStepUpdate(SingleStep):
     update_for_bigger_error = BetweenZeroAndOneProperty(default=0.7)
     error_difference = BoundedProperty(default=1.04, min_size=1)
 
-    def new_step(self):
-        current_step = self.step
-
-        if len(self.errors_in) < 2:
-            return current_step
-
-        last_error = self.last_error()
-        previous_error = self.previous_error()
-
-        if last_error < previous_error:
-            return self.update_for_smaller_error * current_step
-
-        elif last_error >= self.error_difference * previous_error:
-            return self.update_for_bigger_error * current_step
-
-        return current_step
-
-    def after_weight_update(self, input_train, target_train):
-        super(ErrorDifferenceStepUpdate, self).after_weight_update(
-            input_train, target_train
+    def init_variables(self):
+        self.variables.update(
+            last_error=theano.shared(name='last_error', value=np.nan),
+            previous_error=theano.shared(name='previous_error', value=np.nan),
         )
-        self.step = self.new_step()
+        super(ErrorDifferenceStepUpdate, self).init_variables()
+
+    def init_train_updates(self):
+        updates = super(ErrorDifferenceStepUpdate, self).init_train_updates()
+
+        step = self.variables.step
+        last_error = self.variables.last_error
+        previous_error = self.variables.previous_error
+
+        step_update_condition = ifelse(
+            last_error < previous_error,
+            self.update_for_smaller_error * step,
+            ifelse(
+                last_error > self.update_for_bigger_error * previous_error,
+                self.update_for_bigger_error * step,
+                step
+            )
+
+        )
+        updates.append((step, step_update_condition))
+        return updates
+
+    def epoch_start_update(self, epoch):
+        super(ErrorDifferenceStepUpdate, self).epoch_start_update(epoch)
+
+        previous_error = self.previous_error()
+        if previous_error:
+            last_error = self.last_error()
+            self.variables.last_error.set_value(last_error)
+            self.variables.previous_error.set_value(previous_error)

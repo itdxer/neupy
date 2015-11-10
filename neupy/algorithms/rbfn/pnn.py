@@ -78,25 +78,25 @@ class PNN(LazyLearning, Classification, BaseNetwork):
             row_comb_matrix[i, class_val_positions.ravel()] = 1
             class_ratios[i] = np_sum(class_val_positions)
 
-    def setup_defaults(self):
+    def init_properties(self):
         # Remove properties from BaseNetwork
         del self.step
         del self.error
         del self.use_bias
         del self.show_epoch
         del self.train_end_signal
-        del self.train_epoch_end_signal
-        super(PNN, self).setup_defaults()
+        del self.epoch_end_signal
+        super(PNN, self).init_properties()
 
     def predict_prob(self, input_data):
-        raw_output = self.raw_predict(input_data)
+        raw_output = self.predict_raw(input_data)
 
         total_output_sum = raw_output.sum(axis=0).reshape(
             (raw_output.shape[1], 1)
         )
         return raw_output.T / total_output_sum
 
-    def raw_predict(self, input_data):
+    def predict_raw(self, input_data):
         input_data = format_data(input_data)
         super(PNN, self).predict(input_data)
 
@@ -118,5 +118,5 @@ class PNN(LazyLearning, Classification, BaseNetwork):
         ) / class_ratios.reshape((class_ratios.size, 1))
 
     def predict(self, input_data):
-        raw_output = self.raw_predict(input_data)
+        raw_output = self.predict_raw(input_data)
         return self.classes[raw_output.argmax(axis=0)]

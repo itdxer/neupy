@@ -1,9 +1,7 @@
 import numpy as np
 
-from neupy.algorithms import (Backpropagation, WeightDecay,
-                              LeakStepAdaptation)
-from neupy.layers import (Sigmoid, Tanh, StepOutput,
-                          Output)
+from neupy.algorithms import Backpropagation, WeightDecay, SearchThenConverge
+from neupy.layers import Sigmoid, Tanh, StepOutput, Output
 
 from base import BaseTestCase
 from data import xor_input_train, xor_target_train
@@ -19,9 +17,6 @@ class BackpropagationTestCase(BaseTestCase):
 
         with self.assertRaises(TypeError):
             network.step = '33'
-
-        with self.assertRaises(TypeError):
-            network.use_bias = 123
 
         with self.assertRaises(ValueError):
             network.error = 'not a function'
@@ -68,10 +63,10 @@ class BackpropagationTestCase(BaseTestCase):
             )
 
         Backpropagation((2, 3, 1), optimizations=[WeightDecay], verbose=False)
-        Backpropagation((2, 3, 1), optimizations=[LeakStepAdaptation],
+        Backpropagation((2, 3, 1), optimizations=[SearchThenConverge],
                         verbose=False)
         Backpropagation(
             (2, 3, 1),
-            optimizations=[WeightDecay, LeakStepAdaptation],
+            optimizations=[WeightDecay, SearchThenConverge],
             verbose=False
         )

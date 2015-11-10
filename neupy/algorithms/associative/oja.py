@@ -82,11 +82,11 @@ class Oja(UnsupervisedLearning, BaseNetwork):
     def __init__(self, **options):
         super(Oja, self).__init__(FAKE_CONNECTION, **options)
 
-    def setup_defaults(self):
+    def init_properties(self):
         del self.use_bias
         del self.error
         del self.shuffle_data
-        super(Oja, self).setup_defaults()
+        super(Oja, self).init_properties()
 
     def train_epoch(self, input_data, target_train):
         weights = self.weights

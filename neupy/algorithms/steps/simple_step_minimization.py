@@ -1,11 +1,11 @@
 from neupy.core.properties import NonNegativeIntProperty
-from .base import SingleStep
+from .base import LearningRateConfigurable
 
 
 __all__ = ('SimpleStepMinimization',)
 
 
-class SimpleStepMinimization(SingleStep):
+class SimpleStepMinimization(LearningRateConfigurable):
     """ Algorithm Monotonicly minimize learning step on each iteration.
     Probably this is most simple step minimization idea.
 
@@ -45,8 +45,8 @@ class SimpleStepMinimization(SingleStep):
     def init_train_updates(self):
         updates = super(SimpleStepMinimization, self).init_train_updates()
         variables = self.variables
-        new_step = self.first_step / (
+        step_update_condition = self.step / (
             1 + variables.epoch / self.epochs_step_minimizator
         )
-        updates.append((variables.step, new_step))
+        updates.append((variables.step, step_update_condition))
         return updates

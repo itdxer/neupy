@@ -35,7 +35,6 @@ class PandasCompatibilityTestCase(BaseTestCase):
                 layers.Sigmoid(40),
                 layers.Output(1),
             ],
-            use_bias=True,
             show_epoch=100
         )
 

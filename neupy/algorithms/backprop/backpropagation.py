@@ -22,7 +22,7 @@ class Backpropagation(SupervisedLearning, BaseNetwork):
     Methods
     -------
     {supervised_train}
-    {raw_predict}
+    {predict_raw}
     {full_methods}
 
     Examples
@@ -110,17 +110,14 @@ class Backpropagation(SupervisedLearning, BaseNetwork):
 
     def init_train_updates(self):
         updates = []
-        step = self.variables.step
-        layer_update = self.layer_update
-
         for layer in self.train_layers:
-            updates.extend(layer_update(layer))
-
+            updates.extend(self.layer_update(layer))
         return updates
 
     def layer_update(self, layer):
         step = layer.step or self.variables.step
-        grad_w, grad_b = T.grad(self.cost, wrt=[layer.weight, layer.bias])
+        grad_w, grad_b = T.grad(self.variables.error_func,
+                                wrt=[layer.weight, layer.bias])
         return [
             (layer.weight, layer.weight - step * grad_w),
             (layer.bias, layer.bias - step * grad_b),

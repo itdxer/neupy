@@ -35,7 +35,7 @@ def show_training_summary(network):
         Validation error: {error_out}
         Epoch time: {epoch_time} sec
     """.format(
-        epoch=network.epoch,
+        epoch=network.variables.epoch.get_value(),
         error=network.last_error() or '-',
         error_out=network.last_validation_error() or '-',
         epoch_time=round(network.train_epoch_time, 5)
@@ -201,7 +201,7 @@ class BaseNetwork(BaseSkeleton):
     shuffle_data = BoolProperty(default=False)
 
     # Signals
-    train_epoch_end_signal = FuncProperty()
+    epoch_end_signal = FuncProperty()
     train_end_signal = FuncProperty()
 
     def __init__(self, connection, **options):
@@ -218,12 +218,14 @@ class BaseNetwork(BaseSkeleton):
         self.train_layers = self.layers[:-1]
 
         super(BaseNetwork, self).__init__(**options)
-        self.setup_defaults()
+        self.init_properties()
 
         if self.verbose:
             self.show_network_options(highlight_options=options)
 
         self.init_layers()
+
+        self.variables = AttributeKeyDict()
         self.init_variables()
 
     def show_network_options(self, highlight_options=None):
@@ -280,7 +282,7 @@ class BaseNetwork(BaseSkeleton):
                 )
             logs.empty()
 
-    def setup_defaults(self):
+    def init_properties(self):
         """ Setup default values before populate the options.
         """
 
@@ -292,32 +294,31 @@ class BaseNetwork(BaseSkeleton):
         network_input = T.matrix('x')
         network_output = T.matrix('y')
 
-        self.variables = AttributeKeyDict(
+        layer_input = network_input
+        for layer in self.train_layers:
+            layer_input = layer.output(layer_input)
+        predict_raw = layer_input
+
+        self.variables.update(
             network_input=network_input,
             network_output=network_output,
             step=theano.shared(name='step', value=asfloat(self.step)),
             epoch=theano.shared(name='epoch', value=1, borrow=False),
+            error_func=self.error(network_output, layer_input)
         )
-
-        layer_input = network_input
-        for layer in self.train_layers:
-            layer_input = layer.output(layer_input)
-
-        raw_predict = layer_input
-        self.cost = self.error(network_output, layer_input)
 
         self.train_epoch = theano.function(
             inputs=[network_input, network_output],
-            outputs=self.cost,
+            outputs=self.variables.error_func,
             updates=self.init_train_updates(),
         )
         self.prediction_error = theano.function(
             inputs=[network_input, network_output],
-            outputs=self.cost
+            outputs=self.variables.error_func
         )
-        self.raw_predict = theano.function(
+        self.predict_raw = theano.function(
             inputs=[network_input],
-            outputs=raw_predict
+            outputs=predict_raw
         )
 
     def init_layers(self):
@@ -340,8 +341,11 @@ class BaseNetwork(BaseSkeleton):
         include postprocessing step related to the final layer that
         transform output to convenient format for end-use.
         """
-        raw_prediction = self.raw_predict(input_data)
-        return self.output_layer.output(raw_prediction)
+        predict_rawion = self.predict_raw(input_data)
+        return self.output_layer.output(predict_rawion)
+
+    def epoch_start_update(self, epoch):
+        self.variables.epoch.set_value(epoch)
 
     def _train(self, input_train, target_train=None, input_test=None,
                target_test=None, epochs=100, epsilon=None):
@@ -370,7 +374,6 @@ class BaseNetwork(BaseSkeleton):
 
         # ----------- Predefine parameters ----------- #
 
-        self.epoch = 1
         show_epoch = self.show_epoch
         logs = self.logs
         compute_error_out = (input_test is not None and
@@ -415,17 +418,16 @@ class BaseNetwork(BaseSkeleton):
 
         prediction_error = self.prediction_error
         train_epoch = self.train_epoch
-        train_epoch_end_signal = self.train_epoch_end_signal
+        epoch_end_signal = self.epoch_end_signal
         train_end_signal = self.train_end_signal
-        epoch_variable = self.variables.epoch
+        epoch_start_update = self.epoch_start_update
 
         self.input_train = input_train
         self.target_train = target_train
 
         for epoch in iterepochs:
-            self.epoch = epoch
             epoch_start_time = time()
-            epoch_variable.set_value(epoch)
+            epoch_start_update(epoch)
 
             if shuffle_data:
                 input_train, target_train = shuffle_train_data(input_train,
@@ -447,8 +449,8 @@ class BaseNetwork(BaseSkeleton):
                     show_epoch = next(epoch_summary)
                     last_epoch_shown = epoch
 
-                if train_epoch_end_signal is not None:
-                    train_epoch_end_signal(self)
+                if epoch_end_signal is not None:
+                    epoch_end_signal(self)
 
             except StopIteration as err:
                 logs.log("TRAIN", "Epoch #{} stopped. {}"

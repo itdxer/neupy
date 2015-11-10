@@ -174,7 +174,7 @@ For this option we define a signal which will run our ``save_weight_in_epoch`` f
         input_layer_weight = net.train_layers[0].weight.copy()
         weights[:, net.epoch + 1:net.epoch + 2] = input_layer_weight
 
-    network_settings['train_epoch_end_signal'] = save_weight_in_epoch
+    network_settings['epoch_end_signal'] = save_weight_in_epoch
 
 The next function draws weight update history in a plot.
 If you are not familiar with `matplotlib` library quiver, you can skip this code.

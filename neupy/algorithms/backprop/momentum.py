@@ -20,7 +20,7 @@ class Momentum(Backpropagation):
     Methods
     -------
     {supervised_train}
-    {raw_predict}
+    {predict_raw}
     {full_methods}
 
     Examples

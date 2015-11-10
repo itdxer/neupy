@@ -102,8 +102,8 @@ class SOFM(Kohonen):
                     )
                 )
 
-    def setup_defaults(self):
-        super(SOFM, self).setup_defaults()
+    def init_properties(self):
+        super(SOFM, self).init_properties()
 
         # if self.neighbours_step is None:
         #     self.neighbours_step = self.step

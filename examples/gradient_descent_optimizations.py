@@ -56,7 +56,7 @@ network_settings = dict(
     step=0.3,
     use_bias=False,
     # Signals
-    train_epoch_end_signal=save_weight_in_epoch,
+    epoch_end_signal=save_weight_in_epoch,
     verbose=False,
 )
 

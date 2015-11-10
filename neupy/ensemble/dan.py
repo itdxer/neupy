@@ -75,7 +75,7 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
         for network in self.networks:
             network.train(input_data, target_data, *args, **kwargs)
 
-    def raw_predict(self, input_data):
+    def predict_raw(self, input_data):
         number_of_inputs = input_data.shape[0]
         network_certainties = zeros((number_of_inputs, len(self.networks)))
         network_outputs = network_certainties.copy()
@@ -101,5 +101,5 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
         return (self.weights * network_outputs).sum(axis=1)
 
     def predict(self, input_data):
-        raw_output = self.raw_predict(input_data)
+        raw_output = self.predict_raw(input_data)
         return np_round(raw_output)

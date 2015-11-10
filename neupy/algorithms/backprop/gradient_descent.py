@@ -4,7 +4,11 @@ from neupy.core.properties import NumberProperty
 from .backpropagation import Backpropagation
 
 
-__all__ = ('MinibatchGradientDescent',)
+__all__ = ('MinibatchGradientDescent', 'GradientDescent')
+
+
+# Make an alias name
+GradientDescent = Backpropagation
 
 
 class MinibatchGradientDescent(Backpropagation):
@@ -20,7 +24,7 @@ class MinibatchGradientDescent(Backpropagation):
     Methods
     -------
     {supervised_train}
-    {raw_predict}
+    {predict_raw}
     {full_methods}
 
     Examples
@@ -54,11 +58,11 @@ class MinibatchGradientDescent(Backpropagation):
     def train_batch(self, input_data, target_data):
         deltas = [np.zeros(l.weight.shape) for l in self.train_layers]
 
-        raw_predict = self.raw_predict
+        predict_raw = self.predict_raw
         get_gradient = self.get_gradient
 
         for input_row, target_row in zip(input_data, target_data):
-            output_train = raw_predict(input_data)
+            output_train = predict_raw(input_data)
 
             self.output_train = output_train
 
@@ -80,4 +84,4 @@ class MinibatchGradientDescent(Backpropagation):
             update_weights(weight_delta)
             after_weight_update(input_train, target_train)
 
-        return self.error(self.raw_predict(input_train), target_train)
+        return self.error(self.predict_raw(input_train), target_train)
