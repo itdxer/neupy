@@ -93,7 +93,7 @@ class MixtureOfExperts(BaseEnsemble):
                 raise ValueError("Network must contains one output unit, got "
                                  "{0}".format(network.output_layer.input_size))
 
-            if network.error != errors.mse:
+            if network.error != 'mse':
                 raise ValueError(
                     "Use only Mean Square Error (MSE) function in network, "
                     "got {0}".format(network.error.__name__)
@@ -124,7 +124,7 @@ class MixtureOfExperts(BaseEnsemble):
                              "{0}, got {1}".format(n_networks,
                                                    gating_network_output_size))
 
-        if gating_network.error != errors.mse:
+        if gating_network.error != 'mse':
             raise ValueError(
                 "Use only Mean Square Error (MSE) function in network, "
                 "got {0}".format(gating_network.error.__name__)

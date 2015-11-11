@@ -19,14 +19,15 @@ class LeakStepAdaptationTestCase(BaseTestCase):
             algorithms.Backpropagation,
             partial(
                 algorithms.Backpropagation,
-                # Adaptive learning rate settings
                 leak_size=0.5,
                 alpha=0.5,
                 beta=0.5,
                 optimizations=[algorithms.LeakStepAdaptation]
             ),
+
             # Test data
             (even_input_train, even_target_train),
+
             # Network configurations
             connection=[
                 layers.Sigmoid(2),
@@ -35,8 +36,6 @@ class LeakStepAdaptationTestCase(BaseTestCase):
             ],
             step=0.1,
             shuffle_data=True,
-            # Adaptive learning rate parameters
-            # Test configurations
             epochs=30,
             # is_comparison_plot=True,
         )

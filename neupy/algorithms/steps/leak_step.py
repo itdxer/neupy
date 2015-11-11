@@ -1,8 +1,10 @@
-from numpy import zeros
-from numpy.linalg import norm
+import numpy as np
+import theano
+import theano.tensor as T
 
 from neupy.core.properties import (BetweenZeroAndOneProperty,
                                    NonNegativeNumberProperty)
+from neupy.utils import asfloat
 from .base import LearningRateConfigurable
 
 
@@ -53,27 +55,35 @@ class LeakStepAdaptation(LearningRateConfigurable):
 
     def init_layers(self):
         super(LeakStepAdaptation, self).init_layers()
-        updates = self.updates = []
-
         for layer in self.train_layers:
-            updates.append(zeros(layer.size))
+            layer.leak_avarage = theano.shared(
+                value=asfloat(np.zeros(layer.weight_shape)),
+                name='layer_leak_avarage'
+            )
+            layer.step = theano.shared(value=self.step, name='layer_step')
 
-    def after_weight_update(self, input_train, target_train):
-        super(LeakStepAdaptation, self).after_weight_update(input_train,
-                                                            target_train)
+    def init_layer_update(self, layer):
+        updates = super(LeakStepAdaptation, self).init_layer_update(layer)
+
         alpha = self.alpha
         beta = self.beta
         leak_size = self.leak_size
 
-        weight_delta = self.weight_delta
-        steps = self.steps
-        updates = self.updates
+        grad_w = T.grad(self.variables.error_func, wrt=layer.weight)
+        step = layer.step
+        leak_average = layer.leak_avarage
 
-        for i, layer in enumerate(self.train_layers):
-            step = steps[i]
-            update = updates[i]
+        leak_avarage_update = (
+            (1 - leak_size) * leak_average + leak_size * grad_w
+        )
+        updates.extend([
+            (leak_average, leak_avarage_update),
+            (
+                step,
+                step + alpha * step * (
+                    beta * leak_avarage_update.norm(2) - step
+                )
+            ),
+        ])
 
-            updates[i] = (1 - leak_size) * update + (
-                leak_size * weight_delta[i]
-            )
-            steps[i] += alpha * step * (beta * norm(updates[i]) - step)
+        return updates

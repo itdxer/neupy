@@ -1,5 +1,3 @@
-from numpy import ones
-
 from neupy.core.config import Configurable
 from neupy.algorithms.backprop import LEARING_RATE_UPDATE
 

@@ -31,7 +31,7 @@ def compare_networks(default_class, tested_class, data, **kwargs):
 
     network.train(*data, epochs=epochs)
     network_tested_error = network.last_error()
-    errors2 = network.errors_out
+    errors2 = network.errors_in
 
     if is_comparison_plot:
         error_range = np.arange(max(len(errors1), len(errors2)))

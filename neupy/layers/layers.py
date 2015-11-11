@@ -59,10 +59,12 @@ class Layer(BaseLayer):
         bias = self.bias
         self.step = None
 
+        self.weight_shape = (self.input_size, output_size)
+        self.bias_shape = (output_size,)
+
         if not isinstance(weight, theano_shared_class):
             if weight is None:
-                weight_shape = (self.input_size, output_size)
-                weight = generate_weight(weight_shape, self.bounds,
+                weight = generate_weight(self.weight_shape, self.bounds,
                                          self.init_method)
 
             self.weight = theano.shared(value=asfloat(weight), name='weight',
@@ -70,8 +72,7 @@ class Layer(BaseLayer):
 
         if not isinstance(bias, theano_shared_class):
             if bias is None:
-                bias_shape = (output_size,)
-                bias = generate_weight(bias_shape, self.bounds,
+                bias = generate_weight(self.bias_shape, self.bounds,
                                        self.init_method)
 
             self.bias = theano.shared(value=asfloat(bias), name='bias',
