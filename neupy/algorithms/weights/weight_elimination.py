@@ -45,21 +45,20 @@ class WeightElimination(WeightUpdateConfigurable):
     decay_rate = NonNegativeNumberProperty(default=0.1)
     zero_weight = NonNegativeNumberProperty(default=1)
 
-    def init_train_updates(self):
-        updates = super(WeightElimination, self).init_train_updates()
-        variables = self.variables
+    def init_layer_update(self, layer):
+        updates = super(WeightElimination, self).init_layer_update(layer)
         modified_updates = []
 
-        decay_koef = self.decay_rate * variables.step
+        step = layer.step or self.variables.step
+        decay_koef = self.decay_rate * step
         zero_weight_square = self.zero_weight ** 2
 
         for update_var, update_func in updates:
-            if update_var.name in ('weight', 'bias'):
+            if update_var.name.startswith(('weight', 'bias')):
                 update_func -= decay_koef * (
                     (2 * update_var / zero_weight_square) / (
                         1 + (update_var ** 2) / zero_weight_square
                     ) ** 2
                 )
             modified_updates.append((update_var, update_func))
-
         return modified_updates

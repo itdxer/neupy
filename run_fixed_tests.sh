@@ -10,6 +10,7 @@ nosetests \
     tests/core/test_storage.py\
     tests/core/test_properties.py\
     tests/weights/test_weight_decay.py\
+    tests/weights/test_weight_elimination.py\
     tests/plots/test_hinton.py\
     tests/datasets/test_reber.py\
     tests/backpropagation/test_backpropagation.py\

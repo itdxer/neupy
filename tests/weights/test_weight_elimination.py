@@ -34,9 +34,7 @@ class WeightEliminationTestCase(BaseTestCase):
                             decay_network.train_layers)
 
         for net_layer, decay_layer in iter_networks:
-            print(
+            self.assertGreater(
                 np.linalg.norm(net_layer.weight.get_value()),
                 np.linalg.norm(decay_layer.weight.get_value()),
             )
-
-        decay_network.plot_errors()
