@@ -293,7 +293,7 @@ class BaseNetwork(BaseSkeleton):
         """
 
     def init_variables(self):
-        """ Initialize all Theano variables.
+        """ Initialize Theano variables.
         """
 
         network_input = T.matrix('x')
@@ -494,7 +494,7 @@ class BaseNetwork(BaseSkeleton):
         if len(errors_in) > 2:
             return normilize_error(errors_in[-2])
 
-
+    def plot_errors(self, logx=False, ax=None, show=True):
         if not self.errors_in:
             return
 
