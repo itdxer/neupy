@@ -9,26 +9,14 @@ from sklearn.cross_validation import StratifiedShuffleSplit
 from neupy import algorithms, layers
 from neupy.algorithms.backprop import quasi_newton as qn
 
-from data import simple_input_train, simple_target_train
-from utils import compare_networks
+from data import simple_classification
 from base import BaseTestCase
 
 
 class QuasiNewtonTestCase(BaseTestCase):
     def setUp(self):
         super(QuasiNewtonTestCase, self).setUp()
-
-        X, y = datasets.make_classification(n_samples=100, n_features=10,
-                                            random_state=33)
-        shuffle_split = StratifiedShuffleSplit(y, 1, train_size=0.6,
-                                               random_state=33)
-
-        train_index, test_index = next(shuffle_split.__iter__())
-        x_train, x_test = X[train_index], X[test_index]
-        y_train, y_test = y[train_index], y[test_index]
-
-        self.X, self.y = X, y
-        self.data = (x_train, x_test, y_train, y_test)
+        self.data = simple_classification()
 
     def test_quasi_newton_bfgs(self):
         x_train, x_test, y_train, y_test = self.data

@@ -39,7 +39,7 @@ class QuickPropTestCase(BaseTestCase):
 
     def test_compare_quickprop_and_bp(self):
         x_train, _, y_train, _ = self.data
-        network_default_error, network_tested_error = compare_networks(
+        compare_networks(
             # Test classes
             algorithms.Backpropagation,
             partial(algorithms.Quickprop, upper_bound=0.5),
@@ -54,4 +54,3 @@ class QuickPropTestCase(BaseTestCase):
             verbose=False,
             is_comparison_plot=False
         )
-        self.assertGreater(network_default_error, network_tested_error)

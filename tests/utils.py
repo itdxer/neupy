@@ -13,6 +13,21 @@ from data import xor_input_train, xor_target_train
 
 
 def compare_networks(default_class, tested_class, data, **kwargs):
+    """ Compare two network arcitectures.
+
+    Parameters
+    ----------
+    default_class : BaseNetwork instance
+    tested_class : BaseNetwork instance
+    data : tuple
+    **kwargs :
+
+    Raises
+    ------
+    AssertionError
+        Raise exception when first network have better prediction
+        accuracy then the second one.
+    """
     epochs = kwargs.pop('epochs', 100)
     is_comparison_plot = kwargs.pop('is_comparison_plot', False)
 
@@ -39,11 +54,32 @@ def compare_networks(default_class, tested_class, data, **kwargs):
         plt.plot(error_range[:len(errors2)], errors2)
         plt.show()
 
-    return network_default_error, network_tested_error
+    if network_default_error <= network_tested_error:
+        raise AssertionError("First network has smaller error ({}) that the "
+                             "second one ({}).".format(network_default_error,
+                                                       network_tested_error))
 
 
 @contextmanager
 def image_comparison(original_image_path, figsize=(10, 10), tol=1e-3):
+    """ Context manager that initialize figure that should contain figure
+    that should be compared with expected one.
+
+    Parameters
+    ----------
+    original_image_path : str
+        Path to original image that will use for comparison.
+    figsize : tuple
+        Figure size. Defaults to ``(10, 10)``.
+    tol : float
+        Comparison tolerance. Defaults to ``1e-3``.
+
+    Raises
+    ------
+    AssertionError
+        Exception would be trigger in case when generated images and
+        original one are different.
+    """
     currentdir = os.path.abspath(os.path.dirname(__file__))
     original_image_path = os.path.join(currentdir, original_image_path)
 
@@ -58,16 +94,32 @@ def image_comparison(original_image_path, figsize=(10, 10), tol=1e-3):
                                  "Information: {}".format(error))
 
 
-def reproducible_network_train(seed=0, **additional_params):
+def reproducible_network_train(seed=0, epochs=500, **additional_params):
+    """ Make a reproducible train for Gradient Descent based neural
+    network with a XOR data and return this network
+
+    Parameters
+    ----------
+    seed : int
+        Random State seed number for reproducibility. Defaults to ``0``.
+    epochs : int
+        Number of epochs for training. Defaults to ``500``.
+    **additional_params
+        Aditional parameters for Neural Network
+
+    Returns
+    -------
+    GradientDescent instance
+        Returns pretrained network.
+    """
     np.random.seed(seed)
-    network = algorithms.RPROP(
+    network = algorithms.GradientDescent(
         connection=[
             layers.Tanh(2),
             layers.Tanh(5),
             layers.StepOutput(1, output_bounds=(-1, 1))
         ],
-        step=0.3,
         **additional_params
     )
-    network.train(xor_input_train, xor_target_train, epochs=500)
+    network.train(xor_input_train, xor_target_train, epochs=epochs)
     return network

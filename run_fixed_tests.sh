@@ -12,6 +12,7 @@ nosetests \
     tests/weights/test_weight_decay.py\
     tests/weights/test_weight_elimination.py\
     tests/plots/test_hinton.py\
+    tests/plots/test_error_plot.py\
     tests/datasets/test_reber.py\
     tests/backpropagation/test_backpropagation.py\
-    tests/compatibilities/test_pandas.py\
+    tests/compatibilities/test_pandas.py

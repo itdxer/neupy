@@ -97,7 +97,7 @@ class ConjugateGradientTestCase(BaseTestCase):
         self.assertGreater(1e-2, norm)
 
     def test_compare_bp_and_cg(self):
-        network_default_error, network_tested_error = compare_networks(
+        compare_networks(
             # Test classes
             algorithms.Backpropagation,
             partial(
@@ -115,4 +115,3 @@ class ConjugateGradientTestCase(BaseTestCase):
             epochs=50,
             # is_comparison_plot=True
         )
-        self.assertGreater(network_default_error, network_tested_error)

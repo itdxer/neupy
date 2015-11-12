@@ -20,12 +20,17 @@ from neupy.core.properties import (Property, FuncProperty, NumberProperty,
 from neupy.layers import BaseLayer, Output
 from neupy.layers.utils import generate_layers
 from .errors import mse, binary_crossentropy, categorical_crossentropy
-from .utils import iter_until_converge, shuffle, normilize_error_output
+from .utils import (iter_until_converge, shuffle, normilize_error,
+                    normilize_error_list)
 from .connections import (FAKE_CONNECTION, LayerConnection,
                           NetworkConnectionError)
 
 
-__all__ = ('BaseNetwork',)
+__all__ = ('BaseNetwork', 'StopNetworkTraining')
+
+
+class StopNetworkTraining(StopIteration):
+    pass
 
 
 def show_training_summary(network):
@@ -223,10 +228,11 @@ class BaseNetwork(BaseSkeleton):
         if self.verbose:
             self.show_network_options(highlight_options=options)
 
-        self.init_layers()
-
         self.variables = AttributeKeyDict()
+
+        self.init_layers()
         self.init_variables()
+        self.init_methods()
 
     def show_network_options(self, highlight_options=None):
         """ Display all available parameters options for Neural Network.
@@ -287,8 +293,7 @@ class BaseNetwork(BaseSkeleton):
         """
 
     def init_variables(self):
-        """ Initialize all variables and methods that depence
-        on Theano.
+        """ Initialize all Theano variables.
         """
 
         network_input = T.matrix('x')
@@ -297,15 +302,24 @@ class BaseNetwork(BaseSkeleton):
         layer_input = network_input
         for layer in self.train_layers:
             layer_input = layer.output(layer_input)
-        predict_raw = layer_input
+        prediction = layer_input
 
         self.variables.update(
             network_input=network_input,
             network_output=network_output,
             step=theano.shared(name='step', value=asfloat(self.step)),
             epoch=theano.shared(name='epoch', value=1, borrow=False),
-            error_func=self.error(network_output, layer_input)
+            error_func=self.error(network_output, prediction),
+            prediction_func=prediction,
         )
+
+    def init_methods(self):
+        """ Initialize all methods that needed for prediction and
+        training procedures.
+        """
+
+        network_input = self.variables.network_input
+        network_output = self.variables.network_output
 
         self.train_epoch = theano.function(
             inputs=[network_input, network_output],
@@ -318,7 +332,7 @@ class BaseNetwork(BaseSkeleton):
         )
         self.predict_raw = theano.function(
             inputs=[network_input],
-            outputs=predict_raw
+            outputs=self.variables.prediction_func
         )
 
     def init_layers(self):
@@ -332,8 +346,8 @@ class BaseNetwork(BaseSkeleton):
 
     @abstractmethod
     def init_train_updates(self):
-        """ Initialize function update in Theano format that would be use
-        after each trainig epoch.
+        """ Initialize train function update in Theano format that
+        would be trigger after each trainig epoch.
         """
 
     def predict(self, input_data):
@@ -452,7 +466,7 @@ class BaseNetwork(BaseSkeleton):
                 if epoch_end_signal is not None:
                     epoch_end_signal(self)
 
-            except StopIteration as err:
+            except StopNetworkTraining as err:
                 logs.log("TRAIN", "Epoch #{} stopped. {}"
                                   "".format(epoch, str(err)))
                 break
@@ -478,52 +492,47 @@ class BaseNetwork(BaseSkeleton):
     def previous_error(self):
         errors_in = self.errors_in
         if len(errors_in) > 2:
-            return normilize_error_output(errors_in[-2])
+            return normilize_error(errors_in[-2])
 
-    def _normalized_errors(self, errors):
-        if not len(errors) or isinstance(errors[0], float):
-            return errors
 
-        self.logs.warning("Errors are not scalers. They would be normilized.")
-
-        normilized_errors = map(normilize_error_output, errors)
-        return list(normilized_errors)
-
-    def plot_errors(self, logx=False):
         if not self.errors_in:
             return
 
-        errors_in = self._normalized_errors(self.errors_in)
-        errors_out = self._normalized_errors(self.errors_out)
+        if ax is None:
+            ax = plt.gca()
+
+        errors_in = normilize_error_list(self.errors_in)
+        errors_out = normilize_error_list(self.errors_out)
         errors_range = np.arange(len(errors_in))
-        plot_function = plt.semilogx if logx else plt.plot
+        plot_function = ax.semilogx if logx else ax.plot
 
         line_error_in, = plot_function(errors_range, errors_in)
         title_text = 'Learning error after each epoch'
 
         if errors_out:
             line_error_out, = plot_function(errors_range, errors_out)
-            plt.legend(
+            ax.legend(
                 [line_error_in, line_error_out],
                 ['Train error', 'Validation error']
             )
             title_text = 'Learning errors after each epoch'
 
-        plt.title(title_text)
-        plt.xlim(0)
+        ax.set_title(title_text)
+        ax.set_xlim(0)
 
-        plt.ylabel('Error')
-        plt.xlabel('Epoch')
+        ax.set_ylabel('Error')
+        ax.set_xlabel('Epoch')
 
-        plt.show()
+        if show:
+            ax.show()
 
     # ----------------- Representations ----------------- #
 
-    def get_class_name(self):
+    def class_name(self):
         return self.__class__.__name__
 
     def __repr__(self):
-        classname = self.get_class_name()
+        classname = self.class_name()
         options_repr = self._repr_options()
 
         if self.connection != FAKE_CONNECTION:

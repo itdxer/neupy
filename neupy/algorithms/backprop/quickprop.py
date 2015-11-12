@@ -7,6 +7,7 @@ from numpy.linalg import norm
 
 from neupy.core.properties import (NonNegativeNumberProperty,
                                    BetweenZeroAndOneProperty)
+from neupy.network import StopNetworkTraining
 from .backpropagation import Backpropagation
 
 
@@ -61,8 +62,9 @@ class Quickprop(Backpropagation):
             prev_weight_delta = self.prev_weight_deltas[layer_number]
 
             if norm(prev_gradient - gradient) < self.gradient_tol:
-                raise StopIteration("Gradient norm after update is "
-                                    "less than {}".format(self.gradient_tol))
+                raise StopNetworkTraining("Gradient norm after update is "
+                                          "less than {}"
+                                          "".format(self.gradient_tol))
 
             weight_delta = prev_weight_delta * (
                 gradient / (prev_gradient - gradient)

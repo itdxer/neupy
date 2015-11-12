@@ -30,7 +30,7 @@ class RPROPTestCase(BaseTestCase):
         self.assertGreater(1e-4, nw.last_error())
 
     def test_compare_bp_and_rprop(self):
-        network_default_error, network_tested_error = compare_networks(
+        compare_networks(
             # Test classes
             algorithms.Backpropagation,
             algorithms.RPROP,
@@ -45,7 +45,6 @@ class RPROPTestCase(BaseTestCase):
             epochs=50,
             # is_comparison_plot=True
         )
-        self.assertGreater(network_default_error, network_tested_error)
 
     def test_irpropplus(self):
         options = dict(

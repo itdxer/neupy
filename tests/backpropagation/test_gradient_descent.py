@@ -18,7 +18,7 @@ class GradientDescentTestCase(BaseTestCase):
         self.connection = Tanh(2) > Tanh(5) > output
 
     def test_stochastic_gradient_descent(self):
-        network_default_error, network_tested_error = compare_networks(
+        compare_networks(
            # Test classes
            algorithms.Backpropagation,
            partial(algorithms.MinibatchGradientDescent, batch_size=4),
@@ -33,7 +33,6 @@ class GradientDescentTestCase(BaseTestCase):
            epochs=40,
            # is_comparison_plot=True
         )
-        self.assertGreater(network_default_error, network_tested_error)
 
     def test_on_bigger_dataset(self):
         data, targets = datasets.make_regression(n_samples=4000)

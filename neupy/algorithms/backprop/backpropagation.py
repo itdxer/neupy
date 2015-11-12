@@ -123,7 +123,7 @@ class Backpropagation(SupervisedLearning, BaseNetwork):
             (layer.bias, layer.bias - step * grad_b),
         ]
 
-    def get_class_name(self):
+    def class_name(self):
         return 'Backpropagation'
 
     def get_params(self, deep=False, with_connection=True):

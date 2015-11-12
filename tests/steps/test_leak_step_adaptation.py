@@ -14,7 +14,7 @@ even_target_train = np.array([[-1], [-1], [1], [1], [-1]])
 
 class LeakStepAdaptationTestCase(BaseTestCase):
     def test_leak_step_adaptation(self):
-        network_default_error, network_tested_error = compare_networks(
+        compare_networks(
             # Test classes
             algorithms.Backpropagation,
             partial(
@@ -39,4 +39,3 @@ class LeakStepAdaptationTestCase(BaseTestCase):
             epochs=30,
             # is_comparison_plot=True,
         )
-        self.assertGreater(network_default_error, network_tested_error)

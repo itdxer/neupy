@@ -9,7 +9,7 @@ from base import BaseTestCase
 
 class WolfeSearchTestCase(BaseTestCase):
     def test_wolfe_search(self):
-        network_default_error, network_tested_error = compare_networks(
+        compare_networks(
             # Test classes
             algorithms.Backpropagation,
             partial(
@@ -30,4 +30,3 @@ class WolfeSearchTestCase(BaseTestCase):
             epochs=50,
             # is_comparison_plot=True
         )
-        self.assertGreater(network_default_error, network_tested_error)
