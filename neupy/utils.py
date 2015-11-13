@@ -7,25 +7,48 @@ import numpy as np
 __all__ = ('format_data', 'is_row1d', 'asfloat', 'AttributeKeyDict')
 
 
-def format_data(input_data, row1d=False, copy=False):
-    if input_data is None:
+def format_data(data, row1d=False, copy=False):
+    """ Transform data in a standardized format.
+
+    Notes
+    -----
+    It should be applied to the input data prior to use in
+    learning algorithms.
+
+    Parameters
+    ----------
+    data : array-like
+        Data that should be formated. That could be, matrix, vector or
+        Pandas DataFrame instance.
+    row1d : bool
+        Defaults to ``False``.
+    copy : bool
+        Defaults to ``False``.
+
+    Returns
+    -------
+    ndarray
+        The same input data but transformed to a standardized format
+        for further use.
+    """
+    if data is None:
         return
 
-    input_data = np.array(asfloat(input_data), copy=copy)
+    data = np.array(asfloat(data), copy=copy)
 
     # Valid number of features for one or two dimentions
-    n_features = input_data.shape[-1]
+    n_features = data.shape[-1]
     if 'pandas' in sys.modules:
         pandas = sys.modules['pandas']
 
-        if isinstance(input_data, (pandas.Series, pandas.DataFrame)):
-            input_data = input_data.values
+        if isinstance(data, (pandas.Series, pandas.DataFrame)):
+            data = data.values
 
-    if input_data.ndim == 1:
+    if data.ndim == 1:
         data_shape = (1, n_features) if row1d else (n_features, 1)
-        input_data = input_data.reshape(data_shape)
+        data = data.reshape(data_shape)
 
-    return input_data
+    return data
 
 
 def is_row1d(layer):
@@ -35,7 +58,8 @@ def is_row1d(layer):
 
 
 def asfloat(value):
-    """ Convert variable to float type configured by theano floatX variable.
+    """ Convert variable to float type configured by theano
+    floatX variable.
 
     Parameters
     ----------
@@ -45,8 +69,8 @@ def asfloat(value):
     Returns
     -------
     matrix, ndarray or scalar
-        Output would be input value converted to float type configured by
-        theano floatX variable.
+        Output would be input value converted to float type
+        configured by theano floatX variable.
     """
 
     if isinstance(value, (np.matrix, np.ndarray)):
@@ -57,8 +81,8 @@ def asfloat(value):
 
 
 class AttributeKeyDict(dict):
-    """ Modified built-in Python ``dict`` class. That modification helps
-    get and set values in dictionary like attributes.
+    """ Modified built-in Python ``dict`` class. That modification
+    helps get and set values like attributes.
 
     Exampels
     --------
