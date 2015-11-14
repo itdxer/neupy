@@ -96,7 +96,7 @@ def image_comparison(original_image_path, figsize=(10, 10), tol=1e-3):
 
 def reproducible_network_train(seed=0, epochs=500, **additional_params):
     """ Make a reproducible train for Gradient Descent based neural
-    network with a XOR data and return this network
+    network with a XOR problem and return trained network.
 
     Parameters
     ----------
@@ -105,12 +105,12 @@ def reproducible_network_train(seed=0, epochs=500, **additional_params):
     epochs : int
         Number of epochs for training. Defaults to ``500``.
     **additional_params
-        Aditional parameters for Neural Network
+        Aditional parameters for Neural Network.
 
     Returns
     -------
     GradientDescent instance
-        Returns pretrained network.
+        Returns trained network.
     """
     np.random.seed(seed)
     network = algorithms.GradientDescent(

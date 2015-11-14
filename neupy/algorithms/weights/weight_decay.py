@@ -44,6 +44,8 @@ class WeightDecay(WeightUpdateConfigurable):
         step = layer.step or self.variables.step
 
         for update_var, update_func in updates:
+            # TODO: Solution is not really elegant. Should find
+            # a better way to solve it.
             if update_var.name.startswith(('weight', 'bias')):
                 update_func -= step * self.decay_rate * update_var
             modified_updates.append((update_var, update_func))

@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 import numpy as np
 
 from neupy import algorithms, layers
@@ -39,4 +41,45 @@ class WeightDecayTestCase(BaseTestCase):
             )
 
     def test_with_step_minimization_alg(self):
-        pass
+        default_step = 0.3
+        net1 = reproducible_network_train(step=default_step)
+        net2 = reproducible_network_train(
+            step=default_step,
+            optimizations=[algorithms.WeightDecay]
+        )
+        net3 = reproducible_network_train(
+            step=default_step,
+            optimizations=[algorithms.WeightDecay,
+                           algorithms.SimpleStepMinimization]
+        )
+
+        # Check that step is valid for each network
+        StepCase = namedtuple('StepCase', 'network expected_step')
+        step_test_cases = (
+            StepCase(network=net1, expected_step=default_step),
+            StepCase(network=net2, expected_step=default_step),
+            StepCase(network=net3, expected_step=default_step / 6.),
+        )
+
+        for case in step_test_cases:
+            step = case.network.variables.step
+            self.assertAlmostEqual(step.get_value(), case.expected_step,
+                                   places=10)
+
+        # Compare weight norm between networks
+        WeightNormCase = namedtuple('WeightNormCase',
+                                    'with_smaller_norm with_bigger_norm')
+        norm_test_cases = (
+            WeightNormCase(with_smaller_norm=net2, with_bigger_norm=net1),
+            WeightNormCase(with_smaller_norm=net3, with_bigger_norm=net1),
+        )
+        for case in norm_test_cases:
+            network_layers = zip(case.with_smaller_norm.train_layers,
+                                 case.with_bigger_norm.train_layers)
+            for smaller_norm, bigger_norm in network_layers:
+                weight_smaller_norm = smaller_norm.weight.get_value()
+                weight_bigger_norm = bigger_norm.weight.get_value()
+                self.assertGreater(
+                    np.linalg.norm(weight_bigger_norm),
+                    np.linalg.norm(weight_smaller_norm)
+                )

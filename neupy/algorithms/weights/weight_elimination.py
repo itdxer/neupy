@@ -22,6 +22,13 @@ class WeightElimination(WeightUpdateConfigurable):
         with a big value ``zero_weight`` network allow higher values for
         the weights.
 
+    Notes
+    -----
+    Before adding that regularization parameter carefully choose
+    ``decay_rate`` and ``zero_weight`` parameters for the problem.
+    Invalid parameters could significatly reduce weight sizes and norm
+    could be near zero.
+
     Warns
     -----
     {bp_depending}
@@ -41,6 +48,12 @@ class WeightElimination(WeightUpdateConfigurable):
     See Also
     --------
     :network:`WeightDecay`
+
+    .. [1] Weigend, A. S.; Rumelhart, D. E. & Huberman, B. A. (1991),
+    Generalization by Weight-Elimination with Application to Forecasting,
+    in Richard P. Lippmann; John E. Moody & David S. Touretzky, ed.,
+    'Advances in Neural Information Processing Systems 3' , San Francisco,
+    CA: Morgan Kaufmann, , pp. 875--882 .
     """
     decay_rate = NonNegativeNumberProperty(default=0.1)
     zero_weight = NonNegativeNumberProperty(default=1)
@@ -54,6 +67,8 @@ class WeightElimination(WeightUpdateConfigurable):
         zero_weight_square = self.zero_weight ** 2
 
         for update_var, update_func in updates:
+            # TODO: Solution is not really elegant. Should find
+            # a better way to solve it.
             if update_var.name.startswith(('weight', 'bias')):
                 update_func -= decay_koef * (
                     (2 * update_var / zero_weight_square) / (
