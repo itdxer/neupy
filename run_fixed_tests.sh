@@ -11,6 +11,8 @@ nosetests \
     tests/core/test_properties.py\
     tests/weights/test_weight_decay.py\
     tests/weights/test_weight_elimination.py\
+    tests/rbfn/test_pnn.py\
+    tests/rbfn/test_grnn.py\
     tests/plots/test_hinton.py\
     tests/plots/test_error_plot.py\
     tests/datasets/test_reber.py\

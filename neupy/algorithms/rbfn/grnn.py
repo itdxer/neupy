@@ -58,7 +58,6 @@ class GRNN(LazyLearning, Regression, BaseNetwork):
     def init_properties(self):
         del self.error
         del self.step
-        del self.use_bias
         del self.show_epoch
         del self.train_end_signal
         del self.epoch_end_signal

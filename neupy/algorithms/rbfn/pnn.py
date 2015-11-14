@@ -82,7 +82,6 @@ class PNN(LazyLearning, Classification, BaseNetwork):
         # Remove properties from BaseNetwork
         del self.step
         del self.error
-        del self.use_bias
         del self.show_epoch
         del self.train_end_signal
         del self.epoch_end_signal

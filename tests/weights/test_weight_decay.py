@@ -37,3 +37,6 @@ class WeightDecayTestCase(BaseTestCase):
                 np.linalg.norm(net_layer.weight.get_value()),
                 np.linalg.norm(decay_layer.weight.get_value()),
             )
+
+    def test_with_step_minimization_alg(self):
+        pass

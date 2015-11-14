@@ -44,6 +44,9 @@ class LazyLearning(object):
     def init_properties(self):
         del self.shuffle_data
 
+    def init_methods(self):
+        pass
+
     def train(self, input_train, target_train):
         self.input_train = input_train
         self.target_train = target_train

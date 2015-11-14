@@ -17,7 +17,7 @@ class ErrorPlotTestCase(BaseTestCase):
         original_image = os.path.join(IMGDIR, "test_simple_plot.png")
         with image_comparison(original_image) as fig:
             ax = fig.add_subplot(1, 1, 1)
-            network = reproducible_network_train()
+            network = reproducible_network_train(step=0.3)
             network.plot_errors(ax=ax, show=False)
 
     def test_plot_with_validation_dataset(self):
@@ -34,5 +34,5 @@ class ErrorPlotTestCase(BaseTestCase):
         original_image = os.path.join(IMGDIR, "test_log_scale.png")
         with image_comparison(original_image) as fig:
             ax = fig.add_subplot(1, 1, 1)
-            network = reproducible_network_train()
+            network = reproducible_network_train(step=0.3)
             network.plot_errors(logx=True, ax=ax, show=False)
