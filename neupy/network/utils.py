@@ -2,10 +2,17 @@ import numpy as np
 
 
 __all__ = ('iter_until_converge', 'shuffle', 'normilize_error', 'step',
-           'normilize_error_list')
+           'normilize_error_list', 'StopNetworkTraining')
+
+
+class StopNetworkTraining(StopIteration):
+    pass
 
 
 def iter_until_converge(network, epsilon, max_epochs):
+    if not hasattr(network, 'epoch'):
+        network.epoch = 1
+
     # Trigger first iteration and store first error term
     yield network.epoch
     previous_error = error_delta = network.last_error()

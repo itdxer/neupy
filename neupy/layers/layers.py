@@ -83,6 +83,8 @@ class Layer(BaseLayer):
                                       name='bias_{}'.format(self.layer_id),
                                       borrow=True)
 
+        self.parameters = [self.weight, self.bias]
+
     def output(self, input_value):
         summated = T.dot(input_value, self.weight) + self.bias
         return self.activation_function(summated)

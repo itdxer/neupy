@@ -43,7 +43,6 @@ class BaseLayer(with_metaclass(LayerMeta, ChainConnection, BaseConfigurable)):
         # Default variables which will change after initialization
         self.relate_to_layer = None
         self.relate_from_layer = None
-        self.size = None
         self.layer_id = 1
 
         # If you will set class method function variable, python understend

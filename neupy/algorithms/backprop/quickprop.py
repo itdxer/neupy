@@ -2,12 +2,16 @@ from __future__ import division
 
 import copy
 
+import theano
+import theano.tensor as T
+import numpy as np
 from numpy import where, sign, abs as np_abs
 from numpy.linalg import norm
 
 from neupy.core.properties import (NonNegativeNumberProperty,
                                    BetweenZeroAndOneProperty)
 from neupy.network import StopNetworkTraining
+from neupy.utils import asfloat
 from .backpropagation import Backpropagation
 
 
@@ -51,37 +55,35 @@ class Quickprop(Backpropagation):
     :network:`Backpropagation` : Backpropagation algorithm.
     """
     upper_bound = NonNegativeNumberProperty(default=1)
-    gradient_tol = BetweenZeroAndOneProperty(default=1e-10)
 
-    def layer_weight_update(self, delta, layer_number):
-        if not hasattr(self, 'prev_gradients'):
-            weight_delta = delta
-        else:
-            gradient = self.gradients[layer_number]
-            prev_gradient = self.prev_gradients[layer_number]
-            prev_weight_delta = self.prev_weight_deltas[layer_number]
+    def init_layers(self):
+        super(Quickprop, self).init_layers()
+        for layer in self.train_layers:
+            for parameter in layer.parameters:
+                parameter_shape = T.shape(parameter).eval()
+                parameter.prev_delta = theano.shared(
+                    name="prev_delta_" + parameter.name,
+                    value=asfloat(-2 * np.ones(parameter_shape)),
+                )
+                parameter.prev_gradient = theano.shared(
+                    name="prev_grad_" + parameter.name,
+                    value=asfloat(np.zeros(parameter_shape)),
+                )
 
-            if norm(prev_gradient - gradient) < self.gradient_tol:
-                raise StopNetworkTraining("Gradient norm after update is "
-                                          "less than {}"
-                                          "".format(self.gradient_tol))
+    def init_layer_param_updates(self, layer, parameter):
+        step = layer.step or self.variables.step
+        gradient = T.grad(self.variables.error_func, wrt=parameter)
 
-            weight_delta = prev_weight_delta * (
-                gradient / (prev_gradient - gradient)
-            )
-            upper_bound = self.upper_bound
-            weight_delta = where(
-                np_abs(weight_delta) < upper_bound,
-                weight_delta,
-                sign(weight_delta) * upper_bound
-            )
+        prev_delta = parameter.prev_delta
+        prev_gradient = parameter.prev_gradient
 
-        self.weight_deltas.append(weight_delta)
-        return weight_delta
-
-    def update_weights(self, weight_deltas):
-        self.weight_deltas = []
-        super(Quickprop, self).update_weights(weight_deltas)
-
-        self.prev_weight_deltas = copy.copy(self.weight_deltas)
-        self.prev_gradients = copy.copy(self.gradients)
+        parameter_delta = T.clip(
+            T.abs_(prev_delta) * gradient / T.abs_(prev_gradient - gradient),
+            -self.upper_bound,
+            self.upper_bound
+        )
+        return [
+            (parameter, parameter - step * parameter_delta),
+            (prev_gradient, gradient),
+            (prev_delta, parameter_delta),
+        ]

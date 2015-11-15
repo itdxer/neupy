@@ -111,17 +111,19 @@ class Backpropagation(SupervisedLearning, BaseNetwork):
     def init_train_updates(self):
         updates = []
         for layer in self.train_layers:
-            updates.extend(self.init_layer_update(layer))
+            updates.extend(self.init_layer_updates(layer))
         return updates
 
-    def init_layer_update(self, layer):
+    def init_layer_updates(self, layer):
+        updates = []
+        for parameter in layer.parameters:
+            updates.extend(self.init_layer_param_updates(layer, parameter))
+        return updates
+
+    def init_layer_param_updates(self, layer, parameter):
         step = layer.step or self.variables.step
-        grad_w, grad_b = T.grad(self.variables.error_func,
-                                wrt=[layer.weight, layer.bias])
-        return [
-            (layer.weight, layer.weight - step * grad_w),
-            (layer.bias, layer.bias - step * grad_b),
-        ]
+        gradient = T.grad(self.variables.error_func, wrt=parameter)
+        return [(parameter, parameter - step * gradient)]
 
     def class_name(self):
         return 'Backpropagation'

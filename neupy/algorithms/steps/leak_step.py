@@ -62,8 +62,8 @@ class LeakStepAdaptation(LearningRateConfigurable):
             )
             layer.step = theano.shared(value=self.step, name='layer_step')
 
-    def init_layer_update(self, layer):
-        updates = super(LeakStepAdaptation, self).init_layer_update(layer)
+    def init_layer_updates(self, layer):
+        updates = super(LeakStepAdaptation, self).init_layer_updates(layer)
 
         alpha = self.alpha
         beta = self.beta

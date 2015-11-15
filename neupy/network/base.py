@@ -21,16 +21,12 @@ from neupy.layers import BaseLayer, Output
 from neupy.layers.utils import generate_layers
 from .errors import mse, binary_crossentropy, categorical_crossentropy
 from .utils import (iter_until_converge, shuffle, normilize_error,
-                    normilize_error_list)
+                    normilize_error_list, StopNetworkTraining)
 from .connections import (FAKE_CONNECTION, LayerConnection,
                           NetworkConnectionError)
 
 
-__all__ = ('BaseNetwork', 'StopNetworkTraining')
-
-
-class StopNetworkTraining(StopIteration):
-    pass
+__all__ = ('BaseNetwork',)
 
 
 def show_training_summary(network):

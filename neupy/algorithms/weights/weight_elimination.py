@@ -58,22 +58,20 @@ class WeightElimination(WeightUpdateConfigurable):
     decay_rate = NonNegativeNumberProperty(default=0.1)
     zero_weight = NonNegativeNumberProperty(default=1)
 
-    def init_layer_update(self, layer):
-        updates = super(WeightElimination, self).init_layer_update(layer)
-        modified_updates = []
+    def init_layer_param_updates(self, layer, parameter):
+        updates = super(WeightElimination, self).init_layer_param_updates(
+            layer, parameter
+        )
 
         step = layer.step or self.variables.step
         decay_koef = self.decay_rate * step
         zero_weight_square = self.zero_weight ** 2
 
-        for update_var, update_func in updates:
-            # TODO: Solution is not really elegant. Should find
-            # a better way to solve it.
-            if update_var.name.startswith(('weight', 'bias')):
-                update_func -= decay_koef * (
-                    (2 * update_var / zero_weight_square) / (
-                        1 + (update_var ** 2) / zero_weight_square
-                    ) ** 2
-                )
-            modified_updates.append((update_var, update_func))
-        return modified_updates
+        updates_mapper = dict(updates)
+        updates_mapper[parameter] -= decay_koef * (
+            (2 * parameter / zero_weight_square) / (
+                1 + (parameter ** 2) / zero_weight_square
+            ) ** 2
+        )
+
+        return list(updates_mapper.items())

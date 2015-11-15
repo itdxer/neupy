@@ -1,5 +1,8 @@
-import copy
+import theano
+import theano.tensor as T
+import numpy as np
 
+from neupy.utils import asfloat
 from neupy.core.properties import BetweenZeroAndOneProperty
 from .backpropagation import Backpropagation
 
@@ -45,13 +48,24 @@ class Momentum(Backpropagation):
     """
     momentum = BetweenZeroAndOneProperty(default=0.9)
 
-    def layer_weight_update(self, delta, layer_number):
-        update = super(Momentum, self).layer_weight_update(delta,
-                                                           layer_number)
-        if not hasattr(self, 'prev_gradients'):
-            return update
-        return -self.momentum * self.prev_gradients[layer_number] + update
+    def init_layers(self):
+        super(Momentum, self).init_layers()
+        for layer in self.train_layers:
+            for parameter in layer.parameters:
+                parameter_shape = T.shape(parameter).eval()
+                parameter.prev_gradient = theano.shared(
+                    name="prev_grad_" + parameter.name,
+                    value=asfloat(np.zeros(parameter_shape)),
+                )
 
-    def update_weights(self, weight_deltas):
-        super(Momentum, self).update_weights(weight_deltas)
-        self.prev_gradients = copy.copy(self.gradients)
+    def init_layer_param_updates(self, layer, parameter):
+        step = layer.step or self.variables.step
+        gradient = T.grad(self.variables.error_func, wrt=parameter)
+
+        prev_gradient = parameter.prev_gradient
+        parameter_delta = -self.momentum * prev_gradient - step * gradient
+
+        return [
+            (parameter, parameter + parameter_delta),
+            (prev_gradient, gradient),
+        ]

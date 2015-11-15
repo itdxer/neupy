@@ -38,15 +38,11 @@ class WeightDecay(WeightUpdateConfigurable):
     """
     decay_rate = NonNegativeNumberProperty(default=0.1)
 
-    def init_layer_update(self, layer):
-        updates = super(WeightDecay, self).init_layer_update(layer)
-        modified_updates = []
+    def init_layer_param_updates(self, layer, parameter):
+        updates = super(WeightDecay, self).init_layer_param_updates(
+            layer, parameter
+        )
         step = layer.step or self.variables.step
-
-        for update_var, update_func in updates:
-            # TODO: Solution is not really elegant. Should find
-            # a better way to solve it.
-            if update_var.name.startswith(('weight', 'bias')):
-                update_func -= step * self.decay_rate * update_var
-            modified_updates.append((update_var, update_func))
-        return modified_updates
+        updates_mapper = dict(updates)
+        updates_mapper[parameter] -= step * self.decay_rate * parameter
+        return list(updates_mapper.items())

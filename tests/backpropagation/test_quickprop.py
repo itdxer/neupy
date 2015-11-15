@@ -29,13 +29,12 @@ class QuickPropTestCase(BaseTestCase):
             step=0.1,
             upper_bound=1,
             shuffle_data=True,
-            # verbose=True,
+            verbose=False,
         )
-        qp.train(x_train, y_train, epochs=100)
+        qp.train(x_train, y_train, epochs=50)
 
-        result = qp.predict(x_test)
-        error = qp.error(result, y_test)
-        self.assertAlmostEqual(0, error, places=2)
+        error = qp.prediction_error(x_test, y_test)
+        self.assertAlmostEqual(0, error, places=3)
 
     def test_compare_quickprop_and_bp(self):
         x_train, _, y_train, _ = self.data
