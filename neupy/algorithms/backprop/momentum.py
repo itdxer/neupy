@@ -58,7 +58,7 @@ class Momentum(Backpropagation):
                     value=asfloat(np.zeros(parameter_shape)),
                 )
 
-    def init_layer_param_updates(self, layer, parameter):
+    def init_param_updates(self, layer, parameter):
         step = layer.step or self.variables.step
         gradient = T.grad(self.variables.error_func, wrt=parameter)
 

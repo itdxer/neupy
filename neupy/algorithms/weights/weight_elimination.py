@@ -58,8 +58,8 @@ class WeightElimination(WeightUpdateConfigurable):
     decay_rate = NonNegativeNumberProperty(default=0.1)
     zero_weight = NonNegativeNumberProperty(default=1)
 
-    def init_layer_param_updates(self, layer, parameter):
-        updates = super(WeightElimination, self).init_layer_param_updates(
+    def init_param_updates(self, layer, parameter):
+        updates = super(WeightElimination, self).init_param_updates(
             layer, parameter
         )
 

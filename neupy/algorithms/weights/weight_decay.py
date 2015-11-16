@@ -38,8 +38,8 @@ class WeightDecay(WeightUpdateConfigurable):
     """
     decay_rate = NonNegativeNumberProperty(default=0.1)
 
-    def init_layer_param_updates(self, layer, parameter):
-        updates = super(WeightDecay, self).init_layer_param_updates(
+    def init_param_updates(self, layer, parameter):
+        updates = super(WeightDecay, self).init_param_updates(
             layer, parameter
         )
         step = layer.step or self.variables.step
