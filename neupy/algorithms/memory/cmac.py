@@ -71,8 +71,13 @@ class CMAC(SupervisedLearning, BaseNetwork):
         self.weights = {}
         super(CMAC, self).__init__(FAKE_CONNECTION, **options)
 
+    def init_train_updates(self):
+        pass
+
+    def init_methods(self):
+        pass
+
     def init_properties(self):
-        del self.use_bias
         del self.error
         super(CMAC, self).init_properties()
 
@@ -108,6 +113,7 @@ class CMAC(SupervisedLearning, BaseNetwork):
         get_memory_coords = self.get_memory_coords
         get_result_by_coords = self.get_result_by_coords
         weights = self.weights
+        step = self.step
 
         quantized_input = self.quantize(input_train)
         errors = 0
@@ -118,7 +124,7 @@ class CMAC(SupervisedLearning, BaseNetwork):
 
             error = target_sample - predicted
             for coord in coords:
-                weights[coord] += self.step * error
+                weights[coord] += step * error
 
             errors += abs(error)
         return errors / input_train.shape[0]

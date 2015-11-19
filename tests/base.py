@@ -64,8 +64,6 @@ class BaseTestCase(unittest.TestCase):
         test_vectors = create_vectors(input_vector, row1d=row1d)
 
         for i, test_vector in enumerate(test_vectors, start=1):
-            np.testing.assert_array_almost_equal(
-                net.predict(test_vector),
-                target,
-                decimal=decimal
-            )
+            predicted_vector = net.predict(test_vector)
+            np.testing.assert_array_almost_equal(predicted_vector, target,
+                                                 decimal=decimal)

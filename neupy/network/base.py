@@ -20,8 +20,8 @@ from neupy.core.properties import (Property, FuncProperty, NumberProperty,
 from neupy.layers import BaseLayer, Output
 from neupy.layers.utils import generate_layers
 from .errors import mse, binary_crossentropy, categorical_crossentropy
-from .utils import (iter_until_converge, shuffle, normilize_error,
-                    normilize_error_list, StopNetworkTraining)
+from .utils import (iter_until_converge, shuffle, normalize_error,
+                    normalize_error_list, StopNetworkTraining)
 from .connections import (FAKE_CONNECTION, LayerConnection,
                           NetworkConnectionError)
 
@@ -426,7 +426,9 @@ class BaseNetwork(BaseSkeleton):
         errors_out = self.errors_out
         shuffle_data = self.shuffle_data
 
-        prediction_error = self.prediction_error
+        if compute_error_out:
+            prediction_error = self.prediction_error
+
         train_epoch = self.train_epoch
         epoch_end_signal = self.epoch_end_signal
         train_end_signal = self.train_end_signal
@@ -479,16 +481,16 @@ class BaseNetwork(BaseSkeleton):
 
     def last_error(self):
         if self.errors_in:
-            return self.errors_in[-1]
+            return normalize_error(self.errors_in[-1])
 
     def last_validation_error(self):
         if self.errors_out:
-            return self.errors_out[-1]
+            return normalize_error(self.errors_out[-1])
 
     def previous_error(self):
         errors_in = self.errors_in
         if len(errors_in) > 2:
-            return normilize_error(errors_in[-2])
+            return normalize_error(errors_in[-2])
 
     def plot_errors(self, logx=False, ax=None, show=True):
         if not self.errors_in:
@@ -497,8 +499,8 @@ class BaseNetwork(BaseSkeleton):
         if ax is None:
             ax = plt.gca()
 
-        errors_in = normilize_error_list(self.errors_in)
-        errors_out = normilize_error_list(self.errors_out)
+        errors_in = normalize_error_list(self.errors_in)
+        errors_out = normalize_error_list(self.errors_out)
         errors_range = np.arange(len(errors_in))
         plot_function = ax.semilogx if logx else ax.plot
 

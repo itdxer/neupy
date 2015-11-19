@@ -1,8 +1,8 @@
 import numpy as np
 
 
-__all__ = ('iter_until_converge', 'shuffle', 'normilize_error', 'step',
-           'normilize_error_list', 'StopNetworkTraining')
+__all__ = ('iter_until_converge', 'shuffle', 'normalize_error', 'step',
+           'normalize_error_list', 'StopNetworkTraining')
 
 
 class StopNetworkTraining(StopIteration):
@@ -65,7 +65,7 @@ def shuffle(*arrays):
     return arrays
 
 
-def normilize_error(output):
+def normalize_error(output):
     """ Normalize error output when result is non-scalar.
 
     Parameters
@@ -81,7 +81,7 @@ def normilize_error(output):
     return np.sum(np.abs(output))
 
 
-def normilize_error_list(errors):
+def normalize_error_list(errors):
     """ Normalize list that contains error outputs.
 
     Parameters
@@ -98,8 +98,8 @@ def normilize_error_list(errors):
     if not len(errors) or isinstance(errors[0], float):
         return errors
 
-    normilized_errors = map(normilize_error, errors)
-    return list(normilized_errors)
+    normalized_errors = map(normalize_error, errors)
+    return list(normalized_errors)
 
 
 def step(input_value):

@@ -1,7 +1,7 @@
 import numpy as np
+from sklearn import metrics
 
 from neupy import algorithms
-from neupy.functions import errors
 from base import BaseTestCase
 
 
@@ -23,20 +23,23 @@ class CMACTestCase(BaseTestCase):
             verbose=False,
         )
         cmac.train(input_train, target_train, epochs=100)
+
         predicted_test = cmac.predict(input_test)
-        error = errors.mae(target_test, predicted_test)
+        predicted_test = predicted_test.reshape((len(predicted_test), 1))
+        error = metrics.mean_absolute_error(target_test, predicted_test)
 
-        self.assertEqual(round(error, 4), 0.0024)
+        self.assertAlmostEqual(error, 0.0024, places=4)
 
+        # Test that algorithm didn't modify data samples
         np.testing.assert_array_equal(input_train, input_train_before)
         np.testing.assert_array_equal(input_train, input_train_before)
         np.testing.assert_array_equal(target_train, target_train_before)
 
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(
-            algorithms.CMAC(),
-            np.array([1, 2, 3]),
-            np.array([1, 2, 3])
+            net=algorithms.CMAC(),
+            input_vector=np.array([1, 2, 3]),
+            target=np.array([1, 2, 3])
         )
 
     def test_predict_different_inputs(self):
@@ -46,8 +49,12 @@ class CMACTestCase(BaseTestCase):
         target = np.array([[1, 2, 3]]).T
 
         cmac.train(data, target, epochs=100)
-        self.assertInvalidVectorPred(cmac, np.array([1, 2, 3]), target,
-                                     decimal=2)
+        self.assertInvalidVectorPred(
+            net=cmac,
+            input_vector=np.array([1, 2, 3]),
+            target=target,
+            decimal=2
+        )
 
     def test_cmac_multi_output(self):
         input_train = np.linspace(0, 2 * np.pi, 100)
@@ -66,6 +73,6 @@ class CMACTestCase(BaseTestCase):
         )
         cmac.train(input_train, target_train, epochs=100)
         predicted_test = cmac.predict(input_test)
-        error = errors.mae(target_test, predicted_test)
+        error = metrics.mean_absolute_error(target_test, predicted_test)
 
-        self.assertEqual(round(error, 6), 0)
+        self.assertAlmostEqual(error, 0, places=6)

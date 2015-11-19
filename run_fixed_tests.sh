@@ -19,4 +19,7 @@ nosetests \
     tests/backpropagation/test_quickprop.py\
     tests/backpropagation/test_backpropagation.py\
     tests/backpropagation/test_momentum.py\
+    tests/memory/test_discrete_hn.py\
+    tests/memory/test_bam.py\
+    tests/memory/test_cmac.py\
     tests/compatibilities/test_pandas.py
