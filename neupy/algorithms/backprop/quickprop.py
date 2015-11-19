@@ -1,16 +1,10 @@
 from __future__ import division
 
-import copy
-
 import theano
 import theano.tensor as T
 import numpy as np
-from numpy import where, sign, abs as np_abs
-from numpy.linalg import norm
 
-from neupy.core.properties import (NonNegativeNumberProperty,
-                                   BetweenZeroAndOneProperty)
-from neupy.network import StopNetworkTraining
+from neupy.core.properties import NonNegativeNumberProperty
 from neupy.utils import asfloat
 from .backpropagation import Backpropagation
 

@@ -2,7 +2,8 @@ import numpy as np
 
 from neupy import algorithms
 
-from base import BaseTestCase, create_vectors
+from base import BaseTestCase
+from utils import vectors_for_testing
 
 
 class OjaTestCase(BaseTestCase):
@@ -91,7 +92,7 @@ class OjaTestCase(BaseTestCase):
 
         ojanet.train(data, epsilon=0.01, epochs=100)
 
-        test_vectors = create_vectors(input_vector)
+        test_vectors = vectors_for_testing(input_vector)
 
         for i, test_vector in enumerate(test_vectors, start=1):
             np.testing.assert_array_almost_equal(

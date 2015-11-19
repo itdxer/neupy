@@ -37,7 +37,7 @@ class CMACTestCase(BaseTestCase):
 
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(
-            net=algorithms.CMAC(),
+            network=algorithms.CMAC(),
             input_vector=np.array([1, 2, 3]),
             target=np.array([1, 2, 3])
         )
@@ -50,7 +50,7 @@ class CMACTestCase(BaseTestCase):
 
         cmac.train(data, target, epochs=100)
         self.assertInvalidVectorPred(
-            net=cmac,
+            network=cmac,
             input_vector=np.array([1, 2, 3]),
             target=target,
             decimal=2

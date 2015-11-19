@@ -4,6 +4,7 @@ import tempfile
 from contextlib import contextmanager
 
 import numpy as np
+import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.testing.compare import compare_images
 
@@ -123,3 +124,43 @@ def reproducible_network_train(seed=0, epochs=500, **additional_params):
     )
     network.train(xor_input_train, xor_target_train, epochs=epochs)
     return network
+
+
+def vectors_for_testing(vector, row1d=False):
+    """ Function generate different possible variations of one vector.
+    That feature useful for testing algorithms input data.
+
+    Parameters
+    ----------
+    vector : ndarray
+        Vector that would be transformed in different data types.
+    row1d : bool
+        Parameter explain the vector type. There could be two types of
+        vectors: row or column. Parameter equal to ``True`` mean that
+        input data is a row vector. Defaults to ``False``.
+
+    Raises
+    ------
+    ValueError
+        If input is not a vector
+
+    Returns
+    -------
+    list
+        List that contains the same vectors in different data types like
+        numpy 2D vector or pandas Data Frame
+    """
+
+    if vector.ndim != 1 and min(vector.shape) != 1:
+        raise ValueError("Input should be a vector")
+
+    shape2d = (1, vector.size) if row1d else (vector.size, 1)
+
+    vectors_list = []
+    if vector.ndim == 1:
+        vectors_list.extend([vector, pd.Series(vector)])
+
+    vectors_list.extend([vector.reshape(shape2d),
+                         pd.DataFrame(vector.reshape(shape2d))])
+
+    return vectors_list

@@ -1,5 +1,6 @@
 #!/bin/bash -eE
 nosetests \
+    -e ._testing \
     tests/steps/test_simple_step_min.py\
     tests/steps/test_error_difference_update.py\
     tests/steps/test_search_then_converge.py\
