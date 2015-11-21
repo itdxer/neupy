@@ -18,6 +18,9 @@ def pdf_between_data(train_data, input_data, std):
         input sample
     std : float
         standard deviation for PDF
+
+    Returns
+    -------
     """
     # Note: This implementation works faster than 3D arrays
     # and use less memory.

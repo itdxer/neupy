@@ -19,7 +19,6 @@ class BaseAssociative(UnsupervisedLearning, BaseNetwork):
         super(BaseAssociative, self).__init__(connection, **options)
 
     def init_properties(self):
-        del self.use_bias
         self.use_bias = False
         super(BaseAssociative, self).init_properties()
 

@@ -4,22 +4,18 @@ from math import ceil
 from time import time
 from itertools import groupby
 from collections import deque
-from abc import abstractmethod
 
 import six
-import theano
-import theano.tensor as T
 import numpy as np
 import matplotlib.pyplot as plt
 
-from neupy.utils import format_data, is_row1d, asfloat, AttributeKeyDict
+from neupy.utils import format_data, is_row1d
 from neupy.helpers import preformat_value
 from neupy.core.base import BaseSkeleton
 from neupy.core.properties import (Property, FuncProperty, NumberProperty,
                                    BoolProperty, ChoiceProperty)
 from neupy.layers import BaseLayer, Output
 from neupy.layers.utils import generate_layers
-from .errors import mse, binary_crossentropy, categorical_crossentropy
 from .utils import (iter_until_converge, shuffle, normalize_error,
                     normalize_error_list, StopNetworkTraining)
 from .connections import (FAKE_CONNECTION, LayerConnection,
@@ -36,7 +32,7 @@ def show_training_summary(network):
         Validation error: {error_out}
         Epoch time: {epoch_time} sec
     """.format(
-        epoch=network.variables.epoch.get_value(),
+        epoch=network.epoch,
         error=network.last_error() or '-',
         error_out=network.last_validation_error() or '-',
         epoch_time=round(network.train_epoch_time, 5)
@@ -79,6 +75,63 @@ def shuffle_train_data(input_train, target_train):
     if target_train is None:
         return shuffle(input_train), None
     return shuffle(input_train, target_train)
+
+
+def show_network_options(network, highlight_options=None):
+    """ Display all available parameters options for Neural Network.
+
+    Parameters
+    ----------
+    network : object
+        Neural network instance.
+    highlight_options : list
+        List of enabled options. In that case all options from that
+        list would be marked with a green color.
+    """
+
+    available_classes = [cls.__name__ for cls in network.__class__.__mro__]
+    logs = network.logs
+
+    if highlight_options is None:
+        highlight_options = {}
+
+    def classname_grouper(option):
+        classname = option[1].class_name
+        class_priority = -available_classes.index(classname)
+        return (class_priority, classname)
+
+    # Sort and group options by classes
+    grouped_options = groupby(
+        sorted(network.options.items(), key=classname_grouper),
+        key=classname_grouper
+    )
+
+    if isinstance(network.connection, LayerConnection):
+        logs.header("Network structure")
+        logs.log("LAYERS", network.connection)
+
+    # Just display in terminal all network options.
+    logs.header("Network options")
+    for (_, clsname), class_options in grouped_options:
+        if not class_options:
+            # When in some class we remove all available attributes
+            # we just skip it.
+            continue
+
+        logs.simple("{}:".format(clsname))
+
+        for key, data in sorted(class_options):
+            if key in highlight_options:
+                logger = logs.log
+                value = highlight_options[key]
+            else:
+                logger = logs.gray_log
+                value = data.value
+
+            formated_value = preformat_value(value)
+            logger("OPTION", "{} = {}".format(key, formated_value))
+
+        logs.empty()
 
 
 def clean_layers(connection):
@@ -190,11 +243,6 @@ class BaseNetwork(BaseSkeleton):
     {plot_errors}
     {last_error}
     """
-    error = ChoiceProperty(default='mse', choices={
-        'mse': mse,
-        'binary_crossentropy': binary_crossentropy,
-        'categorical_crossentropy': categorical_crossentropy,
-    })
     step = NumberProperty(default=0.1)
 
     # Training settings
@@ -222,114 +270,13 @@ class BaseNetwork(BaseSkeleton):
         self.init_properties()
 
         if self.verbose:
-            self.show_network_options(highlight_options=options)
-
-        self.variables = AttributeKeyDict()
+            show_network_options(network, highlight_options=options)
 
         self.init_layers()
-        self.init_variables()
-        self.init_methods()
-
-    def show_network_options(self, highlight_options=None):
-        """ Display all available parameters options for Neural Network.
-
-        Parameters
-        ----------
-        highlight_options : list
-            List of enabled options. In that case all options from that
-            list would be marked with a green color.
-        """
-
-        available_classes = [cls.__name__ for cls in self.__class__.__mro__]
-        logs = self.logs
-
-        if highlight_options is None:
-            highlight_options = {}
-
-        def classname_grouper(option):
-            classname = option[1].class_name
-            class_priority = -available_classes.index(classname)
-            return (class_priority, classname)
-
-        # Sort and group options by classes
-        grouped_options = groupby(
-            sorted(self.options.items(), key=classname_grouper),
-            key=classname_grouper
-        )
-
-        if isinstance(self.connection, LayerConnection):
-            logs.header("Network structure")
-            logs.log("LAYERS", self.connection)
-
-        # Just display in terminal all network options.
-        logs.header("Network options")
-        for (_, clsname), class_options in grouped_options:
-            if not class_options:
-                # When in some class we remove all available attributes
-                # we just skip it.
-                continue
-
-            logs.simple("{}:".format(clsname))
-
-            for key, data in sorted(class_options):
-                if key in highlight_options:
-                    logger = logs.log
-                    value = highlight_options[key]
-                else:
-                    logger = logs.gray_log
-                    value = data.value
-
-                logger("OPTION", "{} = {}".format(
-                    key, preformat_value(value))
-                )
-            logs.empty()
 
     def init_properties(self):
         """ Setup default values before populate the options.
         """
-
-    def init_variables(self):
-        """ Initialize Theano variables.
-        """
-
-        network_input = T.matrix('x')
-        network_output = T.matrix('y')
-
-        layer_input = network_input
-        for layer in self.train_layers:
-            layer_input = layer.output(layer_input)
-        prediction = layer_input
-
-        self.variables.update(
-            network_input=network_input,
-            network_output=network_output,
-            step=theano.shared(name='step', value=asfloat(self.step)),
-            epoch=theano.shared(name='epoch', value=1, borrow=False),
-            error_func=self.error(network_output, prediction),
-            prediction_func=prediction,
-        )
-
-    def init_methods(self):
-        """ Initialize all methods that needed for prediction and
-        training procedures.
-        """
-
-        network_input = self.variables.network_input
-        network_output = self.variables.network_output
-
-        self.train_epoch = theano.function(
-            inputs=[network_input, network_output],
-            outputs=self.variables.error_func,
-            updates=self.init_train_updates(),
-        )
-        self.prediction_error = theano.function(
-            inputs=[network_input, network_output],
-            outputs=self.variables.error_func
-        )
-        self.predict_raw = theano.function(
-            inputs=[network_input],
-            outputs=self.variables.prediction_func
-        )
 
     def init_layers(self):
         """ Initialize layers.
@@ -340,12 +287,6 @@ class BaseNetwork(BaseSkeleton):
         for layer in self.train_layers:
             layer.initialize()
 
-    @abstractmethod
-    def init_train_updates(self):
-        """ Initialize train function update in Theano format that
-        would be trigger after each trainig epoch.
-        """
-
     def predict(self, input_data):
         """ Return prediction results for the input data. Output result also
         include postprocessing step related to the final layer that
@@ -355,7 +296,7 @@ class BaseNetwork(BaseSkeleton):
         return self.output_layer.output(predict_rawion)
 
     def epoch_start_update(self, epoch):
-        self.variables.epoch.set_value(epoch)
+        self.epoch = epoch
 
     def _train(self, input_train, target_train=None, input_test=None,
                target_test=None, epochs=100, epsilon=None):

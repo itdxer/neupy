@@ -74,8 +74,6 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
         super(RBFKMeans, self).__init__(FAKE_CONNECTION, **options)
 
     def init_properties(self):
-        del self.use_bias
-        del self.error
         del self.step
         super(RBFKMeans, self).init_properties()
 

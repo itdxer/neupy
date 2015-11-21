@@ -35,17 +35,12 @@ class LazyLearning(object):
     def init_layers(self):
         pass
 
-    def init_variables(self):
-        pass
-
-    def init_train_updates(self):
-        pass
-
     def init_properties(self):
         del self.shuffle_data
-
-    def init_methods(self):
-        pass
+        del self.step
+        del self.show_epoch
+        del self.train_end_signal
+        del self.epoch_end_signal
 
     def train(self, input_train, target_train):
         self.input_train = input_train

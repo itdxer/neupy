@@ -4,6 +4,7 @@ from sklearn import preprocessing
 from neupy import algorithms
 
 from base import BaseTestCase
+from data import lenses
 
 
 data = np.array([
@@ -42,7 +43,7 @@ class ARTTestCase(BaseTestCase):
             self.assertEqual(result, answer)
 
     def test_art1_on_real_problem(self):
-        data = pd.DataFrame(lenses, index=0, header=None)
+        data = pd.DataFrame(lenses)
 
         encoder = preprocessing.OneHotEncoder()
         enc_data = encoder.fit_transform(data.values[:, 1:]).toarray()
@@ -51,4 +52,5 @@ class ARTTestCase(BaseTestCase):
                                  verbose=False)
         classes = artnet.predict(enc_data)
 
-        self.assertEqual(list(np.sort(np.unique(classes))), [0, 1, 2])
+        unique_classes = list(np.sort(np.unique(classes)))
+        self.assertEqual(unique_classes, [0, 1, 2])

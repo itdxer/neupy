@@ -14,6 +14,9 @@ nosetests \
     tests/weights/test_weight_elimination.py\
     tests/rbfn/test_pnn.py\
     tests/rbfn/test_grnn.py\
+    tests/rbfn/test_rbf_kmeans.py\
+    tests/associative/test_oja.py\
+    tests/competitive/test_art.py\
     tests/plots/test_hinton.py\
     tests/plots/test_error_plot.py\
     tests/datasets/test_reber.py\

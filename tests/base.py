@@ -25,7 +25,6 @@ class BaseTestCase(unittest.TestCase):
         """ Method helps test network prediction training using different
         types of row or column vector.
         """
-
         input_vectors = vectors_for_testing(input_vector, row1d=row1d)
 
         if target is not None:

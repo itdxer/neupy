@@ -1,7 +1,7 @@
 import numpy as np
 
 from neupy.core.properties import NonNegativeNumberProperty
-from neupy.algorithms.basics.base import SimpleTwoLayerNetwork
+from neupy.algorithms.linear.base import SimpleTwoLayerNetwork
 
 
 __all__ = ('ModifiedRelaxation',)

@@ -1,10 +1,15 @@
 from itertools import chain
+from abc import abstractmethod
 
+import theano
 import theano.tensor as T
 
-from neupy.core.properties import ListProperty
+from neupy.utils import asfloat, AttributeKeyDict
+from neupy.core.properties import ListProperty, ChoiceProperty
 from neupy.network.learning import SupervisedLearning
 from neupy.network.base import BaseNetwork
+from neupy.network.errors import (mse, binary_crossentropy,
+                                  categorical_crossentropy)
 from . import optimization_types
 
 
@@ -44,9 +49,14 @@ class Backpropagation(SupervisedLearning, BaseNetwork):
         optimization algorithms: weight update and step update.
     """
     shared_docs = {"optimizations": __opt_params}
-
-    optimizations = ListProperty(default=None)
     default_optimizations = []
+
+    error = ChoiceProperty(default='mse', choices={
+        'mse': mse,
+        'binary_crossentropy': binary_crossentropy,
+        'categorical_crossentropy': categorical_crossentropy,
+    })
+    optimizations = ListProperty(default=None)
 
     def __new__(cls, connection, options=None, **kwargs):
         # Argument `options` is a simple hack for the `__reduce__` method.
@@ -108,6 +118,59 @@ class Backpropagation(SupervisedLearning, BaseNetwork):
 
         super(Backpropagation, self).__init__(connection, **options)
 
+        self.variables = AttributeKeyDict()
+        self.init_variables()
+        self.init_methods()
+
+    def init_variables(self):
+        """ Initialize Theano variables.
+        """
+
+        network_input = T.matrix('x')
+        network_output = T.matrix('y')
+
+        layer_input = network_input
+        for layer in self.train_layers:
+            layer_input = layer.output(layer_input)
+        prediction = layer_input
+
+        self.variables.update(
+            network_input=network_input,
+            network_output=network_output,
+            step=theano.shared(name='step', value=asfloat(self.step)),
+            epoch=theano.shared(name='epoch', value=1, borrow=False),
+            error_func=self.error(network_output, prediction),
+            prediction_func=prediction,
+        )
+
+    @abstractmethod
+    def init_train_updates(self):
+        """ Initialize train function update in Theano format that
+        would be trigger after each trainig epoch.
+        """
+
+    def init_methods(self):
+        """ Initialize all methods that needed for prediction and
+        training procedures.
+        """
+
+        network_input = self.variables.network_input
+        network_output = self.variables.network_output
+
+        self.train_epoch = theano.function(
+            inputs=[network_input, network_output],
+            outputs=self.variables.error_func,
+            updates=self.init_train_updates(),
+        )
+        self.prediction_error = theano.function(
+            inputs=[network_input, network_output],
+            outputs=self.variables.error_func
+        )
+        self.predict_raw = theano.function(
+            inputs=[network_input],
+            outputs=self.variables.prediction_func
+        )
+
     def init_train_updates(self):
         updates = []
         for layer in self.train_layers:
@@ -124,6 +187,10 @@ class Backpropagation(SupervisedLearning, BaseNetwork):
         step = layer.step or self.variables.step
         gradient = T.grad(self.variables.error_func, wrt=parameter)
         return [(parameter, parameter - step * gradient)]
+
+    def epoch_start_update(self, epoch):
+        super(Backpropagation, self).epoch_start_update(epoch)
+        self.variables.epoch.set_value(epoch)
 
     def class_name(self):
         return 'Backpropagation'

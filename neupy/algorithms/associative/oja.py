@@ -83,8 +83,6 @@ class Oja(UnsupervisedLearning, BaseNetwork):
         super(Oja, self).__init__(FAKE_CONNECTION, **options)
 
     def init_properties(self):
-        del self.use_bias
-        del self.error
         del self.shuffle_data
         super(Oja, self).init_properties()
 
