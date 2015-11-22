@@ -7,7 +7,6 @@ from numpy.linalg import norm
 from neupy.utils import format_data
 from neupy.core.properties import NonNegativeIntProperty
 from neupy.network.base import BaseNetwork
-from neupy.network.connections import FAKE_CONNECTION
 from neupy.network.types import Clustering
 from neupy.network.learning import UnsupervisedLearning
 
@@ -71,7 +70,7 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
 
     def __init__(self, **options):
         self.centers = None
-        super(RBFKMeans, self).__init__(FAKE_CONNECTION, **options)
+        super(RBFKMeans, self).__init__(**options)
 
     def init_properties(self):
         del self.step

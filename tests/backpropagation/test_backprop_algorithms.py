@@ -25,7 +25,7 @@ class BackPropAlgsTestCase(BaseTestCase):
                 bp_algorithm_class((2, 1), verbose=False),
                 np.array([0, 1]),
                 np.array([0]),
-                row1d=True
+                is_feature1d=False
             )
 
     def test_predict_different_inputs(self):
@@ -36,4 +36,4 @@ class BackPropAlgsTestCase(BaseTestCase):
                 use_bias=False
             )
             self.assertInvalidVectorPred(network, np.array([0, 0]), 0,
-                                         row1d=True)
+                                         is_feature1d=False)

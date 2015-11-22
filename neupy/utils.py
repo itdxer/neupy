@@ -4,10 +4,11 @@ import theano
 import numpy as np
 
 
-__all__ = ('format_data', 'is_row1d', 'asfloat', 'AttributeKeyDict')
+__all__ = ('format_data', 'is_layer_accept_1d_feature', 'asfloat',
+           'AttributeKeyDict')
 
 
-def format_data(data, row1d=False, copy=False):
+def format_data(data, is_feature1d=True, copy=False):
     """ Transform data in a standardized format.
 
     Notes
@@ -20,8 +21,9 @@ def format_data(data, row1d=False, copy=False):
     data : array-like
         Data that should be formated. That could be, matrix, vector or
         Pandas DataFrame instance.
-    row1d : bool
-        Defaults to ``False``.
+    is_feature1d : bool
+        Should be equal to ``True`` if input data if a vector that
+        contains n samples with 1 feature each. Defaults to ``True``.
     copy : bool
         Defaults to ``False``.
 
@@ -45,16 +47,14 @@ def format_data(data, row1d=False, copy=False):
             data = data.values
 
     if data.ndim == 1:
-        data_shape = (1, n_features) if row1d else (n_features, 1)
+        data_shape = (n_features, 1) if is_feature1d else (1, n_features)
         data = data.reshape(data_shape)
 
     return data
 
 
-def is_row1d(layer):
-    if layer is None:
-        return False
-    return (layer.input_size != 1)
+def is_layer_accept_1d_feature(layer):
+    return (layer.input_size == 1)
 
 
 def asfloat(value):

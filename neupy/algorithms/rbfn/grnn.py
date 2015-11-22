@@ -3,7 +3,6 @@ from numpy import dot
 from neupy.utils import format_data
 from neupy.core.properties import NonNegativeNumberProperty
 from neupy.network.base import BaseNetwork
-from neupy.network.connections import FAKE_CONNECTION
 from neupy.network.learning import LazyLearning
 from neupy.network.types import Regression
 from .utils import pdf_between_data
@@ -51,9 +50,6 @@ class GRNN(LazyLearning, Regression, BaseNetwork):
     0.4245120142774001
     """
     std = NonNegativeNumberProperty(default=0.1)
-
-    def __init__(self, **options):
-        super(GRNN, self).__init__(FAKE_CONNECTION, **options)
 
     def train(self, input_train, target_train, copy=True):
         input_train = format_data(input_train, copy=copy)

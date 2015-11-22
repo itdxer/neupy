@@ -5,7 +5,6 @@ from neupy.utils import format_data
 from neupy.core.properties import NonNegativeIntProperty, ArrayProperty
 from neupy.network.base import BaseNetwork
 from neupy.network.learning import UnsupervisedLearning
-from neupy.network.connections import FAKE_CONNECTION
 
 
 __all__ = ('Oja',)
@@ -78,9 +77,6 @@ class Oja(UnsupervisedLearning, BaseNetwork):
     """
     minimized_data_size = NonNegativeIntProperty(min_size=1)
     weights = ArrayProperty()
-
-    def __init__(self, **options):
-        super(Oja, self).__init__(FAKE_CONNECTION, **options)
 
     def init_properties(self):
         del self.shuffle_data

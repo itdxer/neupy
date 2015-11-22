@@ -3,7 +3,6 @@ from numpy import unique, zeros, dot, sum as np_sum
 from neupy.utils import format_data
 from neupy.core.properties import NonNegativeNumberProperty
 from neupy.network.base import BaseNetwork
-from neupy.network.connections import FAKE_CONNECTION
 from neupy.network.learning import LazyLearning
 from neupy.network.types import Classification
 
@@ -53,8 +52,7 @@ class PNN(LazyLearning, Classification, BaseNetwork):
     std = NonNegativeNumberProperty(default=0.1)
 
     def __init__(self, **options):
-        super(PNN, self).__init__(FAKE_CONNECTION, **options)
-        # self.output_layer = layers.Output(1)
+        super(PNN, self).__init__(**options)
         self.classes = None
 
     def train(self, input_train, target_train, copy=True):

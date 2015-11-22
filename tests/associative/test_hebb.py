@@ -115,7 +115,7 @@ class HebbRuleTestCase(BaseTestCase):
                 verbose=False
             ),
             np.array([[0, 1]]),
-            row1d=True,
+            is_feature1d=False,
         )
 
     def test_predict_different_inputs(self):
@@ -128,4 +128,4 @@ class HebbRuleTestCase(BaseTestCase):
 
         inet.train(input_data, epochs=10)
         self.assertInvalidVectorPred(inet, np.array([0, 0]), 0,
-                                     row1d=True)
+                                     is_feature1d=False)

@@ -3,7 +3,6 @@ from numpy import concatenate, array
 from neupy.utils import format_data
 from neupy.core.properties import NonNegativeIntProperty
 from neupy.network.learning import SupervisedLearning
-from neupy.network.connections import FAKE_CONNECTION
 from neupy.network.base import BaseNetwork
 
 
@@ -16,7 +15,7 @@ class CMAC(SupervisedLearning, BaseNetwork):
     Notes
     -----
     * Network always use Mean Absolute Error (MAE).
-    * Works for single and multi output values.
+    * Works for multi dimentional target values.
 
     Parameters
     ----------
@@ -30,6 +29,11 @@ class CMAC(SupervisedLearning, BaseNetwork):
     {show_epoch}
     {shuffle_data}
     {full_signals}
+
+    Attributes
+    ----------
+    weights : dict
+        Neural network weights that contain memorized patterns.
 
     Methods
     -------
@@ -69,7 +73,7 @@ class CMAC(SupervisedLearning, BaseNetwork):
 
     def __init__(self, **options):
         self.weights = {}
-        super(CMAC, self).__init__(FAKE_CONNECTION, **options)
+        super(CMAC, self).__init__(**options)
 
     def predict(self, input_data):
         input_data = format_data(input_data)

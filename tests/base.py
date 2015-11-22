@@ -21,14 +21,14 @@ class BaseTestCase(unittest.TestCase):
             logging.disable(logging.CRITICAL)
 
     def assertInvalidVectorTrain(self, network, input_vector, target=None,
-                                 decimal=5, row1d=False, **train_kwargs):
+                                 decimal=5, is_feature1d=True, **train_kwargs):
         """ Method helps test network prediction training using different
         types of row or column vector.
         """
-        input_vectors = vectors_for_testing(input_vector, row1d=row1d)
+        input_vectors = vectors_for_testing(input_vector, is_feature1d)
 
         if target is not None:
-            target_vectors = vectors_for_testing(target, row1d=row1d)
+            target_vectors = vectors_for_testing(target, is_feature1d)
             input_vectors = zip(input_vectors, target_vectors)
 
         train_args = inspect.getargspec(network.train).args
@@ -46,11 +46,11 @@ class BaseTestCase(unittest.TestCase):
                 network.train(*input_data, **train_kwargs)
 
     def assertInvalidVectorPred(self, network, input_vector, target,
-                                decimal=5, row1d=False):
+                                decimal=5, is_feature1d=True):
         """ Method helps test network prediction procedure using different
         types of row or column vector.
         """
-        test_vectors = vectors_for_testing(input_vector, row1d=row1d)
+        test_vectors = vectors_for_testing(input_vector, is_feature1d)
 
         for i, test_vector in enumerate(test_vectors, start=1):
             predicted_vector = network.predict(test_vector)

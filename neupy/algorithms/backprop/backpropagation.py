@@ -1,5 +1,4 @@
 from itertools import chain
-from abc import abstractmethod
 
 import theano
 import theano.tensor as T
@@ -7,7 +6,7 @@ import theano.tensor as T
 from neupy.utils import asfloat, AttributeKeyDict
 from neupy.core.properties import ListProperty, ChoiceProperty
 from neupy.network.learning import SupervisedLearning
-from neupy.network.base import BaseNetwork
+from neupy.network.base import ConstructableNetwork
 from neupy.network.errors import (mse, binary_crossentropy,
                                   categorical_crossentropy)
 from . import optimization_types
@@ -16,7 +15,7 @@ from . import optimization_types
 __all__ = ('Backpropagation',)
 
 
-class Backpropagation(SupervisedLearning, BaseNetwork):
+class Backpropagation(SupervisedLearning, ConstructableNetwork):
     """ Backpropagation algorithm.
 
     Parameters
@@ -143,12 +142,6 @@ class Backpropagation(SupervisedLearning, BaseNetwork):
             prediction_func=prediction,
         )
 
-    @abstractmethod
-    def init_train_updates(self):
-        """ Initialize train function update in Theano format that
-        would be trigger after each trainig epoch.
-        """
-
     def init_methods(self):
         """ Initialize all methods that needed for prediction and
         training procedures.
@@ -172,6 +165,9 @@ class Backpropagation(SupervisedLearning, BaseNetwork):
         )
 
     def init_train_updates(self):
+        """ Initialize train function update in Theano format that
+        would be trigger after each trainig epoch.
+        """
         updates = []
         for layer in self.train_layers:
             updates.extend(self.init_layer_updates(layer))

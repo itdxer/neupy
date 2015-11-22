@@ -9,20 +9,19 @@ import six
 import numpy as np
 import matplotlib.pyplot as plt
 
-from neupy.utils import format_data, is_row1d
+from neupy.utils import format_data, is_layer_accept_1d_feature
 from neupy.helpers import preformat_value
 from neupy.core.base import BaseSkeleton
 from neupy.core.properties import (Property, FuncProperty, NumberProperty,
-                                   BoolProperty, ChoiceProperty)
+                                   BoolProperty)
 from neupy.layers import BaseLayer, Output
 from neupy.layers.utils import generate_layers
 from .utils import (iter_until_converge, shuffle, normalize_error,
                     normalize_error_list, StopNetworkTraining)
-from .connections import (FAKE_CONNECTION, LayerConnection,
-                          NetworkConnectionError)
+from .connections import LayerConnection, NetworkConnectionError
 
 
-__all__ = ('BaseNetwork',)
+__all__ = ('BaseNetwork', 'ConstructableNetwork')
 
 
 def show_training_summary(network):
@@ -134,51 +133,6 @@ def show_network_options(network, highlight_options=None):
         logs.empty()
 
 
-def clean_layers(connection):
-    """ Clean layers connections and format transform them into one format.
-    Also this function validate layers connections.
-
-    Parameters
-    ----------
-    connection : list, tuple or object
-        Layers connetion in different formats.
-
-    Returns
-    -------
-    object
-        Cleaned layers connection.
-    """
-    if connection == FAKE_CONNECTION:
-        return connection
-
-    is_list_of_integers = (
-        isinstance(connection, (list, tuple)) and
-        isinstance(connection[0], int)
-    )
-    if is_list_of_integers:
-        connection = generate_layers(list(connection))
-
-    if isinstance(connection, tuple):
-        connection = list(connection)
-
-    islist = isinstance(connection, list)
-
-    if islist and isinstance(connection[0], BaseLayer):
-        chain_connection = connection.pop()
-        for layer in reversed(connection):
-            chain_connection = LayerConnection(layer, chain_connection)
-        connection = chain_connection
-
-    elif islist and isinstance(connection[0], LayerConnection):
-        pass
-
-    if not isinstance(connection.output_layer, Output):
-        raise NetworkConnectionError("Final layer must be Output class "
-                                     "instance.")
-
-    return connection
-
-
 def parse_show_epoch_property(value, n_epochs):
     if isinstance(value, int):
         return value
@@ -253,47 +207,27 @@ class BaseNetwork(BaseSkeleton):
     epoch_end_signal = FuncProperty()
     train_end_signal = FuncProperty()
 
-    def __init__(self, connection, **options):
-        self.connection = clean_layers(connection)
-
+    def __init__(self, *args, **options):
         self.errors_in = []
         self.errors_out = []
+
         self.train_epoch_time = None
 
-        self.layers = list(self.connection)
-        self.input_layer = self.layers[0]
-        self.hidden_layers = self.layers[1:-1]
-        self.output_layer = self.layers[-1]
-        self.train_layers = self.layers[:-1]
-
-        super(BaseNetwork, self).__init__(**options)
+        super(BaseNetwork, self).__init__(*args, **options)
         self.init_properties()
 
         if self.verbose:
-            show_network_options(network, highlight_options=options)
-
-        self.init_layers()
+            show_network_options(self, highlight_options=options)
 
     def init_properties(self):
         """ Setup default values before populate the options.
         """
-
-    def init_layers(self):
-        """ Initialize layers.
-        """
-        if self.connection == FAKE_CONNECTION:
-            return
-
-        for layer in self.train_layers:
-            layer.initialize()
 
     def predict(self, input_data):
         """ Return prediction results for the input data. Output result also
         include postprocessing step related to the final layer that
         transform output to convenient format for end-use.
         """
-        predict_rawion = self.predict_raw(input_data)
-        return self.output_layer.output(predict_rawion)
 
     def epoch_start_update(self, epoch):
         self.epoch = epoch
@@ -305,17 +239,23 @@ class BaseNetwork(BaseSkeleton):
 
         # ----------- Pre-format target data ----------- #
 
-        input_row1d = is_row1d(self.input_layer)
-        input_train = format_data(input_train, row1d=input_row1d)
+        # TODO: This solution looks ugly, should make it in different
+        # way later.
+        if hasattr(self, 'connection'):
+            is_input_feature1d = is_layer_accept_1d_feature(self.input_layer)
+            is_target_feature1d = is_layer_accept_1d_feature(self.output_layer)
+        else:
+            is_input_feature1d = True
+            is_target_feature1d = True
 
-        target_row1d = is_row1d(self.output_layer)
-        target_train = format_data(target_train, row1d=target_row1d)
+        input_train = format_data(input_train, is_input_feature1d)
+        target_train = format_data(target_train, is_target_feature1d)
 
         if input_test is not None:
-            input_test = format_data(input_test, row1d=input_row1d)
+            input_test = format_data(input_test, is_input_feature1d)
 
         if target_test is not None:
-            target_test = format_data(target_test, row1d=target_row1d)
+            target_test = format_data(target_test, is_target_feature1d)
 
         # ----------- Validate input values ----------- #
 
@@ -346,7 +286,7 @@ class BaseNetwork(BaseSkeleton):
 
         epoch_summary = show_epoch_summary(self, show_epoch)
 
-        # ----------- Train process ----------- #
+        # ----------- Training procedure ----------- #
 
         logs.header("Start train")
         logs.log("TRAIN", "Train data size: {}".format(input_train.shape[0]))
@@ -473,8 +413,80 @@ class BaseNetwork(BaseSkeleton):
     def __repr__(self):
         classname = self.class_name()
         options_repr = self._repr_options()
-
-        if self.connection != FAKE_CONNECTION:
-            return "{}({}, {})".format(classname, self.connection,
-                                       options_repr)
         return "{}({})".format(classname, options_repr)
+
+
+def clean_layers(connection):
+    """ Clean layers connections and format transform them into one format.
+    Also this function validate layers connections.
+
+    Parameters
+    ----------
+    connection : list, tuple or object
+        Layers connetion in different formats.
+
+    Returns
+    -------
+    object
+        Cleaned layers connection.
+    """
+
+    is_list_of_integers = (
+        isinstance(connection, (list, tuple)) and
+        isinstance(connection[0], int)
+    )
+    if is_list_of_integers:
+        connection = generate_layers(list(connection))
+
+    if isinstance(connection, tuple):
+        connection = list(connection)
+
+    islist = isinstance(connection, list)
+
+    if islist and isinstance(connection[0], BaseLayer):
+        chain_connection = connection.pop()
+        for layer in reversed(connection):
+            chain_connection = LayerConnection(layer, chain_connection)
+        connection = chain_connection
+
+    elif islist and isinstance(connection[0], LayerConnection):
+        pass
+
+    if not isinstance(connection.output_layer, Output):
+        raise NetworkConnectionError("Final layer must be Output class "
+                                     "instance.")
+
+    return connection
+
+
+class ConstructableNetwork(BaseNetwork):
+    def __init__(self, connection, *args, **kwargs):
+        self.connection = clean_layers(connection)
+
+        self.layers = list(self.connection)
+        self.input_layer = self.layers[0]
+        self.hidden_layers = self.layers[1:-1]
+        self.output_layer = self.layers[-1]
+        self.train_layers = self.layers[:-1]
+
+        self.init_layers()
+        super(ConstructableNetwork, self).__init__(*args, **kwargs)
+
+    def init_layers(self):
+        """ Initialize layers.
+        """
+        for layer in self.train_layers:
+            layer.initialize()
+
+    def predict(self, input_data):
+        """ Return prediction results for the input data. Output result also
+        include postprocessing step related to the final layer that
+        transform output to convenient format for end-use.
+        """
+        raw_prediction = self.predict_raw(input_data)
+        return self.output_layer.output(raw_prediction)
+
+    def __repr__(self):
+        classname = self.class_name()
+        options_repr = self._repr_options()
+        return "{}({}, {})".format(classname, self.connection, options_repr)

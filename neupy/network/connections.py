@@ -4,10 +4,7 @@ from six import with_metaclass
 
 
 __all__ = ('LayerConnection', 'ReccurentConnection', 'Connection',
-           'ChainConnection', 'FAKE_CONNECTION', 'NetworkConnectionError')
-
-
-FAKE_CONNECTION = [None]
+           'ChainConnection', 'NetworkConnectionError')
 
 
 class NetworkConnectionError(Exception):

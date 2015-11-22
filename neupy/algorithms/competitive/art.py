@@ -7,7 +7,6 @@ from neupy.core.properties import (BetweenZeroAndOneProperty,
                                    NonNegativeIntProperty)
 from neupy.network.base import BaseNetwork
 from neupy.network.types import Clustering
-from neupy.network.connections import FAKE_CONNECTION
 
 
 __all__ = ('ART1',)
@@ -60,9 +59,6 @@ class ART1(Clustering, BaseNetwork):
     """
     rho = BetweenZeroAndOneProperty(default=0.5)
     n_clusters = NonNegativeIntProperty(default=2, min_size=2)
-
-    def __init__(self, **options):
-        super(ART1, self).__init__(FAKE_CONNECTION, **options)
 
     def train(self, input_data):
         input_data = format_data(input_data)

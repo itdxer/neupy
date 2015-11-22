@@ -126,7 +126,7 @@ def reproducible_network_train(seed=0, epochs=500, **additional_params):
     return network
 
 
-def vectors_for_testing(vector, row1d=False):
+def vectors_for_testing(vector, is_feature1d=True):
     """ Function generate different possible variations of one vector.
     That feature useful for testing algorithms input data.
 
@@ -134,10 +134,10 @@ def vectors_for_testing(vector, row1d=False):
     ----------
     vector : ndarray
         Vector that would be transformed in different data types.
-    row1d : bool
-        Parameter explain the vector type. There could be two types of
-        vectors: row or column. Parameter equal to ``True`` mean that
-        input data is a row vector. Defaults to ``False``.
+    is_feature1d : bool
+        Parameter explain the vector type. Parameter equal to ``True`` mean
+        that input data a banch of samples that contains one feature each.
+        Defaults to ``True``.
 
     Raises
     ------
@@ -154,7 +154,7 @@ def vectors_for_testing(vector, row1d=False):
     if vector.ndim != 1 and min(vector.shape) != 1:
         raise ValueError("Input should be a vector")
 
-    shape2d = (1, vector.size) if row1d else (vector.size, 1)
+    shape2d = (vector.size, 1) if is_feature1d else (1, vector.size)
 
     vectors_list = []
     if vector.ndim == 1:
