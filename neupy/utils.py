@@ -5,7 +5,7 @@ import numpy as np
 
 
 __all__ = ('format_data', 'is_layer_accept_1d_feature', 'asfloat',
-           'AttributeKeyDict')
+           'AttributeKeyDict', 'is_int_array')
 
 
 def format_data(data, is_feature1d=True, copy=False):
@@ -104,3 +104,20 @@ class AttributeKeyDict(dict):
 
     def __delattr__(self, attrname):
         del self[attrname]
+
+
+def is_int_array(sequence):
+    """ Check that sequence contains only integer numbers.
+
+    Parameters
+    ----------
+    sequence : list, tuple
+        Array that should be validated.
+
+    Returns
+    -------
+    bool
+        Result would be ``True`` only if each element in a sequence contains
+        is an integer. ``False`` otherwise.
+    """
+    return all(isinstance(element, int) for element in sequence)

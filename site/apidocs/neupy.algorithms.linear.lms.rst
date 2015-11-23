@@ -1,7 +1,7 @@
-neupy.algorithms.basics.lms module
+neupy.algorithms.linear.lms module
 ==================================
 
-.. automodule:: neupy.algorithms.basics.lms
+.. automodule:: neupy.algorithms.linear.lms
     :members:
     :undoc-members:
     :show-inheritance:

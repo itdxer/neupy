@@ -1,12 +1,10 @@
-import numpy as np
-
-from neupy.algorithms.linear.base import SimpleTwoLayerNetwork
+from neupy.algorithms.linear.base import BaseLinearNetwork
 
 
 __all__ = ('Perceptron',)
 
 
-class Perceptron(SimpleTwoLayerNetwork):
+class Perceptron(BaseLinearNetwork):
     """ Perceptron Neural Network. Simples linear model in Neural
     Networks.
 
@@ -33,6 +31,18 @@ class Perceptron(SimpleTwoLayerNetwork):
     array([[-1],
            [ 1]])
     """
-    def get_weight_delta(self, output_train, target_train):
-        error_result = self.error(output_train, target_train)
-        return np.dot(self.input_data.T, error_result)
+
+    def init_layer_updates(self, layer):
+        prediction_func = self.variables.prediction_func
+        network_output = self.variables.network_output
+        network_input = self.variables.network_input
+        step = self.variables.step
+
+        linear_error = prediction_func - network_output
+        weight_delta = network_input.T.dot(linear_error)
+        bias_delta = linear_error.sum(axis=0)
+
+        return [
+            (layer.weight, layer.weight - step * weight_delta),
+            (layer.bias, layer.bias - step * bias_delta),
+        ]

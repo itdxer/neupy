@@ -1,9 +1,7 @@
 from itertools import chain
 
-import theano
 import theano.tensor as T
 
-from neupy.utils import asfloat, AttributeKeyDict
 from neupy.core.properties import ListProperty, ChoiceProperty
 from neupy.network.learning import SupervisedLearning
 from neupy.network.base import ConstructableNetwork
@@ -20,6 +18,7 @@ class Backpropagation(SupervisedLearning, ConstructableNetwork):
 
     Parameters
     ----------
+    {connection}
     {optimizations}
     {full_params}
 
@@ -61,7 +60,7 @@ class Backpropagation(SupervisedLearning, ConstructableNetwork):
         # Argument `options` is a simple hack for the `__reduce__` method.
         # `__reduce__` can't retore class with keyword arguments and
         # it will put them as `dict` argument in the `options` and method
-        # will translate it to kwargs. The same hack is at the
+        # will translate it to kwargs. The same hack is in the
         # `__init__` method.
         if options is None:
             options = kwargs
@@ -117,76 +116,10 @@ class Backpropagation(SupervisedLearning, ConstructableNetwork):
 
         super(Backpropagation, self).__init__(connection, **options)
 
-        self.variables = AttributeKeyDict()
-        self.init_variables()
-        self.init_methods()
-
-    def init_variables(self):
-        """ Initialize Theano variables.
-        """
-
-        network_input = T.matrix('x')
-        network_output = T.matrix('y')
-
-        layer_input = network_input
-        for layer in self.train_layers:
-            layer_input = layer.output(layer_input)
-        prediction = layer_input
-
-        self.variables.update(
-            network_input=network_input,
-            network_output=network_output,
-            step=theano.shared(name='step', value=asfloat(self.step)),
-            epoch=theano.shared(name='epoch', value=1, borrow=False),
-            error_func=self.error(network_output, prediction),
-            prediction_func=prediction,
-        )
-
-    def init_methods(self):
-        """ Initialize all methods that needed for prediction and
-        training procedures.
-        """
-
-        network_input = self.variables.network_input
-        network_output = self.variables.network_output
-
-        self.train_epoch = theano.function(
-            inputs=[network_input, network_output],
-            outputs=self.variables.error_func,
-            updates=self.init_train_updates(),
-        )
-        self.prediction_error = theano.function(
-            inputs=[network_input, network_output],
-            outputs=self.variables.error_func
-        )
-        self.predict_raw = theano.function(
-            inputs=[network_input],
-            outputs=self.variables.prediction_func
-        )
-
-    def init_train_updates(self):
-        """ Initialize train function update in Theano format that
-        would be trigger after each trainig epoch.
-        """
-        updates = []
-        for layer in self.train_layers:
-            updates.extend(self.init_layer_updates(layer))
-        return updates
-
-    def init_layer_updates(self, layer):
-        updates = []
-        for parameter in layer.parameters:
-            updates.extend(self.init_param_updates(layer, parameter))
-        return updates
-
     def init_param_updates(self, layer, parameter):
         step = layer.step or self.variables.step
         gradient = T.grad(self.variables.error_func, wrt=parameter)
         return [(parameter, parameter - step * gradient)]
-
-    def epoch_start_update(self, epoch):
-        super(Backpropagation, self).epoch_start_update(epoch)
-        self.variables.epoch.set_value(epoch)
 
     def class_name(self):
         return 'Backpropagation'

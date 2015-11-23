@@ -135,8 +135,7 @@ docs.update({
     'full_params': joindocs(
         docs,
         [
-            'step', 'show_epoch', 'shuffle_data',
-            'error', 'use_bias', 'epoch_end_signal',
+            'step', 'show_epoch', 'shuffle_data', 'epoch_end_signal',
             'train_end_signal', 'verbose'
         ]
     ),

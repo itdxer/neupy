@@ -1,7 +1,7 @@
-neupy.algorithms.basics.perceptron module
+neupy.algorithms.linear.perceptron module
 =========================================
 
-.. automodule:: neupy.algorithms.basics.perceptron
+.. automodule:: neupy.algorithms.linear.perceptron
     :members:
     :undoc-members:
     :show-inheritance:

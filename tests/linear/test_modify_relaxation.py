@@ -16,8 +16,10 @@ class PerceptronTestCase(BaseTestCase):
         predicted_result = network.predict(np.array([[4, 4], [0, 0]]))
 
         self.assertEqual(network.last_error(), 0)
-        self.assertEqual(predicted_result[0, 0], 0)
-        self.assertEqual(predicted_result[1, 0], 1)
+        np.testing.assert_array_equal(
+            predicted_result.T,
+            np.array([[0, 1]])
+        )
 
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(

@@ -1,13 +1,13 @@
-import numpy as np
+import theano.tensor as T
 
 from neupy.core.properties import NonNegativeNumberProperty
-from neupy.algorithms.linear.base import SimpleTwoLayerNetwork
+from neupy.algorithms.linear.base import BaseLinearNetwork
 
 
 __all__ = ('ModifiedRelaxation',)
 
 
-class ModifiedRelaxation(SimpleTwoLayerNetwork):
+class ModifiedRelaxation(BaseLinearNetwork):
     """ Modified Relaxation Neural Network. Simple linear network. If the
     output value of the network received more than the set limit, the
     weight is updated in the same way as the :network:`LMS`, if less
@@ -32,27 +32,40 @@ class ModifiedRelaxation(SimpleTwoLayerNetwork):
     >>> from neupy import algorithms
     >>>
     >>> input_data = np.array([[1, 0], [2, 2], [3, 3], [0, 0]])
-    >>> target_data = np.array([[1], [-1], [-1], [1]])
+    >>> target_data = np.array([[1], [0], [0], [1]])
     >>>
     >>> mrnet = algorithms.ModifiedRelaxation((2, 1), step=1, verbose=False)
     >>> mrnet.train(input_data, target_data, epochs=100)
-    >>> mrnet.predict(np.array([[4, 4], [-1, -1]]))
-    array([[-1],
-           [ 1]])
+    >>> mrnet.predict(np.array([[4, 4], [0, 0]]))
+    array([[0],
+           [1]])
 
     See Also
     --------
     :network:`LMS` : LMS Neural Network.
     """
+
     dead_zone_radius = NonNegativeNumberProperty(default=0.1)
 
-    def get_weight_delta(self, output_train, target_train):
-        input_data = self.input_data
-        update = np.where(
-            np.abs(self.summated) >= self.dead_zone_radius,
-            self.error(output_train, target_train),
-            target_train
-        )
-        minimized_input = input_data / np.linalg.norm(input_data) ** 2
+    def init_layer_updates(self, layer):
+        prediction_func = self.variables.prediction_func
+        network_output = self.variables.network_output
+        network_input = self.variables.network_input
+        step = self.variables.step
 
-        return np.dot(minimized_input.T, update)
+        normalized_input = network_input / network_input.norm(L=2)
+        summated_output = network_input.dot(layer.weight) + layer.bias
+        linear_error = prediction_func - network_output
+        update = T.where(
+            T.abs_(summated_output) >= self.dead_zone_radius,
+            linear_error,
+            network_output
+        )
+
+        weight_delta = normalized_input.T.dot(update)
+        bias_delta = linear_error.sum(axis=0)
+
+        return [
+            (layer.weight, layer.weight - step * weight_delta),
+            (layer.bias, layer.bias - step * bias_delta),
+        ]

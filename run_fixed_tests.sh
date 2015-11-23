@@ -23,6 +23,9 @@ nosetests \
     tests/backpropagation/test_quickprop.py\
     tests/backpropagation/test_backpropagation.py\
     tests/backpropagation/test_momentum.py\
+    tests/linear/test_perceptron.py\
+    tests/linear/test_lms.py\
+    tests/linear/test_modify_relaxation.py\
     tests/memory/test_discrete_hn.py\
     tests/memory/test_bam.py\
     tests/memory/test_cmac.py\

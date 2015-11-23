@@ -1,7 +1,7 @@
-neupy.functions.base module
+neupy.network.errors module
 ===========================
 
-.. automodule:: neupy.functions.base
+.. automodule:: neupy.network.errors
     :members:
     :undoc-members:
     :show-inheritance:

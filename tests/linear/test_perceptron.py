@@ -1,6 +1,8 @@
 import numpy as np
 
-from neupy import algorithms
+from neupy import algorithms, layers
+from neupy.network.connections import NetworkConnectionError
+
 from base import BaseTestCase
 
 
@@ -8,6 +10,21 @@ class PerceptronTestCase(BaseTestCase):
     def test_perceptron_init_errors(self):
         with self.assertRaises(ValueError):
             algorithms.Perceptron((2, 2, 1), verbose=False)
+
+        with self.assertRaises(ValueError):
+            algorithms.Perceptron((2, 2.5), verbose=False)
+
+        with self.assertRaises(NetworkConnectionError):
+            algorithms.Perceptron(
+                layers.Sigmoid(2) > layers.Output(1),
+                verbose=False
+            )
+
+    def test_valid_cases(self):
+        algorithms.Perceptron(
+            layers.Step(2) > layers.Output(1),
+            verbose=False
+        )
 
     def test_train(self):
         input_data = np.array([[1, 0], [2, 2], [3, 3], [0, 0]])

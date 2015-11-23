@@ -1,40 +1,52 @@
-from neupy.utils import format_data
+from neupy.utils import is_int_array
+from neupy.network.connections import NetworkConnectionError, LayerConnection
 from neupy.network.learning import SupervisedLearning
-from neupy.network.errors import linear_error
+from neupy.network.base import ConstructableNetwork
 from neupy.layers import Step, Output
 
 
-__all__ = ('SimpleTwoLayerNetwork',)
+__all__ = ('BaseLinearNetwork',)
 
 
-class SimpleTwoLayerNetwork(SupervisedLearning):
+class BaseLinearNetwork(SupervisedLearning, ConstructableNetwork):
     """ Base class for feedforward neural network without hidden layers.
-    Input layer is always :layer:`Step`.
+
+    Notes
+    -----
+    * Input layer should be :layer:`Step` class instance.
+
+    Parameters
+    ----------
+    {linear_connection}
+    {full_params}
+
+    Methods
+    -------
+    {plot_errors}
+    {last_error}
     """
-    def __init__(self, layer_sizes, **options):
-        if len(layer_sizes) != 2:
-            raise ValueError("This network must contains two layers.")
 
-        input_layer_size, output_layer_size = layer_sizes
+    shared_docs = {"linear_connection": """connection : list, tuple or object
+        Should be a list or tuple that contains two integers. First integer
+        describe number of input units and the seconds one number of output
+        units.
+    """}
 
-        super(SimpleTwoLayerNetwork, self).__init__(
-            Step(input_layer_size) > Output(output_layer_size),
-            **options
-        )
+    def __init__(self, connection, **options):
+        if len(connection) != 2:
+            raise ValueError("This network should contains two layers.")
 
-        self.input_layer = self.layers[0]
-        self.error = linear_error
+        if is_int_array(connection):
+            input_layer_size, output_layer_size = connection
+            connection = Step(input_layer_size) > Output(output_layer_size)
 
-    def predict_raw(self, input_data):
-        input_data = format_data(input_data)
+        if not isinstance(connection, LayerConnection):
+            raise ValueError("Invalid network connection structure.")
 
-        input_layer = self.input_layer
-        input_data = input_layer.preformat_input(input_data)
+        if not isinstance(connection.input_layer, Step):
+            raise NetworkConnectionError(
+                "Input layer should contains step activation function "
+                "(``Step`` class instance)."
+            )
 
-        self.input_data = input_data
-        self.summated = input_layer.summator(input_data)
-
-        return input_layer.activation_function(self.summated)
-
-    def update_weights(self, weight_deltas):
-        self.input_layer.weight += self.step * weight_deltas
+        super(BaseLinearNetwork, self).__init__(connection, **options)

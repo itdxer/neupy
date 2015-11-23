@@ -3,14 +3,14 @@ from numpy import reshape
 from neupy.utils import format_data, is_layer_accept_1d_feature
 from neupy.core.properties import NonNegativeIntProperty
 from neupy.layers import Step
-from neupy.network.base import BaseNetwork
+from neupy.network.base import ConstructableNetwork
 from neupy.network.learning import UnsupervisedLearning
 
 
 __all__ = ('BaseStepAssociative',)
 
 
-class BaseAssociative(UnsupervisedLearning, BaseNetwork):
+class BaseAssociative(UnsupervisedLearning, ConstructableNetwork):
     def __init__(self, connection, **options):
         if len(connection) != 2:
             raise ValueError("Connection must contains only input and "
@@ -22,11 +22,9 @@ class BaseAssociative(UnsupervisedLearning, BaseNetwork):
         self.use_bias = False
         super(BaseAssociative, self).init_properties()
 
-    def train(self, input_train, epochs=100, epsilon=None):
-        if epsilon is not None:
-            raise AttributeError("You can't converge this algorithm. Use "
-                                 "`epochs` parameter.")
-        return super(BaseAssociative, self).train(input_train, epochs, epsilon)
+    def train(self, input_train, epochs=100):
+        return super(BaseAssociative, self).train(input_train, epochs,
+                                                  epsilon=None)
 
     def predict(self, input_data):
         is_feature1d = is_layer_accept_1d_feature(self.input_layer)

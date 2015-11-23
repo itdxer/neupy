@@ -8,14 +8,18 @@ from collections import deque
 import six
 import numpy as np
 import matplotlib.pyplot as plt
+import theano
+import theano.tensor as T
 
-from neupy.utils import format_data, is_layer_accept_1d_feature
+from neupy.utils import (format_data, is_layer_accept_1d_feature, asfloat,
+                         AttributeKeyDict, is_int_array)
 from neupy.helpers import preformat_value
 from neupy.core.base import BaseSkeleton
 from neupy.core.properties import (Property, FuncProperty, NumberProperty,
-                                   BoolProperty)
+                                   BoolProperty, ChoiceProperty)
 from neupy.layers import BaseLayer, Output
 from neupy.layers.utils import generate_layers
+from .errors import mse, binary_crossentropy, categorical_crossentropy
 from .utils import (iter_until_converge, shuffle, normalize_error,
                     normalize_error_list, StopNetworkTraining)
 from .connections import LayerConnection, NetworkConnectionError
@@ -230,6 +234,14 @@ class BaseNetwork(BaseSkeleton):
         """
 
     def epoch_start_update(self, epoch):
+        """ Function would be trigger before run all training procedure
+        related to the current epoch.
+
+        Parameters
+        ----------
+        epoch : int
+            Current epoch number.
+        """
         self.epoch = epoch
 
     def _train(self, input_train, target_train=None, input_test=None,
@@ -431,11 +443,7 @@ def clean_layers(connection):
         Cleaned layers connection.
     """
 
-    is_list_of_integers = (
-        isinstance(connection, (list, tuple)) and
-        isinstance(connection[0], int)
-    )
-    if is_list_of_integers:
+    if is_int_array(connection):
         connection = generate_layers(list(connection))
 
     if isinstance(connection, tuple):
@@ -460,6 +468,39 @@ def clean_layers(connection):
 
 
 class ConstructableNetwork(BaseNetwork):
+    """ Class contains functionality that helps work with network that have
+    constructable layers architecture.
+
+    Parameters
+    ----------
+    {connection}
+    {full_params}
+
+    Methods
+    -------
+    {plot_errors}
+    {last_error}
+    """
+
+    shared_docs = {"connection": """connection : list, tuple or object
+        Network architecture. That variables could be described in
+        different ways. The simples one is a list or tuple that contains
+        integers. Each integer describe layer input size. For example,
+        ``(2, 4, 1)`` means that network will have 3 layers with 2 input
+        units, 4 hidden units and 1 output unit. The one limitation of that
+        method is that all layers automaticaly would with sigmoid actiavtion
+        function. Other way is just a list of ``BaseLayer``` class
+        instances. For example: ``[Tanh(2), Relu(4), Output(1)].
+        And the most readable one is just layer pipeline
+        ``Tanh(2) > Relu(4) > Output(1)``.
+    """}
+
+    error = ChoiceProperty(default='mse', choices={
+        'mse': mse,
+        'binary_crossentropy': binary_crossentropy,
+        'categorical_crossentropy': categorical_crossentropy,
+    })
+
     def __init__(self, connection, *args, **kwargs):
         self.connection = clean_layers(connection)
 
@@ -472,19 +513,115 @@ class ConstructableNetwork(BaseNetwork):
         self.init_layers()
         super(ConstructableNetwork, self).__init__(*args, **kwargs)
 
+        self.variables = AttributeKeyDict()
+        self.init_variables()
+        self.init_methods()
+
+    def init_variables(self):
+        """ Initialize Theano variables.
+        """
+
+        network_input = T.matrix('x')
+        network_output = T.matrix('y')
+
+        layer_input = network_input
+        for layer in self.train_layers:
+            layer_input = layer.output(layer_input)
+        prediction = layer_input
+
+        self.variables.update(
+            network_input=network_input,
+            network_output=network_output,
+            step=theano.shared(name='step', value=asfloat(self.step)),
+            epoch=theano.shared(name='epoch', value=1, borrow=False),
+            error_func=self.error(network_output, prediction),
+            prediction_func=prediction,
+        )
+
+    def init_methods(self):
+        """ Initialize all methods that needed for prediction and
+        training procedures.
+        """
+
+        network_input = self.variables.network_input
+        network_output = self.variables.network_output
+
+        self.train_epoch = theano.function(
+            inputs=[network_input, network_output],
+            outputs=self.variables.error_func,
+            updates=self.init_train_updates(),
+        )
+        self.prediction_error = theano.function(
+            inputs=[network_input, network_output],
+            outputs=self.variables.error_func
+        )
+        self.predict_raw = theano.function(
+            inputs=[network_input],
+            outputs=self.variables.prediction_func
+        )
+
     def init_layers(self):
-        """ Initialize layers.
+        """ Initialize layers in the same order as they were list in
+        network initialization step.
         """
         for layer in self.train_layers:
             layer.initialize()
+
+    def init_train_updates(self):
+        """ Initialize train function update in Theano format that
+        would be trigger after each trainig epoch.
+        """
+        updates = []
+        for layer in self.train_layers:
+            updates.extend(self.init_layer_updates(layer))
+        return updates
+
+    def init_layer_updates(self, layer):
+        """ Initialize train function update in Theano format that
+        would be trigger after each trainig epoch for each layer.
+
+        Parameters
+        ----------
+        layer : object
+            Any layer that inherit from BaseLayer class.
+
+        Returns
+        -------
+        list
+            Update that excaptable by ``theano.function``. There should be
+            a lits that contains tuples with 2 elements. First one should
+            be parameter that would be updated after epoch and the second one
+            should update rules for this parameter. For example parameter
+            could be a layer's weight and bias.
+        """
+        updates = []
+        for parameter in layer.parameters:
+            updates.extend(self.init_param_updates(layer, parameter))
+        return updates
+
+    def init_param_updates(self, parameter):
+        return []
 
     def predict(self, input_data):
         """ Return prediction results for the input data. Output result also
         include postprocessing step related to the final layer that
         transform output to convenient format for end-use.
         """
+        input_data = format_data(input_data)
         raw_prediction = self.predict_raw(input_data)
         return self.output_layer.output(raw_prediction)
+
+    def epoch_start_update(self, epoch):
+        """ Function would be trigger before run all training procedure
+        related to the current epoch.
+
+        Parameters
+        ----------
+        epoch : int
+            Current epoch number.
+        """
+        super(ConstructableNetwork, self).epoch_start_update(epoch)
+        self.variables.epoch.set_value(epoch)
 
     def __repr__(self):
         classname = self.class_name()

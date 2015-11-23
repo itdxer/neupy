@@ -11,16 +11,17 @@ __all__ = ('Oja',)
 
 
 class Oja(UnsupervisedLearning, BaseNetwork):
-    """ Oja unsupervised algorithm which minimize feature space.
+    """ Oja unsupervised algorithm that minimize input data feature
+    space.
 
     Notes
     -----
     * In practice use step as very small value. For example ``1e-7``.
-    * Normalize the input data before use Oja algorithm. Input data
+    * Normalize the input data before use Oja algorithm. Input data \
     shouldn't contains large values.
-    * Set up smaller values for weights if error for a few first iterations
-    is big compare to the input values scale. For example, if your input data
-    have values between 0 and 1 error value equal to 100 is big.
+    * Set up smaller values for weights if error for a few first iterations \
+    is big compare to the input values scale. For example, if your input \
+    data have values between 0 and 1 error value equal to 100 is big.
 
     Parameters
     ----------

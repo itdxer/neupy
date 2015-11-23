@@ -11,7 +11,6 @@ Subpackages
     neupy.core
     neupy.datasets
     neupy.ensemble
-    neupy.functions
     neupy.helpers
     neupy.layers
     neupy.network

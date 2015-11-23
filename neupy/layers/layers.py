@@ -6,7 +6,6 @@ from numpy.linalg import norm
 from neupy.utils import asfloat
 from neupy.core.properties import (NumberBoundProperty, ArrayProperty,
                                    ChoiceProperty)
-from neupy.network.utils import step
 from neupy.layers.base import BaseLayer
 from neupy.layers.utils import GAUSSIAN, VALID_INIT_METHODS, generate_weight
 
@@ -65,6 +64,7 @@ class Layer(BaseLayer):
         self.weight_shape = (self.input_size, output_size)
         self.bias_shape = (output_size,)
 
+        # TODO: This part looks ugly, should find a different way.
         if not isinstance(weight, theano_shared_class):
             if weight is None:
                 weight = generate_weight(self.weight_shape, self.bounds,
@@ -112,6 +112,12 @@ class Sigmoid(Layer):
     activation_function = T.nnet.sigmoid
 
 
+def step_function(value):
+    """ Step activation function.
+    """
+    return T.gt(value, 0)
+
+
 class Step(Layer):
     """ The layer with the the step activation function.
 
@@ -120,7 +126,7 @@ class Step(Layer):
     {input_size_param}
     {layer_params}
     """
-    activation_function = step
+    activation_function = step_function
 
 
 class Tanh(Layer):

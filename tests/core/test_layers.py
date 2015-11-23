@@ -3,6 +3,7 @@ import unittest
 
 from scipy import stats
 import numpy as np
+import theano
 
 from neupy.algorithms import Backpropagation
 from neupy.network.connections import NetworkConnectionError
@@ -67,8 +68,11 @@ class HiddenLayersOperationsTestCase(BaseTestCase):
 
     def test_step_layer(self):
         layer1 = Step(1)
-        self.assertEqual(layer1.activation_function(1).item(0), 1)
-        self.assertEqual(layer1.activation_function(-1).item(0), 0)
+
+        input_vector = theano.shared(np.array([-10, -1, 0, 1, 10]))
+        expected = np.array([0, 0, 0, 1, 1])
+        output = layer1.activation_function(input_vector).eval()
+        np.testing.assert_array_equal(output, expected)
 
     def test_linear_layer(self):
         layer = Linear(1)

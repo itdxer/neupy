@@ -8,6 +8,7 @@ Submodules
 
    neupy.network.base
    neupy.network.connections
+   neupy.network.errors
    neupy.network.learning
    neupy.network.types
    neupy.network.utils

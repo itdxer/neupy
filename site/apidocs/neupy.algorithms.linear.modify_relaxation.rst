@@ -1,7 +1,7 @@
-neupy.algorithms.basics.modify_relaxation module
+neupy.algorithms.linear.modify_relaxation module
 ================================================
 
-.. automodule:: neupy.algorithms.basics.modify_relaxation
+.. automodule:: neupy.algorithms.linear.modify_relaxation
     :members:
     :undoc-members:
     :show-inheritance:
