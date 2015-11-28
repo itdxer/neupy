@@ -22,7 +22,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
             train_size=0.85
         )
 
-        network = algorithms.Backpropagation(
+        network = algorithms.GradientDescent(
             connection=[
                 layers.Sigmoid(10),
                 layers.Sigmoid(40),
@@ -52,7 +52,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
 
         dan = ensemble.DynamicallyAveragedNetwork([
             algorithms.RPROP((4, 100, 1), step=0.1, maximum_step=1),
-            algorithms.Backpropagation((4, 5, 1), step=0.1),
+            algorithms.GradientDescent((4, 5, 1), step=0.1),
             algorithms.ConjugateGradient((4, 5, 1), step=0.01),
         ])
 

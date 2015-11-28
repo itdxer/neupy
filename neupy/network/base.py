@@ -1,6 +1,6 @@
 from __future__ import division
 
-from math import ceil
+import math
 from time import time
 from itertools import groupby
 from collections import deque
@@ -12,7 +12,7 @@ import theano
 import theano.tensor as T
 
 from neupy.utils import (format_data, is_layer_accept_1d_feature, asfloat,
-                         AttributeKeyDict, is_int_array)
+                         AttributeKeyDict, is_list_of_integers)
 from neupy.helpers import preformat_value
 from neupy.core.base import BaseSkeleton
 from neupy.core.properties import (Property, FuncProperty, NumberProperty,
@@ -63,7 +63,7 @@ def show_epoch_summary(network, show_epoch):
             average_delay = np.mean(terminal_output_delays)
 
             if average_delay < delay_limit:
-                show_epoch *= ceil(delay_limit / average_delay)
+                show_epoch *= math.ceil(delay_limit / average_delay)
                 network.logs.warning(
                     "Too many outputs in a terminal. Set "
                     "up logging after each {} epoch"
@@ -320,6 +320,7 @@ class BaseNetwork(BaseSkeleton):
         shuffle_data = self.shuffle_data
 
         if compute_error_out:
+            # TODO: Method actually is undefined. Should fix it later.
             prediction_error = self.prediction_error
 
         train_epoch = self.train_epoch
@@ -415,7 +416,7 @@ class BaseNetwork(BaseSkeleton):
         ax.set_xlabel('Epoch')
 
         if show:
-            ax.show()
+            plt.show()
 
     # ----------------- Representations ----------------- #
 
@@ -443,7 +444,7 @@ def clean_layers(connection):
         Cleaned layers connection.
     """
 
-    if is_int_array(connection):
+    if is_list_of_integers(connection):
         connection = generate_layers(list(connection))
 
     if isinstance(connection, tuple):
@@ -510,10 +511,12 @@ class ConstructableNetwork(BaseNetwork):
         self.output_layer = self.layers[-1]
         self.train_layers = self.layers[:-1]
 
+        self.variables = AttributeKeyDict()
+        self.methods = AttributeKeyDict()
+
         self.init_layers()
         super(ConstructableNetwork, self).__init__(*args, **kwargs)
 
-        self.variables = AttributeKeyDict()
         self.init_variables()
         self.init_methods()
 
@@ -546,16 +549,16 @@ class ConstructableNetwork(BaseNetwork):
         network_input = self.variables.network_input
         network_output = self.variables.network_output
 
-        self.train_epoch = theano.function(
+        self.methods.train_epoch = theano.function(
             inputs=[network_input, network_output],
             outputs=self.variables.error_func,
             updates=self.init_train_updates(),
         )
-        self.prediction_error = theano.function(
+        self.methods.prediction_error = theano.function(
             inputs=[network_input, network_output],
             outputs=self.variables.error_func
         )
-        self.predict_raw = theano.function(
+        self.methods.predict_raw = theano.function(
             inputs=[network_input],
             outputs=self.variables.prediction_func
         )
@@ -602,12 +605,23 @@ class ConstructableNetwork(BaseNetwork):
     def init_param_updates(self, parameter):
         return []
 
+    def prediction_error(self, input_data, target_data):
+        """ Calculate prediction accuracy for input data.
+        """
+        input_data = format_data(input_data)
+        return self.methods.prediction_error(input_data, target_data)
+
+    def predict_raw(self, input_data):
+        """ Make raw prediction without final layer postprocessing step.
+        """
+        input_data = format_data(input_data)
+        return self.methods.predict_raw(input_data)
+
     def predict(self, input_data):
         """ Return prediction results for the input data. Output result also
         include postprocessing step related to the final layer that
         transform output to convenient format for end-use.
         """
-        input_data = format_data(input_data)
         raw_prediction = self.predict_raw(input_data)
         return self.output_layer.output(raw_prediction)
 
@@ -623,7 +637,9 @@ class ConstructableNetwork(BaseNetwork):
         super(ConstructableNetwork, self).epoch_start_update(epoch)
         self.variables.epoch.set_value(epoch)
 
+    def train_epoch(self, input_train, target_train):
+        return self.methods.train_epoch(input_train, target_train)
+
     def __repr__(self):
-        classname = self.class_name()
-        options_repr = self._repr_options()
-        return "{}({}, {})".format(classname, self.connection, options_repr)
+        return "{}({}, {})".format(self.class_name(), self.connection,
+                                   self._repr_options())

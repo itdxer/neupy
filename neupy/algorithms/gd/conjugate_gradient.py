@@ -5,7 +5,7 @@ from numpy import sqrt, inner
 from neupy.core.properties import ChoiceProperty
 from neupy.algorithms.utils import (matrix_list_in_one_vector,
                                     vector_to_list_of_matrix)
-from .backpropagation import Backpropagation
+from .base import GradientDescent
 
 
 __all__ = ('ConjugateGradient',)
@@ -55,7 +55,7 @@ def dai_yuan(gradient_old, gradient_new, weight_old_delta):
     )
 
 
-class ConjugateGradient(Backpropagation):
+class ConjugateGradient(GradientDescent):
     """ Conjugate Gradient algorithm.
 
     Parameters
@@ -118,7 +118,7 @@ class ConjugateGradient(Backpropagation):
 
     See Also
     --------
-    :network:`Backpropagation`: Backpropagation algorithm.
+    :network:`GradientDescent`: GradientDescent algorithm.
     :network:`LinearSearch`: Linear Search important algorithm for step \
     selection in Conjugate Gradient algorithm.
     """

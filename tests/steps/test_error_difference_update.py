@@ -8,7 +8,7 @@ from base import BaseTestCase
 
 class LearningRateUpdatesTestCase(BaseTestCase):
     def test_error_difference_update(self):
-        network = algorithms.Backpropagation(
+        network = algorithms.GradientDescent(
             [
                 layers.Tanh(2),
                 layers.Tanh(3),

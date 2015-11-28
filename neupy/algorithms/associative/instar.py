@@ -42,15 +42,10 @@ class Instar(BaseStepAssociative):
     ...     [0, 1, 0, 0],
     ...     [0, 0, 0, 0],
     ...     [0, 0, 1, 1],
-    ... ])
-    >>>
-    >>>
-    >>> scaler = {{'lower_value': 0, 'upper_value': 1}}
-    >>> input_layer = layers.Step(4, function_coef=scaler)
-    >>> output_layer = layers.Output(1)
+    ... ]) 
     >>>
     >>> instnet = algorithms.Instar(
-    ...     input_layer > output_layer,
+    ...     layers.Step(4) > layers.Output(1),
     ...     n_unconditioned=1,
     ...     step=1,
     ...     verbose=False,

@@ -5,7 +5,7 @@ from scipy import stats
 import numpy as np
 import theano
 
-from neupy.algorithms import Backpropagation
+from neupy.algorithms import GradientDescent
 from neupy.network.connections import NetworkConnectionError
 from neupy.layers import *
 
@@ -15,10 +15,10 @@ from base import BaseTestCase
 class LayersBasicsTestCase(BaseTestCase):
     def test_without_output_layer(self):
         with self.assertRaises(NetworkConnectionError):
-            Backpropagation(layers.Sigmoid(10) > layers.Sigmoid(1))
+            GradientDescent(layers.Sigmoid(10) > layers.Sigmoid(1))
 
     def test_list_of_layers(self):
-        bpnet = Backpropagation([Sigmoid(2), Sigmoid(3),
+        bpnet = GradientDescent([Sigmoid(2), Sigmoid(3),
                                  Sigmoid(1), Output(10)])
         self.assertEqual(
             [layer.input_size for layer in bpnet.layers],
@@ -26,7 +26,7 @@ class LayersBasicsTestCase(BaseTestCase):
         )
 
     def test_layers_iteratinos(self):
-        network = Backpropagation((2, 2, 1))
+        network = GradientDescent((2, 2, 1))
 
         layers = list(network.layers)
         output_layer = layers.pop()
@@ -43,7 +43,7 @@ class LayersBasicsTestCase(BaseTestCase):
         )
 
         for connection in possible_connections:
-            network = Backpropagation(connection)
+            network = GradientDescent(connection)
             self.assertEqual(len(network.layers), 3)
 
     @unittest.skip("Not ready yet")
@@ -52,7 +52,7 @@ class LayersBasicsTestCase(BaseTestCase):
         hd = [Sigmoid(2), Sigmoid(2)]
         out = Output(1)
 
-        Backpropagation(
+        GradientDescent(
             connection=(
                 inp > hd[0] > out,
                       hd[0] > hd[1],

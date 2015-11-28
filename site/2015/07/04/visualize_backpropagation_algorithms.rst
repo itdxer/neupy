@@ -1,9 +1,9 @@
-Visualize Backpropagation Algorithms
+Visualize GradientDescent Algorithms
 ====================================
 
 .. contents::
 
-In this tutorial we will test different variations of Backpropagation algorithms, visualize them and try to figure out some important features from a plot that we will get.
+In this tutorial we will test different variations of GradientDescent algorithms, visualize them and try to figure out some important features from a plot that we will get.
 
 Checking data
 -------------
@@ -46,7 +46,7 @@ So we can make a scatter plot and look closer at this dots.
     :alt: Dataset scatter plot
 
 From the figure above we can clearly see that all dots are linearly separable and we are able to solve this problem with simple perceptron.
-But a goal of this tutorial is to make clear visualization of learning process for different Backpropagation algorithm variations, so the problem must be as simple as possible, because in other cases it will be complex to visualize.
+But a goal of this tutorial is to make clear visualization of learning process for different GradientDescent algorithm variations, so the problem must be as simple as possible, because in other cases it will be complex to visualize.
 
 So, as the problem is linear separable we can solve it without hidden layers in network.
 There are two features and two classes, so we can build network which will take 2 input values and 1 output.
@@ -124,7 +124,7 @@ For understanding of the entire content of the article it is not necessary to un
             network_target_function
         )
 
-    bp_network = algorithms.Backpropagation(
+    bp_network = algorithms.GradientDescent(
         layers.Sigmoid(2) > layers.Output(1),
         **network_settings
     )
@@ -142,7 +142,7 @@ The plot above shows the approximation error rate depence on the network weights
 The best error must be as small as possible.
 The best weights combination for this problem should be near the lower right corner in the blue area.
 
-Next, we are going to look at 5 algorithms based on Backpropagation. They are:
+Next, we are going to look at 5 algorithms based on GradientDescent. They are:
 
 * Gradient descent
 * Momentum
@@ -224,32 +224,32 @@ This function will train the network until the error will be smaller than `0.125
 Path for all networks would be the same.
 Every network starts at dot with coordinates `(-4, -4)` and finishes near the point with the closest value to `0.125`.
 
-Visualize Backpropagation algorithms
+Visualize GradientDescent algorithms
 ------------------------------------
 
 Gradient Descent
 ++++++++++++++++
 
-Let's primarily check :network:`Gradient Descent <Backpropagation>`.
+Let's primarily check :network:`Gradient Descent <GradientDescent>`.
 
 .. code-block:: python
 
     prepare_plot()
-    draw_quiver(algorithms.Backpropagation, 'Gradient Descent', 'k')
+    draw_quiver(algorithms.GradientDescent, 'Gradient Descent', 'k')
     plt.show()
 
 .. figure:: images/bp-steps.png
     :width: 80%
     :align: center
-    :alt: Backpropagation steps
+    :alt: GradientDescent steps
 
-Backpropagation got to the value close to 0.125 using 798 steps and this black curve are just tiny steps of backpropagation algorithm.
+GradientDescent got to the value close to 0.125 using 798 steps and this black curve are just tiny steps of backpropagation algorithm.
 We can zoom it and look closer.
 
 .. figure:: images/bp-steps-zoom.png
     :width: 80%
     :align: center
-    :alt: Backpropagation steps on zoom
+    :alt: GradientDescent steps on zoom
 
 Now we can see a lot of information about backpropagation algorithm.
 All steps for backpropagation algorithm have approximately similar magnitude.
@@ -275,7 +275,7 @@ Now let's look at another important algorithm - :network:`Momentum`.
 :network:`Momentum` got to the value close to 0.125 by 202 steps, which is almost 4 times fewer steps than previously.
 The basic idea behind :network:`Momentum` algorithm, compared to the previous epoch, is that we are strengthening the update if the sign is not changed, and minimize it in another case.
 
-Even if the number of steps fewer than in :network:`Backpropagation` we still can't clearly see the updates.
+Even if the number of steps fewer than in :network:`GradientDescent` we still can't clearly see the updates.
 For our eye they are just appeared as a line.
 
 .. figure:: images/momentum-steps-zoom.png
@@ -315,7 +315,7 @@ Now we are going to run :network:`RPROP` algorithm.
 
 This improvment looks impressive.
 Now we are able to see steps without zooming.
-We got almost the same value as before using just 19 steps, which is 10 times fewer than :network:`Momentum` and 40 times fewer than :network:`Gradient Descent <Backpropagation>`.
+We got almost the same value as before using just 19 steps, which is 10 times fewer than :network:`Momentum` and 40 times fewer than :network:`Gradient Descent <GradientDescent>`.
 
 Now we are going to figure out what are the main features of :network:`RPROP` just by looking at the plot above.
 :network:`RPROP` has a unique step for each weight.
@@ -403,7 +403,7 @@ Conjugate Gradient and Golden Search
 
 Now let's look at :network:`Conjugate Gradient <ConjugateGradient>` with
 :network:`Golden Search <LinearSearch>`.
-Conjugate Gradient in Backpropagation variation is a little bit different than in
+Conjugate Gradient in GradientDescent variation is a little bit different than in
 Multivariable Calculus notation and it doesn't guarantee converge into n-th steps
 (`n` means dimmention size for specific problem).
 Steps don't have a perfect size for :network:`Conjugate Gradient <ConjugateGradient>`,
@@ -446,7 +446,7 @@ Bring them all together
 .. code-block:: python
 
     algorithms = (
-        (algorithms.Backpropagation, 'Gradient Descent', 'k'),
+        (algorithms.GradientDescent, 'Gradient Descent', 'k'),
         (algorithms.Momentum, 'Momentum', 'm'),
         (algorithms.RPROP, 'RPROP', 'c'),
         (algorithms.IRPROPPlus, 'iRPROP+', 'y'),

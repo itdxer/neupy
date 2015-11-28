@@ -6,14 +6,14 @@ import numpy as np
 
 from neupy.core.properties import NonNegativeNumberProperty
 from neupy.utils import asfloat
-from .backpropagation import Backpropagation
+from .base import GradientDescent
 
 
 __all__ = ('Quickprop',)
 
 
-class Quickprop(Backpropagation):
-    """ Quickprop :network:`Backpropagation` algorithm optimization.
+class Quickprop(GradientDescent):
+    """ Quickprop :network:`GradientDescent` algorithm optimization.
 
     Parameters
     ----------
@@ -46,7 +46,7 @@ class Quickprop(Backpropagation):
 
     See Also
     --------
-    :network:`Backpropagation` : Backpropagation algorithm.
+    :network:`GradientDescent` : GradientDescent algorithm.
     """
     upper_bound = NonNegativeNumberProperty(default=1)
 

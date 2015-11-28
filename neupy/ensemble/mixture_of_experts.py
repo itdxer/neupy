@@ -9,15 +9,15 @@ __all__ = ('MixtureOfExperts',)
 
 
 class MixtureOfExperts(BaseEnsemble):
-    """ Mixture of Experts ensemble algorithm for Backpropagation
+    """ Mixture of Experts ensemble algorithm for GradientDescent
     based Neural Networks.
 
     Parameters
     ----------
     networks : list
-        List of networks based on :network:`Backpropagation` algorithm.
+        List of networks based on :network:`GradientDescent` algorithm.
     gating_network : object
-        2 Layer Neural Network based on :network:`Backpropagation` which
+        2 Layer Neural Network based on :network:`GradientDescent` which
         has :layer:`Softmax` as first one and the last one must be
         the :layer:`Output`. Output layer size must be equal to number
         of networks in model. Also important to say that in every network
@@ -52,16 +52,16 @@ class MixtureOfExperts(BaseEnsemble):
     >>>
     >>> insize, outsize = (10, 1)
     >>> networks = [
-    ...     algorithms.Backpropagation((insize, 20, outsize), step=0.1,
+    ...     algorithms.GradientDescent((insize, 20, outsize), step=0.1,
     ...                                 verbose=False),
-    ...     algorithms.Backpropagation((insize, 20, outsize), step=0.1,
+    ...     algorithms.GradientDescent((insize, 20, outsize), step=0.1,
     ...                                 verbose=False),
     ... ]
     >>> n_networks = len(networks)
     >>>
     >>> moe = ensemble.MixtureOfExperts(
     ...     networks=networks,
-    ...     gating_network=algorithms.Backpropagation(
+    ...     gating_network=algorithms.GradientDescent(
     ...         layers.Softmax(insize) > layers.Output(n_networks),
     ...         step=0.1,
     ...         verbose=False,
@@ -78,14 +78,14 @@ class MixtureOfExperts(BaseEnsemble):
     def __init__(self, networks, gating_network=None):
         super(MixtureOfExperts, self).__init__(networks)
 
-        if not isinstance(gating_network, algorithms.Backpropagation):
-            raise ValueError("Gating network must use Backpropagation "
+        if not isinstance(gating_network, algorithms.GradientDescent):
+            raise ValueError("Gating network must use GradientDescent "
                              "learning algorihtm")
 
         for network in self.networks:
-            if not isinstance(network, algorithms.Backpropagation):
+            if not isinstance(network, algorithms.GradientDescent):
                 raise ValueError(
-                    "Network must use Backpropagation learning algorithm, "
+                    "Network must use GradientDescent learning algorithm, "
                     "got {0}".format(network.__class__.__name__)
                 )
 

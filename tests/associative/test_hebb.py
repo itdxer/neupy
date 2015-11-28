@@ -13,10 +13,6 @@ input_data = np.array([
 
 
 class HebbRuleTestCase(BaseTestCase):
-    def setUp(self):
-        super(HebbRuleTestCase, self).setUp()
-        self.conn = Step(2) > Output(1)
-
     def test_validations(self):
         with self.assertRaises(ValueError):
             # Wrong: too many layers
@@ -28,7 +24,7 @@ class HebbRuleTestCase(BaseTestCase):
 
         with self.assertRaises(AttributeError):
             # Wrong: Algorithm is not converge
-            hn = algorithms.HebbRule(self.conn, verbose=False)
+            hn = algorithms.HebbRule(Step(2) > Output(1), verbose=False)
             hn.train(input_data, epsilon=1e-5)
 
         with self.assertRaises(ValueError):
@@ -49,7 +45,7 @@ class HebbRuleTestCase(BaseTestCase):
 
     def test_learning_process(self):
         hn = algorithms.HebbRule(
-            self.conn,
+            Step(2) > Output(1),
             n_unconditioned=1,
             use_bias=True,
             step=1,
@@ -71,7 +67,7 @@ class HebbRuleTestCase(BaseTestCase):
 
     def test_with_weight_decay(self):
         hn = algorithms.HebbRule(
-            self.conn,
+            Step(2) > Output(1),
             n_unconditioned=1,
             step=1,
             verbose=False,
@@ -109,7 +105,7 @@ class HebbRuleTestCase(BaseTestCase):
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(
             algorithms.HebbRule(
-                self.conn,
+                Step(2) > Output(1),
                 n_unconditioned=1,
                 step=1,
                 verbose=False
@@ -120,7 +116,7 @@ class HebbRuleTestCase(BaseTestCase):
 
     def test_predict_different_inputs(self):
         inet = algorithms.HebbRule(
-            self.conn,
+            Step(2) > Output(1),
             n_unconditioned=1,
             step=1,
             verbose=False

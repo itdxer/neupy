@@ -1,4 +1,4 @@
-from neupy.utils import is_int_array
+from neupy.utils import is_list_of_integers
 from neupy.network.connections import NetworkConnectionError, LayerConnection
 from neupy.network.learning import SupervisedLearning
 from neupy.network.base import ConstructableNetwork
@@ -36,7 +36,7 @@ class BaseLinearNetwork(SupervisedLearning, ConstructableNetwork):
         if len(connection) != 2:
             raise ValueError("This network should contains two layers.")
 
-        if is_int_array(connection):
+        if is_list_of_integers(connection):
             input_layer_size, output_layer_size = connection
             connection = Step(input_layer_size) > Output(output_layer_size)
 

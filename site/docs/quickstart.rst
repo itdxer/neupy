@@ -7,8 +7,8 @@ XOR problem
 ***********
 
 XOR problem is probably the most known for those who have already heared about neural networks.
-The most popular neural network algorithm probably is :network:`Backpropagation`.
-Let's try to solve the XOR problem using :network:`Backpropagation`
+The most popular neural network algorithm probably is :network:`GradientDescent`.
+Let's try to solve the XOR problem using :network:`GradientDescent`
 First of all we need to define 4 data samples for XOR function.
 
 .. code-block:: python
@@ -43,11 +43,11 @@ Let's check the data.
 .. image:: ../_static/screenshots/quick-start-data-viz.png
     :width: 70%
     :align: center
-    :alt: Backpropagation configuration output
+    :alt: GradientDescent configuration output
 
 As we can see from chart on the top, problem is clearly nonlinear.
 
-Now we are going to define :network:`Backpropagation` neural network which solves this problem.
+Now we are going to define :network:`GradientDescent` neural network which solves this problem.
 First of all we have to set up basic structure for network and add some useful configurations.
 As problem is nonlinear we should add one hidden layer to the network.
 For first network implementation we have to set up number of hidden units inside network randomly.
@@ -56,7 +56,7 @@ Let the units number be 4.
 .. code-block:: python
 
     >>> from neupy import algorithms
-    >>> bpnet = algorithms.Backpropagation(
+    >>> bpnet = algorithms.GradientDescent(
     ...     (2, 4, 1),
     ...     step=0.1,
     ...     verbose=True,
@@ -69,7 +69,7 @@ As you can see from code additionaly we set up ``step`` and ``show_epoch`` param
 We set the value up to ``'4 times'`` that mean we will see network progress 4 times and one additional for the final iteration.
 
 We set up network connections as tuple of layers sizes, but we don't put in activation function.
-That is because :network:`Backpropagation` use the most common sigmoid layer by
+That is because :network:`GradientDescent` use the most common sigmoid layer by
 default for tuple structure.
 More about layer configuration you can read `here <layers.html>`_.
 
@@ -78,7 +78,7 @@ If you run the code in terminal you will see output which looks like this one:
 .. image:: ../_static/screenshots/bpnet-config-logs.png
     :width: 70%
     :align: center
-    :alt: Backpropagation configuration output
+    :alt: GradientDescent configuration output
 
 From this output we can extract a lot of information about network configurations.
 
@@ -86,8 +86,8 @@ First of all, as we can see, most of options have gray color label, but
 some of them are green.
 Green color defines all options which we put in network manually and gray color options are default parameters.
 This output shows all possible properties neural network configurations.
-All properties separeted on few groups and each group is a :network:`Backpropagation`  parent classes.
-More information about :network:`Backpropagation` algorithm properties you will find in documentation, just click on algorithm name link and you will see it.
+All properties separeted on few groups and each group is a :network:`GradientDescent`  parent classes.
+More information about :network:`GradientDescent` algorithm properties you will find in documentation, just click on algorithm name link and you will see it.
 
 Now we are going to train network to solve the XOR problem.
 Let set up ``5000`` epochs for training procedure and check the result.
@@ -101,7 +101,7 @@ Output in terminal should look similar to this one:
 .. image:: ../_static/screenshots/bpnet-train-logs.png
     :width: 70%
     :align: center
-    :alt: Backpropagation training procedure output
+    :alt: GradientDescent training procedure output
 
 In the output you can see many useful information about learning procedures.
 First of all there is simple information about input data and number of training epochs.
@@ -122,7 +122,7 @@ Our MSE looks well. Now we can visualize our errors in a chart.
 .. image:: ../_static/screenshots/bpnet-train-errors-plot.png
     :width: 70%
     :align: center
-    :alt: Backpropagation epoch errors plot
+    :alt: GradientDescent epoch errors plot
 
 And finally examine the prediction answer
 

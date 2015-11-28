@@ -17,7 +17,7 @@ class LearningRateUpdatesTestCase(BaseTestCase):
         ]
 
     def test_simple_learning_rate_minimization(self):
-        network = algorithms.Backpropagation(
+        network = algorithms.GradientDescent(
             self.connection,
             step=self.first_step,
             epochs_step_minimizator=50,

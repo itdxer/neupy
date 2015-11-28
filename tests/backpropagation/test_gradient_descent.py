@@ -6,36 +6,37 @@ from neupy import algorithms
 from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
 
-from data import xor_input_train, xor_target_train
+from data import simple_classification
 from utils import compare_networks
 from base import BaseTestCase
 
 
 class GradientDescentTestCase(BaseTestCase):
-    def setUp(self):
-        super(GradientDescentTestCase, self).setUp()
-        output = StepOutput(1, output_bounds=(-1, 1))
-        self.connection = Tanh(2) > Tanh(5) > output
-
     def test_stochastic_gradient_descent(self):
+        output = StepOutput(1, output_bounds=(-1, 1))
+        connection = Tanh(10) > Tanh(20) > output
+
+        x_train, _, y_train, _ = simple_classification()
+
         compare_networks(
            # Test classes
-           algorithms.Backpropagation,
-           partial(algorithms.MinibatchGradientDescent, batch_size=4),
+           algorithms.GradientDescent,
+           partial(algorithms.MinibatchGradientDescent, batch_size=1),
            # Test data
-           (xor_input_train, xor_target_train),
+           (x_train, y_train),
            # Network configurations
-           connection=self.connection,
+           connection=connection,
            step=0.1,
            shuffle_data=True,
-           verbose=False,
+           verbose=True,
            # Test configurations
            epochs=40,
-           # is_comparison_plot=True
+           show_comparison_plot=True
         )
 
     def test_on_bigger_dataset(self):
-        data, targets = datasets.make_regression(n_samples=4000)
+        data, targets = datasets.make_regression(n_samples=400,
+                                                 n_features=10)
         scaler = preprocessing.MinMaxScaler(feature_range=(0, 1))
         data = scaler.fit_transform(data)
         targets = scaler.fit_transform(targets.reshape(-1, 1))
@@ -49,11 +50,9 @@ class GradientDescentTestCase(BaseTestCase):
         sgd_network = algorithms.MinibatchGradientDescent(
             Sigmoid(in_size) > Sigmoid(300) > Output(out_size),
             step=0.2,
-            batch_size=10,
+            batch_size=5,
             verbose=False,
         )
-        sgd_network.train(x_train, y_train, x_test, y_test, epochs=10)
-        result = sgd_network.predict(x_test)
-        test_error = sgd_network.error(result,
-                                       np.reshape(y_test, (y_test.size, 1)))
-        self.assertAlmostEqual(0.02, test_error, places=2)
+        sgd_network.train(x_train, y_train, x_test, y_test, epochs=20)
+        test_error = sgd_network.prediction_error(x_test, y_test)
+        self.assertAlmostEqual(0.007, test_error, places=3)

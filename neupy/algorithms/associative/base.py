@@ -13,26 +13,12 @@ __all__ = ('BaseStepAssociative',)
 class BaseAssociative(UnsupervisedLearning, ConstructableNetwork):
     def __init__(self, connection, **options):
         if len(connection) != 2:
-            raise ValueError("Connection must contains only input and "
-                             "output layers")
-
+            raise ValueError("Connection should contains only 2 layers")
         super(BaseAssociative, self).__init__(connection, **options)
-
-    def init_properties(self):
-        self.use_bias = False
-        super(BaseAssociative, self).init_properties()
 
     def train(self, input_train, epochs=100):
         return super(BaseAssociative, self).train(input_train, epochs,
                                                   epsilon=None)
-
-    def predict(self, input_data):
-        is_feature1d = is_layer_accept_1d_feature(self.input_layer)
-        result = format_data(input_data, is_feature1d)
-
-        for layer in self.layers:
-            result = layer.output(result)
-        return result
 
 
 class BaseStepAssociative(BaseAssociative):
@@ -48,11 +34,11 @@ class BaseStepAssociative(BaseAssociative):
         n_unconditioned = self.n_unconditioned
 
         if not isinstance(input_layer, Step):
-            raise ValueError("Input layer must be `Step`")
+            raise ValueError("Input layer should be `Step` class instance.")
 
         if input_layer.input_size <= n_unconditioned:
             raise ValueError(
-                "Number of uncondition features must be less than total "
+                "Number of uncondition should must be less than total "
                 "number of features in network. #feature = {} and "
                 "#unconditioned = {}".format(
                     input_layer.input_size,

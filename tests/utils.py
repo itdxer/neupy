@@ -30,7 +30,7 @@ def compare_networks(default_class, tested_class, data, **kwargs):
         accuracy then the second one.
     """
     epochs = kwargs.pop('epochs', 100)
-    is_comparison_plot = kwargs.pop('is_comparison_plot', False)
+    show_comparison_plot = kwargs.pop('show_comparison_plot', False)
 
     # Compute result for default network (which must be slower)
     network = default_class(**kwargs)
@@ -49,7 +49,7 @@ def compare_networks(default_class, tested_class, data, **kwargs):
     network_tested_error = network.last_error()
     errors2 = network.errors_in
 
-    if is_comparison_plot:
+    if show_comparison_plot:
         error_range = np.arange(max(len(errors1), len(errors2)))
         plt.plot(error_range[:len(errors1)], errors1)
         plt.plot(error_range[:len(errors2)], errors2)

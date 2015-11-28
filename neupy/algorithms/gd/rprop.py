@@ -2,14 +2,14 @@ from numpy import where, sign, ones, clip
 
 from neupy.core.properties import (NonNegativeNumberProperty,
                                    BetweenZeroAndOneProperty)
-from .backpropagation import Backpropagation
+from .base import GradientDescent
 
 
 __all__ = ('RPROP', 'IRPROPPlus')
 
 
-class RPROP(Backpropagation):
-    """ RPROP :network:`Backpropagation` algorithm optimization.
+class RPROP(GradientDescent):
+    """ RPROP :network:`GradientDescent` algorithm optimization.
 
     Parameters
     ----------
@@ -42,7 +42,7 @@ class RPROP(Backpropagation):
     See Also
     --------
     :network:`IRPROPPlus` : iRPROP+ algorithm.
-    :network:`Backpropagation` : Backpropagation algorithm.
+    :network:`GradientDescent` : GradientDescent algorithm.
     """
 
     __rprop_params = """minimum_step : float
@@ -133,7 +133,7 @@ class RPROP(Backpropagation):
 
 
 class IRPROPPlus(RPROP):
-    """ iRPROP+ :network:`Backpropagation` algorithm optimization.
+    """ iRPROP+ :network:`GradientDescent` algorithm optimization.
 
     Parameters
     ----------
@@ -166,7 +166,7 @@ class IRPROPPlus(RPROP):
     See Also
     --------
     :network:`RPROP` : RPROP algorithm.
-    :network:`Backpropagation` : Backpropagation algorithm.
+    :network:`GradientDescent` : GradientDescent algorithm.
     """
     def get_flip_sign_weight_delta(self, layer_number):
         prev_error = self.previous_error()

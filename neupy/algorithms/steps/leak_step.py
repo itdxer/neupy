@@ -41,7 +41,7 @@ class LeakStepAdaptation(LearningRateConfigurable):
     --------
     >>> from neupy import algorithms
     >>>
-    >>> bpnet = algorithms.Backpropagation(
+    >>> bpnet = algorithms.GradientDescent(
     ...     (2, 4, 1),
     ...     step=0.1,
     ...     verbose=False,

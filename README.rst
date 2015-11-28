@@ -43,7 +43,7 @@ Library support
 ---------------
 
 * Radial Basis Functions Networks (RBFN)
-* Backpropagation and different optimization for it
+* GradientDescent and different optimization for it
 * Neural Network Ensembles
 * Associative and Autoasociative Memory
 * Competitive Networks
@@ -54,7 +54,7 @@ Library support
 Algorithms
 ----------
 
-* Backpropagation
+* GradientDescent
 
   * Classic Gradient Descent
   * Mini-batch Gradient Descent

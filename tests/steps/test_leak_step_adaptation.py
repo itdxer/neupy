@@ -16,9 +16,9 @@ class LeakStepAdaptationTestCase(BaseTestCase):
     def test_leak_step_adaptation(self):
         compare_networks(
             # Test classes
-            algorithms.Backpropagation,
+            algorithms.GradientDescent,
             partial(
-                algorithms.Backpropagation,
+                algorithms.GradientDescent,
                 leak_size=0.5,
                 alpha=0.5,
                 beta=0.5,
@@ -37,5 +37,5 @@ class LeakStepAdaptationTestCase(BaseTestCase):
             step=0.1,
             shuffle_data=True,
             epochs=30,
-            # is_comparison_plot=True,
+            # show_comparison_plot=True,
         )

@@ -1,5 +1,5 @@
 from neupy.core.config import Configurable
-from neupy.algorithms.backprop import LEARING_RATE_UPDATE
+from neupy.algorithms.gd import LEARING_RATE_UPDATE
 
 
 __all__ = ('LearningRateConfigurable',)

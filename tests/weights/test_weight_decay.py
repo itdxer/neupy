@@ -11,7 +11,7 @@ from base import BaseTestCase
 
 class WeightDecayTestCase(BaseTestCase):
     def test_that_alg_works(self):
-        network = algorithms.Backpropagation(
+        network = algorithms.GradientDescent(
             [
                 layers.Tanh(2),
                 layers.Tanh(3),

@@ -20,19 +20,19 @@ class DANTestCase(BaseTestCase):
             # just one.
             ensemble.DynamicallyAveragedNetwork([
                 algorithms.RPROP((4, 10, 2), step=0.1),
-                algorithms.Backpropagation((4, 10, 1), step=0.1)
+                algorithms.GradientDescent((4, 10, 1), step=0.1)
             ])
 
         with self.assertRaises(ValueError):
             # Use ensemble with less than one network
             ensemble.DynamicallyAveragedNetwork([
-                algorithms.Backpropagation((4, 10, 1), step=0.1)
+                algorithms.GradientDescent((4, 10, 1), step=0.1)
             ])
 
         with self.assertRaises(ValueError):
             # Output between -1 and 1
             dan = ensemble.DynamicallyAveragedNetwork([
-                algorithms.Backpropagation(
+                algorithms.GradientDescent(
                     Sigmoid(4) > Tanh(10) > Output(1),
                     step=0.01
                 ),
@@ -50,7 +50,7 @@ class DANTestCase(BaseTestCase):
 
         dan = ensemble.DynamicallyAveragedNetwork([
             algorithms.RPROP((4, 100, 1), step=0.1, maximum_step=1),
-            algorithms.Backpropagation((4, 5, 1), step=0.1),
+            algorithms.GradientDescent((4, 5, 1), step=0.1),
             algorithms.ConjugateGradient((4, 5, 1), step=0.01),
         ])
 

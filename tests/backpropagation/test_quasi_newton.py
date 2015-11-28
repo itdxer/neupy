@@ -7,7 +7,7 @@ import numpy as np
 from sklearn import datasets, metrics
 from sklearn.cross_validation import StratifiedShuffleSplit
 from neupy import algorithms, layers
-from neupy.algorithms.backprop import quasi_newton as qn
+from neupy.algorithms.gd import quasi_newton as qn
 
 from data import simple_classification
 from base import BaseTestCase

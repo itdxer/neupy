@@ -4,7 +4,7 @@ from collections import namedtuple
 import numpy as np
 
 from neupy import algorithms
-import neupy.algorithms.backprop.conjugate_gradient as cg
+import neupy.algorithms.gd.conjugate_gradient as cg
 from neupy.functions import cross_entropy_error
 from neupy.layers import *
 
@@ -99,7 +99,7 @@ class ConjugateGradientTestCase(BaseTestCase):
     def test_compare_bp_and_cg(self):
         compare_networks(
             # Test classes
-            algorithms.Backpropagation,
+            algorithms.GradientDescent,
             partial(
                 algorithms.ConjugateGradient,
                 update_function='fletcher_reeves'
@@ -113,5 +113,5 @@ class ConjugateGradientTestCase(BaseTestCase):
             shuffle_data=True,
             # Test configurations
             epochs=50,
-            # is_comparison_plot=True
+            # show_comparison_plot=True
         )

@@ -4,14 +4,14 @@ import numpy as np
 
 from neupy.utils import asfloat
 from neupy.core.properties import BetweenZeroAndOneProperty
-from .backpropagation import Backpropagation
+from .base import GradientDescent
 
 
 __all__ = ('Momentum',)
 
 
-class Momentum(Backpropagation):
-    """ Momentum algorithm for :network:`Backpropagation` optimization.
+class Momentum(GradientDescent):
+    """ Momentum algorithm for :network:`GradientDescent` optimization.
 
     Parameters
     ----------
@@ -44,7 +44,7 @@ class Momentum(Backpropagation):
 
     See Also
     --------
-    :network:`Backpropagation` : Backpropagation algorithm.
+    :network:`GradientDescent` : GradientDescent algorithm.
     """
     momentum = BetweenZeroAndOneProperty(default=0.9)
 

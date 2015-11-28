@@ -9,12 +9,12 @@ from base import BaseTestCase
 class MixtureOfExpertsTestCase(BaseTestCase):
     def test_handle_errors(self):
         networks = [
-            algorithms.Backpropagation(
+            algorithms.GradientDescent(
                 (1, 20, 1),
                 step=0.2,
                 verbose=False
             ),
-            algorithms.Backpropagation(
+            algorithms.GradientDescent(
                 (1, 20, 1),
                 step=0.2,
                 verbose=False
@@ -22,12 +22,12 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         ]
 
         with self.assertRaises(ValueError):
-            # Ivalid network (not Backpropagation)
+            # Ivalid network (not GradientDescent)
             ensemble.MixtureOfExperts(
                 networks=networks + [
                     algorithms.GRNN(verbose=False)
                 ],
-                gating_network=algorithms.Backpropagation(
+                gating_network=algorithms.GradientDescent(
                     layers.Sigmoid(1) > layers.Output(3),
                     verbose=False,
                 )
@@ -37,13 +37,13 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             # Ivalid number of outputs in third network
             ensemble.MixtureOfExperts(
                 networks=networks + [
-                    algorithms.Backpropagation(
+                    algorithms.GradientDescent(
                         (1, 20, 2),
                         step=0.2,
                         verbose=False
                     )
                 ],
-                gating_network=algorithms.Backpropagation(
+                gating_network=algorithms.GradientDescent(
                     layers.Sigmoid(1) > layers.Output(3),
                     verbose=False,
                 )
@@ -53,7 +53,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             # Ivalid gating network output layer size
             ensemble.MixtureOfExperts(
                 networks=networks,
-                gating_network=algorithms.Backpropagation(
+                gating_network=algorithms.GradientDescent(
                     layers.Softmax(1) > layers.Output(1),
                     verbose=False,
                 )
@@ -63,7 +63,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             # Ivalid gating network input layer
             ensemble.MixtureOfExperts(
                 networks=networks,
-                gating_network=algorithms.Backpropagation(
+                gating_network=algorithms.GradientDescent(
                     layers.Sigmoid(1) > layers.Output(2),
                     verbose=False,
                 )
@@ -73,7 +73,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             # Ivalid gating network output layer
             ensemble.MixtureOfExperts(
                 networks=networks,
-                gating_network=algorithms.Backpropagation(
+                gating_network=algorithms.GradientDescent(
                     layers.Softmax(1) > layers.RoundedOutput(2),
                     verbose=False,
                 )
@@ -83,14 +83,14 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             # Ivalid network error function
             ensemble.MixtureOfExperts(
                 networks=networks + [
-                    algorithms.Backpropagation(
+                    algorithms.GradientDescent(
                         (1, 20, 1),
                         step=0.2,
                         error=rmsle,
                         verbose=False,
                     )
                 ],
-                gating_network=algorithms.Backpropagation(
+                gating_network=algorithms.GradientDescent(
                     layers.Sigmoid(1) > layers.Output(3),
                     verbose=False,
                 ),
@@ -100,7 +100,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             moe = ensemble.MixtureOfExperts(
                 # Ivalid gating error function
                 networks=networks,
-                gating_network=algorithms.Backpropagation(
+                gating_network=algorithms.GradientDescent(
                     layers.Softmax(1) > layers.Output(2),
                     error=rmsle,
                     verbose=False
@@ -110,7 +110,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         moe = ensemble.MixtureOfExperts(
             # Ivalid gating network output layer
             networks=networks,
-            gating_network=algorithms.Backpropagation(
+            gating_network=algorithms.GradientDescent(
                 layers.Softmax(1) > layers.Output(2),
                 verbose=False
             ),
@@ -141,9 +141,9 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             (y_test.size, 1)
         )
 
-        # -------------- Train single Backpropagation -------------- #
+        # -------------- Train single GradientDescent -------------- #
 
-        bpnet = algorithms.Backpropagation(
+        bpnet = algorithms.GradientDescent(
             (insize, 20, outsize),
             step=0.1,
             verbose=False
@@ -157,18 +157,18 @@ class MixtureOfExpertsTestCase(BaseTestCase):
 
         moe = ensemble.MixtureOfExperts(
             networks=[
-                algorithms.Backpropagation(
+                algorithms.GradientDescent(
                     (insize, 20, outsize),
                     step=0.1,
                     verbose=False
                 ),
-                algorithms.Backpropagation(
+                algorithms.GradientDescent(
                     (insize, 20, outsize),
                     step=0.1,
                     verbose=False
                 ),
             ],
-            gating_network=algorithms.Backpropagation(
+            gating_network=algorithms.GradientDescent(
                 layers.Softmax(insize) > layers.Output(2),
                 step=0.1,
                 verbose=False

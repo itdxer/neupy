@@ -3,13 +3,13 @@ from operator import mul
 from numpy import zeros, asmatrix, identity, tile, dot, concatenate
 
 from neupy.core.properties import NonNegativeNumberProperty
-from neupy.algorithms import Backpropagation
+from neupy.algorithms import GradientDescent
 
 
 __all__ = ('LevenbergMarquardt',)
 
 
-class LevenbergMarquardt(Backpropagation):
+class LevenbergMarquardt(GradientDescent):
     """ Levenberg-Marquardt algorithm.
 
     Parameters
@@ -88,7 +88,7 @@ class LevenbergMarquardt(Backpropagation):
 
     See Also
     --------
-    :network:`Backpropagation` : Backpropagation algorithm.
+    :network:`GradientDescent` : GradientDescent algorithm.
     """
     mu = NonNegativeNumberProperty(default=0.01)
     mu_increase_factor = NonNegativeNumberProperty(default=5, min_size=1)

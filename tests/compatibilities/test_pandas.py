@@ -29,7 +29,7 @@ class PandasCompatibilityTestCase(BaseTestCase):
             train_size=0.85
         )
 
-        bpnet = algorithms.Backpropagation(
+        bpnet = algorithms.GradientDescent(
             connection=[
                 layers.Sigmoid(10),
                 layers.Sigmoid(40),

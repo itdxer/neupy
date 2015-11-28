@@ -87,7 +87,7 @@ def target_function(network, x, y):
 
 
 # Get data for countour plot
-bp_network = algorithms.Backpropagation(get_connection(), **network_settings)
+bp_network = algorithms.GradientDescent(get_connection(), **network_settings)
 network_target_function = partial(target_function, bp_network)
 
 plt.figure()
@@ -105,7 +105,7 @@ cgnet_class = partial(algorithms.ConjugateGradient,
                       optimizations=[algorithms.LinearSearch])
 
 algorithms = (
-    (algorithms.Backpropagation, 'Gradient Descent', 'k'),
+    (algorithms.GradientDescent, 'Gradient Descent', 'k'),
     (algorithms.Momentum, 'Momentum', 'm'),
     (algorithms.RPROP, 'RPROP', 'c'),
     (cgnet_class, 'Conjugate Gradient', 'y'),

@@ -1,8 +1,10 @@
+import math
 from itertools import chain
 
+import theano
 import theano.tensor as T
 
-from neupy.core.properties import ListProperty, ChoiceProperty
+from neupy.core.properties import ListProperty, ChoiceProperty, NumberProperty
 from neupy.network.learning import SupervisedLearning
 from neupy.network.base import ConstructableNetwork
 from neupy.network.errors import (mse, binary_crossentropy,
@@ -10,11 +12,11 @@ from neupy.network.errors import (mse, binary_crossentropy,
 from . import optimization_types
 
 
-__all__ = ('Backpropagation',)
+__all__ = ('GradientDescent', 'MinibatchGradientDescent')
 
 
-class Backpropagation(SupervisedLearning, ConstructableNetwork):
-    """ Backpropagation algorithm.
+class GradientDescent(SupervisedLearning, ConstructableNetwork):
+    """ GradientDescent algorithm.
 
     Parameters
     ----------
@@ -31,12 +33,12 @@ class Backpropagation(SupervisedLearning, ConstructableNetwork):
     Examples
     --------
     >>> import numpy as np
-    >>> from neupy.algorithms import Backpropagation
+    >>> from neupy.algorithms import GradientDescent
     >>>
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> bpnet = Backpropagation((2, 3, 1), verbose=False, step=0.1)
+    >>> bpnet = GradientDescent((2, 3, 1), verbose=False, step=0.1)
     >>> bpnet.train(x_train, y_train)
     """
 
@@ -67,7 +69,7 @@ class Backpropagation(SupervisedLearning, ConstructableNetwork):
 
         optimizations = options.get('optimizations', cls.default_optimizations)
         if not optimizations:
-            return super(Backpropagation, cls).__new__(cls)
+            return super(GradientDescent, cls).__new__(cls)
 
         founded_types = []
         for optimization_class in optimizations:
@@ -94,7 +96,7 @@ class Backpropagation(SupervisedLearning, ConstructableNetwork):
         new_class = type(new_class_name, mro_classes, {})
         new_class.main_class = cls
 
-        return super(Backpropagation, new_class).__new__(new_class)
+        return super(GradientDescent, new_class).__new__(new_class)
 
     def __init__(self, connection, options=None, **kwargs):
         if options is None:
@@ -114,7 +116,7 @@ class Backpropagation(SupervisedLearning, ConstructableNetwork):
 
             options['optimizations'] = optimizations_merged
 
-        super(Backpropagation, self).__init__(connection, **options)
+        super(GradientDescent, self).__init__(connection, **options)
 
     def init_param_updates(self, layer, parameter):
         step = layer.step or self.variables.step
@@ -122,10 +124,10 @@ class Backpropagation(SupervisedLearning, ConstructableNetwork):
         return [(parameter, parameter - step * gradient)]
 
     def class_name(self):
-        return 'Backpropagation'
+        return 'GradientDescent'
 
     def get_params(self, deep=False, with_connection=True):
-        params = super(Backpropagation, self).get_params()
+        params = super(GradientDescent, self).get_params()
         if with_connection:
             params['connection'] = self.connection
         return params
@@ -140,3 +142,78 @@ class Backpropagation(SupervisedLearning, ConstructableNetwork):
             main_class = self.__class__
 
         return (main_class, args)
+
+
+class MinibatchGradientDescent(GradientDescent):
+    """ Mini-batch Gradient Descent algorithm.
+
+    Parameters
+    ----------
+    batch_size : int
+        Setup batch size for learning process. Defaults to ``10``.
+    {optimizations}
+    {full_params}
+
+    Methods
+    -------
+    {supervised_train}
+    {predict_raw}
+    {full_methods}
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from neupy import algorithms
+    >>>
+    >>> x_train = np.array([[1, 2], [3, 4]])
+    >>> y_train = np.array([[1], [0]])
+    >>>
+    >>> mgdnet = algorithms.MinibatchGradientDescent(
+    ...     (2, 3, 1),
+    ...     verbose=False,
+    ...     batch_size=1
+    ... )
+    >>> mgdnet.train(x_train, y_train)
+
+    See Also
+    --------
+    :network:`GradientDescent` : GradientDescent algorithm.
+    """
+    batch_size = NumberProperty(default=100)
+
+    def init_variables(self):
+        super(MinibatchGradientDescent, self).init_variables()
+        self.variables.update(batch_index=T.lscalar())
+
+    def train_epoch(self, input_train, target_train):
+        """ Network training.
+        """
+
+        n_samples = len(input_train)
+        n_batches = math.floor(n_samples / self.batch_size)
+
+        network_input = self.variables.network_input
+        network_output = self.variables.network_output
+        batch_index = self.variables.batch_index
+        prediction_error = self.methods.prediction_error
+
+        slice_batch = slice(batch_index * (self.batch_size),
+                            (batch_index + 1) * (self.batch_size))
+
+        input_train_shared = theano.shared(name="x_train", value=input_train)
+        target_train_shared = theano.shared(name="y_train", value=target_train)
+
+        train_batch = theano.function(
+            inputs=[batch_index],
+            outputs=self.variables.error_func,
+            updates=self.init_train_updates(),
+            givens={
+                network_input: input_train_shared[slice_batch],
+                network_output: target_train_shared[slice_batch],
+            }
+        )
+
+        for batch_index in range(n_batches):
+            batch_error = train_batch(batch_index)
+
+        return prediction_error(input_train, target_train)

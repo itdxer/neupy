@@ -5,7 +5,7 @@ Syntax
 ******
 
 In the quick start chapter we saw the neural network that contains only sigmoid
-layers which are default in :network:`Backpropagation` algorithms.
+layers which are default in :network:`GradientDescent` algorithms.
 But many problems need the specific structure for neural network connections.
 In this chapter you will see how to set up different connections for the neural network.
 
@@ -16,7 +16,7 @@ You just define a list or tuple with the numbers of units for each layer in acco
 .. code-block:: python
 
     from neupy import algorithms
-    bpnet = algorithms.Backpropagation((2, 4, 1))
+    bpnet = algorithms.GradientDescent((2, 4, 1))
 
 The second method is the most useful for tasks when you just want to test your network
 structure and don't create final one for it.
@@ -26,7 +26,7 @@ For example it can look like this.
 
     from neupy import algorithms, layers
 
-    bpnet = algorithms.Backpropagation(
+    bpnet = algorithms.GradientDescent(
         [
             layers.Sigmoid(10),
             layers.Sigmoid(40),
@@ -44,7 +44,7 @@ And the last one is the most intuitive.
     from neupy import algorithms
     from neupy.layers import *
 
-    bpnet = algorithms.Backpropagation(
+    bpnet = algorithms.GradientDescent(
         Sigmoid(10) > Sigmoid(40) > Output(2),
         step=0.2,
         shuffle_data=True
@@ -93,7 +93,7 @@ First of all you can see different class :layer:`Layer`.
 This class expect ``activation_function`` property to be provided that must be an one-argument function.
 In this example we just use simple function which squares input value.
 
-But we still can't use it in :network:`Backpropagation` algorithm because we don't describe derivative function.
+But we still can't use it in :network:`GradientDescent` algorithm because we don't describe derivative function.
 
 .. code-block:: python
 
@@ -111,7 +111,7 @@ But we still can't use it in :network:`Backpropagation` algorithm because we don
         activation_function = square
 
 
-Now we can use it in :network:`Backpropagation` algorithm.
+Now we can use it in :network:`GradientDescent` algorithm.
 Also we can describe derivative for ``square_deriv`` function.
 
 There also exist possibility to configure activation function.

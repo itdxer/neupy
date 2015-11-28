@@ -29,7 +29,7 @@ There is a simple example for network serialization.
     >>> target = preprocessing.MinMaxScaler().fit_transform(target)
     >>>
     >>> # Init and train network
-    ... bpnet = algorithms.Backpropagation((2, 5, 1), step=0.1, verbose=False)
+    ... bpnet = algorithms.GradientDescent((2, 5, 1), step=0.1, verbose=False)
     >>> bpnet.train(data, target, epochs=10000)
     >>>
     >>> predicted = bpnet.predict(data)

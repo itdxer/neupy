@@ -40,7 +40,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
 
         for case in cases:
             with catch_stdout() as out:
-                bpnet = algorithms.Backpropagation(
+                bpnet = algorithms.GradientDescent(
                     (2, 3, 1),
                     step=0.1,
                     verbose=True,
@@ -62,7 +62,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
 
         for wrong_input_value in wrong_input_values:
             with self.assertRaises(ValueError):
-                bpnet = algorithms.Backpropagation(
+                bpnet = algorithms.GradientDescent(
                     (2, 3, 1),
                     step=0.1,
                     verbose=False,
@@ -71,7 +71,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
 
     def test_network_convergence(self):
         with catch_stdout() as out:
-            bpnet = algorithms.Backpropagation(
+            bpnet = algorithms.GradientDescent(
                 (2, 3, 1),
                 step=0.1,
                 verbose=True,
@@ -83,7 +83,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
         self.assertEqual(1, terminal_output.count("Network didn't converge"))
 
         with catch_stdout() as out:
-            bpnet = algorithms.Backpropagation(
+            bpnet = algorithms.GradientDescent(
                 (2, 3, 1),
                 step=0.1,
                 verbose=True,
@@ -99,7 +99,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
         with catch_stdout() as out:
             data = np.random.random((1000, 2))
             target = np.random.random((1000, 1))
-            bpnet = algorithms.Backpropagation(
+            bpnet = algorithms.GradientDescent(
                 (2, 1, 1),
                 verbose=True,
                 show_epoch=1

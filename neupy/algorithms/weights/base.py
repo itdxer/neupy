@@ -1,5 +1,5 @@
 from neupy.core.config import Configurable
-from neupy.algorithms.backprop import WEIGHT_PENALTY
+from neupy.algorithms.gd import WEIGHT_PENALTY
 
 
 __all__ = ('WeightUpdateConfigurable',)

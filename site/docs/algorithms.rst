@@ -6,13 +6,13 @@ Classes and functions
 Algorithms
 **********
 
-Backpropagation
+GradientDescent
 ~~~~~~~~~~~~~~~
 
 .. csv-table::
     :header: "Class name", "Name"
 
-    :network:`Backpropagation`, Classic Gradient Descent
+    :network:`GradientDescent`, Classic Gradient Descent
     :network:`MinibatchGradientDescent`, Mini-batch Gradient Descent
     :network:`ConjugateGradient`, Conjugate Gradient
     :network:`QuasiNewton`, quasi-Newton

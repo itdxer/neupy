@@ -40,7 +40,7 @@ class QuickPropTestCase(BaseTestCase):
         x_train, _, y_train, _ = self.data
         compare_networks(
             # Test classes
-            algorithms.Backpropagation,
+            algorithms.GradientDescent,
             partial(algorithms.Quickprop, upper_bound=0.5),
             # Test data
             (x_train, y_train),
@@ -51,5 +51,5 @@ class QuickPropTestCase(BaseTestCase):
             # Test configurations
             epochs=100,
             verbose=False,
-            is_comparison_plot=False
+            show_comparison_plot=False
         )

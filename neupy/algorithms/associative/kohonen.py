@@ -78,3 +78,14 @@ class Kohonen(BaseAssociative):
             self.input_layer.weight[:, index_y] += self.step * (
                 input_row.T - weight[:, index_y]
             )
+
+    def init_layer_updates(self, layer):
+        predicted = self.variables.prediction_func
+        network_input = self.variables.network_input
+        step = self.variables.step
+
+        weight_delta = 0
+
+        return [
+            (layer.weight, layer.weight - step * weight_delta),
+        ]

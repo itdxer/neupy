@@ -282,7 +282,7 @@ This value is just a guess.
 For better and more accurate result we should choose it with other methods, but for now we can use this value.
 As the main algorithm we take Conjugate Gradient.
 This implementation of backpropagation is a little bit different from main interpretation of Conjugate Gradient.
-For Backpropagation implementation we can't guarantee that we get the local minimum in n-th steps (where `n` is the dimention).
+For GradientDescent implementation we can't guarantee that we get the local minimum in n-th steps (where `n` is the dimention).
 To optimize it we should use linear search.
 It will fix and set up better steps for Conjugate Gradient.
 

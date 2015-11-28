@@ -11,9 +11,9 @@ class WolfeSearchTestCase(BaseTestCase):
     def test_wolfe_search(self):
         compare_networks(
             # Test classes
-            algorithms.Backpropagation,
+            algorithms.GradientDescent,
             partial(
-                algorithms.Backpropagation,
+                algorithms.GradientDescent,
                 optimizations=[algorithms.WolfeSearch],
                 maxstep=10,
                 c1=1e-5,
@@ -28,5 +28,5 @@ class WolfeSearchTestCase(BaseTestCase):
             verbose=False,
             # Test configurations
             epochs=50,
-            # is_comparison_plot=True
+            # show_comparison_plot=True
         )

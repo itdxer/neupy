@@ -5,7 +5,7 @@ import numpy as np
 
 
 __all__ = ('format_data', 'is_layer_accept_1d_feature', 'asfloat',
-           'AttributeKeyDict', 'is_int_array')
+           'AttributeKeyDict', 'is_list_of_integers')
 
 
 def format_data(data, is_feature1d=True, copy=False):
@@ -106,7 +106,7 @@ class AttributeKeyDict(dict):
         del self[attrname]
 
 
-def is_int_array(sequence):
+def is_list_of_integers(sequence):
     """ Check that sequence contains only integer numbers.
 
     Parameters

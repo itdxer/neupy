@@ -4,13 +4,13 @@ from numpy import dot, asmatrix, reshape, where
 from scipy.sparse import lil_matrix
 
 from neupy.core.properties import BetweenZeroAndOneProperty
-from .backpropagation import Backpropagation
+from .base import GradientDescent
 
 
 __all__ = ('HessianDiagonal',)
 
 
-class HessianDiagonal(Backpropagation):
+class HessianDiagonal(GradientDescent):
     """ Hissian diagonal is a Hessian algorithm approximation which require
     only computation of hessian matrix diagonal elements and makes it
     invertion much easier and faster.
@@ -90,7 +90,7 @@ class HessianDiagonal(Backpropagation):
 
     See Also
     --------
-    :network:`Backpropagation` : Backpropagation algorithm.
+    :network:`GradientDescent` : GradientDescent algorithm.
     """
     min_eigenvalue = BetweenZeroAndOneProperty(default=1e-10)
 

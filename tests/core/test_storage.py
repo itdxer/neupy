@@ -12,7 +12,7 @@ from base import BaseTestCase
 
 class StorageTestCase(BaseTestCase):
     def test_simple_storage(self):
-        bpnet = algorithms.Backpropagation((2, 3, 1), step=0.25, verbose=False)
+        bpnet = algorithms.GradientDescent((2, 3, 1), step=0.25, verbose=False)
         data, target = datasets.make_regression(n_features=2, n_targets=1)
 
         data = preprocessing.MinMaxScaler().fit_transform(data)
@@ -58,7 +58,7 @@ class StorageTestCase(BaseTestCase):
 
     def test_dynamic_classes(self):
         test_classes = {
-            algorithms.Backpropagation: {},
+            algorithms.GradientDescent: {},
             # algorithms.MinibatchGradientDescent: {'batch_size': 10},
             # algorithms.Momentum: {'momentum': 0.5},
             # algorithms.RPROP: {'maximum_step': 1},

@@ -7,7 +7,7 @@ from neupy.algorithms.utils import (matrix_list_in_one_vector,
                                     vector_to_list_of_matrix)
 from neupy.network import StopNetworkTraining
 from ..steps.wolfe_search import WolfeSearch
-from .backpropagation import Backpropagation
+from .base import GradientDescent
 
 
 __all__ = ('QuasiNewton',)
@@ -74,8 +74,8 @@ def sr1(inverse_hessian, weight_delta, gradient_delta, epsilon=1e-8):
     return inverse_hessian + outer(param, param) / denominator
 
 
-class QuasiNewton(Backpropagation):
-    """ Quasi-Newton :network:`Backpropagation` algorithm optimization.
+class QuasiNewton(GradientDescent):
+    """ Quasi-Newton :network:`GradientDescent` algorithm optimization.
 
     Parameters
     ----------
@@ -115,7 +115,7 @@ class QuasiNewton(Backpropagation):
 
     See Also
     --------
-    :network:`Backpropagation` : Backpropagation algorithm.
+    :network:`GradientDescent` : GradientDescent algorithm.
     """
     update_function = ChoiceProperty(
         default='bfgs',

@@ -7,7 +7,7 @@ from base import BaseTestCase
 
 class BackPropAlgsTestCase(BaseTestCase):
     bp_algorithms = [
-        algorithms.Backpropagation,
+        algorithms.GradientDescent,
         algorithms.ConjugateGradient,
         algorithms.MinibatchGradientDescent,
         algorithms.HessianDiagonal,

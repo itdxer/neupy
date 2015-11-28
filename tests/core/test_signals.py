@@ -1,4 +1,4 @@
-from neupy.algorithms import Backpropagation
+from neupy.algorithms import GradientDescent
 
 from data import xor_input_train, xor_target_train
 from base import BaseTestCase
@@ -15,7 +15,7 @@ class SignalsTestCase(BaseTestCase):
             global triggered_times
             triggered_times += 1
 
-        network = Backpropagation(
+        network = GradientDescent(
             connection=(2, 2, 1),
             epoch_end_signal=print_message,
         )
@@ -33,7 +33,7 @@ class SignalsTestCase(BaseTestCase):
             global triggered_times
             triggered_times += 1
 
-        network = Backpropagation(
+        network = GradientDescent(
             connection=(2, 2, 1),
             train_end_signal=print_message,
         )

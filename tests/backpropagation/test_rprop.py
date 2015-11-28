@@ -32,7 +32,7 @@ class RPROPTestCase(BaseTestCase):
     def test_compare_bp_and_rprop(self):
         compare_networks(
             # Test classes
-            algorithms.Backpropagation,
+            algorithms.GradientDescent,
             algorithms.RPROP,
             # Test data
             (simple_input_train, simple_target_train),
@@ -43,7 +43,7 @@ class RPROPTestCase(BaseTestCase):
             verbose=False,
             # Test configurations
             epochs=50,
-            # is_comparison_plot=True
+            # show_comparison_plot=True
         )
 
     def test_irpropplus(self):
