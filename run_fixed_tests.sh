@@ -20,9 +20,9 @@ nosetests \
     tests/plots/test_hinton.py\
     tests/plots/test_error_plot.py\
     tests/datasets/test_reber.py\
-    tests/backpropagation/test_quickprop.py\
-    tests/backpropagation/test_backpropagation.py\
-    tests/backpropagation/test_momentum.py\
+    tests/gd/test_quickprop.py\
+    tests/gd/test_gd.py\
+    tests/gd/test_momentum.py\
     tests/linear/test_perceptron.py\
     tests/linear/test_lms.py\
     tests/linear/test_modify_relaxation.py\

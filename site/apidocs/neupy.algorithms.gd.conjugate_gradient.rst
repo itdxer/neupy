@@ -1,7 +1,7 @@
-neupy.algorithms.backprop.quasi_newton module
+neupy.algorithms.gd.conjugate_gradient module
 =============================================
 
-.. automodule:: neupy.algorithms.backprop.quasi_newton
+.. automodule:: neupy.algorithms.gd.conjugate_gradient
     :members:
     :undoc-members:
     :show-inheritance:

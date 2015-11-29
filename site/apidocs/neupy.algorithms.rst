@@ -7,8 +7,8 @@ Subpackages
 .. toctree::
 
     neupy.algorithms.associative
-    neupy.algorithms.backprop
     neupy.algorithms.competitive
+    neupy.algorithms.gd
     neupy.algorithms.linear
     neupy.algorithms.memory
     neupy.algorithms.rbfn
