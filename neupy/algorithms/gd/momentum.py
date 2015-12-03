@@ -4,13 +4,13 @@ import numpy as np
 
 from neupy.utils import asfloat
 from neupy.core.properties import BetweenZeroAndOneProperty
-from .base import GradientDescent
+from .base import MinibatchGradientDescent
 
 
 __all__ = ('Momentum',)
 
 
-class Momentum(GradientDescent):
+class Momentum(MinibatchGradientDescent):
     """ Momentum algorithm for :network:`GradientDescent` optimization.
 
     Parameters

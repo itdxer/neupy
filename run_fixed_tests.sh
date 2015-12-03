@@ -15,6 +15,7 @@ nosetests \
     tests/rbfn/test_pnn.py\
     tests/rbfn/test_grnn.py\
     tests/rbfn/test_rbf_kmeans.py\
+    tests/helpers/test_summary_table.py\
     tests/associative/test_oja.py\
     tests/competitive/test_art.py\
     tests/plots/test_hinton.py\
@@ -22,6 +23,7 @@ nosetests \
     tests/datasets/test_reber.py\
     tests/gd/test_quickprop.py\
     tests/gd/test_gd.py\
+    tests/gd/test_gd_minibatch.py\
     tests/gd/test_momentum.py\
     tests/linear/test_perceptron.py\
     tests/linear/test_lms.py\

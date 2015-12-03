@@ -1,8 +1,10 @@
 import os
+import sys
 import copy
 import tempfile
 from contextlib import contextmanager
 
+import six
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -11,6 +13,17 @@ from matplotlib.testing.compare import compare_images
 from neupy import algorithms, layers
 
 from data import xor_input_train, xor_target_train
+
+
+@contextmanager
+def catch_stdout():
+    old_out = sys.stdout
+    out = six.StringIO()
+    sys.stdout = out
+
+    yield out
+
+    sys.stdout = old_out
 
 
 def compare_networks(default_class, tested_class, data, **kwargs):

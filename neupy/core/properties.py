@@ -34,7 +34,7 @@ class Property(object):
                 availabe_types = availabe_types.__name__
 
             raise TypeError(
-                "Wrong data type `{0}` for `{1}` property. Expected "
+                "Invalid data type `{0}` for `{1}` property. Expected "
                 "types: {2}".format(value.__class__.__name__, self.name,
                                     availabe_types)
             )
@@ -213,7 +213,7 @@ class BoundedProperty(Property):
         super(BoundedProperty, self).__init__(*args, **kwargs)
 
     def validate(self, value):
-        if not self.min_size <= value <= self.max_size:
+        if not (self.min_size <= value <= self.max_size):
             raise ValueError("Value `{}` must be between {} and {}".format(
                 self.name, self.min_size, self.max_size
             ))

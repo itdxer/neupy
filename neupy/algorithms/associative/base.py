@@ -1,6 +1,6 @@
 from numpy import reshape
 
-from neupy.utils import format_data, is_layer_accept_1d_feature
+from neupy.utils import format_data
 from neupy.core.properties import NonNegativeIntProperty
 from neupy.layers import Step
 from neupy.network.base import ConstructableNetwork

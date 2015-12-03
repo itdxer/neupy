@@ -1,10 +1,11 @@
 import math
 from itertools import chain
 
-import theano
+import six
 import theano.tensor as T
 
-from neupy.core.properties import ListProperty, ChoiceProperty, NumberProperty
+from neupy.core.properties import (ListProperty, ChoiceProperty, IntProperty,
+                                   BoundedProperty)
 from neupy.network.learning import SupervisedLearning
 from neupy.network.base import ConstructableNetwork
 from neupy.network.errors import (mse, binary_crossentropy,
@@ -144,13 +145,34 @@ class GradientDescent(SupervisedLearning, ConstructableNetwork):
         return (main_class, args)
 
 
+class BatchSizeProperty(IntProperty, BoundedProperty):
+    expected_type = (type(None), int)
+    fullbatch_identifiers = [None, -1, 'all', '*', 'full']
+    min_size = 1
+
+    def __set__(self, instance, value):
+        if isinstance(value, six.string_types):
+            value = value.lower()
+
+        if value in self.fullbatch_identifiers:
+            value = None
+
+        super(BatchSizeProperty, self).__set__(instance, value)
+
+    def validate(self, value):
+        if value is not None:
+            super(BatchSizeProperty, self).validate(value)
+
+
 class MinibatchGradientDescent(GradientDescent):
     """ Mini-batch Gradient Descent algorithm.
 
     Parameters
     ----------
-    batch_size : int
-        Setup batch size for learning process. Defaults to ``10``.
+    batch_size : int or {{None, -1, 'all', '*', 'full'}}
+        Set up batch size for learning process. To set up batch size equal to
+        sample size value should be equal to one of the values listed above.
+        Defaults to ``100``.
     {optimizations}
     {full_params}
 
@@ -179,41 +201,25 @@ class MinibatchGradientDescent(GradientDescent):
     --------
     :network:`GradientDescent` : GradientDescent algorithm.
     """
-    batch_size = NumberProperty(default=100)
-
-    def init_variables(self):
-        super(MinibatchGradientDescent, self).init_variables()
-        self.variables.update(batch_index=T.lscalar())
+    batch_size = BatchSizeProperty(default=100)
 
     def train_epoch(self, input_train, target_train):
         """ Network training.
         """
 
         n_samples = len(input_train)
-        n_batches = math.floor(n_samples / self.batch_size)
+        batch_size = self.batch_size
+        train_epoch = self.methods.train_epoch
 
-        network_input = self.variables.network_input
-        network_output = self.variables.network_output
-        batch_index = self.variables.batch_index
+        if batch_size is None:
+            return train_epoch(input_train, target_train)
+
+        n_batches = math.floor(n_samples / batch_size)
         prediction_error = self.methods.prediction_error
 
-        slice_batch = slice(batch_index * (self.batch_size),
-                            (batch_index + 1) * (self.batch_size))
-
-        input_train_shared = theano.shared(name="x_train", value=input_train)
-        target_train_shared = theano.shared(name="y_train", value=target_train)
-
-        train_batch = theano.function(
-            inputs=[batch_index],
-            outputs=self.variables.error_func,
-            updates=self.init_train_updates(),
-            givens={
-                network_input: input_train_shared[slice_batch],
-                network_output: target_train_shared[slice_batch],
-            }
-        )
-
         for batch_index in range(n_batches):
-            batch_error = train_batch(batch_index)
+            slice_batch = slice(batch_index * batch_size,
+                                (batch_index + 1) * batch_size)
+            train_epoch(input_train[slice_batch], target_train[slice_batch])
 
         return prediction_error(input_train, target_train)

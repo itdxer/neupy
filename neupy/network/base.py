@@ -1,7 +1,7 @@
 from __future__ import division
 
 import math
-from time import time
+import time
 from itertools import groupby
 from collections import deque
 
@@ -13,7 +13,7 @@ import theano.tensor as T
 
 from neupy.utils import (format_data, is_layer_accept_1d_feature, asfloat,
                          AttributeKeyDict, is_list_of_integers)
-from neupy.helpers import preformat_value
+from neupy.helpers import preformat_value, table
 from neupy.core.base import BaseSkeleton
 from neupy.core.properties import (Property, FuncProperty, NumberProperty,
                                    BoolProperty, ChoiceProperty)
@@ -28,50 +28,55 @@ from .connections import LayerConnection, NetworkConnectionError
 __all__ = ('BaseNetwork', 'ConstructableNetwork')
 
 
-def show_training_summary(network):
-    network.logs.data("""
-        Epoch {epoch}
-        Train error:  {error}
-        Validation error: {error_out}
-        Epoch time: {epoch_time} sec
-    """.format(
-        epoch=network.epoch,
-        error=network.last_error() or '-',
-        error_out=network.last_validation_error() or '-',
-        epoch_time=round(network.train_epoch_time, 5)
-    ))
-
-
 def show_epoch_summary(network, show_epoch):
     delay_limit = 1  # in seconds
     prev_summary_time = None
     delay_history_length = 10
     terminal_output_delays = deque(maxlen=delay_history_length)
 
-    while True:
-        now = time()
+    table_drawer = table.TableDrawer(
+        table.Column(name="Epoch #"),
+        table.FloatColumn(name="Train err"),
+        table.FloatColumn(name="Valid err"),
+        table.TimeColumn(name="Time", width=10),
+        stdout=network.logs.simple
+    )
+    table_drawer.start()
 
-        if prev_summary_time is not None:
-            time_delta = now - prev_summary_time
-            terminal_output_delays.append(time_delta)
+    try:
+        while True:
+            now = time.time()
 
-        show_training_summary(network)
-        prev_summary_time = now
+            if prev_summary_time is not None:
+                time_delta = now - prev_summary_time
+                terminal_output_delays.append(time_delta)
 
-        if len(terminal_output_delays) == delay_history_length:
-            prev_summary_time = None
-            average_delay = np.mean(terminal_output_delays)
+            table_drawer.row([
+                network.epoch,
+                network.last_error(),
+                network.last_validation_error() or '-',
+                network.train_epoch_time
+            ])
+            prev_summary_time = now
 
-            if average_delay < delay_limit:
-                show_epoch *= math.ceil(delay_limit / average_delay)
-                network.logs.warning(
-                    "Too many outputs in a terminal. Set "
-                    "up logging after each {} epoch"
-                    "".format(show_epoch)
-                )
-                terminal_output_delays.clear()
+            if len(terminal_output_delays) == delay_history_length:
+                prev_summary_time = None
+                average_delay = np.mean(terminal_output_delays)
 
-        yield show_epoch
+                if average_delay < delay_limit:
+                    show_epoch *= math.ceil(delay_limit / average_delay)
+                    table_drawer.line()
+                    table_drawer.message("Too many outputs in a terminal.")
+                    table_drawer.message("Set up logging after each {} epoch"
+                                         "".format(show_epoch))
+                    table_drawer.line()
+                    terminal_output_delays.clear()
+
+            yield show_epoch
+
+    finally:
+        table_drawer.finish()
+        network.logs.empty()
 
 
 def shuffle_train_data(input_train, target_train):
@@ -109,7 +114,11 @@ def show_network_options(network, highlight_options=None):
         key=classname_grouper
     )
 
-    if isinstance(network.connection, LayerConnection):
+    has_layer_structure = (
+        hasattr(network, 'connection') and
+        isinstance(network.connection, LayerConnection)
+    )
+    if has_layer_structure:
         logs.header("Network structure")
         logs.log("LAYERS", network.connection)
 
@@ -320,7 +329,7 @@ class BaseNetwork(BaseSkeleton):
         shuffle_data = self.shuffle_data
 
         if compute_error_out:
-            # TODO: Method actually is undefined. Should fix it later.
+            # TODO: Method is undefined. Should fix it later.
             prediction_error = self.prediction_error
 
         train_epoch = self.train_epoch
@@ -332,7 +341,7 @@ class BaseNetwork(BaseSkeleton):
         self.target_train = target_train
 
         for epoch in iterepochs:
-            epoch_start_time = time()
+            epoch_start_time = time.time()
             epoch_start_update(epoch)
 
             if shuffle_data:
@@ -349,7 +358,7 @@ class BaseNetwork(BaseSkeleton):
                     errors_out.append(error_out)
 
                 errors.append(error)
-                self.train_epoch_time = time() - epoch_start_time
+                self.train_epoch_time = time.time() - epoch_start_time
 
                 if epoch % show_epoch == 0 or epoch == 1:
                     show_epoch = next(epoch_summary)
@@ -359,16 +368,20 @@ class BaseNetwork(BaseSkeleton):
                     epoch_end_signal(self)
 
             except StopNetworkTraining as err:
+                # TODO: This notification break table view in terminal.
+                # Should show it in different way.
+                # Maybe I can send it in generator using ``throw`` method
                 logs.log("TRAIN", "Epoch #{} stopped. {}"
                                   "".format(epoch, str(err)))
                 break
 
         if epoch != last_epoch_shown:
-            show_training_summary(self)
+            next(epoch_summary)
 
         if train_end_signal is not None:
             train_end_signal(self)
 
+        epoch_summary.close()
         logs.log("TRAIN", "End train")
 
     # ----------------- Errors ----------------- #

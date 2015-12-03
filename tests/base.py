@@ -3,6 +3,7 @@ import inspect
 import logging
 import unittest
 
+import theano
 import numpy as np
 import pandas as pd
 
@@ -19,6 +20,12 @@ class BaseTestCase(unittest.TestCase):
 
         if not self.verbose:
             logging.disable(logging.CRITICAL)
+
+        # Optimize unit tests speed. In general all task very simple so some
+        # Theano optimizations can be redundant.
+        theano.config.mode = "FAST_COMPILE"
+        theano.config.optimizer = "fast_compile"
+        theano.config.allow_gc = False
 
     def assertInvalidVectorTrain(self, network, input_vector, target=None,
                                  decimal=5, is_feature1d=True, **train_kwargs):

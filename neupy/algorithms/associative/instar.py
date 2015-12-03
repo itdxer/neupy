@@ -42,7 +42,7 @@ class Instar(BaseStepAssociative):
     ...     [0, 1, 0, 0],
     ...     [0, 0, 0, 0],
     ...     [0, 0, 1, 1],
-    ... ]) 
+    ... ])
     >>>
     >>> instnet = algorithms.Instar(
     ...     layers.Step(4) > layers.Output(1),
