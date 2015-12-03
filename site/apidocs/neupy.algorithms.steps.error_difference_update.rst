@@ -1,7 +1,7 @@
-neupy.algorithms.steps.error_difference_update module
+neupy.algorithms.steps.errdiff module
 =====================================================
 
-.. automodule:: neupy.algorithms.steps.error_difference_update
+.. automodule:: neupy.algorithms.steps.errdiff
     :members:
     :undoc-members:
     :show-inheritance:

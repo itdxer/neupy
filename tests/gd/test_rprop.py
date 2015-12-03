@@ -55,17 +55,28 @@ class RPROPTestCase(BaseTestCase):
             step=1,
             verbose=False
         )
-        nw = algorithms.IRPROPPlus(copy.deepcopy(self.connection), **options)
 
+        nw = algorithms.IRPROPPlus(copy.deepcopy(self.connection), **options)
         nw.train(simple_input_train, simple_target_train, epochs=100)
         irprop_plus_error = nw.last_error()
         self.assertGreater(1e-4, nw.last_error())
 
         nw = algorithms.RPROP(copy.deepcopy(self.connection), **options)
-
         nw.train(simple_input_train, simple_target_train, epochs=100)
         rprop_error = nw.last_error()
         self.assertGreater(rprop_error, irprop_plus_error)
 
     def test_rprop_exceptions(self):
-        raise NotImplementedError()
+        test_algorithms = [
+            algorithms.RPROP,
+            algorithms.IRPROPPlus
+        ]
+
+        for algorithm_class in test_algorithms:
+            with self.assertRaises(ValueError):
+                algorithm_class(self.connection,
+                                optimizations=[algorithms.ErrDiffStepUpdate])
+
+            # But this code should work fine
+            algorithm_class(self.connection,
+                            optimizations=[algorithms.WeightDecay])

@@ -7,10 +7,10 @@ from neupy.core.properties import (BoundedProperty,
 from .base import LearningRateConfigurable
 
 
-__all__ = ('ErrorDifferenceStepUpdate',)
+__all__ = ('ErrDiffStepUpdate',)
 
 
-class ErrorDifferenceStepUpdate(LearningRateConfigurable):
+class ErrDiffStepUpdate(LearningRateConfigurable):
     """ This algorithm make step update base on error difference between
     epochs.
 
@@ -44,7 +44,7 @@ class ErrorDifferenceStepUpdate(LearningRateConfigurable):
     ...     (2, 4, 1),
     ...     step=0.1,
     ...     verbose=False,
-    ...     optimizations=[algorithms.ErrorDifferenceStepUpdate]
+    ...     optimizations=[algorithms.ErrDiffStepUpdate]
     ... )
     >>>
     """
@@ -57,10 +57,10 @@ class ErrorDifferenceStepUpdate(LearningRateConfigurable):
             last_error=theano.shared(name='last_error', value=np.nan),
             previous_error=theano.shared(name='previous_error', value=np.nan),
         )
-        super(ErrorDifferenceStepUpdate, self).init_variables()
+        super(ErrDiffStepUpdate, self).init_variables()
 
     def init_train_updates(self):
-        updates = super(ErrorDifferenceStepUpdate, self).init_train_updates()
+        updates = super(ErrDiffStepUpdate, self).init_train_updates()
 
         step = self.variables.step
         last_error = self.variables.last_error
@@ -80,7 +80,7 @@ class ErrorDifferenceStepUpdate(LearningRateConfigurable):
         return updates
 
     def epoch_start_update(self, epoch):
-        super(ErrorDifferenceStepUpdate, self).epoch_start_update(epoch)
+        super(ErrDiffStepUpdate, self).epoch_start_update(epoch)
 
         previous_error = self.previous_error()
         if previous_error:

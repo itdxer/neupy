@@ -79,6 +79,10 @@ class Kohonen(BaseAssociative):
                 input_row.T - weight[:, index_y]
             )
 
+    def train_epoch(self, input_train, target_train):
+        for input_row in input_train:
+            train_epoch(input_train)
+
     def init_layer_updates(self, layer):
         predicted = self.variables.prediction_func
         network_input = self.variables.network_input

@@ -1,5 +1,10 @@
-from numpy import where, sign, ones, clip
+import theano
+import theano.tensor as T
+from theano.ifelse import ifelse
+import numpy as np
 
+from neupy.utils import asfloat
+from neupy.algorithms.gd import LEARING_RATE_UPDATE
 from neupy.core.properties import (NonNegativeNumberProperty,
                                    BetweenZeroAndOneProperty)
 from .base import GradientDescent
@@ -68,69 +73,78 @@ class RPROP(GradientDescent):
     increase_factor = NonNegativeNumberProperty(min_size=1, default=1.2)
     decrease_factor = BetweenZeroAndOneProperty(default=0.5)
 
+    def __new__(cls, connection, options=None, **kwargs):
+        if options is None:
+            options = kwargs
+
+        optimizations = options.get('optimizations', cls.default_optimizations)
+        for optimization_class in optimizations:
+            opt_class_type = getattr(optimization_class,
+                                     'optimization_type',  None)
+            if opt_class_type == LEARING_RATE_UPDATE:
+                raise ValueError("Algorithm have built-in functionality that"
+                                 "select learning rate for each weight node.")
+        return super(RPROP, cls).__new__(cls, connection, options, **kwargs)
+
     def init_layers(self):
         super(RPROP, self).init_layers()
-        steps = self.steps = []
-
         for layer in self.train_layers:
-            steps.append(ones(layer.size) * self.step)
+            for parameter in layer.parameters:
+                parameter_shape = T.shape(parameter).eval()
+                parameter.prev_delta = theano.shared(
+                    name="prev_delta_" + parameter.name,
+                    value=asfloat(np.zeros(parameter_shape)),
+                )
+                parameter.prev_gradient = theano.shared(
+                    name="prev_grad_" + parameter.name,
+                    value=asfloat(np.zeros(parameter_shape)),
+                )
+                parameter.steps = theano.shared(
+                    name="steps_{}" + parameter.name,
+                    value=asfloat(np.ones(parameter_shape) * self.step),
+                )
 
-    def get_flip_sign_weight_delta(self, layer_number):
-        return self.prev_weight_deltas[layer_number]
+    def init_prev_delta(self, parameter):
+        return parameter.prev_delta
 
-    def layer_weight_update(self, delta, layer_number):
-        if not hasattr(self, 'prev_gradients'):
-            prev_gradient = 0
-            prev_weight_delta = 0
-        else:
-            prev_gradient = self.prev_gradients[layer_number]
-            prev_weight_delta = self.get_flip_sign_weight_delta(layer_number)
+    def init_param_updates(self, layer, parameter):
+        gradient = T.grad(self.variables.error_func, wrt=parameter)
 
-        step = self.steps[layer_number]
-        gradient = self.gradients[layer_number]
+        current_steps = steps = parameter.steps
+        prev_delta = self.init_prev_delta(parameter)
+        prev_delta = self.init_prev_delta(parameter)
+        prev_gradient = parameter.prev_gradient
 
         grad_product = prev_gradient * gradient
-        negative_gradients = grad_product < 0
+        negative_gradients = T.lt(grad_product, 0)
 
-        step = self.steps[layer_number] = clip(
-            where(
-                grad_product > 0,
-                # Increase step for gradients which switch signs
-                step * self.increase_factor,
-                where(
+        updated_steps = T.clip(
+            T.switch(
+                T.gt(grad_product, 0),
+                steps * self.increase_factor,
+                T.switch(
                     negative_gradients,
-                    # Decrease step for gradients whcih switch signs
-                    step * self.decrease_factor,
-                    # Setup the same step value
-                    step
+                    steps * self.decrease_factor,
+                    steps
                 )
             ),
             self.minimum_step,
             self.maximum_step,
         )
-
-        output = where(
+        gradient_signs = T.switch(T.lt(gradient, 0), -1, 1)
+        parameter_delta = T.switch(
             negative_gradients,
-            -prev_weight_delta,
-            -sign(gradient) * step
+            prev_delta,
+            gradient_signs * updated_steps
         )
-        gradient[negative_gradients] = 0
+        updated_prev_gradient = T.switch(negative_gradients, 0, gradient)
 
-        self.weight_deltas.append(output)
-
-        del negative_gradients
-        del grad_product
-
-        return output
-
-    def update_weights(self, weight_deltas):
-        self.weight_deltas = []
-        super(RPROP, self).update_weights(weight_deltas)
-
-        self.prev_weight_deltas = self.weight_deltas
-        self.prev_gradients = self.gradients
-        self.prev_steps = self.steps
-
+        return [
+            (parameter, parameter - parameter_delta),
+            (steps, updated_steps),
+            (prev_gradient, updated_prev_gradient),
+            (parameter.prev_delta, -parameter_delta),
+        ]
 
 class IRPROPPlus(RPROP):
     """ iRPROP+ :network:`GradientDescent` algorithm optimization.
@@ -168,12 +182,24 @@ class IRPROPPlus(RPROP):
     :network:`RPROP` : RPROP algorithm.
     :network:`GradientDescent` : GradientDescent algorithm.
     """
-    def get_flip_sign_weight_delta(self, layer_number):
-        prev_error = self.previous_error()
-        last_error = self.last_error()
-        prev_weight_delta = 0
 
-        if prev_error is None or last_error > prev_error:
-            prev_weight_delta = self.prev_weight_deltas[layer_number]
+    def init_variables(self):
+        super(IRPROPPlus, self).init_variables()
+        self.variables.update(
+            last_error=theano.shared(name='last_error', value=np.nan),
+            previous_error=theano.shared(name='previous_error', value=np.nan),
+        )
 
-        return prev_weight_delta
+    def epoch_start_update(self, epoch):
+        super(IRPROPPlus, self).epoch_start_update(epoch)
+
+        previous_error = self.previous_error()
+        if previous_error:
+            last_error = self.last_error()
+            self.variables.last_error.set_value(last_error)
+            self.variables.previous_error.set_value(previous_error)
+
+    def init_prev_delta(self, parameter):
+        last_error = self.variables.last_error
+        prev_error = self.variables.previous_error
+        return T.switch(last_error > prev_error, parameter.prev_delta, 0)

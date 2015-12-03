@@ -2,6 +2,7 @@ from __future__ import division
 
 import theano
 import theano.tensor as T
+from theano.ifelse import ifelse
 import numpy as np
 
 from neupy.core.properties import NonNegativeNumberProperty
@@ -57,7 +58,7 @@ class Quickprop(GradientDescent):
                 parameter_shape = T.shape(parameter).eval()
                 parameter.prev_delta = theano.shared(
                     name="prev_delta_" + parameter.name,
-                    value=asfloat(-2 * np.ones(parameter_shape)),
+                    value=asfloat(np.zeros(parameter_shape)),
                 )
                 parameter.prev_gradient = theano.shared(
                     name="prev_grad_" + parameter.name,
@@ -70,11 +71,16 @@ class Quickprop(GradientDescent):
 
         prev_delta = parameter.prev_delta
         prev_gradient = parameter.prev_gradient
+        grad_delta = T.abs_(prev_gradient - gradient)
 
-        parameter_delta = T.clip(
-            T.abs_(prev_delta) * gradient / T.abs_(prev_gradient - gradient),
-            -self.upper_bound,
-            self.upper_bound
+        parameter_delta = ifelse(
+            T.eq(self.variables.epoch, 1),
+            gradient,
+            T.clip(
+                T.abs_(prev_delta) * gradient / grad_delta,
+                -self.upper_bound,
+                self.upper_bound
+            )
         )
         return [
             (parameter, parameter - step * parameter_delta),

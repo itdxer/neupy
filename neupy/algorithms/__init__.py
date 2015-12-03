@@ -12,7 +12,7 @@ from .weights.weight_elimination import *
 
 from .steps.simple_step_minimization import *
 from .steps.search_then_converge import *
-from .steps.error_difference_update import *
+from .steps.errdiff import *
 from .steps.leak_step import *
 from .steps.linear_search import *
 from .steps.wolfe_search import *
