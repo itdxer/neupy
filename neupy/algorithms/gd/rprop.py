@@ -1,6 +1,5 @@
 import theano
 import theano.tensor as T
-from theano.ifelse import ifelse
 import numpy as np
 
 from neupy.utils import asfloat
@@ -110,8 +109,7 @@ class RPROP(GradientDescent):
     def init_param_updates(self, layer, parameter):
         gradient = T.grad(self.variables.error_func, wrt=parameter)
 
-        current_steps = steps = parameter.steps
-        prev_delta = self.init_prev_delta(parameter)
+        steps = parameter.steps
         prev_delta = self.init_prev_delta(parameter)
         prev_gradient = parameter.prev_gradient
 
@@ -145,6 +143,7 @@ class RPROP(GradientDescent):
             (prev_gradient, updated_prev_gradient),
             (parameter.prev_delta, -parameter_delta),
         ]
+
 
 class IRPROPPlus(RPROP):
     """ iRPROP+ :network:`GradientDescent` algorithm optimization.
