@@ -16,7 +16,7 @@ FILES = (
         ('algorithms',),
     )),
     ('Functions', (
-        ('functions', 'errors'),
+        ('network', 'errors'),
     )),
     ('Layers', (
         ('layers', 'layers'),

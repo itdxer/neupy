@@ -4,7 +4,7 @@ from collections import namedtuple
 import numpy as np
 
 from neupy import algorithms
-import neupy.algorithms.gd.conjugate_gradient as cg
+import neupy.algorithms.gd.conjgrad as cg
 from neupy.functions import cross_entropy_error
 from neupy.layers import *
 
@@ -83,7 +83,7 @@ class ConjugateGradientTestCase(BaseTestCase):
             self.assertAlmostEqual(result, testcase.answer, places=3)
 
 
-    def test_conjugate_gradient(self):
+    def test_conjgrad(self):
         nw = algorithms.ConjugateGradient(
             self.connection,
             step=5,

@@ -1,7 +1,7 @@
-neupy.algorithms.gd.levenberg_marquardt module
+neupy.algorithms.gd.lev_marq module
 ==============================================
 
-.. automodule:: neupy.algorithms.gd.levenberg_marquardt
+.. automodule:: neupy.algorithms.gd.lev_marq
     :members:
     :undoc-members:
     :show-inheritance:

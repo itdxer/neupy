@@ -74,6 +74,8 @@ class TimeColumn(Column):
         Examples
         --------
         >>> col = TimeColumn("Time")
+        >>> col.format_value(0.001)
+        '1 ms'
         >>> col.format_value(0.5)
         '0.5 sec'
         >>> col.format_value(1.5)
@@ -83,7 +85,9 @@ class TimeColumn(Column):
         >>> col.format_value(15045)
         '04:10:45'
         """
-        if value < 10:
+        if value < 0.05:
+            return "{} ms".format(round(value * 10 ** 3))
+        elif value < 10:
             return "{} sec".format(round(value, 1))
         return time.strftime("%H:%M:%S", time.gmtime(value))
 

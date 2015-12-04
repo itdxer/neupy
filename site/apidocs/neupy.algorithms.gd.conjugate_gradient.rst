@@ -1,7 +1,7 @@
-neupy.algorithms.gd.conjugate_gradient module
+neupy.algorithms.gd.conjgrad module
 =============================================
 
-.. automodule:: neupy.algorithms.gd.conjugate_gradient
+.. automodule:: neupy.algorithms.gd.conjgrad
     :members:
     :undoc-members:
     :show-inheritance:

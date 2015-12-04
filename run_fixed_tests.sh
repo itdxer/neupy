@@ -26,6 +26,8 @@ nosetests \
     tests/gd/test_rprop.py\
     tests/gd/test_gd_minibatch.py\
     tests/gd/test_momentum.py\
+    tests/gd/test_hessdiag.py\
+    tests/gd/test_hessian.py\
     tests/linear/test_perceptron.py\
     tests/linear/test_lms.py\
     tests/linear/test_modify_relaxation.py\

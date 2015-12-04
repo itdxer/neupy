@@ -9,7 +9,7 @@ from base import BaseTestCase
 
 
 class LevenbergMarquardtTestCase(BaseTestCase):
-    def test_levenberg_marquardt(self):
+    def test_lev_marq(self):
         dataset = datasets.load_diabetes()
         data, target = dataset.data, dataset.target
 

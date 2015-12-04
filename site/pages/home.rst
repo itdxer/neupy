@@ -75,6 +75,7 @@ Algorithms
     * SR1
 
   * Levenberg-Marquardt
+  * Hessian (Newton's method)
   * Hessian diagonal
   * Momentum
   * RPROP

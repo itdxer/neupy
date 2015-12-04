@@ -67,7 +67,7 @@ class StorageTestCase(BaseTestCase):
             #     'update_function': 'fletcher_reeves'
             # },
             # algorithms.QuasiNewton: {'update_function': 'bfgs'},
-            # algorithms.HessianDiagonal: {'min_eigenvalue': 1e-5},
+            # algorithms.HessianDiagonal: {'min_eigval': 1e-5},
             # algorithms.LevenbergMarquardt: {'mu': 0.01},
         }
 
