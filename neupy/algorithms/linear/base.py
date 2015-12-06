@@ -1,14 +1,13 @@
 from neupy.utils import is_list_of_integers
-from neupy.network.connections import NetworkConnectionError, LayerConnection
-from neupy.network.learning import SupervisedLearning
-from neupy.network.base import ConstructableNetwork
+from neupy.layers.connections import NetworkConnectionError, LayerConnection
+from neupy.network import SupervisedConstructableNetwork
 from neupy.layers import Step, Output
 
 
 __all__ = ('BaseLinearNetwork',)
 
 
-class BaseLinearNetwork(SupervisedLearning, ConstructableNetwork):
+class BaseLinearNetwork(SupervisedConstructableNetwork):
     """ Base class for feedforward neural network without hidden layers.
 
     Notes

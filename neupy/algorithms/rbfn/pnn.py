@@ -76,7 +76,7 @@ class PNN(LazyLearning, Classification, BaseNetwork):
             row_comb_matrix[i, class_val_positions.ravel()] = 1
             class_ratios[i] = np_sum(class_val_positions)
 
-    def predict_prob(self, input_data):
+    def predict_proba(self, input_data):
         raw_output = self.predict_raw(input_data)
 
         total_output_sum = raw_output.sum(axis=0).reshape(

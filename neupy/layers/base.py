@@ -2,7 +2,7 @@ from six import with_metaclass
 
 from neupy.core.config import ConfigMeta, BaseConfigurable
 from neupy.core.properties import IntProperty
-from neupy.network.connections import ChainConnection
+from neupy.layers.connections import ChainConnection
 
 
 __all__ = ('BaseLayer',)

@@ -82,7 +82,7 @@ class PNNTestCase(BaseTestCase):
 
         pnnet = algorithms.PNN(verbose=False, std=10)
         pnnet.train(x_train, y_train)
-        result = pnnet.predict_prob(x_test)
+        result = pnnet.predict_proba(x_test)
 
         n_test_inputs = x_test.shape[0]
         self.assertEqual(result.shape, (n_test_inputs, number_of_classes))
@@ -100,7 +100,7 @@ class PNNTestCase(BaseTestCase):
         np.testing.assert_array_equal(y_train, y_train_before)
 
         x_train[:, :] = 0
-        result = pnnet.predict_prob(x_test)
+        result = pnnet.predict_proba(x_test)
         total_classes_prob = np.round(result.sum(axis=1), 10)
         np.testing.assert_array_almost_equal(result, old_result)
 

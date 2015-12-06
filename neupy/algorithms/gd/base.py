@@ -6,8 +6,7 @@ import theano.tensor as T
 
 from neupy.core.properties import (ListProperty, ChoiceProperty, IntProperty,
                                    BoundedProperty)
-from neupy.network.learning import SupervisedLearning
-from neupy.network.base import ConstructableNetwork
+from neupy.network import SupervisedConstructableNetwork
 from neupy.network.errors import (mse, binary_crossentropy,
                                   categorical_crossentropy)
 from . import optimization_types
@@ -16,7 +15,7 @@ from . import optimization_types
 __all__ = ('GradientDescent', 'MinibatchGradientDescent')
 
 
-class GradientDescent(SupervisedLearning, ConstructableNetwork):
+class GradientDescent(SupervisedConstructableNetwork):
     """ GradientDescent algorithm.
 
     Parameters

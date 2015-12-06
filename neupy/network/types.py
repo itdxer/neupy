@@ -15,7 +15,7 @@ class Classification(ConfigurableWithABC):
     """ Mixin for classification.
     """
     @abstractmethod
-    def predict_prob(self):
+    def predict_proba(self):
         """ Predict probabilities.
         """
 

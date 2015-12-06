@@ -19,21 +19,18 @@ class UnsupervisedLearning(object):
                     input_test=None, target_test=None,
                     epochs=epochs, epsilon=epsilon)
 
-    def predict_prob(self, input_data):
+    def predict_proba(self, input_data):
         raise AttributeError("Can't predict probabilities in unsupervised "
                              "network")
 
 
 class LazyLearning(object):
-    """ Mixin for Lazy learning Neural Network algorithms.
+    """ Mixin for lazy learning Neural Network algorithms.
     """
     def __init__(self, *args, **kwargs):
         self.input_train = None
         self.target_train = None
         super(LazyLearning, self).__init__(*args, **kwargs)
-
-    def init_layers(self):
-        pass
 
     def init_properties(self):
         del self.shuffle_data
@@ -47,7 +44,7 @@ class LazyLearning(object):
         self.target_train = target_train
 
         if input_train.shape[0] != target_train.shape[0]:
-            raise ValueError("Input data size must be the same as "
+            raise ValueError("Input data size should be the same as "
                              "target data size")
 
     def train_epoch(self, *args, **kwargs):

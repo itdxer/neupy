@@ -1,7 +1,7 @@
 from numpy.random import randn, random
 from numpy.linalg import svd
 
-from neupy.network.connections import LayerConnection
+from neupy.layers.connections import LayerConnection
 from neupy.helpers import import_class
 
 

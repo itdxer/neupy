@@ -1,6 +1,6 @@
 import numpy as np
 
-from neupy.network.connections import NetworkConnectionError
+from neupy.layers.connections import NetworkConnectionError
 from neupy.layers.base import BaseLayer
 from neupy.core.properties import (IntBoundProperty, NonNegativeIntProperty,
                                    BetweenZeroAndOneProperty)

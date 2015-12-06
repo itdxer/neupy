@@ -1,7 +1,7 @@
 import numpy as np
 
 from neupy import algorithms, layers
-from neupy.network.connections import NetworkConnectionError
+from neupy.layers.connections import NetworkConnectionError
 
 from base import BaseTestCase
 

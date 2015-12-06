@@ -3,8 +3,7 @@ from numpy import reshape
 from neupy.utils import format_data
 from neupy.core.properties import NonNegativeIntProperty
 from neupy.layers import Step
-from neupy.network.base import ConstructableNetwork
-from neupy.network.learning import UnsupervisedLearning
+from neupy.network import ConstructableNetwork, UnsupervisedLearning
 
 
 __all__ = ('BaseStepAssociative',)
@@ -13,7 +12,7 @@ __all__ = ('BaseStepAssociative',)
 class BaseAssociative(UnsupervisedLearning, ConstructableNetwork):
     def __init__(self, connection, **options):
         if len(connection) != 2:
-            raise ValueError("Connection should contains only 2 layers")
+            raise ValueError("Network should have only 2 layers")
         super(BaseAssociative, self).__init__(connection, **options)
 
     def train(self, input_train, epochs=100):

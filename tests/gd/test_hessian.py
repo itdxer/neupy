@@ -20,7 +20,7 @@ class HessianTestCase(BaseTestCase):
             connection=(10, 15, 1),
             step=0.1,
             shuffle_data=True,
-            verbose=True,
+            verbose=False,
             show_epoch=1,
             # Test configurations
             epochs=5,

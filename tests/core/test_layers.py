@@ -6,7 +6,7 @@ import numpy as np
 import theano
 
 from neupy.algorithms import GradientDescent
-from neupy.network.connections import NetworkConnectionError
+from neupy.layers.connections import NetworkConnectionError
 from neupy.layers import *
 
 from base import BaseTestCase

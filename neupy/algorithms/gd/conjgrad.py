@@ -1,7 +1,8 @@
 from operator import mul
 
-from numpy import sqrt, inner
+import numpy as np
 
+from neupy.utils import asfloat
 from neupy.core.properties import ChoiceProperty
 from neupy.algorithms.utils import (matrix_list_in_one_vector,
                                     vector_to_list_of_matrix)
@@ -134,9 +135,23 @@ class ConjugateGradient(GradientDescent):
         }
     )
 
+    # def init_layers(self):
+    #     super(ConjugateGradient, self).init_layers()
+    #     self.n_weights = sum(mul(*layer.size) for layer in self.train_layers)
+
     def init_layers(self):
-        super(ConjugateGradient, self).init_layers()
-        self.n_weights = sum(mul(*layer.size) for layer in self.train_layers)
+        super(Quickprop, self).init_layers()
+        for layer in self.train_layers:
+            for parameter in layer.parameters:
+                parameter_shape = T.shape(parameter).eval()
+                parameter.prev_delta = theano.shared(
+                    name="prev_delta_" + parameter.name,
+                    value=asfloat(np.zeros(parameter_shape)),
+                )
+                parameter.prev_gradient = theano.shared(
+                    name="prev_grad_" + parameter.name,
+                    value=asfloat(np.zeros(parameter_shape)),
+                )
 
     def get_weight_delta(self, output_train, target_train):
         gradients = super(ConjugateGradient, self).get_gradient(output_train,
@@ -168,3 +183,6 @@ class ConjugateGradient(GradientDescent):
         self.prev_gradient = gradient.copy()
 
         return weight_deltas
+
+    def init_param_updates(self, layer, parameter):
+        pass
