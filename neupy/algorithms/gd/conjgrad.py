@@ -1,11 +1,10 @@
-from operator import mul
-
 import numpy as np
+import theano
+from theano.ifelse import ifelse
+import theano.tensor as T
 
 from neupy.utils import asfloat
 from neupy.core.properties import ChoiceProperty
-from neupy.algorithms.utils import (matrix_list_in_one_vector,
-                                    vector_to_list_of_matrix)
 from .base import GradientDescent
 
 
@@ -14,45 +13,44 @@ __all__ = ('ConjugateGradient',)
 
 def fletcher_reeves(gradient_old, gradient_new, weight_old_delta):
     return (
-        inner(gradient_new, gradient_new) /
-        inner(gradient_old, gradient_old)
+        T.dot(gradient_new, gradient_new) /
+        T.dot(gradient_old, gradient_old)
     )
 
 
 def polak_ribiere(gradient_old, gradient_new, weight_old_delta):
     return (
-        inner(gradient_new, gradient_new - gradient_old) /
-        inner(gradient_old, gradient_old)
+        T.dot(gradient_new, gradient_new - gradient_old) /
+        T.dot(gradient_old, gradient_old)
     )
 
 
 def hentenes_stiefel(gradient_old, gradient_new, weight_old_delta):
     gradient_delta = gradient_new - gradient_old
     return (
-        inner(gradient_delta, gradient_new) /
-        inner(weight_old_delta, gradient_delta)
+        T.dot(gradient_delta, gradient_new) /
+        T.dot(weight_old_delta, gradient_delta)
     )
 
 
 def conjugate_descent(gradient_old, gradient_new, weight_old_delta):
-    # Note: `sqrt(dot(a.T, a))` works faster than `linalg.norm(a)`
     return (
-        -sqrt(inner(gradient_new, gradient_new)) /
-        inner(weight_old_delta, gradient_old)
+        -gradient_new.norm(L=2) /
+        T.dot(weight_old_delta, gradient_old)
     )
 
 
 def liu_storey(gradient_old, gradient_new, weight_old_delta):
     return (
-        inner(gradient_new, gradient_new - gradient_old) /
-        inner(weight_old_delta, gradient_old)
+        T.dot(gradient_new, gradient_new - gradient_old) /
+        T.dot(weight_old_delta, gradient_old)
     )
 
 
 def dai_yuan(gradient_old, gradient_new, weight_old_delta):
     return (
-        inner(gradient_new, gradient_new) /
-        inner(gradient_new - gradient_old, weight_old_delta)
+        T.dot(gradient_new, gradient_new) /
+        T.dot(gradient_new - gradient_old, weight_old_delta)
     )
 
 
@@ -135,12 +133,8 @@ class ConjugateGradient(GradientDescent):
         }
     )
 
-    # def init_layers(self):
-    #     super(ConjugateGradient, self).init_layers()
-    #     self.n_weights = sum(mul(*layer.size) for layer in self.train_layers)
-
     def init_layers(self):
-        super(Quickprop, self).init_layers()
+        super(ConjugateGradient, self).init_layers()
         for layer in self.train_layers:
             for parameter in layer.parameters:
                 parameter_shape = T.shape(parameter).eval()
@@ -153,36 +147,26 @@ class ConjugateGradient(GradientDescent):
                     value=asfloat(np.zeros(parameter_shape)),
                 )
 
-    def get_weight_delta(self, output_train, target_train):
-        gradients = super(ConjugateGradient, self).get_gradient(output_train,
-                                                                target_train)
-        epoch = self.epoch
-        gradient = matrix_list_in_one_vector(gradients)
-        weight_delta = -gradient
+    def init_param_updates(self, layer, parameter):
+        step = layer.step or self.variables.step
+        prev_gradient = parameter.prev_gradient
+        prev_delta = parameter.prev_delta
 
-        if epoch > 1 and epoch % self.n_weights == 0:
-            # Must reset after every N iteration, because algoritm
-            # lose conjugacy.
-            self.logs.info("TRAIN", "Reset conjugate gradient vector")
-            del self.prev_gradient
-
-        if hasattr(self, 'prev_gradient'):
-            gradient_old = self.prev_gradient
-            weight_delta_old = self.prev_weight_delta
-            beta = self.update_function(gradient_old, gradient,
-                                        weight_delta_old)
-
-            weight_delta += beta * weight_delta_old
-
-        weight_deltas = vector_to_list_of_matrix(
-            weight_delta,
-            (layer.size for layer in self.train_layers)
+        gradient = T.grad(self.variables.error_func, wrt=parameter)
+        beta = self.update_function(
+            prev_gradient.ravel(),
+            gradient.ravel(),
+            prev_delta
         )
 
-        self.prev_weight_delta = weight_delta.copy()
-        self.prev_gradient = gradient.copy()
+        weight_delta = ifelse(
+            T.eq(T.mod(self.variables.epoch, 25), 1),
+            -gradient,
+            -gradient + beta * prev_delta
+        )
 
-        return weight_deltas
-
-    def init_param_updates(self, layer, parameter):
-        pass
+        return [
+            (parameter, parameter + step * weight_delta),
+            (prev_gradient, gradient),
+            (prev_delta, weight_delta),
+        ]

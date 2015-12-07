@@ -2,11 +2,11 @@ from functools import partial
 from collections import namedtuple
 
 import numpy as np
+import theano
+import theano.tensor as T
 
 from neupy import algorithms
 import neupy.algorithms.gd.conjgrad as cg
-from neupy.functions import cross_entropy_error
-from neupy.layers import *
 
 from data import simple_input_train, simple_target_train
 from utils import compare_networks
@@ -27,7 +27,7 @@ class ConjugateGradientTestCase(BaseTestCase):
                 input_data=(
                     np.array([1.35,  0.3]),
                     np.array([0.11, -0.5]),
-                    None
+                    np.array([0]),
                 ),
                 answer=0.137
             ),
@@ -36,7 +36,7 @@ class ConjugateGradientTestCase(BaseTestCase):
                 input_data=(
                     np.array([1.,  -0.5]),
                     np.array([1.2, -0.45]),
-                    None
+                    np.array([0]),
                 ),
                 answer=0.174
             ),
@@ -79,22 +79,32 @@ class ConjugateGradientTestCase(BaseTestCase):
         ]
 
         for testcase in testcases:
-            result = testcase.func(*testcase.input_data)
+            variables = T.vectors(3)
+            # This is a ugly trick that helps identify more variables That
+            # can be use.
+            # TODO: Fix it later.
+            hack = 0 * variables[-1][0]
+            output_func = theano.function(
+                variables,
+                testcase.func(*variables) + hack
+            )
+            result = output_func(*testcase.input_data)
             self.assertAlmostEqual(result, testcase.answer, places=3)
-
 
     def test_conjgrad(self):
         nw = algorithms.ConjugateGradient(
             self.connection,
-            step=5,
-            error=cross_entropy_error,
+            step=1,
+            error='mse',
             shuffle_data=True,
-            update_function='polak_ribiere'
+            verbose=False,
+            update_function='fletcher_reeves'
         )
         nw.train(simple_input_train, simple_target_train, epochs=300)
+        # nw.plot_errors()
         result = nw.predict(simple_input_train)
         norm = np.linalg.norm(result - simple_target_train)
-        self.assertGreater(1e-2, norm)
+        self.assertAlmostEqual(1e-2, norm, places=2)
 
     def test_compare_bp_and_cg(self):
         compare_networks(
@@ -109,9 +119,9 @@ class ConjugateGradientTestCase(BaseTestCase):
             # Network configurations
             connection=self.connection,
             step=1,
-            error=cross_entropy_error,
+            error='categorical_crossentropy',
             shuffle_data=True,
             # Test configurations
             epochs=50,
-            # show_comparison_plot=True
+            show_comparison_plot=False
         )
