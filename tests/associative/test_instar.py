@@ -14,15 +14,18 @@ input_data = np.array([
 class HebbRuleTestCase(BaseTestCase):
     def setUp(self):
         super(HebbRuleTestCase, self).setUp()
-        kwargs = {'weight': np.array([[3, 0, 0, 0]]).T}
-        self.conn = layers.Step(4, **kwargs) > layers.Output(1)
+        self.default_properties = dict(
+            n_inputs=4,
+            n_outputs=1,
+            n_unconditioned=1,
+            weight=np.array([[3, 0, 0, 0]]).T,
+        )
 
     def test_learning_process(self):
         inet = algorithms.Instar(
-            self.conn,
-            n_unconditioned=1,
             step=1,
-            verbose=False
+            verbose=False,
+            **self.default_properties
         )
 
         inet.train(input_data, epochs=10)
@@ -31,7 +34,7 @@ class HebbRuleTestCase(BaseTestCase):
         self.assertEqual(inet.predict(test_input), 1)
 
         np.testing.assert_array_equal(
-            inet.input_layer.weight,
+            inet.weight,
             np.array([[3, 1, -1, -1]]).T
         )
 
@@ -39,24 +42,20 @@ class HebbRuleTestCase(BaseTestCase):
         input_data = np.array([
             [-0.1961, 0.9806],
         ])
-        input_size, output_size = (2, 3)
-        input_layer = layers.Step(
-            input_size,
+        innet = algorithms.Instar(
+            n_inputs=2,
+            n_outputs=3,
+            n_unconditioned=1,
             weight=np.array([
                 [0.7071, 0.7071, -1],
                 [-0.7071, 0.7071, 0],
-            ])
-        )
-        output_layer = layers.CompetitiveOutput(output_size)
-        hamming_network = algorithms.Instar(
-            input_layer > output_layer,
+            ]),
             step=0.5,
-            n_unconditioned=1,
             verbose=False
         )
-        hamming_network.train(input_data, epochs=1)
+        innet.train(input_data, epochs=1)
         np.testing.assert_array_almost_equal(
-            hamming_network.input_layer.weight,
+            innet.weight,
             np.array([
                 [0.7071, 0.7071, -1],
                 [-0.5704, 0.8439, 0.1368]
@@ -64,14 +63,12 @@ class HebbRuleTestCase(BaseTestCase):
             decimal=4
         )
 
-
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(
             algorithms.Instar(
-                layers.Step(4) > layers.Output(1),
-                n_unconditioned=1,
                 step=1,
-                verbose=False
+                verbose=False,
+                **self.default_properties
             ),
             np.array([[0, 1, -1, -1]]),
             is_feature1d=False,
@@ -79,10 +76,9 @@ class HebbRuleTestCase(BaseTestCase):
 
     def test_predict_different_inputs(self):
         inet = algorithms.Instar(
-            self.conn,
-            n_unconditioned=1,
             step=1,
-            verbose=False
+            verbose=False,
+            **self.default_properties
         )
 
         inet.train(input_data, epochs=10)

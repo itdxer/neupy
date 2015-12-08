@@ -58,6 +58,9 @@ class BaseStepAssociative(BaseAssociative):
                              "expected {}".format(self.weight.shape,
                                                   valid_weight_shape))
 
+        self.weight = self.weight.astype(float)
+        self.bias = self.bias.astype(float)
+
     def predict(self, input_data):
         raw_output = input_data.dot(self.weight) + self.bias
         return np.where(raw_output > 0, 1, 0)
@@ -66,11 +69,12 @@ class BaseStepAssociative(BaseAssociative):
         input_train = format_data(input_train)
 
         weight = self.weight
-        unconditioned = self.n_unconditioned
+        n_unconditioned = self.n_unconditioned
         predict = self.predict
         weight_delta = self.weight_delta
 
         for input_row in input_train:
             input_row = np.reshape(input_row, (1, input_row.size))
             layer_output = predict(input_row)
-            weight[unconditioned:, :] += weight_delta(input_row, layer_output)
+            weight[n_unconditioned:, :] += weight_delta(input_row,
+                                                        layer_output)

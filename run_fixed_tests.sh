@@ -24,6 +24,7 @@ nosetests \
     \
     tests/associative/test_oja.py\
     tests/associative/test_hebb.py\
+    tests/associative/test_instar.py\
     \
     tests/competitive/test_art.py\
     \
@@ -57,7 +58,6 @@ nosetests \
     tests/network/test_network_properties.py
 
 # Not fixed tests:
-# tests/associative/test_instar.py
 # tests/associative/test_kohonen.py
 #
 # tests/competitive/test_sofm.py

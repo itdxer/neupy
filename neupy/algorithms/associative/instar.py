@@ -57,10 +57,11 @@ class Instar(BaseStepAssociative):
            [0],
            [0]])
     """
+
     def weight_delta(self, input_row, layer_output):
-        unconditioned = self.n_unconditioned
-        update_from_column = unconditioned - self.use_bias
-        weight = self.input_layer.weight[unconditioned:, :]
+        n_unconditioned = self.n_unconditioned
+        weight = self.weight[n_unconditioned:, :]
         return self.step * dot(
-            (input_row[:, update_from_column:].T - weight), layer_output.T
+            (input_row[:, n_unconditioned:].T - weight),
+            layer_output.T
         )
