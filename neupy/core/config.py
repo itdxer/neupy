@@ -73,6 +73,11 @@ class BaseConfigurable(object):
         for key, value in options.items():
             setattr(self, key, value)
 
+        for option_name, option in self.options.items():
+            if option.value.required and not getattr(self, option_name):
+                raise ValueError("Option `{}` is required."
+                                 "".format(option_name))
+
 
 class Configurable(with_metaclass(ConfigMeta, BaseConfigurable)):
     pass

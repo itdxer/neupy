@@ -16,6 +16,7 @@ __all__ = ('Property', 'BoundedProperty', 'NumberProperty', 'BoolProperty',
 
 class Property(object):
     expected_type = object
+    required = False
     disable = True
 
     def __init__(self, name=None, default=None, **options):
@@ -100,7 +101,7 @@ class FuncProperty(Property):
 
 
 class ArrayProperty(Property):
-    expected_type = np.ndarray
+    expected_type = (np.ndarray, np.matrix)
 
 
 class ListProperty(Property):
@@ -137,24 +138,6 @@ class IntBoundProperty(ListOfTypesProperty):
 
 class NumberBoundProperty(ListOfTypesProperty):
     inner_list_type = (int, float)
-
-
-class VectorProperty(Property):
-    expected_type = np.ndarray
-
-    def validate(self, value):
-        if value.ndim != 1:
-            raise ValueError("Value `{}` must be 1-D shape vector"
-                             "".format(self.name))
-
-
-class Matrix2DProperty(Property):
-    expected_type = (np.ndarray, np.matrix)
-
-    def validate(self, value):
-        if value.ndim != 2:
-            raise ValueError("Value `{}` should be 2-D shape "
-                             "array/matrix".format(self.name))
 
 
 # -----------------------------------------------------#

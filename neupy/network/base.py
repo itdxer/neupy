@@ -384,16 +384,16 @@ class BaseNetwork(BaseSkeleton):
     # ----------------- Errors ----------------- #
 
     def last_error(self):
-        if self.errors_in:
+        if self.errors_in and self.errors_in[-1] is not None:
             return normalize_error(self.errors_in[-1])
 
     def last_validation_error(self):
-        if self.errors_out:
+        if self.errors_out and self.errors_out[-1] is not None:
             return normalize_error(self.errors_out[-1])
 
     def previous_error(self):
         errors_in = self.errors_in
-        if len(errors_in) > 2:
+        if len(errors_in) > 2 and errors_in[-2] is not None:
             return normalize_error(errors_in[-2])
 
     def plot_errors(self, logx=False, ax=None, show=True):

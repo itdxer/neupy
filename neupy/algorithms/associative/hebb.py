@@ -72,22 +72,11 @@ class HebbRule(BaseStepAssociative):
            [ 1],
            [ 1]])
     """
+
     decay_rate = NonNegativeNumberProperty(default=0.2)
 
-    def init_layers(self):
-        layer_default_weight = self.input_layer.weight
-        super(HebbRule, self).init_layers()
-
-        if layer_default_weight is None:
-            input_layer = self.input_layer
-            unconditioned = self.n_unconditioned
-
-            input_layer.weight[unconditioned:, :] = 0
-            input_layer.weight[:unconditioned, :] = 1
-
     def weight_delta(self, input_row, layer_output):
-        unconditioned = self.n_unconditioned
-        update_from_column = unconditioned - self.use_bias
-        weight = self.input_layer.weight[unconditioned:, :]
-        delta = input_row[:, update_from_column:].T.dot(layer_output)
+        n_unconditioned = self.n_unconditioned
+        weight = self.weight[n_unconditioned:, :]
+        delta = input_row[:, n_unconditioned:].T.dot(layer_output)
         return -self.decay_rate * weight + self.step * delta

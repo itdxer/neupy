@@ -75,3 +75,11 @@ class PropertiesTestCase(BaseTestCase):
         self.assertEqual(a.choice, 'two')
         a.choice = 'three'
         self.assertEqual(a.choice, 'three')
+
+    def test_required_proeprties(self):
+        class A(Configurable):
+            required_prop = Property(required=True)
+
+        a = A(required_prop='defined')
+        with self.assertRaises(ValueError):
+            a = A()
