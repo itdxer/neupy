@@ -7,6 +7,10 @@ from .base import LearningRateConfigurable
 __all__ = ('LinearSearch',)
 
 
+def golden_search():
+    pass
+
+
 class LinearSearch(LearningRateConfigurable):
     """ Linear search for the step selection. Basicly this algorithms
     try different steps and compute your predicted error, after few

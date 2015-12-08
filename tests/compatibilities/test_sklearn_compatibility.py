@@ -5,8 +5,8 @@ from sklearn import datasets, preprocessing, metrics, grid_search
 from sklearn.cross_validation import train_test_split
 from sklearn.pipeline import Pipeline
 from neupy import algorithms, layers, ensemble
-from neupy.functions import rmsle
 
+from utils import rmsle
 from base import BaseTestCase
 
 
@@ -28,7 +28,6 @@ class SklearnCompatibilityTestCase(BaseTestCase):
                 layers.Sigmoid(40),
                 layers.Output(1),
             ],
-            use_bias=True,
             show_epoch=100,
             verbose=False,
         )
@@ -41,7 +40,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
 
         error = rmsle(target_scaler.inverse_transform(y_test),
                       target_scaler.inverse_transform(y_predict).round())
-        self.assertAlmostEqual(0.4481, error, places=4)
+        self.assertAlmostEqual(0.4378, error, places=4)
 
     def test_ensemble(self):
         data, target = datasets.make_classification(300, n_features=4,
@@ -64,12 +63,12 @@ class SklearnCompatibilityTestCase(BaseTestCase):
 
         result = pipeline.predict(x_test)
         ensemble_result = metrics.accuracy_score(y_test, result)
-        self.assertAlmostEqual(0.9222, ensemble_result, places=4)
+        self.assertAlmostEqual(0.9444, ensemble_result, places=4)
 
     def test_grid_search(self):
         def scorer(network, X, y):
             result = network.predict(X)
-            return rmsle(result, y)
+            return rmsle(result[:, 0], y)
 
         dataset = datasets.load_diabetes()
         x_train, x_test, y_train, y_test = train_test_split(
@@ -79,6 +78,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
         grnnet = algorithms.GRNN(std=0.5, verbose=False)
         grnnet.train(x_train, y_train)
         error = scorer(grnnet, x_test, y_test)
+
 
         self.assertAlmostEqual(0.513, error, places=3)
 
@@ -92,4 +92,4 @@ class SklearnCompatibilityTestCase(BaseTestCase):
         scores = random_search.grid_scores_
 
         best_score = min(scores, key=itemgetter(1))
-        self.assertAlmostEqual(0.452, best_score[1], places=3)
+        self.assertAlmostEqual(0.4518, best_score[1], places=3)

@@ -1,8 +1,6 @@
 import theano
 import theano.tensor as T
-from numpy import reshape, nonzero
 
-from neupy.utils import format_data
 from .base import BaseAssociative
 
 
