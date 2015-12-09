@@ -1,9 +1,11 @@
 from operator import mul
 
-from numpy import ogrid, reshape, nonzero
+import numpy as np
+from numpy.linalg import norm
 
-from neupy.core.properties import NonNegativeIntProperty, IntBoundProperty
-from neupy.layers import CompetitiveOutput
+from neupy.core.properties import (NonNegativeIntProperty, IntBoundProperty,
+                                   ChoiceProperty)
+from neupy.utils import format_data
 from neupy.algorithms import Kohonen
 
 
@@ -48,11 +50,27 @@ def neuron_neighbours(neurons, center, radius):
     center_x, center_y = center
     nx, ny = neurons.shape
 
-    y, x = ogrid[-center_x:nx - center_x, -center_y:ny - center_y]
+    y, x = np.ogrid[-center_x:nx - center_x, -center_y:ny - center_y]
     mask = (x * x + y * y) <= radius ** 2
     neurons[mask] = 1
 
     return neurons
+
+
+def dot_product(input_data, weight):
+    return input_data.dot(weight)
+
+
+def neg_euclid_distance(input_data, weight):
+    euclid_dist = norm(input_data.T - weight, axis=0)
+    return -np.reshape(euclid_dist, (1, weight.shape[1]))
+
+
+def cosine_similarity(input_data, weight):
+    norm_prod = norm(input_data) * norm(weight, axis=0)
+    summated_data = np.dot(input_data, weight)
+    cosine_dist = summated_data / norm_prod
+    return np.reshape(cosine_dist, (1, weight.shape[1]))
 
 
 class SOFM(Kohonen):
@@ -78,29 +96,35 @@ class SOFM(Kohonen):
     {plot_errors}
     {last_error}
     """
+
     learning_radius = NonNegativeIntProperty(default=0)
     features_grid = IntBoundProperty()
+    transform = ChoiceProperty(default='linear', choices={
+        'linear': dot_product,
+        'euclid': neg_euclid_distance,
+        'cos': cosine_similarity,
+    })
     # # None - mean that this property is the same as default step
     # neighbours_step = NumberProperty()
 
-    def __init__(self, connection, **options):
-        super(SOFM, self).__init__(connection, **options)
+    def __init__(self, **options):
+        super(SOFM, self).__init__(**options)
 
-        if not isinstance(self.output_layer, CompetitiveOutput):
-            raise ValueError("Output layer must be `CompetitiveOutput`")
-
-        if self.features_grid is not None:
-            if mul(*self.features_grid) != self.output_layer.input_size:
-                raise ValueError(
-                    "Feature grid must contains the same size of elements as "
-                    "at output layer: {0}. But it contains: {1} "
-                    "({2}x{3})".format(
-                        self.output_layer.input_size,
-                        mul(*self.features_grid),
-                        self.features_grid[0],
-                        self.features_grid[1]
-                    )
+        invalid_feature_grid = (
+            self.features_grid is not None and
+            mul(*self.features_grid) != self.n_outputs
+        )
+        if invalid_feature_grid:
+            raise ValueError(
+                "Feature grid should contain the same number of elements as "
+                "in the output layer: {0}, but found: {1} ({2}x{3})"
+                "".format(
+                    self.n_outputs,
+                    mul(*self.features_grid),
+                    self.features_grid[0],
+                    self.features_grid[1]
                 )
+            )
 
     def init_properties(self):
         super(SOFM, self).init_properties()
@@ -109,21 +133,29 @@ class SOFM(Kohonen):
         #     self.neighbours_step = self.step
 
         if self.features_grid is None:
-            self.features_grid = (self.output_layer.input_size, 1)
+            self.features_grid = (self.n_outputs, 1)
+
+    def predict_raw(self, input_data):
+        input_data = format_data(input_data)
+        output = np.zeros((input_data.shape[0], self.n_outputs))
+        for i, input_row in enumerate(input_data):
+            output[i, :] = self.transform(input_row.reshape(1, -1),
+                                          self.weight)
+        return output
 
     def update_indexes(self, layer_output):
         neuron_winner = layer_output.argmax(axis=1)
         feature_bound = self.features_grid[1]
 
         output_with_neightbours = neuron_neighbours(
-            reshape(layer_output, self.features_grid),
+            np.reshape(layer_output, self.features_grid),
             (neuron_winner // feature_bound, neuron_winner % feature_bound),
             self.learning_radius
         )
-        index_y, _ = nonzero(
-            reshape(
+        index_y, _ = np.nonzero(
+            np.reshape(
                 output_with_neightbours,
-                (self.output_layer.input_size, 1)
+                (self.n_outputs, 1)
             )
         )
         return index_y

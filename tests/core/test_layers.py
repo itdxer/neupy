@@ -105,22 +105,6 @@ class HiddenLayersOperationsTestCase(BaseTestCase):
             softmax_layer.activation_function(test_input).eval()
         )
 
-    def test_euclide_distance_layer(self):
-        layer = EuclideDistanceLayer(2, weight=np.array([[0.4, 1]]))
-        test_correct_result = np.array([[-0.72111026, -1.]])
-        np.testing.assert_array_almost_equal(
-            test_correct_result,
-            layer.output(np.array([[0, 1]]))
-        )
-
-    def test_cosine_distance_layer(self):
-        layer = AngleDistanceLayer(2, weight=np.array([[0.4, 1]]).T)
-        test_correct_result = np.array([[-0.40489179]])
-        np.testing.assert_array_almost_equal(
-            test_correct_result,
-            layer.output(np.array([[0.1, 0.1]]))
-        )
-
 
 class OutputLayersOperationsTestCase(BaseTestCase):
     def test_error_handling(self):

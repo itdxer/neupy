@@ -1,7 +1,5 @@
 import theano
 import theano.tensor as T
-from numpy import arccos, dot, reshape
-from numpy.linalg import norm
 
 from neupy.utils import asfloat
 from neupy.core.properties import (NumberBoundProperty, ArrayProperty,
@@ -11,7 +9,7 @@ from neupy.layers.utils import GAUSSIAN, VALID_INIT_METHODS, generate_weight
 
 
 __all__ = ('Layer', 'Linear', 'Sigmoid', 'Step', 'Tanh', 'Relu', 'Softplus',
-           'Softmax', 'EuclideDistanceLayer', 'AngleDistanceLayer')
+           'Softmax')
 
 
 theano_shared_class = T.sharedvar.TensorSharedVariable
@@ -171,35 +169,3 @@ class Softmax(Layer):
     {layer_params}
     """
     activation_function = T.nnet.softmax
-
-
-class EuclideDistanceLayer(Layer):
-    """ The layer compute Euclide distance between the input
-    value and weights.
-
-    Parameters
-    ----------
-    {input_size_param}
-    {layer_params}
-    """
-
-    def output(self, input_value):
-        distance = norm(input_value.T - self.weight, axis=0)
-        return -reshape(distance, (1, self.weight.shape[1]))
-
-
-class AngleDistanceLayer(Layer):
-    """ The layer compute cosine distance between the input value
-    and weights.
-
-    Parameters
-    ----------
-    {input_size_param}
-    {layer_params}
-    """
-
-    def output(self, input_value):
-        norm_prod = norm(input_value) * norm(self.weight, axis=0)
-        summated_data = dot(input_value, self.weight)
-        return -reshape(arccos(summated_data / norm_prod),
-                        (1, self.weight.shape[1]))

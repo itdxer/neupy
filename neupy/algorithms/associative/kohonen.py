@@ -1,5 +1,6 @@
 import numpy as np
 
+from neupy.utils import format_data
 from .base import BaseAssociative
 
 
@@ -58,12 +59,23 @@ class Kohonen(BaseAssociative):
            [ 0.,  0.,  1.]])
     """
 
+    def predict_raw(self, input_data):
+        input_data = format_data(input_data)
+        return input_data.dot(self.weight)
+
+    def predict(self, input_data):
+        raw_output = self.predict_raw(input_data)
+        output = np.zeros(raw_output.shape, dtype=np.int0)
+        max_args = raw_output.argmax(axis=1)
+        output[range(raw_output.shape[0]), max_args] = 1
+        return output
+
     def update_indexes(self, layer_output):
         _, index_y = np.nonzero(layer_output)
         return index_y
 
     def train_epoch(self, input_train, target_train):
-        weight = self.input_layer.weight
+        weight = self.weight
         predict = self.predict
         update_indexes = self.update_indexes
 

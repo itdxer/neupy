@@ -9,6 +9,27 @@ __all__ = ('BaseStepAssociative',)
 
 
 class BaseAssociative(UnsupervisedLearning, BaseNetwork):
+    n_inputs = NonNegativeIntProperty(min_size=1, required=True)
+    n_outputs = NonNegativeIntProperty(min_size=1, required=True)
+    weight = ArrayProperty()
+
+    def __init__(self, **options):
+        super(BaseAssociative, self).__init__(**options)
+        self.init_layers()
+
+    def init_layers(self):
+        valid_weight_shape = (self.n_inputs, self.n_outputs)
+
+        if self.weight is None:
+            self.weight = np.random.randn(*valid_weight_shape)
+
+        if self.weight.shape != valid_weight_shape:
+            raise ValueError("Weight matrix has invalid shape. Got {}, "
+                             "expected {}".format(self.weight.shape,
+                                                  valid_weight_shape))
+
+        self.weight = self.weight.astype(float)
+
     def train(self, input_train, epochs=100):
         return super(BaseAssociative, self).train(input_train, epochs,
                                                   epsilon=None)
@@ -20,14 +41,10 @@ class BaseStepAssociative(BaseAssociative):
     """
 
     n_inputs = NonNegativeIntProperty(min_size=2, required=True)
-    n_outputs = NonNegativeIntProperty(min_size=1, required=True)
     n_unconditioned = NonNegativeIntProperty(min_size=1, required=True)
-    weight = ArrayProperty()
     bias = ArrayProperty()
 
-    def __init__(self, **options):
-        super(BaseStepAssociative, self).__init__(**options)
-
+    def init_layers(self):
         if self.n_inputs <= self.n_unconditioned:
             raise ValueError(
                 "Number of uncondition features should be less than total "
@@ -48,26 +65,21 @@ class BaseStepAssociative(BaseAssociative):
         if self.bias is None:
             self.bias = -0.5 * np.ones(valid_bias_shape)
 
-        if self.weight.shape != valid_weight_shape:
-            raise ValueError("Weight matrix has invalid shape. Got {}, "
-                             "expected {}".format(self.weight.shape,
-                                                  valid_weight_shape))
+        super(BaseStepAssociative, self).init_layers()
 
         if self.bias.shape != valid_bias_shape:
             raise ValueError("Bias vector has invalid shape. Got {}, "
-                             "expected {}".format(self.weight.shape,
-                                                  valid_weight_shape))
+                             "expected {}".format(self.bias.shape,
+                                                  valid_bias_shape))
 
-        self.weight = self.weight.astype(float)
         self.bias = self.bias.astype(float)
 
     def predict(self, input_data):
+        input_data = format_data(input_data, is_feature1d=False)
         raw_output = input_data.dot(self.weight) + self.bias
         return np.where(raw_output > 0, 1, 0)
 
     def train_epoch(self, input_train, target_train):
-        input_train = format_data(input_train)
-
         weight = self.weight
         n_unconditioned = self.n_unconditioned
         predict = self.predict
