@@ -1,6 +1,7 @@
 #!/bin/bash -eE
 echo 'Run tests...'
 nosetests \
+    -s -v \
     -e ._testing \
     tests/steps/test_simple_step_min.py\
     tests/steps/test_errdiff.py\

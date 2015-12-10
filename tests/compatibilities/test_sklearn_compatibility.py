@@ -79,7 +79,6 @@ class SklearnCompatibilityTestCase(BaseTestCase):
         grnnet.train(x_train, y_train)
         error = scorer(grnnet, x_test, y_test)
 
-
         self.assertAlmostEqual(0.513, error, places=3)
 
         random_search = grid_search.RandomizedSearchCV(
