@@ -1,5 +1,4 @@
 import numpy as np
-import theano
 import theano.tensor as T
 from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
@@ -25,23 +24,22 @@ class GoldenSearchTestCase(BaseTestCase):
         )
         for params in invalid_parameters:
             with self.assertRaises(ValueError):
-                fmin_golden_search(lambda x: x, x0=3, direction=1, **params)
+                fmin_golden_search(lambda x: x, **params)
 
         with self.assertRaises(ValueError):
-            fmin_golden_search(lambda x: x, x0=3, direction=1,
-                               minstep=10, maxstep=1)
+            fmin_golden_search(lambda x: x, minstep=10, maxstep=1)
 
     def test_golden_search_function(self):
         def f(x):
             return T.sin(x) * x ** -0.5
 
-        x = T.scalar()
-        y = theano.function([x], f(x))
+        def check_updates(step):
+            return f(3 + step)
 
-        best_step = fmin_golden_search(f, x0=3, direction=1)
+        best_step = fmin_golden_search(check_updates)
         self.assertAlmostEqual(1.6, best_step, places=2)
 
-        best_step = fmin_golden_search(f, x0=3, direction=1, maxstep=1)
+        best_step = fmin_golden_search(check_updates, maxstep=1)
         self.assertAlmostEqual(1, best_step, places=2)
 
     def test_linear_search(self):

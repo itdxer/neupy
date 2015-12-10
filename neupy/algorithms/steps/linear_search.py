@@ -7,22 +7,20 @@ import numpy as np
 from scipy.optimize import minimize_scalar
 
 from neupy.utils import asfloat
-from neupy.core.properties import NonNegativeNumberProperty, ChoiceProperty
+from neupy.core.properties import (NonNegativeNumberProperty, ChoiceProperty,
+                                   NonNegativeIntProperty)
 from .base import LearningRateConfigurable
 
 
 __all__ = ('LinearSearch',)
 
 
-def interval_location(f, x0, direction, minstep=1e-5, maxstep=50.,
-                      maxiter=1024):
+def interval_location(f, minstep=1e-5, maxstep=50., maxiter=1024):
     """ Identify interval where potentialy could be optimal step.
 
     Parameters
     ----------
     f : func
-    x0 : array or float
-    direction : array or float
     minstep : float
         Defaults to ``1e-5``.
     maxstep : float
@@ -40,8 +38,8 @@ def interval_location(f, x0, direction, minstep=1e-5, maxstep=50.,
         function return ``maxstep`` instead.
     """
 
-    def find_right_bound(prev_func_output, step, x0, direction, maxstep):
-        func_output = f(x0 + step * direction)
+    def find_right_bound(prev_func_output, step, maxstep):
+        func_output = f(step)
         is_output_decrease = T.gt(prev_func_output, func_output)
         step = ifelse(
             is_output_decrease,
@@ -59,21 +57,19 @@ def interval_location(f, x0, direction, minstep=1e-5, maxstep=50.,
         find_right_bound,
         outputs_info=[T.constant(asfloat(np.inf)),
                       T.constant(asfloat(minstep))],
-        non_sequences=[x0, direction, maxstep],
+        non_sequences=[maxstep],
         n_steps=maxiter
     )
     find_maxstep = theano.function([], steps[-1])
     return find_maxstep()
 
 
-def golden_search(f, x0, direction, maxstep, maxiter=1024, tol=1e-5):
+def golden_search(f, maxstep=50, maxiter=1024, tol=1e-5):
     """ Identify best step for function in specific direction.
 
     Parameters
     ----------
     f : func
-    x0 : array or float
-    direction : array or float
     maxstep : float
         Defaults to ``50``.
     maxiter : int
@@ -90,8 +86,8 @@ def golden_search(f, x0, direction, maxstep, maxiter=1024, tol=1e-5):
     golden_ratio = asfloat((math.sqrt(5) - 1) / 2)
 
     def interval_reduction(a, b, c, d, tol):
-        fc = f(x0 + c * direction)
-        fd = f(x0 + d * direction)
+        fc = f(c)
+        fd = f(d)
 
         a, b, c, d = ifelse(
             T.lt(fc, fd),
@@ -119,15 +115,12 @@ def golden_search(f, x0, direction, maxstep, maxiter=1024, tol=1e-5):
     return find_best_step()
 
 
-def fmin_golden_search(f, x0, direction, minstep=1e-5, maxstep=50.,
-                       maxiter=1024, tol=1e-5):
-    """ Find best step for specific function and direction.
+def fmin_golden_search(f, minstep=1e-5, maxstep=50., maxiter=1024, tol=1e-5):
+    """ Minimize scalar function using Golden Search.
 
     Parameters
     ----------
     f : func
-    x0 : array or float
-    direction : array or float
     minstep : float
         Defaults to ``1e-5``.
     maxstep : float
@@ -140,7 +133,6 @@ def fmin_golden_search(f, x0, direction, minstep=1e-5, maxstep=50.,
     Returns
     -------
     int
-        Best identified step.
     """
 
     params = (
@@ -157,8 +149,8 @@ def fmin_golden_search(f, x0, direction, minstep=1e-5, maxstep=50.,
     if minstep >= maxstep:
         raise ValueError("`minstep` should be smaller than `maxstep`")
 
-    maxstep = interval_location(f, x0, direction, minstep, maxstep, maxiter)
-    best_step = golden_search(f, x0, direction, maxstep, maxiter, tol)
+    maxstep = interval_location(f, minstep, maxstep, maxiter)
+    best_step = golden_search(f, maxstep, maxiter, tol)
 
     return best_step
 
@@ -239,27 +231,27 @@ class LinearSearch(LearningRateConfigurable):
     search_method = ChoiceProperty(choices={'golden': fmin_golden_search},
                                    default='golden')
 
-    def set_weights(self, new_weights):
-        for layer, new_weight in zip(self.train_layers, new_weights):
-            layer.weight = new_weight.copy()
-
-    def check_updates(self, new_step, weights, delta):
-        self.set_weights(weights)
-        self.step = new_step
-
-        super(LinearSearch, self).update_weights(delta)
-        predicted_output = self.predict(self.input_train)
-        return self.error(predicted_output, self.target_train)
-
-    def update_weights(self, weight_deltas):
-        real_weights = [layer.weight for layer in self.train_layers]
-        res = minimize_scalar(
-            self.check_updates, args=(real_weights, weight_deltas),
-            tol=self.tol, method=self.search_method,
-            options={'xtol': self.tol}
-        )
-
-        self.set_weights(real_weights)
-        self.step = res.x
-
-        return super(LinearSearch, self).update_weights(weight_deltas)
+    # def set_weights(self, new_weights):
+    #     for layer, new_weight in zip(self.train_layers, new_weights):
+    #         layer.weight = new_weight.copy()
+    #
+    # def check_updates(self, new_step, weights, delta):
+    #     self.set_weights(weights)
+    #     self.step = new_step
+    #
+    #     super(LinearSearch, self).update_weights(delta)
+    #     predicted_output = self.predict(self.input_train)
+    #     return self.error(predicted_output, self.target_train)
+    #
+    # def update_weights(self, weight_deltas):
+    #     real_weights = [layer.weight for layer in self.train_layers]
+    #     res = minimize_scalar(
+    #         self.check_updates, args=(real_weights, weight_deltas),
+    #         tol=self.tol, method=self.search_method,
+    #         options={'xtol': self.tol}
+    #     )
+    #
+    #     self.set_weights(real_weights)
+    #     self.step = res.x
+    #
+    #     return super(LinearSearch, self).update_weights(weight_deltas)

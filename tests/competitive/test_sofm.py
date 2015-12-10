@@ -1,7 +1,11 @@
+import math
+
 import numpy as np
 
 from neupy import algorithms
-from neupy.algorithms.competitive.sofm import neuron_neighbours
+from neupy.algorithms.competitive.sofm import (neuron_neighbours, dot_product,
+                                               neg_euclid_distance,
+                                               cosine_similarity)
 from base import BaseTestCase
 
 
@@ -21,6 +25,51 @@ answers = np.array([
     [0., 0., 1.],
     [0., 0., 1.],
 ])
+
+
+class SOFMTransformationsTestCase(BaseTestCase):
+    def assert_invalid_transformation(self, func, vector, weight, expected,
+                                      decimal=6):
+        np.testing.assert_array_almost_equal(
+            func(vector, weight),
+            expected,
+            decimal=decimal
+        )
+
+    def test_linear_transform(self):
+        self.assert_invalid_transformation(
+            dot_product,
+            np.array([[1, 2, 3]]),
+            np.array([[1, 2, 3]]).T,
+            np.array([[14]])
+        )
+
+    def test_euclid_transform(self):
+        self.assert_invalid_transformation(
+            neg_euclid_distance,
+            np.array([[1, 2, 3]]),
+            np.array([
+                [1, 2, 3],
+                [1, 1, 1],
+                [0, 0, 1],
+                [0, 1, 2],
+            ]).T,
+            np.array([[0, -math.sqrt(5), -3, -math.sqrt(3)]])
+        )
+
+    def test_cosine_transform(self):
+        self.assert_invalid_transformation(
+            cosine_similarity,
+            np.array([[1, 2, 3]]),
+            np.array([
+                [1, 2, 3],
+                [1, 1, 1],
+                [0, 0, 1],
+                [0, 1, 2],
+            ]).T,
+            np.array([[1,  0.926, 0.802, 0.956]]),
+            decimal=3
+        )
 
 
 class SOFMTestCase(BaseTestCase):
