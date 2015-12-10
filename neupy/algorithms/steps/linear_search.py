@@ -1,8 +1,12 @@
+import math
+
 import theano
 import theano.tensor as T
 from theano.ifelse import ifelse
+import numpy as np
 from scipy.optimize import minimize_scalar
 
+from neupy.utils import asfloat
 from neupy.core.properties import NonNegativeNumberProperty, ChoiceProperty
 from .base import LearningRateConfigurable
 
@@ -10,25 +14,82 @@ from .base import LearningRateConfigurable
 __all__ = ('LinearSearch',)
 
 
-def golden_search(f, x0, direction, minstep=1e-5, maxstep=50.,
-                  maxiter=1024, tol=1e-5):
+def interval_location(f, x0, direction, minstep=1e-5, maxstep=50.,
+                      maxiter=1024):
+    """ Identify interval where potentialy could be optimal step.
 
-    def interval_location(prev_func_output, step, x0, direction, maxstep):
+    Parameters
+    ----------
+    f : func
+    x0 : array or float
+    direction : array or float
+    minstep : float
+        Defaults to ``1e-5``.
+    maxstep : float
+        Defaults to ``50``.
+    maxiter : int
+        Defaults to ``1024``.
+    tol : float
+        Defaults to ``1e-5``.
+
+    Returns
+    -------
+    float
+        Right bound of interval where could be optimal step in
+        specified direction. In case if there is no such direction
+        function return ``maxstep`` instead.
+    """
+
+    def find_right_bound(prev_func_output, step, x0, direction, maxstep):
         func_output = f(x0 + step * direction)
-        output_decrease = T.gt(prev_func_output, func_output)
-        step = ifelse(output_decrease,
-                      T.minimum(2. * step, maxstep),
-                      step)
+        is_output_decrease = T.gt(prev_func_output, func_output)
+        step = ifelse(
+            is_output_decrease,
+            T.minimum(2. * step, maxstep),
+            step
+        )
 
+        is_output_increse = T.lt(prev_func_output, func_output)
         stoprule = theano.scan_module.until(
-            T.or_(
-                T.lt(prev_func_output, func_output),
-                step > maxstep
-            )
+            T.or_(is_output_increse, step > maxstep)
         )
         return [func_output, step], stoprule
 
-    def interval_reduction(a, b, c ,d, tol):
+    (_, steps), _ = theano.scan(
+        find_right_bound,
+        outputs_info=[T.constant(asfloat(np.inf)),
+                      T.constant(asfloat(minstep))],
+        non_sequences=[x0, direction, maxstep],
+        n_steps=maxiter
+    )
+    find_maxstep = theano.function([], steps[-1])
+    return find_maxstep()
+
+
+def golden_search(f, x0, direction, maxstep, maxiter=1024, tol=1e-5):
+    """ Identify best step for function in specific direction.
+
+    Parameters
+    ----------
+    f : func
+    x0 : array or float
+    direction : array or float
+    maxstep : float
+        Defaults to ``50``.
+    maxiter : int
+        Defaults to ``1024``.
+    tol : float
+        Defaults to ``1e-5``.
+
+    Returns
+    -------
+    float
+        Identified optimal step.
+    """
+
+    golden_ratio = asfloat((math.sqrt(5) - 1) / 2)
+
+    def interval_reduction(a, b, c, d, tol):
         fc = f(x0 + c * direction)
         fd = f(x0 + d * direction)
 
@@ -41,33 +102,65 @@ def golden_search(f, x0, direction, minstep=1e-5, maxstep=50.,
         stoprule = theano.scan_module.until(
             T.lt(T.abs_(c - d), tol)
         )
-
         return [a, b, c, d], stoprule
-
-    (_, steps), _ = theano.scan(
-        interval_location,
-        outputs_info=[T.constant(asfloat(np.inf)),
-                      T.constant(asfloat(minstep))],
-        non_sequences=[x0, direction, maxstep],
-        n_steps=maxiter
-    )
-    compute_maxstep = theano.function([], steps[-1])
-    maxstep = compute_maxstep()
-    print(maxstep)
-    golden_ratio = asfloat((math.sqrt(5) - 1) / 2)
 
     a = T.constant(asfloat(0))
     b = T.constant(asfloat(maxstep))
     c = b - golden_ratio * (b - a)
     d = a + golden_ratio * (b - a)
+
     (a, b, _, _), _ = theano.scan(
         interval_reduction,
         outputs_info=[a, b, c, d],
         non_sequences=[asfloat(tol)],
         n_steps=maxiter
     )
-    compute_step = theano.function([], (a[-1] + b[-1]) / 2)
-    return compute_step()
+    find_best_step = theano.function([], (a[-1] + b[-1]) / 2)
+    return find_best_step()
+
+
+def fmin_golden_search(f, x0, direction, minstep=1e-5, maxstep=50.,
+                       maxiter=1024, tol=1e-5):
+    """ Find best step for specific function and direction.
+
+    Parameters
+    ----------
+    f : func
+    x0 : array or float
+    direction : array or float
+    minstep : float
+        Defaults to ``1e-5``.
+    maxstep : float
+        Defaults to ``50``.
+    maxiter : int
+        Defaults to ``1024``.
+    tol : float
+        Defaults to ``1e-5``.
+
+    Returns
+    -------
+    int
+        Best identified step.
+    """
+
+    params = (
+        ('maxiter', maxiter),
+        ('minstep', minstep),
+        ('maxstep', maxstep),
+        ('tol', tol),
+    )
+    for param_name, param_value in params:
+        if param_value <= 0:
+            raise ValueError("Parameter `{}` should be greater than zero."
+                             "".format(param_name))
+
+    if minstep >= maxstep:
+        raise ValueError("`minstep` should be smaller than `maxstep`")
+
+    maxstep = interval_location(f, x0, direction, minstep, maxstep, maxiter)
+    best_step = golden_search(f, x0, direction, maxstep, maxiter, tol)
+
+    return best_step
 
 
 class LinearSearch(LearningRateConfigurable):
@@ -139,8 +232,11 @@ class LinearSearch(LearningRateConfigurable):
     --------
     :network:`ConjugateGradient`
     """
+
     tol = NonNegativeNumberProperty(default=0.3)
-    search_method = ChoiceProperty(choices=['golden', 'brent'],
+    maxstep = NonNegativeNumberProperty(default=50)
+    maxiter = NonNegativeIntProperty(default=1024)
+    search_method = ChoiceProperty(choices={'golden': fmin_golden_search},
                                    default='golden')
 
     def set_weights(self, new_weights):
