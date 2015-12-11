@@ -3,7 +3,7 @@ from __future__ import division
 from numpy import dot, zeros, ones, inf, logical_and, sort, unique
 
 from neupy.utils import format_data
-from neupy.core.properties import (BetweenZeroAndOneProperty,
+from neupy.core.properties import (ProperFractionProperty,
                                    NonNegativeIntProperty)
 from neupy.network.base import BaseNetwork
 from neupy.network.types import Clustering
@@ -57,8 +57,8 @@ class ART1(Clustering, BaseNetwork):
     >>> artnet.predict(data)
     array([ 0.,  1.,  1.])
     """
-    rho = BetweenZeroAndOneProperty(default=0.5)
-    n_clusters = NonNegativeIntProperty(default=2, min_size=2)
+    rho = ProperFractionProperty(default=0.5)
+    n_clusters = NonNegativeIntProperty(default=2, minsize=2)
 
     def train(self, input_data):
         input_data = format_data(input_data)

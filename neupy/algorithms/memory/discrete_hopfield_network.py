@@ -4,7 +4,7 @@ from numpy import zeros, fill_diagonal, random, sign
 
 from neupy.utils import format_data
 from neupy.network.utils import step
-from neupy.core.properties import BoolProperty
+from neupy.core.properties import Property
 from .utils import bin2sign, hopfield_energy
 from .base import DiscreteMemory
 
@@ -118,7 +118,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     :ref:`password-recovery`: Password recovery with Discrete Hopfield Network.
     :ref:`discrete-hopfield-network`: Discrete Hopfield Network tutorial.
     """
-    check_limit = BoolProperty(default=True)
+    check_limit = Property(default=True, expected_type=bool)
 
     def __init__(self, **options):
         super(DiscreteHopfieldNetwork, self).__init__(**options)

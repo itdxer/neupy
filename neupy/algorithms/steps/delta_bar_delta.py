@@ -1,5 +1,4 @@
-from neupy.core.properties import (BetweenZeroAndOneProperty,
-                                   NonNegativeNumberProperty)
+from neupy.core.properties import ProperFractionProperty, BoundedProperty
 from .base import LearningRateConfigurable
 
 
@@ -7,6 +6,6 @@ __all__ = ('DeltaBarDelta',)
 
 
 class DeltaBarDelta(LearningRateConfigurable):
-    beta = BetweenZeroAndOneProperty(default=0.5)
-    increase_factor = NonNegativeNumberProperty(default=0.1)
-    decrease_factor = BetweenZeroAndOneProperty(default=0.9)
+    beta = ProperFractionProperty(default=0.5)
+    increase_factor = BoundedProperty(default=0.1, minsize=0)
+    decrease_factor = ProperFractionProperty(default=0.9)

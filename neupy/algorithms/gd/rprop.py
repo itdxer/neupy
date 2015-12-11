@@ -4,8 +4,7 @@ import numpy as np
 
 from neupy.utils import asfloat
 from neupy.algorithms.gd import LEARING_RATE_UPDATE
-from neupy.core.properties import (NonNegativeNumberProperty,
-                                   BetweenZeroAndOneProperty)
+from neupy.core.properties import BoundedProperty, ProperFractionProperty
 from .base import GradientDescent
 
 
@@ -64,13 +63,13 @@ class RPROP(GradientDescent):
     shared_docs = {"rprop_params": __rprop_params}
 
     # This properties correct upper and lower bounds for steps.
-    minimum_step = NonNegativeNumberProperty(default=0.1)
-    maximum_step = NonNegativeNumberProperty(default=50)
+    minimum_step = BoundedProperty(default=0.1, minsize=0)
+    maximum_step = BoundedProperty(default=50, minsize=0)
 
     # This properties increase/decrease step by deviding it to
     # some coeffitient.
-    increase_factor = NonNegativeNumberProperty(min_size=1, default=1.2)
-    decrease_factor = BetweenZeroAndOneProperty(default=0.5)
+    increase_factor = BoundedProperty(minsize=1, default=1.2)
+    decrease_factor = ProperFractionProperty(default=0.5)
 
     def __new__(cls, connection, options=None, **kwargs):
         if options is None:

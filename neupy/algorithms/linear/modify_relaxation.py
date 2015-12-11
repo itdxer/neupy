@@ -1,6 +1,6 @@
 import theano.tensor as T
 
-from neupy.core.properties import NonNegativeNumberProperty
+from neupy.core.properties import BoundedProperty
 from neupy.algorithms.linear.base import BaseLinearNetwork
 
 
@@ -45,7 +45,7 @@ class ModifiedRelaxation(BaseLinearNetwork):
     :network:`LMS` : LMS Neural Network.
     """
 
-    dead_zone_radius = NonNegativeNumberProperty(default=0.1)
+    dead_zone_radius = BoundedProperty(default=0.1, minsize=0)
 
     def init_layer_updates(self, layer):
         prediction_func = self.variables.prediction_func

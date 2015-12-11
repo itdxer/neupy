@@ -9,8 +9,8 @@ __all__ = ('BaseStepAssociative',)
 
 
 class BaseAssociative(UnsupervisedLearning, BaseNetwork):
-    n_inputs = NonNegativeIntProperty(min_size=1, required=True)
-    n_outputs = NonNegativeIntProperty(min_size=1, required=True)
+    n_inputs = NonNegativeIntProperty(minsize=1, required=True)
+    n_outputs = NonNegativeIntProperty(minsize=1, required=True)
     weight = ArrayProperty()
 
     def __init__(self, **options):
@@ -40,8 +40,8 @@ class BaseStepAssociative(BaseAssociative):
     one is has step function as activation.
     """
 
-    n_inputs = NonNegativeIntProperty(min_size=2, required=True)
-    n_unconditioned = NonNegativeIntProperty(min_size=1, required=True)
+    n_inputs = NonNegativeIntProperty(minsize=2, required=True)
+    n_unconditioned = NonNegativeIntProperty(minsize=1, required=True)
     bias = ArrayProperty()
 
     def init_layers(self):

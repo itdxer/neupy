@@ -4,7 +4,7 @@ from functools import reduce
 
 from six import with_metaclass
 
-from .properties import Property
+from .properties import BaseProperty
 from .docs import docs
 
 
@@ -46,13 +46,10 @@ class ConfigMeta(type):
 
         # Set properties names and save options for different classes
         for key, value in attrs.items():
-            if isinstance(value, Property):
+            if isinstance(value, BaseProperty):
                 value.name = key
-                new_class.options[key] = Option(
-                    class_name=clsname,
-                    value=value,
-                )
-
+                new_class.options[key] = Option(class_name=clsname,
+                                                value=value)
         return new_class
 
 

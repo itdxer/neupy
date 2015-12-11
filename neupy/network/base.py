@@ -2,6 +2,7 @@ from __future__ import division
 
 import math
 import time
+import types
 from itertools import groupby
 from collections import deque
 
@@ -12,8 +13,7 @@ import matplotlib.pyplot as plt
 from neupy.utils import format_data, is_layer_accept_1d_feature
 from neupy.helpers import preformat_value, table
 from neupy.core.base import BaseSkeleton
-from neupy.core.properties import (Property, FuncProperty, NumberProperty,
-                                   BoolProperty)
+from neupy.core.properties import BoundedProperty, Property, NumberProperty
 from neupy.layers.connections import LayerConnection
 from .utils import (iter_until_converge, shuffle, normalize_error,
                     normalize_error_list, StopNetworkTraining)
@@ -155,7 +155,7 @@ def parse_show_epoch_property(value, n_epochs):
     return int(round(n_epochs / n_epochs_to_check))
 
 
-class ShowEpochProperty(Property):
+class ShowEpochProperty(BoundedProperty):
     """ Class helps validate specific syntax for `show_epoch`
     property from ``BaseNetwork`` class.
     """
@@ -207,12 +207,12 @@ class BaseNetwork(BaseSkeleton):
     step = NumberProperty(default=0.1)
 
     # Training settings
-    show_epoch = ShowEpochProperty(min_size=1, default='10 times')
-    shuffle_data = BoolProperty(default=False)
+    show_epoch = ShowEpochProperty(minsize=1, default='10 times')
+    shuffle_data = Property(default=False, expected_type=bool)
 
     # Signals
-    epoch_end_signal = FuncProperty()
-    train_end_signal = FuncProperty()
+    epoch_end_signal = Property(expected_type=types.FunctionType)
+    train_end_signal = Property(expected_type=types.FunctionType)
 
     def __init__(self, *args, **options):
         self.errors_in = []

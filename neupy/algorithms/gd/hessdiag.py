@@ -2,7 +2,7 @@ from __future__ import division
 
 import theano.tensor as T
 
-from neupy.core.properties import BetweenZeroAndOneProperty
+from neupy.core.properties import ProperFractionProperty
 from .base import GradientDescent
 
 
@@ -92,7 +92,7 @@ class HessianDiagonal(GradientDescent):
     :network:`GradientDescent` : GradientDescent algorithm.
     :network:`Hessian` : Newton's method.
     """
-    min_eigval = BetweenZeroAndOneProperty(default=1e-2)
+    min_eigval = ProperFractionProperty(default=1e-2)
 
     def init_param_updates(self, layer, parameter):
         step = layer.step or self.variables.step

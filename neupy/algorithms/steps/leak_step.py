@@ -2,9 +2,8 @@ import numpy as np
 import theano
 import theano.tensor as T
 
-from neupy.core.properties import (BetweenZeroAndOneProperty,
-                                   NonNegativeNumberProperty)
 from neupy.utils import asfloat
+from neupy.core.properties import ProperFractionProperty, BoundedProperty
 from .base import LearningRateConfigurable
 
 
@@ -49,9 +48,9 @@ class LeakStepAdaptation(LearningRateConfigurable):
     ... )
     >>>
     """
-    leak_size = BetweenZeroAndOneProperty(default=0.5)
-    alpha = NonNegativeNumberProperty(default=0.5)
-    beta = NonNegativeNumberProperty(default=0.5)
+    leak_size = ProperFractionProperty(default=0.5)
+    alpha = BoundedProperty(default=0.5, minsize=0)
+    beta = BoundedProperty(default=0.5, minsize=0)
 
     def init_layers(self):
         super(LeakStepAdaptation, self).init_layers()

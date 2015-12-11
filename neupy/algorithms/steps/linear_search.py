@@ -4,10 +4,9 @@ import theano
 import theano.tensor as T
 from theano.ifelse import ifelse
 import numpy as np
-from scipy.optimize import minimize_scalar
 
 from neupy.utils import asfloat
-from neupy.core.properties import (NonNegativeNumberProperty, ChoiceProperty,
+from neupy.core.properties import (BoundedProperty, ChoiceProperty,
                                    NonNegativeIntProperty)
 from .base import LearningRateConfigurable
 
@@ -225,8 +224,8 @@ class LinearSearch(LearningRateConfigurable):
     :network:`ConjugateGradient`
     """
 
-    tol = NonNegativeNumberProperty(default=0.3)
-    maxstep = NonNegativeNumberProperty(default=50)
+    tol = BoundedProperty(default=0.3, minsize=0)
+    maxstep = BoundedProperty(default=50, minsize=0)
     maxiter = NonNegativeIntProperty(default=1024)
     search_method = ChoiceProperty(choices={'golden': fmin_golden_search},
                                    default='golden')

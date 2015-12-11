@@ -2,7 +2,7 @@ import theano
 import theano.tensor as T
 
 from neupy.utils import asfloat
-from neupy.core.properties import (NumberBoundProperty, ArrayProperty,
+from neupy.core.properties import (TypedListProperty, ArrayProperty,
                                    ChoiceProperty)
 from neupy.layers.base import BaseLayer
 from neupy.layers.utils import GAUSSIAN, VALID_INIT_METHODS, generate_weight
@@ -47,7 +47,7 @@ class Layer(BaseLayer):
 
     weight = SharedArrayProperty(default=None)
     bias = SharedArrayProperty(default=None)
-    bounds = NumberBoundProperty(default=(0, 1))
+    bounds = TypedListProperty(default=(0, 1), element_type=(int, float))
     init_method = ChoiceProperty(default=GAUSSIAN, choices=VALID_INIT_METHODS)
 
     def initialize(self):

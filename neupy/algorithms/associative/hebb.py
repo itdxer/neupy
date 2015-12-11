@@ -1,4 +1,4 @@
-from neupy.core.properties import NonNegativeNumberProperty
+from neupy.core.properties import BoundedProperty
 from .base import BaseStepAssociative
 
 
@@ -73,7 +73,7 @@ class HebbRule(BaseStepAssociative):
            [ 1]])
     """
 
-    decay_rate = NonNegativeNumberProperty(default=0.2)
+    decay_rate = BoundedProperty(default=0.2, minsize=0)
 
     def weight_delta(self, input_row, layer_output):
         n_unconditioned = self.n_unconditioned

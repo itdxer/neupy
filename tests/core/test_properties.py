@@ -4,7 +4,7 @@ from neupy.core.properties import *
 from base import BaseTestCase
 
 
-class PropertiesTestCase(BaseTestCase):
+class PropertiesBasicsTestCase(BaseTestCase):
     def test_basic_properties(self):
         class A(Configurable):
             int_property = Property(expected_type=int)
@@ -24,19 +24,31 @@ class PropertiesTestCase(BaseTestCase):
         with self.assertRaises(TypeError):
             b.int_property = [5, 4]
 
+    def test_required_properties(self):
+        class A(Configurable):
+            required_prop = Property(required=True)
+
+        a = A(required_prop='defined')
+        with self.assertRaises(ValueError):
+            a = A()
+
+
+class BoundedPropertiesTestCase(BaseTestCase):
     def test_bounded_properties(self):
         class A(Configurable):
-            bounded_property = BoundedProperty(min_size=-1, max_size=1)
+            bounded_property = BoundedProperty(minsize=-1, maxsize=1)
 
         a = A()
         a.bounded_property = 0
         with self.assertRaises(ValueError):
             a.bounded_property = -2
 
-    def test_list_of_types_properties(self):
+
+class TypedListPropertiesTestCase(BaseTestCase):
+    def test_typed_list_properties(self):
         class A(Configurable):
-            list_of_properties = ListOfTypesProperty(inner_list_type=str,
-                                                     count=3)
+            list_of_properties = TypedListProperty(element_type=str,
+                                                   n_elements=3)
 
         a = A()
         a.list_of_properties = ('1', '2', '3')
@@ -47,6 +59,18 @@ class PropertiesTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             a.list_of_properties = ('1', '2', '3', '4')
 
+    def test_multiple_types(self):
+        class A(Configurable):
+            list_of_properties = TypedListProperty(element_type=(int, float),
+                                                   n_elements=3)
+
+        a = A(list_of_properties=[1, -2.0, 3.4])
+
+        with self.assertRaises(TypeError):
+            a.list_of_properties = (1, 1.23, 'x')
+
+
+class ChoicesPropertiesTestCase(BaseTestCase):
     def test_choice_property_from_dict(self):
         class A(Configurable):
             choice = ChoiceProperty(choices={'one': 1, 'two': 2, 'three': 3})
@@ -76,10 +100,5 @@ class PropertiesTestCase(BaseTestCase):
         a.choice = 'three'
         self.assertEqual(a.choice, 'three')
 
-    def test_required_proeprties(self):
-        class A(Configurable):
-            required_prop = Property(required=True)
-
-        a = A(required_prop='defined')
         with self.assertRaises(ValueError):
-            a = A()
+            a.choice = 1

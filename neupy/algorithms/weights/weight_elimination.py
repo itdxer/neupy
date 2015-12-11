@@ -1,4 +1,4 @@
-from neupy.core.properties import NonNegativeNumberProperty
+from neupy.core.properties import BoundedProperty
 from .base import WeightUpdateConfigurable
 
 
@@ -55,8 +55,8 @@ class WeightElimination(WeightUpdateConfigurable):
         Advances in Neural Information Processing Systems, San Francisco, \
         CA: Morgan Kaufmann, pp. 875--882 .
     """
-    decay_rate = NonNegativeNumberProperty(default=0.1)
-    zero_weight = NonNegativeNumberProperty(default=1)
+    decay_rate = BoundedProperty(default=0.1, minsize=0)
+    zero_weight = BoundedProperty(default=1, minsize=0)
 
     def init_param_updates(self, layer, parameter):
         updates = super(WeightElimination, self).init_param_updates(

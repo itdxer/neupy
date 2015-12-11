@@ -1,7 +1,7 @@
 from numpy import dot
 
 from neupy.utils import format_data
-from neupy.core.properties import NonNegativeNumberProperty
+from neupy.core.properties import BoundedProperty
 from neupy.network.base import BaseNetwork
 from neupy.network.learning import LazyLearning
 from neupy.network.types import Regression
@@ -49,7 +49,7 @@ class GRNN(LazyLearning, Regression, BaseNetwork):
     >>> rmsle(result, y_test)
     0.4245120142774001
     """
-    std = NonNegativeNumberProperty(default=0.1)
+    std = BoundedProperty(default=0.1, minsize=0)
 
     def train(self, input_train, target_train, copy=True):
         input_train = format_data(input_train, copy=copy)

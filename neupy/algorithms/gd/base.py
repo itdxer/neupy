@@ -4,8 +4,7 @@ from itertools import chain
 import six
 import theano.tensor as T
 
-from neupy.core.properties import (ListProperty, ChoiceProperty, IntProperty,
-                                   BoundedProperty)
+from neupy.core.properties import Property, ChoiceProperty BoundedProperty
 from neupy.network import SupervisedConstructableNetwork
 from neupy.network.errors import (mse, binary_crossentropy,
                                   categorical_crossentropy)
@@ -56,7 +55,7 @@ class GradientDescent(SupervisedConstructableNetwork):
         'binary_crossentropy': binary_crossentropy,
         'categorical_crossentropy': categorical_crossentropy,
     })
-    optimizations = ListProperty(default=None)
+    optimizations = Property(default=None, expected_type=list)
 
     def __new__(cls, connection, options=None, **kwargs):
         # Argument `options` is a simple hack for the `__reduce__` method.
@@ -144,10 +143,12 @@ class GradientDescent(SupervisedConstructableNetwork):
         return (main_class, args)
 
 
-class BatchSizeProperty(IntProperty, BoundedProperty):
+class BatchSizeProperty(BoundedProperty):
     expected_type = (type(None), int)
     fullbatch_identifiers = [None, -1, 'all', '*', 'full']
-    min_size = 1
+
+    def __init__(self, *args, **kwargs):
+        super(BatchSizeProperty, self).__init__(minsize=1, *args, **kwargs)
 
     def __set__(self, instance, value):
         if isinstance(value, six.string_types):

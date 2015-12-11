@@ -45,7 +45,7 @@ class SearchThenConverge(LearningRateConfigurable):
     --------
     :network:`SimpleStepMinimization`
     """
-    epochs_step_minimizator = NonNegativeIntProperty(min_size=1, default=100)
+    epochs_step_minimizator = NonNegativeIntProperty(minsize=1, default=100)
     rate_coefitient = NumberProperty(default=0.2)
 
     def init_train_updates(self):

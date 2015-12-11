@@ -3,7 +3,7 @@ from operator import mul
 import numpy as np
 from numpy.linalg import norm
 
-from neupy.core.properties import (NonNegativeIntProperty, IntBoundProperty,
+from neupy.core.properties import (NonNegativeIntProperty, TypedListProperty,
                                    ChoiceProperty)
 from neupy.utils import format_data
 from neupy.algorithms import Kohonen
@@ -98,7 +98,7 @@ class SOFM(Kohonen):
     """
 
     learning_radius = NonNegativeIntProperty(default=0)
-    features_grid = IntBoundProperty()
+    features_grid = TypedListProperty()
     transform = ChoiceProperty(default='linear', choices={
         'linear': dot_product,
         'euclid': neg_euclid_distance,

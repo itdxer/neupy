@@ -5,7 +5,7 @@ import theano.tensor as T
 from theano.ifelse import ifelse
 import numpy as np
 
-from neupy.core.properties import NonNegativeNumberProperty
+from neupy.core.properties import BoundedProperty
 from neupy.utils import asfloat
 from .base import GradientDescent
 
@@ -49,7 +49,7 @@ class Quickprop(GradientDescent):
     --------
     :network:`GradientDescent` : GradientDescent algorithm.
     """
-    upper_bound = NonNegativeNumberProperty(default=1)
+    upper_bound = BoundedProperty(default=1, minsize=0)
 
     def init_layers(self):
         super(Quickprop, self).init_layers()

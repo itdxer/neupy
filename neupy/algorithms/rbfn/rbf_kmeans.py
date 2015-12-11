@@ -66,7 +66,7 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
     array([[ 0.],
            [ 1.]])
     """
-    n_clusters = NonNegativeIntProperty(min_size=2)
+    n_clusters = NonNegativeIntProperty(minsize=2)
 
     def __init__(self, **options):
         self.centers = None

@@ -1,7 +1,6 @@
 from scipy.optimize import line_search
 
-from neupy.core.properties import (NonNegativeNumberProperty,
-                                   BetweenZeroAndOneProperty)
+from neupy.core.properties import BoundedProperty, ProperFractionProperty
 from neupy.algorithms.utils import (matrix_list_in_one_vector,
                                     vector_to_list_of_matrix)
 from .base import LearningRateConfigurable
@@ -72,9 +71,9 @@ class WolfeSearch(LearningRateConfigurable):
     0.91666666666666674
     """
 
-    maxstep = NonNegativeNumberProperty(default=50)
-    c1 = BetweenZeroAndOneProperty(default=1e-4)
-    c2 = BetweenZeroAndOneProperty(default=0.9)
+    maxstep = BoundedProperty(default=50, minsize=0)
+    c1 = ProperFractionProperty(default=1e-4)
+    c2 = ProperFractionProperty(default=0.9)
 
     def set_weights(self, new_weights):
         for layer, new_weight in zip(self.train_layers, new_weights):

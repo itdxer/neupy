@@ -1,30 +1,34 @@
-import types
-
-import six
 import numpy as np
 
 from neupy.helpers.base import preformat_value
 
 
-__all__ = ('Property', 'BoundedProperty', 'NumberProperty', 'BoolProperty',
-           'BetweenZeroAndOneProperty', 'FuncProperty', 'IntBoundProperty',
-           'ArrayProperty', 'ListOfTypesProperty', 'ListProperty',
-           'DictProperty', 'IntProperty', 'StringProperty',
-           'NonNegativeIntProperty', 'NonNegativeNumberProperty',
-           'ChoiceProperty', 'NumberBoundProperty')
+__all__ = (
+    'BaseProperty', 'Property',
+    'IntProperty', 'NumberProperty', 'ArrayProperty',
+    'BoundedProperty', 'ProperFractionProperty',
+    'TypedListProperty', 'ChoiceProperty'
+)
 
 
-class Property(object):
+class BaseProperty(object):
+    """ Base class for properties.
+
+    Parameters
+    ----------
+    default : object
+        Default property value. Defaults to ``None``.
+    required : bool
+        If parameter equal to ``True`` and value undefined after
+        initialization class then it will cause an error.
+        Defaults to ``False``.
+    """
     expected_type = object
-    required = False
-    disable = True
 
-    def __init__(self, name=None, default=None, **options):
-        self.name = name
+    def __init__(self, default=None, required=False):
+        self.name = None
         self.default = default
-
-        for key, value in options.items():
-            setattr(self, key, value)
+        self.required = required
 
     def __set__(self, instance, value):
         if not isinstance(value, self.expected_type):
@@ -71,93 +75,67 @@ class Property(object):
         pass
 
 
-# -----------------------------------------------------#
-#                   Typed properties                   #
-# -----------------------------------------------------#
+class Property(BaseProperty):
+    """ Simple and flexible class that help build properties with
+    specified type.
+    """
+    def __init__(self, expected_type=object, *args, **kwargs):
+        self.expected_type = expected_type
+        super(Property, self).__init__(*args, **kwargs)
 
 
-class StringProperty(Property):
-    expected_type = six.string_types
-
-
-class IntProperty(Property):
+class IntProperty(BaseProperty):
     expected_type = int
 
 
-class NumberProperty(Property):
+class NumberProperty(BaseProperty):
     expected_type = (float, int)
 
 
-class BoolProperty(Property):
-    expected_type = bool
-
-
-class DictProperty(Property):
-    expected_type = dict
-
-
-class FuncProperty(Property):
-    expected_type = types.FunctionType
-
-
-class ArrayProperty(Property):
+class ArrayProperty(BaseProperty):
     expected_type = (np.ndarray, np.matrix)
 
 
-class ListProperty(Property):
-    expected_type = list
-
-
-# -----------------------------------------------------#
-#                 Special properties                   #
-# -----------------------------------------------------#
-
-
-class ListOfTypesProperty(Property):
+class TypedListProperty(BaseProperty):
     expected_type = (list, tuple, set)
-    inner_list_type = int
-    count = None
+
+    def __init__(self, n_elements=None, element_type=int, *args, **kwargs):
+        self.n_elements = n_elements
+        self.element_type = element_type
+        super(TypedListProperty, self).__init__(*args, **kwargs)
 
     def validate(self, value):
-        super(ListOfTypesProperty, self).validate(value)
+        super(TypedListProperty, self).validate(value)
 
-        if self.count is not None and len(value) != self.count:
-            raise ValueError("Expected list with {} variables".format(
-                self.count
-            ))
+        if self.n_elements is not None and len(value) != self.n_elements:
+            raise ValueError("Expected list with {} variables"
+                             "".format(self.n_elements))
 
-        if not all(isinstance(v, self.inner_list_type) for v in value):
-            raise TypeError("Expected list with {}".format(
-                self.inner_list_type.__name__
-            ))
+        if not all(isinstance(v, self.element_type) for v in value):
+            if isinstance(self.element_type, tuple):
+                type_names = (type_.__name__ for type_ in self.element_type)
+                element_type_name = ', '.join(type_names)
+            else:
+                element_type_name = self.element_type.__name__
 
-
-class IntBoundProperty(ListOfTypesProperty):
-    pass
-
-
-class NumberBoundProperty(ListOfTypesProperty):
-    inner_list_type = (int, float)
+            raise TypeError("Valid list element types are: {}"
+                            "".format(element_type_name))
 
 
-# -----------------------------------------------------#
-#                  Choices properties                  #
-# -----------------------------------------------------#
-
-
-class ChoiceProperty(Property):
+class ChoiceProperty(BaseProperty):
     choices = {}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, choices, *args, **kwargs):
         super(ChoiceProperty, self).__init__(*args, **kwargs)
-        choices = self.choices
+        self.choices = choices
 
         if isinstance(choices, (list, tuple, set)):
             self.choices = dict(zip(choices, choices))
 
         if not isinstance(self.choices, dict):
+            class_name = self.choices.__class__.__name__
             raise ValueError("Choice properties can be only a `dict`, got "
-                             "`{0}`".format(self.choices.__class__.__name__))
+                             "`{0}`".format(class_name))
 
         if not self.choices:
             raise ValueError("Must be at least one choice in property "
@@ -165,9 +143,10 @@ class ChoiceProperty(Property):
 
     def __set__(self, instance, value):
         if value not in self.choices:
+            possible_choices = ", ".join(self.choices.keys())
             raise ValueError(
                 "Wrong value `{0}` for property `{1}`. Available values: "
-                "{2}".format(value, self.name, ", ".join(self.choices.keys()))
+                "{2}".format(value, self.name, possible_choices)
             )
         return super(ChoiceProperty, self).__set__(instance, value)
 
@@ -177,39 +156,24 @@ class ChoiceProperty(Property):
             return self.choices[choice_key]
 
 
-# -----------------------------------------------------#
-#                   Sized properties                   #
-# -----------------------------------------------------#
-
-
-class BoundedProperty(Property):
-    min_size = -np.inf
-    max_size = np.inf
-
-    def __init__(self, min_size=None, max_size=None, *args, **kwargs):
-        if min_size is not None:
-            self.min_size = min_size
-
-        if max_size is not None:
-            self.max_size = max_size
-
+class BoundedProperty(NumberProperty):
+    def __init__(self, minsize=-np.inf, maxsize=np.inf, *args, **kwargs):
+        self.minsize = minsize
+        self.maxsize = maxsize
         super(BoundedProperty, self).__init__(*args, **kwargs)
 
     def validate(self, value):
-        if not (self.min_size <= value <= self.max_size):
-            raise ValueError("Value `{}` must be between {} and {}".format(
-                self.name, self.min_size, self.max_size
-            ))
+        if not (self.minsize <= value <= self.maxsize):
+            raise ValueError("Value `{}` must be between {} and {}"
+                             "".format(self.name, self.minsize, self.maxsize))
 
 
-class BetweenZeroAndOneProperty(NumberProperty, BoundedProperty):
-    min_size = 0
-    max_size = 1
+class ProperFractionProperty(BoundedProperty):
+    def __init__(self, *args, **kwargs):
+        super(ProperFractionProperty, self).__init__(
+            minsize=0, maxsize=1, *args, **kwargs
+        )
 
 
-class NonNegativeIntProperty(IntProperty, BoundedProperty):
-    min_size = 0
-
-
-class NonNegativeNumberProperty(NumberProperty, BoundedProperty):
-    min_size = 0
+class NonNegativeIntProperty(BoundedProperty):
+    expected_type = int

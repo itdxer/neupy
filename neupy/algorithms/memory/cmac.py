@@ -69,7 +69,7 @@ class CMAC(SupervisedLearning, BaseNetwork):
     0.0023639417543036569
     """
     quantization = NonNegativeIntProperty(default=10)
-    associative_unit_size = NonNegativeIntProperty(default=2, min_size=2)
+    associative_unit_size = NonNegativeIntProperty(default=2, minsize=2)
 
     def __init__(self, **options):
         self.weights = {}

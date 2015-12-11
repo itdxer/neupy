@@ -1,4 +1,4 @@
-from neupy.core.properties import NonNegativeNumberProperty
+from neupy.core.properties import BoundedProperty
 from .base import WeightUpdateConfigurable
 
 
@@ -36,7 +36,7 @@ class WeightDecay(WeightUpdateConfigurable):
     --------
     :network:`WeightElimination`
     """
-    decay_rate = NonNegativeNumberProperty(default=0.1)
+    decay_rate = BoundedProperty(default=0.1, minsize=0)
 
     def init_param_updates(self, layer, parameter):
         updates = super(WeightDecay, self).init_param_updates(

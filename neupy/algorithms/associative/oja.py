@@ -76,7 +76,7 @@ class Oja(UnsupervisedLearning, BaseNetwork):
            [ 4.00000093,  4.00000093],
            [ 5.00000116,  5.00000116]])
     """
-    minimized_data_size = NonNegativeIntProperty(min_size=1)
+    minimized_data_size = NonNegativeIntProperty(minsize=1)
     weights = ArrayProperty()
 
     def init_properties(self):

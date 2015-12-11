@@ -1,8 +1,8 @@
 from numpy import eye, newaxis, sign, isinf, clip, inner, outer
 from numpy.linalg import norm
 
-from neupy.core.properties import (ChoiceProperty, NonNegativeNumberProperty,
-                                   BetweenZeroAndOneProperty)
+from neupy.core.properties import (ChoiceProperty, BoundedProperty,
+                                   ProperFractionProperty)
 from neupy.algorithms.utils import (matrix_list_in_one_vector,
                                     vector_to_list_of_matrix)
 from neupy.network import StopNetworkTraining
@@ -126,8 +126,8 @@ class QuasiNewton(GradientDescent):
             'sr1': sr1,
         }
     )
-    h0_scale = NonNegativeNumberProperty(default=1)
-    gradient_tol = BetweenZeroAndOneProperty(default=1e-5)
+    h0_scale = BoundedProperty(default=1, minsize=0)
+    gradient_tol = ProperFractionProperty(default=1e-5)
 
     default_optimizations = [WolfeSearch]
 

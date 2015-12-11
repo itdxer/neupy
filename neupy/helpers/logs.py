@@ -4,7 +4,7 @@ import logging
 import operator
 
 from neupy.core.config import Configurable
-from neupy.core.properties import BoolProperty
+from neupy.core.properties import BaseProperty
 
 
 __all__ = ('Verbose',)
@@ -85,7 +85,9 @@ class CustomLogger(logging.Logger):
 logging.setLoggerClass(CustomLogger)
 
 
-class VerboseProperty(BoolProperty):
+class VerboseProperty(BaseProperty):
+    expected_type = bool
+
     def __set__(self, instance, value):
         instance.logs.propagate = value
         return super(VerboseProperty, self).__set__(instance, value)

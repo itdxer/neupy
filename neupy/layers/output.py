@@ -2,8 +2,8 @@ import numpy as np
 
 from neupy.layers.connections import NetworkConnectionError
 from neupy.layers.base import BaseLayer
-from neupy.core.properties import (IntBoundProperty, NonNegativeIntProperty,
-                                   BetweenZeroAndOneProperty)
+from neupy.core.properties import (TypedListProperty, NonNegativeIntProperty,
+                                   ProperFractionProperty)
 
 
 __all__ = ('Output', 'CompetitiveOutput', 'StepOutput', 'RoundedOutput',
@@ -56,8 +56,8 @@ class StepOutput(Output):
         point should be equal to the lower bound. Defaults to ``0``.
     {input_size_param}
     """
-    output_bounds = IntBoundProperty(default=(0, 1))
-    critical_point = BetweenZeroAndOneProperty(default=0)
+    output_bounds = TypedListProperty(default=(0, 1))
+    critical_point = ProperFractionProperty(default=0)
 
     def output(self, value):
         lower_bound, upper_bound = self.output_bounds

@@ -3,7 +3,7 @@ import theano.tensor as T
 import numpy as np
 
 from neupy.utils import asfloat
-from neupy.core.properties import BetweenZeroAndOneProperty
+from neupy.core.properties import ProperFractionProperty
 from .base import MinibatchGradientDescent
 
 
@@ -46,7 +46,7 @@ class Momentum(MinibatchGradientDescent):
     --------
     :network:`GradientDescent` : GradientDescent algorithm.
     """
-    momentum = BetweenZeroAndOneProperty(default=0.9)
+    momentum = ProperFractionProperty(default=0.9)
 
     def init_layers(self):
         super(Momentum, self).init_layers()

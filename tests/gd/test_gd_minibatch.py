@@ -23,7 +23,8 @@ class MinibatchGDTestCase(BaseTestCase):
         invalid_values = [-10, 3.50, 'invalid values', [10]]
 
         for net_class, value in product(self.network_classes, invalid_values):
-            with self.assertRaises((TypeError, ValueError)):
+            msg = "Network: {}, Value: {}".format(net_class.__name__, value)
+            with self.assertRaises((TypeError, ValueError), msg=msg):
                 net_class((10, 20, 1), batch_size=value)
 
     def test_full_batch_training(self):

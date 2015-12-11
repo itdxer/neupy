@@ -1,7 +1,7 @@
 from numpy import unique, zeros, dot, sum as np_sum
 
 from neupy.utils import format_data
-from neupy.core.properties import NonNegativeNumberProperty
+from neupy.core.properties import BoundedProperty
 from neupy.network.base import BaseNetwork
 from neupy.network.learning import LazyLearning
 from neupy.network.types import Classification
@@ -49,7 +49,7 @@ class PNN(LazyLearning, Classification, BaseNetwork):
     >>> metrics.accuracy_score(y_test, result)
     0.98888888888888893
     """
-    std = NonNegativeNumberProperty(default=0.1)
+    std = BoundedProperty(default=0.1, minsize=0)
 
     def __init__(self, **options):
         super(PNN, self).__init__(**options)
