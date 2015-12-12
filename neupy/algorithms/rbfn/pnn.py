@@ -49,7 +49,7 @@ class PNN(LazyLearning, Classification, BaseNetwork):
     >>> metrics.accuracy_score(y_test, result)
     0.98888888888888893
     """
-    std = BoundedProperty(default=0.1, minsize=0)
+    std = BoundedProperty(default=0.1, minval=0)
 
     def __init__(self, **options):
         super(PNN, self).__init__(**options)

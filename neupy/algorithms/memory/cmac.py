@@ -1,7 +1,7 @@
 from numpy import concatenate, array
 
 from neupy.utils import format_data
-from neupy.core.properties import NonNegativeIntProperty
+from neupy.core.properties import IntProperty
 from neupy.network.learning import SupervisedLearning
 from neupy.network.base import BaseNetwork
 
@@ -68,8 +68,8 @@ class CMAC(SupervisedLearning, BaseNetwork):
     >>> cmac.error(target_test, predicted_test)
     0.0023639417543036569
     """
-    quantization = NonNegativeIntProperty(default=10)
-    associative_unit_size = NonNegativeIntProperty(default=2, minsize=2)
+    quantization = IntProperty(default=10, minval=1)
+    associative_unit_size = IntProperty(default=2, minval=2)
 
     def __init__(self, **options):
         self.weights = {}

@@ -38,7 +38,7 @@ class Hessian(GradientDescent):
     --------
     :network:`HessianDiagonal` : Hessian diagonal approximation.
     """
-    inv_penalty_const = BoundedProperty(default=1, minsize=0)
+    inv_penalty_const = BoundedProperty(default=1, minval=0)
 
     def init_param_updates(self, layer, parameter):
         parameter_dim = parameter.get_value().shape

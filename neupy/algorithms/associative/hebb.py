@@ -73,7 +73,7 @@ class HebbRule(BaseStepAssociative):
            [ 1]])
     """
 
-    decay_rate = BoundedProperty(default=0.2, minsize=0)
+    decay_rate = BoundedProperty(default=0.2, minval=0)
 
     def weight_delta(self, input_row, layer_output):
         n_unconditioned = self.n_unconditioned

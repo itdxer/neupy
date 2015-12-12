@@ -4,7 +4,7 @@ from itertools import chain
 import six
 import theano.tensor as T
 
-from neupy.core.properties import Property, ChoiceProperty BoundedProperty
+from neupy.core.properties import Property, ChoiceProperty, BoundedProperty
 from neupy.network import SupervisedConstructableNetwork
 from neupy.network.errors import (mse, binary_crossentropy,
                                   categorical_crossentropy)
@@ -148,7 +148,7 @@ class BatchSizeProperty(BoundedProperty):
     fullbatch_identifiers = [None, -1, 'all', '*', 'full']
 
     def __init__(self, *args, **kwargs):
-        super(BatchSizeProperty, self).__init__(minsize=1, *args, **kwargs)
+        super(BatchSizeProperty, self).__init__(minval=1, *args, **kwargs)
 
     def __set__(self, instance, value):
         if isinstance(value, six.string_types):

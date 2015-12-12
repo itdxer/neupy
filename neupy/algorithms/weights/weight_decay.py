@@ -36,7 +36,7 @@ class WeightDecay(WeightUpdateConfigurable):
     --------
     :network:`WeightElimination`
     """
-    decay_rate = BoundedProperty(default=0.1, minsize=0)
+    decay_rate = BoundedProperty(default=0.1, minval=0)
 
     def init_param_updates(self, layer, parameter):
         updates = super(WeightDecay, self).init_param_updates(

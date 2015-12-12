@@ -49,7 +49,7 @@ class Quickprop(GradientDescent):
     --------
     :network:`GradientDescent` : GradientDescent algorithm.
     """
-    upper_bound = BoundedProperty(default=1, minsize=0)
+    upper_bound = BoundedProperty(default=1, minval=0)
 
     def init_layers(self):
         super(Quickprop, self).init_layers()

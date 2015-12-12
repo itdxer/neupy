@@ -2,7 +2,7 @@ import numpy as np
 
 from neupy.layers.connections import NetworkConnectionError
 from neupy.layers.base import BaseLayer
-from neupy.core.properties import (TypedListProperty, NonNegativeIntProperty,
+from neupy.core.properties import (TypedListProperty, IntProperty,
                                    ProperFractionProperty)
 
 
@@ -74,7 +74,7 @@ class RoundedOutput(Output):
         The precision in decimal digits for output value.
     {input_size_param}
     """
-    decimal_places = NonNegativeIntProperty(default=0)
+    decimal_places = IntProperty(default=0, minval=0)
 
     def output(self, value):
         return np.round(value, self.decimal_places)

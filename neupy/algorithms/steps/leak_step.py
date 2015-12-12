@@ -49,8 +49,8 @@ class LeakStepAdaptation(LearningRateConfigurable):
     >>>
     """
     leak_size = ProperFractionProperty(default=0.5)
-    alpha = BoundedProperty(default=0.5, minsize=0)
-    beta = BoundedProperty(default=0.5, minsize=0)
+    alpha = BoundedProperty(default=0.5, minval=0)
+    beta = BoundedProperty(default=0.5, minval=0)
 
     def init_layers(self):
         super(LeakStepAdaptation, self).init_layers()

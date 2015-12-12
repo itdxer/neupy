@@ -1,7 +1,7 @@
 from numpy import any as np_any
 
 from neupy.core.base import BaseSkeleton
-from neupy.core.properties import ChoiceProperty, NonNegativeIntProperty
+from neupy.core.properties import ChoiceProperty, IntProperty
 from neupy.core.config import Configurable
 
 
@@ -35,7 +35,7 @@ class DiscreteMemory(BaseSkeleton, Configurable):
     }
 
     mode = ChoiceProperty(default='sync', choices=['async', 'sync'])
-    n_times = NonNegativeIntProperty(default=100)
+    n_times = IntProperty(default=100, minval=1)
 
     def __init__(self, **options):
         super(DiscreteMemory, self).__init__(**options)

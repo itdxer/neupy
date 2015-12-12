@@ -5,7 +5,7 @@ from numpy import (zeros, argmin, argwhere, take, sum as np_sum,
 from numpy.linalg import norm
 
 from neupy.utils import format_data
-from neupy.core.properties import NonNegativeIntProperty
+from neupy.core.properties import IntProperty
 from neupy.network.base import BaseNetwork
 from neupy.network.types import Clustering
 from neupy.network.learning import UnsupervisedLearning
@@ -66,7 +66,7 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
     array([[ 0.],
            [ 1.]])
     """
-    n_clusters = NonNegativeIntProperty(minsize=2)
+    n_clusters = IntProperty(minval=2)
 
     def __init__(self, **options):
         self.centers = None

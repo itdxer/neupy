@@ -49,7 +49,7 @@ class GRNN(LazyLearning, Regression, BaseNetwork):
     >>> rmsle(result, y_test)
     0.4245120142774001
     """
-    std = BoundedProperty(default=0.1, minsize=0)
+    std = BoundedProperty(default=0.1, minval=0)
 
     def train(self, input_train, target_train, copy=True):
         input_train = format_data(input_train, copy=copy)

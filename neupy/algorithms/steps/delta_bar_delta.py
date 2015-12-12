@@ -7,5 +7,5 @@ __all__ = ('DeltaBarDelta',)
 
 class DeltaBarDelta(LearningRateConfigurable):
     beta = ProperFractionProperty(default=0.5)
-    increase_factor = BoundedProperty(default=0.1, minsize=0)
+    increase_factor = BoundedProperty(default=0.1, minval=0)
     decrease_factor = ProperFractionProperty(default=0.9)

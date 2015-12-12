@@ -2,7 +2,7 @@ from numpy import dot, abs as np_abs, sum as np_sum
 from numpy.random import randn
 
 from neupy.utils import format_data
-from neupy.core.properties import NonNegativeIntProperty, ArrayProperty
+from neupy.core.properties import IntProperty, ArrayProperty
 from neupy.network.base import BaseNetwork
 from neupy.network.learning import UnsupervisedLearning
 
@@ -76,7 +76,7 @@ class Oja(UnsupervisedLearning, BaseNetwork):
            [ 4.00000093,  4.00000093],
            [ 5.00000116,  5.00000116]])
     """
-    minimized_data_size = NonNegativeIntProperty(minsize=1)
+    minimized_data_size = IntProperty(minval=1)
     weights = ArrayProperty()
 
     def init_properties(self):

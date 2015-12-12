@@ -55,8 +55,8 @@ class WeightElimination(WeightUpdateConfigurable):
         Advances in Neural Information Processing Systems, San Francisco, \
         CA: Morgan Kaufmann, pp. 875--882 .
     """
-    decay_rate = BoundedProperty(default=0.1, minsize=0)
-    zero_weight = BoundedProperty(default=1, minsize=0)
+    decay_rate = BoundedProperty(default=0.1, minval=0)
+    zero_weight = BoundedProperty(default=1, minval=0)
 
     def init_param_updates(self, layer, parameter):
         updates = super(WeightElimination, self).init_param_updates(

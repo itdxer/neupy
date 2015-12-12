@@ -3,12 +3,9 @@ import numpy as np
 from neupy.helpers.base import preformat_value
 
 
-__all__ = (
-    'BaseProperty', 'Property',
-    'IntProperty', 'NumberProperty', 'ArrayProperty',
-    'BoundedProperty', 'ProperFractionProperty',
-    'TypedListProperty', 'ChoiceProperty'
-)
+__all__ = ('BaseProperty', 'Property', 'ArrayProperty', 'BoundedProperty',
+           'ProperFractionProperty', 'NumberProperty', 'IntProperty',
+           'TypedListProperty', 'ChoiceProperty')
 
 
 class BaseProperty(object):
@@ -76,7 +73,7 @@ class BaseProperty(object):
 
 
 class Property(BaseProperty):
-    """ Simple and flexible class that help build properties with
+    """ Simple and flexible class that helps indetify properties with
     specified type.
     """
     def __init__(self, expected_type=object, *args, **kwargs):
@@ -84,19 +81,24 @@ class Property(BaseProperty):
         super(Property, self).__init__(*args, **kwargs)
 
 
-class IntProperty(BaseProperty):
-    expected_type = int
-
-
-class NumberProperty(BaseProperty):
-    expected_type = (float, int)
-
-
 class ArrayProperty(BaseProperty):
+    """ Numpy array or matrix property.
+    """
     expected_type = (np.ndarray, np.matrix)
 
 
 class TypedListProperty(BaseProperty):
+    """ List property that contains specified element types.
+
+    Properties
+    ----------
+    n_elements : int
+        Indentify fixed number of elements in list. ``None`` value mean
+        that list can contains any number of elements. Defaults to ``None``.
+    element_type : object or tuple
+        There are could be defined valid list elementy type or a bunch
+        of them as tuple.
+    """
     expected_type = (list, tuple, set)
 
     def __init__(self, n_elements=None, element_type=int, *args, **kwargs):
@@ -123,6 +125,17 @@ class TypedListProperty(BaseProperty):
 
 
 class ChoiceProperty(BaseProperty):
+    """ Property that can have discrete number of properties.
+
+    Parameters
+    ----------
+    choices : list, tuple or dict
+        Identify all posible choices. Dictionary choices ties values
+        with some names that can help easily chang options between
+        some specific object like functions. List or tuple choices
+        do the same as dictionary, but they are useful in case when
+        keys and values should be the same.
+    """
     choices = {}
 
     def __init__(self, choices, *args, **kwargs):
@@ -142,13 +155,14 @@ class ChoiceProperty(BaseProperty):
                              "`{0}`".format(self.name))
 
     def __set__(self, instance, value):
-        if value not in self.choices:
-            possible_choices = ", ".join(self.choices.keys())
-            raise ValueError(
-                "Wrong value `{0}` for property `{1}`. Available values: "
-                "{2}".format(value, self.name, possible_choices)
-            )
-        return super(ChoiceProperty, self).__set__(instance, value)
+        if value in self.choices:
+            return super(ChoiceProperty, self).__set__(instance, value)
+
+        possible_choices = ", ".join(self.choices.keys())
+        raise ValueError(
+            "Wrong value `{0}` for property `{1}`. Available values: "
+            "{2}".format(value, self.name, possible_choices)
+        )
 
     def __get__(self, instance, value):
         if instance is not None:
@@ -156,24 +170,48 @@ class ChoiceProperty(BaseProperty):
             return self.choices[choice_key]
 
 
-class BoundedProperty(NumberProperty):
-    def __init__(self, minsize=-np.inf, maxsize=np.inf, *args, **kwargs):
-        self.minsize = minsize
-        self.maxsize = maxsize
+class BoundedProperty(BaseProperty):
+    """ Number property that have specified numerical bounds.
+
+    Properties
+    ----------
+    minval : float
+        Minimum possible value for the property.
+    maxval : float
+        Maximum possible value for the property.
+    """
+
+    def __init__(self, minval=-np.inf, maxval=np.inf, *args, **kwargs):
+        self.minval = minval
+        self.maxval = maxval
         super(BoundedProperty, self).__init__(*args, **kwargs)
 
     def validate(self, value):
-        if not (self.minsize <= value <= self.maxsize):
-            raise ValueError("Value `{}` must be between {} and {}"
-                             "".format(self.name, self.minsize, self.maxsize))
+        super(BoundedProperty, self).validate(value)
+
+        if not (self.minval <= value <= self.maxval):
+            raise ValueError("Value `{}` should be between {} and {}"
+                             "".format(self.name, self.minval, self.maxval))
 
 
 class ProperFractionProperty(BoundedProperty):
+    """ Proper fraction property. Identify all possible numbers
+    between zero and one.
+    """
+    expected_type = (float, int)
+
     def __init__(self, *args, **kwargs):
-        super(ProperFractionProperty, self).__init__(
-            minsize=0, maxsize=1, *args, **kwargs
-        )
+        super(ProperFractionProperty, self).__init__(minval=0, maxval=1,
+                                                     *args, **kwargs)
 
 
-class NonNegativeIntProperty(BoundedProperty):
+class NumberProperty(BoundedProperty):
+    """ Float or integer number property.
+    """
+    expected_type = (float, int)
+
+
+class IntProperty(BoundedProperty):
+    """ Integer property.
+    """
     expected_type = int

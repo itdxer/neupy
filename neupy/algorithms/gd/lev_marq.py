@@ -90,8 +90,8 @@ class LevenbergMarquardt(GradientDescent):
     --------
     :network:`GradientDescent` : GradientDescent algorithm.
     """
-    mu = BoundedProperty(default=0.01, minsize=0)
-    mu_increase_factor = BoundedProperty(default=5, minsize=1)
+    mu = BoundedProperty(default=0.01, minval=0)
+    mu_increase_factor = BoundedProperty(default=5, minval=1)
 
     def init_layers(self):
         super(LevenbergMarquardt, self).init_layers()

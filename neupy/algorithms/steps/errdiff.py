@@ -48,9 +48,9 @@ class ErrDiffStepUpdate(LearningRateConfigurable):
     ... )
     >>>
     """
-    update_for_smaller_error = BoundedProperty(default=1.05, minsize=1)
+    update_for_smaller_error = BoundedProperty(default=1.05, minval=1)
     update_for_bigger_error = ProperFractionProperty(default=0.7)
-    error_difference = BoundedProperty(default=1.04, minsize=1)
+    error_difference = BoundedProperty(default=1.04, minval=1)
 
     def init_variables(self):
         self.variables.update(

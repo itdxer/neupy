@@ -71,7 +71,7 @@ class WolfeSearch(LearningRateConfigurable):
     0.91666666666666674
     """
 
-    maxstep = BoundedProperty(default=50, minsize=0)
+    maxstep = BoundedProperty(default=50, minval=0)
     c1 = ProperFractionProperty(default=1e-4)
     c2 = ProperFractionProperty(default=0.9)
 

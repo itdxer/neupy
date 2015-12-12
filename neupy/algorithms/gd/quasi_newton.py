@@ -126,7 +126,7 @@ class QuasiNewton(GradientDescent):
             'sr1': sr1,
         }
     )
-    h0_scale = BoundedProperty(default=1, minsize=0)
+    h0_scale = BoundedProperty(default=1, minval=0)
     gradient_tol = ProperFractionProperty(default=1e-5)
 
     default_optimizations = [WolfeSearch]

@@ -33,7 +33,7 @@ class BaseLayer(with_metaclass(LayerMeta, ChainConnection, BaseConfigurable)):
     """
     shared_docs = {'input_size_param': __layer_params}
 
-    input_size = IntProperty()
+    input_size = IntProperty(required=True, minval=1)
 
     def __init__(self, input_size, **options):
         super(BaseLayer, self).__init__()

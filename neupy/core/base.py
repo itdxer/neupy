@@ -11,6 +11,7 @@ __all__ = ('BaseSkeleton',)
 class BaseSkeleton(ConfigurableWithABC, Verbose):
     """ Base class for neural network algorithms.
     """
+
     def get_params(self, deep=False):
         options = {}
         for property_name, option in self.options.items():
@@ -60,7 +61,6 @@ class BaseSkeleton(ConfigurableWithABC, Verbose):
         return ', '.join(options)
 
     def __repr__(self):
-        return "{}({})".format(
-            self.__class__.__name__,
-            self._repr_options()
-        )
+        class_name = self.__class__.__name__
+        available_options = self._repr_options()
+        return "{}({})".format(class_name, available_options)

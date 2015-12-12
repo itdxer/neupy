@@ -4,7 +4,7 @@ from numpy import dot, zeros, ones, inf, logical_and, sort, unique
 
 from neupy.utils import format_data
 from neupy.core.properties import (ProperFractionProperty,
-                                   NonNegativeIntProperty)
+                                   IntProperty)
 from neupy.network.base import BaseNetwork
 from neupy.network.types import Clustering
 
@@ -58,7 +58,7 @@ class ART1(Clustering, BaseNetwork):
     array([ 0.,  1.,  1.])
     """
     rho = ProperFractionProperty(default=0.5)
-    n_clusters = NonNegativeIntProperty(default=2, minsize=2)
+    n_clusters = IntProperty(default=2, minval=2)
 
     def train(self, input_data):
         input_data = format_data(input_data)

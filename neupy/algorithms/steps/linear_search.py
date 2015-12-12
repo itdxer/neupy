@@ -7,7 +7,7 @@ import numpy as np
 
 from neupy.utils import asfloat
 from neupy.core.properties import (BoundedProperty, ChoiceProperty,
-                                   NonNegativeIntProperty)
+                                   IntProperty)
 from .base import LearningRateConfigurable
 
 
@@ -224,9 +224,9 @@ class LinearSearch(LearningRateConfigurable):
     :network:`ConjugateGradient`
     """
 
-    tol = BoundedProperty(default=0.3, minsize=0)
-    maxstep = BoundedProperty(default=50, minsize=0)
-    maxiter = NonNegativeIntProperty(default=1024)
+    tol = BoundedProperty(default=0.3, minval=0)
+    maxstep = BoundedProperty(default=50, minval=0)
+    maxiter = IntProperty(default=1024, minval=1)
     search_method = ChoiceProperty(choices={'golden': fmin_golden_search},
                                    default='golden')
 
