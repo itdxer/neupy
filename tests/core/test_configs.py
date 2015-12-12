@@ -47,23 +47,3 @@ class ConfigsTestCase(BaseTestCase):
 
         with self.assertRaises(TypeError):
             InheritA()
-
-    def test_shared_docs(self):
-        shared_message = "This class is awesome"
-
-        class MainClassA(Configurable):
-            """ Class MainClassA description.
-            {shared_text}
-            """
-            shared_docs = {"shared_text": shared_message}
-
-        self.assertIn(shared_message, MainClassA.__doc__)
-        self.assertIn(MainClassA.__name__, MainClassA.__doc__)
-
-        class InheritA(MainClassA):
-            """ Class InheritA description.
-            {shared_text}
-            """
-
-        self.assertIn(shared_message, InheritA.__doc__)
-        self.assertIn(InheritA.__name__, InheritA.__doc__)

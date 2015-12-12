@@ -9,6 +9,7 @@ Submodules
    neupy.helpers.base
    neupy.helpers.logs
    neupy.helpers.sms
+   neupy.helpers.table
 
 Module contents
 ---------------

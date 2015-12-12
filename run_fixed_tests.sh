@@ -13,6 +13,7 @@ nosetests \
     tests/core/test_signals.py\
     tests/core/test_storage.py\
     tests/core/test_properties.py\
+    tests/core/test_shared_docs.py\
     \
     tests/weights/test_weight_decay.py\
     tests/weights/test_weight_elimination.py\

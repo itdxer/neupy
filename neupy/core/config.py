@@ -1,11 +1,10 @@
 from abc import ABCMeta
 from collections import namedtuple
-from functools import reduce
 
 from six import with_metaclass
 
 from .properties import BaseProperty
-from .docs import docs
+from .docs import SharedDocsMeta
 
 
 __all__ = ('ConfigMeta', 'ConfigWithABCMeta', 'Configurable',
@@ -15,25 +14,10 @@ __all__ = ('ConfigMeta', 'ConfigWithABCMeta', 'Configurable',
 Option = namedtuple('Option', 'class_name value')
 
 
-def merge_dicts(left_dict, right_dict):
-    return dict(left_dict, **right_dict)
-
-
-class ConfigMeta(type):
+class ConfigMeta(SharedDocsMeta):
     def __new__(cls, clsname, bases, attrs):
-        parents = [kls for kls in bases if isinstance(kls, ConfigMeta)]
         new_class = super(ConfigMeta, cls).__new__(cls, clsname, bases, attrs)
-
-        if new_class.__doc__ is not None:
-            maindocs = docs.copy()
-            mro_classes = new_class.__mro__
-
-            # Collect parameter `shared_docs` for all MRO classes and
-            # combine them in one big dictionary
-            shared_docs = [getattr(b, 'shared_docs', {}) for b in mro_classes]
-            all_params = reduce(merge_dicts, shared_docs, maindocs)
-
-            new_class.__doc__ = new_class.__doc__.format(**all_params)
+        parents = [kls for kls in bases if isinstance(kls, ConfigMeta)]
 
         if not hasattr(new_class, 'options'):
             new_class.options = {}

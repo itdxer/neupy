@@ -120,8 +120,6 @@ Input and hidden layers
     ":layer:`Relu`", "Layer with rectifier activation function.", "No"
     ":layer:`Softplus`", "Layer with softplus activation function.", "Yes"
     ":layer:`Softmax`", "Layer with softmax activation function.", "Yes"
-    ":layer:`EuclideDistanceLayer`", "Layer output equal to Euclide distance between input value and weights.", "No"
-    ":layer:`AngleDistanceLayer`", "Layer which output equal to cosine distance between input value and weights.", "No"
 
 Output layers
 ~~~~~~~~~~~~~

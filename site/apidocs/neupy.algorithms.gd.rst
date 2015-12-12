@@ -9,6 +9,7 @@ Submodules
    neupy.algorithms.gd.base
    neupy.algorithms.gd.conjgrad
    neupy.algorithms.gd.hessdiag
+   neupy.algorithms.gd.hessian
    neupy.algorithms.gd.lev_marq
    neupy.algorithms.gd.momentum
    neupy.algorithms.gd.quasi_newton

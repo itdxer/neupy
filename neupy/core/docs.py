@@ -1,4 +1,69 @@
-__all__ = ("docs",)
+import re
+from functools import reduce
+
+from six import with_metaclass
+
+from neupy.utils import AttributeKeyDict
+
+
+__all__ = ("docs", "SharedDocsMeta", "SharedDocs")
+
+
+def merge_dicts(left_dict, right_dict):
+    return dict(left_dict, **right_dict)
+
+
+class SharedDocsMeta(type):
+    def __new__(cls, clsname, bases, attrs):
+        new_class = super(SharedDocsMeta, cls).__new__(cls, clsname, bases,
+                                                       attrs)
+
+        if new_class.__doc__ is None:
+            return new_class
+
+        mro_classes = new_class.__mro__
+
+        found_indent = re.compile(r"(?P<indent>\ *)(?P<dashes>-{3,})")
+        indent_info = found_indent.findall(new_class.__doc__)
+
+        if not len(indent_info):
+            return new_class
+
+        indent, _ = indent_info[0]
+
+        parse_parameters = re.compile(
+            r"(?P<name>\w+?)\s*\:\s*(?P<type>[^\n]+)"
+            r"((?P<description>\n{indent}\ +[^\n]+)*)"
+            "".format(indent=indent)
+        )
+
+        parameters = {}
+        for parent_class in mro_classes:
+            class_name = parent_class.__name__
+            class_params = parameters[class_name] = AttributeKeyDict()
+            parent_docs = parent_class.__doc__
+
+            if parent_docs is not None:
+                doc_parameters = parse_parameters.findall(parent_docs)
+                for name, type_, desc, _ in doc_parameters:
+                    class_params[name] = "{} : {}{}".format(name, type_, desc)
+
+
+        # TODO: after refatoring should remove old style shared documentaion
+
+        # Collect parameter `shared_docs` for all MRO classes and
+        # combine them in one big dictionary
+        shared_docs = [getattr(b, 'shared_docs', {}) for b in mro_classes]
+        all_params = reduce(merge_dicts, shared_docs, docs)
+        parameters = merge_dicts(parameters, all_params)
+
+        new_class.__doc__ = new_class.__doc__.format(**parameters)
+
+        return new_class
+
+
+class SharedDocs(with_metaclass(SharedDocsMeta)):
+    pass
 
 
 docs = {

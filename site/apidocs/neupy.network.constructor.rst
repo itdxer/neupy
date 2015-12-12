@@ -1,7 +1,7 @@
-neupy.network.connections module
+neupy.network.constructor module
 ================================
 
-.. automodule:: neupy.network.connections
+.. automodule:: neupy.network.constructor
     :members:
     :undoc-members:
     :show-inheritance:
