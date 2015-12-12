@@ -6,8 +6,6 @@ import theano.tensor as T
 
 from neupy.core.properties import Property, ChoiceProperty, BoundedProperty
 from neupy.network import SupervisedConstructableNetwork
-from neupy.network.errors import (mse, binary_crossentropy,
-                                  categorical_crossentropy)
 from . import optimization_types
 
 
@@ -19,15 +17,28 @@ class GradientDescent(SupervisedConstructableNetwork):
 
     Parameters
     ----------
-    {connection}
-    {optimizations}
-    {full_params}
+    optimizations : list or None
+        The list of optimization algortihms. ``None`` by default.
+        If this option is not empty it will generate new class which
+        will inherit all from this list. Support two types of
+        optimization algorithms: weight update and step update.
+    {ConstructableNetwork.connection}
+    {SupervisedConstructableNetwork.error}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------
-    {supervised_train}
-    {predict_raw}
-    {full_methods}
+    {BaseNetwork.plot_errors}
+    {BaseNetwork.last_error}
+    {BaseNetwork.last_validation_error}
+    {BaseNetwork.previous_error}
+    {BaseSkeleton.predict}
+    {BaseSkeleton.fit}
 
     Examples
     --------
@@ -41,20 +52,7 @@ class GradientDescent(SupervisedConstructableNetwork):
     >>> bpnet.train(x_train, y_train)
     """
 
-    __opt_params = """optimizations : list or None
-        The list of optimization algortihms. ``None`` by default.
-        If this option is not empty it will generate new class which
-        will inherit all from this list. Support two types of
-        optimization algorithms: weight update and step update.
-    """
-    shared_docs = {"optimizations": __opt_params}
     default_optimizations = []
-
-    error = ChoiceProperty(default='mse', choices={
-        'mse': mse,
-        'binary_crossentropy': binary_crossentropy,
-        'categorical_crossentropy': categorical_crossentropy,
-    })
     optimizations = Property(default=None, expected_type=list)
 
     def __new__(cls, connection, options=None, **kwargs):
@@ -173,14 +171,24 @@ class MinibatchGradientDescent(GradientDescent):
         Set up batch size for learning process. To set up batch size equal to
         sample size value should be equal to one of the values listed above.
         Defaults to ``100``.
-    {optimizations}
-    {full_params}
+    {GradientDescent.optimizations}
+    {ConstructableNetwork.connection}
+    {SupervisedConstructableNetwork.error}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------
-    {supervised_train}
-    {predict_raw}
-    {full_methods}
+    {BaseNetwork.plot_errors}
+    {BaseNetwork.last_error}
+    {BaseNetwork.last_validation_error}
+    {BaseNetwork.previous_error}
+    {BaseSkeleton.predict}
+    {BaseSkeleton.fit}
 
     Examples
     --------

@@ -159,6 +159,13 @@ def parse_show_epoch_property(value, n_epochs):
 class ShowEpochProperty(BoundedProperty):
     """ Class helps validate specific syntax for `show_epoch`
     property from ``BaseNetwork`` class.
+
+    Parameters
+    ----------
+    {BoundedProperty.minval}
+    {BoundedProperty.maxval}
+    {BaseProperty.default}
+    {BaseProperty.required}
     """
     expected_type = tuple([int] + [six.string_types])
 
@@ -198,20 +205,53 @@ class BaseNetwork(BaseSkeleton):
 
     Parameters
     ----------
-    {full_params}
+    step : float
+        Learning rate, defaults to ``0.1``.
+    show_epoch : int or str
+        This property controls how often the network will display information
+        about training. There are two main syntaxes for this property.
+        You can describe it as positive integer number and it
+        will describe how offen would you like to see summary output in
+        terminal. For instance, number `100` mean that network will show you
+        summary in 100, 200, 300 ... epochs. String value should be in a
+        specific format. It should contain the number of times that the output
+        will be displayed in the terminal. The second part is just
+        a syntax word ``time`` or ``times`` just to make text readable.
+        For instance, value ``'2 times'`` mean that the network will show
+        output twice with approximately equal period of epochs and one
+        additional output would be after the finall epoch.
+        Defaults to ``'10 times'``.
+    shuffle_data : bool
+        If it's ``True`` class shuffles all your training data before
+        training your network, defaults to ``True``.
+    epoch_end_signal : function
+        Calls this function when train epoch finishes.
+    train_end_signal : function
+        Calls this function when train process finishes.
+    {Verbose.verbose}
 
     Methods
     -------
-    {plot_errors}
-    {last_error}
+    plot_errors(logx=False)
+        Draws the error rate update plot. It always shows network
+        learning progress. When you add cross validation data set
+        into training function it displays validation data set error as
+        separated curve. If parameter ``logx`` is equal to the
+        ``True`` value it displays x-axis in logarithmic scale.
+    last_error()
+        Returns the last error network result after training procedure
+        or ``None`` value if you try to get it before network training.
+    last_validation_error()
+        Last error for the validation data.
+    previous_error()
+        Return previous network error or ``None`` if network didn't
+        train two epochs and don't have this information.
     """
     step = NumberProperty(default=0.1, minval=0)
 
-    # Training settings
     show_epoch = ShowEpochProperty(minval=1, default='10 times')
     shuffle_data = Property(default=False, expected_type=bool)
 
-    # Signals
     epoch_end_signal = Property(expected_type=types.FunctionType)
     train_end_signal = Property(expected_type=types.FunctionType)
 

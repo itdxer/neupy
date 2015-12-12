@@ -20,6 +20,13 @@ class SharedDocsTestCase(BaseTestCase):
                 Var2 description.
             test : complex or float
 
+            Methods
+            -------
+            foo()
+                Foo description.
+                Even more
+            bar(params=True)
+
             Examples
             --------
             one-two-three
@@ -33,12 +40,24 @@ class SharedDocsTestCase(BaseTestCase):
             {A.var1}
             {A.var2}
             {A.test}
+
+            Methods
+            -------
+            {A.foo}
+            {A.bar}
             """
+
+        self.assertIn("Class B documentation", B.__doc__)
 
         self.assertIn("var1 : int", B.__doc__)
         self.assertIn("var2 : str", B.__doc__)
         self.assertIn("test : complex or float", B.__doc__)
-        self.assertIn("Class B documentation", B.__doc__)
+
+        self.assertIn("foo()", B.__doc__)
+        self.assertIn("bar(params=True)", B.__doc__)
 
     def test_complex_class_inheritance(self):
+        pass
+
+    def test_parameter_rewriting(self):
         pass

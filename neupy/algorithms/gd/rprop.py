@@ -16,9 +16,25 @@ class RPROP(GradientDescent):
 
     Parameters
     ----------
-    {rprop_params}
-    {optimizations}
-    {full_params}
+    minimum_step : float
+        Minimum possible value for step. Defaults to ``0.1``.
+    maximum_step : float
+        Maximum possible value for step. Defaults to ``50``.
+    increase_factor : float
+        Increase factor for step in case when gradient doesn't change
+        sign compare to previous epoch.
+    decrease_factor : float
+        Decrease factor for step in case when gradient changes sign
+        compare to previous epoch.
+    {GradientDescent.optimizations}
+    {ConstructableNetwork.connection}
+    {SupervisedConstructableNetwork.error}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------
@@ -47,20 +63,6 @@ class RPROP(GradientDescent):
     :network:`IRPROPPlus` : iRPROP+ algorithm.
     :network:`GradientDescent` : GradientDescent algorithm.
     """
-
-    __rprop_params = """minimum_step : float
-        Minimum possible value for step. Defaults to ``0.1``.
-    maximum_step : float
-        Maximum possible value for step. Defaults to ``50``.
-    increase_factor : float
-        Increase factor for step in case when gradient doesn't change
-        sign compare to previous epoch.
-    decrease_factor : float
-        Decrease factor for step in case when gradient changes sign
-        compare to previous epoch.
-    """
-
-    shared_docs = {"rprop_params": __rprop_params}
 
     # This properties correct upper and lower bounds for steps.
     minimum_step = BoundedProperty(default=0.1, minval=0)
@@ -149,9 +151,19 @@ class IRPROPPlus(RPROP):
 
     Parameters
     ----------
-    {rprop_params}
-    {optimizations}
-    {full_params}
+    {RPROP.minimum_step}
+    {RPROP.maximum_step}
+    {RPROP.increase_factor}
+    {RPROP.decrease_factor}
+    {GradientDescent.optimizations}
+    {ConstructableNetwork.connection}
+    {SupervisedConstructableNetwork.error}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------

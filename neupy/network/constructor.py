@@ -61,16 +61,7 @@ class ConstructableNetwork(BaseNetwork):
 
     Parameters
     ----------
-    {connection}
-    {full_params}
-
-    Methods
-    -------
-    {plot_errors}
-    {last_error}
-    """
-
-    shared_docs = {"connection": """connection : list, tuple or object
+    connection : list, tuple or object
         Network architecture. That variables could be described in
         different ways. The simples one is a list or tuple that contains
         integers. Each integer describe layer input size. For example,
@@ -81,7 +72,20 @@ class ConstructableNetwork(BaseNetwork):
         instances. For example: ``[Tanh(2), Relu(4), Output(1)].
         And the most readable one is just layer pipeline
         ``Tanh(2) > Relu(4) > Output(1)``.
-    """}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
+
+    Methods
+    -------
+    {BaseNetwork.plot_errors}
+    {BaseNetwork.last_error}
+    {BaseNetwork.last_validation_error}
+    {BaseNetwork.previous_error}
+    """
 
     def __init__(self, connection, *args, **kwargs):
         self.connection = clean_layers(connection)
@@ -214,6 +218,26 @@ class ConstructableNetwork(BaseNetwork):
 class SupervisedConstructableNetwork(SupervisedLearning, ConstructableNetwork):
     """ Constructuble Neural Network that contains supervised
     learning features.
+
+    Parameters
+    ----------
+    error : str
+        Function which controls your training error.
+        Defaults to ``mse``
+    {ConstructableNetwork.connection}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
+
+    Methods
+    -------
+    {BaseNetwork.plot_errors}
+    {BaseNetwork.last_error}
+    {BaseNetwork.last_validation_error}
+    {BaseNetwork.previous_error}
     """
 
     error = ChoiceProperty(default='mse', choices={

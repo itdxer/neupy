@@ -22,11 +22,14 @@ class Hessian(GradientDescent):
         Inverse hessian could be singular matrix. For this reason
         algorithm include penalty that add to hessian matrix identity
         multiplied by defined constant. Defaults to ``1``.
-    {show_epoch}
-    {shuffle_data}
-    {epoch_end_signal}
-    {train_end_signal}
-    {verbose}
+    {GradientDescent.optimizations}
+    {ConstructableNetwork.connection}
+    {SupervisedConstructableNetwork.error}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------

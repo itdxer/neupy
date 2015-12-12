@@ -94,6 +94,15 @@ class VerboseProperty(BaseProperty):
 
 
 class Verbose(Configurable):
+    """ Class that help use and control NeuPy logging.
+
+    Parameters
+    ----------
+    verbose : bool
+        Property controls verbose output interminal.
+        ``True`` enable informative output in the terminal and ``False`` -
+        disable it. Defaults to ``False``.
+    """
     verbose = VerboseProperty(default=False)
 
     def __init__(self, **options):

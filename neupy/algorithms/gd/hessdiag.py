@@ -21,8 +21,15 @@ class HessianDiagonal(GradientDescent):
         iteration elements would be extremly small and matrix inverse
         produce huge number in hessian diagonal elements. This
         parameter control diagonal elements size. Defaults to ``1e-2``.
-    {optimizations}
-    {full_params}
+    {GradientDescent.optimizations}
+    {ConstructableNetwork.connection}
+    {SupervisedConstructableNetwork.error}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------

@@ -17,8 +17,16 @@ class Momentum(MinibatchGradientDescent):
     ----------
     momentum : float
         Control previous gradient ratio. Defaults to ``0.9``.
-    {optimizations}
-    {full_params}
+    {MinibatchGradientDescent.batch_size}
+    {GradientDescent.optimizations}
+    {ConstructableNetwork.connection}
+    {SupervisedConstructableNetwork.error}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------

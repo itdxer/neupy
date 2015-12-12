@@ -87,8 +87,15 @@ class QuasiNewton(GradientDescent):
     gradient_tol : float
         In the gradient less than this value algorithm will stop training
         procedure. Defaults to ``1e-5``.
-    {optimizations}
-    {full_params}
+    {GradientDescent.optimizations}
+    {ConstructableNetwork.connection}
+    {SupervisedConstructableNetwork.error}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------

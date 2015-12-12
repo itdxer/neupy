@@ -19,8 +19,15 @@ class LevenbergMarquardt(GradientDescent):
     mu_increase_factor : float
         Factor to decrease the mu if update decrese the error, otherwise
         increse mu by the same factor.
-    {optimizations}
-    {full_params}
+    {GradientDescent.optimizations}
+    {ConstructableNetwork.connection}
+    {SupervisedConstructableNetwork.error}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------

@@ -10,6 +10,13 @@ __all__ = ('BaseSkeleton',)
 
 class BaseSkeleton(ConfigurableWithABC, Verbose):
     """ Base class for neural network algorithms.
+
+    Methods
+    -------
+    fit(\*args, \*\*kwargs)
+        The same as ``train`` method.
+    predict(input_data)
+        Predict value.
     """
 
     def get_params(self, deep=False):
