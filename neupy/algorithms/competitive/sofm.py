@@ -76,25 +76,38 @@ def cosine_similarity(input_data, weight):
 class SOFM(Kohonen):
     """ Self-Organizing Feature Map.
 
-    Notes
-    -----
-    * Network architecture must contains two layers.
-    * Second layer must be :layer:`CompetitiveOutput`.
-
     Parameters
     ----------
     learning_radius : int
         Learning radius.
     features_grid : int
         Learning radius.
-    {full_params}
+    transform : {{'linear', 'euclid', 'cos'}}
+        Indicate transformation operation related to the input layer.
+        The ``linear`` value mean that input data would be multiplied by
+        weights in typical way. The ``euclid`` method will identify the
+        closest weight vector to the input one. The ``cos`` made the same
+        as ``euclid``, but instead of euclid distance it uses cosine
+        similarity. Defaults to ``linear``.
+    {BaseAssociative.n_inputs}
+    {BaseAssociative.n_outputs}
+    {BaseAssociative.weight}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------
-    {unsupervised_train_epochs}
-    {predict}
-    {plot_errors}
-    {last_error}
+    {BaseSkeleton.predict}
+    {BaseAssociative.train}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
+    {BaseNetwork.last_error}
+    {BaseNetwork.last_validation_error}
+    {BaseNetwork.previous_error}
     """
 
     learning_radius = IntProperty(default=0, minval=0)

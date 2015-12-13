@@ -4,7 +4,7 @@ from itertools import chain
 import six
 import theano.tensor as T
 
-from neupy.core.properties import Property, ChoiceProperty, BoundedProperty
+from neupy.core.properties import Property, BoundedProperty
 from neupy.network import SupervisedConstructableNetwork
 from . import optimization_types
 
@@ -33,12 +33,13 @@ class GradientDescent(SupervisedConstructableNetwork):
 
     Methods
     -------
+    {BaseSkeleton.predict}
+    {SupervisedLearning.train}
+    {BaseSkeleton.fit}
     {BaseNetwork.plot_errors}
     {BaseNetwork.last_error}
     {BaseNetwork.last_validation_error}
     {BaseNetwork.previous_error}
-    {BaseSkeleton.predict}
-    {BaseSkeleton.fit}
 
     Examples
     --------
@@ -183,12 +184,13 @@ class MinibatchGradientDescent(GradientDescent):
 
     Methods
     -------
+    {BaseSkeleton.predict}
+    {SupervisedLearning.train}
+    {BaseSkeleton.fit}
     {BaseNetwork.plot_errors}
     {BaseNetwork.last_error}
     {BaseNetwork.last_validation_error}
     {BaseNetwork.previous_error}
-    {BaseSkeleton.predict}
-    {BaseSkeleton.fit}
 
     Examples
     --------

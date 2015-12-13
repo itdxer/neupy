@@ -31,17 +31,23 @@ class Oja(UnsupervisedLearning, BaseNetwork):
         Predefine default weights which controll your data in two sides.
         If weights are, ``None`` before train algorithms generate random
         weights. Defaults to ``None``.
-    {step}
-    {show_epoch}
-    {verbose}
-    {full_signals}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------
     reconstruct(input_data):
         Reconstruct your minimized data.
-    {unsupervised_train_epsilon}
-    {full_methods}
+    {BaseSkeleton.predict}
+    {UnsupervisedLearning.train}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
+    {BaseNetwork.last_error}
+    {BaseNetwork.last_validation_error}
+    {BaseNetwork.previous_error}
 
     Raises
     ------
@@ -94,6 +100,7 @@ class Oja(UnsupervisedLearning, BaseNetwork):
 
         mae = np_sum(np_abs(error)) / input_data.size
 
+        # Clear memory
         del minimized
         del reconstruct
         del error

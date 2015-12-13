@@ -21,12 +21,25 @@ class Kohonen(BaseAssociative):
 
     Parameters
     ----------
-    {full_params}
+    {BaseAssociative.n_inputs}
+    {BaseAssociative.n_outputs}
+    {BaseAssociative.weight}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------
-    {unsupervised_train_epochs}
-    {full_methods}
+    {BaseSkeleton.predict}
+    {BaseAssociative.train}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
+    {BaseNetwork.last_error}
+    {BaseNetwork.last_validation_error}
+    {BaseNetwork.previous_error}
 
     Examples
     --------

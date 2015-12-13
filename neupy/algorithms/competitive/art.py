@@ -27,15 +27,23 @@ class ART1(Clustering, BaseNetwork):
         between ``0`` and ``1``, defaults to ``0.5``.
     n_clusters : int
         Number of clusters, defaults to ``2``. Min value is also ``2``.
-    {full_params}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
 
     Methods
     -------
     train(input_data):
-        Trains network until it has clustered all samples
+        Network network will train until it clusters all samples.
     {predict}
-    {plot_errors}
-    {last_error}
+    {BaseSkeleton.predict}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
+    {BaseNetwork.last_error}
+    {BaseNetwork.last_validation_error}
+    {BaseNetwork.previous_error}
 
     Examples
     --------
@@ -141,6 +149,3 @@ class ART1(Clustering, BaseNetwork):
 
     def predict(self, input_data):
         return self.train(input_data)
-
-    def train_epoch(self, input_data, target_data):
-        pass

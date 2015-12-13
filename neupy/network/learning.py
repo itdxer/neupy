@@ -3,6 +3,15 @@ __all__ = ('SupervisedLearning', 'UnsupervisedLearning', 'LazyLearning')
 
 class SupervisedLearning(object):
     """ Mixin for Supervised Neural Network algorithms.
+
+    Methods
+    -------
+    train(input_train, target_train, input_test=None, target_test=None,\
+    epochs=100, epsilon=None):
+        Trains network. You can control network training procedure
+        iterations with the number of epochs or converge value epsilon.
+        Also you can specify ``input_test`` and ``target_test`` and control
+        your validation data error on each iteration.
     """
     def train(self, input_train, target_train, input_test=None,
               target_test=None, epochs=100, epsilon=None):
@@ -13,6 +22,13 @@ class SupervisedLearning(object):
 
 class UnsupervisedLearning(object):
     """ Mixin for Unsupervised Neural Network algorithms.
+
+    Methods
+    -------
+    train(input_train, epsilon=1e-5, epochs=100):
+        Trains network until it converge. Parameter ``epochs`` control
+        maximum number of iterations, just to make sure that network will
+        stop training procedure if it can't converge.
     """
     def train(self, input_train, epochs=100, epsilon=None):
         self._train(input_train=input_train, target_train=None,
@@ -26,6 +42,13 @@ class UnsupervisedLearning(object):
 
 class LazyLearning(object):
     """ Mixin for lazy learning Neural Network algorithms.
+
+    Methods
+    -------
+    train(input_train, target_train, copy=True):
+        Network just stores all the information about the data and use it for \
+        the prediction. Parameter ``copy`` copy input data before store it \
+        inside the network.
     """
     def __init__(self, *args, **kwargs):
         self.input_train = None
@@ -52,4 +75,4 @@ class LazyLearning(object):
 
     def predict(self, input_data):
         if self.input_train is None:
-            raise ValueError("Train your network before make prediction")
+            raise ValueError("Train neural network before make prediction")

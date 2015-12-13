@@ -32,9 +32,13 @@ class Quickprop(GradientDescent):
 
     Methods
     -------
-    {supervised_train}
-    {predict_raw}
-    {full_methods}
+    {BaseSkeleton.predict}
+    {SupervisedLearning.train}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
+    {BaseNetwork.last_error}
+    {BaseNetwork.last_validation_error}
+    {BaseNetwork.previous_error}
 
     Examples
     --------

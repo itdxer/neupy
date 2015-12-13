@@ -1,8 +1,10 @@
 import time
 from operator import attrgetter
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod
 
 from six import with_metaclass
+
+from neupy.core.docs import SharedDocs, SharedDocsABCMeta
 
 
 __all__ = ("TableDrawer", "Column", "TimeColumn", "FloatColumn",
@@ -14,7 +16,7 @@ class TableDrawingError(AttributeError):
     """
 
 
-class Column(object):
+class Column(SharedDocs):
     """ Simple column class that helps discribe structure for
     ``TableDrawer`` class instance.
 
@@ -57,6 +59,12 @@ class Column(object):
 class TimeColumn(Column):
     """ Columns useful for time formating from seconds to more
     informative and readable format.
+
+    Parameters
+    ----------
+    {Column.name}
+    {Column.dtype}
+    {Column.width}
     """
 
     def format_value(self, value):
@@ -102,6 +110,9 @@ class FloatColumn(Column):
     ----------
     places : int
         Float number rounding precision. Defaults to ``6``.
+    {Column.name}
+    {Column.dtype}
+    {Column.width}
     """
 
     def __init__(self, places=6, *args, **kwargs):
@@ -129,7 +140,7 @@ class FloatColumn(Column):
         return round(value, self.places)
 
 
-class BaseState(with_metaclass(ABCMeta)):
+class BaseState(with_metaclass(SharedDocsABCMeta)):
     """ Base abstract class that identify all important methods for
     ``TableDrawer`` class states.
 
@@ -182,6 +193,10 @@ class DrawingState(BaseState):
     """ Identify active state for ``TableDrawer`` class instance.
     In this state summary table instance is able to show information
     in terminal.
+
+    Parameters
+    ----------
+    {BaseState.table}
     """
 
     def start(self):
@@ -207,6 +222,10 @@ class IdleState(BaseState):
     """ Identify idle state for ``TableDrawer`` class instance.
     In this state summary table instance isn't able to show information
     in terminal.
+
+    Parameters
+    ----------
+    {BaseState.table}
     """
 
     def start(self):
@@ -233,7 +252,7 @@ class IdleState(BaseState):
                                 "didn't started")
 
 
-class TableDrawer(object):
+class TableDrawer(SharedDocs):
     """ Build ASCII tables using simple structure.
 
     Parameters

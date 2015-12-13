@@ -1,12 +1,14 @@
 import re
 from functools import reduce
+from abc import ABCMeta
 
 from six import with_metaclass
 
 from neupy.utils import AttributeKeyDict
 
 
-__all__ = ("SharedDocsMeta", "SharedDocs")
+__all__ = ("SharedDocsMeta", "SharedDocs", "SharedDocsException",
+           "SharedDocsABCMeta")
 
 
 def merge_dicts(left_dict, right_dict):
@@ -22,7 +24,19 @@ def find_numpy_doc_indent(docs):
         return indent
 
 
+class SharedDocsException(Exception):
+    """ Exception that help identify problems related to shared
+    documentation.
+    """
+
+
 class SharedDocsMeta(type):
+    """ Meta class for shared documentation. This class conatains main
+    functionality that help inherit parameters and methods descriptions
+    from parent classes. This class automaticaly format class documentation
+    using basic python format syntax for objects.
+    """
+
     def __new__(cls, clsname, bases, attrs):
         new_class = super(SharedDocsMeta, cls).__new__(cls, clsname, bases,
                                                        attrs)
@@ -73,13 +87,25 @@ class SharedDocsMeta(type):
         all_params = reduce(merge_dicts, shared_docs, docs)
         parameters = merge_dicts(parameters, all_params)
 
-        new_class.__doc__ = new_class.__doc__.format(**parameters)
+        try:
+            new_class.__doc__ = new_class.__doc__.format(**parameters)
+        except ValueError as e:
+            raise SharedDocsException("Can't format documentation for class "
+                                      "`{}`. Catched exception: {}"
+                                      "".format(new_class.__name__, e))
 
         return new_class
 
 
+class SharedDocsABCMeta(SharedDocsMeta, ABCMeta):
+    """ Meta class that combine ``SharedDocsMeta`` and ``ABCMeta``
+    meta classes.
+    """
+
+
 class SharedDocs(with_metaclass(SharedDocsMeta)):
-    pass
+    """ Main class that provide with shared documentation functionality.
+    """
 
 
 docs = {
@@ -104,12 +130,7 @@ docs = {
     #             Train Methods            #
     # ------------------------------------ #
 
-    "supervised_train": """train(input_train, target_train, input_test=None,\
-    target_test=None, epochs=100, epsilon=None):
-        Trains network. You can control network training procedure
-        iterations with the number of epochs or converge value epsilon.
-        Also you can specify ``input_test`` and ``target_test`` and control
-        your validation data error on each iteration.
+    "supervised_train": """
     """,
     "supervised_train_epochs": """train(input_data, target_data, epochs=100):
         Trains network with fixed number of epochs.
@@ -123,10 +144,7 @@ docs = {
         maximum number of iterations, just to make sure that network will
         stop training procedure if it can't converge.
     """,
-    "supervised_train_lazy": """train(input_train, target_train, copy=True):
-        Network just stores all the information about the data and use it for \
-        the prediction. Parameter ``copy`` copy input data before store it \
-        inside the network.
+    "supervised_train_lazy": """
     """,
 
     # ------------------------------------ #

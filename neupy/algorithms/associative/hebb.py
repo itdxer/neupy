@@ -12,8 +12,6 @@ class HebbRule(BaseStepAssociative):
 
     Notes
     -----
-    * First layer must always be :layer:`Step`.
-    * Network must contains exacly 2 layers.
     * Network always generate weights which contains ``0`` weight for \
     conditioned stimulus and ``1`` otherwise. This setup helps you controll \
     your default state for learning features. Other type of weight you can \
@@ -26,21 +24,27 @@ class HebbRule(BaseStepAssociative):
         Decay rate is control your network weights. It helps network
         'forgote' information and control weight sizes. Without this
         parameter network weight will grow. Defaults to ``0.2``.
-    n_unconditioned : int
-        This value control number of features which are unconditioned
-        stimulus for network. Defaults to ``1``. Can be any integer value
-        bigger than ``1``, but less than feature space.
-    {step}
-    {show_epoch}
-    {shuffle_data}
-    {error}
-    {verbose}
-    {full_signals}
+    {BaseAssociative.n_inputs}
+    {BaseAssociative.n_outputs}
+    {BaseStepAssociative.n_unconditioned}
+    {BaseAssociative.weight}
+    {BaseStepAssociative.bias}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------
-    {unsupervised_train_epochs}
-    {full_methods}
+    {BaseSkeleton.predict}
+    {BaseAssociative.train}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
+    {BaseNetwork.last_error}
+    {BaseNetwork.last_validation_error}
+    {BaseNetwork.previous_error}
 
     Examples
     --------

@@ -16,20 +16,28 @@ class BaseLinearNetwork(SupervisedConstructableNetwork):
 
     Parameters
     ----------
-    {linear_connection}
-    {full_params}
-
-    Methods
-    -------
-    {plot_errors}
-    {last_error}
-    """
-
-    shared_docs = {"linear_connection": """connection : list, tuple or object
+    connection : list, tuple or object
         Should be a list or tuple that contains two integers. First integer
         describe number of input units and the seconds one number of output
         units.
-    """}
+    {SupervisedConstructableNetwork.error}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
+
+    Methods
+    -------
+    {BaseSkeleton.predict}
+    {SupervisedLearning.train}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
+    {BaseNetwork.last_error}
+    {BaseNetwork.last_validation_error}
+    {BaseNetwork.previous_error}
+    """
 
     def __init__(self, connection, **options):
         if len(connection) != 2:

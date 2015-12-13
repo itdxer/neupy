@@ -10,12 +10,24 @@ class Perceptron(BaseLinearNetwork):
 
     Parameters
     ----------
-    {full_params}
+    {BaseLinearNetwork.connection}
+    {SupervisedConstructableNetwork.error}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------
-    {supervised_train}
-    {full_methods}
+    {BaseSkeleton.predict}
+    {SupervisedLearning.train}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
+    {BaseNetwork.last_error}
+    {BaseNetwork.last_validation_error}
+    {BaseNetwork.previous_error}
 
     Examples
     --------
