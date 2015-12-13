@@ -13,13 +13,11 @@ class DiscreteMemory(BaseSkeleton, Configurable):
 
     Notes
     -----
-    * {discrete_data_note}
-    """
-    __discrete_data_note = """ Input and output data must contains only \
-    binary values.
-    """
+    * Input and output vectors should contain only binary values.
 
-    __discrete_params = """mode : {'sync', 'async'}
+    Parameters
+    ----------
+    mode : {{'sync', 'async'}}
         Indentify pattern recovery mode. ``sync`` mode try recovery a pattern
         using the all input vector. ``async`` mode randomly chose some
         values from the input vector and repeat this procedure the number
@@ -28,11 +26,6 @@ class DiscreteMemory(BaseSkeleton, Configurable):
         Available only in ``async`` mode. Identify number of random trials.
         Defaults to ``100``.
     """
-
-    shared_docs = {
-        'discrete_data_note': __discrete_data_note,
-        'discrete_params': __discrete_params
-    }
 
     mode = ChoiceProperty(default='sync', choices=['async', 'sync'])
     n_times = IntProperty(default=100, minval=1)

@@ -4,9 +4,6 @@ from base import BaseTestCase
 
 
 class SharedDocsTestCase(BaseTestCase):
-    def test_global_docs(self):
-        pass
-
     def test_simple_case(self):
         class A(SharedDocs):
             """ Class A documentation.
@@ -19,6 +16,27 @@ class SharedDocsTestCase(BaseTestCase):
             var2 : str
                 Var2 description.
             test : complex or float
+            """
+
+        class B(A):
+            """ Class B documentation.
+
+            Parameters
+            ----------
+            {A.var1}
+            {A.var2}
+            {A.test}
+            """
+
+        self.assertIn("Class B documentation", B.__doc__)
+
+        self.assertIn("var1 : int", B.__doc__)
+        self.assertIn("var2 : str", B.__doc__)
+        self.assertIn("test : complex or float", B.__doc__)
+
+    def test_shared_methods(self):
+        class A(SharedDocs):
+            """ Class A documentation.
 
             Methods
             -------
@@ -35,12 +53,6 @@ class SharedDocsTestCase(BaseTestCase):
         class B(A):
             """ Class B documentation.
 
-            Parameters
-            ----------
-            {A.var1}
-            {A.var2}
-            {A.test}
-
             Methods
             -------
             {A.foo}
@@ -49,15 +61,70 @@ class SharedDocsTestCase(BaseTestCase):
 
         self.assertIn("Class B documentation", B.__doc__)
 
-        self.assertIn("var1 : int", B.__doc__)
-        self.assertIn("var2 : str", B.__doc__)
-        self.assertIn("test : complex or float", B.__doc__)
-
         self.assertIn("foo()", B.__doc__)
         self.assertIn("bar(params=True)", B.__doc__)
 
-    def test_complex_class_inheritance(self):
-        pass
+    def test_shared_warns(self):
+        class A(SharedDocs):
+            """ Class A documentation.
 
-    def test_parameter_rewriting(self):
-        pass
+            Warns
+            -----
+            Important warning.
+            Additional information related to warning message.
+
+            Examples
+            --------
+            Just to put sth before `Warns`
+            """
+
+        class B(A):
+            """ Class B documentation.
+
+            Warns
+            -----
+            {A.Warns}
+            """
+
+        self.assertIn("Class B documentation", B.__doc__)
+
+        self.assertIn("Important warning", B.__doc__)
+        self.assertIn("related to warning message", B.__doc__)
+
+        self.assertNotIn("Just to", B.__doc__)
+        self.assertNotIn("Examples", B.__doc__)
+
+    def test_complex_class_inheritance(self):
+        class A(SharedDocs):
+            """ Class A documentation.
+
+            Parameters
+            ----------
+            var_a : int
+            var_x : str
+            """
+
+        class B(SharedDocs):
+            """ Class B documentation
+
+            Parameters
+            ----------
+            var_b : int
+            var_x : float
+            """
+
+        class C(A, B):
+            """ Class C documentation.
+
+            Parameters
+            ----------
+            {A.var_a}
+            {B.var_b}
+            {A.var_x}
+            """
+
+        self.assertIn("Class C documentation", C.__doc__)
+
+        self.assertIn("var_a : int", C.__doc__)
+        self.assertIn("var_b : int", C.__doc__)
+        self.assertIn("var_x : str", C.__doc__)

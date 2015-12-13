@@ -16,7 +16,7 @@ class Output(BaseLayer):
 
     Parameters
     ----------
-    {input_size_param}
+    {BaseLayer.input_size}
     """
 
     def relate_to(self, right_layer):
@@ -33,7 +33,7 @@ class CompetitiveOutput(Output):
 
     Parameters
     ----------
-    {input_size_param}
+    {BaseLayer.input_size}
     """
     def output(self, value):
         output = np.zeros(value.shape, dtype=np.int0)
@@ -54,7 +54,7 @@ class StepOutput(Output):
     critical_point : float
         Critical point is set up step function bias. Value equal to this
         point should be equal to the lower bound. Defaults to ``0``.
-    {input_size_param}
+    {BaseLayer.input_size}
     """
     output_bounds = TypedListProperty(default=(0, 1))
     critical_point = ProperFractionProperty(default=0)
@@ -72,7 +72,7 @@ class RoundedOutput(Output):
     ----------
     decimal_places : int
         The precision in decimal digits for output value.
-    {input_size_param}
+    {BaseLayer.input_size}
     """
     decimal_places = IntProperty(default=0, minval=0)
 
@@ -87,7 +87,7 @@ class ArgmaxOutput(Output):
     ----------
     decimal_places : int
     The precision in decimal digits for output value.
-    {input_size_param}
+    {BaseLayer.input_size}
     """
 
     def output(self, value):

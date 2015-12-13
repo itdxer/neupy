@@ -25,8 +25,8 @@ class MixtureOfExperts(BaseEnsemble):
 
     Methods
     -------
-    {supervised_train_epochs}
-    {full_methods}
+    train(self, input_data, target_data, epochs=100):
+        Train neural network.
 
     Examples
     --------

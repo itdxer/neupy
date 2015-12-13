@@ -18,7 +18,7 @@ class WeightDecay(WeightUpdateConfigurable):
 
     Warns
     -----
-    {bp_depending}
+    {WeightUpdateConfigurable.Warns}
 
     Examples
     --------

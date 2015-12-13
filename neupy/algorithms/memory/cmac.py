@@ -25,10 +25,11 @@ class CMAC(SupervisedLearning, BaseNetwork):
         quantization, defaults to ``10``.
     associative_unit_size : int
         Number of associative blocks in memory, defaults to ``2``.
-    {step}
-    {show_epoch}
-    {shuffle_data}
-    {full_signals}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
 
     Attributes
     ----------
@@ -37,11 +38,13 @@ class CMAC(SupervisedLearning, BaseNetwork):
 
     Methods
     -------
-    {fit}
-    {supervised_train}
-    {predict}
-    {last_error}
-    {plot_errors}
+    {BaseSkeleton.predict}
+    {SupervisedLearning.train}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
+    {BaseNetwork.last_error}
+    {BaseNetwork.last_validation_error}
+    {BaseNetwork.previous_error}
 
     Examples
     --------

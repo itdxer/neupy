@@ -21,13 +21,9 @@ class WolfeSearch(LearningRateConfigurable):
     c2 : float
         Parameter for curvature condition rule. Defaults to ``0.9``.
 
-    Attributes
-    ----------
-    {first_step}
-
     Warns
     -----
-    {bp_depending}
+    {LearningRateConfigurable.Warns}
 
     Examples
     --------

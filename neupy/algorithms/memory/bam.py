@@ -17,7 +17,8 @@ class DiscreteBAM(DiscreteMemory):
 
     Parameters
     ----------
-    {discrete_params}
+    {DiscreteMemory.mode}
+    {DiscreteMemory.n_times}
 
     Methods
     -------
@@ -36,7 +37,7 @@ class DiscreteBAM(DiscreteMemory):
 
     Notes
     -----
-    * {discrete_data_note}
+    * Input and output vectors should contain only binary values.
 
     Examples
     --------

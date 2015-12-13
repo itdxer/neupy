@@ -37,7 +37,6 @@ class ART1(Clustering, BaseNetwork):
     -------
     train(input_data):
         Network network will train until it clusters all samples.
-    {predict}
     {BaseSkeleton.predict}
     {BaseSkeleton.fit}
     {BaseNetwork.plot_errors}

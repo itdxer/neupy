@@ -16,13 +16,9 @@ class SimpleStepMinimization(LearningRateConfigurable):
         to epochs. Defaults to ``100`` epochs. Can't be less than ``1``.
         Less value mean that step decrease faster.
 
-    Attributes
-    ----------
-    {first_step}
-
     Warns
     -----
-    {bp_depending}
+    {LearningRateConfigurable.Warns}
 
     Examples
     --------

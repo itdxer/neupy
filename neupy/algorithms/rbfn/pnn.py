@@ -19,12 +19,17 @@ class PNN(LazyLearning, Classification, BaseNetwork):
     ----------
     std : float
         standard deviation for PDF function, default to 0.1.
-    {verbose}
+    {Verbose.verbose}
 
     Methods
     -------
-    {supervised_train_lazy}
-    {full_methods}
+    {LazyLearning.train}
+    {BaseSkeleton.predict}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
+    {BaseNetwork.last_error}
+    {BaseNetwork.last_validation_error}
+    {BaseNetwork.previous_error}
 
     Examples
     --------

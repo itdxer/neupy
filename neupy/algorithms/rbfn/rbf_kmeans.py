@@ -21,10 +21,11 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
     ----------
     n_clusters : int
         number of clusters in dataset.
-    {show_epoch}
-    {shuffle_data}
-    {full_signals}
-    {verbose}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Attributes
     ----------
@@ -34,8 +35,13 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
 
     Methods
     -------
-    {unsupervised_train_epsilon}
-    {full_methods}
+    {UnsupervisedLearning.train}
+    {BaseSkeleton.predict}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
+    {BaseNetwork.last_error}
+    {BaseNetwork.last_validation_error}
+    {BaseNetwork.previous_error}
 
     Examples
     --------

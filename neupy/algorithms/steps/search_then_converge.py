@@ -21,13 +21,9 @@ class SearchThenConverge(LearningRateConfigurable):
         Second important parameter to control the rate of error reduction.
         Defaults to ``0.2``
 
-    Attributes
-    ----------
-    {first_step}
-
     Warns
     -----
-    {bp_depending}
+    {LearningRateConfigurable.Warns}
 
     Examples
     --------

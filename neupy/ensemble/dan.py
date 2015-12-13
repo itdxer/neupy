@@ -21,8 +21,8 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
 
     Methods
     -------
-    {supervised_train}
-    {full_methods}
+    train(self, input_data, target_data, *args, **kwargs):
+        Use input data to train all neural network one by one.
 
     Attributes
     ----------

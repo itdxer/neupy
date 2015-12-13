@@ -18,7 +18,8 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
     Parameters
     ----------
-    {discrete_params}
+    {DiscreteMemory.mode}
+    {DiscreteMemory.n_times}
     check_limit : bool
         Option enable a limit of patterns control for the network using
         logarithmically proportion rule. Defaults to ``True``.
@@ -38,7 +39,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
     Notes
     -----
-    * {discrete_data_note}
+    * Input and output vectors should contain only binary values.
 
     Examples
     --------
@@ -118,6 +119,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     :ref:`password-recovery`: Password recovery with Discrete Hopfield Network.
     :ref:`discrete-hopfield-network`: Discrete Hopfield Network tutorial.
     """
+
     check_limit = Property(default=True, expected_type=bool)
 
     def __init__(self, **options):

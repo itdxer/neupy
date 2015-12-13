@@ -168,13 +168,9 @@ class LinearSearch(LearningRateConfigurable):
         Linear search method. Can be ``golden`` for golden search or ``brent``
         for Brent's search, default to ``golden``.
 
-    Attributes
-    ----------
-    {first_step}
-
     Warns
     -----
-    {bp_depending}
+    {LearningRateConfigurable.Warns}
 
     Examples
     --------

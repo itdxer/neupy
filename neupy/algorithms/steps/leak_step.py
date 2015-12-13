@@ -28,13 +28,9 @@ class LeakStepAdaptation(LearningRateConfigurable):
         This similar to ``alpha``, but it control ration only for update
         matrix norms. Defaults to ``0.5``.
 
-    Attributes
-    ----------
-    {steps}
-
     Warns
     -----
-    {bp_depending}
+    {LearningRateConfigurable.Warns}
 
     Examples
     --------

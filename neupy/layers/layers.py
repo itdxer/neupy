@@ -16,6 +16,14 @@ theano_shared_class = T.sharedvar.TensorSharedVariable
 
 
 class SharedArrayProperty(ArrayProperty):
+    """ In addition to Numpy arrays and matrix property support also
+    Theano shared variables.
+
+    Parameters
+    ----------
+    {BaseProperty.default}
+    {BaseProperty.required}
+    """
     expected_type = (ArrayProperty.expected_type, theano_shared_class)
 
 
@@ -23,15 +31,15 @@ class Layer(BaseLayer):
     """ Base class for input and hidden layers.
     Parameters
     ----------
-    {input_size_param}
-    {layer_params}
-    """
-
-    __layer_params = """weight : 2D array-like or None
+    {BaseLayer.input_size}
+    weight : 2D array-like or None
         Define your layer weights. ``None`` means that your weights will be
         generate randomly dependence on property ``init_method``.
         ``None`` by default.
-    init_method : {'gauss', 'bounded', 'ortho'}
+    bias : 1D array-like or None
+        Define your layer bias. ``None`` means that your weights will be
+        generate randomly dependence on property ``init_method``.
+    init_method : {{'gauss', 'bounded', 'ortho'}}
         Weight initialization method.
         ``gauss`` will generate random weights from Standard Normal
         Distribution.
@@ -43,8 +51,6 @@ class Layer(BaseLayer):
         identify minimum and maximum possible value in random weights.
         Defaults to ``(0, 1)``.
     """
-    shared_docs = {'layer_params': __layer_params}
-
     weight = SharedArrayProperty(default=None)
     bias = SharedArrayProperty(default=None)
     bounds = TypedListProperty(default=(0, 1), element_type=(int, float))
@@ -93,8 +99,11 @@ class Linear(Layer):
 
     Parameters
     ----------
-    {input_size_param}
-    {layer_params}
+    {BaseLayer.input_size}
+    {Layer.weight}
+    {Layer.bias}
+    {Layer.init_method}
+    {Layer.bounds}
     """
     activation_function = (lambda x: x)
 
@@ -104,8 +113,11 @@ class Sigmoid(Layer):
 
     Parameters
     ----------
-    {input_size_param}
-    {layer_params}
+    {BaseLayer.input_size}
+    {Layer.weight}
+    {Layer.bias}
+    {Layer.init_method}
+    {Layer.bounds}
     """
     activation_function = T.nnet.sigmoid
 
@@ -121,8 +133,11 @@ class Step(Layer):
 
     Parameters
     ----------
-    {input_size_param}
-    {layer_params}
+    {BaseLayer.input_size}
+    {Layer.weight}
+    {Layer.bias}
+    {Layer.init_method}
+    {Layer.bounds}
     """
     activation_function = step_function
 
@@ -132,8 +147,11 @@ class Tanh(Layer):
 
     Parameters
     ----------
-    {input_size_param}
-    {layer_params}
+    {BaseLayer.input_size}
+    {Layer.weight}
+    {Layer.bias}
+    {Layer.init_method}
+    {Layer.bounds}
     """
     activation_function = T.tanh
 
@@ -143,8 +161,11 @@ class Relu(Layer):
 
     Parameters
     ----------
-    {input_size_param}
-    {layer_params}
+    {BaseLayer.input_size}
+    {Layer.weight}
+    {Layer.bias}
+    {Layer.init_method}
+    {Layer.bounds}
     """
     activation_function = T.nnet.relu
 
@@ -154,8 +175,11 @@ class Softplus(Layer):
 
     Parameters
     ----------
-    {input_size_param}
-    {layer_params}
+    {BaseLayer.input_size}
+    {Layer.weight}
+    {Layer.bias}
+    {Layer.init_method}
+    {Layer.bounds}
     """
     activation_function = T.nnet.softplus
 
@@ -165,7 +189,10 @@ class Softmax(Layer):
 
     Parameters
     ----------
-    {input_size_param}
-    {layer_params}
+    {BaseLayer.input_size}
+    {Layer.weight}
+    {Layer.bias}
+    {Layer.init_method}
+    {Layer.bounds}
     """
     activation_function = T.nnet.softmax

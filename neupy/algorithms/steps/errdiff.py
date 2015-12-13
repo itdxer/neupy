@@ -28,13 +28,9 @@ class ErrDiffStepUpdate(LearningRateConfigurable):
         previous epochs that would produce a reduction step. Defaults
         to ``1.04``. Value can't be less than ``1``.
 
-    Attributes
-    ----------
-    {first_step}
-
     Warns
     -----
-    {bp_depending}
+    {LearningRateConfigurable.Warns}
 
     Examples
     --------

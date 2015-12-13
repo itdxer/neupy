@@ -1,7 +1,6 @@
 from abc import abstractmethod
 
 from neupy.core.base import BaseSkeleton
-from neupy.core.properties import Property
 from neupy.core.config import ConfigurableWithABC
 
 
@@ -9,10 +8,8 @@ __all__ = ('BaseEnsemble',)
 
 
 class BaseEnsemble(BaseSkeleton, ConfigurableWithABC):
-    """ Base class for ensemlbe algorithms.
+    """ Base class for ensemble algorithms.
     """
-    shuffle_data = Property(default=False, expected_type=bool)
-
     def __init__(self, networks):
         self.networks = networks
 

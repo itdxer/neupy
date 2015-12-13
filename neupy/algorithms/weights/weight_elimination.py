@@ -24,7 +24,7 @@ class WeightElimination(WeightUpdateConfigurable):
 
     Warns
     -----
-    {bp_depending}
+    {WeightUpdateConfigurable.Warns}
 
     Examples
     --------

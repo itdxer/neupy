@@ -1,5 +1,4 @@
 import re
-from functools import reduce
 from abc import ABCMeta
 
 from six import with_metaclass
@@ -12,16 +11,113 @@ __all__ = ("SharedDocsMeta", "SharedDocs", "SharedDocsException",
 
 
 def merge_dicts(left_dict, right_dict):
+    """ Merge two dictionaries in one.
+
+    Parameters
+    ----------
+    left_dict : dict
+    right_dict : dict
+
+    Returns
+    -------
+    dict
+    """
     return dict(left_dict, **right_dict)
 
 
 def find_numpy_doc_indent(docs):
+    """ Find indent for Numpy styled documentation and return number of
+    shifts inside of it.
+
+    Parameters
+    ----------
+    docs : str
+
+    Returns
+    -------
+    int or None
+        Returns number of indentations in documentation. If it doesn't
+        identify indentation function output will be ``None`` value.
+    """
+
     indent_detector = re.compile(r"(?P<indent>\ *)(?P<dashes>-{3,})")
     indent_info = indent_detector.findall(docs)
 
     if indent_info:
         indent, _ = indent_info[0]
-        return indent
+        return len(indent)
+
+
+def iter_parameters(docs):
+    """ Find parameters described in the Numpy style documentation.
+
+    Parameters
+    ----------
+    docs : str
+
+    Yields
+    ------
+    tuple
+        Yields tuple that contain 3 values. There are: parameter name,
+        parameter type and parameter description.
+    """
+
+    doc_indent = find_numpy_doc_indent(docs)
+    parser = re.compile(
+        r"(?P<name>\w+?)\s*\:\s*(?P<type>[^\n]+)"
+        r"((?P<description>\n{indent}\ +[^\n]+)*)"
+        "".format(indent=doc_indent)
+    )
+
+    for name, type_, desc, _ in parser.findall(docs):
+        yield (name, type_, desc)
+
+
+def iter_methods(docs):
+    """ Find methods described in the Numpy style documentation.
+
+    Parameters
+    ----------
+    docs : str
+
+    Yields
+    ------
+    tuple
+        Yields tuple that contain 3 values. There are: method name,
+        method parameters and method description.
+    """
+
+    doc_indent = find_numpy_doc_indent(docs)
+    parser = re.compile(
+        r"(?P<name>\w+?)(\((.+?)?\))"
+        r"((?P<description>\n{indent}\ +[^\n]+)*)"
+        "".format(indent=doc_indent)
+    )
+
+    for name, func_params, _, desc, _ in parser.findall(docs):
+        yield (name, func_params, desc)
+
+
+def parse_warns(docs):
+    """ Find warning described in the Numpy style documentation.
+
+    Parameters
+    ----------
+    docs : str
+
+    Returns
+    -------
+    str or None
+        Returns warnings from documentation or ``None`` if function
+        didn't find it.
+    """
+
+    parser = re.compile(r"Warns\s+-+\s+(?P<warntext>(.+\n)+)")
+    doc_warns = parser.findall(docs)
+
+    if doc_warns:
+        doc_warns, _ = doc_warns[0]
+        return doc_warns
 
 
 class SharedDocsException(Exception):
@@ -38,26 +134,16 @@ class SharedDocsMeta(type):
     """
 
     def __new__(cls, clsname, bases, attrs):
-        new_class = super(SharedDocsMeta, cls).__new__(cls, clsname, bases,
-                                                       attrs)
-
+        new_class = super(SharedDocsMeta, cls).__new__(cls, clsname,
+                                                       bases, attrs)
         if new_class.__doc__ is None:
             return new_class
 
-        doc_indent = find_numpy_doc_indent(new_class.__doc__)
-        if doc_indent is None:
-            return new_class
+        class_docs = new_class.__doc__
+        n_indents = find_numpy_doc_indent(class_docs)
 
-        parse_parameters = re.compile(
-            r"(?P<name>\w+?)\s*\:\s*(?P<type>[^\n]+)"
-            r"((?P<description>\n{indent}\ +[^\n]+)*)"
-            "".format(indent=doc_indent)
-        )
-        parse_methods = re.compile(
-            r"(?P<name>\w+?)(\((.+?)?\))"
-            r"((?P<description>\n{indent}\ +[^\n]+)*)"
-            "".format(indent=doc_indent)
-        )
+        if n_indents is None:
+            return new_class
 
         parameters = {}
         parent_classes = new_class.__mro__
@@ -71,25 +157,19 @@ class SharedDocsMeta(type):
             parent_name = parent_class.__name__
             parent_params = parameters[parent_name] = AttributeKeyDict()
 
-            doc_parameters = parse_parameters.findall(parent_docs)
-            for name, type_, desc, _ in doc_parameters:
+            for name, type_, desc in iter_parameters(parent_docs):
                 parent_params[name] = "{} : {}{}".format(name, type_, desc)
 
-            doc_methods = parse_methods.findall(parent_docs)
-            for name, func_params, _, desc, _ in doc_methods:
+            for name, func_params, desc in iter_methods(parent_docs):
                 parent_params[name] = ''.join([name, func_params, desc])
 
-        # TODO: after refatoring should remove old style shared documentaion
-
-        # Collect parameter `shared_docs` for all MRO classes and
-        # combine them in one big dictionary
-        shared_docs = [getattr(b, 'shared_docs', {}) for b in parent_classes]
-        all_params = reduce(merge_dicts, shared_docs, docs)
-        parameters = merge_dicts(parameters, all_params)
+            doc_warns = parse_warns(parent_docs)
+            if doc_warns is not None:
+                parent_params['Warns'] = doc_warns
 
         try:
             new_class.__doc__ = new_class.__doc__.format(**parameters)
-        except ValueError as e:
+        except Exception as e:
             raise SharedDocsException("Can't format documentation for class "
                                       "`{}`. Catched exception: {}"
                                       "".format(new_class.__name__, e))
@@ -106,108 +186,3 @@ class SharedDocsABCMeta(SharedDocsMeta, ABCMeta):
 class SharedDocs(with_metaclass(SharedDocsMeta)):
     """ Main class that provide with shared documentation functionality.
     """
-
-
-docs = {
-    # ------------------------------------ #
-    #                Methods               #
-    # ------------------------------------ #
-
-    "last_error": """
-    """,
-    "plot_errors": """
-    """,
-    "predict": """
-    """,
-    "predict_raw": """predict_raw(input_data)
-        Make a raw prediction. Ignore any post processing results related
-        to the final output layer.
-    """,
-    "fit": """
-    """,
-
-    # ------------------------------------ #
-    #             Train Methods            #
-    # ------------------------------------ #
-
-    "supervised_train": """
-    """,
-    "supervised_train_epochs": """train(input_data, target_data, epochs=100):
-        Trains network with fixed number of epochs.
-    """,
-    "unsupervised_train_epochs": """train(input_train, epochs=100):
-        Trains network with fixed number of epochs.
-    """,
-    "unsupervised_train_epsilon": """train(input_train, epsilon=1e-5, \
-    epochs=100):
-        Trains network until it converge. Parameter ``epochs`` control
-        maximum number of iterations, just to make sure that network will
-        stop training procedure if it can't converge.
-    """,
-    "supervised_train_lazy": """
-    """,
-
-    # ------------------------------------ #
-    #              Parameters              #
-    # ------------------------------------ #
-
-    "verbose": """
-    """,
-    "step": """
-    """,
-    "show_epoch": """
-    """,
-    "shuffle_data": """
-    """,
-    "error": """
-    """,
-    "epoch_end_signal": """
-    """,
-    "train_end_signal": """
-    """,
-
-    # ------------------------------------ #
-    #                 Steps                #
-    # ------------------------------------ #
-    "first_step": """first_step : float
-        Contains initialized step value.
-    """,
-    "steps": """steps : list of float
-        List of steps in the same order as the network layers.
-        By default all values are equal to ``step`` parameter.
-    """,
-
-    # ------------------------------------ #
-    #               Warnings               #
-    # ------------------------------------ #
-    "bp_depending": """It works with any algorithm based on backpropagation. \
-    Class can't work without it.
-    """
-}
-
-
-# ------------------------------------ #
-#         Complex parameters           #
-# ------------------------------------ #
-
-
-def joindocs(docs, docskeys):
-    return ''.join([docs[key] for key in docskeys])
-
-
-full_params_params = ()
-docs.update({
-    'full_params': joindocs(
-        docs,
-        [
-            'step', 'show_epoch', 'shuffle_data', 'epoch_end_signal',
-            'train_end_signal', 'verbose'
-        ]
-    ),
-    'full_signals': joindocs(
-        docs, ['epoch_end_signal', 'train_end_signal']
-    ),
-    'full_methods': joindocs(
-        docs, ['fit', 'predict', 'last_error', 'plot_errors']
-    )
-})

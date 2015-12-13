@@ -26,13 +26,9 @@ class BaseLayer(with_metaclass(LayerMeta, ChainConnection, BaseConfigurable)):
 
     Parameters
     ----------
-    {input_size_param}
-    """
-    __layer_params = """input_size : int
+    input_size : int
         Layer input size.
     """
-    shared_docs = {'input_size_param': __layer_params}
-
     input_size = IntProperty(required=True, minval=1)
 
     def __init__(self, input_size, **options):

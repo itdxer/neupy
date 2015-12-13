@@ -6,4 +6,11 @@ __all__ = ('WeightUpdateConfigurable',)
 
 
 class WeightUpdateConfigurable(Configurable):
+    """ Configuration class for algorithms that update weights.
+
+    Warns
+    -----
+    It works with any algorithm based on backpropagation. Class can't
+    work without it.
+    """
     optimization_type = WEIGHT_PENALTY
