@@ -1,5 +1,3 @@
-import sys
-
 import theano
 import numpy as np
 
@@ -40,12 +38,6 @@ def format_data(data, is_feature1d=True, copy=False):
 
     # Valid number of features for one or two dimentions
     n_features = data.shape[-1]
-    if 'pandas' in sys.modules:
-        pandas = sys.modules['pandas']
-
-        if isinstance(data, (pandas.Series, pandas.DataFrame)):
-            data = data.values
-
     if data.ndim == 1:
         data_shape = (n_features, 1) if is_feature1d else (1, n_features)
         data = data.reshape(data_shape)

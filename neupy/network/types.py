@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from neupy.core.config import ConfigurableWithABC
+from neupy.core.config import ConfigurableABC
 
 
 __all__ = ('Regression', 'Classification', 'Clustering')
@@ -11,7 +11,7 @@ class Regression(object):
     """
 
 
-class Classification(ConfigurableWithABC):
+class Classification(ConfigurableABC):
     """ Mixin for classification.
     """
     @abstractmethod

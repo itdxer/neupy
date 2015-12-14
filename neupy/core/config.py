@@ -7,14 +7,16 @@ from .properties import BaseProperty
 from .docs import SharedDocsMeta
 
 
-__all__ = ('ConfigMeta', 'ConfigWithABCMeta', 'Configurable',
-           'ConfigurableWithABC')
+__all__ = ('ConfigMeta', 'ConfigABCMeta', 'Configurable', 'ConfigurableABC')
 
 
 Option = namedtuple('Option', 'class_name value')
 
 
 class ConfigMeta(SharedDocsMeta):
+    """ Meta-class that configure initialized properties. Also it helps
+    inheit properties from parent classes and use them.
+    """
     def __new__(cls, clsname, bases, attrs):
         new_class = super(ConfigMeta, cls).__new__(cls, clsname, bases, attrs)
         parents = [kls for kls in bases if isinstance(kls, ConfigMeta)]
@@ -37,11 +39,15 @@ class ConfigMeta(SharedDocsMeta):
         return new_class
 
 
-class ConfigWithABCMeta(ABCMeta, ConfigMeta):
-    pass
-
-
 class BaseConfigurable(object):
+    """ Base configuration class. It help set up and validate
+    initialized property values.
+
+    Parameters
+    ----------
+    **options
+        Available properties.
+    """
     def __init__(self, **options):
         available_options = set(self.options.keys())
         invalid_options = set(options) - available_options
@@ -61,9 +67,18 @@ class BaseConfigurable(object):
 
 
 class Configurable(with_metaclass(ConfigMeta, BaseConfigurable)):
-    pass
+    """ Class that combine ``BaseConfigurable`` class functionality and
+    ``ConfigMeta`` meta-class.
+    """
 
 
-class ConfigurableWithABC(with_metaclass(ConfigWithABCMeta,
-                                         BaseConfigurable)):
-    pass
+class ConfigABCMeta(ABCMeta, ConfigMeta):
+    """ Meta-class that combains ``ConfigMeta`` and ``abc.ABCMeta``
+    meta-classes.
+    """
+
+
+class ConfigurableABC(with_metaclass(ConfigABCMeta, BaseConfigurable)):
+    """ Class that combine ``BaseConfigurable`` class functionality,
+    ``ConfigMeta`` and ``abc.ABCMeta`` meta-classes.
+    """

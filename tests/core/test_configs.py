@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from neupy.core.config import Configurable, ConfigurableWithABC
+from neupy.core.config import Configurable, ConfigurableABC
 from neupy.core.properties import Property
 
 from base import BaseTestCase
@@ -37,7 +37,7 @@ class ConfigsTestCase(BaseTestCase):
             a = A(invalid_property=3)
 
     def test_abc_config(self):
-        class A(ConfigurableWithABC):
+        class A(ConfigurableABC):
             @abstractmethod
             def important_method(self):
                 pass

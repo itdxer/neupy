@@ -2,13 +2,13 @@ from abc import abstractmethod
 
 from neupy.helpers import preformat_value
 from neupy.helpers.logs import Verbose
-from .config import ConfigurableWithABC
+from .config import ConfigurableABC
 
 
 __all__ = ('BaseSkeleton',)
 
 
-class BaseSkeleton(ConfigurableWithABC, Verbose):
+class BaseSkeleton(ConfigurableABC, Verbose):
     """ Base class for neural network algorithms.
 
     Methods

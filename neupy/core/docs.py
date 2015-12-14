@@ -62,7 +62,8 @@ def iter_parameters(docs):
         parameter type and parameter description.
     """
 
-    doc_indent = find_numpy_doc_indent(docs)
+    n_indents = find_numpy_doc_indent(docs)
+    doc_indent = ' ' * n_indents if n_indents else ''
     parser = re.compile(
         r"(?P<name>\w+?)\s*\:\s*(?P<type>[^\n]+)"
         r"((?P<description>\n{indent}\ +[^\n]+)*)"
@@ -87,7 +88,8 @@ def iter_methods(docs):
         method parameters and method description.
     """
 
-    doc_indent = find_numpy_doc_indent(docs)
+    n_indents = find_numpy_doc_indent(docs)
+    doc_indent = ' ' * n_indents if n_indents else ''
     parser = re.compile(
         r"(?P<name>\w+?)(\((.+?)?\))"
         r"((?P<description>\n{indent}\ +[^\n]+)*)"
@@ -127,7 +129,7 @@ class SharedDocsException(Exception):
 
 
 class SharedDocsMeta(type):
-    """ Meta class for shared documentation. This class conatains main
+    """ Meta-class for shared documentation. This class conatains main
     functionality that help inherit parameters and methods descriptions
     from parent classes. This class automaticaly format class documentation
     using basic python format syntax for objects.
@@ -178,8 +180,8 @@ class SharedDocsMeta(type):
 
 
 class SharedDocsABCMeta(SharedDocsMeta, ABCMeta):
-    """ Meta class that combine ``SharedDocsMeta`` and ``ABCMeta``
-    meta classes.
+    """ Meta-class that combine ``SharedDocsMeta`` and ``ABCMeta``
+    meta-classes.
     """
 
 

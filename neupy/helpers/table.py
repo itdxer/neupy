@@ -264,6 +264,11 @@ class TableDrawer(SharedDocs):
     """
 
     def __init__(self, *columns, stdout=print):
+        for column in columns:
+            if not isinstance(column, Column):
+                raise TypeError("Column should be ``Column`` class "
+                                "instance.")
+
         self.columns = columns
         self.stdout = stdout
         self.state = IdleState(self)

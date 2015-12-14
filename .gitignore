@@ -10,6 +10,7 @@ build/
 
 # Tests
 *-failed-diff.png
+.coverage
 
 # Other
 .tox/*

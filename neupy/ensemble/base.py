@@ -1,13 +1,13 @@
 from abc import abstractmethod
 
 from neupy.core.base import BaseSkeleton
-from neupy.core.config import ConfigurableWithABC
+from neupy.core.config import ConfigurableABC
 
 
 __all__ = ('BaseEnsemble',)
 
 
-class BaseEnsemble(BaseSkeleton, ConfigurableWithABC):
+class BaseEnsemble(BaseSkeleton, ConfigurableABC):
     """ Base class for ensemble algorithms.
     """
     def __init__(self, networks):

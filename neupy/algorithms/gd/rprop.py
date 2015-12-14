@@ -3,7 +3,7 @@ import theano.tensor as T
 import numpy as np
 
 from neupy.utils import asfloat
-from neupy.algorithms.gd import LEARING_RATE_UPDATE
+from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.core.properties import BoundedProperty, ProperFractionProperty
 from .base import GradientDescent
 
@@ -11,7 +11,7 @@ from .base import GradientDescent
 __all__ = ('RPROP', 'IRPROPPlus')
 
 
-class RPROP(GradientDescent):
+class RPROP(StepSelectionBuiltIn, GradientDescent):
     """ RPROP :network:`GradientDescent` algorithm optimization.
 
     Parameters
@@ -29,7 +29,6 @@ class RPROP(GradientDescent):
     {GradientDescent.optimizations}
     {ConstructableNetwork.connection}
     {SupervisedConstructableNetwork.error}
-    {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
     {BaseNetwork.epoch_end_signal}
@@ -76,19 +75,6 @@ class RPROP(GradientDescent):
     # some coeffitient.
     increase_factor = BoundedProperty(minval=1, default=1.2)
     decrease_factor = ProperFractionProperty(default=0.5)
-
-    def __new__(cls, connection, options=None, **kwargs):
-        if options is None:
-            options = kwargs
-
-        optimizations = options.get('optimizations', cls.default_optimizations)
-        for optimization_class in optimizations:
-            opt_class_type = getattr(optimization_class,
-                                     'optimization_type',  None)
-            if opt_class_type == LEARING_RATE_UPDATE:
-                raise ValueError("Algorithm have built-in functionality that"
-                                 "select learning rate for each weight node.")
-        return super(RPROP, cls).__new__(cls, connection, options, **kwargs)
 
     def init_layers(self):
         super(RPROP, self).init_layers()
@@ -162,7 +148,6 @@ class IRPROPPlus(RPROP):
     {GradientDescent.optimizations}
     {ConstructableNetwork.connection}
     {SupervisedConstructableNetwork.error}
-    {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
     {BaseNetwork.epoch_end_signal}

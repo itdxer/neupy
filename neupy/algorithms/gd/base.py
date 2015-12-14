@@ -54,6 +54,8 @@ class GradientDescent(SupervisedConstructableNetwork):
     """
 
     default_optimizations = []
+    supported_optimizations = optimization_types
+
     optimizations = Property(default=None, expected_type=list)
 
     def __new__(cls, connection, options=None, **kwargs):
@@ -71,11 +73,18 @@ class GradientDescent(SupervisedConstructableNetwork):
 
         founded_types = []
         for optimization_class in optimizations:
-            opt_class_type = getattr(optimization_class, 'optimization_type',
-                                     None)
-            if opt_class_type not in optimization_types:
-                raise ValueError("Invalid optimization class `{}`".format(
-                                 optimization_class.__name__))
+            opt_class_type = getattr(optimization_class,
+                                     'optimization_type',  None)
+
+            if opt_class_type not in cls.supported_optimizations:
+                opt_class_name = optimization_class.__name__
+                supported_opts = ', '.join(
+                    cls.supported_optimizations.values()
+                )
+                raise ValueError(
+                    "Invalid optimization class `{}`. Class supports only "
+                    "{}".format(opt_class_name, supported_opts)
+                )
 
             if opt_class_type in founded_types:
                 raise ValueError(

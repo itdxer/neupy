@@ -8,6 +8,11 @@ from base import BaseTestCase
 
 
 class HessianTestCase(BaseTestCase):
+    def test_hessian_exceptions(self):
+        with self.assertRaises(ValueError):
+            # Don't have step option
+            algorithms.Hessian((2, 3, 1), step=1)
+
     def test_compare_bp_and_hessian(self):
         x_train, x_test, y_train, y_test = simple_classification()
         compare_networks(

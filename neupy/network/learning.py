@@ -7,7 +7,7 @@ class SupervisedLearning(object):
     Methods
     -------
     train(input_train, target_train, input_test=None, target_test=None,\
-    epochs=100, epsilon=None):
+    epochs=100, epsilon=None)
         Trains network. You can control network training procedure
         iterations with the number of epochs or converge value epsilon.
         Also you can specify ``input_test`` and ``target_test`` and control
@@ -25,7 +25,7 @@ class UnsupervisedLearning(object):
 
     Methods
     -------
-    train(input_train, epsilon=1e-5, epochs=100):
+    train(input_train, epsilon=1e-5, epochs=100)
         Trains network until it converge. Parameter ``epochs`` control
         maximum number of iterations, just to make sure that network will
         stop training procedure if it can't converge.
@@ -45,7 +45,7 @@ class LazyLearning(object):
 
     Methods
     -------
-    train(input_train, target_train, copy=True):
+    train(input_train, target_train, copy=True)
         Network just stores all the information about the data and use it for \
         the prediction. Parameter ``copy`` copy input data before store it \
         inside the network.

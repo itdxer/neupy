@@ -1,6 +1,8 @@
 #!/bin/bash -eE
 echo 'Run tests...'
 nosetests \
+    --with-coverage \
+    --cover-package=neupy \
     -s -v \
     -e ._testing \
     tests/steps/test_simple_step_min.py\
@@ -14,6 +16,7 @@ nosetests \
     tests/core/test_storage.py\
     tests/core/test_properties.py\
     tests/core/test_shared_docs.py\
+    tests/core/test_logging.py\
     \
     tests/weights/test_weight_decay.py\
     tests/weights/test_weight_elimination.py\

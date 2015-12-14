@@ -33,6 +33,7 @@ class SharedDocsTestCase(BaseTestCase):
         self.assertIn("var1 : int", B.__doc__)
         self.assertIn("var2 : str", B.__doc__)
         self.assertIn("test : complex or float", B.__doc__)
+        self.assertIn("Defaults to ``2``.", B.__doc__)
 
     def test_shared_methods(self):
         class A(SharedDocs):
@@ -44,6 +45,9 @@ class SharedDocsTestCase(BaseTestCase):
                 Foo description.
                 Even more
             bar(params=True)
+            double_row(param1=True, param2=True,\
+            param3=True)
+                Additional description for ``double_row``.
 
             Examples
             --------
@@ -57,12 +61,20 @@ class SharedDocsTestCase(BaseTestCase):
             -------
             {A.foo}
             {A.bar}
+            {A.double_row}
             """
 
         self.assertIn("Class B documentation", B.__doc__)
 
         self.assertIn("foo()", B.__doc__)
+        self.assertIn("Foo description.", B.__doc__)
+        self.assertIn("Even more", B.__doc__)
         self.assertIn("bar(params=True)", B.__doc__)
+
+        # Check multi-row method
+        self.assertIn("double_row(param1=True, param2=True,", B.__doc__)
+        self.assertIn("param3=True)", B.__doc__)
+        self.assertIn("Additional description for ``double_row``.", B.__doc__)
 
     def test_shared_warns(self):
         class A(SharedDocs):

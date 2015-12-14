@@ -3,6 +3,7 @@ from operator import mul
 import theano
 import theano.tensor as T
 
+from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.core.properties import BoundedProperty
 from .base import GradientDescent
 
@@ -10,7 +11,7 @@ from .base import GradientDescent
 __all__ = ('Hessian',)
 
 
-class Hessian(GradientDescent):
+class Hessian(StepSelectionBuiltIn, GradientDescent):
     """ Hessian gradient decent optimization. This GD algorithm
     variation using second derivative information helps choose better
     gradient direction and as a consequence better weight update
@@ -46,6 +47,10 @@ class Hessian(GradientDescent):
     :network:`HessianDiagonal` : Hessian diagonal approximation.
     """
     inv_penalty_const = BoundedProperty(default=1, minval=0)
+
+    def init_properties(self):
+        del self.step
+        return super(StepSelectionBuiltIn, self).init_properties()
 
     def init_param_updates(self, layer, parameter):
         parameter_dim = parameter.get_value().shape
