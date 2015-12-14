@@ -29,6 +29,10 @@ class TerminalLogger(object):
     ----------
     propagate : bool
         Enable/disable logging output.
+    template : str
+        Terminal output message template. Defaults to ``"[{name}] {text}"``.
+    stdout : object
+        Function that catch message. Defaults to ``print``.
     """
 
     def __init__(self):
@@ -91,12 +95,17 @@ class VerboseProperty(BaseProperty):
 class Verbose(Configurable):
     """ Class that help use and control NeuPy logging.
 
-    # Parameters
+    Parameters
     ----------
     verbose : bool
         Property controls verbose output interminal. ``True`` enables
         informative output in the terminal and ``False`` -
         disable it. Defaults to ``False``.
+
+    Attributes
+    ----------
+    logs : TerminalLogger
+        ``TerminalLogger`` instance.
     """
     verbose = VerboseProperty(default=False)
 
