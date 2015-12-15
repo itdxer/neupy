@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from neupy.helpers import preformat_value
+from neupy.utils import preformat_value
 from neupy.helpers.logs import Verbose
 from .config import ConfigurableABC
 

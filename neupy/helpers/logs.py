@@ -1,7 +1,5 @@
 from __future__ import print_function
 
-from functools import wraps
-
 from neupy.core.config import Configurable
 from neupy.core.properties import BaseProperty
 from . import terminal
@@ -10,74 +8,104 @@ from . import terminal
 __all__ = ('Verbose',)
 
 
-def on_active_propagation(method):
-    """ Override method and activate it only in case if ``propagate``
-    parameter equal to ``True``.
-    """
-    @wraps(method)
-    def wrapper(self, *args, **kwargs):
-        if self.propagate:
-            return method(self, *args, **kwargs)
-    return wrapper
-
-
 class TerminalLogger(object):
     """ Customized logging class that replace standard logging
     functionality.
 
     Attributes
     ----------
-    propagate : bool
-        Enable/disable logging output.
+    enable : bool
+        Enable/disable logging output. Defaults to ``True``.
     template : str
-        Terminal output message template. Defaults to ``"[{name}] {text}"``.
-    stdout : object
-        Function that catch message. Defaults to ``print``.
+        Terminal output message template. Defaults
+        to ``"[{name}] {text}"``.
+    stdout : func
+        Function shows output in terminal. Defaults to ``print``.
     """
 
+    colors = {
+        'green': terminal.green,
+        'gray': terminal.gray,
+        'red': terminal.red,
+    }
+
     def __init__(self):
-        self.propagate = False
-        self.template = "[{name}] {text}"
+        self.enable = True
+        self.template = "[{tag}] {text}"
         self.stdout = print
 
-    def write(self, name, text, color=terminal.green):
-        formated_name = color(name.upper())
-        message = self.template.format(name=formated_name, text=text)
-        self.stdout(message)
+    def write(self, text):
+        """ Method writes text in terminal if logging is enable.
 
-    @on_active_propagation
-    def log(self, name, text, *args, **kwargs):
-        self.write(terminal.green(name), text)
+        Parameters
+        ----------
+        text : str
+        """
+        if self.enable:
+            self.stdout(text)
 
-    @on_active_propagation
-    def gray_log(self, name, text, *args, **kwargs):
-        self.write(terminal.gray(name), text)
+    def message(self, tag, text, color='green'):
+        """ Methods writes message in terminal using specific template.
+        Each row should have tag and text. Tag identifies message
+        category and text information reletad to this category.
 
-    @on_active_propagation
-    def header(self, text, *args, **kwargs):
+        Parameters
+        ----------
+        name : str
+        text : str
+        color : {{'green', 'gray', 'red'}}
+            Property that color text defined as ``tag`` parameter.
+            Defaults to ``green``.
+        """
+
+        if color not in self.colors:
+            available_colors = ', '.join(self.colors.keys())
+            raise ValueError("Invalid color `{}`. Available colors: {}"
+                             "".format(color, available_colors))
+
+        colorizer = self.colors[color]
+        formated_tag = colorizer(tag.upper())
+        message = self.template.format(tag=formated_tag, text=text)
+        self.write(message)
+
+    def title(self, text):
+        """ Method write text as a title message. Text will be displayed
+        using bold and underline text styles. Also there will be empty
+        lines before and after the message.
+
+        Parameters
+        ----------
+        text : str
+        """
         bold_text = terminal.bold(text)
         message = "\n{text}\n".format(text=terminal.underline(bold_text))
-        self.stdout(message)
+        self.write(message)
 
-    @on_active_propagation
-    def simple(self, text):
-        self.stdout(text)
+    def error(self, text):
+        """" Method writes messages that related to error type.
+        Text will be displayed as message with ``tag`` parameter equal
+        to ``'ERROR'``. Color will be red.
 
-    @on_active_propagation
-    def empty(self):
-        self.stdout("")
+        Parameters
+        ----------
+        text : str
+        """
+        self.message('ERROR', text, color='red')
 
-    @on_active_propagation
-    def error(self, text, *args, **kwargs):
-        self.write(terminal.red('ERROR'), text)
+    def warning(self, text):
+        """" Method writes messages that related to warning type.
+        Text will be displayed as message with ``tag`` parameter equal
+        to ``'WARN'``. Color will be red.
 
-    @on_active_propagation
-    def warning(self, text, *args, **kwargs):
-        self.write(terminal.red('WARN'), text)
+        Parameters
+        ----------
+        text : str
+        """
+        self.message('WARN', text, color='red')
 
 
 class VerboseProperty(BaseProperty):
-    """ Property that synchronize updates with ``propagate`` attribute in
+    """ Property that synchronize updates with ``enable`` attribute in
     logging instance.
 
     Parameters
@@ -88,7 +116,7 @@ class VerboseProperty(BaseProperty):
     expected_type = bool
 
     def __set__(self, instance, value):
-        instance.logs.propagate = value
+        instance.logs.enable = value
         return super(VerboseProperty, self).__set__(instance, value)
 
 
@@ -111,5 +139,5 @@ class Verbose(Configurable):
 
     def __init__(self, **options):
         self.logs = TerminalLogger()
-        self.logs.propagate = self.verbose
+        self.logs.enable = self.verbose
         super(Verbose, self).__init__(**options)

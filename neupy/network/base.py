@@ -10,8 +10,9 @@ import six
 import numpy as np
 import matplotlib.pyplot as plt
 
-from neupy.utils import format_data, is_layer_accept_1d_feature
-from neupy.helpers import preformat_value, table
+from neupy.utils import (format_data, is_layer_accept_1d_feature,
+                         preformat_value)
+from neupy.helpers import table
 from neupy.core.base import BaseSkeleton
 from neupy.core.properties import (BoundedProperty, NumberProperty,
                                    Property)
@@ -34,7 +35,7 @@ def show_epoch_summary(network, show_epoch):
         table.FloatColumn(name="Train err"),
         table.FloatColumn(name="Valid err"),
         table.TimeColumn(name="Time", width=10),
-        stdout=network.logs.simple
+        stdout=network.logs.write
     )
     table_drawer.start()
 
@@ -71,7 +72,7 @@ def show_epoch_summary(network, show_epoch):
 
     finally:
         table_drawer.finish()
-        network.logs.empty()
+        network.logs.write("")
 
 
 def shuffle_train_data(input_train, target_train):
@@ -114,31 +115,32 @@ def show_network_options(network, highlight_options=None):
         isinstance(network.connection, LayerConnection)
     )
     if has_layer_structure:
-        logs.header("Network structure")
-        logs.log("LAYERS", network.connection)
+        logs.title("Network structure")
+        logs.message("LAYERS", network.connection)
 
     # Just display in terminal all network options.
-    logs.header("Network options")
+    logs.title("Network options")
     for (_, clsname), class_options in grouped_options:
         if not class_options:
             # When in some class we remove all available attributes
             # we just skip it.
             continue
 
-        logs.simple("{}:".format(clsname))
+        logs.write("{}:".format(clsname))
 
         for key, data in sorted(class_options):
             if key in highlight_options:
-                logger = logs.log
+                msg_color = 'green'
                 value = highlight_options[key]
             else:
-                logger = logs.gray_log
+                msg_color = 'gray'
                 value = data.value
 
             formated_value = preformat_value(value)
-            logger("OPTION", "{} = {}".format(key, formated_value))
+            msg_text = "{} = {}".format(key, formated_value)
+            logs.message("OPTION", msg_text, color=msg_color)
 
-        logs.empty()
+        logs.write("")
 
 
 def parse_show_epoch_property(value, n_epochs):
@@ -347,19 +349,21 @@ class BaseNetwork(BaseSkeleton):
 
         # ----------- Training procedure ----------- #
 
-        logs.header("Start train")
-        logs.log("TRAIN", "Train data size: {}".format(input_train.shape[0]))
+        n_train_samples = input_train.shape[0]
+
+        logs.title("Start train")
+        logs.message("TRAIN", "Train data size: {}".format(n_train_samples))
 
         if input_test is not None:
-            logs.log("TRAIN", "Validation data size: {}"
-                              "".format(input_test.shape[0]))
+            logs.message("TRAIN", "Validation data size: {}"
+                                  "".format(input_test.shape[0]))
 
         if epsilon is None:
-            logs.log("TRAIN", "Total epochs: {}".format(epochs))
+            logs.message("TRAIN", "Total epochs: {}".format(epochs))
         else:
-            logs.log("TRAIN", "Max epochs: {}".format(epochs))
+            logs.message("TRAIN", "Max epochs: {}".format(epochs))
 
-        logs.empty()
+        logs.write("")
 
         # Optimizations for long loops
         errors = self.errors_in
@@ -409,8 +413,8 @@ class BaseNetwork(BaseSkeleton):
                 # TODO: This notification break table view in terminal.
                 # Should show it in different way.
                 # Maybe I can send it in generator using ``throw`` method
-                logs.log("TRAIN", "Epoch #{} stopped. {}"
-                                  "".format(epoch, str(err)))
+                logs.message("TRAIN", "Epoch #{} stopped. {}"
+                                      "".format(epoch, str(err)))
                 break
 
         if epoch != last_epoch_shown:
@@ -420,7 +424,7 @@ class BaseNetwork(BaseSkeleton):
             train_end_signal(self)
 
         epoch_summary.close()
-        logs.log("TRAIN", "End train")
+        logs.message("TRAIN", "End train")
 
     # ----------------- Errors ----------------- #
 

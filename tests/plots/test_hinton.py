@@ -1,5 +1,6 @@
 import os
 
+import matplotlib.pyplot as plt
 import numpy as np
 
 from neupy import plots
@@ -17,7 +18,8 @@ class HintonDiagramTestCase(BaseTestCase):
         with image_comparison(original_image, figsize=(10, 6)) as fig:
             weight = np.random.randn(20, 20)
             ax = fig.add_subplot(1, 1, 1)
-            plots.hinton(weight, ax=ax, add_legend=True)
+            plt.sca(ax)  # To test the case when ax=None
+            plots.hinton(weight, add_legend=True)
 
     def test_max_weight(self):
         original_image = os.path.join(IMGDIR, "test_max_weight_hinton.png")

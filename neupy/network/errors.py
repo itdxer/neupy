@@ -3,14 +3,7 @@ from __future__ import division
 import theano.tensor as T
 
 
-__all__ = ('mse', 'binary_crossentropy', 'categorical_crossentropy',
-           'linear_error')
-
-
-def linear_error(actual, predicted):
-    """ Linear error.
-    """
-    return predicted - actual
+__all__ = ('mse', 'binary_crossentropy', 'categorical_crossentropy')
 
 
 def mae(actual, predicted):
@@ -37,10 +30,6 @@ def categorical_crossentropy(actual, predicted, epsilon=1e-10):
     """
     predicted = T.clip(predicted, epsilon, 1.0 - epsilon)
     return T.nnet.categorical_crossentropy(predicted, actual).mean()
-
-
-def kullback_leibler(actual, predicted):
-    pass
 
 
 def rmsle(actual, predicted):

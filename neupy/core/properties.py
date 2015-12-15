@@ -1,6 +1,6 @@
 import numpy as np
 
-from neupy.helpers.base import preformat_value
+from neupy.utils import preformat_value
 from neupy.core.docs import SharedDocs
 
 

@@ -1,8 +1,9 @@
+import importlib
+
 from numpy.random import randn, random
 from numpy.linalg import svd
 
 from neupy.layers.connections import LayerConnection
-from neupy.helpers import import_class
 
 
 __all__ = ('generate_layers', 'random_orthogonal', 'random_bounded',
@@ -11,6 +12,27 @@ __all__ = ('generate_layers', 'random_orthogonal', 'random_bounded',
 
 DEFAULT_LAYER_CLASS = "neupy.layers.Sigmoid"
 DEFAULT_OUTPUT_LAYER_CLASS = "neupy.layers.Output"
+
+
+def import_class(object_path):
+    """ Import class from module using module path written as Python
+    string.
+
+    Parameters
+    ----------
+    object_path : str
+        Path to the object. For example, it can be written
+        as ``'path.to.module.MyClass'``.
+
+    Returns
+    -------
+    object
+        Function returns object imported using identified path.
+    """
+
+    module_name, classname = object_path.rsplit('.', 1)
+    module = importlib.import_module(module_name)
+    return getattr(module, classname)
 
 
 def generate_layers(layers_sizes):

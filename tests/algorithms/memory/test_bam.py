@@ -2,7 +2,7 @@ import numpy as np
 
 from neupy import algorithms
 
-from memory.data import *
+from algorithms.memory.data import *
 from base import BaseTestCase
 from utils import vectors_for_testing
 

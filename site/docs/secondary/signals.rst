@@ -22,7 +22,7 @@ Here is the example where we define two custom signals which will display useful
         """.format(network.epoch, network.step))
 
     def train_end(network):
-        network.logs.log("TRAIN", "End train")
+        network.logs.message("TRAIN", "End train")
 
     bpnet = algorithms.ConjugateGradient(
         (2, 5, 1),

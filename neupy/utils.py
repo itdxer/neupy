@@ -1,9 +1,11 @@
+import inspect
+
 import theano
 import numpy as np
 
 
 __all__ = ('format_data', 'is_layer_accept_1d_feature', 'asfloat',
-           'AttributeKeyDict', 'is_list_of_integers')
+           'AttributeKeyDict', 'is_list_of_integers', 'preformat_value')
 
 
 def format_data(data, is_feature1d=True, copy=False):
@@ -113,3 +115,26 @@ def is_list_of_integers(sequence):
         is an integer. ``False`` otherwise.
     """
     return all(isinstance(element, int) for element in sequence)
+
+
+def preformat_value(value):
+    """ Function pre-format input value depence on it's type.
+
+    Parameters
+    ----------
+    value : object
+
+    Returns
+    -------
+    object
+    """
+    if inspect.isfunction(value) or inspect.isclass(value):
+        return value.__name__
+
+    elif isinstance(value, (list, tuple, set)):
+        return [preformat_value(v) for v in value]
+
+    elif isinstance(value, (np.ndarray, np.matrix)):
+        return value.shape
+
+    return value
