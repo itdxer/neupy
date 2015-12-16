@@ -1,6 +1,7 @@
 import numpy as np
 
 from neupy.utils import preformat_value
+from neupy.network.utils import shuffle
 
 from base import BaseTestCase
 
@@ -38,8 +39,8 @@ class UtilsTestCase(BaseTestCase):
         actual = preformat_value(np.matrix([[1, 1]]))
         np.testing.assert_array_equal(expected, actual)
 
-    # def test_shuffle(self):
-    #     input_data = np.arange(10)
-    #     shuffeled_data = shuffle(input_data, input_data)
-    #
-    #     np.testing.assert_array_equal(*shuffeled_data)
+    def test_shuffle(self):
+        input_data = np.arange(10)
+        shuffeled_data = shuffle(input_data, input_data)
+
+        np.testing.assert_array_equal(*shuffeled_data)
