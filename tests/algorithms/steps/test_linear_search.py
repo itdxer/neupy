@@ -11,7 +11,7 @@ from base import BaseTestCase
 
 
 class GoldenSearchTestCase(BaseTestCase):
-    def test_golden_search_exception(self):
+    def test_golden_search_exceptions(self):
         invalid_parameters = (
             dict(tol=-1),
             dict(minstep=-1),

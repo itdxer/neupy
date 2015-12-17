@@ -42,5 +42,6 @@ class UtilsTestCase(BaseTestCase):
     def test_shuffle(self):
         input_data = np.arange(10)
         shuffeled_data = shuffle(input_data, input_data)
-
         np.testing.assert_array_equal(*shuffeled_data)
+
+        np.testing.assert_array_equal(tuple(), shuffle())

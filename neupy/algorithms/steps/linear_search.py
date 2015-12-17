@@ -59,8 +59,7 @@ def interval_location(f, minstep=1e-5, maxstep=50., maxiter=1024):
         non_sequences=[maxstep],
         n_steps=maxiter
     )
-    find_maxstep = theano.function([], steps[-1])
-    return find_maxstep()
+    return steps[-1]
 
 
 def golden_search(f, maxstep=50, maxiter=1024, tol=1e-5):
@@ -110,8 +109,7 @@ def golden_search(f, maxstep=50, maxiter=1024, tol=1e-5):
         non_sequences=[asfloat(tol)],
         n_steps=maxiter
     )
-    find_best_step = theano.function([], (a[-1] + b[-1]) / 2)
-    return find_best_step()
+    return (a[-1] + b[-1]) / 2
 
 
 def fmin_golden_search(f, minstep=1e-5, maxstep=50., maxiter=1024, tol=1e-5):
@@ -133,7 +131,6 @@ def fmin_golden_search(f, minstep=1e-5, maxstep=50., maxiter=1024, tol=1e-5):
     -------
     int
     """
-
     params = (
         ('maxiter', maxiter),
         ('minstep', minstep),

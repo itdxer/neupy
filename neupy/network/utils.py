@@ -43,6 +43,16 @@ def iter_until_converge(network, epsilon, max_epochs):
 
 def shuffle(*arrays):
     """ Make a random shuffle for all arrays.
+
+    Parameters
+    ----------
+    *arrays
+        List of arrays that should be shuffled.
+
+    Returns
+    -------
+    list
+        List of arrays that contain shuffeled input data.
     """
     if not arrays:
         return tuple()
