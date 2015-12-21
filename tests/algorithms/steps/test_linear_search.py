@@ -37,10 +37,10 @@ class GoldenSearchTestCase(BaseTestCase):
             return f(3 + step)
 
         best_step = fmin_golden_search(check_updates)
-        self.assertAlmostEqual(1.6, best_step, places=2)
+        self.assertAlmostEqual(1.6, best_step.eval(), places=2)
 
         best_step = fmin_golden_search(check_updates, maxstep=1)
-        self.assertAlmostEqual(1, best_step, places=2)
+        self.assertAlmostEqual(1, best_step.eval(), places=2)
 
     def test_linear_search(self):
         methods = [

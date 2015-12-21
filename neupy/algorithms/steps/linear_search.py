@@ -99,7 +99,7 @@ def golden_search(f, maxstep=50, maxiter=1024, tol=1e-5):
         return [a, b, c, d], stoprule
 
     a = T.constant(asfloat(0))
-    b = T.constant(asfloat(maxstep))
+    b = maxstep
     c = b - golden_ratio * (b - a)
     d = a + golden_ratio * (b - a)
 
