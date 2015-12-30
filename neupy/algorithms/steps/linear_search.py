@@ -4,6 +4,7 @@ import theano
 import theano.tensor as T
 from theano.ifelse import ifelse
 import numpy as np
+from scipy.optimize import minimize_scalar
 
 from neupy.utils import asfloat
 from neupy.core.properties import (BoundedProperty, ChoiceProperty,
@@ -50,7 +51,7 @@ def interval_location(f, minstep=1e-5, maxstep=50., maxiter=1024):
         stoprule = theano.scan_module.until(
             T.or_(is_output_increse, step > maxstep)
         )
-        return [theano.shared(func_output), step], stoprule
+        return [func_output, step], stoprule
 
     (_, steps), _ = theano.scan(
         find_right_bound,
@@ -103,7 +104,7 @@ def golden_search(f, maxstep=50, maxiter=1024, tol=1e-5):
     c = b - golden_ratio * (b - a)
     d = a + golden_ratio * (b - a)
 
-    (a, b, _, _), _ = theano.scan(
+    (a, b, c, d), _ = theano.scan(
         interval_reduction,
         outputs_info=[a, b, c, d],
         non_sequences=[asfloat(tol)],
@@ -163,7 +164,7 @@ class LinearSearch(LearningRateConfigurable):
     Parameters
     ----------
     tol : float
-        Tolerance for termination, default to ``0.3``. Can be any number
+        Tolerance for termination, default to ``0.1``. Can be any number
         greater that zero.
     search_method : 'gloden', 'brent'
         Linear search method. Can be ``golden`` for golden search or ``brent``
@@ -221,11 +222,9 @@ class LinearSearch(LearningRateConfigurable):
     :network:`ConjugateGradient`
     """
 
-    tol = BoundedProperty(default=0.3, minval=0)
-    minstep = BoundedProperty(default=1e-5, minval=0)
-    maxstep = BoundedProperty(default=50, minval=0)
+    tol = BoundedProperty(default=0.1, minval=0)
     maxiter = IntProperty(default=1024, minval=1)
-    search_method = ChoiceProperty(choices={'golden': fmin_golden_search},
+    search_method = ChoiceProperty(choices=['golden', 'brent'],
                                    default='golden')
 
     def train_epoch(self, input_train, target_train):
@@ -233,13 +232,24 @@ class LinearSearch(LearningRateConfigurable):
         train_epoch = self.methods.train_epoch
         shared_step = self.variables.step
 
+        params = [param for param, _ in self.init_train_updates()]
+        param_defaults = [param.get_value() for param in params]
+
         def setup_new_step(new_step):
-            for new_weight, layer in zip(weights, self.train_layers):
-                layer.weight.set_value(new_weight)
+            for param_default, param in zip(param_defaults, params):
+                param.set_value(param_default)
 
-            self.variables.step = new_step
-            return train_epoch(input_train, target_train)
+            self.variables.step.set_value(new_step)
+            train_epoch(input_train, target_train)
+            error = self.methods.prediction_error(input_train, target_train)
 
-        best_step = fmin_golden_search(setup_new_step, self.minstep,
-                                       self.maxstep, self.maxiter, self.tol)
-        return setup_new_step(best_step)
+            return np.where(np.isnan(error), np.inf, error)
+
+        res = minimize_scalar(
+            setup_new_step,
+            tol=self.tol,
+            method=self.search_method,
+            options={'xtol': self.tol, 'maxiter': self.maxiter},
+        )
+
+        return setup_new_step(res.x)
