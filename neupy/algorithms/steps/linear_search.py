@@ -50,7 +50,7 @@ def interval_location(f, minstep=1e-5, maxstep=50., maxiter=1024):
         stoprule = theano.scan_module.until(
             T.or_(is_output_increse, step > maxstep)
         )
-        return [func_output, step], stoprule
+        return [theano.shared(func_output), step], stoprule
 
     (_, steps), _ = theano.scan(
         find_right_bound,
@@ -118,6 +118,8 @@ def fmin_golden_search(f, minstep=1e-5, maxstep=50., maxiter=1024, tol=1e-5):
     Parameters
     ----------
     f : func
+        Function that needs to be minimized. Function need to
+        return the scalar.
     minstep : float
         Defaults to ``1e-5``.
     maxstep : float
@@ -129,7 +131,9 @@ def fmin_golden_search(f, minstep=1e-5, maxstep=50., maxiter=1024, tol=1e-5):
 
     Returns
     -------
-    int
+    object
+        Returns the Theano instance that finally should produce
+        best possbile step for specified function.
     """
     params = (
         ('maxiter', maxiter),
@@ -218,32 +222,24 @@ class LinearSearch(LearningRateConfigurable):
     """
 
     tol = BoundedProperty(default=0.3, minval=0)
+    minstep = BoundedProperty(default=1e-5, minval=0)
     maxstep = BoundedProperty(default=50, minval=0)
     maxiter = IntProperty(default=1024, minval=1)
     search_method = ChoiceProperty(choices={'golden': fmin_golden_search},
                                    default='golden')
 
-    # def set_weights(self, new_weights):
-    #     for layer, new_weight in zip(self.train_layers, new_weights):
-    #         layer.weight = new_weight.copy()
-    #
-    # def check_updates(self, new_step, weights, delta):
-    #     self.set_weights(weights)
-    #     self.step = new_step
-    #
-    #     super(LinearSearch, self).update_weights(delta)
-    #     predicted_output = self.predict(self.input_train)
-    #     return self.error(predicted_output, self.target_train)
-    #
-    # def update_weights(self, weight_deltas):
-    #     real_weights = [layer.weight for layer in self.train_layers]
-    #     res = minimize_scalar(
-    #         self.check_updates, args=(real_weights, weight_deltas),
-    #         tol=self.tol, method=self.search_method,
-    #         options={'xtol': self.tol}
-    #     )
-    #
-    #     self.set_weights(real_weights)
-    #     self.step = res.x
-    #
-    #     return super(LinearSearch, self).update_weights(weight_deltas)
+    def train_epoch(self, input_train, target_train):
+        weights = [layer.weight.get_value() for layer in self.train_layers]
+        train_epoch = self.methods.train_epoch
+        shared_step = self.variables.step
+
+        def setup_new_step(new_step):
+            for new_weight, layer in zip(weights, self.train_layers):
+                layer.weight.set_value(new_weight)
+
+            self.variables.step = new_step
+            return train_epoch(input_train, target_train)
+
+        best_step = fmin_golden_search(setup_new_step, self.minstep,
+                                       self.maxstep, self.maxiter, self.tol)
+        return setup_new_step(best_step)

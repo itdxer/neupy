@@ -127,7 +127,6 @@ class ConstructableNetwork(BaseNetwork):
         """ Initialize all methods that needed for prediction and
         training procedures.
         """
-
         self.methods.predict_raw = theano.function(
             inputs=[self.variables.network_input],
             outputs=self.variables.prediction_func

@@ -69,11 +69,14 @@ class GoldenSearchTestCase(BaseTestCase):
                     layers.Sigmoid(50),
                     layers.Output(1),
                 ],
+                show_epoch=1,
+                verbose=True,
                 search_method=method_name,
-                show_epoch=25,
+                minstep=1e-1,
+                maxstep=1,
                 optimizations=[algorithms.LinearSearch],
             )
-            cgnet.train(x_train, y_train, epochs=100)
+            cgnet.train(x_train, y_train, epochs=78)
             y_predict = cgnet.predict(x_test).round(1)
 
             error = rmsle(target_scaler.inverse_transform(y_test),
