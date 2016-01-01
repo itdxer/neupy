@@ -1,6 +1,6 @@
 from .gd.base import *
 from .gd.lev_marq import *
-from .gd.quasi_newton import *
+from .gd.bfgs import *
 from .gd.conjgrad import *
 from .gd.hessian import *
 from .gd.hessdiag import *
@@ -16,7 +16,6 @@ from .steps.search_then_converge import *
 from .steps.errdiff import *
 from .steps.leak_step import *
 from .steps.linear_search import *
-from .steps.wolfe_search import *
 
 from .memory.discrete_hopfield_network import *
 from .memory.bam import *

@@ -50,7 +50,7 @@ class Hessian(StepSelectionBuiltIn, GradientDescent):
 
     def init_properties(self):
         del self.step
-        return super(StepSelectionBuiltIn, self).init_properties()
+        return super(Hessian, self).init_properties()
 
     def init_param_updates(self, layer, parameter):
         parameter_dim = parameter.get_value().shape

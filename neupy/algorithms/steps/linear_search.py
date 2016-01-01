@@ -223,13 +223,12 @@ class LinearSearch(LearningRateConfigurable):
     """
 
     tol = BoundedProperty(default=0.1, minval=0)
-    maxiter = IntProperty(default=1024, minval=1)
     search_method = ChoiceProperty(choices=['golden', 'brent'],
                                    default='golden')
 
     def train_epoch(self, input_train, target_train):
-        weights = [layer.weight.get_value() for layer in self.train_layers]
         train_epoch = self.methods.train_epoch
+        prediction_error = self.methods.prediction_error
         shared_step = self.variables.step
 
         params = [param for param, _ in self.init_train_updates()]
@@ -241,7 +240,7 @@ class LinearSearch(LearningRateConfigurable):
 
             self.variables.step.set_value(new_step)
             train_epoch(input_train, target_train)
-            error = self.methods.prediction_error(input_train, target_train)
+            error = prediction_error(input_train, target_train)
 
             return np.where(np.isnan(error), np.inf, error)
 
@@ -249,7 +248,7 @@ class LinearSearch(LearningRateConfigurable):
             setup_new_step,
             tol=self.tol,
             method=self.search_method,
-            options={'xtol': self.tol, 'maxiter': self.maxiter},
+            options={'xtol': self.tol},
         )
 
         return setup_new_step(res.x)

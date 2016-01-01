@@ -1,7 +1,11 @@
-from operator import mul
+from itertools import chain
 
-from numpy import zeros, asmatrix, identity, tile, dot, concatenate
+import theano
+import theano.tensor as T
+from theano.ifelse import ifelse
+import numpy as np
 
+from neupy.utils import asfloat
 from neupy.core.properties import BoundedProperty
 from neupy.algorithms import GradientDescent
 
@@ -9,19 +13,37 @@ from neupy.algorithms import GradientDescent
 __all__ = ('LevenbergMarquardt',)
 
 
+def jaccobian(y, x):
+    n_samples = y.shape[0]
+    J, _ = theano.scan(
+        lambda i, y, *params: T.grad(T.sum(y[i]), wrt=params),
+        sequences=T.arange(n_samples),
+        non_sequences=[y] + x
+    )
+
+    jacc = []
+    for j, param in zip(J, x):
+        jacc.append(j.reshape((n_samples, param.size)))
+
+    return T.concatenate(jacc, axis=1)
+
+
 class LevenbergMarquardt(GradientDescent):
     """ Levenberg-Marquardt algorithm.
+
+    Notes
+    -----
+    * Network minimizes only Mean Squared Error function.
 
     Parameters
     ----------
     mu : float
         Control invertion for J.T * J matrix, defaults to `0.1`.
-    mu_increase_factor : float
+    mu_update_factor : float
         Factor to decrease the mu if update decrese the error, otherwise
         increse mu by the same factor.
     {GradientDescent.optimizations}
     {ConstructableNetwork.connection}
-    {SupervisedConstructableNetwork.error}
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
@@ -82,7 +104,7 @@ class LevenbergMarquardt(GradientDescent):
     ...         layers.Sigmoid(40),
     ...         layers.Output(1),
     ...     ],
-    ...     mu_increase_factor=2,
+    ...     mu_update_factor=2,
     ...     mu=0.1,
     ...     step=0.25,
     ...     show_epoch=10,
@@ -102,82 +124,63 @@ class LevenbergMarquardt(GradientDescent):
     :network:`GradientDescent` : GradientDescent algorithm.
     """
     mu = BoundedProperty(default=0.01, minval=0)
-    mu_increase_factor = BoundedProperty(default=5, minval=1)
+    mu_update_factor = BoundedProperty(default=5, minval=1)
 
-    def init_layers(self):
-        super(LevenbergMarquardt, self).init_layers()
-        self.n_weights = sum(mul(*layer.size) for layer in self.train_layers)
+    def init_properties(self):
+        del self.step
+        self.error = 'mse'
+        return super(LevenbergMarquardt, self).init_properties()
 
-    def get_jacobian_matrix(self):
-        result = []
-        for input_data, gradient in zip(self.layer_outputs, self.delta):
-            gradient_n_col = gradient.shape[1]
-            input_data_n_features = input_data.shape[1]
-
-            repeated_gradients = tile(gradient, (1, input_data_n_features))
-            # Total weight matrix size (rows*cols) in layer.
-            n_weights = repeated_gradients.shape[1]
-
-            # Matrix `comb` help repeate input data columns for valid
-            # combination of input data and gradients for Jacobian matrix.
-            # Basicly this matrix and dot product replace 2 inner loops
-            # in pure python.
-            comb = zeros((input_data_n_features, n_weights))
-            for i in range(input_data_n_features):
-                comb[i, i * gradient_n_col:(i + 1) * gradient_n_col] = 1
-
-            result.append(repeated_gradients * dot(input_data, comb))
-
-        return concatenate(result, axis=1)
-
-    def update_weights(self, weight_deltas):
-        error = asmatrix(self.target_train - self.output_train)
-        jacoby = self.get_jacobian_matrix() / error
-        jacoby_t = jacoby.T
-        smallstep_matrix = self.mu * identity(self.n_weights)
-
-        inverse_hessian = (jacoby_t * jacoby + smallstep_matrix).I
-        # Most of all time this order would be much faster than sequantial
-        # order without brackets, because number of columns for parameter
-        # error would be small.
-        jacoby_delta = inverse_hessian * (jacoby_t * error)
-
-        row = 0
-        old_weights = self.old_weights = []
-
-        for layer in self.train_layers:
-            weight = layer.weight
-            weight_in_size, weight_out_size = weight.shape
-            old_weights.append(weight.copy())
-
-            for i in range(self.use_bias, weight_in_size):
-                weight_delta = jacoby_delta[row:row + weight_out_size, :].T
-                weight[i:i + 1, :] -= weight_delta
-                row += weight_out_size
-
-            if self.use_bias:
-                # Use otside if loop because we setup last column for bias
-                # which is at fist row position in weight matrix.
-                weight[0:1, :] -= jacoby_delta[row:row + weight_out_size, :].T
-                row += weight_out_size
-
-    def after_weight_update(self, input_train, target_train):
-        super(LevenbergMarquardt, self).after_weight_update(
-            input_train, target_train
+    def init_variables(self):
+        super(LevenbergMarquardt, self).init_variables()
+        self.variables.update(
+            mu=theano.shared(name='mu', value=asfloat(self.mu)),
+            last_error=theano.shared(name='last_error', value=np.nan),
         )
 
-        if not self.last_error():
-            return
+    def init_train_updates(self):
+        network_output = self.variables.network_output
+        prediction_func = self.variables.prediction_func
+        last_error = self.variables.last_error
+        error_func = self.variables.error_func
+        mu = self.variables.mu
 
-        output_train = self.predict(input_train)
-        error = self.error(output_train, target_train)
+        new_mu = ifelse(
+            T.lt(last_error, error_func),
+            mu * self.mu_update_factor,
+            mu / self.mu_update_factor,
+        )
 
-        if error < self.last_error():
-            self.mu /= self.mu_increase_factor
-            return
+        err = T.mean((network_output - prediction_func) ** 2, axis=1)
 
-        self.mu *= self.mu_increase_factor
+        params = list(
+            chain(*[layer.parameters for layer in self.train_layers])
+        )
+        param_vector = T.concatenate([param.flatten() for param in params])
+        J = jaccobian(err, params)
+        n_params = J.shape[1]
 
-        # Error changed in wrong way. Rollback weight updates.
-        for i, layer in enumerate(self.train_layers):
-            layer.weight = self.old_weights[i]
+        updated_params = param_vector - T.nlinalg.matrix_inverse(
+            J.T.dot(J) + new_mu * T.eye(n_params)
+        ).dot(J.T).dot(err)
+
+        start_pos = 0
+        updates = [(mu, new_mu)]
+        for param in params:
+            end_pos = start_pos + param.size
+
+            updates.append((param, T.reshape(
+                updated_params[start_pos:end_pos],
+                param.shape
+            )))
+
+            start_pos = end_pos
+
+        return updates
+
+    def epoch_start_update(self, epoch):
+        super(LevenbergMarquardt, self).epoch_start_update(epoch)
+
+        last_error = self.last_error()
+        if last_error is not None:
+            self.variables.last_error.set_value(last_error)

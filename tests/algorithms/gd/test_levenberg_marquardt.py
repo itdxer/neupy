@@ -1,0 +1,74 @@
+import numpy as np
+import theano
+import theano.tensor as T
+from sklearn import datasets, preprocessing
+from sklearn.cross_validation import train_test_split
+
+from neupy import algorithms, layers
+from neupy.utils import asfloat
+from neupy.algorithms.gd.lev_marq import jaccobian
+
+from utils import rmsle
+from base import BaseTestCase
+
+
+class LevenbergMarquardtTestCase(BaseTestCase):
+    def test_jaccobian(self):
+        w1 = theano.shared(name='w1', value=asfloat(np.array([[1]])))
+        b1 = theano.shared(name='b1', value=asfloat(np.array([0])))
+        w2 = theano.shared(name='w2', value=asfloat(np.array([[2]])))
+        b2 = theano.shared(name='b2', value=asfloat(np.array([1])))
+
+        x = T.matrix('x')
+        y = T.matrix('y')
+        output = ((x.dot(w1.T) + b1) ** 2).dot(w2.T) + b2
+        error_func = T.mean((y - output), axis=1)
+
+        x_train = asfloat(np.array([[1, 2, 3]]).T)
+        y_train = asfloat(np.array([[1, 2, 3]]).T)
+        output_expected = asfloat(np.array([[3, 9, 19]]).T)
+
+        np.testing.assert_array_almost_equal(
+            output.eval({x: x_train}),
+            output_expected
+        )
+
+        jaccobian_expected = asfloat(np.array([
+            [-4, -4, -1, -1],
+            [-16, -8, -4, -1],
+            [-36, -12, -9, -1],
+        ]))
+        jaccobian_actual = jaccobian(error_func, [w1, b1, w2, b2])
+        np.testing.assert_array_almost_equal(
+            jaccobian_expected,
+            jaccobian_actual.eval({x: x_train, y: y_train})
+        )
+
+    def test_lev_marq(self):
+        dataset = datasets.make_regression(n_samples=50, n_features=2)
+        data, target = dataset
+
+        data_scaler = preprocessing.MinMaxScaler()
+        target_scaler = preprocessing.MinMaxScaler()
+
+        x_train, x_test, y_train, y_test = train_test_split(
+            data_scaler.fit_transform(data),
+            target_scaler.fit_transform(target.reshape(-1, 1)),
+            train_size=0.85
+        )
+
+        lmnet = algorithms.LevenbergMarquardt(
+            connection=[
+                layers.Sigmoid(2),
+                layers.Sigmoid(6),
+                layers.Output(1),
+            ],
+            mu_update_factor=2,
+            mu=0.1,
+            verbose=False,
+            show_epoch=1,
+        )
+        lmnet.train(x_train, y_train, epochs=4)
+        error = lmnet.prediction_error(x_test, y_test)
+
+        self.assertAlmostEqual(0.009, error, places=3)

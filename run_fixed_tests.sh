@@ -9,6 +9,7 @@ nosetests \
     tests/algorithms/steps/test_errdiff.py\
     tests/algorithms/steps/test_search_then_converge.py\
     tests/algorithms/steps/test_leak_step_adaptation.py\
+    tests/algorithms/steps/test_linear_search.py\
     \
     tests/core/test_configs.py\
     tests/core/test_layers.py\
@@ -49,6 +50,7 @@ nosetests \
     tests/algorithms/gd/test_hessdiag.py\
     tests/algorithms/gd/test_hessian.py\
     tests/algorithms/gd/test_conjgrad.py\
+    tests/algorithms/gd/test_levenberg_marquardt.py\
     \
     tests/algorithms/linear/test_perceptron.py\
     tests/algorithms/linear/test_lms.py\
@@ -69,12 +71,8 @@ nosetests \
 # Not fixed tests:
 # tests/ensemble/test_mixtures_of_experts.py
 #
-# tests/gd/test_levenberg_marquardt.py
 # tests/gd/test_quasi_newton.py
 # tests/gd/test_gd_general.pys
-#
-# tests/steps/test_wolfe_search.py
-# tests/steps/test_linear_search.py
 
 echo ''
 echo 'PEP8 validation...'
