@@ -99,7 +99,10 @@ class ConstructableNetwork(BaseNetwork):
         self.init_layers()
         super(ConstructableNetwork, self).__init__(*args, **kwargs)
 
-        self.variables = AttributeKeyDict()
+        self.variables = AttributeKeyDict(
+            network_input=T.matrix('x'),
+            network_output=T.matrix('y'),
+        )
         self.methods = AttributeKeyDict()
 
         self.init_variables()
@@ -109,7 +112,7 @@ class ConstructableNetwork(BaseNetwork):
         """ Initialize Theano variables.
         """
 
-        network_input = T.matrix('x')
+        network_input = self.variables.network_input
 
         layer_input = network_input
         for layer in self.train_layers:
@@ -117,7 +120,6 @@ class ConstructableNetwork(BaseNetwork):
         prediction = layer_input
 
         self.variables.update(
-            network_input=network_input,
             step=theano.shared(name='step', value=asfloat(self.step)),
             epoch=theano.shared(name='epoch', value=1, borrow=False),
             prediction_func=prediction,
@@ -250,11 +252,10 @@ class SupervisedConstructableNetwork(SupervisedLearning, ConstructableNetwork):
         """
         super(SupervisedConstructableNetwork, self).init_variables()
 
-        network_output = T.matrix('y')
+        network_output = self.variables.network_output
         prediction = self.variables.prediction_func
 
         self.variables.update(
-            network_output=network_output,
             error_func=self.error(network_output, prediction),
         )
 

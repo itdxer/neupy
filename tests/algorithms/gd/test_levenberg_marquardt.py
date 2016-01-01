@@ -44,7 +44,7 @@ class LevenbergMarquardtTestCase(BaseTestCase):
             jaccobian_actual.eval({x: x_train, y: y_train})
         )
 
-    def test_lev_marq(self):
+    def test_levenberg_marquardt(self):
         dataset = datasets.make_regression(n_samples=50, n_features=2)
         data, target = dataset
 

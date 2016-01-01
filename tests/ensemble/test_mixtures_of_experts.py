@@ -1,9 +1,9 @@
 import numpy as np
 from sklearn import datasets, preprocessing, cross_validation
 from neupy import algorithms, layers, ensemble
-from neupy.functions import rmsle
 
 from base import BaseTestCase
+from utils import rmsle
 
 
 class MixtureOfExpertsTestCase(BaseTestCase):
@@ -136,10 +136,9 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             train_size=0.8
         )
 
-        n_epochs = 300
-        scaled_y_test = output_scaler.inverse_transform(y_test).reshape(
-            (y_test.size, 1)
-        )
+        n_epochs = 100
+        scaled_y_test = output_scaler.inverse_transform(y_test)
+        scaled_y_test = scaled_y_test.reshape((y_test.size, 1))
 
         # -------------- Train single GradientDescent -------------- #
 

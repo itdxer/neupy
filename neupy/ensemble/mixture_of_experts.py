@@ -1,4 +1,6 @@
-from numpy import multiply, concatenate
+import theano
+import theano.tensor as T
+import numpy as np
 
 from neupy import algorithms
 from neupy.layers import Softmax, Output
@@ -93,7 +95,7 @@ class MixtureOfExperts(BaseEnsemble):
                 raise ValueError("Network must contains one output unit, got "
                                  "{0}".format(network.output_layer.input_size))
 
-            if network.error != 'mse':
+            if network.error.__name__ != 'mse':
                 raise ValueError(
                     "Use only Mean Square Error (MSE) function in network, "
                     "got {0}".format(network.error.__name__)
@@ -124,13 +126,44 @@ class MixtureOfExperts(BaseEnsemble):
                              "{0}, got {1}".format(n_networks,
                                                    gating_network_output_size))
 
-        if gating_network.error != 'mse':
+        if gating_network.error.__name__ != 'mse':
             raise ValueError(
-                "Use only Mean Square Error (MSE) function in network, "
+                "Only Mean Square Error (MSE) function is available, "
                 "got {0}".format(gating_network.error.__name__)
             )
 
         self.gating_network = gating_network
+
+        x = T.matrix('x')
+        y = T.matrix('y')
+
+        gating_network.variables.network_input = x
+        gating_network.init_variables()
+        gating_network.init_methods()
+
+        probs = gating_network.variables.prediction_func
+        outputs = []
+        for i, network in enumerate(self.networks):
+            network.variables.network_input = x
+            network.variables.network_output = y
+
+            network.init_variables()
+            network.init_methods()
+
+            output = network.variables.prediction_func
+            outputs.append(output * probs[:, i:i + 1])
+
+        outputs_concat = T.concatenate(outputs, axis=1)
+        self.prediction_func = sum(outputs)
+        for net in self.networks:
+            net.methods.error_func = net.error(y, self.prediction_func)
+
+        gating_network.methods.error_func = gating_network.error(
+            gating_network.variables.network_output,
+            outputs_concat
+        )
+
+        self._predict = theano.function([x], self.prediction_func)
 
     def train(self, input_data, target_data, epochs=100):
         if target_data.ndim == 1:
@@ -152,48 +185,19 @@ class MixtureOfExperts(BaseEnsemble):
                 "{1}".format(gating_network_input_size, input_size)
             )
 
+        networks = self.networks
+
         for epoch in range(epochs):
-            probs = self.gating_network.predict(input_data)
-            total_output = 0
-            outputs = []
+            predictions = []
+            for i, network in enumerate(networks):
+                predictions.append(network.predict(input_data))
+                network.train_epoch(input_data, target_data)
 
-            for i, network in enumerate(self.networks):
-                output = network.predict(input_data)
-                outputs.append(output)
-                total_output += multiply(output, probs[:, i:i + 1])
-
-            outputs = concatenate(outputs, axis=1)
-
-            for i, network in enumerate(self.networks):
-                # This is simple solution for error derivative update
-                # g * (expected - actual) = g * expected - g * actual
-                # It's simple hack and probably could broke other
-                # algorithms, but now it works fine, but I need
-                # change it later
-                weight_delta = network.get_weight_delta(
-                    total_output * probs[:, i:i + 1],
-                    target_data * probs[:, i:i + 1]
-                )
-                network.update_weights(weight_delta)
-                network.after_weight_update(input_data, target_data)
-
-            # The same as at comment above
-            weight_delta = gating_network.get_weight_delta(
-                total_output * probs,
-                target_data * probs
-            )
-            gating_network.update_weights(weight_delta)
-            gating_network.after_weight_update(input_data, target_data)
+            gating_network.train_epoch(input_data,
+                                       np.concatenate(predictions, axis=1))
 
     def predict(self, input_data):
-        probs = self.gating_network.predict(input_data)
-        total_output = 0
-
-        for i, network in enumerate(self.networks):
-            output = network.predict(input_data)
-            total_output += multiply(output, probs[:, i:i + 1])
-
-        return total_output
+        return self._predict(input_data)
 
     def __repr__(self):
         indent = ' ' * 4

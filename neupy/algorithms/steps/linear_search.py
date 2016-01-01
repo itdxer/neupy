@@ -7,8 +7,7 @@ import numpy as np
 from scipy.optimize import minimize_scalar
 
 from neupy.utils import asfloat
-from neupy.core.properties import (BoundedProperty, ChoiceProperty,
-                                   IntProperty)
+from neupy.core.properties import BoundedProperty, ChoiceProperty
 from .base import LearningRateConfigurable
 
 
@@ -229,7 +228,6 @@ class LinearSearch(LearningRateConfigurable):
     def train_epoch(self, input_train, target_train):
         train_epoch = self.methods.train_epoch
         prediction_error = self.methods.prediction_error
-        shared_step = self.variables.step
 
         params = [param for param, _ in self.init_train_updates()]
         param_defaults = [param.get_value() for param in params]

@@ -123,6 +123,7 @@ class LevenbergMarquardt(GradientDescent):
     --------
     :network:`GradientDescent` : GradientDescent algorithm.
     """
+
     mu = BoundedProperty(default=0.01, minval=0)
     mu_update_factor = BoundedProperty(default=5, minval=1)
 

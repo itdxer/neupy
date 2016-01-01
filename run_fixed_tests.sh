@@ -64,13 +64,12 @@ nosetests \
     tests/compatibilities/test_sklearn_compatibility.py\
     \
     tests/ensemble/test_dan.py\
+    tests/ensemble/test_mixtures_of_experts.py\
     \
     tests/network/test_network_properties.py\
     tests/network/test_errors.py
 
 # Not fixed tests:
-# tests/ensemble/test_mixtures_of_experts.py
-#
 # tests/gd/test_quasi_newton.py
 # tests/gd/test_gd_general.pys
 

@@ -1,11 +1,3 @@
-from numpy import eye, newaxis, sign, isinf, clip, inner, outer
-from numpy.linalg import norm
-
-from neupy.core.properties import (ChoiceProperty, BoundedProperty,
-                                   ProperFractionProperty)
-from neupy.algorithms.utils import (matrix_list_in_one_vector,
-                                    vector_to_list_of_matrix)
-from neupy.network import StopNetworkTraining
 from .base import GradientDescent
 
 
@@ -60,10 +52,11 @@ class BFGS(GradientDescent):
     """
 
     def train_epoch(self, input_train, target_train):
-        train_epoch = self.methods.train_epoch
-        prediction_error = self.methods.prediction_error
-
-        import scipy
-        scipy.optimize.fmin_bfgs(
-
-        )
+        pass
+        # train_epoch = self.methods.train_epoch
+        # prediction_error = self.methods.prediction_error
+        #
+        # import scipy
+        # scipy.optimize.fmin_bfgs(
+        #
+        # )
