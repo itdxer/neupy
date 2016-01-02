@@ -300,7 +300,7 @@ class BaseNetwork(BaseSkeleton):
 
         # ----------- Pre-format target data ----------- #
 
-        # TODO: This solution looks ugly, should make it in different
+        # TODO: This solution looks ugly, should change it in different
         # way later.
         if hasattr(self, 'connection'):
             is_input_feature1d = is_layer_accept_1d_feature(self.input_layer)

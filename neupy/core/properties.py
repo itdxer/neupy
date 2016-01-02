@@ -32,6 +32,7 @@ class BaseProperty(SharedDocs):
         if not isinstance(value, self.expected_type):
             availabe_types = self.expected_type
             if isinstance(availabe_types, (list, tuple)):
+                print(availabe_types)
                 availabe_types = ', '.join(t.__name__ for t in availabe_types)
             else:
                 availabe_types = availabe_types.__name__

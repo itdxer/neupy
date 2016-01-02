@@ -23,7 +23,6 @@ class HessianTestCase(BaseTestCase):
             (x_train, y_train, x_test, y_test),
             # Network configurations
             connection=(10, 15, 1),
-            step=0.1,
             shuffle_data=True,
             verbose=False,
             show_epoch=1,

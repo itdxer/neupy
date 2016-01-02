@@ -1,3 +1,4 @@
+import numpy as np
 import theano
 import theano.tensor as T
 
@@ -24,7 +25,8 @@ class SharedArrayProperty(ArrayProperty):
     {BaseProperty.default}
     {BaseProperty.required}
     """
-    expected_type = (ArrayProperty.expected_type, theano_shared_class)
+    expected_type = (np.matrix, np.ndarray, theano_shared_class,
+                     T.TensorVariable)
 
 
 class Layer(BaseLayer):

@@ -3,7 +3,7 @@ import theano.tensor as T
 
 
 from neupy.utils import (AttributeKeyDict, asfloat, is_list_of_integers,
-                         format_data)
+                         format_data, is_layer_accept_1d_feature)
 from neupy.layers import BaseLayer, Output
 from neupy.layers.utils import generate_layers
 from neupy.core.properties import ChoiceProperty
@@ -185,7 +185,8 @@ class ConstructableNetwork(BaseNetwork):
     def predict_raw(self, input_data):
         """ Make raw prediction without final layer postprocessing step.
         """
-        input_data = format_data(input_data)
+        is_feature1d = is_layer_accept_1d_feature(self.input_layer)
+        input_data = format_data(input_data, is_feature1d)
         return self.methods.predict_raw(input_data)
 
     def predict(self, input_data):

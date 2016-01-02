@@ -51,7 +51,7 @@ class QuasiNewtonTestCase(BaseTestCase):
             step=0.1,
             shuffle_data=True,
             show_epoch='20 times',
-            verbose=True,
+            verbose=False,
         )
         qnnet.train(x_train, y_train, x_test, y_test, epochs=20)
         result = qnnet.predict(x_test).round()

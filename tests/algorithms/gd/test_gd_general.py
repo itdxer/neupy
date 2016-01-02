@@ -8,13 +8,14 @@ from base import BaseTestCase
 class BackPropAlgsTestCase(BaseTestCase):
     bp_algorithms = [
         algorithms.GradientDescent,
-        algorithms.ConjugateGradient,
         algorithms.MinibatchGradientDescent,
+        algorithms.ConjugateGradient,
         algorithms.HessianDiagonal,
         algorithms.Hessian,
         algorithms.LevenbergMarquardt,
         algorithms.Momentum,
         algorithms.Quickprop,
+        algorithms.QuasiNewton,
         algorithms.RPROP,
         algorithms.IRPROPPlus,
     ]
@@ -31,9 +32,12 @@ class BackPropAlgsTestCase(BaseTestCase):
     def test_predict_different_inputs(self):
         for bp_algorithm_class in self.bp_algorithms:
             network = bp_algorithm_class(
-                layers.Linear(2) > layers.Output(1),
+                [
+                    layers.Linear(2, bias=np.zeros(1),
+                                  weight=np.zeros((2, 1))),
+                    layers.Output(1),
+                ],
                 verbose=False,
-                use_bias=False
             )
             self.assertInvalidVectorPred(network, np.array([0, 0]), 0,
                                          is_feature1d=False)

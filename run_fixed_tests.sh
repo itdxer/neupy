@@ -51,6 +51,8 @@ nosetests \
     tests/algorithms/gd/test_hessian.py\
     tests/algorithms/gd/test_conjgrad.py\
     tests/algorithms/gd/test_levenberg_marquardt.py\
+    tests/algorithms/gd/test_quasi_newton.py\
+    tests/algorithms/gd/test_gd_general.py
     \
     tests/algorithms/linear/test_perceptron.py\
     tests/algorithms/linear/test_lms.py\
@@ -68,10 +70,6 @@ nosetests \
     \
     tests/network/test_network_properties.py\
     tests/network/test_errors.py
-
-# Not fixed tests:
-# tests/gd/test_quasi_newton.py
-# tests/gd/test_gd_general.pys
 
 echo ''
 echo 'PEP8 validation...'
