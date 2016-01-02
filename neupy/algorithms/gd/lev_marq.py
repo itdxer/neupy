@@ -8,6 +8,8 @@ import numpy as np
 from neupy.utils import asfloat
 from neupy.core.properties import BoundedProperty
 from neupy.algorithms import GradientDescent
+from neupy.algorithms.gd import StepSelectionBuiltIn
+from neupy.algorithms.utils import parameters2vector, iter_parameters
 
 
 __all__ = ('LevenbergMarquardt',)
@@ -28,7 +30,7 @@ def jaccobian(y, x):
     return T.concatenate(jacc, axis=1)
 
 
-class LevenbergMarquardt(GradientDescent):
+class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
     """ Levenberg-Marquardt algorithm.
 
     Notes
@@ -154,10 +156,9 @@ class LevenbergMarquardt(GradientDescent):
 
         err = T.mean((network_output - prediction_func) ** 2, axis=1)
 
-        params = list(
-            chain(*[layer.parameters for layer in self.train_layers])
-        )
-        param_vector = T.concatenate([param.flatten() for param in params])
+        params = list(iter_parameters(self))
+        param_vector = parameters2vector(self)
+
         J = jaccobian(err, params)
         n_params = J.shape[1]
 

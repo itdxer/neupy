@@ -1,6 +1,6 @@
 from .gd.base import *
 from .gd.lev_marq import *
-from .gd.bfgs import *
+from .gd.quasi_newton import *
 from .gd.conjgrad import *
 from .gd.hessian import *
 from .gd.hessdiag import *

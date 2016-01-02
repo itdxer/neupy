@@ -69,7 +69,7 @@ Algorithms
 
   * quasi-Newton
 
-    * BFGS
+    * QuasiNewton
     * DFP
     * PSB
     * SR1
