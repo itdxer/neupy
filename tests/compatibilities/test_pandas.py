@@ -1,8 +1,9 @@
 import pandas as pd
-from sklearn import datasets, preprocessing, metrics
+from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
 from neupy import algorithms, layers
 
+from utils import rmsle
 from base import BaseTestCase
 
 
@@ -32,17 +33,16 @@ class PandasCompatibilityTestCase(BaseTestCase):
         bpnet = algorithms.GradientDescent(
             connection=[
                 layers.Sigmoid(10),
-                layers.Sigmoid(40),
+                layers.Sigmoid(30),
                 layers.Output(1),
             ],
             show_epoch=100
         )
-
-        bpnet.train(x_train, y_train, epochs=1000)
+        bpnet.train(x_train, y_train, epochs=50)
         y_predict = bpnet.predict(x_test)
 
-        error = metrics.mean_absolute_error(
+        error = rmsle(
             target_scaler.inverse_transform(y_test),
             target_scaler.inverse_transform(y_predict).round()
         )
-        self.assertAlmostEqual(51.2239, error, places=4)
+        self.assertAlmostEqual(6.17, error, places=2)

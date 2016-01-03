@@ -1,5 +1,3 @@
-from itertools import chain
-
 import theano
 import theano.tensor as T
 from theano.ifelse import ifelse

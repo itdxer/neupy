@@ -357,6 +357,7 @@ def my_not(arg):
     """
     return T.eq(arg, zero)
 
+
 def constant(value):
     """
     .. todo::
@@ -614,23 +615,18 @@ def bfgs(inverse_hessian, weight_delta, gradient_delta, maxrho=1e4):
 
 
 def dfp(inverse_hessian, weight_delta, gradient_delta, maxnum=1e5):
-    gradient_delta_t = gradient_delta[newaxis, :]
-    gradient_delta = gradient_delta[:, newaxis]
-    weight_delta = weight_delta[:, newaxis]
-
     quasi_dot_gradient = inverse_hessian.dot(gradient_delta)
 
     param1 = (
-        weight_delta.dot(weight_delta.T)
+        T.outer(weight_delta, weight_delta)
     ) / (
-        gradient_delta_t.dot(weight_delta)
+        T.dot(gradient_delta, weight_delta)
     )
-    param2_numerator = clip(
-        quasi_dot_gradient.dot(gradient_delta_t) * inverse_hessian,
-        a_min=-maxnum,
-        a_max=maxnum
+    param2_numerator = T.clip(
+        T.outer(quasi_dot_gradient, gradient_delta) * inverse_hessian,
+        -maxnum, maxnum
     )
-    param2_denominator = gradient_delta_t.dot(quasi_dot_gradient)
+    param2_denominator = gradient_delta.dot(quasi_dot_gradient)
     param2 = param2_numerator / param2_denominator
 
     return inverse_hessian + param1 - param2
@@ -640,23 +636,28 @@ def psb(inverse_hessian, weight_delta, gradient_delta, **options):
     gradient_delta_t = gradient_delta.T
     param = weight_delta - inverse_hessian.dot(gradient_delta)
 
-    devider = (1. / inner(gradient_delta, gradient_delta)).item(0)
-    param1 = outer(param, gradient_delta) + outer(gradient_delta, param)
+    devider = (1. / T.dot(gradient_delta, gradient_delta))
+    param1 = T.outer(param, gradient_delta) + T.outer(gradient_delta, param)
     param2 = (
-        inner(gradient_delta, param)
-    ).item(0) * outer(gradient_delta, gradient_delta_t)
+        T.dot(gradient_delta, param) *
+        T.outer(gradient_delta, gradient_delta_t)
+    )
 
     return inverse_hessian + param1 * devider - param2 * devider ** 2
 
 
 def sr1(inverse_hessian, weight_delta, gradient_delta, epsilon=1e-8):
     param = weight_delta - inverse_hessian.dot(gradient_delta)
-    denominator = inner(param, gradient_delta)
+    denominator = T.dot(param, gradient_delta)
 
-    if abs(denominator) < epsilon * norm(param) * norm(gradient_delta):
-        return inverse_hessian
-
-    return inverse_hessian + outer(param, param) / denominator
+    return ifelse(
+        T.lt(
+            T.abs_(denominator),
+            epsilon * param.norm(L=2) * gradient_delta.norm(L=2)
+        ),
+        inverse_hessian,
+        inverse_hessian + T.outer(param, param) / denominator
+    )
 
 
 class QuasiNewton(GradientDescent):
