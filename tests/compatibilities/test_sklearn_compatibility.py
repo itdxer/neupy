@@ -25,7 +25,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
         network = algorithms.GradientDescent(
             connection=[
                 layers.Sigmoid(10),
-                layers.Sigmoid(40),
+                layers.Sigmoid(25),
                 layers.Output(1),
             ],
             show_epoch=100,
@@ -33,14 +33,14 @@ class SklearnCompatibilityTestCase(BaseTestCase):
         )
         pipeline = Pipeline([
             ('min_max_scaler', preprocessing.MinMaxScaler()),
-            ('backpropagation', network),
+            ('gd', network),
         ])
-        pipeline.fit(x_train, y_train, backpropagation__epochs=1000)
+        pipeline.fit(x_train, y_train, gd__epochs=50)
         y_predict = pipeline.predict(x_test)
 
         error = rmsle(target_scaler.inverse_transform(y_test),
                       target_scaler.inverse_transform(y_predict).round())
-        self.assertAlmostEqual(0.4378, error, places=4)
+        self.assertAlmostEqual(0.6, error, places=2)
 
     def test_ensemble(self):
         data, target = datasets.make_classification(300, n_features=4,
@@ -50,7 +50,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
         )
 
         dan = ensemble.DynamicallyAveragedNetwork([
-            algorithms.RPROP((4, 100, 1), step=0.1, maximum_step=1),
+            algorithms.RPROP((4, 5, 1), step=0.1, maximum_step=1),
             algorithms.GradientDescent((4, 5, 1), step=0.1),
             algorithms.ConjugateGradient((4, 5, 1), step=0.01),
         ])
@@ -59,11 +59,11 @@ class SklearnCompatibilityTestCase(BaseTestCase):
             ('min_max_scaler', preprocessing.StandardScaler()),
             ('dan', dan),
         ])
-        pipeline.fit(x_train, y_train, dan__epochs=500)
+        pipeline.fit(x_train, y_train, dan__epochs=100)
 
         result = pipeline.predict(x_test)
         ensemble_result = metrics.accuracy_score(y_test, result)
-        self.assertAlmostEqual(0.9444, ensemble_result, places=4)
+        self.assertAlmostEqual(0.9222, ensemble_result, places=4)
 
     def test_grid_search(self):
         def scorer(network, X, y):
@@ -83,7 +83,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
 
         random_search = grid_search.RandomizedSearchCV(
             grnnet,
-            param_distributions={'std': np.arange(1e-2, 1, 1e-4)},
+            param_distributions={'std': np.arange(1e-2, 0.1, 1e-4)},
             n_iter=10,
             scoring=scorer
         )
@@ -91,4 +91,4 @@ class SklearnCompatibilityTestCase(BaseTestCase):
         scores = random_search.grid_scores_
 
         best_score = min(scores, key=itemgetter(1))
-        self.assertAlmostEqual(0.4518, best_score[1], places=3)
+        self.assertAlmostEqual(0.4303, best_score[1], places=3)
