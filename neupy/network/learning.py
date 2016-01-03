@@ -35,10 +35,6 @@ class UnsupervisedLearning(object):
                     input_test=None, target_test=None,
                     epochs=epochs, epsilon=epsilon)
 
-    def predict_proba(self, input_data):
-        raise AttributeError("Can't predict probabilities in unsupervised "
-                             "network")
-
 
 class LazyLearning(object):
     """ Mixin for lazy learning Neural Network algorithms.
