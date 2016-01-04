@@ -243,27 +243,36 @@ def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c):
         point ``x`` which is minimizer for cubic function.
     """
 
-    db = x_b - x_a
-    dc = x_c - x_a
+    from_a2b_dist = x_b - x_a
+    from_a2c_dist = x_c - x_a
 
-    denom = (db * dc) ** 2 * (db - dc)
-    t1_0 = y_b - y_a - y_prime_a * db
-    t1_1 = y_c - y_a - y_prime_a * dc
+    denominator = (
+        (from_a2b_dist * from_a2c_dist) ** 2 *
+        (from_a2b_dist - from_a2c_dist)
+    )
+    tau_ab = y_b - y_a - y_prime_a * from_a2b_dist
+    tau_ac = y_c - y_a - y_prime_a * from_a2c_dist
 
-    A = (dc ** 2 * t1_0 - db ** 2 * t1_1) / denom
-    B = (-dc ** 3 * t1_0 + db ** 3 * t1_1) / denom
-    radical = B ** 2 - 3 * A * y_prime_a
+    alpha = (
+        from_a2c_dist ** 2 * tau_ab -
+        from_a2b_dist ** 2 * tau_ac
+    ) / denominator
+    beta = (
+        from_a2b_dist ** 3 * tau_ac -
+        from_a2c_dist ** 3 * tau_ab
+    ) / denominator
+    radical = beta ** 2 - 3 * alpha * y_prime_a
 
-    return T.switch(
+    return ifelse(
         sequential_or(
             radical < zero,
-            T.eq(db, zero),
-            T.eq(dc, zero),
+            T.eq(x_a, x_b),
+            T.eq(x_a, x_c),
             T.eq(x_b, x_c),
-            T.eq(A, zero)
+            T.eq(alpha, zero)
         ),
-        np.nan,
-        x_a + (-B + T.sqrt(radical)) / (3 * A)
+        nan,
+        x_a + (-beta + T.sqrt(radical)) / (asfloat(3) * alpha)
     )
 
 
