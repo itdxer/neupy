@@ -44,7 +44,7 @@ def sequential_and(*conditions):
 
 
 def scalar_search_wolfe2(phi, derphi, phi0=None, old_phi0=None, derphi0=None,
-                         n_iters=20, c1=1e-4, c2=0.9):
+                         maxiter=20, c1=1e-4, c2=0.9):
     """ Find alpha that satisfies strong Wolfe conditions.
     alpha > 0 is assumed to be a descent direction.
 
@@ -112,7 +112,6 @@ def scalar_search_wolfe2(phi, derphi, phi0=None, old_phi0=None, derphi0=None,
     # Make sure variables are tensors otherwise strange things happen
     c1 = T.as_tensor_variable(c1)
     c2 = T.as_tensor_variable(c2)
-    maxiter = n_iters
 
     def while_search(alpha0, alpha1, phi_a0, phi_a1, derphi_a0, i_t,
                     alpha_star, phi_star, derphi_star):
@@ -187,14 +186,14 @@ def quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b):
     x_a : float or theano variable
         Left point ``a`` in the ``x`` axis.
     y_a : float or theano variable
-        Output from function ``y`` at some point ``a``.
+        Output from function ``y`` at point ``a``.
     y_prime_a : float or theano variable
-        Output from function ``y'`` (``y`` derivative) at some
+        Output from function ``y'`` (``y`` derivative) at
         point ``a``.
     x_b : float or theano variable
         Right point ``a`` in the ``x`` axis.
     y_b : float or theano variable
-        Output from function ``y`` at some point ``b``.
+        Output from function ``y`` at point ``b``.
 
     Returns
     -------
@@ -229,12 +228,20 @@ def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c):
     Parameters
     ----------
     x_a : float or theano variable
+        First point ``a`` in the ``x`` axis.
     y_a : float or theano variable
+        Output from function ``y`` at point ``a``.
     y_prime_a : float or theano variable
+        Output from function ``y'`` (``y`` derivative) at
+        point ``a``.
     x_b : float or theano variable
+        Second point ``b`` in the ``x`` axis.
     y_b : float or theano variable
+        Output from function ``y`` at point ``b``.
     x_c : float or theano variable
+        Third point ``c`` in the ``x`` axis.
     y_c : float or theano variable
+        Output from function ``y`` at point ``c``.
 
     Returns
     -------
@@ -276,8 +283,8 @@ def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c):
     )
 
 
-def zoom(a_lo, a_hi, phi_lo, phi_hi, derphi_lo,
-          phi, derphi, phi0, derphi0, c1, c2, n_iters=10):
+def zoom(a_low, a_high, phi_low, phi_high, derphi_low,
+          phi, derphi, phi0, derphi0, c1, c2, maxiter=10):
     """
     Notes
     -----
@@ -285,16 +292,16 @@ def zoom(a_lo, a_hi, phi_lo, phi_hi, derphi_lo,
 
     Parameters
     ----------
-    a_lo : float
+    a_low : float
         Step size
-    a_hi : float
+    a_high : float
         Step size
-    phi_lo : float
-        Value of f at a_lo
-    phi_hi : float
-        Value of f at a_hi
-    derphi_lo : float
-        Value of derivative at a_lo
+    phi_low : float
+        Value of f at a_low
+    phi_high : float
+        Value of f at a_high
+    derphi_low : float
+        Value of derivative at a_low
     phi : callable
         Generates computational graph
     derphi : callable
@@ -308,38 +315,38 @@ def zoom(a_lo, a_hi, phi_lo, phi_hi, derphi_lo,
     c2 : float
         Wolfe parameter
     """
-    # Function reprensenting the computations of one step of the while loop
-    def whilezoom(phi_rec, a_rec, a_lo, a_hi, phi_hi,
-                   phi_lo, derphi_lo, a_star, val_star, valprime):
-        # interpolate to find a trial step length between a_lo and
-        # a_hi Need to choose interpolation here.  Use cubic
+
+    def zoom_itertion_step(phi_rec, a_rec, a_low, a_high, phi_high, phi_low,
+                           derphi_low, a_star, val_star, valprime):
+        # interpolate to find a trial step length between a_low and
+        # a_high Need to choose interpolation here.  Use cubic
         # interpolation and then if the result is within delta *
-        # dalpha or outside of the interval bounded by a_lo or a_hi
+        # dalpha or outside of the interval bounded by a_low or a_high
         # then use quadratic interpolation, if the result is still too
         # close, then use bisection
-        dalpha = a_hi - a_lo
-        a = T.switch(dalpha < zero, a_hi, a_lo)
-        b = T.switch(dalpha < zero, a_lo, a_hi)
+        dalpha = a_high - a_low
+        a = T.switch(dalpha < zero, a_high, a_low)
+        b = T.switch(dalpha < zero, a_low, a_high)
 
         # minimizer of cubic interpolant
-        # (uses phi_lo, derphi_lo, phi_hi, and the most recent value of phi)
+        # (uses phi_low, derphi_low, phi_high, and the most recent value of phi)
         #
         # if the result is too close to the end points (or out of the
-        # interval) then use quadratic interpolation with phi_lo,
-        # derphi_lo and phi_hi if the result is stil too close to the
+        # interval) then use quadratic interpolation with phi_low,
+        # derphi_low and phi_high if the result is stil too close to the
         # end points (or out of the interval) then use bisection
 
         # cubic interpolation
-        cchk = delta1 * dalpha
-        a_j_cubic = cubic_minimizer(a_lo, phi_lo, derphi_lo,
-                                    a_hi, phi_hi, a_rec, phi_rec)
+        cchk = asfloat(0.2) * dalpha
+        a_j_cubic = cubic_minimizer(a_low, phi_low, derphi_low,
+                                    a_high, phi_high, a_rec, phi_rec)
         # quadric interpolation
-        qchk = delta2 * dalpha
-        a_j_quad = quadratic_minimizer(a_lo, phi_lo, derphi_lo, a_hi, phi_hi)
+        qchk = asfloat(0.1) * dalpha
+        a_j_quad = quadratic_minimizer(a_low, phi_low, derphi_low, a_high, phi_high)
         cond_q = sequential_or(T.isnan(a_j_quad),
                          a_j_quad > b - qchk,
                          a_j_quad < a + qchk)
-        a_j_quad = T.switch(cond_q, a_lo + asfloat(0.5) * dalpha, a_j_quad)
+        a_j_quad = T.switch(cond_q, a_low + asfloat(0.5) * dalpha, a_j_quad)
 
         # pick between the two ..
         cond_c = sequential_or(T.isnan(a_j_cubic),
@@ -355,144 +362,106 @@ def zoom(a_lo, a_hi, phi_lo, phi_hi, derphi_lo,
         derphi_aj = derphi(a_j)
 
         stop = sequential_and(phi_aj <= phi0 + c1 * a_j * derphi0,
-                              phi_aj < phi_lo,
+                              phi_aj < phi_low,
                               abs(derphi_aj) <= -c2 * derphi0)
 
         cond1 = T.bitwise_or(phi_aj > phi0 + c1 * a_j * derphi0,
-                              phi_aj >= phi_lo)
-        cond2 = derphi_aj * (a_hi - a_lo) >= zero
+                              phi_aj >= phi_low)
+        cond2 = derphi_aj * (a_high - a_low) >= zero
 
         # Switches just make more sense here because they have a C
         # implementation and they get composed
-        phi_rec = ifelse(cond1,
-                         phi_hi,
-                         T.switch(cond2, phi_hi, phi_lo),
-                         name='phi_rec')
-        a_rec = ifelse(cond1,
-                       a_hi,
-                       T.switch(cond2, a_hi, a_lo),
-                         name='a_rec')
-        a_hi = ifelse(cond1, a_j,
-                      T.switch(cond2, a_lo, a_hi),
-                      name='a_hi')
-        phi_hi = ifelse(cond1, phi_aj,
-                        T.switch(cond2, phi_lo, phi_hi),
-                        name='phi_hi')
+        phi_rec = ifelse(cond1, phi_high, T.switch(cond2, phi_high, phi_low))
+        a_rec = ifelse(cond1, a_high, T.switch(cond2, a_high, a_low))
+        a_high = ifelse(cond1, a_j, T.switch(cond2, a_low, a_high))
+        phi_high = ifelse(cond1, phi_aj, T.switch(cond2, phi_low, phi_high))
 
-        a_lo = T.switch(cond1, a_lo, a_j)
-        phi_lo = T.switch(cond1, phi_lo, phi_aj)
-        derphi_lo = ifelse(cond1, derphi_lo, derphi_aj, name='derphi_lo')
+        a_low = T.switch(cond1, a_low, a_j)
+        phi_low = T.switch(cond1, phi_low, phi_aj)
+        derphi_low = ifelse(cond1, derphi_low, derphi_aj)
 
         a_star = a_j
         val_star = phi_aj
-        valprime = ifelse(cond1, nan,
-                          T.switch(cond2, derphi_aj, nan), name='valprime')
+        valprime = ifelse(cond1, nan, T.switch(cond2, derphi_aj, nan))
 
         return ([phi_rec,
                  a_rec,
-                 a_lo,
-                 a_hi,
-                 phi_hi,
-                 phi_lo,
-                 derphi_lo,
+                 a_low,
+                 a_high,
+                 phi_high,
+                 phi_low,
+                 derphi_low,
                  a_star,
                  val_star,
                  valprime],
-                theano.scan_module.scan_utils.until(stop))
+                 theano.scan_module.scan_utils.until(stop))
 
-    maxiter = n_iters
-    # cubic interpolant check
-    delta1 = T.constant(np.asarray(0.2,
-                                       dtype=theano.config.floatX))
-    # quadratic interpolant check
-    delta2 = T.constant(np.asarray(0.1,
-                                       dtype=theano.config.floatX))
     phi_rec = phi0
     a_rec = zero
 
-    # Initial iteration
-
-    dalpha = a_hi - a_lo
-    a = T.switch(dalpha < zero, a_hi, a_lo)
-    b = T.switch(dalpha < zero, a_lo, a_hi)
-    #a = ifelse(dalpha < 0, a_hi, a_lo)
-    #b = ifelse(dalpha < 0, a_lo, a_hi)
+    dalpha = a_high - a_low
+    a = T.switch(dalpha < zero, a_high, a_low)
+    b = T.switch(dalpha < zero, a_low, a_high)
 
     # minimizer of cubic interpolant
-    # (uses phi_lo, derphi_lo, phi_hi, and the most recent value of phi)
+    # (uses phi_low, derphi_low, phi_high, and the most recent value of phi)
     #
     # if the result is too close to the end points (or out of the
-    # interval) then use quadratic interpolation with phi_lo,
-    # derphi_lo and phi_hi if the result is stil too close to the
+    # interval) then use quadratic interpolation with phi_low,
+    # derphi_low and phi_high if the result is stil too close to the
     # end points (or out of the interval) then use bisection
 
     # quadric interpolation
-    qchk = delta2 * dalpha
-    a_j = quadratic_minimizer(a_lo, phi_lo, derphi_lo, a_hi, phi_hi)
-    cond_q = sequential_or(T.isnan(a_j),
-                           a_j > b - qchk,
-                           a_j < a + qchk)
+    qchk = asfloat(0.1) * dalpha
+    a_j = quadratic_minimizer(a_low, phi_low, derphi_low, a_high, phi_high)
 
-    a_j = T.switch(cond_q, a_lo +
-                    np.asarray(0.5, dtype=theano.config.floatX) * \
-                    dalpha, a_j)
+    a_j = T.switch(
+        sequential_or(
+            T.isnan(a_j),
+            a_j > b - qchk,
+            a_j < a + qchk
+        ),
+        a_low + asfloat(0.5) * dalpha,
+        a_j
+    )
 
     # Check new value of a_j
     phi_aj = phi(a_j)
     derphi_aj = derphi(a_j)
 
-    cond1 = T.bitwise_or(phi_aj > phi0 + c1 * a_j * derphi0,
-                          phi_aj >= phi_lo)
-    cond2 = derphi_aj * (a_hi - a_lo) >= zero
+    cond1 = T.or_(
+        phi_aj > (phi0 + c1 * a_j * derphi0),
+        phi_aj >= phi_low
+    )
+    cond2 = derphi_aj * (a_high - a_low) >= zero
 
     # Switches just make more sense here because they have a C
     # implementation and they get composed
-    phi_rec = ifelse(cond1,
-                     phi_hi,
-                     T.switch(cond2, phi_hi, phi_lo),
-                     name='mphirec')
-    a_rec = ifelse(cond1,
-                   a_hi,
-                   T.switch(cond2, a_hi, a_lo),
-                   name='marec')
-    a_hi = ifelse(cond1,
-                  a_j,
-                  T.switch(cond2, a_lo, a_hi),
-                  name='mahi')
-    phi_hi = ifelse(cond1,
-                    phi_aj,
-                    T.switch(cond2, phi_lo, phi_hi),
-                    name='mphihi')
+    phi_rec = ifelse(cond1, phi_high, T.switch(cond2, phi_high, phi_low))
+    a_rec = ifelse(cond1, a_high, T.switch(cond2, a_high, a_low))
+    a_high = ifelse(cond1, a_j, T.switch(cond2, a_low, a_high))
+    phi_high = ifelse(cond1, phi_aj, T.switch(cond2, phi_low, phi_high))
 
     onlyif = sequential_and(phi_aj <= phi0 + c1 * a_j * derphi0,
-                            phi_aj < phi_lo,
+                            phi_aj < phi_low,
                             abs(derphi_aj) <= -c2 * derphi0)
 
-    a_lo = T.switch(cond1, a_lo, a_j)
-    phi_lo = T.switch(cond1, phi_lo, phi_aj)
-    derphi_lo = ifelse(cond1, derphi_lo, derphi_aj, name='derphi_lo_main')
-    phi_rec.name = 'phi_rec'
-    a_rec.name = 'a_rec'
-    a_lo.name = 'a_lo'
-    a_hi.name = 'a_hi'
-    phi_hi.name = 'phi_hi'
-    phi_lo.name = 'phi_lo'
-    derphi_lo.name = 'derphi_lo'
-    vderphi_aj = ifelse(cond1, nan, T.switch(cond2, derphi_aj, nan),
-                        name='vderphi_aj')
-    states = [phi_rec, a_rec, a_lo, a_hi, phi_hi, phi_lo,
-              derphi_lo, zero, zero, zero]
+    a_low = T.switch(cond1, a_low, a_j)
+    phi_low = T.switch(cond1, phi_low, phi_aj)
+    derphi_low = ifelse(cond1, derphi_low, derphi_aj)
+    vderphi_aj = ifelse(cond1, nan, T.switch(cond2, derphi_aj, nan))
+    states = [phi_rec, a_rec, a_low, a_high, phi_high, phi_low,
+              derphi_low, zero, zero, zero]
 
-    outs, updates = theano.scan(whilezoom,
-                         outputs_info=states,
-                         n_steps=maxiter,
-                         name='whilezoom',
-                        #  mode=theano.Mode(linker='cvm_nogc'),
-                         )
+    outs, updates = theano.scan(
+        zoom_itertion_step,
+        outputs_info=states,
+        n_steps=maxiter
+    )
 
-    a_star = ifelse(onlyif, a_j, outs[7][-1], name='astar')
-    val_star = ifelse(onlyif, phi_aj, outs[8][-1], name='valstar')
-    valprime = ifelse(onlyif, vderphi_aj, outs[9][-1], name='valprime')
+    a_star = ifelse(onlyif, a_j, outs[7][-1])
+    val_star = ifelse(onlyif, phi_aj, outs[8][-1])
+    valprime = ifelse(onlyif, vderphi_aj, outs[9][-1])
 
     ## WARNING !! I ignore updates given by scan which I should not do !!!
     return a_star, val_star, valprime
