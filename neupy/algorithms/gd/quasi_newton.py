@@ -1,5 +1,3 @@
-from operator import mul
-
 import theano
 import theano.tensor as T
 from theano.ifelse import ifelse

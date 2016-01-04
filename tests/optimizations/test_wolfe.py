@@ -11,6 +11,14 @@ Case = namedtuple('Case', 'func_input func_expected')
 
 
 class WolfeInterpolationTestCase(BaseTestCase):
+    def assertEqual(self, left_value, right_value):
+        if np.isnan(left_value) or np.isnan(right_value):
+            self.assertTrue(np.isnan(left_value) and np.isnan(right_value))
+        else:
+            super(WolfeInterpolationTestCase, self).assertEqual(
+                left_value, right_value
+            )
+
     def test_quadratic_minimizer(self):
         nan = np.array(np.nan)
         testcases = (
@@ -27,14 +35,14 @@ class WolfeInterpolationTestCase(BaseTestCase):
         )
 
         for testcase in testcases:
-            actual_output = wolfe.quadratic_minimizer(
-                **testcase.func_input
-            ).eval()
+            actual_output = wolfe.quadratic_minimizer(**testcase.func_input)
+            self.assertEqual(actual_output.eval(), testcase.func_expected)
 
-            if np.isnan(testcase.func_expected):
-                self.assertTrue(
-                    np.isnan(testcase.func_expected) and
-                    np.isnan(actual_output)
-                )
-            else:
-                self.assertEqual(actual_output, testcase.func_expected)
+    def test_cubic_minimizer(self):
+        testcases = (
+
+        )
+
+        for testcase in testcases:
+            actual_output = wolfe.cubic_minimizer(**testcase.func_input)
+            self.assertEqual(actual_output.eval(), testcase.func_expected)
