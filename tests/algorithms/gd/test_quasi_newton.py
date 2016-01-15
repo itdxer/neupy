@@ -8,7 +8,6 @@ from sklearn import datasets, metrics
 from sklearn.cross_validation import StratifiedShuffleSplit
 
 from neupy import algorithms, layers
-from neupy.algorithms.gd.quasi_newton import line_search
 from neupy.algorithms.gd import quasi_newton as qn
 
 from data import simple_classification
@@ -16,30 +15,18 @@ from base import BaseTestCase
 
 
 class QuasiNewtonTestCase(BaseTestCase):
-    def test_line_search_exceptions(self):
-        testcases = [
-            # Invalid c1 values
-            dict(c1=-1, c2=0.5, amax=1),
-            dict(c1=0, c2=0.5, amax=1),
-            dict(c1=1, c2=0.5, amax=1),
+    def test_exceptions(self):
+        with self.assertRaises(ValueError):
+            # Don't have learning rate
+            algorithms.QuasiNewton((2, 3, 1), step=0.3)
 
-            # Invalid c2 values
-            dict(c2=-1, c1=0.5, amax=1),
-            dict(c2=0, c1=0.5, amax=1),
-            dict(c2=1, c1=0.5, amax=1),
-
-            # c1 > c2
-            dict(c1=0.5, c2=0.1, amax=1),
-
-            # Invalid amax values
-            dict(c1=0.05, c2=0.1, amax=-10),
-            dict(c1=0.05, c2=0.1, amax=0),
-        ]
-
-        for testcase in testcases:
-            error_desc = "Line search for {}".format(testcase)
-            with self.assertRaises(ValueError, msg=error_desc):
-                line_search(**testcase)
+        with self.assertRaises(ValueError):
+            # Since it don't have learning rate, there is no need to set
+            # up learning rate update algorithm
+            algorithms.QuasiNewton(
+                (2, 3, 1),
+                optimizations=[algorithms.LinearSearch]
+            )
 
     def test_bfgs(self):
         x_train, x_test, y_train, y_test = simple_classification()
@@ -50,7 +37,6 @@ class QuasiNewtonTestCase(BaseTestCase):
                 layers.Sigmoid(20, init_method='ortho'),
                 layers.Output(1)
             ],
-            step=0.1,
             shuffle_data=True,
             show_epoch='20 times',
             verbose=False,
@@ -145,7 +131,6 @@ class QuasiNewtonTestCase(BaseTestCase):
                 layers.Sigmoid(30, init_method='ortho'),
                 layers.Output(1)
             ],
-            step=0.1,
             shuffle_data=True,
             show_epoch=20,
             verbose=False,
@@ -169,7 +154,6 @@ class QuasiNewtonTestCase(BaseTestCase):
                 layers.Sigmoid(30, init_method='ortho'),
                 layers.Output(1)
             ],
-            step=0.1,
             shuffle_data=True,
             show_epoch=20,
             verbose=False,
@@ -193,7 +177,6 @@ class QuasiNewtonTestCase(BaseTestCase):
                 layers.Sigmoid(30, init_method='ortho'),
                 layers.Output(1)
             ],
-            step=0.1,
             shuffle_data=True,
             show_epoch=20,
             verbose=False,

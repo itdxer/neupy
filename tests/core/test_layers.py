@@ -105,6 +105,9 @@ class HiddenLayersOperationsTestCase(BaseTestCase):
             softmax_layer.activation_function(test_input).eval()
         )
 
+    def test_dropout_layer(self):
+        pass
+
 
 class OutputLayersOperationsTestCase(BaseTestCase):
     def test_error_handling(self):

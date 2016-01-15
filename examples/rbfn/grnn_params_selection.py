@@ -3,15 +3,21 @@ from operator import itemgetter
 import numpy as np
 from sklearn import datasets, grid_search
 from sklearn.cross_validation import train_test_split
-from neupy import algorithms, functions
+from neupy import algorithms
 
 
 np.random.seed(0)
 
 
+def rmsle(actual, expected):
+    count_of = expected.shape[0]
+    square_logarithm_difference = np.log((actual + 1) / (expected + 1)) ** 2
+    return np.sqrt((1 / count_of) * np.sum(square_logarithm_difference))
+
+
 def scorer(network, X, y):
     result = network.predict(X)
-    return functions.rmsle(result, y)
+    return rmsle(result, y)
 
 
 def report(grid_scores, n_top=3):

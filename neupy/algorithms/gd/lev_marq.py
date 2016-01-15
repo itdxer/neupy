@@ -6,7 +6,7 @@ import numpy as np
 from neupy.utils import asfloat
 from neupy.core.properties import BoundedProperty
 from neupy.algorithms import GradientDescent
-from neupy.algorithms.gd import StepSelectionBuiltIn
+from neupy.algorithms.gd import NoStepSelection
 from neupy.algorithms.utils import parameters2vector, iter_parameters
 
 
@@ -28,7 +28,7 @@ def jaccobian(y, x):
     return T.concatenate(jacc, axis=1)
 
 
-class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
+class LevenbergMarquardt(NoStepSelection, GradientDescent):
     """ Levenberg-Marquardt algorithm.
 
     Notes
@@ -128,7 +128,6 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
     mu_update_factor = BoundedProperty(default=5, minval=1)
 
     def init_properties(self):
-        del self.step
         self.error = 'mse'
         return super(LevenbergMarquardt, self).init_properties()
 

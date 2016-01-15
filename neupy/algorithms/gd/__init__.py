@@ -17,3 +17,9 @@ class StepSelectionBuiltIn(object):
     supported_optimizations = {
         WEIGHT_PENALTY: "Weight penalty",
     }
+
+
+class NoStepSelection(StepSelectionBuiltIn):
+    def init_properties(self):
+        del self.step
+        super(NoStepSelection, self).init_properties()

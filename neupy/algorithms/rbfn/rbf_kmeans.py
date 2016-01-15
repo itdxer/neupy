@@ -6,6 +6,7 @@ from numpy.linalg import norm
 
 from neupy.utils import format_data
 from neupy.core.properties import IntProperty
+from neupy.algorithms.gd import NoStepSelection
 from neupy.network.base import BaseNetwork
 from neupy.network.types import Clustering
 from neupy.network.learning import UnsupervisedLearning
@@ -14,7 +15,9 @@ from neupy.network.learning import UnsupervisedLearning
 __all__ = ('RBFKMeans',)
 
 
-class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
+class RBFKMeans(NoStepSelection, UnsupervisedLearning, Clustering,
+                BaseNetwork):
+
     """ Radial basis function K-means for clustering.
 
     Parameters
@@ -77,10 +80,6 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
     def __init__(self, **options):
         self.centers = None
         super(RBFKMeans, self).__init__(**options)
-
-    def init_properties(self):
-        del self.step
-        super(RBFKMeans, self).init_properties()
 
     def predict(self, input_data):
         input_data = format_data(input_data)

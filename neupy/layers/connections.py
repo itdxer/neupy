@@ -3,8 +3,8 @@ from abc import ABCMeta, abstractmethod, abstractproperty
 from six import with_metaclass
 
 
-__all__ = ('LayerConnection', 'ReccurentConnection', 'Connection',
-           'ChainConnection', 'NetworkConnectionError')
+__all__ = ('LayerConnection', 'Connection', 'ChainConnection',
+           'NetworkConnectionError')
 
 
 class NetworkConnectionError(Exception):
@@ -17,9 +17,6 @@ class ChainConnection(object):
 
     def __gt__(self, other):
         return LayerConnection(self, other)
-
-    def __and__(self, other):
-        return ReccurentConnection(self, other)
 
 
 class Connection(with_metaclass(ABCMeta, ChainConnection)):
@@ -96,7 +93,3 @@ class LayerConnection(Connection):
         if isinstance(self.right, Connection):
             return self.right.output_layer
         return self.right
-
-
-class ReccurentConnection(Connection):
-    pass

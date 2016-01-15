@@ -3,12 +3,22 @@ from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
 import matplotlib.pyplot as plt
 from neupy import algorithms, layers
-from neupy.functions import rmsle
 
 
 np.random.seed(0)
-
 plt.style.use('ggplot')
+
+import theano
+theano.config.mode = "FAST_COMPILE"
+theano.config.optimizer = "fast_compile"
+theano.config.allow_gc = False
+
+
+def rmsle(actual, expected):
+    count_of = expected.shape[0]
+    square_logarithm_difference = np.log((actual + 1) / (expected + 1)) ** 2
+    return np.sqrt((1 / count_of) * np.sum(square_logarithm_difference))
+
 
 dataset = datasets.load_boston()
 data, target = dataset.data, dataset.target
@@ -27,18 +37,24 @@ cgnet = algorithms.ConjugateGradient(
     connection=[
         layers.Sigmoid(13),
         layers.Sigmoid(50),
+        layers.Sigmoid(10),
         layers.Output(1),
     ],
-    search_method='golden',
-    show_epoch=25,
+    show_epoch='100 times',
     verbose=True,
-    optimizations=[algorithms.LinearSearch],
+    optimizations=[
+        algorithms.LinearSearch
+    ],
 )
 
-cgnet.train(x_train, y_train, x_test, y_test, epochs=100)
-cgnet.plot_errors()
+cgnet.train(x_train, y_train, x_test, y_test, epochs=250)
+y_predict = cgnet.predict(x_test)
 
-y_predict = cgnet.predict(x_test).round(1)
 error = rmsle(target_scaler.inverse_transform(y_test),
-              target_scaler.inverse_transform(y_predict))
+              target_scaler.inverse_transform(y_predict).T.round(1))
 print("RMSLE = {}".format(error))
+
+from neupy.network import errors
+error = errors.mse(target_scaler.inverse_transform(y_test),
+              target_scaler.inverse_transform(y_predict).T).eval()
+print("MSE = {}".format(error))

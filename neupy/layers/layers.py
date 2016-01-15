@@ -4,7 +4,7 @@ import theano.tensor as T
 
 from neupy.utils import asfloat
 from neupy.core.properties import (TypedListProperty, ArrayProperty,
-                                   ChoiceProperty)
+                                   ChoiceProperty, ProperFractionProperty)
 from neupy.layers.base import BaseLayer
 from neupy.layers.utils import GAUSSIAN, VALID_INIT_METHODS, generate_weight
 
@@ -198,3 +198,23 @@ class Softmax(Layer):
     {Layer.bounds}
     """
     activation_function = T.nnet.softmax
+
+
+class Dropout(BaseLayer):
+    """ Dropout layer
+
+    Parameters
+    ----------
+    proba : float
+
+    {BaseLayer.input_size}
+    """
+    proba = ProperFractionProperty(required=True)
+
+    def output(self, input_value):
+        seed = np.random.randint(sys.maxint)
+        theano_random = T.shared_randomstreams.RandomStreams(seed)
+
+        mask = theano_random.binomial(n=1, p=1.0 - self.proba,
+                                      size=input_value.shape)
+        return mask * input_value

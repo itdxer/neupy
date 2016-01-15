@@ -77,7 +77,8 @@ def show_epoch_summary(network, show_epoch):
 
 def shuffle_train_data(input_train, target_train):
     if target_train is None:
-        return shuffle(input_train), None
+        input_train, = shuffle(input_train)
+        return input_train, None
     return shuffle(input_train, target_train)
 
 

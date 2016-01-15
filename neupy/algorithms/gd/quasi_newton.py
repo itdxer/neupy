@@ -5,45 +5,14 @@ import numpy as np
 
 from neupy.core.properties import (ChoiceProperty, ProperFractionProperty,
                                    NumberProperty)
+from neupy.algorithms.gd import NoStepSelection
 from neupy.algorithms.utils import parameters2vector, iter_parameters
-from neupy.optimizations.wolfe import scalar_search_wolfe2
+from neupy.optimizations.wolfe import line_search
 from neupy.utils import asfloat
 from .base import GradientDescent
 
 
 __all__ = ('QuasiNewton',)
-
-
-def line_search(amax, c1=1e-5, c2=0.9):
-    """ Line search method that satisfied Wolfe conditions
-
-    Parameters
-    ----------
-    c1 : float
-        Parameter for Armijo condition rule.
-    c2 : float
-        Parameter for curvature condition rule.
-    amax : float
-        Upper bound for value a.
-
-    Notes
-    -----
-    Uses the line search algorithm to enforce strong Wolfe
-    conditions.  See Wright and Nocedal, 'Numerical Optimization',
-    1999, pg. 59-60.
-    """
-
-    if not 0 < c1 < 1:
-        raise ValueError("c1 should be a float between 0 and 1")
-
-    if not 0 < c2 < 1:
-        raise ValueError("c2 should be a float between 0 and 1")
-
-    if c2 < c1:
-        raise ValueError("c2 needs to be greater than c1")
-
-    if amax <= 0:
-        raise ValueError("amax needs to be greater than 0")
 
 
 def bfgs(inverse_hessian, weight_delta, gradient_delta, maxrho=1e4):
@@ -109,7 +78,7 @@ def sr1(inverse_hessian, weight_delta, gradient_delta, epsilon=1e-8):
     )
 
 
-class QuasiNewton(GradientDescent):
+class QuasiNewton(NoStepSelection, GradientDescent):
     """ Quasi-Newton algorithm optimization.
 
     Parameters
@@ -117,7 +86,6 @@ class QuasiNewton(GradientDescent):
     {GradientDescent.optimizations}
     {ConstructableNetwork.connection}
     {SupervisedConstructableNetwork.error}
-    {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
     {BaseNetwork.epoch_end_signal}
@@ -149,7 +117,7 @@ class QuasiNewton(GradientDescent):
     ...     update_function='bfgs',
     ...     verbose=False
     ... )
-    >>> qnnet.train(x_train, y_train)
+    >>> qnnet.train(x_train, y_train, epochs=10)
 
     See Also
     --------
@@ -236,9 +204,8 @@ class QuasiNewton(GradientDescent):
             error_func = self.error(prediction(step), network_output)
             return T.grad(error_func, wrt=step)
 
-        rvals = scalar_search_wolfe2(phi, derphi)
-
-        updated_params = param_vector + rvals[0] * param_delta
+        step = line_search(phi, derphi)
+        updated_params = param_vector + step * param_delta
 
         start_pos = 0
         updates = []
