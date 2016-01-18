@@ -56,6 +56,9 @@ class BaseSkeleton(ConfigurableABC, Verbose):
         self.train(X, y, *args, **kwargs)
         return self
 
+    def class_name(self):
+        return self.__class__.__name__
+
     def _repr_options(self):
         options = []
         for option_name in self.options:
@@ -68,6 +71,6 @@ class BaseSkeleton(ConfigurableABC, Verbose):
         return ', '.join(options)
 
     def __repr__(self):
-        class_name = self.__class__.__name__
+        class_name = self.class_name()
         available_options = self._repr_options()
         return "{}({})".format(class_name, available_options)

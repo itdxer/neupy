@@ -60,7 +60,7 @@ class ModifiedRelaxation(BaseLinearNetwork):
     dead_zone_radius = BoundedProperty(default=0.1, minval=0)
 
     def init_layer_updates(self, layer):
-        prediction_func = self.variables.prediction_func
+        prediction_func = self.variables.train_prediction_func
         network_output = self.variables.network_output
         network_input = self.variables.network_input
         step = self.variables.step

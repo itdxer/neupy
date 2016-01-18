@@ -1,7 +1,6 @@
 from six import with_metaclass
 
 from neupy.core.config import ConfigMeta, BaseConfigurable
-from neupy.core.properties import IntProperty
 from neupy.layers.connections import ChainConnection
 
 
@@ -23,18 +22,12 @@ class LayerMeta(ConfigMeta):
 
 class BaseLayer(with_metaclass(LayerMeta, ChainConnection, BaseConfigurable)):
     """ Base class for all layers.
-
-    Parameters
-    ----------
-    input_size : int
-        Layer input size.
     """
-    input_size = IntProperty(required=True, minval=1)
 
-    def __init__(self, input_size, **options):
+    def __init__(self, *args, **options):
         super(BaseLayer, self).__init__()
 
-        self.input_size = input_size
+        self.parameters = []
 
         # Default variables which will change after initialization
         self.relate_to_layer = None
@@ -52,7 +45,3 @@ class BaseLayer(with_metaclass(LayerMeta, ChainConnection, BaseConfigurable)):
     def relate_to(self, right_layer):
         self.relate_to_layer = right_layer
         right_layer.relate_from_layer = self
-
-    def __repr__(self):
-        return '{name}({size})'.format(name=self.__class__.__name__,
-                                       size=self.input_size)

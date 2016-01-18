@@ -4,13 +4,14 @@ import theano.tensor as T
 
 from neupy.utils import asfloat
 from neupy.core.properties import (TypedListProperty, ArrayProperty,
-                                   ChoiceProperty, ProperFractionProperty)
+                                   ChoiceProperty, ProperFractionProperty,
+                                   IntProperty)
 from neupy.layers.base import BaseLayer
 from neupy.layers.utils import GAUSSIAN, VALID_INIT_METHODS, generate_weight
 
 
-__all__ = ('Layer', 'Linear', 'Sigmoid', 'Step', 'Tanh', 'Relu', 'Softplus',
-           'Softmax')
+__all__ = ('Layer', 'Linear', 'Sigmoid', 'HardSigmoid', 'Step', 'Tanh',
+           'Relu', 'Softplus', 'Softmax', 'Dropout')
 
 
 theano_shared_class = T.sharedvar.TensorSharedVariable
@@ -33,7 +34,8 @@ class Layer(BaseLayer):
     """ Base class for input and hidden layers.
     Parameters
     ----------
-    {BaseLayer.input_size}
+    size : int
+        Layer input size.
     weight : 2D array-like or None
         Define your layer weights. ``None`` means that your weights will be
         generate randomly dependence on property ``init_method``.
@@ -53,13 +55,18 @@ class Layer(BaseLayer):
         identify minimum and maximum possible value in random weights.
         Defaults to ``(0, 1)``.
     """
+    size = IntProperty(required=True, minval=1)
     weight = SharedArrayProperty(default=None)
     bias = SharedArrayProperty(default=None)
     bounds = TypedListProperty(default=(0, 1), element_type=(int, float))
     init_method = ChoiceProperty(default=GAUSSIAN, choices=VALID_INIT_METHODS)
 
+    def __init__(self, size, **options):
+        options['size'] = size
+        super(Layer, self).__init__(**options)
+
     def initialize(self):
-        output_size = self.relate_to_layer.input_size
+        output_size = self.relate_to_layer.size
         weight = self.weight
         bias = self.bias
         self.step = None
@@ -67,7 +74,7 @@ class Layer(BaseLayer):
         if self.relate_from_layer is not None:
             self.layer_id = self.relate_from_layer.layer_id + 1
 
-        self.weight_shape = (self.input_size, output_size)
+        self.weight_shape = (self.size, output_size)
         self.bias_shape = (output_size,)
 
         # TODO: This part looks ugly, should find a different way.
@@ -95,13 +102,17 @@ class Layer(BaseLayer):
         summated = T.dot(input_value, self.weight) + self.bias
         return self.activation_function(summated)
 
+    def __repr__(self):
+        return '{name}({size})'.format(name=self.__class__.__name__,
+                                       size=self.size)
+
 
 class Linear(Layer):
     """ The layer with the linear activation function.
 
     Parameters
     ----------
-    {BaseLayer.input_size}
+    {Layer.size}
     {Layer.weight}
     {Layer.bias}
     {Layer.init_method}
@@ -115,13 +126,27 @@ class Sigmoid(Layer):
 
     Parameters
     ----------
-    {BaseLayer.input_size}
+    {Layer.size}
     {Layer.weight}
     {Layer.bias}
     {Layer.init_method}
     {Layer.bounds}
     """
     activation_function = T.nnet.sigmoid
+
+
+class HardSigmoid(Layer):
+    """ The layer with the hard sigmoid activation function.
+
+    Parameters
+    ----------
+    {Layer.size}
+    {Layer.weight}
+    {Layer.bias}
+    {Layer.init_method}
+    {Layer.bounds}
+    """
+    activation_function = T.nnet.hard_sigmoid
 
 
 def step_function(value):
@@ -135,7 +160,7 @@ class Step(Layer):
 
     Parameters
     ----------
-    {BaseLayer.input_size}
+    {Layer.size}
     {Layer.weight}
     {Layer.bias}
     {Layer.init_method}
@@ -149,7 +174,7 @@ class Tanh(Layer):
 
     Parameters
     ----------
-    {BaseLayer.input_size}
+    {Layer.size}
     {Layer.weight}
     {Layer.bias}
     {Layer.init_method}
@@ -163,7 +188,7 @@ class Relu(Layer):
 
     Parameters
     ----------
-    {BaseLayer.input_size}
+    {Layer.size}
     {Layer.weight}
     {Layer.bias}
     {Layer.init_method}
@@ -177,7 +202,7 @@ class Softplus(Layer):
 
     Parameters
     ----------
-    {BaseLayer.input_size}
+    {Layer.size}
     {Layer.weight}
     {Layer.bias}
     {Layer.init_method}
@@ -191,7 +216,7 @@ class Softmax(Layer):
 
     Parameters
     ----------
-    {BaseLayer.input_size}
+    {Layer.size}
     {Layer.weight}
     {Layer.bias}
     {Layer.init_method}
@@ -206,15 +231,33 @@ class Dropout(BaseLayer):
     Parameters
     ----------
     proba : float
-
-    {BaseLayer.input_size}
+        Fraction of the input units to drop. Value needs to be
+        between 0 and 1.
     """
     proba = ProperFractionProperty(required=True)
 
+    def __init__(self, proba, **options):
+        options['proba'] = proba
+        super(Dropout, self).__init__(**options)
+
+    @property
+    def size(self):
+        return self.relate_to_layer.size
+
+    def initialize(self):
+        pass
+
     def output(self, input_value):
-        seed = np.random.randint(sys.maxint)
+        # Use NumPy seed to make Theano code easely reproducible
+        max_possible_seed = 4e9
+        seed = np.random.randint(max_possible_seed)
         theano_random = T.shared_randomstreams.RandomStreams(seed)
 
-        mask = theano_random.binomial(n=1, p=1.0 - self.proba,
-                                      size=input_value.shape)
+        mask = theano_random.binomial(n=1, p=(1.0 - self.proba),
+                                      size=input_value.shape,
+                                      dtype=input_value.dtype)
         return mask * input_value
+
+    def __repr__(self):
+        return "{name}(proba={proba})".format(name=self.__class__.__name__,
+                                              proba=self.proba)

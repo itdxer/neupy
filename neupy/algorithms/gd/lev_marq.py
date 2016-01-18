@@ -140,7 +140,7 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
 
     def init_train_updates(self):
         network_output = self.variables.network_output
-        prediction_func = self.variables.prediction_func
+        prediction_func = self.variables.train_prediction_func
         last_error = self.variables.last_error
         error_func = self.variables.error_func
         mu = self.variables.mu

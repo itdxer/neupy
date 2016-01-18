@@ -48,7 +48,7 @@ def format_data(data, is_feature1d=True, copy=False):
 
 
 def is_layer_accept_1d_feature(layer):
-    return (layer.input_size == 1)
+    return (layer.size == 1)
 
 
 def asfloat(value):

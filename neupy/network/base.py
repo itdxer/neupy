@@ -473,13 +473,3 @@ class BaseNetwork(BaseSkeleton):
 
         if show:
             plt.show()
-
-    # ----------------- Representations ----------------- #
-
-    def class_name(self):
-        return self.__class__.__name__
-
-    def __repr__(self):
-        classname = self.class_name()
-        options_repr = self._repr_options()
-        return "{}({})".format(classname, options_repr)

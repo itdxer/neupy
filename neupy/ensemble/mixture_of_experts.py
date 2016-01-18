@@ -91,9 +91,9 @@ class MixtureOfExperts(BaseEnsemble):
                     "got {0}".format(network.__class__.__name__)
                 )
 
-            if network.output_layer.input_size != 1:
+            if network.output_layer.size != 1:
                 raise ValueError("Network must contains one output unit, got "
-                                 "{0}".format(network.output_layer.input_size))
+                                 "{0}".format(network.output_layer.size))
 
             if network.error.__name__ != 'mse':
                 raise ValueError(
@@ -118,7 +118,7 @@ class MixtureOfExperts(BaseEnsemble):
             )
 
         gating_network.verbose = False
-        gating_network_output_size = gating_network.output_layer.input_size
+        gating_network_output_size = gating_network.output_layer.size
         n_networks = len(self.networks)
 
         if gating_network_output_size != n_networks:
@@ -142,7 +142,7 @@ class MixtureOfExperts(BaseEnsemble):
         gating_network.init_methods()
 
         probs = gating_network.variables.prediction_func
-        outputs = []
+        train_outputs, outputs = [], []
         for i, network in enumerate(self.networks):
             network.variables.network_input = x
             network.variables.network_output = y
@@ -153,10 +153,15 @@ class MixtureOfExperts(BaseEnsemble):
             output = network.variables.prediction_func
             outputs.append(output * probs[:, i:i + 1])
 
+            train_output = network.variables.train_prediction_func
+            train_outputs.append(train_output * probs[:, i:i + 1])
+
         outputs_concat = T.concatenate(outputs, axis=1)
         self.prediction_func = sum(outputs)
+        self.train_prediction_func = sum(train_outputs)
+
         for net in self.networks:
-            net.methods.error_func = net.error(y, self.prediction_func)
+            net.methods.error_func = net.error(y, self.train_prediction_func)
 
         gating_network.methods.error_func = gating_network.error(
             gating_network.variables.network_output,
@@ -177,7 +182,7 @@ class MixtureOfExperts(BaseEnsemble):
         input_size = input_data.shape[1]
 
         gating_network = self.gating_network
-        gating_network_input_size = gating_network.input_layer.input_size
+        gating_network_input_size = gating_network.input_layer.size
 
         if gating_network_input_size != input_size:
             raise ValueError(

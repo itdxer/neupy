@@ -7,6 +7,8 @@ import theano
 import numpy as np
 import pandas as pd
 
+from neupy import environment
+
 from utils import vectors_for_testing
 
 
@@ -23,9 +25,7 @@ class BaseTestCase(unittest.TestCase):
 
         # Optimize unit tests speed. In general all task very simple so some
         # Theano optimizations can be redundant.
-        theano.config.mode = "FAST_COMPILE"
-        theano.config.optimizer = "fast_compile"
-        theano.config.allow_gc = False
+        environment.sandbox()
 
     def assertInvalidVectorTrain(self, network, input_vector, target=None,
                                  decimal=5, is_feature1d=True, **train_kwargs):

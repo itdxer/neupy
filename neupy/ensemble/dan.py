@@ -62,7 +62,7 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
         self.weights = None
 
         for network in networks:
-            output_layer_size = network.output_layer.input_size
+            output_layer_size = network.output_layer.size
             network.verbose = False
 
             if output_layer_size != 1:

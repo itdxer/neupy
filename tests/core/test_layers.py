@@ -4,7 +4,9 @@ import unittest
 from scipy import stats
 import numpy as np
 import theano
+import theano.tensor as T
 
+from neupy.utils import asfloat
 from neupy.algorithms import GradientDescent
 from neupy.layers.connections import NetworkConnectionError
 from neupy.layers import *
@@ -21,7 +23,7 @@ class LayersBasicsTestCase(BaseTestCase):
         bpnet = GradientDescent([Sigmoid(2), Sigmoid(3),
                                  Sigmoid(1), Output(10)])
         self.assertEqual(
-            [layer.input_size for layer in bpnet.layers],
+            [layer.size for layer in bpnet.layers],
             [2, 3, 1, 10]
         )
 
@@ -66,6 +68,17 @@ class HiddenLayersOperationsTestCase(BaseTestCase):
         layer1 = Sigmoid(1)
         self.assertGreater(1, layer1.activation_function(1).eval())
 
+    def test_hard_sigmoid_layer(self):
+        layer1 = HardSigmoid(6)
+
+        test_value = asfloat(np.array([[-3, -2, -1, 0, 1, 2]]))
+        expected = np.array([[0, 0.1, 0.3, 0.5, 0.7, 0.9]])
+
+        x = T.matrix()
+        output = layer1.activation_function(x).eval({x: test_value})
+
+        np.testing.assert_array_almost_equal(output, expected)
+
     def test_step_layer(self):
         layer1 = Step(1)
 
@@ -106,7 +119,12 @@ class HiddenLayersOperationsTestCase(BaseTestCase):
         )
 
     def test_dropout_layer(self):
-        pass
+        test_input = np.ones((50, 20))
+        dropout_layer = Dropout(proba=0.3)
+
+        layer_output = dropout_layer.output(test_input).eval()
+        # Near 70%
+        self.assertEqual(layer_output.sum(), 708)
 
 
 class OutputLayersOperationsTestCase(BaseTestCase):

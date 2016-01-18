@@ -4,7 +4,7 @@ import theano.tensor as T
 
 from neupy.utils import (AttributeKeyDict, asfloat, is_list_of_integers,
                          format_data, is_layer_accept_1d_feature)
-from neupy.layers import BaseLayer, Output
+from neupy.layers import BaseLayer, Output, Dropout
 from neupy.layers.utils import generate_layers
 from neupy.core.properties import ChoiceProperty
 from neupy.layers.connections import LayerConnection, NetworkConnectionError
@@ -114,15 +114,17 @@ class ConstructableNetwork(BaseNetwork):
 
         network_input = self.variables.network_input
 
-        layer_input = network_input
+        train_layer_input = layer_input = network_input
         for layer in self.train_layers:
-            layer_input = layer.output(layer_input)
-        prediction = layer_input
+            if not isinstance(layer, Dropout):
+                layer_input = layer.output(layer_input)
+            train_layer_input = layer.output(train_layer_input)
 
         self.variables.update(
             step=theano.shared(name='step', value=asfloat(self.step)),
             epoch=theano.shared(name='epoch', value=1, borrow=False),
-            prediction_func=prediction,
+            prediction_func=layer_input,
+            train_prediction_func=train_layer_input,
         )
 
     def init_methods(self):
@@ -254,7 +256,7 @@ class SupervisedConstructableNetwork(SupervisedLearning, ConstructableNetwork):
         super(SupervisedConstructableNetwork, self).init_variables()
 
         network_output = self.variables.network_output
-        prediction = self.variables.prediction_func
+        prediction = self.variables.train_prediction_func
 
         self.variables.update(
             error_func=self.error(network_output, prediction),

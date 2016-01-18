@@ -16,8 +16,17 @@ class Output(BaseLayer):
 
     Parameters
     ----------
-    {BaseLayer.input_size}
+    size : int
+        Network output size.
     """
+    size = IntProperty(required=True, minval=1)
+
+    def __init__(self, size, **options):
+        options['size'] = size
+        super(Output, self).__init__(**options)
+
+    def initialize(self):
+        pass
 
     def relate_to(self, right_layer):
         raise NetworkConnectionError("Can't create connection "
@@ -26,6 +35,10 @@ class Output(BaseLayer):
     def output(self, value):
         return value
 
+    def __repr__(self):
+        return '{name}({size})'.format(name=self.__class__.__name__,
+                                       size=self.size)
+
 
 class CompetitiveOutput(Output):
     """ Competitive layer output. Layer output will return the result where
@@ -33,7 +46,7 @@ class CompetitiveOutput(Output):
 
     Parameters
     ----------
-    {BaseLayer.input_size}
+    {Output.size}
     """
     def output(self, value):
         output = np.zeros(value.shape, dtype=np.int0)
@@ -54,7 +67,7 @@ class StepOutput(Output):
     critical_point : float
         Critical point is set up step function bias. Value equal to this
         point should be equal to the lower bound. Defaults to ``0``.
-    {BaseLayer.input_size}
+    {Output.size}
     """
     output_bounds = TypedListProperty(default=(0, 1))
     critical_point = ProperFractionProperty(default=0)
@@ -72,7 +85,7 @@ class RoundedOutput(Output):
     ----------
     decimal_places : int
         The precision in decimal digits for output value.
-    {BaseLayer.input_size}
+    {Output.size}
     """
     decimal_places = IntProperty(default=0, minval=0)
 
@@ -87,7 +100,7 @@ class ArgmaxOutput(Output):
     ----------
     decimal_places : int
     The precision in decimal digits for output value.
-    {BaseLayer.input_size}
+    {Output.size}
     """
 
     def output(self, value):

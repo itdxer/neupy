@@ -98,6 +98,7 @@ def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
                               y_deriv_previous, is_first_iteration, x_star):
 
         y_deriv_current = f_deriv(x_current)
+
         x_new = x_current * asfloat(2)
         y_new = f(x_new)
 
