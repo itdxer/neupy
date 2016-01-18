@@ -1,5 +1,6 @@
 from functools import partial
 
+import theano.tensor as T
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -31,6 +32,15 @@ target_data = np.array([
 default_weight = np.array([[-4.], [-4.]])
 
 weights = None
+current_epoch = 0
+
+
+class NoBiasSigmoid(layers.Sigmoid):
+    def output(self, input_value):
+        # Miltiply bias by zero to disable it. We need to include it in
+        # formula, because Theano use update rules for it.
+        summated = T.dot(input_value, self.weight) + (0 * self.bias)
+        return self.activation_function(summated)
 
 
 def save_weight_in_epoch(net):
@@ -38,13 +48,15 @@ def save_weight_in_epoch(net):
     epoch.
     """
     global weights
-    input_layer_weight = net.train_layers[0].weight.copy()
-    weights[:, net.epoch + 1:net.epoch + 2] = input_layer_weight
+    global current_epoch
+
+    input_layer_weight = net.input_layer.weight.get_value().copy()
+    weights[:, current_epoch + 1:current_epoch + 2] = input_layer_weight
 
 
 def get_connection():
     """ Generate new connections every time when we call it """
-    input_layer = layers.Sigmoid(2, weight=default_weight.copy())
+    input_layer = NoBiasSigmoid(2, weight=default_weight.copy())
     output_layer = layers.Output(1)
     return input_layer > output_layer
 
@@ -52,12 +64,8 @@ def get_connection():
 # Setup default networks settings which we will use in all algorithms
 # which we will vizualize.
 network_settings = dict(
-    # Network
     step=0.3,
-    use_bias=False,
-    # Signals
     epoch_end_signal=save_weight_in_epoch,
-    verbose=False,
 )
 
 
@@ -66,24 +74,29 @@ def draw_quiver(network_class, name, color='r'):
     for this algorithm.
     """
     global weights
+    global current_epoch
 
     bpn = network_class(get_connection(), **network_settings)
     # 1000 is an upper limit for all network epochs, later we
     # will fix it size
     weights = np.zeros((2, 1000))
     weights[:, 0:1] = default_weight.copy()
-    bpn.train(input_data, target_data, epsilon=0.125)
-    weights = weights[:, :bpn.epoch + 1]
+
+    current_epoch = 0
+    while bpn.prediction_error(input_data, target_data) > 0.125:
+        bpn.train(input_data, target_data, epochs=1)
+        current_epoch += 1
+
+    weights = weights[:, :current_epoch + 1]
     weight_quiver(weights, color=color)
 
-    label = "{name} ({n} steps)".format(name=name, n=bpn.epoch)
+    label = "{name} ({n} steps)".format(name=name, n=current_epoch)
     return mpatches.Patch(color=color, label=label)
 
 
 def target_function(network, x, y):
-    network.input_layer.weight = np.array([[x], [y]])
-    predicted = network.predict(input_data)
-    return network.error(predicted, target_data)
+    network.input_layer.weight.set_value(np.array([[x], [y]]))
+    return network.prediction_error(input_data, target_data)
 
 
 # Get data for countour plot
@@ -96,24 +109,26 @@ plt.xlabel("First weight")
 plt.ylabel("Second weight")
 
 draw_countour(
-    np.linspace(-4.5, 4, 50),
-    np.linspace(-4.5, 4, 50),
+    np.linspace(-6.5, 6.5, 50),
+    np.linspace(-6.5, 6.5, 50),
     network_target_function
 )
 
 cgnet_class = partial(algorithms.ConjugateGradient,
                       optimizations=[algorithms.LinearSearch])
+momentum_class = partial(algorithms.Momentum, batch_size='full')
 
 algorithms = (
     (algorithms.GradientDescent, 'Gradient Descent', 'k'),
-    (algorithms.Momentum, 'Momentum', 'm'),
+    (momentum_class, 'Momentum', 'm'),
     (algorithms.RPROP, 'RPROP', 'c'),
     (cgnet_class, 'Conjugate Gradient', 'y'),
 )
 
 patches = []
-for network_params in algorithms:
-    quiver_patch = draw_quiver(*network_params)
+for algorithm, algorithm_name, color in algorithms:
+    print("Train '{}' network".format(algorithm_name))
+    quiver_patch = draw_quiver(algorithm, algorithm_name, color)
     patches.append(quiver_patch)
 
 plt.legend(handles=patches)
