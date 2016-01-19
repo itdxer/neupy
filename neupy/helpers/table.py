@@ -2,6 +2,7 @@ import time
 from operator import attrgetter
 from abc import abstractmethod
 
+import numpy as np
 from six import with_metaclass
 
 from neupy.core.docs import SharedDocs, SharedDocsABCMeta
@@ -100,9 +101,6 @@ class TimeColumn(Column):
         return time.strftime("%H:%M:%S", time.gmtime(value))
 
 
-# TODO: After a few modifications class got different behaviour and
-# its name doesn't describe behaviour correctly. Should change it to
-# some better name.
 class FloatColumn(Column):
     """ Class describe float column type.
 
@@ -131,13 +129,14 @@ class FloatColumn(Column):
         float
             Rounded input value.
         """
-        if not isinstance(value, (int, float)):
+        if not isinstance(value, (int, float, np.floating, np.integer)):
             return value
 
         if value > 100:
             return "~{:.0f}".format(value)
 
-        return round(value, self.places)
+        return "{value:.{places}f}".format(value=value,
+                                           places=self.places)
 
 
 class BaseState(with_metaclass(SharedDocsABCMeta)):

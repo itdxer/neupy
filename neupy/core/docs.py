@@ -171,10 +171,16 @@ class SharedDocsMeta(type):
 
         try:
             new_class.__doc__ = new_class.__doc__.format(**parameters)
-        except Exception as e:
-            raise SharedDocsException("Can't format documentation for class "
-                                      "`{}`. Catched exception: {}"
-                                      "".format(new_class.__name__, e))
+        except Exception as exception:
+            exception_classname = exception.__class__.__name__
+            raise SharedDocsException(
+                "Can't format documentation for class `{}`. "
+                "Catched `{}` exception with message: {}".format(
+                    new_class.__name__,
+                    exception_classname,
+                    exception
+                )
+            )
 
         return new_class
 

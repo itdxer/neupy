@@ -35,7 +35,7 @@ class GradientDescentTestCase(BaseTestCase):
             verbose=False
         )
         network.train(x_train, y_train, epochs=500)
-        self.assertAlmostEqual(network.last_error(), 0.054, places=3)
+        self.assertAlmostEqual(network.last_error(), 0.02, places=3)
 
     def test_optimization_validations(self):
         with self.assertRaises(ValueError):

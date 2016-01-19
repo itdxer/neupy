@@ -2,7 +2,7 @@ import numpy as np
 
 from sklearn import datasets, preprocessing, cross_validation, metrics
 from neupy import algorithms, ensemble, layers
-from neupy.layers import Tanh, Sigmoid, Output
+from neupy.layers import Relu, Sigmoid, Output
 
 from base import BaseTestCase
 
@@ -30,13 +30,17 @@ class DANTestCase(BaseTestCase):
             ])
 
         with self.assertRaises(ValueError):
-            # Output between -1 and 1
+            # Output greater than 1
             dan = ensemble.DynamicallyAveragedNetwork([
                 algorithms.GradientDescent(
-                    Sigmoid(4) > Tanh(10) > Output(1),
+                    [
+                        Sigmoid(4),
+                        Relu(10, init_method='bounded', bounds=(0, 1)),
+                        Output(1),
+                    ],
                     step=0.01
                 ),
-                algorithms.RPROP((4, 10, 1), step=0.1)
+                algorithms.RPROP((4, 10, 1), step=0.01),
             ])
             dan.train(x_train, y_train, epochs=10)
             dan.predict(x_test)
@@ -57,4 +61,4 @@ class DANTestCase(BaseTestCase):
         dan.train(x_train, y_train, epochs=500)
         result = dan.predict(x_test)
         ensemble_result = metrics.accuracy_score(y_test, result)
-        self.assertAlmostEqual(0.9333, ensemble_result, places=4)
+        self.assertAlmostEqual(0.9222, ensemble_result, places=4)

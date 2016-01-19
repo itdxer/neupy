@@ -1,6 +1,6 @@
 import os
 
-from neupy.helpers.logs import red
+from neupy.helpers.terminal import red
 
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))

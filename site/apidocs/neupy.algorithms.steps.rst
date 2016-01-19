@@ -13,7 +13,6 @@ Submodules
    neupy.algorithms.steps.linear_search
    neupy.algorithms.steps.search_then_converge
    neupy.algorithms.steps.simple_step_minimization
-   neupy.algorithms.steps.wolfe_search
 
 Module contents
 ---------------

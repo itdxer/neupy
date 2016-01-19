@@ -45,4 +45,4 @@ class PandasCompatibilityTestCase(BaseTestCase):
             target_scaler.inverse_transform(y_test),
             target_scaler.inverse_transform(y_predict).round()
         )
-        self.assertAlmostEqual(6.17, error, places=2)
+        self.assertAlmostEqual(3.94, error, places=2)

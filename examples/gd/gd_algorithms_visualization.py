@@ -9,10 +9,8 @@ from neupy import algorithms, layers
 from plots import draw_countour, weight_quiver
 
 
-# Settings
-TOTAL_EPOCHS = 30
+np.random.seed(0)
 
-# Initialize test data
 input_data = np.array([
     [0.9, 0.3],
     [0.5, 0.3],
@@ -61,8 +59,6 @@ def get_connection():
     return input_layer > output_layer
 
 
-# Setup default networks settings which we will use in all algorithms
-# which we will vizualize.
 network_settings = dict(
     step=0.3,
     epoch_end_signal=save_weight_in_epoch,

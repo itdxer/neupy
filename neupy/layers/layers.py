@@ -7,7 +7,8 @@ from neupy.core.properties import (TypedListProperty, ArrayProperty,
                                    ChoiceProperty, ProperFractionProperty,
                                    IntProperty)
 from neupy.layers.base import BaseLayer
-from neupy.layers.utils import GAUSSIAN, VALID_INIT_METHODS, generate_weight
+from neupy.layers.utils import (XAVIER_NORMAL, VALID_INIT_METHODS,
+                                generate_weight)
 
 
 __all__ = ('Layer', 'Linear', 'Sigmoid', 'HardSigmoid', 'Step', 'Tanh',
@@ -32,6 +33,7 @@ class SharedArrayProperty(ArrayProperty):
 
 class Layer(BaseLayer):
     """ Base class for input and hidden layers.
+
     Parameters
     ----------
     size : int
@@ -43,13 +45,37 @@ class Layer(BaseLayer):
     bias : 1D array-like or None
         Define your layer bias. ``None`` means that your weights will be
         generate randomly dependence on property ``init_method``.
-    init_method : {{'gauss', 'bounded', 'ortho'}}
-        Weight initialization method.
-        ``gauss`` will generate random weights from Standard Normal
-        Distribution.
-        ``bounded`` generate random weights from Uniform distribution.
-        ``ortho`` generate random orthogonal matrix.
-        Defaults to ``gauss``.
+    init_method : {{'bounded', 'normal', 'ortho', 'xavier_normal',\
+    'xavier_uniform', 'he_normal', 'he_uniform'}}
+        Weight initialization method. Defaults to ``xavier_normal``.
+
+        * ``normal`` will generate random weights from normal distribution \
+        with standard deviation equal to ``0.01``.
+
+        * ``bounded`` generate random weights from Uniform distribution.
+
+        * ``ortho`` generate random orthogonal matrix.
+
+        * ``xavier_normal`` generate random matrix from normal distrubtion \
+        where variance equal to :math:`\\frac{{2}}{{fan_{{in}} + \
+        fan_{{out}}}}`. Where :math:`fan_{{in}}` is a number of \
+        layer input units and :math:`fan_{{out}}` - number of layer \
+        output units.
+
+        * ``xavier_uniform`` generate random matrix from uniform \
+        distribution \ where :math:`w_{{ij}} \in \
+        [-\\sqrt{{\\frac{{6}}{{fan_{{in}} + fan_{{out}}}}}}, \
+        \\sqrt{{\\frac{{6}}{{fan_{{in}} + fan_{{out}}}}}}`].
+
+        * ``he_normal`` generate random matrix from normal distrubtion \
+        where variance equal to :math:`\\frac{{2}}{{fan_{{in}}}}`. \
+        Where :math:`fan_{{in}}` is a number of layer input units.
+
+        * ``he_uniform`` generate random matrix from uniformal \
+        distribution where :math:`w_{{ij}} \in [\
+        -\\sqrt{{\\frac{{6}}{{fan_{{in}}}}}}, \
+        \\sqrt{{\\frac{{6}}{{fan_{{in}}}}}}]`
+
     bounds : tuple of two float
         Available only for ``init_method`` eqaul to ``bounded``.  Value
         identify minimum and maximum possible value in random weights.
@@ -59,7 +85,8 @@ class Layer(BaseLayer):
     weight = SharedArrayProperty(default=None)
     bias = SharedArrayProperty(default=None)
     bounds = TypedListProperty(default=(0, 1), element_type=(int, float))
-    init_method = ChoiceProperty(default=GAUSSIAN, choices=VALID_INIT_METHODS)
+    init_method = ChoiceProperty(default=XAVIER_NORMAL,
+                                 choices=VALID_INIT_METHODS)
 
     def __init__(self, size, **options):
         options['size'] = size

@@ -48,7 +48,6 @@ class BaseSkeleton(ConfigurableABC, Verbose):
     def train(self, input_data, target_data):
         pass
 
-    @abstractmethod
     def predict(self, input_data):
         pass
 

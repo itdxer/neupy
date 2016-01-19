@@ -1,7 +1,6 @@
 import importlib
 
-from numpy.random import randn, random
-from numpy.linalg import svd
+import numpy as np
 
 from neupy.layers.connections import LayerConnection
 
@@ -83,19 +82,19 @@ def random_orthogonal(shape):
         raise ValueError("Shape attribute should be a tuple which contains "
                          "1 or 2 integer values.")
 
-    rand_matrix = randn(*shape)
+    rand_matrix = np.random.randn(*shape)
 
     if len(shape) == 1:
         return rand_matrix
 
     nrows, ncols = shape
-    u, _, v = svd(rand_matrix, full_matrices=False)
+    u, _, v = np.linalg.svd(rand_matrix, full_matrices=False)
     ortho_base = u if nrows > ncols else v
 
     return ortho_base[:nrows, :ncols]
 
 
-def random_bounded(shape, bounds=(0, 1)):
+def random_bounded(shape, bounds=(-0.01, 0.01)):
     """ Generate uniform random matrix which values between bounds.
 
     Parameters
@@ -118,18 +117,135 @@ def random_bounded(shape, bounds=(0, 1)):
                          "two numbers.".format(bounds))
 
     left_bound, right_bound = bounds
-    random_weight = random(shape)
+    random_weight = np.random.random(shape)
     return random_weight * (right_bound - left_bound) + left_bound
 
 
-GAUSSIAN = 'gauss'
+def identify_fans(shape):
+    """ Identify fans from shape.
+
+    Parameters
+    ----------
+    shape : tuple or list
+        Matrix shape.
+
+    Returns
+    -------
+    tuple
+        Tuple that contains :math:`fan_{in}` and :math:`fan_{out}`.
+    """
+    fan_in = shape[0]
+    fan_out = shape[1] if len(shape) > 1 else 1
+    return fan_in, fan_out
+
+
+def he_normal(shape):
+    """ Kaiming He weight initialization from normal
+    distribution.
+
+    Parameters
+    ----------
+    shape : tuple or list
+        Random matrix shape.
+
+    Returns
+    -------
+    array-like
+        Randomly generate matrix with defined shape.
+
+    ..[1] Kaiming He, Xiangyu Zhan, Shaoqing Ren, Jian Sun.
+        Delving Deep into Rectifiers: Surpassing Human-Level Performance
+        on ImageNet Classification, 2015.
+    """
+    fan_in, _ = identify_fans(shape)
+    variance = 2. / fan_in
+    std = np.sqrt(variance)
+    return np.random.normal(loc=0, scale=std, size=shape)
+
+
+def he_uniform(shape):
+    """ Kaiming He weight initialization from uniform
+    distribution.
+
+    Parameters
+    ----------
+    shape : tuple or list
+        Random matrix shape.
+
+    Returns
+    -------
+    array-like
+        Randomly generate matrix with defined shape.
+
+    ..[1] Kaiming He, Xiangyu Zhan, Shaoqing Ren, Jian Sun.
+        Delving Deep into Rectifiers: Surpassing Human-Level Performance
+        on ImageNet Classification, 2015.
+    """
+    fan_in, _ = identify_fans(shape)
+    variance = 6. / fan_in
+    abs_max_value = np.sqrt(variance)
+    return random_bounded(shape, bounds=(-abs_max_value, abs_max_value))
+
+
+def xavier_normal(shape):
+    """ Xavier Glorot weight initialization from normal
+    distribution.
+
+    Parameters
+    ----------
+    shape : tuple or list
+        Random matrix shape.
+
+    Returns
+    -------
+    array-like
+        Randomly generate matrix with defined shape.
+
+    ..[1] X Glorot, Y Bengio. Understanding the difficulty of training
+        deep feedforward neural networks, 2010.
+    """
+    fan_in, fan_out = identify_fans(shape)
+    variance = 2. / (fan_in + fan_out)
+    std = np.sqrt(variance)
+    return np.random.normal(loc=0, scale=std, size=shape)
+
+
+def xavier_uniform(shape):
+    """ Xavier Glorot weight initialization from uniform
+    distribution.
+
+    Parameters
+    ----------
+    shape : tuple or list
+        Random matrix shape.
+
+    Returns
+    -------
+    array-like
+        Randomly generate matrix with defined shape.
+
+    ..[1] X Glorot, Y Bengio. Understanding the difficulty of training
+        deep feedforward neural networks, 2010.
+    """
+    fan_in, fan_out = identify_fans(shape)
+    variance = 6. / (fan_in + fan_out)
+    abs_max_value = np.sqrt(variance)
+    return random_bounded(shape, bounds=(-abs_max_value, abs_max_value))
+
+
+NORMAL = 'normal'
 BOUNDED = 'bounded'
 ORTHOGONAL = 'ortho'
+XAVIER_NORMAL = 'xavier_normal'
+XAVIER_UNIFORM = 'xavier_uniform'
+HE_NORMAL = 'he_normal'
+HE_UNIFORM = 'he_uniform'
 
-VALID_INIT_METHODS = (GAUSSIAN, BOUNDED, ORTHOGONAL)
+VALID_INIT_METHODS = (NORMAL, BOUNDED, ORTHOGONAL, XAVIER_NORMAL,
+                      XAVIER_UNIFORM, HE_NORMAL, HE_UNIFORM)
 
 
-def generate_weight(shape, bounds=None, init_method=GAUSSIAN):
+def generate_weight(shape, bounds=None, init_method=XAVIER_NORMAL):
     """ Generate random weights for neural network connections.
 
     Parameters
@@ -139,13 +255,33 @@ def generate_weight(shape, bounds=None, init_method=GAUSSIAN):
     bounds : tuple of int
         Available only for ``init_method`` equal to ``bounded``.
         Value identify minimum and maximum possible value in random weights.
-    init_method : {{'bounded', 'gauss', 'ortho'}}
-        Weight initialization method.
-        ``gauss`` will generate random weights from Standard Normal
-        Distribution.
-        ``bounded`` generate random weights from Uniform distribution.
-        ``ortho`` generate random orthogonal matrix.
-        Defaults to ``gauss``.
+    init_method : {'bounded', 'normal', 'ortho', 'xavier_normal',\
+    'xavier_uniform', 'he_normal', 'he_uniform'}
+        Weight initialization method. Defaults to ``xavier_normal``.
+
+        * ``normal`` will generate random weights from normal distribution \
+        with standard deviation equal to ``0.01``.
+
+        * ``bounded`` generate random weights from Uniform distribution.
+
+        * ``ortho`` generate random orthogonal matrix.
+
+        * ``xavier_normal`` generate random matrix from normal distrubtion \
+        where variance equal to :math:`\\frac{2}{fan_{in} + fan_{out}}`. \
+        Where :math:`fan_{in}` is a number of layer input units and \
+        :math:`fan_{out}` - number of layer output units.
+
+        * ``xavier_uniform`` generate random matrix from uniform \
+        distribution where :math:`w_{ij} \in [-\\sqrt{\\frac{6}{fan_{in} \
+        + fan_{out}}}, \\sqrt{\\frac{6}{fan_{in} + fan_{out}}}]`.
+
+        * ``he_normal`` generate random matrix from normal distrubtion \
+        where variance equal to :math:`\\frac{2}{fan_{in}}`. \
+        Where :math:`fan_{in}` is a number of layer input units.
+
+        * ``he_uniform`` generate random matrix from uniformal \
+        distribution where :math:`w_{ij} \in [-\\sqrt{\\frac{6}{fan_{in}}}, \
+        \\sqrt{\\frac{6}{fan_{in}}}]`
 
     Returns
     -------
@@ -157,13 +293,23 @@ def generate_weight(shape, bounds=None, init_method=GAUSSIAN):
         raise ValueError("Undefined initialization method `{}`. Available: {}"
                          "".format(init_method, VALID_INIT_METHODS))
 
-    if init_method == GAUSSIAN:
-        weight = randn(*shape)
+    methods_without_parameters = {
+        ORTHOGONAL: random_orthogonal,
+        XAVIER_NORMAL: xavier_normal,
+        XAVIER_UNIFORM: xavier_uniform,
+        HE_NORMAL: he_normal,
+        HE_UNIFORM: he_uniform,
+    }
+
+    if init_method == NORMAL:
+        # TODO: Scale parameter needs to be specified by user.
+        weight = np.random.normal(loc=0, scale=0.01, size=shape)
 
     elif init_method == BOUNDED:
         weight = random_bounded(shape, bounds)
 
-    elif init_method == ORTHOGONAL:
-        weight = random_orthogonal(shape)
+    else:
+        generation_function = methods_without_parameters[init_method]
+        weight = generation_function(shape)
 
     return weight

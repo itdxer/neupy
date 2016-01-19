@@ -67,9 +67,9 @@ Algorithms
     * Liu-Storey
     * Dai-Yuan
 
-  * quasi-Newton
+  * quasi-Newton with Wolfe search
 
-    * QuasiNewton
+    * BFGS
     * DFP
     * PSB
     * SR1
@@ -89,10 +89,9 @@ Algorithms
 
 * Learning rate update rules
 
-  * Adaptive Learning Rate
+  * Leak step adaptation
   * Error difference Update
-  * Linear search by Golden Search or Brent
-  * Wolfe line search
+  * Linear search using Golden Search or Brent
   * Search than converge
   * Simple Step Minimization
 

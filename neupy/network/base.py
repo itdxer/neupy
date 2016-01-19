@@ -3,7 +3,6 @@ from __future__ import division
 import math
 import time
 import types
-from itertools import groupby
 from collections import deque
 
 import six
@@ -93,23 +92,10 @@ def show_network_options(network, highlight_options=None):
         List of enabled options. In that case all options from that
         list would be marked with a green color.
     """
-
-    available_classes = [cls.__name__ for cls in network.__class__.__mro__]
     logs = network.logs
 
     if highlight_options is None:
         highlight_options = {}
-
-    def classname_grouper(option):
-        classname = option[1].class_name
-        class_priority = -available_classes.index(classname)
-        return (class_priority, classname)
-
-    # Sort and group options by classes
-    grouped_options = groupby(
-        sorted(network.options.items(), key=classname_grouper),
-        key=classname_grouper
-    )
 
     has_layer_structure = (
         hasattr(network, 'connection') and
@@ -119,29 +105,21 @@ def show_network_options(network, highlight_options=None):
         logs.title("Network structure")
         logs.message("LAYERS", network.connection)
 
-    # Just display in terminal all network options.
     logs.title("Network options")
-    for (_, clsname), class_options in grouped_options:
-        if not class_options:
-            # When in some class we remove all available attributes
-            # we just skip it.
-            continue
 
-        logs.write("{}:".format(clsname))
+    for key, data in sorted(network.options.items()):
+        if key in highlight_options:
+            msg_color = 'green'
+            value = highlight_options[key]
+        else:
+            msg_color = 'gray'
+            value = data.value
 
-        for key, data in sorted(class_options):
-            if key in highlight_options:
-                msg_color = 'green'
-                value = highlight_options[key]
-            else:
-                msg_color = 'gray'
-                value = data.value
+        formated_value = preformat_value(value)
+        msg_text = "{} = {}".format(key, formated_value)
+        logs.message("OPTION", msg_text, color=msg_color)
 
-            formated_value = preformat_value(value)
-            msg_text = "{} = {}".format(key, formated_value)
-            logs.message("OPTION", msg_text, color=msg_color)
-
-        logs.write("")
+    logs.write("")
 
 
 def parse_show_epoch_property(value, n_epochs):
@@ -223,7 +201,7 @@ class BaseNetwork(BaseSkeleton):
         For instance, value ``'2 times'`` mean that the network will show
         output twice with approximately equal period of epochs and one
         additional output would be after the finall epoch.
-        Defaults to ``'10 times'``.
+        Defaults to ``1``.
     shuffle_data : bool
         If it's ``True`` class shuffles all your training data before
         training your network, defaults to ``True``.
@@ -252,7 +230,7 @@ class BaseNetwork(BaseSkeleton):
     """
     step = NumberProperty(default=0.1, minval=0)
 
-    show_epoch = ShowEpochProperty(minval=1, default='10 times')
+    show_epoch = ShowEpochProperty(minval=1, default=1)
     shuffle_data = Property(default=False, expected_type=bool)
 
     epoch_end_signal = Property(expected_type=types.FunctionType)

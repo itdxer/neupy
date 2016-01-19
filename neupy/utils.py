@@ -5,7 +5,14 @@ import numpy as np
 
 
 __all__ = ('format_data', 'is_layer_accept_1d_feature', 'asfloat',
-           'AttributeKeyDict', 'is_list_of_integers', 'preformat_value')
+           'AttributeKeyDict', 'is_list_of_integers', 'preformat_value',
+           'as_array2d', 'NotTrainedException')
+
+
+class NotTrainedException(Exception):
+    """ Exception needs for cases when algorithm is not trained
+    and can not be applied.
+    """
 
 
 def format_data(data, is_feature1d=True, copy=False):
@@ -138,3 +145,22 @@ def preformat_value(value):
         return value.shape
 
     return value
+
+
+def as_array2d(array):
+    """ Transform any array to 2D.
+
+    Parameters
+    ----------
+    array : array-like
+
+    Returns
+    -------
+    array-like
+        The same array transformed to 2D.
+    """
+    if array.ndim == 1:
+        return array.reshape((1, -1))
+
+    n_samples, feature_shape = array.shape[0], array.shape[1:]
+    return array.reshape((n_samples, np.prod(feature_shape)))

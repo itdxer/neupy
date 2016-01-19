@@ -32,7 +32,7 @@ class TableColumnsTestCase(BaseTestCase):
 
     def test_float_column(self):
         col1 = table.FloatColumn(name="Test1", places=2)
-        self.assertAlmostEqual(col1.format_value(1 / 3.), 0.33, places=2)
+        self.assertEqual(col1.format_value(1 / 3.), "0.33")
 
     def test_time_column(self):
         test_cases = [

@@ -30,7 +30,7 @@ x_train, x_test, y_train, y_test = train_test_split(
     data, target, train_size=0.85
 )
 
-cgnet = algorithms.QuasiNewton(
+cgnet = algorithms.Momentum(
     connection=[
         layers.Sigmoid(13),
         layers.Sigmoid(50),

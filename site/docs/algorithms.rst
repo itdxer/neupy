@@ -17,6 +17,7 @@ GradientDescent
     :network:`ConjugateGradient`, Conjugate Gradient
     :network:`QuasiNewton`, quasi-Newton
     :network:`LevenbergMarquardt`, Levenberg-Marquardt
+    :network:`Hessian`, Hessian
     :network:`HessianDiagonal`, Hessian diagonal
     :network:`Momentum`, Momentum
     :network:`RPROP`, RPROP
@@ -41,7 +42,6 @@ Learning rate update rules
     :network:`LeakStepAdaptation`, Leak Step Adaptation
     :network:`ErrDiffStepUpdate`, Error difference Update
     :network:`LinearSearch`, Linear search by Golden Search or Brent
-    :network:`WolfeSearch`, Wolfe line search
     :network:`SearchThenConverge`, Search than converge
     :network:`SimpleStepMinimization`, Simple Step Minimization
 
@@ -111,15 +111,17 @@ Input and hidden layers
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table::
-    :header: "Class name", "Description", "Has derivative?"
+    :header: "Class name", "Description"
 
-    ":layer:`Linear`", "Layer with linear activation function.", "No"
-    ":layer:`Sigmoid`", "Layer with sigmoid activation function.", "Yes"
-    ":layer:`Step`", "Layer with step activation function.", "No"
-    ":layer:`Tanh`", "Layer with tanh activation function.", "Yes"
-    ":layer:`Relu`", "Layer with rectifier activation function.", "No"
-    ":layer:`Softplus`", "Layer with softplus activation function.", "Yes"
-    ":layer:`Softmax`", "Layer with softmax activation function.", "Yes"
+    ":layer:`Linear`", "Layer with linear activation function."
+    ":layer:`Sigmoid`", "Layer with sigmoid activation function."
+    ":layer:`HardSigmoid`", "Layer with hard sigmoid activation function."
+    ":layer:`Step`", "Layer with step activation function."
+    ":layer:`Tanh`", "Layer with tanh activation function."
+    ":layer:`Relu`", "Layer with rectifier activation function."
+    ":layer:`Softplus`", "Layer with softplus activation function."
+    ":layer:`Softmax`", "Layer with softmax activation function."
+    ":layer:`Dropout`", "Dropout layer"
 
 Output layers
 ~~~~~~~~~~~~~

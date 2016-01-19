@@ -6,7 +6,7 @@ from sklearn import datasets, cross_validation, preprocessing
 from neupy import algorithms, layers
 
 from utils import rmsle, compare_networks
-from data import simple_input_train, simple_target_train
+from data import simple_classification
 from base import BaseTestCase
 
 
@@ -43,18 +43,23 @@ class HessianDiagonalTestCase(BaseTestCase):
             target_scaler.inverse_transform(y_predict).round()
         )
 
-        self.assertAlmostEqual(0.4981, error, places=4)
+        self.assertAlmostEqual(0.5027, error, places=4)
 
     def test_compare_bp_and_hessian(self):
+        x_train, _, y_train, _ = simple_classification()
         compare_networks(
             # Test classes
             algorithms.GradientDescent,
-            partial(algorithms.HessianDiagonal, min_eigval=1e-1),
+            partial(algorithms.HessianDiagonal, min_eigval=0.01),
             # Test data
-            (simple_input_train, simple_target_train),
+            (x_train, y_train),
             # Network configurations
-            connection=(3, 10, 2),
-            step=0.01,
+            connection=[
+                layers.Sigmoid(10, init_method='bounded', bounds=(-1, 1)),
+                layers.Sigmoid(20, init_method='bounded', bounds=(-1, 1)),
+                layers.Output(1)
+            ],
+            step=0.1,
             shuffle_data=True,
             verbose=False,
             # Test configurations

@@ -3,7 +3,7 @@ import sys
 import inspect
 import importlib
 
-from neupy.helpers.logs import green
+from neupy.helpers.terminal import green
 
 
 sys.path.append(

@@ -136,7 +136,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             train_size=0.8
         )
 
-        n_epochs = 100
+        n_epochs = 10
         scaled_y_test = output_scaler.inverse_transform(y_test)
         scaled_y_test = scaled_y_test.reshape((y_test.size, 1))
 
@@ -156,18 +156,18 @@ class MixtureOfExpertsTestCase(BaseTestCase):
 
         moe = ensemble.MixtureOfExperts(
             networks=[
-                algorithms.GradientDescent(
+                algorithms.Momentum(
                     (insize, 20, outsize),
                     step=0.1,
                     verbose=False
                 ),
-                algorithms.GradientDescent(
+                algorithms.Momentum(
                     (insize, 20, outsize),
                     step=0.1,
                     verbose=False
                 ),
             ],
-            gating_network=algorithms.GradientDescent(
+            gating_network=algorithms.Momentum(
                 layers.Softmax(insize) > layers.Output(2),
                 step=0.1,
                 verbose=False

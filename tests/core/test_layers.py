@@ -207,8 +207,8 @@ class OutputLayersOperationsTestCase(BaseTestCase):
 
 
 class LayersInitializationTestCase(BaseTestCase):
-    def test_layers_gauss_init(self):
-        input_layer = Sigmoid(30, init_method='gauss')
+    def test_layers_normal_init(self):
+        input_layer = Sigmoid(30, init_method='normal')
         connection = input_layer > Output(10)
         input_layer.initialize()
 
@@ -250,3 +250,56 @@ class LayersInitializationTestCase(BaseTestCase):
             np.eye(10),
             weight.dot(weight.T).round(10)
         )
+
+    def test_he_normal(self):
+        n_inputs = 10
+        input_layer = Sigmoid(n_inputs, init_method='he_normal')
+        connection = input_layer > Output(30)
+        input_layer.initialize()
+
+        weight = input_layer.weight.get_value()
+
+        self.assertAlmostEqual(weight.mean(), 0, places=1)
+        self.assertAlmostEqual(weight.std(), math.sqrt(2. / n_inputs),
+                               places=2)
+        self.assertTrue(stats.mstats.normaltest(weight))
+
+    def test_he_uniform(self):
+        n_inputs = 10
+        input_layer = Sigmoid(n_inputs, init_method='he_uniform')
+        connection = input_layer > Output(30)
+        input_layer.initialize()
+
+        weight = input_layer.weight.get_value()
+        bound = math.sqrt(6. / n_inputs)
+
+        self.assertAlmostEqual(weight.mean(), 0, places=1)
+        self.assertGreaterEqual(weight.min(), -bound)
+        self.assertLessEqual(weight.max(), bound)
+
+    def test_xavier_normal(self):
+        n_inputs, n_outputs = 10, 30
+        input_layer = Sigmoid(n_inputs, init_method='xavier_normal')
+        connection = input_layer > Output(n_outputs)
+        input_layer.initialize()
+
+        weight = input_layer.weight.get_value()
+
+        self.assertAlmostEqual(weight.mean(), 0, places=1)
+        self.assertAlmostEqual(weight.std(),
+                               math.sqrt(2. / (n_inputs + n_outputs)),
+                               places=2)
+        self.assertTrue(stats.mstats.normaltest(weight))
+
+    def test_xavier_uniform(self):
+        n_inputs, n_outputs = 10, 30
+        input_layer = Sigmoid(n_inputs, init_method='xavier_uniform')
+        connection = input_layer > Output(n_outputs)
+        input_layer.initialize()
+
+        weight = input_layer.weight.get_value()
+        bound = math.sqrt(6. / (n_inputs + n_outputs))
+
+        self.assertAlmostEqual(weight.mean(), 0, places=1)
+        self.assertGreaterEqual(weight.min(), -bound)
+        self.assertLessEqual(weight.max(), bound)

@@ -20,7 +20,7 @@ class MomentumTestCase(BaseTestCase):
         )
 
         mnet.train(x_train, y_train, epochs=40)
-        self.assertAlmostEqual(0.006, mnet.last_error(), places=3)
+        self.assertAlmostEqual(0.009, mnet.last_error(), places=3)
 
     def test_with_minibatch(self):
         x_train, _, y_train, _ = simple_classification()

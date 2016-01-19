@@ -18,7 +18,7 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
 
     Parameters
     ----------
-    matrix: array like
+    matrix: array-like
         Matrix that you want to visualise using Hinton diagram.
     max_weight : float
         Maximum value of the matrix. If it's equal to ``None`` than value

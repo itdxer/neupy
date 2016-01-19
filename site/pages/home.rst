@@ -1,5 +1,5 @@
-Home
-====
+NeuPy
+=====
 
 NeuPy is a Python library for Artificial Neural Networks.
 You can run and test different Neural Network algorithms.
@@ -67,9 +67,9 @@ Algorithms
     * Liu-Storey
     * Dai-Yuan
 
-  * quasi-Newton
+  * quasi-Newton with Wolfe search
 
-    * QuasiNewton
+    * BFGS
     * DFP
     * PSB
     * SR1
@@ -91,8 +91,7 @@ Algorithms
 
   * Adaptive Learning Rate
   * Error difference Update
-  * Linear search by Golden Search or Brent
-  * Wolfe line search
+  * Linear search using Golden Search or Brent
   * Search than converge
   * Simple Step Minimization
 

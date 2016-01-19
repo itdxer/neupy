@@ -14,6 +14,7 @@ Subpackages
     neupy.helpers
     neupy.layers
     neupy.network
+    neupy.optimizations
     neupy.plots
 
 Submodules
@@ -21,6 +22,8 @@ Submodules
 
 .. toctree::
 
+   neupy.environment
+   neupy.preprocessing
    neupy.utils
 
 Module contents

@@ -4,6 +4,7 @@ from itertools import chain
 import six
 import theano.tensor as T
 
+from neupy.helpers import progressbar
 from neupy.core.properties import Property, BoundedProperty
 from neupy.network import SupervisedConstructableNetwork
 from . import optimization_types
@@ -236,7 +237,7 @@ class MinibatchGradientDescent(GradientDescent):
         n_batches = math.floor(n_samples / batch_size)
         prediction_error = self.methods.prediction_error
 
-        for batch_index in range(n_batches):
+        for batch_index in progressbar(range(n_batches)):
             slice_batch = slice(batch_index * batch_size,
                                 (batch_index + 1) * batch_size)
             train_epoch(input_train[slice_batch], target_train[slice_batch])

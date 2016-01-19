@@ -55,13 +55,18 @@ class RPROPTestCase(BaseTestCase):
             step=1,
             verbose=False
         )
+        connection = [
+            Sigmoid(3, init_method='bounded', bounds=(0, 1)),
+            Sigmoid(10, init_method='bounded', bounds=(0, 1)),
+            Output(2)
+        ]
 
-        nw = algorithms.IRPROPPlus(copy.deepcopy(self.connection), **options)
+        nw = algorithms.IRPROPPlus(copy.deepcopy(connection), **options)
         nw.train(simple_input_train, simple_target_train, epochs=100)
         irprop_plus_error = nw.last_error()
         self.assertGreater(1e-4, nw.last_error())
 
-        nw = algorithms.RPROP(copy.deepcopy(self.connection), **options)
+        nw = algorithms.RPROP(copy.deepcopy(connection), **options)
         nw.train(simple_input_train, simple_target_train, epochs=100)
         rprop_error = nw.last_error()
         self.assertGreater(rprop_error, irprop_plus_error)
