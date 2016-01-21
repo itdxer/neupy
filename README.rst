@@ -28,6 +28,7 @@ Dependence
 ----------
 
 * Python 2.7, 3.3, 3.4
+* Theano >= 0.7.0
 * NumPy >= 1.9.0
 * SciPy >= 0.14.0
 * Matplotlib >= 1.4.0
@@ -78,6 +79,7 @@ Algorithms
   * Hessian (Newton's method)
   * Hessian diagonal
   * Momentum
+  * Nesterov Momentum
   * RPROP
   * iRPROP+
   * QuickProp

@@ -3,7 +3,7 @@ import theano.tensor as T
 import numpy as np
 
 from neupy.utils import asfloat
-from neupy.core.properties import ProperFractionProperty
+from neupy.core.properties import ProperFractionProperty, Property
 from .base import MinibatchGradientDescent
 
 
@@ -17,6 +17,9 @@ class Momentum(MinibatchGradientDescent):
     ----------
     momentum : float
         Control previous gradient ratio. Defaults to ``0.9``.
+    nesterov : bool
+        Instead of classic momentum computes Nesterov momentum.
+        Defaults to ``False``.
     {MinibatchGradientDescent.batch_size}
     {GradientDescent.optimizations}
     {ConstructableNetwork.connection}
@@ -59,14 +62,15 @@ class Momentum(MinibatchGradientDescent):
     :network:`GradientDescent` : GradientDescent algorithm.
     """
     momentum = ProperFractionProperty(default=0.9)
+    nesterov = Property(default=False, expected_type=bool)
 
     def init_layers(self):
         super(Momentum, self).init_layers()
         for layer in self.train_layers:
             for parameter in layer.parameters:
                 parameter_shape = T.shape(parameter).eval()
-                parameter.prev_gradient = theano.shared(
-                    name="prev_grad_" + parameter.name,
+                parameter.prev_param_delta = theano.shared(
+                    name="prev_param_delta_" + parameter.name,
                     value=asfloat(np.zeros(parameter_shape)),
                 )
 
@@ -74,10 +78,13 @@ class Momentum(MinibatchGradientDescent):
         step = layer.step or self.variables.step
         gradient = T.grad(self.variables.error_func, wrt=parameter)
 
-        prev_gradient = parameter.prev_gradient
-        parameter_delta = -self.momentum * prev_gradient - step * gradient
+        prev_param_delta = parameter.prev_param_delta
+        parameter_delta = self.momentum * prev_param_delta - step * gradient
+
+        if self.nesterov:
+            parameter_delta = self.momentum * parameter_delta - step * gradient
 
         return [
             (parameter, parameter + parameter_delta),
-            (prev_gradient, gradient),
+            (prev_param_delta, parameter_delta),
         ]

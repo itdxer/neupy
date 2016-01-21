@@ -31,8 +31,8 @@ def show_epoch_summary(network, show_epoch):
 
     table_drawer = table.TableDrawer(
         table.Column(name="Epoch #"),
-        table.FloatColumn(name="Train err"),
-        table.FloatColumn(name="Valid err"),
+        table.NumberColumn(name="Train err"),
+        table.NumberColumn(name="Valid err"),
         table.TimeColumn(name="Time", width=10),
         stdout=network.logs.write
     )

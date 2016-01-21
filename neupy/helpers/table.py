@@ -8,7 +8,7 @@ from six import with_metaclass
 from neupy.core.docs import SharedDocs, SharedDocsABCMeta
 
 
-__all__ = ("TableDrawer", "Column", "TimeColumn", "FloatColumn",
+__all__ = ("TableDrawer", "Column", "TimeColumn", "NumberColumn",
            "TableDrawingError")
 
 
@@ -101,7 +101,7 @@ class TimeColumn(Column):
         return time.strftime("%H:%M:%S", time.gmtime(value))
 
 
-class FloatColumn(Column):
+class NumberColumn(Column):
     """ Class describe float column type.
 
     Parameters
@@ -114,7 +114,7 @@ class FloatColumn(Column):
     """
 
     def __init__(self, places=6, *args, **kwargs):
-        super(FloatColumn, self).__init__(*args, **kwargs)
+        super(NumberColumn, self).__init__(*args, **kwargs)
         self.places = places
 
     def format_value(self, value):

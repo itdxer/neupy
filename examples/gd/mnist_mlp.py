@@ -35,12 +35,13 @@ network = algorithms.Momentum(
     error='categorical_crossentropy',
     step=0.01,
     verbose=True,
-    show_epoch=1,
     shuffle_data=True,
+    momentum=0.99,
+    nesterov=True,
     epochs_step_minimizator=10,
     optimizations=[algorithms.SimpleStepMinimization],
 )
-network.train(x_train, y_train, x_test, y_test, epochs=20)
+network.train(x_train, y_train, x_test, y_test, epochs=10)
 
 y_predicted = network.predict(x_test)
 y_test = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))

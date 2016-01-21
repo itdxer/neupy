@@ -7,7 +7,7 @@ from base import BaseTestCase
 
 
 class ReberTestCase(BaseTestCase):
-    def test_reber_wrod_generation(self):
+    def test_reber_word_generation(self):
         words = make_reber(50)
         self.assertEqual(50, len(words))
 

@@ -38,3 +38,11 @@ class ZCATestCase(BaseTestCase):
             data_transformed = zca.transform(data)
 
             ax.imshow(data_transformed, cmap=plt.cm.binary)
+
+        with image_comparison(original_image, figsize=(10, 6)) as fig:
+            ax = fig.add_subplot(1, 1, 1)
+
+            zca = preprocessing.ZCA(0.001)
+            data_transformed = zca.fit(data).transform(data)
+
+            ax.imshow(data_transformed, cmap=plt.cm.binary)

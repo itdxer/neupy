@@ -159,11 +159,13 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                 algorithms.Momentum(
                     (insize, 20, outsize),
                     step=0.1,
+                    batch_size=1,
                     verbose=False
                 ),
                 algorithms.Momentum(
                     (insize, 20, outsize),
                     step=0.1,
+                    batch_size=1,
                     verbose=False
                 ),
             ],
