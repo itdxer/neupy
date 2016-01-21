@@ -41,7 +41,7 @@ network = algorithms.Momentum(
     epochs_step_minimizator=10,
     optimizations=[algorithms.SimpleStepMinimization],
 )
-network.train(x_train, y_train, x_test, y_test, epochs=10)
+network.train(x_train, y_train, x_test, y_test, epochs=20)
 
 y_predicted = network.predict(x_test)
 y_test = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))

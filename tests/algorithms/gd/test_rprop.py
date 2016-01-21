@@ -43,7 +43,7 @@ class RPROPTestCase(BaseTestCase):
             verbose=False,
             # Test configurations
             epochs=50,
-            # show_comparison_plot=True
+            show_comparison_plot=False
         )
 
     def test_irpropplus(self):

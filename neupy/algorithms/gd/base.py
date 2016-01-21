@@ -224,9 +224,15 @@ class MinibatchGradientDescent(GradientDescent):
     batch_size = BatchSizeProperty(default=100)
 
     def train_epoch(self, input_train, target_train):
-        """ Network training.
-        """
+        """ Network training epoch.
 
+        Parameters
+        ----------
+        input_train : array-like
+            Training input array.
+        target_train : array-like
+            Training target array.
+        """
         n_samples = len(input_train)
         batch_size = self.batch_size
         train_epoch = self.methods.train_epoch
