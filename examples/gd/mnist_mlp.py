@@ -26,9 +26,9 @@ x_train, x_test, y_train, y_test = cross_validation.train_test_split(
 network = algorithms.Momentum(
     [
         layers.Relu(784),
-        layers.Dropout(0.3),
+        layers.Dropout(0.2),
         layers.Relu(500),
-        layers.Dropout(0.3),
+        layers.Dropout(0.2),
         layers.Softmax(500),
         layers.ArgmaxOutput(10),
     ],

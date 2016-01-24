@@ -2,6 +2,7 @@ from __future__ import print_function
 
 from neupy.core.config import Configurable
 from neupy.core.properties import BaseProperty
+from neupy.helpers import progressbar
 from . import terminal
 
 
@@ -102,6 +103,22 @@ class TerminalLogger(object):
         text : str
         """
         self.message('WARN', text, color='red')
+
+    def progressbar(self, iterator, *args, **kwargs):
+        """ Make progressbar for specific iteration if logging
+        is enable.
+
+        Parameters
+        ----------
+        iterator : iterable object
+        *args
+            Arguments for ``progressbar`` function.
+        **kwargs
+            Key defined arguments for ``progressbar`` function.
+        """
+        if self.enable:
+            return progressbar(iterator, *args, **kwargs)
+        return iterator
 
 
 class VerboseProperty(BaseProperty):

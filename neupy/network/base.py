@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from neupy.utils import (format_data, is_layer_accept_1d_feature,
-                         preformat_value)
+                         preformat_value, AttributeKeyDict)
 from neupy.helpers import table
 from neupy.core.base import BaseSkeleton
 from neupy.core.properties import (BoundedProperty, NumberProperty,
@@ -23,8 +23,8 @@ from .utils import (iter_until_converge, shuffle, normalize_error,
 __all__ = ('BaseNetwork',)
 
 
-def show_epoch_summary(network, show_epoch):
-    delay_limit = 1  # in seconds
+def show_epoch_summary(network):
+    delay_limit = 1.  # delay time in seconds
     prev_summary_time = None
     delay_history_length = 10
     terminal_output_delays = deque(maxlen=delay_history_length)
@@ -37,6 +37,7 @@ def show_epoch_summary(network, show_epoch):
         stdout=network.logs.write
     )
     table_drawer.start()
+    yield
 
     try:
         while True:
@@ -47,10 +48,10 @@ def show_epoch_summary(network, show_epoch):
                 terminal_output_delays.append(time_delta)
 
             table_drawer.row([
-                network.epoch,
+                network.training.epoch,
                 network.last_error() or '-',
                 network.last_validation_error() or '-',
-                network.train_epoch_time
+                network.training.epoch_time,
             ])
             prev_summary_time = now
 
@@ -59,7 +60,10 @@ def show_epoch_summary(network, show_epoch):
                 average_delay = np.mean(terminal_output_delays)
 
                 if average_delay < delay_limit:
-                    show_epoch *= math.ceil(delay_limit / average_delay)
+                    show_epoch = (
+                        network.training.show_epoch *
+                        math.ceil(delay_limit / average_delay)
+                    )
                     table_drawer.line()
                     table_drawer.message("Too many outputs in a terminal.")
                     table_drawer.message("Set up logging after each {} epoch"
@@ -67,7 +71,9 @@ def show_epoch_summary(network, show_epoch):
                     table_drawer.line()
                     terminal_output_delays.clear()
 
-            yield show_epoch
+                    network.training.show_epoch = show_epoch
+
+            yield
 
     finally:
         table_drawer.finish()
@@ -240,8 +246,6 @@ class BaseNetwork(BaseSkeleton):
         self.errors_in = []
         self.errors_out = []
 
-        self.train_epoch_time = None
-
         super(BaseNetwork, self).__init__(*args, **options)
         self.init_properties()
 
@@ -267,7 +271,7 @@ class BaseNetwork(BaseSkeleton):
         epoch : int
             Current epoch number.
         """
-        self.epoch = epoch
+        self.training.epoch = epoch
 
     def train_epoch(self, input_train, target_train=None):
         raise NotImplementedError()
@@ -279,8 +283,8 @@ class BaseNetwork(BaseSkeleton):
 
         # ----------- Pre-format target data ----------- #
 
-        # TODO: This solution looks ugly, should change it in different
-        # way later.
+        # TODO: This solution looks ugly, I should solve this problem
+        # in different way.
         if hasattr(self, 'connection'):
             is_input_feature1d = is_layer_accept_1d_feature(self.input_layer)
             is_target_feature1d = is_layer_accept_1d_feature(self.output_layer)
@@ -307,6 +311,7 @@ class BaseNetwork(BaseSkeleton):
 
         show_epoch = self.show_epoch
         logs = self.logs
+        training = self.training = AttributeKeyDict(epoch=1)
         compute_error_out = (input_test is not None and
                              target_test is not None)
         last_epoch_shown = 0
@@ -324,7 +329,8 @@ class BaseNetwork(BaseSkeleton):
             iterepochs = range(1, epochs + 1)
             show_epoch = parse_show_epoch_property(show_epoch, epochs)
 
-        epoch_summary = show_epoch_summary(self, show_epoch)
+        epoch_summary = show_epoch_summary(self)
+        training.show_epoch = show_epoch
 
         # ----------- Training procedure ----------- #
 
@@ -343,6 +349,7 @@ class BaseNetwork(BaseSkeleton):
             logs.message("TRAIN", "Max epochs: {}".format(epochs))
 
         logs.write("")
+        next(epoch_summary)
 
         # Optimizations for long loops
         errors = self.errors_in
@@ -379,10 +386,10 @@ class BaseNetwork(BaseSkeleton):
                     errors_out.append(error_out)
 
                 errors.append(error)
-                self.train_epoch_time = time.time() - epoch_start_time
+                training.epoch_time = time.time() - epoch_start_time
 
-                if epoch % show_epoch == 0 or epoch == 1:
-                    show_epoch = next(epoch_summary)
+                if epoch % training.show_epoch == 0 or epoch == 1:
+                    next(epoch_summary)
                     last_epoch_shown = epoch
 
                 if epoch_end_signal is not None:

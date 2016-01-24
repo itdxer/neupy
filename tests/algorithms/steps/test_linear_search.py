@@ -37,8 +37,9 @@ class LinearSearchTestCase(BaseTestCase):
                     layers.Output(1),
                 ],
                 show_epoch=1,
-                verbose=False,
+                verbose=True,
                 search_method=method_name,
+                tol=0.1,
                 optimizations=[algorithms.LinearSearch],
             )
             cgnet.train(x_train, y_train, epochs=4)

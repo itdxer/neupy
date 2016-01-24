@@ -198,10 +198,10 @@ class QuasiNewton(NoStepSelection, GradientDescent):
             return layer_input
 
         def phi(step):
-            return self.error(prediction(step), network_output)
+            return self.error(network_output, prediction(step))
 
         def derphi(step):
-            error_func = self.error(prediction(step), network_output)
+            error_func = self.error(network_output, prediction(step))
             return T.grad(error_func, wrt=step)
 
         step = line_search(phi, derphi)

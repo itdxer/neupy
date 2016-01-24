@@ -168,9 +168,10 @@ class ConjugateGradient(GradientDescent):
             gradient.ravel(),
             prev_delta
         )
+        n_params = T.prod(parameter.shape)
 
         weight_delta = ifelse(
-            T.eq(T.mod(self.variables.epoch, 25), 1),
+            T.eq(T.mod(self.variables.epoch, n_params), 1),
             -gradient,
             -gradient + beta * prev_delta
         )

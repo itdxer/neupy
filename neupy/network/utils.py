@@ -10,35 +10,36 @@ class StopNetworkTraining(StopIteration):
 
 
 def iter_until_converge(network, epsilon, max_epochs):
+    training = network.training
+    logs = network.logs
+
     if not hasattr(network, 'epoch'):
-        network.epoch = 1
+        training.epoch = 1
 
     # Trigger first iteration and store first error term
-    yield network.epoch
+    yield training.epoch
     previous_error = error_delta = network.last_error()
 
     while error_delta > epsilon:
-        network.epoch += 1
-        yield network.epoch
+        training.epoch += 1
+        yield training.epoch
 
         last_error = network.last_error()
         error_delta = abs(last_error - previous_error)
         previous_error = last_error
 
-        if network.epoch >= max_epochs and error_delta > epsilon:
-            network.logs.message(
-                "TRAIN",
-                "Epoch #{} stopped. Network didn't converge "
-                "after {} iterations".format(network.epoch, max_epochs)
-            )
+        if training.epoch >= max_epochs and error_delta > epsilon:
+            logs.message("TRAIN", "Epoch #{} stopped. Network didn't "
+                                  "converge after {} iterations"
+                                  "".format(training.epoch, max_epochs))
             return
 
     if np.isnan(error_delta) or np.isinf(error_delta):
-        network.logs.message("TRAIN", "Epoch #{} stopped. Network error "
-                                      "value is invalid".format(network.epoch))
+        logs.message("TRAIN", "Epoch #{} stopped. Network error value is "
+                              "invalid".format(training.epoch))
     else:
-        network.logs.message("TRAIN", "Epoch #{} stopped. Network converged."
-                                      "".format(network.epoch))
+        logs.message("TRAIN", "Epoch #{} stopped. Network converged."
+                              "".format(training.epoch))
 
 
 def shuffle(*arrays):

@@ -280,10 +280,11 @@ class Dropout(BaseLayer):
         seed = np.random.randint(max_possible_seed)
         theano_random = T.shared_randomstreams.RandomStreams(seed)
 
-        mask = theano_random.binomial(n=1, p=(1.0 - self.proba),
+        proba = (1.0 - self.proba)
+        mask = theano_random.binomial(n=1, p=proba,
                                       size=input_value.shape,
                                       dtype=input_value.dtype)
-        return mask * input_value
+        return (mask * input_value) / proba
 
     def __repr__(self):
         return "{name}(proba={proba})".format(name=self.__class__.__name__,
