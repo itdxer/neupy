@@ -128,6 +128,7 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
     mu_update_factor = BoundedProperty(default=5, minval=1)
 
     def init_properties(self):
+        del self.error
         self.error = 'mse'
         return super(LevenbergMarquardt, self).init_properties()
 
