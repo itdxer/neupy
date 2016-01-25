@@ -15,7 +15,10 @@ from neupy.algorithms.utils import (parameters2vector, iter_parameters,
 __all__ = ('LevenbergMarquardt',)
 
 
+# TODO: Function needs refactoring
 def jaccobian(y, x):
+    """ Compute Jacobbian.
+    """
     n_samples = y.shape[0]
     J, _ = theano.scan(
         lambda i, y, *params: T.grad(T.sum(y[i]), wrt=params),

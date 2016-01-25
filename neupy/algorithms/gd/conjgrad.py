@@ -170,19 +170,19 @@ class ConjugateGradient(GradientDescent):
         param_vector = parameters2vector(self)
 
         gradients = T.grad(self.variables.error_func, wrt=parameters)
-        gradient = T.concatenate([grad.flatten() for grad in gradients])
+        full_gradient = T.concatenate([grad.flatten() for grad in gradients])
 
-        beta = self.update_function(previous_gradient, gradient,
+        beta = self.update_function(previous_gradient, full_gradient,
                                     previous_delta)
         parameter_delta = ifelse(
             T.eq(T.mod(self.variables.epoch, n_parameters), 1),
-            -gradient,
-            -gradient + beta * previous_delta
+            -full_gradient,
+            -full_gradient + beta * previous_delta
         )
         updated_parameters = param_vector + step * parameter_delta
 
         updates = [
-            (previous_gradient, gradient),
+            (previous_gradient, full_gradient),
             (previous_delta, parameter_delta),
         ]
         parameter_updates = setup_parameter_updates(parameters,

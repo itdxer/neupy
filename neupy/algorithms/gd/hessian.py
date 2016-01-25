@@ -1,14 +1,51 @@
-from operator import mul
-
 import theano
+import theano.typed_list
 import theano.tensor as T
 
-from neupy.algorithms.gd import NoStepSelection
 from neupy.core.properties import BoundedProperty
+from neupy.algorithms.gd import NoStepSelection
+from neupy.algorithms.utils import (parameters2vector, count_parameters,
+                                    iter_parameters, setup_parameter_updates)
 from .base import GradientDescent
 
 
 __all__ = ('Hessian',)
+
+
+def find_hessian_and_gradient(error_function, parameters):
+    """ Find Hessian and gradient for the Neural Network cost function.
+
+    Parameters
+    ----------
+    function : Theano function
+    parameters : list
+        List of all Neural Network parameters.
+
+    Returns
+    -------
+    Theano function
+    """
+    n_parameters = T.sum([parameter.size for parameter in parameters])
+    gradients = T.grad(error_function, wrt=parameters)
+    full_gradient = T.concatenate([grad.flatten() for grad in gradients])
+
+    def find_hessian(i, full_gradient, *parameters):
+        second_derivatives = []
+        g = full_gradient[i]
+        for parameter in parameters:
+            second_derivative = T.grad(g, wrt=parameter)
+            second_derivatives.append(second_derivative.flatten())
+
+        return T.concatenate(second_derivatives)
+
+    hessian, _ = theano.scan(
+        find_hessian,
+        sequences=T.arange(n_parameters),
+        non_sequences=[full_gradient] + parameters,
+    )
+    hessian_matrix = hessian.reshape((n_parameters, n_parameters))
+
+    return hessian_matrix, full_gradient
 
 
 class Hessian(NoStepSelection, GradientDescent):
@@ -19,7 +56,7 @@ class Hessian(NoStepSelection, GradientDescent):
 
     Parameters
     ----------
-    inv_penalty_const : float
+    penalty_const : float
         Inverse hessian could be singular matrix. For this reason
         algorithm include penalty that add to hessian matrix identity
         multiplied by defined constant. Defaults to ``1``.
@@ -46,31 +83,21 @@ class Hessian(NoStepSelection, GradientDescent):
     --------
     :network:`HessianDiagonal` : Hessian diagonal approximation.
     """
-    inv_penalty_const = BoundedProperty(default=1, minval=0)
+    penalty_const = BoundedProperty(default=1, minval=0)
 
-    def init_param_updates(self, layer, parameter):
-        parameter_dim = parameter.get_value().shape
-        grad = T.grad(self.variables.error_func, wrt=parameter)
+    def init_train_updates(self):
+        n_parameters = count_parameters(self)
+        parameters = list(iter_parameters(self))
+        param_vector = parameters2vector(self)
 
-        if len(parameter_dim) > 1:
-            hessian_dim = mul(*parameter_dim)
-        else:
-            hessian_dim = parameter_dim[0]
-
-        hessian, _ = theano.scan(
-            lambda i, grad, parameter: T.grad(grad[i], wrt=parameter),
-            sequences=T.arange(hessian_dim),
-            non_sequences=[grad.flatten(), parameter]
+        hessian_matrix, full_gradient = find_hessian_and_gradient(
+            self.variables.error_func, parameters
         )
-        hessian_matrix = hessian.reshape((hessian_dim, hessian_dim))
         hessian_inverse = T.nlinalg.matrix_inverse(
-            hessian_matrix + self.inv_penalty_const * T.eye(hessian_dim)
+            hessian_matrix + self.penalty_const * T.eye(n_parameters)
         )
 
-        grad_vector = grad.reshape((hessian_dim, 1))
-        parameter_update = hessian_inverse.dot(grad_vector)
-        parameter_update = parameter_update.reshape(parameter_dim)
+        updated_parameters = param_vector - hessian_inverse.dot(full_gradient)
+        updates = setup_parameter_updates(parameters, updated_parameters)
 
-        return [
-            (parameter, parameter - parameter_update),
-        ]
+        return updates

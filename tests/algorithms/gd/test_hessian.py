@@ -1,6 +1,11 @@
 from functools import partial
 
+import theano
+import theano.tensor as T
+import numpy as np
+
 from neupy import algorithms
+from neupy.algorithms.gd.hessian import find_hessian_and_gradient
 
 from utils import compare_networks
 from data import simple_classification
@@ -18,7 +23,7 @@ class HessianTestCase(BaseTestCase):
         compare_networks(
             # Test classes
             algorithms.GradientDescent,
-            partial(algorithms.Hessian, inv_penalty_const=1),
+            partial(algorithms.Hessian, penalty_const=1),
             # Test data
             (x_train, y_train, x_test, y_test),
             # Network configurations
@@ -29,4 +34,22 @@ class HessianTestCase(BaseTestCase):
             # Test configurations
             epochs=5,
             show_comparison_plot=False
+        )
+
+    def test_hessian_computation(self):
+        x = T.scalar('x')
+        y = T.scalar('y')
+
+        f = x ** 2 + y ** 3 + 7 * x * y
+        hessian, gradient = find_hessian_and_gradient(f, [x, y])
+
+        func = theano.function([x, y], [hessian, gradient])
+        hessian_output, gradient_output = func(1, 2)
+
+        np.testing.assert_array_almost_equal(
+            hessian_output,
+            np.array([
+                [2, 7],
+                [7, 12],
+            ])
         )

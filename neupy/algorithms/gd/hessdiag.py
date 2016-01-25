@@ -3,6 +3,8 @@ from __future__ import division
 import theano.tensor as T
 
 from neupy.core.properties import ProperFractionProperty
+from neupy.algorithms.utils import (parameters2vector, setup_parameter_updates,
+                                    iter_parameters)
 from .base import GradientDescent
 
 
@@ -17,8 +19,8 @@ class HessianDiagonal(GradientDescent):
     Parameters
     ----------
     min_eigval : float
-        Setup min eigenvalue for Hessian diagonale matrix. After few
-        iteration elements would be extremly small and matrix inverse
+        Set up minimum eigenvalue for Hessian diagonale matrix. After a few
+        iteration elements will be extremly small and matrix inverse
         produce huge number in hessian diagonal elements. This
         parameter control diagonal elements size. Defaults to ``1e-2``.
     {GradientDescent.optimizations}
@@ -105,13 +107,21 @@ class HessianDiagonal(GradientDescent):
     """
     min_eigval = ProperFractionProperty(default=1e-2)
 
-    def init_param_updates(self, layer, parameter):
-        step = layer.step or self.variables.step
+    def init_train_updates(self):
+        step = self.variables.step
         min_eigval = self.min_eigval
+        parameters = list(iter_parameters(self))
+        param_vector = parameters2vector(self)
 
-        grad = T.grad(self.variables.error_func, wrt=parameter)
-        hessian_diag = T.grad(grad.sum(), wrt=parameter)
+        gradients = T.grad(self.variables.error_func, wrt=parameters)
+        full_gradient = T.concatenate([grad.flatten() for grad in gradients])
 
+        second_derivatives = []
+        for parameter, gradient in zip(parameters, gradients):
+            second_derivative = T.grad(gradient.sum(), wrt=parameter)
+            second_derivatives.append(second_derivative.flatten())
+
+        hessian_diag = T.concatenate(second_derivatives)
         hessian_diag = T.switch(
             T.abs_(hessian_diag) < min_eigval,
             T.switch(
@@ -121,10 +131,15 @@ class HessianDiagonal(GradientDescent):
             ),
             hessian_diag
         )
-        return [
-            # Divide gradient by hessian diagonal elementwise
-            # mean that we just took diagonal hessian inverse (which is
-            # reciprocal for each diagonal element) and mutliply
-            # by gradient. This operation less clear by much faster.
-            (parameter, parameter - step * grad / hessian_diag),
-        ]
+
+        # We divide gradient by Hessian diagonal elementwise is the same
+        # as we just took diagonal Hessian inverse (which is
+        # reciprocal for each diagonal element) and mutliply
+        # by gradient. This operation is less clear, but works faster.
+        updated_parameters = (
+            param_vector -
+            step * full_gradient / hessian_diag
+        )
+        updates = setup_parameter_updates(parameters, updated_parameters)
+
+        return updates
