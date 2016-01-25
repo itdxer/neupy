@@ -24,6 +24,6 @@ install:
 script:
   - nosetests -v tests
   - flake8 neupy/ --exclude=neupy/commands/new_project_template/,__init__.py
-branches:
-  except:
-    - release/v0.2.0
+# branches:
+#   except:
+#     - release/v0.2.0
