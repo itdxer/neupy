@@ -46,7 +46,8 @@ class LevenbergMarquardtTestCase(BaseTestCase):
 
     def test_exceptions(self):
         with self.assertRaises(ValueError):
-            algorithms.LevenbergMarquardt((2, 3, 1), error='mse')
+            algorithms.LevenbergMarquardt((2, 3, 1),
+                                          error='categorical_crossentropy')
 
     def test_levenberg_marquardt(self):
         dataset = datasets.make_regression(n_samples=50, n_features=2)

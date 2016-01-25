@@ -63,7 +63,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
 
         result = pipeline.predict(x_test)
         ensemble_result = metrics.accuracy_score(y_test, result)
-        self.assertAlmostEqual(0.9333, ensemble_result, places=4)
+        self.assertAlmostEqual(0.9222, ensemble_result, places=4)
 
     def test_grid_search(self):
         def scorer(network, X, y):

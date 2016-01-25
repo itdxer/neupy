@@ -250,7 +250,8 @@ class MinibatchGradientDescent(GradientDescent):
         prediction_error = self.methods.prediction_error
 
         batches_index_iter = range(n_batches)
-        if self.training.show_epoch == 1:
+        # TODO: quick hack, fix it later.
+        if hasattr(self, 'training') and self.training.show_epoch == 1:
             batches_index_iter = logs.progressbar(batches_index_iter,
                                                   mininterval=1.,
                                                   desc='Iter batches',

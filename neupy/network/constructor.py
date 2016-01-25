@@ -8,8 +8,8 @@ from neupy.layers import BaseLayer, Output, Dropout
 from neupy.layers.utils import generate_layers
 from neupy.core.properties import ChoiceProperty
 from neupy.layers.connections import LayerConnection, NetworkConnectionError
+from neupy.network import errors
 from .learning import SupervisedLearning
-from .errors import mse, binary_crossentropy, categorical_crossentropy
 from .base import BaseNetwork
 
 
@@ -245,9 +245,9 @@ class SupervisedConstructableNetwork(SupervisedLearning, ConstructableNetwork):
     """
 
     error = ChoiceProperty(default='mse', choices={
-        'mse': mse,
-        'binary_crossentropy': binary_crossentropy,
-        'categorical_crossentropy': categorical_crossentropy,
+        'mse': errors.mse,
+        'binary_crossentropy': errors.binary_crossentropy,
+        'categorical_crossentropy': errors.categorical_crossentropy,
     })
 
     def init_variables(self):

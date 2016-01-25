@@ -1,6 +1,6 @@
 import numpy as np
 
-from neupy.utils import preformat_value
+from neupy.utils import preformat_value, as_array2d, AttributeKeyDict
 from neupy.network.utils import shuffle
 
 from base import BaseTestCase
@@ -45,3 +45,30 @@ class UtilsTestCase(BaseTestCase):
         np.testing.assert_array_equal(*shuffeled_data)
 
         np.testing.assert_array_equal(tuple(), shuffle())
+
+        with self.assertRaises(ValueError):
+            shuffle(input_data, input_data[:len(input_data) - 1])
+
+    def test_as_array2d(self):
+        test_input = np.ones(5)
+        actual_output = as_array2d(test_input)
+        self.assertEqual((1, 5), actual_output.shape)
+
+    def test_attribute_key_dict(self):
+        attrdict = AttributeKeyDict(val1='hello', val2='world')
+
+        # Get
+        self.assertEqual(attrdict.val1, 'hello')
+        self.assertEqual(attrdict.val2, 'world')
+
+        with self.assertRaises(KeyError):
+            attrdict.unknown_variable
+
+        # Set
+        attrdict.new_value = 'test'
+        self.assertEqual(attrdict.new_value, 'test')
+
+        # Delete
+        del attrdict.val1
+        with self.assertRaises(KeyError):
+            attrdict.val1

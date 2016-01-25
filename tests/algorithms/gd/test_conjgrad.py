@@ -94,7 +94,7 @@ class ConjugateGradientTestCase(BaseTestCase):
     def test_conjgrad(self):
         nw = algorithms.ConjugateGradient(
             self.connection,
-            step=0.1,
+            step=1,
             error='mse',
             shuffle_data=True,
             verbose=False,
@@ -103,7 +103,7 @@ class ConjugateGradientTestCase(BaseTestCase):
         nw.train(simple_input_train, simple_target_train, epochs=300)
         result = nw.predict(simple_input_train)
         norm = np.linalg.norm(result - simple_target_train)
-        self.assertAlmostEqual(0.26, norm, places=2)
+        self.assertAlmostEqual(0.01, norm, places=3)
 
     def test_compare_bp_and_cg(self):
         compare_networks(

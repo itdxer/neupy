@@ -120,11 +120,16 @@ class HiddenLayersOperationsTestCase(BaseTestCase):
 
     def test_dropout_layer(self):
         test_input = np.ones((50, 20))
-        dropout_layer = Dropout(proba=0.3)
+        dropout_layer = Dropout(proba=0.5)
 
         layer_output = dropout_layer.output(test_input).eval()
-        # Near 70%
-        self.assertEqual(layer_output.sum(), 708)
+
+        self.assertGreater(layer_output.sum(), 900)
+        self.assertLess(layer_output.sum(), 1100)
+
+        self.assertTrue(np.all(
+            np.bitwise_or(layer_output == 0, layer_output == 2)
+        ))
 
 
 class OutputLayersOperationsTestCase(BaseTestCase):

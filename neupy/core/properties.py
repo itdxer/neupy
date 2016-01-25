@@ -136,8 +136,8 @@ class TypedListProperty(BaseProperty):
             else:
                 element_type_name = self.element_type.__name__
 
-            raise TypeError("Valid list element types are: {}"
-                            "".format(element_type_name))
+            raise TypeError("Valid list element types for `{}` are: {}"
+                            "".format(self.name, element_type_name))
 
 
 class ChoiceProperty(BaseProperty):

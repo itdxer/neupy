@@ -11,8 +11,8 @@ from base import BaseTestCase
 class LinearSearchTestCase(BaseTestCase):
     def test_linear_search(self):
         methods = [
-            ('golden', 0.36917),
-            ('brent', 0.32469),
+            ('golden', 0.34202),
+            ('brent', 0.34942),
         ]
 
         for method_name, valid_error in methods:
@@ -37,7 +37,7 @@ class LinearSearchTestCase(BaseTestCase):
                     layers.Output(1),
                 ],
                 show_epoch=1,
-                verbose=True,
+                verbose=False,
                 search_method=method_name,
                 tol=0.1,
                 optimizations=[algorithms.LinearSearch],

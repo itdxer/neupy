@@ -4,10 +4,12 @@ from theano.ifelse import ifelse
 import numpy as np
 
 from neupy.utils import asfloat
-from neupy.core.properties import BoundedProperty
+from neupy.network import errors
+from neupy.core.properties import BoundedProperty, ChoiceProperty
 from neupy.algorithms import GradientDescent
 from neupy.algorithms.gd import NoStepSelection
-from neupy.algorithms.utils import parameters2vector, iter_parameters
+from neupy.algorithms.utils import (parameters2vector, iter_parameters,
+                                    setup_parameter_updates)
 
 
 __all__ = ('LevenbergMarquardt',)
@@ -42,6 +44,9 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
     mu_update_factor : float
         Factor to decrease the mu if update decrese the error, otherwise
         increse mu by the same factor.
+    error: {{'mse'}}
+        Levenberg-Marquardt works only for quadratic functions.
+        Defaults to ``mse``.
     {GradientDescent.optimizations}
     {ConstructableNetwork.connection}
     {BaseNetwork.step}
@@ -126,11 +131,8 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
 
     mu = BoundedProperty(default=0.01, minval=0)
     mu_update_factor = BoundedProperty(default=5, minval=1)
-
-    def init_properties(self):
-        del self.error
-        self.error = 'mse'
-        return super(LevenbergMarquardt, self).init_properties()
+    # TODO: Add other quadratic functions.
+    error = ChoiceProperty(default='mse', choices={'mse': errors.mse})
 
     def init_variables(self):
         super(LevenbergMarquardt, self).init_variables()
@@ -164,17 +166,9 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
             J.T.dot(J) + new_mu * T.eye(n_params)
         ).dot(J.T).dot(err)
 
-        start_pos = 0
         updates = [(mu, new_mu)]
-        for param in params:
-            end_pos = start_pos + param.size
-
-            updates.append((param, T.reshape(
-                updated_params[start_pos:end_pos],
-                param.shape
-            )))
-
-            start_pos = end_pos
+        parameter_updates = setup_parameter_updates(params, updated_params)
+        updates.extend(parameter_updates)
 
         return updates
 

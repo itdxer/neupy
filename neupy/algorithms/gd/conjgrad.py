@@ -5,6 +5,8 @@ import theano.tensor as T
 
 from neupy.utils import asfloat
 from neupy.core.properties import ChoiceProperty
+from neupy.algorithms.utils import (parameters2vector, count_parameters,
+                                    iter_parameters, setup_parameter_updates)
 from .base import GradientDescent
 
 
@@ -143,41 +145,48 @@ class ConjugateGradient(GradientDescent):
         }
     )
 
-    def init_layers(self):
-        super(ConjugateGradient, self).init_layers()
-        for layer in self.train_layers:
-            for parameter in layer.parameters:
-                parameter_shape = T.shape(parameter).eval()
-                parameter.prev_delta = theano.shared(
-                    name="prev_delta_" + parameter.name,
-                    value=asfloat(np.zeros(parameter_shape)),
-                )
-                parameter.prev_gradient = theano.shared(
-                    name="prev_grad_" + parameter.name,
-                    value=asfloat(np.zeros(parameter_shape)),
-                )
+    def init_variables(self):
+        super(ConjugateGradient, self).init_variables()
+        n_parameters = count_parameters(self)
 
-    def init_param_updates(self, layer, parameter):
-        step = layer.step or self.variables.step
-        prev_gradient = parameter.prev_gradient
-        prev_delta = parameter.prev_delta
-
-        gradient = T.grad(self.variables.error_func, wrt=parameter)
-        beta = self.update_function(
-            prev_gradient.ravel(),
-            gradient.ravel(),
-            prev_delta
+        self.variables.update(
+            prev_delta=theano.shared(
+                name="prev_delta",
+                value=asfloat(np.zeros(n_parameters)),
+            ),
+            prev_gradient=theano.shared(
+                name="prev_gradient",
+                value=asfloat(np.zeros(n_parameters)),
+            )
         )
-        n_params = T.prod(parameter.shape)
 
-        weight_delta = ifelse(
-            T.eq(T.mod(self.variables.epoch, n_params), 1),
+    def init_train_updates(self):
+        step = self.variables.step
+        previous_delta = self.variables.prev_delta
+        previous_gradient = self.variables.prev_gradient
+
+        n_parameters = count_parameters(self)
+        parameters = list(iter_parameters(self))
+        param_vector = parameters2vector(self)
+
+        gradients = T.grad(self.variables.error_func, wrt=parameters)
+        gradient = T.concatenate([grad.flatten() for grad in gradients])
+
+        beta = self.update_function(previous_gradient, gradient,
+                                    previous_delta)
+        parameter_delta = ifelse(
+            T.eq(T.mod(self.variables.epoch, n_parameters), 1),
             -gradient,
-            -gradient + beta * prev_delta
+            -gradient + beta * previous_delta
         )
+        updated_parameters = param_vector + step * parameter_delta
 
-        return [
-            (parameter, parameter + step * weight_delta),
-            (prev_gradient, gradient),
-            (prev_delta, weight_delta),
+        updates = [
+            (previous_gradient, gradient),
+            (previous_delta, parameter_delta),
         ]
+        parameter_updates = setup_parameter_updates(parameters,
+                                                    updated_parameters)
+        updates.extend(parameter_updates)
+
+        return updates

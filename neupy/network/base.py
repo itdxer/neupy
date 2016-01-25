@@ -246,8 +246,8 @@ class BaseNetwork(BaseSkeleton):
         self.errors_in = []
         self.errors_out = []
 
-        self.init_properties()
         super(BaseNetwork, self).__init__(*args, **options)
+        self.init_properties()
 
         if self.verbose:
             show_network_options(self, highlight_options=options)

@@ -76,6 +76,7 @@ class LinearSearch(LearningRateConfigurable):
     """
 
     tol = BoundedProperty(default=0.1, minval=0)
+    maxiter = BoundedProperty(default=10, minval=1)
     search_method = ChoiceProperty(choices=['golden', 'brent'],
                                    default='golden')
 
@@ -92,15 +93,22 @@ class LinearSearch(LearningRateConfigurable):
 
             self.variables.step.set_value(asfloat(new_step))
             train_epoch(input_train, target_train)
+            # Train epoch returns neural network error that was before
+            # training epoch step, that's why we need to compute
+            # it second time.
             error = prediction_error(input_train, target_train)
 
             return np.where(np.isnan(error), np.inf, error)
+
+        options = {'xtol': self.tol}
+        if self.search_method == 'brent':
+            options['maxiter'] = self.maxiter
 
         res = minimize_scalar(
             setup_new_step,
             tol=self.tol,
             method=self.search_method,
-            options={'xtol': self.tol},
+            options=options,
         )
 
         return setup_new_step(res.x)
