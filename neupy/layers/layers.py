@@ -6,9 +6,9 @@ from neupy.utils import asfloat
 from neupy.core.properties import (TypedListProperty, ArrayProperty,
                                    ChoiceProperty, ProperFractionProperty,
                                    IntProperty)
-from neupy.layers.base import BaseLayer
-from neupy.layers.utils import (XAVIER_NORMAL, VALID_INIT_METHODS,
-                                generate_weight)
+from .base import BaseLayer
+from .utils import XAVIER_NORMAL, VALID_INIT_METHODS, generate_weight
+from .activations import relu, step_function
 
 
 __all__ = ('Layer', 'Linear', 'Sigmoid', 'HardSigmoid', 'Step', 'Tanh',
@@ -176,12 +176,6 @@ class HardSigmoid(Layer):
     activation_function = T.nnet.hard_sigmoid
 
 
-def step_function(value):
-    """ Step activation function.
-    """
-    return T.gt(value, 0)
-
-
 class Step(Layer):
     """ The layer with the the step activation function.
 
@@ -221,7 +215,7 @@ class Relu(Layer):
     {Layer.init_method}
     {Layer.bounds}
     """
-    activation_function = T.nnet.relu
+    activation_function = relu
 
 
 class Softplus(Layer):

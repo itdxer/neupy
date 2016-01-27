@@ -37,6 +37,7 @@ def show_epoch_summary(network):
         stdout=network.logs.write
     )
     table_drawer.start()
+
     yield
 
     try:

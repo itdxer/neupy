@@ -122,7 +122,7 @@ class ConstructableNetwork(BaseNetwork):
 
         self.variables.update(
             step=theano.shared(name='step', value=asfloat(self.step)),
-            epoch=theano.shared(name='epoch', value=1, borrow=False),
+            epoch=theano.shared(name='epoch', value=1),
             prediction_func=layer_input,
             train_prediction_func=train_layer_input,
         )

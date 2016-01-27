@@ -40,7 +40,7 @@ class PropertiesBasicsTestCase(BaseTestCase):
         Case = namedtuple("Case", "property_class valid invalid")
         test_cases = (
             Case(property_class=IntProperty,
-                 valid=[1, 2, 0, -10],
+                 valid=[1, 2, 0, -10, np.int32(23), np.int64(11)],
                  invalid=[1.0, 12.34, 'invalid']),
             Case(property_class=NumberProperty,
                  valid=[1, 1.0, 12.34, -345],

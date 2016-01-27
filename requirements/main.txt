@@ -2,7 +2,7 @@
 numpy>=1.9.0
 scipy>=0.14.0
 matplotlib>=1.4.0
--e git://github.com/Theano/Theano.git@master#egg=master
+Theano==0.7.0
 
 # Commands
 Baker>=1.3
