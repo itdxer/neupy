@@ -246,7 +246,7 @@ class MinibatchGradientDescent(GradientDescent):
         if batch_size is None:
             return train_epoch(input_train, target_train)
 
-        n_batches = math.floor(n_samples / batch_size)
+        n_batches = int(math.floor(n_samples / batch_size))
         prediction_error = self.methods.prediction_error
 
         batches_index_iter = range(n_batches)

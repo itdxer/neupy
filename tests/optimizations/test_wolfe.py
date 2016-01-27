@@ -84,8 +84,8 @@ class WolfeInterpolationTestCase(BaseTestCase):
 
     def test_cubic_minimizer(self):
         testcases = (
-            Case(func_input=dict(x_a=0, y_a=1, y_prime_a=-1,
-                                 x_b=5, y_b=10, x_c=10, y_c=60),
+            Case(func_input=dict(x_a=0., y_a=1., y_prime_a=-1.,
+                                 x_b=5., y_b=10., x_c=10., y_c=60.),
                  func_expected=1.06),
         )
 

@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import time
 from operator import attrgetter
 from abc import abstractmethod
@@ -262,7 +264,17 @@ class TableDrawer(SharedDocs):
         Function through which the message will be transmitted.
     """
 
-    def __init__(self, *columns, stdout=print):
+    def __init__(self, *columns, **kwargs):
+        valid_kwargs = ['stdout']
+        # In Python 2 doesn't work syntax like
+        # def __init__(self, *columns, stdout=print):
+        # Code below implements the same.
+        stdout = kwargs.get('stdout', print)
+
+        if any(kwarg not in valid_kwargs for kwarg in kwargs):
+            raise ValueError("Invalid keyword arguments. Available "
+                             "only: {}".format(valid_kwargs))
+
         for column in columns:
             if not isinstance(column, Column):
                 raise TypeError("Column should be ``Column`` class "

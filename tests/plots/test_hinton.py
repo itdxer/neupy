@@ -1,7 +1,13 @@
 import os
 
-import matplotlib.pyplot as plt
+import six
 import numpy as np
+import matplotlib
+
+# Configure matplotlib for Travis CI
+matplotlib.use('Agg')
+
+import matplotlib.pyplot as plt
 
 from neupy import plots
 
@@ -22,7 +28,12 @@ class HintonDiagramTestCase(BaseTestCase):
             plots.hinton(weight, add_legend=True)
 
     def test_max_weight(self):
-        original_image = os.path.join(IMGDIR, "test_max_weight_hinton.png")
+        if six.PY3:
+            original_image_name = "test_py3_max_weight_hinton.png"
+        else:
+            original_image_name = "test_py2_max_weight_hinton.png"
+
+        original_image = os.path.join(IMGDIR, original_image_name)
         with image_comparison(original_image, figsize=(10, 6)) as fig:
             weight = 100 * np.random.randn(20, 20)
             ax = fig.add_subplot(1, 1, 1)

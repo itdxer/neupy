@@ -37,7 +37,6 @@ class TableColumnsTestCase(BaseTestCase):
     def test_time_column(self):
         test_cases = [
             Case(input_value=0.1, expected_output='0.1 sec'),
-            Case(input_value=1, expected_output='1 sec'),
             Case(input_value=1.0, expected_output='1.0 sec'),
             Case(input_value=1.1234, expected_output='1.1 sec'),
             Case(input_value=9.99, expected_output='10.0 sec'),

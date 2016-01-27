@@ -22,7 +22,7 @@ install:
   - source activate test-environment
   - python setup.py install
 script:
-  - nosetests -v tests
+  - nosetests -v -e ._testing tests
   - flake8 neupy/ --exclude=neupy/commands/new_project_template/,__init__.py
 # branches:
 #   except:

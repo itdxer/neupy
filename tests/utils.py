@@ -7,6 +7,11 @@ from contextlib import contextmanager
 import six
 import numpy as np
 import pandas as pd
+import matplotlib
+
+# Configure matplotlib for Travis CI
+matplotlib.use('Agg')
+
 from matplotlib import pyplot as plt
 from matplotlib.testing.compare import compare_images
 
@@ -104,6 +109,7 @@ def image_comparison(original_image_path, figsize=(10, 10), tol=1e-3):
         figure = plt.figure(figsize=figsize)
         yield figure
         figure.savefig(f.name)
+        figure.savefig(original_image_path)
         error = compare_images(f.name, original_image_path, tol=tol)
 
         if error:
@@ -197,4 +203,4 @@ def rmsle(actual, expected):
     """
     count_of = expected.shape[0]
     square_logarithm_difference = np.log((actual + 1) / (expected + 1)) ** 2
-    return np.sqrt((1 / count_of) * np.sum(square_logarithm_difference))
+    return np.sqrt((1. / count_of) * np.sum(square_logarithm_difference))

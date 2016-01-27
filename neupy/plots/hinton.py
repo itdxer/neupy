@@ -63,9 +63,9 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
     ax.yaxis.set_major_locator(plt.NullLocator())
 
     for (y, x), weight in np.ndenumerate(matrix):
-        color = 'white' if weight > 0 else 'black'
-        size = min(np.sqrt(np.abs(weight / max_weight)), 1)
-        rect = plt.Rectangle([x - size / 2, y - size / 2], size, size,
+        color = ('white' if weight > 0 else 'black')
+        size = min(np.sqrt(np.abs(weight / max_weight)), 1.)
+        rect = plt.Rectangle([x - size / 2., y - size / 2.], size, size,
                              facecolor=color, edgecolor=color)
         ax.add_patch(rect)
 
@@ -106,6 +106,6 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
             ]
 
         ax.legend(rectangles, rect_description, loc='center left',
-                  bbox_to_anchor=(1, 0.5))
+                  bbox_to_anchor=(1., 0.5))
 
     return ax

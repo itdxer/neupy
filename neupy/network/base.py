@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, absolute_import
 
 import math
 import time
@@ -61,13 +61,13 @@ def show_epoch_summary(network):
                 average_delay = np.mean(terminal_output_delays)
 
                 if average_delay < delay_limit:
-                    show_epoch = (
+                    show_epoch = int(
                         network.training.show_epoch *
                         math.ceil(delay_limit / average_delay)
                     )
                     table_drawer.line()
                     table_drawer.message("Too many outputs in a terminal.")
-                    table_drawer.message("Set up logging after each {} epoch"
+                    table_drawer.message("Set up logging after each {} epochs"
                                          "".format(show_epoch))
                     table_drawer.line()
                     terminal_output_delays.clear()
