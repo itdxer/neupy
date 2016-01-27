@@ -13,7 +13,7 @@ from neupy import preprocessing
 from neupy.utils import NotTrainedException
 
 from base import BaseTestCase
-from utils import image_comparison
+from utils import image_comparison, format_image_name
 
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -29,13 +29,16 @@ class ZCATestCase(BaseTestCase):
     def test_simple_zca(self):
         plt.style.use('ggplot')
 
-        original_image = os.path.join(PLOTS_DIR, "test_simple_zca.png")
+        original_image_name = format_image_name("simple_zca.png")
+        original_image = os.path.join(PLOTS_DIR, original_image_name)
         image = os.path.join(IMGDIR, "cifar10.png")
 
         data = imread(image)
         data = data[:, :, 0]
 
-        with image_comparison(original_image, figsize=(10, 6)) as fig:
+        comparison_kwargs = dict(figsize=(10, 6), tol=0.05)
+
+        with image_comparison(original_image, **comparison_kwargs) as fig:
             ax = fig.add_subplot(1, 1, 1)
 
             zca = preprocessing.ZCA(0.001)
@@ -44,7 +47,7 @@ class ZCATestCase(BaseTestCase):
 
             ax.imshow(data_transformed, cmap=plt.cm.binary)
 
-        with image_comparison(original_image, figsize=(10, 6)) as fig:
+        with image_comparison(original_image, **comparison_kwargs) as fig:
             ax = fig.add_subplot(1, 1, 1)
 
             zca = preprocessing.ZCA(0.001)

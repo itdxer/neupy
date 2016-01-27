@@ -82,6 +82,21 @@ def compare_networks(default_class, tested_class, data, **kwargs):
                                                        network_tested_error))
 
 
+def format_image_name(name):
+    """ Add to image name prefix that identify Python versions.
+
+    Parameters
+    ----------
+    name : str
+
+    Returns
+    -------
+    str
+    """
+    name_prefix = 'test_py3_' if six.PY3 else 'test_py2_'
+    return name_prefix + name
+
+
 @contextmanager
 def image_comparison(original_image_path, figsize=(10, 10), tol=1e-3):
     """ Context manager that initialize figure that should contain figure
@@ -109,7 +124,6 @@ def image_comparison(original_image_path, figsize=(10, 10), tol=1e-3):
         figure = plt.figure(figsize=figsize)
         yield figure
         figure.savefig(f.name)
-        figure.savefig(original_image_path)
         error = compare_images(f.name, original_image_path, tol=tol)
 
         if error:

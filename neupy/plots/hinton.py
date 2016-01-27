@@ -76,9 +76,9 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
         max_value = matrix.max().round(2)
         min_value = matrix.min().round(2)
 
-        white = Rectangle(xy=(0, 0), width=1, height=1, linewidth=1,
+        white = Rectangle(xy=(0, 0), width=1., height=1., linewidth=1.,
                           linestyle='solid', facecolor='#ffffff')
-        black = Rectangle(xy=(0, 0), width=1, height=1, color='#000000')
+        black = Rectangle(xy=(0, 0), width=1., height=1., color='#000000')
 
         if min_value < 0 and max_value > 0:
             rectangles = [white, black]
