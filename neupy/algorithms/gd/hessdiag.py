@@ -65,7 +65,7 @@ class HessianDiagonal(GradientDescent):
     >>> from sklearn.cross_validation import train_test_split
     >>> from sklearn import datasets, preprocessing
     >>> from neupy import algorithms, layers
-    >>> from neupy.functions import rmsle
+    >>> from neupy.estimators import rmsle
     >>>
     >>> np.random.seed(0)
     >>>

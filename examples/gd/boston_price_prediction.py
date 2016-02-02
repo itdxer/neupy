@@ -2,19 +2,13 @@ import numpy as np
 from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
 import matplotlib.pyplot as plt
-from neupy import algorithms, layers, environment
+from neupy import algorithms, layers, environment, estimators
 
 
 np.random.seed(0)
 plt.style.use('ggplot')
 
 environment.sandbox()
-
-
-def rmsle(expected, actual):
-    n_samples = actual.shape[0]
-    square_logarithm_difference = np.log((expected + 1) / (actual + 1)) ** 2
-    return np.sqrt((1. / n_samples) * np.sum(square_logarithm_difference))
 
 
 dataset = datasets.load_boston()
@@ -46,5 +40,5 @@ y_predict = cgnet.predict(x_test)
 
 y_test = target_scaler.inverse_transform(y_test)
 y_predict = target_scaler.inverse_transform(y_predict).T.round(1)
-error = rmsle(y_predict, y_test)
+error = estimators.rmsle(y_predict, y_test)
 print("RMSLE = {}".format(error))

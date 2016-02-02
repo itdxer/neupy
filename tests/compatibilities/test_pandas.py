@@ -1,9 +1,8 @@
 import pandas as pd
 from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
-from neupy import algorithms, layers
+from neupy import algorithms, layers, estimators
 
-from utils import rmsle
 from base import BaseTestCase
 
 
@@ -41,8 +40,8 @@ class PandasCompatibilityTestCase(BaseTestCase):
         bpnet.train(x_train, y_train, epochs=50)
         y_predict = bpnet.predict(x_test)
 
-        error = rmsle(
+        error = estimators.rmsle(
             target_scaler.inverse_transform(y_test),
             target_scaler.inverse_transform(y_predict).round()
         )
-        self.assertAlmostEqual(3.94, error, places=2)
+        self.assertAlmostEqual(0.48, error, places=2)

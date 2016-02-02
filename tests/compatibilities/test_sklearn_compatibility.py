@@ -5,8 +5,8 @@ from sklearn import datasets, preprocessing, metrics, grid_search
 from sklearn.cross_validation import train_test_split
 from sklearn.pipeline import Pipeline
 from neupy import algorithms, layers, ensemble
+from neupy.estimators import rmsle
 
-from utils import rmsle
 from base import BaseTestCase
 
 

@@ -83,14 +83,14 @@ class RoundedOutput(Output):
 
     Parameters
     ----------
-    decimal_places : int
+    decimals : int
         The precision in decimal digits for output value.
     {Output.size}
     """
-    decimal_places = IntProperty(default=0, minval=0)
+    decimals = IntProperty(default=0, minval=0)
 
     def output(self, value):
-        return np.round(value, self.decimal_places)
+        return np.round(value, self.decimals)
 
 
 class ArgmaxOutput(Output):
@@ -98,7 +98,7 @@ class ArgmaxOutput(Output):
 
     Parameters
     ----------
-    decimal_places : int
+    decimals : int
     The precision in decimal digits for output value.
     {Output.size}
     """

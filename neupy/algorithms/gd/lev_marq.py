@@ -91,7 +91,7 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
     >>> from sklearn import datasets, preprocessing
     >>> from sklearn.cross_validation import train_test_split
     >>> from neupy import algorithms, layers
-    >>> from neupy.functions import rmsle
+    >>> from neupy.estimators import rmsle
     >>>
     >>> dataset = datasets.load_diabetes()
     >>> data, target = dataset.data, dataset.target

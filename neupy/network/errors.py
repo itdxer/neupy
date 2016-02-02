@@ -24,3 +24,7 @@ def categorical_crossentropy(actual, predicted, epsilon=1e-10):
     """
     predicted = T.clip(predicted, epsilon, 1.0 - epsilon)
     return T.nnet.categorical_crossentropy(predicted, actual).mean()
+
+
+def crossentropy(actual, predicted, epsilon):
+    pass

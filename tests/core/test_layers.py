@@ -155,7 +155,7 @@ class OutputLayersOperationsTestCase(BaseTestCase):
             output_vector
         )
 
-        layer = RoundedOutput(1, decimal_places=1)
+        layer = RoundedOutput(1, decimals=1)
         output_vector = layer.output(input_vector)
         np.testing.assert_array_equal(
             np.array([[1.1, 1.5, -2, 2]]).T,

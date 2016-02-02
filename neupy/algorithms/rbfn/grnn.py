@@ -37,8 +37,7 @@ class GRNN(LazyLearning, Regression, BaseNetwork):
     >>> from sklearn import datasets
     >>> from sklearn.cross_validation import train_test_split
     >>>
-    >>> from neupy.algorithms import GRNN
-    >>> from neupy.functions import rmsle
+    >>> from neupy import algorithms, estimators
     >>>
     >>> np.random.seed(0)
     >>>
@@ -48,10 +47,10 @@ class GRNN(LazyLearning, Regression, BaseNetwork):
     ...     random_state=0
     ... )
     >>>
-    >>> nw = GRNN(std=0.1, verbose=False)
+    >>> nw = algorithms.GRNN(std=0.1, verbose=False)
     >>> nw.train(x_train, y_train)
     >>> result = nw.predict(x_test)
-    >>> rmsle(result, y_test)
+    >>> estimators.rmsle(result, y_test)
     0.4245120142774001
     """
     std = BoundedProperty(default=0.1, minval=0)

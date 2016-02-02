@@ -1,9 +1,9 @@
 import numpy as np
 from sklearn import datasets, preprocessing, cross_validation
 from neupy import algorithms, layers, ensemble
+from neupy.estimators import rmsle
 
 from base import BaseTestCase
-from utils import rmsle
 
 
 class MixtureOfExpertsTestCase(BaseTestCase):

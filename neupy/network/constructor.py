@@ -182,6 +182,7 @@ class ConstructableNetwork(BaseNetwork):
         """ Calculate prediction accuracy for input data.
         """
         input_data = format_data(input_data)
+        target_data = format_data(target_data)
         return self.methods.prediction_error(input_data, target_data)
 
     def predict_raw(self, input_data):

@@ -9,6 +9,9 @@ You can run and test different Neural Network algorithms.
 .. |Travis| image:: https://api.travis-ci.org/itdxer/neupy.png?branch=master
 .. _Travis: https://travis-ci.org/itdxer/neupy
 
+.. |Coveralls| image:: https://coveralls.io/repos/github/itdxer/neupy/badge.svg?branch=master
+.. _Coveralls: https://coveralls.io/github/itdxer/neupy?branch=master
+
 Installation
 ------------
 

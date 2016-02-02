@@ -36,7 +36,7 @@ class MixtureOfExperts(BaseEnsemble):
     >>> from sklearn import datasets, preprocessing
     >>> from sklearn.cross_validation import train_test_split
     >>> from neupy import ensemble, algorithms, layers
-    >>> from neupy.functions import rmsle
+    >>> from neupy.estimators import rmsle
     >>>
     >>> np.random.seed(100)
     >>>

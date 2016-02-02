@@ -34,8 +34,7 @@ class LinearSearch(LearningRateConfigurable):
     >>>
     >>> from sklearn import datasets, preprocessing
     >>> from sklearn.cross_validation import train_test_split
-    >>> from neupy import algorithms, layers
-    >>> from neupy.functions import rmsle
+    >>> from neupy import algorithms, layers, estimators
     >>>
     >>> dataset = datasets.load_boston()
     >>> data, target = dataset.data, dataset.target
@@ -53,7 +52,7 @@ class LinearSearch(LearningRateConfigurable):
     ...     connection=[
     ...         layers.Sigmoid(13),
     ...         layers.Sigmoid(50),
-    ...         layers.Output(1),
+    ...         layers.RoundedOutput(1, decimals=1),
     ...     ],
     ...     search_method='golden',
     ...     optimizations=[algorithms.LinearSearch],
@@ -66,7 +65,7 @@ class LinearSearch(LearningRateConfigurable):
     >>> real = target_scaler.inverse_transform(y_test)
     >>> predicted = target_scaler.inverse_transform(y_predict)
     >>>
-    >>> error = rmsle(real, predicted.round(1))
+    >>> error = estimators.rmsle(real, predicted)
     >>> error
     0.20752676697596578
 

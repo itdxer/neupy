@@ -322,7 +322,7 @@ To fix it, we are going to inverse our transformation for predicted and actual v
 
 .. code-block:: python
 
-    from neupy.functions.errors import rmsle
+    from neupy.estimators import rmsle
 
     y_predict = cgnet.predict(x_test).round(1)
     error = rmsle(target_scaler.inverse_transform(y_test),

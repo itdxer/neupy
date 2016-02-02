@@ -3,9 +3,9 @@ from functools import partial
 import numpy as np
 
 from sklearn import datasets, cross_validation, preprocessing
-from neupy import algorithms, layers
+from neupy import algorithms, layers, estimators
 
-from utils import rmsle, compare_networks
+from utils import compare_networks
 from data import simple_classification
 from base import BaseTestCase
 
@@ -38,7 +38,7 @@ class HessianDiagonalTestCase(BaseTestCase):
         nw.train(x_train, y_train, epochs=100)
         y_predict = nw.predict(x_test)
 
-        error = rmsle(
+        error = estimators.rmsle(
             target_scaler.inverse_transform(y_test),
             target_scaler.inverse_transform(y_predict).round()
         )

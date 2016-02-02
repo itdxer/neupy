@@ -3,8 +3,8 @@ from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
 
 from neupy import algorithms, layers
+from neupy.estimators import rmsle
 
-from utils import rmsle
 from base import BaseTestCase
 
 

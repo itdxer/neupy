@@ -4,11 +4,10 @@ import theano.tensor as T
 from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
 
-from neupy import algorithms, layers
+from neupy import algorithms, layers, estimators
 from neupy.utils import asfloat
 from neupy.algorithms.gd.lev_marq import jaccobian
 
-from utils import rmsle
 from base import BaseTestCase
 
 

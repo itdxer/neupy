@@ -200,21 +200,3 @@ def vectors_for_testing(vector, is_feature1d=True):
                          pd.DataFrame(vector.reshape(shape2d))])
 
     return vectors_list
-
-
-def rmsle(actual, expected):
-    """ Root mean square logarithmic error.
-
-    Parameters
-    ----------
-    actual : array-like
-    expected : array-like
-
-    Returns
-    -------
-    float
-        Computed error using actual and expected values.
-    """
-    count_of = expected.shape[0]
-    square_logarithm_difference = np.log((actual + 1) / (expected + 1)) ** 2
-    return np.sqrt((1. / count_of) * np.sum(square_logarithm_difference))
