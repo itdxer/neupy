@@ -247,9 +247,11 @@ class SupervisedConstructableNetwork(SupervisedLearning, ConstructableNetwork):
     """
 
     error = ChoiceProperty(default='mse', choices={
+        'mae': errors.mae,
         'mse': errors.mse,
         'rmse': errors.rmse,
-        'mae': errors.mae,
+        'msle': errors.msle,
+        'rmsle': errors.rmsle,
         'binary_crossentropy': errors.binary_crossentropy,
         'categorical_crossentropy': errors.categorical_crossentropy,
     })

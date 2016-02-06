@@ -1,58 +1,70 @@
 import numpy as np
 
-from neupy.network import errors
+from neupy import estimators
 
 from base import BaseTestCase
 
 
 class ErrorFuncTestCase(BaseTestCase):
     def test_mse(self):
+        actual = np.array([0, 1, 2, 3])
+        predicted = np.array([3, 2, 1, 0])
+        self.assertEqual(5, estimators.mse(actual, predicted))
+
+        actual = np.array([
+            [0, 1],
+            [2, 3],
+            [4, 5],
+        ])
         predicted = np.array([
-            [1, 2],
-            [3, 4],
-            [-5, -6]
+            [5, 4],
+            [3, 2],
+            [1, 0],
         ])
-        target = np.array([
-            [1, 1],
-            [1, 1],
-            [1, 1]
-        ])
-
-        actual = errors.mse(predicted, target)
-        expected = 16.5
-
-        self.assertAlmostEqual(actual.eval(), expected)
+        self.assertAlmostEqual(70 / 6., estimators.mse(actual, predicted))
 
     def test_binary_crossentropy(self):
-        predicted = np.array([
-            [0.4],
-            [0],
-            [0.01],
-        ])
-        target = np.array([
-            [1],
-            [0],
-            [0],
-        ])
+        predicted = np.array([0.1, 0.9, 0.2, 0.5])
+        actual = np.array([0, 1, 0, 1])
 
-        actual = errors.binary_crossentropy(predicted, target)
-        expected = 4.68
-
-        self.assertAlmostEqual(actual.eval(), expected, places=2)
+        error = estimators.binary_crossentropy(actual, predicted)
+        self.assertAlmostEqual(0.28, error, places=2)
 
     def test_categorical_crossentropy(self):
         predicted = np.array([
-            [0.4, 0.6],
-            [0, 1],
-            [0.01, 0.99],
+            [0.1, 0.9],
+            [0.9, 0.1],
+            [0.2, 0.8],
+            [0.5, 0.5],
         ])
-        target = np.array([
+        actual = np.array([
+            [0, 1],
             [1, 0],
             [0, 1],
-            [0, 1],
+            [1, 0],
         ])
 
-        actual = errors.categorical_crossentropy(predicted, target)
-        expected = 4.68
+        error = estimators.categorical_crossentropy(actual, predicted)
+        self.assertAlmostEqual(0.28, error, places=2)
 
-        self.assertAlmostEqual(actual.eval(), expected, places=2)
+    def test_mae(self):
+        predicted = np.array([1, 2, 3])
+        target = np.array([3, 2, 1])
+
+        actual = estimators.mae(target, predicted)
+        self.assertAlmostEqual(actual, 4 / 3.)
+
+    def test_rmse(self):
+        actual = np.array([0, 1, 2, 3])
+        predicted = np.array([3, 2, 1, 0])
+        self.assertEqual(np.sqrt(5), estimators.rmse(actual, predicted))
+
+    def test_msle(self):
+        actual = np.e ** (np.array([1, 2, 3, 4])) - 1
+        predicted = np.e ** (np.array([4, 3, 2, 1])) - 1
+        self.assertEqual(5, estimators.msle(actual, predicted))
+
+    def test_rmsle(self):
+        actual = np.e ** (np.array([1, 2, 3, 4])) - 1
+        predicted = np.e ** (np.array([4, 3, 2, 1])) - 1
+        self.assertEqual(np.sqrt(5), estimators.rmsle(actual, predicted))
