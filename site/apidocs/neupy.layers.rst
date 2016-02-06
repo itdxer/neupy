@@ -6,6 +6,7 @@ Submodules
 
 .. toctree::
 
+   neupy.layers.activations
    neupy.layers.base
    neupy.layers.connections
    neupy.layers.layers

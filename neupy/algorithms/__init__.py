@@ -8,6 +8,9 @@ from .gd.rprop import *
 from .gd.quickprop import *
 from .gd.momentum import *
 
+from .ensemble.dan import *
+from .ensemble.mixture_of_experts import *
+
 from .weights.weight_decay import *
 from .weights.weight_elimination import *
 

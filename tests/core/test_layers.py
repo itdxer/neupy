@@ -231,8 +231,8 @@ class LayersInitializationTestCase(BaseTestCase):
         self.assertGreaterEqual(10, np.max(weight))
 
     def test_layers_ortho_init(self):
-        # Note: Matrix can't be orthogonal in both ways for the
-        # rectangular matrix.
+        # Note: Matrix can't be orthogonal for row and column space
+        # in the same time for the rectangular matrix.
 
         # Matrix that have more rows than columns
         input_layer = Sigmoid(30, init_method='ortho')

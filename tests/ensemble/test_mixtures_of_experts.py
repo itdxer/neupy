@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn import datasets, preprocessing, cross_validation
-from neupy import algorithms, layers, ensemble
+from neupy import algorithms, layers
 from neupy.estimators import rmsle
 
 from base import BaseTestCase
@@ -23,7 +23,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
 
         with self.assertRaises(ValueError):
             # Ivalid network (not GradientDescent)
-            ensemble.MixtureOfExperts(
+            algorithms.MixtureOfExperts(
                 networks=networks + [
                     algorithms.GRNN(verbose=False)
                 ],
@@ -35,7 +35,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
 
         with self.assertRaises(ValueError):
             # Ivalid number of outputs in third network
-            ensemble.MixtureOfExperts(
+            algorithms.MixtureOfExperts(
                 networks=networks + [
                     algorithms.GradientDescent(
                         (1, 20, 2),
@@ -51,7 +51,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
 
         with self.assertRaises(ValueError):
             # Ivalid gating network output layer size
-            ensemble.MixtureOfExperts(
+            algorithms.MixtureOfExperts(
                 networks=networks,
                 gating_network=algorithms.GradientDescent(
                     layers.Softmax(1) > layers.Output(1),
@@ -61,7 +61,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
 
         with self.assertRaises(ValueError):
             # Ivalid gating network input layer
-            ensemble.MixtureOfExperts(
+            algorithms.MixtureOfExperts(
                 networks=networks,
                 gating_network=algorithms.GradientDescent(
                     layers.Sigmoid(1) > layers.Output(2),
@@ -71,7 +71,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
 
         with self.assertRaises(ValueError):
             # Ivalid gating network output layer
-            ensemble.MixtureOfExperts(
+            algorithms.MixtureOfExperts(
                 networks=networks,
                 gating_network=algorithms.GradientDescent(
                     layers.Softmax(1) > layers.RoundedOutput(2),
@@ -81,7 +81,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
 
         with self.assertRaises(ValueError):
             # Ivalid network error function
-            ensemble.MixtureOfExperts(
+            algorithms.MixtureOfExperts(
                 networks=networks + [
                     algorithms.GradientDescent(
                         (1, 20, 1),
@@ -97,7 +97,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             )
 
         with self.assertRaises(ValueError):
-            moe = ensemble.MixtureOfExperts(
+            moe = algorithms.MixtureOfExperts(
                 # Ivalid gating error function
                 networks=networks,
                 gating_network=algorithms.GradientDescent(
@@ -107,7 +107,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                 ),
             )
 
-        moe = ensemble.MixtureOfExperts(
+        moe = algorithms.MixtureOfExperts(
             # Ivalid gating network output layer
             networks=networks,
             gating_network=algorithms.GradientDescent(
@@ -154,7 +154,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
 
         # -------------- Train ensemlbe -------------- #
 
-        moe = ensemble.MixtureOfExperts(
+        moe = algorithms.MixtureOfExperts(
             networks=[
                 algorithms.Momentum(
                     (insize, 20, outsize),

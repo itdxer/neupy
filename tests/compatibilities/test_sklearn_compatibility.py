@@ -4,7 +4,7 @@ import numpy as np
 from sklearn import datasets, preprocessing, metrics, grid_search
 from sklearn.cross_validation import train_test_split
 from sklearn.pipeline import Pipeline
-from neupy import algorithms, layers, ensemble
+from neupy import algorithms, layers
 from neupy.estimators import rmsle
 
 from base import BaseTestCase
@@ -49,7 +49,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
             data, target, train_size=0.7
         )
 
-        dan = ensemble.DynamicallyAveragedNetwork([
+        dan = algorithms.DynamicallyAveragedNetwork([
             algorithms.RPROP((4, 5, 1), step=0.1, maximum_step=1),
             algorithms.GradientDescent((4, 5, 1), step=0.1),
             algorithms.ConjugateGradient((4, 5, 1), step=0.01),

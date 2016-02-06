@@ -51,8 +51,8 @@ Ensembles
 .. csv-table::
     :header: "Class name", "Name"
 
-    :ensemble:`MixtureOfExperts`, Mixture of Experts
-    :ensemble:`DynamicallyAveragedNetwork`, Dynamically Averaged Network (DAN)
+    :algorithms:`MixtureOfExperts`, Mixture of Experts
+    :algorithms:`DynamicallyAveragedNetwork`, Dynamically Averaged Network (DAN)
 
 Radial Basis Functions Networks (RBFN)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

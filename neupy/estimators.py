@@ -10,6 +10,17 @@ __all__ = ('rmsle', 'mse', 'binary_crossentropy', 'categorical_crossentropy')
 
 
 def override_theano_function(function):
+    """ Override theano function and help evaluate output result.
+
+    Parameters
+    ----------
+    function : function
+        Function need to return theano variable.
+
+    Returns
+    -------
+    function
+    """
     @wraps(function)
     def wrapper(actual, expected, *args, **kwargs):
         actual = format_data(actual)

@@ -1,8 +1,9 @@
+import sys
+
 import theano
 import theano.tensor as T
 import numpy as np
 
-from neupy import algorithms
 from neupy.layers import Softmax, Output
 from .base import BaseEnsemble
 
@@ -19,7 +20,7 @@ class MixtureOfExperts(BaseEnsemble):
     networks : list
         List of networks based on :network:`GradientDescent` algorithm.
     gating_network : object
-        2 Layer Neural Network based on :network:`GradientDescent` which
+        2-Layer Neural Network based on :network:`GradientDescent` which
         has :layer:`Softmax` as first one and the last one must be
         the :layer:`Output`. Output layer size must be equal to number
         of networks in model. Also important to say that in every network
@@ -35,7 +36,7 @@ class MixtureOfExperts(BaseEnsemble):
     >>> import numpy as np
     >>> from sklearn import datasets, preprocessing
     >>> from sklearn.cross_validation import train_test_split
-    >>> from neupy import ensemble, algorithms, layers
+    >>> from neupy import algorithms, layers
     >>> from neupy.estimators import rmsle
     >>>
     >>> np.random.seed(100)
@@ -54,14 +55,12 @@ class MixtureOfExperts(BaseEnsemble):
     >>>
     >>> insize, outsize = (10, 1)
     >>> networks = [
-    ...     algorithms.GradientDescent((insize, 20, outsize), step=0.1,
-    ...                                 verbose=False),
-    ...     algorithms.GradientDescent((insize, 20, outsize), step=0.1,
-    ...                                 verbose=False),
+    ...     algorithms.GradientDescent((insize, 20, outsize), step=0.1),
+    ...     algorithms.GradientDescent((insize, 20, outsize), step=0.1),
     ... ]
     >>> n_networks = len(networks)
     >>>
-    >>> moe = ensemble.MixtureOfExperts(
+    >>> moe = algorithms.MixtureOfExperts(
     ...     networks=networks,
     ...     gating_network=algorithms.GradientDescent(
     ...         layers.Softmax(insize) > layers.Output(n_networks),
@@ -79,6 +78,7 @@ class MixtureOfExperts(BaseEnsemble):
     """
     def __init__(self, networks, gating_network=None):
         super(MixtureOfExperts, self).__init__(networks)
+        algorithms = sys.modules['neupy.algorithms']
 
         if not isinstance(gating_network, algorithms.GradientDescent):
             raise ValueError("Gating network must use GradientDescent "
@@ -198,8 +198,8 @@ class MixtureOfExperts(BaseEnsemble):
                 predictions.append(network.predict(input_data))
                 network.train_epoch(input_data, target_data)
 
-            gating_network.train_epoch(input_data,
-                                       np.concatenate(predictions, axis=1))
+            predictions = np.concatenate(predictions, axis=1)
+            gating_network.train_epoch(input_data, predictions)
 
     def predict(self, input_data):
         return self._predict(input_data)

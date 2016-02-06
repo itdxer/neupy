@@ -102,6 +102,5 @@ class ArgmaxOutput(Output):
     The precision in decimal digits for output value.
     {Output.size}
     """
-
     def output(self, value):
         return value.argmax(axis=1)

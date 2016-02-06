@@ -226,9 +226,10 @@ class SupervisedConstructableNetwork(SupervisedLearning, ConstructableNetwork):
 
     Parameters
     ----------
-    error : str
+    error : {{'mse', 'rmse', 'mae', 'categorical_crossentropy', \
+    'binary_crossentropy'}}
         Function which controls your training error.
-        Defaults to ``mse``
+        Defaults to ``mse``.
     {ConstructableNetwork.connection}
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
@@ -247,6 +248,8 @@ class SupervisedConstructableNetwork(SupervisedLearning, ConstructableNetwork):
 
     error = ChoiceProperty(default='mse', choices={
         'mse': errors.mse,
+        'rmse': errors.rmse,
+        'mae': errors.mae,
         'binary_crossentropy': errors.binary_crossentropy,
         'categorical_crossentropy': errors.categorical_crossentropy,
     })

@@ -35,7 +35,7 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
     >>> import numpy as np
     >>> from sklearn import datasets, metrics
     >>> from sklearn.cross_validation import train_test_split
-    >>> from neupy import ensemble, algorithms
+    >>> from neupy import algorithms
     >>>
     >>> np.random.seed(50)
     >>>
@@ -45,7 +45,7 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
     >>>     data, target, train_size=0.7
     >>> )
     >>>
-    >>> dan = ensemble.DynamicallyAveragedNetwork([
+    >>> dan = algorithms.DynamicallyAveragedNetwork([
     >>>     algorithms.RPROP((4, 10, 1), step=0.1, maximum_step=1,
     >>>                       verbose=False),
     >>>     algorithms.GradientDescent((4, 5, 1), step=0.1,

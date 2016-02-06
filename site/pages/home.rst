@@ -1,5 +1,5 @@
-NeuPy
-=====
+Home
+====
 
 NeuPy is a Python library for Artificial Neural Networks.
 You can run and test different Neural Network algorithms.
@@ -15,14 +15,6 @@ Installation
 .. code-block:: bash
 
     $ pip install neupy
-
-Links
------
-
-* `Documentation <http://neupy.com>`_
-* `Issues <https://github.com/itdxer/neupy/issues>`_
-* `Tutorials <http://neupy.com/archive.html>`_
-* `Available algorithms <http://neupy.com/docs/algorithms.html>`_
 
 Dependence
 ----------

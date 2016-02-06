@@ -23,7 +23,7 @@ description = 'Artificial Neural Network library implemented in Python'
 author = 'Yurii Shevchuk'
 
 # Change this to your copyright string
-copyright = '2015, ' + author
+copyright = '2015 - 2016, ' + author
 
 # Change this to your blog root URL (required for RSS feed)
 website = 'http://neupy.com'
@@ -142,7 +142,6 @@ def get_module_for_class(classname, moduletype):
     """
     available_module_types = {
         'network': 'neupy.algorithms',
-        'ensemble': 'neupy.ensemble',
         'layer': 'neupy.layers',
         'plot': 'neupy.plots',
     }
@@ -166,12 +165,11 @@ def process_docstring(app, what, name, obj, options, lines):
 
     Available types:
     * :network:`NetworkClassName`
-    * :ensemble:`EnsembleClassName`
     * :layer:`LayerClassName`
     * :plot:`function_name`
     """
 
-    labels = ['network', 'layer', 'ensemble', 'plot']
+    labels = ['network', 'layer', 'plot']
     labels_regexp = '|'.join(labels)
 
     regexp = re.compile(
