@@ -1,4 +1,4 @@
-from numpy import where, zeros, reshape, round as np_round
+import numpy as np
 
 from .base import BaseEnsemble
 
@@ -46,10 +46,8 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
     >>> )
     >>>
     >>> dan = algorithms.DynamicallyAveragedNetwork([
-    >>>     algorithms.RPROP((4, 10, 1), step=0.1, maximum_step=1,
-    >>>                       verbose=False),
-    >>>     algorithms.GradientDescent((4, 5, 1), step=0.1,
-    >>>                                 verbose=False)
+    >>>     algorithms.RPROP((4, 10, 1), maximum_step=1),
+    >>>     algorithms.GradientDescent((4, 5, 1)),
     >>> ])
     >>> dan.train(x_train, y_train, epochs=500)
     >>> y_predicted = dan.predict(x_test)
@@ -77,7 +75,7 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
 
     def predict_raw(self, input_data):
         number_of_inputs = input_data.shape[0]
-        network_certainties = zeros((number_of_inputs, len(self.networks)))
+        network_certainties = np.zeros((number_of_inputs, len(self.networks)))
         network_outputs = network_certainties.copy()
 
         for i, network in enumerate(self.networks):
@@ -90,16 +88,16 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
                     "was in range [{}, {}]".format(minval, maxval)
                 )
 
-            certainty = where(output > 0.5, output, 1 - output)
+            certainty = np.where(output > 0.5, output, 1 - output)
 
             network_certainties[:, i:i + 1] = certainty
             network_outputs[:, i:i + 1] = output
 
-        total_output_sum = reshape(network_certainties.sum(axis=1),
-                                   (number_of_inputs, 1))
+        total_output_sum = np.reshape(network_certainties.sum(axis=1),
+                                      (number_of_inputs, 1))
         self.weights = network_certainties / total_output_sum
         return (self.weights * network_outputs).sum(axis=1)
 
     def predict(self, input_data):
         raw_output = self.predict_raw(input_data)
-        return np_round(raw_output)
+        return np.round(raw_output)

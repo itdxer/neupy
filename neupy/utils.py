@@ -85,7 +85,7 @@ class AttributeKeyDict(dict):
     """ Modified built-in Python ``dict`` class. That modification
     helps get and set values like attributes.
 
-    Exampels
+    Examples
     --------
     >>> attrdict = AttributeKeyDict()
     >>> attrdict

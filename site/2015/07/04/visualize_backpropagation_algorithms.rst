@@ -413,7 +413,7 @@ so :network:`Golden Search <LinearSearch>` is always a good choice for a step se
 
     prepare_plot()
     cgnet_golde_search = partial(algorithms.ConjugateGradient,
-                                 optimizations=[algorithms.LinearSearch])
+                                 addons=[algorithms.LinearSearch])
     draw_quiver(cgnet_golde_search,
                 'Conjugate Gradient + Golden Search', 'r')
     plt.show()

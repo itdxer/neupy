@@ -13,4 +13,4 @@ class LearningRateConfigurable(Configurable):
     It works with any algorithm based on backpropagation. Class can't
     work without it.
     """
-    optimization_type = LEARING_RATE_UPDATE
+    addon_type = LEARING_RATE_UPDATE

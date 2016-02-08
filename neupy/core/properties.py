@@ -190,7 +190,7 @@ class ChoiceProperty(BaseProperty):
 class BoundedProperty(BaseProperty):
     """ Number property that have specified numerical bounds.
 
-    Properties
+    Parameters
     ----------
     minval : float
         Minimum possible value for the property.

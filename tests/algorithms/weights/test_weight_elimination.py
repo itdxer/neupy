@@ -19,7 +19,7 @@ class WeightEliminationTestCase(BaseTestCase):
             ],
             step=0.3,
             zero_weight=20,
-            optimizations=[algorithms.WeightElimination]
+            addons=[algorithms.WeightElimination]
         )
         network.train(xor_input_train, xor_target_train, epochs=350)
         self.assertAlmostEqual(network.last_error(), 0, places=2)
@@ -29,7 +29,7 @@ class WeightEliminationTestCase(BaseTestCase):
         decay_network = reproducible_network_train(
             decay_rate=0.3,
             zero_weight=5,
-            optimizations=[algorithms.WeightElimination]
+            addons=[algorithms.WeightElimination]
         )
 
         iter_networks = zip(base_network.train_layers,
@@ -48,13 +48,13 @@ class WeightEliminationTestCase(BaseTestCase):
             step=default_step,
             decay_rate=0.25,
             zero_weight=10,
-            optimizations=[algorithms.WeightElimination]
+            addons=[algorithms.WeightElimination]
         )
         net3 = reproducible_network_train(
             step=default_step,
             decay_rate=0.25,
             zero_weight=10,
-            optimizations=[algorithms.WeightElimination,
+            addons=[algorithms.WeightElimination,
                            algorithms.SimpleStepMinimization]
         )
 

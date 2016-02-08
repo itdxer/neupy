@@ -40,7 +40,7 @@ class LinearSearchTestCase(BaseTestCase):
                 verbose=False,
                 search_method=method_name,
                 tol=0.1,
-                optimizations=[algorithms.LinearSearch],
+                addons=[algorithms.LinearSearch],
             )
             cgnet.train(x_train, y_train, epochs=4)
             y_predict = cgnet.predict(x_test).round(1)

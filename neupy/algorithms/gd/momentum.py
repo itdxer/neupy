@@ -21,7 +21,7 @@ class Momentum(MinibatchGradientDescent):
         Instead of classic momentum computes Nesterov momentum.
         Defaults to ``False``.
     {MinibatchGradientDescent.batch_size}
-    {GradientDescent.optimizations}
+    {GradientDescent.addons}
     {ConstructableNetwork.connection}
     {SupervisedConstructableNetwork.error}
     {BaseNetwork.step}

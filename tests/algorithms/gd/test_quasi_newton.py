@@ -25,7 +25,7 @@ class QuasiNewtonTestCase(BaseTestCase):
             # up learning rate update algorithm
             algorithms.QuasiNewton(
                 (2, 3, 1),
-                optimizations=[algorithms.LinearSearch]
+                addons=[algorithms.LinearSearch]
             )
 
     def test_bfgs(self):

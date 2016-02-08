@@ -21,7 +21,7 @@ class LearningRateUpdatesTestCase(BaseTestCase):
             self.connection,
             step=self.first_step,
             epochs_step_minimizator=50,
-            optimizations=[algorithms.SimpleStepMinimization]
+            addons=[algorithms.SimpleStepMinimization]
         )
         network.train(xor_input_train, xor_target_train, epochs=100)
         self.assertEqual(

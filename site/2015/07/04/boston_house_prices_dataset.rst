@@ -268,7 +268,7 @@ Now we are ready to build Neural Network which will predict house prices.
         search_method='golden',
         show_epoch=25,
         verbose=True,
-        optimizations=[algorithms.LinearSearch],
+        addons=[algorithms.LinearSearch],
     )
 
 .. figure:: images/cgnet-init.png

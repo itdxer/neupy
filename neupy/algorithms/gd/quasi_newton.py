@@ -83,7 +83,7 @@ class QuasiNewton(NoStepSelection, GradientDescent):
 
     Parameters
     ----------
-    {GradientDescent.optimizations}
+    {GradientDescent.addons}
     {ConstructableNetwork.connection}
     {SupervisedConstructableNetwork.error}
     {BaseNetwork.show_epoch}

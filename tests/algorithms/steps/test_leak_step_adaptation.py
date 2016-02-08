@@ -22,7 +22,7 @@ class LeakStepAdaptationTestCase(BaseTestCase):
                 leak_size=0.5,
                 alpha=0.5,
                 beta=0.5,
-                optimizations=[algorithms.LeakStepAdaptation]
+                addons=[algorithms.LeakStepAdaptation]
             ),
 
             # Test data

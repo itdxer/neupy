@@ -39,7 +39,7 @@ network = algorithms.Momentum(
     momentum=0.99,
     nesterov=True,
     epochs_step_minimizator=10,
-    optimizations=[algorithms.SimpleStepMinimization],
+    addons=[algorithms.SimpleStepMinimization],
 )
 network.train(x_train, y_train, x_test, y_test, epochs=20)
 

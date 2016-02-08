@@ -1,7 +1,5 @@
 from functools import wraps
 
-import numpy as np
-
 from neupy.network import errors
 from neupy.utils import format_data
 
@@ -28,7 +26,9 @@ def override_theano_function(function):
         expected = format_data(expected)
 
         output = function(actual, expected, *args, **kwargs)
-        return output.eval()
+        # use .item(0) to get a first array element and automaticaly
+        # convert vector that contains one element to scalar
+        return output.eval().item(0)
     return wrapper
 
 

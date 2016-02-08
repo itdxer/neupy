@@ -18,7 +18,7 @@ class LearningRateUpdatesTestCase(BaseTestCase):
             update_for_smaller_error=1.05,
             update_for_bigger_error=0.7,
             error_difference=1.04,
-            optimizations=[algorithms.ErrDiffStepUpdate]
+            addons=[algorithms.ErrDiffStepUpdate]
         )
         network.train(xor_input_train, xor_target_train, epochs=200)
         self.assertAlmostEqual(network.last_error(), 0, places=5)

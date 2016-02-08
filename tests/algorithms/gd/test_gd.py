@@ -42,29 +42,29 @@ class GradientDescentTestCase(BaseTestCase):
             # Invalid optimization class
             algorithms.GradientDescent(
                 (2, 3, 1),
-                optimizations=[algorithms.GradientDescent]
+                addons=[algorithms.GradientDescent]
             )
 
         with self.assertRaises(ValueError):
             # Dublicate optimization algorithms from one type
             algorithms.GradientDescent(
-                (2, 3, 1), optimizations=[algorithms.WeightDecay,
+                (2, 3, 1), addons=[algorithms.WeightDecay,
                                           algorithms.WeightDecay]
             )
 
         algorithms.GradientDescent(
             (2, 3, 1),
-            optimizations=[algorithms.WeightDecay],
+            addons=[algorithms.WeightDecay],
             verbose=False,
         )
         algorithms.GradientDescent(
             (2, 3, 1),
-            optimizations=[algorithms.SearchThenConverge],
+            addons=[algorithms.SearchThenConverge],
             verbose=False,
         )
         algorithms.GradientDescent(
             (2, 3, 1),
-            optimizations=[algorithms.WeightDecay,
+            addons=[algorithms.WeightDecay,
                            algorithms.SearchThenConverge],
             verbose=False
         )

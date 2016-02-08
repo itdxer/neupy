@@ -55,7 +55,7 @@ class LinearSearch(LearningRateConfigurable):
     ...         layers.RoundedOutput(1, decimals=1),
     ...     ],
     ...     search_method='golden',
-    ...     optimizations=[algorithms.LinearSearch],
+    ...     addons=[algorithms.LinearSearch],
     ...     verbose=False
     ... )
     >>>

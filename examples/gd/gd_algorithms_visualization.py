@@ -111,7 +111,7 @@ draw_countour(
 )
 
 cgnet_class = partial(algorithms.ConjugateGradient,
-                      optimizations=[algorithms.LinearSearch])
+                      addons=[algorithms.LinearSearch])
 momentum_class = partial(algorithms.Momentum, batch_size='full')
 
 algorithms = (

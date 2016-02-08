@@ -28,7 +28,7 @@ class WeightDecay(WeightUpdateConfigurable):
     ...     (2, 4, 1),
     ...     step=0.1,
     ...     verbose=False,
-    ...     optimizations=[algorithms.WeightDecay]
+    ...     addons=[algorithms.WeightDecay]
     ... )
     >>>
 

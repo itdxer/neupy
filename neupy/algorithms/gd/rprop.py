@@ -26,7 +26,7 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
     decrease_factor : float
         Decrease factor for step in case when gradient changes sign
         compare to previous epoch.
-    {GradientDescent.optimizations}
+    {GradientDescent.addons}
     {ConstructableNetwork.connection}
     {SupervisedConstructableNetwork.error}
     {BaseNetwork.show_epoch}
@@ -145,7 +145,7 @@ class IRPROPPlus(RPROP):
     {RPROP.maximum_step}
     {RPROP.increase_factor}
     {RPROP.decrease_factor}
-    {GradientDescent.optimizations}
+    {GradientDescent.addons}
     {ConstructableNetwork.connection}
     {SupervisedConstructableNetwork.error}
     {BaseNetwork.show_epoch}

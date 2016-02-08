@@ -6,7 +6,7 @@ import theano.tensor as T
 
 from neupy.core.properties import Property, BoundedProperty
 from neupy.network import SupervisedConstructableNetwork
-from . import optimization_types
+from . import addon_types
 
 
 __all__ = ('GradientDescent', 'MinibatchGradientDescent')
@@ -17,11 +17,11 @@ class GradientDescent(SupervisedConstructableNetwork):
 
     Parameters
     ----------
-    optimizations : list or None
-        The list of optimization algortihms. ``None`` by default.
+    addons : list or None
+        The list of addon algortihms. ``None`` by default.
         If this option is not empty it will generate new class which
         will inherit all from this list. Support two types of
-        optimization algorithms: weight update and step update.
+        addon algorithms: weight update and step update.
     {ConstructableNetwork.connection}
     {SupervisedConstructableNetwork.error}
     {BaseNetwork.step}
@@ -53,10 +53,9 @@ class GradientDescent(SupervisedConstructableNetwork):
     >>> bpnet.train(x_train, y_train)
     """
 
-    default_optimizations = []
-    supported_optimizations = optimization_types
+    supported_addons = addon_types
 
-    optimizations = Property(default=None, expected_type=list)
+    addons = Property(default=None, expected_type=list)
 
     def __new__(cls, connection, options=None, **kwargs):
         # Argument `options` is a simple hack for the `__reduce__` method.
@@ -67,39 +66,39 @@ class GradientDescent(SupervisedConstructableNetwork):
         if options is None:
             options = kwargs
 
-        optimizations = options.get('optimizations', cls.default_optimizations)
-        if not optimizations:
+        addons = options.get('addons')
+
+        if not addons:
             return super(GradientDescent, cls).__new__(cls)
 
         founded_types = []
-        for optimization_class in optimizations:
-            opt_class_type = getattr(optimization_class,
-                                     'optimization_type',  None)
+        for addon_class in addons:
+            opt_class_type = getattr(addon_class, 'addon_type',  None)
 
-            if opt_class_type not in cls.supported_optimizations:
-                opt_class_name = optimization_class.__name__
+            if opt_class_type not in cls.supported_addons:
+                opt_class_name = addon_class.__name__
                 supported_opts = ', '.join(
-                    cls.supported_optimizations.values()
+                    cls.supported_addons.values()
                 )
                 raise ValueError(
-                    "Invalid optimization class `{}`. Class supports only "
+                    "Invalid add-on class `{}`. Class supports only "
                     "{}".format(opt_class_name, supported_opts)
                 )
 
             if opt_class_type in founded_types:
                 raise ValueError(
-                    "There can be only one optimization class with "
-                    "type `{}`".format(optimization_types[opt_class_type])
+                    "There can be only one add-on class with "
+                    "type `{}`".format(addon_types[opt_class_type])
                 )
 
             founded_types.append(opt_class_type)
 
-        # Build new class which would inherit main and all optimization
+        # Build new class which would inherit main and all addon
         new_class_name = (
             cls.__name__ +
-            ''.join(class_.__name__ for class_ in optimizations)
+            ''.join(class_.__name__ for class_ in addons)
         )
-        mro_classes = tuple(list(optimizations) + [cls])
+        mro_classes = tuple(list(addons) + [cls])
         new_class = type(new_class_name, mro_classes, {})
         new_class.main_class = cls
 
@@ -108,21 +107,6 @@ class GradientDescent(SupervisedConstructableNetwork):
     def __init__(self, connection, options=None, **kwargs):
         if options is None:
             options = kwargs
-
-        self.optimizations = default_optimizations = self.default_optimizations
-
-        if default_optimizations and 'optimizations' in options:
-            optimizations_merged = []
-            optimizations = options['optimizations']
-
-            for algorithm in chain(optimizations, default_optimizations):
-                types = [alg.optimization_type for alg in optimizations_merged]
-
-                if algorithm.optimization_type not in types:
-                    optimizations_merged.append(algorithm)
-
-            options['optimizations'] = optimizations_merged
-
         super(GradientDescent, self).__init__(connection, **options)
 
     def init_param_updates(self, layer, parameter):
@@ -181,7 +165,7 @@ class MinibatchGradientDescent(GradientDescent):
         Set up batch size for learning process. To set up batch size equal to
         sample size value should be equal to one of the values listed above.
         Defaults to ``100``.
-    {GradientDescent.optimizations}
+    {GradientDescent.addons}
     {ConstructableNetwork.connection}
     {SupervisedConstructableNetwork.error}
     {BaseNetwork.step}

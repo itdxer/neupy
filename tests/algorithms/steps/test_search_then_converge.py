@@ -17,7 +17,7 @@ class LearningRateUpdatesTestCase(BaseTestCase):
             step=0.3,
             epochs_step_minimizator=50,
             rate_coefitient=0.2,
-            optimizations=[algorithms.SearchThenConverge]
+            addons=[algorithms.SearchThenConverge]
         )
         network.train(xor_input_train, xor_target_train, epochs=6)
         self.assertEqual(network.variables.step.get_value(), 0.18)

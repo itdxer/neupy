@@ -60,7 +60,7 @@ class Hessian(NoStepSelection, GradientDescent):
         Inverse hessian could be singular matrix. For this reason
         algorithm include penalty that add to hessian matrix identity
         multiplied by defined constant. Defaults to ``1``.
-    {GradientDescent.optimizations}
+    {GradientDescent.addons}
     {ConstructableNetwork.connection}
     {SupervisedConstructableNetwork.error}
     {BaseNetwork.show_epoch}

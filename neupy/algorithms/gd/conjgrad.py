@@ -64,7 +64,7 @@ class ConjugateGradient(GradientDescent):
     update_function : {{'fletcher_reeves', 'polak_ribiere',\
     'hentenes_stiefel', 'conjugate_descent', 'liu_storey', 'dai_yuan'}}
         Update function. Defaults to ``fletcher_reeves``.
-    {GradientDescent.optimizations}
+    {GradientDescent.addons}
     {ConstructableNetwork.connection}
     {SupervisedConstructableNetwork.error}
     {BaseNetwork.step}
@@ -112,7 +112,7 @@ class ConjugateGradient(GradientDescent):
     ...     ],
     ...     search_method='golden',
     ...     update_function='fletcher_reeves',
-    ...     optimizations=[algorithms.LinearSearch],
+    ...     addons=[algorithms.LinearSearch],
     ...     verbose=False
     ... )
     >>>

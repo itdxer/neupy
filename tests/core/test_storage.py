@@ -77,7 +77,7 @@ class StorageTestCase(BaseTestCase):
 
             bpnet = algorithm_class(
                 (3, 5, 1),
-                optimizations=optimization_classes,
+                addons=optimization_classes,
                 verbose=False,
                 **algorithm_params
             )
@@ -98,7 +98,7 @@ class StorageTestCase(BaseTestCase):
 
                 self.assertEqual(valid_class_name, restored_class_name)
                 self.assertEqual(optimization_classes,
-                                 restored_bpnet.optimizations)
+                                 restored_bpnet.addons)
 
                 bpnet.train(data, target, epochs=10)
                 real_bpnet_error = bpnet.prediction_error(data, target)

@@ -13,4 +13,4 @@ class WeightUpdateConfigurable(Configurable):
     It works with any algorithm based on backpropagation. Class can't
     work without it.
     """
-    optimization_type = WEIGHT_PENALTY
+    addon_type = WEIGHT_PENALTY

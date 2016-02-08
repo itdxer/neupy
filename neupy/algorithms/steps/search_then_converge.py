@@ -33,7 +33,7 @@ class SearchThenConverge(LearningRateConfigurable):
     ...     (2, 4, 1),
     ...     step=0.1,
     ...     verbose=False,
-    ...     optimizations=[algorithms.SearchThenConverge]
+    ...     addons=[algorithms.SearchThenConverge]
     ... )
     >>>
 

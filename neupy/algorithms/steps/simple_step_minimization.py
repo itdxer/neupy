@@ -28,7 +28,7 @@ class SimpleStepMinimization(LearningRateConfigurable):
     ...     (2, 4, 1),
     ...     step=0.1,
     ...     verbose=False,
-    ...     optimizations=[algorithms.SimpleStepMinimization]
+    ...     addons=[algorithms.SimpleStepMinimization]
     ... )
     >>>
 

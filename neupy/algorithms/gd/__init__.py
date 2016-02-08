@@ -1,20 +1,20 @@
-__all__ = ('LEARING_RATE_UPDATE', 'WEIGHT_PENALTY', 'optimization_types',
-           'StesSelectionBuiltIn')
+__all__ = ('LEARING_RATE_UPDATE', 'WEIGHT_PENALTY', 'addon_types',
+           'StepSelectionBuiltIn')
 
 
-# Available optimization types
+# Available add-on types
 LEARING_RATE_UPDATE = 1
 WEIGHT_PENALTY = 2
 
 
-optimization_types = {
+addon_types = {
     LEARING_RATE_UPDATE: "Learning rate update",
     WEIGHT_PENALTY: "Weight penalty",
 }
 
 
 class StepSelectionBuiltIn(object):
-    supported_optimizations = {
+    supported_addons = {
         WEIGHT_PENALTY: "Weight penalty",
     }
 
