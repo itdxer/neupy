@@ -15,22 +15,37 @@ from neupy.algorithms.utils import (parameters2vector, iter_parameters,
 __all__ = ('LevenbergMarquardt',)
 
 
-# TODO: Function needs refactoring
-def jaccobian(y, x):
+def compute_jaccobian(errors, parameters):
     """ Compute Jacobbian.
+
+    Parameters
+    ----------
+    errors : Theano variable
+        Computed MSE for each sample separetly.
+    parameters : list of Theano variable
+        Neural network parameters (e.g. weights, biases).
+
+    Returns
+    -------
+    Theano variable
     """
-    n_samples = y.shape[0]
+    n_samples = errors.shape[0]
+
+    def find_jacobbian(i, errors, *params):
+        return T.grad(T.sum(errors[i]), wrt=params)
+
     J, _ = theano.scan(
-        lambda i, y, *params: T.grad(T.sum(y[i]), wrt=params),
+        find_jacobbian,
         sequences=T.arange(n_samples),
-        non_sequences=[y] + x
+        non_sequences=[errors] + parameters
     )
 
-    jacc = []
-    for j, param in zip(J, x):
-        jacc.append(j.reshape((n_samples, param.size)))
+    jaccobians = []
+    for jaccobian, parameter in zip(J, parameters):
+        jaccobian = jaccobian.reshape((n_samples, parameter.size))
+        jaccobians.append(jaccobian)
 
-    return T.concatenate(jacc, axis=1)
+    return T.concatenate(jaccobians, axis=1)
 
 
 class LevenbergMarquardt(NoStepSelection, GradientDescent):
@@ -157,17 +172,20 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
             mu / self.mu_update_factor,
         )
 
-        err = T.mean((network_output - prediction_func) ** 2, axis=1)
+        mse_for_each_sample = T.mean(
+            (network_output - prediction_func) ** 2,
+            axis=1
+        )
 
         params = list(iter_parameters(self))
         param_vector = parameters2vector(self)
 
-        J = jaccobian(err, params)
+        J = compute_jaccobian(mse_for_each_sample, params)
         n_params = J.shape[1]
 
         updated_params = param_vector - T.nlinalg.matrix_inverse(
             J.T.dot(J) + new_mu * T.eye(n_params)
-        ).dot(J.T).dot(err)
+        ).dot(J.T).dot(mse_for_each_sample)
 
         updates = [(mu, new_mu)]
         parameter_updates = setup_parameter_updates(params, updated_params)

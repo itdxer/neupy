@@ -1,11 +1,11 @@
 from neupy.core.properties import IntProperty
-from .base import LearningRateConfigurable
+from .base import SingleStepConfigurable
 
 
 __all__ = ('SimpleStepMinimization',)
 
 
-class SimpleStepMinimization(LearningRateConfigurable):
+class SimpleStepMinimization(SingleStepConfigurable):
     """ Algorithm Monotonicly minimize learning step on each iteration.
     Probably this is most simple step minimization idea.
 
@@ -18,7 +18,7 @@ class SimpleStepMinimization(LearningRateConfigurable):
 
     Warns
     -----
-    {LearningRateConfigurable.Warns}
+    {SingleStepConfigurable.Warns}
 
     Examples
     --------

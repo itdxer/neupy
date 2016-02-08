@@ -4,13 +4,13 @@ import theano.tensor as T
 
 from neupy.utils import asfloat
 from neupy.core.properties import ProperFractionProperty, BoundedProperty
-from .base import LearningRateConfigurable
+from .base import MultipleStepConfigurable
 
 
 __all__ = ('LeakStepAdaptation',)
 
 
-class LeakStepAdaptation(LearningRateConfigurable):
+class LeakStepAdaptation(MultipleStepConfigurable):
     """ Leak Learning Rate Adaptation algorithm for step adaptation procedure
     in backpropagation algortihm. By default every layer has the same value
     as ``step`` parameter in network, but after first training epoch they
@@ -30,7 +30,7 @@ class LeakStepAdaptation(LearningRateConfigurable):
 
     Warns
     -----
-    {LearningRateConfigurable.Warns}
+    {MultipleStepConfigurable.Warns}
 
     Examples
     --------

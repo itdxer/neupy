@@ -3,13 +3,13 @@ from scipy.optimize import minimize_scalar
 
 from neupy.utils import asfloat
 from neupy.core.properties import BoundedProperty, ChoiceProperty
-from .base import LearningRateConfigurable
+from .base import SingleStepConfigurable
 
 
 __all__ = ('LinearSearch',)
 
 
-class LinearSearch(LearningRateConfigurable):
+class LinearSearch(SingleStepConfigurable):
     """ Linear search for the step selection. Basicly this algorithms
     try different steps and compute your predicted error, after few
     iteration it will chose one which was better.
@@ -25,7 +25,7 @@ class LinearSearch(LearningRateConfigurable):
 
     Warns
     -----
-    {LearningRateConfigurable.Warns}
+    {SingleStepConfigurable.Warns}
 
     Examples
     --------

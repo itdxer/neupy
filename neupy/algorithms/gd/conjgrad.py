@@ -5,6 +5,7 @@ import theano.tensor as T
 
 from neupy.utils import asfloat
 from neupy.core.properties import ChoiceProperty
+from neupy.algorithms.gd import NoMultipleStepSelection
 from neupy.algorithms.utils import (parameters2vector, count_parameters,
                                     iter_parameters, setup_parameter_updates)
 from .base import GradientDescent
@@ -56,7 +57,7 @@ def dai_yuan(gradient_old, gradient_new, weight_old_delta):
     )
 
 
-class ConjugateGradient(GradientDescent):
+class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
     """ Conjugate Gradient algorithm.
 
     Parameters

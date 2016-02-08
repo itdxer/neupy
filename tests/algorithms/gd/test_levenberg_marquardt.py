@@ -6,7 +6,7 @@ from sklearn.cross_validation import train_test_split
 
 from neupy import algorithms, layers, estimators
 from neupy.utils import asfloat
-from neupy.algorithms.gd.lev_marq import jaccobian
+from neupy.algorithms.gd.lev_marq import compute_jaccobian
 
 from base import BaseTestCase
 
@@ -37,7 +37,7 @@ class LevenbergMarquardtTestCase(BaseTestCase):
             [-16, -8, -4, -1],
             [-36, -12, -9, -1],
         ]))
-        jaccobian_actual = jaccobian(error_func, [w1, b1, w2, b2])
+        jaccobian_actual = compute_jaccobian(error_func, [w1, b1, w2, b2])
         np.testing.assert_array_almost_equal(
             jaccobian_expected,
             jaccobian_actual.eval({x: x_train, y: y_train})

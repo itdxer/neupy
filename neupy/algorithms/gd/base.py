@@ -53,7 +53,7 @@ class GradientDescent(SupervisedConstructableNetwork):
     >>> bpnet.train(x_train, y_train)
     """
 
-    supported_addons = addon_types
+    supported_addon_types = addon_types.keys()
 
     addons = Property(default=None, expected_type=list)
 
@@ -75,11 +75,9 @@ class GradientDescent(SupervisedConstructableNetwork):
         for addon_class in addons:
             opt_class_type = getattr(addon_class, 'addon_type',  None)
 
-            if opt_class_type not in cls.supported_addons:
+            if opt_class_type not in cls.supported_addon_types:
                 opt_class_name = addon_class.__name__
-                supported_opts = ', '.join(
-                    cls.supported_addons.values()
-                )
+                supported_opts = ', '.join(addon_types.values())
                 raise ValueError(
                     "Invalid add-on class `{}`. Class supports only "
                     "{}".format(opt_class_name, supported_opts)

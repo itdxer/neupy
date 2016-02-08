@@ -5,13 +5,14 @@ import theano.tensor as T
 from neupy.core.properties import ProperFractionProperty
 from neupy.algorithms.utils import (parameters2vector, setup_parameter_updates,
                                     iter_parameters)
+from neupy.algorithms.gd import NoMultipleStepSelection
 from .base import GradientDescent
 
 
 __all__ = ('HessianDiagonal',)
 
 
-class HessianDiagonal(GradientDescent):
+class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
     """ Hissian diagonal is a Hessian algorithm approximation which require
     only computation of hessian matrix diagonal elements and makes it
     invertion much easier and faster.

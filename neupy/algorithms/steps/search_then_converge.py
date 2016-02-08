@@ -1,13 +1,13 @@
 from __future__ import division
 
 from neupy.core.properties import IntProperty, NumberProperty
-from .base import LearningRateConfigurable
+from .base import SingleStepConfigurable
 
 
 __all__ = ('SearchThenConverge',)
 
 
-class SearchThenConverge(LearningRateConfigurable):
+class SearchThenConverge(SingleStepConfigurable):
     """ Algorithm minimize learning step. Similar to
     :network:`SimpleStepMinimization`, but more complicated step update rule.
 
@@ -23,7 +23,7 @@ class SearchThenConverge(LearningRateConfigurable):
 
     Warns
     -----
-    {LearningRateConfigurable.Warns}
+    {SingleStepConfigurable.Warns}
 
     Examples
     --------

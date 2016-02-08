@@ -4,13 +4,13 @@ import numpy as np
 
 from neupy.core.properties import (BoundedProperty,
                                    ProperFractionProperty)
-from .base import LearningRateConfigurable
+from .base import SingleStepConfigurable
 
 
 __all__ = ('ErrDiffStepUpdate',)
 
 
-class ErrDiffStepUpdate(LearningRateConfigurable):
+class ErrDiffStepUpdate(SingleStepConfigurable):
     """ This algorithm make step update base on error difference between
     epochs.
 
@@ -30,7 +30,7 @@ class ErrDiffStepUpdate(LearningRateConfigurable):
 
     Warns
     -----
-    {LearningRateConfigurable.Warns}
+    {SingleStepConfigurable.Warns}
 
     Examples
     --------
