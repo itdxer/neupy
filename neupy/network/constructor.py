@@ -230,6 +230,21 @@ class SupervisedConstructableNetwork(SupervisedLearning, ConstructableNetwork):
     'binary_crossentropy'}}
         Function which controls your training error.
         Defaults to ``mse``.
+
+        * ``mae`` - Mean Absolute Error.
+
+        * ``mse`` - Mean Squared Error.
+
+        * ``rmse`` - Root Mean Squared Error.
+
+        * ``msle`` - Mean Squared Logarithmic Error.
+
+        * ``rmsle`` - Root Mean Squared Logarithmic Error.
+
+        * ``categorical_crossentropy`` - Categorical cross entropy.
+
+        * ``binary_crossentropy`` - Binary cross entropy.
+
     {ConstructableNetwork.connection}
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}

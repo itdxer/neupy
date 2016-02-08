@@ -142,6 +142,10 @@ Error functions
 .. csv-table::
     :header: "Function name", "Description"
 
-    "mse", "Mean square error"
+    "mae", "Mean absolute error"
+    "mse", "Mean squared error"
+    "rmse", "Root mean squared error"
+    "msle", "Mean squared logarithmic error"
+    "rmsle", "Root mean squared logarithmic error"
     "categorical_crossentropy", "Cross entropy error"
     "binary_crossentropy", "Cross entropy error"

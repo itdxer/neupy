@@ -8,6 +8,7 @@ Subpackages
 
     neupy.algorithms.associative
     neupy.algorithms.competitive
+    neupy.algorithms.ensemble
     neupy.algorithms.gd
     neupy.algorithms.linear
     neupy.algorithms.memory

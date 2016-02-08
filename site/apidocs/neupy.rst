@@ -10,7 +10,6 @@ Subpackages
     neupy.commands
     neupy.core
     neupy.datasets
-    neupy.ensemble
     neupy.helpers
     neupy.layers
     neupy.network

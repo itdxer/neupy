@@ -77,7 +77,7 @@ class Layer(BaseLayer):
         \\sqrt{{\\frac{{6}}{{fan_{{in}}}}}}]`
 
     bounds : tuple of two float
-        Available only for ``init_method`` eqaul to ``bounded``.  Value
+        Available only for ``init_method`` equal to ``bounded``.  Value
         identify minimum and maximum possible value in random weights.
         Defaults to ``(0, 1)``.
     """

@@ -66,11 +66,11 @@ def iter_parameters(docs):
     doc_indent = ' ' * n_indents if n_indents else ''
     parser = re.compile(
         r"(?P<name>\w+?)\s*\:\s*(?P<type>[^\n]+)"
-        r"((?P<description>\n{indent}\ +[^\n]+)*)"
+        r"((?P<description>(\n{indent}\ +[^\n]+)|(\n))*)"
         "".format(indent=doc_indent)
     )
 
-    for name, type_, desc, _ in parser.findall(docs):
+    for name, type_, desc, _, _, _ in parser.findall(docs):
         yield (name, type_, desc)
 
 
@@ -117,9 +117,11 @@ def parse_warns(docs):
     parser = re.compile(r"Warns\s+-+\s+(?P<warntext>(.+\n)+)")
     doc_warns = parser.findall(docs)
 
-    if doc_warns:
-        doc_warns, _ = doc_warns[0]
-        return doc_warns
+    if not doc_warns:
+        return None
+
+    doc_warns, _ = doc_warns[0]
+    return doc_warns
 
 
 class SharedDocsException(Exception):
