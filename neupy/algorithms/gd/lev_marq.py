@@ -149,7 +149,6 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
 
     mu = BoundedProperty(default=0.01, minval=0)
     mu_update_factor = BoundedProperty(default=5, minval=1)
-    # TODO: Add other quadratic functions.
     error = ChoiceProperty(default='mse', choices={'mse': errors.mse})
 
     def init_variables(self):

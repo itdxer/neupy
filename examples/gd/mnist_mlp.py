@@ -27,9 +27,9 @@ network = algorithms.Momentum(
     [
         layers.Relu(784),
         layers.Dropout(0.2),
-        layers.Relu(500),
+        layers.Relu(400),
         layers.Dropout(0.2),
-        layers.Softmax(500),
+        layers.Softmax(400),
         layers.ArgmaxOutput(10),
     ],
     error='categorical_crossentropy',

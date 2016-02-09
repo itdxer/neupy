@@ -80,9 +80,12 @@ class ConjugateGradientTestCase(BaseTestCase):
 
         for testcase in testcases:
             variables = T.vectors(3)
-            # This is a ugly trick that helps identify more variables That
-            # can be use.
-            # TODO: Fix it later.
+            # For functions some input variables can be optional and we
+            # ignore them during the computation. This solution cause errors
+            # related to the Theano computational graph, because we
+            # do not use all defined variables. That's why we need
+            # simple hack that fix this issue and do not add changes to
+            # the output result.
             hack = 0 * variables[-1][0]
             output_func = theano.function(
                 variables,

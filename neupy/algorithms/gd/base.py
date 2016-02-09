@@ -1,5 +1,4 @@
 import math
-from itertools import chain
 
 import six
 import theano.tensor as T

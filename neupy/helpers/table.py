@@ -169,10 +169,6 @@ class BaseState(with_metaclass(SharedDocsABCMeta)):
         formated_text = text.ljust(self.table.total_width - 4)
         self.table.stdout("| " + formated_text + " |")
 
-    def rewrite(self):
-        # TODO: Add functionality
-        raise NotImplementedError()
-
     @abstractmethod
     def start(self):
         pass
