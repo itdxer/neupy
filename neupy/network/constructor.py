@@ -1,6 +1,7 @@
+import types
+
 import theano
 import theano.tensor as T
-
 
 from neupy.utils import (AttributeKeyDict, asfloat, is_list_of_integers,
                          format_data, is_layer_accept_1d_feature)
@@ -220,6 +221,29 @@ class ConstructableNetwork(BaseNetwork):
                                    self._repr_options())
 
 
+class ErrorFunctionProperty(ChoiceProperty):
+    """ Property that helps select error function from
+    available or define a new one.
+
+    Parameters
+    ----------
+    {ChoiceProperty.choices}
+    {BaseProperty.default}
+    {BaseProperty.required}
+    """
+    def __set__(self, instance, value):
+        if isinstance(value, types.FunctionType):
+            return super(ChoiceProperty, self).__set__(instance, value)
+        return super(ErrorFunctionProperty, self).__set__(instance, value)
+
+    def __get__(self, instance, value):
+        founded_value = super(ChoiceProperty, self).__get__(instance, value)
+        if isinstance(founded_value, types.FunctionType):
+            return founded_value
+        return super(ErrorFunctionProperty, self).__get__(instance,
+                                                          founded_value)
+
+
 class SupervisedConstructableNetwork(SupervisedLearning, ConstructableNetwork):
     """ Constructuble Neural Network that contains supervised
     learning features.
@@ -227,8 +251,8 @@ class SupervisedConstructableNetwork(SupervisedLearning, ConstructableNetwork):
     Parameters
     ----------
     error : {{'mse', 'rmse', 'mae', 'categorical_crossentropy', \
-    'binary_crossentropy'}}
-        Function which controls your training error.
+    'binary_crossentropy'}} or function
+        Function that calculate prediction error.
         Defaults to ``mse``.
 
         * ``mae`` - Mean Absolute Error.
@@ -244,6 +268,10 @@ class SupervisedConstructableNetwork(SupervisedLearning, ConstructableNetwork):
         * ``categorical_crossentropy`` - Categorical cross entropy.
 
         * ``binary_crossentropy`` - Binary cross entropy.
+
+        * Custom function that accept two mandatory arguments.
+        The first one is expected value and the second one is
+        predicted value. Example: ``custom_func(expected, predicted)``
 
     {ConstructableNetwork.connection}
     {BaseNetwork.step}
@@ -261,7 +289,7 @@ class SupervisedConstructableNetwork(SupervisedLearning, ConstructableNetwork):
     {BaseNetwork.previous_error}
     """
 
-    error = ChoiceProperty(default='mse', choices={
+    error = ErrorFunctionProperty(default='mse', choices={
         'mae': errors.mae,
         'mse': errors.mse,
         'rmse': errors.rmse,

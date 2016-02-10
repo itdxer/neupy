@@ -129,7 +129,6 @@ def progressbar(iterable, desc='', total=None, leave=False, file=sys.stderr,
                 last_print_n = n
                 last_print_time = current_time
 
-
     if not leave:
         printer.write('')
         sys.stdout.write('\r')

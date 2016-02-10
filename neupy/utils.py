@@ -2,6 +2,7 @@ import inspect
 
 import theano
 import numpy as np
+from scipy.sparse import issparse
 
 
 __all__ = ('format_data', 'is_layer_accept_1d_feature', 'asfloat',
@@ -40,13 +41,14 @@ def format_data(data, is_feature1d=True, copy=False):
         The same input data but transformed to a standardized format
         for further use.
     """
-    if data is None:
-        return
+    if data is None or issparse(data):
+        return data
 
     data = np.array(asfloat(data), copy=copy)
 
     # Valid number of features for one or two dimentions
     n_features = data.shape[-1]
+
     if data.ndim == 1:
         data_shape = (n_features, 1) if is_feature1d else (1, n_features)
         data = data.reshape(data_shape)
@@ -76,6 +78,9 @@ def asfloat(value):
 
     if isinstance(value, (np.matrix, np.ndarray)):
         return value.astype(theano.config.floatX)
+
+    elif issparse(value):
+        return value
 
     float_x_type = np.cast[theano.config.floatX]
     return float_x_type(value)

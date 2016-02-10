@@ -133,6 +133,14 @@ class GradientDescent(SupervisedConstructableNetwork):
 
 
 class BatchSizeProperty(BoundedProperty):
+    """ Batch size property
+
+    Parameters
+    ----------
+    {BoundedProperty.maxval}
+    {BaseProperty.default}
+    {BaseProperty.required}
+    """
     expected_type = (type(None), int)
     fullbatch_identifiers = [None, -1, 'all', '*', 'full']
 

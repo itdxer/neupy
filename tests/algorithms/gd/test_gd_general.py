@@ -2,6 +2,7 @@ import numpy as np
 
 from neupy import algorithms, layers
 
+from data import simple_classification
 from base import BaseTestCase
 
 
@@ -41,3 +42,11 @@ class BackPropAlgsTestCase(BaseTestCase):
             )
             self.assertInvalidVectorPred(network, np.array([0, 0]), 0,
                                          is_feature1d=False)
+
+    def test_custom_error_functions(self):
+        def custom_mse(expected, predicted):
+            return (0.5 * (predicted - expected) ** 2).mean()
+
+        x_train, _, y_train, _ = simple_classification()
+        gdnet = algorithms.GradientDescent((10, 10, 1), error=custom_mse)
+        gdnet.train(x_train, y_train)
