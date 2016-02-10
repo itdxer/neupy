@@ -70,7 +70,7 @@ class StatusPrinter(object):
 
 
 def progressbar(iterable, desc='', total=None, leave=False, file=sys.stderr,
-                mininterval=0.5, miniters=1, init_interval=0):
+                mininterval=0.01, miniters=1, init_interval=0):
     """ Get an iterable object, and return an iterator which acts
     exactly like the iterable, but prints a progress meter and updates
     it every time a value is requested.
@@ -128,6 +128,7 @@ def progressbar(iterable, desc='', total=None, leave=False, file=sys.stderr,
                 )
                 last_print_n = n
                 last_print_time = current_time
+
 
     if not leave:
         printer.write('')

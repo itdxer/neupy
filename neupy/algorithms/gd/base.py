@@ -234,7 +234,7 @@ class MinibatchGradientDescent(GradientDescent):
         # TODO: quick hack, fix it later.
         if hasattr(self, 'training') and self.training.show_epoch == 1:
             batches_index_iter = logs.progressbar(batches_index_iter,
-                                                  mininterval=1.,
+                                                  mininterval=0.05,
                                                   desc='Iter batches',
                                                   miniters=1,
                                                   init_interval=1.)
