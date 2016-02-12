@@ -20,7 +20,7 @@ class ModifiedRelaxation(BaseLinearNetwork):
         Indicates the line between stable outcome network output and
         weak, and depending on the result of doing different updates.
     {BaseLinearNetwork.connection}
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}

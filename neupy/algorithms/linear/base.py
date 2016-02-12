@@ -1,13 +1,13 @@
 from neupy.utils import is_list_of_integers
 from neupy.layers.connections import NetworkConnectionError, LayerConnection
-from neupy.network import SupervisedConstructableNetwork
+from neupy.network import ConstructableNetwork
 from neupy.layers import Step, Output
 
 
 __all__ = ('BaseLinearNetwork',)
 
 
-class BaseLinearNetwork(SupervisedConstructableNetwork):
+class BaseLinearNetwork(ConstructableNetwork):
     """ Base class for feedforward neural network without hidden layers.
 
     Notes
@@ -20,7 +20,7 @@ class BaseLinearNetwork(SupervisedConstructableNetwork):
         Should be a list or tuple that contains two integers. First integer
         describe number of input units and the seconds one number of output
         units.
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}

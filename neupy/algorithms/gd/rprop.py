@@ -28,7 +28,7 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
         compare to previous epoch.
     {GradientDescent.addons}
     {ConstructableNetwork.connection}
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
     {BaseNetwork.epoch_end_signal}
@@ -147,7 +147,7 @@ class IRPROPPlus(RPROP):
     {RPROP.decrease_factor}
     {GradientDescent.addons}
     {ConstructableNetwork.connection}
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
     {BaseNetwork.epoch_end_signal}

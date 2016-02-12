@@ -28,7 +28,7 @@ class Adamax(MinibatchGradientDescent):
     {MinibatchGradientDescent.batch_size}
     {GradientDescent.addons}
     {ConstructableNetwork.connection}
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
     {BaseNetwork.epoch_end_signal}
@@ -78,7 +78,6 @@ class Adamax(MinibatchGradientDescent):
         step = layer.step or self.variables.step
         beta1 = self.beta1
         beta2 = self.beta2
-        epsilon = self.epsilon
 
         gradient = T.grad(self.variables.error_func, wrt=parameter)
 
@@ -88,7 +87,7 @@ class Adamax(MinibatchGradientDescent):
 
         parameter_delta = (
             (1 / (1 - beta1 ** iteration)) *
-            (first_moment / weighted_inf_norm)
+            (first_moment / (weighted_inf_norm + self.epsilon))
         )
 
         return [

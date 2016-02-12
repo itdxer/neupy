@@ -22,7 +22,7 @@ class Quickprop(GradientDescent):
         Maximum possible value for weight update. Defaults to ``1``.
     {GradientDescent.addons}
     {ConstructableNetwork.connection}
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}

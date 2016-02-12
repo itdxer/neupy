@@ -14,7 +14,7 @@ from .learning import SupervisedLearning
 from .base import BaseNetwork
 
 
-__all__ = ('ConstructableNetwork', 'SupervisedConstructableNetwork')
+__all__ = ('ConstructableNetwork',)
 
 
 def clean_layers(connection):
@@ -83,7 +83,30 @@ def create_input_variable(input_layer, variable_name):
     return variable_type(variable_name)
 
 
-class ConstructableNetwork(BaseNetwork):
+class ErrorFunctionProperty(ChoiceProperty):
+    """ Property that helps select error function from
+    available or define a new one.
+
+    Parameters
+    ----------
+    {ChoiceProperty.choices}
+    {BaseProperty.default}
+    {BaseProperty.required}
+    """
+    def __set__(self, instance, value):
+        if isinstance(value, types.FunctionType):
+            return super(ChoiceProperty, self).__set__(instance, value)
+        return super(ErrorFunctionProperty, self).__set__(instance, value)
+
+    def __get__(self, instance, value):
+        founded_value = super(ChoiceProperty, self).__get__(instance, value)
+        if isinstance(founded_value, types.FunctionType):
+            return founded_value
+        return super(ErrorFunctionProperty, self).__get__(instance,
+                                                          founded_value)
+
+
+class ConstructableNetwork(SupervisedLearning, BaseNetwork):
     """ Class contains functionality that helps work with network that have
     constructable layers architecture.
 
@@ -100,6 +123,28 @@ class ConstructableNetwork(BaseNetwork):
         instances. For example: ``[Tanh(2), Relu(4), Output(1)].
         And the most readable one is just layer pipeline
         ``Tanh(2) > Relu(4) > Output(1)``.
+    error : {{'mse', 'rmse', 'mae', 'categorical_crossentropy', \
+    'binary_crossentropy'}} or function
+        Function that calculate prediction error.
+        Defaults to ``mse``.
+
+        * ``mae`` - Mean Absolute Error.
+
+        * ``mse`` - Mean Squared Error.
+
+        * ``rmse`` - Root Mean Squared Error.
+
+        * ``msle`` - Mean Squared Logarithmic Error.
+
+        * ``rmsle`` - Root Mean Squared Logarithmic Error.
+
+        * ``categorical_crossentropy`` - Categorical cross entropy.
+
+        * ``binary_crossentropy`` - Binary cross entropy.
+
+        * Custom function that accept two mandatory arguments.
+        The first one is expected value and the second one is
+        predicted value. Example: ``custom_func(expected, predicted)``
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
@@ -114,6 +159,15 @@ class ConstructableNetwork(BaseNetwork):
     {BaseNetwork.last_validation_error}
     {BaseNetwork.previous_error}
     """
+    error = ErrorFunctionProperty(default='mse', choices={
+        'mae': errors.mae,
+        'mse': errors.mse,
+        'rmse': errors.rmse,
+        'msle': errors.msle,
+        'rmsle': errors.rmsle,
+        'binary_crossentropy': errors.binary_crossentropy,
+        'categorical_crossentropy': errors.categorical_crossentropy,
+    })
 
     def __init__(self, connection, *args, **kwargs):
         self.connection = clean_layers(connection)
@@ -127,7 +181,7 @@ class ConstructableNetwork(BaseNetwork):
         self.init_layers()
         super(ConstructableNetwork, self).__init__(*args, **kwargs)
 
-        import theano.sparse
+        # import theano.sparse
         self.variables = AttributeKeyDict(
             network_input=create_input_variable(self.input_layer,
                                                 variable_name='x'),
@@ -144,27 +198,42 @@ class ConstructableNetwork(BaseNetwork):
         """
 
         network_input = self.variables.network_input
+        network_output = self.variables.network_output
 
         train_layer_input = layer_input = network_input
         for layer in self.train_layers:
             if not isinstance(layer, Dropout):
                 layer_input = layer.output(layer_input)
             train_layer_input = layer.output(train_layer_input)
+        prediction = train_layer_input
 
         self.variables.update(
             step=theano.shared(name='step', value=asfloat(self.step)),
             epoch=theano.shared(name='epoch', value=1),
             prediction_func=layer_input,
-            train_prediction_func=train_layer_input,
+            train_prediction_func=prediction,
+            error_func=self.error(network_output, prediction),
         )
 
     def init_methods(self):
         """ Initialize all methods that needed for prediction and
         training procedures.
         """
+        network_input = self.variables.network_input
+        network_output = self.variables.network_output
+
         self.methods.predict_raw = theano.function(
             inputs=[self.variables.network_input],
             outputs=self.variables.prediction_func
+        )
+        self.methods.train_epoch = theano.function(
+            inputs=[network_input, network_output],
+            outputs=self.variables.error_func,
+            updates=self.init_train_updates(),
+        )
+        self.methods.prediction_error = theano.function(
+            inputs=[network_input, network_output],
+            outputs=self.variables.error_func
         )
 
     def init_layers(self):
@@ -249,113 +318,3 @@ class ConstructableNetwork(BaseNetwork):
     def __repr__(self):
         return "{}({}, {})".format(self.class_name(), self.connection,
                                    self._repr_options())
-
-
-class ErrorFunctionProperty(ChoiceProperty):
-    """ Property that helps select error function from
-    available or define a new one.
-
-    Parameters
-    ----------
-    {ChoiceProperty.choices}
-    {BaseProperty.default}
-    {BaseProperty.required}
-    """
-    def __set__(self, instance, value):
-        if isinstance(value, types.FunctionType):
-            return super(ChoiceProperty, self).__set__(instance, value)
-        return super(ErrorFunctionProperty, self).__set__(instance, value)
-
-    def __get__(self, instance, value):
-        founded_value = super(ChoiceProperty, self).__get__(instance, value)
-        if isinstance(founded_value, types.FunctionType):
-            return founded_value
-        return super(ErrorFunctionProperty, self).__get__(instance,
-                                                          founded_value)
-
-
-class SupervisedConstructableNetwork(SupervisedLearning, ConstructableNetwork):
-    """ Constructuble Neural Network that contains supervised
-    learning features.
-
-    Parameters
-    ----------
-    error : {{'mse', 'rmse', 'mae', 'categorical_crossentropy', \
-    'binary_crossentropy'}} or function
-        Function that calculate prediction error.
-        Defaults to ``mse``.
-
-        * ``mae`` - Mean Absolute Error.
-
-        * ``mse`` - Mean Squared Error.
-
-        * ``rmse`` - Root Mean Squared Error.
-
-        * ``msle`` - Mean Squared Logarithmic Error.
-
-        * ``rmsle`` - Root Mean Squared Logarithmic Error.
-
-        * ``categorical_crossentropy`` - Categorical cross entropy.
-
-        * ``binary_crossentropy`` - Binary cross entropy.
-
-        * Custom function that accept two mandatory arguments.
-        The first one is expected value and the second one is
-        predicted value. Example: ``custom_func(expected, predicted)``
-
-    {ConstructableNetwork.connection}
-    {BaseNetwork.step}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
-    {Verbose.verbose}
-
-    Methods
-    -------
-    {BaseNetwork.plot_errors}
-    {BaseNetwork.last_error}
-    {BaseNetwork.last_validation_error}
-    {BaseNetwork.previous_error}
-    """
-
-    error = ErrorFunctionProperty(default='mse', choices={
-        'mae': errors.mae,
-        'mse': errors.mse,
-        'rmse': errors.rmse,
-        'msle': errors.msle,
-        'rmsle': errors.rmsle,
-        'binary_crossentropy': errors.binary_crossentropy,
-        'categorical_crossentropy': errors.categorical_crossentropy,
-    })
-
-    def init_variables(self):
-        """ Initialize Theano variables.
-        """
-        super(SupervisedConstructableNetwork, self).init_variables()
-
-        network_output = self.variables.network_output
-        prediction = self.variables.train_prediction_func
-
-        self.variables.update(
-            error_func=self.error(network_output, prediction),
-        )
-
-    def init_methods(self):
-        """ Initialize all methods that needed for prediction and
-        training procedures.
-        """
-        super(SupervisedConstructableNetwork, self).init_methods()
-
-        network_input = self.variables.network_input
-        network_output = self.variables.network_output
-
-        self.methods.train_epoch = theano.function(
-            inputs=[network_input, network_output],
-            outputs=self.variables.error_func,
-            updates=self.init_train_updates(),
-        )
-        self.methods.prediction_error = theano.function(
-            inputs=[network_input, network_output],
-            outputs=self.variables.error_func
-        )

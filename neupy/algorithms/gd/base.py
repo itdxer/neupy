@@ -4,14 +4,14 @@ import six
 import theano.tensor as T
 
 from neupy.core.properties import Property, BoundedProperty
-from neupy.network import SupervisedConstructableNetwork
+from neupy.network import ConstructableNetwork
 from . import addon_types
 
 
 __all__ = ('GradientDescent', 'MinibatchGradientDescent')
 
 
-class GradientDescent(SupervisedConstructableNetwork):
+class GradientDescent(ConstructableNetwork):
     """ GradientDescent algorithm.
 
     Parameters
@@ -22,7 +22,7 @@ class GradientDescent(SupervisedConstructableNetwork):
         will inherit all from this list. Support two types of
         addon algorithms: weight update and step update.
     {ConstructableNetwork.connection}
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
@@ -172,7 +172,7 @@ class MinibatchGradientDescent(GradientDescent):
         Defaults to ``100``.
     {GradientDescent.addons}
     {ConstructableNetwork.connection}
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}

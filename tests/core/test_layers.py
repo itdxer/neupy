@@ -214,7 +214,7 @@ class OutputLayersOperationsTestCase(BaseTestCase):
 class LayersInitializationTestCase(BaseTestCase):
     def test_layers_normal_init(self):
         input_layer = Sigmoid(30, init_method='normal')
-        connection = input_layer > Output(10)
+        connection = input_layer > Output(30)
         input_layer.initialize()
 
         weight = input_layer.weight.get_value()
@@ -257,7 +257,7 @@ class LayersInitializationTestCase(BaseTestCase):
         )
 
     def test_he_normal(self):
-        n_inputs = 10
+        n_inputs = 30
         input_layer = Sigmoid(n_inputs, init_method='he_normal')
         connection = input_layer > Output(30)
         input_layer.initialize()
@@ -283,7 +283,7 @@ class LayersInitializationTestCase(BaseTestCase):
         self.assertLessEqual(weight.max(), bound)
 
     def test_xavier_normal(self):
-        n_inputs, n_outputs = 10, 30
+        n_inputs, n_outputs = 30, 30
         input_layer = Sigmoid(n_inputs, init_method='xavier_normal')
         connection = input_layer > Output(n_outputs)
         input_layer.initialize()

@@ -23,7 +23,7 @@ class RMSProp(MinibatchGradientDescent):
     {MinibatchGradientDescent.batch_size}
     {GradientDescent.addons}
     {ConstructableNetwork.connection}
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
@@ -57,8 +57,6 @@ class RMSProp(MinibatchGradientDescent):
     def init_param_updates(self, layer, parameter):
         prev_mean_squred_grad = parameter.prev_mean_squred_grad
         step = layer.step or self.variables.step
-        epsilon = self.epsilon
-
         gradient = T.grad(self.variables.error_func, wrt=parameter)
 
         mean_squred_grad = (

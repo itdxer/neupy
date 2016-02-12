@@ -23,7 +23,7 @@ class Adadelta(MinibatchGradientDescent):
     {MinibatchGradientDescent.batch_size}
     {GradientDescent.addons}
     {ConstructableNetwork.connection}
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}

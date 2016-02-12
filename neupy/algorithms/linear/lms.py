@@ -12,7 +12,7 @@ class LMS(BaseLinearNetwork):
     Parameters
     ----------
     {BaseLinearNetwork.connection}
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}

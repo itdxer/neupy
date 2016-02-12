@@ -28,7 +28,7 @@ class Adam(MinibatchGradientDescent):
     {MinibatchGradientDescent.batch_size}
     {GradientDescent.addons}
     {ConstructableNetwork.connection}
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
     {BaseNetwork.epoch_end_signal}

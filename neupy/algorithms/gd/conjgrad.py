@@ -67,7 +67,7 @@ class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
         Update function. Defaults to ``fletcher_reeves``.
     {GradientDescent.addons}
     {ConstructableNetwork.connection}
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}

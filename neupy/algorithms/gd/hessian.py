@@ -62,7 +62,7 @@ class Hessian(NoStepSelection, GradientDescent):
         multiplied by defined constant. Defaults to ``1``.
     {GradientDescent.addons}
     {ConstructableNetwork.connection}
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
     {BaseNetwork.epoch_end_signal}

@@ -3,7 +3,7 @@ import theano.tensor as T
 import numpy as np
 
 from neupy.utils import asfloat
-from neupy.core.properties import ProperFractionProperty, NumberProperty
+from neupy.core.properties import NumberProperty
 from .base import MinibatchGradientDescent
 
 
@@ -20,7 +20,7 @@ class Adagrad(MinibatchGradientDescent):
     {MinibatchGradientDescent.batch_size}
     {GradientDescent.addons}
     {ConstructableNetwork.connection}
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
@@ -53,7 +53,6 @@ class Adagrad(MinibatchGradientDescent):
     def init_param_updates(self, layer, parameter):
         prev_mean_squred_grad = parameter.prev_mean_squred_grad
         step = layer.step or self.variables.step
-        epsilon = self.epsilon
 
         gradient = T.grad(self.variables.error_func, wrt=parameter)
 

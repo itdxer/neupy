@@ -26,7 +26,7 @@ class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
         parameter control diagonal elements size. Defaults to ``1e-2``.
     {GradientDescent.addons}
     {ConstructableNetwork.connection}
-    {SupervisedConstructableNetwork.error}
+    {ConstructableNetwork.error}
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
