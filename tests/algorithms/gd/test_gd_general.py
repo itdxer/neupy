@@ -44,6 +44,7 @@ class BackPropAlgsTestCase(BaseTestCase):
                                          is_feature1d=False)
 
     def test_custom_error_functions(self):
+        # Test that everything works without fail
         def custom_mse(expected, predicted):
             return (0.5 * (predicted - expected) ** 2).mean()
 

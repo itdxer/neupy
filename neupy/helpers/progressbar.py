@@ -33,7 +33,6 @@ def format_meter(n_finished, n_total, elapsed):
         n_total = None
 
     elapsed_str = format_interval(elapsed)
-    rate = '%5.2f' % (n_finished / elapsed) if elapsed else '?'
 
     if n_total is not None:
         frac = float(n_finished) / n_total
@@ -48,13 +47,12 @@ def format_meter(n_finished, n_total, elapsed):
             elapsed / n_finished * (n_total - n_finished)
         ) if n_finished else '?'
 
-        return '|{}| {}/{} {} [elapsed: {} left: {}, {} iters/sec]'.format(
+        return '|{}| {}/{} {} [elapsed: {} left: {}]'.format(
             bar, n_finished, n_total, percentage,
-            elapsed_str, left_str, rate
+            elapsed_str, left_str
         )
 
-    return '{} [elapsed: {}, {} iters/sec]'.format(n_finished,
-                                                   elapsed_str, rate)
+    return '{} [elapsed: {}]'.format(n_finished, elapsed_str)
 
 
 class StatusPrinter(object):

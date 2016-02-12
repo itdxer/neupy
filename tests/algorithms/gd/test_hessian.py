@@ -15,7 +15,7 @@ from base import BaseTestCase
 class HessianTestCase(BaseTestCase):
     def test_hessian_exceptions(self):
         with self.assertRaises(ValueError):
-            # Don't have step option
+            # Don't have step parameter
             algorithms.Hessian((2, 3, 1), step=1)
 
     def test_compare_bp_and_hessian(self):

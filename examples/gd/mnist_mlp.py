@@ -1,7 +1,7 @@
 import theano
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
-from sklearn import cross_validation, metrics, decomposition, datasets
+from sklearn import cross_validation, metrics, datasets
 from neupy import algorithms, layers
 
 

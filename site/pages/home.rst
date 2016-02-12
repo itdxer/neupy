@@ -73,6 +73,11 @@ Algorithms
   * RPROP
   * iRPROP+
   * QuickProp
+  * Adadelta
+  * Adagrad
+  * RMSProp
+  * Adam
+  * AdaMax
 
 * Weight update rules
 

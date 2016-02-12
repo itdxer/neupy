@@ -56,6 +56,33 @@ def clean_layers(connection):
     return connection
 
 
+def create_input_variable(input_layer, variable_name):
+    """ Create input variabl based on input layer information.
+
+    Parameters
+    ----------
+    input_layer : object
+    variable_name : str
+
+    Returns
+    -------
+    Theano variable
+    """
+    dim_to_variable_type = {
+        2: T.matrix,
+        3: T.tensor3,
+        4: T.tensor4,
+    }
+    ndim = input_layer.weight.ndim
+
+    if ndim not in dim_to_variable_type:
+        raise ValueError("Layer's input needs to be 2, 3 or 4 dimensional. "
+                         "Found {}".format(ndim))
+
+    variable_type = dim_to_variable_type[ndim]
+    return variable_type(variable_name)
+
+
 class ConstructableNetwork(BaseNetwork):
     """ Class contains functionality that helps work with network that have
     constructable layers architecture.
@@ -100,8 +127,11 @@ class ConstructableNetwork(BaseNetwork):
         self.init_layers()
         super(ConstructableNetwork, self).__init__(*args, **kwargs)
 
+        import theano.sparse
         self.variables = AttributeKeyDict(
-            network_input=T.matrix('x'),
+            network_input=create_input_variable(self.input_layer,
+                                                variable_name='x'),
+            # network_output=theano.sparse.csr_matrix('y'),
             network_output=T.matrix('y'),
         )
         self.methods = AttributeKeyDict()

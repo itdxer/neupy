@@ -232,12 +232,10 @@ class MinibatchGradientDescent(GradientDescent):
         train_epoch = self.methods.train_epoch
         logs = self.logs
 
-        if batch_size is None:
+        if batch_size is None or len(input_train) <= batch_size:
             return train_epoch(input_train, target_train)
 
         n_batches = int(math.floor(n_samples / batch_size))
-        prediction_error = self.methods.prediction_error
-
         batches_index_iter = range(n_batches)
         # TODO: quick hack, fix it later.
         if hasattr(self, 'training') and self.training.show_epoch == 1:
@@ -250,6 +248,7 @@ class MinibatchGradientDescent(GradientDescent):
         for batch_index in batches_index_iter:
             slice_batch = slice(batch_index * batch_size,
                                 (batch_index + 1) * batch_size)
-            train_epoch(input_train[slice_batch], target_train[slice_batch])
+            batch_error = train_epoch(input_train[slice_batch],
+                                      target_train[slice_batch])
 
-        return prediction_error(input_train, target_train)
+        return batch_error

@@ -9,7 +9,7 @@ from base import BaseTestCase
 
 
 class MomentumTestCase(BaseTestCase):
-    def test_basic(self):
+    def test_simple_momentum(self):
         x_train, _, y_train, _ = simple_classification()
         mnet = algorithms.Momentum(
             (10, 20, 1),

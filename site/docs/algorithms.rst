@@ -23,6 +23,11 @@ GradientDescent
     :network:`RPROP`, RPROP
     :network:`IRPROPPlus`, iRPROP+
     :network:`Quickprop`, Quickprop
+    :network:`Adadelta`, Adadelta
+    :network:`Adagrad`, Adagrad
+    :network:`RMSProp`, RMSProp
+    :network:`Adam`, Adam
+    :network:`Adamax`, AdaMax
 
 Weight update rules
 ~~~~~~~~~~~~~~~~~~~

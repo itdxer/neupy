@@ -7,6 +7,11 @@ from .gd.hessdiag import *
 from .gd.rprop import *
 from .gd.quickprop import *
 from .gd.momentum import *
+from .gd.adadelta import *
+from .gd.adagrad import *
+from .gd.rmsprop import *
+from .gd.adam import *
+from .gd.adamax import *
 
 from .ensemble.dan import *
 from .ensemble.mixture_of_experts import *
