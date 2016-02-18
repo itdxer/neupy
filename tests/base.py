@@ -15,6 +15,7 @@ from utils import vectors_for_testing
 class BaseTestCase(unittest.TestCase):
     verbose = False
     random_seed = 0
+    use_sandbox_mode = True
 
     def setUp(self):
         np.random.seed(self.random_seed)
@@ -23,9 +24,10 @@ class BaseTestCase(unittest.TestCase):
         if not self.verbose:
             logging.disable(logging.CRITICAL)
 
-        # Optimize unit tests speed. In general all task very simple so some
-        # Theano optimizations can be redundant.
-        environment.sandbox()
+        if self.use_sandbox_mode:
+            # Optimize unit tests speed. In general all task very
+            # simple so some Theano optimizations can be redundant.
+            environment.sandbox()
 
     def assertInvalidVectorTrain(self, network, input_vector, target=None,
                                  decimal=5, is_feature1d=True, **train_kwargs):

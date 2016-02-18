@@ -1,10 +1,11 @@
 import types
 
 import theano
+import theano.sparse
 import theano.tensor as T
 
 from neupy.utils import (AttributeKeyDict, asfloat, is_list_of_integers,
-                         format_data, is_layer_accept_1d_feature)
+                         format_data, does_layer_accept_1d_feature)
 from neupy.layers import BaseLayer, Output, Dropout
 from neupy.layers.utils import generate_layers
 from neupy.core.properties import ChoiceProperty
@@ -57,7 +58,7 @@ def clean_layers(connection):
 
 
 def create_input_variable(input_layer, variable_name):
-    """ Create input variabl based on input layer information.
+    """ Create input variable based on input layer information.
 
     Parameters
     ----------
@@ -81,6 +82,28 @@ def create_input_variable(input_layer, variable_name):
 
     variable_type = dim_to_variable_type[ndim]
     return variable_type(variable_name)
+
+
+def create_output_variable(error_function, variable_name):
+    """ Create output variable based on error function.
+
+    Parameters
+    ----------
+    error_function : function
+    variable_name : str
+
+    Returns
+    -------
+    Theano variable
+    """
+    # TODO: Solution is not user friendly. I need to find
+    # better solution later.
+    if hasattr(error_function, 'expected_dtype'):
+        network_output_dtype = error_function.expected_dtype
+    else:
+        network_output_dtype = T.matrix
+
+    return network_output_dtype(variable_name)
 
 
 class ErrorFunctionProperty(ChoiceProperty):
@@ -181,12 +204,11 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         self.init_layers()
         super(ConstructableNetwork, self).__init__(*args, **kwargs)
 
-        # import theano.sparse
         self.variables = AttributeKeyDict(
             network_input=create_input_variable(self.input_layer,
                                                 variable_name='x'),
-            # network_output=theano.sparse.csr_matrix('y'),
-            network_output=T.matrix('y'),
+            network_output=create_output_variable(self.error,
+                                                  variable_name='y'),
         )
         self.methods = AttributeKeyDict()
 
@@ -196,7 +218,6 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
     def init_variables(self):
         """ Initialize Theano variables.
         """
-
         network_input = self.variables.network_input
         network_output = self.variables.network_output
 
@@ -288,7 +309,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
     def predict_raw(self, input_data):
         """ Make raw prediction without final layer postprocessing step.
         """
-        is_feature1d = is_layer_accept_1d_feature(self.input_layer)
+        is_feature1d = does_layer_accept_1d_feature(self.input_layer)
         input_data = format_data(input_data, is_feature1d)
         return self.methods.predict_raw(input_data)
 

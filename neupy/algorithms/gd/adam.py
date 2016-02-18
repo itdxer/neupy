@@ -67,8 +67,9 @@ class Adam(MinibatchGradientDescent):
     def init_variables(self):
         super(Adam, self).init_variables()
         # It's not the same as ``epoch``, because epoch resets when
-        # ``train`` method runs
-        self.variables.iteration = theano.shared(name='iteration', value=1)
+        # ``train`` method runs second time.
+        self.variables.iteration = theano.shared(name='iteration',
+                                                 value=asfloat(1))
 
     def init_param_updates(self, layer, parameter):
         iteration = self.variables.iteration

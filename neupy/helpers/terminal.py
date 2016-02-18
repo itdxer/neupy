@@ -1,10 +1,9 @@
 import os
 import sys
 import platform
-from functools import wraps
 
 
-__all__ = ('red', 'green', 'gray', 'bold', 'underline')
+__all__ = ('red', 'green', 'gray', 'white', 'bold', 'underline')
 
 
 def is_color_supported():
@@ -31,88 +30,30 @@ def is_color_supported():
     return is_support
 
 
-def only_if_terminal_support(function):
-    """ Decorator for functions that add styles to the input string.
-    If terminal do not support it, output will be without modification.
+def create_style(ansi_code):
+    """ Create style based on ANSI code number.
+
+    Parameters
+    ----------
+    ansi_code : int
+        ANSI style code.
+
+    Returns
+    -------
+    function
+        Function that takes string argument and add ANDI styles
+        if its possible.
     """
-    @wraps(function)
-    def wrapper(text, *args, **kwargs):
+    def style(text):
         if is_color_supported():
-            return function(text, *args, **kwargs)
+            return "\033[{}m{}\033[0m".format(ansi_code, text)
         return text
-    return wrapper
+    return style
 
 
-@only_if_terminal_support
-def red(text):
-    """ Makes string color red.
-
-    Parameters
-    ----------
-    text : str
-
-    Returns
-    -------
-    str
-    """
-    return "\033[91m{}\033[0m".format(text)
-
-
-@only_if_terminal_support
-def green(text):
-    """ Makes string color green.
-
-    Parameters
-    ----------
-    text : str
-
-    Returns
-    -------
-    str
-    """
-    return "\033[92m{}\033[0m".format(text)
-
-
-@only_if_terminal_support
-def gray(text):
-    """ Makes string color gray.
-
-    Parameters
-    ----------
-    text : str
-
-    Returns
-    -------
-    str
-    """
-    return "\033[90m{}\033[0m".format(text)
-
-
-@only_if_terminal_support
-def bold(text):
-    """ Makes string font bold.
-
-    Parameters
-    ----------
-    text : str
-
-    Returns
-    -------
-    str
-    """
-    return "\033[1m{}\033[0;0m".format(text)
-
-
-@only_if_terminal_support
-def underline(text):
-    """ Adds underline to string.
-
-    Parameters
-    ----------
-    text : str
-
-    Returns
-    -------
-    str
-    """
-    return "\033[4m{}\033[0;0m".format(text)
+red = create_style(ansi_code=91)
+green = create_style(ansi_code=92)
+gray = create_style(ansi_code=94)
+white = create_style(ansi_code=97)
+bold = create_style(ansi_code=1)
+underline = create_style(ansi_code=4)

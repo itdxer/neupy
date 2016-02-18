@@ -1,4 +1,7 @@
+import theano
+
 from neupy.core.properties import IntProperty
+from neupy.utils import asfloat
 from .base import SingleStepConfigurable
 
 
@@ -38,11 +41,23 @@ class SimpleStepMinimization(SingleStepConfigurable):
     """
     epochs_step_minimizator = IntProperty(minval=1, default=100)
 
+    def init_variables(self):
+        super(SimpleStepMinimization, self).init_variables()
+        # It's not the same as ``epoch``, because epoch resets when
+        # ``train`` method runs second time.
+        self.variables.iteration = theano.shared(name='iteration',
+                                                 value=asfloat(1))
+
     def init_train_updates(self):
         updates = super(SimpleStepMinimization, self).init_train_updates()
-        variables = self.variables
+        iteration = self.variables.iteration
+        step = self.variables.step
+
         step_update_condition = self.step / (
-            1 + variables.epoch / self.epochs_step_minimizator
+            1 + iteration / self.epochs_step_minimizator
         )
-        updates.append((variables.step, step_update_condition))
+        updates.extend([
+            (step, step_update_condition),
+            (iteration, iteration + 1),
+        ])
         return updates

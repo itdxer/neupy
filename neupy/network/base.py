@@ -9,7 +9,7 @@ import six
 import numpy as np
 import matplotlib.pyplot as plt
 
-from neupy.utils import (format_data, is_layer_accept_1d_feature,
+from neupy.utils import (format_data, does_layer_accept_1d_feature,
                          preformat_value, AttributeKeyDict)
 from neupy.helpers import table
 from neupy.core.base import BaseSkeleton
@@ -108,9 +108,10 @@ def show_network_options(network, highlight_options=None):
         hasattr(network, 'connection') and
         isinstance(network.connection, LayerConnection)
     )
+    logs.title("Main information")
+    logs.message("ALGORITHM", network.class_name())
     if has_layer_structure:
-        logs.title("Network structure")
-        logs.message("LAYERS", network.connection)
+        logs.message("ARCHITECTURE", network.connection)
 
     logs.title("Network options")
 
@@ -125,8 +126,6 @@ def show_network_options(network, highlight_options=None):
         formated_value = preformat_value(value)
         msg_text = "{} = {}".format(key, formated_value)
         logs.message("OPTION", msg_text, color=msg_color)
-
-    logs.write("")
 
 
 def parse_show_epoch_property(value, n_epochs):
@@ -287,8 +286,10 @@ class BaseNetwork(BaseSkeleton):
         # TODO: This solution looks ugly, I should solve this problem
         # in different way.
         if hasattr(self, 'connection'):
-            is_input_feature1d = is_layer_accept_1d_feature(self.input_layer)
-            is_target_feature1d = is_layer_accept_1d_feature(self.output_layer)
+            is_input_feature1d = does_layer_accept_1d_feature(self.input_layer)
+            is_target_feature1d = does_layer_accept_1d_feature(
+                self.output_layer
+            )
         else:
             is_input_feature1d = True
             is_target_feature1d = True
@@ -303,6 +304,9 @@ class BaseNetwork(BaseSkeleton):
             target_test = format_data(target_test, is_target_feature1d)
 
         # ----------- Validate input values ----------- #
+
+        if epochs <= 0:
+            raise ValueError("Number of epochs needs to be greater than 0.")
 
         if epsilon is not None and epochs <= 2:
             raise ValueError("Network should train at teast 3 epochs before "

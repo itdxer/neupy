@@ -5,6 +5,10 @@ from sklearn import datasets
 from neupy import algorithms, layers
 
 
+np.random.seed(0)
+theano.config.floatX = 'float32'
+
+
 def reduce_dimension(network, data):
     """ Function minimize input data dimention using
     pre-trained autoencoder.
@@ -12,9 +16,6 @@ def reduce_dimension(network, data):
     minimized_data = network.input_layer.output(data)
     return minimized_data.eval()
 
-
-np.random.seed(0)
-theano.config.floatX = 'float32'
 
 mnist = datasets.fetch_mldata('MNIST original')
 
@@ -44,6 +45,7 @@ images = (image_vectors + features_mean) * 255.
 predicted_images = autoencoder.predict(image_vectors)
 predicted_images = (predicted_images + features_mean) * 255.
 
+# Compare real and reconstructed images
 fig, axes = plt.subplots(4, 2, figsize=(12, 8))
 iterator = zip(axes, images, predicted_images)
 

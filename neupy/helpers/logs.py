@@ -25,9 +25,10 @@ class TerminalLogger(object):
     """
 
     colors = {
-        'green': terminal.green,
         'gray': terminal.gray,
+        'green': terminal.green,
         'red': terminal.red,
+        'white': terminal.white,
     }
 
     def __init__(self):

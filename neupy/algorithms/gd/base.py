@@ -1,3 +1,5 @@
+from __future__ import division
+
 import math
 
 import six
@@ -51,12 +53,11 @@ class GradientDescent(ConstructableNetwork):
     >>> bpnet = GradientDescent((2, 3, 1), verbose=False, step=0.1)
     >>> bpnet.train(x_train, y_train)
     """
-
     supported_addon_types = addon_types.keys()
 
     addons = Property(default=None, expected_type=list)
 
-    def __new__(cls, connection, options=None, **kwargs):
+    def __new__(cls, connection=None, options=None, **kwargs):
         # Argument `options` is a simple hack for the `__reduce__` method.
         # `__reduce__` can't retore class with keyword arguments and
         # it will put them as `dict` argument in the `options` and method
@@ -68,9 +69,10 @@ class GradientDescent(ConstructableNetwork):
         addons = options.get('addons')
 
         if not addons:
+            cls.main_class = cls
             return super(GradientDescent, cls).__new__(cls)
 
-        founded_types = []
+        identified_types = []
         for addon_class in addons:
             opt_class_type = getattr(addon_class, 'addon_type',  None)
 
@@ -82,15 +84,14 @@ class GradientDescent(ConstructableNetwork):
                     "{}".format(opt_class_name, supported_opts)
                 )
 
-            if opt_class_type in founded_types:
+            if opt_class_type in identified_types:
                 raise ValueError(
                     "There can be only one add-on class with "
                     "type `{}`".format(addon_types[opt_class_type])
                 )
 
-            founded_types.append(opt_class_type)
+            identified_types.append(opt_class_type)
 
-        # Build new class which would inherit main and all addon
         new_class_name = (
             cls.__name__ +
             ''.join(class_.__name__ for class_ in addons)
@@ -112,7 +113,7 @@ class GradientDescent(ConstructableNetwork):
         return [(parameter, parameter - step * gradient)]
 
     def class_name(self):
-        return 'GradientDescent'
+        return self.main_class.__name__
 
     def get_params(self, deep=False, with_connection=True):
         params = super(GradientDescent, self).get_params()
@@ -121,15 +122,9 @@ class GradientDescent(ConstructableNetwork):
         return params
 
     def __reduce__(self):
-        args = (self.connection, self.get_params(with_connection=False))
-
-        # Main class should be different if we construct it dynamicaly
-        if hasattr(self, 'main_class'):
-            main_class = self.main_class
-        else:
-            main_class = self.__class__
-
-        return (main_class, args)
+        parameters = self.get_params(with_connection=False)
+        args = (self.connection, parameters)
+        return (self.main_class, args)
 
 
 class BatchSizeProperty(BoundedProperty):
