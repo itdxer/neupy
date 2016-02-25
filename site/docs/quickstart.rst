@@ -134,7 +134,7 @@ Let's check our progress.
 
 .. code-block:: python
 
-    >>> bpnet.plot_errors()
+    >>> network.plot_errors()
 
 .. image:: ../_static/screenshots/bpnet-train-errors-plot.png
     :width: 70%
