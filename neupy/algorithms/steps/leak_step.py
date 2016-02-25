@@ -20,14 +20,17 @@ class LeakStepAdaptation(SingleStepConfigurable):
     Parameters
     ----------
     leak_size : float
-        Leak size control ratio of update variable which combine weight
-        deltas from previous epochs, defaults to ``0.5``.
+        Defaults to ``0.01``. This variable identified proportion, so it's
+        always between 0 and 1. Usualy this value is small.
     alpha : float
         The ``alpha`` is control total step update ratio (It's similar to
-        step role in weight update procedure). Defaults to ``0.5``.
+        step role in weight update procedure). Defaults to ``0.001``.
+        Typical this value is small.
     beta : float
         This similar to ``alpha``, but it control ration only for update
-        matrix norms. Defaults to ``0.5``.
+        matrix norms. Defaults to ``20``.
+        Typical this value is > 1.
+    beta : float
 
     Warns
     -----
@@ -44,10 +47,14 @@ class LeakStepAdaptation(SingleStepConfigurable):
     ...     addons=[algorithms.LeakStepAdaptation]
     ... )
     >>>
+
+    .. [1] Noboru M. "Adaptive on-line learning in changing
+        environments", 1997
+    .. [2] LeCun, "Efficient BackProp", 1998
     """
-    leak_size = ProperFractionProperty(default=0.5)
-    alpha = BoundedProperty(default=0.5, minval=0)
-    beta = BoundedProperty(default=0.5, minval=0)
+    leak_size = ProperFractionProperty(default=0.01)
+    alpha = BoundedProperty(default=0.001, minval=0)
+    beta = BoundedProperty(default=20, minval=0)
 
     def init_variables(self):
         super(LeakStepAdaptation, self).init_variables()

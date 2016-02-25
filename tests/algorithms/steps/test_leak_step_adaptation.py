@@ -19,9 +19,9 @@ class LeakStepAdaptationTestCase(BaseTestCase):
             algorithms.GradientDescent,
             partial(
                 algorithms.GradientDescent,
-                leak_size=0.5,
-                alpha=0.5,
-                beta=0.5,
+                leak_size=0.05,
+                alpha=0.05,
+                beta=5,
                 addons=[algorithms.LeakStepAdaptation]
             ),
 
@@ -35,6 +35,7 @@ class LeakStepAdaptationTestCase(BaseTestCase):
                 layers.Output(1)
             ],
             step=0.1,
+            verbose=False,
             shuffle_data=True,
             epochs=30,
             # show_comparison_plot=True,

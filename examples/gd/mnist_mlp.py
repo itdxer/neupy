@@ -40,7 +40,6 @@ network = algorithms.Momentum(
     shuffle_data=True,
     momentum=0.99,
     nesterov=True,
-    addons=[algorithms.LeakStepAdaptation],
 )
 network.train(x_train, y_train, x_test, y_test, epochs=20)
 
