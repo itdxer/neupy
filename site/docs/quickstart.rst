@@ -121,16 +121,16 @@ Output in terminal should look similar to this one:
     :align: center
     :alt: GradientDescent training procedure output
 
-In the output you can see many useful information about learning procedures.
-First of all there is simple information about input data and number of training epochs.
-Also ther you can see information about every training epoch.
-\ch epoch output has three values: Train error, Validation error and Epoch time.
-Epoch time shows for how long the process was active in the specific epoch.
-There are also two types of errors.
-First one displays error for your training dataset and second one for validation dataset.
-Validation data sample is optional and we are not using it in this example, but we can put in ``train`` method separated data sample and track validation error.
+Output show the most important information related to training procedure.
+Each epoch contains 4 columns. First one identified epoch. 
+The second one show training error. The third one is optional.
+In case you have validation dataset, you can check learning perfomanse using
+dataset separated from the learning procedure.
+And the last column shows how many time network trains during this epoch.
 
-Our MSE looks well. Now we can visualize our errors in a chart.
+From the table is not clear network's trainig progress. We can check it very easy.
+Network instance contains built-in method that build line plot that show trainig progress.
+Let's check our progress.
 
 .. code-block:: python
 
@@ -141,25 +141,18 @@ Our MSE looks well. Now we can visualize our errors in a chart.
     :align: center
     :alt: GradientDescent epoch errors plot
 
-And finally examine the prediction answer
+Let's make a simple report for our classification result.
 
 .. code-block:: python
 
-    >>> predicted = bpnet.predict(input_data)
-    >>> predicted
-    array([[ 0.77293114],
-           [ 0.28974524],
-           [ 0.18620525],
-           [ 0.74104605]])
+    >>> y_predicted = network.predict(x_test)
+    >>> y_test = np,asarray(y_test.argmax(axis=1)).reshape(len(y_test))
+    >>>
+    >>> print(metrics.classification_report(y_test, y_predicted))
+    precision
+    >>> score = metrics.accuracy_score(y_test, y_predicted)
+    >>> print("Validation accuracy: {:.2f}%".format(100 * score))
+    Validation accuracy: 98.31%
 
-Looks well.
-Using more training epochs can make better prediction.
-For final step we just round our network result for making it valid.
-
-.. code-block:: python
-
-    >>> predicted.round()
-    array([[ 1.],
-           [ 0.],
-           [ 0.],
-           [ 1.]])
+The 98.3% accuracy is pretty good for such a quick solution. Additional modification can 
+improve prediction accuracy.
