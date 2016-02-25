@@ -3,12 +3,13 @@ Quick start
 
 Ready to get started?
 
-MNIST problem
-*************
+MNIST classification
+********************
 
-MNIST problem is probably the most known for those who have already heared about neural networks.
-The most popular neural network algorithm probably is :network:`GradientDescent`.
-Let's try to solve the MNIST problem using :network:`GradientDescent`
+The MNIST problem is probably the most known for those who have already 
+heared about neural networks. This short tutorial contains simple solution for this
+problem that you can quickly build by your own using NeuPy. Let's dive in.
+
 First of all we need to load data.
 
 .. code-block:: python
@@ -20,7 +21,7 @@ First of all we need to load data.
 I used scikit-learn to fetch the MNIST dataset, but you can do that in
 different way.
 
-Data doesn't have appropriate for for neural network, so we need to make simple
+Data doesn't have appropriate format for neural network, so we need to make simple
 transformation before apply it to neural network.
 
 .. code-block:: python
@@ -34,7 +35,7 @@ transformation before apply it to neural network.
     >>> target = target_scaler.fit_transform(target.reshape((-1, 1))
     >>> target = target.todense()
 
-Next we need to divide ataset into two parts: train and test. Regarding `The
+Next we need to divide dataset into two parts: train and test. Regarding `The
 MNIST Database <http://yann.lecun.com/exdb/mnist/>`_ page we wil use 60,000
 samples for training and 10,000 for test.
 
@@ -61,7 +62,7 @@ we are going to use 32bit float numbers.
 We prepared everything that we need for neural network training. Now we are
 able to create neural network that will classify digits for us. 
  
-Let's start with architecture. I didn't reinvent the wheel and use one of the
+Let's start with an architecture. I didn't reinvent the wheel and used one of the
 know architectures from `The MNIST Database
 <http://yann.lecun.com/exdb/mnist/>`_ page which is 784 > 500 > 300 > 10. As
 the main activation function I used Relu and Softmax for the final layer. The
@@ -74,9 +75,9 @@ Actually all this and other network configuration should be clear from the code.
     ...     [
     ...         layers.Relu(784),
     ...         layers.Dropout(0.2),
-    ...         layers.Relu(400),
+    ...         layers.Relu(500),
     ...         layers.Dropout(0.2),
-    ...         layers.Softmax(400),
+    ...         layers.Softmax(300),
     ...         layers.ArgmaxOutput(10),
     ...     ],
     ...     error='categorical_crossentropy',
@@ -87,34 +88,9 @@ Actually all this and other network configuration should be clear from the code.
     ...     nesterov=True,
     ... )
 
-
-Now we are going to define :network:`GradientDescent` neural network which solves this problem.
-First of all we have to set up basic structure for network and add some useful configurations.
-As problem is nonlinear we should add one hidden layer to the network.
-For first network implementation we have to set up number of hidden units inside network randomly.
-Let the units number be 4.
-
-.. code-block:: python
-
-    >>> from neupy import algorithms
-    >>> bpnet = algorithms.GradientDescent(
-    ...     (2, 4, 1),
-    ...     step=0.1,
-    ...     verbose=True,
-    ...     show_epoch='4 times',
-    ... )
-
-As you can see from code additionaly we set up ``step`` and ``show_epoch`` parameters.
-``step`` parameter control learning rate.
-``show_epoch`` controls the frequency display in the terminal training.
-We set the value up to ``'4 times'`` that mean we will see network progress 4 times and one additional for the final iteration.
-
-We set up network connections as tuple of layers sizes, but we don't put in activation function.
-That is because :network:`GradientDescent` use the most common sigmoid layer by
-default for tuple structure.
-More about layer configuration you can read `here <layers.html>`_.
-
-If you run the code in terminal you will see output which looks like this one:
+Isn't it simple and clear? All the most important information related to the neural
+network you can find in the terminal output. If you run code that shown above
+you would get the same output as on the figure below.
 
 .. image:: ../_static/screenshots/bpnet-config-logs.png
     :width: 70%
@@ -123,19 +99,20 @@ If you run the code in terminal you will see output which looks like this one:
 
 From this output we can extract a lot of information about network configurations.
 
-First of all, as we can see, most of options have gray color label, but
-some of them are green.
-Green color defines all options which we put in network manually and gray color options are default parameters.
-This output shows all possible properties neural network configurations.
-All properties separeted on few groups and each group is a :network:`GradientDescent`  parent classes.
-More information about :network:`GradientDescent` algorithm properties you will find in documentation, just click on algorithm name link and you will see it.
+First of all, as we can see, most of options have green color label, but
+some of them are gray.
+Green color defines all options which we put in network manually and gray
+color options are default parameters.
+All properties separeted on few groups and each group is a :network:`Momentum`  parent classes.
+More information about :network:`Momentum` algorithm properties you will 
+find in documentation, just click on algorithm name link and you will see it.
 
-Now we are going to train network to solve the XOR problem.
-Let set up ``5000`` epochs for training procedure and check the result.
+Now we are going to train network.
+Let set up ``20`` epochs for training procedure and check the result.
 
 .. code-block:: python
 
-    >>> bpnet.train(input_data, target_data, epochs=5000)
+    >>> network.train(x_train y_train, x_test, y_test, epochs=20)
 
 Output in terminal should look similar to this one:
 
@@ -146,9 +123,8 @@ Output in terminal should look similar to this one:
 
 In the output you can see many useful information about learning procedures.
 First of all there is simple information about input data and number of training epochs.
-Also ther you can see information about every 1000 training epoch.
-In addition training output always shows the last training epoch.
-Each epoch output has three values: Train error, Validation error and Epoch time.
+Also ther you can see information about every training epoch.
+\ch epoch output has three values: Train error, Validation error and Epoch time.
 Epoch time shows for how long the process was active in the specific epoch.
 There are also two types of errors.
 First one displays error for your training dataset and second one for validation dataset.

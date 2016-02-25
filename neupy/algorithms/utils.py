@@ -63,6 +63,16 @@ def setup_parameter_updates(parameters, parameter_update_vector):
     """ Creates update rules for list of parameters from one vector.
     Function is useful in Conjugate Gradient or
     Levenberg-Marquardt optimization algorithms
+
+    Parameters
+    ----------
+    parameters : list
+    parameter_update_vector : Theano varible
+
+    Returns
+    -------
+    list
+        List of updates separeted for each parameter.
     """
     updates = []
     start_position = 0

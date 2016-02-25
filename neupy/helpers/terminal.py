@@ -30,7 +30,7 @@ def is_color_supported():
     return is_support
 
 
-def create_style(ansi_code):
+def create_style(ansi_code, use_bright_mode=False):
     """ Create style based on ANSI code number.
 
     Parameters
@@ -46,14 +46,15 @@ def create_style(ansi_code):
     """
     def style(text):
         if is_color_supported():
-            return "\033[{}m{}\033[0m".format(ansi_code, text)
+            mode = int(use_bright_mode)
+            return "\033[{};{}m{}\033[0m".format(mode, ansi_code, text)
         return text
     return style
 
 
-red = create_style(ansi_code=91)
-green = create_style(ansi_code=92)
-gray = create_style(ansi_code=96)
-white = create_style(ansi_code=97)
-bold = create_style(ansi_code=1)
-underline = create_style(ansi_code=4)
+red = create_style(ansi_code=31)
+green = create_style(ansi_code=32)
+gray = create_style(ansi_code=37)
+white = create_style(ansi_code=37)
+bold = create_style(ansi_code=1, use_bright_mode=True)
+underline = create_style(ansi_code=4, use_bright_mode=True)

@@ -4,13 +4,14 @@ import theano.tensor as T
 
 from neupy.utils import asfloat
 from neupy.core.properties import ProperFractionProperty, BoundedProperty
-from .base import MultipleStepConfigurable
+from neupy.algorithms.utils import iter_parameters, count_parameters
+from .base import SingleStepConfigurable
 
 
 __all__ = ('LeakStepAdaptation',)
 
 
-class LeakStepAdaptation(MultipleStepConfigurable):
+class LeakStepAdaptation(SingleStepConfigurable):
     """ Leak Learning Rate Adaptation algorithm for step adaptation procedure
     in backpropagation algortihm. By default every layer has the same value
     as ``step`` parameter in network, but after first training epoch they
@@ -30,7 +31,7 @@ class LeakStepAdaptation(MultipleStepConfigurable):
 
     Warns
     -----
-    {MultipleStepConfigurable.Warns}
+    {SingleStepConfigurable.Warns}
 
     Examples
     --------
@@ -48,37 +49,38 @@ class LeakStepAdaptation(MultipleStepConfigurable):
     alpha = BoundedProperty(default=0.5, minval=0)
     beta = BoundedProperty(default=0.5, minval=0)
 
-    def init_layers(self):
-        super(LeakStepAdaptation, self).init_layers()
-        for layer in self.train_layers:
-            layer.leak_avarage = theano.shared(
-                value=asfloat(np.zeros(layer.weight_shape)),
-                name='layer_leak_avarage'
-            )
-            layer.step = theano.shared(value=self.step, name='layer_step')
+    def init_variables(self):
+        super(LeakStepAdaptation, self).init_variables()
+        n_parameters = count_parameters(self)
+        self.variables.leak_average = theano.shared(
+            value=asfloat(np.zeros(n_parameters)),
+            name='leak_average'
+        )
 
-    def init_layer_updates(self, layer):
-        updates = super(LeakStepAdaptation, self).init_layer_updates(layer)
+    def init_train_updates(self):
+        updates = super(LeakStepAdaptation, self).init_train_updates()
 
         alpha = self.alpha
         beta = self.beta
         leak_size = self.leak_size
 
-        grad_w = T.grad(self.variables.error_func, wrt=layer.weight)
-        step = layer.step
-        leak_average = layer.leak_avarage
+        step = self.variables.step
+        leak_average = self.variables.leak_average
+
+        parameters = list(iter_parameters(self))
+        gradients = T.grad(self.variables.error_func, wrt=parameters)
+        full_gradient = T.concatenate([grad.flatten() for grad in gradients])
 
         leak_avarage_update = (
-            (1 - leak_size) * leak_average + leak_size * grad_w
+            (1 - leak_size) * leak_average + leak_size * full_gradient
         )
+        new_step = step + alpha * step * (
+            beta * leak_avarage_update.norm(L=2) - step
+        )
+
         updates.extend([
             (leak_average, leak_avarage_update),
-            (
-                step,
-                step + alpha * step * (
-                    beta * leak_avarage_update.norm(2) - step
-                )
-            ),
+            (step, new_step),
         ])
 
         return updates

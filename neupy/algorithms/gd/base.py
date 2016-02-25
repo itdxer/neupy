@@ -240,10 +240,11 @@ class MinibatchGradientDescent(GradientDescent):
                                                   miniters=1,
                                                   init_interval=1.)
 
+        error = 0
         for batch_index in batches_index_iter:
             slice_batch = slice(batch_index * batch_size,
                                 (batch_index + 1) * batch_size)
-            batch_error = train_epoch(input_train[slice_batch],
-                                      target_train[slice_batch])
+            error += train_epoch(input_train[slice_batch],
+                                 target_train[slice_batch])
 
-        return batch_error
+        return batch_size * error / len(input_train)
