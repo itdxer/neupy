@@ -57,7 +57,9 @@ There are two main types of layers.
 First type includes layers that have weights and activation function.
 The second one is output layers.
 Output layer is always the final layer in network structure and it just makes final output transformation for neural network.
-The output layer doesn't have weights or activation function.
+The output layer doesn't have weights or activation function and it doesn't
+involve in training procedure. It's is just a useful feature that helps to make
+finall transformations with neural network's output.
 
 Create custom layers
 ********************
@@ -81,62 +83,19 @@ The example below shows one of the possible way to create a new layer.
 
 .. code-block:: python
 
+    import theano.tensor as T
     from neupy import layers
 
     def square(x):
-        return x ** 2
+        return T.square(x)
 
     class SquareLayer(layers.Layer):
         activation_function = square
 
 First of all you can see different class :layer:`Layer`.
-This class expect ``activation_function`` property to be provided that must be an one-argument function.
+This class expect ``activation_function`` property to be provided. It must be
+an one-argument function that returns Theano function.
 In this example we just use simple function which squares input value.
-
-But we still can't use it in :network:`GradientDescent` algorithm because we don't describe derivative function.
-
-.. code-block:: python
-
-    from neupy import layers
-    from neupy.functions import with_derivative
-
-    def square_deriv(x):
-        return 2 * x
-
-    @with_derivative(square_deriv)
-    def square(x):
-        return x ** 2
-
-    class SquareLayer(layers.Layer):
-        activation_function = square
-
-
-Now we can use it in :network:`GradientDescent` algorithm.
-Also we can describe derivative for ``square_deriv`` function.
-
-There also exist possibility to configure activation function.
-Using the same example of square function we can make some general case of it.
-
-.. code-block:: python
-
-    from neupy import layers
-    from neupy.core.properties import DictProperty
-    from neupy.functions import with_derivative
-
-    def square_deriv(x, a=1, b=0, c=0):
-        return 2 * a * x + b
-
-    @with_derivative(square_deriv)
-    def square(x, a=1, b=0, c=0):
-        return a * x ** 2 + b * x + c
-
-    class SquareLayer(layers.Layer):
-        function_coef = DictProperty(default={'a': 1, 'b': 0, 'c': 0})
-        activation_function = square
-
-    input_layer = SquareLayer(2, function_coef={'a': 1, 'b': 2, 'c': 3})
-
-It's important for you to use the same number of constants in all derivative function even if they are disappear after differentiation.
 
 And a low-level implementation of layer inherits :layer:`BaseLayer` class and contains method ``output``.
 It can be useful if you want to create a layer which will have custom behaviour.

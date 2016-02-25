@@ -3,49 +3,90 @@ Quick start
 
 Ready to get started?
 
-XOR problem
-***********
+MNIST problem
+*************
 
-XOR problem is probably the most known for those who have already heared about neural networks.
+MNIST problem is probably the most known for those who have already heared about neural networks.
 The most popular neural network algorithm probably is :network:`GradientDescent`.
-Let's try to solve the XOR problem using :network:`GradientDescent`
-First of all we need to define 4 data samples for XOR function.
+Let's try to solve the MNIST problem using :network:`GradientDescent`
+First of all we need to load data.
 
 .. code-block:: python
 
-    >>> import numpy as np
-    >>>
-    >>> np.random.seed(0)
-    >>>
-    >>> input_data = np.array([
-    ...     [0, 0],
-    ...     [0, 1],
-    ...     [1, 0],
-    ...     [1, 1],
-    ... ])
-    >>> target_data = np.array([
-    ...     [1],
-    ...     [0],
-    ...     [0],
-    ...     [1],
-    ... ])
+    >>> from sklearn import datasets, cross_validation
+    >>> mnist = datasets.fetch_mldata('MNIST original')  
+    >>> data, target = mnist.data, mnist.target
 
-Let's check the data.
+I used scikit-learn to fetch the MNIST dataset, but you can do that in
+different way.
+
+Data doesn't have appropriate for for neural network, so we need to make simple
+transformation before apply it to neural network.
 
 .. code-block:: python
 
-    >>> import matplotlib.pyplot as plt
+    >>> from sklearn.preprocessing import OneHotEncoder
+    >>> 
+    >>> data = data / 255.
+    >>> data = data - data.mean(axis=0) 
     >>>
-    >>> plt.style.use('ggplot')
-    >>> plt.scatter(*input_data.T, c=target_data, s=100)
-    >>> plt.show()
+    >>> target_scaler = OneHotEncoder()
+    >>> target = target_scaler.fit_transform(target.reshape((-1, 1))
+    >>> target = target.todense()
 
-.. image:: ../_static/screenshots/quick-start-data-viz.png
-    :width: 70%
-    :align: center
-    :alt: GradientDescent configuration output
+Next we need to divide ataset into two parts: train and test. Regarding `The
+MNIST Database <http://yann.lecun.com/exdb/mnist/>`_ page we wil use 60,000
+samples for training and 10,000 for test.
 
-As we can see from chart on the top, problem is clearly nonlinear.
+.. code-block:: python
+
+    >>> from sklearn.cross_validation import train_test_split 
+    >>> x_train, x_test, y_train, y_test = train_test_split(
+    ,,,     data.astype(np.float32),
+    ...     target.astype(np.float32),
+    ...     train_size=(6. / 7)
+    ... )
+
+In the previous procedure I converted all data to `float32` data type. This
+simple trick will help us use less memory and decrease computation time.
+Theano is a main backend for the Gradient Descent based algorithms in NeuPy.
+For Theano we need add additional configuration that will explain Theano that
+we are going to use 32bit float numbers.
+
+.. code-block:: python
+
+    >>> import theano
+    >>> theano.config.floatX = 'float32'
+
+We prepared everything that we need for neural network training. Now we are
+able to create neural network that will classify digits for us. 
+ 
+Let's start with architecture. I didn't reinvent the wheel and use one of the
+know architectures from `The MNIST Database
+<http://yann.lecun.com/exdb/mnist/>`_ page which is 784 > 500 > 300 > 10. As
+the main activation function I used Relu and Softmax for the final layer. The
+main algorithm is Nesterov Momentum that use 100 samples per batch iteration.
+Actually all this and other network configuration should be clear from the code.
+
+.. code-block:: python
+
+    >>> network = algorithms.Momentum(
+    ...     [
+    ...         layers.Relu(784),
+    ...         layers.Dropout(0.2),
+    ...         layers.Relu(400),
+    ...         layers.Dropout(0.2),
+    ...         layers.Softmax(400),
+    ...         layers.ArgmaxOutput(10),
+    ...     ],
+    ...     error='categorical_crossentropy',
+    ...     step=0.01,
+    ...     verbose=True,
+    ...     shuffle_data=True,
+    ...     momentum=0.99,
+    ...     nesterov=True,
+    ... )
+
 
 Now we are going to define :network:`GradientDescent` neural network which solves this problem.
 First of all we have to set up basic structure for network and add some useful configurations.

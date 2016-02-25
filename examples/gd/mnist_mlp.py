@@ -28,10 +28,10 @@ network = algorithms.Momentum(
         layers.Relu(784),
         layers.Dropout(0.2),
 
-        layers.Relu(400),
+        layers.Relu(500),
         layers.Dropout(0.2),
 
-        layers.Softmax(400),
+        layers.Softmax(300),
         layers.ArgmaxOutput(10),
     ],
     error='categorical_crossentropy',
@@ -40,8 +40,6 @@ network = algorithms.Momentum(
     shuffle_data=True,
     momentum=0.99,
     nesterov=True,
-    epochs_step_minimizator=10,
-    addons=[algorithms.SimpleStepMinimization],
 )
 network.train(x_train, y_train, x_test, y_test, epochs=20)
 

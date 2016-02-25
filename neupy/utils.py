@@ -57,6 +57,16 @@ def format_data(data, is_feature1d=True, copy=False):
 
 
 def does_layer_accept_1d_feature(layer):
+    """ Check if 1D feature values are valid for the layer.
+
+    Parameters
+    ----------
+    layer : object
+
+    Returns
+    -------
+    bool
+    """
     return (layer.size == 1)
 
 

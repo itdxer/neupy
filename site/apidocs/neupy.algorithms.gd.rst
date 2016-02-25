@@ -6,6 +6,10 @@ Submodules
 
 .. toctree::
 
+   neupy.algorithms.gd.adadelta
+   neupy.algorithms.gd.adagrad
+   neupy.algorithms.gd.adam
+   neupy.algorithms.gd.adamax
    neupy.algorithms.gd.base
    neupy.algorithms.gd.conjgrad
    neupy.algorithms.gd.hessdiag
@@ -14,6 +18,7 @@ Submodules
    neupy.algorithms.gd.momentum
    neupy.algorithms.gd.quasi_newton
    neupy.algorithms.gd.quickprop
+   neupy.algorithms.gd.rmsprop
    neupy.algorithms.gd.rprop
 
 Module contents

@@ -53,7 +53,7 @@ def create_style(ansi_code):
 
 red = create_style(ansi_code=91)
 green = create_style(ansi_code=92)
-gray = create_style(ansi_code=94)
+gray = create_style(ansi_code=96)
 white = create_style(ansi_code=97)
 bold = create_style(ansi_code=1)
 underline = create_style(ansi_code=4)

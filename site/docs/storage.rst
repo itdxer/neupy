@@ -2,9 +2,9 @@ Storage
 =======
 
 After succesful learning you can save network and later use it for prediction tasks.
-There already exists awesome module - `dill <https://github.com/uqfoundation/dill>`_.
+There already exists awesome library - `dill <https://github.com/uqfoundation/dill>`_.
 As a ``pickle`` library ``dill`` provides similar interface to serialize and de-serialize built-in python objects.
-The main advantage of this is a model that can store a network class and attributes without additional functionality.
+The main advantage of this is a functionality that can store a network class and attributes without additional functionality.
 
 First of all you need to install ``dill`` library
 
@@ -63,4 +63,4 @@ And then you can use it from other file and try to reproduce the same error rate
     0.00075682357631507964
 
 The interface for ``dill`` library is the same as for ``pickle``, so functions
-like ``dumps`` or ``loads`` are also available.
+like ``dumps`` or ``loads`` are available.
