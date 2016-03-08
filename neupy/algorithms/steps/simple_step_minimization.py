@@ -1,7 +1,4 @@
-import theano
-
 from neupy.core.properties import IntProperty
-from neupy.utils import asfloat
 from .base import SingleStepConfigurable
 
 

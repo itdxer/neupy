@@ -81,13 +81,6 @@ def show_epoch_summary(network):
         network.logs.write("")
 
 
-def shuffle_train_data(input_train, target_train):
-    if target_train is None:
-        input_train, = shuffle(input_train)
-        return input_train, None
-    return shuffle(input_train, target_train)
-
-
 def show_network_options(network, highlight_options=None):
     """ Display all available parameters options for Neural Network.
 
@@ -146,19 +139,61 @@ def show_network_options(network, highlight_options=None):
         logs.write("")
 
 
-def parse_show_epoch_property(value, n_epochs):
-    if isinstance(value, int):
-        return value
+def logging_info_about_the_data(network, input_train, input_test):
+    logs = network.logs
+    n_train_samples = input_train.shape[0]
+    train_feature_shape = input_train.shape[1:]
 
-    number_end_position = value.index('time')
+    logs.title("Start train")
+    logs.message("TRAIN DATA",
+                 "{} samples, feature shape: {}"
+                 "".format(n_train_samples, train_feature_shape))
+
+    if input_test is not None:
+        n_test_samples = input_test.shape[0]
+        test_feature_shape = input_test.shape[1:]
+        logs.message("TEST DATA",
+                     "{} samples, feature shape: {}"
+                     "".format(n_test_samples, test_feature_shape))
+
+
+def logging_info_about_trainig(network, epochs, epsilon):
+    logs = network.logs
+    if epsilon is None:
+        logs.message("TRAINING", "Total epochs: {}".format(epochs))
+    else:
+        logs.message("TRAINING", "Epsilon: {}, Max epochs: {}"
+                                 "".format(epsilon, epochs))
+
+
+def parse_show_epoch_property(network, n_epochs, epsilon=None):
+    show_epoch = network.show_epoch
+
+    if isinstance(show_epoch, int):
+        return show_epoch
+
+    if epsilon is not None and isinstance(show_epoch, six.string_types):
+        network.logs.warning("Can't use `show_epoch` value in converging "
+                             "mode. Set up `show_epoch` property equal to 1")
+        return 1
+
+    number_end_position = show_epoch.index('time')
     # Ignore grammar mistakes like `2 time`, this error could be
     # really annoying
-    n_epochs_to_check = int(value[:number_end_position].strip())
+    n_epochs_to_check = int(show_epoch[:number_end_position].strip())
 
     if n_epochs <= n_epochs_to_check:
         return 1
 
     return int(round(n_epochs / n_epochs_to_check))
+
+
+def create_trainig_epochs_iterator(network, epochs, epsilon=None):
+    if epsilon is not None:
+        return iter_until_converge(network, epsilon, max_epochs=epochs)
+
+    next_epoch = network.last_epoch + 1
+    return range(next_epoch, next_epoch + epochs)
 
 
 class ShowEpochProperty(BoundedProperty):
@@ -310,6 +345,10 @@ class BaseNetwork(BaseSkeleton):
         epsilon : float or None
         """
 
+        show_epoch = self.show_epoch
+        logs = self.logs
+        training = self.training = AttributeKeyDict()
+
         if epochs <= 0:
             raise ValueError("Number of epochs needs to be greater than 0.")
 
@@ -317,43 +356,15 @@ class BaseNetwork(BaseSkeleton):
             raise ValueError("Network should train at teast 3 epochs before "
                              "check the difference between errors")
 
-        show_epoch = self.show_epoch
-        logs = self.logs
-        training = self.training = AttributeKeyDict(epoch=1)
-        can_compute_error_out = (input_test is not None)
-        last_epoch_shown = 0
+        logging_info_about_the_data(self, input_train, input_test)
+        logging_info_about_trainig(self, epochs, epsilon)
+        logs.write("")
 
-        if epsilon is not None:
-            iterepochs = iter_until_converge(self, epsilon, max_epochs=epochs)
-
-            if isinstance(show_epoch, six.string_types):
-                show_epoch = 100
-                logs.warning("Can't use `show_epoch` value in converging "
-                             "mode. Set up 100 to `show_epoch` property "
-                             "by default.")
-        else:
-            next_epoch = self.last_epoch + 1
-            iterepochs = range(next_epoch, next_epoch + epochs)
-            show_epoch = parse_show_epoch_property(show_epoch, epochs)
-
-        epoch_summary = show_epoch_summary(self)
+        iterepochs = create_trainig_epochs_iterator(self, epochs, epsilon)
+        show_epoch = parse_show_epoch_property(self, epochs, epsilon)
         training.show_epoch = show_epoch
 
-        n_train_samples = input_train.shape[0]
-
-        logs.title("Start train")
-        logs.message("TRAIN DATA", "size: {}".format(n_train_samples))
-
-        if input_test is not None:
-            n_output_samples = input_test.shape[0]
-            logs.message("TEST DATA", "size: {}".format(n_output_samples))
-
-        if epsilon is None:
-            logs.message("TRAIN", "Total epochs: {}".format(epochs))
-        else:
-            logs.message("TRAIN", "Max epochs: {}".format(epochs))
-
-        logs.write("")
+        epoch_summary = show_epoch_summary(self)
         next(epoch_summary)
 
         # Storring attributes and methods in local variables we prevent
@@ -370,25 +381,26 @@ class BaseNetwork(BaseSkeleton):
         epoch_start_update = self.epoch_start_update
 
         is_first_iteration = True
+        can_compute_error_out = (input_test is not None)
+        last_epoch_shown = 0
+
         for epoch in iterepochs:
             epoch_start_time = time.time()
             epoch_start_update(epoch)
 
             if shuffle_data:
-                input_train, target_train = shuffle_train_data(input_train,
-                                                               target_train)
-                self.input_train = input_train
-                self.target_train = target_train
+                input_train, target_train = shuffle(input_train, target_train)
 
             try:
-                error = train_epoch(input_train, target_train)
+                error_in = train_epoch(input_train, target_train)
+                errors.append(error_in)
 
                 if can_compute_error_out:
                     error_out = self.prediction_error(input_test, target_test)
                     errors_out.append(error_out)
 
-                errors.append(error)
-                training.epoch_time = time.time() - epoch_start_time
+                epoch_finish_time = time.time()
+                training.epoch_time = epoch_finish_time - epoch_start_time
 
                 if epoch % training.show_epoch == 0 or is_first_iteration:
                     next(epoch_summary)
@@ -414,7 +426,7 @@ class BaseNetwork(BaseSkeleton):
             train_end_signal(self)
 
         epoch_summary.close()
-        logs.message("TRAIN", "End train")
+        logs.message("TRAIN", "Trainig finished")
 
     # ----------------- Errors ----------------- #
 

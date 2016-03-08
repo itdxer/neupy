@@ -1,3 +1,4 @@
+import time
 import types
 
 import theano
@@ -204,6 +205,10 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         self.init_layers()
         super(ConstructableNetwork, self).__init__(*args, **kwargs)
 
+        self.logs.message("THEANO", "Initializing Theano variables and "
+                                    "functions.")
+        start_init_time = time.time()
+
         self.variables = AttributeKeyDict(
             network_input=create_input_variable(self.input_layer,
                                                 variable_name='x'),
@@ -214,6 +219,11 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
 
         self.init_variables()
         self.init_methods()
+
+        finish_init_time = time.time()
+        self.logs.message("THEANO", "Initialization finished sucessfully. "
+                          "It took {:.2f} seconds"
+                          "".format(finish_init_time - start_init_time))
 
     def init_variables(self):
         """ Initialize Theano variables.

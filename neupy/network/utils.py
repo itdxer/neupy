@@ -10,9 +10,7 @@ class StopNetworkTraining(StopIteration):
 
 
 def iter_until_converge(network, epsilon, max_epochs):
-    training = network.training
     logs = network.logs
-
     # Trigger first iteration and store first error term
     yield network.last_epoch
     previous_error = error_delta = network.last_error()
@@ -69,7 +67,7 @@ def shuffle(*arrays):
 
     arrays = list(arrays)
     for i, array in enumerate(arrays):
-        arrays[i] = array[indices]
+        arrays[i] = array[indices] if array is not None else None
 
     return arrays
 
