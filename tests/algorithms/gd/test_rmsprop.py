@@ -16,4 +16,4 @@ class RMSPropTestCase(BaseTestCase):
             decay=0.9,
         )
         mnet.train(x_train, y_train, epochs=100)
-        self.assertAlmostEqual(0.01, mnet.last_error(), places=2)
+        self.assertAlmostEqual(0.01, mnet.errors.last(), places=2)

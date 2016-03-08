@@ -176,12 +176,16 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
     {BaseNetwork.train_end_signal}
     {Verbose.verbose}
 
+    Attributes
+    ----------
+    {BaseNetwork.errors}
+    {BaseNetwork.train_errors}
+    {BaseNetwork.validation_errors}
+    {BaseNetwork.last_epoch}
+
     Methods
     -------
     {BaseNetwork.plot_errors}
-    {BaseNetwork.last_error}
-    {BaseNetwork.last_validation_error}
-    {BaseNetwork.previous_error}
     """
     error = ErrorFunctionProperty(default='mse', choices={
         'mae': errors.mae,
@@ -331,7 +335,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         raw_prediction = self.predict_raw(input_data)
         return self.output_layer.output(raw_prediction)
 
-    def epoch_start_update(self, epoch):
+    def on_epoch_start_update(self, epoch):
         """ Function would be trigger before run all training procedure
         related to the current epoch.
 
@@ -340,7 +344,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         epoch : int
             Current epoch number.
         """
-        super(ConstructableNetwork, self).epoch_start_update(epoch)
+        super(ConstructableNetwork, self).on_epoch_start_update(epoch)
         self.variables.epoch.set_value(epoch)
 
     def train(self, input_train, target_train, input_test=None,

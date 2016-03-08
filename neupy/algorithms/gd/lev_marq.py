@@ -80,9 +80,6 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
     {BaseNetwork.plot_errors}
-    {BaseNetwork.last_error}
-    {BaseNetwork.last_validation_error}
-    {BaseNetwork.previous_error}
 
     Examples
     --------
@@ -192,9 +189,9 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
 
         return updates
 
-    def epoch_start_update(self, epoch):
-        super(LevenbergMarquardt, self).epoch_start_update(epoch)
+    def on_epoch_start_update(self, epoch):
+        super(LevenbergMarquardt, self).on_epoch_start_update(epoch)
 
-        last_error = self.last_error()
+        last_error = self.errors.last()
         if last_error is not None:
             self.variables.last_error.set_value(last_error)

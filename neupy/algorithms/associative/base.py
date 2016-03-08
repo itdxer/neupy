@@ -35,9 +35,6 @@ class BaseAssociative(UnsupervisedLearning, BaseNetwork):
         Train neural network.
     {BaseSkeleton.fit}
     {BaseNetwork.plot_errors}
-    {BaseNetwork.last_error}
-    {BaseNetwork.last_validation_error}
-    {BaseNetwork.previous_error}
     """
 
     n_inputs = IntProperty(minval=1, required=True)
@@ -95,9 +92,6 @@ class BaseStepAssociative(BaseAssociative):
     {BaseAssociative.train}
     {BaseSkeleton.fit}
     {BaseNetwork.plot_errors}
-    {BaseNetwork.last_error}
-    {BaseNetwork.last_validation_error}
-    {BaseNetwork.previous_error}
     """
 
     n_inputs = IntProperty(minval=2, required=True)

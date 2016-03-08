@@ -17,4 +17,4 @@ class AdamTestCase(BaseTestCase):
             beta2=0.999,
         )
         mnet.train(x_train, y_train, epochs=100)
-        self.assertAlmostEqual(0.06, mnet.last_error(), places=2)
+        self.assertAlmostEqual(0.06, mnet.errors.last(), places=2)

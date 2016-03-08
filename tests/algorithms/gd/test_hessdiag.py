@@ -29,7 +29,7 @@ class HessianDiagonalTestCase(BaseTestCase):
         nw.train(x_train / 2, y_train, epochs=10)
         y_predict = nw.predict(x_test)
 
-        self.assertAlmostEqual(0.10, nw.last_error(), places=2)
+        self.assertAlmostEqual(0.10, nw.errors.last(), places=2)
 
     def test_compare_bp_and_hessian(self):
         x_train, _, y_train, _ = simple_classification()

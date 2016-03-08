@@ -2,7 +2,7 @@ import numpy as np
 
 
 __all__ = ('iter_until_converge', 'shuffle', 'normalize_error', 'step',
-           'normalize_error_list', 'StopNetworkTraining')
+           'StopNetworkTraining')
 
 
 class StopNetworkTraining(StopIteration):
@@ -13,14 +13,14 @@ def iter_until_converge(network, epsilon, max_epochs):
     logs = network.logs
     # Trigger first iteration and store first error term
     yield network.last_epoch
-    previous_error = error_delta = network.last_error()
+    previous_error = error_delta = network.errors.last()
 
     epoch = network.last_epoch
     while error_delta > epsilon:
         epoch = epoch + 1
         yield epoch
 
-        last_error = network.last_error()
+        last_error = network.errors.last()
         error_delta = abs(last_error - previous_error)
         previous_error = last_error
 
@@ -86,27 +86,6 @@ def normalize_error(output):
         Return sum of all absolute values.
     """
     return np.sum(np.abs(output))
-
-
-def normalize_error_list(errors):
-    """ Normalize list that contains error outputs.
-
-    Parameters
-    ----------
-    errors : list
-        List that contains network training errors
-
-    Returns
-    -------
-    list
-        Return the same list with normalized values if there
-        where some problems.
-    """
-    if not len(errors) or isinstance(errors[0], float):
-        return errors
-
-    normalized_errors = map(normalize_error, errors)
-    return list(normalized_errors)
 
 
 def step(input_value):

@@ -15,7 +15,7 @@ class PerceptronTestCase(BaseTestCase):
         network.train(input_data, target_data, epochs=100)
         predicted_result = network.predict(np.array([[4, 4], [0, 0]]))
 
-        self.assertEqual(network.last_error(), 0)
+        self.assertEqual(network.errors.last(), 0)
         np.testing.assert_array_equal(
             predicted_result.T,
             np.array([[0, 1]])

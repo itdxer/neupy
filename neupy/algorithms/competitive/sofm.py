@@ -105,9 +105,6 @@ class SOFM(Kohonen):
     {BaseAssociative.train}
     {BaseSkeleton.fit}
     {BaseNetwork.plot_errors}
-    {BaseNetwork.last_error}
-    {BaseNetwork.last_validation_error}
-    {BaseNetwork.previous_error}
     """
 
     learning_radius = IntProperty(default=0, minval=0)

@@ -75,11 +75,11 @@ class ErrDiffStepUpdate(SingleStepConfigurable):
         updates.append((step, step_update_condition))
         return updates
 
-    def epoch_start_update(self, epoch):
-        super(ErrDiffStepUpdate, self).epoch_start_update(epoch)
+    def on_epoch_start_update(self, epoch):
+        super(ErrDiffStepUpdate, self).on_epoch_start_update(epoch)
 
-        previous_error = self.previous_error()
+        previous_error = self.errors.previous()
         if previous_error:
-            last_error = self.last_error()
+            last_error = self.errors.last()
             self.variables.last_error.set_value(last_error)
             self.variables.previous_error.set_value(previous_error)

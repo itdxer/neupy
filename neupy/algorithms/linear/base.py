@@ -34,9 +34,6 @@ class BaseLinearNetwork(ConstructableNetwork):
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
     {BaseNetwork.plot_errors}
-    {BaseNetwork.last_error}
-    {BaseNetwork.last_validation_error}
-    {BaseNetwork.previous_error}
     """
 
     def __init__(self, connection, **options):

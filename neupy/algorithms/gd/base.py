@@ -32,15 +32,19 @@ class GradientDescent(ConstructableNetwork):
     {BaseNetwork.train_end_signal}
     {Verbose.verbose}
 
+    Attributes
+    ----------
+    {BaseNetwork.errors}
+    {BaseNetwork.train_errors}
+    {BaseNetwork.validation_errors}
+    {BaseNetwork.last_epoch}
+
     Methods
     -------
     {BaseSkeleton.predict}
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
     {BaseNetwork.plot_errors}
-    {BaseNetwork.last_error}
-    {BaseNetwork.last_validation_error}
-    {BaseNetwork.previous_error}
 
     Examples
     --------
@@ -175,15 +179,19 @@ class MinibatchGradientDescent(GradientDescent):
     {BaseNetwork.train_end_signal}
     {Verbose.verbose}
 
+    Attributes
+    ----------
+    {BaseNetwork.errors}
+    {BaseNetwork.train_errors}
+    {BaseNetwork.validation_errors}
+    {BaseNetwork.last_epoch}
+
     Methods
     -------
     {BaseSkeleton.predict}
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
     {BaseNetwork.plot_errors}
-    {BaseNetwork.last_error}
-    {BaseNetwork.last_validation_error}
-    {BaseNetwork.previous_error}
 
     Examples
     --------

@@ -39,6 +39,6 @@ class MinibatchGDTestCase(BaseTestCase):
                 net = network_class((10, 20, 1), batch_size=fullbatch_value)
                 net.train(x_train, y_train, epochs=10)
 
-                errors.append(net.last_error())
+                errors.append(net.errors.last())
 
             self.assertTrue(all(e == errors[0] for e in errors))

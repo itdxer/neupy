@@ -41,9 +41,6 @@ class Adamax(MinibatchGradientDescent):
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
     {BaseNetwork.plot_errors}
-    {BaseNetwork.last_error}
-    {BaseNetwork.last_validation_error}
-    {BaseNetwork.previous_error}
     """
     step = NumberProperty(default=0.001, minval=0)
     beta1 = ProperFractionProperty(default=0.9)

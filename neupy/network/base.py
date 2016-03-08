@@ -17,7 +17,7 @@ from neupy.core.properties import (BoundedProperty, NumberProperty,
                                    Property)
 from neupy.layers.connections import LayerConnection
 from .utils import (iter_until_converge, shuffle, normalize_error,
-                    normalize_error_list, StopNetworkTraining)
+                    StopNetworkTraining)
 
 
 __all__ = ('BaseNetwork',)
@@ -50,8 +50,8 @@ def show_epoch_summary(network):
 
             table_drawer.row([
                 network.last_epoch,
-                network.last_error() or '-',
-                network.last_validation_error() or '-',
+                network.errors.last() or '-',
+                network.validation_errors.last() or '-',
                 network.training.epoch_time,
             ])
             prev_summary_time = now
@@ -73,7 +73,6 @@ def show_epoch_summary(network):
                     terminal_output_delays.clear()
 
                     network.training.show_epoch = show_epoch
-
             yield
 
     finally:
@@ -157,7 +156,7 @@ def logging_info_about_the_data(network, input_train, input_test):
                      "".format(n_test_samples, test_feature_shape))
 
 
-def logging_info_about_trainig(network, epochs, epsilon):
+def logging_info_about_training(network, epochs, epsilon):
     logs = network.logs
     if epsilon is None:
         logs.message("TRAINING", "Total epochs: {}".format(epochs))
@@ -240,6 +239,40 @@ class ShowEpochProperty(BoundedProperty):
                              "equal to one.".format(self.name))
 
 
+class ErrorHistoryList(list):
+    """ Wrapper around the built-in list class that adds additional
+    methods.
+    """
+    def last(self):
+        """ Returns last element if list is not empty,
+        ``None`` otherwise.
+        """
+        if self and self[-1] is not None:
+            return normalize_error(self[-1])
+
+    def previous(self):
+        """ Returns last element if list is not empty,
+        ``None`` otherwise.
+        """
+        if len(self) > 2 and self[-2] is not None:
+            return normalize_error(self[-2])
+
+    def normalized(self):
+        """ Normalize list that contains error outputs.
+
+        Returns
+        -------
+        list
+            Return the same list with normalized values if there
+            where some problems.
+        """
+        if not self or isinstance(self[0], float):
+            return self
+
+        normalized_errors = map(normalize_error, self)
+        return list(normalized_errors)
+
+
 class BaseNetwork(BaseSkeleton):
     """ Base class for Neural Network algorithms.
 
@@ -270,6 +303,21 @@ class BaseNetwork(BaseSkeleton):
         Calls this function when train process finishes.
     {Verbose.verbose}
 
+    Attributes
+    ----------
+    errors : ErrorHistoryList
+        Contains list of training errors. This object has the same
+        properties as list and in addition there are three additional
+        useful methods: `last`, `previous` and `normalized`.
+    train_errors : ErrorHistoryList
+        Alias to `errors` attribute.
+    validation_errors : ErrorHistoryList
+        The same as `errors` attribute, but it contains only validation
+        errors.
+    last_epoch : int
+        Value equals to the last trained epoch. After initialization
+        it is equal to ``0``.
+
     Methods
     -------
     plot_errors(logx=False)
@@ -278,14 +326,6 @@ class BaseNetwork(BaseSkeleton):
         into training function it displays validation data set error as
         separated curve. If parameter ``logx`` is equal to the
         ``True`` value it displays x-axis in logarithmic scale.
-    last_error()
-        Returns the last error network result after training procedure
-        or ``None`` value if you try to get it before network training.
-    last_validation_error()
-        Last error for the validation data.
-    previous_error()
-        Return previous network error or ``None`` if network didn't
-        train two epochs and don't have this information.
     """
     step = NumberProperty(default=0.1, minval=0)
 
@@ -296,8 +336,8 @@ class BaseNetwork(BaseSkeleton):
     train_end_signal = Property(expected_type=types.FunctionType)
 
     def __init__(self, *args, **options):
-        self.errors_in = []
-        self.errors_out = []
+        self.errors = self.train_errors = ErrorHistoryList()
+        self.validation_errors = ErrorHistoryList()
         self.last_epoch = 0
 
         super(BaseNetwork, self).__init__(*args, **options)
@@ -311,12 +351,20 @@ class BaseNetwork(BaseSkeleton):
         """
 
     def predict(self, input_data):
-        """ Return prediction results for the input data. Output result also
-        include postprocessing step related to the final layer that
-        transform output to convenient format for end-use.
+        """ Return prediction results for the input data. Output result
+        includes post-processing step related to the final layer that
+        transforms output to convenient format for end-use.
+
+        Parameters
+        ----------
+        input_data : array-like
+
+        Returns
+        -------
+        array-like
         """
 
-    def epoch_start_update(self, epoch):
+    def on_epoch_start_update(self, epoch):
         """ Function would be trigger before run all training procedure
         related to the current epoch.
 
@@ -328,6 +376,9 @@ class BaseNetwork(BaseSkeleton):
         self.last_epoch = epoch
 
     def train_epoch(self, input_train, target_train=None):
+        raise NotImplementedError()
+
+    def prediction_error(self, input_test, target_test):
         raise NotImplementedError()
 
     def train(self, input_train, target_train=None, input_test=None,
@@ -357,7 +408,7 @@ class BaseNetwork(BaseSkeleton):
                              "check the difference between errors")
 
         logging_info_about_the_data(self, input_train, input_test)
-        logging_info_about_trainig(self, epochs, epsilon)
+        logging_info_about_training(self, epochs, epsilon)
         logs.write("")
 
         iterepochs = create_trainig_epochs_iterator(self, epochs, epsilon)
@@ -371,14 +422,14 @@ class BaseNetwork(BaseSkeleton):
         # useless __getattr__ call a lot of times in each loop.
         # This variables speed up loop in case on huge amount of
         # iterations.
-        errors = self.errors_in
-        errors_out = self.errors_out
+        errors = self.errors
+        validation_errors = self.validation_errors
         shuffle_data = self.shuffle_data
 
         train_epoch = self.train_epoch
         epoch_end_signal = self.epoch_end_signal
         train_end_signal = self.train_end_signal
-        epoch_start_update = self.epoch_start_update
+        on_epoch_start_update = self.on_epoch_start_update
 
         is_first_iteration = True
         can_compute_error_out = (input_test is not None)
@@ -386,7 +437,7 @@ class BaseNetwork(BaseSkeleton):
 
         for epoch in iterepochs:
             epoch_start_time = time.time()
-            epoch_start_update(epoch)
+            on_epoch_start_update(epoch)
 
             if shuffle_data:
                 input_train, target_train = shuffle(input_train, target_train)
@@ -397,7 +448,7 @@ class BaseNetwork(BaseSkeleton):
 
                 if can_compute_error_out:
                     error_out = self.prediction_error(input_test, target_test)
-                    errors_out.append(error_out)
+                    validation_errors.append(error_out)
 
                 epoch_finish_time = time.time()
                 training.epoch_time = epoch_finish_time - epoch_start_time
@@ -428,38 +479,27 @@ class BaseNetwork(BaseSkeleton):
         epoch_summary.close()
         logs.message("TRAIN", "Trainig finished")
 
-    # ----------------- Errors ----------------- #
-
-    def last_error(self):
-        if self.errors_in and self.errors_in[-1] is not None:
-            return normalize_error(self.errors_in[-1])
-
-    def last_validation_error(self):
-        if self.errors_out and self.errors_out[-1] is not None:
-            return normalize_error(self.errors_out[-1])
-
-    def previous_error(self):
-        errors_in = self.errors_in
-        if len(errors_in) > 2 and errors_in[-2] is not None:
-            return normalize_error(errors_in[-2])
-
     def plot_errors(self, logx=False, ax=None, show=True):
-        if not self.errors_in:
+        """ Plot line plot that shows trainig progress. x-axis
+        is an epoch number and y-axis is an error
+        """
+        if not self.errors:
+            self.logs.warning("There is no data to plot")
             return
 
         if ax is None:
             ax = plt.gca()
 
-        errors_in = normalize_error_list(self.errors_in)
-        errors_out = normalize_error_list(self.errors_out)
-        errors_range = np.arange(len(errors_in))
+        train_errors = self.errors.normalized()
+        validation_errors = self.validation_errors.normalized()
+        errors_range = np.arange(len(train_errors))
         plot_function = ax.semilogx if logx else ax.plot
 
-        line_error_in, = plot_function(errors_range, errors_in)
+        line_error_in, = plot_function(errors_range, train_errors)
         title_text = 'Learning error after each epoch'
 
-        if errors_out:
-            line_error_out, = plot_function(errors_range, errors_out)
+        if validation_errors:
+            line_error_out, = plot_function(errors_range, validation_errors)
             ax.legend(
                 [line_error_in, line_error_out],
                 ['Train error', 'Validation error']

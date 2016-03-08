@@ -41,9 +41,6 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
     {BaseNetwork.plot_errors}
-    {BaseNetwork.last_error}
-    {BaseNetwork.last_validation_error}
-    {BaseNetwork.previous_error}
 
     Examples
     --------
@@ -160,9 +157,6 @@ class IRPROPPlus(RPROP):
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
     {BaseNetwork.plot_errors}
-    {BaseNetwork.last_error}
-    {BaseNetwork.last_validation_error}
-    {BaseNetwork.previous_error}
 
     Examples
     --------
@@ -193,12 +187,12 @@ class IRPROPPlus(RPROP):
             previous_error=theano.shared(name='previous_error', value=np.nan),
         )
 
-    def epoch_start_update(self, epoch):
-        super(IRPROPPlus, self).epoch_start_update(epoch)
+    def on_epoch_start_update(self, epoch):
+        super(IRPROPPlus, self).on_epoch_start_update(epoch)
 
-        previous_error = self.previous_error()
+        previous_error = self.errors.previous()
         if previous_error:
-            last_error = self.last_error()
+            last_error = self.errors.last()
             self.variables.last_error.set_value(last_error)
             self.variables.previous_error.set_value(previous_error)
 

@@ -41,6 +41,10 @@ class NoBiasSigmoid(layers.Sigmoid):
         return self.activation_function(summated)
 
 
+def copy_weight(weight):
+    return weight.get_value().copy()
+
+
 def save_weight_in_epoch(net):
     """ Signal processor which save weight update for every
     epoch.
@@ -48,7 +52,7 @@ def save_weight_in_epoch(net):
     global weights
     global current_epoch
 
-    input_layer_weight = net.input_layer.weight.get_value().copy()
+    input_layer_weight = copy_weight(net.input_layer.weight)
     weights[:, current_epoch + 1:current_epoch + 2] = input_layer_weight
 
 
@@ -91,7 +95,9 @@ def draw_quiver(network_class, name, color='r'):
 
 
 def target_function(network, x, y):
-    network.input_layer.weight.set_value(np.array([[x], [y]]))
+    weight = network.input_layer.weight
+    new_weight = np.array([[x], [y]])
+    weight.set_value(new_weight)
     return network.prediction_error(input_data, target_data)
 
 

@@ -22,7 +22,7 @@ class WeightDecayTestCase(BaseTestCase):
             addons=[algorithms.WeightDecay]
         )
         network.train(xor_input_train, xor_target_train, epochs=500)
-        self.assertAlmostEqual(network.last_error(), 0, places=2)
+        self.assertAlmostEqual(network.errors.last(), 0, places=2)
 
     def test_weight_minimization(self):
         base_network = reproducible_network_train()

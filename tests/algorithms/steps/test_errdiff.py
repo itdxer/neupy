@@ -21,4 +21,4 @@ class LearningRateUpdatesTestCase(BaseTestCase):
             addons=[algorithms.ErrDiffStepUpdate]
         )
         network.train(xor_input_train, xor_target_train, epochs=200)
-        self.assertAlmostEqual(network.last_error(), 0, places=5)
+        self.assertAlmostEqual(network.errors.last(), 0, places=5)
