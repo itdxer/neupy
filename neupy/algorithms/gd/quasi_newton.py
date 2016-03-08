@@ -183,7 +183,7 @@ class QuasiNewton(NoStepSelection, GradientDescent):
 
             layer_input = network_input
             start_pos = 0
-            for layer in self.train_layers:
+            for layer in self.layers:
                 for param in layer.parameters:
                     end_pos = start_pos + param.size
                     setattr(layer, param.name.split('_')[0], T.reshape(

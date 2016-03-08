@@ -23,14 +23,14 @@ class LayersBasicsTestCase(BaseTestCase):
         bpnet = GradientDescent([Sigmoid(2), Sigmoid(3),
                                  Sigmoid(1), Output(10)])
         self.assertEqual(
-            [layer.size for layer in bpnet.layers],
+            [layer.size for layer in bpnet.all_layers],
             [2, 3, 1, 10]
         )
 
     def test_layers_iteratinos(self):
         network = GradientDescent((2, 2, 1))
 
-        layers = list(network.layers)
+        layers = list(network.all_layers)
         output_layer = layers.pop()
 
         self.assertIsNone(output_layer.relate_to_layer)
@@ -46,7 +46,7 @@ class LayersBasicsTestCase(BaseTestCase):
 
         for connection in possible_connections:
             network = GradientDescent(connection)
-            self.assertEqual(len(network.layers), 3)
+            self.assertEqual(len(network.all_layers), 3)
 
     @unittest.skip("Not ready yet")
     def test_recurrent_connections(self):

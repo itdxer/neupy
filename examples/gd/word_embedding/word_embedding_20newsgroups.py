@@ -139,11 +139,11 @@ class WordEmbedding(algorithms.Momentum):
 crossentropy.expected_dtype = theano.sparse.csr_matrix
 train_newsgroups = fetch_20newsgroups(
     subset='all',
-    categories=['rec.autos', 'rec.motorcycles']
+    categories=['rec.autos']
 )
 
 embedding_network = WordEmbedding(
-    n_words=20000,
+    n_words=10000,
     minimized_space=100,
 
     error=crossentropy,

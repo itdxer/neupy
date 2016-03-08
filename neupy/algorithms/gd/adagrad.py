@@ -39,7 +39,7 @@ class Adagrad(MinibatchGradientDescent):
 
     def init_layers(self):
         super(Adagrad, self).init_layers()
-        for layer in self.train_layers:
+        for layer in self.layers:
             for parameter in layer.parameters:
                 parameter_shape = T.shape(parameter).eval()
                 parameter.prev_mean_squred_grad = theano.shared(

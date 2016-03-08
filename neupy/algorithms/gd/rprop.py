@@ -75,7 +75,7 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
 
     def init_layers(self):
         super(RPROP, self).init_layers()
-        for layer in self.train_layers:
+        for layer in self.layers:
             for parameter in layer.parameters:
                 parameter_shape = T.shape(parameter).eval()
                 parameter.prev_delta = theano.shared(

@@ -107,6 +107,12 @@ def create_output_variable(error_function, variable_name):
     return network_output_dtype(variable_name)
 
 
+def find_input_layer(layers):
+    for layer in layers:
+        if not isinstance(layer, Dropout):
+            return layer
+
+
 class ErrorFunctionProperty(ChoiceProperty):
     """ Property that helps select error function from
     available or define a new one.
@@ -200,11 +206,12 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
     def __init__(self, connection, *args, **kwargs):
         self.connection = clean_layers(connection)
 
-        self.layers = list(self.connection)
-        self.input_layer = self.layers[0]
-        self.hidden_layers = self.layers[1:-1]
-        self.output_layer = self.layers[-1]
-        self.train_layers = self.layers[:-1]
+        self.all_layers = list(self.connection)
+        self.layers = self.all_layers[:-1]
+
+        self.input_layer = find_input_layer(self.layers)
+        self.hidden_layers = self.layers[1:]
+        self.output_layer = self.all_layers[-1]
 
         self.init_layers()
         super(ConstructableNetwork, self).__init__(*args, **kwargs)
@@ -214,10 +221,12 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         start_init_time = time.time()
 
         self.variables = AttributeKeyDict(
-            network_input=create_input_variable(self.input_layer,
-                                                variable_name='x'),
-            network_output=create_output_variable(self.error,
-                                                  variable_name='y'),
+            network_input=create_input_variable(
+                self.input_layer, variable_name='x'
+            ),
+            network_output=create_output_variable(
+                self.error, variable_name='y'
+            ),
         )
         self.methods = AttributeKeyDict()
 
@@ -235,19 +244,18 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         network_input = self.variables.network_input
         network_output = self.variables.network_output
 
-        train_layer_input = layer_input = network_input
-        for layer in self.train_layers:
+        train_prediction = prediction = network_input
+        for layer in self.layers:
             if not isinstance(layer, Dropout):
-                layer_input = layer.output(layer_input)
-            train_layer_input = layer.output(train_layer_input)
-        prediction = train_layer_input
+                prediction = layer.output(prediction)
+            train_prediction = layer.output(train_prediction)
 
         self.variables.update(
             step=theano.shared(name='step', value=asfloat(self.step)),
             epoch=theano.shared(name='epoch', value=self.last_epoch),
-            prediction_func=layer_input,
-            train_prediction_func=prediction,
-            error_func=self.error(network_output, prediction),
+            prediction_func=prediction,
+            train_prediction_func=train_prediction,
+            error_func=self.error(network_output, train_prediction),
         )
 
     def init_methods(self):
@@ -275,7 +283,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         """ Initialize layers in the same order as they were list in
         network initialization step.
         """
-        for layer in self.train_layers:
+        for layer in self.layers:
             layer.initialize()
 
     def init_train_updates(self):
@@ -283,7 +291,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         would be trigger after each trainig epoch.
         """
         updates = []
-        for layer in self.train_layers:
+        for layer in self.layers:
             updates.extend(self.init_layer_updates(layer))
         return updates
 
@@ -349,7 +357,6 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
 
     def train(self, input_train, target_train, input_test=None,
               target_test=None, *args, **kwargs):
-
         is_input_feature1d = does_layer_accept_1d_feature(self.input_layer)
         is_target_feature1d = does_layer_accept_1d_feature(
             self.output_layer

@@ -63,7 +63,7 @@ class Momentum(MinibatchGradientDescent):
 
     def init_layers(self):
         super(Momentum, self).init_layers()
-        for layer in self.train_layers:
+        for layer in self.layers:
             for parameter in layer.parameters:
                 parameter_shape = T.shape(parameter).eval()
                 parameter.prev_param_delta = theano.shared(

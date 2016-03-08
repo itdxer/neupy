@@ -32,8 +32,8 @@ class WeightEliminationTestCase(BaseTestCase):
             addons=[algorithms.WeightElimination]
         )
 
-        iter_networks = zip(base_network.train_layers,
-                            decay_network.train_layers)
+        iter_networks = zip(base_network.layers,
+                            decay_network.layers)
 
         for net_layer, decay_layer in iter_networks:
             self.assertGreater(
@@ -79,8 +79,8 @@ class WeightEliminationTestCase(BaseTestCase):
             WeightNormCase(with_smaller_norm=net3, with_bigger_norm=net1),
         )
         for case in norm_test_cases:
-            network_layers = zip(case.with_smaller_norm.train_layers,
-                                 case.with_bigger_norm.train_layers)
+            network_layers = zip(case.with_smaller_norm.layers,
+                                 case.with_bigger_norm.layers)
             for smaller_norm, bigger_norm in network_layers:
                 weight_smaller_norm = smaller_norm.weight.get_value()
                 weight_bigger_norm = bigger_norm.weight.get_value()

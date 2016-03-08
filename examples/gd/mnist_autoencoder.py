@@ -28,6 +28,7 @@ x_train, x_test = data[:60000], data[60000:]
 
 autoencoder = algorithms.Momentum(
     [
+        layers.Dropout(proba=0.5),
         layers.Sigmoid(784),
         layers.Sigmoid(100),
         layers.Output(784),

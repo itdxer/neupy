@@ -23,7 +23,7 @@ def iter_parameters(network):
         and the other will be in the same order as layers in the
         network.
     """
-    parameters = [layer.parameters for layer in network.train_layers]
+    parameters = [layer.parameters for layer in network.layers]
     return chain(*parameters)
 
 

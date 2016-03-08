@@ -26,7 +26,7 @@ class StorageTestCase(BaseTestCase):
 
             restored_bpnet = dill.load(temp)
             temp.file.seek(0)
-            layers_sizes = [layer.size for layer in restored_bpnet.layers]
+            layers_sizes = [layer.size for layer in restored_bpnet.all_layers]
 
             self.assertEqual(0.25, restored_bpnet.step)
             self.assertEqual([2, 3, 1], layers_sizes)
