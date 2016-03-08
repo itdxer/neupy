@@ -144,7 +144,7 @@ train_newsgroups = fetch_20newsgroups(
 
 embedding_network = WordEmbedding(
     n_words=20000,
-    minimized_space=1000,
+    minimized_space=100,
 
     error=crossentropy,
     batch_size=100,

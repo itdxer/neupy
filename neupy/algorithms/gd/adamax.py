@@ -64,15 +64,8 @@ class Adamax(MinibatchGradientDescent):
                     value=asfloat(np.zeros(parameter_shape)),
                 )
 
-    def init_variables(self):
-        super(Adamax, self).init_variables()
-        # It's not the same as ``epoch``, because epoch resets when
-        # ``train`` method runs second time.
-        self.variables.iteration = theano.shared(name='iteration',
-                                                 value=asfloat(1))
-
     def init_param_updates(self, layer, parameter):
-        iteration = self.variables.iteration
+        epoch = self.variables.epoch
         prev_first_moment = parameter.prev_first_moment
         prev_weighted_inf_norm = parameter.prev_weighted_inf_norm
 
@@ -87,7 +80,7 @@ class Adamax(MinibatchGradientDescent):
                                       T.abs_(gradient))
 
         parameter_delta = (
-            (1 / (1 - beta1 ** iteration)) *
+            (1 / (1 - beta1 ** epoch)) *
             (first_moment / (weighted_inf_norm + self.epsilon))
         )
 
@@ -96,9 +89,3 @@ class Adamax(MinibatchGradientDescent):
             (prev_weighted_inf_norm, weighted_inf_norm),
             (parameter, parameter - step * parameter_delta),
         ]
-
-    def init_train_updates(self):
-        updates = super(Adamax, self).init_train_updates()
-        iteration = self.variables.iteration
-        updates.append((iteration, iteration + 1))
-        return updates

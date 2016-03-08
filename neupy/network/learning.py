@@ -1,3 +1,6 @@
+from neupy.utils import format_data
+
+
 __all__ = ('SupervisedLearning', 'UnsupervisedLearning', 'LazyLearning')
 
 
@@ -15,9 +18,30 @@ class SupervisedLearning(object):
     """
     def train(self, input_train, target_train, input_test=None,
               target_test=None, epochs=100, epsilon=None):
-        self._train(input_train=input_train, target_train=target_train,
-                    input_test=input_test, target_test=target_test,
-                    epochs=epochs, epsilon=epsilon)
+
+        is_test_data_partialy_missed = (
+            (input_test is None and target_test is not None) or
+            (input_test is not None and target_test is None)
+        )
+
+        if is_test_data_partialy_missed:
+            raise ValueError("Input and target test samples missed. "
+                             "They must be defined both or none of them.")
+
+        input_train = format_data(input_train, is_feature1d=True)
+        target_train = format_data(target_train, is_feature1d=True)
+
+        if input_test is not None:
+            input_test = format_data(input_test, is_feature1d=True)
+
+        if target_test is not None:
+            target_test = format_data(target_test, is_feature1d=True)
+
+        return super(SupervisedLearning, self).train(
+            input_train=input_train, target_train=target_train,
+            input_test=input_test, target_test=target_test,
+            epochs=epochs, epsilon=epsilon
+        )
 
 
 class UnsupervisedLearning(object):
@@ -31,9 +55,12 @@ class UnsupervisedLearning(object):
         stop training procedure if it can't converge.
     """
     def train(self, input_train, epochs=100, epsilon=None):
-        self._train(input_train=input_train, target_train=None,
-                    input_test=None, target_test=None,
-                    epochs=epochs, epsilon=epsilon)
+        input_train = format_data(input_train, is_feature1d=True)
+        return super(UnsupervisedLearning, self).train(
+            input_train=input_train, target_train=None,
+            input_test=None, target_test=None,
+            epochs=epochs, epsilon=epsilon
+        )
 
 
 class LazyLearning(object):

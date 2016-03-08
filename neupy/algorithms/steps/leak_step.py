@@ -42,8 +42,6 @@ class LeakStepAdaptation(SingleStepConfigurable):
     >>>
     >>> bpnet = algorithms.GradientDescent(
     ...     (2, 4, 1),
-    ...     step=0.1,
-    ...     verbose=False,
     ...     addons=[algorithms.LeakStepAdaptation]
     ... )
     >>>

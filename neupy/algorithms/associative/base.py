@@ -139,6 +139,11 @@ class BaseStepAssociative(BaseAssociative):
         raw_output = input_data.dot(self.weight) + self.bias
         return np.where(raw_output > 0, 1, 0)
 
+    def train(self, input_train, *args, **kwargs):
+        input_train = format_data(input_train, is_feature1d=False)
+        return super(BaseStepAssociative, self).train(input_train, *args,
+                                                      **kwargs)
+
     def train_epoch(self, input_train, target_train):
         weight = self.weight
         n_unconditioned = self.n_unconditioned

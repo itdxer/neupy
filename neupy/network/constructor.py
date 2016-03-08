@@ -230,7 +230,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
 
         self.variables.update(
             step=theano.shared(name='step', value=asfloat(self.step)),
-            epoch=theano.shared(name='epoch', value=1),
+            epoch=theano.shared(name='epoch', value=self.last_epoch),
             prediction_func=layer_input,
             train_prediction_func=prediction,
             error_func=self.error(network_output, prediction),
@@ -332,6 +332,28 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         """
         super(ConstructableNetwork, self).epoch_start_update(epoch)
         self.variables.epoch.set_value(epoch)
+
+    def train(self, input_train, target_train, input_test=None,
+              target_test=None, *args, **kwargs):
+
+        is_input_feature1d = does_layer_accept_1d_feature(self.input_layer)
+        is_target_feature1d = does_layer_accept_1d_feature(
+            self.output_layer
+        )
+
+        input_train = format_data(input_train, is_input_feature1d)
+        target_train = format_data(target_train, is_target_feature1d)
+
+        if input_test is not None:
+            input_test = format_data(input_test, is_input_feature1d)
+
+        if target_test is not None:
+            target_test = format_data(target_test, is_target_feature1d)
+
+        return super(ConstructableNetwork, self).train(
+            input_train, target_train, input_test, target_test,
+            *args, **kwargs
+        )
 
     def train_epoch(self, input_train, target_train):
         return self.methods.train_epoch(input_train, target_train)

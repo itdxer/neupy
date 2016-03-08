@@ -10,8 +10,7 @@ import six
 import numpy as np
 import matplotlib.pyplot as plt
 
-from neupy.utils import (format_data, does_layer_accept_1d_feature,
-                         preformat_value, AttributeKeyDict)
+from neupy.utils import preformat_value, AttributeKeyDict
 from neupy.helpers import table
 from neupy.core.base import BaseSkeleton
 from neupy.core.properties import (BoundedProperty, NumberProperty,
@@ -50,7 +49,7 @@ def show_epoch_summary(network):
                 terminal_output_delays.append(time_delta)
 
             table_drawer.row([
-                network.training.epoch,
+                network.last_epoch,
                 network.last_error() or '-',
                 network.last_validation_error() or '-',
                 network.training.epoch_time,
@@ -264,6 +263,7 @@ class BaseNetwork(BaseSkeleton):
     def __init__(self, *args, **options):
         self.errors_in = []
         self.errors_out = []
+        self.last_epoch = 0
 
         super(BaseNetwork, self).__init__(*args, **options)
         self.init_properties()
@@ -290,39 +290,25 @@ class BaseNetwork(BaseSkeleton):
         epoch : int
             Current epoch number.
         """
-        self.training.epoch = epoch
+        self.last_epoch = epoch
 
     def train_epoch(self, input_train, target_train=None):
         raise NotImplementedError()
 
-    def _train(self, input_train, target_train=None, input_test=None,
-               target_test=None, epochs=100, epsilon=None):
-        """ Main method for the Neural Network training.
+    def train(self, input_train, target_train=None, input_test=None,
+              target_test=None, epochs=100, epsilon=None):
+        """ Method train neural network.
+
+        Parameters
+        ----------
+        input_train : array-like
+        target_train : array-like or Npne
+        input_test : array-like or None
+        target_test : array-like or None
+        epochs : int
+            Defaults to `100`.
+        epsilon : float or None
         """
-
-        # ----------- Pre-format target data ----------- #
-
-        # TODO: This solution looks ugly, I should solve this problem
-        # in different way.
-        if hasattr(self, 'connection'):
-            is_input_feature1d = does_layer_accept_1d_feature(self.input_layer)
-            is_target_feature1d = does_layer_accept_1d_feature(
-                self.output_layer
-            )
-        else:
-            is_input_feature1d = True
-            is_target_feature1d = True
-
-        input_train = format_data(input_train, is_input_feature1d)
-        target_train = format_data(target_train, is_target_feature1d)
-
-        if input_test is not None:
-            input_test = format_data(input_test, is_input_feature1d)
-
-        if target_test is not None:
-            target_test = format_data(target_test, is_target_feature1d)
-
-        # ----------- Validate input values ----------- #
 
         if epochs <= 0:
             raise ValueError("Number of epochs needs to be greater than 0.")
@@ -331,13 +317,10 @@ class BaseNetwork(BaseSkeleton):
             raise ValueError("Network should train at teast 3 epochs before "
                              "check the difference between errors")
 
-        # ----------- Predefine parameters ----------- #
-
         show_epoch = self.show_epoch
         logs = self.logs
         training = self.training = AttributeKeyDict(epoch=1)
-        compute_error_out = (input_test is not None and
-                             target_test is not None)
+        can_compute_error_out = (input_test is not None)
         last_epoch_shown = 0
 
         if epsilon is not None:
@@ -348,24 +331,22 @@ class BaseNetwork(BaseSkeleton):
                 logs.warning("Can't use `show_epoch` value in converging "
                              "mode. Set up 100 to `show_epoch` property "
                              "by default.")
-
         else:
-            iterepochs = range(1, epochs + 1)
+            next_epoch = self.last_epoch + 1
+            iterepochs = range(next_epoch, next_epoch + epochs)
             show_epoch = parse_show_epoch_property(show_epoch, epochs)
 
         epoch_summary = show_epoch_summary(self)
         training.show_epoch = show_epoch
 
-        # ----------- Training procedure ----------- #
-
         n_train_samples = input_train.shape[0]
 
         logs.title("Start train")
-        logs.message("TRAIN", "Train data size: {}".format(n_train_samples))
+        logs.message("TRAIN DATA", "size: {}".format(n_train_samples))
 
         if input_test is not None:
-            logs.message("TRAIN", "Validation data size: {}"
-                                  "".format(input_test.shape[0]))
+            n_output_samples = input_test.shape[0]
+            logs.message("TEST DATA", "size: {}".format(n_output_samples))
 
         if epsilon is None:
             logs.message("TRAIN", "Total epochs: {}".format(epochs))
@@ -375,23 +356,20 @@ class BaseNetwork(BaseSkeleton):
         logs.write("")
         next(epoch_summary)
 
-        # Optimizations for long loops
+        # Storring attributes and methods in local variables we prevent
+        # useless __getattr__ call a lot of times in each loop.
+        # This variables speed up loop in case on huge amount of
+        # iterations.
         errors = self.errors_in
         errors_out = self.errors_out
         shuffle_data = self.shuffle_data
-
-        if compute_error_out:
-            # TODO: Method is undefined. Should fix it later.
-            prediction_error = self.prediction_error
 
         train_epoch = self.train_epoch
         epoch_end_signal = self.epoch_end_signal
         train_end_signal = self.train_end_signal
         epoch_start_update = self.epoch_start_update
 
-        self.input_train = input_train
-        self.target_train = target_train
-
+        is_first_iteration = True
         for epoch in iterepochs:
             epoch_start_time = time.time()
             epoch_start_update(epoch)
@@ -405,14 +383,14 @@ class BaseNetwork(BaseSkeleton):
             try:
                 error = train_epoch(input_train, target_train)
 
-                if compute_error_out:
-                    error_out = prediction_error(input_test, target_test)
+                if can_compute_error_out:
+                    error_out = self.prediction_error(input_test, target_test)
                     errors_out.append(error_out)
 
                 errors.append(error)
                 training.epoch_time = time.time() - epoch_start_time
 
-                if epoch % training.show_epoch == 0 or epoch == 1:
+                if epoch % training.show_epoch == 0 or is_first_iteration:
                     next(epoch_summary)
                     last_epoch_shown = epoch
 
@@ -426,6 +404,8 @@ class BaseNetwork(BaseSkeleton):
                 logs.message("TRAIN", "Epoch #{} stopped. {}"
                                       "".format(epoch, str(err)))
                 break
+
+            is_first_iteration = False
 
         if epoch != last_epoch_shown:
             next(epoch_summary)

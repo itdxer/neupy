@@ -13,33 +13,31 @@ def iter_until_converge(network, epsilon, max_epochs):
     training = network.training
     logs = network.logs
 
-    if not hasattr(network, 'epoch'):
-        training.epoch = 1
-
     # Trigger first iteration and store first error term
-    yield training.epoch
+    yield network.last_epoch
     previous_error = error_delta = network.last_error()
 
+    epoch = network.last_epoch
     while error_delta > epsilon:
-        training.epoch += 1
-        yield training.epoch
+        epoch = epoch + 1
+        yield epoch
 
         last_error = network.last_error()
         error_delta = abs(last_error - previous_error)
         previous_error = last_error
 
-        if training.epoch >= max_epochs and error_delta > epsilon:
+        if epoch >= max_epochs and error_delta > epsilon:
             logs.message("TRAIN", "Epoch #{} stopped. Network didn't "
                                   "converge after {} iterations"
-                                  "".format(training.epoch, max_epochs))
+                                  "".format(epoch, max_epochs))
             return
 
     if np.isnan(error_delta) or np.isinf(error_delta):
         logs.message("TRAIN", "Epoch #{} stopped. Network error value is "
-                              "invalid".format(training.epoch))
+                              "invalid".format(epoch))
     else:
         logs.message("TRAIN", "Epoch #{} stopped. Network converged."
-                              "".format(training.epoch))
+                              "".format(epoch))
 
 
 def shuffle(*arrays):

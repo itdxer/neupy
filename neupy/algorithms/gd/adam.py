@@ -64,15 +64,8 @@ class Adam(MinibatchGradientDescent):
                     value=asfloat(np.zeros(parameter_shape)),
                 )
 
-    def init_variables(self):
-        super(Adam, self).init_variables()
-        # It's not the same as ``epoch``, because epoch resets when
-        # ``train`` method runs second time.
-        self.variables.iteration = theano.shared(name='iteration',
-                                                 value=asfloat(1))
-
     def init_param_updates(self, layer, parameter):
-        iteration = self.variables.iteration
+        epoch = self.variables.epoch
         prev_first_moment = parameter.prev_first_moment
         prev_second_moment = parameter.prev_second_moment
 
@@ -89,8 +82,8 @@ class Adam(MinibatchGradientDescent):
             (1 - beta2) * gradient ** 2
         )
 
-        first_moment_bias_corrected = first_moment / (1 - beta1 ** iteration)
-        second_moment_bias_corrected = second_moment / (1 - beta2 ** iteration)
+        first_moment_bias_corrected = first_moment / (1 - beta1 ** epoch)
+        second_moment_bias_corrected = second_moment / (1 - beta2 ** epoch)
 
         parameter_delta = first_moment_bias_corrected * (
             T.sqrt(second_moment_bias_corrected) + epsilon
@@ -101,9 +94,3 @@ class Adam(MinibatchGradientDescent):
             (prev_second_moment, second_moment),
             (parameter, parameter - step * parameter_delta),
         ]
-
-    def init_train_updates(self):
-        updates = super(Adam, self).init_train_updates()
-        iteration = self.variables.iteration
-        updates.append((iteration, iteration + 1))
-        return updates
