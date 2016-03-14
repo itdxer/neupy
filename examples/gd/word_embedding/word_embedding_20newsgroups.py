@@ -1,126 +1,55 @@
-import os
-import string
 from collections import Counter
 from itertools import chain
 
 import theano
-import theano.sparse
 import theano.tensor as T
 import numpy as np
-import nltk
-from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
-import scipy.sparse as sp
+import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn import metrics, manifold
-from sklearn.datasets import fetch_20newsgroups
-from neupy import algorithms, layers
-from neupy.core.properties import IntProperty
+from sklearn import manifold
+from sklearn.pipeline import Pipeline
+from neupy import algorithms, layers, environment
+from neupy.utils import asint
+
+from utils import accuracy_score, AverageLinearLayer, crossentropy
+from preprocessing import (TokenizeTexts, VoidFunctionTransformer,
+                           PrepareTrainingData)
 
 
-np.random.seed(0)
+environment.reproducible()
 theano.config.floatX = 'float32'
 
 
-class AverageLinearLayer(layers.Layer):
-    def output(self, input_value):
-        input_value = T.cast(input_value, 'int32')
-        summator = self.weight[input_value]
-        self.parameters = [self.weight]
-        return summator.mean(axis=1)
-
-
-def crossentropy(expected, predicted, epsilon=1e-10):
-    predicted = T.clip(predicted, epsilon, 1.0 - epsilon)
-    n_samples = expected.shape[0]
-
-    error = theano.sparse.sp_sum(-expected * T.log(predicted))
-    return error / n_samples
-
-
-def accuracy_score(expected, predicted):
-    return (predicted == expected).sum() / len(predicted)
-
-
-def tokenize_texts(texts):
-    stoplist = stopwords.words('english')
-    stemmer = PorterStemmer()
-    punctuation = string.punctuation
-
-    tokenized_texts = []
-    for text in texts:
-        tokenized_text = []
-        for word in nltk.word_tokenize(text.lower()):
-            word = ''.join([l for l in word if l not in punctuation])
-
-            if word not in stoplist and len(word) > 1:
-                word = stemmer.stem(word)
-                tokenized_text.append(word)
-
-        tokenized_texts.append(tokenized_text)
-    return tokenized_texts
-
-
-def prepare_training_data(texts, dictionary, window_size=5):
-    train_data, target_data = [], []
-
-    for text in texts:
-        cleaned_text = []
-        for word in text:
-            if word in dictionary:
-                cleaned_text.append(dictionary[word])
-
-        for i in range(window_size, len(cleaned_text) - window_size):
-            target_word = cleaned_text[i]
-            input_context = (
-                cleaned_text[i - window_size:i] +
-                cleaned_text[i + 1:i + window_size + 1]
-            )
-
-            target_data.append(target_word)
-            train_data.append(input_context)
-
-    n_samples = len(target_data)
-    dictionary_size = len(dictionary)
-    row_indeces = np.arange(n_samples)
-    column_indeces = np.array(target_data)
-
-    target_data = sp.csr_matrix(
-        (
-            np.ones(n_samples),
-            (row_indeces, column_indeces),
-        ),
-        shape=(n_samples, dictionary_size),
-        dtype=theano.config.floatX,
-    )
-
-    return np.array(train_data), target_data
-
-
 class WordEmbedding(algorithms.Momentum):
-    n_words = IntProperty(minval=1, required=True)
-    minimized_space = IntProperty(minval=1, required=True)
-
-    def __init__(self, n_words, minimized_space, **options):
-        connection = [
-            AverageLinearLayer(n_words),
-            layers.Softmax(minimized_space),
-            layers.ArgmaxOutput(n_words),
-        ]
-
-        self.dictionary = {}
-        self.n_words = n_words
+    def __init__(self, minimized_space, min_frequency=10, **options):
+        self.dictionary = []
+        self.n_words = None
+        self.min_frequency = min_frequency
         self.minimized_space = minimized_space
-
-        super(WordEmbedding, self).__init__(connection, **options)
+        self.default_options = options
 
     def build_dictionary(self, data):
-        dictionary = Counter(chain(*data))
-        most_frequent_words = dictionary.most_common(self.n_words)
+        if hasattr(self, 'connection'):
+            raise ValueError('Neural Network has already created. '
+                             'Functionality that helps extend dictionary is '
+                             'not implemented.')
 
-        self.dictionary = {}
-        for i, (word, _) in enumerate(most_frequent_words):
-            self.dictionary[word] = i
+        counted_words = Counter(chain(*data))
+        most_frequent_words = counted_words.most_common(self.n_words)
+        dictionary = self.dictionary
+
+        for word, frequency in most_frequent_words:
+            if frequency >= self.min_frequency:
+                dictionary.append(word)
+
+        self.n_words = len(dictionary)
+
+        connection = [
+            AverageLinearLayer(self.n_words),
+            layers.Softmax(self.minimized_space),
+            layers.ArgmaxOutput(self.n_words),
+        ]
+        super(WordEmbedding, self).__init__(connection, **self.default_options)
 
     def init_methods(self):
         super(WordEmbedding, self).init_methods()
@@ -131,40 +60,76 @@ class WordEmbedding(algorithms.Momentum):
             self.input_layer.output(network_input)
         )
 
+        words_id_list = self.variables.word_id = T.ivector()
+        weight = self.input_layer.weight
+        words_matrix = weight[words_id_list, :]
+
+        all_word_vectors_length = weight.norm(L=2, axis=1).reshape((-1, 1))
+        word_vectors_length = words_matrix.norm(L=2, axis=1).reshape((-1, 1))
+
+        unit_words_matrix = words_matrix / word_vectors_length
+        unit_weight = weight / all_word_vectors_length
+        cosine_similarities = unit_words_matrix.dot(unit_weight.T)
+
+        n_words = words_id_list.shape[0]
+        the_same_words = cosine_similarities[T.arange(n_words), words_id_list]
+        # Similarity within the same words will be equal to 1.
+        # That's why we need make them equal to 0
+        cosine_similarities = T.set_subtensor(the_same_words, 0)
+
+        self.methods.cosine_similarties = theano.function(
+            [words_id_list], cosine_similarities
+        )
+
     def transform_to_vector(self, text):
         return self.methods.transform_to_vector(text)
 
+    def most_similar(self, words, n_similar=10):
+        identifiers = [self.dictionary.index(word) for word in words]
+        identifiers = asint(identifiers)
+        similarities = self.methods.cosine_similarties(identifiers)
 
-# Make it possible to use sparse matrix for trainig target
-crossentropy.expected_dtype = theano.sparse.csr_matrix
-train_newsgroups = fetch_20newsgroups(
-    subset='all',
-    categories=['rec.autos']
-)
+        similarities_indeces = similarities.argsort(axis=1)
+        similarities.sort(axis=1)
+
+        n_most_similar_vales = similarities[:, -n_similar:][:, ::-1]
+        n_most_similar_indeces = similarities_indeces[:, -n_similar:][:, ::-1]
+
+        dictionary = np.array(self.dictionary)
+        n_most_similar_words = dictionary[n_most_similar_indeces]
+
+        return n_most_similar_words, n_most_similar_vales
+
+
+data = pd.read_csv('amazon_cells_labelled.txt', sep='\t',
+                   header=None, names=['review', 'sentiment'])
+reviews = data.review.values
 
 embedding_network = WordEmbedding(
-    n_words=10000,
-    minimized_space=100,
+    minimized_space=400,
+    min_frequency=5,
 
     error=crossentropy,
     batch_size=100,
     momentum=0.99,
     nesterov=True,
     verbose=True,
+    shuffle_data=True,
     step=0.1,
-
-    # Decrease step after each epoch
-    epochs_step_minimizator=25,
-    addons=[algorithms.SimpleStepMinimization]
 )
 
-data = tokenize_texts(train_newsgroups.data)
-embedding_network.build_dictionary(data)
-x_train, y_train = prepare_training_data(
-    data,
-    embedding_network.dictionary,
-    window_size=2
-)
+text_preprocessing = Pipeline([
+    ('tokenize_texts', TokenizeTexts(ignore_stopwords=False)),
+    ('build_dictionary', VoidFunctionTransformer(
+        func=embedding_network.build_dictionary,
+        validate=False,
+    )),
+    ('prepare_training_data', PrepareTrainingData(
+        dictionary=embedding_network.dictionary,
+        window_size=3,
+    )),
+])
+x_train, y_train = text_preprocessing.transform(reviews)
 embedding_network.train(x_train, y_train, epochs=30)
 
 # Check the accuracy
@@ -172,14 +137,16 @@ predicted = embedding_network.predict(x_train)
 accuracy = accuracy_score(y_train.indices, predicted)
 print("Accuracy: {:.2f}%".format(accuracy * 100))
 
-# Visualize embedded words
-tsne = manifold.TSNE(n_components=2)
-word_vectors = embedding_network.input_layer.weight.get_value()
-minimized_word_vectors = tsne.fit_transform(word_vectors)
-id2token = {v:k for k, v in embedding_network.dictionary.items()}
-
-fig, ax = plt.subplots(1, 1)
-for i, row in enumerate(minimized_word_vectors):
-    ax.annotate(id2token[i], row)
-
-plt.show()
+# # Visualize embedded words
+# word_vectors = embedding_network.input_layer.weight.get_value()
+# tsne = manifold.LocallyLinearEmbedding(n_components=2)
+# minimized_word_vectors = tsne.fit_transform(word_vectors)
+# id2token = {v:k for k, v in embedding_network.dictionary.items()}
+#
+# fig, ax = plt.subplots(1, 1)
+# ax.set_ylim(-15, 15)
+# ax.set_xlim(-15, 15)
+# for i, row in enumerate(minimized_word_vectors[:500]):
+#     ax.annotate(id2token[i], row)
+#
+# plt.show()

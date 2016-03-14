@@ -1,5 +1,5 @@
-NeuPy
-=====
+NeuPy v0.2.0
+============
 
 NeuPy is a Python library for Artificial Neural Networks.
 You can run and test different Neural Network algorithms.
@@ -27,6 +27,45 @@ Links
 * `Tutorials <http://neupy.com/archive.html>`_
 * `Available algorithms <http://neupy.com/docs/algorithms.html>`_
 
+Tutorials
+---------
+
+* `Password recovery <http://neupy.com/2015/09/21/password_recovery.html>`_
+* `Discrete Hopfield Network <http://neupy.com/2015/09/20/discrete_hopfield_network.html>`_
+* `Boston house-prices dataset <http://neupy.com/2015/07/04/boston_house_prices_dataset.html>`_
+* `Visualize Backpropagation Algorithms <http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html>`_
+
+Examples
+--------
+
+Gradient based Neural network
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* `MNIST, Multilayer perceptron <examples/gd/mnist_mlp.py>`_
+* `Rectangle images, Multilayer perceptron <examples/gd/rectangles_mlp.py>`_
+* `MNIST, Denoising Autoencoder <examples/gd/mnist_autoencoder.py>`_
+* `Boston House Price prediction, Hessian algorithm <examples/gd/boston_price_prediction.py>`_
+* `Learning Algorithms Visualization, Gradient Descent, Momentum, RPROP and Conjugate Gradient <examples/gd/gd_algorithms_visualization.py>`_
+
+Competitive Neural Networks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* `Simple SOFM example <examples/competitive/sofm_basic.py>`_
+
+Radial Basis Function Neural Networks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* `Classify iris dataset, Probabilistic Neural Network (PNN) <examples/rbfn/pnn_iris.py>`_
+* `Regression using Diabets dataset, Generilized Neural Nerwork (GRNN) <examples/rbfn/grnn_params_selection.py>`_
+* `Music-Speech audio classification, Probabilistic Neural Network (PNN) <examples/rbfn/music_speech>`_
+
+Memory based Neural Networks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* `Sinus function approximation, CMAC <examples/memory/cmac_basic.py>`_
+* `Visualize Discrete Hopfield Neural Network energy function <examples/memory/dhn_energy_func.py>`_
+* `Password recovery, Discrete Hopfield Neural Network <examples/memory/password_recovery.py>`_
+
 Dependence
 ----------
 
@@ -39,12 +78,14 @@ Dependence
 Next steps
 ----------
 
-* Bug fixing and version stabilization
+* Add convolutional neural network layers (https://github.com/itdxer/neupy/issues/56)
+* Add reccurent neural network layers (https://github.com/itdxer/neupy/issues/57)
+* Bug fixing and version stabilization (https://github.com/itdxer/neupy/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
 * Speeding up algorithms
 * Adding more algorithms
 
-Library support
----------------
+Library includes
+----------------
 
 * Radial Basis Functions Networks (RBFN)
 * GradientDescent and different optimization for it

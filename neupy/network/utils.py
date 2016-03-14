@@ -54,10 +54,15 @@ def shuffle(*arrays):
     if not arrays:
         return tuple()
 
-    first = arrays[0]
+    not_none_arrays = [array for array in arrays if array is not None]
+
+    if not not_none_arrays:
+        return arrays
+
+    first = not_none_arrays[0]
     n_samples = first.shape[0]
 
-    for array in arrays:
+    for array in not_none_arrays:
         if n_samples != array.shape[0]:
             raise ValueError("All matrices should have the same "
                              "number of rows")

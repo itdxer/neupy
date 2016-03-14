@@ -32,12 +32,14 @@ class KohonenTestCase(BaseTestCase):
         # test one iteration update
         data = np.reshape(input_data[0, :], (1, input_data.shape[1]))
         kh.train(data, epochs=1)
-        self.assertTrue(np.all(
-            kh.weight == np.array([
+        np.testing.assert_array_almost_equal(
+            kh.weight,
+            np.array([
                 [0.7071, 0.4516, -1.0000],
                 [-0.7071, 0.84385,  0.0000],
-            ])
-        ))
+            ]),
+            decimal=4
+        )
 
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(

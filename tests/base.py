@@ -18,8 +18,7 @@ class BaseTestCase(unittest.TestCase):
     use_sandbox_mode = True
 
     def setUp(self):
-        np.random.seed(self.random_seed)
-        random.seed(self.random_seed)
+        environment.reproducible(seed=self.random_seed)
 
         if not self.verbose:
             logging.disable(logging.CRITICAL)

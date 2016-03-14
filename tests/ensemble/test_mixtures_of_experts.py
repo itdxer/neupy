@@ -86,7 +86,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                     algorithms.GradientDescent(
                         (1, 20, 1),
                         step=0.2,
-                        error=rmsle,
+                        error='rmsle',
                         verbose=False,
                     )
                 ],
@@ -102,7 +102,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                 networks=networks,
                 gating_network=algorithms.GradientDescent(
                     layers.Softmax(1) > layers.Output(2),
-                    error=rmsle,
+                    error='rmsle',
                     verbose=False
                 ),
             )
