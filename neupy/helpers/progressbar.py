@@ -1,4 +1,4 @@
-""" Code from `tqdm` library: https://github.com/noamraph/tqdm
+""" Code from a `tqdm` library: https://github.com/noamraph/tqdm
 """
 import sys
 import time
@@ -62,12 +62,18 @@ class StatusPrinter(object):
 
     def write(self, text):
         n_spaces = max(self.last_printed_len - len(text), 0)
+
         self.file.write('\r' + text + ' ' * n_spaces)
         self.file.flush()
+
         self.last_printed_len = len(text)
 
+    def clean(self):
+        self.write('')
+        self.file.write('\r')
 
-def progressbar(iterable, desc='', total=None, leave=False, file=sys.stderr,
+
+def progressbar(iterable, desc='', total=None, file=sys.stderr,
                 mininterval=0.01, miniters=1, init_interval=0):
     """ Get an iterable object, and return an iterator which acts
     exactly like the iterable, but prints a progress meter and updates
@@ -83,9 +89,6 @@ def progressbar(iterable, desc='', total=None, leave=False, file=sys.stderr,
         len(iterable) is used if it is defined.
     file : object
         Can be a file-like object to output the progress message to.
-    leave : bool
-        If leave is False, ``progressbar`` deletes its traces
-        from screen after it has finished iterating over all elements.
     mininterval : float
     miniters : int
         If less than mininterval seconds or miniters
@@ -109,31 +112,26 @@ def progressbar(iterable, desc='', total=None, leave=False, file=sys.stderr,
     start_time = last_print_time = time.time()
     last_print_n = 0
     n = 0
-    for obj in iterable:
-        yield obj
+
+    try:
+        for obj in iterable:
+            yield obj
+            timer.cancel()
+
+            # Now the object was created and processed, so we
+            # can print the meter.
+            n += 1
+            if n - last_print_n >= miniters:
+                # We check the counter first, to reduce the
+                # overhead of time.time()
+                current_time = time.time()
+
+                if (current_time - last_print_time) >= mininterval:
+                    time_delta = current_time - start_time
+                    printer.write(prefix + format_meter(n, total, time_delta))
+                    last_print_n = n
+                    last_print_time = current_time
+    finally:
+        # in case of instant error or early interuption
         timer.cancel()
-
-        # Now the object was created and processed, so we
-        # can print the meter.
-        n += 1
-        if n - last_print_n >= miniters:
-            # We check the counter first, to reduce the
-            # overhead of time.time()
-            current_time = time.time()
-            if current_time - last_print_time >= mininterval:
-                printer.write(
-                    prefix + format_meter(n, total, current_time - start_time)
-                )
-                last_print_n = n
-                last_print_time = current_time
-
-    if not leave:
-        printer.write('')
-        sys.stdout.write('\r')
-    else:
-        if last_print_n < n:
-            current_time = time.time()
-            printer.write(
-                prefix + format_meter(n, total, current_time - start_time)
-            )
-        file.write('\n')
+        printer.clean()

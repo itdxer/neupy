@@ -1,5 +1,10 @@
 from __future__ import print_function
 
+import os
+import sys
+import importlib
+from contextlib import contextmanager
+
 from neupy.core.config import Configurable
 from neupy.core.properties import BaseProperty
 from neupy.helpers import progressbar
@@ -20,8 +25,8 @@ class TerminalLogger(object):
     template : str
         Terminal output message template. Defaults
         to ``"[{name}] {text}"``.
-    stdout : func
-        Function shows output in terminal. Defaults to ``print``.
+    stdout : object
+        Writes output in terminal. Defaults to ``sys.stdout``.
     """
 
     colors = {
@@ -34,7 +39,7 @@ class TerminalLogger(object):
     def __init__(self):
         self.enable = True
         self.template = "[{tag}] {text}"
-        self.stdout = print
+        self.stdout = sys.stdout
 
     def write(self, text):
         """ Method writes text in terminal if logging is enable.
@@ -44,7 +49,10 @@ class TerminalLogger(object):
         text : str
         """
         if self.enable:
-            self.stdout(text)
+            self.stdout.write(text + '\n')
+
+    def newline(self):
+        self.write('\r')
 
     def message(self, tag, text, color='green'):
         """ Methods writes message in terminal using specific template.
@@ -55,7 +63,7 @@ class TerminalLogger(object):
         ----------
         name : str
         text : str
-        color : {{'green', 'gray', 'red'}}
+        color : {{'green', 'gray', 'red', 'white'}}
             Property that color text defined as ``tag`` parameter.
             Defaults to ``green``.
         """
@@ -120,6 +128,27 @@ class TerminalLogger(object):
         if self.enable:
             return progressbar(iterator, *args, **kwargs)
         return iterator
+
+    @contextmanager
+    def disable_user_input(self):
+        """ Context manager helps ignore user input in
+        terminal for UNIX.
+        """
+        is_windows = (os.name == 'nt')
+
+        if not is_windows and self.enable:
+            curses = importlib.import_module('curses')
+
+            try:
+                stdscr = curses.initscr()
+                curses.echo()
+                yield
+
+            finally:
+                curses.noecho()
+                curses.endwin()
+        else:
+            yield
 
 
 class VerboseProperty(BaseProperty):

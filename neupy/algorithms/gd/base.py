@@ -240,13 +240,17 @@ class MinibatchGradientDescent(GradientDescent):
 
         n_batches = int(math.floor(n_samples / batch_size))
         batches_index_iter = range(n_batches)
+
         # TODO: quick hack, fix it later.
         if hasattr(self, 'training') and self.training.show_epoch == 1:
-            batches_index_iter = logs.progressbar(batches_index_iter,
-                                                  mininterval=0.05,
-                                                  desc='Iter batches',
-                                                  miniters=1,
-                                                  init_interval=1.)
+            batches_index_iter = logs.progressbar(
+                batches_index_iter,
+                mininterval=0.05,
+                desc='Iter batches',
+                miniters=1,
+                init_interval=1.,
+                file=self.logs.stdout
+            )
 
         error = 0
         for batch_index in batches_index_iter:

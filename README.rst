@@ -38,8 +38,8 @@ Tutorials
 Examples
 --------
 
-Gradient based Neural network
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Gradient based Neural Networks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * `MNIST, Multilayer perceptron <examples/gd/mnist_mlp.py>`_
 * `Rectangle images, Multilayer perceptron <examples/gd/rectangles_mlp.py>`_
@@ -52,11 +52,11 @@ Competitive Neural Networks
 
 * `Simple SOFM example <examples/competitive/sofm_basic.py>`_
 
-Radial Basis Function Neural Networks
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Neural Networks with Radial Basis Functions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * `Classify iris dataset, Probabilistic Neural Network (PNN) <examples/rbfn/pnn_iris.py>`_
-* `Regression using Diabets dataset, Generilized Neural Nerwork (GRNN) <examples/rbfn/grnn_params_selection.py>`_
+* `Regression using Diabetes dataset, Generilized Neural Nerwork (GRNN) <examples/rbfn/grnn_params_selection.py>`_
 * `Music-Speech audio classification, Probabilistic Neural Network (PNN) <examples/rbfn/music_speech>`_
 
 Memory based Neural Networks
@@ -78,8 +78,8 @@ Dependence
 Next steps
 ----------
 
-* Add convolutional neural network layers (https://github.com/itdxer/neupy/issues/56)
-* Add reccurent neural network layers (https://github.com/itdxer/neupy/issues/57)
+* Adding convolutional neural network layers (https://github.com/itdxer/neupy/issues/56)
+* Adding reccurent neural network layers (https://github.com/itdxer/neupy/issues/57)
 * Bug fixing and version stabilization (https://github.com/itdxer/neupy/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
 * Speeding up algorithms
 * Adding more algorithms

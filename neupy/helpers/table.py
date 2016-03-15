@@ -159,7 +159,7 @@ class BaseState(with_metaclass(SharedDocsABCMeta)):
         """ Draw ASCII line. Line width depence on the table
         column sizes.
         """
-        self.table.stdout('-' * self.table.total_width)
+        self.table.stdout('\r' + '-' * self.table.total_width)
 
     def message(self, text):
         """ Write additional message in table. All seperators between
@@ -167,7 +167,7 @@ class BaseState(with_metaclass(SharedDocsABCMeta)):
         """
         # Exclude from total width 2 separators and 2 spaces near them
         formated_text = text.ljust(self.table.total_width - 4)
-        self.table.stdout("| " + formated_text + " |")
+        self.table.stdout("\r| " + formated_text + " |")
 
     @abstractmethod
     def start(self):
@@ -212,7 +212,7 @@ class DrawingState(BaseState):
             val = column.format_value(val)
             cell_value = str(val).ljust(column.width)
             formated_data.append(cell_value)
-        self.table.stdout("| " + " | ".join(formated_data) + " |")
+        self.table.stdout("\r| " + " | ".join(formated_data) + " |")
 
 
 class IdleState(BaseState):
@@ -240,7 +240,7 @@ class IdleState(BaseState):
         for column in self.table.columns:
             header_name = str(column.name).ljust(column.width)
             headers.append(header_name)
-        self.table.stdout("| " + " | ".join(headers) + " |")
+        self.table.stdout("\r| " + " | ".join(headers) + " |")
 
         self.line()
 

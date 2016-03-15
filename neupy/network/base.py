@@ -77,7 +77,7 @@ def show_epoch_summary(network):
 
     finally:
         table_drawer.finish()
-        network.logs.write("")
+        network.logs.newline()
 
 
 def show_network_options(network, highlight_options=None):
@@ -432,51 +432,54 @@ class BaseNetwork(BaseSkeleton):
         on_epoch_start_update = self.on_epoch_start_update
 
         is_first_iteration = True
-        can_compute_error_out = (input_test is not None)
+        can_compute_validation_error = (input_test is not None)
         last_epoch_shown = 0
 
-        for epoch in iterepochs:
-            epoch_start_time = time.time()
-            on_epoch_start_update(epoch)
+        with logs.disable_user_input():
+            for epoch in iterepochs:
+                epoch_start_time = time.time()
+                on_epoch_start_update(epoch)
 
-            if shuffle_data:
-                input_train, target_train = shuffle(input_train, target_train)
+                if shuffle_data:
+                    input_train, target_train = shuffle(input_train,
+                                                        target_train)
 
-            try:
-                error_in = train_epoch(input_train, target_train)
-                errors.append(error_in)
+                try:
+                    train_error = train_epoch(input_train, target_train)
+                    errors.append(train_error)
 
-                if can_compute_error_out:
-                    error_out = self.prediction_error(input_test, target_test)
-                    validation_errors.append(error_out)
+                    if can_compute_validation_error:
+                        validation_error = self.prediction_error(input_test,
+                                                                 target_test)
+                        validation_errors.append(validation_error)
 
-                epoch_finish_time = time.time()
-                training.epoch_time = epoch_finish_time - epoch_start_time
+                    epoch_finish_time = time.time()
+                    training.epoch_time = epoch_finish_time - epoch_start_time
 
-                if epoch % training.show_epoch == 0 or is_first_iteration:
-                    next(epoch_summary)
-                    last_epoch_shown = epoch
+                    if epoch % training.show_epoch == 0 or is_first_iteration:
+                        next(epoch_summary)
+                        last_epoch_shown = epoch
 
-                if epoch_end_signal is not None:
-                    epoch_end_signal(self)
+                    if epoch_end_signal is not None:
+                        epoch_end_signal(self)
 
-            except StopNetworkTraining as err:
-                # TODO: This notification break table view in terminal.
-                # Should show it in different way.
-                # Maybe I can send it in generator using ``throw`` method
-                logs.message("TRAIN", "Epoch #{} stopped. {}"
-                                      "".format(epoch, str(err)))
-                break
+                    is_first_iteration = False
 
-            is_first_iteration = False
+                except StopNetworkTraining as err:
+                    # TODO: This notification breaks table view in terminal.
+                    # Should show it in different way.
+                    # Maybe I can send it in generator using ``throw`` method
+                    logs.message("TRAIN", "Epoch #{} stopped. {}"
+                                          "".format(epoch, str(err)))
 
-        if epoch != last_epoch_shown:
-            next(epoch_summary)
+            if epoch != last_epoch_shown:
+                next(epoch_summary)
 
-        if train_end_signal is not None:
-            train_end_signal(self)
+            if train_end_signal is not None:
+                train_end_signal(self)
 
-        epoch_summary.close()
+            epoch_summary.close()
+
         logs.message("TRAIN", "Trainig finished")
 
     def plot_errors(self, logx=False, ax=None, show=True):

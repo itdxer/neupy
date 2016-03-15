@@ -100,4 +100,5 @@ class TableDrawerTestCase(BaseTestCase):
             table_drawing.finish()
             terminal_output = out.getvalue().strip()
 
-        self.assertEqual(table_drawing_result, terminal_output)
+        self.assertEqual(table_drawing_result,
+                         terminal_output.replace('\r', ''))
