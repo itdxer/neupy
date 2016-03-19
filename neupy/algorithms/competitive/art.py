@@ -6,13 +6,12 @@ from neupy.utils import format_data
 from neupy.core.properties import (ProperFractionProperty,
                                    IntProperty)
 from neupy.network.base import BaseNetwork
-from neupy.network.types import Clustering
 
 
 __all__ = ('ART1',)
 
 
-class ART1(Clustering, BaseNetwork):
+class ART1(BaseNetwork):
     """ Adaptive Resonance Theory (ART1) Network for binary
     data clustering.
 

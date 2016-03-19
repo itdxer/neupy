@@ -4,7 +4,6 @@ from neupy.utils import format_data
 from neupy.core.properties import BoundedProperty
 from neupy.network.base import BaseNetwork
 from neupy.network.learning import LazyLearning
-from neupy.network.types import Classification
 
 from .utils import pdf_between_data
 
@@ -12,7 +11,7 @@ from .utils import pdf_between_data
 __all__ = ('PNN',)
 
 
-class PNN(LazyLearning, Classification, BaseNetwork):
+class PNN(LazyLearning, BaseNetwork):
     """ Probabilistic Neural Network for classification.
 
     Parameters

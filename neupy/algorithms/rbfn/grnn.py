@@ -4,14 +4,13 @@ from neupy.utils import format_data
 from neupy.core.properties import BoundedProperty
 from neupy.network.base import BaseNetwork
 from neupy.network.learning import LazyLearning
-from neupy.network.types import Regression
 from .utils import pdf_between_data
 
 
 __all__ = ('GRNN',)
 
 
-class GRNN(LazyLearning, Regression, BaseNetwork):
+class GRNN(LazyLearning, BaseNetwork):
     """ Generalized Regression Neural Network.
 
     Parameters
