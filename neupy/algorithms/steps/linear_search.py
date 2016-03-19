@@ -29,12 +29,11 @@ class LinearSearch(SingleStepConfigurable):
 
     Examples
     --------
-    >>> import numpy as np
-    >>> np.random.seed(0)
-    >>>
     >>> from sklearn import datasets, preprocessing
     >>> from sklearn.cross_validation import train_test_split
-    >>> from neupy import algorithms, layers, estimators
+    >>> from neupy import algorithms, layers, estimators, environment
+    >>>
+    >>> environment.reproducible()
     >>>
     >>> dataset = datasets.load_boston()
     >>> data, target = dataset.data, dataset.target

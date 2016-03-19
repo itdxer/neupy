@@ -1,9 +1,3 @@
-NeuPy v0.2.0
-============
-
-NeuPy is a Python library for Artificial Neural Networks.
-You can run and test different Neural Network algorithms.
-
 |Travis|_
 
 .. |Travis| image:: https://api.travis-ci.org/itdxer/neupy.png?branch=master
@@ -11,6 +5,16 @@ You can run and test different Neural Network algorithms.
 
 .. |Coveralls| image:: https://coveralls.io/repos/github/itdxer/neupy/badge.svg?branch=master
 .. _Coveralls: https://coveralls.io/github/itdxer/neupy?branch=master
+
+NeuPy v0.2.0
+============
+
+NeuPy is a Python library for Artificial Neural Networks.
+You can run and test different Neural Network algorithms.
+
+.. image:: site/_static/img/mnist-solution-code.png
+    :width: 80%
+    :align: center
 
 Installation
 ------------
@@ -66,8 +70,8 @@ Memory based Neural Networks
 * `Visualize Discrete Hopfield Neural Network energy function <examples/memory/dhn_energy_func.py>`_
 * `Password recovery, Discrete Hopfield Neural Network <examples/memory/password_recovery.py>`_
 
-Dependence
-----------
+Dependencies
+------------
 
 * Python 2.7, 3.3, 3.4
 * Theano >= 0.7.0
@@ -78,28 +82,16 @@ Dependence
 Next steps
 ----------
 
-* Adding convolutional neural network layers (https://github.com/itdxer/neupy/issues/56)
-* Adding reccurent neural network layers (https://github.com/itdxer/neupy/issues/57)
-* Bug fixing and version stabilization (https://github.com/itdxer/neupy/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
+* Adding convolutional neural network layers (`Issue #56 <https://github.com/itdxer/neupy/issues/56>`_)
+* Adding reccurent neural network layers (`Issue #57 <https://github.com/itdxer/neupy/issues/57>`_)
+* Bug fixing and version stabilization  (`Known bugs <https://github.com/itdxer/neupy/issues?q=is%3Aissue+is%3Aopen+label%3Abug>`_)
 * Speeding up algorithms
 * Adding more algorithms
-
-Library includes
-----------------
-
-* Radial Basis Functions Networks (RBFN)
-* GradientDescent and different optimization for it
-* Neural Network Ensembles
-* Associative and Autoasociative Memory
-* Competitive Networks
-* Step update algorithms for backpropagation
-* Weight control algorithms for backpropagation
-* Basic Linear Networks
 
 Algorithms
 ----------
 
-* GradientDescent
+* Algorithms that use Backpropagation training approach
 
   * Classic Gradient Descent
   * Mini-batch Gradient Descent
@@ -133,14 +125,14 @@ Algorithms
   * Adam
   * AdaMax
 
-* Weight update rules
+* Algorithms that penalize weights
 
   * Weight Decay
   * Weight Elimination
 
-* Learning rate update rules
+* Algorithms that update learning rate
 
-  * Leak step adaptation
+  * Adaptive Learning Rate
   * Error difference Update
   * Linear search using Golden Search or Brent
   * Search than converge
@@ -151,7 +143,7 @@ Algorithms
   * Mixture of Experts
   * Dynamically Averaged Network (DAN)
 
-* Radial Basis Functions Networks (RBFN)
+* Neural Networks based on Radial Basis Functions (RBFN)
 
   * Generalized Regression Neural Network (GRNN)
   * Probabilistic Neural Network (PNN)
@@ -180,11 +172,3 @@ Algorithms
   * Kohonen
   * Instar
   * Hebb
-
-Tests
------
-
-.. code-block:: bash
-
-    $ pip install tox
-    $ tox

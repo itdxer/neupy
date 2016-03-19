@@ -13,16 +13,16 @@ from neupy.utils import asint
 
 from utils import accuracy_score, AverageLinearLayer, crossentropy
 from preprocessing import (TokenizeTexts, VoidFunctionTransformer,
-                           PrepareTrainingData)
+                           PrepareTrainingData, NONE_WORD)
 
 
 environment.reproducible()
 theano.config.floatX = 'float32'
 
 
-class WordEmbedding(algorithms.Momentum):
+class WordEmbedding(algorithms.Adamax):
     def __init__(self, minimized_space, min_frequency=10, **options):
-        self.dictionary = []
+        self.dictionary = [NONE_WORD]
         self.n_words = None
         self.min_frequency = min_frequency
         self.minimized_space = minimized_space
@@ -106,13 +106,13 @@ data = pd.read_csv('amazon_cells_labelled.txt', sep='\t',
 reviews = data.review.values
 
 embedding_network = WordEmbedding(
-    minimized_space=400,
+    minimized_space=500,
     min_frequency=5,
 
     error=crossentropy,
     batch_size=100,
-    momentum=0.99,
-    nesterov=True,
+    # momentum=0.99,
+    # nesterov=True,
     verbose=True,
     shuffle_data=True,
     step=0.1,
@@ -139,14 +139,14 @@ print("Accuracy: {:.2f}%".format(accuracy * 100))
 
 # # Visualize embedded words
 # word_vectors = embedding_network.input_layer.weight.get_value()
-# tsne = manifold.LocallyLinearEmbedding(n_components=2)
+# tsne = manifold.TSNE(n_components=2)
 # minimized_word_vectors = tsne.fit_transform(word_vectors)
-# id2token = {v:k for k, v in embedding_network.dictionary.items()}
+# dictionary = embedding_network.dictionary
 #
 # fig, ax = plt.subplots(1, 1)
-# ax.set_ylim(-15, 15)
-# ax.set_xlim(-15, 15)
+# ax.set_ylim(-0.5, 0.5)
+# ax.set_xlim(-0.5, 0.5)
 # for i, row in enumerate(minimized_word_vectors[:500]):
-#     ax.annotate(id2token[i], row)
+#     ax.annotate(dictionary[i], row)
 #
 # plt.show()

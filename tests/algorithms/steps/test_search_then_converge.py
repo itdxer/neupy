@@ -20,4 +20,8 @@ class LearningRateUpdatesTestCase(BaseTestCase):
             addons=[algorithms.SearchThenConverge]
         )
         network.train(xor_input_train, xor_target_train, epochs=6)
-        self.assertEqual(network.variables.step.get_value(), 0.18)
+        self.assertAlmostEqual(
+            network.variables.step.get_value(),
+            0.18,
+            places=5,
+        )

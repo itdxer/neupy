@@ -1,9 +1,9 @@
-Visualize GradientDescent Algorithms
-====================================
+Visualize Gradient Descent Algorithms
+=====================================
 
 .. contents::
 
-In this tutorial we will test different variations of GradientDescent algorithms, visualize them and try to figure out some important features from a plot that we will get.
+In this tutorial we will test different variations of Gradient Descent algorithms, visualize them and try to figure out some important features from a plot that we will get.
 
 Checking data
 -------------
@@ -46,7 +46,7 @@ So we can make a scatter plot and look closer at this dots.
     :alt: Dataset scatter plot
 
 From the figure above we can clearly see that all dots are linearly separable and we are able to solve this problem with simple perceptron.
-But a goal of this tutorial is to make clear visualization of learning process for different GradientDescent algorithm variations, so the problem must be as simple as possible, because in other cases it will be complex to visualize.
+But a goal of this tutorial is to make clear visualization of learning process for different Gradient Descent algorithm variations, so the problem must be as simple as possible, because in other cases it will be complex to visualize.
 
 So, as the problem is linear separable we can solve it without hidden layers in network.
 There are two features and two classes, so we can build network which will take 2 input values and 1 output.
@@ -142,7 +142,7 @@ The plot above shows the approximation error rate depence on the network weights
 The best error must be as small as possible.
 The best weights combination for this problem should be near the lower right corner in the blue area.
 
-Next, we are going to look at 5 algorithms based on GradientDescent. They are:
+Next, we are going to look at 5 algorithms based on Gradient Descent. They are:
 
 * Gradient descent
 * Momentum
@@ -224,8 +224,8 @@ This function will train the network until the error will be smaller than `0.125
 Path for all networks would be the same.
 Every network starts at dot with coordinates `(-4, -4)` and finishes near the point with the closest value to `0.125`.
 
-Visualize GradientDescent algorithms
-------------------------------------
+Visualize Gradient Descent algorithms
+-------------------------------------
 
 Gradient Descent
 ++++++++++++++++
@@ -241,15 +241,15 @@ Let's primarily check :network:`Gradient Descent <GradientDescent>`.
 .. figure:: images/bp-steps.png
     :width: 80%
     :align: center
-    :alt: GradientDescent steps
+    :alt: Weight update steps for the Gradient Descent
 
-GradientDescent got to the value close to 0.125 using 798 steps and this black curve are just tiny steps of backpropagation algorithm.
+Gradient Descent got to the value close to 0.125 using 798 steps and this black curve are just tiny steps of backpropagation algorithm.
 We can zoom it and look closer.
 
 .. figure:: images/bp-steps-zoom.png
     :width: 80%
     :align: center
-    :alt: GradientDescent steps on zoom
+    :alt: Zoomed weight update steps for the Gradient Descent
 
 Now we can see a lot of information about backpropagation algorithm.
 All steps for backpropagation algorithm have approximately similar magnitude.
@@ -403,7 +403,7 @@ Conjugate Gradient and Golden Search
 
 Now let's look at :network:`Conjugate Gradient <ConjugateGradient>` with
 :network:`Golden Search <LinearSearch>`.
-Conjugate Gradient in GradientDescent variation is a little bit different than in
+Conjugate Gradient in Gradient Descent variation is a little bit different than in
 Multivariable Calculus notation and it doesn't guarantee converge into n-th steps
 (`n` means dimmention size for specific problem).
 Steps don't have a perfect size for :network:`Conjugate Gradient <ConjugateGradient>`,

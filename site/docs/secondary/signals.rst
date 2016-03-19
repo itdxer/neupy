@@ -41,7 +41,7 @@ Property ``verbose`` just control logging output, but doesn't make any effect on
 Early stopping
 ~~~~~~~~~~~~~~
 
-The other usefull feature releated to the signals is that you can can implement your own rule that can interrupt training procedure. Here is a simple example:
+The other useful feature releated to the signals is that you can can implement your own rule that can interrupt training procedure. Here is a simple example:
 
 .. code-block:: python
 

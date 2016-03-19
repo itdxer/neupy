@@ -69,7 +69,7 @@ class WeightEliminationTestCase(BaseTestCase):
         for case in step_test_cases:
             step = case.network.variables.step
             self.assertAlmostEqual(step.get_value(), case.expected_step,
-                                   places=10)
+                                   places=5)
 
         # Compare weight norm between networks
         WeightNormCase = namedtuple('WeightNormCase',

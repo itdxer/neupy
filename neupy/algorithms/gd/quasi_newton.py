@@ -6,7 +6,8 @@ import numpy as np
 from neupy.core.properties import (ChoiceProperty, ProperFractionProperty,
                                    NumberProperty)
 from neupy.algorithms.gd import NoStepSelection
-from neupy.algorithms.utils import parameters2vector, iter_parameters
+from neupy.algorithms.utils import (parameters2vector, iter_parameters,
+                                    count_parameters, setup_parameter_updates)
 from neupy.optimizations.wolfe import line_search
 from neupy.utils import asfloat
 from .base import GradientDescent
@@ -18,7 +19,9 @@ __all__ = ('QuasiNewton',)
 def bfgs(inverse_hessian, weight_delta, gradient_delta, maxrho=1e4):
     ident_matrix = T.eye(inverse_hessian.shape[0])
 
-    rho = 1. / gradient_delta.dot(weight_delta)
+    maxrho = asfloat(maxrho)
+    rho = asfloat(1.) / gradient_delta.dot(weight_delta)
+
     rho = ifelse(
         T.isinf(rho),
         maxrho * T.sgn(rho),
@@ -33,6 +36,7 @@ def bfgs(inverse_hessian, weight_delta, gradient_delta, maxrho=1e4):
 
 
 def dfp(inverse_hessian, weight_delta, gradient_delta, maxnum=1e5):
+    maxnum = asfloat(maxnum)
     quasi_dot_gradient = inverse_hessian.dot(gradient_delta)
 
     param1 = (
@@ -65,6 +69,7 @@ def psb(inverse_hessian, weight_delta, gradient_delta, **options):
 
 
 def sr1(inverse_hessian, weight_delta, gradient_delta, epsilon=1e-8):
+    epsilon = asfloat(epsilon)
     param = weight_delta - inverse_hessian.dot(gradient_delta)
     denominator = T.dot(param, gradient_delta)
 
@@ -144,8 +149,8 @@ class QuasiNewton(NoStepSelection, GradientDescent):
                 name='prev_params',
                 value=asfloat(np.zeros(n_params)),
             ),
-            prev_grads=theano.shared(
-                name='prev_grads',
+            prev_full_gradient=theano.shared(
+                name='prev_full_gradient',
                 value=asfloat(np.zeros(n_params)),
             ),
         )
@@ -155,28 +160,24 @@ class QuasiNewton(NoStepSelection, GradientDescent):
         network_output = self.variables.network_output
         inv_hessian = self.variables.inv_hessian
         prev_params = self.variables.prev_params
-        prev_grads = self.variables.prev_grads
+        prev_full_gradient = self.variables.prev_full_gradient
 
         params = list(iter_parameters(self))
         param_vector = parameters2vector(self)
 
-        grads = []
-        n_params = 0
-        for param in params:
-            gradient = T.grad(self.variables.error_func, wrt=param)
-            grads.append(gradient.flatten())
-            n_params += param.size
+        n_params = count_parameters(self)
 
-        grads = T.concatenate(grads)
+        gradients = T.grad(self.variables.error_func, wrt=params)
+        full_gradient = T.concatenate([grad.flatten() for grad in gradients])
 
         new_inv_hessian = ifelse(
             T.eq(self.variables.epoch, 1),
             inv_hessian,
             self.update_function(inv_hessian,
                                  param_vector - prev_params,
-                                 grads - prev_grads)
+                                 full_gradient - prev_full_gradient)
         )
-        param_delta = -new_inv_hessian.dot(grads)
+        param_delta = -new_inv_hessian.dot(full_gradient)
 
         def prediction(step):
             updated_params = param_vector + step * param_delta
@@ -201,26 +202,14 @@ class QuasiNewton(NoStepSelection, GradientDescent):
             error_func = self.error(network_output, prediction(step))
             return T.grad(error_func, wrt=step)
 
-        step = line_search(phi, derphi)
+        step = asfloat(line_search(phi, derphi))
         updated_params = param_vector + step * param_delta
-
-        start_pos = 0
-        updates = []
-        for param in params:
-            end_pos = start_pos + param.size
-            updates.append((
-                param,
-                T.reshape(
-                    updated_params[start_pos:end_pos],
-                    param.shape
-                )
-            ))
-            start_pos = end_pos
+        updates = setup_parameter_updates(params, updated_params)
 
         updates.extend([
             (inv_hessian, new_inv_hessian),
             (prev_params, param_vector),
-            (prev_grads, grads),
+            (prev_full_gradient, full_gradient),
         ])
 
         return updates

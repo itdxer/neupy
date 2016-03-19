@@ -1,10 +1,10 @@
 import numpy as np
 from sklearn import cross_validation, metrics
 from skdata.larochelle_etal_2007 import dataset
-from neupy import algorithms, layers
+from neupy import algorithms, layers, environment
 
 
-np.random.seed(0)
+environment.reproducible()
 
 rectangle_dataset = dataset.Rectangles()
 rectangle_dataset.fetch(download_if_missing=True)

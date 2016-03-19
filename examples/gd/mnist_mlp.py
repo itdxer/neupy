@@ -2,10 +2,10 @@ import theano
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 from sklearn import cross_validation, metrics, datasets
-from neupy import algorithms, layers
+from neupy import algorithms, layers, environment
 
 
-np.random.seed(0)
+environment.reproducible()
 theano.config.floatX = 'float32'
 
 mnist = datasets.fetch_mldata('MNIST original')
@@ -30,10 +30,12 @@ network = algorithms.Momentum(
         layers.Softmax(300),
         layers.ArgmaxOutput(10),
     ],
+
     error='categorical_crossentropy',
     step=0.01,
     verbose=True,
     shuffle_data=True,
+
     momentum=0.99,
     nesterov=True,
 )

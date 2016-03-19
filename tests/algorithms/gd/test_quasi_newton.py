@@ -15,6 +15,8 @@ from base import BaseTestCase
 
 
 class QuasiNewtonTestCase(BaseTestCase):
+    use_sandbox_mode = False
+
     def test_exceptions(self):
         with self.assertRaises(ValueError):
             # Don't have learning rate
@@ -183,7 +185,7 @@ class QuasiNewtonTestCase(BaseTestCase):
 
             update_function='sr1',
             h0_scale=2,
-            gradient_tol=1e-10,
+            gradient_tol=1e-5,
         )
         qnnet.train(x_train, y_train, x_test, y_test, epochs=10)
         result = qnnet.predict(x_test).round()

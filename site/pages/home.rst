@@ -4,49 +4,20 @@ Home
 NeuPy is a Python library for Artificial Neural Networks.
 You can run and test different Neural Network algorithms.
 
-|Travis|_
-
-.. |Travis| image:: https://api.travis-ci.org/itdxer/neupy.png?branch=master
-.. _Travis: https://travis-ci.org/itdxer/neupy
-
-Installation
-------------
-
-.. code-block:: bash
-
-    $ pip install neupy
-
-Dependence
-----------
-
-* Python 2.7, 3.3, 3.4
-* NumPy >= 1.9.0
-* SciPy >= 0.14.0
-* Matplotlib >= 1.4.0
 
 Next steps
 ----------
 
-* Bug fixing and version stabilization
+* Adding convolutional neural network layers (`Issue #56 <https://github.com/itdxer/neupy/issues/56>`_)
+* Adding reccurent neural network layers (`Issue #57 <https://github.com/itdxer/neupy/issues/57>`_)
+* Bug fixing and version stabilization  (`Known bugs <https://github.com/itdxer/neupy/issues?q=is%3Aissue+is%3Aopen+label%3Abug>`_)
 * Speeding up algorithms
 * Adding more algorithms
-
-Library support
----------------
-
-* Radial Basis Functions Networks (RBFN)
-* GradientDescent and different optimization for it
-* Neural Network Ensembles
-* Associative and Autoasociative Memory
-* Competitive Networks
-* Step update algorithms for backpropagation
-* Weight control algorithms for backpropagation
-* Basic Linear Networks
 
 Algorithms
 ----------
 
-* GradientDescent
+* Algorithms that use Backpropagation training approach
 
   * Classic Gradient Descent
   * Mini-batch Gradient Descent
@@ -70,6 +41,7 @@ Algorithms
   * Hessian (Newton's method)
   * Hessian diagonal
   * Momentum
+  * Nesterov Momentum
   * RPROP
   * iRPROP+
   * QuickProp
@@ -79,12 +51,12 @@ Algorithms
   * Adam
   * AdaMax
 
-* Weight update rules
+* Algorithms that penalize weights
 
   * Weight Decay
   * Weight Elimination
 
-* Learning rate update rules
+* Algorithms that update learning rate
 
   * Adaptive Learning Rate
   * Error difference Update
@@ -97,7 +69,7 @@ Algorithms
   * Mixture of Experts
   * Dynamically Averaged Network (DAN)
 
-* Radial Basis Functions Networks (RBFN)
+* Neural Networks based on Radial Basis Functions (RBFN)
 
   * Generalized Regression Neural Network (GRNN)
   * Probabilistic Neural Network (PNN)
@@ -126,6 +98,15 @@ Algorithms
   * Kohonen
   * Instar
   * Hebb
+
+Dependencies
+------------
+
+* Python 2.7, 3.3, 3.4
+* Theano >= 0.7.0
+* NumPy >= 1.9.0
+* SciPy >= 0.14.0
+* Matplotlib >= 1.4.0
 
 Tests
 -----

@@ -29,14 +29,11 @@ class GRNN(LazyLearning, Regression, BaseNetwork):
 
     Examples
     --------
-    >>> import numpy as np
-    >>>
     >>> from sklearn import datasets
     >>> from sklearn.cross_validation import train_test_split
+    >>> from neupy import algorithms, estimators, environment
     >>>
-    >>> from neupy import algorithms, estimators
-    >>>
-    >>> np.random.seed(0)
+    >>> environment.reproducible()
     >>>
     >>> dataset = datasets.load_diabetes()
     >>> x_train, x_test, y_train, y_test = train_test_split(

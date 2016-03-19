@@ -1,6 +1,7 @@
 import numpy as np
 
 from neupy import estimators
+from neupy.utils import asfloat
 
 from base import BaseTestCase
 
@@ -21,7 +22,10 @@ class ErrorFuncTestCase(BaseTestCase):
             [3, 2],
             [1, 0],
         ])
-        self.assertAlmostEqual(70 / 6., estimators.mse(actual, predicted))
+        self.assertAlmostEqual(
+            asfloat(70 / 6.),
+            estimators.mse(actual, predicted)
+        )
 
     def test_binary_crossentropy(self):
         predicted = np.array([0.1, 0.9, 0.2, 0.5])
@@ -57,7 +61,10 @@ class ErrorFuncTestCase(BaseTestCase):
     def test_rmse(self):
         actual = np.array([0, 1, 2, 3])
         predicted = np.array([3, 2, 1, 0])
-        self.assertEqual(np.sqrt(5), estimators.rmse(actual, predicted))
+        self.assertEqual(
+            asfloat(np.sqrt(5)),
+            estimators.rmse(actual, predicted)
+        )
 
     def test_msle(self):
         actual = np.e ** (np.array([1, 2, 3, 4])) - 1
@@ -67,4 +74,7 @@ class ErrorFuncTestCase(BaseTestCase):
     def test_rmsle(self):
         actual = np.e ** (np.array([1, 2, 3, 4])) - 1
         predicted = np.e ** (np.array([4, 3, 2, 1])) - 1
-        self.assertEqual(np.sqrt(5), estimators.rmsle(actual, predicted))
+        self.assertEqual(
+            asfloat(np.sqrt(5)),
+            estimators.rmsle(actual, predicted)
+        )

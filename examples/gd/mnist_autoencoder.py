@@ -2,10 +2,10 @@ import theano
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets
-from neupy import algorithms, layers
+from neupy import algorithms, layers, environment
 
 
-np.random.seed(0)
+environment.reproducible()
 theano.config.floatX = 'float32'
 
 

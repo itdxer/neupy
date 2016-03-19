@@ -1,12 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from neupy import algorithms
+from neupy import algorithms, environment
 
 
+environment.reproducible()
 plt.style.use('ggplot')
-
-np.random.seed(0)
 
 input_train = np.reshape(np.linspace(0, 2 * np.pi, 100), (100, 1))
 input_test = np.reshape(np.sort(2 * np.pi * np.random.random(50)), (50, 1))

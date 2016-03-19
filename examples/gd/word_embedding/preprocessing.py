@@ -7,6 +7,9 @@ import numpy as np
 import scipy.sparse as sp
 
 
+NONE_WORD = ''
+
+
 class CustomTransformerMixin(TransformerMixin):
     def fit(self, X, y=None, **fit_params):
         return self
@@ -50,14 +53,19 @@ class PrepareTrainingData(CustomTransformerMixin):
     def transform(self, X, y=None):
         texts = X
         dictionary = self.dictionary
+        non_word_index = dictionary.index(NONE_WORD)
         window_size = self.window_size
         train_data, target_data = [], []
 
         for text in texts:
-            cleaned_text = []
+            # Add left padding
+            cleaned_text = [non_word_index] * window_size
             for word in text:
                 if word in dictionary:
                     cleaned_text.append(dictionary.index(word))
+
+            # Add right padding
+            cleaned_text += [non_word_index] * window_size
 
             for i in range(window_size, len(cleaned_text) - window_size):
                 target_word = cleaned_text[i]

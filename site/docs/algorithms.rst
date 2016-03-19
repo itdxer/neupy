@@ -6,8 +6,8 @@ Classes and functions
 Algorithms
 **********
 
-GradientDescent
-~~~~~~~~~~~~~~~
+Algorithms that use Backpropagation training approach
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table::
     :header: "Class name", "Name"

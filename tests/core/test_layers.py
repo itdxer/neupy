@@ -240,9 +240,10 @@ class LayersInitializationTestCase(BaseTestCase):
         input_layer.initialize()
 
         weight = input_layer.weight.get_value()
-        np.testing.assert_array_equal(
+        np.testing.assert_array_almost_equal(
             np.eye(10),
-            weight.T.dot(weight).round(10)
+            weight.T.dot(weight),
+            decimal=5
         )
 
         # Matrix that have more columns than rows
@@ -251,9 +252,10 @@ class LayersInitializationTestCase(BaseTestCase):
         input_layer.initialize()
 
         weight = input_layer.weight.get_value()
-        np.testing.assert_array_equal(
+        np.testing.assert_array_almost_equal(
             np.eye(10),
-            weight.dot(weight.T).round(10)
+            weight.dot(weight.T),
+            decimal=5
         )
 
     def test_he_normal(self):

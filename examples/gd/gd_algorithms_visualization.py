@@ -5,11 +5,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-from neupy import algorithms, layers
+from neupy import algorithms, layers, environment
 from plots import draw_countour, weight_quiver
 
 
-np.random.seed(0)
+environment.reproducible()
 
 input_data = np.array([
     [0.9, 0.3],

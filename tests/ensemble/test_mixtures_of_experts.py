@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn import datasets, preprocessing, cross_validation
 from neupy import algorithms, layers
+from neupy.utils import asfloat
 from neupy.estimators import rmsle
 
 from base import BaseTestCase
@@ -125,7 +126,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
 
     def test_mixture_of_experts(self):
         dataset = datasets.load_diabetes()
-        data, target = dataset.data, dataset.target
+        data, target = asfloat(dataset.data), asfloat(dataset.target)
         insize, outsize = data.shape[1], 1
 
         input_scaler = preprocessing.MinMaxScaler((-1 ,1))

@@ -140,7 +140,7 @@ class TerminalLogger(object):
             curses = importlib.import_module('curses')
 
             try:
-                stdscr = curses.initscr()
+                curses.initscr()
                 curses.echo()
                 yield
 

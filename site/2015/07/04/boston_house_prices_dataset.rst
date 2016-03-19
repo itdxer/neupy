@@ -243,11 +243,10 @@ We use 85% of data for train.
 
 .. code-block:: python
 
-    import numpy as np
     from sklearn.cross_validation import train_test_split
+    from neupy import environment
 
-    # To make result reproducible
-    np.random.seed(0)
+    environment.reproducible()
 
     x_train, x_test, y_train, y_test = train_test_split(
         data, target, train_size=0.85
@@ -329,7 +328,7 @@ To fix it, we are going to inverse our transformation for predicted and actual v
                   target_scaler.inverse_transform(y_predict))
     print(error)
 
-Now we can see that our error equals to `0.2098` which is pretty small.
+Now we can see that our error approximately equals to `0.22` which is pretty small.
 In the table below you can find 10 randomly chosen errors.
 
 .. raw:: html

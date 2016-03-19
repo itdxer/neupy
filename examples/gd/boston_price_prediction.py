@@ -2,10 +2,10 @@ import numpy as np
 from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
 import matplotlib.pyplot as plt
-from neupy import algorithms, layers, estimators
+from neupy import algorithms, layers, estimators, environment
 
 
-np.random.seed(0)
+environment.reproducible()
 plt.style.use('ggplot')
 
 dataset = datasets.load_boston()

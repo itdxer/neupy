@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from neupy import algorithms
+from neupy import algorithms, environment
 
 
-np.random.seed(0)
+environment.reproducible()
 plt.style.use('ggplot')
 
 

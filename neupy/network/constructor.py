@@ -252,7 +252,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
 
         self.variables.update(
             step=theano.shared(name='step', value=asfloat(self.step)),
-            epoch=theano.shared(name='epoch', value=self.last_epoch),
+            epoch=theano.shared(name='epoch', value=asfloat(self.last_epoch)),
             prediction_func=prediction,
             train_prediction_func=train_prediction,
             error_func=self.error(network_output, train_prediction),
