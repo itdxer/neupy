@@ -6,8 +6,8 @@
 .. |Coveralls| image:: https://coveralls.io/repos/github/itdxer/neupy/badge.svg?branch=master
 .. _Coveralls: https://coveralls.io/github/itdxer/neupy?branch=master
 
-NeuPy v0.2.0
-============
+NeuPy v0.2.0 (beta)
+===================
 
 NeuPy is a Python library for Artificial Neural Networks.
 You can run and test different Neural Network algorithms.

@@ -4,6 +4,10 @@ Home
 NeuPy is a Python library for Artificial Neural Networks.
 You can run and test different Neural Network algorithms.
 
+.. image:: ../_static/img/mnist-solution-code.png
+    :width: 100%
+    :align: center
+
 
 Next steps
 ----------
