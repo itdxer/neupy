@@ -15,7 +15,7 @@ from base import BaseTestCase
 
 
 class QuasiNewtonTestCase(BaseTestCase):
-    use_sandbox_mode = False
+    use_sandbox_mode = True
 
     def test_exceptions(self):
         with self.assertRaises(ValueError):
@@ -36,7 +36,7 @@ class QuasiNewtonTestCase(BaseTestCase):
         qnnet = algorithms.QuasiNewton(
             connection=[
                 layers.Sigmoid(10, init_method='ortho'),
-                layers.Sigmoid(20, init_method='ortho'),
+                layers.Sigmoid(25, init_method='ortho'),
                 layers.Output(1)
             ],
             shuffle_data=True,
@@ -44,7 +44,7 @@ class QuasiNewtonTestCase(BaseTestCase):
             verbose=False,
         )
         qnnet.train(x_train, y_train, x_test, y_test, epochs=20)
-        result = qnnet.predict(x_test).round()
+        result = qnnet.predict(x_test).round().astype(int)
 
         roc_curve_score = metrics.roc_auc_score(result, y_test)
         self.assertAlmostEqual(0.92, roc_curve_score, places=2)

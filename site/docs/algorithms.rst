@@ -59,8 +59,8 @@ Ensembles
     :network:`MixtureOfExperts`, Mixture of Experts
     :network:`DynamicallyAveragedNetwork`, Dynamically Averaged Network (DAN)
 
-Radial Basis Functions Networks (RBFN)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Neural Networks with Radial Basis Functions (RBFN)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table::
     :header: "Class name", "Name"

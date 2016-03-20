@@ -6,6 +6,7 @@ import theano
 import theano.tensor as T
 
 from neupy import algorithms
+from neupy.utils import asfloat
 import neupy.algorithms.gd.conjgrad as cg
 
 from data import simple_input_train, simple_target_train
@@ -27,7 +28,7 @@ class ConjugateGradientTestCase(BaseTestCase):
                 input_data=(
                     np.array([1.35,  0.3]),
                     np.array([0.11, -0.5]),
-                    np.array([0]),
+                    np.array([0, 0]),
                 ),
                 answer=0.137
             ),
@@ -36,7 +37,7 @@ class ConjugateGradientTestCase(BaseTestCase):
                 input_data=(
                     np.array([1.,  -0.5]),
                     np.array([1.2, -0.45]),
-                    np.array([0]),
+                    np.array([0, 0]),
                 ),
                 answer=0.174
             ),
@@ -79,6 +80,7 @@ class ConjugateGradientTestCase(BaseTestCase):
         ]
 
         for testcase in testcases:
+            input_data = asfloat(np.array(testcase.input_data))
             variables = T.vectors(3)
             # For functions some input variables can be optional and we
             # ignore them during the computation. This solution cause errors
@@ -86,12 +88,12 @@ class ConjugateGradientTestCase(BaseTestCase):
             # do not use all defined variables. That's why we need
             # simple hack that fix this issue and do not add changes to
             # the output result.
-            hack = 0 * variables[-1][0]
+            hack = asfloat(0) * variables[-1][0]
             output_func = theano.function(
                 variables,
                 testcase.func(*variables) + hack
             )
-            result = output_func(*testcase.input_data)
+            result = output_func(*input_data)
             self.assertAlmostEqual(result, testcase.answer, places=3)
 
     def test_conjgrad(self):

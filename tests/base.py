@@ -19,7 +19,6 @@ class BaseTestCase(unittest.TestCase):
 
     def setUp(self):
         environment.reproducible(seed=self.random_seed)
-        theano.config.floatX = 'float32'
 
         if not self.verbose:
             logging.disable(logging.CRITICAL)

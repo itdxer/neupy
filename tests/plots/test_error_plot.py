@@ -1,5 +1,6 @@
 import os
 
+import theano
 import numpy as np
 
 from neupy import plots, algorithms
@@ -14,6 +15,10 @@ IMGDIR = os.path.join("plots", "images", "error-plot")
 
 
 class ErrorPlotTestCase(BaseTestCase):
+    def setUp(self):
+        super(ErrorPlotTestCase, self).setUp()
+        theano.config.floatX = 'float64'
+
     def test_simple_plot(self):
         original_image_name = format_image_name("simple_plot.png")
         original_image = os.path.join(IMGDIR, original_image_name)

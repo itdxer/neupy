@@ -7,6 +7,7 @@ import matplotlib
 # Configure matplotlib for Travis CI
 matplotlib.use('Agg')
 
+import theano
 import matplotlib.pyplot as plt
 
 from neupy import plots
@@ -19,6 +20,10 @@ IMGDIR = os.path.join("plots", "images", "hinton")
 
 
 class HintonDiagramTestCase(BaseTestCase):
+    def setUp(self):
+        super(HintonDiagramTestCase, self).setUp()
+        theano.config.floatX = 'float64'
+
     def test_simple_hinton(self):
         original_image_name = format_image_name("simple_hinton.png")
         original_image = os.path.join(IMGDIR, original_image_name)

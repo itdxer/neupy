@@ -63,7 +63,7 @@ Algorithms
   * Mixture of Experts
   * Dynamically Averaged Network (DAN)
 
-* Neural Networks based on Radial Basis Functions (RBFN)
+* Neural Networks with Radial Basis Functions (RBFN)
 
   * Generalized Regression Neural Network (GRNN)
   * Probabilistic Neural Network (PNN)

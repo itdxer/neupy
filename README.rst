@@ -10,7 +10,6 @@ NeuPy v0.2.0 (beta)
 ===================
 
 NeuPy is a Python library for Artificial Neural Networks.
-You can run and test different Neural Network algorithms.
 
 .. image:: site/_static/img/mnist-solution-code.png
     :width: 80%
@@ -143,7 +142,7 @@ Algorithms
   * Mixture of Experts
   * Dynamically Averaged Network (DAN)
 
-* Neural Networks based on Radial Basis Functions (RBFN)
+* Neural Networks with Radial Basis Functions (RBFN)
 
   * Generalized Regression Neural Network (GRNN)
   * Probabilistic Neural Network (PNN)

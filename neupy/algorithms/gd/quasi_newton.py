@@ -165,8 +165,6 @@ class QuasiNewton(NoStepSelection, GradientDescent):
         params = list(iter_parameters(self))
         param_vector = parameters2vector(self)
 
-        n_params = count_parameters(self)
-
         gradients = T.grad(self.variables.error_func, wrt=params)
         full_gradient = T.concatenate([grad.flatten() for grad in gradients])
 
