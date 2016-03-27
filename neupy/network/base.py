@@ -187,7 +187,7 @@ def parse_show_epoch_property(network, n_epochs, epsilon=None):
     return int(round(n_epochs / n_epochs_to_check))
 
 
-def create_trainig_epochs_iterator(network, epochs, epsilon=None):
+def create_training_epochs_iterator(network, epochs, epsilon=None):
     if epsilon is not None:
         return iter_until_converge(network, epsilon, max_epochs=epochs)
 
@@ -338,6 +338,7 @@ class BaseNetwork(BaseSkeleton):
     def __init__(self, *args, **options):
         self.errors = self.train_errors = ErrorHistoryList()
         self.validation_errors = ErrorHistoryList()
+        self.training = AttributeKeyDict()
         self.last_epoch = 0
 
         super(BaseNetwork, self).__init__(*args, **options)
@@ -411,7 +412,7 @@ class BaseNetwork(BaseSkeleton):
         logging_info_about_training(self, epochs, epsilon)
         logs.write("")
 
-        iterepochs = create_trainig_epochs_iterator(self, epochs, epsilon)
+        iterepochs = create_training_epochs_iterator(self, epochs, epsilon)
         show_epoch = parse_show_epoch_property(self, epochs, epsilon)
         training.show_epoch = show_epoch
 
@@ -467,8 +468,8 @@ class BaseNetwork(BaseSkeleton):
 
                 except StopNetworkTraining as err:
                     # TODO: This notification breaks table view in terminal.
-                    # Should show it in different way.
-                    # Maybe I can send it in generator using ``throw`` method
+                    # I need to show it in a different way. Maybe I can
+                    # send it in generator using ``throw`` method.
                     logs.message("TRAIN", "Epoch #{} stopped. {}"
                                           "".format(epoch, str(err)))
 
@@ -483,15 +484,34 @@ class BaseNetwork(BaseSkeleton):
         logs.message("TRAIN", "Trainig finished")
 
     def plot_errors(self, logx=False, ax=None, show=True):
-        """ Plot line plot that shows trainig progress. x-axis
-        is an epoch number and y-axis is an error
+        """ Plot line plot that shows training progress. x-axis
+        is an epoch number and y-axis is an error.
+
+        Parameters
+        ----------
+        logx : bool
+            Parameter set up logarithmic scale to x-axis.
+            Defaults to ``False``.
+        ax : object or None
+            Matplotlib axis object. ``None`` values means that axis equal
+            to the current one (the same as ``ax = plt.gca()``).
+            Defaults to ``None``.
+        show : bool
+            If parameter is equal to ``True`` plot will instantly shows
+            the plot. Defaults to ``True``.
+
+        Returns
+        -------
+        object
+            Matplotlib axis instance.
         """
-        if not self.errors:
-            self.logs.warning("There is no data to plot")
-            return
 
         if ax is None:
             ax = plt.gca()
+
+        if not self.errors:
+            self.logs.warning("There is no data to plot")
+            return ax
 
         train_errors = self.errors.normalized()
         validation_errors = self.validation_errors.normalized()
@@ -499,21 +519,21 @@ class BaseNetwork(BaseSkeleton):
         plot_function = ax.semilogx if logx else ax.plot
 
         line_error_in, = plot_function(errors_range, train_errors)
-        title_text = 'Learning error after each epoch'
 
         if validation_errors:
             line_error_out, = plot_function(errors_range, validation_errors)
             ax.legend(
                 [line_error_in, line_error_out],
-                ['Train error', 'Validation error']
+                ['Train', 'Validation']
             )
-            title_text = 'Learning errors after each epoch'
 
-        ax.set_title(title_text)
-        ax.set_xlim(0)
+        ax.set_title('Training perfomance')
+        ax.set_ylim(bottom=0)
 
         ax.set_ylabel('Error')
         ax.set_xlabel('Epoch')
 
         if show:
             plt.show()
+
+        return ax

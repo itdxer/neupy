@@ -108,6 +108,19 @@ def create_output_variable(error_function, variable_name):
 
 
 def find_input_layer(layers):
+    """ Function checks list of layer and finds an input layer.
+
+    Parameters
+    ----------
+    layers : iterative object
+        Ordered list of layers.
+
+    Returns
+    -------
+    BaseLayer instance or None
+        Function will return input layer if it exists in the specified
+        connection structure. Otherwise, output will be equal to ``None``.
+    """
     for layer in layers:
         if not isinstance(layer, Dropout):
             return layer
@@ -288,7 +301,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
 
     def init_train_updates(self):
         """ Initialize train function update in Theano format that
-        would be trigger after each trainig epoch.
+        would be trigger after each training epoch.
         """
         updates = []
         for layer in self.layers:
@@ -297,7 +310,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
 
     def init_layer_updates(self, layer):
         """ Initialize train function update in Theano format that
-        would be trigger after each trainig epoch for each layer.
+        would be trigger after each training epoch for each layer.
 
         Parameters
         ----------
@@ -319,26 +332,98 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         return updates
 
     def init_param_updates(self, parameter):
+        """ Initialize parameter updates.
+
+        Parameters
+        ----------
+        parameter : object
+            Usualy it is a weight or bias.
+
+        Returns
+        -------
+        list
+            List of updates related to the specified parameter.
+        """
         return []
+
+    def format_input_data(self, input_data):
+        """ Input data format is depence on the input layer
+        structure.
+
+        Parameters
+        ----------
+        input_data : array-like or None
+
+        Returns
+        -------
+        array-like or None
+            Function returns formatted array.
+        """
+        if input_data is not None:
+            is_feature1d = does_layer_accept_1d_feature(self.input_layer)
+            return format_data(input_data, is_feature1d)
+
+    def format_target_data(self, target_data):
+        """ Target data format is depence on the output layer
+        structure.
+
+        Parameters
+        ----------
+        target_data : array-like or None
+
+        Returns
+        -------
+        array-like or None
+            Function returns formatted array.
+        """
+        if target_data is not None:
+            is_feature1d = does_layer_accept_1d_feature(self.output_layer)
+            return format_data(target_data, is_feature1d)
 
     def prediction_error(self, input_data, target_data):
         """ Calculate prediction accuracy for input data.
+
+        Parameters
+        ----------
+        input_data : array-like
+        target_data : array-like
+
+        Returns
+        -------
+        float
+            Prediction error.
         """
-        input_data = format_data(input_data)
-        target_data = format_data(target_data)
-        return self.methods.prediction_error(input_data, target_data)
+        return self.methods.prediction_error(
+            self.format_input_data(input_data),
+            self.format_target_data(target_data)
+        )
 
     def predict_raw(self, input_data):
         """ Make raw prediction without final layer postprocessing step.
+
+        Parameters
+        ----------
+        input_data : array-like
+
+        Returns
+        -------
+        array-like
         """
-        is_feature1d = does_layer_accept_1d_feature(self.input_layer)
-        input_data = format_data(input_data, is_feature1d)
+        input_data = self.format_input_data(input_data)
         return self.methods.predict_raw(input_data)
 
     def predict(self, input_data):
         """ Return prediction results for the input data. Output result also
         include postprocessing step related to the final layer that
         transform output to convenient format for end-use.
+
+        Parameters
+        ----------
+        input_data : array-like
+
+        Returns
+        -------
+        array-like
         """
         raw_prediction = self.predict_raw(input_data)
         return self.output_layer.output(raw_prediction)
@@ -357,26 +442,28 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
 
     def train(self, input_train, target_train, input_test=None,
               target_test=None, *args, **kwargs):
-        is_input_feature1d = does_layer_accept_1d_feature(self.input_layer)
-        is_target_feature1d = does_layer_accept_1d_feature(
-            self.output_layer
-        )
-
-        input_train = format_data(input_train, is_input_feature1d)
-        target_train = format_data(target_train, is_target_feature1d)
-
-        if input_test is not None:
-            input_test = format_data(input_test, is_input_feature1d)
-
-        if target_test is not None:
-            target_test = format_data(target_test, is_target_feature1d)
 
         return super(ConstructableNetwork, self).train(
-            input_train, target_train, input_test, target_test,
+            self.format_input_data(input_train),
+            self.format_target_data(target_train),
+            self.format_input_data(input_test),
+            self.format_target_data(target_test),
             *args, **kwargs
         )
 
     def train_epoch(self, input_train, target_train):
+        """ Trains neural network over one epoch.
+
+        Parameters
+        ----------
+        input_data : array-like
+        target_data : array-like
+
+        Returns
+        -------
+        float
+            Prediction error.
+        """
         return self.methods.train_epoch(input_train, target_train)
 
     def __repr__(self):

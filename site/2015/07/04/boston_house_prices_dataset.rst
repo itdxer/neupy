@@ -270,7 +270,7 @@ Now we are ready to build Neural Network which will predict house prices.
         addons=[algorithms.LinearSearch],
     )
 
-.. figure:: images/cgnet-init.png
+.. figure:: images/boston/cgnet-init.png
     :width: 80%
     :align: center
     :alt: Conjgate Gradient train
@@ -294,7 +294,7 @@ Also we will add test data into training function to check validation error on e
     cgnet.train(x_train, y_train, x_test, y_test, epochs=100)
 
 
-.. figure:: images/cgnet-train.png
+.. figure:: images/boston/cgnet-train.png
     :width: 80%
     :align: center
     :alt: Conjgate Gradient train
@@ -308,7 +308,7 @@ To make sure that all training processes go in a right way we can check erros up
     cgnet.plot_errors()
 
 
-.. figure:: images/cgnet-error-plot.png
+.. figure:: images/boston/cgnet-error-plot.png
     :width: 80%
     :align: center
     :alt: Conjgate Gradient train

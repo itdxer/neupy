@@ -10,7 +10,6 @@ Submodules
    neupy.network.constructor
    neupy.network.errors
    neupy.network.learning
-   neupy.network.types
    neupy.network.utils
 
 Module contents

@@ -23,6 +23,17 @@ x_train, x_test, y_train, y_test = cross_validation.train_test_split(
     train_size=(6 / 7.)
 )
 
+scores = []
+f1_scores = []
+y_actual = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))
+
+def on_epoch_end(network):
+    y_predicted = network.predict(x_test)
+    score = metrics.accuracy_score(y_actual, y_predicted)
+    scores.append(score)
+    score = metrics.f1_score(y_actual, y_predicted)
+    f1_scores.append(score)
+
 network = algorithms.Momentum(
     [
         layers.Relu(784),
@@ -35,6 +46,8 @@ network = algorithms.Momentum(
     step=0.01,
     verbose=True,
     shuffle_data=True,
+
+    epoch_end_signal=on_epoch_end,
 
     momentum=0.99,
     nesterov=True,

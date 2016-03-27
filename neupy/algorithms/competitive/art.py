@@ -22,7 +22,7 @@ class ART1(BaseNetwork):
     Parameters
     ----------
     rho : float
-        Control reset action in trainig process. Value must be
+        Control reset action in training process. Value must be
         between ``0`` and ``1``, defaults to ``0.5``.
     n_clusters : int
         Number of clusters, defaults to ``2``. Min value is also ``2``.

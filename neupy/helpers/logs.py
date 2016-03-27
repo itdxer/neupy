@@ -52,6 +52,8 @@ class TerminalLogger(object):
             self.stdout.write(text + '\n')
 
     def newline(self):
+        """ Just writes an empty line.
+        """
         self.write('\r')
 
     def message(self, tag, text, color='green'):

@@ -7,7 +7,7 @@ from neupy.core.properties import (ChoiceProperty, ProperFractionProperty,
                                    NumberProperty)
 from neupy.algorithms.gd import NoStepSelection
 from neupy.algorithms.utils import (parameters2vector, iter_parameters,
-                                    count_parameters, setup_parameter_updates)
+                                    setup_parameter_updates)
 from neupy.optimizations.wolfe import line_search
 from neupy.utils import asfloat
 from .base import GradientDescent

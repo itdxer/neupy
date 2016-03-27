@@ -160,6 +160,16 @@ class BatchSizeProperty(BoundedProperty):
             super(BatchSizeProperty, self).validate(value)
 
 
+def iter_batches(n_samples, batch_size):
+    n_batches = int(math.floor(n_samples / batch_size))
+
+    for batch_index in range(n_batches):
+        yield slice(
+            batch_index * batch_size,
+            (batch_index + 1) * batch_size
+        )
+
+
 class MinibatchGradientDescent(GradientDescent):
     """ Mini-batch Gradient Descent algorithm.
 
@@ -233,30 +243,51 @@ class MinibatchGradientDescent(GradientDescent):
         n_samples = len(input_train)
         batch_size = self.batch_size
         train_epoch = self.methods.train_epoch
-        logs = self.logs
 
-        if batch_size is None or len(input_train) <= batch_size:
+        if batch_size is None or n_samples <= batch_size:
             return train_epoch(input_train, target_train)
 
-        n_batches = int(math.floor(n_samples / batch_size))
-        batches_index_iter = range(n_batches)
+        batch_iterator = iter_batches(n_samples, batch_size)
 
-        # TODO: quick hack, fix it later.
-        if hasattr(self, 'training') and self.training.show_epoch == 1:
-            batches_index_iter = logs.progressbar(
-                batches_index_iter,
-                mininterval=0.05,
-                desc='Iter batches',
-                miniters=1,
-                init_interval=1.,
+        if self.training and self.training.show_epoch == 1:
+            batch_iterator = self.logs.progressbar(
+                list(batch_iterator),
+                desc='Train batches',
                 file=self.logs.stdout
             )
 
-        error = 0
-        for batch_index in batches_index_iter:
-            slice_batch = slice(batch_index * batch_size,
-                                (batch_index + 1) * batch_size)
-            error += train_epoch(input_train[slice_batch],
-                                 target_train[slice_batch])
+        total_error = 0
+        for batch in batch_iterator:
+            total_error += train_epoch(input_train[batch],
+                                       target_train[batch])
 
-        return batch_size * error / len(input_train)
+        average_error = batch_size * total_error / n_samples
+        return average_error
+
+    def prediction_error(self, input_data, target_data):
+        input_data = self.format_input_data(input_data)
+        target_data = self.format_target_data(target_data)
+
+        n_samples = len(input_data)
+        batch_size = self.batch_size
+        prediction_error = self.methods.prediction_error
+
+        if batch_size is None or n_samples <= batch_size:
+            return prediction_error(input_data, target_data)
+
+        batch_iterator = iter_batches(n_samples, batch_size)
+
+        if self.training and self.training.show_epoch == 1:
+            batch_iterator = self.logs.progressbar(
+                list(batch_iterator),
+                desc='Validation batches',
+                file=self.logs.stdout
+            )
+
+        total_error = 0
+        for batch in batch_iterator:
+            total_error += prediction_error(input_data[batch],
+                                            target_data[batch])
+
+        average_error = batch_size * total_error / n_samples
+        return average_error

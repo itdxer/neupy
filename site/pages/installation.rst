@@ -20,3 +20,5 @@ Or just from source
     git clone https://github.com/itdxer/neupy.git
     cd neupy
     python setup.py install
+
+Check the :ref:`quick_start` tutorial next.

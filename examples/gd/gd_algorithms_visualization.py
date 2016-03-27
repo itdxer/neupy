@@ -45,7 +45,7 @@ def copy_weight(weight):
     return weight.get_value().copy()
 
 
-def save_weight_in_epoch(net):
+def save_epoch_weight(net):
     """ Signal processor which save weight update for every
     epoch.
     """
@@ -57,16 +57,11 @@ def save_weight_in_epoch(net):
 
 
 def get_connection():
-    """ Generate new connections every time when we call it """
+    """ Generate new connections every time when we call it.
+    """
     input_layer = NoBiasSigmoid(2, weight=default_weight.copy())
     output_layer = layers.Output(1)
     return input_layer > output_layer
-
-
-network_settings = dict(
-    step=0.3,
-    epoch_end_signal=save_weight_in_epoch,
-)
 
 
 def draw_quiver(network_class, name, color='r'):
@@ -76,7 +71,11 @@ def draw_quiver(network_class, name, color='r'):
     global weights
     global current_epoch
 
-    bpn = network_class(get_connection(), **network_settings)
+    bpn = network_class(
+        get_connection(),
+        step=0.3,
+        epoch_end_signal=save_epoch_weight
+    )
     # 1000 is an upper limit for all network epochs, later we
     # will fix it size
     weights = np.zeros((2, 1000))
@@ -102,7 +101,11 @@ def target_function(network, x, y):
 
 
 # Get data for countour plot
-bp_network = algorithms.GradientDescent(get_connection(), **network_settings)
+bp_network = algorithms.GradientDescent(
+    get_connection(),
+    step=0.3,
+    epoch_end_signal=save_epoch_weight
+)
 network_target_function = partial(target_function, bp_network)
 
 plt.figure()
@@ -111,8 +114,8 @@ plt.xlabel("First weight")
 plt.ylabel("Second weight")
 
 draw_countour(
-    np.linspace(-6.5, 6.5, 50),
-    np.linspace(-6.5, 6.5, 50),
+    np.linspace(-5, 5, 50),
+    np.linspace(-5, 5, 50),
     network_target_function
 )
 
@@ -122,8 +125,9 @@ momentum_class = partial(algorithms.Momentum, batch_size='full')
 
 algorithms = (
     (algorithms.GradientDescent, 'Gradient Descent', 'k'),
-    (momentum_class, 'Momentum', 'm'),
-    (algorithms.RPROP, 'RPROP', 'c'),
+    (momentum_class, 'Momentum', 'g'),
+    (algorithms.RPROP, 'RPROP', 'm'),
+    (algorithms.IRPROPPlus, 'RPROP', 'r'),
     (cgnet_class, 'Conjugate Gradient', 'y'),
 )
 

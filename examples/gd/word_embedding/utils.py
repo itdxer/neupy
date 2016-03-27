@@ -21,7 +21,7 @@ def crossentropy(expected, predicted, epsilon=1e-10):
     return error / n_samples
 
 
-# Make it possible to use sparse matrix for trainig target
+# Make it possible to use sparse matrix for training target
 crossentropy.expected_dtype = theano.sparse.csr_matrix
 
 

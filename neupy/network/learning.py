@@ -28,14 +28,14 @@ class SupervisedLearning(object):
             raise ValueError("Input and target test samples missed. "
                              "They must be defined both or none of them.")
 
-        input_train = format_data(input_train, is_feature1d=True)
-        target_train = format_data(target_train, is_feature1d=True)
+        input_train = format_data(input_train)
+        target_train = format_data(target_train)
 
         if input_test is not None:
-            input_test = format_data(input_test, is_feature1d=True)
+            input_test = format_data(input_test)
 
         if target_test is not None:
-            target_test = format_data(target_test, is_feature1d=True)
+            target_test = format_data(target_test)
 
         return super(SupervisedLearning, self).train(
             input_train=input_train, target_train=target_train,
