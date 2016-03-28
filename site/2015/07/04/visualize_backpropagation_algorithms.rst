@@ -131,54 +131,36 @@ From the figure above it's clear that weight update magnitude become smaller. Li
 RPROP
 +++++
 
-:network:`Momentum` makes fewer steps for a prediction, but we still can
-find minimum in fewer number of steps.
-Now we are going to run :network:`RPROP` algorithm.
+:network:`Momentum` makes fewer steps for a prediction, but we still can find minimum in fewer number of steps. Now we are going to run :network:`RPROP` algorithm.
 
 .. figure:: images/visualize_gd/rprop-steps.png
     :width: 80%
     :align: center
     :alt: RPROP steps
 
-This improvment looks impressive.
-Now we are able to see steps without zooming.
-We got almost the same value as before using just 20 steps, which is 5 times fewer than :network:`Momentum` and 40 times fewer than :network:`Gradient Descent <GradientDescent>`.
+This improvment looks impressive. Now we are able to see steps without zooming. We got almost the same value as before using just 20 steps, which is 5 times fewer than :network:`Momentum` and 40 times fewer than :network:`Gradient Descent <GradientDescent>`.
 
-Now we are going to figure out what are the main features of :network:`RPROP` just by looking at the plot above.
-:network:`RPROP` has a unique step for each weight.
-There are just two steps for each weight in the input layer for this network.
-:network:`RPROP` will increase the step size if gradient don't change the sign before its value, and it will decrease in a different situation.
-This update rule is not the same as for :network:`Momentum` algorithm.
+Now we are going to figure out what are the main features of :network:`RPROP` just by looking at the plot above. :network:`RPROP` has a unique step for each weight. There are just two steps for each weight in the input layer for this network. :network:`RPROP` will increase the step size if gradient don't change the sign before its value, and it will decrease in a different situation.
 
-.. figure:: images/visualize_gd/rprop-first-6-steps.png
+.. figure:: images/visualize_gd/rprop-first-11-steps.png
     :width: 80%
     :align: center
-    :alt: RPROP first 6 steps
+    :alt: RPROP first 11 steps
 
-From the figure above you can see that first 6 updates have the same direction, so both steps are increase after each iteration.
-For the first epoch steps are equal to the same value which we set up at network initialization step.
-On the every next iterations they have been increased by the same factor, so after six iteration they became bigger, but they are still equal because they were getting bigger by the same factor.
+From the figure above you can see that first 11 updates have the same direction, so both steps are increase after each iteration. For the first epoch steps are equal to the same value which we set up at network initialization step. On the every next iterations they have been increased by the same factor, so after six iteration they became bigger, but they are still equal because they were getting bigger by the same factor.
 
-Now let's check the next epochs from the figure below.
-On the 7th epoch gradient changed the direction, but steps are still the same.
-But we can clearly see that gradient changed the sign for the second weight.
-:network:`RPROP` updated the step after weight had updated, so the step for the second weight must be fewer for the 8th epoch.
+Now let's check the next epochs from the figure below. On the 12th epoch gradient changed the direction, but steps are still the same. But we can clearly see that gradient changed the sign for the second weight. :network:`RPROP` updated the step after weight had updated, so the step for the second weight must be fewer for the 13th epoch.
 
-.. figure:: images/visualize_gd/rprop-6th-to-9th-epochs.png
+.. figure:: images/visualize_gd/rprop-11th-to-14th-epochs.png
     :width: 80%
     :align: center
-    :alt: RPROP from 6th to 9th steps
+    :alt: RPROP from 11th to 14th steps
 
-Now let's look at the 8th epoch.
-It shows us how gradient sign difference on the 7th epoch updated steps.
-Now the steps are not equal.
-From the picture above we can see that update on the second weight (y axis) is fewer than on the first weight (x axis).
+Now let's look at the 13th epoch. It shows us how gradient sign difference on the 12th epoch updated steps. Now the steps are not equal. From the picture above we can see that update on the second weight (y axis) is smaler than on the first weight (x axis).
 
-On the 8th epoch gradient on y axis changed the sign again.
-Network decreased by constant factor and update for the second weight on the 9th epoch would be fewer than on the 8th.
+On the 16th epoch gradient on y axis changed the sign again. Network decreased by constant factor and update for the second weight on the 17th epoch would be fewer than on the 16th.
 
-To train your intuition you can check the other epochs updates and try to figure out
-how steps are dependent on the direction.
+To train your intuition you can check the other epochs updates and try to figure out how steps are dependent on the direction.
 
 iRPROP+
 +++++++
@@ -191,33 +173,20 @@ iRPROP+
     :alt: iRPROP+ steps
 
 As in :network:`RPROP` algorithm :network:`iRPROP+ <IRPROPPlus>` make exacly the
-same first 6 steps.
+same first 11 steps.
 
-Now let's look at the 7th step in the figure below.
+Now let's look at the 12th step in the figure below.
 
-.. figure:: images/visualize_gd/irprop-plus-6th-to-12th-epochs.png
+.. figure:: images/visualize_gd/irprop-plus-second-part.png
     :width: 80%
     :align: center
-    :alt: iRPROP+ from 6th to 12th epoch updates.
+    :alt: iRPROP+ second part
 
-Second weight (on the y axis) didn't change the value.
-On the same epoch :network:`RPROP` changed the gradient comparing to the previous
-epoch and just decreased step value after weight update.
-Instead, :network:`iRPROP+ <IRPROPPlus>` just disabled weight update for current
-epoch (set it up to `0`).
-And of course it also decreased the step for the second weight.
-Also you can find that vector for the 7th epoch that looks smaller than for the :network:`RPROP` algorithm, because we ignored the second weight update.
-If we check the x axis update size we will find that it has the same value
-as in :network:`RPROP` algorithm.
+Second weight (on the y axis) didn't change the value. On the same epoch :network:`RPROP` changed the gradient comparing to the previous epoch and just decreased step value after weight update. Instead, :network:`iRPROP+ <IRPROPPlus>` disabled weight update for current epoch (set it up to `0`). And of course it also decreased the step for the second weight. Also you can find that vector for the 12th epoch that looks fewer than for the :network:`RPROP` algorithm, because we ignored the second weight update. If we check the x axis update size we will find that it has the same value as in :network:`RPROP` algorithm.
 
-On 8th epoch network included again second weight into the update process, because
-compared to the previous epoch gradient didn't change its sign.
+On 13th epoch network included again second weight into the update process, because compared to the previous epoch gradient didn't change its sign.
 
-Next steps are doing the same job, but 11th epoch differs from others.
-There are a few updates which are related specifically to :network:`iRPROP+ <IRPROPPlus>`, but the most important we have not seen before.
-After weight update on the 11th epoch network error increased, so our update made our prediction worse.
-Now on the 12th epoch network tried to rollback vector update.
-It decreased steps on the 11th epoch and weight update didn't go to the same point after the rollback procedure, it just took opposite direction with a smaller step.
+Next steps are doing the same job, but 15th epoch differs from others. There are a few updates which are related specifically to :network:`iRPROP+ <IRPROPPlus>`, but the most important we have not seen before. After weight update on the 15th epoch network error increased, so our update made our prediction worse. Now on the 16th epoch network tried to rollback vector update. It decreased steps on the 15th epoch and weight update didn't go to the same point after the rollback procedure, it just took opposite direction with a smaller step.
 
 Conjugate Gradient and Golden Search
 ++++++++++++++++++++++++++++++++++++
@@ -241,16 +210,7 @@ Of course it's not a great assumption.
 Golden Search is just trying to figure out the most perfect step size by using a simple search.
 But it doing a greate job.
 
-Finally network made 5 steps, but in plot we can clearly see just 4 of them.
-The reason is that the update for the second epoch was really small compared to others.
-We can zoom the plot and find this tiny step update.
-
-.. figure:: images/visualize_gd/conj-grad-small-step.png
-    :width: 80%
-    :align: center
-    :alt: Conjugate Gradient with Golden Search small second step
-
-If we add the same :network:`Golden Search <LinearSearch>` algorithm to the classic Gradient Descent we will get to the minimum into a few steps as well.
+Finally network made 4 steps. If we add the same :network:`Golden Search <LinearSearch>` algorithm to the classic Gradient Descent we will get to the minimum into a few steps as well.
 
 Bring them all together
 -----------------------

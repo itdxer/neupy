@@ -3,6 +3,7 @@ import theano.typed_list
 import theano.tensor as T
 
 from neupy.core.properties import BoundedProperty
+from neupy.utils import asfloat
 from neupy.algorithms.gd import NoStepSelection
 from neupy.algorithms.utils import (parameters2vector, count_parameters,
                                     iter_parameters, setup_parameter_updates)
@@ -86,6 +87,7 @@ class Hessian(NoStepSelection, GradientDescent):
         n_parameters = count_parameters(self)
         parameters = list(iter_parameters(self))
         param_vector = parameters2vector(self)
+        penalty_const = asfloat(self.penalty_const)
 
         hessian_matrix, full_gradient = find_hessian_and_gradient(
             self.variables.error_func, parameters

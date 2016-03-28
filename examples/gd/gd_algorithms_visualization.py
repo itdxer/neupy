@@ -127,7 +127,7 @@ algorithms = (
     (algorithms.GradientDescent, 'Gradient Descent', 'k'),
     (momentum_class, 'Momentum', 'g'),
     (algorithms.RPROP, 'RPROP', 'm'),
-    (algorithms.IRPROPPlus, 'RPROP', 'r'),
+    (algorithms.IRPROPPlus, 'iRPROP+', 'r'),
     (cgnet_class, 'Conjugate Gradient', 'y'),
 )
 
