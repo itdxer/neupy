@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from neupy import plots
 
 from base import BaseTestCase
-from utils import (skip_plot_test_if_specified, image_comparison,
+from utils import (skip_image_comparison_if_specified, image_comparison,
                    format_image_name)
 
 
@@ -25,7 +25,7 @@ class HintonDiagramTestCase(BaseTestCase):
         super(HintonDiagramTestCase, self).setUp()
         theano.config.floatX = 'float64'
 
-    @skip_plot_test_if_specified
+    @skip_image_comparison_if_specified
     def test_simple_hinton(self):
         original_image_name = format_image_name("simple_hinton.png")
         original_image = os.path.join(IMGDIR, original_image_name)
@@ -36,7 +36,7 @@ class HintonDiagramTestCase(BaseTestCase):
             plt.sca(ax)  # To test the case when ax=None
             plots.hinton(weight, add_legend=True)
 
-    @skip_plot_test_if_specified
+    @skip_image_comparison_if_specified
     def test_max_weight(self):
         original_image_name = format_image_name("max_weight_hinton.png")
         original_image = os.path.join(IMGDIR, original_image_name)
@@ -46,7 +46,7 @@ class HintonDiagramTestCase(BaseTestCase):
             ax = fig.add_subplot(1, 1, 1)
             plots.hinton(weight, ax=ax, max_weight=10, add_legend=True)
 
-    @skip_plot_test_if_specified
+    @skip_image_comparison_if_specified
     def test_hinton_without_legend(self):
         original_image_name = format_image_name("hinton_without_legend.png")
         original_image = os.path.join(IMGDIR, original_image_name)
@@ -56,7 +56,7 @@ class HintonDiagramTestCase(BaseTestCase):
             ax = fig.add_subplot(1, 1, 1)
             plots.hinton(weight, ax=ax, add_legend=False)
 
-    @skip_plot_test_if_specified
+    @skip_image_comparison_if_specified
     def test_hinton_only_positive(self):
         original_image_name = format_image_name("hinton_only_positive.png")
         original_image = os.path.join(IMGDIR, original_image_name)
@@ -66,7 +66,7 @@ class HintonDiagramTestCase(BaseTestCase):
             ax = fig.add_subplot(1, 1, 1)
             plots.hinton(weight, ax=ax)
 
-    @skip_plot_test_if_specified
+    @skip_image_comparison_if_specified
     def test_hinton_only_negative(self):
         original_image_name = format_image_name("hinton_only_negative.png")
         original_image = os.path.join(IMGDIR, original_image_name)
@@ -76,7 +76,7 @@ class HintonDiagramTestCase(BaseTestCase):
             ax = fig.add_subplot(1, 1, 1)
             plots.hinton(weight, ax=ax)
 
-    @skip_plot_test_if_specified
+    @skip_image_comparison_if_specified
     def test_hinton_1darray(self):
         original_image_name = format_image_name("hinton_1darray.png")
         original_image = os.path.join(IMGDIR, original_image_name)

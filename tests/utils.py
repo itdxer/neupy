@@ -203,7 +203,7 @@ def vectors_for_testing(vector, is_feature1d=True):
     return vectors_list
 
 
-def skip_plot_test_if_specified(func):
+def skip_image_comparison_if_specified(func):
     """ Decorator identifies tests that involve image comparison.
     Before run test function check if environemnt variable
     `SKIP_PLOT_TEST` exists and has non-empty value. If it exists,
