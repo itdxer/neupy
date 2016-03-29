@@ -27,12 +27,14 @@ scores = []
 f1_scores = []
 y_actual = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))
 
+
 def on_epoch_end(network):
     y_predicted = network.predict(x_test)
     score = metrics.accuracy_score(y_actual, y_predicted)
     scores.append(score)
     score = metrics.f1_score(y_actual, y_predicted)
     f1_scores.append(score)
+
 
 network = algorithms.Momentum(
     [

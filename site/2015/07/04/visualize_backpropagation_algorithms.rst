@@ -191,26 +191,16 @@ Next steps are doing the same job, but 15th epoch differs from others. There are
 Conjugate Gradient and Golden Search
 ++++++++++++++++++++++++++++++++++++
 
-Now let's look at :network:`Conjugate Gradient <ConjugateGradient>` with
-:network:`Golden Search <LinearSearch>`.
-Conjugate Gradient in Gradient Descent variation is a little bit different than in
-Multivariable Calculus notation and it doesn't guarantee converge into n-th steps
-(`n` means dimmention size for specific problem).
-Steps don't have a perfect size for :network:`Conjugate Gradient <ConjugateGradient>`,
-so :network:`Golden Search <LinearSearch>` is always a good choice for a step selection.
+Now let's look at :network:`Conjugate Gradient <ConjugateGradient>` with :network:`Golden Search <LinearSearch>`. Conjugate Gradient in Gradient Descent variation is a little bit different than in Multivariable Calculus notation and it doesn't guarantee converge into n-th steps (`n` means dimmention size for specific problem). Steps don't have a perfect size for :network:`Conjugate Gradient <ConjugateGradient>`, so :network:`Golden Search <LinearSearch>` is always a good choice for a step selection.
 
 .. figure:: images/visualize_gd/conj-grad-and-gold-search-steps.png
     :width: 80%
     :align: center
     :alt: Conjugate Gradient with Golden Search steps
 
-From the figure above we can see almost perfect step for the specific direction.
-Each of the fifth steps make a great choice for the step size.
-Of course it's not a great assumption.
-Golden Search is just trying to figure out the most perfect step size by using a simple search.
-But it doing a greate job.
+From the figure above we can see almost perfect step for the specific direction. Each of the fourth steps make a great choice for the step size. Of course it's not a great assumption. Golden Search is just trying to figure out the most perfect step size by using a simple search. But it doing a greate job.
 
-Finally network made 4 steps. If we add the same :network:`Golden Search <LinearSearch>` algorithm to the classic Gradient Descent we will get to the minimum into a few steps as well.
+Finally network made 4 steps. If we add the same :network:`Golden Search <LinearSearch>` algorithm to the classic Gradient Descent we will get to the minimum using just 2 steps. You can try it by your own.
 
 Bring them all together
 -----------------------

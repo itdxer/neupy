@@ -1,4 +1,3 @@
-import numpy as np
 from sklearn import cross_validation, metrics
 from skdata.larochelle_etal_2007 import dataset
 from neupy import algorithms, layers, environment
