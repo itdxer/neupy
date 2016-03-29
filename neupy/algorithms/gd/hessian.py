@@ -93,7 +93,7 @@ class Hessian(NoStepSelection, GradientDescent):
             self.variables.error_func, parameters
         )
         hessian_inverse = T.nlinalg.matrix_inverse(
-            hessian_matrix + self.penalty_const * T.eye(n_parameters)
+            hessian_matrix + penalty_const * T.eye(n_parameters)
         )
 
         updated_parameters = param_vector - hessian_inverse.dot(full_gradient)

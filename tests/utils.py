@@ -1,6 +1,7 @@
 import os
 import sys
 import copy
+import unittest
 import tempfile
 from contextlib import contextmanager
 
@@ -200,3 +201,16 @@ def vectors_for_testing(vector, is_feature1d=True):
                          pd.DataFrame(vector.reshape(shape2d))])
 
     return vectors_list
+
+
+def skip_plot_test_if_specified(func):
+    """ Decorator identifies tests that involve image comparison.
+    Before run test function check if environemnt variable
+    `SKIP_PLOT_TEST` exists and has non-empty value. If it exists,
+    step will be skipped.
+    """
+    decorator = unittest.skipIf(
+        os.environ.get('SKIP_PLOT_TEST', None),
+        "don't check tests that involve image comparison"
+    )
+    return decorator(func)

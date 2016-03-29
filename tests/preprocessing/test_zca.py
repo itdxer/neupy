@@ -13,7 +13,8 @@ from neupy import preprocessing
 from neupy.utils import NotTrainedException
 
 from base import BaseTestCase
-from utils import image_comparison, format_image_name
+from utils import (image_comparison, format_image_name,
+                   skip_plot_test_if_specified)
 
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -24,8 +25,11 @@ IMGDIR = os.path.join(CURRENT_DIR, "images")
 class ZCATestCase(BaseTestCase):
     def test_exceptions(self):
         with self.assertRaises(NotTrainedException):
-            preprocessing.ZCA().transform(np.random.random((3, 2)))
+            data = np.random.random((3, 2))
+            zca = preprocessing.ZCA()
+            zca.transform(data)
 
+    @skip_plot_test_if_specified
     def test_simple_zca(self):
         plt.style.use('ggplot')
 
