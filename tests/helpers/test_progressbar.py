@@ -9,8 +9,13 @@ from utils import catch_stdout
 class ProgressbarTestCase(BaseTestCase):
     def test_simple_progressbar(self):
         with catch_stdout() as out:
-            iterator = progressbar(range(10), mininterval=0, file=sys.stdout,
-                                   init_interval=0)
+            iterator = progressbar(
+                range(10),
+                mininterval=0.,
+                file=sys.stdout,
+                init_interval=0.
+            )
+
             for i in iterator:
                 terminal_output = out.getvalue()
 
