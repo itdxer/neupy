@@ -1,7 +1,7 @@
 from numpy import any as np_any
 
 from neupy.core.base import BaseSkeleton
-from neupy.core.properties import ChoiceProperty, NonNegativeIntProperty
+from neupy.core.properties import ChoiceProperty, IntProperty
 from neupy.core.config import Configurable
 
 
@@ -13,13 +13,11 @@ class DiscreteMemory(BaseSkeleton, Configurable):
 
     Notes
     -----
-    * {discrete_data_note}
-    """
-    __discrete_data_note = """ Input and output data must contains only \
-    binary values.
-    """
+    * Input and output vectors should contain only binary values.
 
-    __discrete_params = """mode : {'sync', 'async'}
+    Parameters
+    ----------
+    mode : {{'sync', 'async'}}
         Indentify pattern recovery mode. ``sync`` mode try recovery a pattern
         using the all input vector. ``async`` mode randomly chose some
         values from the input vector and repeat this procedure the number
@@ -29,13 +27,8 @@ class DiscreteMemory(BaseSkeleton, Configurable):
         Defaults to ``100``.
     """
 
-    shared_docs = {
-        'discrete_data_note': __discrete_data_note,
-        'discrete_params': __discrete_params
-    }
-
     mode = ChoiceProperty(default='sync', choices=['async', 'sync'])
-    n_times = NonNegativeIntProperty(default=100)
+    n_times = IntProperty(default=100, minval=1)
 
     def __init__(self, **options):
         super(DiscreteMemory, self).__init__(**options)

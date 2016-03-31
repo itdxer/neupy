@@ -1,42 +1,38 @@
 from numpy import dot
 
 from neupy.utils import format_data
-from neupy.core.properties import NonNegativeNumberProperty
+from neupy.core.properties import BoundedProperty
 from neupy.network.base import BaseNetwork
-from neupy.network.connections import FAKE_CONNECTION
 from neupy.network.learning import LazyLearning
-from neupy.network.types import Regression
 from .utils import pdf_between_data
 
 
 __all__ = ('GRNN',)
 
 
-class GRNN(LazyLearning, Regression, BaseNetwork):
+class GRNN(LazyLearning, BaseNetwork):
     """ Generalized Regression Neural Network.
 
     Parameters
     ----------
     std : float
         standard deviation for PDF function, default to 0.1.
-    {verbose}
+    {Verbose.verbose}
 
     Methods
     -------
-    {supervised_train_lazy}
-    {full_methods}
+    {LazyLearning.train}
+    {BaseSkeleton.predict}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
 
     Examples
     --------
-    >>> import numpy as np
-    >>>
     >>> from sklearn import datasets
     >>> from sklearn.cross_validation import train_test_split
+    >>> from neupy import algorithms, estimators, environment
     >>>
-    >>> from neupy.algorithms import GRNN
-    >>> from neupy.functions import rmsle
-    >>>
-    >>> np.random.seed(0)
+    >>> environment.reproducible()
     >>>
     >>> dataset = datasets.load_diabetes()
     >>> x_train, x_test, y_train, y_test = train_test_split(
@@ -44,25 +40,13 @@ class GRNN(LazyLearning, Regression, BaseNetwork):
     ...     random_state=0
     ... )
     >>>
-    >>> nw = GRNN(std=0.1, verbose=False)
+    >>> nw = algorithms.GRNN(std=0.1, verbose=False)
     >>> nw.train(x_train, y_train)
     >>> result = nw.predict(x_test)
-    >>> rmsle(result, y_test)
+    >>> estimators.rmsle(result, y_test)
     0.4245120142774001
     """
-    std = NonNegativeNumberProperty(default=0.1)
-
-    def __init__(self, **options):
-        super(GRNN, self).__init__(FAKE_CONNECTION, **options)
-
-    def setup_defaults(self):
-        del self.error
-        del self.step
-        del self.use_bias
-        del self.show_epoch
-        del self.train_end_signal
-        del self.train_epoch_end_signal
-        super(GRNN, self).setup_defaults()
+    std = BoundedProperty(default=0.1, minval=0)
 
     def train(self, input_train, target_train, copy=True):
         input_train = format_data(input_train, copy=copy)

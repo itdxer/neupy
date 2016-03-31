@@ -13,11 +13,8 @@ But you can test code without it.
 
 .. code-block:: python
 
-    import random
-    import numpy as np
-
-    np.random.seed(0)
-    random.seed(0)
+    from neupy import environment
+    environment.reproducible()
 
 If you can't reproduce with your version of Python or libraries you can install those ones that were used in this tutorial:
 
@@ -25,7 +22,7 @@ If you can't reproduce with your version of Python or libraries you can install 
 
     >>> import neupy
     >>> neupy.__version__
-    '0.1.0'
+    '0.2.0'
     >>> import numpy
     >>> numpy.__version__
     '1.9.2'
@@ -376,7 +373,7 @@ Download script
 
 You can download and test a full script from the `github repository <https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py>`_.
 
-It doesn't contain a fixed ``seed`` initialization, so you will get different outputs after each run.
+It doesn't contain a fixed ``environment.reproducible`` function, so you will get different outputs after each run.
 
 .. author:: default
 .. categories:: none

@@ -5,27 +5,27 @@ from numpy import (zeros, argmin, argwhere, take, sum as np_sum,
 from numpy.linalg import norm
 
 from neupy.utils import format_data
-from neupy.core.properties import NonNegativeIntProperty
+from neupy.core.properties import IntProperty
+from neupy.algorithms.gd import NoStepSelection
 from neupy.network.base import BaseNetwork
-from neupy.network.connections import FAKE_CONNECTION
-from neupy.network.types import Clustering
 from neupy.network.learning import UnsupervisedLearning
 
 
 __all__ = ('RBFKMeans',)
 
 
-class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
+class RBFKMeans(NoStepSelection, UnsupervisedLearning, BaseNetwork):
     """ Radial basis function K-means for clustering.
 
     Parameters
     ----------
     n_clusters : int
         number of clusters in dataset.
-    {show_epoch}
-    {shuffle_data}
-    {full_signals}
-    {verbose}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Attributes
     ----------
@@ -35,8 +35,10 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
 
     Methods
     -------
-    {unsupervised_train_epsilon}
-    {full_methods}
+    {UnsupervisedLearning.train}
+    {BaseSkeleton.predict}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
 
     Examples
     --------
@@ -67,17 +69,11 @@ class RBFKMeans(UnsupervisedLearning, Clustering, BaseNetwork):
     array([[ 0.],
            [ 1.]])
     """
-    n_clusters = NonNegativeIntProperty(min_size=2)
+    n_clusters = IntProperty(minval=2)
 
     def __init__(self, **options):
         self.centers = None
-        super(RBFKMeans, self).__init__(FAKE_CONNECTION, **options)
-
-    def setup_defaults(self):
-        del self.use_bias
-        del self.error
-        del self.step
-        super(RBFKMeans, self).setup_defaults()
+        super(RBFKMeans, self).__init__(**options)
 
     def predict(self, input_data):
         input_data = format_data(input_data)

@@ -243,11 +243,10 @@ We use 85% of data for train.
 
 .. code-block:: python
 
-    import numpy as np
     from sklearn.cross_validation import train_test_split
+    from neupy import environment
 
-    # To make result reproducible
-    np.random.seed(0)
+    environment.reproducible()
 
     x_train, x_test, y_train, y_test = train_test_split(
         data, target, train_size=0.85
@@ -261,17 +260,17 @@ Now we are ready to build Neural Network which will predict house prices.
 
     cgnet = algorithms.ConjugateGradient(
         connection=[
-            layers.SigmoidLayer(13),
-            layers.SigmoidLayer(50),
-            layers.OutputLayer(1),
+            layers.Sigmoid(13),
+            layers.Sigmoid(50),
+            layers.Output(1),
         ],
         search_method='golden',
         show_epoch=25,
         verbose=True,
-        optimizations=[algorithms.LinearSearch],
+        addons=[algorithms.LinearSearch],
     )
 
-.. figure:: images/cgnet-init.png
+.. figure:: images/boston/cgnet-init.png
     :width: 80%
     :align: center
     :alt: Conjgate Gradient train
@@ -282,7 +281,7 @@ This value is just a guess.
 For better and more accurate result we should choose it with other methods, but for now we can use this value.
 As the main algorithm we take Conjugate Gradient.
 This implementation of backpropagation is a little bit different from main interpretation of Conjugate Gradient.
-For Backpropagation implementation we can't guarantee that we get the local minimum in n-th steps (where `n` is the dimention).
+For GradientDescent implementation we can't guarantee that we get the local minimum in n-th steps (where `n` is the dimention).
 To optimize it we should use linear search.
 It will fix and set up better steps for Conjugate Gradient.
 
@@ -295,7 +294,7 @@ Also we will add test data into training function to check validation error on e
     cgnet.train(x_train, y_train, x_test, y_test, epochs=100)
 
 
-.. figure:: images/cgnet-train.png
+.. figure:: images/boston/cgnet-train.png
     :width: 80%
     :align: center
     :alt: Conjgate Gradient train
@@ -309,7 +308,7 @@ To make sure that all training processes go in a right way we can check erros up
     cgnet.plot_errors()
 
 
-.. figure:: images/cgnet-error-plot.png
+.. figure:: images/boston/cgnet-error-plot.png
     :width: 80%
     :align: center
     :alt: Conjgate Gradient train
@@ -322,14 +321,14 @@ To fix it, we are going to inverse our transformation for predicted and actual v
 
 .. code-block:: python
 
-    from neupy.functions.errors import rmsle
+    from neupy.estimators import rmsle
 
     y_predict = cgnet.predict(x_test).round(1)
     error = rmsle(target_scaler.inverse_transform(y_test),
                   target_scaler.inverse_transform(y_predict))
     print(error)
 
-Now we can see that our error equals to `0.2098` which is pretty small.
+Now we can see that our error approximately equals to `0.22` which is pretty small.
 In the table below you can find 10 randomly chosen errors.
 
 .. raw:: html

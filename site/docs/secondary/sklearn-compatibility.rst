@@ -10,7 +10,7 @@ First of all instead of ``train`` method you can use ``fit``.
 
     from neupy import algorithms
 
-    bpnet = algorithms.Backpropagation((2, 3 1))
+    bpnet = algorithms.GradientDescent((2, 3 1))
     bpnet.fit(x_train, y_train, epochs=100)
 
 Also you can use scikit-learn pipelines with NeuPy.
@@ -22,7 +22,7 @@ Also you can use scikit-learn pipelines with NeuPy.
 
     pipeline = pipeline.Pipeline([
         ('min_max_scaler', preprocessing.MinMaxScaler()),
-        ('backpropagation', algorithms.Backpropagation((2, 3, 1))),
+        ('backpropagation', algorithms.GradientDescent((2, 3, 1))),
     ])
 
     pipeline.fit(x_train, y_train, backpropagation__epochs=1000)

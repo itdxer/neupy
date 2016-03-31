@@ -646,10 +646,11 @@ We don't necessary need to create a new network, we can just simply switch its m
 
 .. code-block:: python
 
-    >>> np.random.seed(0)
+    >>> from neupy import environment
+    >>> environment.reproducible()
     >>>
     >>> dhnet.mode = 'async'
-    >>> dhnet.n_times = 200
+    >>> dhnet.n_times = 400
     >>>
     >>> result = dhnet.predict(half_two)
     >>> draw_bin_image(result.reshape((6, 5)))

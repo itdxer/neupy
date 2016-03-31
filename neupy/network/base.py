@@ -1,127 +1,185 @@
-from __future__ import division
+from __future__ import division, absolute_import
 
-from math import ceil
-from time import time
-from itertools import groupby
+import math
+import time
+import types
 from collections import deque
+from itertools import groupby
 
 import six
-from numpy import arange, mean
+import numpy as np
 import matplotlib.pyplot as plt
 
-from neupy.utils import format_data, is_row1d
-from neupy.helpers import preformat_value
+from neupy.utils import preformat_value, AttributeKeyDict
+from neupy.helpers import table
 from neupy.core.base import BaseSkeleton
-from neupy.core.properties import (Property, FuncProperty, NumberProperty,
-                                   BoolProperty)
-from neupy.layers import BaseLayer, OutputLayer
-from neupy.functions import normilize_error_output, mse
-from .utils import iter_until_converge, shuffle
-from .connections import (FAKE_CONNECTION, LayerConnection,
-                          NetworkConnectionError)
+from neupy.core.properties import (BoundedProperty, NumberProperty,
+                                   Property)
+from neupy.layers.connections import LayerConnection
+from .utils import (iter_until_converge, shuffle, normalize_error,
+                    StopNetworkTraining)
 
 
 __all__ = ('BaseNetwork',)
 
 
-def show_training_summary(network):
-    network.logs.data("""
-        Epoch {epoch}
-        Train error:  {error}
-        Validation error: {error_out}
-        Epoch time: {epoch_time} sec
-    """.format(
-        epoch=network.epoch,
-        error=network.last_error_in() or '-',
-        error_out=network.last_error_out() or '-',
-        epoch_time=round(network.train_epoch_time, 5)
-    ))
-
-
-def show_epoch_summary(network, show_epoch):
-    delay_limit = 1  # in seconds
+def show_epoch_summary(network):
+    delay_limit = 1.  # delay time in seconds
     prev_summary_time = None
     delay_history_length = 10
     terminal_output_delays = deque(maxlen=delay_history_length)
 
-    while True:
-        now = time()
+    table_drawer = table.TableDrawer(
+        table.Column(name="Epoch #"),
+        table.NumberColumn(name="Train err"),
+        table.NumberColumn(name="Valid err"),
+        table.TimeColumn(name="Time", width=10),
+        stdout=network.logs.write
+    )
+    table_drawer.start()
 
-        if prev_summary_time is not None:
-            time_delta = now - prev_summary_time
-            terminal_output_delays.append(time_delta)
+    yield
 
-        show_training_summary(network)
-        prev_summary_time = now
+    try:
+        while True:
+            now = time.time()
 
-        if len(terminal_output_delays) == delay_history_length:
-            prev_summary_time = None
-            average_delay = mean(terminal_output_delays)
+            if prev_summary_time is not None:
+                time_delta = now - prev_summary_time
+                terminal_output_delays.append(time_delta)
 
-            if average_delay < delay_limit:
-                show_epoch *= ceil(delay_limit / average_delay)
-                network.logs.warning(
-                    "Too many outputs in a terminal. Set "
-                    "up logging after each {} epoch"
-                    "".format(show_epoch)
-                )
-                terminal_output_delays.clear()
+            table_drawer.row([
+                network.last_epoch,
+                network.errors.last() or '-',
+                network.validation_errors.last() or '-',
+                network.training.epoch_time,
+            ])
+            prev_summary_time = now
 
-        yield show_epoch
+            if len(terminal_output_delays) == delay_history_length:
+                prev_summary_time = None
+                average_delay = np.mean(terminal_output_delays)
+
+                if average_delay < delay_limit:
+                    show_epoch = int(
+                        network.training.show_epoch *
+                        math.ceil(delay_limit / average_delay)
+                    )
+                    table_drawer.line()
+                    table_drawer.message("Too many outputs in a terminal.")
+                    table_drawer.message("Set up logging after each {} epochs"
+                                         "".format(show_epoch))
+                    table_drawer.line()
+                    terminal_output_delays.clear()
+
+                    network.training.show_epoch = show_epoch
+            yield
+
+    finally:
+        table_drawer.finish()
+        network.logs.newline()
 
 
-def shuffle_train_data(input_train, target_train):
-    if target_train is None:
-        return shuffle(input_train), None
-    return shuffle(input_train, target_train)
-
-
-def clean_layers(connection):
-    """ Clean layers connections and format transform them into one format.
-    Also this function validate layers connections.
+def show_network_options(network, highlight_options=None):
+    """ Display all available parameters options for Neural Network.
 
     Parameters
     ----------
-    connection : list, tuple or object
-        Layers connetion in different formats.
-
-    Returns
-    -------
-    object
-        Cleaned layers connection.
+    network : object
+        Neural network instance.
+    highlight_options : list
+        List of enabled options. In that case all options from that
+        list would be marked with a green color.
     """
-    if connection == FAKE_CONNECTION:
-        return connection
+    available_classes = [cls.__name__ for cls in network.__class__.__mro__]
+    logs = network.logs
 
-    if isinstance(connection, tuple):
-        connection = list(connection)
+    if highlight_options is None:
+        highlight_options = {}
 
-    islist = isinstance(connection, list)
+    def group_by_class_name(value):
+        _, option = value
+        option_priority = -available_classes.index(option.class_name)
+        return option_priority, option.class_name
 
-    if islist and isinstance(connection[0], BaseLayer):
-        chain_connection = connection.pop()
-        for layer in reversed(connection):
-            chain_connection = LayerConnection(layer, chain_connection)
-        connection = chain_connection
+    grouped_options = groupby(
+        sorted(network.options.items(), key=group_by_class_name),
+        group_by_class_name,
+    )
 
-    elif islist and isinstance(connection[0], LayerConnection):
-        pass
+    has_layer_structure = (
+        hasattr(network, 'connection') and
+        isinstance(network.connection, LayerConnection)
+    )
+    logs.title("Main information")
+    logs.message("ALGORITHM", network.class_name())
+    if has_layer_structure:
+        logs.message("ARCHITECTURE", network.connection)
 
-    if not isinstance(connection.output_layer, OutputLayer):
-        raise NetworkConnectionError("Final layer must be OutputLayer class "
-                                     "instance.")
+    logs.title("Network options")
 
-    return connection
+    for (_, class_name), options in grouped_options:
+        if not options:
+            continue
+
+        logs.write("{}:".format(class_name))
+        for key, data in sorted(options):
+            if key in highlight_options:
+                msg_color = 'green'
+                value = highlight_options[key]
+            else:
+                msg_color = 'gray'
+                value = data.value
+
+            formated_value = preformat_value(value)
+            msg_text = "{} = {}".format(key, formated_value)
+            logs.message("OPTION", msg_text, color=msg_color)
+
+        logs.write("")
 
 
-def parse_show_epoch_property(value, n_epochs):
-    if isinstance(value, int):
-        return value
+def logging_info_about_the_data(network, input_train, input_test):
+    logs = network.logs
+    n_train_samples = input_train.shape[0]
+    train_feature_shape = input_train.shape[1:]
 
-    number_end_position = value.index('time')
+    logs.title("Start train")
+    logs.message("TRAIN DATA",
+                 "{} samples, feature shape: {}"
+                 "".format(n_train_samples, train_feature_shape))
+
+    if input_test is not None:
+        n_test_samples = input_test.shape[0]
+        test_feature_shape = input_test.shape[1:]
+        logs.message("TEST DATA",
+                     "{} samples, feature shape: {}"
+                     "".format(n_test_samples, test_feature_shape))
+
+
+def logging_info_about_training(network, epochs, epsilon):
+    logs = network.logs
+    if epsilon is None:
+        logs.message("TRAINING", "Total epochs: {}".format(epochs))
+    else:
+        logs.message("TRAINING", "Epsilon: {}, Max epochs: {}"
+                                 "".format(epsilon, epochs))
+
+
+def parse_show_epoch_property(network, n_epochs, epsilon=None):
+    show_epoch = network.show_epoch
+
+    if isinstance(show_epoch, int):
+        return show_epoch
+
+    if epsilon is not None and isinstance(show_epoch, six.string_types):
+        network.logs.warning("Can't use `show_epoch` value in converging "
+                             "mode. Set up `show_epoch` property equal to 1")
+        return 1
+
+    number_end_position = show_epoch.index('time')
     # Ignore grammar mistakes like `2 time`, this error could be
     # really annoying
-    n_epochs_to_check = int(value[:number_end_position].strip())
+    n_epochs_to_check = int(show_epoch[:number_end_position].strip())
 
     if n_epochs <= n_epochs_to_check:
         return 1
@@ -129,9 +187,24 @@ def parse_show_epoch_property(value, n_epochs):
     return int(round(n_epochs / n_epochs_to_check))
 
 
-class ShowEpochProperty(Property):
+def create_training_epochs_iterator(network, epochs, epsilon=None):
+    if epsilon is not None:
+        return iter_until_converge(network, epsilon, max_epochs=epochs)
+
+    next_epoch = network.last_epoch + 1
+    return range(next_epoch, next_epoch + epochs)
+
+
+class ShowEpochProperty(BoundedProperty):
     """ Class helps validate specific syntax for `show_epoch`
     property from ``BaseNetwork`` class.
+
+    Parameters
+    ----------
+    {BoundedProperty.minval}
+    {BoundedProperty.maxval}
+    {BaseProperty.default}
+    {BaseProperty.required}
     """
     expected_type = tuple([int] + [six.string_types])
 
@@ -166,308 +239,301 @@ class ShowEpochProperty(Property):
                              "equal to one.".format(self.name))
 
 
+class ErrorHistoryList(list):
+    """ Wrapper around the built-in list class that adds additional
+    methods.
+    """
+    def last(self):
+        """ Returns last element if list is not empty,
+        ``None`` otherwise.
+        """
+        if self and self[-1] is not None:
+            return normalize_error(self[-1])
+
+    def previous(self):
+        """ Returns last element if list is not empty,
+        ``None`` otherwise.
+        """
+        if len(self) > 2 and self[-2] is not None:
+            return normalize_error(self[-2])
+
+    def normalized(self):
+        """ Normalize list that contains error outputs.
+
+        Returns
+        -------
+        list
+            Return the same list with normalized values if there
+            where some problems.
+        """
+        if not self or isinstance(self[0], float):
+            return self
+
+        normalized_errors = map(normalize_error, self)
+        return list(normalized_errors)
+
+
 class BaseNetwork(BaseSkeleton):
-    """ Base class Network algorithms.
+    """ Base class for Neural Network algorithms.
 
     Parameters
     ----------
-    {full_params}
+    step : float
+        Learning rate, defaults to ``0.1``.
+    show_epoch : int or str
+        This property controls how often the network will display information
+        about training. There are two main syntaxes for this property.
+        You can describe it as positive integer number and it
+        will describe how offen would you like to see summary output in
+        terminal. For instance, number `100` mean that network will show you
+        summary in 100, 200, 300 ... epochs. String value should be in a
+        specific format. It should contain the number of times that the output
+        will be displayed in the terminal. The second part is just
+        a syntax word ``time`` or ``times`` just to make text readable.
+        For instance, value ``'2 times'`` mean that the network will show
+        output twice with approximately equal period of epochs and one
+        additional output would be after the finall epoch.
+        Defaults to ``1``.
+    shuffle_data : bool
+        If it's ``True`` class shuffles all your training data before
+        training your network, defaults to ``True``.
+    epoch_end_signal : function
+        Calls this function when train epoch finishes.
+    train_end_signal : function
+        Calls this function when train process finishes.
+    {Verbose.verbose}
+
+    Attributes
+    ----------
+    errors : ErrorHistoryList
+        Contains list of training errors. This object has the same
+        properties as list and in addition there are three additional
+        useful methods: `last`, `previous` and `normalized`.
+    train_errors : ErrorHistoryList
+        Alias to `errors` attribute.
+    validation_errors : ErrorHistoryList
+        The same as `errors` attribute, but it contains only validation
+        errors.
+    last_epoch : int
+        Value equals to the last trained epoch. After initialization
+        it is equal to ``0``.
 
     Methods
     -------
-    {plot_errors}
-    {last_error}
+    plot_errors(logx=False)
+        Draws the error rate update plot. It always shows network
+        learning progress. When you add cross validation data set
+        into training function it displays validation data set error as
+        separated curve. If parameter ``logx`` is equal to the
+        ``True`` value it displays x-axis in logarithmic scale.
     """
-    error = FuncProperty(default=mse)
-    use_bias = BoolProperty(default=True)
-    step = NumberProperty(default=0.1)
+    step = NumberProperty(default=0.1, minval=0)
 
-    # Training settings
-    show_epoch = ShowEpochProperty(min_size=1, default='10 times')
-    shuffle_data = BoolProperty(default=False)
+    show_epoch = ShowEpochProperty(minval=1, default=1)
+    shuffle_data = Property(default=False, expected_type=bool)
 
-    # Signals
-    train_epoch_end_signal = FuncProperty()
-    train_end_signal = FuncProperty()
+    epoch_end_signal = Property(expected_type=types.FunctionType)
+    train_end_signal = Property(expected_type=types.FunctionType)
 
-    def __init__(self, connection, **options):
-        self.connection = clean_layers(connection)
+    def __init__(self, *args, **options):
+        self.errors = self.train_errors = ErrorHistoryList()
+        self.validation_errors = ErrorHistoryList()
+        self.training = AttributeKeyDict()
+        self.last_epoch = 0
 
-        self.errors_in = []
-        self.errors_out = []
-        self.train_epoch_time = None
-
-        self.layers = list(self.connection)
-        self.input_layer = self.layers[0]
-        self.output_layer = self.layers[-1]
-        self.train_layers = self.layers[:-1]
-
-        super(BaseNetwork, self).__init__(**options)
-        self.setup_defaults()
+        super(BaseNetwork, self).__init__(*args, **options)
+        self.init_properties()
 
         if self.verbose:
-            self.show_network_options(highlight_options=options)
+            show_network_options(self, highlight_options=options)
 
-        self.init_layers()
-
-    def show_network_options(self, highlight_options=None):
-        available_classes = [cls.__name__ for cls in self.__class__.__mro__]
-        logs = self.logs
-
-        if highlight_options is None:
-            highlight_options = {}
-
-        def classname_grouper(option):
-            classname = option[1].class_name
-            class_priority = -available_classes.index(classname)
-            return (class_priority, classname)
-
-        # Sort and group options by classes
-        grouped_options = groupby(
-            sorted(self.options.items(), key=classname_grouper),
-            key=classname_grouper
-        )
-
-        if isinstance(self.connection, LayerConnection):
-            logs.header("Network structure")
-            logs.log("LAYERS", self.connection)
-
-        # Just display in terminal all network options.
-        logs.header("Network options")
-        for (_, clsname), class_options in grouped_options:
-            if not class_options:
-                # When in some class we remove all available attributes
-                # we just skip it.
-                continue
-
-            logs.simple("{}:".format(clsname))
-
-            for key, data in sorted(class_options):
-                if key in highlight_options:
-                    logger = logs.log
-                    value = highlight_options[key]
-                else:
-                    logger = logs.gray_log
-                    value = data.value
-
-                logger("OPTION", "{} = {}".format(
-                    key, preformat_value(value))
-                )
-            logs.empty()
-
-    def setup_defaults(self):
+    def init_properties(self):
         """ Setup default values before populate the options.
         """
 
-    # ----------------- Neural Network Layers ---------------- #
+    def predict(self, input_data):
+        """ Return prediction results for the input data. Output result
+        includes post-processing step related to the final layer that
+        transforms output to convenient format for end-use.
 
-    def init_layers(self):
-        """ Initialize layers.
-        """
-        if self.connection == FAKE_CONNECTION:
-            return
+        Parameters
+        ----------
+        input_data : array-like
 
-        for layer in self.train_layers:
-            layer.initialize(with_bias=self.use_bias)
-
-    # ----------------- Neural Network Train ---------------- #
-
-    def _train(self, input_train, target_train=None, input_test=None,
-               target_test=None, epochs=100, epsilon=None):
-        """ Main method for the Neural Network training.
+        Returns
+        -------
+        array-like
         """
 
-        # ----------- Pre-format target data ----------- #
+    def on_epoch_start_update(self, epoch):
+        """ Function would be trigger before run all training procedure
+        related to the current epoch.
 
-        input_row1d = is_row1d(self.input_layer)
-        input_train = format_data(input_train, row1d=input_row1d)
+        Parameters
+        ----------
+        epoch : int
+            Current epoch number.
+        """
+        self.last_epoch = epoch
 
-        target_row1d = is_row1d(self.output_layer)
-        target_train = format_data(target_train, row1d=target_row1d)
+    def train_epoch(self, input_train, target_train=None):
+        raise NotImplementedError()
 
-        if input_test is not None:
-            input_test = format_data(input_test, row1d=input_row1d)
+    def prediction_error(self, input_test, target_test):
+        raise NotImplementedError()
 
-        if target_test is not None:
-            target_test = format_data(target_test, row1d=target_row1d)
+    def train(self, input_train, target_train=None, input_test=None,
+              target_test=None, epochs=100, epsilon=None):
+        """ Method train neural network.
 
-        # ----------- Validate input values ----------- #
+        Parameters
+        ----------
+        input_train : array-like
+        target_train : array-like or Npne
+        input_test : array-like or None
+        target_test : array-like or None
+        epochs : int
+            Defaults to `100`.
+        epsilon : float or None
+        """
+
+        show_epoch = self.show_epoch
+        logs = self.logs
+        training = self.training = AttributeKeyDict()
+
+        if epochs <= 0:
+            raise ValueError("Number of epochs needs to be greater than 0.")
 
         if epsilon is not None and epochs <= 2:
             raise ValueError("Network should train at teast 3 epochs before "
                              "check the difference between errors")
 
-        # ----------- Predefine parameters ----------- #
+        logging_info_about_the_data(self, input_train, input_test)
+        logging_info_about_training(self, epochs, epsilon)
+        logs.write("")
 
-        self.epoch = 1
-        show_epoch = self.show_epoch
-        logs = self.logs
-        compute_error_out = (input_test is not None and
-                             target_test is not None)
-        predict = self.predict
-        last_epoch_shown = 0
+        iterepochs = create_training_epochs_iterator(self, epochs, epsilon)
+        show_epoch = parse_show_epoch_property(self, epochs, epsilon)
+        training.show_epoch = show_epoch
 
-        if epsilon is not None:
-            iterepochs = iter_until_converge(self, epsilon, max_epochs=epochs)
+        epoch_summary = show_epoch_summary(self)
+        next(epoch_summary)
 
-            if isinstance(show_epoch, six.string_types):
-                show_epoch = 100
-                logs.warning("Can't use `show_epoch` value in converging "
-                             "mode. Set up 100 to `show_epoch` property "
-                             "by default.")
-
-        else:
-            iterepochs = range(1, epochs + 1)
-            show_epoch = parse_show_epoch_property(show_epoch, epochs)
-
-        epoch_summary = show_epoch_summary(self, show_epoch)
-
-        # ----------- Train process ----------- #
-
-        logs.header("Start train")
-        logs.log("TRAIN", "Train data size: {}".format(input_train.shape[0]))
-
-        if input_test is not None:
-            logs.log("TRAIN", "Validation data size: {}"
-                              "".format(input_test.shape[0]))
-
-        if epsilon is None:
-            logs.log("TRAIN", "Total epochs: {}".format(epochs))
-        else:
-            logs.log("TRAIN", "Max epochs: {}".format(epochs))
-
-        logs.empty()
-
-        # Optimizations for long loops
-        errors = self.errors_in
-        errors_out = self.errors_out
+        # Storring attributes and methods in local variables we prevent
+        # useless __getattr__ call a lot of times in each loop.
+        # This variables speed up loop in case on huge amount of
+        # iterations.
+        errors = self.errors
+        validation_errors = self.validation_errors
         shuffle_data = self.shuffle_data
 
-        error_func = self.error
         train_epoch = self.train_epoch
-        train_epoch_end_signal = self.train_epoch_end_signal
+        epoch_end_signal = self.epoch_end_signal
         train_end_signal = self.train_end_signal
+        on_epoch_start_update = self.on_epoch_start_update
 
-        self.input_train = input_train
-        self.target_train = target_train
+        is_first_iteration = True
+        can_compute_validation_error = (input_test is not None)
+        last_epoch_shown = 0
 
-        for epoch in iterepochs:
-            self.epoch = epoch
-            epoch_start_time = time()
+        with logs.disable_user_input():
+            for epoch in iterepochs:
+                epoch_start_time = time.time()
+                on_epoch_start_update(epoch)
 
-            if shuffle_data:
-                input_train, target_train = shuffle_train_data(input_train,
-                                                               target_train)
-                self.input_train = input_train
-                self.target_train = target_train
+                if shuffle_data:
+                    input_train, target_train = shuffle(input_train,
+                                                        target_train)
 
-            try:
-                error = train_epoch(input_train, target_train)
+                try:
+                    train_error = train_epoch(input_train, target_train)
+                    errors.append(train_error)
 
-                if compute_error_out:
-                    predicted_test = predict(input_test)
-                    error_out = error_func(predicted_test, target_test)
-                    errors_out.append(error_out)
+                    if can_compute_validation_error:
+                        validation_error = self.prediction_error(input_test,
+                                                                 target_test)
+                        validation_errors.append(validation_error)
 
-                errors.append(error)
-                self.train_epoch_time = time() - epoch_start_time
+                    epoch_finish_time = time.time()
+                    training.epoch_time = epoch_finish_time - epoch_start_time
 
-                if epoch % show_epoch == 0 or epoch == 1:
-                    show_epoch = next(epoch_summary)
-                    last_epoch_shown = epoch
+                    if epoch % training.show_epoch == 0 or is_first_iteration:
+                        next(epoch_summary)
+                        last_epoch_shown = epoch
 
-                if train_epoch_end_signal is not None:
-                    train_epoch_end_signal(self)
+                    if epoch_end_signal is not None:
+                        epoch_end_signal(self)
 
-            except StopIteration as err:
-                logs.log("TRAIN", "Epoch #{} stopped. {}"
-                                  "".format(epoch, str(err)))
-                break
+                    is_first_iteration = False
 
-        if epoch != last_epoch_shown:
-            show_training_summary(self)
+                except StopNetworkTraining as err:
+                    # TODO: This notification breaks table view in terminal.
+                    # I need to show it in a different way. Maybe I can
+                    # send it in generator using ``throw`` method.
+                    logs.message("TRAIN", "Epoch #{} stopped. {}"
+                                          "".format(epoch, str(err)))
 
-        if train_end_signal is not None:
-            train_end_signal(self)
+            if epoch != last_epoch_shown:
+                next(epoch_summary)
 
-        logs.log("TRAIN", "End train")
+            if train_end_signal is not None:
+                train_end_signal(self)
 
-    # ----------------- Errors ----------------- #
+            epoch_summary.close()
 
-    def _last_error(self, errors):
-        if errors and errors[-1] is not None:
-            return normilize_error_output(errors[-1])
+        logs.message("TRAIN", "Trainig finished")
 
-    def last_error_in(self):
-        return self._last_error(self.errors_in)
+    def plot_errors(self, logx=False, ax=None, show=True):
+        """ Plot line plot that shows training progress. x-axis
+        is an epoch number and y-axis is an error.
 
-    def last_error(self):
-        return self._last_error(self.errors_in)
+        Parameters
+        ----------
+        logx : bool
+            Parameter set up logarithmic scale to x-axis.
+            Defaults to ``False``.
+        ax : object or None
+            Matplotlib axis object. ``None`` values means that axis equal
+            to the current one (the same as ``ax = plt.gca()``).
+            Defaults to ``None``.
+        show : bool
+            If parameter is equal to ``True`` plot will instantly shows
+            the plot. Defaults to ``True``.
 
-    def last_error_out(self):
-        return self._last_error(self.errors_out)
+        Returns
+        -------
+        object
+            Matplotlib axis instance.
+        """
 
-    def previous_error(self):
-        errors = self.errors_in
-        return normilize_error_output(errors[-2]) if len(errors) > 2 else None
+        if ax is None:
+            ax = plt.gca()
 
-    def _normalized_errors(self, errors):
-        if not len(errors) or isinstance(errors[0], float):
-            return errors
+        if not self.errors:
+            self.logs.warning("There is no data to plot")
+            return ax
 
-        self.logs.warning("Your errors bad formated for plot output. "
-                          "They will be normilized.")
+        train_errors = self.errors.normalized()
+        validation_errors = self.validation_errors.normalized()
+        errors_range = np.arange(len(train_errors))
+        plot_function = ax.semilogx if logx else ax.plot
 
-        normilized_errors = []
-        for error in errors:
-            normilized_errors.append(normilize_error_output(error))
+        line_error_in, = plot_function(errors_range, train_errors)
 
-        return normilized_errors
-
-    def normalized_errors_in(self):
-        return self._normalized_errors(self.errors_in)
-
-    def normalized_errors_out(self):
-        return self._normalized_errors(self.errors_out)
-
-    def plot_errors(self, logx=False):
-        if not self.errors_in:
-            return
-
-        errors_in = self.normalized_errors_in()
-        errors_out = self.normalized_errors_out()
-        errors_range = arange(len(errors_in))
-        plot_function = plt.semilogx if logx else plt.plot
-
-        line_error_in, = plot_function(errors_range, errors_in)
-        title_text = 'Learning error after each epoch'
-
-        if errors_out:
-            line_error_out, = plot_function(errors_range, errors_out)
-            plt.legend(
+        if validation_errors:
+            line_error_out, = plot_function(errors_range, validation_errors)
+            ax.legend(
                 [line_error_in, line_error_out],
-                ['Train error', 'Validation error']
+                ['Train', 'Validation']
             )
-            title_text = 'Learning errors after each epoch'
 
-        plt.title(title_text)
-        plt.xlim(0)
+        ax.set_title('Training perfomance')
+        ax.set_ylim(bottom=0)
 
-        plt.ylabel('Error')
-        plt.xlabel('Epoch')
+        ax.set_ylabel('Error')
+        ax.set_xlabel('Epoch')
 
-        plt.show()
+        if show:
+            plt.show()
 
-    # ----------------- Representations ----------------- #
-
-    def get_class_name(self):
-        return self.__class__.__name__
-
-    def __repr__(self):
-        classname = self.get_class_name()
-        options_repr = self._repr_options()
-
-        if self.connection != FAKE_CONNECTION:
-            return "{}({}, {})".format(classname, self.connection,
-                                       options_repr)
-        return "{}({})".format(classname, options_repr)
+        return ax

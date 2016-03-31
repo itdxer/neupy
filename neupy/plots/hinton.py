@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 
+from neupy.utils import format_data
+
 
 __all__ = ('hinton',)
 
@@ -16,7 +18,7 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
 
     Parameters
     ----------
-    matrix: array like
+    matrix: array-like
         Matrix that you want to visualise using Hinton diagram.
     max_weight : float
         Maximum value of the matrix. If it's equal to ``None`` than value
@@ -48,6 +50,8 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
     if ax is None:
         ax = plt.gca()
 
+    matrix = format_data(matrix, is_feature1d=True)
+
     if max_weight is None:
         max_value = np.abs(matrix).max()
         max_value_log2_base = np.log(max_value) / np.log(2)
@@ -59,9 +63,9 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
     ax.yaxis.set_major_locator(plt.NullLocator())
 
     for (y, x), weight in np.ndenumerate(matrix):
-        color = 'white' if weight > 0 else 'black'
-        size = min(np.sqrt(np.abs(weight / max_weight)), 1)
-        rect = plt.Rectangle([x - size / 2, y - size / 2], size, size,
+        color = ('white' if weight > 0 else 'black')
+        size = min(np.sqrt(np.abs(weight / max_weight)), 1.)
+        rect = plt.Rectangle([x - size / 2., y - size / 2.], size, size,
                              facecolor=color, edgecolor=color)
         ax.add_patch(rect)
 
@@ -72,9 +76,9 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
         max_value = matrix.max().round(2)
         min_value = matrix.min().round(2)
 
-        white = Rectangle(xy=(0, 0), width=1, height=1, linewidth=1,
+        white = Rectangle(xy=(0, 0), width=1., height=1., linewidth=1.,
                           linestyle='solid', facecolor='#ffffff')
-        black = Rectangle(xy=(0, 0), width=1, height=1, color='#000000')
+        black = Rectangle(xy=(0, 0), width=1., height=1., color='#000000')
 
         if min_value < 0 and max_value > 0:
             rectangles = [white, black]
@@ -102,6 +106,6 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
             ]
 
         ax.legend(rectangles, rect_description, loc='center left',
-                  bbox_to_anchor=(1, 0.5))
+                  bbox_to_anchor=(1., 0.5))
 
     return ax

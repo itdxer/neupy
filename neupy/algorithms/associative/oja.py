@@ -2,26 +2,26 @@ from numpy import dot, abs as np_abs, sum as np_sum
 from numpy.random import randn
 
 from neupy.utils import format_data
-from neupy.core.properties import NonNegativeIntProperty, ArrayProperty
+from neupy.core.properties import IntProperty, ArrayProperty
 from neupy.network.base import BaseNetwork
 from neupy.network.learning import UnsupervisedLearning
-from neupy.network.connections import FAKE_CONNECTION
 
 
 __all__ = ('Oja',)
 
 
 class Oja(UnsupervisedLearning, BaseNetwork):
-    """ Oja unsupervised algorithm which minimize feature space.
+    """ Oja unsupervised algorithm that minimize input data feature
+    space.
 
     Notes
     -----
     * In practice use step as very small value. For example ``1e-7``.
-    * Normalize the input data before use Oja algorithm. Input data
+    * Normalize the input data before use Oja algorithm. Input data \
     shouldn't contains large values.
-    * Set up smaller values for weights if error for a few first iterations
-    is big compare to the input values scale. For example, if your input data
-    have values between 0 and 1 error value equal to 100 is big.
+    * Set up smaller values for weights if error for a few first iterations \
+    is big compare to the input values scale. For example, if your input \
+    data have values between 0 and 1 error value equal to 100 is big.
 
     Parameters
     ----------
@@ -31,17 +31,20 @@ class Oja(UnsupervisedLearning, BaseNetwork):
         Predefine default weights which controll your data in two sides.
         If weights are, ``None`` before train algorithms generate random
         weights. Defaults to ``None``.
-    {step}
-    {show_epoch}
-    {verbose}
-    {full_signals}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------
     reconstruct(input_data):
         Reconstruct your minimized data.
-    {unsupervised_train_epsilon}
-    {full_methods}
+    {BaseSkeleton.predict}
+    {UnsupervisedLearning.train}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
 
     Raises
     ------
@@ -76,17 +79,12 @@ class Oja(UnsupervisedLearning, BaseNetwork):
            [ 4.00000093,  4.00000093],
            [ 5.00000116,  5.00000116]])
     """
-    minimized_data_size = NonNegativeIntProperty(min_size=1)
+    minimized_data_size = IntProperty(minval=1)
     weights = ArrayProperty()
 
-    def __init__(self, **options):
-        super(Oja, self).__init__(FAKE_CONNECTION, **options)
-
-    def setup_defaults(self):
-        del self.use_bias
-        del self.error
+    def init_properties(self):
         del self.shuffle_data
-        super(Oja, self).setup_defaults()
+        super(Oja, self).init_properties()
 
     def train_epoch(self, input_data, target_train):
         weights = self.weights
@@ -99,6 +97,7 @@ class Oja(UnsupervisedLearning, BaseNetwork):
 
         mae = np_sum(np_abs(error)) / input_data.size
 
+        # Clear memory
         del minimized
         del reconstruct
         del error

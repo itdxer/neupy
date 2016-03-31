@@ -1,9 +1,8 @@
 from numpy import concatenate, array
 
 from neupy.utils import format_data
-from neupy.core.properties import NonNegativeIntProperty
+from neupy.core.properties import IntProperty
 from neupy.network.learning import SupervisedLearning
-from neupy.network.connections import FAKE_CONNECTION
 from neupy.network.base import BaseNetwork
 
 
@@ -16,7 +15,7 @@ class CMAC(SupervisedLearning, BaseNetwork):
     Notes
     -----
     * Network always use Mean Absolute Error (MAE).
-    * Works for single and multi output values.
+    * Works for multi dimentional target values.
 
     Parameters
     ----------
@@ -26,18 +25,23 @@ class CMAC(SupervisedLearning, BaseNetwork):
         quantization, defaults to ``10``.
     associative_unit_size : int
         Number of associative blocks in memory, defaults to ``2``.
-    {step}
-    {show_epoch}
-    {shuffle_data}
-    {full_signals}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+
+    Attributes
+    ----------
+    weights : dict
+        Neural network weights that contain memorized patterns.
 
     Methods
     -------
-    {fit}
-    {supervised_train}
-    {predict}
-    {last_error}
-    {plot_errors}
+    {BaseSkeleton.predict}
+    {SupervisedLearning.train}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
 
     Examples
     --------
@@ -64,17 +68,12 @@ class CMAC(SupervisedLearning, BaseNetwork):
     >>> cmac.error(target_test, predicted_test)
     0.0023639417543036569
     """
-    quantization = NonNegativeIntProperty(default=10)
-    associative_unit_size = NonNegativeIntProperty(default=2, min_size=2)
+    quantization = IntProperty(default=10, minval=1)
+    associative_unit_size = IntProperty(default=2, minval=2)
 
     def __init__(self, **options):
         self.weights = {}
-        super(CMAC, self).__init__(FAKE_CONNECTION, **options)
-
-    def setup_defaults(self):
-        del self.use_bias
-        del self.error
-        super(CMAC, self).setup_defaults()
+        super(CMAC, self).__init__(**options)
 
     def predict(self, input_data):
         input_data = format_data(input_data)
@@ -108,6 +107,7 @@ class CMAC(SupervisedLearning, BaseNetwork):
         get_memory_coords = self.get_memory_coords
         get_result_by_coords = self.get_result_by_coords
         weights = self.weights
+        step = self.step
 
         quantized_input = self.quantize(input_train)
         errors = 0
@@ -118,7 +118,7 @@ class CMAC(SupervisedLearning, BaseNetwork):
 
             error = target_sample - predicted
             for coord in coords:
-                weights[coord] += self.step * error
+                weights[coord] += step * error
 
             errors += abs(error)
         return errors / input_train.shape[0]

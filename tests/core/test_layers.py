@@ -3,119 +3,58 @@ import unittest
 
 from scipy import stats
 import numpy as np
+import theano
+import theano.tensor as T
 
-from neupy.algorithms import Backpropagation
-from neupy.network.connections import NetworkConnectionError
+from neupy.utils import asfloat
+from neupy.algorithms import GradientDescent
+from neupy.layers.connections import NetworkConnectionError
 from neupy.layers import *
 
 from base import BaseTestCase
 
 
-class LayersTestCase(BaseTestCase):
-    verbose = False
+class LayersBasicsTestCase(BaseTestCase):
+    def test_without_output_layer(self):
+        with self.assertRaises(NetworkConnectionError):
+            GradientDescent(layers.Sigmoid(10) > layers.Sigmoid(1))
+
+    def test_list_of_layers(self):
+        bpnet = GradientDescent([Sigmoid(2), Sigmoid(3),
+                                 Sigmoid(1), Output(10)])
+        self.assertEqual(
+            [layer.size for layer in bpnet.all_layers],
+            [2, 3, 1, 10]
+        )
 
     def test_layers_iteratinos(self):
-        network = Backpropagation((2, 2, 1))
+        network = GradientDescent((2, 2, 1))
 
-        layers = list(network.layers)
+        layers = list(network.all_layers)
         output_layer = layers.pop()
 
         self.assertIsNone(output_layer.relate_to_layer)
-
         for layer in layers:
             self.assertIsNotNone(layer.relate_to_layer)
 
-    def test_sigmoid_layer(self):
-        layer1 = SigmoidLayer(1)
-        layer2 = SigmoidLayer(1, function_coef={'alpha': 0.1})
-        self.assertNotEqual(layer1.activation_function(1),
-                            layer2.activation_function(1))
+    def test_connection_initializations(self):
+        possible_connections = (
+            (2, 3, 1),
+            [Sigmoid(2), Tanh(3), Output(1)],
+            Relu(2) > Tanh(10) > Output(1),
+        )
 
-    def test_step_layer(self):
-        layer1 = StepLayer(1)
-        self.assertEqual(layer1.activation_function(1).item(0), 1)
-        self.assertEqual(layer1.activation_function(-1).item(0), 0)
-
-    def test_linear_layer(self):
-        layer = LinearLayer(1)
-        self.assertEqual(layer.activation_function(1), 1)
-
-    def test_tanh_layer(self):
-        layer1 = TanhLayer(1)
-        layer2 = TanhLayer(1, function_coef={'alpha': 0.5})
-        self.assertGreater(layer1.activation_function(1),
-                           layer2.activation_function(1))
-
-    def test_rectifier_layer(self):
-        layer = RectifierLayer(1)
-        self.assertEqual(0, layer.activation_function(-10))
-        self.assertEqual(0, layer.activation_function(0))
-        self.assertEqual(10, layer.activation_function(10))
-
-    def test_softplus_layer(self):
-        layer = SoftplusLayer(1)
-        self.assertEqual(math.log(2), layer.activation_function(0))
-
-    def test_softmax_layer(self):
-        test_input = np.array([[0.5, 0.5, 0.1]])
-
-        layer1 = SoftmaxLayer(3)
-        test_correct_result = np.array([[0.37448695, 0.37448695, 0.25102611]])
-        self.assertTrue(np.allclose(
-            test_correct_result, layer1.activation_function(test_input)
-        ))
-
-        layer2 = SoftmaxLayer(3, function_coef={'temp': 100000000})
-        self.assertTrue(np.allclose(
-            np.ones(3) / 3., layer2.activation_function(test_input)
-        ))
-
-        layer3 = SoftmaxLayer(3, function_coef={'temp': 0.01})
-        test_correct_result = np.array([[0.5, 0.5, 0.0]])
-        self.assertTrue(np.allclose(
-            test_correct_result, layer3.activation_function(test_input)
-        ))
-
-    def test_euclide_distance_layer(self):
-        layer = EuclideDistanceLayer(2, weight=np.array([[0.4, 1]]))
-        test_correct_result = np.array([[-0.72111026, -1.]])
-        self.assertTrue(np.allclose(
-            test_correct_result, layer.output(np.array([[0, 1]]))
-        ))
-
-    def test_cosine_distance_layer(self):
-        layer = AngleDistanceLayer(2, weight=np.array([[0.4, 1]]).T)
-        test_correct_result = np.array([[-0.40489179]])
-        self.assertTrue(np.allclose(
-            test_correct_result, layer.output(np.array([[0.1, 0.1]]))
-        ))
-
-    def test_output_layers(self):
-        layer = OutputLayer(1)
-
-        with self.assertRaises(NetworkConnectionError):
-            layer.relate_to(OutputLayer(1))
-
-        self.assertEqual(layer.format_output(1), 1)
-        self.assertEqual(layer.output(1), 1)
-
-        layer = RoundOutputLayer(1)
-        self.assertEqual(layer.format_output(1.1), 1)
-
-        layer = StepOutputLayer(1)
-        self.assertEqual(layer.format_output(-10), 0)
-
-        layer = CompetitiveOutputLayer(1)
-        output = np.sum(layer.format_output(np.array([[1, 10, 20, 0, -10]])))
-        self.assertEqual(output, 1)
+        for connection in possible_connections:
+            network = GradientDescent(connection)
+            self.assertEqual(len(network.all_layers), 3)
 
     @unittest.skip("Not ready yet")
     def test_recurrent_connections(self):
-        inp = SigmoidLayer(2)
-        hd = [SigmoidLayer(2), SigmoidLayer(2)]
-        out = OutputLayer(1)
+        inp = Sigmoid(2)
+        hd = [Sigmoid(2), Sigmoid(2)]
+        out = Output(1)
 
-        network = Backpropagation(
+        GradientDescent(
             connection=(
                 inp > hd[0] > out,
                       hd[0] > hd[1],
@@ -123,51 +62,251 @@ class LayersTestCase(BaseTestCase):
             )
         )
 
-    def test_layers_init_method(self):
-        input_layer = SigmoidLayer(30, init_method='gauss')
-        connection = input_layer > OutputLayer(10)
-        input_layer.initialize()
-        self.assertTrue(stats.mstats.normaltest(input_layer.weight))
 
-        input_layer = SigmoidLayer(30, init_method='bounded',
-                                   bounds=(-10, 10))
-        connection = input_layer > OutputLayer(10)
-        input_layer.initialize()
-        self.assertLessEqual(-10, np.min(input_layer.weight))
-        self.assertGreaterEqual(10, np.max(input_layer.weight))
+class HiddenLayersOperationsTestCase(BaseTestCase):
+    def test_sigmoid_layer(self):
+        layer1 = Sigmoid(1)
+        self.assertGreater(1, layer1.activation_function(1).eval())
 
-        input_layer = SigmoidLayer(30, init_method='ortho',
-                                   bounds=(-10, 10))
-        connection = input_layer > OutputLayer(10)
-        input_layer.initialize()
-        weight = input_layer.weight
-        # Can't be orthogonal in both ways for rectangular matrix.
-        np.testing.assert_array_equal(
-            np.eye(10),
-            weight.T.dot(weight).round(10)
+    def test_hard_sigmoid_layer(self):
+        layer1 = HardSigmoid(6)
+
+        test_value = asfloat(np.array([[-3, -2, -1, 0, 1, 2]]))
+        expected = np.array([[0, 0.1, 0.3, 0.5, 0.7, 0.9]])
+
+        x = T.matrix()
+        output = layer1.activation_function(x).eval({x: test_value})
+
+        np.testing.assert_array_almost_equal(output, expected)
+
+    def test_step_layer(self):
+        layer1 = Step(1)
+
+        input_vector = theano.shared(np.array([-10, -1, 0, 1, 10]))
+        expected = np.array([0, 0, 0, 1, 1])
+        output = layer1.activation_function(input_vector).eval()
+        np.testing.assert_array_equal(output, expected)
+
+    def test_linear_layer(self):
+        layer = Linear(1)
+        self.assertEqual(layer.activation_function(1), 1)
+
+    def test_tanh_layer(self):
+        layer1 = Tanh(1)
+        self.assertGreater(1, layer1.activation_function(1).eval())
+
+    def test_relu_layer(self):
+        layer = Relu(1)
+        self.assertEqual(0, layer.activation_function(-10))
+        self.assertEqual(0, layer.activation_function(0))
+        self.assertEqual(10, layer.activation_function(10))
+
+    def test_softplus_layer(self):
+        layer = Softplus(1)
+        self.assertAlmostEqual(
+            math.log(2),
+            layer.activation_function(0).eval()
         )
 
-        input_layer = SigmoidLayer(10, init_method='ortho',
-                                   bounds=(-10, 10))
-        connection = input_layer > OutputLayer(30)
-        input_layer.initialize()
-        weight = input_layer.weight
-        np.testing.assert_array_equal(
-            np.eye(10),
-            weight.dot(weight.T).round(10)
+    def test_softmax_layer(self):
+        test_input = np.array([[0.5, 0.5, 0.1]])
+
+        softmax_layer = Softmax(3)
+        correct_result = np.array([[0.37448695, 0.37448695, 0.25102611]])
+        np.testing.assert_array_almost_equal(
+            correct_result,
+            softmax_layer.activation_function(test_input).eval()
         )
 
-    def test_without_output_layer(self):
+    def test_dropout_layer(self):
+        test_input = np.ones((50, 20))
+        dropout_layer = Dropout(proba=0.5)
+
+        layer_output = dropout_layer.output(test_input).eval()
+
+        self.assertGreater(layer_output.sum(), 900)
+        self.assertLess(layer_output.sum(), 1100)
+
+        self.assertTrue(np.all(
+            np.bitwise_or(layer_output == 0, layer_output == 2)
+        ))
+
+
+class OutputLayersOperationsTestCase(BaseTestCase):
+    def test_error_handling(self):
+        layer = Output(1)
+
         with self.assertRaises(NetworkConnectionError):
-            network = Backpropagation(
-                connection=(
-                    layers.SigmoidLayer(10),
-                    layers.SigmoidLayer(1),
-                )
-            )
+            layer.relate_to(Output(1))
 
-    def test_list_of_layers(self):
-        bpnet = Backpropagation([SigmoidLayer(2), SigmoidLayer(3),
-                                 SigmoidLayer(1), OutputLayer(10)])
-        self.assertEqual([layer.input_size for layer in bpnet.layers],
-                         [2, 3, 1, 10])
+    def test_output_layer(self):
+        layer = Output(1)
+        input_vector = np.array([1, 1000, -0.1])
+        output_vector = layer.output(input_vector)
+        np.testing.assert_array_equal(input_vector, output_vector)
+
+    def test_rounded_output_layer(self):
+        input_vector = np.array([[1.1, 1.5, -1.99, 2]]).T
+
+        layer = RoundedOutput(1)
+        output_vector = layer.output(input_vector)
+        np.testing.assert_array_equal(
+            np.array([[1, 2, -2, 2]]).T,
+            output_vector
+        )
+
+        layer = RoundedOutput(1, decimals=1)
+        output_vector = layer.output(input_vector)
+        np.testing.assert_array_equal(
+            np.array([[1.1, 1.5, -2, 2]]).T,
+            output_vector
+        )
+
+    def test_step_output_layer(self):
+        input_vector = np.array([[-10, 0, 10, 0.001]]).T
+
+        layer = StepOutput(1)
+        output_vector = layer.output(input_vector)
+        np.testing.assert_array_equal(
+            np.array([[0, 0, 1, 1]]).T,
+            output_vector
+        )
+
+        layer = StepOutput(1, output_bounds=(-1, 1))
+        output_vector = layer.output(input_vector)
+        np.testing.assert_array_equal(
+            np.array([[-1, -1, 1, 1]]).T,
+            output_vector
+        )
+
+        layer = StepOutput(1, critical_point=0.1)
+        output_vector = layer.output(input_vector)
+        np.testing.assert_array_equal(
+            np.array([[0, 0, 1, 0]]).T,
+            output_vector
+        )
+
+    def test_competitive_output_layer(self):
+        layer = CompetitiveOutput(1)
+        input_vector = np.array([[1, 10, 20, 0, -10]])
+        output_vector = layer.output(input_vector)
+
+        np.testing.assert_array_equal(
+            np.array([[0, 0, 1, 0, 0]]),
+            output_vector
+        )
+
+    def test_argmax_output_layer(self):
+        layer = ArgmaxOutput(5)
+        input_matrix = np.array([
+            [1., 4, 2, 3, -10],
+            [-10, 1, 0, 3.0001, 3],
+            [0, 0, 0, 0, 0],
+        ])
+        output_vector = layer.output(input_matrix)
+
+        np.testing.assert_array_equal(
+            np.array([1, 3, 0]),
+            output_vector
+        )
+
+
+class LayersInitializationTestCase(BaseTestCase):
+    def test_layers_normal_init(self):
+        input_layer = Sigmoid(30, init_method='normal')
+        connection = input_layer > Output(30)
+        input_layer.initialize()
+
+        weight = input_layer.weight.get_value()
+        self.assertTrue(stats.mstats.normaltest(weight))
+
+    def test_layers_bounded_init(self):
+        input_layer = Sigmoid(30, init_method='bounded',
+                              bounds=(-10, 10))
+        connection = input_layer > Output(10)
+        input_layer.initialize()
+
+        weight = input_layer.weight.get_value()
+        self.assertLessEqual(-10, np.min(weight))
+        self.assertGreaterEqual(10, np.max(weight))
+
+    def test_layers_ortho_init(self):
+        # Note: Matrix can't be orthogonal for row and column space
+        # in the same time for the rectangular matrix.
+
+        # Matrix that have more rows than columns
+        input_layer = Sigmoid(30, init_method='ortho')
+        connection = input_layer > Output(10)
+        input_layer.initialize()
+
+        weight = input_layer.weight.get_value()
+        np.testing.assert_array_almost_equal(
+            np.eye(10),
+            weight.T.dot(weight),
+            decimal=5
+        )
+
+        # Matrix that have more columns than rows
+        input_layer = Sigmoid(10, init_method='ortho')
+        connection = input_layer > Output(30)
+        input_layer.initialize()
+
+        weight = input_layer.weight.get_value()
+        np.testing.assert_array_almost_equal(
+            np.eye(10),
+            weight.dot(weight.T),
+            decimal=5
+        )
+
+    def test_he_normal(self):
+        n_inputs = 30
+        input_layer = Sigmoid(n_inputs, init_method='he_normal')
+        connection = input_layer > Output(30)
+        input_layer.initialize()
+
+        weight = input_layer.weight.get_value()
+
+        self.assertAlmostEqual(weight.mean(), 0, places=1)
+        self.assertAlmostEqual(weight.std(), math.sqrt(2. / n_inputs),
+                               places=2)
+        self.assertTrue(stats.mstats.normaltest(weight))
+
+    def test_he_uniform(self):
+        n_inputs = 10
+        input_layer = Sigmoid(n_inputs, init_method='he_uniform')
+        connection = input_layer > Output(30)
+        input_layer.initialize()
+
+        weight = input_layer.weight.get_value()
+        bound = math.sqrt(6. / n_inputs)
+
+        self.assertAlmostEqual(weight.mean(), 0, places=1)
+        self.assertGreaterEqual(weight.min(), -bound)
+        self.assertLessEqual(weight.max(), bound)
+
+    def test_xavier_normal(self):
+        n_inputs, n_outputs = 30, 30
+        input_layer = Sigmoid(n_inputs, init_method='xavier_normal')
+        connection = input_layer > Output(n_outputs)
+        input_layer.initialize()
+
+        weight = input_layer.weight.get_value()
+
+        self.assertAlmostEqual(weight.mean(), 0, places=1)
+        self.assertAlmostEqual(weight.std(),
+                               math.sqrt(2. / (n_inputs + n_outputs)),
+                               places=2)
+        self.assertTrue(stats.mstats.normaltest(weight))
+
+    def test_xavier_uniform(self):
+        n_inputs, n_outputs = 10, 30
+        input_layer = Sigmoid(n_inputs, init_method='xavier_uniform')
+        connection = input_layer > Output(n_outputs)
+        input_layer.initialize()
+
+        weight = input_layer.weight.get_value()
+        bound = math.sqrt(6. / (n_inputs + n_outputs))
+
+        self.assertAlmostEqual(weight.mean(), 0, places=1)
+        self.assertGreaterEqual(weight.min(), -bound)
+        self.assertLessEqual(weight.max(), bound)

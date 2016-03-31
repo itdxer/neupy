@@ -8,11 +8,20 @@ dist/
 build/
 *.egg-info/
 
+# Tests
+*-failed-diff.png
+.coverage
+
 # Other
+*.dill
 .tox/*
 .DS_Store
 .python-version
 examples/drafts
+
+# Vim
+*.swp
+*.swo
 
 # Site
 site/blog/*

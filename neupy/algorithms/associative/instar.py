@@ -13,21 +13,24 @@ class Instar(BaseStepAssociative):
 
     Parameters
     ----------
-    n_unconditioned : int
-        This value control number of features which are unconditioned
-        stimulus for network. Defaults to ``1``. Can be any integer value
-        bigger than ``1``, but less than feature space.
-    {step}
-    {show_epoch}
-    {shuffle_data}
-    {error}
-    {verbose}
-    {full_signals}
+    {BaseAssociative.n_inputs}
+    {BaseAssociative.n_outputs}
+    {BaseStepAssociative.n_unconditioned}
+    {BaseAssociative.weight}
+    {BaseStepAssociative.bias}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------
-    {unsupervised_train_epochs}
-    {full_methods}
+    {BaseSkeleton.predict}
+    {BaseAssociative.train}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
 
     Examples
     --------
@@ -44,13 +47,8 @@ class Instar(BaseStepAssociative):
     ...     [0, 0, 1, 1],
     ... ])
     >>>
-    >>>
-    >>> scaler = {{'lower_value': 0, 'upper_value': 1}}
-    >>> input_layer = layers.StepLayer(4, function_coef=scaler)
-    >>> output_layer = layers.OutputLayer(1)
-    >>>
     >>> instnet = algorithms.Instar(
-    ...     input_layer > output_layer,
+    ...     layers.Step(4) > layers.Output(1),
     ...     n_unconditioned=1,
     ...     step=1,
     ...     verbose=False,
@@ -62,10 +60,11 @@ class Instar(BaseStepAssociative):
            [0],
            [0]])
     """
+
     def weight_delta(self, input_row, layer_output):
-        unconditioned = self.n_unconditioned
-        update_from_column = unconditioned - self.use_bias
-        weight = self.input_layer.weight[unconditioned:, :]
+        n_unconditioned = self.n_unconditioned
+        weight = self.weight[n_unconditioned:, :]
         return self.step * dot(
-            (input_row[:, update_from_column:].T - weight), layer_output.T
+            (input_row[:, n_unconditioned:].T - weight),
+            layer_output.T
         )

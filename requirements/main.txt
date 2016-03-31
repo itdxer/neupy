@@ -1,7 +1,8 @@
 # Library
 numpy>=1.9.0
 scipy>=0.14.0
-matplotlib>=1.4.0
+matplotlib>=1.5.1
+Theano==0.7.0
 
 # Commands
 Baker>=1.3

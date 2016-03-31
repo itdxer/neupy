@@ -1,1 +1,1 @@
-from .base import *
+from .progressbar import progressbar

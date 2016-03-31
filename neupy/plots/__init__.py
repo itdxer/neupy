@@ -1,1 +1,1 @@
-from .hinton import hinton
+from .hinton import *

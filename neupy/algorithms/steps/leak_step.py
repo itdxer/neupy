@@ -1,15 +1,17 @@
-from numpy import zeros
-from numpy.linalg import norm
+import numpy as np
+import theano
+import theano.tensor as T
 
-from neupy.core.properties import (BetweenZeroAndOneProperty,
-                                   NonNegativeNumberProperty)
-from .base import MultiSteps
+from neupy.utils import asfloat
+from neupy.core.properties import ProperFractionProperty, BoundedProperty
+from neupy.algorithms.utils import iter_parameters, count_parameters
+from .base import SingleStepConfigurable
 
 
 __all__ = ('LeakStepAdaptation',)
 
 
-class LeakStepAdaptation(MultiSteps):
+class LeakStepAdaptation(SingleStepConfigurable):
     """ Leak Learning Rate Adaptation algorithm for step adaptation procedure
     in backpropagation algortihm. By default every layer has the same value
     as ``step`` parameter in network, but after first training epoch they
@@ -18,62 +20,72 @@ class LeakStepAdaptation(MultiSteps):
     Parameters
     ----------
     leak_size : float
-        Leak size control ratio of update variable which combine weight
-        deltas from previous epochs, defaults to ``0.5``.
+        Defaults to ``0.01``. This variable identified proportion, so it's
+        always between 0 and 1. Usualy this value is small.
     alpha : float
         The ``alpha`` is control total step update ratio (It's similar to
-        step role in weight update procedure). Defaults to ``0.5``.
+        step role in weight update procedure). Defaults to ``0.001``.
+        Typical this value is small.
     beta : float
         This similar to ``alpha``, but it control ration only for update
-        matrix norms. Defaults to ``0.5``.
-
-    Attributes
-    ----------
-    {steps}
+        matrix norms. Defaults to ``20``.
+        Typical this value is > 1.
+    beta : float
 
     Warns
     -----
-    {bp_depending}
+    {SingleStepConfigurable.Warns}
 
     Examples
     --------
     >>> from neupy import algorithms
     >>>
-    >>> bpnet = algorithms.Backpropagation(
+    >>> bpnet = algorithms.GradientDescent(
     ...     (2, 4, 1),
-    ...     step=0.1,
-    ...     verbose=False,
-    ...     optimizations=[algorithms.LeakStepAdaptation]
+    ...     addons=[algorithms.LeakStepAdaptation]
     ... )
     >>>
+
+    .. [1] Noboru M. "Adaptive on-line learning in changing
+        environments", 1997
+    .. [2] LeCun, "Efficient BackProp", 1998
     """
-    leak_size = BetweenZeroAndOneProperty(default=0.5)
-    alpha = NonNegativeNumberProperty(default=0.5)
-    beta = NonNegativeNumberProperty(default=0.5)
+    leak_size = ProperFractionProperty(default=0.01)
+    alpha = BoundedProperty(default=0.001, minval=0)
+    beta = BoundedProperty(default=20, minval=0)
 
-    def init_layers(self):
-        super(LeakStepAdaptation, self).init_layers()
-        updates = self.updates = []
+    def init_variables(self):
+        super(LeakStepAdaptation, self).init_variables()
+        n_parameters = count_parameters(self)
+        self.variables.leak_average = theano.shared(
+            value=asfloat(np.zeros(n_parameters)),
+            name='leak_average'
+        )
 
-        for layer in self.train_layers:
-            updates.append(zeros(layer.size))
+    def init_train_updates(self):
+        updates = super(LeakStepAdaptation, self).init_train_updates()
 
-    def after_weight_update(self, input_train, target_train):
-        super(LeakStepAdaptation, self).after_weight_update(input_train,
-                                                            target_train)
         alpha = self.alpha
         beta = self.beta
         leak_size = self.leak_size
 
-        weight_delta = self.weight_delta
-        steps = self.steps
-        updates = self.updates
+        step = self.variables.step
+        leak_average = self.variables.leak_average
 
-        for i, layer in enumerate(self.train_layers):
-            step = steps[i]
-            update = updates[i]
+        parameters = list(iter_parameters(self))
+        gradients = T.grad(self.variables.error_func, wrt=parameters)
+        full_gradient = T.concatenate([grad.flatten() for grad in gradients])
 
-            updates[i] = (1 - leak_size) * update + (
-                leak_size * weight_delta[i]
-            )
-            steps[i] += alpha * step * (beta * norm(updates[i]) - step)
+        leak_avarage_update = (
+            (1 - leak_size) * leak_average + leak_size * full_gradient
+        )
+        new_step = step + alpha * step * (
+            beta * leak_avarage_update.norm(L=2) - step
+        )
+
+        updates.extend([
+            (leak_average, leak_avarage_update),
+            (step, new_step),
+        ])
+
+        return updates

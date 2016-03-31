@@ -7,6 +7,7 @@ from collections import OrderedDict
 from operator import itemgetter
 
 import numpy as np
+from tqdm import tqdm
 from neupy import algorithms
 
 
@@ -121,7 +122,7 @@ if __name__ == '__main__':
     ])
     results = OrderedDict.fromkeys(cases.keys(), 0)
 
-    for _ in range(n_times):
+    for _ in tqdm(range(n_times)):
         real_password = generate_password(min_length=25, max_length=25)
 
         for casename, func in cases.items():

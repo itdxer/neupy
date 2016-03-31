@@ -22,6 +22,7 @@ for i, (train, test) in enumerate(skfold, start=1):
     pnn_network = PNN(std=0.1, verbose=False)
     pnn_network.train(x_train, y_train)
     result = pnn_network.predict(x_test)
-    print("Test #{:<2}: {}/{}".format(
+
+    print("Test #{:<2}: Guessed {} out of {}".format(
         i, np.sum(result == y_test), test.size
     ))

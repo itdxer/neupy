@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 
 def energy(input_vector):
@@ -11,6 +12,7 @@ def energy(input_vector):
 
 fig = plt.figure(figsize=(9, 9))
 ax = fig.add_subplot(111, projection='3d')
+
 x = y = np.arange(-1.0, 1.0, 0.01)
 X, Y = np.meshgrid(x, y)
 energies = map(energy, zip(np.ravel(X), np.ravel(Y)))

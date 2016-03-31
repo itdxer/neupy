@@ -1,149 +1,198 @@
-__all__ = ("docs",)
+import re
+from abc import ABCMeta
+
+from six import with_metaclass
+
+from neupy.utils import AttributeKeyDict
 
 
-docs = {
-    # ------------------------------------ #
-    #                Methods               #
-    # ------------------------------------ #
+__all__ = ("SharedDocsMeta", "SharedDocs", "SharedDocsException",
+           "SharedDocsABCMeta")
 
-    "last_error": """last_error()
-        Returns the last error network result after training procedure
-        or ``None`` value if you try to get it before network training.
-    """,
-    "plot_errors": """plot_errors(logx=False)
-        Draws the error rate update plot. It always shows network
-        learning progress. When you add cross validation data set
-        into training function it displays validation data set error as
-        separated curve. If parameter ``logx`` is equal to the
-        ``True`` value it displays x-axis in logarithmic scale.
-    """,
-    "predict": """predict(input_data)
-        Predict value.
-    """,
-    "raw_predict": """raw_predict(input_data)
-        Make a raw prediction. Ignore any post processing results related
-        to the final output layer.
-    """,
-    "fit": """fit(\*args, \*\*kwargs)
-        The same as ``train`` method.
-    """,
 
-    # ------------------------------------ #
-    #             Train Methods            #
-    # ------------------------------------ #
+def merge_dicts(left_dict, right_dict):
+    """ Merge two dictionaries in one.
 
-    "supervised_train": """train(input_train, target_train, input_test=None,\
-    target_test=None, epochs=100, epsilon=None):
-        Trains network. You can control network training procedure
-        iterations with the number of epochs or converge value epsilon.
-        Also you can specify ``input_test`` and ``target_test`` and control
-        your validation data error on each iteration.
-    """,
-    "supervised_train_epochs": """train(input_data, target_data, epochs=100):
-        Trains network with fixed number of epochs.
-    """,
-    "unsupervised_train_epochs": """train(input_train, epochs=100):
-        Trains network with fixed number of epochs.
-    """,
-    "unsupervised_train_epsilon": """train(input_train, epsilon=1e-5, \
-    epochs=100):
-        Trains network until it converge. Parameter ``epochs`` control
-        maximum number of iterations, just to make sure that network will
-        stop training procedure if it can't converge.
-    """,
-    "supervised_train_lazy": """train(input_train, target_train, copy=True):
-        Network just stores all the information about the data and use it for \
-        the prediction. Parameter ``copy`` copy input data before store it \
-        inside the network.
-    """,
+    Parameters
+    ----------
+    left_dict : dict
+    right_dict : dict
 
-    # ------------------------------------ #
-    #              Parameters              #
-    # ------------------------------------ #
-
-    "verbose": """verbose : bool
-        Property controls verbose output interminal.
-        ``True`` enable informative output in the terminal and ``False`` -
-        disable it. Defaults to ``False``.
-    """,
-    "step": """step : float
-        Learns step, defaults to ``0.1``.
-    """,
-    "show_epoch": """show_epoch : int or str
-        This property controls how often the network will display information
-        about training. There are two main syntaxes for this property.
-        You can describe it as positive integer number and it
-        will describe how offen would you like to see summary output in
-        terminal. For instance, number `100` mean that network will show you
-        summary in 100, 200, 300 ... epochs. String value should be in a
-        specific format. It should contain the number of times that the output
-        will be displayed in the terminal. The second part is just
-        a syntax word ``time`` or ``times`` just to make text readable.
-        For instance, value ``'2 times'`` mean that the network will show
-        output twice with approximately equal period of epochs and one
-        additional output would be after the finall epoch.
-        Defaults to ``'10 times'``.
-    """,
-    "shuffle_data": """shuffle_data : bool
-        If it's ``True`` class shuffles all your training data before
-        training your network, defaults to ``True``.
-    """,
-    "error": """error : function
-        Function which controls your training error. defaults to ``mse``
-    """,
-    "use_bias": """use_bias : bool
-        Uses bias in the network, defualts to ``True``.
-    """,
-    "train_epoch_end_signal": """train_epoch_end_signal : function
-        Calls this function when train epoch finishes.
-    """,
-    "train_end_signal": """train_end_signal : function
-        Calls this function when train process finishes.
-    """,
-
-    # ------------------------------------ #
-    #                 Steps                #
-    # ------------------------------------ #
-    "first_step": """first_step : float
-        Contains initialized step value.
-    """,
-    "steps": """steps : list of float
-        List of steps in the same order as the network layers.
-        By default all values are equal to ``step`` parameter.
-    """,
-
-    # ------------------------------------ #
-    #               Warnings               #
-    # ------------------------------------ #
-    "bp_depending": """It works with any algorithm based on backpropagation. \
-    Class can't work without it.
+    Returns
+    -------
+    dict
     """
-}
+    return dict(left_dict, **right_dict)
 
 
-# ------------------------------------ #
-#         Complex parameters           #
-# ------------------------------------ #
+def find_numpy_doc_indent(docs):
+    """ Find indent for Numpy styled documentation and return number of
+    shifts inside of it.
+
+    Parameters
+    ----------
+    docs : str
+
+    Returns
+    -------
+    int or None
+        Returns number of indentations in documentation. If it doesn't
+        identify indentation function output will be ``None`` value.
+    """
+
+    indent_detector = re.compile(r"(?P<indent>\ *)(?P<dashes>-{3,})")
+    indent_info = indent_detector.findall(docs)
+
+    if indent_info:
+        indent, _ = indent_info[0]
+        return len(indent)
 
 
-def joindocs(docs, docskeys):
-    return ''.join([docs[key] for key in docskeys])
+def iter_parameters(docs):
+    """ Find parameters described in the Numpy style documentation.
 
+    Parameters
+    ----------
+    docs : str
 
-full_params_params = ()
-docs.update({
-    'full_params': joindocs(
-        docs,
-        [
-            'step', 'show_epoch', 'shuffle_data',
-            'error', 'use_bias', 'train_epoch_end_signal',
-            'train_end_signal', 'verbose'
-        ]
-    ),
-    'full_signals': joindocs(
-        docs, ['train_epoch_end_signal', 'train_end_signal']
-    ),
-    'full_methods': joindocs(
-        docs, ['fit', 'predict', 'last_error', 'plot_errors']
+    Yields
+    ------
+    tuple
+        Yields tuple that contain 3 values. There are: parameter name,
+        parameter type and parameter description.
+    """
+
+    n_indents = find_numpy_doc_indent(docs)
+    doc_indent = ' ' * n_indents if n_indents else ''
+    parser = re.compile(
+        r"(?P<name>\w+?)\s*\:\s*(?P<type>[^\n]+)"
+        r"((?P<description>(\n{indent}\ +[^\n]+)|(\n))*)"
+        "".format(indent=doc_indent)
     )
-})
+
+    for name, type_, desc, _, _, _ in parser.findall(docs):
+        yield (name, type_, desc)
+
+
+def iter_methods(docs):
+    """ Find methods described in the Numpy style documentation.
+
+    Parameters
+    ----------
+    docs : str
+
+    Yields
+    ------
+    tuple
+        Yields tuple that contain 3 values. There are: method name,
+        method parameters and method description.
+    """
+
+    n_indents = find_numpy_doc_indent(docs)
+    doc_indent = ' ' * n_indents if n_indents else ''
+    parser = re.compile(
+        r"(?P<name>\w+?)(\((.+?)?\))"
+        r"((?P<description>\n{indent}\ +[^\n]+)*)"
+        "".format(indent=doc_indent)
+    )
+
+    for name, func_params, _, desc, _ in parser.findall(docs):
+        yield (name, func_params, desc)
+
+
+def parse_warns(docs):
+    """ Find warning described in the Numpy style documentation.
+
+    Parameters
+    ----------
+    docs : str
+
+    Returns
+    -------
+    str or None
+        Returns warnings from documentation or ``None`` if function
+        didn't find it.
+    """
+
+    parser = re.compile(r"Warns\s+-+\s+(?P<warntext>(.+\n)+)")
+    doc_warns = parser.findall(docs)
+
+    if not doc_warns:
+        return None
+
+    doc_warns, _ = doc_warns[0]
+    return doc_warns
+
+
+class SharedDocsException(Exception):
+    """ Exception that help identify problems related to shared
+    documentation.
+    """
+
+
+class SharedDocsMeta(type):
+    """ Meta-class for shared documentation. This class conatains main
+    functionality that help inherit parameters and methods descriptions
+    from parent classes. This class automaticaly format class documentation
+    using basic python format syntax for objects.
+    """
+
+    def __new__(cls, clsname, bases, attrs):
+        new_class = super(SharedDocsMeta, cls).__new__(cls, clsname,
+                                                       bases, attrs)
+        if new_class.__doc__ is None:
+            return new_class
+
+        class_docs = new_class.__doc__
+        n_indents = find_numpy_doc_indent(class_docs)
+
+        if n_indents is None:
+            return new_class
+
+        parameters = {}
+        parent_classes = new_class.__mro__
+
+        for parent_class in parent_classes:
+            parent_docs = parent_class.__doc__
+
+            if parent_docs is None:
+                continue
+
+            parent_name = parent_class.__name__
+            parent_params = parameters[parent_name] = AttributeKeyDict()
+
+            for name, type_, desc in iter_parameters(parent_docs):
+                parent_params[name] = "{} : {}{}".format(name, type_, desc)
+
+            for name, func_params, desc in iter_methods(parent_docs):
+                parent_params[name] = ''.join([name, func_params, desc])
+
+            doc_warns = parse_warns(parent_docs)
+            if doc_warns is not None:
+                parent_params['Warns'] = doc_warns
+
+        try:
+            new_class.__doc__ = new_class.__doc__.format(**parameters)
+        except Exception as exception:
+            exception_classname = exception.__class__.__name__
+            raise SharedDocsException(
+                "Can't format documentation for class `{}`. "
+                "Catched `{}` exception with message: {}".format(
+                    new_class.__name__,
+                    exception_classname,
+                    exception
+                )
+            )
+
+        return new_class
+
+
+class SharedDocsABCMeta(SharedDocsMeta, ABCMeta):
+    """ Meta-class that combine ``SharedDocsMeta`` and ``ABCMeta``
+    meta-classes.
+    """
+
+
+class SharedDocs(with_metaclass(SharedDocsMeta)):
+    """ Main class that provide with shared documentation functionality.
+    """

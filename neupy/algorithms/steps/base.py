@@ -1,42 +1,30 @@
-from numpy import ones
-
 from neupy.core.config import Configurable
-from neupy.algorithms.backprop import LEARING_RATE_UPDATE
+from neupy.algorithms.gd import SINGLE_STEP_UPDATE, MULTIPLE_STEP_UPDATE
 
 
-__all__ = ('SingleStep', 'MultiSteps')
+__all__ = ('SingleStepConfigurable', 'MultipleStepConfigurable')
 
 
-class LearningRateConfigurable(Configurable):
-    optimization_type = LEARING_RATE_UPDATE
+class SingleStepConfigurable(Configurable):
+    """ Configuration class for learning rate control algorithms.
+    Works for algorithms that modify single learnig rate.
 
-
-class SingleStep(LearningRateConfigurable):
-    """ Base class for backpropagation step algorithms which allow use single
-    step for all layers.
-
-    Attributes
-    ----------
-    {first_step}
+    Warns
+    -----
+    It works with any algorithm based on backpropagation. Class can't
+    work without it.
     """
-    def setup_defaults(self):
-        self.first_step = self.step
+    addon_type = SINGLE_STEP_UPDATE
 
 
-class MultiSteps(LearningRateConfigurable):
-    """ Base class for step algorithms which allow use unique step for
-    every layer.
+class MultipleStepConfigurable(Configurable):
+    """ Configuration class for learning rate control algorithms.
+    Works for algorithms that modify multiple learnig rates for one
+    neural network.
 
-    Attributes
-    ----------
-    {steps}
+    Warns
+    -----
+    It works with any algorithm based on backpropagation. Class can't
+    work without it.
     """
-    def init_layers(self):
-        super(MultiSteps, self).init_layers()
-        steps = self.steps = []
-
-        for layer in self.train_layers:
-            steps.append(ones(layer.size) * self.step)
-
-    def layer_step(self, layer_number):
-        return self.steps[layer_number]
+    addon_type = MULTIPLE_STEP_UPDATE

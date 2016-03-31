@@ -7,9 +7,10 @@ Subpackages
 .. toctree::
 
     neupy.algorithms.associative
-    neupy.algorithms.backprop
-    neupy.algorithms.basics
     neupy.algorithms.competitive
+    neupy.algorithms.ensemble
+    neupy.algorithms.gd
+    neupy.algorithms.linear
     neupy.algorithms.memory
     neupy.algorithms.rbfn
     neupy.algorithms.steps
@@ -20,7 +21,6 @@ Submodules
 
 .. toctree::
 
-   neupy.algorithms.feedforward
    neupy.algorithms.utils
 
 Module contents

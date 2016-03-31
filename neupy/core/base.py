@@ -1,16 +1,24 @@
 from abc import abstractmethod
 
-from neupy.helpers import preformat_value
+from neupy.utils import preformat_value
 from neupy.helpers.logs import Verbose
-from .config import ConfigurableWithABC
+from .config import ConfigurableABC
 
 
 __all__ = ('BaseSkeleton',)
 
 
-class BaseSkeleton(ConfigurableWithABC, Verbose):
+class BaseSkeleton(ConfigurableABC, Verbose):
     """ Base class for neural network algorithms.
+
+    Methods
+    -------
+    fit(\*args, \*\*kwargs)
+        The same as ``train`` method.
+    predict(input_data)
+        Predict value.
     """
+
     def get_params(self, deep=False):
         options = {}
         for property_name, option in self.options.items():
@@ -40,13 +48,15 @@ class BaseSkeleton(ConfigurableWithABC, Verbose):
     def train(self, input_data, target_data):
         pass
 
-    @abstractmethod
     def predict(self, input_data):
         pass
 
     def fit(self, X, y, *args, **kwargs):
         self.train(X, y, *args, **kwargs)
         return self
+
+    def class_name(self):
+        return self.__class__.__name__
 
     def _repr_options(self):
         options = []
@@ -60,7 +70,6 @@ class BaseSkeleton(ConfigurableWithABC, Verbose):
         return ', '.join(options)
 
     def __repr__(self):
-        return "{}({})".format(
-            self.__class__.__name__,
-            self._repr_options()
-        )
+        class_name = self.class_name()
+        available_options = self._repr_options()
+        return "{}({})".format(class_name, available_options)

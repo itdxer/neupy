@@ -3,8 +3,8 @@ from math import log, ceil
 from numpy import zeros, fill_diagonal, random, sign
 
 from neupy.utils import format_data
-from neupy.functions import step
-from neupy.core.properties import BoolProperty
+from neupy.network.utils import step
+from neupy.core.properties import Property
 from .utils import bin2sign, hopfield_energy
 from .base import DiscreteMemory
 
@@ -18,7 +18,8 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
     Parameters
     ----------
-    {discrete_params}
+    {DiscreteMemory.mode}
+    {DiscreteMemory.n_times}
     check_limit : bool
         Option enable a limit of patterns control for the network using
         logarithmically proportion rule. Defaults to ``True``.
@@ -38,7 +39,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
     Notes
     -----
-    * {discrete_data_note}
+    * Input and output vectors should contain only binary values.
 
     Examples
     --------
@@ -118,7 +119,8 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     :ref:`password-recovery`: Password recovery with Discrete Hopfield Network.
     :ref:`discrete-hopfield-network`: Discrete Hopfield Network tutorial.
     """
-    check_limit = BoolProperty(default=True)
+
+    check_limit = Property(default=True, expected_type=bool)
 
     def __init__(self, **options):
         super(DiscreteHopfieldNetwork, self).__init__(**options)
@@ -128,7 +130,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         self.discrete_validation(input_data)
 
         input_data = bin2sign(input_data)
-        input_data = format_data(input_data, row1d=True)
+        input_data = format_data(input_data, is_feature1d=False)
 
         nrows, n_features = input_data.shape
         nrows_after_update = self.n_remembered_data + nrows
@@ -156,7 +158,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
     def predict(self, input_data, n_times=None):
         self.discrete_validation(input_data)
-        input_data = format_data(bin2sign(input_data), row1d=True)
+        input_data = format_data(bin2sign(input_data), is_feature1d=False)
 
         if self.mode == 'async':
             if n_times is None:
@@ -177,7 +179,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     def energy(self, input_data):
         self.discrete_validation(input_data)
         input_data = bin2sign(input_data)
-        input_data = format_data(input_data, row1d=True)
+        input_data = format_data(input_data, is_feature1d=False)
         nrows, n_features = input_data.shape
 
         if nrows == 1:

@@ -6,9 +6,11 @@ Submodules
 
 .. toctree::
 
-   neupy.helpers.base
    neupy.helpers.logs
+   neupy.helpers.progressbar
    neupy.helpers.sms
+   neupy.helpers.table
+   neupy.helpers.terminal
 
 Module contents
 ---------------

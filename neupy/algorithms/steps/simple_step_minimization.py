@@ -1,11 +1,11 @@
-from neupy.core.properties import NonNegativeIntProperty
-from .base import SingleStep
+from neupy.core.properties import IntProperty
+from .base import SingleStepConfigurable
 
 
 __all__ = ('SimpleStepMinimization',)
 
 
-class SimpleStepMinimization(SingleStep):
+class SimpleStepMinimization(SingleStepConfigurable):
     """ Algorithm Monotonicly minimize learning step on each iteration.
     Probably this is most simple step minimization idea.
 
@@ -16,23 +16,19 @@ class SimpleStepMinimization(SingleStep):
         to epochs. Defaults to ``100`` epochs. Can't be less than ``1``.
         Less value mean that step decrease faster.
 
-    Attributes
-    ----------
-    {first_step}
-
     Warns
     -----
-    {bp_depending}
+    {SingleStepConfigurable.Warns}
 
     Examples
     --------
     >>> from neupy import algorithms
     >>>
-    >>> bpnet = algorithms.Backpropagation(
+    >>> bpnet = algorithms.GradientDescent(
     ...     (2, 4, 1),
     ...     step=0.1,
     ...     verbose=False,
-    ...     optimizations=[algorithms.SimpleStepMinimization]
+    ...     addons=[algorithms.SimpleStepMinimization]
     ... )
     >>>
 
@@ -40,12 +36,17 @@ class SimpleStepMinimization(SingleStep):
     --------
     :network:`SearchThenConverge`
     """
-    epochs_step_minimizator = NonNegativeIntProperty(min_size=1, default=100)
+    epochs_step_minimizator = IntProperty(minval=1, default=100)
 
-    def after_weight_update(self, input_train, target_train):
-        super(SimpleStepMinimization, self).after_weight_update(
-            input_train, target_train
+    def init_train_updates(self):
+        updates = super(SimpleStepMinimization, self).init_train_updates()
+        epoch = self.variables.epoch
+        step = self.variables.step
+
+        step_update_condition = self.step / (
+            1 + epoch / self.epochs_step_minimizator
         )
-        self.step = self.first_step / (
-            1 + self.epoch / self.epochs_step_minimizator
-        )
+        updates.extend([
+            (step, step_update_condition),
+        ])
+        return updates

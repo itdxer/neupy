@@ -3,17 +3,15 @@ from __future__ import division
 from numpy import dot, zeros, ones, inf, logical_and, sort, unique
 
 from neupy.utils import format_data
-from neupy.core.properties import (BetweenZeroAndOneProperty,
-                                   NonNegativeIntProperty)
+from neupy.core.properties import (ProperFractionProperty,
+                                   IntProperty)
 from neupy.network.base import BaseNetwork
-from neupy.network.types import Clustering
-from neupy.network.connections import FAKE_CONNECTION
 
 
 __all__ = ('ART1',)
 
 
-class ART1(Clustering, BaseNetwork):
+class ART1(BaseNetwork):
     """ Adaptive Resonance Theory (ART1) Network for binary
     data clustering.
 
@@ -24,19 +22,23 @@ class ART1(Clustering, BaseNetwork):
     Parameters
     ----------
     rho : float
-        Control reset action in trainig process. Value must be
+        Control reset action in training process. Value must be
         between ``0`` and ``1``, defaults to ``0.5``.
     n_clusters : int
         Number of clusters, defaults to ``2``. Min value is also ``2``.
-    {full_params}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
 
     Methods
     -------
     train(input_data):
-        Trains network until it has clustered all samples
-    {predict}
-    {plot_errors}
-    {last_error}
+        Network network will train until it clusters all samples.
+    {BaseSkeleton.predict}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
 
     Examples
     --------
@@ -58,11 +60,8 @@ class ART1(Clustering, BaseNetwork):
     >>> artnet.predict(data)
     array([ 0.,  1.,  1.])
     """
-    rho = BetweenZeroAndOneProperty(default=0.5)
-    n_clusters = NonNegativeIntProperty(default=2, min_size=2)
-
-    def __init__(self, **options):
-        super(ART1, self).__init__(FAKE_CONNECTION, **options)
+    rho = ProperFractionProperty(default=0.5)
+    n_clusters = IntProperty(default=2, minval=2)
 
     def train(self, input_data):
         input_data = format_data(input_data)
@@ -145,6 +144,3 @@ class ART1(Clustering, BaseNetwork):
 
     def predict(self, input_data):
         return self.train(input_data)
-
-    def train_epoch(self, input_data, target_data):
-        pass

@@ -1,4 +1,4 @@
-from neupy.core.properties import NonNegativeNumberProperty
+from neupy.core.properties import BoundedProperty
 from .base import BaseStepAssociative
 
 
@@ -12,8 +12,6 @@ class HebbRule(BaseStepAssociative):
 
     Notes
     -----
-    * First layer must always be :layer:`StepLayer`.
-    * Network must contains exacly 2 layers.
     * Network always generate weights which contains ``0`` weight for \
     conditioned stimulus and ``1`` otherwise. This setup helps you controll \
     your default state for learning features. Other type of weight you can \
@@ -26,21 +24,24 @@ class HebbRule(BaseStepAssociative):
         Decay rate is control your network weights. It helps network
         'forgote' information and control weight sizes. Without this
         parameter network weight will grow. Defaults to ``0.2``.
-    n_unconditioned : int
-        This value control number of features which are unconditioned
-        stimulus for network. Defaults to ``1``. Can be any integer value
-        bigger than ``1``, but less than feature space.
-    {step}
-    {show_epoch}
-    {shuffle_data}
-    {error}
-    {verbose}
-    {full_signals}
+    {BaseAssociative.n_inputs}
+    {BaseAssociative.n_outputs}
+    {BaseStepAssociative.n_unconditioned}
+    {BaseAssociative.weight}
+    {BaseStepAssociative.bias}
+    {BaseNetwork.step}
+    {BaseNetwork.show_epoch}
+    {BaseNetwork.shuffle_data}
+    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.train_end_signal}
+    {Verbose.verbose}
 
     Methods
     -------
-    {unsupervised_train_epochs}
-    {full_methods}
+    {BaseSkeleton.predict}
+    {BaseAssociative.train}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
 
     Examples
     --------
@@ -59,7 +60,7 @@ class HebbRule(BaseStepAssociative):
     ... ])
     >>>
     >>> hebbnet = algorithms.HebbRule(
-    ...     layers.StepLayer(2) > layers.OutputLayer(1),
+    ...     layers.Step(2) > layers.Output(1),
     ...     n_unconditioned=1,
     ...     step=0.1,
     ...     decay_rate=0.8,
@@ -72,22 +73,11 @@ class HebbRule(BaseStepAssociative):
            [ 1],
            [ 1]])
     """
-    decay_rate = NonNegativeNumberProperty(default=0.2)
 
-    def init_layers(self):
-        layer_default_weight = self.input_layer.weight
-        super(HebbRule, self).init_layers()
-
-        if layer_default_weight is None:
-            input_layer = self.input_layer
-            unconditioned = self.n_unconditioned
-
-            input_layer.weight[unconditioned:, :] = 0
-            input_layer.weight[:unconditioned, :] = 1
+    decay_rate = BoundedProperty(default=0.2, minval=0)
 
     def weight_delta(self, input_row, layer_output):
-        unconditioned = self.n_unconditioned
-        update_from_column = unconditioned - self.use_bias
-        weight = self.input_layer.weight[unconditioned:, :]
-        delta = input_row[:, update_from_column:].T.dot(layer_output)
+        n_unconditioned = self.n_unconditioned
+        weight = self.weight[n_unconditioned:, :]
+        delta = input_row[:, n_unconditioned:].T.dot(layer_output)
         return -self.decay_rate * weight + self.step * delta

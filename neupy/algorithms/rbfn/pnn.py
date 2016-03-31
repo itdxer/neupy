@@ -1,11 +1,9 @@
 from numpy import unique, zeros, dot, sum as np_sum
 
 from neupy.utils import format_data
-from neupy.core.properties import NonNegativeNumberProperty
+from neupy.core.properties import BoundedProperty
 from neupy.network.base import BaseNetwork
-from neupy.network.connections import FAKE_CONNECTION
 from neupy.network.learning import LazyLearning
-from neupy.network.types import Classification
 
 from .utils import pdf_between_data
 
@@ -13,19 +11,21 @@ from .utils import pdf_between_data
 __all__ = ('PNN',)
 
 
-class PNN(LazyLearning, Classification, BaseNetwork):
+class PNN(LazyLearning, BaseNetwork):
     """ Probabilistic Neural Network for classification.
 
     Parameters
     ----------
     std : float
         standard deviation for PDF function, default to 0.1.
-    {verbose}
+    {Verbose.verbose}
 
     Methods
     -------
-    {supervised_train_lazy}
-    {full_methods}
+    {LazyLearning.train}
+    {BaseSkeleton.predict}
+    {BaseSkeleton.fit}
+    {BaseNetwork.plot_errors}
 
     Examples
     --------
@@ -34,27 +34,25 @@ class PNN(LazyLearning, Classification, BaseNetwork):
     >>> from sklearn import datasets
     >>> from sklearn import metrics
     >>> from sklearn.cross_validation import train_test_split
+    >>> from neupy import algorithms, environment
     >>>
-    >>> from neupy.algorithms import PNN
-    >>>
-    >>> np.random.seed(0)
+    >>> environment.reproducible()
     >>>
     >>> dataset = datasets.load_digits()
     >>> x_train, x_test, y_train, y_test = train_test_split(
     ...     dataset.data, dataset.target, train_size=0.7
     ... )
     >>>
-    >>> nw = PNN(std=10, verbose=False)
+    >>> nw = algorithms.PNN(std=10, verbose=False)
     >>> nw.train(x_train, y_train)
     >>> result = nw.predict(x_test)
     >>> metrics.accuracy_score(y_test, result)
     0.98888888888888893
     """
-    std = NonNegativeNumberProperty(default=0.1)
+    std = BoundedProperty(default=0.1, minval=0)
 
     def __init__(self, **options):
-        super(PNN, self).__init__(FAKE_CONNECTION, **options)
-        # self.output_layer = layers.OutputLayer(1)
+        super(PNN, self).__init__(**options)
         self.classes = None
 
     def train(self, input_train, target_train, copy=True):
@@ -78,25 +76,15 @@ class PNN(LazyLearning, Classification, BaseNetwork):
             row_comb_matrix[i, class_val_positions.ravel()] = 1
             class_ratios[i] = np_sum(class_val_positions)
 
-    def setup_defaults(self):
-        # Remove properties from BaseNetwork
-        del self.step
-        del self.error
-        del self.use_bias
-        del self.show_epoch
-        del self.train_end_signal
-        del self.train_epoch_end_signal
-        super(PNN, self).setup_defaults()
-
-    def predict_prob(self, input_data):
-        raw_output = self.raw_predict(input_data)
+    def predict_proba(self, input_data):
+        raw_output = self.predict_raw(input_data)
 
         total_output_sum = raw_output.sum(axis=0).reshape(
             (raw_output.shape[1], 1)
         )
         return raw_output.T / total_output_sum
 
-    def raw_predict(self, input_data):
+    def predict_raw(self, input_data):
         input_data = format_data(input_data)
         super(PNN, self).predict(input_data)
 
@@ -118,5 +106,5 @@ class PNN(LazyLearning, Classification, BaseNetwork):
         ) / class_ratios.reshape((class_ratios.size, 1))
 
     def predict(self, input_data):
-        raw_output = self.raw_predict(input_data)
+        raw_output = self.predict_raw(input_data)
         return self.classes[raw_output.argmax(axis=0)]

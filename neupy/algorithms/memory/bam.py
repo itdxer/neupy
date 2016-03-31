@@ -3,7 +3,7 @@ from random import randint
 from numpy import zeros, sign
 
 from neupy.utils import format_data
-from neupy.functions import step
+from neupy.network.utils import step
 from .utils import bin2sign, hopfield_energy
 from .base import DiscreteMemory
 
@@ -17,7 +17,8 @@ class DiscreteBAM(DiscreteMemory):
 
     Parameters
     ----------
-    {discrete_params}
+    {DiscreteMemory.mode}
+    {DiscreteMemory.n_times}
 
     Methods
     -------
@@ -36,7 +37,7 @@ class DiscreteBAM(DiscreteMemory):
 
     Notes
     -----
-    * {discrete_data_note}
+    * Input and output vectors should contain only binary values.
 
     Examples
     --------
@@ -91,13 +92,13 @@ class DiscreteBAM(DiscreteMemory):
         return step(predicted_result).astype(int)
 
     def predict_input(self, output_data, n_times=None):
-        return self._predict(input_data=None,
-                             output_data=format_data(output_data, row1d=True),
+        output_data = format_data(output_data, is_feature1d=False)
+        return self._predict(input_data=None, output_data=output_data,
                              n_times=n_times)
 
     def predict_output(self, input_data, n_times=None):
-        return self._predict(input_data=format_data(input_data, row1d=True),
-                             output_data=None,
+        input_data = format_data(input_data, is_feature1d=False)
+        return self._predict(input_data=input_data, output_data=None,
                              n_times=n_times)
 
     def _predict(self, input_data=None, output_data=None, n_times=None):
@@ -144,8 +145,8 @@ class DiscreteBAM(DiscreteMemory):
         self.discrete_validation(input_data)
         self.discrete_validation(output_data)
 
-        output_data = bin2sign(format_data(output_data, row1d=True))
-        input_data = bin2sign(format_data(input_data, row1d=True))
+        output_data = bin2sign(format_data(output_data, is_feature1d=False))
+        input_data = bin2sign(format_data(input_data, is_feature1d=False))
 
         _, wight_nrows = input_data.shape
         _, wight_ncols = output_data.shape
@@ -166,8 +167,8 @@ class DiscreteBAM(DiscreteMemory):
         self.discrete_validation(output_data)
 
         input_data, output_data = bin2sign(input_data), bin2sign(output_data)
-        input_data = format_data(input_data, row1d=True)
-        output_data = format_data(output_data, row1d=True)
+        input_data = format_data(input_data, is_feature1d=False)
+        output_data = format_data(output_data, is_feature1d=False)
         nrows, n_features = input_data.shape
 
         if nrows == 1:

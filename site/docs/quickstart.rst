@@ -1,148 +1,177 @@
+.. _quick_start:
+
 Quick start
 ===========
 
 Ready to get started?
 
-XOR problem
-***********
+MNIST classification
+********************
 
-XOR problem is probably the most known for those who have already heared about neural networks.
-The most popular neural network algorithm probably is :network:`Backpropagation`.
-Let's try to solve the XOR problem using :network:`Backpropagation`
-First of all we need to define 4 data samples for XOR function.
+The MNIST problem is probably the most known for those who have already
+heared about neural networks. This short tutorial contains simple solution for this
+problem that you can quickly build by your own using NeuPy. Let's dive in.
+
+First of all we need to load data.
 
 .. code-block:: python
 
+    >>> from sklearn import datasets, cross_validation
+    >>> mnist = datasets.fetch_mldata('MNIST original')
+    >>> data, target = mnist.data, mnist.target
+
+I used scikit-learn to fetch the MNIST dataset, but you can do that load it in different way.
+
+Data doesn't have appropriate format for neural network, so we need to make simple
+transformation before use it.
+
+.. code-block:: python
+
+    >>> from sklearn.preprocessing import OneHotEncoder
+    >>>
+    >>> data = data / 255.
+    >>> data = data - data.mean(axis=0)
+    >>>
+    >>> target_scaler = OneHotEncoder()
+    >>> target = target_scaler.fit_transform(target.reshape((-1, 1)))
+    >>> target = target.todense()
+
+Next we need to divide dataset into two parts: train and test. Regarding `The
+MNIST Database <http://yann.lecun.com/exdb/mnist/>`_ page we wil use 60,000
+samples for training and 10,000 for test.
+
+.. code-block:: python
+
+    >>> from neupy import environment
     >>> import numpy as np
+    >>> from sklearn.cross_validation import train_test_split
     >>>
-    >>> np.random.seed(0)
+    >>> environment.reproducible()
     >>>
-    >>> input_data = np.array([
-    ...     [0, 0],
-    ...     [0, 1],
-    ...     [1, 0],
-    ...     [1, 1],
-    ... ])
-    >>> target_data = np.array([
-    ...     [1],
-    ...     [0],
-    ...     [0],
-    ...     [1],
-    ... ])
-
-Let's check the data.
-
-.. code-block:: python
-
-    >>> import matplotlib.pyplot as plt
-    >>>
-    >>> plt.style.use('ggplot')
-    >>> plt.scatter(*input_data.T, c=target_data, s=100)
-    >>> plt.show()
-
-.. image:: ../_static/screenshots/quick-start-data-viz.png
-    :width: 70%
-    :align: center
-    :alt: Backpropagation configuration output
-
-As we can see from chart on the top, problem is clearly nonlinear.
-
-Now we are going to define :network:`Backpropagation` neural network which solves this problem.
-First of all we have to set up basic structure for network and add some useful configurations.
-As problem is nonlinear we should add one hidden layer to the network.
-For first network implementation we have to set up number of hidden units inside network randomly.
-Let the units number be 4.
-
-.. code-block:: python
-
-    >>> from neupy import algorithms
-    >>> bpnet = algorithms.Backpropagation(
-    ...     (2, 4, 1),
-    ...     step=0.1,
-    ...     verbose=True,
-    ...     show_epoch='4 times',
+    >>> x_train, x_test, y_train, y_test = train_test_split(
+    ...     data.astype(np.float32),
+    ...     target.astype(np.float32),
+    ...     train_size=(6. / 7)
     ... )
 
-As you can see from code additionaly we set up ``step`` and ``show_epoch`` parameters.
-``step`` parameter control learning rate.
-``show_epoch`` controls the frequency display in the terminal training.
-We set the value up to ``'4 times'`` that mean we will see network progress 4 times and one additional for the final iteration.
+In the previous procedure I converted all data to `float32` data type. This
+simple trick will help us use less memory and decrease computational time.
+Theano is a main backend for the Gradient Descent based algorithms in NeuPy.
+For the Theano we need to add additional configuration that will explain Theano that
+we are going to use 32bit float numbers.
 
-We set up network connections as tuple of layers sizes, but we don't put in activation function.
-That is because :network:`Backpropagation` use the most common sigmoid layer by
-default for tuple structure.
-More about layer configuration you can read `here <layers.html>`_.
+.. code-block:: python
 
-If you run the code in terminal you will see output which looks like this one:
+    >>> import theano
+    >>> theano.config.floatX = 'float32'
+
+We prepared everything that we need for the neural network training. Now we are
+able to create the neural network that will classify digits for us.
+
+Let's start with an architecture. I didn't reinvent the wheel and used one of the know architectures from `The Database <http://yann.lecun.com/exdb/mnist/>`_ page which is 784 > 500 > 300 > 10. As the main activation function I used Relu and Softmax for the final layer. The main algorithm is a Nesterov Momentum that uses 100 samples per batch iteration. Actually all this and other network configuration should be clear from the code shown below.
+
+.. code-block:: python
+
+    >>> from neupy import algorithms, layers
+    >>>
+    >>> network = algorithms.Momentum(
+    ...     [
+    ...         layers.Relu(784),
+    ...         layers.Relu(500),
+    ...         layers.Softmax(300),
+    ...         layers.ArgmaxOutput(10),
+    ...     ],
+    ...     error='categorical_crossentropy',
+    ...     step=0.01,
+    ...     verbose=True,
+    ...     shuffle_data=True,
+    ...     momentum=0.99,
+    ...     nesterov=True,
+    ... )
+
+Isn't it simple and clear? All the most important information related to the neural network you can find in the terminal output. If you run the code that shown above you would get the same output as on the figure below.
 
 .. image:: ../_static/screenshots/bpnet-config-logs.png
     :width: 70%
     :align: center
-    :alt: Backpropagation configuration output
+    :alt: GradientDescent configuration output
 
 From this output we can extract a lot of information about network configurations.
 
-First of all, as we can see, most of options have gray color label, but
-some of them are green.
-Green color defines all options which we put in network manually and gray color options are default parameters.
-This output shows all possible properties neural network configurations.
-All properties separeted on few groups and each group is a :network:`Backpropagation`  parent classes.
-More information about :network:`Backpropagation` algorithm properties you will find in documentation, just click on algorithm name link and you will see it.
+First of all, as we can see, most of options have green color label, but some of them are gray. Green color defines all options which we put in network manually and gray color options are default parameters. All properties separeted on few groups and each group is a :network:`Momentum`  parent classes. More information about :network:`Momentum` algorithm properties you will find in documentation, just click on algorithm name link and you will see it.
 
-Now we are going to train network to solve the XOR problem.
-Let set up ``5000`` epochs for training procedure and check the result.
+Now we are going to train network. Let set up 20 epochs for training procedure and check the result.
 
 .. code-block:: python
 
-    >>> bpnet.train(input_data, target_data, epochs=5000)
+    >>> network.train(x_train, y_train, x_test, y_test, epochs=20)
 
 Output in terminal should look similar to this one:
 
 .. image:: ../_static/screenshots/bpnet-train-logs.png
     :width: 70%
     :align: center
-    :alt: Backpropagation training procedure output
+    :alt: GradientDescent training procedure output
 
-In the output you can see many useful information about learning procedures.
-First of all there is simple information about input data and number of training epochs.
-Also ther you can see information about every 1000 training epoch.
-In addition training output always shows the last training epoch.
-Each epoch output has three values: Train error, Validation error and Epoch time.
-Epoch time shows for how long the process was active in the specific epoch.
-There are also two types of errors.
-First one displays error for your training dataset and second one for validation dataset.
-Validation data sample is optional and we are not using it in this example, but we can put in ``train`` method separated data sample and track validation error.
+Output show the most important information related to training procedure. Each epoch contains 4 columns. First one identified epoch. The second one show training error. The third one is optional. In case you have validation dataset, you can check learning perfomanse using dataset separated from the learning procedure. And the last column shows how many time network trains during this epoch.
 
-Our MSE looks well. Now we can visualize our errors in a chart.
+From the table is not clear network's training progress. We can check it very easy. Network instance contains built-in method that build line plot that show training progress. Let's check our progress.
 
 .. code-block:: python
 
-    >>> bpnet.plot_errors()
+    >>> network.plot_errors()
 
 .. image:: ../_static/screenshots/bpnet-train-errors-plot.png
     :width: 70%
     :align: center
-    :alt: Backpropagation epoch errors plot
+    :alt: GradientDescent epoch errors plot
 
-And finally examine the prediction answer
-
-.. code-block:: python
-
-    >>> predicted = bpnet.predict(input_data)
-    >>> predicted
-    array([[ 0.77293114],
-           [ 0.28974524],
-           [ 0.18620525],
-           [ 0.74104605]])
-
-Looks well.
-Using more training epochs can make better prediction.
-For final step we just round our network result for making it valid.
+From the figure above you can notice that validation error does not decrease over time. Sometimes it goes up and sometimes down, but it doesn't mean that network trains poorly. Let's check small example that can make this problem clear.
 
 .. code-block:: python
 
-    >>> predicted.round()
-    array([[ 1.],
-           [ 0.],
-           [ 0.],
-           [ 1.]])
+    >>> actual_values = np.array([1, 1, 1])
+    >>> model1_prediction = np.array([0.9, 0.9, 0.4])
+    >>> model2_prediction = np.array([0.6, 0.6, 0.6])
+
+In the code above you can see two prediction releate to the different models. The first model predicted two samples right and one wrong. The second one predicted everything right. But second model's predictions are less certain. Let's check the cross entropy error.
+
+.. code-block:: python
+
+    >>> from neupy import estimators
+    >>> estimators.binary_crossentropy(actual_values, model1_prediction)
+    0.3756706118583679
+    >>> estimators.binary_crossentropy(actual_values, model2_prediction)
+    0.5108255743980408
+
+That is the result that we looked for. The second model made better prediction, but it got a higher cross entropy error value. That's because we less certain about our prediction. Similar situation we've observed in the plot above.
+
+Let's finally make a simple report for our classification result.
+
+.. code-block:: python
+
+    >>> from sklearn import metrics
+    >>>
+    >>> y_predicted = network.predict(x_test)
+    >>> y_test = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))
+    >>>
+    >>> print(metrics.classification_report(y_test, y_predicted))
+                  precision    recall  f1-score   support
+
+              0       0.98      0.99      0.99       936
+              1       1.00      0.99      0.99      1163
+              2       0.98      0.98      0.98       982
+              3       0.98      0.98      0.98      1038
+              4       0.98      0.98      0.98       948
+              5       0.98      0.98      0.98       921
+              6       0.98      0.99      0.99      1013
+              7       0.98      0.98      0.98      1029
+              8       0.98      0.99      0.99       978
+              9       0.98      0.97      0.98       992
+
+    avg / total       0.98      0.98      0.98     10000
+    >>> score = metrics.accuracy_score(y_test, y_predicted)
+    >>> print("Validation accuracy: {:.2f}%".format(100 * score))
+    Validation accuracy: 98.47%
+
+The 98.5% accuracy is pretty good for such a quick solution. Additional modification can improve prediction accuracy.

@@ -38,7 +38,8 @@ def twilio_sms(account_id, token, to_phone, from_phone, verbose=True):
         sys.exit()
 
     def send_message(text_message):
-        logs.log("Message", "Send SMS with text: '{}'".format(text_message))
+        formated_message = "Send SMS with text: '{}'".format(text_message)
+        logs.message("SMS", formated_message)
 
         client = twilio.rest.TwilioRestClient(account_id, token)
         message = client.messages.create(body=text_message, to=to_phone,

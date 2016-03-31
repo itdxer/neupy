@@ -1,39 +1,25 @@
 from abc import ABCMeta
 from collections import namedtuple
-from functools import reduce
 
 from six import with_metaclass
 
-from .properties import Property
-from .docs import docs
+from .properties import BaseProperty
+from .docs import SharedDocsMeta
 
 
-__all__ = ('ConfigMeta', 'ConfigWithABCMeta', 'Configurable',
-           'ConfigurableWithABC')
+__all__ = ('ConfigMeta', 'ConfigABCMeta', 'Configurable', 'ConfigurableABC')
 
 
 Option = namedtuple('Option', 'class_name value')
 
 
-def merge_dicts(left_dict, right_dict):
-    return dict(left_dict, **right_dict)
-
-
-class ConfigMeta(type):
+class ConfigMeta(SharedDocsMeta):
+    """ Meta-class that configure initialized properties. Also it helps
+    inheit properties from parent classes and use them.
+    """
     def __new__(cls, clsname, bases, attrs):
-        parents = [kls for kls in bases if isinstance(kls, ConfigMeta)]
         new_class = super(ConfigMeta, cls).__new__(cls, clsname, bases, attrs)
-
-        if new_class.__doc__ is not None:
-            maindocs = docs.copy()
-            mro_classes = new_class.__mro__
-
-            # Collect parameter `shared_docs` for all MRO classes and
-            # combine them in one big dictionary
-            shared_docs = [getattr(b, 'shared_docs', {}) for b in mro_classes]
-            all_params = reduce(merge_dicts, shared_docs, maindocs)
-
-            new_class.__doc__ = new_class.__doc__.format(**all_params)
+        parents = [kls for kls in bases if isinstance(kls, ConfigMeta)]
 
         if not hasattr(new_class, 'options'):
             new_class.options = {}
@@ -46,21 +32,22 @@ class ConfigMeta(type):
 
         # Set properties names and save options for different classes
         for key, value in attrs.items():
-            if isinstance(value, Property):
+            if isinstance(value, BaseProperty):
                 value.name = key
-                new_class.options[key] = Option(
-                    class_name=clsname,
-                    value=value,
-                )
-
+                new_class.options[key] = Option(class_name=clsname,
+                                                value=value)
         return new_class
 
 
-class ConfigWithABCMeta(ABCMeta, ConfigMeta):
-    pass
-
-
 class BaseConfigurable(object):
+    """ Base configuration class. It help set up and validate
+    initialized property values.
+
+    Parameters
+    ----------
+    **options
+        Available properties.
+    """
     def __init__(self, **options):
         available_options = set(self.options.keys())
         invalid_options = set(options) - available_options
@@ -73,11 +60,25 @@ class BaseConfigurable(object):
         for key, value in options.items():
             setattr(self, key, value)
 
+        for option_name, option in self.options.items():
+            if option.value.required and not getattr(self, option_name):
+                raise ValueError("Option `{}` is required."
+                                 "".format(option_name))
+
 
 class Configurable(with_metaclass(ConfigMeta, BaseConfigurable)):
-    pass
+    """ Class that combine ``BaseConfigurable`` class functionality and
+    ``ConfigMeta`` meta-class.
+    """
 
 
-class ConfigurableWithABC(with_metaclass(ConfigWithABCMeta,
-                                         BaseConfigurable)):
-    pass
+class ConfigABCMeta(ABCMeta, ConfigMeta):
+    """ Meta-class that combains ``ConfigMeta`` and ``abc.ABCMeta``
+    meta-classes.
+    """
+
+
+class ConfigurableABC(with_metaclass(ConfigABCMeta, BaseConfigurable)):
+    """ Class that combine ``BaseConfigurable`` class functionality,
+    ``ConfigMeta`` and ``abc.ABCMeta`` meta-classes.
+    """

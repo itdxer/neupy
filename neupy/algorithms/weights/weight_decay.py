@@ -1,4 +1,4 @@
-from neupy.core.properties import NonNegativeNumberProperty
+from neupy.core.properties import BoundedProperty
 from .base import WeightUpdateConfigurable
 
 
@@ -18,17 +18,17 @@ class WeightDecay(WeightUpdateConfigurable):
 
     Warns
     -----
-    {bp_depending}
+    {WeightUpdateConfigurable.Warns}
 
     Examples
     --------
     >>> from neupy import algorithms
     >>>
-    >>> bpnet = algorithms.Backpropagation(
+    >>> bpnet = algorithms.GradientDescent(
     ...     (2, 4, 1),
     ...     step=0.1,
     ...     verbose=False,
-    ...     optimizations=[algorithms.WeightDecay]
+    ...     addons=[algorithms.WeightDecay]
     ... )
     >>>
 
@@ -36,14 +36,13 @@ class WeightDecay(WeightUpdateConfigurable):
     --------
     :network:`WeightElimination`
     """
-    decay_rate = NonNegativeNumberProperty(default=0.1)
+    decay_rate = BoundedProperty(default=0.1, minval=0)
 
-    def layer_weight_update(self, delta, layer_number):
-        weight_update = super(WeightDecay, self).layer_weight_update(
-            delta, layer_number
+    def init_param_updates(self, layer, parameter):
+        updates = super(WeightDecay, self).init_param_updates(
+            layer, parameter
         )
-
-        weight = self.train_layers[layer_number].weight
-        step = self.layer_step(layer_number)
-
-        return -step * self.decay_rate * weight + weight_update
+        step = layer.step or self.variables.step
+        updates_mapper = dict(updates)
+        updates_mapper[parameter] -= step * self.decay_rate * parameter
+        return list(updates_mapper.items())

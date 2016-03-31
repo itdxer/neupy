@@ -28,7 +28,7 @@ process will be finished.
     )
 
     def on_train_end(network):
-        last_error = network.last_error()
+        last_error = network.errors.last()
         send_sms("Train finished. Last error: {}".format(last_error))
 
     lmnet = algorithms.LevenbergMarquardt(

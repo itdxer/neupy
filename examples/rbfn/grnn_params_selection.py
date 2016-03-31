@@ -3,15 +3,15 @@ from operator import itemgetter
 import numpy as np
 from sklearn import datasets, grid_search
 from sklearn.cross_validation import train_test_split
-from neupy import algorithms, functions
+from neupy import algorithms, estimators, environment
 
 
-np.random.seed(0)
+environment.reproducible()
 
 
 def scorer(network, X, y):
     result = network.predict(X)
-    return functions.rmsle(result, y)
+    return estimators.rmsle(result, y)
 
 
 def report(grid_scores, n_top=3):

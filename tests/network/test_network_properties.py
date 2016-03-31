@@ -1,27 +1,14 @@
-import sys
-from contextlib import contextmanager
 from collections import namedtuple
 
-import six
 import numpy as np
 from neupy import algorithms
 
+from utils import catch_stdout
 from base import BaseTestCase
 
 
 xor_zero_input_train = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
 xor_zero_target_train = np.array([[1, 0, 0, 1]]).T
-
-
-@contextmanager
-def catch_stdout():
-    old_out = sys.stdout
-    out = six.StringIO()
-    sys.stdout = out
-
-    yield out
-
-    sys.stdout = old_out
 
 
 class NetworkPropertiesTestCase(BaseTestCase):
@@ -40,7 +27,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
 
         for case in cases:
             with catch_stdout() as out:
-                bpnet = algorithms.Backpropagation(
+                bpnet = algorithms.GradientDescent(
                     (2, 3, 1),
                     step=0.1,
                     verbose=True,
@@ -51,7 +38,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
                 terminal_output = out.getvalue()
 
             self.assertEqual(case.should_be_n_times,
-                             terminal_output.count("Train error"))
+                             terminal_output.count(" ms "))
 
     def test_show_epoch_invalid_cases(self):
         wrong_input_values = (
@@ -62,7 +49,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
 
         for wrong_input_value in wrong_input_values:
             with self.assertRaises(ValueError):
-                bpnet = algorithms.Backpropagation(
+                bpnet = algorithms.GradientDescent(
                     (2, 3, 1),
                     step=0.1,
                     verbose=False,
@@ -71,7 +58,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
 
     def test_network_convergence(self):
         with catch_stdout() as out:
-            bpnet = algorithms.Backpropagation(
+            bpnet = algorithms.GradientDescent(
                 (2, 3, 1),
                 step=0.1,
                 verbose=True,
@@ -83,7 +70,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
         self.assertEqual(1, terminal_output.count("Network didn't converge"))
 
         with catch_stdout() as out:
-            bpnet = algorithms.Backpropagation(
+            bpnet = algorithms.GradientDescent(
                 (2, 3, 1),
                 step=0.1,
                 verbose=True,
@@ -99,7 +86,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
         with catch_stdout() as out:
             data = np.random.random((1000, 2))
             target = np.random.random((1000, 1))
-            bpnet = algorithms.Backpropagation(
+            bpnet = algorithms.GradientDescent(
                 (2, 1, 1),
                 verbose=True,
                 show_epoch=1
