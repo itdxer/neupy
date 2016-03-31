@@ -105,7 +105,7 @@ Next steps
 Dependencies
 ------------
 
-* Python 2.7, 3.3, 3.4
+* Python 2.7, 3.4
 * Theano >= 0.7.0
 * NumPy >= 1.9.0
 * SciPy >= 0.14.0

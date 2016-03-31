@@ -208,6 +208,16 @@ def skip_image_comparison_if_specified(func):
     Before run test function check if environemnt variable
     `SKIP_PLOT_TEST` exists and has non-empty value. If it exists,
     step will be skipped.
+
+    Parameters
+    ----------
+    func : function
+        Any function that you need to override.
+
+    Returns
+    -------
+    function
+        Overrided function.
     """
     decorator = unittest.skipIf(
         os.environ.get('SKIP_PLOT_TEST', None),

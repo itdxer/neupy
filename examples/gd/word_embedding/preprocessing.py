@@ -1,6 +1,7 @@
 import theano
 import nltk
 from nltk.corpus import stopwords
+from nltk.tokenize import RegexpTokenizer
 from sklearn.base import TransformerMixin
 from sklearn.preprocessing import FunctionTransformer
 import numpy as np
@@ -27,6 +28,8 @@ class TokenizeTexts(CustomTransformerMixin):
         super(TokenizeTexts, self).__init__(*args, **kwargs)
 
     def transform(self, X, y=None):
+        tokenizer = RegexpTokenizer(r'[a-z]+|\d+')
+
         texts = X
         tokenized_texts = []
         stoplist = []
@@ -36,9 +39,9 @@ class TokenizeTexts(CustomTransformerMixin):
 
         for text in texts:
             tokenized_text = []
-            for word in nltk.word_tokenize(text.lower()):
+            for word in tokenizer.tokenize(text.lower()):
                 if word not in stoplist:
-                    tokenized_text.append(word)
+                    tokenized_text.append(word.strip())
 
             tokenized_texts.append(tokenized_text)
         return tokenized_texts

@@ -170,7 +170,7 @@ class VerboseProperty(BaseProperty):
 
 
 class Verbose(Configurable):
-    """ Class that help use and control NeuPy logging.
+    """ Class that controls NeuPy logging.
 
     Parameters
     ----------

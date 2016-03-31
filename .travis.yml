@@ -26,7 +26,7 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
 script:
-  - export THEANO_FLAGS='floatX=float32' &&  export SKIP_PLOT_TEST='YES' && nosetests -v -e ._testing tests
+  - export THEANO_FLAGS='floatX=float32' && export SKIP_PLOT_TEST='YES' && nosetests -v -e ._testing tests
   - export THEANO_FLAGS='floatX=float64' && export SKIP_PLOT_TEST='YES' && nosetests -v -e ._testing tests
   - flake8 neupy/ --exclude=neupy/commands/new_project_template/,__init__.py
 # branches:
