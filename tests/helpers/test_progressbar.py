@@ -1,4 +1,5 @@
 import sys
+import time
 
 from neupy.helpers import progressbar
 
@@ -17,6 +18,7 @@ class ProgressbarTestCase(BaseTestCase):
             )
 
             for i in iterator:
+                time.sleep(0.1)
                 terminal_output = out.getvalue()
 
                 self.assertRegexpMatches(
