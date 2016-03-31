@@ -221,6 +221,6 @@ def skip_image_comparison_if_specified(func):
     """
     decorator = unittest.skipIf(
         os.environ.get('SKIP_PLOT_TEST', None),
-        "don't check tests that involve image comparison"
+        "skip tests that involve image comparison"
     )
     return decorator(func)

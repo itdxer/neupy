@@ -143,12 +143,18 @@ class TerminalLogger(object):
 
             try:
                 curses.initscr()
-                curses.echo()
+
+                try:
+                    curses.echo()
+                    yield
+
+                finally:
+                    curses.noecho()
+                    curses.endwin()
+            except:
+                # Handles case when terminal is not defined.
                 yield
 
-            finally:
-                curses.noecho()
-                curses.endwin()
         else:
             yield
 
