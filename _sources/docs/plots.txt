@@ -5,6 +5,8 @@ Hinton diagram
 --------------
 
 More information about the :plot:`hinton` function you can find in documentation.
+Small example and its output are shown below.
+
 
 .. code-block:: python
 

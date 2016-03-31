@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="next" title="Installation" href="../pages/installation.html" /><link rel="prev" title="Scikit-learn compatibility" href="secondary/sklearn-compatibility.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Installation" href="../pages/installation.html" /><link rel="prev" title="Environments" href="secondary/environments.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -106,11 +106,11 @@
 <ul class="simple">
 <li><a class="reference internal" href="#classes-and-functions" id="id1">Classes and functions</a><ul>
 <li><a class="reference internal" href="#algorithms" id="id2">Algorithms</a><ul>
-<li><a class="reference internal" href="#backpropagation" id="id3">Backpropagation</a></li>
+<li><a class="reference internal" href="#algorithms-that-use-backpropagation-training-approach" id="id3">Algorithms that use Backpropagation training approach</a></li>
 <li><a class="reference internal" href="#weight-update-rules" id="id4">Weight update rules</a></li>
 <li><a class="reference internal" href="#learning-rate-update-rules" id="id5">Learning rate update rules</a></li>
 <li><a class="reference internal" href="#ensembles" id="id6">Ensembles</a></li>
-<li><a class="reference internal" href="#radial-basis-functions-networks-rbfn" id="id7">Radial Basis Functions Networks (RBFN)</a></li>
+<li><a class="reference internal" href="#neural-networks-with-radial-basis-functions-rbfn" id="id7">Neural Networks with Radial Basis Functions (RBFN)</a></li>
 <li><a class="reference internal" href="#autoasociative-memory" id="id8">Autoasociative Memory</a></li>
 <li><a class="reference internal" href="#competitive-networks" id="id9">Competitive Networks</a></li>
 <li><a class="reference internal" href="#linear-networks" id="id10">Linear networks</a></li>
@@ -129,8 +129,8 @@
 </div>
 <div class="section" id="algorithms">
 <h2><a class="toc-backref" href="#id2">Algorithms</a></h2>
-<div class="section" id="backpropagation">
-<h3><a class="toc-backref" href="#id3">Backpropagation</a></h3>
+<div class="section" id="algorithms-that-use-backpropagation-training-approach">
+<h3><a class="toc-backref" href="#id3">Algorithms that use Backpropagation training approach</a></h3>
 <table border="1" class="docutils">
 <colgroup>
 <col width="50%" />
@@ -142,35 +142,53 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Backpropagation</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">GradientDescent</span></span></a></td>
 <td>Classic Gradient Descent</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.backprop.gradient_descent.html#neupy.algorithms.backprop.gradient_descent.MinibatchGradientDescent" title="neupy.algorithms.backprop.gradient_descent.MinibatchGradientDescent"><span class="xref py py-class docutils literal"><span class="pre">MinibatchGradientDescent</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.MinibatchGradientDescent" title="neupy.algorithms.gd.base.MinibatchGradientDescent"><span class="xref py py-class docutils literal"><span class="pre">MinibatchGradientDescent</span></span></a></td>
 <td>Mini-batch Gradient Descent</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.backprop.conjugate_gradient.html#neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient" title="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">ConjugateGradient</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">ConjugateGradient</span></span></a></td>
 <td>Conjugate Gradient</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.backprop.quasi_newton.html#neupy.algorithms.backprop.quasi_newton.QuasiNewton" title="neupy.algorithms.backprop.quasi_newton.QuasiNewton"><span class="xref py py-class docutils literal"><span class="pre">QuasiNewton</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.quasi_newton.html#neupy.algorithms.gd.quasi_newton.QuasiNewton" title="neupy.algorithms.gd.quasi_newton.QuasiNewton"><span class="xref py py-class docutils literal"><span class="pre">QuasiNewton</span></span></a></td>
 <td>quasi-Newton</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.backprop.levenberg_marquardt.html#neupy.algorithms.backprop.levenberg_marquardt.LevenbergMarquardt" title="neupy.algorithms.backprop.levenberg_marquardt.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">LevenbergMarquardt</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">LevenbergMarquardt</span></span></a></td>
 <td>Levenberg-Marquardt</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.backprop.hessian_diagonal.html#neupy.algorithms.backprop.hessian_diagonal.HessianDiagonal" title="neupy.algorithms.backprop.hessian_diagonal.HessianDiagonal"><span class="xref py py-class docutils literal"><span class="pre">HessianDiagonal</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.hessian.html#neupy.algorithms.gd.hessian.Hessian" title="neupy.algorithms.gd.hessian.Hessian"><span class="xref py py-class docutils literal"><span class="pre">Hessian</span></span></a></td>
+<td>Hessian</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.hessdiag.html#neupy.algorithms.gd.hessdiag.HessianDiagonal" title="neupy.algorithms.gd.hessdiag.HessianDiagonal"><span class="xref py py-class docutils literal"><span class="pre">HessianDiagonal</span></span></a></td>
 <td>Hessian diagonal</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.backprop.momentum.html#neupy.algorithms.backprop.momentum.Momentum" title="neupy.algorithms.backprop.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a></td>
 <td>Momentum</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.RPROP" title="neupy.algorithms.backprop.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a></td>
 <td>RPROP</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.backprop.rprop.html#neupy.algorithms.backprop.rprop.IRPROPPlus" title="neupy.algorithms.backprop.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">IRPROPPlus</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.IRPROPPlus" title="neupy.algorithms.gd.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">IRPROPPlus</span></span></a></td>
 <td>iRPROP+</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.backprop.quickprop.html#neupy.algorithms.backprop.quickprop.Quickprop" title="neupy.algorithms.backprop.quickprop.Quickprop"><span class="xref py py-class docutils literal"><span class="pre">Quickprop</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.quickprop.html#neupy.algorithms.gd.quickprop.Quickprop" title="neupy.algorithms.gd.quickprop.Quickprop"><span class="xref py py-class docutils literal"><span class="pre">Quickprop</span></span></a></td>
 <td>Quickprop</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adadelta.html#neupy.algorithms.gd.adadelta.Adadelta" title="neupy.algorithms.gd.adadelta.Adadelta"><span class="xref py py-class docutils literal"><span class="pre">Adadelta</span></span></a></td>
+<td>Adadelta</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adagrad.html#neupy.algorithms.gd.adagrad.Adagrad" title="neupy.algorithms.gd.adagrad.Adagrad"><span class="xref py py-class docutils literal"><span class="pre">Adagrad</span></span></a></td>
+<td>Adagrad</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.rmsprop.html#neupy.algorithms.gd.rmsprop.RMSProp" title="neupy.algorithms.gd.rmsprop.RMSProp"><span class="xref py py-class docutils literal"><span class="pre">RMSProp</span></span></a></td>
+<td>RMSProp</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adam.html#neupy.algorithms.gd.adam.Adam" title="neupy.algorithms.gd.adam.Adam"><span class="xref py py-class docutils literal"><span class="pre">Adam</span></span></a></td>
+<td>Adam</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adamax.html#neupy.algorithms.gd.adamax.Adamax" title="neupy.algorithms.gd.adamax.Adamax"><span class="xref py py-class docutils literal"><span class="pre">Adamax</span></span></a></td>
+<td>AdaMax</td>
 </tr>
 </tbody>
 </table>
@@ -213,19 +231,16 @@
 <tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.steps.leak_step.html#neupy.algorithms.steps.leak_step.LeakStepAdaptation" title="neupy.algorithms.steps.leak_step.LeakStepAdaptation"><span class="xref py py-class docutils literal"><span class="pre">LeakStepAdaptation</span></span></a></td>
 <td>Leak Step Adaptation</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.steps.error_difference_update.html#neupy.algorithms.steps.error_difference_update.ErrorDifferenceStepUpdate" title="neupy.algorithms.steps.error_difference_update.ErrorDifferenceStepUpdate"><span class="xref py py-class docutils literal"><span class="pre">ErrorDifferenceStepUpdate</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.steps.errdiff.html#neupy.algorithms.steps.errdiff.ErrDiffStepUpdate" title="neupy.algorithms.steps.errdiff.ErrDiffStepUpdate"><span class="xref py py-class docutils literal"><span class="pre">ErrDiffStepUpdate</span></span></a></td>
 <td>Error difference Update</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.steps.linear_search.html#neupy.algorithms.steps.linear_search.LinearSearch" title="neupy.algorithms.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">LinearSearch</span></span></a></td>
 <td>Linear search by Golden Search or Brent</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.steps.wolfe_search.html#neupy.algorithms.steps.wolfe_search.WolfeSearch" title="neupy.algorithms.steps.wolfe_search.WolfeSearch"><span class="xref py py-class docutils literal"><span class="pre">WolfeSearch</span></span></a></td>
-<td>Wolfe line search</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.steps.search_then_converge.html#neupy.algorithms.steps.search_then_converge.SearchThenConverge" title="neupy.algorithms.steps.search_then_converge.SearchThenConverge"><span class="xref py py-class docutils literal"><span class="pre">SearchThenConverge</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.steps.search_then_converge.html#neupy.algorithms.steps.search_then_converge.SearchThenConverge" title="neupy.algorithms.steps.search_then_converge.SearchThenConverge"><span class="xref py py-class docutils literal"><span class="pre">SearchThenConverge</span></span></a></td>
 <td>Search than converge</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.steps.simple_step_minimization.html#neupy.algorithms.steps.simple_step_minimization.SimpleStepMinimization" title="neupy.algorithms.steps.simple_step_minimization.SimpleStepMinimization"><span class="xref py py-class docutils literal"><span class="pre">SimpleStepMinimization</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.steps.simple_step_minimization.html#neupy.algorithms.steps.simple_step_minimization.SimpleStepMinimization" title="neupy.algorithms.steps.simple_step_minimization.SimpleStepMinimization"><span class="xref py py-class docutils literal"><span class="pre">SimpleStepMinimization</span></span></a></td>
 <td>Simple Step Minimization</td>
 </tr>
 </tbody>
@@ -244,17 +259,17 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.ensemble.mixture_of_experts.html#neupy.ensemble.mixture_of_experts.MixtureOfExperts" title="neupy.ensemble.mixture_of_experts.MixtureOfExperts"><span class="xref py py-class docutils literal"><span class="pre">MixtureOfExperts</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.ensemble.mixture_of_experts.html#neupy.algorithms.ensemble.mixture_of_experts.MixtureOfExperts" title="neupy.algorithms.ensemble.mixture_of_experts.MixtureOfExperts"><span class="xref py py-class docutils literal"><span class="pre">MixtureOfExperts</span></span></a></td>
 <td>Mixture of Experts</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.ensemble.dan.html#neupy.ensemble.dan.DynamicallyAveragedNetwork" title="neupy.ensemble.dan.DynamicallyAveragedNetwork"><span class="xref py py-class docutils literal"><span class="pre">DynamicallyAveragedNetwork</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.ensemble.dan.html#neupy.algorithms.ensemble.dan.DynamicallyAveragedNetwork" title="neupy.algorithms.ensemble.dan.DynamicallyAveragedNetwork"><span class="xref py py-class docutils literal"><span class="pre">DynamicallyAveragedNetwork</span></span></a></td>
 <td>Dynamically Averaged Network (DAN)</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="section" id="radial-basis-functions-networks-rbfn">
-<h3><a class="toc-backref" href="#id7">Radial Basis Functions Networks (RBFN)</a></h3>
+<div class="section" id="neural-networks-with-radial-basis-functions-rbfn">
+<h3><a class="toc-backref" href="#id7">Neural Networks with Radial Basis Functions (RBFN)</a></h3>
 <table border="1" class="docutils">
 <colgroup>
 <col width="50%" />
@@ -338,13 +353,13 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.basics.perceptron.html#neupy.algorithms.basics.perceptron.Perceptron" title="neupy.algorithms.basics.perceptron.Perceptron"><span class="xref py py-class docutils literal"><span class="pre">Perceptron</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.linear.perceptron.html#neupy.algorithms.linear.perceptron.Perceptron" title="neupy.algorithms.linear.perceptron.Perceptron"><span class="xref py py-class docutils literal"><span class="pre">Perceptron</span></span></a></td>
 <td>Perceptron</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.basics.lms.html#neupy.algorithms.basics.lms.LMS" title="neupy.algorithms.basics.lms.LMS"><span class="xref py py-class docutils literal"><span class="pre">LMS</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.linear.lms.html#neupy.algorithms.linear.lms.LMS" title="neupy.algorithms.linear.lms.LMS"><span class="xref py py-class docutils literal"><span class="pre">LMS</span></span></a></td>
 <td>LMS Network</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.basics.modify_relaxation.html#neupy.algorithms.basics.modify_relaxation.ModifiedRelaxation" title="neupy.algorithms.basics.modify_relaxation.ModifiedRelaxation"><span class="xref py py-class docutils literal"><span class="pre">ModifiedRelaxation</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.linear.modify_relaxation.html#neupy.algorithms.linear.modify_relaxation.ModifiedRelaxation" title="neupy.algorithms.linear.modify_relaxation.ModifiedRelaxation"><span class="xref py py-class docutils literal"><span class="pre">ModifiedRelaxation</span></span></a></td>
 <td>Modified Relaxation Network</td>
 </tr>
 </tbody>
@@ -385,52 +400,41 @@
 <h3><a class="toc-backref" href="#id13">Input and hidden layers</a></h3>
 <table border="1" class="docutils">
 <colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="33%" />
+<col width="50%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Class name</th>
 <th class="head">Description</th>
-<th class="head">Has derivative?</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.LinearLayer" title="neupy.layers.layers.LinearLayer"><span class="xref py py-class docutils literal"><span class="pre">LinearLayer</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Linear" title="neupy.layers.layers.Linear"><span class="xref py py-class docutils literal"><span class="pre">Linear</span></span></a></td>
 <td>Layer with linear activation function.</td>
-<td>No</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.SigmoidLayer" title="neupy.layers.layers.SigmoidLayer"><span class="xref py py-class docutils literal"><span class="pre">SigmoidLayer</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Sigmoid" title="neupy.layers.layers.Sigmoid"><span class="xref py py-class docutils literal"><span class="pre">Sigmoid</span></span></a></td>
 <td>Layer with sigmoid activation function.</td>
-<td>Yes</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.StepLayer" title="neupy.layers.layers.StepLayer"><span class="xref py py-class docutils literal"><span class="pre">StepLayer</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.HardSigmoid" title="neupy.layers.layers.HardSigmoid"><span class="xref py py-class docutils literal"><span class="pre">HardSigmoid</span></span></a></td>
+<td>Layer with hard sigmoid activation function.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Step" title="neupy.layers.layers.Step"><span class="xref py py-class docutils literal"><span class="pre">Step</span></span></a></td>
 <td>Layer with step activation function.</td>
-<td>No</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.TanhLayer" title="neupy.layers.layers.TanhLayer"><span class="xref py py-class docutils literal"><span class="pre">TanhLayer</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Tanh" title="neupy.layers.layers.Tanh"><span class="xref py py-class docutils literal"><span class="pre">Tanh</span></span></a></td>
 <td>Layer with tanh activation function.</td>
-<td>Yes</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.RectifierLayer" title="neupy.layers.layers.RectifierLayer"><span class="xref py py-class docutils literal"><span class="pre">RectifierLayer</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Relu" title="neupy.layers.layers.Relu"><span class="xref py py-class docutils literal"><span class="pre">Relu</span></span></a></td>
 <td>Layer with rectifier activation function.</td>
-<td>No</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.SoftplusLayer" title="neupy.layers.layers.SoftplusLayer"><span class="xref py py-class docutils literal"><span class="pre">SoftplusLayer</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Softplus" title="neupy.layers.layers.Softplus"><span class="xref py py-class docutils literal"><span class="pre">Softplus</span></span></a></td>
 <td>Layer with softplus activation function.</td>
-<td>Yes</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.SoftmaxLayer" title="neupy.layers.layers.SoftmaxLayer"><span class="xref py py-class docutils literal"><span class="pre">SoftmaxLayer</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Softmax" title="neupy.layers.layers.Softmax"><span class="xref py py-class docutils literal"><span class="pre">Softmax</span></span></a></td>
 <td>Layer with softmax activation function.</td>
-<td>Yes</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.EuclideDistanceLayer" title="neupy.layers.layers.EuclideDistanceLayer"><span class="xref py py-class docutils literal"><span class="pre">EuclideDistanceLayer</span></span></a></td>
-<td>Layer output equal to Euclide distance between input value and weights.</td>
-<td>No</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.AngleDistanceLayer" title="neupy.layers.layers.AngleDistanceLayer"><span class="xref py py-class docutils literal"><span class="pre">AngleDistanceLayer</span></span></a></td>
-<td>Layer which output equal to cosine distance between input value and weights.</td>
-<td>No</td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Dropout" title="neupy.layers.layers.Dropout"><span class="xref py py-class docutils literal"><span class="pre">Dropout</span></span></a></td>
+<td>Dropout layer</td>
 </tr>
 </tbody>
 </table>
@@ -448,17 +452,20 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.output.html#neupy.layers.output.OutputLayer" title="neupy.layers.output.OutputLayer"><span class="xref py py-class docutils literal"><span class="pre">OutputLayer</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.output.html#neupy.layers.output.Output" title="neupy.layers.output.Output"><span class="xref py py-class docutils literal"><span class="pre">Output</span></span></a></td>
 <td>Simple output layer which does not make any transformations</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.output.html#neupy.layers.output.CompetitiveOutputLayer" title="neupy.layers.output.CompetitiveOutputLayer"><span class="xref py py-class docutils literal"><span class="pre">CompetitiveOutputLayer</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.output.html#neupy.layers.output.CompetitiveOutput" title="neupy.layers.output.CompetitiveOutput"><span class="xref py py-class docutils literal"><span class="pre">CompetitiveOutput</span></span></a></td>
 <td>Competitive layer output</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.output.html#neupy.layers.output.StepOutputLayer" title="neupy.layers.output.StepOutputLayer"><span class="xref py py-class docutils literal"><span class="pre">StepOutputLayer</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.output.html#neupy.layers.output.StepOutput" title="neupy.layers.output.StepOutput"><span class="xref py py-class docutils literal"><span class="pre">StepOutput</span></span></a></td>
 <td>The behaviour for this output layer is the same as for step function.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.output.html#neupy.layers.output.RoundOutputLayer" title="neupy.layers.output.RoundOutputLayer"><span class="xref py py-class docutils literal"><span class="pre">RoundOutputLayer</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.output.html#neupy.layers.output.RoundedOutput" title="neupy.layers.output.RoundedOutput"><span class="xref py py-class docutils literal"><span class="pre">RoundedOutput</span></span></a></td>
 <td>Layer round output value.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.output.html#neupy.layers.output.ArgmaxOutput" title="neupy.layers.output.ArgmaxOutput"><span class="xref py py-class docutils literal"><span class="pre">ArgmaxOutput</span></span></a></td>
+<td>Return number of feature that have maximum value for each sample.</td>
 </tr>
 </tbody>
 </table>
@@ -468,40 +475,35 @@
 <h2><a class="toc-backref" href="#id15">Error functions</a></h2>
 <table border="1" class="docutils">
 <colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="33%" />
+<col width="50%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Function name</th>
 <th class="head">Description</th>
-<th class="head">Has derivative?</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>linear_error(actual, expected)</td>
-<td>Compute difference between expected and actual values</td>
-<td>No</td>
-</tr>
-<tr class="row-odd"><td>mae(actual, expected)</td>
+<tr class="row-even"><td>mae</td>
 <td>Mean absolute error</td>
-<td>No</td>
 </tr>
-<tr class="row-even"><td>mse(actual, expected)</td>
-<td>Mean square error</td>
-<td>Yes</td>
+<tr class="row-odd"><td>mse</td>
+<td>Mean squared error</td>
 </tr>
-<tr class="row-odd"><td>cross_entropy_error(actual, expected, epsilon=1e-10)</td>
-<td>Cross entropy error</td>
-<td>Yes</td>
+<tr class="row-even"><td>rmse</td>
+<td>Root mean squared error</td>
 </tr>
-<tr class="row-even"><td>kullback_leibler(actual, expected)</td>
-<td>Kullback-Leibler error</td>
-<td>Yes</td>
+<tr class="row-odd"><td>msle</td>
+<td>Mean squared logarithmic error</td>
 </tr>
-<tr class="row-odd"><td>rmsle(actual, expected)</td>
+<tr class="row-even"><td>rmsle</td>
 <td>Root mean squared logarithmic error</td>
-<td>Yes</td>
+</tr>
+<tr class="row-odd"><td>categorical_crossentropy</td>
+<td>Cross entropy error</td>
+</tr>
+<tr class="row-even"><td>binary_crossentropy</td>
+<td>Cross entropy error</td>
 </tr>
 </tbody>
 </table>
@@ -513,7 +515,7 @@
         
         
         </div><ul class="related clearfix">
-            <li class="left"> &laquo; <a href="secondary/sklearn-compatibility.html">Scikit-learn compatibility</a></li>
+            <li class="left"> &laquo; <a href="secondary/environments.html">Environments</a></li>
             <li class="right"><a href="../pages/installation.html">Installation</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
@@ -524,7 +526,7 @@
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -553,7 +555,7 @@
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

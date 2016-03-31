@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="Visualize Backpropagation Algorithms" href="visualize_backpropagation_algorithms.html" /><link rel="prev" title="Discrete Hopfiel Network" href="../../09/20/discrete_hopfield_network.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Visualize Gradient Descent Algorithms" href="visualize_backpropagation_algorithms.html" /><link rel="prev" title="Discrete Hopfiel Network" href="../../09/20/discrete_hopfield_network.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.5',
@@ -326,11 +326,10 @@ To fix this issue we should transfrom all columns to get similar ranges.</p>
 </table><p>All the data is now in the range between 0 and 1.</p>
 <p>Then we should split our data set into train and validation.
 We use 85% of data for train.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
 
-<span class="c"># To make result reproducible</span>
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
 
 <span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
     <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mf">0.85</span>
@@ -342,14 +341,14 @@ We use 85% of data for train.</p>
 
 <span class="n">cgnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">ConjugateGradient</span><span class="p">(</span>
     <span class="n">connection</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">SigmoidLayer</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">SigmoidLayer</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">OutputLayer</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Output</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
     <span class="p">],</span>
     <span class="n">search_method</span><span class="o">=</span><span class="s">&#39;golden&#39;</span><span class="p">,</span>
     <span class="n">show_epoch</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-    <span class="n">optimizations</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LinearSearch</span><span class="p">],</span>
+    <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LinearSearch</span><span class="p">],</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -362,7 +361,7 @@ This value is just a guess.
 For better and more accurate result we should choose it with other methods, but for now we can use this value.
 As the main algorithm we take Conjugate Gradient.
 This implementation of backpropagation is a little bit different from main interpretation of Conjugate Gradient.
-For Backpropagation implementation we can&#8217;t guarantee that we get the local minimum in n-th steps (where <cite>n</cite> is the dimention).
+For GradientDescent implementation we can&#8217;t guarantee that we get the local minimum in n-th steps (where <cite>n</cite> is the dimention).
 To optimize it we should use linear search.
 It will fix and set up better steps for Conjugate Gradient.</p>
 <p>Now we are going to train the network.
@@ -385,7 +384,7 @@ Also we will add test data into training function to check validation error on e
 The problem is, that last error doesn&#8217;t show us the full picture of prediction accuracy.
 Our output is always between zero and one and we count the results always into Mean Square Error.
 To fix it, we are going to inverse our transformation for predicted and actual values and for accuracy measurment we will use Root Mean Square Logarithmic Error (RMSLE).</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy.functions.errors</span> <span class="kn">import</span> <span class="n">rmsle</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy.estimators</span> <span class="kn">import</span> <span class="n">rmsle</span>
 
 <span class="n">y_predict</span> <span class="o">=</span> <span class="n">cgnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">error</span> <span class="o">=</span> <span class="n">rmsle</span><span class="p">(</span><span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_test</span><span class="p">),</span>
@@ -393,7 +392,7 @@ To fix it, we are going to inverse our transformation for predicted and actual v
 <span class="k">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Now we can see that our error equals to <cite>0.2098</cite> which is pretty small.
+<p>Now we can see that our error approximately equals to <cite>0.22</cite> which is pretty small.
 In the table below you can find 10 randomly chosen errors.</p>
 <table border="1" class="dataframe">
   <thead>
@@ -460,7 +459,7 @@ There are a lot of things which we can do to improve network results, but we wil
         </div>
         </div><ul class="related clearfix">
             <li class="left"> &laquo; <a href="../../09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a></li>
-            <li class="right"><a href="visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a> &raquo; </li>
+            <li class="right"><a href="visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a> &raquo; </li>
         </ul><div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "neupy";    var disqus_identifier = "2015/07/04/boston_house_prices_dataset";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
@@ -470,7 +469,7 @@ There are a lot of things which we can do to improve network results, but we wil
         </li><li>
             <a href="#">Boston house-prices dataset</a>
         </li><li>
-            <a href="visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -499,7 +498,7 @@ There are a lot of things which we can do to improve network results, but we wil
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../../../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

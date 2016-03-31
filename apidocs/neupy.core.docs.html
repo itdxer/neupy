@@ -101,6 +101,39 @@
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.core.docs">
 <span id="neupy-core-docs-module"></span><h1>neupy.core.docs module</h1>
+<dl class="class">
+<dt id="neupy.core.docs.SharedDocsMeta">
+<em class="property">class </em><span class="descclassname">neupy.core.docs.</span><span class="descname">SharedDocsMeta</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/docs.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">type</span></span></p>
+<p>Meta-class for shared documentation. This class conatains main
+functionality that help inherit parameters and methods descriptions
+from parent classes. This class automaticaly format class documentation
+using basic python format syntax for objects.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.core.docs.SharedDocs">
+<em class="property">class </em><span class="descclassname">neupy.core.docs.</span><span class="descname">SharedDocs</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/docs.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">object</span></span></p>
+<p>Main class that provide with shared documentation functionality.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="neupy.core.docs.SharedDocsException">
+<em class="property">exception </em><span class="descclassname">neupy.core.docs.</span><span class="descname">SharedDocsException</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/docs.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">Exception</span></span></p>
+<p>Exception that help identify problems related to shared
+documentation.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.core.docs.SharedDocsABCMeta">
+<em class="property">class </em><span class="descclassname">neupy.core.docs.</span><span class="descname">SharedDocsABCMeta</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/docs.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#neupy.core.docs.SharedDocsMeta" title="neupy.core.docs.SharedDocsMeta"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.docs.SharedDocsMeta</span></span></a>, <span class="xref py py-class docutils literal"><span class="pre">abc.ABCMeta</span></span></p>
+<p>Meta-class that combine <span class="docutils literal"><span class="pre">SharedDocsMeta</span></span> and <span class="docutils literal"><span class="pre">ABCMeta</span></span>
+meta-classes.</p>
+</dd></dl>
+
 </div>
 
     <div class="postmeta">
@@ -116,7 +149,7 @@
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -145,7 +178,7 @@
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

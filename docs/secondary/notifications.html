@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="next" title="Functions" href="functions.html" /><link rel="prev" title="Signals" href="signals.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Commands" href="commands.html" /><link rel="prev" title="Signals" href="signals.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
         VERSION:     '1.5',
@@ -122,7 +122,7 @@ process will be finished.</p>
 <span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">on_train_end</span><span class="p">(</span><span class="n">network</span><span class="p">):</span>
-    <span class="n">last_error</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">last_error</span><span class="p">()</span>
+    <span class="n">last_error</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
     <span class="n">send_sms</span><span class="p">(</span><span class="s">&quot;Train finished. Last error: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">last_error</span><span class="p">))</span>
 
 <span class="n">lmnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">LevenbergMarquardt</span><span class="p">(</span>
@@ -140,7 +140,7 @@ process will be finished.</p>
         
         </div><ul class="related clearfix">
             <li class="left"> &laquo; <a href="signals.html">Signals</a></li>
-            <li class="right"><a href="functions.html">Functions</a> &raquo; </li>
+            <li class="right"><a href="commands.html">Commands</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
@@ -150,7 +150,7 @@ process will be finished.</p>
         </li><li>
             <a href="../../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -179,7 +179,7 @@ process will be finished.</p>
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

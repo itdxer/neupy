@@ -119,7 +119,8 @@ Defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.<
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><p class="first last"><strong>It works with any algorithm based on backpropagation.     Class can&#8217;t work without it.</strong></p>
+<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><p class="first"><strong>It works with any algorithm based on backpropagation. Class can&#8217;t</strong></p>
+<p class="last"><strong>work without it.</strong></p>
 </td>
 </tr>
 </tbody>
@@ -131,11 +132,11 @@ Defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.<
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Backpropagation</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">optimizations</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">WeightDecay</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">WeightDecay</span><span class="p">]</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 </pre></div>
@@ -146,8 +147,8 @@ Defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.<
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="neupy.algorithms.weights.weight_decay.WeightDecay.layer_weight_update">
-<span class="descname">layer_weight_update</span><span class="sig-paren">(</span><em>delta</em>, <em>layer_number</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/weights/weight_decay.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.algorithms.weights.weight_decay.WeightDecay.init_param_updates">
+<span class="descname">init_param_updates</span><span class="sig-paren">(</span><em>layer</em>, <em>parameter</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/weights/weight_decay.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -172,7 +173,7 @@ Defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.<
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -201,7 +202,7 @@ Defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.<
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

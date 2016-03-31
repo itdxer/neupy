@@ -122,7 +122,7 @@ quantization, defaults to <span class="docutils literal"><span class="pre">10</s
 </div></blockquote>
 <p><strong>step</strong> : float</p>
 <blockquote>
-<div><p>Learns step, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
+<div><p>Learning rate, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
 </div></blockquote>
 <p><strong>show_epoch</strong> : int or str</p>
 <blockquote>
@@ -138,14 +138,14 @@ a syntax word <span class="docutils literal"><span class="pre">time</span></span
 For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that the network will show
 output twice with approximately equal period of epochs and one
 additional output would be after the finall epoch.
-Defaults to <span class="docutils literal"><span class="pre">'10</span> <span class="pre">times'</span></span>.</p>
+Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
 </div></blockquote>
 <p><strong>shuffle_data</strong> : bool</p>
 <blockquote>
 <div><p>If it&#8217;s <span class="docutils literal"><span class="pre">True</span></span> class shuffles all your training data before
 training your network, defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
 </div></blockquote>
-<p><strong>train_epoch_end_signal</strong> : function</p>
+<p><strong>epoch_end_signal</strong> : function</p>
 <blockquote>
 <div><p>Calls this function when train epoch finishes.</p>
 </div></blockquote>
@@ -160,7 +160,7 @@ training your network, defaults to <span class="docutils literal"><span class="p
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li>Network always use Mean Absolute Error (MAE).</li>
-<li>Works for single and multi output values.</li>
+<li>Works for multi dimentional target values.</li>
 </ul>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -187,6 +187,18 @@ training your network, defaults to <span class="docutils literal"><span class="p
 <span class="go">0.0023639417543036569</span>
 </pre></div>
 </div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>weights</td>
+<td>(dict) Neural network weights that contain memorized patterns.</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -194,19 +206,16 @@ training your network, defaults to <span class="docutils literal"><span class="p
 <col width="75%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>fit(*args, **kwargs)</td>
-<td>The same as <span class="docutils literal"><span class="pre">train</span></span> method.</td>
-</tr>
-<tr class="row-even"><td>train(input_train, target_train, input_test=None,    target_test=None, epochs=100, epsilon=None):</td>
-<td>Trains network. You can control network training procedure iterations with the number of epochs or converge value epsilon. Also you can specify <span class="docutils literal"><span class="pre">input_test</span></span> and <span class="docutils literal"><span class="pre">target_test</span></span> and control your validation data error on each iteration.</td>
-</tr>
 <tr class="row-odd"><td>predict(input_data)</td>
 <td>Predict value.</td>
 </tr>
-<tr class="row-even"><td>last_error()</td>
-<td>Returns the last error network result after training procedure or <span class="docutils literal"><span class="pre">None</span></span> value if you try to get it before network training.</td>
+<tr class="row-even"><td>train(input_train, target_train, input_test=None, target_test=None,    epochs=100, epsilon=None)</td>
+<td>Trains network. You can control network training procedure iterations with the number of epochs or converge value epsilon. Also you can specify <span class="docutils literal"><span class="pre">input_test</span></span> and <span class="docutils literal"><span class="pre">target_test</span></span> and control your validation data error on each iteration.</td>
 </tr>
-<tr class="row-odd"><td>plot_errors(logx=False)</td>
+<tr class="row-odd"><td>fit(*args, **kwargs)</td>
+<td>The same as <span class="docutils literal"><span class="pre">train</span></span> method.</td>
+</tr>
+<tr class="row-even"><td>plot_errors(logx=False)</td>
 <td>Draws the error rate update plot. It always shows network learning progress. When you add cross validation data set into training function it displays validation data set error as separated curve. If parameter <span class="docutils literal"><span class="pre">logx</span></span> is equal to the <span class="docutils literal"><span class="pre">True</span></span> value it displays x-axis in logarithmic scale.</td>
 </tr>
 </tbody>
@@ -228,7 +237,7 @@ training your network, defaults to <span class="docutils literal"><span class="p
 
 <dl class="attribute">
 <dt id="neupy.algorithms.memory.cmac.CMAC.options">
-<span class="descname">options</span><em class="property"> = {'show_epoch': Option(class_name='BaseNetwork', value=10 times), 'step': Option(class_name='BaseNetwork', value=0.1), 'use_bias': Option(class_name='BaseNetwork', value=True), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'error': Option(class_name='BaseNetwork', value=mse), 'quantization': Option(class_name='CMAC', value=10), 'associative_unit_size': Option(class_name='CMAC', value=2), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'train_epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'verbose': Option(class_name='Verbose', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'step': Option(class_name='BaseNetwork', value=0.1), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'associative_unit_size': Option(class_name='CMAC', value=2), 'verbose': Option(class_name='Verbose', value=False), 'quantization': Option(class_name='CMAC', value=10)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -244,11 +253,6 @@ training your network, defaults to <span class="docutils literal"><span class="p
 <dl class="method">
 <dt id="neupy.algorithms.memory.cmac.CMAC.quantize">
 <span class="descname">quantize</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="neupy.algorithms.memory.cmac.CMAC.setup_defaults">
-<span class="descname">setup_defaults</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -273,7 +277,7 @@ training your network, defaults to <span class="docutils literal"><span class="p
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -302,7 +306,7 @@ training your network, defaults to <span class="docutils literal"><span class="p
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

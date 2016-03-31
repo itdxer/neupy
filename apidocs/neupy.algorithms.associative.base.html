@@ -103,10 +103,118 @@
 <span id="neupy-algorithms-associative-base-module"></span><h1>neupy.algorithms.associative.base module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.associative.base.BaseStepAssociative">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.associative.base.</span><span class="descname">BaseStepAssociative</span><span class="sig-paren">(</span><em>connection</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.associative.base.</span><span class="descname">BaseStepAssociative</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.associative.base.BaseAssociative</span></span></p>
 <p>Base class for associative algorithms which have 2 layers and first
 one is has step function as activation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_inputs</strong> : int</p>
+<blockquote>
+<div><p>Number of input units.</p>
+</div></blockquote>
+<p><strong>n_outputs</strong> : int</p>
+<blockquote>
+<div><p>Number of output units.</p>
+</div></blockquote>
+<p><strong>n_unconditioned</strong> : int</p>
+<blockquote>
+<div><p>Number of unconditioned units in neraul networks. All these
+units wouldn&#8217;t update during the training procedure.
+Unconditioned should be the first features in dataset.</p>
+</div></blockquote>
+<p><strong>weight</strong> : array-like</p>
+<blockquote>
+<div><p>Neural network weights. <span class="docutils literal"><span class="pre">None</span></span> mean that network weight would
+be generated randomly. Value defined manualy should have
+shape <span class="docutils literal"><span class="pre">(n_inputs,</span> <span class="pre">n_outputs)</span></span>. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+<p><strong>bias</strong> : array-like</p>
+<blockquote>
+<div><p>Neural network bias units. The same behaviour as for parameter
+<span class="docutils literal"><span class="pre">weight</span></span>. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+<p><strong>step</strong> : float</p>
+<blockquote>
+<div><p>Learning rate, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
+</div></blockquote>
+<p><strong>show_epoch</strong> : int or str</p>
+<blockquote>
+<div><p>This property controls how often the network will display information
+about training. There are two main syntaxes for this property.
+You can describe it as positive integer number and it
+will describe how offen would you like to see summary output in
+terminal. For instance, number <cite>100</cite> mean that network will show you
+summary in 100, 200, 300 ... epochs. String value should be in a
+specific format. It should contain the number of times that the output
+will be displayed in the terminal. The second part is just
+a syntax word <span class="docutils literal"><span class="pre">time</span></span> or <span class="docutils literal"><span class="pre">times</span></span> just to make text readable.
+For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that the network will show
+output twice with approximately equal period of epochs and one
+additional output would be after the finall epoch.
+Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</div></blockquote>
+<p><strong>shuffle_data</strong> : bool</p>
+<blockquote>
+<div><p>If it&#8217;s <span class="docutils literal"><span class="pre">True</span></span> class shuffles all your training data before
+training your network, defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
+</div></blockquote>
+<p><strong>epoch_end_signal</strong> : function</p>
+<blockquote>
+<div><p>Calls this function when train epoch finishes.</p>
+</div></blockquote>
+<p><strong>train_end_signal</strong> : function</p>
+<blockquote>
+<div><p>Calls this function when train process finishes.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool</p>
+<blockquote class="last">
+<div><p>Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
+informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> -
+disable it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="91%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>predict(input_data)</td>
+<td>Predict value.</td>
+</tr>
+<tr class="row-even"><td>train(input_train, epochs=100)</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>fit(*args, **kwargs)</td>
+<td>The same as <span class="docutils literal"><span class="pre">train</span></span> method.</td>
+</tr>
+<tr class="row-even"><td>plot_errors(logx=False)</td>
+<td>Draws the error rate update plot. It always shows network learning progress. When you add cross validation data set into training function it displays validation data set error as separated curve. If parameter <span class="docutils literal"><span class="pre">logx</span></span> is equal to the <span class="docutils literal"><span class="pre">True</span></span> value it displays x-axis in logarithmic scale.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.algorithms.associative.base.BaseStepAssociative.bias">
+<span class="descname">bias</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.associative.base.BaseStepAssociative.init_layers">
+<span class="descname">init_layers</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.associative.base.BaseStepAssociative.n_inputs">
+<span class="descname">n_inputs</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="neupy.algorithms.associative.base.BaseStepAssociative.n_unconditioned">
 <span class="descname">n_unconditioned</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -114,7 +222,17 @@ one is has step function as activation.</p>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.associative.base.BaseStepAssociative.options">
-<span class="descname">options</span><em class="property"> = {'show_epoch': Option(class_name='BaseNetwork', value=10 times), 'step': Option(class_name='BaseNetwork', value=0.1), 'use_bias': Option(class_name='BaseNetwork', value=True), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'error': Option(class_name='BaseNetwork', value=mse), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'train_epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'verbose': Option(class_name='Verbose', value=False), 'n_unconditioned': Option(class_name='BaseStepAssociative', value=1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'step': Option(class_name='BaseNetwork', value=0.1), 'n_inputs': Option(class_name='BaseStepAssociative', value=None), 'bias': Option(class_name='BaseStepAssociative', value=None), 'weight': Option(class_name='BaseAssociative', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'n_unconditioned': Option(class_name='BaseStepAssociative', value=None), 'n_outputs': Option(class_name='BaseAssociative', value=None), 'verbose': Option(class_name='Verbose', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.associative.base.BaseStepAssociative.predict">
+<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.associative.base.BaseStepAssociative.train">
+<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -139,7 +257,7 @@ one is has step function as activation.</p>
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -168,7 +286,7 @@ one is has step function as activation.</p>
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

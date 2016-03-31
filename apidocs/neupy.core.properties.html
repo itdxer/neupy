@@ -101,234 +101,268 @@
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.core.properties">
 <span id="neupy-core-properties-module"></span><h1>neupy.core.properties module</h1>
-<dl class="class">
+<dl class="attribute">
+<dt id="neupy.core.properties.BaseProperty">
+<span class="descclassname">neupy.core.properties.</span><span class="descname">BaseProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Base class for properties.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>default</strong> : object</p>
+<blockquote>
+<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+<p><strong>required</strong> : bool</p>
+<blockquote class="last">
+<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value undefined after
+initialization class then it will cause an error.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="neupy.core.properties.Property">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">Property</span><span class="sig-paren">(</span><em>name=None</em>, <em>default=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">object</span></span></p>
-<dl class="attribute">
-<dt id="neupy.core.properties.Property.disable">
-<span class="descname">disable</span><em class="property"> = True</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.core.properties.Property.expected_type">
-<span class="descname">expected_type</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>alias of <span class="xref py py-class docutils literal"><span class="pre">object</span></span></p>
+<span class="descclassname">neupy.core.properties.</span><span class="descname">Property</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Simple and flexible class that helps indetify properties with
+specified type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>expected_type</strong> : object</p>
+<blockquote>
+<div><p>Valid data type.</p>
+</div></blockquote>
+<p><strong>default</strong> : object</p>
+<blockquote>
+<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+<p><strong>required</strong> : bool</p>
+<blockquote class="last">
+<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value undefined after
+initialization class then it will cause an error.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
-
-<dl class="method">
-<dt id="neupy.core.properties.Property.validate">
-<span class="descname">validate</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="neupy.core.properties.CheckSizeProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">CheckSizeProperty</span><span class="sig-paren">(</span><em>min_size=None</em>, <em>max_size=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.Property" title="neupy.core.properties.Property"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.Property</span></span></a></p>
-<dl class="attribute">
-<dt id="neupy.core.properties.CheckSizeProperty.max_size">
-<span class="descname">max_size</span><em class="property"> = inf</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.core.properties.CheckSizeProperty.min_size">
-<span class="descname">min_size</span><em class="property"> = -inf</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="neupy.core.properties.CheckSizeProperty.validate">
-<span class="descname">validate</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="neupy.core.properties.NumberProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">NumberProperty</span><span class="sig-paren">(</span><em>name=None</em>, <em>default=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.Property" title="neupy.core.properties.Property"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.Property</span></span></a></p>
-<dl class="attribute">
-<dt id="neupy.core.properties.NumberProperty.expected_type">
-<span class="descname">expected_type</span><em class="property"> = (&lt;class 'float'&gt;, &lt;class 'int'&gt;)</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="neupy.core.properties.BoolProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">BoolProperty</span><span class="sig-paren">(</span><em>name=None</em>, <em>default=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.Property" title="neupy.core.properties.Property"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.Property</span></span></a></p>
-<dl class="attribute">
-<dt id="neupy.core.properties.BoolProperty.expected_type">
-<span class="descname">expected_type</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>alias of <span class="xref py py-class docutils literal"><span class="pre">bool</span></span></p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="neupy.core.properties.BetweenZeroAndOneProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">BetweenZeroAndOneProperty</span><span class="sig-paren">(</span><em>min_size=None</em>, <em>max_size=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.NumberProperty" title="neupy.core.properties.NumberProperty"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.NumberProperty</span></span></a>, <a class="reference internal" href="#neupy.core.properties.CheckSizeProperty" title="neupy.core.properties.CheckSizeProperty"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.CheckSizeProperty</span></span></a></p>
-<dl class="attribute">
-<dt id="neupy.core.properties.BetweenZeroAndOneProperty.max_size">
-<span class="descname">max_size</span><em class="property"> = 1</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.core.properties.BetweenZeroAndOneProperty.min_size">
-<span class="descname">min_size</span><em class="property"> = 0</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="neupy.core.properties.FuncProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">FuncProperty</span><span class="sig-paren">(</span><em>name=None</em>, <em>default=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.Property" title="neupy.core.properties.Property"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.Property</span></span></a></p>
-<dl class="attribute">
-<dt id="neupy.core.properties.FuncProperty.expected_type">
-<span class="descname">expected_type</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>alias of <span class="xref py py-class docutils literal"><span class="pre">function</span></span></p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="neupy.core.properties.IntBoundProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">IntBoundProperty</span><span class="sig-paren">(</span><em>name=None</em>, <em>default=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.ListOfTypesProperty" title="neupy.core.properties.ListOfTypesProperty"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.ListOfTypesProperty</span></span></a></p>
-</dd></dl>
-
-<dl class="class">
 <dt id="neupy.core.properties.ArrayProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">ArrayProperty</span><span class="sig-paren">(</span><em>name=None</em>, <em>default=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.Property" title="neupy.core.properties.Property"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.Property</span></span></a></p>
-<dl class="attribute">
-<dt id="neupy.core.properties.ArrayProperty.expected_type">
-<span class="descname">expected_type</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>alias of <span class="xref py py-class docutils literal"><span class="pre">ndarray</span></span></p>
+<span class="descclassname">neupy.core.properties.</span><span class="descname">ArrayProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Numpy array or matrix property.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>default</strong> : object</p>
+<blockquote>
+<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+<p><strong>required</strong> : bool</p>
+<blockquote class="last">
+<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value undefined after
+initialization class then it will cause an error.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="neupy.core.properties.ListOfTypesProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">ListOfTypesProperty</span><span class="sig-paren">(</span><em>name=None</em>, <em>default=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.Property" title="neupy.core.properties.Property"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.Property</span></span></a></p>
-<dl class="attribute">
-<dt id="neupy.core.properties.ListOfTypesProperty.count">
-<span class="descname">count</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.core.properties.ListOfTypesProperty.expected_type">
-<span class="descname">expected_type</span><em class="property"> = (&lt;class 'list'&gt;, &lt;class 'tuple'&gt;, &lt;class 'set'&gt;)</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.core.properties.ListOfTypesProperty.inner_list_type">
-<span class="descname">inner_list_type</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>alias of <span class="xref py py-class docutils literal"><span class="pre">int</span></span></p>
+<dt id="neupy.core.properties.BoundedProperty">
+<span class="descclassname">neupy.core.properties.</span><span class="descname">BoundedProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Number property that have specified numerical bounds.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minval</strong> : float</p>
+<blockquote>
+<div><p>Minimum possible value for the property.</p>
+</div></blockquote>
+<p><strong>maxval</strong> : float</p>
+<blockquote>
+<div><p>Maximum possible value for the property.</p>
+</div></blockquote>
+<p><strong>default</strong> : object</p>
+<blockquote>
+<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+<p><strong>required</strong> : bool</p>
+<blockquote class="last">
+<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value undefined after
+initialization class then it will cause an error.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
-<dt id="neupy.core.properties.ListOfTypesProperty.validate">
-<span class="descname">validate</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="neupy.core.properties.ListProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">ListProperty</span><span class="sig-paren">(</span><em>name=None</em>, <em>default=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.Property" title="neupy.core.properties.Property"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.Property</span></span></a></p>
 <dl class="attribute">
-<dt id="neupy.core.properties.ListProperty.expected_type">
-<span class="descname">expected_type</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>alias of <span class="xref py py-class docutils literal"><span class="pre">list</span></span></p>
+<dt id="neupy.core.properties.ProperFractionProperty">
+<span class="descclassname">neupy.core.properties.</span><span class="descname">ProperFractionProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Proper fraction property. Identify all possible numbers
+between zero and one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>default</strong> : object</p>
+<blockquote>
+<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+<p><strong>required</strong> : bool</p>
+<blockquote class="last">
+<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value undefined after
+initialization class then it will cause an error.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="class">
-<dt id="neupy.core.properties.DictProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">DictProperty</span><span class="sig-paren">(</span><em>name=None</em>, <em>default=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.Property" title="neupy.core.properties.Property"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.Property</span></span></a></p>
 <dl class="attribute">
-<dt id="neupy.core.properties.DictProperty.expected_type">
-<span class="descname">expected_type</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>alias of <span class="xref py py-class docutils literal"><span class="pre">dict</span></span></p>
+<dt id="neupy.core.properties.NumberProperty">
+<span class="descclassname">neupy.core.properties.</span><span class="descname">NumberProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Float or integer number property.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minval</strong> : float</p>
+<blockquote>
+<div><p>Minimum possible value for the property.</p>
+</div></blockquote>
+<p><strong>maxval</strong> : float</p>
+<blockquote>
+<div><p>Maximum possible value for the property.</p>
+</div></blockquote>
+<p><strong>default</strong> : object</p>
+<blockquote>
+<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+<p><strong>required</strong> : bool</p>
+<blockquote class="last">
+<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value undefined after
+initialization class then it will cause an error.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="class">
+<dl class="attribute">
 <dt id="neupy.core.properties.IntProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">IntProperty</span><span class="sig-paren">(</span><em>name=None</em>, <em>default=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.Property" title="neupy.core.properties.Property"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.Property</span></span></a></p>
+<span class="descclassname">neupy.core.properties.</span><span class="descname">IntProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Integer property.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minval</strong> : float</p>
+<blockquote>
+<div><p>Minimum possible value for the property.</p>
+</div></blockquote>
+<p><strong>maxval</strong> : float</p>
+<blockquote>
+<div><p>Maximum possible value for the property.</p>
+</div></blockquote>
+<p><strong>default</strong> : object</p>
+<blockquote>
+<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+<p><strong>required</strong> : bool</p>
+<blockquote class="last">
+<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value undefined after
+initialization class then it will cause an error.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
-<dt id="neupy.core.properties.IntProperty.expected_type">
-<span class="descname">expected_type</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>alias of <span class="xref py py-class docutils literal"><span class="pre">int</span></span></p>
+<dt id="neupy.core.properties.TypedListProperty">
+<span class="descclassname">neupy.core.properties.</span><span class="descname">TypedListProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>List property that contains specified element types.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_elements</strong> : int</p>
+<blockquote>
+<div><p>Indentify fixed number of elements in list. <span class="docutils literal"><span class="pre">None</span></span> value mean
+that list can contains any number of elements. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+<p><strong>element_type</strong> : object or tuple</p>
+<blockquote>
+<div><p>There are could be defined valid list elementy type or a bunch
+of them as tuple.</p>
+</div></blockquote>
+<p><strong>default</strong> : object</p>
+<blockquote>
+<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+<p><strong>required</strong> : bool</p>
+<blockquote class="last">
+<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value undefined after
+initialization class then it will cause an error.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="class">
-<dt id="neupy.core.properties.StringProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">StringProperty</span><span class="sig-paren">(</span><em>name=None</em>, <em>default=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.Property" title="neupy.core.properties.Property"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.Property</span></span></a></p>
 <dl class="attribute">
-<dt id="neupy.core.properties.StringProperty.expected_type">
-<span class="descname">expected_type</span><em class="property"> = (&lt;class 'str'&gt;,)</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="neupy.core.properties.NonNegativeIntProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">NonNegativeIntProperty</span><span class="sig-paren">(</span><em>min_size=None</em>, <em>max_size=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.IntProperty" title="neupy.core.properties.IntProperty"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.IntProperty</span></span></a>, <a class="reference internal" href="#neupy.core.properties.CheckSizeProperty" title="neupy.core.properties.CheckSizeProperty"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.CheckSizeProperty</span></span></a></p>
-<dl class="attribute">
-<dt id="neupy.core.properties.NonNegativeIntProperty.min_size">
-<span class="descname">min_size</span><em class="property"> = 0</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="neupy.core.properties.NonNegativeNumberProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">NonNegativeNumberProperty</span><span class="sig-paren">(</span><em>min_size=None</em>, <em>max_size=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.NumberProperty" title="neupy.core.properties.NumberProperty"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.NumberProperty</span></span></a>, <a class="reference internal" href="#neupy.core.properties.CheckSizeProperty" title="neupy.core.properties.CheckSizeProperty"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.CheckSizeProperty</span></span></a></p>
-<dl class="attribute">
-<dt id="neupy.core.properties.NonNegativeNumberProperty.min_size">
-<span class="descname">min_size</span><em class="property"> = 0</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="neupy.core.properties.ChoiceProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">ChoiceProperty</span><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.Property" title="neupy.core.properties.Property"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.Property</span></span></a></p>
-<dl class="attribute">
-<dt id="neupy.core.properties.ChoiceProperty.choices">
-<span class="descname">choices</span><em class="property"> = {}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="neupy.core.properties.NumberBoundProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">NumberBoundProperty</span><span class="sig-paren">(</span><em>name=None</em>, <em>default=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.core.properties.ListOfTypesProperty" title="neupy.core.properties.ListOfTypesProperty"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.properties.ListOfTypesProperty</span></span></a></p>
-<dl class="attribute">
-<dt id="neupy.core.properties.NumberBoundProperty.inner_list_type">
-<span class="descname">inner_list_type</span><em class="property"> = (&lt;class 'int'&gt;, &lt;class 'float'&gt;)</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
+<span class="descclassname">neupy.core.properties.</span><span class="descname">ChoiceProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Property that can have discrete number of properties.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>choices</strong> : list, tuple or dict</p>
+<blockquote>
+<div><p>Identify all posible choices. Dictionary choices ties values
+with some names that can help easily chang options between
+some specific object like functions. List or tuple choices
+do the same as dictionary, but they are useful in case when
+keys and values should be the same.</p>
+</div></blockquote>
+<p><strong>default</strong> : object</p>
+<blockquote>
+<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+<p><strong>required</strong> : bool</p>
+<blockquote class="last">
+<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value undefined after
+initialization class then it will cause an error.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -346,7 +380,7 @@
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -375,7 +409,7 @@
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

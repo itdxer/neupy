@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="next" title="Classes and functions" href="../algorithms.html" /><link rel="prev" title="Commands" href="commands.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Environments" href="environments.html" /><link rel="prev" title="Commands" href="commands.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
         VERSION:     '1.5',
@@ -106,7 +106,7 @@ NeuPy contains a few compatibilities for making possible interaction with some s
 <p>First of all instead of <span class="docutils literal"><span class="pre">train</span></span> method you can use <span class="docutils literal"><span class="pre">fit</span></span>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 
-<span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Backpropagation</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="mi">1</span><span class="p">))</span>
 <span class="n">bpnet</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -116,7 +116,7 @@ NeuPy contains a few compatibilities for making possible interaction with some s
 
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">Pipeline</span><span class="p">([</span>
     <span class="p">(</span><span class="s">&#39;min_max_scaler&#39;</span><span class="p">,</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">MinMaxScaler</span><span class="p">()),</span>
-    <span class="p">(</span><span class="s">&#39;backpropagation&#39;</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Backpropagation</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))),</span>
+    <span class="p">(</span><span class="s">&#39;backpropagation&#39;</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))),</span>
 <span class="p">])</span>
 
 <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">backpropagation__epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
@@ -131,7 +131,7 @@ NeuPy contains a few compatibilities for making possible interaction with some s
         
         </div><ul class="related clearfix">
             <li class="left"> &laquo; <a href="commands.html">Commands</a></li>
-            <li class="right"><a href="../algorithms.html">Classes and functions</a> &raquo; </li>
+            <li class="right"><a href="environments.html">Environments</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
@@ -141,7 +141,7 @@ NeuPy contains a few compatibilities for making possible interaction with some s
         </li><li>
             <a href="../../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -170,7 +170,7 @@ NeuPy contains a few compatibilities for making possible interaction with some s
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

@@ -9,6 +9,6 @@ This part of documentation contains secondary feature from NeuPy library.
 
     secondary/signals
     secondary/notifications
-    secondary/functions
     secondary/commands
     secondary/sklearn-compatibility
+    secondary/environments

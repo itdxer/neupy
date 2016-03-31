@@ -102,9 +102,9 @@
     <div class="section" id="storage">
 <h1>Storage</h1>
 <p>After succesful learning you can save network and later use it for prediction tasks.
-There already exists awesome module - <a class="reference external" href="https://github.com/uqfoundation/dill">dill</a>.
+There already exists awesome library - <a class="reference external" href="https://github.com/uqfoundation/dill">dill</a>.
 As a <span class="docutils literal"><span class="pre">pickle</span></span> library <span class="docutils literal"><span class="pre">dill</span></span> provides similar interface to serialize and de-serialize built-in python objects.
-The main advantage of this is a model that can store a network class and attributes without additional functionality.</p>
+The main advantage of this is a functionality that can store a network class and attributes without additional functionality.</p>
 <p>First of all you need to install <span class="docutils literal"><span class="pre">dill</span></span> library</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install dill&gt;<span class="o">=</span>0.2.3
 </pre></div>
@@ -123,7 +123,7 @@ The main advantage of this is a model that can store a network class and attribu
 <span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">MinMaxScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c"># Init and train network</span>
-<span class="gp">... </span><span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Backpropagation</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span><span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">predicted</span> <span class="o">=</span> <span class="n">bpnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -156,7 +156,7 @@ The main advantage of this is a model that can store a network class and attribu
 </pre></div>
 </div>
 <p>The interface for <span class="docutils literal"><span class="pre">dill</span></span> library is the same as for <span class="docutils literal"><span class="pre">pickle</span></span>, so functions
-like <span class="docutils literal"><span class="pre">dumps</span></span> or <span class="docutils literal"><span class="pre">loads</span></span> are also available.</p>
+like <span class="docutils literal"><span class="pre">dumps</span></span> or <span class="docutils literal"><span class="pre">loads</span></span> are available.</p>
 </div>
 
     <div class="postmeta">
@@ -175,7 +175,7 @@ like <span class="docutils literal"><span class="pre">dumps</span></span> or <sp
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -204,7 +204,7 @@ like <span class="docutils literal"><span class="pre">dumps</span></span> or <sp
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

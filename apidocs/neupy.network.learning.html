@@ -106,6 +106,18 @@
 <em class="property">class </em><span class="descclassname">neupy.network.learning.</span><span class="descname">SupervisedLearning</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/learning.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">object</span></span></p>
 <p>Mixin for Supervised Neural Network algorithms.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>train(input_train, target_train, input_test=None, target_test=None,    epochs=100, epsilon=None)</td>
+<td>Trains network. You can control network training procedure iterations with the number of epochs or converge value epsilon. Also you can specify <span class="docutils literal"><span class="pre">input_test</span></span> and <span class="docutils literal"><span class="pre">target_test</span></span> and control your validation data error on each iteration.</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="neupy.network.learning.SupervisedLearning.train">
 <span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em>, <em>input_test=None</em>, <em>target_test=None</em>, <em>epochs=100</em>, <em>epsilon=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/learning.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -118,11 +130,18 @@
 <em class="property">class </em><span class="descclassname">neupy.network.learning.</span><span class="descname">UnsupervisedLearning</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/learning.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">object</span></span></p>
 <p>Mixin for Unsupervised Neural Network algorithms.</p>
-<dl class="method">
-<dt id="neupy.network.learning.UnsupervisedLearning.predict_prob">
-<span class="descname">predict_prob</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/learning.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>train(input_train, epsilon=1e-5, epochs=100)</td>
+<td>Trains network until it converge. Parameter <span class="docutils literal"><span class="pre">epochs</span></span> control maximum number of iterations, just to make sure that network will stop training procedure if it can&#8217;t converge.</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="neupy.network.learning.UnsupervisedLearning.train">
 <span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>epochs=100</em>, <em>epsilon=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/learning.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -134,15 +153,27 @@
 <dt id="neupy.network.learning.LazyLearning">
 <em class="property">class </em><span class="descclassname">neupy.network.learning.</span><span class="descname">LazyLearning</span><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/learning.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">object</span></span></p>
-<p>Mixin for Lazy learning Neural Network algorithms.</p>
+<p>Mixin for lazy learning Neural Network algorithms.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>train(input_train, target_train, copy=True)</td>
+<td>Network just stores all the information about the data and use it for         the prediction. Parameter <span class="docutils literal"><span class="pre">copy</span></span> copy input data before store it         inside the network.</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
-<dt id="neupy.network.learning.LazyLearning.predict">
-<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/learning.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.network.learning.LazyLearning.init_properties">
+<span class="descname">init_properties</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/learning.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="neupy.network.learning.LazyLearning.setup_defaults">
-<span class="descname">setup_defaults</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/learning.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.network.learning.LazyLearning.predict">
+<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/learning.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -172,7 +203,7 @@
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -201,7 +232,7 @@
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

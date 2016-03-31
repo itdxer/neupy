@@ -101,6 +101,8 @@
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="signals">
 <h1>Signals</h1>
+<div class="section" id="basics">
+<h2>Basics</h2>
 <p>Signal is a simple approach that helps you implement functions which will be triggered in specific case.
 In training process there are 2 of them.
 First one will be triggered after epoch training procedure.
@@ -110,28 +112,43 @@ The second one will be triggered when all traning is finished.</p>
 <p>Here is the example where we define two custom signals which will display useful information.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 
-<span class="k">def</span> <span class="nf">train_epoch_end</span><span class="p">(</span><span class="n">network</span><span class="p">):</span>
-    <span class="n">network</span><span class="o">.</span><span class="n">logs</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s">&quot;&quot;&quot;</span>
-<span class="s">        Epoch {}</span>
-<span class="s">        Step: {}</span>
-<span class="s">    &quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">epoch</span><span class="p">,</span> <span class="n">network</span><span class="o">.</span><span class="n">step</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">on_epoch_end</span><span class="p">(</span><span class="n">network</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">last_epoch</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">train_end</span><span class="p">(</span><span class="n">network</span><span class="p">):</span>
-    <span class="n">network</span><span class="o">.</span><span class="n">logs</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s">&quot;TRAIN&quot;</span><span class="p">,</span> <span class="s">&quot;End train&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">on_training_end</span><span class="p">(</span><span class="n">network</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Training finished&quot;</span><span class="p">)</span>
 
-<span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">ConjugateGradient</span><span class="p">(</span>
+<span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
     <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-    <span class="n">train_epoch_end_signal</span><span class="o">=</span><span class="n">train_epoch_end</span><span class="p">,</span>
-    <span class="n">train_end_signal</span><span class="o">=</span><span class="n">train_epoch_end</span><span class="p">,</span>
+    <span class="n">epoch_end_signal</span><span class="o">=</span><span class="n">on_epoch_end</span><span class="p">,</span>
+    <span class="n">train_end_signal</span><span class="o">=</span><span class="n">on_training_end</span><span class="p">,</span>
     <span class="n">show_epoch</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>We define two new functions that rewrite all outputs and display their own information on every trigger signal.
-Also we define parameter <span class="docutils literal"><span class="pre">show_epoch</span></span> that will control <span class="docutils literal"><span class="pre">train_epoch_end_signal</span></span> signal frequency.
+Also we define parameter <span class="docutils literal"><span class="pre">show_epoch</span></span> that will control <span class="docutils literal"><span class="pre">epoch_end_signal</span></span> signal frequency.
 It&#8217;s useful when there are a lot of epochs in network and we don&#8217;t want to see each of them.</p>
 <p>Property <span class="docutils literal"><span class="pre">verbose</span></span> just control logging output, but doesn&#8217;t make any effect on signals.</p>
+</div>
+<div class="section" id="early-stopping">
+<h2>Early stopping</h2>
+<p>The other useful feature releated to the signals is that you can can implement your own rule that can interrupt training procedure. Here is a simple example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="kn">from</span> <span class="nn">neupy.utils</span> <span class="kn">import</span> <span class="n">StopNetworkTraining</span>
+
+<span class="k">def</span> <span class="nf">on_epoch_end</span><span class="p">(</span><span class="n">network</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">network</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">last</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.001</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">StopNetworkTraining</span><span class="p">(</span><span class="s">&quot;Stop training&quot;</span><span class="p">)</span>
+
+<span class="n">gdnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="n">epoch_end_signal</span><span class="o">=</span><span class="n">on_epoch_end</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </div>
 
     <div class="postmeta">
@@ -150,7 +167,7 @@ It&#8217;s useful when there are a lot of epochs in network and we don&#8217;t w
         </li><li>
             <a href="../../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -179,7 +196,7 @@ It&#8217;s useful when there are a lot of epochs in network and we don&#8217;t w
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

@@ -100,113 +100,136 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="quick-start">
-<h1>Quick start</h1>
+<span id="id1"></span><h1>Quick start</h1>
 <p>Ready to get started?</p>
-<div class="section" id="xor-problem">
-<h2>XOR problem</h2>
-<p>XOR problem is probably the most known for those who have already heared about neural networks.
-The most popular neural network algorithm probably is <a class="reference internal" href="../apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Backpropagation</span></span></a>.
-Let&#8217;s try to solve the XOR problem using <a class="reference internal" href="../apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Backpropagation</span></span></a>
-First of all we need to define 4 data samples for XOR function.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">input_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-<span class="gp">... </span>    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-<span class="gp">... </span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">target_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-<span class="gp">... </span>    <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-<span class="gp">... </span><span class="p">])</span>
+<div class="section" id="mnist-classification">
+<h2>MNIST classification</h2>
+<p>The MNIST problem is probably the most known for those who have already
+heared about neural networks. This short tutorial contains simple solution for this
+problem that you can quickly build by your own using NeuPy. Let&#8217;s dive in.</p>
+<p>First of all we need to load data.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">cross_validation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mnist</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">fetch_mldata</span><span class="p">(</span><span class="s">&#39;MNIST original&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">mnist</span><span class="o">.</span><span class="n">target</span>
 </pre></div>
 </div>
-<p>Let&#8217;s check the data.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<p>I used scikit-learn to fetch the MNIST dataset, but you can do that load it in different way.</p>
+<p>Data doesn&#8217;t have appropriate format for neural network, so we need to make simple
+transformation before use it.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s">&#39;ggplot&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">input_data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">target_data</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">/</span> <span class="mf">255.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">-</span> <span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target_scaler</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">target_scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/quick-start-data-viz.png"><img alt="Backpropagation configuration output" class="align-center" src="../_images/quick-start-data-viz.png" style="width: 70%;" /></a>
-<p>As we can see from chart on the top, problem is clearly nonlinear.</p>
-<p>Now we are going to define <a class="reference internal" href="../apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Backpropagation</span></span></a> neural network which solves this problem.
-First of all we have to set up basic structure for network and add some useful configurations.
-As problem is nonlinear we should add one hidden layer to the network.
-For first network implementation we have to set up number of hidden units inside network randomly.
-Let the units number be 4.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Backpropagation</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">show_epoch</span><span class="o">=</span><span class="s">&#39;4 times&#39;</span><span class="p">,</span>
+<p>Next we need to divide dataset into two parts: train and test. Regarding <a class="reference external" href="http://yann.lecun.com/exdb/mnist/">The
+MNIST Database</a> page we wil use 60,000
+samples for training and 10,000 for test.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">target</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">train_size</span><span class="o">=</span><span class="p">(</span><span class="mf">6.</span> <span class="o">/</span> <span class="mi">7</span><span class="p">)</span>
 <span class="gp">... </span><span class="p">)</span>
 </pre></div>
 </div>
-<p>As you can see from code additionaly we set up <span class="docutils literal"><span class="pre">step</span></span> and <span class="docutils literal"><span class="pre">show_epoch</span></span> parameters.
-<span class="docutils literal"><span class="pre">step</span></span> parameter control learning rate.
-<span class="docutils literal"><span class="pre">show_epoch</span></span> controls the frequency display in the terminal training.
-We set the value up to <span class="docutils literal"><span class="pre">'4</span> <span class="pre">times'</span></span> that mean we will see network progress 4 times and one additional for the final iteration.</p>
-<p>We set up network connections as tuple of layers sizes, but we don&#8217;t put in activation function.
-That is because <a class="reference internal" href="../apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Backpropagation</span></span></a> use the most common sigmoid layer by
-default for tuple structure.
-More about layer configuration you can read <a class="reference external" href="layers.html">here</a>.</p>
-<p>If you run the code in terminal you will see output which looks like this one:</p>
-<a class="reference internal image-reference" href="../_images/bpnet-config-logs.png"><img alt="Backpropagation configuration output" class="align-center" src="../_images/bpnet-config-logs.png" style="width: 70%;" /></a>
+<p>In the previous procedure I converted all data to <cite>float32</cite> data type. This
+simple trick will help us use less memory and decrease computational time.
+Theano is a main backend for the Gradient Descent based algorithms in NeuPy.
+For the Theano we need to add additional configuration that will explain Theano that
+we are going to use 32bit float numbers.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">theano</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theano</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">floatX</span> <span class="o">=</span> <span class="s">&#39;float32&#39;</span>
+</pre></div>
+</div>
+<p>We prepared everything that we need for the neural network training. Now we are
+able to create the neural network that will classify digits for us.</p>
+<p>Let&#8217;s start with an architecture. I didn&#8217;t reinvent the wheel and used one of the know architectures from <a class="reference external" href="http://yann.lecun.com/exdb/mnist/">The Database</a> page which is 784 &gt; 500 &gt; 300 &gt; 10. As the main activation function I used Relu and Softmax for the final layer. The main algorithm is a Nesterov Momentum that uses 100 samples per batch iteration. Actually all this and other network configuration should be clear from the code shown below.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">ArgmaxOutput</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="p">],</span>
+<span class="gp">... </span>    <span class="n">error</span><span class="o">=</span><span class="s">&#39;categorical_crossentropy&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">momentum</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">nesterov</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Isn&#8217;t it simple and clear? All the most important information related to the neural network you can find in the terminal output. If you run the code that shown above you would get the same output as on the figure below.</p>
+<a class="reference internal image-reference" href="../_images/bpnet-config-logs.png"><img alt="GradientDescent configuration output" class="align-center" src="../_images/bpnet-config-logs.png" style="width: 70%;" /></a>
 <p>From this output we can extract a lot of information about network configurations.</p>
-<p>First of all, as we can see, most of options have gray color label, but
-some of them are green.
-Green color defines all options which we put in network manually and gray color options are default parameters.
-This output shows all possible properties neural network configurations.
-All properties separeted on few groups and each group is a <a class="reference internal" href="../apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Backpropagation</span></span></a>  parent classes.
-More information about <a class="reference internal" href="../apidocs/neupy.algorithms.backprop.backpropagation.html#neupy.algorithms.backprop.backpropagation.Backpropagation" title="neupy.algorithms.backprop.backpropagation.Backpropagation"><span class="xref py py-class docutils literal"><span class="pre">Backpropagation</span></span></a> algorithm properties you will find in documentation, just click on algorithm name link and you will see it.</p>
-<p>Now we are going to train network to solve the XOR problem.
-Let set up <span class="docutils literal"><span class="pre">5000</span></span> epochs for training procedure and check the result.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">target_data</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5000</span><span class="p">)</span>
+<p>First of all, as we can see, most of options have green color label, but some of them are gray. Green color defines all options which we put in network manually and gray color options are default parameters. All properties separeted on few groups and each group is a <a class="reference internal" href="../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a>  parent classes. More information about <a class="reference internal" href="../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm properties you will find in documentation, just click on algorithm name link and you will see it.</p>
+<p>Now we are going to train network. Let set up 20 epochs for training procedure and check the result.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Output in terminal should look similar to this one:</p>
-<a class="reference internal image-reference" href="../_images/bpnet-train-logs.png"><img alt="Backpropagation training procedure output" class="align-center" src="../_images/bpnet-train-logs.png" style="width: 70%;" /></a>
-<p>In the output you can see many useful information about learning procedures.
-First of all there is simple information about input data and number of training epochs.
-Also ther you can see information about every 1000 training epoch.
-In addition training output always shows the last training epoch.
-Each epoch output has three values: Train error, Validation error and Epoch time.
-Epoch time shows for how long the process was active in the specific epoch.
-There are also two types of errors.
-First one displays error for your training dataset and second one for validation dataset.
-Validation data sample is optional and we are not using it in this example, but we can put in <span class="docutils literal"><span class="pre">train</span></span> method separated data sample and track validation error.</p>
-<p>Our MSE looks well. Now we can visualize our errors in a chart.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span><span class="o">.</span><span class="n">plot_errors</span><span class="p">()</span>
+<a class="reference internal image-reference" href="../_images/bpnet-train-logs.png"><img alt="GradientDescent training procedure output" class="align-center" src="../_images/bpnet-train-logs.png" style="width: 70%;" /></a>
+<p>Output show the most important information related to training procedure. Each epoch contains 4 columns. First one identified epoch. The second one show training error. The third one is optional. In case you have validation dataset, you can check learning perfomanse using dataset separated from the learning procedure. And the last column shows how many time network trains during this epoch.</p>
+<p>From the table is not clear network&#8217;s training progress. We can check it very easy. Network instance contains built-in method that build line plot that show training progress. Let&#8217;s check our progress.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">plot_errors</span><span class="p">()</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/bpnet-train-errors-plot.png"><img alt="Backpropagation epoch errors plot" class="align-center" src="../_images/bpnet-train-errors-plot.png" style="width: 70%;" /></a>
-<p>And finally examine the prediction answer</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted</span> <span class="o">=</span> <span class="n">bpnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted</span>
-<span class="go">array([[ 0.77293114],</span>
-<span class="go">       [ 0.28974524],</span>
-<span class="go">       [ 0.18620525],</span>
-<span class="go">       [ 0.74104605]])</span>
+<a class="reference internal image-reference" href="../_images/bpnet-train-errors-plot.png"><img alt="GradientDescent epoch errors plot" class="align-center" src="../_images/bpnet-train-errors-plot.png" style="width: 70%;" /></a>
+<p>From the figure above you can notice that validation error does not decrease over time. Sometimes it goes up and sometimes down, but it doesn&#8217;t mean that network trains poorly. Let&#8217;s check small example that can make this problem clear.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">actual_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1_prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model2_prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>Looks well.
-Using more training epochs can make better prediction.
-For final step we just round our network result for making it valid.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted</span><span class="o">.</span><span class="n">round</span><span class="p">()</span>
-<span class="go">array([[ 1.],</span>
-<span class="go">       [ 0.],</span>
-<span class="go">       [ 0.],</span>
-<span class="go">       [ 1.]])</span>
+<p>In the code above you can see two prediction releate to the different models. The first model predicted two samples right and one wrong. The second one predicted everything right. But second model&#8217;s predictions are less certain. Let&#8217;s check the cross entropy error.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">estimators</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimators</span><span class="o">.</span><span class="n">binary_crossentropy</span><span class="p">(</span><span class="n">actual_values</span><span class="p">,</span> <span class="n">model1_prediction</span><span class="p">)</span>
+<span class="go">0.3756706118583679</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimators</span><span class="o">.</span><span class="n">binary_crossentropy</span><span class="p">(</span><span class="n">actual_values</span><span class="p">,</span> <span class="n">model2_prediction</span><span class="p">)</span>
+<span class="go">0.5108255743980408</span>
 </pre></div>
 </div>
+<p>That is the result that we looked for. The second model made better prediction, but it got a higher cross entropy error value. That&#8217;s because we less certain about our prediction. Similar situation we&#8217;ve observed in the plot above.</p>
+<p>Let&#8217;s finally make a simple report for our classification result.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_predicted</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_test</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">))</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">))</span>
+<span class="go">              precision    recall  f1-score   support</span>
+
+<span class="go">          0       0.98      0.99      0.99       936</span>
+<span class="go">          1       1.00      0.99      0.99      1163</span>
+<span class="go">          2       0.98      0.98      0.98       982</span>
+<span class="go">          3       0.98      0.98      0.98      1038</span>
+<span class="go">          4       0.98      0.98      0.98       948</span>
+<span class="go">          5       0.98      0.98      0.98       921</span>
+<span class="go">          6       0.98      0.99      0.99      1013</span>
+<span class="go">          7       0.98      0.98      0.98      1029</span>
+<span class="go">          8       0.98      0.99      0.99       978</span>
+<span class="go">          9       0.98      0.97      0.98       992</span>
+
+<span class="go">avg / total       0.98      0.98      0.98     10000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">score</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&quot;Validation accuracy: {:.2f}%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">score</span><span class="p">))</span>
+<span class="go">Validation accuracy: 98.47%</span>
+</pre></div>
+</div>
+<p>The 98.5% accuracy is pretty good for such a quick solution. Additional modification can improve prediction accuracy.</p>
 </div>
 </div>
 
@@ -226,7 +249,7 @@ For final step we just round our network result for making it valid.</p>
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -255,7 +278,7 @@ For final step we just round our network result for making it valid.</p>
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

@@ -6,22 +6,28 @@ Classes and functions
 Algorithms
 **********
 
-Backpropagation
-~~~~~~~~~~~~~~~
+Algorithms that use Backpropagation training approach
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table::
     :header: "Class name", "Name"
 
-    :network:`Backpropagation`, Classic Gradient Descent
+    :network:`GradientDescent`, Classic Gradient Descent
     :network:`MinibatchGradientDescent`, Mini-batch Gradient Descent
     :network:`ConjugateGradient`, Conjugate Gradient
     :network:`QuasiNewton`, quasi-Newton
     :network:`LevenbergMarquardt`, Levenberg-Marquardt
+    :network:`Hessian`, Hessian
     :network:`HessianDiagonal`, Hessian diagonal
     :network:`Momentum`, Momentum
     :network:`RPROP`, RPROP
     :network:`IRPROPPlus`, iRPROP+
     :network:`Quickprop`, Quickprop
+    :network:`Adadelta`, Adadelta
+    :network:`Adagrad`, Adagrad
+    :network:`RMSProp`, RMSProp
+    :network:`Adam`, Adam
+    :network:`Adamax`, AdaMax
 
 Weight update rules
 ~~~~~~~~~~~~~~~~~~~
@@ -39,9 +45,8 @@ Learning rate update rules
     :header: "Class name", "Name"
 
     :network:`LeakStepAdaptation`, Leak Step Adaptation
-    :network:`ErrorDifferenceStepUpdate`, Error difference Update
+    :network:`ErrDiffStepUpdate`, Error difference Update
     :network:`LinearSearch`, Linear search by Golden Search or Brent
-    :network:`WolfeSearch`, Wolfe line search
     :network:`SearchThenConverge`, Search than converge
     :network:`SimpleStepMinimization`, Simple Step Minimization
 
@@ -51,11 +56,11 @@ Ensembles
 .. csv-table::
     :header: "Class name", "Name"
 
-    :ensemble:`MixtureOfExperts`, Mixture of Experts
-    :ensemble:`DynamicallyAveragedNetwork`, Dynamically Averaged Network (DAN)
+    :network:`MixtureOfExperts`, Mixture of Experts
+    :network:`DynamicallyAveragedNetwork`, Dynamically Averaged Network (DAN)
 
-Radial Basis Functions Networks (RBFN)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Neural Networks with Radial Basis Functions (RBFN)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table::
     :header: "Class name", "Name"
@@ -111,17 +116,17 @@ Input and hidden layers
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table::
-    :header: "Class name", "Description", "Has derivative?"
+    :header: "Class name", "Description"
 
-    ":layer:`LinearLayer`", "Layer with linear activation function.", "No"
-    ":layer:`SigmoidLayer`", "Layer with sigmoid activation function.", "Yes"
-    ":layer:`StepLayer`", "Layer with step activation function.", "No"
-    ":layer:`TanhLayer`", "Layer with tanh activation function.", "Yes"
-    ":layer:`RectifierLayer`", "Layer with rectifier activation function.", "No"
-    ":layer:`SoftplusLayer`", "Layer with softplus activation function.", "Yes"
-    ":layer:`SoftmaxLayer`", "Layer with softmax activation function.", "Yes"
-    ":layer:`EuclideDistanceLayer`", "Layer output equal to Euclide distance between input value and weights.", "No"
-    ":layer:`AngleDistanceLayer`", "Layer which output equal to cosine distance between input value and weights.", "No"
+    ":layer:`Linear`", "Layer with linear activation function."
+    ":layer:`Sigmoid`", "Layer with sigmoid activation function."
+    ":layer:`HardSigmoid`", "Layer with hard sigmoid activation function."
+    ":layer:`Step`", "Layer with step activation function."
+    ":layer:`Tanh`", "Layer with tanh activation function."
+    ":layer:`Relu`", "Layer with rectifier activation function."
+    ":layer:`Softplus`", "Layer with softplus activation function."
+    ":layer:`Softmax`", "Layer with softmax activation function."
+    ":layer:`Dropout`", "Dropout layer"
 
 Output layers
 ~~~~~~~~~~~~~
@@ -129,21 +134,23 @@ Output layers
 .. csv-table::
     :header: "Class name", "Description"
 
-    ":layer:`OutputLayer`", "Simple output layer which does not make any transformations"
-    ":layer:`CompetitiveOutputLayer`", "Competitive layer output"
-    ":layer:`StepOutputLayer`", "The behaviour for this output layer is the same as for step function."
-    ":layer:`RoundOutputLayer`", "Layer round output value."
+    ":layer:`Output`", "Simple output layer which does not make any transformations"
+    ":layer:`CompetitiveOutput`", "Competitive layer output"
+    ":layer:`StepOutput`", "The behaviour for this output layer is the same as for step function."
+    ":layer:`RoundedOutput`", "Layer round output value."
+    ":layer:`ArgmaxOutput`", "Return number of feature that have maximum value for each sample."
 
 
 Error functions
 ***************
 
 .. csv-table::
-    :header: "Function name", "Description", "Has derivative?"
+    :header: "Function name", "Description"
 
-    "linear_error(actual, expected)", "Compute difference between expected and actual values", "No"
-    "mae(actual, expected)", "Mean absolute error", "No"
-    "mse(actual, expected)", "Mean square error", "Yes"
-    "cross_entropy_error(actual, expected, epsilon=1e-10)", "Cross entropy error", "Yes"
-    "kullback_leibler(actual, expected)", "Kullback-Leibler error", "Yes"
-    "rmsle(actual, expected)", "Root mean squared logarithmic error", "Yes"
+    "mae", "Mean absolute error"
+    "mse", "Mean squared error"
+    "rmse", "Root mean squared error"
+    "msle", "Mean squared logarithmic error"
+    "rmsle", "Root mean squared logarithmic error"
+    "categorical_crossentropy", "Cross entropy error"
+    "binary_crossentropy", "Cross entropy error"

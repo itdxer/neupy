@@ -105,7 +105,7 @@
 <dt id="neupy.algorithms.weights.weight_elimination.WeightElimination">
 <em class="property">class </em><span class="descclassname">neupy.algorithms.weights.weight_elimination.</span><span class="descname">WeightElimination</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/weights/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.weights.base.html#neupy.algorithms.weights.base.WeightUpdateConfigurable" title="neupy.algorithms.weights.base.WeightUpdateConfigurable"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.weights.base.WeightUpdateConfigurable</span></span></a></p>
-<p>Weight elimination algorithm penalizes large weights and limits the
+<p>Weight Elimination algorithm penalizes large weights and limits the
 freedom in network. The algorithm is able to solve one of the possible
 problems of network overfitting.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -120,27 +120,45 @@ Defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.<
 <p><strong>zero_weight</strong> : float</p>
 <blockquote>
 <div><p>Second important parameter for weights penalization. Defaults
-to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+to <span class="docutils literal"><span class="pre">1</span></span>. Small value can make all weights close to zero. Big value
+will make less significant contribution in weight update. That mean
+with a big value <span class="docutils literal"><span class="pre">zero_weight</span></span> network allow higher values for
+the weights.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><p class="first last"><strong>It works with any algorithm based on backpropagation.     Class can&#8217;t work without it.</strong></p>
+<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><p class="first"><strong>It works with any algorithm based on backpropagation. Class can&#8217;t</strong></p>
+<p class="last"><strong>work without it.</strong></p>
 </td>
 </tr>
 </tbody>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="neupy.algorithms.weights.weight_decay.html#neupy.algorithms.weights.weight_decay.WeightDecay" title="neupy.algorithms.weights.weight_decay.WeightDecay"><span class="xref py py-class docutils literal"><span class="pre">WeightDecay</span></span></a></p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="neupy.algorithms.weights.weight_decay.html#neupy.algorithms.weights.weight_decay.WeightDecay" title="neupy.algorithms.weights.weight_decay.WeightDecay"><span class="xref py py-class docutils literal"><span class="pre">WeightDecay</span></span></a></dt>
+<dd>Weight Decay penalty.</dd>
+</dl>
 </div>
+<p class="rubric">Notes</p>
+<p>Before adding that regularization parameter carefully choose
+<span class="docutils literal"><span class="pre">decay_rate</span></span> and <span class="docutils literal"><span class="pre">zero_weight</span></span> parameters for the problem.
+Invalid parameters could significatly reduce weight sizes and norm
+could be near zero.</p>
+<table class="docutils citation" frame="void" id="r3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R3]</td><td>Weigend, A. S.; Rumelhart, D. E. &amp; Huberman, B. A. (1991),         Generalization by Weight-Elimination with Application to Forecasting,         in Richard P. Lippmann; John E. Moody &amp; David S. Touretzky, ed.,         Advances in Neural Information Processing Systems, San Francisco,         CA: Morgan Kaufmann, pp. 875&#8211;882 .</td></tr>
+</tbody>
+</table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Backpropagation</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">optimizations</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">WeightElimination</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">WeightElimination</span><span class="p">]</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 </pre></div>
@@ -151,13 +169,13 @@ to <span class="docutils literal"><span class="pre">1</span></span>.</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="neupy.algorithms.weights.weight_elimination.WeightElimination.layer_weight_update">
-<span class="descname">layer_weight_update</span><span class="sig-paren">(</span><em>delta</em>, <em>layer_number</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/weights/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.algorithms.weights.weight_elimination.WeightElimination.init_param_updates">
+<span class="descname">init_param_updates</span><span class="sig-paren">(</span><em>layer</em>, <em>parameter</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/weights/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.weights.weight_elimination.WeightElimination.options">
-<span class="descname">options</span><em class="property"> = {'zero_weight': Option(class_name='WeightElimination', value=1), 'decay_rate': Option(class_name='WeightElimination', value=0.1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/weights/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'decay_rate': Option(class_name='WeightElimination', value=0.1), 'zero_weight': Option(class_name='WeightElimination', value=1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/weights/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -182,7 +200,7 @@ to <span class="docutils literal"><span class="pre">1</span></span>.</p>
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -211,7 +229,7 @@ to <span class="docutils literal"><span class="pre">1</span></span>.</p>
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

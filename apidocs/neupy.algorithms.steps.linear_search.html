@@ -104,7 +104,7 @@
 <dl class="class">
 <dt id="neupy.algorithms.steps.linear_search.LinearSearch">
 <em class="property">class </em><span class="descclassname">neupy.algorithms.steps.linear_search.</span><span class="descname">LinearSearch</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/linear_search.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="neupy.algorithms.steps.base.html#neupy.algorithms.steps.base.SingleStep" title="neupy.algorithms.steps.base.SingleStep"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.steps.base.SingleStep</span></span></a></p>
+<dd><p>Bases: <a class="reference internal" href="neupy.algorithms.steps.base.html#neupy.algorithms.steps.base.SingleStepConfigurable" title="neupy.algorithms.steps.base.SingleStepConfigurable"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.steps.base.SingleStepConfigurable</span></span></a></p>
 <p>Linear search for the step selection. Basicly this algorithms
 try different steps and compute your predicted error, after few
 iteration it will chose one which was better.</p>
@@ -114,7 +114,7 @@ iteration it will chose one which was better.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tol</strong> : float</p>
 <blockquote>
-<div><p>Tolerance for termination, default to <span class="docutils literal"><span class="pre">0.3</span></span>. Can be any number
+<div><p>Tolerance for termination, default to <span class="docutils literal"><span class="pre">0.1</span></span>. Can be any number
 greater that zero.</p>
 </div></blockquote>
 <p><strong>search_method</strong> : &#8216;gloden&#8217;, &#8216;brent&#8217;</p>
@@ -124,23 +124,22 @@ for Brent&#8217;s search, default to <span class="docutils literal"><span class=
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><p class="first last"><strong>It works with any algorithm based on backpropagation.     Class can&#8217;t work without it.</strong></p>
+<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><p class="first"><strong>It works with any algorithm based on backpropagation. Class can&#8217;t</strong></p>
+<p class="last"><strong>work without it.</strong></p>
 </td>
 </tr>
 </tbody>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="neupy.algorithms.backprop.conjugate_gradient.html#neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient" title="neupy.algorithms.backprop.conjugate_gradient.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">ConjugateGradient</span></span></a></p>
+<p class="last"><a class="reference internal" href="neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">ConjugateGradient</span></span></a></p>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.functions</span> <span class="kn">import</span> <span class="n">rmsle</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">estimators</span><span class="p">,</span> <span class="n">environment</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_boston</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">target</span>
@@ -156,12 +155,12 @@ for Brent&#8217;s search, default to <span class="docutils literal"><span class=
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cgnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">ConjugateGradient</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">connection</span><span class="o">=</span><span class="p">[</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">SigmoidLayer</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">SigmoidLayer</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">OutputLayer</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">RoundedOutput</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="p">],</span>
 <span class="gp">... </span>    <span class="n">search_method</span><span class="o">=</span><span class="s">&#39;golden&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">optimizations</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LinearSearch</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LinearSearch</span><span class="p">],</span>
 <span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -171,41 +170,24 @@ for Brent&#8217;s search, default to <span class="docutils literal"><span class=
 <span class="gp">&gt;&gt;&gt; </span><span class="n">real</span> <span class="o">=</span> <span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">predicted</span> <span class="o">=</span> <span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_predict</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">error</span> <span class="o">=</span> <span class="n">rmsle</span><span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">predicted</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">error</span> <span class="o">=</span> <span class="n">estimators</span><span class="o">.</span><span class="n">rmsle</span><span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">predicted</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">error</span>
 <span class="go">0.20752676697596578</span>
 </pre></div>
 </div>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="20%" />
-<col width="80%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>first_step</td>
-<td>(float) Contains initialized step value.</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="neupy.algorithms.steps.linear_search.LinearSearch.check_updates">
-<span class="descname">check_updates</span><span class="sig-paren">(</span><em>new_step</em>, <em>weights</em>, <em>delta</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/linear_search.py"><span class="viewcode-link">[source]</span></a></dt>
+<dl class="attribute">
+<dt id="neupy.algorithms.steps.linear_search.LinearSearch.maxiter">
+<span class="descname">maxiter</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/linear_search.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.steps.linear_search.LinearSearch.options">
-<span class="descname">options</span><em class="property"> = {'search_method': Option(class_name='LinearSearch', value=golden), 'tol': Option(class_name='LinearSearch', value=0.3)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/linear_search.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'maxiter': Option(class_name='LinearSearch', value=10), 'search_method': Option(class_name='LinearSearch', value=golden), 'tol': Option(class_name='LinearSearch', value=0.1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/linear_search.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.steps.linear_search.LinearSearch.search_method">
 <span class="descname">search_method</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/linear_search.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="neupy.algorithms.steps.linear_search.LinearSearch.set_weights">
-<span class="descname">set_weights</span><span class="sig-paren">(</span><em>new_weights</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/linear_search.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -214,8 +196,8 @@ for Brent&#8217;s search, default to <span class="docutils literal"><span class=
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="neupy.algorithms.steps.linear_search.LinearSearch.update_weights">
-<span class="descname">update_weights</span><span class="sig-paren">(</span><em>weight_deltas</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/linear_search.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.algorithms.steps.linear_search.LinearSearch.train_epoch">
+<span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/linear_search.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -235,7 +217,7 @@ for Brent&#8217;s search, default to <span class="docutils literal"><span class=
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -264,7 +246,7 @@ for Brent&#8217;s search, default to <span class="docutils literal"><span class=
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

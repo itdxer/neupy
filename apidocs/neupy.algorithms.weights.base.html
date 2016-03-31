@@ -105,9 +105,20 @@
 <dt id="neupy.algorithms.weights.base.WeightUpdateConfigurable">
 <em class="property">class </em><span class="descclassname">neupy.algorithms.weights.base.</span><span class="descname">WeightUpdateConfigurable</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/weights/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.core.config.html#neupy.core.config.Configurable" title="neupy.core.config.Configurable"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.config.Configurable</span></span></a></p>
+<p>Configuration class for algorithms that update weights.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Warns:</th><td class="field-body"><p class="first"><strong>It works with any algorithm based on backpropagation. Class can&#8217;t</strong></p>
+<p class="last"><strong>work without it.</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="attribute">
-<dt id="neupy.algorithms.weights.base.WeightUpdateConfigurable.optimization_type">
-<span class="descname">optimization_type</span><em class="property"> = 2</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/weights/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.algorithms.weights.base.WeightUpdateConfigurable.addon_type">
+<span class="descname">addon_type</span><em class="property"> = 3</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/weights/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -132,7 +143,7 @@
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -161,7 +172,7 @@
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

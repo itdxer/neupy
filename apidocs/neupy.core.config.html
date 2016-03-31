@@ -104,19 +104,25 @@
 <dl class="class">
 <dt id="neupy.core.config.ConfigMeta">
 <em class="property">class </em><span class="descclassname">neupy.core.config.</span><span class="descname">ConfigMeta</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/config.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">type</span></span></p>
+<dd><p>Bases: <a class="reference internal" href="neupy.core.docs.html#neupy.core.docs.SharedDocsMeta" title="neupy.core.docs.SharedDocsMeta"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.docs.SharedDocsMeta</span></span></a></p>
+<p>Meta-class that configure initialized properties. Also it helps
+inheit properties from parent classes and use them.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="neupy.core.config.ConfigWithABCMeta">
-<em class="property">class </em><span class="descclassname">neupy.core.config.</span><span class="descname">ConfigWithABCMeta</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/config.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.core.config.ConfigABCMeta">
+<em class="property">class </em><span class="descclassname">neupy.core.config.</span><span class="descname">ConfigABCMeta</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/config.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">abc.ABCMeta</span></span>, <a class="reference internal" href="#neupy.core.config.ConfigMeta" title="neupy.core.config.ConfigMeta"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.config.ConfigMeta</span></span></a></p>
+<p>Meta-class that combains <span class="docutils literal"><span class="pre">ConfigMeta</span></span> and <span class="docutils literal"><span class="pre">abc.ABCMeta</span></span>
+meta-classes.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="neupy.core.config.Configurable">
 <em class="property">class </em><span class="descclassname">neupy.core.config.</span><span class="descname">Configurable</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/config.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">neupy.core.config.BaseConfigurable</span></span></p>
+<p>Class that combine <span class="docutils literal"><span class="pre">BaseConfigurable</span></span> class functionality and
+<span class="docutils literal"><span class="pre">ConfigMeta</span></span> meta-class.</p>
 <dl class="attribute">
 <dt id="neupy.core.config.Configurable.options">
 <span class="descname">options</span><em class="property"> = {}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/config.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -125,11 +131,13 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="neupy.core.config.ConfigurableWithABC">
-<em class="property">class </em><span class="descclassname">neupy.core.config.</span><span class="descname">ConfigurableWithABC</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/config.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.core.config.ConfigurableABC">
+<em class="property">class </em><span class="descclassname">neupy.core.config.</span><span class="descname">ConfigurableABC</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/config.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">neupy.core.config.BaseConfigurable</span></span></p>
+<p>Class that combine <span class="docutils literal"><span class="pre">BaseConfigurable</span></span> class functionality,
+<span class="docutils literal"><span class="pre">ConfigMeta</span></span> and <span class="docutils literal"><span class="pre">abc.ABCMeta</span></span> meta-classes.</p>
 <dl class="attribute">
-<dt id="neupy.core.config.ConfigurableWithABC.options">
+<dt id="neupy.core.config.ConfigurableABC.options">
 <span class="descname">options</span><em class="property"> = {}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/config.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
@@ -150,7 +158,7 @@
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -179,7 +187,7 @@
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

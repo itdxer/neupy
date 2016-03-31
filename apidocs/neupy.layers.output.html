@@ -102,8 +102,8 @@
     <div class="section" id="module-neupy.layers.output">
 <span id="neupy-layers-output-module"></span><h1>neupy.layers.output module</h1>
 <dl class="class">
-<dt id="neupy.layers.output.OutputLayer">
-<em class="property">class </em><span class="descclassname">neupy.layers.output.</span><span class="descname">OutputLayer</span><span class="sig-paren">(</span><em>input_size</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.output.Output">
+<em class="property">class </em><span class="descclassname">neupy.layers.output.</span><span class="descname">Output</span><span class="sig-paren">(</span><em>size</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.layers.base.html#neupy.layers.base.BaseLayer" title="neupy.layers.base.BaseLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.base.BaseLayer</span></span></a></p>
 <p>Simples output layer class which does not make any transformations.
 Output from this layer is the same as input.</p>
@@ -111,113 +111,75 @@ Output from this layer is the same as input.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_size</strong> : int</p>
-<blockquote>
-<div><p>Layer input size.</p>
-</div></blockquote>
-<p><strong>weight</strong> : 2D array-like or None</p>
-<blockquote>
-<div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
-generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
-<span class="docutils literal"><span class="pre">None</span></span> by default.</p>
-</div></blockquote>
-<p><strong>init_method</strong> : {&#8216;gauss&#8217;, &#8216;bounded&#8217;, &#8216;ortho&#8217;}</p>
-<blockquote>
-<div><p>Weight initialization method.
-<span class="docutils literal"><span class="pre">gauss</span></span> will generate random weights dependence on Standard
-Normal Distribution.
-<span class="docutils literal"><span class="pre">bounded</span></span> generate uniform random weghts in initialized bounds.
-<span class="docutils literal"><span class="pre">ortho</span></span> generate random orthogonal matrix.</p>
-</div></blockquote>
-<p><strong>bounds</strong> : tuple of two float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : int</p>
 <blockquote class="last">
-<div><p>Available only for <span class="docutils literal"><span class="pre">init_method</span></span> eqaul to <span class="docutils literal"><span class="pre">bounded</span></span>, defaults
-to <span class="docutils literal"><span class="pre">(0,</span> <span class="pre">1)</span></span>.</p>
+<div><p>Network output size.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
-<dt id="neupy.layers.output.OutputLayer.format_output">
-<span class="descname">format_output</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="neupy.layers.output.OutputLayer.initialize">
-<span class="descname">initialize</span><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.output.Output.initialize">
+<span class="descname">initialize</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.layers.output.OutputLayer.options">
-<span class="descname">options</span><em class="property"> = {'init_method': Option(class_name='BaseLayer', value=gauss), 'weight': Option(class_name='BaseLayer', value=None), 'bounds': Option(class_name='BaseLayer', value=[0, 1]), 'input_size': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.output.Output.options">
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='Output', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="neupy.layers.output.OutputLayer.output">
+<dt id="neupy.layers.output.Output.output">
 <span class="descname">output</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="neupy.layers.output.OutputLayer.relate_to">
+<dt id="neupy.layers.output.Output.relate_to">
 <span class="descname">relate_to</span><span class="sig-paren">(</span><em>right_layer</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.output.Output.size">
+<span class="descname">size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="neupy.layers.output.CompetitiveOutputLayer">
-<em class="property">class </em><span class="descclassname">neupy.layers.output.</span><span class="descname">CompetitiveOutputLayer</span><span class="sig-paren">(</span><em>input_size</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.layers.output.OutputLayer" title="neupy.layers.output.OutputLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.output.OutputLayer</span></span></a></p>
+<dt id="neupy.layers.output.CompetitiveOutput">
+<em class="property">class </em><span class="descclassname">neupy.layers.output.</span><span class="descname">CompetitiveOutput</span><span class="sig-paren">(</span><em>size</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#neupy.layers.output.Output" title="neupy.layers.output.Output"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.output.Output</span></span></a></p>
 <p>Competitive layer output. Layer output will return the result where
 all zero values and one value which has greatest value will be one.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_size</strong> : int</p>
-<blockquote>
-<div><p>Layer input size.</p>
-</div></blockquote>
-<p><strong>weight</strong> : 2D array-like or None</p>
-<blockquote>
-<div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
-generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
-<span class="docutils literal"><span class="pre">None</span></span> by default.</p>
-</div></blockquote>
-<p><strong>init_method</strong> : {&#8216;gauss&#8217;, &#8216;bounded&#8217;, &#8216;ortho&#8217;}</p>
-<blockquote>
-<div><p>Weight initialization method.
-<span class="docutils literal"><span class="pre">gauss</span></span> will generate random weights dependence on Standard
-Normal Distribution.
-<span class="docutils literal"><span class="pre">bounded</span></span> generate uniform random weghts in initialized bounds.
-<span class="docutils literal"><span class="pre">ortho</span></span> generate random orthogonal matrix.</p>
-</div></blockquote>
-<p><strong>bounds</strong> : tuple of two float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : int</p>
 <blockquote class="last">
-<div><p>Available only for <span class="docutils literal"><span class="pre">init_method</span></span> eqaul to <span class="docutils literal"><span class="pre">bounded</span></span>, defaults
-to <span class="docutils literal"><span class="pre">(0,</span> <span class="pre">1)</span></span>.</p>
+<div><p>Network output size.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="neupy.layers.output.CompetitiveOutputLayer.format_output">
-<span class="descname">format_output</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dl class="attribute">
+<dt id="neupy.layers.output.CompetitiveOutput.options">
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='Output', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="neupy.layers.output.CompetitiveOutputLayer.options">
-<span class="descname">options</span><em class="property"> = {'init_method': Option(class_name='BaseLayer', value=gauss), 'weight': Option(class_name='BaseLayer', value=None), 'bounds': Option(class_name='BaseLayer', value=[0, 1]), 'input_size': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dl class="method">
+<dt id="neupy.layers.output.CompetitiveOutput.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="neupy.layers.output.StepOutputLayer">
-<em class="property">class </em><span class="descclassname">neupy.layers.output.</span><span class="descname">StepOutputLayer</span><span class="sig-paren">(</span><em>input_size</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.layers.output.OutputLayer" title="neupy.layers.output.OutputLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.output.OutputLayer</span></span></a></p>
+<dt id="neupy.layers.output.StepOutput">
+<em class="property">class </em><span class="descclassname">neupy.layers.output.</span><span class="descname">StepOutput</span><span class="sig-paren">(</span><em>size</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#neupy.layers.output.Output" title="neupy.layers.output.Output"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.output.Output</span></span></a></p>
 <p>The behaviour for this layer is the same as for step function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -231,110 +193,104 @@ to <span class="docutils literal"><span class="pre">(0,</span> <span class="pre"
 </div></blockquote>
 <p><strong>critical_point</strong> : float</p>
 <blockquote>
-<div><p>Critical point is setup step function bias.</p>
+<div><p>Critical point is set up step function bias. Value equal to this
+point should be equal to the lower bound. Defaults to <span class="docutils literal"><span class="pre">0</span></span>.</p>
 </div></blockquote>
-<p><strong>input_size</strong> : int</p>
-<blockquote>
-<div><p>Layer input size.</p>
-</div></blockquote>
-<p><strong>weight</strong> : 2D array-like or None</p>
-<blockquote>
-<div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
-generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
-<span class="docutils literal"><span class="pre">None</span></span> by default.</p>
-</div></blockquote>
-<p><strong>init_method</strong> : {&#8216;gauss&#8217;, &#8216;bounded&#8217;, &#8216;ortho&#8217;}</p>
-<blockquote>
-<div><p>Weight initialization method.
-<span class="docutils literal"><span class="pre">gauss</span></span> will generate random weights dependence on Standard
-Normal Distribution.
-<span class="docutils literal"><span class="pre">bounded</span></span> generate uniform random weghts in initialized bounds.
-<span class="docutils literal"><span class="pre">ortho</span></span> generate random orthogonal matrix.</p>
-</div></blockquote>
-<p><strong>bounds</strong> : tuple of two float</p>
+<p><strong>size</strong> : int</p>
 <blockquote class="last">
-<div><p>Available only for <span class="docutils literal"><span class="pre">init_method</span></span> eqaul to <span class="docutils literal"><span class="pre">bounded</span></span>, defaults
-to <span class="docutils literal"><span class="pre">(0,</span> <span class="pre">1)</span></span>.</p>
+<div><p>Network output size.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="neupy.layers.output.StepOutputLayer.critical_point">
+<dt id="neupy.layers.output.StepOutput.critical_point">
 <span class="descname">critical_point</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="neupy.layers.output.StepOutput.options">
+<span class="descname">options</span><em class="property"> = {'output_bounds': Option(class_name='StepOutput', value=[0, 1]), 'critical_point': Option(class_name='StepOutput', value=0), 'size': Option(class_name='Output', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
 <dl class="method">
-<dt id="neupy.layers.output.StepOutputLayer.format_output">
-<span class="descname">format_output</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.output.StepOutput.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.layers.output.StepOutputLayer.options">
-<span class="descname">options</span><em class="property"> = {'init_method': Option(class_name='BaseLayer', value=gauss), 'weight': Option(class_name='BaseLayer', value=None), 'critical_point': Option(class_name='StepOutputLayer', value=0.5), 'output_bounds': Option(class_name='StepOutputLayer', value=[0, 1]), 'bounds': Option(class_name='BaseLayer', value=[0, 1]), 'input_size': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.output.StepOutputLayer.output_bounds">
+<dt id="neupy.layers.output.StepOutput.output_bounds">
 <span class="descname">output_bounds</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="neupy.layers.output.RoundOutputLayer">
-<em class="property">class </em><span class="descclassname">neupy.layers.output.</span><span class="descname">RoundOutputLayer</span><span class="sig-paren">(</span><em>input_size</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.layers.output.OutputLayer" title="neupy.layers.output.OutputLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.output.OutputLayer</span></span></a></p>
+<dt id="neupy.layers.output.RoundedOutput">
+<em class="property">class </em><span class="descclassname">neupy.layers.output.</span><span class="descname">RoundedOutput</span><span class="sig-paren">(</span><em>size</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#neupy.layers.output.Output" title="neupy.layers.output.Output"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.output.Output</span></span></a></p>
 <p>Round output layer value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>decimal_places</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>decimals</strong> : int</p>
 <blockquote>
 <div><p>The precision in decimal digits for output value.</p>
 </div></blockquote>
-<p><strong>input_size</strong> : int</p>
-<blockquote>
-<div><p>Layer input size.</p>
-</div></blockquote>
-<p><strong>weight</strong> : 2D array-like or None</p>
-<blockquote>
-<div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
-generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
-<span class="docutils literal"><span class="pre">None</span></span> by default.</p>
-</div></blockquote>
-<p><strong>init_method</strong> : {&#8216;gauss&#8217;, &#8216;bounded&#8217;, &#8216;ortho&#8217;}</p>
-<blockquote>
-<div><p>Weight initialization method.
-<span class="docutils literal"><span class="pre">gauss</span></span> will generate random weights dependence on Standard
-Normal Distribution.
-<span class="docutils literal"><span class="pre">bounded</span></span> generate uniform random weghts in initialized bounds.
-<span class="docutils literal"><span class="pre">ortho</span></span> generate random orthogonal matrix.</p>
-</div></blockquote>
-<p><strong>bounds</strong> : tuple of two float</p>
+<p><strong>size</strong> : int</p>
 <blockquote class="last">
-<div><p>Available only for <span class="docutils literal"><span class="pre">init_method</span></span> eqaul to <span class="docutils literal"><span class="pre">bounded</span></span>, defaults
-to <span class="docutils literal"><span class="pre">(0,</span> <span class="pre">1)</span></span>.</p>
+<div><p>Network output size.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="neupy.layers.output.RoundOutputLayer.decimal_places">
-<span class="descname">decimal_places</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="neupy.layers.output.RoundOutputLayer.format_output">
-<span class="descname">format_output</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.output.RoundedOutput.decimals">
+<span class="descname">decimals</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.layers.output.RoundOutputLayer.options">
-<span class="descname">options</span><em class="property"> = {'init_method': Option(class_name='BaseLayer', value=gauss), 'weight': Option(class_name='BaseLayer', value=None), 'decimal_places': Option(class_name='RoundOutputLayer', value=0), 'bounds': Option(class_name='BaseLayer', value=[0, 1]), 'input_size': Option(class_name='BaseLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.output.RoundedOutput.options">
+<span class="descname">options</span><em class="property"> = {'decimals': Option(class_name='RoundedOutput', value=0), 'size': Option(class_name='Output', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.output.RoundedOutput.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.layers.output.ArgmaxOutput">
+<em class="property">class </em><span class="descclassname">neupy.layers.output.</span><span class="descname">ArgmaxOutput</span><span class="sig-paren">(</span><em>size</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#neupy.layers.output.Output" title="neupy.layers.output.Output"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.output.Output</span></span></a></p>
+<p>Return number of feature that have maximum value for each sample.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>decimals</strong> : int</p>
+<p><strong>The precision in decimal digits for output value.</strong></p>
+<p><strong>size</strong> : int</p>
+<blockquote class="last">
+<div><p>Network output size.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.layers.output.ArgmaxOutput.options">
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='Output', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.output.ArgmaxOutput.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/output.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -354,7 +310,7 @@ to <span class="docutils literal"><span class="pre">(0,</span> <span class="pre"
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -383,7 +339,7 @@ to <span class="docutils literal"><span class="pre">(0,</span> <span class="pre"
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

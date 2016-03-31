@@ -102,84 +102,93 @@
     <div class="section" id="module-neupy.algorithms.utils">
 <span id="neupy-algorithms-utils-module"></span><h1>neupy.algorithms.utils module</h1>
 <dl class="function">
-<dt id="neupy.algorithms.utils.matrix_list_in_one_vector">
-<span class="descclassname">neupy.algorithms.utils.</span><span class="descname">matrix_list_in_one_vector</span><span class="sig-paren">(</span><em>matrix_list</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/utils.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Function concatenate all matrix from list in a single vector.</p>
+<dt id="neupy.algorithms.utils.count_parameters">
+<span class="descclassname">neupy.algorithms.utils.</span><span class="descname">count_parameters</span><span class="sig-paren">(</span><em>network</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Count number of parameters in Neural Network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>matrix_list</strong> : list of array-like elements</p>
-<blockquote>
-<div><p>List of matrices.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>network</strong> : ConstructableNetwork instance</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">array-like</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
 <blockquote class="last">
-<div><p>Function will return a single vector wich contains all matrix
-transformed to the vector and concatenated in the same order
-as in the list.</p>
+<div><p>Number of parameters.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.algorithms.utils</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">matrix_list_in_one_vector</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">])</span>
-<span class="go">array([ 0,  1,  2,  3,  4,  5,  6,  7,  8, 10,  0,  0, -1])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">matrix_list_in_one_vector</span><span class="p">([</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">])</span>
-<span class="go">array([10,  0,  0, -1,  0,  1,  2,  3,  4,  5,  6,  7,  8])</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="function">
-<dt id="neupy.algorithms.utils.vector_to_list_of_matrix">
-<span class="descclassname">neupy.algorithms.utils.</span><span class="descname">vector_to_list_of_matrix</span><span class="sig-paren">(</span><em>vector</em>, <em>matrix_sizes</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/utils.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Funtion split vector into few pices and convert each one to
-a matrix.</p>
+<dt id="neupy.algorithms.utils.parameters2vector">
+<span class="descclassname">neupy.algorithms.utils.</span><span class="descname">parameters2vector</span><span class="sig-paren">(</span><em>network</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Concatenate all network parameters in one big vector.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>vector</strong> : arra-like</p>
-<blockquote>
-<div><p>The vector which you need to split in few matrices.</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>network</strong> : ConstructableNetwork instance</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">object</p>
+<blockquote class="last">
+<div><p>Returns concatenated parameters in one big vector.</p>
 </div></blockquote>
-<p><strong>matrix_sizes</strong> : list</p>
-<blockquote>
-<div><p>List of new matrix shapes.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.algorithms.utils.iter_parameters">
+<span class="descclassname">neupy.algorithms.utils.</span><span class="descname">iter_parameters</span><span class="sig-paren">(</span><em>network</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Iterate over all network parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>network</strong> : ConstructableNetwork instance</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">iterator</p>
+<blockquote class="last">
+<div><p>Returns iterator that contains all weights and biases from the
+network. Parameters from the first layer will be at the beggining
+and the other will be in the same order as layers in the
+network.</p>
 </div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.algorithms.utils.setup_parameter_updates">
+<span class="descclassname">neupy.algorithms.utils.</span><span class="descname">setup_parameter_updates</span><span class="sig-paren">(</span><em>parameters</em>, <em>parameter_update_vector</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Creates update rules for list of parameters from one vector.
+Function is useful in Conjugate Gradient or
+Levenberg-Marquardt optimization algorithms</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>parameters</strong> : list</p>
+<p><strong>parameter_update_vector</strong> : Theano varible</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list</p>
 <blockquote class="last">
-<div><p>List of all matrices built form <span class="docutils literal"><span class="pre">vector</span></span> parameter using
-matrix shapes list.</p>
+<div><p>List of updates separeted for each parameter.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.algorithms.utils</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vector_to_list_of_matrix</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)])</span>
-<span class="go">[array([[10,  0],</span>
-<span class="go">       [ 0, -1]]), array([[0, 1, 2],</span>
-<span class="go">       [3, 4, 5],</span>
-<span class="go">       [6, 7, 8]])]</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </div>
@@ -197,7 +206,7 @@ matrix shapes list.</p>
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -226,7 +235,7 @@ matrix shapes list.</p>
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

@@ -103,56 +103,11 @@
 <h1>Home</h1>
 <p>NeuPy is a Python library for Artificial Neural Networks.
 You can run and test different Neural Network algorithms.</p>
-<p><a class="reference external" href="https://travis-ci.org/itdxer/neupy"><img alt="Travis" src="https://api.travis-ci.org/itdxer/neupy.png?branch=master" /></a></p>
-<div class="section" id="installation">
-<h2>Installation</h2>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install neupy
-</pre></div>
-</div>
-</div>
-<div class="section" id="links">
-<h2>Links</h2>
-<ul class="simple">
-<li><a class="reference external" href="http://neupy.com">Documentation</a></li>
-<li><a class="reference external" href="https://github.com/itdxer/neupy/issues">Issues</a></li>
-<li><a class="reference external" href="http://neupy.com/archive.html">Tutorials</a></li>
-<li><a class="reference external" href="http://neupy.com/docs/algorithms.html">Available algorithms</a></li>
-</ul>
-</div>
-<div class="section" id="dependence">
-<h2>Dependence</h2>
-<ul class="simple">
-<li>Python 2.7, 3.3, 3.4</li>
-<li>NumPy &gt;= 1.9.0</li>
-<li>SciPy &gt;= 0.14.0</li>
-<li>Matplotlib &gt;= 1.4.0</li>
-</ul>
-</div>
-<div class="section" id="next-steps">
-<h2>Next steps</h2>
-<ul class="simple">
-<li>Bug fixing and version stabilization</li>
-<li>Speeding up algorithms</li>
-<li>Adding more algorithms</li>
-</ul>
-</div>
-<div class="section" id="library-support">
-<h2>Library support</h2>
-<ul class="simple">
-<li>Radial Basis Functions Networks (RBFN)</li>
-<li>Backpropagation and different optimization for it</li>
-<li>Neural Network Ensembles</li>
-<li>Associative and Autoasociative Memory</li>
-<li>Competitive Networks</li>
-<li>Step update algorithms for backpropagation</li>
-<li>Weight control algorithms for backpropagation</li>
-<li>Basic Linear Networks</li>
-</ul>
-</div>
+<a class="reference internal image-reference" href="../_images/mnist-solution-code.png"><img alt="../_images/mnist-solution-code.png" class="align-center" src="../_images/mnist-solution-code.png" style="width: 100%;" /></a>
 <div class="section" id="algorithms">
 <h2>Algorithms</h2>
 <ul class="simple">
-<li>Backpropagation<ul>
+<li>Algorithms that use Backpropagation training approach<ul>
 <li>Classic Gradient Descent</li>
 <li>Mini-batch Gradient Descent</li>
 <li>Conjugate Gradient<ul>
@@ -164,7 +119,7 @@ You can run and test different Neural Network algorithms.</p>
 <li>Dai-Yuan</li>
 </ul>
 </li>
-<li>quasi-Newton<ul>
+<li>quasi-Newton with Wolfe search<ul>
 <li>BFGS</li>
 <li>DFP</li>
 <li>PSB</li>
@@ -172,23 +127,29 @@ You can run and test different Neural Network algorithms.</p>
 </ul>
 </li>
 <li>Levenberg-Marquardt</li>
+<li>Hessian (Newton&#8217;s method)</li>
 <li>Hessian diagonal</li>
 <li>Momentum</li>
+<li>Nesterov Momentum</li>
 <li>RPROP</li>
 <li>iRPROP+</li>
 <li>QuickProp</li>
+<li>Adadelta</li>
+<li>Adagrad</li>
+<li>RMSProp</li>
+<li>Adam</li>
+<li>AdaMax</li>
 </ul>
 </li>
-<li>Weight update rules<ul>
+<li>Algorithms that penalize weights<ul>
 <li>Weight Decay</li>
 <li>Weight Elimination</li>
 </ul>
 </li>
-<li>Learning rate update rules<ul>
+<li>Algorithms that update learning rate<ul>
 <li>Adaptive Learning Rate</li>
 <li>Error difference Update</li>
-<li>Linear search by Golden Search or Brent</li>
-<li>Wolfe line search</li>
+<li>Linear search using Golden Search or Brent</li>
 <li>Search than converge</li>
 <li>Simple Step Minimization</li>
 </ul>
@@ -198,7 +159,7 @@ You can run and test different Neural Network algorithms.</p>
 <li>Dynamically Averaged Network (DAN)</li>
 </ul>
 </li>
-<li>Radial Basis Functions Networks (RBFN)<ul>
+<li>Neural Networks with Radial Basis Functions (RBFN)<ul>
 <li>Generalized Regression Neural Network (GRNN)</li>
 <li>Probabilistic Neural Network (PNN)</li>
 <li>Radial basis function K-means</li>
@@ -230,6 +191,26 @@ You can run and test different Neural Network algorithms.</p>
 </li>
 </ul>
 </div>
+<div class="section" id="next-steps">
+<h2>Next steps</h2>
+<ul class="simple">
+<li>Adding convolutional neural network layers (<a class="reference external" href="https://github.com/itdxer/neupy/issues/56">Issue #56</a>)</li>
+<li>Adding reccurent neural network layers (<a class="reference external" href="https://github.com/itdxer/neupy/issues/57">Issue #57</a>)</li>
+<li>Bug fixing and version stabilization  (<a class="reference external" href="https://github.com/itdxer/neupy/issues?q=is%3Aissue+is%3Aopen+label%3Abug">Known bugs</a>)</li>
+<li>Speeding up algorithms</li>
+<li>Adding more algorithms</li>
+</ul>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies</h2>
+<ul class="simple">
+<li>Python 2.7, 3.4</li>
+<li>Theano &gt;= 0.7.0</li>
+<li>NumPy &gt;= 1.9.0</li>
+<li>SciPy &gt;= 0.14.0</li>
+<li>Matplotlib &gt;= 1.4.0</li>
+</ul>
+</div>
 <div class="section" id="tests">
 <h2>Tests</h2>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install tox
@@ -252,7 +233,7 @@ You can run and test different Neural Network algorithms.</p>
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -281,7 +262,7 @@ You can run and test different Neural Network algorithms.</p>
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

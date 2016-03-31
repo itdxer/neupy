@@ -102,65 +102,57 @@
     <div class="section" id="module-neupy.algorithms.steps.base">
 <span id="neupy-algorithms-steps-base-module"></span><h1>neupy.algorithms.steps.base module</h1>
 <dl class="class">
-<dt id="neupy.algorithms.steps.base.SingleStep">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.steps.base.</span><span class="descname">SingleStep</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.steps.base.LearningRateConfigurable</span></span></p>
-<p>Base class for backpropagation step algorithms which allow use single
-step for all layers.</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="20%" />
-<col width="80%" />
-</colgroup>
+<dt id="neupy.algorithms.steps.base.SingleStepConfigurable">
+<em class="property">class </em><span class="descclassname">neupy.algorithms.steps.base.</span><span class="descname">SingleStepConfigurable</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="neupy.core.config.html#neupy.core.config.Configurable" title="neupy.core.config.Configurable"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.config.Configurable</span></span></a></p>
+<p>Configuration class for learning rate control algorithms.
+Works for algorithms that modify single learnig rate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td>first_step</td>
-<td>(float) Contains initialized step value.</td>
+<tr class="field-odd field"><th class="field-name">Warns:</th><td class="field-body"><p class="first"><strong>It works with any algorithm based on backpropagation. Class can&#8217;t</strong></p>
+<p class="last"><strong>work without it.</strong></p>
+</td>
 </tr>
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="neupy.algorithms.steps.base.SingleStep.options">
-<span class="descname">options</span><em class="property"> = {}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.algorithms.steps.base.SingleStepConfigurable.addon_type">
+<span class="descname">addon_type</span><em class="property"> = 1</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="neupy.algorithms.steps.base.SingleStep.setup_defaults">
-<span class="descname">setup_defaults</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dl class="attribute">
+<dt id="neupy.algorithms.steps.base.SingleStepConfigurable.options">
+<span class="descname">options</span><em class="property"> = {}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="neupy.algorithms.steps.base.MultiSteps">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.steps.base.</span><span class="descname">MultiSteps</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.steps.base.LearningRateConfigurable</span></span></p>
-<p>Base class for step algorithms which allow use unique step for
-every layer.</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="4%" />
-<col width="96%" />
-</colgroup>
+<dt id="neupy.algorithms.steps.base.MultipleStepConfigurable">
+<em class="property">class </em><span class="descclassname">neupy.algorithms.steps.base.</span><span class="descname">MultipleStepConfigurable</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="neupy.core.config.html#neupy.core.config.Configurable" title="neupy.core.config.Configurable"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.config.Configurable</span></span></a></p>
+<p>Configuration class for learning rate control algorithms.
+Works for algorithms that modify multiple learnig rates for one
+neural network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td>steps</td>
-<td>(list of float) List of steps in the same order as the network layers. By default all values are equal to <span class="docutils literal"><span class="pre">step</span></span> parameter.</td>
+<tr class="field-odd field"><th class="field-name">Warns:</th><td class="field-body"><p class="first"><strong>It works with any algorithm based on backpropagation. Class can&#8217;t</strong></p>
+<p class="last"><strong>work without it.</strong></p>
+</td>
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="neupy.algorithms.steps.base.MultiSteps.init_layers">
-<span class="descname">init_layers</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="neupy.algorithms.steps.base.MultiSteps.layer_step">
-<span class="descname">layer_step</span><span class="sig-paren">(</span><em>layer_number</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dl class="attribute">
+<dt id="neupy.algorithms.steps.base.MultipleStepConfigurable.addon_type">
+<span class="descname">addon_type</span><em class="property"> = 2</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.algorithms.steps.base.MultiSteps.options">
+<dt id="neupy.algorithms.steps.base.MultipleStepConfigurable.options">
 <span class="descname">options</span><em class="property"> = {}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/steps/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
@@ -181,7 +173,7 @@ every layer.</p>
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Backpropagation Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -210,7 +202,7 @@ every layer.</p>
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
     <a id="fork_me" href="http://github.com/itdxer/neupy">
         <img alt="Fork me" src="../_static/img/github-fork-green.png" />
     </a></div> <!-- footer-container -->

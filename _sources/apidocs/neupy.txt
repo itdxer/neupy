@@ -10,11 +10,10 @@ Subpackages
     neupy.commands
     neupy.core
     neupy.datasets
-    neupy.ensemble
-    neupy.functions
     neupy.helpers
     neupy.layers
     neupy.network
+    neupy.optimizations
     neupy.plots
 
 Submodules
@@ -22,6 +21,9 @@ Submodules
 
 .. toctree::
 
+   neupy.environment
+   neupy.estimators
+   neupy.preprocessing
    neupy.utils
 
 Module contents
