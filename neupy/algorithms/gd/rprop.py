@@ -16,9 +16,9 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
 
     Parameters
     ----------
-    minimum_step : float
+    minstep : float
         Minimum possible value for step. Defaults to ``0.1``.
-    maximum_step : float
+    maxstep : float
         Maximum possible value for step. Defaults to ``50``.
     increase_factor : float
         Increase factor for step in case when gradient doesn't change
@@ -65,8 +65,8 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
     """
 
     # This properties correct upper and lower bounds for steps.
-    minimum_step = BoundedProperty(default=0.1, minval=0)
-    maximum_step = BoundedProperty(default=50, minval=0)
+    minstep = BoundedProperty(default=0.1, minval=0)
+    maxstep = BoundedProperty(default=50, minval=0)
 
     # This properties increase/decrease step by deviding it to
     # some coeffitient.
@@ -114,8 +114,8 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
                     steps
                 )
             ),
-            self.minimum_step,
-            self.maximum_step,
+            self.minstep,
+            self.maxstep,
         )
         gradient_signs = T.switch(T.lt(gradient, 0), -1, 1)
         parameter_delta = T.switch(
@@ -138,8 +138,8 @@ class IRPROPPlus(RPROP):
 
     Parameters
     ----------
-    {RPROP.minimum_step}
-    {RPROP.maximum_step}
+    {RPROP.minstep}
+    {RPROP.maxstep}
     {RPROP.increase_factor}
     {RPROP.decrease_factor}
     {GradientDescent.addons}

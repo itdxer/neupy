@@ -53,7 +53,7 @@ class DANTestCase(BaseTestCase):
         )
 
         dan = algorithms.DynamicallyAveragedNetwork([
-            algorithms.RPROP((4, 10, 1), step=0.1, maximum_step=1),
+            algorithms.RPROP((4, 10, 1), step=0.1, maxstep=1),
             algorithms.GradientDescent((4, 5, 1), step=0.1),
             algorithms.ConjugateGradient((4, 5, 1), step=0.01),
         ])

@@ -61,8 +61,8 @@ class StorageTestCase(BaseTestCase):
             algorithms.GradientDescent: {},
             # algorithms.MinibatchGradientDescent: {'batch_size': 10},
             # algorithms.Momentum: {'momentum': 0.5},
-            # algorithms.RPROP: {'maximum_step': 1},
-            # algorithms.IRPROPPlus: {'maximum_step': 1},
+            # algorithms.RPROP: {'maxstep': 1},
+            # algorithms.IRPROPPlus: {'maxstep': 1},
             # algorithms.ConjugateGradient: {
             #     'update_function': 'fletcher_reeves'
             # },

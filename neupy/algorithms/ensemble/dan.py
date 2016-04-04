@@ -46,7 +46,7 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
     >>> )
     >>>
     >>> dan = algorithms.DynamicallyAveragedNetwork([
-    >>>     algorithms.RPROP((4, 10, 1), maximum_step=1),
+    >>>     algorithms.RPROP((4, 10, 1), maxstep=1),
     >>>     algorithms.GradientDescent((4, 5, 1)),
     >>> ])
     >>> dan.train(x_train, y_train, epochs=500)

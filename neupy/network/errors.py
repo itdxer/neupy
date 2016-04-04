@@ -1,6 +1,7 @@
 from __future__ import division
 
 import theano.tensor as T
+from neupy.utils import smallest_positive_number
 
 
 __all__ = ('mse', 'rmse', 'mae', 'msle', 'rmsle', 'binary_crossentropy',
@@ -38,15 +39,17 @@ def rmsle(expected, predicted):
     return T.sqrt(msle(expected, predicted))
 
 
-def binary_crossentropy(expected, predicted, epsilon=1e-10):
+def binary_crossentropy(expected, predicted):
     """ Binary cross-entropy error.
     """
+    epsilon = smallest_positive_number()
     predicted = T.clip(predicted, epsilon, 1.0 - epsilon)
     return T.nnet.binary_crossentropy(predicted, expected).mean()
 
 
-def categorical_crossentropy(expected, predicted, epsilon=1e-10):
+def categorical_crossentropy(expected, predicted):
     """ Categorical cross-entropy error.
     """
+    epsilon = smallest_positive_number()
     predicted = T.clip(predicted, epsilon, 1.0 - epsilon)
     return T.nnet.categorical_crossentropy(predicted, expected).mean()

@@ -1,6 +1,7 @@
 import numpy as np
 
-from neupy.utils import preformat_value, as_array2d, AttributeKeyDict
+from neupy.utils import (preformat_value, as_array2d, AttributeKeyDict,
+                         smallest_positive_number, asfloat)
 from neupy.network.utils import shuffle
 
 from base import BaseTestCase
@@ -72,3 +73,8 @@ class UtilsTestCase(BaseTestCase):
         del attrdict.val1
         with self.assertRaises(KeyError):
             attrdict.val1
+
+    def test_smallest_positive_number(self):
+        epsilon = smallest_positive_number()
+        self.assertNotEqual(0, asfloat(1) - (asfloat(1) - asfloat(epsilon)))
+        self.assertEqual(0, asfloat(1) - (asfloat(1) - asfloat(epsilon / 10)))

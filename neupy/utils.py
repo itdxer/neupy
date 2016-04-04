@@ -10,7 +10,7 @@ from scipy.sparse import issparse
 
 __all__ = ('format_data', 'does_layer_accept_1d_feature', 'asfloat',
            'AttributeKeyDict', 'is_list_of_integers', 'preformat_value',
-           'as_array2d', 'NotTrainedException')
+           'as_array2d', 'NotTrainedException', 'smallest_positive_number')
 
 
 class NotTrainedException(Exception):
@@ -221,3 +221,24 @@ def as_array2d(array):
 
     n_samples, feature_shape = array.shape[0], array.shape[1:]
     return array.reshape((n_samples, np.prod(feature_shape)))
+
+
+def smallest_positive_number():
+    """ Based on the `floatX` variables function returns different
+    smallest positive numbers.
+
+    Returns
+    -------
+    float
+        Smallest positive float number.
+    """
+    float_type = theano.config.floatX
+    epsilon_values = {
+        'float32': 1e-7,
+        'float64': 1e-16,
+    }
+
+    if float_type not in epsilon_values:
+        raise TypeError("Unknown float type `{}`".format(float_type))
+
+    return epsilon_values[float_type]

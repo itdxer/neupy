@@ -18,8 +18,8 @@ class RPROPTestCase(BaseTestCase):
     def test_rprop(self):
         nw = algorithms.RPROP(
             self.connection,
-            minimum_step=0.001,
-            maximum_step=1,
+            minstep=0.001,
+            maxstep=1,
             increase_factor=1.1,
             decrease_factor=0.1,
             step=1,
@@ -48,8 +48,8 @@ class RPROPTestCase(BaseTestCase):
 
     def test_irpropplus(self):
         options = dict(
-            minimum_step=0.001,
-            maximum_step=1,
+            minstep=0.001,
+            maxstep=1,
             increase_factor=1.1,
             decrease_factor=0.1,
             step=1,
