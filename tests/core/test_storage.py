@@ -3,16 +3,18 @@ import platform
 import tempfile
 
 import dill
+import theano
 import numpy as np
 from sklearn import datasets, preprocessing
 from neupy import algorithms
 
 from base import BaseTestCase
+from data import simple_classification
 
 
 class StorageTestCase(BaseTestCase):
     def test_simple_storage(self):
-        bpnet = algorithms.GradientDescent((2, 3, 1), step=0.25, verbose=False)
+        bpnet = algorithms.GradientDescent((2, 3, 1), step=0.25)
         data, target = datasets.make_regression(n_features=2, n_targets=1)
 
         data = preprocessing.MinMaxScaler().fit_transform(data)
@@ -59,16 +61,8 @@ class StorageTestCase(BaseTestCase):
     def test_dynamic_classes(self):
         test_classes = {
             algorithms.GradientDescent: {},
-            # algorithms.MinibatchGradientDescent: {'batch_size': 10},
-            # algorithms.Momentum: {'momentum': 0.5},
-            # algorithms.RPROP: {'maxstep': 1},
-            # algorithms.IRPROPPlus: {'maxstep': 1},
-            # algorithms.ConjugateGradient: {
-            #     'update_function': 'fletcher_reeves'
-            # },
-            # algorithms.QuasiNewton: {'update_function': 'bfgs'},
-            # algorithms.HessianDiagonal: {'min_eigval': 1e-5},
-            # algorithms.LevenbergMarquardt: {'mu': 0.01},
+            algorithms.MinibatchGradientDescent: {'batch_size': 10},
+            algorithms.Momentum: {'momentum': 0.5},
         }
 
         for algorithm_class, algorithm_params in test_classes.items():
@@ -121,3 +115,22 @@ class StorageTestCase(BaseTestCase):
                 )
                 # Error must be big, because we didn't normalize data
                 self.assertEqual(real_bpnet_error, restored_bpnet_error)
+
+    def test_storage_with_custom_theano_float_config(self):
+        theano.config.floatX = 'float32'
+
+        x_train, x_test, y_train, y_test = simple_classification()
+        bpnet = algorithms.GradientDescent((10, 20, 1), step=0.25)
+        bpnet.train(x_train, y_train, x_test, y_test)
+
+        with tempfile.NamedTemporaryFile() as temp:
+            test_layer_weights = bpnet.input_layer.weight.get_value().copy()
+            dill.dump(bpnet, temp)
+            temp.file.seek(0)
+
+            theano.config.floatX = 'float64'
+            restored_bpnet = dill.load(temp)
+            np.testing.assert_array_equal(
+                test_layer_weights,
+                restored_bpnet.input_layer.weight.get_value()
+            )

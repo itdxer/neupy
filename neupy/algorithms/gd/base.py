@@ -3,6 +3,7 @@ from __future__ import division
 import math
 
 import six
+import theano
 import theano.tensor as T
 
 from neupy.core.properties import Property, BoundedProperty
@@ -61,14 +62,21 @@ class GradientDescent(ConstructableNetwork):
 
     addons = Property(default=None, expected_type=list)
 
-    def __new__(cls, connection=None, options=None, **kwargs):
+    # TODO: The None parameters that get useful only in
+    # case of dill.load operation don't look good.
+    # I should find a better way to solve this problem.
+    def __new__(cls, connection=None, options=None, floatX=None, **kwargs):
         # Argument `options` is a simple hack for the `__reduce__` method.
         # `__reduce__` can't retore class with keyword arguments and
         # it will put them as `dict` argument in the `options` and method
         # will translate it to kwargs. The same hack is in the
         # `__init__` method.
+
         if options is None:
             options = kwargs
+
+        if floatX is not None:
+            theano.config.floatX = floatX
 
         addons = options.get('addons')
 
@@ -106,7 +114,7 @@ class GradientDescent(ConstructableNetwork):
 
         return super(GradientDescent, new_class).__new__(new_class)
 
-    def __init__(self, connection, options=None, **kwargs):
+    def __init__(self, connection, options=None, floatX=None, **kwargs):
         if options is None:
             options = kwargs
         super(GradientDescent, self).__init__(connection, **options)
@@ -127,7 +135,8 @@ class GradientDescent(ConstructableNetwork):
 
     def __reduce__(self):
         parameters = self.get_params(with_connection=False)
-        args = (self.connection, parameters)
+        floatX = theano.config.floatX
+        args = (self.connection, parameters, floatX)
         return (self.main_class, args)
 
 
