@@ -444,7 +444,6 @@ class BaseNetwork(BaseSkeleton):
                 if shuffle_data:
                     input_train, target_train = shuffle(input_train,
                                                         target_train)
-
                 try:
                     train_error = train_epoch(input_train, target_train)
 

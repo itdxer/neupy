@@ -14,6 +14,34 @@ from . import terminal
 __all__ = ('Verbose',)
 
 
+def terminal_echo(enabled, file_descriptor=sys.stdin):
+    """ Enable/disable echo in the terminal.
+
+    Parameters
+    ----------
+    enabled : bool
+        The `False` value means that you willn't be able to make
+        input in terminal.
+    file_descriptor : object
+        File descriptor that you would like to enable or disable.
+        Defaults to ``sys.stdin``.
+    """
+    is_windows = (os.name == 'nt')
+
+    if not is_windows:
+        termios = importlib.import_module('termios')
+        attributes = termios.tcgetattr(file_descriptor)
+        lflag = attributes[3]
+
+        if enabled:
+            lflag |= termios.ECHO
+        else:
+            lflag &= ~termios.ECHO
+
+        attributes[3] = lflag
+        termios.tcsetattr(file_descriptor, termios.TCSANOW, attributes)
+
+
 class TerminalLogger(object):
     """ Customized logging class that replace standard logging
     functionality.
@@ -136,25 +164,13 @@ class TerminalLogger(object):
         """ Context manager helps ignore user input in
         terminal for UNIX.
         """
-        is_windows = (os.name == 'nt')
 
-        if not is_windows and self.enable:
-            curses = importlib.import_module('curses')
-
+        if self.enable:
             try:
-                curses.initscr()
-
-                try:
-                    curses.echo()
-                    yield
-
-                finally:
-                    curses.noecho()
-                    curses.endwin()
-            except:
-                # Handles case when terminal is not defined.
+                terminal_echo(enabled=False)
                 yield
-
+            finally:
+                terminal_echo(enabled=True)
         else:
             yield
 
