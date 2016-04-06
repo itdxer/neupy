@@ -38,9 +38,9 @@ def show_epoch_summary(network):
     )
     table_drawer.start()
 
-    yield
-
     try:
+        yield
+
         while True:
             now = time.time()
 
