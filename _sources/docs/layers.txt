@@ -86,11 +86,8 @@ The example below shows one of the possible way to create a new layer.
     import theano.tensor as T
     from neupy import layers
 
-    def square(x):
-        return T.square(x)
-
     class SquareLayer(layers.Layer):
-        activation_function = square
+        activation_function = T.square
 
 First of all you can see different class :layer:`Layer`.
 This class expect ``activation_function`` property to be provided. It must be

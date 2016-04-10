@@ -103,18 +103,18 @@
 <span id="neupy-algorithms-gd-rprop-module"></span><h1>neupy.algorithms.gd.rprop module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.gd.rprop.RPROP">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.gd.rprop.</span><span class="descname">RPROP</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/rprop.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.gd.rprop.</span><span class="descname">RPROP</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>floatX=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/rprop.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.gd.html#neupy.algorithms.gd.StepSelectionBuiltIn" title="neupy.algorithms.gd.StepSelectionBuiltIn"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.gd.StepSelectionBuiltIn</span></span></a>, <a class="reference internal" href="neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.gd.base.GradientDescent</span></span></a></p>
 <p>RPROP <a class="reference internal" href="neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">GradientDescent</span></span></a> algorithm optimization.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minimum_step</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minstep</strong> : float</p>
 <blockquote>
 <div><p>Minimum possible value for step. Defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
 </div></blockquote>
-<p><strong>maximum_step</strong> : float</p>
+<p><strong>maxstep</strong> : float</p>
 <blockquote>
 <div><p>Maximum possible value for step. Defaults to <span class="docutils literal"><span class="pre">50</span></span>.</p>
 </div></blockquote>
@@ -275,36 +275,36 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.algorithms.gd.rprop.RPROP.maximum_step">
-<span class="descname">maximum_step</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/rprop.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.algorithms.gd.rprop.RPROP.maxstep">
+<span class="descname">maxstep</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/rprop.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.algorithms.gd.rprop.RPROP.minimum_step">
-<span class="descname">minimum_step</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/rprop.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.algorithms.gd.rprop.RPROP.minstep">
+<span class="descname">minstep</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/rprop.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.rprop.RPROP.options">
-<span class="descname">options</span><em class="property"> = {'shuffle_data': Option(class_name='BaseNetwork', value=False), 'addons': Option(class_name='GradientDescent', value=None), 'step': Option(class_name='BaseNetwork', value=0.1), 'verbose': Option(class_name='Verbose', value=False), 'error': Option(class_name='ConstructableNetwork', value=mse), 'increase_factor': Option(class_name='RPROP', value=1.2), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'minimum_step': Option(class_name='RPROP', value=0.1), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'maximum_step': Option(class_name='RPROP', value=50), 'decrease_factor': Option(class_name='RPROP', value=0.5), 'show_epoch': Option(class_name='BaseNetwork', value=1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/rprop.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'decrease_factor': Option(class_name='RPROP', value=0.5), 'maxstep': Option(class_name='RPROP', value=50), 'step': Option(class_name='BaseNetwork', value=0.1), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'increase_factor': Option(class_name='RPROP', value=1.2), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'error': Option(class_name='ConstructableNetwork', value=mse), 'addons': Option(class_name='GradientDescent', value=None), 'minstep': Option(class_name='RPROP', value=0.1), 'verbose': Option(class_name='Verbose', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/rprop.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="neupy.algorithms.gd.rprop.IRPROPPlus">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.gd.rprop.</span><span class="descname">IRPROPPlus</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/rprop.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.gd.rprop.</span><span class="descname">IRPROPPlus</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>floatX=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/rprop.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.gd.rprop.RPROP</span></span></a></p>
 <p>iRPROP+ <a class="reference internal" href="neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">GradientDescent</span></span></a> algorithm optimization.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minimum_step</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minstep</strong> : float</p>
 <blockquote>
 <div><p>Minimum possible value for step. Defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
 </div></blockquote>
-<p><strong>maximum_step</strong> : float</p>
+<p><strong>maxstep</strong> : float</p>
 <blockquote>
 <div><p>Maximum possible value for step. Defaults to <span class="docutils literal"><span class="pre">50</span></span>.</p>
 </div></blockquote>
@@ -456,7 +456,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.rprop.IRPROPPlus.options">
-<span class="descname">options</span><em class="property"> = {'shuffle_data': Option(class_name='BaseNetwork', value=False), 'addons': Option(class_name='GradientDescent', value=None), 'step': Option(class_name='BaseNetwork', value=0.1), 'verbose': Option(class_name='Verbose', value=False), 'error': Option(class_name='ConstructableNetwork', value=mse), 'increase_factor': Option(class_name='RPROP', value=1.2), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'minimum_step': Option(class_name='RPROP', value=0.1), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'maximum_step': Option(class_name='RPROP', value=50), 'decrease_factor': Option(class_name='RPROP', value=0.5), 'show_epoch': Option(class_name='BaseNetwork', value=1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/rprop.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'decrease_factor': Option(class_name='RPROP', value=0.5), 'verbose': Option(class_name='Verbose', value=False), 'error': Option(class_name='ConstructableNetwork', value=mse), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'increase_factor': Option(class_name='RPROP', value=1.2), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'maxstep': Option(class_name='RPROP', value=50), 'step': Option(class_name='BaseNetwork', value=0.1), 'addons': Option(class_name='GradientDescent', value=None), 'minstep': Option(class_name='RPROP', value=0.1), 'shuffle_data': Option(class_name='BaseNetwork', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/rprop.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

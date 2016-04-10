@@ -103,7 +103,7 @@
 <span id="neupy-algorithms-gd-adagrad-module"></span><h1>neupy.algorithms.gd.adagrad module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.gd.adagrad.Adagrad">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.gd.adagrad.</span><span class="descname">Adagrad</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/adagrad.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.gd.adagrad.</span><span class="descname">Adagrad</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>floatX=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/adagrad.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.MinibatchGradientDescent" title="neupy.algorithms.gd.base.MinibatchGradientDescent"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.gd.base.MinibatchGradientDescent</span></span></a></p>
 <p>Adagrad algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -238,7 +238,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.adagrad.Adagrad.options">
-<span class="descname">options</span><em class="property"> = {'shuffle_data': Option(class_name='BaseNetwork', value=False), 'addons': Option(class_name='GradientDescent', value=None), 'step': Option(class_name='BaseNetwork', value=0.1), 'epsilon': Option(class_name='Adagrad', value=1e-05), 'verbose': Option(class_name='Verbose', value=False), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'error': Option(class_name='ConstructableNetwork', value=mse), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'batch_size': Option(class_name='MinibatchGradientDescent', value=100), 'show_epoch': Option(class_name='BaseNetwork', value=1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/adagrad.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'epsilon': Option(class_name='Adagrad', value=1e-05), 'error': Option(class_name='ConstructableNetwork', value=mse), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'step': Option(class_name='BaseNetwork', value=0.1), 'addons': Option(class_name='GradientDescent', value=None), 'verbose': Option(class_name='Verbose', value=False), 'batch_size': Option(class_name='MinibatchGradientDescent', value=100)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/adagrad.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

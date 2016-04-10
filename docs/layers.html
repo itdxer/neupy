@@ -171,11 +171,8 @@ The example below shows one of the possible way to create a new layer.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
 <span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 
-<span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">T</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-
 <span class="k">class</span> <span class="nc">SquareLayer</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Layer</span><span class="p">):</span>
-    <span class="n">activation_function</span> <span class="o">=</span> <span class="n">square</span>
+    <span class="n">activation_function</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">square</span>
 </pre></div>
 </div>
 <p>First of all you can see different class <a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Layer" title="neupy.layers.layers.Layer"><span class="xref py py-class docutils literal"><span class="pre">Layer</span></span></a>.

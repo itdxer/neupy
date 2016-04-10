@@ -103,7 +103,7 @@
 <span id="neupy-algorithms-gd-lev-marq-module"></span><h1>neupy.algorithms.gd.lev_marq module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.gd.lev_marq.LevenbergMarquardt">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.gd.lev_marq.</span><span class="descname">LevenbergMarquardt</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/lev_marq.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.gd.lev_marq.</span><span class="descname">LevenbergMarquardt</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>floatX=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/lev_marq.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.gd.NoStepSelection</span></span>, <a class="reference internal" href="neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.gd.base.GradientDescent</span></span></a></p>
 <p>Levenberg-Marquardt algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -308,7 +308,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.lev_marq.LevenbergMarquardt.options">
-<span class="descname">options</span><em class="property"> = {'shuffle_data': Option(class_name='BaseNetwork', value=False), 'addons': Option(class_name='GradientDescent', value=None), 'step': Option(class_name='BaseNetwork', value=0.1), 'mu_update_factor': Option(class_name='LevenbergMarquardt', value=5), 'verbose': Option(class_name='Verbose', value=False), 'error': Option(class_name='LevenbergMarquardt', value=mse), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'mu': Option(class_name='LevenbergMarquardt', value=0.01), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/lev_marq.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'step': Option(class_name='BaseNetwork', value=0.1), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'mu_update_factor': Option(class_name='LevenbergMarquardt', value=5), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'mu': Option(class_name='LevenbergMarquardt', value=0.01), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'error': Option(class_name='LevenbergMarquardt', value=mse), 'addons': Option(class_name='GradientDescent', value=None), 'verbose': Option(class_name='Verbose', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/lev_marq.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
