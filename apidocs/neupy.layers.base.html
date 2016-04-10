@@ -104,8 +104,13 @@
 <dl class="class">
 <dt id="neupy.layers.base.BaseLayer">
 <em class="property">class </em><span class="descclassname">neupy.layers.base.</span><span class="descname">BaseLayer</span><span class="sig-paren">(</span><em>*args</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="neupy.layers.connections.html#neupy.layers.connections.ChainConnection" title="neupy.layers.connections.ChainConnection"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.connections.ChainConnection</span></span></a>, <span class="xref py py-class docutils literal"><span class="pre">neupy.core.config.BaseConfigurable</span></span></p>
+<dd><p>Bases: <a class="reference internal" href="neupy.layers.connections.html#neupy.layers.connections.ChainConnection" title="neupy.layers.connections.ChainConnection"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.connections.ChainConnection</span></span></a>, <a class="reference internal" href="neupy.core.config.html#neupy.core.config.Configurable" title="neupy.core.config.Configurable"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.config.Configurable</span></span></a></p>
 <p>Base class for all layers.</p>
+<dl class="method">
+<dt id="neupy.layers.base.BaseLayer.initialize">
+<span class="descname">initialize</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="neupy.layers.base.BaseLayer.options">
 <span class="descname">options</span><em class="property"> = {}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -114,6 +119,100 @@
 <dl class="method">
 <dt id="neupy.layers.base.BaseLayer.relate_to">
 <span class="descname">relate_to</span><span class="sig-paren">(</span><em>right_layer</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.layers.base.ParameterBasedLayer">
+<em class="property">class </em><span class="descclassname">neupy.layers.base.</span><span class="descname">ParameterBasedLayer</span><span class="sig-paren">(</span><em>size</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#neupy.layers.base.BaseLayer" title="neupy.layers.base.BaseLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.base.BaseLayer</span></span></a></p>
+<p>Layer that creates weight and bias parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : int</p>
+<blockquote>
+<div><p>Layer input size.</p>
+</div></blockquote>
+<p><strong>weight</strong> : 2D array-like or None</p>
+<blockquote>
+<div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
+generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
+<span class="docutils literal"><span class="pre">None</span></span> by default.</p>
+</div></blockquote>
+<p><strong>bias</strong> : 1D array-like or None</p>
+<blockquote>
+<div><p>Define your layer bias. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
+generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.</p>
+</div></blockquote>
+<p><strong>init_method</strong> : {&#8216;bounded&#8217;, &#8216;normal&#8217;, &#8216;ortho&#8217;, &#8216;xavier_normal&#8217;,    &#8216;xavier_uniform&#8217;, &#8216;he_normal&#8217;, &#8216;he_uniform&#8217;}</p>
+<blockquote>
+<div><p>Weight initialization method. Defaults to <span class="docutils literal"><span class="pre">xavier_normal</span></span>.</p>
+<ul class="simple">
+<li><span class="docutils literal"><span class="pre">normal</span></span> will generate random weights from normal distribution         with standard deviation equal to <span class="docutils literal"><span class="pre">0.01</span></span>.</li>
+<li><span class="docutils literal"><span class="pre">bounded</span></span> generate random weights from Uniform distribution.</li>
+<li><span class="docutils literal"><span class="pre">ortho</span></span> generate random orthogonal matrix.</li>
+<li><span class="docutils literal"><span class="pre">xavier_normal</span></span> generate random matrix from normal distrubtion         where variance equal to <span class="math">\(\frac{2}{fan_{in} +         fan_{out}}\)</span>. Where <span class="math">\(fan_{in}\)</span> is a number of         layer input units and <span class="math">\(fan_{out}\)</span> - number of layer         output units.</li>
+<li><span class="docutils literal"><span class="pre">xavier_uniform</span></span> generate random matrix from uniform         distribution where <span class="math">\(w_{ij} \in         [-\sqrt{\frac{6}{fan_{in} + fan_{out}}},         \sqrt{\frac{6}{fan_{in} + fan_{out}}}\)</span>].</li>
+<li><span class="docutils literal"><span class="pre">he_normal</span></span> generate random matrix from normal distrubtion         where variance equal to <span class="math">\(\frac{2}{fan_{in}}\)</span>.         Where <span class="math">\(fan_{in}\)</span> is a number of layer input units.</li>
+<li><span class="docutils literal"><span class="pre">he_uniform</span></span> generate random matrix from uniformal         distribution where <span class="math">\(w_{ij} \in [        -\sqrt{\frac{6}{fan_{in}}},         \sqrt{\frac{6}{fan_{in}}}]\)</span></li>
+</ul>
+</div></blockquote>
+<p><strong>bounds</strong> : tuple of two float</p>
+<blockquote class="last">
+<div><p>Available only for <span class="docutils literal"><span class="pre">init_method</span></span> equal to <span class="docutils literal"><span class="pre">bounded</span></span>.  Value
+identify minimum and maximum possible value in random weights.
+Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span class="pre">1)</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.layers.base.ParameterBasedLayer.bias">
+<span class="descname">bias</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.base.ParameterBasedLayer.bias_shape">
+<span class="descname">bias_shape</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.base.ParameterBasedLayer.bounds">
+<span class="descname">bounds</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.base.ParameterBasedLayer.init_method">
+<span class="descname">init_method</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.base.ParameterBasedLayer.initialize">
+<span class="descname">initialize</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.base.ParameterBasedLayer.options">
+<span class="descname">options</span><em class="property"> = {'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'bias': Option(class_name='ParameterBasedLayer', value=None), 'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.base.ParameterBasedLayer.size">
+<span class="descname">size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.base.ParameterBasedLayer.weight">
+<span class="descname">weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.base.ParameterBasedLayer.weight_shape">
+<span class="descname">weight_shape</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -154,7 +253,8 @@
 </div></section><section><div class="widget">
     <h1>Versions</h1>
     <ul>
-        <li>0.2.0 (March 2016) - <a href="../index.html">documentation</a></li>
+        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
+        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
         <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
         <li>0.1.3 (October 2015)</li>
         <li>0.1.2 (October 2015)</li>

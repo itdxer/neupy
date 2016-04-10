@@ -1,0 +1,518 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="viewport" content="width=device-width">
+        <title>Boston house-prices dataset &mdash; NeuPy</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="next" title="Visualize Gradient Descent Algorithms" href="visualize_backpropagation_algorithms.html" /><link rel="prev" title="Discrete Hopfiel Network" href="../../09/20/discrete_hopfield_network.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+<style media="screen" type="text/css">
+    #fork_me { display: none; }
+    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
+    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
+
+    .docutils { width: 100%; }
+    .docutils td { padding: 10px; }
+    .section { word-wrap:break-word; }
+    .descname { font-weight: bold; }
+    .highlight-python + .figure { margin-top: 20px; }
+    .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+    .dataframe td { padding: 5px; }
+
+    .math .gd { color: #000 !important; } /* Generic.Deleted */
+    .math .m { color: #000 !important; } /* Literal.Number */
+    .math .s { color: #000 !important; } /* Literal.String */
+    .math .mf { color: #000 !important; } /* Literal.Number.Float */
+    .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+    .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+    .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+    .math .sc { color: #000 !important; } /* Literal.String.Char */
+    .math .s2 { color: #000 !important; } /* Literal.String.Double */
+    .math .si { color: #000 !important; } /* Literal.String.Interpol */
+    .math .sx { color: #000 !important; } /* Literal.String.Other */
+    .math .s1 { color: #000 !important; } /* Literal.String.Single */
+    .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+    .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+</style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../../../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
+          </header>
+      <nav role="navigation">
+            <ul><li class="main-nav">
+                  <a href="../../../pages/home.html">Home</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../page1.html">Tutorials</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/documentation.html">Documentation</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/installation.html">Installation</a>
+                </li>
+              </ul>
+          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
+            <span>July 04, 2015</span>
+        </div>
+    <div class="section" id="boston-house-prices-dataset">
+<h1>Boston house-prices dataset</h1>
+<p>For this tutorial we are going to predict Boston house prices via Conjugate gradient.</p>
+<p>For the beginning we should get some data.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_boston</span><span class="p">()</span>
+<span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">target</span>
+</pre></div>
+</div>
+<p>Let&#8217;s look closer into the data.</p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th>CRIM</th>
+      <th>ZN</th>
+      <th>INDUS</th>
+      <th>CHAS</th>
+      <th>NOX</th>
+      <th>RM</th>
+      <th>AGE</th>
+      <th>DIS</th>
+      <th>RAD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0.00632</td>
+      <td>18</td>
+      <td>2.31</td>
+      <td>0</td>
+      <td>0.538</td>
+      <td>6.575</td>
+      <td>65.2</td>
+      <td>4.0900</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>0.02731</td>
+      <td>0</td>
+      <td>7.07</td>
+      <td>0</td>
+      <td>0.469</td>
+      <td>6.421</td>
+      <td>78.9</td>
+      <td>4.9671</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>0.02729</td>
+      <td>0</td>
+      <td>7.07</td>
+      <td>0</td>
+      <td>0.469</td>
+      <td>7.185</td>
+      <td>61.1</td>
+      <td>4.9671</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>0.03237</td>
+      <td>0</td>
+      <td>2.18</td>
+      <td>0</td>
+      <td>0.458</td>
+      <td>6.998</td>
+      <td>45.8</td>
+      <td>6.0622</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>0.06905</td>
+      <td>0</td>
+      <td>2.18</td>
+      <td>0</td>
+      <td>0.458</td>
+      <td>7.147</td>
+      <td>54.2</td>
+      <td>6.0622</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th>TAX</th>
+      <th>PTRATIO</th>
+      <th>B</th>
+      <th>LSTAT</th>
+      <th>MEDV</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>296</td>
+      <td>15.3</td>
+      <td>396.90</td>
+      <td>4.98</td>
+      <td>24.0</td>
+    </tr>
+    <tr>
+      <td>242</td>
+      <td>17.8</td>
+      <td>396.90</td>
+      <td>9.14</td>
+      <td>21.6</td>
+    </tr>
+    <tr>
+      <td>242</td>
+      <td>17.8</td>
+      <td>392.83</td>
+      <td>4.03</td>
+      <td>34.7</td>
+    </tr>
+    <tr>
+      <td>222</td>
+      <td>18.7</td>
+      <td>394.63</td>
+      <td>2.94</td>
+      <td>33.4</td>
+    </tr>
+    <tr>
+      <td>222</td>
+      <td>18.7</td>
+      <td>396.90</td>
+      <td>5.33</td>
+      <td>36.2</td>
+    </tr>
+  </tbody>
+</table><p>Data contains 14 columns.
+The last column <span class="docutils literal"><span class="pre">MEDV</span></span> is a median value of owner-occupied homes in $1000&#8217;s.
+The goal is to predict this prices.
+Other columns we can use for Neural Network training.
+All columns description you can find below.</p>
+<ul class="simple">
+<li>CRIM     per capita crime rate by town</li>
+<li>ZN       proportion of residential land zoned for lots over 25,000 sq.ft.</li>
+<li>INDUS    proportion of non-retail business acres per town</li>
+<li>CHAS     Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)</li>
+<li>NOX      nitric oxides concentration (parts per 10 million)</li>
+<li>RM       average number of rooms per dwelling</li>
+<li>AGE      proportion of owner-occupied units built prior to 1940</li>
+<li>DIS      weighted distances to five Boston employment centres</li>
+<li>RAD      index of accessibility to radial highways</li>
+<li>TAX      full-value property-tax rate per $10,000</li>
+<li>PTRATIO  pupil-teacher ratio by town</li>
+<li>B        1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town</li>
+<li>LSTAT    % lower status of the population</li>
+</ul>
+<p>From data set description we can find that there are 13 continuous attributes (including &#8220;class&#8221; attribute &#8220;MEDV&#8221;) and 1 binary-valued attribute.
+There is no multiple categorical data, so we don&#8217;t need to change feature dimention.
+But we already have one problem.
+If you look closer, you will find that every column has its own data range.
+This situation is a bad thing for Neural Network training, because input values ​​make different contributions to the calculation of the output values.
+Bigger values will be more important for Network which can be perceived as invalid assumption based on data.
+For example in the first row, in the table above, column <span class="docutils literal"><span class="pre">B</span></span> contains value <cite>396.90</cite> and column <span class="docutils literal"><span class="pre">CRIM</span></span> - <cite>0.00632</cite>.
+To fix this issue we should transfrom all columns to get similar ranges.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span>
+
+<span class="n">data_scaler</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">MinMaxScaler</span><span class="p">()</span>
+<span class="n">target_scaler</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">MinMaxScaler</span><span class="p">()</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">data_scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">target_scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After transformation data looks like this.</p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th>CRIM</th>
+      <th>ZN</th>
+      <th>INDUS</th>
+      <th>CHAS</th>
+      <th>NOX</th>
+      <th>...</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0.000000</td>
+      <td>0.18</td>
+      <td>0.067815</td>
+      <td>0</td>
+      <td>0.314815</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <td>0.000236</td>
+      <td>0.00</td>
+      <td>0.242302</td>
+      <td>0</td>
+      <td>0.172840</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <td>0.000236</td>
+      <td>0.00</td>
+      <td>0.242302</td>
+      <td>0</td>
+      <td>0.172840</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <td>0.000293</td>
+      <td>0.00</td>
+      <td>0.063050</td>
+      <td>0</td>
+      <td>0.150206</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <td>0.000705</td>
+      <td>0.00</td>
+      <td>0.063050</td>
+      <td>0</td>
+      <td>0.150206</td>
+      <td>...</td>
+    </tr>
+  </tbody>
+</table><p>All the data is now in the range between 0 and 1.</p>
+<p>Then we should split our data set into train and validation.
+We use 85% of data for train.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
+
+<span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
+
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mf">0.85</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we are ready to build Neural Network which will predict house prices.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+
+<span class="n">cgnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">ConjugateGradient</span><span class="p">(</span>
+    <span class="n">connection</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Output</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">search_method</span><span class="o">=</span><span class="s">&#39;golden&#39;</span><span class="p">,</span>
+    <span class="n">show_epoch</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LinearSearch</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/cgnet-init.png"><img alt="Conjgate Gradient train" src="../../../_images/cgnet-init.png" style="width: 80%;" /></a>
+</div>
+<p>We define network with one hidden layer.
+Input size for this layer is 50.
+This value is just a guess.
+For better and more accurate result we should choose it with other methods, but for now we can use this value.
+As the main algorithm we take Conjugate Gradient.
+This implementation of backpropagation is a little bit different from main interpretation of Conjugate Gradient.
+For GradientDescent implementation we can&#8217;t guarantee that we get the local minimum in n-th steps (where <cite>n</cite> is the dimention).
+To optimize it we should use linear search.
+It will fix and set up better steps for Conjugate Gradient.</p>
+<p>Now we are going to train the network.
+For training we set up 100 epochs.
+Also we will add test data into training function to check validation error on every epoch.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cgnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/cgnet-train.png"><img alt="Conjgate Gradient train" src="../../../_images/cgnet-train.png" style="width: 80%;" /></a>
+</div>
+<p>To make sure that all training processes go in a right way we can check erros updates while the training is in process.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cgnet</span><span class="o">.</span><span class="n">plot_errors</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/cgnet-error-plot.png"><img alt="Conjgate Gradient train" src="../../../_images/cgnet-error-plot.png" style="width: 80%;" /></a>
+</div>
+<p>Error minimization procedure looks fine.
+The problem is, that last error doesn&#8217;t show us the full picture of prediction accuracy.
+Our output is always between zero and one and we count the results always into Mean Square Error.
+To fix it, we are going to inverse our transformation for predicted and actual values and for accuracy measurment we will use Root Mean Square Logarithmic Error (RMSLE).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy.estimators</span> <span class="kn">import</span> <span class="n">rmsle</span>
+
+<span class="n">y_predict</span> <span class="o">=</span> <span class="n">cgnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">error</span> <span class="o">=</span> <span class="n">rmsle</span><span class="p">(</span><span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_test</span><span class="p">),</span>
+              <span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_predict</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we can see that our error approximately equals to <cite>0.22</cite> which is pretty small.
+In the table below you can find 10 randomly chosen errors.</p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th>Actual</th>
+      <th>Predicted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>31.2</td>
+      <td>27.5</td>
+    </tr>
+    <tr>
+      <td>18.7</td>
+      <td>18.5</td>
+    </tr>
+    <tr>
+      <td>20.1</td>
+      <td>18.5</td>
+    </tr>
+    <tr>
+      <td>17.2</td>
+      <td>9.5</td>
+    </tr>
+    <tr>
+      <td>8.3</td>
+      <td>9.5</td>
+    </tr>
+    <tr>
+      <td>50.0</td>
+      <td>41.0</td>
+    </tr>
+    <tr>
+      <td>42.8</td>
+      <td>32.0</td>
+    </tr>
+    <tr>
+      <td>20.5</td>
+      <td>18.5</td>
+    </tr>
+    <tr>
+      <td>16.8</td>
+      <td>23.0</td>
+    </tr>
+    <tr>
+      <td>11.8</td>
+      <td>9.5</td>
+    </tr>
+  </tbody>
+</table><p>The results are good for the first network implementation.
+There are a lot of things which we can do to improve network results, but we will discuss them in an another tutorial.</p>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Posted by Yurii Shevchuk</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="../../../tags/supervised.html">supervised</a>, <a href="../../../tags/backpropagation.html">backpropagation</a>, <a href="../../../tags/regression.html">regression</a></span>
+        </div>
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="../../09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a></li>
+            <li class="right"><a href="visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a> &raquo; </li>
+        </ul><div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "neupy";    var disqus_identifier = "2015/07/04/boston_house_prices_dataset";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Posts</h1>
+    <ul><li>
+            <a href="../../09/21/password_recovery.html">Password recovery</a>
+        </li><li>
+            <a href="../../09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
+        </li><li>
+            <a href="#">Boston house-prices dataset</a>
+        </li><li>
+            <a href="visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+        </li></ul>
+</div>
+</section><section><div class="widget">
+    <h1>Cheat sheet</h1>
+    <ul>
+        <li><a href="../../../docs/algorithms.html#algorithms">Algorithms</a></li>
+        <li><a href="../../../docs/algorithms.html#layers">Layers</a></li>
+        <li><a href="../../../docs/algorithms.html#error-functions">Error functions</a></li>
+    </ul>
+</div></section><section><div class="widget">
+    <h1>Installation</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neupy</pre>
+        </div>
+    </div>
+    <p>Read more in <a href="../../../pages/documentation.html">Documentation</a>.</p>
+</div></section><section><div class="widget">
+    <h1>Versions</h1>
+    <ul>
+        <li>0.2.0 (March 2016) - <a href="../../../index.html">documentation</a></li>
+        <li>0.1.4 (November 2015) - <a href="../../../versions/0.1.4/index.html">documentation</a></li>
+        <li>0.1.3 (October 2015)</li>
+        <li>0.1.2 (October 2015)</li>
+        <li>0.1.1 (October 2015)</li>
+        <li>0.1.0 (September 2015)</li>
+    </ul>
+</div></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+    <a id="fork_me" href="http://github.com/itdxer/neupy">
+        <img alt="Fork me" src="../../../_static/img/github-fork-green.png" />
+    </a></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

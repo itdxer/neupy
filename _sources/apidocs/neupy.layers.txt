@@ -9,8 +9,9 @@ Submodules
    neupy.layers.activations
    neupy.layers.base
    neupy.layers.connections
-   neupy.layers.layers
+   neupy.layers.convolutions
    neupy.layers.output
+   neupy.layers.transformations
    neupy.layers.utils
 
 Module contents

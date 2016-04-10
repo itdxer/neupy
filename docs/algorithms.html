@@ -119,10 +119,12 @@
 </li>
 <li><a class="reference internal" href="#layers" id="id12">Layers</a><ul>
 <li><a class="reference internal" href="#input-and-hidden-layers" id="id13">Input and hidden layers</a></li>
-<li><a class="reference internal" href="#output-layers" id="id14">Output layers</a></li>
+<li><a class="reference internal" href="#convolutional-layers" id="id14">Convolutional Layers</a></li>
+<li><a class="reference internal" href="#misc-layers" id="id15">Misc layers</a></li>
+<li><a class="reference internal" href="#output-layers" id="id16">Output layers</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#error-functions" id="id15">Error functions</a></li>
+<li><a class="reference internal" href="#error-functions" id="id17">Error functions</a></li>
 </ul>
 </li>
 </ul>
@@ -409,38 +411,82 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Linear" title="neupy.layers.layers.Linear"><span class="xref py py-class docutils literal"><span class="pre">Linear</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.Linear" title="neupy.layers.activations.Linear"><span class="xref py py-class docutils literal"><span class="pre">Linear</span></span></a></td>
 <td>Layer with linear activation function.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Sigmoid" title="neupy.layers.layers.Sigmoid"><span class="xref py py-class docutils literal"><span class="pre">Sigmoid</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.Sigmoid" title="neupy.layers.activations.Sigmoid"><span class="xref py py-class docutils literal"><span class="pre">Sigmoid</span></span></a></td>
 <td>Layer with sigmoid activation function.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.HardSigmoid" title="neupy.layers.layers.HardSigmoid"><span class="xref py py-class docutils literal"><span class="pre">HardSigmoid</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.HardSigmoid" title="neupy.layers.activations.HardSigmoid"><span class="xref py py-class docutils literal"><span class="pre">HardSigmoid</span></span></a></td>
 <td>Layer with hard sigmoid activation function.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Step" title="neupy.layers.layers.Step"><span class="xref py py-class docutils literal"><span class="pre">Step</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.Step" title="neupy.layers.activations.Step"><span class="xref py py-class docutils literal"><span class="pre">Step</span></span></a></td>
 <td>Layer with step activation function.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Tanh" title="neupy.layers.layers.Tanh"><span class="xref py py-class docutils literal"><span class="pre">Tanh</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.Tanh" title="neupy.layers.activations.Tanh"><span class="xref py py-class docutils literal"><span class="pre">Tanh</span></span></a></td>
 <td>Layer with tanh activation function.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Relu" title="neupy.layers.layers.Relu"><span class="xref py py-class docutils literal"><span class="pre">Relu</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.Relu" title="neupy.layers.activations.Relu"><span class="xref py py-class docutils literal"><span class="pre">Relu</span></span></a></td>
 <td>Layer with rectifier activation function.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Softplus" title="neupy.layers.layers.Softplus"><span class="xref py py-class docutils literal"><span class="pre">Softplus</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.Softplus" title="neupy.layers.activations.Softplus"><span class="xref py py-class docutils literal"><span class="pre">Softplus</span></span></a></td>
 <td>Layer with softplus activation function.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Softmax" title="neupy.layers.layers.Softmax"><span class="xref py py-class docutils literal"><span class="pre">Softmax</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.Softmax" title="neupy.layers.activations.Softmax"><span class="xref py py-class docutils literal"><span class="pre">Softmax</span></span></a></td>
 <td>Layer with softmax activation function.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.layers.html#neupy.layers.layers.Dropout" title="neupy.layers.layers.Dropout"><span class="xref py py-class docutils literal"><span class="pre">Dropout</span></span></a></td>
+</tbody>
+</table>
+</div>
+<div class="section" id="convolutional-layers">
+<h3><a class="toc-backref" href="#id14">Convolutional Layers</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Class name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.convolutions.html#neupy.layers.convolutions.Convolution" title="neupy.layers.convolutions.Convolution"><span class="xref py py-class docutils literal"><span class="pre">Convolution</span></span></a></td>
+<td>Convolutional layer</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.convolutions.html#neupy.layers.convolutions.MaxPooling" title="neupy.layers.convolutions.MaxPooling"><span class="xref py py-class docutils literal"><span class="pre">MaxPooling</span></span></a></td>
+<td>Maximum pooling layer</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.convolutions.html#neupy.layers.convolutions.AveragePooling" title="neupy.layers.convolutions.AveragePooling"><span class="xref py py-class docutils literal"><span class="pre">AveragePooling</span></span></a></td>
+<td>Average pooling layer</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="misc-layers">
+<h3><a class="toc-backref" href="#id15">Misc layers</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Class name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.transformations.html#neupy.layers.transformations.Reshape" title="neupy.layers.transformations.Reshape"><span class="xref py py-class docutils literal"><span class="pre">Reshape</span></span></a></td>
+<td>Reshape tensor input to matrix</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.transformations.html#neupy.layers.transformations.Dropout" title="neupy.layers.transformations.Dropout"><span class="xref py py-class docutils literal"><span class="pre">Dropout</span></span></a></td>
 <td>Dropout layer</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="output-layers">
-<h3><a class="toc-backref" href="#id14">Output layers</a></h3>
+<h3><a class="toc-backref" href="#id16">Output layers</a></h3>
 <table border="1" class="docutils">
 <colgroup>
 <col width="50%" />
@@ -472,7 +518,7 @@
 </div>
 </div>
 <div class="section" id="error-functions">
-<h2><a class="toc-backref" href="#id15">Error functions</a></h2>
+<h2><a class="toc-backref" href="#id17">Error functions</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="50%" />
@@ -547,7 +593,8 @@
 </div></section><section><div class="widget">
     <h1>Versions</h1>
     <ul>
-        <li>0.2.0 (March 2016) - <a href="../index.html">documentation</a></li>
+        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
+        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
         <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
         <li>0.1.3 (October 2015)</li>
         <li>0.1.2 (October 2015)</li>
