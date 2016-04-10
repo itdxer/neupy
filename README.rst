@@ -41,15 +41,21 @@ Tutorials
 Examples
 --------
 
-Gradient based Neural Networks
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+MLP Neural Networks
+~~~~~~~~~~~~~~~~~~~
 
 * `MNIST, Multilayer perceptron <examples/gd/mnist_mlp.py>`_
 * `Rectangle images, Multilayer perceptron <examples/gd/rectangles_mlp.py>`_
 * `MNIST, Denoising Autoencoder <examples/gd/mnist_autoencoder.py>`_
 * `Boston House Price prediction, Hessian algorithm <examples/gd/boston_price_prediction.py>`_
 * `Learning Algorithms Visualization, Gradient Descent, Momentum, RPROP and Conjugate Gradient <examples/gd/gd_algorithms_visualization.py>`_
-* `Text classification using CBOW and RPROP <examples/gd/word_embedding>`_
+* `IMDB review classification using CBOW and RPROP MLP <examples/gd/word_embedding>`_
+
+Convolutional Neural Networks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* `MNIST CNN <examples/gd/mnist_cnn.py>`_
+* `CIFAR10 CNN <examples/gd/cifar10_cnn.py>`_
 
 Competitive Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -74,7 +80,7 @@ Dependencies
 ------------
 
 * Python 2.7, 3.4
-* Theano >= 0.7.0
+* Theano >= 0.8.1
 * NumPy >= 1.9.0
 * SciPy >= 0.14.0
 * Matplotlib >= 1.4.0
