@@ -96,7 +96,6 @@ Algorithms
 Next steps
 ----------
 
-* Adding convolutional neural network layers (`Issue #56 <https://github.com/itdxer/neupy/issues/56>`_)
 * Adding reccurent neural network layers (`Issue #57 <https://github.com/itdxer/neupy/issues/57>`_)
 * Bug fixing and version stabilization  (`Known bugs <https://github.com/itdxer/neupy/issues?q=is%3Aissue+is%3Aopen+label%3Abug>`_)
 * Speeding up algorithms
