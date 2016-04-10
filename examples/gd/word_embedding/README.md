@@ -1,2 +1,1 @@
-# IN PROGRESS!!! Examples is not finished yet.
-# Auto news group word embedding
+# IMDB reviews classification using CBOW word embedding and RPROP MLP classifier
