@@ -56,7 +56,7 @@ class Adadelta(MinibatchGradientDescent):
                 )
 
     def init_param_updates(self, layer, parameter):
-        step = layer.step or self.variables.step
+        step = self.variables.step
         epsilon = self.epsilon
 
         gradient = T.grad(self.variables.error_func, wrt=parameter)

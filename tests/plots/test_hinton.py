@@ -2,11 +2,6 @@ import os
 
 import six
 import numpy as np
-import matplotlib
-
-# Configure matplotlib for Travis CI
-matplotlib.use('Agg')
-
 import theano
 import matplotlib.pyplot as plt
 

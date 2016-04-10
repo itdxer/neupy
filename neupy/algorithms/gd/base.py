@@ -5,6 +5,7 @@ import math
 import six
 import theano
 import theano.tensor as T
+import numpy as np
 
 from neupy.core.properties import Property, BoundedProperty
 from neupy.network import ConstructableNetwork
@@ -64,7 +65,8 @@ class GradientDescent(ConstructableNetwork):
 
     # TODO: The None parameters that get useful only in
     # case of dill.load operation don't look good.
-    # I should find a better way to solve this problem.
+    # I should find a better way to solve this problem
+    # The same I need to do with `__init__` method
     def __new__(cls, connection=None, options=None, floatX=None, **kwargs):
         # Argument `options` is a simple hack for the `__reduce__` method.
         # `__reduce__` can't retore class with keyword arguments and
@@ -120,7 +122,7 @@ class GradientDescent(ConstructableNetwork):
         super(GradientDescent, self).__init__(connection, **options)
 
     def init_param_updates(self, layer, parameter):
-        step = layer.step or self.variables.step
+        step = self.variables.step
         gradient = T.grad(self.variables.error_func, wrt=parameter)
         return [(parameter, parameter - step * gradient)]
 
@@ -170,6 +172,20 @@ class BatchSizeProperty(BoundedProperty):
 
 
 def iter_batches(n_samples, batch_size):
+    """ Iterates batch slices.
+
+    Parameters
+    ----------
+    n_samples : int
+        Number of samples. Number should be greater than 0.
+    batch_size : int
+        Batch size. Number should be greater than 0.
+
+    Yields
+    ------
+    object
+        Batch slices.
+    """
     n_batches = int(math.floor(n_samples / batch_size))
 
     for batch_index in range(n_batches):
@@ -257,8 +273,9 @@ class MinibatchGradientDescent(GradientDescent):
             return train_epoch(input_train, target_train)
 
         batch_iterator = iter_batches(n_samples, batch_size)
+        show_progressbar = (self.training and self.training.show_epoch == 1)
 
-        if self.training and self.training.show_epoch == 1:
+        if show_progressbar:
             batch_iterator = self.logs.progressbar(
                 list(batch_iterator),
                 desc='Train batches',
@@ -266,9 +283,12 @@ class MinibatchGradientDescent(GradientDescent):
             )
 
         total_error = 0
+        error = None
         for batch in batch_iterator:
-            total_error += train_epoch(input_train[batch],
-                                       target_train[batch])
+            if show_progressbar and self.verbose:
+                batch = batch_iterator.send(error)
+            error = train_epoch(input_train[batch], target_train[batch])
+            total_error += error
 
         average_error = batch_size * total_error / n_samples
         return average_error
@@ -285,8 +305,9 @@ class MinibatchGradientDescent(GradientDescent):
             return prediction_error(input_data, target_data)
 
         batch_iterator = iter_batches(n_samples, batch_size)
+        show_progressbar = (self.training and self.training.show_epoch == 1)
 
-        if self.training and self.training.show_epoch == 1:
+        if show_progressbar:
             batch_iterator = self.logs.progressbar(
                 list(batch_iterator),
                 desc='Validation batches',
@@ -294,9 +315,38 @@ class MinibatchGradientDescent(GradientDescent):
             )
 
         total_error = 0
+        error = None
         for batch in batch_iterator:
-            total_error += prediction_error(input_data[batch],
-                                            target_data[batch])
+            if show_progressbar and self.verbose:
+                batch = batch_iterator.send(error)
+            error = prediction_error(input_data[batch], target_data[batch])
+            total_error += error
 
         average_error = batch_size * total_error / n_samples
         return average_error
+
+    def predict_raw(self, input_data):
+        input_data = self.format_input_data(input_data)
+
+        n_samples = len(input_data)
+        batch_size = self.batch_size
+        predict_raw = self.methods.predict_raw
+
+        if batch_size is None or n_samples <= batch_size:
+            return predict_raw(input_data)
+
+        batch_iterator = iter_batches(n_samples, batch_size)
+        batch_iterator = self.logs.progressbar(
+            list(batch_iterator),
+            desc='Prediction batches',
+            file=self.logs.stdout
+        )
+
+        outputs = []
+        for batch in batch_iterator:
+            if self.verbose:
+                batch = batch_iterator.send(None)
+            batch_output = predict_raw(input_data[batch])
+            outputs.append(batch_output)
+
+        return np.concatenate(outputs, axis=0)

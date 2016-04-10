@@ -1,11 +1,6 @@
 import os
 
 import numpy as np
-import matplotlib
-
-# Configure matplotlib for Travis CI
-matplotlib.use('Agg')
-
 import matplotlib.pyplot as plt
 from scipy.misc import imread
 

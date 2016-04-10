@@ -63,7 +63,7 @@ class WeightElimination(WeightUpdateConfigurable):
             layer, parameter
         )
 
-        step = layer.step or self.variables.step
+        step = self.variables.step
         decay_koef = self.decay_rate * step
         zero_weight_square = self.zero_weight ** 2
 

@@ -77,7 +77,7 @@ class TerminalLogger(object):
         text : str
         """
         if self.enable:
-            self.stdout.write(text + '\n')
+            self.stdout.write(str(text) + '\n')
 
     def newline(self):
         """ Just writes an empty line.

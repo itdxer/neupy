@@ -72,7 +72,7 @@ class Momentum(MinibatchGradientDescent):
                 )
 
     def init_param_updates(self, layer, parameter):
-        step = layer.step or self.variables.step
+        step = self.variables.step
         gradient = T.grad(self.variables.error_func, wrt=parameter)
 
         prev_param_delta = parameter.prev_param_delta

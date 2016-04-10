@@ -8,11 +8,6 @@ from contextlib import contextmanager
 import six
 import numpy as np
 import pandas as pd
-import matplotlib
-
-# Configure matplotlib for Travis CI
-matplotlib.use('Agg')
-
 from matplotlib import pyplot as plt
 from matplotlib.testing.compare import compare_images
 

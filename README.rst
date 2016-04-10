@@ -49,6 +49,7 @@ Gradient based Neural Networks
 * `MNIST, Denoising Autoencoder <examples/gd/mnist_autoencoder.py>`_
 * `Boston House Price prediction, Hessian algorithm <examples/gd/boston_price_prediction.py>`_
 * `Learning Algorithms Visualization, Gradient Descent, Momentum, RPROP and Conjugate Gradient <examples/gd/gd_algorithms_visualization.py>`_
+* `Text classification using CBOW and RPROP <examples/gd/word_embedding>`_
 
 Competitive Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

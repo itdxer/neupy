@@ -66,7 +66,7 @@ class Adam(MinibatchGradientDescent):
         prev_first_moment = parameter.prev_first_moment
         prev_second_moment = parameter.prev_second_moment
 
-        step = asfloat(layer.step or self.variables.step)
+        step = asfloat(self.variables.step)
         beta1 = asfloat(self.beta1)
         beta2 = asfloat(self.beta2)
         epsilon = asfloat(self.epsilon)

@@ -10,7 +10,7 @@ logger = create_logger(__name__)
 class WordEmbeddingNN(models.Word2Vec):
     def train(self, data, n_epochs=100):
         train_method = super(WordEmbeddingNN, self).train
-        logger.info("Start trainig network over {} epochs".format(n_epochs))
+        logger.info("Start training network over {} epochs".format(n_epochs))
 
         for epoch in range(n_epochs):
             logger.info("Training epoch {} / {}".format(epoch + 1, n_epochs))
