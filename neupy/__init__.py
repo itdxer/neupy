@@ -3,4 +3,4 @@ NeuPy is the Artificial Neural Network library implemented in Python.
 """
 
 
-__version__ = '0.2.0.rc1'
+__version__ = '0.2.0'
