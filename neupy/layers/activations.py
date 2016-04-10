@@ -5,8 +5,8 @@ from neupy.core.config import ConfigMeta
 from .base import ParameterBasedLayer
 
 
-__all__ = ('Linear', 'Sigmoid', 'HardSigmoid', 'Step', 'Tanh', 'Relu',
-           'Softplus', 'Softmax')
+__all__ = ('ActivationLayer', 'Linear', 'Sigmoid', 'HardSigmoid', 'Step',
+           'Tanh', 'Relu', 'Softplus', 'Softmax')
 
 
 class LayerMeta(ConfigMeta):

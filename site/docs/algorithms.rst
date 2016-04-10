@@ -126,6 +126,24 @@ Input and hidden layers
     ":layer:`Relu`", "Layer with rectifier activation function."
     ":layer:`Softplus`", "Layer with softplus activation function."
     ":layer:`Softmax`", "Layer with softmax activation function."
+
+Convolutional Layers
+~~~~~~~~~~~~~~~~~~~~
+
+.. csv-table::
+    :header: "Class name", "Description"
+
+    ":layer:`Convolution`", "Convolutional layer"
+    ":layer:`MaxPooling`", "Maximum pooling layer"
+    ":layer:`AveragePooling`", "Average pooling layer"
+
+Misc layers
+~~~~~~~~~~~
+
+.. csv-table::
+    :header: "Class name", "Description"
+
+    ":layer:`Reshape`", "Reshape tensor input to matrix"
     ":layer:`Dropout`", "Dropout layer"
 
 Output layers
