@@ -442,7 +442,6 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
 
     def train(self, input_train, target_train, input_test=None,
               target_test=None, *args, **kwargs):
-
         return super(ConstructableNetwork, self).train(
             self.format_input_data(input_train),
             self.format_target_data(target_train),
@@ -465,6 +464,11 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
             Prediction error.
         """
         return self.methods.train_epoch(input_train, target_train)
+
+    def architecture(self):
+        self.logs.title("Network's architecture")
+        for layer in self.all_layers:
+            self.logs.write(layer)
 
     def __repr__(self):
         return "{}({}, {})".format(self.class_name(), self.connection,

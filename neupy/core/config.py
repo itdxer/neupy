@@ -53,6 +53,7 @@ class BaseConfigurable(object):
         invalid_options = set(options) - available_options
 
         if invalid_options:
+            print(self.options)
             raise ValueError("Network `{}` contains invalid properties: "
                              "{}".format(self.__class__.__name__,
                                          ', '.join(invalid_options)))

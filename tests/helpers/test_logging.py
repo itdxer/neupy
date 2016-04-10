@@ -93,5 +93,5 @@ class NeuralNetworkLoggingTestCase(BaseTestCase):
 
             terminal_output = out.getvalue()
 
-            self.assertIn("Start train", terminal_output)
+            self.assertIn("Start training", terminal_output)
             self.assertIn("-----", terminal_output)

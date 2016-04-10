@@ -53,7 +53,7 @@ class RMSProp(MinibatchGradientDescent):
 
     def init_param_updates(self, layer, parameter):
         prev_mean_squred_grad = parameter.prev_mean_squred_grad
-        step = layer.step or self.variables.step
+        step = self.variables.step
         gradient = T.grad(self.variables.error_func, wrt=parameter)
 
         mean_squred_grad = (

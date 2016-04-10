@@ -15,7 +15,6 @@ from neupy.helpers import table
 from neupy.core.base import BaseSkeleton
 from neupy.core.properties import (BoundedProperty, NumberProperty,
                                    Property)
-from neupy.layers.connections import LayerConnection
 from .utils import (iter_until_converge, shuffle, normalize_error,
                     StopNetworkTraining)
 
@@ -107,16 +106,9 @@ def show_network_options(network, highlight_options=None):
         group_by_class_name,
     )
 
-    has_layer_structure = (
-        hasattr(network, 'connection') and
-        isinstance(network.connection, LayerConnection)
-    )
     logs.title("Main information")
     logs.message("ALGORITHM", network.class_name())
-    if has_layer_structure:
-        logs.message("ARCHITECTURE", network.connection)
-
-    logs.title("Network options")
+    logs.newline()
 
     for (_, class_name), options in grouped_options:
         if not options:
@@ -143,7 +135,7 @@ def logging_info_about_the_data(network, input_train, input_test):
     n_train_samples = input_train.shape[0]
     train_feature_shape = input_train.shape[1:]
 
-    logs.title("Start train")
+    logs.title("Start training")
     logs.message("TRAIN DATA",
                  "{} samples, feature shape: {}"
                  "".format(n_train_samples, train_feature_shape))
@@ -151,9 +143,14 @@ def logging_info_about_the_data(network, input_train, input_test):
     if input_test is not None:
         n_test_samples = input_test.shape[0]
         test_feature_shape = input_test.shape[1:]
+
         logs.message("TEST DATA",
                      "{} samples, feature shape: {}"
                      "".format(n_test_samples, test_feature_shape))
+
+        if train_feature_shape != test_feature_shape:
+            raise ValueError("Train and test samples should have the "
+                             "same feature shape.")
 
 
 def logging_info_about_training(network, epochs, epsilon):

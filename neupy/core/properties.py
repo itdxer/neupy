@@ -38,8 +38,11 @@ class BaseProperty(SharedDocs):
 
             raise TypeError(
                 "Invalid data type `{0}` for `{1}` property. Expected "
-                "types: {2}".format(value.__class__.__name__, self.name,
-                                    availabe_types)
+                "types: {2}".format(
+                    value.__class__.__name__,
+                    self.name,
+                    availabe_types
+                )
             )
 
         self.validate(value)

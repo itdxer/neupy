@@ -3,13 +3,27 @@
 import sys
 import time
 import threading
+import collections
+
+import numpy as np
 
 
 __all__ = ('progressbar',)
 
 
-def format_interval(t):
-    mins, seconds = divmod(int(t), 60)
+def format_interval(time_in_seconds):
+    """ Format seconds into human readable format.
+
+    Parameters
+    ----------
+    time_in_seconds : float
+
+    Returns
+    -------
+    str
+        Formated time.
+    """
+    mins, seconds = divmod(int(time_in_seconds), 60)
     hours, minutes = divmod(mins, 60)
 
     if hours > 0:
@@ -18,7 +32,28 @@ def format_interval(t):
     return '{:0>2d}:{:0>2d}'.format(minutes, seconds)
 
 
-def format_meter(n_finished, n_total, elapsed):
+def format_error(error):
+    """ Format the error value.
+
+    Parameters
+    ----------
+    error : float, list or None
+
+    Returns
+    -------
+    str
+        Formated error value.
+    """
+    if error is None:
+        return '?'
+
+    if isinstance(error, collections.Iterable):
+        error = np.atleast_1d(error).item(0)
+
+    return '{:.5f}'.format(error)
+
+
+def format_meter(n_finished, n_total, elapsed, error=None):
     """ Format meter.
     Parameters
     ----------
@@ -47,9 +82,9 @@ def format_meter(n_finished, n_total, elapsed):
             elapsed / n_finished * (n_total - n_finished)
         ) if n_finished else '?'
 
-        return '|{}| {}/{} {} [elapsed: {} left: {}]'.format(
+        return '|{}| {}/{} {} [elapsed: {} left: {} error: {}]'.format(
             bar, n_finished, n_total, percentage,
-            elapsed_str, left_str
+            elapsed_str, left_str, format_error(error)
         )
 
     return '{} [elapsed: {}]'.format(n_finished, elapsed_str)
@@ -118,6 +153,7 @@ def progressbar(iterable, desc='', total=None, file=sys.stderr,
 
     try:
         for obj in iterable:
+            error = (yield)
             yield obj
             timer.cancel()
 
@@ -131,7 +167,8 @@ def progressbar(iterable, desc='', total=None, file=sys.stderr,
 
                 if (current_time - last_print_time) >= mininterval:
                     time_delta = current_time - start_time
-                    printer.write(prefix + format_meter(n, total, time_delta))
+                    formated_str = format_meter(n, total, time_delta, error)
+                    printer.write(prefix + formated_str)
                     last_print_n = n
                     last_print_time = current_time
     finally:

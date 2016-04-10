@@ -66,7 +66,7 @@ class Adamax(MinibatchGradientDescent):
         prev_first_moment = parameter.prev_first_moment
         prev_weighted_inf_norm = parameter.prev_weighted_inf_norm
 
-        step = layer.step or self.variables.step
+        step = self.variables.step
         beta1 = self.beta1
         beta2 = self.beta2
 

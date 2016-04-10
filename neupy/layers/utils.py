@@ -135,7 +135,13 @@ def identify_fans(shape):
         Tuple that contains :math:`fan_{in}` and :math:`fan_{out}`.
     """
     fan_in = shape[0]
-    fan_out = shape[1] if len(shape) > 1 else 1
+    output_feature_shape = shape[1:]
+
+    if output_feature_shape:
+        fan_out = np.prod(output_feature_shape).item(0)
+    else:
+        fan_out = 1
+
     return fan_in, fan_out
 
 
