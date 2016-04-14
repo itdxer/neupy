@@ -63,9 +63,7 @@ if args.apply_pca:
     pca = decomposition.PCA(2)
     plt.scatter(*pca.fit_transform(x_train).T, c=y_train, s=100)
     plt.show()
-    print("PCA explain {:.2f}%".format(
-        100 * pca.explained_variance_ratio_.sum()
-    ))
+    print("PCA explain {:.2%}".format(pca.explained_variance_ratio_.sum()))
 
 print("\n> Train prediction")
 
@@ -86,7 +84,7 @@ for i, (train_index, test_index) in enumerate(skf, start=1):
     scores.append(score)
 
     print("ROC AUC score: {:.4f}".format(score))
-    print("Accurucy: {:.2f}%".format(100 * accurucy))
+    print("Accurucy: {:.2%}".format(accurucy))
     print(metrics.confusion_matrix(y_predicted, y_fold_test))
 
 print("Average ROC AUC score: {:.4f}".format(np.mean(scores)))
