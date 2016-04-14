@@ -186,13 +186,121 @@ def iter_batches(n_samples, batch_size):
     object
         Batch slices.
     """
-    n_batches = int(math.floor(n_samples / batch_size))
+    n_batches = int(math.ceil(n_samples / batch_size))
 
     for batch_index in range(n_batches):
         yield slice(
             batch_index * batch_size,
             (batch_index + 1) * batch_size
         )
+
+
+def cannot_divide_into_batches(data, batch_size):
+    """ Checkes whether data can be divided into at least
+    two batches.
+
+    Parameters
+    ----------
+    data : array-like
+    batch_size : int or None
+
+    Returns
+    -------
+    bool
+    """
+    n_samples = len(data)
+    return batch_size is None or n_samples <= batch_size
+
+
+def apply_batches(function, arguments, batch_size, logger, description='',
+                  show_progressbar=False, use_error_output=True):
+    """ Apply batches to a specified function.
+
+    Parameters
+    ----------
+    function : func
+        Function that accepts one or more positional arguments.
+        Each of them should be an array-like variable that
+        have exactly the same number of rows.
+    arguments : tuple, list
+        The arguemnts that will be provided to the function specified
+        in the ``function`` argument.
+    batch_size : int
+        Batch size.
+    logger : TerminalLogger instance
+    description : str
+        Short description that will be displayed near the progressbar
+        in verbose mode. Defaults to ``''`` (empty string).
+    show_progressbar : bool
+        ``True`` mean that function will show progressbar in the
+        terminal. Defaults to ``False``.
+
+    Returns
+    -------
+    list
+        List of function outputs.
+    """
+    if not arguments:
+        raise ValueError("The arguments parameter should have at "
+                         "least one element.")
+
+    samples = arguments[0]
+    n_samples = len(samples)
+    batch_iterator = iter_batches(n_samples, batch_size)
+
+    if show_progressbar:
+        batch_iterator = logger.progressbar(
+            list(batch_iterator),
+            desc=description,
+            file=logger.stdout
+        )
+
+    output = None
+    outputs = []
+    for batch in batch_iterator:
+        if show_progressbar and logger.enable:
+            batch = batch_iterator.send(output if use_error_output else None)
+
+        sliced_arguments = [argument[batch] for argument in arguments]
+        output = function(*sliced_arguments)
+
+        outputs.append(output)
+
+    return outputs
+
+
+def average_batch_errors(errors, n_samples, batch_size):
+    """ Computes average error per sample.
+
+    Parameters
+    ----------
+    errors : list
+        List of errors where each element is a average error
+        per batch.
+    n_samples : int
+        Number of samples in the dataset.
+    batch_size : int
+        Batch size.
+
+    Returns
+    -------
+    float
+        Average error per sample.
+    """
+    n_samples_in_final_batch = n_samples % batch_size
+
+    if n_samples_in_final_batch == 0:
+        return np.mean(errors)
+
+    all_errors_without_last = errors[:-1]
+    last_error = errors[-1]
+
+    total_error = (
+        sum(all_errors_without_last) * batch_size +
+        last_error * n_samples_in_final_batch
+    )
+    average_error = (total_error / n_samples)
+    return average_error
 
 
 class MinibatchGradientDescent(GradientDescent):
@@ -237,9 +345,7 @@ class MinibatchGradientDescent(GradientDescent):
     >>> y_train = np.array([[1], [0]])
     >>>
     >>> mgdnet = algorithms.MinibatchGradientDescent(
-    ...     (2, 3, 1),
-    ...     verbose=False,
-    ...     batch_size=1
+    ...     (2, 3, 1), batch_size=1
     ... )
     >>> mgdnet.train(x_train, y_train)
 
@@ -250,7 +356,7 @@ class MinibatchGradientDescent(GradientDescent):
     batch_size = BatchSizeProperty(default=100)
 
     def train_epoch(self, input_train, target_train):
-        """ Network training epoch.
+        """ Train one epoch.
 
         Parameters
         ----------
@@ -262,91 +368,95 @@ class MinibatchGradientDescent(GradientDescent):
         Returns
         -------
         float
-            Train data prediction error based on chosen
-            error function.
+            Training error.
         """
-        n_samples = len(input_train)
-        batch_size = self.batch_size
         train_epoch = self.methods.train_epoch
 
-        if batch_size is None or n_samples <= batch_size:
+        if cannot_divide_into_batches(input_train, self.batch_size):
             return train_epoch(input_train, target_train)
 
-        batch_iterator = iter_batches(n_samples, batch_size)
         show_progressbar = (self.training and self.training.show_epoch == 1)
+        errors = apply_batches(
+            function=train_epoch,
+            arguments=(input_train, target_train),
+            batch_size=self.batch_size,
 
-        if show_progressbar:
-            batch_iterator = self.logs.progressbar(
-                list(batch_iterator),
-                desc='Train batches',
-                file=self.logs.stdout
-            )
-
-        total_error = 0
-        error = None
-        for batch in batch_iterator:
-            if show_progressbar and self.verbose:
-                batch = batch_iterator.send(error)
-            error = train_epoch(input_train[batch], target_train[batch])
-            total_error += error
-
-        average_error = batch_size * total_error / n_samples
-        return average_error
+            description='Training batches',
+            show_progressbar=show_progressbar,
+            logger=self.logs,
+            use_error_output=True,
+        )
+        return average_batch_errors(
+            errors,
+            n_samples=len(input_train),
+            batch_size=self.batch_size,
+        )
 
     def prediction_error(self, input_data, target_data):
+        """ Check the prediction error for the specified input samples
+        and their targets.
+
+        Parameters
+        ----------
+        input_data : array-like
+        target_data : array-like
+
+        Returns
+        -------
+        float
+            Prediction error.
+        """
         input_data = self.format_input_data(input_data)
         target_data = self.format_target_data(target_data)
 
-        n_samples = len(input_data)
-        batch_size = self.batch_size
         prediction_error = self.methods.prediction_error
 
-        if batch_size is None or n_samples <= batch_size:
+        if cannot_divide_into_batches(input_data, self.batch_size):
             return prediction_error(input_data, target_data)
 
-        batch_iterator = iter_batches(n_samples, batch_size)
         show_progressbar = (self.training and self.training.show_epoch == 1)
+        errors = apply_batches(
+            function=prediction_error,
+            arguments=(input_data, target_data),
+            batch_size=self.batch_size,
 
-        if show_progressbar:
-            batch_iterator = self.logs.progressbar(
-                list(batch_iterator),
-                desc='Validation batches',
-                file=self.logs.stdout
-            )
-
-        total_error = 0
-        error = None
-        for batch in batch_iterator:
-            if show_progressbar and self.verbose:
-                batch = batch_iterator.send(error)
-            error = prediction_error(input_data[batch], target_data[batch])
-            total_error += error
-
-        average_error = batch_size * total_error / n_samples
-        return average_error
-
-    def predict_raw(self, input_data):
-        input_data = self.format_input_data(input_data)
-
-        n_samples = len(input_data)
-        batch_size = self.batch_size
-        predict_raw = self.methods.predict_raw
-
-        if batch_size is None or n_samples <= batch_size:
-            return predict_raw(input_data)
-
-        batch_iterator = iter_batches(n_samples, batch_size)
-        batch_iterator = self.logs.progressbar(
-            list(batch_iterator),
-            desc='Prediction batches',
-            file=self.logs.stdout
+            description='Validation batches',
+            show_progressbar=show_progressbar,
+            logger=self.logs,
+            use_error_output=True,
+        )
+        return average_batch_errors(
+            errors,
+            n_samples=len(input_data),
+            batch_size=self.batch_size,
         )
 
-        outputs = []
-        for batch in batch_iterator:
-            if self.verbose:
-                batch = batch_iterator.send(None)
-            batch_output = predict_raw(input_data[batch])
-            outputs.append(batch_output)
+    def predict_raw(self, input_data):
+        """ Makes a raw prediction.
+
+        Parameters
+        ----------
+        input_data : array-like
+
+        Returns
+        -------
+        array-like
+        """
+        input_data = self.format_input_data(input_data)
+        predict_raw = self.methods.predict_raw
+
+        if cannot_divide_into_batches(input_data, self.batch_size):
+            return predict_raw(input_data)
+
+        outputs = apply_batches(
+            function=predict_raw,
+            arguments=(input_data,),
+            batch_size=self.batch_size,
+
+            description='Prediction batches',
+            show_progressbar=True,
+            logger=self.logs,
+            use_error_output=False,
+        )
 
         return np.concatenate(outputs, axis=0)

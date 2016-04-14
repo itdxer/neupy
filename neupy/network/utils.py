@@ -5,7 +5,7 @@ __all__ = ('iter_until_converge', 'shuffle', 'normalize_error', 'step',
            'StopNetworkTraining')
 
 
-class StopNetworkTraining(StopIteration):
+class StopNetworkTraining(Exception):
     pass
 
 

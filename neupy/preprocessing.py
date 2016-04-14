@@ -39,10 +39,28 @@ class ZCA(BaseSkeleton):
         super(ZCA, self).__init__(**options)
 
     def fit(self, X, *args, **kwargs):
+        """ This method is an alias to `train` method.
+        This method is important for the scikit-learn
+        compatibility.
+
+        Parameters
+        ----------
+        X : array-like
+
+        Returns
+        -------
+        ZCA class instance
+        """
         self.train(X, *args, **kwargs)
         return self
 
     def train(self, data):
+        """ Train ZCA.
+
+        Parameters
+        ----------
+        data : array-like
+        """
         data = as_array2d(data)
         self.mean = data.mean(axis=0)
         data = data - self.mean
@@ -54,6 +72,16 @@ class ZCA(BaseSkeleton):
         self.components = (U / np.sqrt(S + self.regularization)).dot(U.T)
 
     def transform(self, data):
+        """ Apply ZCA transformation on data.
+
+        Parameters
+        ----------
+        data : array-like
+
+        Returns
+        -------
+        array-like
+        """
         if self.mean is None or self.components is None:
             raise NotTrainedException("Train ZCA before use it.")
 

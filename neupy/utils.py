@@ -91,7 +91,10 @@ def asfloat(value):
     float_type = theano.config.floatX
 
     if isinstance(value, (np.matrix, np.ndarray)):
-        return value.astype(float_type)
+        if value.dtype != np.dtype(float_type):
+            return value.astype(float_type)
+        else:
+            return value
 
     elif isinstance(value, (TensorVariable, TensorSharedVariable)):
         return T.cast(value, float_type)
@@ -126,7 +129,10 @@ def asint(value):
     int_type = int2float_types[float_type]
 
     if isinstance(value, (np.matrix, np.ndarray)):
-        return value.astype(int_type)
+        if value.dtype != np.dtype(int_type):
+            return value.astype(int_type)
+        else:
+            return value
 
     elif isinstance(value, (TensorVariable, TensorSharedVariable)):
         return T.cast(value, int_type)
@@ -237,8 +243,4 @@ def smallest_positive_number():
         'float32': 1e-7,
         'float64': 1e-16,
     }
-
-    if float_type not in epsilon_values:
-        raise TypeError("Unknown float type `{}`".format(float_type))
-
     return epsilon_values[float_type]

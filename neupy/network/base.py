@@ -471,6 +471,7 @@ class BaseNetwork(BaseSkeleton):
                     # send it in generator using ``throw`` method.
                     logs.message("TRAIN", "Epoch #{} stopped. {}"
                                           "".format(epoch, str(err)))
+                    break
 
             if epoch != last_epoch_shown:
                 next(epoch_summary)
