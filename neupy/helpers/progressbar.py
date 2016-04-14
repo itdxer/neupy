@@ -176,6 +176,4 @@ def progressbar(iterable, desc='', total=None, file=sys.stderr,
                     last_print_n = n
                     last_print_time = current_time
     finally:
-        # in case of instant error or early interruption
-        timer.cancel()
         printer.clean()
