@@ -420,7 +420,7 @@ class BaseNetwork(BaseSkeleton):
         # useless __getattr__ call a lot of times in each loop.
         # This variables speed up loop in case on huge amount of
         # iterations.
-        errors = self.errors
+        training_errors = self.errors
         validation_errors = self.validation_errors
         shuffle_data = self.shuffle_data
 
@@ -435,6 +435,7 @@ class BaseNetwork(BaseSkeleton):
 
         with logs.disable_user_input():
             for epoch in iterepochs:
+                validation_error = np.nan
                 epoch_start_time = time.time()
                 on_epoch_start_update(epoch)
 
@@ -447,11 +448,11 @@ class BaseNetwork(BaseSkeleton):
                     if can_compute_validation_error:
                         validation_error = self.prediction_error(input_test,
                                                                  target_test)
-                        validation_errors.append(validation_error)
 
                     # It's important that we store error result after
                     # we stored validation error.
-                    errors.append(train_error)
+                    training_errors.append(train_error)
+                    validation_errors.append(validation_error)
 
                     epoch_finish_time = time.time()
                     training.epoch_time = epoch_finish_time - epoch_start_time
@@ -519,6 +520,9 @@ class BaseNetwork(BaseSkeleton):
         if len(train_errors) != len(validation_errors):
             self.logs.warning("Number of train and validation errors are "
                               "not the same. Ignored validation errors.")
+            validation_errors = []
+
+        if all(np.isnan(validation_errors)):
             validation_errors = []
 
         errors_range = np.arange(len(train_errors))
