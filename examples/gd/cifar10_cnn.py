@@ -64,8 +64,10 @@ network = algorithms.Adadelta(
 
         layers.Relu(256 * 4 * 4),
         layers.Dropout(proba=0.5),
+
         layers.Relu(1024),
         layers.Dropout(proba=0.5),
+
         layers.Softmax(1024),
         layers.ArgmaxOutput(10),
     ],
