@@ -81,9 +81,8 @@ class SharedArrayProperty(ArrayProperty):
     {BaseProperty.default}
     {BaseProperty.required}
     """
-    expected_type = (np.matrix, np.ndarray,
-                     T.sharedvar.TensorSharedVariable,
-                     T.TensorVariable)
+    expected_type = (np.matrix, np.ndarray, T.Variable,
+                     T.sharedvar.SharedVariable)
 
 
 class ParameterBasedLayer(BaseLayer):
