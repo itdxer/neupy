@@ -27,7 +27,7 @@ class ErrorPlotTestCase(BaseTestCase):
         with image_comparison(original_image) as fig:
             ax = fig.add_subplot(1, 1, 1)
             network = reproducible_network_train(step=0.3)
-            network.plot_errors(ax=ax, show=False)
+            plots.error_plot(network, ax=ax, show=False)
 
     @skip_image_comparison_if_specified
     def test_plot_with_validation_dataset(self):
@@ -40,7 +40,7 @@ class ErrorPlotTestCase(BaseTestCase):
             x_train, x_test, y_train, y_test = simple_classification()
             gdnet = algorithms.GradientDescent((10, 12, 1), step=0.25)
             gdnet.train(x_train, y_train, x_test, y_test, epochs=100)
-            gdnet.plot_errors(ax=ax, show=False)
+            plots.error_plot(gdnet, ax=ax, show=False)
 
     @skip_image_comparison_if_specified
     def test_log_scale(self):
@@ -50,4 +50,4 @@ class ErrorPlotTestCase(BaseTestCase):
         with image_comparison(original_image) as fig:
             ax = fig.add_subplot(1, 1, 1)
             network = reproducible_network_train(step=0.3)
-            network.plot_errors(logx=True, ax=ax, show=False)
+            plots.error_plot(network, logx=True, ax=ax, show=False)

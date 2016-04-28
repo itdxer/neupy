@@ -201,10 +201,6 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
     {BaseNetwork.train_errors}
     {BaseNetwork.validation_errors}
     {BaseNetwork.last_epoch}
-
-    Methods
-    -------
-    {BaseNetwork.plot_errors}
     """
     error = ErrorFunctionProperty(default='mse', choices={
         'mae': errors.mae,

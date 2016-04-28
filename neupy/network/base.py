@@ -1,82 +1,23 @@
 from __future__ import division, absolute_import
 
-import math
 import time
 import types
-from collections import deque
 from itertools import groupby
 
 import six
 import numpy as np
-import matplotlib.pyplot as plt
 
 from neupy.utils import preformat_value, AttributeKeyDict
 from neupy.helpers import table
 from neupy.core.base import BaseSkeleton
 from neupy.core.properties import (BoundedProperty, NumberProperty,
                                    Property)
+from .summary_info import SummaryTable, InlineSummary
 from .utils import (iter_until_converge, shuffle, normalize_error,
                     StopNetworkTraining)
 
 
 __all__ = ('BaseNetwork',)
-
-
-def show_epoch_summary(network):
-    delay_limit = 1.  # delay time in seconds
-    prev_summary_time = None
-    delay_history_length = 10
-    terminal_output_delays = deque(maxlen=delay_history_length)
-
-    table_drawer = table.TableDrawer(
-        table.Column(name="Epoch #"),
-        table.NumberColumn(name="Train err"),
-        table.NumberColumn(name="Valid err"),
-        table.TimeColumn(name="Time", width=10),
-        stdout=network.logs.write
-    )
-    table_drawer.start()
-
-    try:
-        yield
-
-        while True:
-            now = time.time()
-
-            if prev_summary_time is not None:
-                time_delta = now - prev_summary_time
-                terminal_output_delays.append(time_delta)
-
-            table_drawer.row([
-                network.last_epoch,
-                network.errors.last() or '-',
-                network.validation_errors.last() or '-',
-                network.training.epoch_time,
-            ])
-            prev_summary_time = now
-
-            if len(terminal_output_delays) == delay_history_length:
-                prev_summary_time = None
-                average_delay = np.mean(terminal_output_delays)
-
-                if average_delay < delay_limit:
-                    show_epoch = int(
-                        network.training.show_epoch *
-                        math.ceil(delay_limit / average_delay)
-                    )
-                    table_drawer.line()
-                    table_drawer.message("Too many outputs in a terminal.")
-                    table_drawer.message("Set up logging after each {} epochs"
-                                         "".format(show_epoch))
-                    table_drawer.line()
-                    terminal_output_delays.clear()
-
-                    network.training.show_epoch = show_epoch
-            yield
-
-    finally:
-        table_drawer.finish()
-        network.logs.newline()
 
 
 def show_network_options(network, highlight_options=None):
@@ -127,7 +68,7 @@ def show_network_options(network, highlight_options=None):
             msg_text = "{} = {}".format(key, formated_value)
             logs.message("OPTION", msg_text, color=msg_color)
 
-        logs.write("")
+        logs.newline()
 
 
 def logging_info_about_the_data(network, input_train, input_test):
@@ -236,22 +177,36 @@ class ShowEpochProperty(BoundedProperty):
                              "equal to one.".format(self.name))
 
 
+def is_valid_error_value(value):
+    """ Checks that error value has valid type.
+
+    Parameters
+    ----------
+    value : object
+
+    Returns
+    -------
+    bool
+    """
+    return value is not None and not np.all(np.isnan(value))
+
+
 class ErrorHistoryList(list):
-    """ Wrapper around the built-in list class that adds additional
-    methods.
+    """ Wrapper around the built-in list class that adds a few
+    additional methods.
     """
     def last(self):
         """ Returns last element if list is not empty,
         ``None`` otherwise.
         """
-        if self and self[-1] is not None:
+        if self and is_valid_error_value(self[-1]):
             return normalize_error(self[-1])
 
     def previous(self):
         """ Returns last element if list is not empty,
         ``None`` otherwise.
         """
-        if len(self) > 2 and self[-2] is not None:
+        if len(self) >= 2 and is_valid_error_value(self[-2]):
             return normalize_error(self[-2])
 
     def normalized(self):
@@ -314,15 +269,6 @@ class BaseNetwork(BaseSkeleton):
     last_epoch : int
         Value equals to the last trained epoch. After initialization
         it is equal to ``0``.
-
-    Methods
-    -------
-    plot_errors(logx=False)
-        Draws the error rate update plot. It always shows network
-        learning progress. When you add cross validation data set
-        into training function it displays validation data set error as
-        separated curve. If parameter ``logx`` is equal to the
-        ``True`` value it displays x-axis in logarithmic scale.
     """
     step = NumberProperty(default=0.1, minval=0)
 
@@ -380,7 +326,8 @@ class BaseNetwork(BaseSkeleton):
         raise NotImplementedError()
 
     def train(self, input_train, target_train=None, input_test=None,
-              target_test=None, epochs=100, epsilon=None):
+              target_test=None, epochs=100, epsilon=None,
+              summary_type='table'):
         """ Method train neural network.
 
         Parameters
@@ -392,6 +339,7 @@ class BaseNetwork(BaseSkeleton):
         epochs : int
             Defaults to `100`.
         epsilon : float or None
+            Defaults to ``None``.
         """
 
         show_epoch = self.show_epoch
@@ -405,16 +353,34 @@ class BaseNetwork(BaseSkeleton):
             raise ValueError("Network should train at teast 3 epochs before "
                              "check the difference between errors")
 
-        logging_info_about_the_data(self, input_train, input_test)
-        logging_info_about_training(self, epochs, epsilon)
-        logs.write("")
+        if summary_type == 'table':
+            logging_info_about_the_data(self, input_train, input_test)
+            logging_info_about_training(self, epochs, epsilon)
+            logs.newline()
+
+            summary = SummaryTable(
+                table_builder=table.TableBuilder(
+                    table.Column(name="Epoch #"),
+                    table.NumberColumn(name="Train err"),
+                    table.NumberColumn(name="Valid err"),
+                    table.TimeColumn(name="Time", width=10),
+                    stdout=logs.write
+                ),
+                network=self,
+                delay_limit=1.,
+                delay_history_length=10,
+            )
+
+        elif summary_type == 'inline':
+            summary = InlineSummary(network=self)
+
+        else:
+            raise ValueError("`{}` is unknown summary type"
+                             "".format(summary_type))
 
         iterepochs = create_training_epochs_iterator(self, epochs, epsilon)
         show_epoch = parse_show_epoch_property(self, epochs, epsilon)
         training.show_epoch = show_epoch
-
-        epoch_summary = show_epoch_summary(self)
-        next(epoch_summary)
 
         # Storring attributes and methods in local variables we prevent
         # useless __getattr__ call a lot of times in each loop.
@@ -449,8 +415,6 @@ class BaseNetwork(BaseSkeleton):
                         validation_error = self.prediction_error(input_test,
                                                                  target_test)
 
-                    # It's important that we store error result after
-                    # we stored validation error.
                     training_errors.append(train_error)
                     validation_errors.append(validation_error)
 
@@ -458,7 +422,7 @@ class BaseNetwork(BaseSkeleton):
                     training.epoch_time = epoch_finish_time - epoch_start_time
 
                     if epoch % training.show_epoch == 0 or is_first_iteration:
-                        next(epoch_summary)
+                        summary.show_last()
                         last_epoch_shown = epoch
 
                     if epoch_end_signal is not None:
@@ -468,82 +432,18 @@ class BaseNetwork(BaseSkeleton):
 
                 except StopNetworkTraining as err:
                     # TODO: This notification breaks table view in terminal.
-                    # I need to show it in a different way. Maybe I can
-                    # send it in generator using ``throw`` method.
+                    # I need to show it in a different way.
                     logs.message("TRAIN", "Epoch #{} stopped. {}"
                                           "".format(epoch, str(err)))
                     break
 
             if epoch != last_epoch_shown:
-                next(epoch_summary)
+                summary.show_last()
 
             if train_end_signal is not None:
                 train_end_signal(self)
 
-            epoch_summary.close()
+            summary.finish()
+            logs.newline()
 
         logs.message("TRAIN", "Trainig finished")
-
-    def plot_errors(self, logx=False, ax=None, show=True):
-        """ Plot line plot that shows training progress. x-axis
-        is an epoch number and y-axis is an error.
-
-        Parameters
-        ----------
-        logx : bool
-            Parameter set up logarithmic scale to x-axis.
-            Defaults to ``False``.
-        ax : object or None
-            Matplotlib axis object. ``None`` values means that axis equal
-            to the current one (the same as ``ax = plt.gca()``).
-            Defaults to ``None``.
-        show : bool
-            If parameter is equal to ``True`` plot will instantly shows
-            the plot. Defaults to ``True``.
-
-        Returns
-        -------
-        object
-            Matplotlib axis instance.
-        """
-
-        if ax is None:
-            ax = plt.gca()
-
-        if not self.errors:
-            self.logs.warning("There is no data to plot")
-            return ax
-
-        train_errors = self.errors.normalized()
-        validation_errors = self.validation_errors.normalized()
-
-        if len(train_errors) != len(validation_errors):
-            self.logs.warning("Number of train and validation errors are "
-                              "not the same. Ignored validation errors.")
-            validation_errors = []
-
-        if all(np.isnan(validation_errors)):
-            validation_errors = []
-
-        errors_range = np.arange(len(train_errors))
-        plot_function = ax.semilogx if logx else ax.plot
-
-        line_error_in, = plot_function(errors_range, train_errors)
-
-        if validation_errors:
-            line_error_out, = plot_function(errors_range, validation_errors)
-            ax.legend(
-                [line_error_in, line_error_out],
-                ['Train', 'Validation']
-            )
-
-        ax.set_title('Training perfomance')
-        ax.set_ylim(bottom=0)
-
-        ax.set_ylabel('Error')
-        ax.set_xlabel('Epoch')
-
-        if show:
-            plt.show()
-
-        return ax

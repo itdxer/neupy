@@ -40,7 +40,6 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
     {BaseSkeleton.predict}
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
 
     Examples
     --------
@@ -156,7 +155,6 @@ class IRPROPPlus(RPROP):
     {BaseSkeleton.predict}
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
 
     Examples
     --------

@@ -6,7 +6,9 @@ __all__ = ('iter_until_converge', 'shuffle', 'normalize_error', 'step',
 
 
 class StopNetworkTraining(Exception):
-    pass
+    """ Exception that needs to be triggered in case of
+    early training interruption.
+    """
 
 
 def iter_until_converge(network, epsilon, max_epochs):
@@ -18,6 +20,8 @@ def iter_until_converge(network, epsilon, max_epochs):
     epoch = network.last_epoch
     while error_delta > epsilon:
         epoch = epoch + 1
+        network.last_epoch += 1
+
         yield epoch
 
         last_error = network.errors.last()

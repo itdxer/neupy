@@ -36,7 +36,6 @@ class Adadelta(MinibatchGradientDescent):
     {BaseSkeleton.predict}
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
     """
     decay = ProperFractionProperty(default=0.95)
     epsilon = NumberProperty(default=1e-5, minval=0)

@@ -40,7 +40,6 @@ class Adam(MinibatchGradientDescent):
     {BaseSkeleton.predict}
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
     """
     step = NumberProperty(default=0.001, minval=0)
     beta1 = ProperFractionProperty(default=0.9)

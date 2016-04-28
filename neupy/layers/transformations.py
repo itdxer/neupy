@@ -1,7 +1,7 @@
 import numpy as np
 import theano.tensor as T
 
-from neupy.core.properties import ProperFractionProperty
+from neupy.core.properties import ProperFractionProperty, TypedListProperty
 from .base import BaseLayer
 
 
@@ -47,12 +47,39 @@ class Dropout(BaseLayer):
 
 
 class Reshape(BaseLayer):
-    """ Reshape layer makes a simple transformation that
-    changes input data shape from tensor (>= 3 features) to
-    matrix (2 features).
+    """ Gives a new shape to an input value without changing
+    its data.
+
+    Parameters
+    ----------
+    shape : tuple or list
+        New feature shape. ``None`` value means that feature
+        will be flatten in 1D vector. If you need to get the
+        output feature with more that 2 dimensions then you can
+        set up new feature shape using tuples. Defaults to ``None``.
     """
+    shape = TypedListProperty()
+
+    def __init__(self, shape=None, **options):
+        if shape is not None:
+            options['shape'] = shape
+        super(Reshape, self).__init__(**options)
+
     def output(self, input_value):
+        """ Reshape the feature space for the input value.
+
+        Parameters
+        ----------
+        input_value : array-like or Theano variable
+        """
+        new_feature_shape = self.shape
         input_shape = input_value.shape[0]
-        output_shape = input_value.shape[1:]
-        flattened_shape = (input_shape, T.prod(output_shape))
-        return T.reshape(input_value, flattened_shape)
+
+        if new_feature_shape is None:
+            output_shape = input_value.shape[1:]
+            new_feature_shape = T.prod(output_shape)
+            output_shape = (input_shape, new_feature_shape)
+        else:
+            output_shape = (input_shape,) + new_feature_shape
+
+        return T.reshape(input_value, output_shape)

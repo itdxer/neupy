@@ -38,7 +38,6 @@ class ART1(BaseNetwork):
         Network network will train until it clusters all samples.
     {BaseSkeleton.predict}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
 
     Examples
     --------

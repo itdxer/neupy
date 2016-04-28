@@ -47,7 +47,10 @@ def format_data(data, is_feature1d=True, copy=False):
     if data is None or issparse(data):
         return data
 
-    data = np.array(asfloat(data), copy=copy)
+    data = asfloat(data)
+
+    if not isinstance(data, np.ndarray) or copy:
+        data = np.array(data, copy=copy)
 
     # Valid number of features for one or two dimentions
     n_features = data.shape[-1]

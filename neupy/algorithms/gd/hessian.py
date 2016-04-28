@@ -75,7 +75,6 @@ class Hessian(NoStepSelection, GradientDescent):
     {BaseSkeleton.predict}
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
 
     See Also
     --------

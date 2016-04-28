@@ -79,7 +79,6 @@ class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
     {BaseSkeleton.predict}
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
 
     Examples
     --------
