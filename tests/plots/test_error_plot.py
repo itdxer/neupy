@@ -17,6 +17,9 @@ IMGDIR = os.path.join("plots", "images", "error-plot")
 class ErrorPlotTestCase(BaseTestCase):
     def setUp(self):
         super(ErrorPlotTestCase, self).setUp()
+        # It's better to use one float type all the time,
+        # because different type can change plots images a
+        # little bit, but this change can cause test failers
         theano.config.floatX = 'float64'
 
     @skip_image_comparison_if_specified
