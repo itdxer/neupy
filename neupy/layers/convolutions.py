@@ -28,8 +28,10 @@ class StrideProperty(TypedListProperty):
     def __set__(self, instance, value):
         if isinstance(value, collections.Iterable) and len(value) == 1:
             value = value[0]
+
         if isinstance(value, int):
             value = (value, 1)
+
         super(StrideProperty, self).__set__(instance, value)
 
     def validate(self, value):
@@ -74,8 +76,8 @@ class Convolution(ParameterBasedLayer):
     ----------
     size : tuple of integers
         Filter shape.
-    border_mode : {{'valid', 'full', 'half'}}
-        Convolution border mode.
+    border_mode : {{'valid', 'full', 'half'}} or int or tuple with 2 int
+        Convolution border mode. Check Theano's `nnet.conv2d` doc.
     stride_size : tuple with 1 or 2 integers or integer.
         Stride size.
     """
@@ -110,9 +112,14 @@ class BasePooling(BaseLayer):
         rows/cols to get the next pool region. If stride_size is
         None, it is considered equal to ds (no overlap on
         pooling regions).
+    padding : tuple of two ints
+        (pad_h, pad_w), pad zeros to extend beyond four borders of
+        the images, pad_h is the size of the top and bottom margins,
+        and pad_w is the size of the left and right margins.
     """
     size = TypedListProperty(required=True, element_type=int)
     stride_size = StrideProperty(default=None)
+    padding = TypedListProperty(default=(0, 0), element_type=int, n_elements=2)
 
     def __init__(self, size, **options):
         options['size'] = size
@@ -133,7 +140,8 @@ class MaxPooling(BasePooling):
     """
     def output(self, input_value):
         return pool.pool_2d(input_value, ds=self.size, mode='max',
-                            ignore_border=True, st=self.stride_size)
+                            ignore_border=True, st=self.stride_size,
+                            padding=self.padding)
 
 
 class AveragePooling(BasePooling):
@@ -142,7 +150,8 @@ class AveragePooling(BasePooling):
     Parameters
     ----------
     mode : {{'include_padding', 'exclude_padding'}}
-        Gives you the choice to include or exclude it.
+        Gives you the choice to include or exclude padding.
+        Defaults to ``include_padding``.
     {BasePooling.size}
     {BasePooling.stride_size}
     """
@@ -156,4 +165,5 @@ class AveragePooling(BasePooling):
 
     def output(self, input_value):
         return pool.pool_2d(input_value, ds=self.size, mode=self.mode,
-                            ignore_border=True, st=self.stride_size)
+                            ignore_border=True, st=self.stride_size,
+                            padding=self.padding)

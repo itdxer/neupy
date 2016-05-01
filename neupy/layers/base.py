@@ -63,7 +63,7 @@ def create_shared_parameter(value, name, shape, init_method, bounds):
     -------
     Theano shared variable.
     """
-    if isinstance(value, T.sharedvar.TensorSharedVariable):
+    if isinstance(value, (T.sharedvar.SharedVariable, T.Variable)):
         return value
 
     if value is None:
@@ -82,8 +82,8 @@ class SharedArrayProperty(ArrayProperty):
     {BaseProperty.required}
     """
     expected_type = (np.matrix, np.ndarray,
-                     T.sharedvar.TensorSharedVariable,
-                     T.TensorVariable)
+                     T.sharedvar.SharedVariable,
+                     T.Variable)
 
 
 class ParameterBasedLayer(BaseLayer):

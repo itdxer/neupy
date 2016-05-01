@@ -305,7 +305,8 @@ To make sure that all training processes go in a right way we can check erros up
 
 .. code-block:: python
 
-    cgnet.plot_errors()
+    from neupy import plots
+    plots.error_plot(cgnet)
 
 
 .. figure:: images/boston/cgnet-error-plot.png

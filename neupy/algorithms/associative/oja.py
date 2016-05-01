@@ -44,7 +44,6 @@ class Oja(UnsupervisedLearning, BaseNetwork):
     {BaseSkeleton.predict}
     {UnsupervisedLearning.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
 
     Raises
     ------

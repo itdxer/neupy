@@ -30,16 +30,21 @@ def terminal_echo(enabled, file_descriptor=sys.stdin):
 
     if not is_windows:
         termios = importlib.import_module('termios')
-        attributes = termios.tcgetattr(file_descriptor)
-        lflag = attributes[3]
 
-        if enabled:
-            lflag |= termios.ECHO
-        else:
-            lflag &= ~termios.ECHO
+        try:
+            attributes = termios.tcgetattr(file_descriptor)
+            lflag = attributes[3]
 
-        attributes[3] = lflag
-        termios.tcsetattr(file_descriptor, termios.TCSANOW, attributes)
+            if enabled:
+                lflag |= termios.ECHO
+            else:
+                lflag &= ~termios.ECHO
+
+            attributes[3] = lflag
+            termios.tcsetattr(file_descriptor, termios.TCSANOW, attributes)
+
+        except termios.error:
+            pass
 
 
 class TerminalLogger(object):

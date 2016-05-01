@@ -24,7 +24,6 @@ class Perceptron(BaseLinearNetwork):
     {BaseSkeleton.predict}
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
 
     Examples
     --------

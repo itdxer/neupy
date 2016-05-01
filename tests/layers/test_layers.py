@@ -143,7 +143,14 @@ class HiddenLayersOperationsTestCase(BaseTestCase):
         ))
 
     def test_reshape_layer(self):
+        # 1D shape
         x = np.random.random((5, 4, 3, 2, 1))
         reshape_layer = Reshape()
         y = reshape_layer.output(x).eval()
         self.assertEqual(y.shape, (5, 4 * 3 * 2 * 1))
+
+        # 2D shape
+        x = np.random.random((5, 20))
+        reshape_layer = Reshape((4, 5))
+        y = reshape_layer.output(x).eval()
+        self.assertEqual(y.shape, (5, 4, 5))

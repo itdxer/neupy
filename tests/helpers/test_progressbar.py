@@ -15,8 +15,7 @@ class ProgressbarTestCase(BaseTestCase):
             iterator = progressbar(
                 range(10),
                 mininterval=0.,
-                file=sys.stdout,
-                init_interval=0.
+                file=sys.stdout
             )
 
             for i in iterator:

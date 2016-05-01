@@ -34,7 +34,6 @@ class BaseAssociative(UnsupervisedLearning, BaseNetwork):
     train(input_train, epochs=100):
         Train neural network.
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
     """
 
     n_inputs = IntProperty(minval=1, required=True)
@@ -91,7 +90,6 @@ class BaseStepAssociative(BaseAssociative):
     {BaseSkeleton.predict}
     {BaseAssociative.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
     """
 
     n_inputs = IntProperty(minval=2, required=True)

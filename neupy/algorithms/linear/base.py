@@ -33,7 +33,6 @@ class BaseLinearNetwork(ConstructableNetwork):
     {BaseSkeleton.predict}
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
     """
 
     def __init__(self, connection, **options):

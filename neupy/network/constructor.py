@@ -201,10 +201,6 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
     {BaseNetwork.train_errors}
     {BaseNetwork.validation_errors}
     {BaseNetwork.last_epoch}
-
-    Methods
-    -------
-    {BaseNetwork.plot_errors}
     """
     error = ErrorFunctionProperty(default='mse', choices={
         'mae': errors.mae,
@@ -266,9 +262,12 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         self.variables.update(
             step=theano.shared(name='step', value=asfloat(self.step)),
             epoch=theano.shared(name='epoch', value=asfloat(self.last_epoch)),
+
             prediction_func=prediction,
             train_prediction_func=train_prediction,
+
             error_func=self.error(network_output, train_prediction),
+            validation_error_func=self.error(network_output, prediction),
         )
 
     def init_methods(self):
@@ -289,7 +288,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         )
         self.methods.prediction_error = theano.function(
             inputs=[network_input, network_output],
-            outputs=self.variables.error_func
+            outputs=self.variables.validation_error_func
         )
 
     def init_layers(self):
@@ -442,6 +441,8 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
 
     def train(self, input_train, target_train, input_test=None,
               target_test=None, *args, **kwargs):
+        """ Trains neural network.
+        """
         return super(ConstructableNetwork, self).train(
             self.format_input_data(input_train),
             self.format_target_data(target_train),
@@ -466,9 +467,15 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         return self.methods.train_epoch(input_train, target_train)
 
     def architecture(self):
+        """ Shows network's architecture in the terminal if
+        ``verbose`` parameter is equal to ``True``.
+        """
         self.logs.title("Network's architecture")
-        for layer in self.all_layers:
-            self.logs.write(layer)
+
+        for i, layer in enumerate(self.all_layers, start=1):
+            self.logs.write("{:>3}. {}".format(i, str(layer)))
+
+        self.logs.newline()
 
     def __repr__(self):
         return "{}({}, {})".format(self.class_name(), self.connection,

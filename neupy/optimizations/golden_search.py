@@ -138,6 +138,7 @@ def fmin_golden_search(f, minstep=1e-5, maxstep=50., maxiter=1024, tol=1e-5):
         ('maxstep', maxstep),
         ('tol', tol),
     )
+
     for param_name, param_value in params:
         if param_value <= 0:
             raise ValueError("Parameter `{}` should be greater than zero."

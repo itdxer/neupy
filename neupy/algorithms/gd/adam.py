@@ -40,12 +40,11 @@ class Adam(MinibatchGradientDescent):
     {BaseSkeleton.predict}
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
     """
     step = NumberProperty(default=0.001, minval=0)
     beta1 = ProperFractionProperty(default=0.9)
     beta2 = ProperFractionProperty(default=0.999)
-    epsilon = NumberProperty(default=1e-8, minval=0)
+    epsilon = NumberProperty(default=1e-7, minval=0)
 
     def init_layers(self):
         super(Adam, self).init_layers()

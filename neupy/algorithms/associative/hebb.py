@@ -41,7 +41,6 @@ class HebbRule(BaseStepAssociative):
     {BaseSkeleton.predict}
     {BaseAssociative.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
 
     Examples
     --------

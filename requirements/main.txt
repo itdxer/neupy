@@ -2,7 +2,10 @@
 numpy>=1.9.0
 scipy>=0.14.0
 matplotlib>=1.5.1
+
 Theano>=0.8.1
+# Important dependency for Theano 0.8.2
+nose-parameterized==0.5.0
 
 # Commands
 Baker>=1.3

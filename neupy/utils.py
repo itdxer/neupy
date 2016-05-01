@@ -47,7 +47,10 @@ def format_data(data, is_feature1d=True, copy=False):
     if data is None or issparse(data):
         return data
 
-    data = np.array(asfloat(data), copy=copy)
+    data = asfloat(data)
+
+    if not isinstance(data, np.ndarray) or copy:
+        data = np.array(data, copy=copy)
 
     # Valid number of features for one or two dimentions
     n_features = data.shape[-1]
@@ -91,7 +94,10 @@ def asfloat(value):
     float_type = theano.config.floatX
 
     if isinstance(value, (np.matrix, np.ndarray)):
-        return value.astype(float_type)
+        if value.dtype != np.dtype(float_type):
+            return value.astype(float_type)
+        else:
+            return value
 
     elif isinstance(value, (TensorVariable, TensorSharedVariable)):
         return T.cast(value, float_type)
@@ -126,7 +132,10 @@ def asint(value):
     int_type = int2float_types[float_type]
 
     if isinstance(value, (np.matrix, np.ndarray)):
-        return value.astype(int_type)
+        if value.dtype != np.dtype(int_type):
+            return value.astype(int_type)
+        else:
+            return value
 
     elif isinstance(value, (TensorVariable, TensorSharedVariable)):
         return T.cast(value, int_type)
@@ -237,8 +246,4 @@ def smallest_positive_number():
         'float32': 1e-7,
         'float64': 1e-16,
     }
-
-    if float_type not in epsilon_values:
-        raise TypeError("Unknown float type `{}`".format(float_type))
-
     return epsilon_values[float_type]

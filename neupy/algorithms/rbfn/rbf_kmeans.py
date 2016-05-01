@@ -38,7 +38,6 @@ class RBFKMeans(NoStepSelection, UnsupervisedLearning, BaseNetwork):
     {UnsupervisedLearning.train}
     {BaseSkeleton.predict}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
 
     Examples
     --------
