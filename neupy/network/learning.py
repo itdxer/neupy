@@ -17,7 +17,8 @@ class SupervisedLearning(object):
         your validation data error on each iteration.
     """
     def train(self, input_train, target_train, input_test=None,
-              target_test=None, epochs=100, epsilon=None):
+              target_test=None, epochs=100, epsilon=None,
+              summary_type='table'):
 
         is_test_data_partialy_missed = (
             (input_test is None and target_test is not None) or
@@ -40,7 +41,8 @@ class SupervisedLearning(object):
         return super(SupervisedLearning, self).train(
             input_train=input_train, target_train=target_train,
             input_test=input_test, target_test=target_test,
-            epochs=epochs, epsilon=epsilon
+            epochs=epochs, epsilon=epsilon,
+            summary_type=summary_type
         )
 
 
@@ -54,12 +56,15 @@ class UnsupervisedLearning(object):
         maximum number of iterations, just to make sure that network will
         stop training procedure if it can't converge.
     """
-    def train(self, input_train, epochs=100, epsilon=None):
+    def train(self, input_train, epochs=100, epsilon=None,
+              summary_type='table'):
+
         input_train = format_data(input_train, is_feature1d=True)
         return super(UnsupervisedLearning, self).train(
             input_train=input_train, target_train=None,
             input_test=None, target_test=None,
-            epochs=epochs, epsilon=epsilon
+            epochs=epochs, epsilon=epsilon,
+            summary_type=summary_type
         )
 
 

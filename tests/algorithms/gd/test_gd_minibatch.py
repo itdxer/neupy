@@ -1,7 +1,11 @@
 from itertools import product
 
+import numpy as np
+
 from neupy import algorithms
-from neupy.algorithms.gd.base import BatchSizeProperty
+from neupy.algorithms.gd.base import (BatchSizeProperty, iter_batches,
+                                      average_batch_errors,
+                                      cannot_divide_into_batches)
 
 from data import simple_classification
 from base import BaseTestCase
@@ -42,3 +46,34 @@ class MinibatchGDTestCase(BaseTestCase):
                 errors.append(net.errors.last())
 
             self.assertTrue(all(e == errors[0] for e in errors))
+
+    def test_iterbatches(self):
+        n_samples = 50
+        batch_size = 20
+        expected_shapes = [(20, 2), (20, 2), (10, 2)]
+
+        data = np.random.random((n_samples, 2))
+        batch_slices = list(iter_batches(n_samples, batch_size))
+        for batch, expected_shape in zip(batch_slices, expected_shapes):
+            self.assertEqual(data[batch].shape, expected_shape)
+
+    def test_batch_average(self):
+        expected_error = 0.9  # or 225 / 250
+        actual_error = average_batch_errors([1, 1, 0.5], 250, 100)
+        self.assertAlmostEqual(expected_error, actual_error)
+
+        expected_error = 0.8  # or 270 / 300
+        actual_error = average_batch_errors([1, 1, 0.4], 300, 100)
+        self.assertAlmostEqual(expected_error, actual_error)
+
+    def test_cannot_divide_into_batches(self):
+        x = np.random.random(10)
+
+        self.assertTrue(cannot_divide_into_batches(x, batch_size=None))
+        self.assertTrue(cannot_divide_into_batches(x, batch_size=100))
+        self.assertTrue(cannot_divide_into_batches(x, batch_size=10))
+
+        self.assertFalse(cannot_divide_into_batches(x, batch_size=1))
+        self.assertFalse(cannot_divide_into_batches(x, batch_size=2))
+        self.assertFalse(cannot_divide_into_batches(x, batch_size=3))
+        self.assertFalse(cannot_divide_into_batches(x, batch_size=9))

@@ -58,15 +58,49 @@ def neuron_neighbours(neurons, center, radius):
 
 
 def dot_product(input_data, weight):
+    """ Simple dot product.
+
+    Parameters
+    ----------
+    input_data : array-like
+    weight : array-like
+
+    Returns
+    -------
+    array-like
+    """
     return input_data.dot(weight)
 
 
 def neg_euclid_distance(input_data, weight):
+    """ Negative Euclidian distance between input
+    data and weight.
+
+    Parameters
+    ----------
+    input_data : array-like
+    weight : array-like
+
+    Returns
+    -------
+    array-like
+    """
     euclid_dist = norm(input_data.T - weight, axis=0)
     return -np.reshape(euclid_dist, (1, weight.shape[1]))
 
 
 def cosine_similarity(input_data, weight):
+    """ Cosine similarity between input data and weight.
+
+    Parameters
+    ----------
+    input_data : array-like
+    weight : array-like
+
+    Returns
+    -------
+    array-like
+    """
     norm_prod = norm(input_data) * norm(weight, axis=0)
     summated_data = np.dot(input_data, weight)
     cosine_dist = summated_data / norm_prod
@@ -104,7 +138,6 @@ class SOFM(Kohonen):
     {BaseSkeleton.predict}
     {BaseAssociative.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
     """
 
     learning_radius = IntProperty(default=0, minval=0)
@@ -114,8 +147,6 @@ class SOFM(Kohonen):
         'euclid': neg_euclid_distance,
         'cos': cosine_similarity,
     })
-    # # None - mean that this property is the same as default step
-    # neighbours_step = NumberProperty()
 
     def __init__(self, **options):
         super(SOFM, self).__init__(**options)
@@ -138,9 +169,6 @@ class SOFM(Kohonen):
 
     def init_properties(self):
         super(SOFM, self).init_properties()
-
-        # if self.neighbours_step is None:
-        #     self.neighbours_step = self.step
 
         if self.features_grid is None:
             self.features_grid = (self.n_outputs, 1)

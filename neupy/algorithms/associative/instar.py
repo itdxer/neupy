@@ -30,7 +30,6 @@ class Instar(BaseStepAssociative):
     {BaseSkeleton.predict}
     {BaseAssociative.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
 
     Examples
     --------

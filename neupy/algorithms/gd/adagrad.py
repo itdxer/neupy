@@ -33,7 +33,6 @@ class Adagrad(MinibatchGradientDescent):
     {BaseSkeleton.predict}
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
     """
     epsilon = NumberProperty(default=1e-5, minval=0)
 

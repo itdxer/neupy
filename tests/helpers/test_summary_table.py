@@ -52,9 +52,9 @@ class TableColumnsTestCase(BaseTestCase):
                              case.expected_output)
 
 
-class TableDrawerTestCase(BaseTestCase):
+class TableBuilderTestCase(BaseTestCase):
     def test_idle_state_raises(self):
-        table_drawing = table.TableDrawer(
+        table_drawing = table.TableBuilder(
             table.Column("Col 1"),
             table.Column("Col 2"),
         )
@@ -66,7 +66,7 @@ class TableDrawerTestCase(BaseTestCase):
             table_drawing.row([1, 2])
 
     def test_drawing_state_raises(self):
-        table_drawing = table.TableDrawer(
+        table_drawing = table.TableBuilder(
             table.Column("Col 1"),
             table.Column("Col 2"),
         )
@@ -81,7 +81,7 @@ class TableDrawerTestCase(BaseTestCase):
                 table_drawing.header()
 
     def test_table_drawing(self):
-        table_drawing = table.TableDrawer(
+        table_drawing = table.TableBuilder(
             table.Column("Col 1"),
             table.Column("Col 2", dtype=float),
             table.Column("Col 3", width=10),
@@ -92,9 +92,7 @@ class TableDrawerTestCase(BaseTestCase):
 
             table_drawing.row(['test', 33, 'val'])
             table_drawing.row(['test2', -3, 'val 2'])
-            table_drawing.line()
             table_drawing.message("Warning message")
-            table_drawing.line()
             table_drawing.row(['test3', 0, 'val 3'])
 
             table_drawing.finish()

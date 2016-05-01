@@ -2,7 +2,6 @@
 """
 import sys
 import time
-import threading
 import collections
 
 import numpy as np
@@ -78,9 +77,12 @@ def format_meter(n_finished, n_total, elapsed, error=None):
 
         percentage = '%3d%%' % (frac * 100)
 
-        left_str = format_interval(
-            elapsed / n_finished * (n_total - n_finished)
-        ) if n_finished else '?'
+        if n_finished:
+            left_str = format_interval(
+                elapsed / n_finished * (n_total - n_finished)
+            )
+        else:
+            left_str = '?'
 
         return '|{}| {}/{} {} [elapsed: {} left: {} error: {}]'.format(
             bar, n_finished, n_total, percentage,
@@ -91,6 +93,15 @@ def format_meter(n_finished, n_total, elapsed, error=None):
 
 
 class StatusPrinter(object):
+    """ Class is able to write and rewrite the last row in
+    the terminal
+
+    Parameters
+    ----------
+    file : file
+        File object instance that was opened using
+        write mode.
+    """
     def __init__(self, file):
         self.file = file
         self.last_printed_len = 0
@@ -109,7 +120,7 @@ class StatusPrinter(object):
 
 
 def progressbar(iterable, desc='', total=None, file=sys.stderr,
-                mininterval=0.05, miniters=1, init_interval=1.):
+                mininterval=0.05, miniters=1):
     """ Get an iterable object, and return an iterator which acts
     exactly like the iterable, but prints a progress meter and updates
     it every time a value is requested.
@@ -130,8 +141,6 @@ def progressbar(iterable, desc='', total=None, file=sys.stderr,
         If less than mininterval seconds or miniters
         iterations have passed since the last progress meter
         update, it is not updated again. Defaults to ``1``.
-    init_interval : float
-        Defaults to ``1``.
     """
     if total is None:
         try:
@@ -143,9 +152,7 @@ def progressbar(iterable, desc='', total=None, file=sys.stderr,
 
     printer = StatusPrinter(file)
     status = prefix + format_meter(0, total, 0)
-
-    timer = threading.Timer(init_interval, printer.write, args=[status])
-    timer.start()
+    printer.write(status)
 
     start_time = last_print_time = time.time()
     last_print_n = 0
@@ -155,23 +162,18 @@ def progressbar(iterable, desc='', total=None, file=sys.stderr,
         for obj in iterable:
             error = (yield)
             yield obj
-            timer.cancel()
 
-            # Now the object was created and processed, so we
-            # can print the meter.
             n += 1
             if n - last_print_n >= miniters:
-                # We check the counter first, to reduce the
-                # overhead of time.time()
                 current_time = time.time()
 
                 if (current_time - last_print_time) >= mininterval:
                     time_delta = current_time - start_time
                     formated_str = format_meter(n, total, time_delta, error)
+
                     printer.write(prefix + formated_str)
+
                     last_print_n = n
                     last_print_time = current_time
     finally:
-        # in case of instant error or early interuption
-        timer.cancel()
         printer.clean()

@@ -36,7 +36,6 @@ class Kohonen(BaseAssociative):
     {BaseSkeleton.predict}
     {BaseAssociative.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
 
     Examples
     --------

@@ -117,7 +117,7 @@ class TypedListProperty(BaseProperty):
     {BaseProperty.default}
     {BaseProperty.required}
     """
-    expected_type = (list, tuple, set)
+    expected_type = (list, tuple)
 
     def __init__(self, n_elements=None, element_type=int, *args, **kwargs):
         self.n_elements = n_elements

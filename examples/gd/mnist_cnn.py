@@ -37,7 +37,7 @@ network = algorithms.Adadelta(
 
         layers.Reshape(),
 
-        layers.Relu(6912),
+        layers.Relu(48 * 12 * 12),
         layers.Dropout(0.3),
         layers.Softmax(200),
         layers.ArgmaxOutput(10),

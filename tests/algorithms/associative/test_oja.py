@@ -67,7 +67,7 @@ class OjaTestCase(BaseTestCase):
 
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(
-            algorithms.Oja(minimized_data_size=1, verbose=False),
+            algorithms.Oja(minimized_data_size=1, verbose=False, step=0.01),
             np.array([1, 2, 3])
         )
 

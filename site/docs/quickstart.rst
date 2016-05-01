@@ -119,7 +119,8 @@ From the table is not clear network's training progress. We can check it very ea
 
 .. code-block:: python
 
-    >>> network.plot_errors()
+    >>> from neupy import plots
+    >>> plots.error_plot(network)
 
 .. image:: ../_static/screenshots/bpnet-train-errors-plot.png
     :width: 70%

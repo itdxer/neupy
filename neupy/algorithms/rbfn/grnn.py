@@ -24,7 +24,6 @@ class GRNN(LazyLearning, BaseNetwork):
     {LazyLearning.train}
     {BaseSkeleton.predict}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
 
     Examples
     --------

@@ -34,14 +34,21 @@ class BackPropAlgsTestCase(BaseTestCase):
         for bp_algorithm_class in self.bp_algorithms:
             network = bp_algorithm_class(
                 [
-                    layers.Linear(2, bias=np.zeros(1),
-                                  weight=np.zeros((2, 1))),
+                    layers.Linear(
+                        size=2,
+                        bias=np.zeros(1),
+                        weight=np.zeros((2, 1))
+                    ),
                     layers.Output(1),
                 ],
                 verbose=False,
             )
-            self.assertInvalidVectorPred(network, np.array([0, 0]), 0,
-                                         is_feature1d=False)
+            self.assertInvalidVectorPred(
+                network,
+                input_vector=np.array([0, 0]),
+                target=0,
+                is_feature1d=False
+            )
 
     def test_custom_error_functions(self):
         # Test that everything works without fail

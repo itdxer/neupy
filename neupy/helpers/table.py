@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import time
+import textwrap
 from operator import attrgetter
 from abc import abstractmethod
 
@@ -10,18 +11,18 @@ from six import with_metaclass
 from neupy.core.docs import SharedDocs, SharedDocsABCMeta
 
 
-__all__ = ("TableDrawer", "Column", "TimeColumn", "NumberColumn",
+__all__ = ("TableBuilder", "Column", "TimeColumn", "NumberColumn",
            "TableDrawingError")
 
 
 class TableDrawingError(AttributeError):
-    """ Exception specific for ``TableDrawer`` class functionality.
+    """ Exception specific for ``TableBuilder`` class functionality.
     """
 
 
 class Column(SharedDocs):
     """ Simple column class that helps discribe structure for
-    ``TableDrawer`` class instance.
+    ``TableBuilder`` class instance.
 
     Parameters
     ----------
@@ -59,6 +60,42 @@ class Column(SharedDocs):
         return self.dtype(value)
 
 
+def format_time(value):
+    """ Convert seconds to the value format that easy
+    to understand.
+
+    Parameters
+    ----------
+    value : float
+        Time interval in seconds.
+
+    Returns
+    -------
+    str
+
+    Examples
+    --------
+    >>> col = TimeColumn("Time")
+    >>> col.format_value(0.001)
+    '1 ms'
+    >>> col.format_value(0.5)
+    '0.5 sec'
+    >>> col.format_value(1.5)
+    '1.5 sec'
+    >>> col.format_value(15)
+    '00:00:15'
+    >>> col.format_value(15045)
+    '04:10:45'
+    """
+    if value < 0.05:
+        return "{} ms".format(round(value * 10 ** 3))
+
+    elif value < 10:
+        return "{} sec".format(round(value, 1))
+
+    return time.strftime("%H:%M:%S", time.gmtime(value))
+
+
 class TimeColumn(Column):
     """ Columns useful for time formating from seconds to more
     informative and readable format.
@@ -71,36 +108,7 @@ class TimeColumn(Column):
     """
 
     def format_value(self, value):
-        """
-        Parameters
-        ----------
-        value : float
-            Time range in seconds.
-
-        Returns
-        -------
-        str
-            Seconds formated in readable string format.
-
-        Examples
-        --------
-        >>> col = TimeColumn("Time")
-        >>> col.format_value(0.001)
-        '1 ms'
-        >>> col.format_value(0.5)
-        '0.5 sec'
-        >>> col.format_value(1.5)
-        '1.5 sec'
-        >>> col.format_value(15)
-        '00:00:15'
-        >>> col.format_value(15045)
-        '04:10:45'
-        """
-        if value < 0.05:
-            return "{} ms".format(round(value * 10 ** 3))
-        elif value < 10:
-            return "{} sec".format(round(value, 1))
-        return time.strftime("%H:%M:%S", time.gmtime(value))
+        return format_time(value)
 
 
 class NumberColumn(Column):
@@ -143,13 +151,13 @@ class NumberColumn(Column):
 
 class BaseState(with_metaclass(SharedDocsABCMeta)):
     """ Base abstract class that identify all important methods for
-    ``TableDrawer`` class states.
+    ``TableBuilder`` class states.
 
     Parameters
     ----------
-    table : TableDrawer instance
+    table : TableBuilder instance
         Accept summary table instance. State is able to control
-        properties from main ``TableDrawer`` class instantance
+        properties from main ``TableBuilder`` class instantance
     """
 
     def __init__(self, table):
@@ -162,12 +170,20 @@ class BaseState(with_metaclass(SharedDocsABCMeta)):
         self.table.stdout('\r' + '-' * self.table.total_width)
 
     def message(self, text):
-        """ Write additional message in table. All seperators between
-        columns will be ignored.
+        """ Write additional message in table. All seperators
+        between columns will be ignored.
         """
-        # Exclude from total width 2 separators and 2 spaces near them
-        formated_text = text.ljust(self.table.total_width - 4)
-        self.table.stdout("\r| " + formated_text + " |")
+        self.line()
+        # Excluding from the total width 2 symbols related to
+        # the separators near the table edges and 2 symbols
+        # related to the spaces near these edges
+        max_line_width = self.table.total_width - 4
+
+        for text_row in textwrap.wrap(text, max_line_width):
+            formated_text = text_row.ljust(max_line_width)
+            self.table.stdout("\r| " + formated_text + " |")
+
+        self.line()
 
     @abstractmethod
     def start(self):
@@ -187,7 +203,7 @@ class BaseState(with_metaclass(SharedDocsABCMeta)):
 
 
 class DrawingState(BaseState):
-    """ Identify active state for ``TableDrawer`` class instance.
+    """ Identify active state for ``TableBuilder`` class instance.
     In this state summary table instance is able to show information
     in terminal.
 
@@ -216,7 +232,7 @@ class DrawingState(BaseState):
 
 
 class IdleState(BaseState):
-    """ Identify idle state for ``TableDrawer`` class instance.
+    """ Identify idle state for ``TableBuilder`` class instance.
     In this state summary table instance isn't able to show information
     in terminal.
 
@@ -249,7 +265,7 @@ class IdleState(BaseState):
                                 "didn't started")
 
 
-class TableDrawer(SharedDocs):
+class TableBuilder(SharedDocs):
     """ Build ASCII tables using simple structure.
 
     Parameters
@@ -259,7 +275,6 @@ class TableDrawer(SharedDocs):
     stdout : func
         Function through which the message will be transmitted.
     """
-
     def __init__(self, *columns, **kwargs):
         valid_kwargs = ['stdout']
         # In Python 2 doesn't work syntax like
@@ -290,4 +305,4 @@ class TableDrawer(SharedDocs):
     def __getattr__(self, attr):
         if attr not in self.__dict__:
             return getattr(self.state, attr)
-        return super(TableDrawer, self).__getattr__(attr)
+        return super(TableBuilder, self).__getattr__(attr)

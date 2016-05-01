@@ -102,7 +102,6 @@ class QuasiNewton(NoStepSelection, GradientDescent):
     {BaseSkeleton.predict}
     {SupervisedLearning.train}
     {BaseSkeleton.fit}
-    {BaseNetwork.plot_errors}
 
     Examples
     --------
@@ -178,6 +177,7 @@ class QuasiNewton(NoStepSelection, GradientDescent):
         param_delta = -new_inv_hessian.dot(full_gradient)
 
         def prediction(step):
+            # TODO: I need to update this ugly solution later
             updated_params = param_vector + step * param_delta
 
             layer_input = network_input
@@ -185,7 +185,8 @@ class QuasiNewton(NoStepSelection, GradientDescent):
             for layer in self.layers:
                 for param in layer.parameters:
                     end_pos = start_pos + param.size
-                    setattr(layer, param.name.split('_')[0], T.reshape(
+                    parameter_name, parameter_id = param.name.split('_')
+                    setattr(layer, parameter_name, T.reshape(
                         updated_params[start_pos:end_pos],
                         param.shape
                     ))
