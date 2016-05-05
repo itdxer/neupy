@@ -302,6 +302,42 @@ class TableBuilder(SharedDocs):
 
         self.total_width = text_width + n_separators + n_margins
 
+    @classmethod
+    def show_full_table(cls, columns, values, **kwargs):
+        """ Shows full table. This method is useful in case if all
+        table values are available and we can just show them all
+        in one table without interations.
+
+        Parameters
+        ----------
+        columns : list
+            List of columns.
+        values : list of list or tuple
+            List of values. Each element should be a list or
+            tuple that contains column values in the same order
+            as defined in the ``columns`` parameter.
+        **kwargs
+            Arguments for the ``TableBuilder`` class
+            initialization.
+        """
+
+        values_length = []
+        for row_values in values:
+            row_values_length = [len(str(value)) for value in row_values]
+            values_length.append(row_values_length)
+
+        columns_width = np.array(values_length).max(axis=0)
+        for column, proposed_column_width in zip(columns, columns_width):
+            column.width = max(column.width, proposed_column_width)
+
+        table_builder = cls(*columns, **kwargs)
+        table_builder.start()
+
+        for row_values in values:
+            table_builder.row(row_values)
+
+        table_builder.finish()
+
     def __getattr__(self, attr):
         if attr not in self.__dict__:
             return getattr(self.state, attr)

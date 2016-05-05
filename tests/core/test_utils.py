@@ -1,9 +1,12 @@
+from collections import namedtuple
+
 import theano
 import numpy as np
 from scipy.sparse import csr_matrix
 
 from neupy.utils import (preformat_value, as_array2d, AttributeKeyDict, asint,
-                         smallest_positive_number, asfloat, format_data)
+                         smallest_positive_number, asfloat, format_data,
+                         as_tuple)
 from neupy.network.utils import shuffle
 
 from base import BaseTestCase
@@ -149,3 +152,19 @@ class UtilsTestCase(BaseTestCase):
         x = theano.tensor.fmatrix()
         self.assertNotEqual(x.dtype, int_type)
         self.assertEqual(asint(x).dtype, int_type)
+
+    def test_as_tuple(self):
+        Case = namedtuple("Case", "input_args expected_output")
+        testcases = (
+            Case(input_args=(1, 2, 3),
+                 expected_output=(1, 2, 3)),
+            Case(input_args=(None, (1, 2, 3), None),
+                 expected_output=(None, 1, 2, 3, None)),
+            Case(input_args=((1, 2, 3), (4, 5, 3)),
+                 expected_output=(1, 2, 3, 4, 5, 3)),
+        )
+
+        for testcase in testcases:
+            actual_output = as_tuple(*testcase.input_args)
+            self.assertEqual(actual_output, testcase.expected_output,
+                             msg="Input args: {}".format(testcase.input_args))

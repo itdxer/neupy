@@ -28,9 +28,11 @@ x_train, x_test, y_train, y_test = cross_validation.train_test_split(
 
 network = algorithms.Adadelta(
     [
-        layers.Convolution((32, 1, 3, 3)),
+        layers.Input((1, 28, 28)),
+
+        layers.Convolution((32, 3, 3)),
         layers.Relu(),
-        layers.Convolution((48, 32, 3, 3)),
+        layers.Convolution((48, 3, 3)),
         layers.Relu(),
         layers.MaxPooling((2, 2)),
         layers.Dropout(0.2),

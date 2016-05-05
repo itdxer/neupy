@@ -73,7 +73,6 @@ class LayersBasicsTestCase(BaseTestCase):
         np.testing.assert_array_equal(actual_output, expected_output)
 
 
-
 class HiddenLayersOperationsTestCase(BaseTestCase):
     def test_sigmoid_layer(self):
         layer1 = Sigmoid(1)
@@ -145,12 +144,20 @@ class HiddenLayersOperationsTestCase(BaseTestCase):
     def test_reshape_layer(self):
         # 1D shape
         x = np.random.random((5, 4, 3, 2, 1))
-        reshape_layer = Reshape()
+
+        input_layer = layers.Input((4, 3, 2, 1))
+        reshape_layer = layers.Reshape()
+        connection = input_layer > reshape_layer
+
         y = reshape_layer.output(x).eval()
         self.assertEqual(y.shape, (5, 4 * 3 * 2 * 1))
 
         # 2D shape
         x = np.random.random((5, 20))
-        reshape_layer = Reshape((4, 5))
+
+        input_layer = layers.Input(20)
+        reshape_layer = layers.Reshape((4, 5))
+        connection = input_layer > input_layer
+
         y = reshape_layer.output(x).eval()
         self.assertEqual(y.shape, (5, 4, 5))

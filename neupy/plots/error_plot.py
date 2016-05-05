@@ -26,6 +26,15 @@ def error_plot(network, logx=False, ax=None, show=True):
     -------
     object
         Matplotlib axis instance.
+
+    Examples
+    --------
+    >>> from neupy import algorithms, plots
+    >>>
+    >>> gdnet = algorithms.GradientDescent((2, 3, 1))
+    >>> gdnet.train(x_train, y_train, x_test, y_test, epochs=100)
+    >>>
+    >>> plots.error_plot(gdnet)
     """
 
     if ax is None:

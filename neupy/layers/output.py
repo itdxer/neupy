@@ -1,5 +1,6 @@
 import numpy as np
 
+from neupy.utils import cached_property
 from neupy.layers.connections import NetworkConnectionError
 from neupy.layers.base import BaseLayer
 from neupy.core.properties import (TypedListProperty, IntProperty,
@@ -102,5 +103,10 @@ class ArgmaxOutput(Output):
     The precision in decimal digits for output value.
     {Output.size}
     """
+
+    @cached_property
+    def output_shape(self):
+        return 1
+
     def output(self, value):
         return value.argmax(axis=1)

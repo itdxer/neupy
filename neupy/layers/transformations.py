@@ -1,6 +1,7 @@
 import numpy as np
 import theano.tensor as T
 
+from neupy.utils import as_tuple, cached_property
 from neupy.core.properties import ProperFractionProperty, TypedListProperty
 from .base import BaseLayer
 
@@ -23,7 +24,7 @@ class Dropout(BaseLayer):
         options['proba'] = proba
         super(Dropout, self).__init__(**options)
 
-    @property
+    @cached_property
     def size(self):
         return self.relate_to_layer.size
 
@@ -65,6 +66,14 @@ class Reshape(BaseLayer):
             options['shape'] = shape
         super(Reshape, self).__init__(**options)
 
+    @cached_property
+    def output_shape(self):
+        if self.shape is not None:
+            return self.shape
+
+        output_shape = self.input_shape[1:]
+        return np.prod(output_shape)
+
     def output(self, input_value):
         """ Reshape the feature space for the input value.
 
@@ -72,14 +81,5 @@ class Reshape(BaseLayer):
         ----------
         input_value : array-like or Theano variable
         """
-        new_feature_shape = self.shape
-        input_shape = input_value.shape[0]
-
-        if new_feature_shape is None:
-            output_shape = input_value.shape[1:]
-            new_feature_shape = T.prod(output_shape)
-            output_shape = (input_shape, new_feature_shape)
-        else:
-            output_shape = (input_shape,) + new_feature_shape
-
+        output_shape = as_tuple(input_value.shape[0], self.output_shape)
         return T.reshape(input_value, output_shape)

@@ -1,6 +1,7 @@
 import six
 import theano.tensor as T
 
+from neupy.utils import cached_property
 from neupy.core.config import ConfigMeta
 from .base import ParameterBasedLayer
 
@@ -47,6 +48,16 @@ class ActivationLayer(six.with_metaclass(LayerMeta, ParameterBasedLayer)):
         if hasattr(self.__class__, 'activation_function'):
             self.activation_function = self.__class__.activation_function
         super(ActivationLayer, self).__init__(size, **options)
+
+    @cached_property
+    def input_shape(self):
+        return self.size
+
+    @cached_property
+    def output_shape(self):
+        if self.size is None:
+            return self.input_shape
+        return super(ActivationLayer, self).output_shape
 
     def initialize(self):
         if self.size is not None:
