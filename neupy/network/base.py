@@ -445,5 +445,3 @@ class BaseNetwork(BaseSkeleton):
 
             summary.finish()
             logs.newline()
-
-        logs.message("TRAIN", "Trainig finished")

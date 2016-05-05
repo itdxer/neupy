@@ -8,9 +8,10 @@ import theano.tensor as T
 from neupy.utils import (AttributeKeyDict, asfloat, is_list_of_integers,
                          format_data, does_layer_accept_1d_feature)
 from neupy.layers import BaseLayer, Output, Dropout
-from neupy.layers.utils import generate_layers
-from neupy.core.properties import ChoiceProperty
+from neupy.layers.utils import generate_layers, preformat_layer_shape
 from neupy.layers.connections import LayerConnection, NetworkConnectionError
+from neupy.helpers import table
+from neupy.core.properties import ChoiceProperty
 from neupy.network import errors
 from .learning import SupervisedLearning
 from .base import BaseNetwork
@@ -75,7 +76,11 @@ def create_input_variable(input_layer, variable_name):
         3: T.tensor3,
         4: T.tensor4,
     }
-    ndim = input_layer.weight.ndim
+
+    if isinstance(input_layer.input_shape, tuple):
+        ndim = len(input_layer.input_shape)
+    else:
+        ndim = 2
 
     if ndim not in dim_to_variable_type:
         raise ValueError("Layer's input needs to be 2, 3 or 4 dimensional. "
@@ -472,9 +477,25 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         """
         self.logs.title("Network's architecture")
 
-        for i, layer in enumerate(self.all_layers, start=1):
-            self.logs.write("{:>3}. {}".format(i, str(layer)))
+        values = []
+        for index, layer in enumerate(self.all_layers, start=1):
+            values.append((
+                index,
+                preformat_layer_shape(layer.input_shape),
+                layer.__class__.__name__,
+                preformat_layer_shape(layer.output_shape)
+            ))
 
+        table.TableBuilder.show_full_table(
+            columns=[
+                table.Column(name="#"),
+                table.Column(name="Input shape"),
+                table.Column(name="Layer Type"),
+                table.Column(name="Output shape"),
+            ],
+            values=values,
+            stdout=self.logs.write,
+        )
         self.logs.newline()
 
     def __repr__(self):

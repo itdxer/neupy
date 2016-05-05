@@ -6,7 +6,7 @@ from neupy.layers.connections import LayerConnection
 
 
 __all__ = ('generate_layers', 'random_orthogonal', 'random_bounded',
-           'generate_weight')
+           'generate_weight', 'preformat_layer_shape')
 
 
 DEFAULT_LAYER_CLASS = "neupy.layers.Sigmoid"
@@ -319,3 +319,21 @@ def generate_weight(shape, bounds=None, init_method=XAVIER_NORMAL):
         weight = generation_function(shape)
 
     return weight
+
+
+def preformat_layer_shape(shape):
+    """ Each layer should have input and output shape
+    attributes. This function formats layer's shape value to
+    make it easy to read.
+
+    Parameters
+    ----------
+    shape : int or tuple
+
+    Returns
+    -------
+    int or tuple
+    """
+    if isinstance(shape, tuple) and shape[0] is None:
+        return shape[1:]
+    return shape

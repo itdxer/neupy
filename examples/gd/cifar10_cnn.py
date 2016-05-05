@@ -37,25 +37,27 @@ y_test = target_scaler.transform(y_test.reshape((-1, 1))).todense()
 
 network = algorithms.Adadelta(
     [
-        layers.Convolution((64, 3, 3, 3), border_mode='full'),
+        layers.Input((3, 32, 32)),
+
+        layers.Convolution((64, 3, 3), border_mode='full'),
         layers.Relu(),
-        layers.Convolution((64, 64, 3, 3)),
+        layers.Convolution((64, 3, 3)),
         layers.Relu(),
         layers.MaxPooling((2, 2)),
         layers.Dropout(proba=0.25),
 
-        layers.Convolution((128, 64, 3, 3), border_mode='full'),
+        layers.Convolution((128, 3, 3), border_mode='full'),
         layers.Relu(),
-        layers.Convolution((128, 128, 3, 3)),
+        layers.Convolution((128, 3, 3)),
         layers.Relu(),
         layers.MaxPooling((2, 2)),
         layers.Dropout(proba=0.25),
 
-        layers.Convolution((256, 128, 3, 3), border_mode='full'),
+        layers.Convolution((256, 3, 3), border_mode='full'),
         layers.Relu(),
-        layers.Convolution((256, 256, 3, 3)),
+        layers.Convolution((256, 3, 3)),
         layers.Relu(),
-        layers.Convolution((256, 256, 1, 1)),
+        layers.Convolution((256, 1, 1)),
         layers.Relu(),
         layers.MaxPooling((2, 2)),
         layers.Dropout(proba=0.25),

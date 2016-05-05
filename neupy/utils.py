@@ -10,7 +10,8 @@ from scipy.sparse import issparse
 
 __all__ = ('format_data', 'does_layer_accept_1d_feature', 'asfloat',
            'AttributeKeyDict', 'is_list_of_integers', 'preformat_value',
-           'as_array2d', 'NotTrainedException', 'smallest_positive_number')
+           'as_array2d', 'NotTrainedException', 'smallest_positive_number',
+           'as_tuple', 'asint', 'cached_property')
 
 
 class NotTrainedException(Exception):
@@ -247,3 +248,55 @@ def smallest_positive_number():
         'float64': 1e-16,
     }
     return epsilon_values[float_type]
+
+
+def as_tuple(*values):
+    """ Convert sequence of values in one big tuple.
+
+    Parameters
+    ----------
+    *values
+        Values that needs to be combined in one big tuple.
+
+    Returns
+    -------
+    tuple
+        All input values combined in one tuple
+
+    Examples
+    --------
+    >>> as_tuple(None, (1, 2, 3), None)
+    (None, 1, 2, 3, None)
+    >>> as_tuple((1, 2, 3), (4, 5, 3))
+    (1, 2, 3, 4, 5, 3)
+    """
+    cleaned_values = []
+    for value in values:
+        if isinstance(value, tuple):
+            cleaned_values.extend(value)
+        else:
+            cleaned_values.append(value)
+    return tuple(cleaned_values)
+
+
+class CachedProperty(object):
+    """ A property that is only computed once per instance
+    and then replaces itself with an ordinary attribute.
+    Deleting the attribute resets the property.
+    Source: https://github.com/bottlepy/bottle/\
+    commit/fa7733e075da0d790d809aa3d2f53071897e6f76
+    """
+    def __init__(self, func):
+        self.__doc__ = getattr(func, '__doc__')
+        self.func = func
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+
+        value = self.func(instance)
+        instance.__dict__[self.func.__name__] = value
+        return value
+
+
+cached_property = CachedProperty

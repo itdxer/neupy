@@ -48,7 +48,7 @@ class BaseProperty(SharedDocs):
         self.validate(value)
         instance.__dict__[self.name] = value
 
-    def __get__(self, instance, value):
+    def __get__(self, instance, owner):
         if instance is None:
             return
 

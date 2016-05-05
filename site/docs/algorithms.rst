@@ -133,6 +133,7 @@ Convolutional Layers
 .. csv-table::
     :header: "Class name", "Description"
 
+    ":layer:`Input`", "Layer defines input value's feature shape"
     ":layer:`Convolution`", "Convolutional layer"
     ":layer:`MaxPooling`", "Maximum pooling layer"
     ":layer:`AveragePooling`", "Average pooling layer"
