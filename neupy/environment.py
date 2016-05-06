@@ -11,8 +11,6 @@ def sandbox():
     """ Sandbox mode set up Theano configurations in the way that
     make compilation faster.
     """
-    theano.config.linker = 'py'
-    theano.config.mode = 'FAST_COMPILE'
     theano.config.optimizer = 'fast_compile'
     theano.config.allow_gc = False
 

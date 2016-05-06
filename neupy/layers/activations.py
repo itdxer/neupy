@@ -51,7 +51,9 @@ class ActivationLayer(six.with_metaclass(LayerMeta, ParameterBasedLayer)):
 
     @cached_property
     def input_shape(self):
-        return self.size
+        if self.size is not None:
+            return self.size
+        return super(ActivationLayer, self).input_shape
 
     @cached_property
     def output_shape(self):
