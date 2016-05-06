@@ -12,8 +12,6 @@ from base import BaseTestCase
 
 
 class ConvLayersTestCase(BaseTestCase):
-    use_sandbox_mode = False
-
     def test_convolution_params(self):
         weight_shape = (6, 1, 2, 2)
         bias_shape = (6,)
