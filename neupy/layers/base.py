@@ -1,3 +1,5 @@
+from contextlib import contextmanager
+
 import numpy as np
 import theano
 import theano.tensor as T
@@ -22,6 +24,19 @@ class BaseLayer(ChainConnection, Configurable):
         Set up important configurations related to the layer.
     relate_to(right_layer)
         Connect current layer with the next one.
+    disable_training_state()
+        Swith off trainig state.
+
+    Attributes
+    ----------
+    training_state : bool
+        Defines whether layer in training state or not.
+    layer_id : int
+        Layer's identifier.
+    parameters : list
+        List of layer's parameters.
+    relate_to_layer : BaseLayer or None
+    relate_from_layer : BaseLayer or None
     """
     def __init__(self, *args, **options):
         super(BaseLayer, self).__init__(*args)
@@ -32,6 +47,7 @@ class BaseLayer(ChainConnection, Configurable):
         self.relate_to_layer = None
         self.relate_from_layer = None
         self.layer_id = 1
+        self.training_state = True
 
         Configurable.__init__(self, **options)
 
@@ -43,6 +59,12 @@ class BaseLayer(ChainConnection, Configurable):
     @cached_property
     def output_shape(self):
         return self.input_shape
+
+    @contextmanager
+    def disable_training_state(self):
+        self.training_state = False
+        yield
+        self.training_state = True
 
     def initialize(self):
         if self.relate_from_layer is not None:
