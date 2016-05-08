@@ -138,14 +138,22 @@ Convolutional Layers
     ":layer:`MaxPooling`", "Maximum pooling layer"
     ":layer:`AveragePooling`", "Average pooling layer"
 
-Misc layers
-~~~~~~~~~~~
+Stochastic Layers
+~~~~~~~~~~~~~~~~~
 
 .. csv-table::
     :header: "Class name", "Description"
 
-    ":layer:`Reshape`", "Reshape tensor input to matrix"
     ":layer:`Dropout`", "Dropout layer"
+    ":layer:`GaussianNoise`", "Add gaussian noise to the input"
+
+Transformation Layers
+~~~~~~~~~~~~~~~~~~~~~
+
+.. csv-table::
+    :header: "Class name", "Description"
+
+    ":layer:`Reshape`", "Reshape tensor input"
 
 Output layers
 ~~~~~~~~~~~~~

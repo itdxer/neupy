@@ -260,9 +260,10 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
 
         train_prediction = prediction = network_input
         for layer in self.layers:
-            if not isinstance(layer, Dropout):
-                prediction = layer.output(prediction)
             train_prediction = layer.output(train_prediction)
+
+            with layer.disable_training_state():
+                prediction = layer.output(prediction)
 
         self.variables.update(
             step=theano.shared(name='step', value=asfloat(self.step)),

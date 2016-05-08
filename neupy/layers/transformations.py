@@ -2,49 +2,11 @@ import numpy as np
 import theano.tensor as T
 
 from neupy.utils import as_tuple, cached_property
-from neupy.core.properties import ProperFractionProperty, TypedListProperty
+from neupy.core.properties import TypedListProperty
 from .base import BaseLayer
 
 
-__all__ = ('Dropout', 'Reshape')
-
-
-class Dropout(BaseLayer):
-    """ Dropout layer
-
-    Parameters
-    ----------
-    proba : float
-        Fraction of the input units to drop. Value needs to be
-        between 0 and 1.
-    """
-    proba = ProperFractionProperty(required=True)
-
-    def __init__(self, proba, **options):
-        options['proba'] = proba
-        super(Dropout, self).__init__(**options)
-
-    @cached_property
-    def size(self):
-        return self.relate_to_layer.size
-
-    def output(self, input_value):
-        # Use NumPy seed to make Theano code easely reproducible
-        max_possible_seed = 4e9
-        seed = np.random.randint(max_possible_seed)
-        theano_random = T.shared_randomstreams.RandomStreams(seed)
-
-        proba = (1.0 - self.proba)
-        mask = theano_random.binomial(n=1, p=proba,
-                                      size=input_value.shape,
-                                      dtype=input_value.dtype)
-        return (mask * input_value) / proba
-
-    def __repr__(self):
-        return "{name}(proba={proba})".format(
-            name=self.__class__.__name__,
-            proba=self.proba
-        )
+__all__ = ('Reshape',)
 
 
 class Reshape(BaseLayer):
