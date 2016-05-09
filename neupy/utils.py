@@ -11,7 +11,10 @@ from scipy.sparse import issparse
 __all__ = ('format_data', 'does_layer_accept_1d_feature', 'asfloat',
            'AttributeKeyDict', 'is_list_of_integers', 'preformat_value',
            'as_array2d', 'NotTrainedException', 'smallest_positive_number',
-           'as_tuple', 'asint', 'cached_property')
+           'as_tuple', 'asint', 'cached_property', 'number_type')
+
+
+number_type = (int, float, np.floating, np.integer)
 
 
 class NotTrainedException(Exception):

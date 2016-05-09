@@ -334,6 +334,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         updates = []
         for parameter in layer.parameters:
             updates.extend(self.init_param_updates(layer, parameter))
+        updates.extend(layer.updates())
         return updates
 
     def init_param_updates(self, parameter):

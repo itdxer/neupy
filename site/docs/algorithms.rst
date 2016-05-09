@@ -123,7 +123,9 @@ Input and hidden layers
     ":layer:`HardSigmoid`", "Layer with hard sigmoid activation function."
     ":layer:`Step`", "Layer with step activation function."
     ":layer:`Tanh`", "Layer with tanh activation function."
-    ":layer:`Relu`", "Layer with rectifier activation function."
+    ":layer:`Relu`", "Layer with ReLu activation function."
+    ":layer:`Elu`", "Layer with ELU activation function."
+    ":layer:`PRelu`", "Layer with Parametric ReLu activation function."
     ":layer:`Softplus`", "Layer with softplus activation function."
     ":layer:`Softmax`", "Layer with softmax activation function."
 
