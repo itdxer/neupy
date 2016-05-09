@@ -8,6 +8,7 @@ from abc import abstractmethod
 import numpy as np
 from six import with_metaclass
 
+from neupy.utils import number_type
 from neupy.core.docs import SharedDocs, SharedDocsABCMeta
 
 
@@ -139,7 +140,7 @@ class NumberColumn(Column):
         float
             Rounded input value.
         """
-        if not isinstance(value, (int, float, np.floating, np.integer)):
+        if not isinstance(value, number_type):
             return value
 
         if value > 100:

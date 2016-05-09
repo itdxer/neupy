@@ -74,6 +74,9 @@ class BaseLayer(ChainConnection, Configurable):
         self.relate_to_layer = right_layer
         right_layer.relate_from_layer = self
 
+    def updates(self):
+        return []
+
     def __repr__(self):
         classname = self.__class__.__name__
         return '{name}()'.format(name=classname)
@@ -131,11 +134,11 @@ class ParameterBasedLayer(BaseLayer):
     ----------
     size : int
         Layer input size.
-    weight : 2D array-like or None
+    weight : 2D array-like, Theano shared variable or None
         Define your layer weights. ``None`` means that your weights will be
         generate randomly dependence on property ``init_method``.
         ``None`` by default.
-    bias : 1D array-like or None
+    bias : 1D array-like, Theano shared variable or None
         Define your layer bias. ``None`` means that your weights will be
         generate randomly dependence on property ``init_method``.
     init_method : {{'bounded', 'normal', 'ortho', 'xavier_normal',\
