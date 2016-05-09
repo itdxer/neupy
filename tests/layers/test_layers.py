@@ -168,6 +168,14 @@ class PReluTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             prelu_layer.initialize()
 
+    def test_prelu_random_params(self):
+        prelu_layer = layers.PRelu(10, alpha=None)
+        connection = prelu_layer > layers.Output(10)
+        prelu_layer.initialize()
+
+        alpha = prelu_layer.alpha.get_value()
+        self.assertEqual(10, np.unique(alpha).size)
+
     def test_prelu_layer_param_dense(self):
         prelu_layer = layers.PRelu(10, alpha=0.25)
         connection = prelu_layer > layers.Output(10)
@@ -193,7 +201,7 @@ class PReluTestCase(BaseTestCase):
         self.assertEqual(prelu_layer.alpha.get_value().shape, (5, 8))
         np.testing.assert_array_almost_equal(alpha, expected_alpha)
 
-    def test_prelu_output(self):
+    def test_prelu_output_by_dense_input(self):
         prelu_layer = layers.PRelu(1, alpha=0.25)
         connection = prelu_layer > layers.Output(1)
         prelu_layer.initialize()
@@ -203,6 +211,24 @@ class PReluTestCase(BaseTestCase):
         actual_output = prelu_layer.activation_function(input_data).eval()
 
         np.testing.assert_array_almost_equal(expected_output, actual_output)
+
+    def test_prelu_output_by_spatial_input(self):
+        input_data = asfloat(np.random.random((1, 3, 10, 10)))
+
+        input_layer = layers.Input((3, 10, 10))
+        conv_layer = layers.Convolution((5, 3, 3))
+        prelu_layer = layers.PRelu(alpha=0.25, alpha_axes=(1, 3))
+        connection = input_layer > conv_layer > prelu_layer
+
+        conv_layer.initialize()
+        prelu_layer.initialize()
+
+        actual_output = input_data
+        for layer in connection:
+            actual_output = layer.output(actual_output)
+
+        actual_output = actual_output.eval()
+        self.assertEqual(actual_output.shape, (1, 5, 8, 8))
 
     def test_prelu_param_updates(self):
         x_train, _, y_train, _ = simple_classification()
