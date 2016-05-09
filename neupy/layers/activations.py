@@ -200,6 +200,8 @@ class Elu(ActivationLayer):
     {ParameterBasedLayer.bias}
     {ParameterBasedLayer.init_method}
     {ParameterBasedLayer.bounds}
+
+    .. [1] http://arxiv.org/pdf/1511.07289v3.pdf
     """
     alpha = NumberProperty(default=1, minval=0)
 
@@ -217,7 +219,7 @@ class PReluAlphaProperty(SharedArrayProperty):
     {BaseProperty.required}
     """
     expected_type = as_tuple(SharedArrayProperty.expected_type,
-                             number_type)
+                             number_type, type(None))
 
 
 class AxesProperty(TypedListProperty):
@@ -249,7 +251,7 @@ class PRelu(ActivationLayer):
 
     Parameters
     ----------
-    alpha_axes : intpr tuple
+    alpha_axes : int or tuple
         Axes that will not include unique alpha parameter.
         Single integer value defines the same as a tuple with one value.
         Defaults to ``1``.
@@ -257,12 +259,17 @@ class PRelu(ActivationLayer):
         Alpha parameter per each non-shared axis for the ReLu.
         Scalar value means that each element in the tensor will be
         equal to the specified value.
+        ``None`` means that parameters will be generated randomly.
+        The exact random initialization algorithm depence on
+        the ``init_method`` parameter.
         Defaults to ``0.25``.
     {ActivationLayer.size}
     {ParameterBasedLayer.weight}
     {ParameterBasedLayer.bias}
     {ParameterBasedLayer.init_method}
     {ParameterBasedLayer.bounds}
+
+    .. [1] https://arxiv.org/pdf/1502.01852v1.pdf
     """
     alpha_axes = AxesProperty(default=1)
     alpha = PReluAlphaProperty(default=0.25)
@@ -285,7 +292,6 @@ class PRelu(ActivationLayer):
                              "Maximum available axis is #{}"
                              "".format(max(alpha_axes), len(output_shape) - 1))
 
-        ndim = len(output_shape)
         alpha_shape = [output_shape[axis] for axis in alpha_axes]
 
         if isinstance(alpha, number_type):
@@ -303,14 +309,9 @@ class PRelu(ActivationLayer):
     def activation_function(self, input_value):
         alpha_axes = list(self.alpha_axes)
 
-        pattern = []
-        axis = 0
-        for i in range(input_value.ndim):
-            if i in alpha_axes:
-                pattern.append(axis)
-                axis += 1
-            else:
-                pattern.append('x')
+        pattern = ['x'] * input_value.ndim
+        for i, axis in enumerate(alpha_axes):
+            pattern[axis] = i
 
         alpha = self.alpha.dimshuffle(pattern)
         return T.nnet.relu(input_value, alpha)
