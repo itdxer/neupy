@@ -307,10 +307,8 @@ class PRelu(ActivationLayer):
         self.parameters.append(self.alpha)
 
     def activation_function(self, input_value):
-        alpha_axes = list(self.alpha_axes)
-
         pattern = ['x'] * input_value.ndim
-        for i, axis in enumerate(alpha_axes):
+        for i, axis in enumerate(self.alpha_axes):
             pattern[axis] = i
 
         alpha = self.alpha.dimshuffle(pattern)
