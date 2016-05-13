@@ -1,4 +1,5 @@
 import os
+import warnings
 
 from setuptools import setup, find_packages
 
@@ -10,10 +11,15 @@ CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 
 def get_requirements():
     try:
-        requirements_file = os.path.join(CURRENT_DIR, 'requirements/main.txt')
+        requirements_file = os.path.join(CURRENT_DIR, 'requirements',
+                                         'main.txt')
+
         with open(requirements_file) as f:
-            return f.read().splitlines()
-    except IOError:
+            requirements = f.read()
+            return requirements.splitlines()
+
+    except IOError as e:
+        warnings.warn("error", e)
         # Simple hack for `tox` test.
         return []
 
