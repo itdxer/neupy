@@ -32,16 +32,23 @@ network = algorithms.Adadelta(
 
         layers.Convolution((32, 3, 3)),
         layers.Relu(),
+        layers.BatchNorm(),
         layers.Convolution((48, 3, 3)),
         layers.Relu(),
+        layers.BatchNorm(),
         layers.MaxPooling((2, 2)),
-        layers.Dropout(0.2),
+
+        layers.Convolution((64, 3, 3)),
+        layers.Relu(),
+        layers.BatchNorm(),
+        layers.MaxPooling((2, 2)),
 
         layers.Reshape(),
 
-        layers.Relu(48 * 12 * 12),
-        layers.Dropout(0.3),
-        layers.Softmax(200),
+        layers.Relu(64 * 5 * 5),
+        layers.BatchNorm(),
+
+        layers.Softmax(1024),
         layers.ArgmaxOutput(10),
     ],
 
@@ -54,7 +61,7 @@ network = algorithms.Adadelta(
     addons=[algorithms.SimpleStepMinimization],
 )
 network.architecture()
-network.train(x_train, y_train, x_test, y_test, epochs=6)
+network.train(x_train, y_train, x_test, y_test, epochs=15)
 
 y_predicted = network.predict(x_test)
 y_test_labels = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))

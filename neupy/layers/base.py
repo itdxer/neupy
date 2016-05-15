@@ -47,7 +47,9 @@ class BaseLayer(ChainConnection, Configurable):
         self.relate_to_layer = None
         self.relate_from_layer = None
         self.layer_id = 1
+
         self.training_state = True
+        self.updates = []
 
         Configurable.__init__(self, **options)
 
@@ -73,9 +75,6 @@ class BaseLayer(ChainConnection, Configurable):
     def relate_to(self, right_layer):
         self.relate_to_layer = right_layer
         right_layer.relate_from_layer = self
-
-    def updates(self):
-        return []
 
     def __repr__(self):
         classname = self.__class__.__name__
@@ -191,15 +190,15 @@ class ParameterBasedLayer(BaseLayer):
 
     @cached_property
     def output_shape(self):
-        return self.relate_to_layer.size
+        return as_tuple(self.relate_to_layer.size)
 
     @cached_property
     def weight_shape(self):
-        return (self.size, self.output_shape)
+        return as_tuple(self.size, self.output_shape)
 
     @cached_property
     def bias_shape(self):
-        return (self.output_shape,)
+        return as_tuple(self.output_shape)
 
     def initialize(self):
         super(ParameterBasedLayer, self).initialize()
@@ -260,7 +259,7 @@ class Input(BaseLayer):
 
     @cached_property
     def input_shape(self):
-        return as_tuple(None, self.size)
+        return as_tuple(self.size)
 
     @cached_property
     def output_shape(self):

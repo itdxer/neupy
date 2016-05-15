@@ -3,6 +3,7 @@ import theano.tensor as T
 
 from neupy.utils import cached_property, asfloat, as_tuple, number_type
 from neupy.core.properties import NumberProperty, TypedListProperty
+from .utils import dimshuffle
 from .base import (ParameterBasedLayer, create_shared_parameter,
                    SharedArrayProperty)
 
@@ -32,7 +33,7 @@ class ActivationLayer(ParameterBasedLayer):
     @cached_property
     def input_shape(self):
         if self.size is not None:
-            return self.size
+            return as_tuple(self.size)
         return super(ActivationLayer, self).input_shape
 
     @cached_property
@@ -201,6 +202,8 @@ class Elu(ActivationLayer):
     {ParameterBasedLayer.init_method}
     {ParameterBasedLayer.bounds}
 
+    References
+    ----------
     .. [1] http://arxiv.org/pdf/1511.07289v3.pdf
     """
     alpha = NumberProperty(default=1, minval=0)
@@ -269,6 +272,8 @@ class PRelu(ActivationLayer):
     {ParameterBasedLayer.init_method}
     {ParameterBasedLayer.bounds}
 
+    References
+    ----------
     .. [1] https://arxiv.org/pdf/1502.01852v1.pdf
     """
     alpha_axes = AxesProperty(default=1)
@@ -307,9 +312,5 @@ class PRelu(ActivationLayer):
         self.parameters.append(self.alpha)
 
     def activation_function(self, input_value):
-        pattern = ['x'] * input_value.ndim
-        for i, axis in enumerate(self.alpha_axes):
-            pattern[axis] = i
-
-        alpha = self.alpha.dimshuffle(pattern)
+        alpha = dimshuffle(self.alpha, input_value.ndim, self.alpha_axes)
         return T.nnet.relu(input_value, alpha)

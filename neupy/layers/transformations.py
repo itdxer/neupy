@@ -31,10 +31,10 @@ class Reshape(BaseLayer):
     @cached_property
     def output_shape(self):
         if self.shape is not None:
-            return self.shape
+            return as_tuple(self.shape)
 
-        output_shape = self.input_shape[1:]
-        return np.prod(output_shape)
+        n_output_features = np.prod(self.input_shape)
+        return as_tuple(n_output_features)
 
     def output(self, input_value):
         """ Reshape the feature space for the input value.

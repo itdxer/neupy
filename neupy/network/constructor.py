@@ -78,7 +78,7 @@ def create_input_variable(input_layer, variable_name):
     }
 
     if isinstance(input_layer.input_shape, tuple):
-        ndim = len(input_layer.input_shape)
+        ndim = len(input_layer.input_shape) + 1
     else:
         ndim = 2
 
@@ -334,7 +334,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         updates = []
         for parameter in layer.parameters:
             updates.extend(self.init_param_updates(layer, parameter))
-        updates.extend(layer.updates())
+        updates.extend(layer.updates)
         return updates
 
     def init_param_updates(self, parameter):

@@ -170,11 +170,11 @@ class Convolution(ParameterBasedLayer):
                                         row_border_mode, row_stride)
         output_cols = conv_output_shape(cols, col_filter_size,
                                         col_border_mode, col_stride)
-        return (None, n_kernels, output_rows, output_cols)
+        return (n_kernels, output_rows, output_cols)
 
     @cached_property
     def weight_shape(self):
-        n_channels = self.input_shape[1]
+        n_channels = self.input_shape[0]
         n_filters, n_rows, n_cols = self.size
         return (n_filters, n_channels, n_rows, n_cols)
 
@@ -185,7 +185,7 @@ class Convolution(ParameterBasedLayer):
     def output(self, input_value):
         bias = T.reshape(self.bias, (1, -1, 1, 1))
         output = T.nnet.conv2d(input_value, self.weight,
-                               input_shape=self.input_shape,
+                               input_shape=as_tuple(None, self.input_shape),
                                filter_shape=self.weight_shape,
                                border_mode=self.border_mode,
                                subsample=self.stride_size)
@@ -246,7 +246,7 @@ class BasePooling(BaseLayer):
                                         row_border_mode, row_stride)
         output_cols = conv_output_shape(cols, col_filter_size,
                                         col_border_mode, col_stride)
-        return (None, n_kernels, output_rows, output_cols)
+        return (n_kernels, output_rows, output_cols)
 
     def __repr__(self):
         return '{name}({size})'.format(name=self.__class__.__name__,

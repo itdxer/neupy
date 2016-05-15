@@ -6,7 +6,7 @@ from neupy.layers.connections import LayerConnection
 
 
 __all__ = ('generate_layers', 'random_orthogonal', 'random_bounded',
-           'generate_weight', 'preformat_layer_shape')
+           'generate_weight', 'preformat_layer_shape', 'dimshuffle')
 
 
 DEFAULT_LAYER_CLASS = "neupy.layers.Sigmoid"
@@ -334,6 +334,26 @@ def preformat_layer_shape(shape):
     -------
     int or tuple
     """
-    if isinstance(shape, tuple) and shape[0] is None:
-        return shape[1:]
+    if isinstance(shape, tuple) and len(shape) == 1:
+        return shape[0]
     return shape
+
+
+def dimshuffle(value, ndim, axes):
+    """ Shuffle dimension based on the specified number of
+    dimensions and axes.
+
+    Parameters
+    ----------
+    value : Theano variable
+    ndim : int
+    axes : tuple, list
+
+    Returns
+    -------
+    Theano variable
+    """
+    pattern = ['x'] * ndim
+    for i, axis in enumerate(axes):
+        pattern[axis] = i
+    return value.dimshuffle(pattern)
