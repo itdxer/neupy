@@ -135,7 +135,7 @@ If you have a matrix :math:`X \in \Bbb R^{m\times n}` where each row is the inpu
 Where :math:`I` is an identity matrix (:math:`I \in \Bbb R^{n\times n}`), :math:`n` is a number of features in the input vector and :math:`m` is a number of input patterns inside the matrix :math:`X`.
 Term :math:`m I` removes all values from the diagonal.
 Basically we remove 1s for each stored pattern and since we have :math:`m` of them, we should do it :math:`m` times.
-Practically, it's not very good to create an identity matrix just to set up zeros on the diagonal, especially when dimention on the matrix is very big.
+Practically, it's not very good to create an identity matrix just to set up zeros on the diagonal, especially when dimension on the matrix is very big.
 Usually linear algebra libraries give you a possibility to set up diagonal values without creating an additional matrix and this solution would be more efficient.
 For example in NumPy library it's a `numpy.fill_diagonal <http://docs.scipy.org/doc/numpy/reference/generated/numpy.fill_diagonal.html>`_ function.
 
@@ -425,7 +425,7 @@ Memory limit
 Obviously, you can't store infinite number of vectors inside the network.
 There are two good rules of thumb.
 
-Concider that :math:`n` is the dimention (number of features) of your input vector and :math:`m` is the number of patterns that you want to store in the network.
+Concider that :math:`n` is the dimension (number of features) of your input vector and :math:`m` is the number of patterns that you want to store in the network.
 The first rule gives us a simple ration between :math:`m` and :math:`n`.
 
 .. math::
@@ -489,8 +489,8 @@ Below you can see the plot that visualizes energy function for this situation.
 As you can see we have two minimum values at the same points as those patterns that are already stored inside the network.
 But between these two patterns function creates a saddle point somewhere at the point with coordinates :math:`(0, 0)`.
 In this case we can't stick to the points :math:`(0, 0)`.
-But in situation with more dimentions this saddle points can be at the level of available values and they could be hallucination.
-Unfortunately, we are very limited in terms of numbers of dimentions we could plot, but the problem is still the same.
+But in situation with more dimensions this saddle points can be at the level of available values and they could be hallucination.
+Unfortunately, we are very limited in terms of numbers of dimensions we could plot, but the problem is still the same.
 
 Full source code for this plot you can find on `github <https://github.com/itdxer/neupy/tree/master/examples/memory/dhn_energy_func.py>`_
 

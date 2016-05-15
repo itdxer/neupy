@@ -61,7 +61,7 @@ class PNN(LazyLearning, BaseNetwork):
         LazyLearning.train(self, input_train, target_train)
 
         if target_train.shape[1] != 1:
-            raise ValueError("Target value must be in 1 dimention")
+            raise ValueError("Target value must be in 1 dimension")
 
         classes = self.classes = unique(target_train)
         number_of_classes = classes.size

@@ -286,18 +286,15 @@ class PRelu(ActivationLayer):
         alpha_axes = self.alpha_axes
         output_shape = self.output_shape
 
-        if isinstance(output_shape, int):
-            output_shape = (None, output_shape)
-
         if 0 in alpha_axes:
             raise ValueError("Cannot specify alpha per input sample.")
 
-        if max(alpha_axes) >= len(output_shape):
+        if max(alpha_axes) > len(output_shape):
             raise ValueError("Cannot specify alpha for the axis #{}. "
                              "Maximum available axis is #{}"
                              "".format(max(alpha_axes), len(output_shape) - 1))
 
-        alpha_shape = [output_shape[axis] for axis in alpha_axes]
+        alpha_shape = [output_shape[axis - 1] for axis in alpha_axes]
 
         if isinstance(alpha, number_type):
             alpha = alpha * np.ones(alpha_shape)

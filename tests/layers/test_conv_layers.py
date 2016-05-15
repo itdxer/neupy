@@ -44,7 +44,7 @@ class ConvLayersTestCase(BaseTestCase):
             conv_layer.initialize()
 
             y = conv_layer.output(x).eval()
-            actual_output_shape = as_tuple(None, y.shape[1:])
+            actual_output_shape = as_tuple(y.shape[1:])
 
             self.assertEqual(actual_output_shape, conv_layer.output_shape,
                              msg='border_mode={}'.format(border_mode))

@@ -27,7 +27,7 @@ def neuron_neighbours(neurons, center, radius):
     Returns
     -------
     array-like
-        Return matrix with the same dimention as ``neurons`` where center
+        Return matrix with the same dimension as ``neurons`` where center
         element and it neighbours positions filled with value ``1``
         and other as ``0``.
 

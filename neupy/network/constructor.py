@@ -78,6 +78,8 @@ def create_input_variable(input_layer, variable_name):
     }
 
     if isinstance(input_layer.input_shape, tuple):
+        # Shape doesn't include batch size dimension, that's why
+        # we need add one
         ndim = len(input_layer.input_shape) + 1
     else:
         ndim = 2

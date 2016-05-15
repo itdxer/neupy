@@ -66,7 +66,7 @@ class ART1(BaseNetwork):
         input_data = format_data(input_data)
 
         if input_data.ndim != 2:
-            raise ValueError("Input value must be 2 dimentional, got "
+            raise ValueError("Input value must be 2 dimensional, got "
                              "{0}".format(input_data.ndim))
 
         data_size = input_data.shape[1]
@@ -89,7 +89,7 @@ class ART1(BaseNetwork):
 
         if data_size != weight_21.shape[0]:
             raise ValueError(
-                "Data dimention is invalid. Get {} columns data set. "
+                "Data dimension is invalid. Get {} columns data set. "
                 "Must be - {} columns".format(
                     data_size, weight_21.shape[0]
                 )

@@ -52,7 +52,7 @@ class GRNN(LazyLearning, BaseNetwork):
         target_train = format_data(target_train, copy=copy)
 
         if target_train.shape[1] != 1:
-            raise ValueError("Target value must be one dimentional array")
+            raise ValueError("Target value must be one dimensional array")
 
         LazyLearning.train(self, input_train, target_train)
 

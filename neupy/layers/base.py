@@ -47,6 +47,7 @@ class BaseLayer(ChainConnection, Configurable):
         self.relate_to_layer = None
         self.relate_from_layer = None
         self.layer_id = 1
+        self.training_state = True
 
         self.training_state = True
         self.updates = []

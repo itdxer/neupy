@@ -56,7 +56,7 @@ def format_data(data, is_feature1d=True, copy=False):
     if not isinstance(data, np.ndarray) or copy:
         data = np.array(data, copy=copy)
 
-    # Valid number of features for one or two dimentions
+    # Valid number of features for one or two dimensions
     n_features = data.shape[-1]
 
     if data.ndim == 1:
