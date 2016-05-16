@@ -1,6 +1,5 @@
 import theano
 import theano.tensor as T
-from theano.ifelse import ifelse
 import numpy as np
 
 from neupy.core.properties import NumberProperty, ProperFractionProperty
@@ -115,12 +114,13 @@ class BatchNorm(BaseLayer):
         input_inv_std = T.inv(T.sqrt(input_var + epsilon))
 
         if not self.training_state:
-            self.updates = [
-                (running_inv_std, asfloat(1 - alpha) * running_inv_std +
-                                  alpha * input_inv_std),
-                (running_mean, asfloat(1 - alpha) * running_mean +
-                               alpha * input_mean),
-            ]
+            self.updates = [(
+                running_inv_std,
+                asfloat(1 - alpha) * running_inv_std + alpha * input_inv_std
+            ), (
+                running_mean,
+                asfloat(1 - alpha) * running_mean + alpha * input_mean
+            )]
 
             mean = running_mean
             inv_std = running_inv_std
