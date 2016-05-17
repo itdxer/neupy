@@ -46,6 +46,9 @@ class LMS(BaseLinearNetwork):
     """
 
     def init_layer_updates(self, layer):
+        if not layer.parameters:
+            return []
+
         network_output = self.variables.network_output
         network_input = self.variables.network_input
         step = self.variables.step

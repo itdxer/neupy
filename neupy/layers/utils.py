@@ -1,67 +1,8 @@
-import importlib
-
 import numpy as np
 
-from neupy.layers.connections import LayerConnection
 
-
-__all__ = ('generate_layers', 'random_orthogonal', 'random_bounded',
-           'generate_weight', 'preformat_layer_shape', 'dimshuffle')
-
-
-DEFAULT_LAYER_CLASS = "neupy.layers.Sigmoid"
-DEFAULT_OUTPUT_LAYER_CLASS = "neupy.layers.Output"
-
-
-def import_class(object_path):
-    """ Import class from module using module path written as Python
-    string.
-
-    Parameters
-    ----------
-    object_path : str
-        Path to the object. For example, it can be written
-        as ``'path.to.module.MyClass'``.
-
-    Returns
-    -------
-    object
-        Function returns object imported using identified path.
-    """
-
-    module_name, classname = object_path.rsplit('.', 1)
-    module = importlib.import_module(module_name)
-    return getattr(module, classname)
-
-
-def generate_layers(layers_sizes):
-    """ Create from list of layer sizes basic linear network.
-
-    Parameters
-    ----------
-    layers_sizes : list or tuple
-        Ordered list of network connection structure.
-
-    Returns
-    -------
-    LayerConnection
-        Constructed connection.
-    """
-
-    if len(layers_sizes) < 2:
-        raise ValueError("Network must contains at least 2 layers.")
-
-    default_layer_class = import_class(DEFAULT_LAYER_CLASS)
-    default_output_layer_class = import_class(DEFAULT_OUTPUT_LAYER_CLASS)
-
-    output_layer_size = layers_sizes.pop()
-    connection = default_output_layer_class(output_layer_size)
-
-    for input_size in reversed(layers_sizes):
-        left_layer = default_layer_class(input_size)
-        connection = LayerConnection(left_layer, connection)
-
-    return connection
+__all__ = ('random_orthogonal', 'random_bounded', 'generate_weight',
+           'preformat_layer_shape', 'dimshuffle')
 
 
 def random_orthogonal(shape):

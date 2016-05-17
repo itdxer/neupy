@@ -15,9 +15,9 @@ x_train, x_test, y_train, y_test = cross_validation.train_test_split(
 
 network = algorithms.MinibatchGradientDescent(
     [
-        layers.Sigmoid(784),
+        layers.Input(784),
         layers.Sigmoid(20),
-        layers.RoundedOutput(1),
+        layers.Sigmoid(1),
     ],
     error='binary_crossentropy',
     verbose=True,
@@ -26,7 +26,7 @@ network = algorithms.MinibatchGradientDescent(
 )
 network.train(x_train, y_train, x_test, y_test, epochs=10)
 
-y_predicted = network.predict(x_test)
+y_predicted = network.predict(x_test).round()
 print(metrics.classification_report(y_test, y_predicted))
 
 roc_score = metrics.roc_auc_score(y_test, y_predicted)

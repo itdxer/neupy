@@ -157,19 +157,6 @@ Transformation Layers
 
     ":layer:`Reshape`", "Reshape tensor input"
 
-Output layers
-~~~~~~~~~~~~~
-
-.. csv-table::
-    :header: "Class name", "Description"
-
-    ":layer:`Output`", "Simple output layer which does not make any transformations"
-    ":layer:`CompetitiveOutput`", "Competitive layer output"
-    ":layer:`StepOutput`", "The behaviour for this output layer is the same as for step function."
-    ":layer:`RoundedOutput`", "Layer round output value."
-    ":layer:`ArgmaxOutput`", "Return number of feature that have maximum value for each sample."
-
-
 Error functions
 ***************
 

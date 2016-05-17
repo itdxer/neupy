@@ -295,9 +295,7 @@ class BaseNetwork(BaseSkeleton):
         """
 
     def predict(self, input_data):
-        """ Return prediction results for the input data. Output result
-        includes post-processing step related to the final layer that
-        transforms output to convenient format for end-use.
+        """ Return prediction results for the input data.
 
         Parameters
         ----------

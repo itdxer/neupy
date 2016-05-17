@@ -25,10 +25,10 @@ x_train, x_test, y_train, y_test = cross_validation.train_test_split(
 
 network = algorithms.Momentum(
     [
-        layers.Relu(784),
+        layers.Input(784),
         layers.Relu(500),
-        layers.Softmax(300),
-        layers.ArgmaxOutput(10),
+        layers.Relu(300),
+        layers.Softmax(10),
     ],
 
     error='categorical_crossentropy',
@@ -42,7 +42,7 @@ network = algorithms.Momentum(
 network.architecture()
 network.train(x_train, y_train, x_test, y_test, epochs=20)
 
-y_predicted = network.predict(x_test)
+y_predicted = network.predict(x_test).argmax(axis=1)
 y_test = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))
 
 print(metrics.classification_report(y_test, y_predicted))

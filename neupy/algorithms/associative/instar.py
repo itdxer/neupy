@@ -34,7 +34,7 @@ class Instar(BaseStepAssociative):
     Examples
     --------
     >>> import numpy as np
-    >>> from neupy import algorithms, layers
+    >>> from neupy import algorithms
     >>>
     >>> train_data = np.array([
     ...     [0, 1, 0, 0],
@@ -47,7 +47,8 @@ class Instar(BaseStepAssociative):
     ... ])
     >>>
     >>> instnet = algorithms.Instar(
-    ...     layers.Step(4) > layers.Output(1),
+    ...     n_inputs=4,
+    ...     n_outputs=1,
     ...     n_unconditioned=1,
     ...     step=1,
     ...     verbose=False,

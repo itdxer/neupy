@@ -1,7 +1,7 @@
 from neupy.utils import is_list_of_integers
 from neupy.layers.connections import NetworkConnectionError, LayerConnection
 from neupy.network import ConstructableNetwork
-from neupy.layers import Step, Output
+from neupy.layers import Step, Input
 
 
 __all__ = ('BaseLinearNetwork',)
@@ -41,15 +41,15 @@ class BaseLinearNetwork(ConstructableNetwork):
 
         if is_list_of_integers(connection):
             input_layer_size, output_layer_size = connection
-            connection = Step(input_layer_size) > Output(output_layer_size)
+            connection = Input(input_layer_size) > Step(output_layer_size)
 
         if not isinstance(connection, LayerConnection):
             raise ValueError("Invalid network connection structure.")
 
-        if not isinstance(connection.input_layer, Step):
+        if not isinstance(connection.output_layer, Step):
             raise NetworkConnectionError(
-                "Input layer should contains step activation function "
-                "(``Step`` class instance)."
+                "Final layer should contains step activation function "
+                "(``layers.Step`` class instance)."
             )
 
         super(BaseLinearNetwork, self).__init__(connection, **options)

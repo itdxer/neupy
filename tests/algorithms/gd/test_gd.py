@@ -30,7 +30,7 @@ class GradientDescentTestCase(BaseTestCase):
         x_train, _, y_train, _ = simple_classification()
 
         network = algorithms.GradientDescent(
-            (layers.Tanh(10) > layers.Tanh(20) > layers.Output(1)),
+            (layers.Input(10) > layers.Tanh(20) > layers.Tanh(1)),
             step=0.3,
             verbose=False
         )
@@ -78,7 +78,7 @@ class GradientDescentTestCase(BaseTestCase):
            # Test data
            (x_train, y_train),
            # Network configurations
-           connection=(layers.Tanh(10) > layers.Tanh(20) > layers.Output(1)),
+           connection=(layers.Input(10) > layers.Tanh(20) > layers.Tanh(1)),
            step=0.1,
            shuffle_data=True,
            verbose=False,

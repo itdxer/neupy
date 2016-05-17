@@ -10,9 +10,9 @@ class LearningRateUpdatesTestCase(BaseTestCase):
     def test_errdiff(self):
         network = algorithms.GradientDescent(
             [
-                layers.Tanh(2),
+                layers.Input(2),
                 layers.Tanh(3),
-                layers.StepOutput(1, output_bounds=(-1, 1))
+                layers.Tanh(1),
             ],
             step=0.3,
             update_for_smaller_error=1.05,

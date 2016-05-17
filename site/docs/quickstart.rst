@@ -76,10 +76,10 @@ Let's start with an architecture. I didn't reinvent the wheel and used one of th
     >>>
     >>> network = algorithms.Momentum(
     ...     [
-    ...         layers.Relu(784),
+    ...         layers.Input(784),
     ...         layers.Relu(500),
-    ...         layers.Softmax(300),
-    ...         layers.ArgmaxOutput(10),
+    ...         layers.Relu(300),
+    ...         layers.Softmax(10),
     ...     ],
     ...     error='categorical_crossentropy',
     ...     step=0.01,

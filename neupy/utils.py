@@ -77,7 +77,7 @@ def does_layer_accept_1d_feature(layer):
     -------
     bool
     """
-    return (layer.size == 1)
+    return (layer.output_shape == (1,))
 
 
 def asfloat(value):

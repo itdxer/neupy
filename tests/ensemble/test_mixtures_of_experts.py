@@ -29,7 +29,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                     algorithms.GRNN(verbose=False)
                 ],
                 gating_network=algorithms.GradientDescent(
-                    layers.Sigmoid(1) > layers.Output(3),
+                    layers.Input(1) > layers.Sigmoid(3),
                     verbose=False,
                 )
             )
@@ -45,7 +45,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                     )
                 ],
                 gating_network=algorithms.GradientDescent(
-                    layers.Sigmoid(1) > layers.Output(3),
+                    layers.Input(1) > layers.Sigmoid(3),
                     verbose=False,
                 )
             )
@@ -55,7 +55,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             algorithms.MixtureOfExperts(
                 networks=networks,
                 gating_network=algorithms.GradientDescent(
-                    layers.Softmax(1) > layers.Output(1),
+                    layers.Input(1) > layers.Softmax(1),
                     verbose=False,
                 )
             )
@@ -65,17 +65,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             algorithms.MixtureOfExperts(
                 networks=networks,
                 gating_network=algorithms.GradientDescent(
-                    layers.Sigmoid(1) > layers.Output(2),
-                    verbose=False,
-                )
-            )
-
-        with self.assertRaises(ValueError):
-            # Ivalid gating network output layer
-            algorithms.MixtureOfExperts(
-                networks=networks,
-                gating_network=algorithms.GradientDescent(
-                    layers.Softmax(1) > layers.RoundedOutput(2),
+                    layers.Input(1) > layers.Sigmoid(2),
                     verbose=False,
                 )
             )
@@ -92,7 +82,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                     )
                 ],
                 gating_network=algorithms.GradientDescent(
-                    layers.Sigmoid(1) > layers.Output(3),
+                    layers.Input(1) > layers.Sigmoid(3),
                     verbose=False,
                 ),
             )
@@ -102,7 +92,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                 # Ivalid gating error function
                 networks=networks,
                 gating_network=algorithms.GradientDescent(
-                    layers.Softmax(1) > layers.Output(2),
+                    layers.Input(1) > layers.Softmax(2),
                     error='rmsle',
                     verbose=False
                 ),
@@ -112,7 +102,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             # Ivalid gating network output layer
             networks=networks,
             gating_network=algorithms.GradientDescent(
-                layers.Softmax(1) > layers.Output(2),
+                layers.Input(1) > layers.Softmax(2),
                 verbose=False
             ),
         )
@@ -171,13 +161,14 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                 ),
             ],
             gating_network=algorithms.Momentum(
-                layers.Softmax(insize) > layers.Output(2),
+                layers.Input(insize) > layers.Softmax(2),
                 step=0.1,
                 verbose=False
             )
         )
         moe.train(x_train, y_train, epochs=n_epochs)
         ensemble_output = moe.predict(x_test)
+
         ensemlbe_error = rmsle(
             output_scaler.inverse_transform(ensemble_output),
             scaled_y_test

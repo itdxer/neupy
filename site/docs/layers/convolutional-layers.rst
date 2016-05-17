@@ -21,10 +21,9 @@ NeuPy supports CNN architectures. Here is a simple example that solves MNIST pro
 
             layers.Reshape(),
 
-            layers.Relu(6912),
+            layers.Relu(200),
             layers.Dropout(0.3),
-            layers.Softmax(200),
-            layers.ArgmaxOutput(10),
+            layers.Softmax(10),
         ],
 
         error='categorical_crossentropy',

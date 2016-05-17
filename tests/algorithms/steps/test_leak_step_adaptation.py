@@ -30,9 +30,9 @@ class LeakStepAdaptationTestCase(BaseTestCase):
 
             # Network configurations
             connection=[
-                layers.Sigmoid(2),
-                layers.Tanh(3),
-                layers.Output(1)
+                layers.Input(2),
+                layers.Sigmoid(3),
+                layers.Tanh(1),
             ],
             step=0.1,
             verbose=False,

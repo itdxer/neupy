@@ -251,11 +251,10 @@ class Input(BaseLayer):
         doesn't have input feature with fixed size.
         Defaults to ``None``.
     """
-    size = ArrayShapeProperty(default=None)
+    size = ArrayShapeProperty()
 
     def __init__(self, size, **options):
-        if size is not None:
-            options['size'] = size
+        options['size'] = size
         super(Input, self).__init__(**options)
 
     @cached_property

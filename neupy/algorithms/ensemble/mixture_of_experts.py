@@ -4,7 +4,8 @@ import theano
 import theano.tensor as T
 import numpy as np
 
-from neupy.layers import Softmax, Output
+from neupy.utils import format_data
+from neupy.layers import Softmax
 from .base import BaseEnsemble
 
 
@@ -21,9 +22,9 @@ class MixtureOfExperts(BaseEnsemble):
         List of networks based on :network:`GradientDescent` algorithm.
     gating_network : object
         2-Layer Neural Network based on :network:`GradientDescent` which
-        has :layer:`Softmax` as first one and the last one must be
-        the :layer:`Output`. Output layer size must be equal to number
-        of networks in model. Also important to say that in every network
+        has :layer:`Softmax` layer. Network's output size must be
+        equal to number of networks in the mixture model.
+        Also important to notice that in the every network
         input size must be equal.
 
     Methods
@@ -63,7 +64,7 @@ class MixtureOfExperts(BaseEnsemble):
     >>> moe = algorithms.MixtureOfExperts(
     ...     networks=networks,
     ...     gating_network=algorithms.GradientDescent(
-    ...         layers.Softmax(insize) > layers.Output(n_networks),
+    ...         layers.Input(insize) > layers.Softmax(n_networks),
     ...         step=0.1,
     ...         verbose=False,
     ...     )
@@ -103,19 +104,10 @@ class MixtureOfExperts(BaseEnsemble):
 
             network.verbose = False
 
-        if gating_network.input_layer.__class__ != Softmax:
-            raise ValueError(
-                "Input layer must be `Softmax`, got `{0}`".format(
-                    gating_network.input_layer.__class__.__name__
-                )
-            )
-
-        if gating_network.output_layer.__class__ != Output:
-            raise ValueError(
-                "First layer must be `Output`, got `{0}`".format(
-                    gating_network.output_layer.__class__.__name__
-                )
-            )
+        if not isinstance(gating_network.output_layer, Softmax):
+            class_name = gating_network.output_layer.__class__.__name__
+            raise ValueError("Final layer must be Softmax, got `{0}`"
+                             "".format(class_name))
 
         gating_network.verbose = False
         gating_network_output_size = gating_network.output_layer.size
@@ -168,7 +160,7 @@ class MixtureOfExperts(BaseEnsemble):
             outputs_concat
         )
 
-        self._predict = theano.function([x], self.prediction_func)
+        self.prediction = theano.function([x], self.prediction_func)
 
     def train(self, input_data, target_data, epochs=100):
         if target_data.ndim == 1:
@@ -202,7 +194,8 @@ class MixtureOfExperts(BaseEnsemble):
             gating_network.train_epoch(input_data, predictions)
 
     def predict(self, input_data):
-        return self._predict(input_data)
+        input_data = format_data(input_data)
+        return self.prediction(input_data)
 
     def __repr__(self):
         indent = ' ' * 4

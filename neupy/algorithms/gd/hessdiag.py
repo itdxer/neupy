@@ -80,9 +80,9 @@ class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
     >>>
     >>> nw = algorithms.HessianDiagonal(
     ...     connection=[
-    ...         layers.Sigmoid(10),
+    ...         layers.Input(10),
     ...         layers.Sigmoid(20),
-    ...         layers.Output(1)
+    ...         layers.Sigmoid(1),
     ...     ],
     ...     step=1.5,
     ...     shuffle_data=False,

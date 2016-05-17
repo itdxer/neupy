@@ -119,9 +119,9 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
     >>> # Network
     ... lmnet = algorithms.LevenbergMarquardt(
     ...     connection=[
-    ...         layers.Sigmoid(10),
+    ...         layers.Input(10),
     ...         layers.Sigmoid(40),
-    ...         layers.Output(1),
+    ...         layers.Sigmoid(1),
     ...     ],
     ...     mu_update_factor=2,
     ...     mu=0.1,

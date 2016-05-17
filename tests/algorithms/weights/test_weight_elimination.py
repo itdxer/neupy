@@ -13,9 +13,9 @@ class WeightEliminationTestCase(BaseTestCase):
     def test_that_alg_works(self):
         network = algorithms.GradientDescent(
             [
-                layers.Tanh(2),
+                layers.Input(2),
                 layers.Tanh(3),
-                layers.StepOutput(1, output_bounds=(-1, 1))
+                layers.Tanh(1),
             ],
             step=0.3,
             zero_weight=20,
@@ -32,8 +32,8 @@ class WeightEliminationTestCase(BaseTestCase):
             addons=[algorithms.WeightElimination]
         )
 
-        iter_networks = zip(base_network.layers,
-                            decay_network.layers)
+        iter_networks = zip(base_network.layers[1:-1],
+                            decay_network.layers[1:-1])
 
         for net_layer, decay_layer in iter_networks:
             self.assertGreater(
@@ -79,8 +79,8 @@ class WeightEliminationTestCase(BaseTestCase):
             WeightNormCase(with_smaller_norm=net3, with_bigger_norm=net1),
         )
         for case in norm_test_cases:
-            network_layers = zip(case.with_smaller_norm.layers,
-                                 case.with_bigger_norm.layers)
+            network_layers = zip(case.with_smaller_norm.layers[1:-1],
+                                 case.with_bigger_norm.layers[1:-1])
             for smaller_norm, bigger_norm in network_layers:
                 weight_smaller_norm = smaller_norm.weight.get_value()
                 weight_bigger_norm = bigger_norm.weight.get_value()

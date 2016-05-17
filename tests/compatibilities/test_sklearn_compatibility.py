@@ -24,9 +24,9 @@ class SklearnCompatibilityTestCase(BaseTestCase):
 
         network = algorithms.GradientDescent(
             connection=[
-                layers.Sigmoid(10),
+                layers.Input(10),
                 layers.Sigmoid(25),
-                layers.Output(1),
+                layers.Sigmoid(1),
             ],
             show_epoch=100,
             verbose=False,

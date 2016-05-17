@@ -41,6 +41,9 @@ class Perceptron(BaseLinearNetwork):
     """
 
     def init_layer_updates(self, layer):
+        if not layer.parameters:
+            return []
+
         prediction_func = self.variables.prediction_func
         network_output = self.variables.network_output
         network_input = self.variables.network_input

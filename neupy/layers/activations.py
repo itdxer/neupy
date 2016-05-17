@@ -31,16 +31,10 @@ class ActivationLayer(ParameterBasedLayer):
         super(ActivationLayer, self).__init__(size, **options)
 
     @cached_property
-    def input_shape(self):
+    def output_shape(self):
         if self.size is not None:
             return as_tuple(self.size)
-        return super(ActivationLayer, self).input_shape
-
-    @cached_property
-    def output_shape(self):
-        if self.size is None:
-            return self.input_shape
-        return super(ActivationLayer, self).output_shape
+        return self.input_shape
 
     def initialize(self):
         if self.size is not None:

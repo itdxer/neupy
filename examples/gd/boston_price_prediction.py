@@ -23,10 +23,10 @@ x_train, x_test, y_train, y_test = train_test_split(
 
 cgnet = algorithms.Hessian(
     connection=[
-        layers.Sigmoid(13),
+        layers.Input(13),
         layers.Sigmoid(50),
         layers.Sigmoid(10),
-        layers.Output(1),
+        layers.Sigmoid(1),
     ],
     verbose=True,
 )

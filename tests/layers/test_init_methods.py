@@ -11,16 +11,16 @@ from base import BaseTestCase
 class LayersInitializationTestCase(BaseTestCase):
     def test_layers_normal_init(self):
         input_layer = Sigmoid(30, init_method='normal')
-        connection = input_layer > Output(30)
+        connection = Input(30) > input_layer
         input_layer.initialize()
 
         weight = input_layer.weight.get_value()
         self.assertTrue(stats.mstats.normaltest(weight))
 
     def test_layers_bounded_init(self):
-        input_layer = Sigmoid(30, init_method='bounded',
+        input_layer = Sigmoid(10, init_method='bounded',
                               bounds=(-10, 10))
-        connection = input_layer > Output(10)
+        connection = Input(30) > input_layer
         input_layer.initialize()
 
         weight = input_layer.weight.get_value()
@@ -32,8 +32,8 @@ class LayersInitializationTestCase(BaseTestCase):
         # in the same time for the rectangular matrix.
 
         # Matrix that have more rows than columns
-        input_layer = Sigmoid(30, init_method='ortho')
-        connection = input_layer > Output(10)
+        input_layer = Sigmoid(10, init_method='ortho')
+        connection = Input(30) > input_layer
         input_layer.initialize()
 
         weight = input_layer.weight.get_value()
@@ -44,8 +44,8 @@ class LayersInitializationTestCase(BaseTestCase):
         )
 
         # Matrix that have more columns than rows
-        input_layer = Sigmoid(10, init_method='ortho')
-        connection = input_layer > Output(30)
+        input_layer = Sigmoid(30, init_method='ortho')
+        connection = Input(10) > input_layer
         input_layer.initialize()
 
         weight = input_layer.weight.get_value()
@@ -56,9 +56,9 @@ class LayersInitializationTestCase(BaseTestCase):
         )
 
     def test_he_normal(self):
-        n_inputs = 30
-        input_layer = Sigmoid(n_inputs, init_method='he_normal')
-        connection = input_layer > Output(30)
+        n_inputs = 10
+        input_layer = Sigmoid(30, init_method='he_normal')
+        connection = Input(n_inputs) > input_layer
         input_layer.initialize()
 
         weight = input_layer.weight.get_value()
@@ -70,8 +70,8 @@ class LayersInitializationTestCase(BaseTestCase):
 
     def test_he_uniform(self):
         n_inputs = 10
-        input_layer = Sigmoid(n_inputs, init_method='he_uniform')
-        connection = input_layer > Output(30)
+        input_layer = Sigmoid(30, init_method='he_uniform')
+        connection = Input(n_inputs) > input_layer
         input_layer.initialize()
 
         weight = input_layer.weight.get_value()
@@ -83,8 +83,8 @@ class LayersInitializationTestCase(BaseTestCase):
 
     def test_xavier_normal(self):
         n_inputs, n_outputs = 30, 30
-        input_layer = Sigmoid(n_inputs, init_method='xavier_normal')
-        connection = input_layer > Output(n_outputs)
+        input_layer = Sigmoid(n_outputs, init_method='xavier_normal')
+        connection = Input(n_inputs) > input_layer
         input_layer.initialize()
 
         weight = input_layer.weight.get_value()
@@ -97,8 +97,8 @@ class LayersInitializationTestCase(BaseTestCase):
 
     def test_xavier_uniform(self):
         n_inputs, n_outputs = 10, 30
-        input_layer = Sigmoid(n_inputs, init_method='xavier_uniform')
-        connection = input_layer > Output(n_outputs)
+        input_layer = Sigmoid(n_outputs, init_method='xavier_uniform')
+        connection = Input(n_inputs) > input_layer
         input_layer.initialize()
 
         weight = input_layer.weight.get_value()

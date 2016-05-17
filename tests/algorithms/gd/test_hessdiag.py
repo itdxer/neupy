@@ -17,9 +17,9 @@ class HessianDiagonalTestCase(BaseTestCase):
         x_train, x_test, y_train, y_test = simple_classification()
         nw = algorithms.HessianDiagonal(
             connection=[
-                layers.Sigmoid(10, init_method='bounded', bounds=(-1, 1)),
+                layers.Input(10),
                 layers.Sigmoid(20, init_method='bounded', bounds=(-1, 1)),
-                layers.Output(1)
+                layers.Sigmoid(1, init_method='bounded', bounds=(-1, 1))
             ],
             step=0.1,
             shuffle_data=False,
@@ -41,9 +41,9 @@ class HessianDiagonalTestCase(BaseTestCase):
             (x_train, y_train),
             # Network configurations
             connection=[
-                layers.Sigmoid(10, init_method='bounded', bounds=(-1, 1)),
+                layers.Input(10),
                 layers.Sigmoid(20, init_method='bounded', bounds=(-1, 1)),
-                layers.Output(1)
+                layers.Sigmoid(1, init_method='bounded', bounds=(-1, 1)),
             ],
             step=0.1,
             shuffle_data=True,

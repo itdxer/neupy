@@ -23,10 +23,10 @@ The second method is the most useful common one. Here is a simple example.
 
     bpnet = algorithms.GradientDescent(
         [
-            layers.Sigmoid(10),
+            layers.Input(10),
             layers.Sigmoid(40),
+            layers.Sigmoid(2)
             layers.Softmax(2),
-            layers.Output(2)
         ],
         step=0.2,
         shuffle_data=True
@@ -42,7 +42,7 @@ And the last one is the most intuitive.
     from neupy.layers import *
 
     bpnet = algorithms.GradientDescent(
-        Sigmoid(10) > Sigmoid(40) > Output(2),
+        Input(10) > Sigmoid(40) > Sigmoid(2),
         step=0.2,
         shuffle_data=True
     )
@@ -78,11 +78,10 @@ Subnetworks is a simple trick that makes easier to read and understend the netwo
 
             layers.Reshape(),
 
-            layers.Relu(64 * 5 * 5),
+            layers.Relu(1024),
             layers.BatchNorm(),
 
-            layers.Softmax(1024),
-            layers.ArgmaxOutput(10),
+            layers.Softmax(10),
         ]
     )
 
@@ -105,9 +104,8 @@ Does it look simple to you? Not at all. However, this is a really simple network
 
             layers.Reshape(),
 
-            layers.Relu(64 * 5 * 5) > layers.BatchNorm(),
-            layers.Softmax(1024),
-            layers.ArgmaxOutput(10),
+            layers.Relu(1024) > layers.BatchNorm(),
+            layers.Softmax(10),
         ]
     )
 

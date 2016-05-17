@@ -1,7 +1,6 @@
 import numpy as np
 
 from neupy import algorithms
-from neupy.layers import Step, Output, Sigmoid
 
 from base import BaseTestCase
 

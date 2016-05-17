@@ -37,10 +37,10 @@ prepare_data_pipeline = Pipeline([
 
 classifier = algorithms.RPROP(
     [
-        layers.Relu(100),
+        layers.Input(100),
         layers.Relu(200),
-        layers.Sigmoid(50),
-        layers.RoundedOutput(1),
+        layers.Relu(50),
+        layers.Sigmoid(1),
     ],
     error='binary_crossentropy',
     verbose=True,
@@ -64,8 +64,8 @@ y_test = (test_data.sentiment.values == 'pos')
 
 classifier.train(x_train, y_train, x_test, y_test, epochs=100)
 
-y_train_predicted = classifier.predict(x_train)
-y_test_predicted = classifier.predict(x_test)
+y_train_predicted = classifier.predict(x_train).round()
+y_test_predicted = classifier.predict(x_test).round()
 
 print(metrics.classification_report(y_train_predicted, y_train))
 print(metrics.confusion_matrix(y_train_predicted, y_train))

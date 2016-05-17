@@ -13,7 +13,7 @@ from base import BaseTestCase
 class RPROPTestCase(BaseTestCase):
     def setUp(self):
         super(RPROPTestCase, self).setUp()
-        self.connection = Sigmoid(3) > Sigmoid(10) > Output(2)
+        self.connection = Input(3) > Sigmoid(10) > Sigmoid(2)
 
     def test_rprop(self):
         nw = algorithms.RPROP(
@@ -56,9 +56,9 @@ class RPROPTestCase(BaseTestCase):
             verbose=False
         )
         connection = [
-            Sigmoid(3, init_method='bounded', bounds=(0, 1)),
+            Input(3),
             Sigmoid(10, init_method='bounded', bounds=(0, 1)),
-            Output(2)
+            Sigmoid(2, init_method='bounded', bounds=(0, 1)),
         ]
 
         nw = algorithms.IRPROPPlus(copy.deepcopy(connection), **options)
