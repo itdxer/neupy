@@ -18,18 +18,18 @@ x_train, x_test = cifar10.train.x, cifar10.test.x
 y_train, y_test = cifar10.train.y, cifar10.test.y
 
 x_train = np.transpose(x_train, (0, 3, 1, 2))
+x_train = x_train.astype(np.float32, copy=False)
+
 x_test = np.transpose(x_test, (0, 3, 1, 2))
-x_train, x_test = x_train / 255., x_test / 255.
+x_test = x_test.astype(np.float32, copy=False)
 
-mean = x_train.mean(axis=0)
-std = x_train.mean(axis=0)
-x_train = (x_train - mean) / std
-x_test = (x_test - mean) / std
+mean = x_train.mean(axis=(0, 2, 3)).reshape((1, -1, 1, 1))
+std = x_train.std(axis=(0, 2, 3)).reshape((1, -1, 1, 1))
 
-zca = preprocessing.ZCA()
-zca.train(x_train)
-x_train = zca.transform(x_train)
-x_test = zca.transform(x_test)
+x_train -= mean
+x_train /= std
+x_test -= mean
+x_test /= std
 
 target_scaler = OneHotEncoder()
 y_train = target_scaler.fit_transform(y_train.reshape((-1, 1))).todense()
@@ -39,48 +39,44 @@ network = algorithms.Adadelta(
     [
         layers.Input((3, 32, 32)),
 
-        layers.Convolution((64, 3, 3), border_mode='full'),
+        layers.Convolution((64, 3, 3)),
         layers.Relu(),
+
+        layers.BatchNorm(),
         layers.Convolution((64, 3, 3)),
         layers.Relu(),
         layers.MaxPooling((2, 2)),
-        layers.Dropout(proba=0.25),
 
-        layers.Convolution((128, 3, 3), border_mode='full'),
+        layers.BatchNorm(),
+        layers.Convolution((128, 3, 3)),
         layers.Relu(),
+
+        layers.BatchNorm(),
         layers.Convolution((128, 3, 3)),
         layers.Relu(),
         layers.MaxPooling((2, 2)),
-        layers.Dropout(proba=0.25),
-
-        layers.Convolution((256, 3, 3), border_mode='full'),
-        layers.Relu(),
-        layers.Convolution((256, 3, 3)),
-        layers.Relu(),
-        layers.Convolution((256, 1, 1)),
-        layers.Relu(),
-        layers.MaxPooling((2, 2)),
-        layers.Dropout(proba=0.25),
 
         layers.Reshape(),
 
-        layers.Relu(256 * 4 * 4),
-        layers.Dropout(proba=0.5),
+        layers.BatchNorm(),
+        layers.Relu(128 * 5 * 5),
 
+        layers.BatchNorm(),
         layers.Relu(1024),
-        layers.Dropout(proba=0.5),
 
+        layers.BatchNorm(),
         layers.Softmax(1024),
         layers.ArgmaxOutput(10),
     ],
 
     error='categorical_crossentropy',
-    step=0.25,
+    step=0.5,
     shuffle_data=True,
+    batch_size=128,
     verbose=True,
 
-    epochs_step_minimizator=5,
-    addons=[algorithms.SimpleStepMinimization]
+    # epochs_step_minimizator=5,
+    # addons=[algorithms.SimpleStepMinimization]
 )
 network.architecture()
 network.train(x_train, y_train, x_test, y_test, epochs=20)

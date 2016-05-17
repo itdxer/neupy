@@ -15,6 +15,55 @@ from base import BaseTestCase
 from data import simple_classification
 
 
+class ConnectionsTestCase(BaseTestCase):
+    def test_connection_initializations(self):
+        possible_connections = (
+            (2, 3, 1),
+            [Sigmoid(2), Tanh(3), Output(1)],
+            Relu(2) > Tanh(10) > Output(1),
+        )
+
+        for connection in possible_connections:
+            network = GradientDescent(connection)
+            self.assertEqual(len(network.all_layers), 3)
+
+    def test_connection_inside_connection_mlp(self):
+        connection = [
+            layers.Relu(2),
+            layers.Relu(10) > layers.Relu(4),
+            layers.Relu(7) > layers.Relu(3),
+            layers.Output(1)
+        ]
+        expected_sizes = [2, 10, 4, 7, 3, 1]
+
+        network = GradientDescent(connection)
+        for layer, expected_size in zip(network.all_layers, expected_sizes):
+            self.assertEqual(expected_size, layer.size)
+
+    def test_connection_inside_connection_conv(self):
+        connection = [
+            layers.Input((1, 28, 28)),
+
+            layers.Convolution((8, 3, 3)) > layers.Relu(),
+            layers.Convolution((8, 3, 3)) > layers.Relu(),
+            layers.MaxPooling((2, 2)),
+
+            layers.Reshape(),
+
+            layers.Softmax(8 * 12 * 12),
+            layers.Output(1)
+        ]
+
+        network = GradientDescent(connection)
+        self.assertEqual(9, len(network.all_layers))
+
+        self.assertIsInstance(network.layers[1], layers.Convolution)
+        self.assertIsInstance(network.layers[2], layers.Relu)
+        self.assertIsInstance(network.layers[3], layers.Convolution)
+        self.assertIsInstance(network.layers[4], layers.Relu)
+        self.assertIsInstance(network.layers[5], layers.MaxPooling)
+
+
 class LayersBasicsTestCase(BaseTestCase):
     def test_without_output_layer(self):
         with self.assertRaises(NetworkConnectionError):
@@ -48,6 +97,19 @@ class LayersBasicsTestCase(BaseTestCase):
         for connection in possible_connections:
             network = GradientDescent(connection)
             self.assertEqual(len(network.all_layers), 3)
+
+    def test_connection_inside_connection(self):
+        connection = [
+            layers.Relu(2),
+            layers.Relu(10) > layers.Relu(4),
+            layers.Relu(7) > layers.Relu(3),
+            layers.Output(1)
+        ]
+        expected_sizes = [2, 10, 4, 7, 3, 1]
+
+        network = GradientDescent(connection)
+        for layer, expected_size in zip(network.all_layers, expected_sizes):
+            self.assertEqual(expected_size, layer.size)
 
     @unittest.skip("Not ready yet")
     def test_recurrent_connections(self):
@@ -198,7 +260,7 @@ class PReluTestCase(BaseTestCase):
         alpha = prelu_layer.alpha.get_value()
         expected_alpha = np.ones((5, 8)) * 0.25
 
-        self.assertEqual(prelu_layer.alpha.get_value().shape, (5, 8))
+        self.assertEqual(alpha.shape, (5, 8))
         np.testing.assert_array_almost_equal(alpha, expected_alpha)
 
     def test_prelu_output_by_dense_input(self):

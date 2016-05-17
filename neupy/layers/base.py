@@ -195,7 +195,7 @@ class ParameterBasedLayer(BaseLayer):
 
     @cached_property
     def weight_shape(self):
-        return as_tuple(self.size, self.output_shape)
+        return as_tuple(self.input_shape, self.output_shape)
 
     @cached_property
     def bias_shape(self):

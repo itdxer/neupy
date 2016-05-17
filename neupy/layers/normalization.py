@@ -48,6 +48,8 @@ class BatchNorm(BaseLayer):
         training; the closer to one, the more it will depend on
         the last batches seen. Value needs to be between ``0`` and ``1``.
         Defaults to ``0.1``.
+    gamma : float
+    beta : float
 
     References
     ----------
@@ -98,11 +100,27 @@ class BatchNorm(BaseLayer):
             value=asfloat(np.ones(parameter_shape))
         )
 
+        if isinstance(self.gamma, number_type):
+            self.gamma = np.ones(parameter_shape) * self.gamma
+
+        if isinstance(self.beta, number_type):
+            self.beta = np.ones(parameter_shape) * self.beta
+
+        self.gamma = theano.shared(
+            name='gamma_{}'.format(self.layer_id),
+            value=asfloat(self.gamma),
+        )
+        self.beta = theano.shared(
+            name='beta_{}'.format(self.layer_id),
+            value=asfloat(self.beta),
+        )
+        self.parameters = [self.gamma, self.beta]
+
     def output(self, input_value):
         epsilon = asfloat(self.epsilon)
         alpha = asfloat(self.alpha)
-        beta = asfloat(self.beta)
-        gamma = asfloat(self.gamma)
+        gamma, beta = self.gamma, self.beta
+
         ndim = input_value.ndim
         axes = self.axes
 
@@ -130,6 +148,9 @@ class BatchNorm(BaseLayer):
             inv_std = input_inv_std
 
         opposite_axes = find_opposite_axes(axes, ndim)
+
+        beta = dimshuffle(beta, ndim, opposite_axes)
+        gamma = dimshuffle(gamma, ndim, opposite_axes)
         mean = dimshuffle(mean, ndim, opposite_axes)
         inv_std = dimshuffle(inv_std, ndim, opposite_axes)
 

@@ -503,5 +503,12 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         self.logs.newline()
 
     def __repr__(self):
-        return "{}({}, {})".format(self.class_name(), self.connection,
+        n_layers = len(self.connection)
+
+        if n_layers > 5:
+            connection = '[... {} layers ...]'.format(n_layers)
+        else:
+            connection = self.connection
+
+        return "{}({}, {})".format(self.class_name(), connection,
                                    self._repr_options())

@@ -9,13 +9,11 @@ environment.reproducible()
 theano.config.floatX = 'float32'
 
 mnist = datasets.fetch_mldata('MNIST original')
+data = mnist.data
 
 target_scaler = OneHotEncoder()
 target = mnist.target.reshape((-1, 1))
 target = target_scaler.fit_transform(target).todense()
-
-data = mnist.data / 255.
-data = data - data.mean(axis=0)
 
 n_samples = data.shape[0]
 data = data.reshape((n_samples, 1, 28, 28))
@@ -26,28 +24,27 @@ x_train, x_test, y_train, y_test = cross_validation.train_test_split(
     train_size=(6 / 7.)
 )
 
+mean = x_train.mean(axis=(0, 2, 3))
+std = x_train.std(axis=(0, 2, 3))
+
+x_train -= mean
+x_train /= std
+x_test -= mean
+x_test /= std
+
 network = algorithms.Adadelta(
     [
         layers.Input((1, 28, 28)),
 
-        layers.Convolution((32, 3, 3)),
-        layers.Relu(),
-        layers.BatchNorm(),
-        layers.Convolution((48, 3, 3)),
-        layers.Relu(),
-        layers.BatchNorm(),
+        layers.Convolution((32, 3, 3)) > layers.BatchNorm() > layers.Relu(),
+        layers.Convolution((48, 3, 3)) > layers.BatchNorm() > layers.Relu(),
         layers.MaxPooling((2, 2)),
 
-        layers.Convolution((64, 3, 3)),
-        layers.Relu(),
-        layers.BatchNorm(),
+        layers.Convolution((64, 3, 3)) > layers.BatchNorm() > layers.Relu(),
         layers.MaxPooling((2, 2)),
 
         layers.Reshape(),
-
-        layers.Relu(64 * 5 * 5),
-        layers.BatchNorm(),
-
+        layers.Linear(64 * 5 * 5) > layers.BatchNorm() > layers.Relu(),
         layers.Softmax(1024),
         layers.ArgmaxOutput(10),
     ],

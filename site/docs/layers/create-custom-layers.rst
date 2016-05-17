@@ -1,6 +1,13 @@
 Custom layers
 =============
 
+There are a few main types of layers. We are going to check them one by one in order of complexity.
+
+Element-wise transformation
+***************************
+
+In case 
+
 Types
 *****
 

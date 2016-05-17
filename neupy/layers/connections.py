@@ -46,7 +46,7 @@ class Connection(with_metaclass(ABCMeta, ChainConnection)):
         pass
 
     def __len__(self):
-        return len(list(self.__iter__()))
+        return len(list(iter(self)))
 
     def __iter__(self):
         if isinstance(self.left, Connection):
@@ -73,13 +73,15 @@ class LayerConnection(Connection):
     @property
     def left_layer(self):
         if isinstance(self.left, Connection):
-            return self.left.right_layer
+            all_elements = list(self.left)
+            last_element = all_elements[-1]
+            return last_element
         return self.left
 
     @property
     def right_layer(self):
         if isinstance(self.right, Connection):
-            return self.right.left_layer
+            return next(iter(self.right))
         return self.right
 
     @property
