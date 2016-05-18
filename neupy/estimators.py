@@ -1,7 +1,5 @@
 from functools import wraps
 
-import numpy as np
-
 from neupy.network import errors
 from neupy.utils import format_data, number_type
 
