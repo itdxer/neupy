@@ -6,7 +6,7 @@ There are a few main types of layers. We are going to check them one by one in o
 Element-wise transformation
 ***************************
 
-In case 
+In case
 
 Types
 *****
@@ -32,7 +32,6 @@ The simplest type of two layers types is an output layer. Below you can see simp
         def output(self, value):
             return value.astype(int)
 
-The base class is :layer:`Output`.
 This layer has one useful method - ``output``.
 Attribute ``value`` contains the raw output from network and method can manage to perform some useful transformation to provide different output.
 

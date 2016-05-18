@@ -37,6 +37,7 @@ Tutorials
 * `Discrete Hopfield Network <http://neupy.com/2015/09/20/discrete_hopfield_network.html>`_
 * `Boston house-prices dataset <http://neupy.com/2015/07/04/boston_house_prices_dataset.html>`_
 * `Visualize Backpropagation Algorithms <http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html>`_
+* `MNIST classification <http://neupy.com/docs/quickstart.html#mnist-classification>`_
 
 Examples
 --------

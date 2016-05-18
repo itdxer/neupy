@@ -145,7 +145,7 @@ In the code above you can see two prediction releate to the different models. Th
     >>> estimators.binary_crossentropy(actual_values, model2_prediction)
     0.5108255743980408
 
-That is the result that we looked for. The second model made better prediction, but it got a higher cross entropy error value. That's because we less certain about our prediction. Similar situation we've observed in the plot above.
+That is the result that we looked for. The second model made better prediction, but it got a higher cross entropy error. It means that we less certain about our prediction. Similar situation we've observed in the plot above.
 
 Let's finally make a simple report for our classification result.
 

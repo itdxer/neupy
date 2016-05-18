@@ -1,11 +1,13 @@
 from functools import wraps
 
+import numpy as np
+
 from neupy.network import errors
-from neupy.utils import format_data
+from neupy.utils import format_data, number_type
 
 
 __all__ = ('mse', 'rmse', 'mae', 'msle', 'rmsle', 'binary_crossentropy',
-           'categorical_crossentropy')
+           'categorical_crossentropy', 'binary_hinge', 'categorical_hinge')
 
 
 def override_theano_function(function):
@@ -26,9 +28,13 @@ def override_theano_function(function):
         expected = format_data(expected)
 
         output = function(actual, expected, *args, **kwargs)
+
+        if not isinstance(output, number_type):
+            output = output.eval()
+
         # use .item(0) to get a first array element and automaticaly
         # convert vector that contains one element to scalar
-        return output.eval().item(0)
+        return output.item(0)
     return wrapper
 
 
@@ -41,3 +47,5 @@ binary_crossentropy = override_theano_function(errors.binary_crossentropy)
 categorical_crossentropy = override_theano_function(
     errors.categorical_crossentropy
 )
+binary_hinge = override_theano_function(errors.binary_hinge)
+categorical_hinge = override_theano_function(errors.categorical_hinge)

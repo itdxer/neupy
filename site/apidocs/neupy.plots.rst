@@ -6,6 +6,7 @@ Submodules
 
 .. toctree::
 
+   neupy.plots.error_plot
    neupy.plots.hinton
 
 Module contents

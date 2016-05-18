@@ -1,5 +1,5 @@
-Classes and functions
-=====================
+Cheat sheet
+===========
 
 .. contents::
 
@@ -112,8 +112,8 @@ Associative
 Layers
 ******
 
-Input and hidden layers
-~~~~~~~~~~~~~~~~~~~~~~~
+Layers with activation function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table::
     :header: "Class name", "Description"
@@ -168,5 +168,7 @@ Error functions
     "rmse", "Root mean squared error"
     "msle", "Mean squared logarithmic error"
     "rmsle", "Root mean squared logarithmic error"
-    "categorical_crossentropy", "Cross entropy error"
-    "binary_crossentropy", "Cross entropy error"
+    "binary_crossentropy", "Cross entropy error function for the binary classification"
+    "categorical_crossentropy", "Cross entropy error function for the multi-class classification"
+    "binary_hinge", "Hinge error function for the binary classification"
+    "categorical_hinge", "Hinge error function for the multi-class classification"
