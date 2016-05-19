@@ -158,4 +158,4 @@ Does it look simple to you? Not at all. However, this is a really simple network
         ]
     )
 
-As you can see we use an ability to organize sequence of simple layer in one small network. Each subnetwork defines a sequence of simple operations. You can think about subnetworks as a simple way to define more complecated layers. But instead of creating redundant classes that defines complex layers you can define everything in place. In addition it improves the readability, because now you can see order of these simple operations inside the subnetwork.
+As you can see we use an ability to organize sequence of simple layer in one small network. Each subnetwork defines a sequence of simple operations. You can think about subnetworks as a simple way to define more complecated layers. But instead of creating redundant classes that define complex layers you can define everything in place. In addition it improves the readability, because now you can see order of these simple operations inside the subnetwork.

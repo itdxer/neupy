@@ -12,4 +12,4 @@ Documentation
     ../docs/storage
     ../docs/plots
     ../docs/secondary
-    ../docs/algorithms
+    ../docs/cheatsheet

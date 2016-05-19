@@ -57,7 +57,7 @@ class Dropout(BaseLayer):
 
 
 class GaussianNoise(BaseLayer):
-    """ Add gaussian noise to the layer output. Mean is equal
+    """ Add gaussian noise to the input value. Mean is equal
     to zero and standard deviation is a layer parameter.
 
     Parameters

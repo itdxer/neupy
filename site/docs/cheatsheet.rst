@@ -112,6 +112,14 @@ Associative
 Layers
 ******
 
+Basic Layers
+~~~~~~~~~~~~
+
+.. csv-table::
+    :header: "Class name", "Description"
+
+    ":layer:`Input`", "Layer defines input value's feature shape"
+
 Layers with activation function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -129,18 +137,18 @@ Layers with activation function
     ":layer:`Softplus`", "Layer with softplus activation function."
     ":layer:`Softmax`", "Layer with softmax activation function."
 
-Convolutional Layers
+Convolutional layers
 ~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table::
     :header: "Class name", "Description"
 
-    ":layer:`Input`", "Layer defines input value's feature shape"
     ":layer:`Convolution`", "Convolutional layer"
     ":layer:`MaxPooling`", "Maximum pooling layer"
     ":layer:`AveragePooling`", "Average pooling layer"
+    ":layer:`Upscale`", "Upscale layer"
 
-Stochastic Layers
+Stochastic layers
 ~~~~~~~~~~~~~~~~~
 
 .. csv-table::

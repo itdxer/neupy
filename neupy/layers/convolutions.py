@@ -6,10 +6,11 @@ from theano.tensor.signal import pool
 
 from neupy.utils import as_tuple, cached_property
 from neupy.core.properties import TypedListProperty, Property, ChoiceProperty
+from .connections import NetworkConnectionError
 from .base import BaseLayer, ParameterBasedLayer
 
 
-__all__ = ('Convolution', 'MaxPooling', 'AveragePooling')
+__all__ = ('Convolution', 'MaxPooling', 'AveragePooling', 'Upscale')
 
 
 class StrideProperty(TypedListProperty):
@@ -131,7 +132,8 @@ class Convolution(ParameterBasedLayer):
     Parameters
     ----------
     size : tuple of int
-        Filter shape.
+        Filter shape. In should be defined as a tuple with three integers
+        ``(output channels, filter rows, filter columns)``.
     border_mode : {{'valid', 'full', 'half'}} or int or tuple with 2 int
         Convolution border mode. Check Theano's ``nnet.conv2d`` doc.
     stride_size : tuple with 1 or 2 integers or integer.
@@ -199,8 +201,8 @@ class BasePooling(BaseLayer):
     ----------
     size : tuple with 2 integers
         Factor by which to downscale (vertical, horizontal).
-        (2,2) will halve the image in each dimension.
-    stride_size :
+        (2, 2) will halve the image in each dimension.
+    stride_size : tuple with 1 or 2 integers or integer.
         Stride size, which is the number of shifts over
         rows/cols to get the next pool region. If stride_size is
         None, it is considered equal to ds (no overlap on
@@ -290,3 +292,60 @@ class AveragePooling(BasePooling):
         return pool.pool_2d(input_value, ds=self.size, mode=self.mode,
                             ignore_border=True, st=self.stride_size,
                             padding=self.padding)
+
+
+class ScaleFactorProperty(TypedListProperty):
+    """ Defines sclaing factor for the Upscale layer.
+    """
+    expected_type = (tuple, int)
+
+    def __set__(self, instance, value):
+        if isinstance(value, int):
+            value = as_tuple(value, value)
+        super(ScaleFactorProperty, self).__set__(instance, value)
+
+    def validate(self, value):
+        if any(element <= 0 for element in value):
+            raise ValueError("Scale factor property accepts only positive "
+                             "integer numbers.")
+        super(ScaleFactorProperty, self).validate(value)
+
+
+class Upscale(BaseLayer):
+    """ Upscales input over two axis (height and width).
+
+    Parameters
+    ----------
+    scale : int or tuple with two int
+        Scaling factor for the input value.
+    """
+    scale = ScaleFactorProperty(required=True, n_elements=2)
+
+    def __init__(self, scale, **options):
+        options['scale'] = scale
+        super(Upscale, self).__init__(**options)
+
+    @cached_property
+    def output_shape(self):
+        if len(self.input_shape) != 3:
+            raise NetworkConnectionError(
+                "Upscale layer should have an input value that have "
+                "3 feature dimensions (channel, height and width)"
+            )
+
+        channel, height, width = self.input_shape
+        height_scale, width_scale = self.scale
+
+        return (channel, height_scale * height, width_scale * width)
+
+    def output(self, input_value):
+        height_scale, width_scale = self.scale
+        scaled_value = input_value
+
+        if height_scale != 1:
+            scaled_value = T.extra_ops.repeat(scaled_value, height_scale, 2)
+
+        if width_scale != 1:
+            scaled_value = T.extra_ops.repeat(scaled_value, width_scale, 3)
+
+        return scaled_value
