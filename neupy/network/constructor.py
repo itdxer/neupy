@@ -473,7 +473,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         self.logs.title("Network's architecture")
 
         values = []
-        for layer in enumerate(self.layers, start=1):
+        for index, layer in enumerate(self.layers, start=1):
             input_shape = preformat_layer_shape(layer.input_shape)
             output_shape = preformat_layer_shape(layer.output_shape)
             classname = layer.__class__.__name__
