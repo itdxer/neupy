@@ -6,8 +6,8 @@
 .. |Coveralls| image:: https://coveralls.io/repos/github/itdxer/neupy/badge.svg?branch=master
 .. _Coveralls: https://coveralls.io/github/itdxer/neupy?branch=master
 
-NeuPy v0.3.0 (beta)
-===================
+NeuPy v0.3.0 (development)
+==========================
 
 NeuPy is a Python library for Artificial Neural Networks.
 
@@ -45,18 +45,24 @@ Examples
 MLP Neural Networks
 ~~~~~~~~~~~~~~~~~~~
 
-* `MNIST, Multilayer perceptron <examples/gd/mnist_mlp.py>`_
-* `Rectangle images, Multilayer perceptron <examples/gd/rectangles_mlp.py>`_
-* `MNIST, Denoising Autoencoder <examples/gd/mnist_autoencoder.py>`_
-* `Boston House Price prediction, Hessian algorithm <examples/gd/boston_price_prediction.py>`_
-* `Learning Algorithms Visualization, Gradient Descent, Momentum, RPROP and Conjugate Gradient <examples/gd/gd_algorithms_visualization.py>`_
-* `IMDB review classification using CBOW and RPROP MLP <examples/gd/word_embedding>`_
+* `MNIST, Multilayer perceptron <examples/mlp/mnist_mlp.py>`_
+* `Rectangle images, Multilayer perceptron <examples/mlp/rectangles_mlp.py>`_
+* `Boston House Price prediction, Hessian algorithm <examples/mlp/boston_price_prediction.py>`_
+* `Learning Algorithms Visualization, Gradient Descent, Momentum, RPROP and Conjugate Gradient <examples/mlp/gd_algorithms_visualization.py>`_
+* `IMDB review classification using CBOW and RPROP MLP <examples/mlp/imdb_review_classification>`_
 
 Convolutional Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* `MNIST CNN <examples/gd/mnist_cnn.py>`_
-* `CIFAR10 CNN <examples/gd/cifar10_cnn.py>`_
+* `MNIST CNN <examples/cnn/mnist_cnn.py>`_
+* `CIFAR10 CNN <examples/cnn/cifar10_cnn.py>`_
+
+Autoencoders
+~~~~~~~~~~~~
+
+* `MNIST, Denoising Autoencoder <examples/autoencoder/denoising_autoencoder.py>`_
+* `MNIST, Convolutional Autoencoder <examples/autoencoder/conv_autoencoder.py>`_
+* `MNIST, Stacked Convolutional Autoencoders <examples/autoencoder/stacked_conv_autoencoders.py>`_
 
 Competitive Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

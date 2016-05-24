@@ -49,7 +49,6 @@ setup(
     },
 
     # Other
-    setup_cfg=True,
     classifiers=[
         'Intended Audience :: Developers',
         'Natural Language :: English',

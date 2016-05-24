@@ -69,7 +69,7 @@ This layer can have two different behaviours. You've already seen the first case
         shuffle_data=True
     )
 
-Let's consider the ``layers.Sigmoid(40)`` layer. This layer defines two different operations. The first one is a linear transformation that multiplies input by a weight matrix and adds bias to the result of this multiplication. The second one applies activation function to the linear transformation. The type of the linear function depence on the layer class. In the examples we use two layers with sigmoid activation function and one with a softmax.
+Let's consider the ``layers.Sigmoid(40)`` layer. This layer defines two different operations. The first one is a linear transformation that multiplies input by a weight matrix and adds bias to the result of this multiplication. The second one applies activation function to the linear transformation. The type of the linear function depends on the layer class. In the examples we use two layers with sigmoid activation function and one with a softmax.
 
 This layer combines two basic operations, but you can split it into the separate steps. Here is a previous examples divided into the separate steps.
 

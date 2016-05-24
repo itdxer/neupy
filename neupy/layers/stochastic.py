@@ -50,23 +50,24 @@ class Dropout(BaseLayer):
         return (mask * input_value) / proba
 
     def __repr__(self):
-        return "{name}(proba={proba})".format(
-            name=self.__class__.__name__,
-            proba=self.proba
-        )
+        classname = self.__class__.__name__
+        return "{}(proba={})".format(classname, self.proba)
 
 
 class GaussianNoise(BaseLayer):
-    """ Add gaussian noise to the input value. Mean is equal
-    to zero and standard deviation is a layer parameter.
+    """ Add gaussian noise to the input value. Mean and standard
+    deviation are layer's parameters.
 
     Parameters
     ----------
     std : float
         Standard deviation of the gaussian noise. Values needs to
         be greater than zero. Defaults to ``1``.
+    mean : float
+        Mean of the gaussian noise. Defaults to ``0``.
     """
     std = NumberProperty(default=1, minval=0)
+    mean = NumberProperty(default=0)
 
     def __init__(self, std, **options):
         options['std'] = std
@@ -77,11 +78,10 @@ class GaussianNoise(BaseLayer):
             return input_value
 
         theano_random = theano_random_stream()
-        noise = theano_random.normal(size=input_value.shape, std=self.std)
+        noise = theano_random.normal(size=input_value.shape,
+                                     avg=self.mean, std=self.std)
         return input_value + noise
 
     def __repr__(self):
-        return "{name}(std={std})".format(
-            name=self.__class__.__name__,
-            std=self.std
-        )
+        classname = self.__class__.__name__
+        return "{}(mean={}, std={})".format(classname, self.mean, self.std)

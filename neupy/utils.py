@@ -115,7 +115,7 @@ def asfloat(value):
 
 def asint(value):
     """ Convert variable to an integer type. Number of bits per
-    integer depence on floatX Theano variable.
+    integer depend on floatX Theano variable.
 
     Parameters
     ----------
@@ -195,7 +195,7 @@ def is_list_of_integers(sequence):
 
 
 def preformat_value(value):
-    """ Function pre-format input value depence on it's type.
+    """ Function pre-format input value depending on it's type.
 
     Parameters
     ----------
@@ -294,9 +294,6 @@ class CachedProperty(object):
         self.func = func
 
     def __get__(self, instance, owner):
-        if instance is None:
-            return self
-
         value = self.func(instance)
         instance.__dict__[self.func.__name__] = value
         return value

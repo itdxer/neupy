@@ -257,7 +257,7 @@ class PRelu(ActivationLayer):
         Scalar value means that each element in the tensor will be
         equal to the specified value.
         ``None`` means that parameters will be generated randomly.
-        The exact random initialization algorithm depence on
+        The exact random initialization algorithm depends on
         the ``init_method`` parameter.
         Defaults to ``0.25``.
     {ActivationLayer.size}

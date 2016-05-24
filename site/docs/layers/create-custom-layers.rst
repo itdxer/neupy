@@ -53,7 +53,7 @@ Some layers makes an output shape modification. If you don't define the new outp
 
 The ``FeatureMeanLayer`` layer makes a feature transformation and modifies input matrix shape. We define ``output_shape`` property as an additional layer's parameter. Now other layers in the sequence know the expected layers output shape and adjust their parameters to the correct shape.
 
-If your parameter depence on the other layers in the layers sequence you can get them from the ``self.relate_to_layer`` and ``self.relate_from_layer`` attributes. They return next and previous layers respectively. Eahc of this layers have ``output_shape`` and ``input_shape`` attibutes, so you can read useful information from them.
+If your parameter depends on the other layers in the layers sequence you can get them from the ``self.relate_to_layer`` and ``self.relate_from_layer`` attributes. They return next and previous layers respectively. Eahc of this layers have ``output_shape`` and ``input_shape`` attibutes, so you can read useful information from them.
 
 The other important method is an ``initialize``. The main purpose of this method is to apply all necesary initializations related to the network. For instance, random weight or bias parameters. You can't define them in the ``__init__`` method, because when you create layer instance full network structure is unknown and you don't have all the necessary information. Let's extend the previous layer with the ``initialize`` method.
 
@@ -79,4 +79,4 @@ The other important method is an ``initialize``. The main purpose of this method
         def output(self, value):
             return self.scaler * value.mean(axis=1)
 
-In this example I've added a few other feature to consider a couple of useful attributes and functions. Let's check them one by one. ``self.layer_id`` defines layer's identifier as an integer number. This number is basically a layer's index number in the sequence. The ``self.parameters`` attribute is a list that contains all trainable parameters. Usually it is a weight or bias, but you can define any parameter you want. The ``asfloat`` function just converts any number to the float number. The type of the float number depence on the Theano's ``theano.config.floatX`` variable.
+In this example I've added a few other feature to consider a couple of useful attributes and functions. Let's check them one by one. ``self.layer_id`` defines layer's identifier as an integer number. This number is basically a layer's index number in the sequence. The ``self.parameters`` attribute is a list that contains all trainable parameters. Usually it is a weight or bias, but you can define any parameter you want. The ``asfloat`` function just converts any number to the float number. The type of the float number depends on the Theano's ``theano.config.floatX`` variable.

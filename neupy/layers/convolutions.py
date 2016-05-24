@@ -6,7 +6,7 @@ from theano.tensor.signal import pool
 
 from neupy.utils import as_tuple, cached_property
 from neupy.core.properties import TypedListProperty, Property, ChoiceProperty
-from .connections import NetworkConnectionError
+from .connections import LayerConnectionError
 from .base import BaseLayer, ParameterBasedLayer
 
 
@@ -317,7 +317,9 @@ class Upscale(BaseLayer):
     Parameters
     ----------
     scale : int or tuple with two int
-        Scaling factor for the input value.
+        Scaling factor for the input value. In the tuple first
+        parameter identifies scale of the height and the second
+        one of the width.
     """
     scale = ScaleFactorProperty(required=True, n_elements=2)
 
@@ -328,7 +330,7 @@ class Upscale(BaseLayer):
     @cached_property
     def output_shape(self):
         if len(self.input_shape) != 3:
-            raise NetworkConnectionError(
+            raise LayerConnectionError(
                 "Upscale layer should have an input value that have "
                 "3 feature dimensions (channel, height and width)"
             )

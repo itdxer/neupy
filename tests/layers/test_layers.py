@@ -1,5 +1,4 @@
 import math
-import unittest
 
 import numpy as np
 import theano
@@ -13,53 +12,6 @@ from neupy.layers import *
 
 from base import BaseTestCase
 from data import simple_classification
-
-
-class ConnectionsTestCase(BaseTestCase):
-    def test_connection_initializations(self):
-        possible_connections = (
-            (2, 3, 1),
-            [Input(2), Sigmoid(3), Tanh(1)],
-            Input(2) > Relu(10) > Tanh(1),
-        )
-
-        for connection in possible_connections:
-            network = GradientDescent(connection)
-            self.assertEqual(len(network.layers), 3)
-
-    def test_connection_inside_connection_mlp(self):
-        connection = [
-            layers.Input(2),
-            layers.Relu(10),
-            layers.Relu(4) > layers.Relu(7),
-            layers.Relu(3) > layers.Relu(1),
-        ]
-        expected_sizes = [2, 10, 4, 7, 3, 1]
-
-        network = GradientDescent(connection)
-        for layer, expected_size in zip(network.layers, expected_sizes):
-            self.assertEqual(expected_size, layer.size)
-
-    def test_connection_inside_connection_conv(self):
-        connection = [
-            layers.Input((1, 28, 28)),
-
-            layers.Convolution((8, 3, 3)) > layers.Relu(),
-            layers.Convolution((8, 3, 3)) > layers.Relu(),
-            layers.MaxPooling((2, 2)),
-
-            layers.Reshape(),
-            layers.Softmax(1),
-        ]
-
-        network = GradientDescent(connection)
-        self.assertEqual(8, len(network.layers))
-
-        self.assertIsInstance(network.layers[1], layers.Convolution)
-        self.assertIsInstance(network.layers[2], layers.Relu)
-        self.assertIsInstance(network.layers[3], layers.Convolution)
-        self.assertIsInstance(network.layers[4], layers.Relu)
-        self.assertIsInstance(network.layers[5], layers.MaxPooling)
 
 
 class LayersBasicsTestCase(BaseTestCase):

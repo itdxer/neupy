@@ -165,7 +165,7 @@ class BaseState(with_metaclass(SharedDocsABCMeta)):
         self.table = table
 
     def line(self):
-        """ Draw ASCII line. Line width depence on the table
+        """ Draw ASCII line. Line width depends on the table
         column sizes.
         """
         self.table.stdout('\r' + '-' * self.table.total_width)

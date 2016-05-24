@@ -24,6 +24,7 @@ Submodules
    neupy.environment
    neupy.estimators
    neupy.preprocessing
+   neupy.surgery
    neupy.utils
 
 Module contents

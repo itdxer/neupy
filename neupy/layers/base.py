@@ -1,5 +1,3 @@
-from contextlib import contextmanager
-
 import numpy as np
 import theano
 import theano.tensor as T
@@ -43,13 +41,9 @@ class BaseLayer(ChainConnection, Configurable):
 
         self.parameters = []
 
-        # Default variables which will change after initialization
         self.relate_to_layer = None
         self.relate_from_layer = None
         self.layer_id = 1
-        self.training_state = True
-
-        self.training_state = True
         self.updates = []
 
         Configurable.__init__(self, **options)
@@ -63,11 +57,8 @@ class BaseLayer(ChainConnection, Configurable):
     def output_shape(self):
         return self.input_shape
 
-    @contextmanager
-    def disable_training_state(self):
-        self.training_state = False
-        yield
-        self.training_state = True
+    def output(self, input_value):
+        return input_value
 
     def initialize(self):
         if self.relate_from_layer is not None:
@@ -267,3 +258,7 @@ class Input(BaseLayer):
 
     def output(self, input_value):
         return input_value
+
+    def __repr__(self):
+        classname = self.__class__.__name__
+        return '{name}({size})'.format(name=classname, size=self.size)

@@ -7,7 +7,7 @@ import numpy as np
 
 from neupy.utils import asfloat, as_tuple
 from neupy import layers
-from neupy.layers.connections import NetworkConnectionError
+from neupy.layers.connections import LayerConnectionError
 from neupy.layers.convolutions import conv_output_shape
 
 from base import BaseTestCase
@@ -147,7 +147,7 @@ class PoolingLayersTestCase(BaseTestCase):
         np.testing.assert_array_almost_equal(actual_output, expected_output)
 
     def test_upscale_layer_exceptions(self):
-        with self.assertRaises(NetworkConnectionError):
+        with self.assertRaises(LayerConnectionError):
             # Input shape should have 3 feature dimensions
             # (and +1 for the batch)
             upscale_layer = layers.Upscale((2, 2))

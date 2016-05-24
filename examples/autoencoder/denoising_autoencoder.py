@@ -19,9 +19,8 @@ def reduce_dimension(network, data):
 
 mnist = datasets.fetch_mldata('MNIST original')
 
-data = mnist.data / 255.
-features_mean = data.mean(axis=0)
-data = (data - features_mean).astype(np.float32)
+data = mnist.data
+data = (data / 255.).astype(np.float32)
 
 np.random.shuffle(data)
 x_train, x_test = data[:60000], data[60000:]
@@ -29,7 +28,7 @@ x_train, x_test = data[:60000], data[60000:]
 autoencoder = algorithms.Momentum(
     [
         layers.Input(784),
-        layers.Dropout(proba=0.5),
+        layers.GaussianNoise(mean=0.5, std=0.1),
         layers.Sigmoid(100),
         layers.Sigmoid(784),
     ],
@@ -37,6 +36,7 @@ autoencoder = algorithms.Momentum(
     verbose=True,
     momentum=0.99,
     nesterov=True,
+    error='rmse',
 )
 autoencoder.train(x_train, x_train, x_test, x_test, epochs=100)
 

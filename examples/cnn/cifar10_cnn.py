@@ -39,43 +39,26 @@ network = algorithms.Adadelta(
     [
         layers.Input((3, 32, 32)),
 
-        layers.Convolution((64, 3, 3)),
-        layers.Relu(),
-
-        layers.BatchNorm(),
-        layers.Convolution((64, 3, 3)),
-        layers.Relu(),
+        layers.Convolution((64, 3, 3)) > layers.BatchNorm() > layers.PRelu(),
+        layers.Convolution((64, 3, 3)) > layers.BatchNorm() > layers.PRelu(),
         layers.MaxPooling((2, 2)),
 
-        layers.BatchNorm(),
-        layers.Convolution((128, 3, 3)),
-        layers.Relu(),
-
-        layers.BatchNorm(),
-        layers.Convolution((128, 3, 3)),
-        layers.Relu(),
+        layers.Convolution((128, 3, 3)) > layers.BatchNorm() > layers.PRelu(),
+        layers.Convolution((128, 3, 3)) > layers.BatchNorm() > layers.PRelu(),
         layers.MaxPooling((2, 2)),
 
         layers.Reshape(),
 
-        layers.BatchNorm(),
-        layers.Relu(1024),
-
-        layers.BatchNorm(),
-        layers.Relu(1024),
-
-        layers.BatchNorm(),
+        layers.Linear(1024) > layers.BatchNorm() > layers.PRelu(),
+        layers.Linear(1024) > layers.BatchNorm() > layers.PRelu(),
         layers.Softmax(10),
     ],
 
     error='categorical_crossentropy',
-    step=0.5,
+    step=0.25,
     shuffle_data=True,
     batch_size=128,
     verbose=True,
-
-    # epochs_step_minimizator=5,
-    # addons=[algorithms.SimpleStepMinimization]
 )
 network.architecture()
 network.train(x_train, y_train, x_test, y_test, epochs=20)

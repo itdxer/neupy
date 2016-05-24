@@ -62,7 +62,7 @@ I wouldn't add all code related to the plots building. For understanding of the 
     :align: center
     :alt: Approximation function contour plot
 
-The plot above shows the approximation error rate depence on the network weights. The best error must be as small as possible. The best weights combination for this problem should be near the lower right corner in the blue area.
+The plot above shows error rate that depends on the network's weights. The best error must be as small as possible. The best weights combination for this problem should be near the lower right corner in the blue area.
 
 Next, we are going to look at 5 algorithms based on Gradient Descent. They are:
 
@@ -74,7 +74,7 @@ Next, we are going to look at 5 algorithms based on Gradient Descent. They are:
 
 Let's define start point for our algorithms. As we can see from the figure above the position (-4, -4) is on the red part of the plot and the error for it would be approximetly 0.43, so we define default weights on this position.
 
-This function will train the network until the error will be smaller than `0.125`. Path for all networks would be the same. Every network starts at dot with coordinates `(-4, -4)` and finishes near the point with the closest value to `0.125`. The final result will depence on the selected algorithm.
+This function will train the network until the error will be smaller than `0.125`. Path for all networks would be the same. Every network starts at dot with coordinates `(-4, -4)` and finishes near the point with the closest value to `0.125`. The final result will depend on the selected algorithm.
 
 Visualize Gradient Descent algorithms
 -------------------------------------

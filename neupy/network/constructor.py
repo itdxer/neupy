@@ -69,8 +69,9 @@ def clean_layers(connection):
         connection = list(connection)
 
     islist = isinstance(connection, list)
+    layer_types = (layers.BaseLayer, LayerConnection)
 
-    if islist and isinstance(connection[0], layers.BaseLayer):
+    if islist and isinstance(connection[0], layer_types):
         chain_connection = connection.pop()
         for layer in reversed(connection):
             chain_connection = LayerConnection(layer, chain_connection)
@@ -270,12 +271,9 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         network_input = self.variables.network_input
         network_output = self.variables.network_output
 
-        train_prediction = prediction = network_input
-        for layer in self.layers:
-            train_prediction = layer.output(train_prediction)
-
-            with layer.disable_training_state():
-                prediction = layer.output(prediction)
+        train_prediction = self.connection.output(network_input)
+        with self.connection.disable_training_state():
+            prediction = self.connection.output(network_input)
 
         self.variables.update(
             step=theano.shared(name='step', value=asfloat(self.step)),
@@ -313,8 +311,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         """ Initialize layers in the same order as they were list in
         network initialization step.
         """
-        for layer in self.layers:
-            layer.initialize()
+        self.connection.initialize()
 
     def init_train_updates(self):
         """ Initialize train function update in Theano format that
@@ -365,7 +362,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         return []
 
     def format_input_data(self, input_data):
-        """ Input data format is depence on the input layer
+        """ Input data format is depend on the input layer
         structure.
 
         Parameters
@@ -382,7 +379,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
             return format_data(input_data, is_feature1d)
 
     def format_target_data(self, target_data):
-        """ Target data format is depence on the output layer
+        """ Target data format is depend on the output layer
         structure.
 
         Parameters
@@ -476,13 +473,12 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         self.logs.title("Network's architecture")
 
         values = []
-        for index, layer in enumerate(self.layers, start=1):
-            values.append((
-                index,
-                preformat_layer_shape(layer.input_shape),
-                layer.__class__.__name__,
-                preformat_layer_shape(layer.output_shape)
-            ))
+        for layer in enumerate(self.layers, start=1):
+            input_shape = preformat_layer_shape(layer.input_shape)
+            output_shape = preformat_layer_shape(layer.output_shape)
+            classname = layer.__class__.__name__
+
+            values.append((index, input_shape, classname, output_shape))
 
         table.TableBuilder.show_full_table(
             columns=[
