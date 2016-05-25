@@ -3,7 +3,7 @@ import theano.tensor as T
 import numpy as np
 
 from neupy.core.properties import NumberProperty, ProperFractionProperty
-from neupy.utils import asfloat, cached_property, as_tuple, number_type
+from neupy.utils import asfloat, as_tuple, number_type
 from .activations import AxesProperty
 from .utils import dimshuffle
 from .base import BaseLayer, SharedArrayProperty
