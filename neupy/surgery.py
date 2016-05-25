@@ -47,7 +47,7 @@ def is_layer_isolated(connection):
     Parameters
     ----------
     connection : BaseLayer instance
-        Layer or connection that you need validate.
+        Layer or connection that you need to validate.
 
     Returns
     -------

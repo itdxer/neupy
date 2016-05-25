@@ -13,6 +13,37 @@ __all__ = ('BatchNorm',)
 
 
 def find_opposite_axes(axes, ndim):
+    """ Based on the total number of dimensions function
+    finds all axes that are missed in the specified
+    list ``axes``.
+
+    Parameters
+    ----------
+    axes : list or tuple
+        Already known axes.
+    ndim : int
+        Total number of dimensions
+
+    Returns
+    -------
+    list
+
+    Examples
+    --------
+    >>> from neupy.layers.normalization import find_opposite_axes
+    >>> find_opposite_axes([0, 1], ndim=4)
+    [2, 3]
+    >>>
+    >>> find_opposite_axes([], ndim=4)
+    [0, 1, 2, 3]
+    >>>
+    >>> find_opposite_axes([0, 1, 2], ndim=3)
+    []
+    """
+    if any(axis >= ndim for axis in axes):
+        raise ValueError("Some axes have invalid values. Axis value "
+                         "should be between 0 and {}".format(ndim))
+
     return [axis for axis in range(ndim) if axis not in axes]
 
 
@@ -62,10 +93,6 @@ class BatchNorm(BaseLayer):
     epsilon = NumberProperty(default=1e-5, minval=0)
     gamma = ArrayOrScalarProperty(default=1)
     beta = ArrayOrScalarProperty(default=0)
-
-    @cached_property
-    def size(self):
-        return self.relate_to_layer.size
 
     def initialize(self):
         super(BatchNorm, self).initialize()
@@ -131,15 +158,15 @@ class BatchNorm(BaseLayer):
         input_var = input_value.var(axes)
         input_inv_std = T.inv(T.sqrt(input_var + epsilon))
 
-        if not self.training_state:
-            self.updates = [(
-                running_inv_std,
-                asfloat(1 - alpha) * running_inv_std + alpha * input_inv_std
-            ), (
-                running_mean,
-                asfloat(1 - alpha) * running_mean + alpha * input_mean
-            )]
+        self.updates = [(
+            running_inv_std,
+            asfloat(1 - alpha) * running_inv_std + alpha * input_inv_std
+        ), (
+            running_mean,
+            asfloat(1 - alpha) * running_mean + alpha * input_mean
+        )]
 
+        if not self.training_state:
             mean = running_mean
             inv_std = running_inv_std
 
