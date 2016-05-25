@@ -3,8 +3,9 @@ import time
 import six
 import numpy as np
 
-from neupy.helpers import progressbar
-from neupy.helpers.progressbar import format_interval, format_error
+from neupy.helpers import Progressbar
+from neupy.helpers.progressbar import format_time, FormatInlineDict
+from neupy.algorithms.gd.base import format_error
 
 from base import BaseTestCase
 
@@ -12,10 +13,9 @@ from base import BaseTestCase
 class ProgressbarTestCase(BaseTestCase):
     def test_simple_progressbar(self):
         out = six.StringIO()
-        iterator = progressbar(range(10), mininterval=0., file=out)
+        iterator = Progressbar(range(10), file=out)
 
-        for _ in iterator:
-            i = iterator.send(None)
+        for i in iterator:
             time.sleep(0.1)
             terminal_output = out.getvalue()
 
@@ -36,7 +36,7 @@ class ProgressbarTestCase(BaseTestCase):
         )
 
         for testcase in testcases:
-            actual_format = format_interval(testcase['time_in_seconds'])
+            actual_format = format_time(testcase['time_in_seconds'])
             self.assertEqual(actual_format, testcase['expected_format'])
 
     def test_format_error(self):
@@ -50,3 +50,8 @@ class ProgressbarTestCase(BaseTestCase):
         for testcase in testcases:
             actual_format = format_error(testcase['error'])
             self.assertEqual(actual_format, testcase['expected_format'])
+
+    def test_inline_format_dict(self):
+        data = FormatInlineDict([('bca', 1), ('abc', 2), (None, 3)])
+        formated_data = '{}'.format(data)
+        self.assertEqual(formated_data, 'bca: 1 abc: 2 None: 3')
