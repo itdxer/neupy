@@ -123,6 +123,8 @@ class Progressbar(collections.Iterable):
 
     def __iter__(self):
         start_time = time.time()
+
+        self.last_printed_len = 0
         self.update_status(n_finished=0, elapsed=0)
 
         try:

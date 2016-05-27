@@ -223,6 +223,15 @@ def format_error(error):
     -------
     str
         Formated error value.
+
+    Examples
+    --------
+    >>> format_error(None)
+    '?'
+    >>> format_error(0.43)
+    '0.43000'
+    >>> format_error(1 / 3.)
+    '0.33333'
     """
     if error is None:
         return '?'
@@ -449,7 +458,7 @@ class MinibatchGradientDescent(GradientDescent):
             batch_size=self.batch_size,
         )
 
-    def predict_raw(self, input_data):
+    def predict(self, input_data):
         """ Makes a raw prediction.
 
         Parameters
@@ -461,13 +470,13 @@ class MinibatchGradientDescent(GradientDescent):
         array-like
         """
         input_data = self.format_input_data(input_data)
-        predict_raw = self.methods.predict_raw
+        predict = self.methods.predict
 
         if cannot_divide_into_batches(input_data, self.batch_size):
-            return predict_raw(input_data)
+            return predict(input_data)
 
         outputs = apply_batches(
-            function=predict_raw,
+            function=predict,
             arguments=(input_data,),
             batch_size=self.batch_size,
 
