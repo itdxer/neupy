@@ -1,7 +1,7 @@
 import numpy as np
 import theano.tensor as T
 
-from neupy.utils import as_tuple, cached_property
+from neupy.utils import as_tuple
 from neupy.core.properties import TypedListProperty
 from .base import BaseLayer
 
@@ -28,7 +28,7 @@ class Reshape(BaseLayer):
             options['shape'] = shape
         super(Reshape, self).__init__(**options)
 
-    @cached_property
+    @property
     def output_shape(self):
         if self.shape is not None:
             return as_tuple(self.shape)

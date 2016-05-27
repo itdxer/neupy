@@ -1,7 +1,5 @@
 from contextlib import contextmanager
 
-from neupy.utils import cached_property
-
 
 __all__ = ('LayerConnection', 'ChainConnection', 'NetworkConnectionError',
            'LayerConnectionError')
@@ -96,11 +94,11 @@ class LayerConnection(ChainConnection):
             return self.right.output_layer
         return self.right
 
-    @cached_property
+    @property
     def input_shape(self):
         return self.input_layer.input_shape
 
-    @cached_property
+    @property
     def output_shape(self):
         return self.output_layer.output_shape
 

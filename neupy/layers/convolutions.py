@@ -4,7 +4,7 @@ import six
 import theano.tensor as T
 from theano.tensor.signal import pool
 
-from neupy.utils import as_tuple, cached_property
+from neupy.utils import as_tuple
 from neupy.core.properties import TypedListProperty, Property, ChoiceProperty
 from .connections import LayerConnectionError
 from .base import BaseLayer, ParameterBasedLayer
@@ -143,7 +143,7 @@ class Convolution(ParameterBasedLayer):
     border_mode = BorderModeProperty(default='valid')
     stride_size = StrideProperty(default=(1, 1))
 
-    @cached_property
+    @property
     def output_shape(self):
         if self.input_shape is None:
             return None
@@ -174,13 +174,13 @@ class Convolution(ParameterBasedLayer):
                                         col_border_mode, col_stride)
         return (n_kernels, output_rows, output_cols)
 
-    @cached_property
+    @property
     def weight_shape(self):
         n_channels = self.input_shape[0]
         n_filters, n_rows, n_cols = self.size
         return (n_filters, n_channels, n_rows, n_cols)
 
-    @cached_property
+    @property
     def bias_shape(self):
         return as_tuple(self.size[0])
 
@@ -220,7 +220,7 @@ class BasePooling(BaseLayer):
         options['size'] = size
         super(BasePooling, self).__init__(**options)
 
-    @cached_property
+    @property
     def output_shape(self):
         if self.input_shape is None:
             return None
@@ -327,7 +327,7 @@ class Upscale(BaseLayer):
         options['scale'] = scale
         super(Upscale, self).__init__(**options)
 
-    @cached_property
+    @property
     def output_shape(self):
         if len(self.input_shape) != 3:
             raise LayerConnectionError(

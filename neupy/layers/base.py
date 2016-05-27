@@ -2,7 +2,7 @@ import numpy as np
 import theano
 import theano.tensor as T
 
-from neupy.utils import asfloat, as_tuple, cached_property
+from neupy.utils import asfloat, as_tuple
 from neupy.core.config import Configurable
 from neupy.core.properties import (TypedListProperty, ArrayProperty,
                                    ChoiceProperty, IntProperty)
@@ -48,12 +48,12 @@ class BaseLayer(ChainConnection, Configurable):
 
         Configurable.__init__(self, **options)
 
-    @cached_property
+    @property
     def input_shape(self):
         if self.relate_from_layer is not None:
             return self.relate_from_layer.output_shape
 
-    @cached_property
+    @property
     def output_shape(self):
         return self.input_shape
 
@@ -180,15 +180,15 @@ class ParameterBasedLayer(BaseLayer):
             options['size'] = size
         super(ParameterBasedLayer, self).__init__(**options)
 
-    @cached_property
+    @property
     def output_shape(self):
         return as_tuple(self.relate_to_layer.size)
 
-    @cached_property
+    @property
     def weight_shape(self):
         return as_tuple(self.input_shape, self.output_shape)
 
-    @cached_property
+    @property
     def bias_shape(self):
         return as_tuple(self.output_shape)
 
@@ -248,11 +248,11 @@ class Input(BaseLayer):
         options['size'] = size
         super(Input, self).__init__(**options)
 
-    @cached_property
+    @property
     def input_shape(self):
         return as_tuple(self.size)
 
-    @cached_property
+    @property
     def output_shape(self):
         return self.input_shape
 

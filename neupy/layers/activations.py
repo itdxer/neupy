@@ -1,7 +1,7 @@
 import numpy as np
 import theano.tensor as T
 
-from neupy.utils import cached_property, asfloat, as_tuple, number_type
+from neupy.utils import asfloat, as_tuple, number_type
 from neupy.core.properties import NumberProperty, TypedListProperty
 from .utils import dimshuffle
 from .base import (ParameterBasedLayer, create_shared_parameter,
@@ -30,7 +30,7 @@ class ActivationLayer(ParameterBasedLayer):
     def __init__(self, size=None, **options):
         super(ActivationLayer, self).__init__(size, **options)
 
-    @cached_property
+    @property
     def output_shape(self):
         if self.size is not None:
             return as_tuple(self.size)

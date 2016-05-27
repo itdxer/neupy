@@ -11,7 +11,7 @@ from scipy.sparse import issparse
 __all__ = ('format_data', 'does_layer_accept_1d_feature', 'asfloat',
            'AttributeKeyDict', 'is_list_of_integers', 'preformat_value',
            'as_array2d', 'NotTrainedException', 'smallest_positive_number',
-           'as_tuple', 'asint', 'cached_property', 'number_type')
+           'as_tuple', 'asint', 'number_type')
 
 
 number_type = (int, float, np.floating, np.integer)
@@ -280,23 +280,3 @@ def as_tuple(*values):
         else:
             cleaned_values.append(value)
     return tuple(cleaned_values)
-
-
-class CachedProperty(object):
-    """ A property that is only computed once per instance
-    and then replaces itself with an ordinary attribute.
-    Deleting the attribute resets the property.
-    Source: https://github.com/bottlepy/bottle/\
-    commit/fa7733e075da0d790d809aa3d2f53071897e6f76
-    """
-    def __init__(self, func):
-        self.__doc__ = getattr(func, '__doc__')
-        self.func = func
-
-    def __get__(self, instance, owner):
-        value = self.func(instance)
-        instance.__dict__[self.func.__name__] = value
-        return value
-
-
-cached_property = CachedProperty

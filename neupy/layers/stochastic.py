@@ -1,7 +1,6 @@
 import numpy as np
 import theano.tensor as T
 
-from neupy.utils import cached_property
 from neupy.core.properties import ProperFractionProperty, NumberProperty
 from .base import BaseLayer
 
@@ -34,7 +33,7 @@ class Dropout(BaseLayer):
         options['proba'] = proba
         super(Dropout, self).__init__(**options)
 
-    @cached_property
+    @property
     def size(self):
         return self.relate_to_layer.size
 
