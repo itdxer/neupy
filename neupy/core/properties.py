@@ -1,6 +1,6 @@
 import numpy as np
 
-from neupy.utils import preformat_value
+from neupy.utils import preformat_value, number_type
 from neupy.core.docs import SharedDocs
 
 
@@ -242,7 +242,7 @@ class NumberProperty(BoundedProperty):
     {BaseProperty.default}
     {BaseProperty.required}
     """
-    expected_type = (float, int)
+    expected_type = number_type
 
 
 class IntProperty(BoundedProperty):
