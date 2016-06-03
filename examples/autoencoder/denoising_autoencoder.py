@@ -42,9 +42,9 @@ autoencoder.train(x_train, x_train, x_test, x_test, epochs=100)
 
 n_samples = 4
 image_vectors = x_test[:n_samples, :]
-images = (image_vectors + features_mean) * 255.
+images = image_vectors * 255.
 predicted_images = autoencoder.predict(image_vectors)
-predicted_images = (predicted_images + features_mean) * 255.
+predicted_images = predicted_images * 255.
 
 # Compare real and reconstructed images
 fig, axes = plt.subplots(4, 2, figsize=(12, 8))

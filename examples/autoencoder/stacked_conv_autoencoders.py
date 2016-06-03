@@ -1,9 +1,10 @@
+from __future__ import division
+
 import theano
 import numpy as np
-from sklearn import datasets, cross_validation
+from sklearn import datasets, metrics
+from sklearn.cross_validation import train_test_split
 from sklearn.preprocessing import OneHotEncoder
-import matplotlib.pyplot as plt
-from neupy.network.utils import shuffle
 from neupy import algorithms, layers, environment, surgery
 
 
@@ -18,14 +19,18 @@ target_scaler = OneHotEncoder()
 target = mnist.target.reshape((-1, 1))
 target = target_scaler.fit_transform(target).todense()
 
-x_train, x_test, y_train, y_test = cross_validation.train_test_split(
+n_labeled = 1000
+n_samples = len(data)
+n_unlabeled = n_samples - n_labeled
+
+x_labeled, x_unlabeled, y_labeled, y_unlabeled = train_test_split(
     data.astype(np.float32),
     target.astype(np.float32),
-    train_size=(6 / 7.)
+    train_size=(n_labeled / n_samples)
 )
 
-x_train_4d = x_train.reshape((60000, 1, 28, 28))
-x_test_4d = x_test.reshape((10000, 1, 28, 28))
+x_labeled_4d = x_labeled.reshape((n_labeled, 1, 28, 28))
+x_unlabeled_4d = x_unlabeled.reshape((n_unlabeled, 1, 28, 28))
 
 conv_autoencoder = algorithms.Momentum(
     [
@@ -64,46 +69,52 @@ conv_autoencoder = algorithms.Momentum(
     momentum=0.99,
     shuffle_data=True,
     batch_size=128,
-    error='rmse',
+    error='binary_crossentropy',
 )
 conv_autoencoder.architecture()
-conv_autoencoder.train(x_train_4d, x_train, x_test_4d, x_test, epochs=10)
+conv_autoencoder.train(x_unlabeled_4d, x_unlabeled,
+                       x_labeled_4d, x_labeled, epochs=10)
 
 classifier_structure, _ = surgery.cut_along_lines(conv_autoencoder)
 
-train_4d = classifier_structure.output(x_train_4d).eval()
-test_4d = classifier_structure.output(x_test_4d).eval()
+x_labeled_encoded = classifier_structure.output(x_labeled_4d).eval()
+x_unlabeled_encoded = classifier_structure.output(x_unlabeled_4d).eval()
 
-linear_classifier = algorithms.GradientDescent(
+linear_classifier = algorithms.Adadelta(
     [
         layers.Input(classifier_structure.output_shape),
-        # layers.BatchNorm(),
-        # layers.Relu(128),
-        # layers.BatchNorm(),
+        layers.PRelu(512),
+        layers.Dropout(0.25),
         layers.Softmax(10),
     ],
     verbose=True,
-    step=0.1,
-    # momentum=0.99,
+    step=0.05,
     shuffle_data=True,
     batch_size=128,
     error='categorical_crossentropy',
 )
 linear_classifier.architecture()
-linear_classifier.train(train_4d, y_train, test_4d, y_test, epochs=100)
+linear_classifier.train(x_labeled_encoded, y_labeled,
+                        x_unlabeled_encoded, y_unlabeled, epochs=100)
 
-classification_layer = surgery.cut(linear_classifier, start=1, end=2)
+classification_layer = surgery.cut(linear_classifier, start=1, end=4)
 classifier_structure = surgery.sew_together([classifier_structure,
                                              classification_layer])
 
-classifier = algorithms.Adadelta(
+classifier = algorithms.MinibatchGradientDescent(
     classifier_structure,
     verbose=True,
     step=0.1,
-    # momentum=0.99,
     shuffle_data=True,
     batch_size=128,
     error='categorical_crossentropy',
 )
 classifier.architecture()
-classifier.train(x_train_4d, y_train, x_test_4d, y_test, epochs=1)
+classifier.train(x_labeled_4d, y_labeled, epochs=1000)
+
+unlabeled_predicted = classifier.predict(x_unlabeled_4d).argmax(axis=1)
+y_unlabeled_classes = np.asarray(y_unlabeled).argmax(axis=1)
+
+print(metrics.classification_report(y_unlabeled_classes, unlabeled_predicted))
+score = metrics.accuracy_score(y_unlabeled_classes, unlabeled_predicted)
+print("Validation accuracy: {:.2%}".format(score))

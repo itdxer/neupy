@@ -2,8 +2,8 @@ import theano
 import numpy as np
 from skdata.cifar10 import dataset, view
 from sklearn.preprocessing import OneHotEncoder
-from sklearn import metrics, preprocessing
-from neupy import algorithms, layers, environment, preprocessing
+from sklearn import metrics
+from neupy import algorithms, layers, environment
 
 
 environment.reproducible()
@@ -68,5 +68,5 @@ y_test_labels = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))
 
 print(metrics.classification_report(y_test_labels, y_predicted))
 score = metrics.accuracy_score(y_test_labels, y_predicted)
-print("Validation accuracy: {:.2f}%".format(100 * score))
+print("Validation accuracy: {:.2%}".format(score))
 print(metrics.confusion_matrix(y_predicted, y_test_labels))

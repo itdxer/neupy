@@ -172,7 +172,7 @@ Let's finally make a simple report for our classification result.
 
     avg / total       0.98      0.98      0.98     10000
     >>> score = metrics.accuracy_score(y_test, y_predicted)
-    >>> print("Validation accuracy: {:.2f}%".format(100 * score))
+    >>> print("Validation accuracy: {:.2%}".format(score))
     Validation accuracy: 98.47%
 
 The 98.5% accuracy is pretty good for such a quick solution. Additional modification can improve prediction accuracy.

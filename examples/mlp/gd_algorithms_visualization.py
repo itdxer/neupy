@@ -5,8 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
+from neupy.utils import asfloat
 from neupy import algorithms, layers, environment
-from plots import draw_countour, weight_quiver
 
 
 environment.reproducible()
@@ -74,7 +74,7 @@ def save_epoch_weight(net):
     global weights
     global current_epoch
 
-    input_layer_weight = copy_weight(net.input_layer.weight)
+    input_layer_weight = copy_weight(net.layers[1].weight)
     weights[:, current_epoch + 1:current_epoch + 2] = input_layer_weight
 
 
@@ -98,8 +98,11 @@ def draw_quiver(network_class, name, color='r'):
         step=0.3,
         epoch_end_signal=save_epoch_weight
     )
-    # 1000 is an upper limit for all network epochs, later we
-    # will fix it size
+
+    # We don't know in advance number of epochs that network
+    # need to reach the goal. For this reason we use 1000 as
+    # an upper limit for all network epochs, later we
+    # need to fix
     weights = np.zeros((2, 1000))
     weights[:, 0:1] = default_weight.copy()
 
@@ -116,9 +119,9 @@ def draw_quiver(network_class, name, color='r'):
 
 
 def target_function(network, x, y):
-    weight = network.input_layer.weight
+    weight = network.layers[1].weight
     new_weight = np.array([[x], [y]])
-    weight.set_value(new_weight)
+    weight.set_value(asfloat(new_weight))
     return network.prediction_error(input_data, target_data)
 
 
@@ -159,5 +162,6 @@ for algorithm, algorithm_name, color in algorithms:
     quiver_patch = draw_quiver(algorithm, algorithm_name, color)
     patches.append(quiver_patch)
 
+print("Plot training results")
 plt.legend(handles=patches)
 plt.show()

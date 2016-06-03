@@ -33,4 +33,4 @@ roc_score = metrics.roc_auc_score(y_test, y_predicted)
 print("ROC score: {}".format(roc_score))
 
 accuracy = metrics.accuracy_score(y_test, y_predicted)
-print("Accuracy: {:.2f}%".format(accuracy * 100))
+print("Accuracy: {:.2%}".format(accuracy))

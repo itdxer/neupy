@@ -64,4 +64,4 @@ y_test_labels = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))
 
 print(metrics.classification_report(y_test_labels, y_predicted))
 score = metrics.accuracy_score(y_test_labels, y_predicted)
-print("Validation accuracy: {:.2f}%".format(100 * score))
+print("Validation accuracy: {:.2%}".format(score))

@@ -61,7 +61,7 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
         Control invertion for J.T * J matrix, defaults to `0.1`.
     mu_update_factor : float
         Factor to decrease the mu if update decrese the error, otherwise
-        increse mu by the same factor.
+        increse mu by the same factor. Defaults to ``1.2``
     error: {{'mse'}}
         Levenberg-Marquardt works only for quadratic functions.
         Defaults to ``mse``.
@@ -144,7 +144,7 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
     """
 
     mu = BoundedProperty(default=0.01, minval=0)
-    mu_update_factor = BoundedProperty(default=5, minval=1)
+    mu_update_factor = BoundedProperty(default=1.2, minval=1)
     error = ChoiceProperty(default='mse', choices={'mse': errors.mse})
 
     def init_variables(self):
