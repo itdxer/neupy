@@ -330,11 +330,13 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
             updates.extend(self.init_param_updates(layer, parameter))
         return updates
 
-    def init_param_updates(self, parameter):
+    def init_param_updates(self, layer, parameter):
         """ Initialize parameter updates.
 
         Parameters
         ----------
+        layer : object
+            Any layer that inherit from BaseLayer class.
         parameter : object
             Usualy it is a weight or bias.
 
