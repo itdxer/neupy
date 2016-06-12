@@ -96,7 +96,6 @@ html_sidebars = {
         'recent.html',
         'cheat-sheet.html',
         'installation.html',
-        'versions.html',
         'searchbox.html',
     ],
 }

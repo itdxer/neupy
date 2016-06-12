@@ -1,7 +1,7 @@
-neupy.algorithms.steps.linear_search module
+neupy.algorithms.step_update.errdiff module
 ===========================================
 
-.. automodule:: neupy.algorithms.steps.linear_search
+.. automodule:: neupy.algorithms.step_update.errdiff
     :members:
     :undoc-members:
     :show-inheritance:

@@ -1,7 +1,7 @@
-neupy.algorithms.steps.delta_bar_delta module
+neupy.algorithms.step_update.leak_step module
 =============================================
 
-.. automodule:: neupy.algorithms.steps.delta_bar_delta
+.. automodule:: neupy.algorithms.step_update.leak_step
     :members:
     :undoc-members:
     :show-inheritance:
