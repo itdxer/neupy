@@ -35,9 +35,9 @@ class QuasiNewtonTestCase(BaseTestCase):
 
         qnnet = algorithms.QuasiNewton(
             connection=[
-                layers.Sigmoid(10, init_method='ortho'),
-                layers.Sigmoid(25, init_method='ortho'),
-                layers.Output(1)
+                layers.Input(10),
+                layers.Sigmoid(30, init_method='ortho'),
+                layers.Sigmoid(1, init_method='ortho'),
             ],
             shuffle_data=True,
             show_epoch='20 times',
@@ -129,9 +129,9 @@ class QuasiNewtonTestCase(BaseTestCase):
 
         qnnet = algorithms.QuasiNewton(
             connection=[
-                layers.Sigmoid(10, init_method='ortho'),
+                layers.Input(10),
                 layers.Sigmoid(30, init_method='ortho'),
-                layers.Output(1)
+                layers.Sigmoid(1, init_method='ortho'),
             ],
             shuffle_data=True,
             show_epoch=20,
@@ -152,9 +152,9 @@ class QuasiNewtonTestCase(BaseTestCase):
 
         qnnet = algorithms.QuasiNewton(
             connection=[
-                layers.Sigmoid(10, init_method='ortho'),
+                layers.Input(10),
                 layers.Sigmoid(30, init_method='ortho'),
-                layers.Output(1)
+                layers.Sigmoid(1, init_method='ortho'),
             ],
             shuffle_data=True,
             show_epoch=20,
@@ -175,9 +175,9 @@ class QuasiNewtonTestCase(BaseTestCase):
 
         qnnet = algorithms.QuasiNewton(
             connection=[
-                layers.Sigmoid(10, init_method='ortho'),
+                layers.Input(10),
                 layers.Sigmoid(30, init_method='ortho'),
-                layers.Output(1)
+                layers.Sigmoid(1, init_method='ortho'),
             ],
             shuffle_data=True,
             show_epoch=20,

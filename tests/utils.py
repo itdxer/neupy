@@ -8,6 +8,8 @@ from contextlib import contextmanager
 import six
 import numpy as np
 import pandas as pd
+import theano.tensor as T
+from theano.ifelse import ifelse
 from matplotlib import pyplot as plt
 from matplotlib.testing.compare import compare_images
 
@@ -127,6 +129,13 @@ def image_comparison(original_image_path, figsize=(10, 10), tol=1e-3):
                                  "Information: {}".format(error))
 
 
+class StepOutput(layers.BaseLayer):
+    def output(self, value):
+        if not self.training_state:
+            return T.switch(value < 0, -1, 1)
+        return value
+
+
 def reproducible_network_train(seed=0, epochs=500, **additional_params):
     """ Make a reproducible train for Gradient Descent based neural
     network with a XOR problem and return trained network.
@@ -148,9 +157,10 @@ def reproducible_network_train(seed=0, epochs=500, **additional_params):
     np.random.seed(seed)
     network = algorithms.GradientDescent(
         connection=[
-            layers.Tanh(2),
+            layers.Input(2),
             layers.Tanh(5),
-            layers.StepOutput(1, output_bounds=(-1, 1))
+            layers.Tanh(1),
+            StepOutput(),
         ],
         **additional_params
     )

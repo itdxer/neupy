@@ -17,7 +17,7 @@ data = np.array([
 class ARTTestCase(BaseTestCase):
     def test_art_handle_errors(self):
         with self.assertRaises(ValueError):
-            # Invalid input data dimention
+            # Invalid input data dimension
             artnet = algorithms.ART1(step=0.4, rho=0.1, n_clusters=3,
                                      verbose=False)
             artnet.predict(np.array([0.5]))

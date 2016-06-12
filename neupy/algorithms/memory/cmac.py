@@ -15,7 +15,7 @@ class CMAC(SupervisedLearning, BaseNetwork):
     Notes
     -----
     * Network always use Mean Absolute Error (MAE).
-    * Works for multi dimentional target values.
+    * Works for multi dimensional target values.
 
     Parameters
     ----------

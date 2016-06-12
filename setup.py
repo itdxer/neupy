@@ -43,11 +43,6 @@ setup(
     zip_safe=False,
     keywords=['neural networks'],
 
-    # Command
-    entry_points={
-        'console_scripts': ['neupy = neupy.commands.main:main'],
-    },
-
     # Other
     classifiers=[
         'Intended Audience :: Developers',

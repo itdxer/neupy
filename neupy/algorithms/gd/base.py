@@ -1,6 +1,7 @@
 from __future__ import division
 
 import math
+import collections
 
 import six
 import theano
@@ -211,8 +212,38 @@ def cannot_divide_into_batches(data, batch_size):
     return batch_size is None or n_samples <= batch_size
 
 
+def format_error(error):
+    """ Format the error value.
+
+    Parameters
+    ----------
+    error : float, list or None
+
+    Returns
+    -------
+    str
+        Formated error value.
+
+    Examples
+    --------
+    >>> format_error(None)
+    '?'
+    >>> format_error(0.43)
+    '0.43000'
+    >>> format_error(1 / 3.)
+    '0.33333'
+    """
+    if error is None:
+        return '?'
+
+    if isinstance(error, collections.Iterable):
+        error = np.atleast_1d(error).item(0)
+
+    return '{:.5f}'.format(error)
+
+
 def apply_batches(function, arguments, batch_size, logger, description='',
-                  show_progressbar=False, use_error_output=True):
+                  show_progressbar=False, show_error_output=True):
     """ Apply batches to a specified function.
 
     Parameters
@@ -248,22 +279,20 @@ def apply_batches(function, arguments, batch_size, logger, description='',
     batch_iterator = iter_batches(n_samples, batch_size)
 
     if show_progressbar:
-        batch_iterator = logger.progressbar(
-            list(batch_iterator),
-            desc=description,
-            file=logger.stdout
-        )
+        batch_iterator = logger.progressbar(list(batch_iterator),
+                                            description=description,
+                                            file=logger.stdout)
 
-    output = None
     outputs = []
     for batch in batch_iterator:
-        if show_progressbar and logger.enable:
-            batch = batch_iterator.send(output if use_error_output else None)
-
         sliced_arguments = [argument[batch] for argument in arguments]
         output = function(*sliced_arguments)
-
         outputs.append(output)
+
+        if show_progressbar and logger.enable and show_error_output:
+            batch_iterator.show_in_next_iteration = {
+                'error': format_error(output)
+            }
 
     return outputs
 
@@ -298,7 +327,7 @@ def average_batch_errors(errors, n_samples, batch_size):
         sum(all_errors_without_last) * batch_size +
         last_error * n_samples_in_final_batch
     )
-    average_error = (total_error / n_samples)
+    average_error = total_error / n_samples
     return average_error
 
 
@@ -380,9 +409,9 @@ class MinibatchGradientDescent(GradientDescent):
             batch_size=self.batch_size,
 
             description='Training batches',
-            show_progressbar=show_progressbar,
             logger=self.logs,
-            use_error_output=True,
+            show_progressbar=show_progressbar,
+            show_error_output=True,
         )
         return average_batch_errors(
             errors,
@@ -419,9 +448,9 @@ class MinibatchGradientDescent(GradientDescent):
             batch_size=self.batch_size,
 
             description='Validation batches',
-            show_progressbar=show_progressbar,
             logger=self.logs,
-            use_error_output=True,
+            show_progressbar=show_progressbar,
+            show_error_output=True,
         )
         return average_batch_errors(
             errors,
@@ -429,7 +458,7 @@ class MinibatchGradientDescent(GradientDescent):
             batch_size=self.batch_size,
         )
 
-    def predict_raw(self, input_data):
+    def predict(self, input_data):
         """ Makes a raw prediction.
 
         Parameters
@@ -441,20 +470,20 @@ class MinibatchGradientDescent(GradientDescent):
         array-like
         """
         input_data = self.format_input_data(input_data)
-        predict_raw = self.methods.predict_raw
+        predict = self.methods.predict
 
         if cannot_divide_into_batches(input_data, self.batch_size):
-            return predict_raw(input_data)
+            return predict(input_data)
 
         outputs = apply_batches(
-            function=predict_raw,
+            function=predict,
             arguments=(input_data,),
             batch_size=self.batch_size,
 
             description='Prediction batches',
-            show_progressbar=True,
             logger=self.logs,
-            use_error_output=False,
+            show_progressbar=True,
+            show_error_output=False,
         )
 
         return np.concatenate(outputs, axis=0)

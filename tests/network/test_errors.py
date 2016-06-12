@@ -78,3 +78,34 @@ class ErrorFuncTestCase(BaseTestCase):
             asfloat(np.sqrt(5)),
             estimators.rmsle(actual, predicted)
         )
+
+    def test_binary_hinge(self):
+        targets = np.array([
+            [-1, 1, 1],
+            [-1, -1, 1],
+        ])
+        predictions = np.array([
+            [-0.1, 0.9, 0.5],
+            [0.5, -0.5, 1],
+        ])
+        expected = np.array([
+            [0.9, 0.1, 0.5],
+            [1.5, 0.5, 0],
+        ]).mean()
+
+        actual = estimators.binary_hinge(targets, predictions)
+        self.assertAlmostEqual(expected, actual)
+
+    def test_categorical_hinge(self):
+        targets = np.array([
+            [0, 0, 1],
+            [1, 0, 0],
+        ])
+        predictions = np.array([
+            [0.1, 0.2, 0.7],
+            [0.0, 0.9, 0.1],
+        ])
+        expected = np.array([0.5, 1.9]).mean()
+
+        actual = estimators.categorical_hinge(targets, predictions)
+        self.assertAlmostEqual(expected, actual)

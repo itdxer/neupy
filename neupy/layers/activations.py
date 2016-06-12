@@ -1,31 +1,18 @@
-import six
+import numpy as np
 import theano.tensor as T
 
-from neupy.core.config import ConfigMeta
-from .base import ParameterBasedLayer
+from neupy.utils import asfloat, as_tuple, number_type
+from neupy.core.properties import NumberProperty, TypedListProperty
+from .utils import dimshuffle
+from .base import (ParameterBasedLayer, create_shared_parameter,
+                   SharedArrayProperty)
 
 
 __all__ = ('ActivationLayer', 'Linear', 'Sigmoid', 'HardSigmoid', 'Step',
-           'Tanh', 'Relu', 'Softplus', 'Softmax')
+           'Tanh', 'Relu', 'Softplus', 'Softmax', 'Elu', 'PRelu')
 
 
-class LayerMeta(ConfigMeta):
-    """ Meta-class overrides activation functions an make them
-    behave as usual functions.
-    """
-    def __new__(cls, clsname, bases, attrs):
-        if 'activation_function' in attrs:
-            # Override `activation_function` in `staticmethod` by default.
-            # Python 2 translate any assigned function as class method
-            # and try call it with with argument `self` which broke
-            # logic. For this reason we try make it static.
-            attrs['activation_function'] = staticmethod(
-                attrs['activation_function']
-            )
-        return super(LayerMeta, cls).__new__(cls, clsname, bases, attrs)
-
-
-class ActivationLayer(six.with_metaclass(LayerMeta, ParameterBasedLayer)):
+class ActivationLayer(ParameterBasedLayer):
     """ Base class for the layers based on the activation
     functions.
 
@@ -41,12 +28,13 @@ class ActivationLayer(six.with_metaclass(LayerMeta, ParameterBasedLayer)):
     {ParameterBasedLayer.bounds}
     """
     def __init__(self, size=None, **options):
-        # If you set class method function variable, python will interpret
-        # it as a new class method and will call it with a `self`
-        # argument.
-        if hasattr(self.__class__, 'activation_function'):
-            self.activation_function = self.__class__.activation_function
         super(ActivationLayer, self).__init__(size, **options)
+
+    @property
+    def output_shape(self):
+        if self.size is not None:
+            return as_tuple(self.size)
+        return self.input_shape
 
     def initialize(self):
         if self.size is not None:
@@ -74,7 +62,8 @@ class Linear(ActivationLayer):
     {ParameterBasedLayer.init_method}
     {ParameterBasedLayer.bounds}
     """
-    activation_function = (lambda x: x)
+    def activation_function(self, input_value):
+        return input_value
 
 
 class Sigmoid(ActivationLayer):
@@ -88,7 +77,8 @@ class Sigmoid(ActivationLayer):
     {ParameterBasedLayer.init_method}
     {ParameterBasedLayer.bounds}
     """
-    activation_function = T.nnet.sigmoid
+    def activation_function(self, input_value):
+        return T.nnet.sigmoid(input_value)
 
 
 class HardSigmoid(ActivationLayer):
@@ -102,29 +92,8 @@ class HardSigmoid(ActivationLayer):
     {ParameterBasedLayer.init_method}
     {ParameterBasedLayer.bounds}
     """
-    activation_function = T.nnet.hard_sigmoid
-
-
-def step_function(value):
-    """ Step activation function.
-
-    Parameters
-    ----------
-    value : symbolic tensor
-        Tensor to compute the activation function for.
-    alpha : scalar or tensor, optional
-        Slope for negative input, usually between 0 and 1. The
-        default value of 0 will lead to the standard rectifier, 1 will lead to
-        a linear activation function, and any value in between will give a
-        leaky rectifier. A shared variable (broadcastable against `x`) will
-        result in a parameterized rectifier with learnable slope(s).
-
-    Returns
-    -------
-    symbolic tensor
-        Element-wise rectifier applied to `x`.
-    """
-    return T.gt(value, 0)
+    def activation_function(self, input_value):
+        return T.nnet.hard_sigmoid(input_value)
 
 
 class Step(ActivationLayer):
@@ -138,7 +107,8 @@ class Step(ActivationLayer):
     {ParameterBasedLayer.init_method}
     {ParameterBasedLayer.bounds}
     """
-    activation_function = step_function
+    def activation_function(self, input_value):
+        return T.gt(input_value, 0)
 
 
 class Tanh(ActivationLayer):
@@ -152,21 +122,31 @@ class Tanh(ActivationLayer):
     {ParameterBasedLayer.init_method}
     {ParameterBasedLayer.bounds}
     """
-    activation_function = T.tanh
+    def activation_function(self, input_value):
+        return T.tanh(input_value)
 
 
 class Relu(ActivationLayer):
-    """ The layer with the rectifier activation function.
+    """ The layer with the rectifier (ReLu) activation function.
 
     Parameters
     ----------
+    alpha : float
+        Alpha parameter defines the decreasing rate
+        for the negative values. If ``alpha``
+        is non-zero value then layer behave like a
+        leaky ReLu. Defaults to ``0``.
     {ActivationLayer.size}
     {ParameterBasedLayer.weight}
     {ParameterBasedLayer.bias}
     {ParameterBasedLayer.init_method}
     {ParameterBasedLayer.bounds}
     """
-    activation_function = T.nnet.relu
+    alpha = NumberProperty(default=0, minval=0)
+
+    def activation_function(self, input_value):
+        alpha = asfloat(self.alpha)
+        return T.nnet.relu(input_value, alpha)
 
 
 class Softplus(ActivationLayer):
@@ -180,7 +160,9 @@ class Softplus(ActivationLayer):
     {ParameterBasedLayer.init_method}
     {ParameterBasedLayer.bounds}
     """
-    activation_function = T.nnet.softplus
+
+    def activation_function(self, input_value):
+        return T.nnet.softplus(input_value)
 
 
 class Softmax(ActivationLayer):
@@ -194,4 +176,132 @@ class Softmax(ActivationLayer):
     {ParameterBasedLayer.init_method}
     {ParameterBasedLayer.bounds}
     """
-    activation_function = T.nnet.softmax
+
+    def activation_function(self, input_value):
+        return T.nnet.softmax(input_value)
+
+
+class Elu(ActivationLayer):
+    """ The layer with the exponensial linear unit (ELU)
+    activation function.
+
+    Parameters
+    ----------
+    alpha : float
+        Alpha parameter defines the decreasing exponensial
+        rate for the negative values. Defaults to ``1``.
+    {ActivationLayer.size}
+    {ParameterBasedLayer.weight}
+    {ParameterBasedLayer.bias}
+    {ParameterBasedLayer.init_method}
+    {ParameterBasedLayer.bounds}
+
+    References
+    ----------
+    .. [1] http://arxiv.org/pdf/1511.07289v3.pdf
+    """
+    alpha = NumberProperty(default=1, minval=0)
+
+    def activation_function(self, input_value):
+        alpha = asfloat(self.alpha)
+        return T.nnet.elu(input_value, alpha)
+
+
+class PReluAlphaProperty(SharedArrayProperty):
+    """ Defines PReLu layer alpha parameter.
+
+    Parameters
+    ----------
+    {BaseProperty.default}
+    {BaseProperty.required}
+    """
+    expected_type = as_tuple(SharedArrayProperty.expected_type,
+                             number_type, type(None))
+
+
+class AxesProperty(TypedListProperty):
+    """ Property defines axes parameter.
+
+    Parameters
+    ----------
+    {TypedListProperty.n_elements}
+    {TypedListProperty.element_type}
+    {BaseProperty.default}
+    {BaseProperty.required}
+    """
+    def __set__(self, instance, value):
+        if isinstance(value, int):
+            value = (value,)
+        super(AxesProperty, self).__set__(instance, value)
+
+    def validate(self, value):
+        super(AxesProperty, self).validate(value)
+
+        if any(element < 0 for element in value):
+            raise ValueError("Axes property is allowed only "
+                             "non-negative axis.")
+
+
+class PRelu(ActivationLayer):
+    """ The layer with the parametrized ReLu activation
+    function.
+
+    Parameters
+    ----------
+    alpha_axes : int or tuple
+        Axes that will not include unique alpha parameter.
+        Single integer value defines the same as a tuple with one value.
+        Defaults to ``1``.
+    alpha : array-like, Theano shared variable, scalar or None
+        Alpha parameter per each non-shared axis for the ReLu.
+        Scalar value means that each element in the tensor will be
+        equal to the specified value.
+        ``None`` means that parameters will be generated randomly.
+        The exact random initialization algorithm depends on
+        the ``init_method`` parameter.
+        Defaults to ``0.25``.
+    {ActivationLayer.size}
+    {ParameterBasedLayer.weight}
+    {ParameterBasedLayer.bias}
+    {ParameterBasedLayer.init_method}
+    {ParameterBasedLayer.bounds}
+
+    References
+    ----------
+    .. [1] https://arxiv.org/pdf/1502.01852v1.pdf
+    """
+    alpha_axes = AxesProperty(default=1)
+    alpha = PReluAlphaProperty(default=0.25)
+
+    def initialize(self):
+        super(PRelu, self).initialize()
+
+        alpha = self.alpha
+        alpha_axes = self.alpha_axes
+        output_shape = self.output_shape
+
+        if 0 in alpha_axes:
+            raise ValueError("Cannot specify alpha per input sample.")
+
+        if max(alpha_axes) > len(output_shape):
+            raise ValueError("Cannot specify alpha for the axis #{}. "
+                             "Maximum available axis is #{}"
+                             "".format(max(alpha_axes), len(output_shape) - 1))
+
+        alpha_shape = [output_shape[axis - 1] for axis in alpha_axes]
+
+        if isinstance(alpha, number_type):
+            alpha = alpha * np.ones(alpha_shape)
+
+        self.alpha = create_shared_parameter(
+            value=alpha,
+            name='alpha_{}'.format(self.layer_id),
+            shape=alpha_shape,
+            bounds=self.bounds,
+            init_method=self.init_method,
+        )
+        self.parameters.append(self.alpha)
+
+    def activation_function(self, input_value):
+        alpha = dimshuffle(self.alpha, input_value.ndim, self.alpha_axes)
+        return T.nnet.relu(input_value, alpha)

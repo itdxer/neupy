@@ -5,18 +5,46 @@ import theano
 import theano.sparse
 import theano.tensor as T
 
+from neupy import layers
 from neupy.utils import (AttributeKeyDict, asfloat, is_list_of_integers,
                          format_data, does_layer_accept_1d_feature)
-from neupy.layers import BaseLayer, Output, Dropout
-from neupy.layers.utils import generate_layers
-from neupy.core.properties import ChoiceProperty
+from neupy.layers.utils import preformat_layer_shape
 from neupy.layers.connections import LayerConnection, NetworkConnectionError
+from neupy.helpers import table
+from neupy.core.properties import ChoiceProperty
 from neupy.network import errors
 from .learning import SupervisedLearning
 from .base import BaseNetwork
 
 
 __all__ = ('ConstructableNetwork',)
+
+
+def generate_layers(layers_sizes):
+    """ Create from list of layer sizes basic linear network.
+
+    Parameters
+    ----------
+    layers_sizes : list or tuple
+        Ordered list of network connection structure.
+
+    Returns
+    -------
+    LayerConnection
+        Constructed connection.
+    """
+
+    if len(layers_sizes) < 2:
+        raise ValueError("Network must contains at least 2 layers.")
+
+    input_layer_size = layers_sizes.pop(0)
+    connection = layers.Input(input_layer_size)
+
+    for output_size in layers_sizes:
+        next_layer = layers.Sigmoid(output_size)
+        connection = LayerConnection(connection, next_layer)
+
+    return connection
 
 
 def clean_layers(connection):
@@ -41,19 +69,23 @@ def clean_layers(connection):
         connection = list(connection)
 
     islist = isinstance(connection, list)
+    layer_types = (layers.BaseLayer, LayerConnection)
 
-    if islist and isinstance(connection[0], BaseLayer):
+    if islist and isinstance(connection[0], layer_types):
         chain_connection = connection.pop()
         for layer in reversed(connection):
             chain_connection = LayerConnection(layer, chain_connection)
         connection = chain_connection
 
-    elif islist and isinstance(connection[0], LayerConnection):
-        pass
-
-    if not isinstance(connection.output_layer, Output):
-        raise NetworkConnectionError("Final layer must be Output class "
+    if not isinstance(connection.input_layer, layers.Input):
+        raise NetworkConnectionError("First layer must be layers.Input class "
                                      "instance.")
+
+    all_layers = list(connection)
+
+    if any(isinstance(layer, layers.Input) for layer in all_layers[1:]):
+        raise NetworkConnectionError("Only the first layer can be instance "
+                                     "of layers.Input class.")
 
     return connection
 
@@ -75,7 +107,13 @@ def create_input_variable(input_layer, variable_name):
         3: T.tensor3,
         4: T.tensor4,
     }
-    ndim = input_layer.weight.ndim
+
+    if isinstance(input_layer.input_shape, tuple):
+        # Shape doesn't include batch size dimension, that's why
+        # we need add one
+        ndim = len(input_layer.input_shape) + 1
+    else:
+        ndim = 2
 
     if ndim not in dim_to_variable_type:
         raise ValueError("Layer's input needs to be 2, 3 or 4 dimensional. "
@@ -105,25 +143,6 @@ def create_output_variable(error_function, variable_name):
         network_output_dtype = T.matrix
 
     return network_output_dtype(variable_name)
-
-
-def find_input_layer(layers):
-    """ Function checks list of layer and finds an input layer.
-
-    Parameters
-    ----------
-    layers : iterative object
-        Ordered list of layers.
-
-    Returns
-    -------
-    BaseLayer instance or None
-        Function will return input layer if it exists in the specified
-        connection structure. Otherwise, output will be equal to ``None``.
-    """
-    for layer in layers:
-        if not isinstance(layer, Dropout):
-            return layer
 
 
 class ErrorFunctionProperty(ChoiceProperty):
@@ -162,10 +181,10 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         ``(2, 4, 1)`` means that network will have 3 layers with 2 input
         units, 4 hidden units and 1 output unit. The one limitation of that
         method is that all layers automaticaly would with sigmoid actiavtion
-        function. Other way is just a list of ``BaseLayer``` class
-        instances. For example: ``[Tanh(2), Relu(4), Output(1)].
-        And the most readable one is just layer pipeline
-        ``Tanh(2) > Relu(4) > Output(1)``.
+        function. Other way is just a list of ``layers.BaseLayer``` class
+        instances. For example: ``[Input(2), Tanh(4), Relu(1)]``.
+        And the most readable one is pipeline
+        ``Input(2) > Tanh(4) > Relu(1)``.
     error : {{'mse', 'rmse', 'mae', 'categorical_crossentropy', \
     'binary_crossentropy'}} or function
         Function that calculate prediction error.
@@ -215,12 +234,11 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
     def __init__(self, connection, *args, **kwargs):
         self.connection = clean_layers(connection)
 
-        self.all_layers = list(self.connection)
-        self.layers = self.all_layers[:-1]
+        self.layers = list(self.connection)
 
-        self.input_layer = find_input_layer(self.layers)
+        self.input_layer = self.layers[0]
         self.hidden_layers = self.layers[1:]
-        self.output_layer = self.all_layers[-1]
+        self.output_layer = self.layers[-1]
 
         self.init_layers()
         super(ConstructableNetwork, self).__init__(*args, **kwargs)
@@ -253,11 +271,9 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         network_input = self.variables.network_input
         network_output = self.variables.network_output
 
-        train_prediction = prediction = network_input
-        for layer in self.layers:
-            if not isinstance(layer, Dropout):
-                prediction = layer.output(prediction)
-            train_prediction = layer.output(train_prediction)
+        train_prediction = self.connection.output(network_input)
+        with self.connection.disable_training_state():
+            prediction = self.connection.output(network_input)
 
         self.variables.update(
             step=theano.shared(name='step', value=asfloat(self.step)),
@@ -277,7 +293,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         network_input = self.variables.network_input
         network_output = self.variables.network_output
 
-        self.methods.predict_raw = theano.function(
+        self.methods.predict = theano.function(
             inputs=[self.variables.network_input],
             outputs=self.variables.prediction_func
         )
@@ -295,8 +311,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         """ Initialize layers in the same order as they were list in
         network initialization step.
         """
-        for layer in self.layers:
-            layer.initialize()
+        self.connection.initialize()
 
     def init_train_updates(self):
         """ Initialize train function update in Theano format that
@@ -314,7 +329,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         Parameters
         ----------
         layer : object
-            Any layer that inherit from BaseLayer class.
+            Any layer that inherit from layers.BaseLayer class.
 
         Returns
         -------
@@ -328,6 +343,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         updates = []
         for parameter in layer.parameters:
             updates.extend(self.init_param_updates(layer, parameter))
+        updates.extend(layer.updates)
         return updates
 
     def init_param_updates(self, layer, parameter):
@@ -348,7 +364,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         return []
 
     def format_input_data(self, input_data):
-        """ Input data format is depence on the input layer
+        """ Input data format is depend on the input layer
         structure.
 
         Parameters
@@ -365,7 +381,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
             return format_data(input_data, is_feature1d)
 
     def format_target_data(self, target_data):
-        """ Target data format is depence on the output layer
+        """ Target data format is depend on the output layer
         structure.
 
         Parameters
@@ -399,8 +415,8 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
             self.format_target_data(target_data)
         )
 
-    def predict_raw(self, input_data):
-        """ Make raw prediction without final layer postprocessing step.
+    def predict(self, input_data):
+        """ Return prediction results for the input data.
 
         Parameters
         ----------
@@ -411,23 +427,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         array-like
         """
         input_data = self.format_input_data(input_data)
-        return self.methods.predict_raw(input_data)
-
-    def predict(self, input_data):
-        """ Return prediction results for the input data. Output result also
-        include postprocessing step related to the final layer that
-        transform output to convenient format for end-use.
-
-        Parameters
-        ----------
-        input_data : array-like
-
-        Returns
-        -------
-        array-like
-        """
-        raw_prediction = self.predict_raw(input_data)
-        return self.output_layer.output(raw_prediction)
+        return self.methods.predict(input_data)
 
     def on_epoch_start_update(self, epoch):
         """ Function would be trigger before run all training procedure
@@ -474,11 +474,33 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         """
         self.logs.title("Network's architecture")
 
-        for i, layer in enumerate(self.all_layers, start=1):
-            self.logs.write("{:>3}. {}".format(i, str(layer)))
+        values = []
+        for index, layer in enumerate(self.layers, start=1):
+            input_shape = preformat_layer_shape(layer.input_shape)
+            output_shape = preformat_layer_shape(layer.output_shape)
+            classname = layer.__class__.__name__
 
+            values.append((index, input_shape, classname, output_shape))
+
+        table.TableBuilder.show_full_table(
+            columns=[
+                table.Column(name="#"),
+                table.Column(name="Input shape"),
+                table.Column(name="Layer Type"),
+                table.Column(name="Output shape"),
+            ],
+            values=values,
+            stdout=self.logs.write,
+        )
         self.logs.newline()
 
     def __repr__(self):
-        return "{}({}, {})".format(self.class_name(), self.connection,
+        n_layers = len(self.connection)
+
+        if n_layers > 5:
+            connection = '[... {} layers ...]'.format(n_layers)
+        else:
+            connection = self.connection
+
+        return "{}({}, {})".format(self.class_name(), connection,
                                    self._repr_options())

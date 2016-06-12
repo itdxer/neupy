@@ -16,13 +16,13 @@ class PerceptronTestCase(BaseTestCase):
 
         with self.assertRaises(NetworkConnectionError):
             algorithms.Perceptron(
-                layers.Sigmoid(2) > layers.Output(1),
+                layers.Input(2) > layers.Sigmoid(1),
                 verbose=False
             )
 
     def test_valid_cases(self):
         algorithms.Perceptron(
-            layers.Step(2) > layers.Output(1),
+            layers.Input(2) > layers.Step(1),
             verbose=False
         )
 

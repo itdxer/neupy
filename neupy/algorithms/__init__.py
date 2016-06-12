@@ -16,14 +16,14 @@ from .gd.adamax import *
 from .ensemble.dan import *
 from .ensemble.mixture_of_experts import *
 
-from .weights.weight_decay import *
-from .weights.weight_elimination import *
+from .regularization.weight_decay import *
+from .regularization.weight_elimination import *
 
-from .steps.simple_step_minimization import *
-from .steps.search_then_converge import *
-from .steps.errdiff import *
-from .steps.leak_step import *
-from .steps.linear_search import *
+from .step_update.simple_step_minimization import *
+from .step_update.search_then_converge import *
+from .step_update.errdiff import *
+from .step_update.leak_step import *
+from .step_update.linear_search import *
 
 from .memory.discrete_hopfield_network import *
 from .memory.bam import *

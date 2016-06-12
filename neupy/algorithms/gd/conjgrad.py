@@ -102,9 +102,9 @@ class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
     >>>
     >>> cgnet = algorithms.ConjugateGradient(
     ...     connection=[
-    ...         layers.Sigmoid(13),
+    ...         layers.Input(13),
     ...         layers.Sigmoid(50),
-    ...         layers.RoundedOutput(1, decimals=1),
+    ...         layers.Sigmoid(1),
     ...     ],
     ...     search_method='golden',
     ...     update_function='fletcher_reeves',
@@ -113,7 +113,7 @@ class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
     ... )
     >>>
     >>> cgnet.train(x_train, y_train, epochs=100)
-    >>> y_predict = cgnet.predict(x_test)
+    >>> y_predict = cgnet.predict(x_test).round(1)
     >>>
     >>> real = target_scaler.inverse_transform(y_test)
     >>> predicted = target_scaler.inverse_transform(y_predict)

@@ -13,8 +13,8 @@ Subpackages
     neupy.algorithms.linear
     neupy.algorithms.memory
     neupy.algorithms.rbfn
-    neupy.algorithms.steps
-    neupy.algorithms.weights
+    neupy.algorithms.regularization
+    neupy.algorithms.step_update
 
 Submodules
 ----------

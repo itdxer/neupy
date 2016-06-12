@@ -1,36 +1,27 @@
-Custom layers
-=============
-
-Types
-*****
-
-There are two main types of layers.
-First type includes layers that have weights and activation function.
-The second one is output layers.
-Output layer is always the final layer in network structure and it just makes final output transformation for neural network.
-The output layer doesn't have weights or activation function and it doesn't
-involve in training procedure. It's is just a useful feature that helps to make
-finall transformations with neural network's output.
-
 Create custom layers
-********************
+====================
 
-The simplest type of two layers types is an output layer. Below you can see simple example.
+There are a few main types of layers. We are going to check them one by one in order of complexity.
+
+Element-wise transformation
+***************************
+
+The simplest one layer that makes only element-wise transformation. This layer doesn't include any trainable parameters and it doesn't change input's shape. For simplisity we can build a layer that adds one to each elements in the input tensor.
 
 .. code-block:: python
 
     from neupy import layers
 
-    class RoundFloorOutput(layers.Output):
+    class ShiftByOneLayer(layers.BaseLayer):
         def output(self, value):
-            return value.astype(int)
+            return value + 1
 
-The base class is :layer:`Output`.
-This layer has one useful method - ``output``.
-Attribute ``value`` contains the raw output from network and method can manage to perform some useful transformation to provide different output.
+``BaseLayer`` is a main class that contains all important methods and attributes that any layer requires.
 
-Other layers should have activation function.
-The example below shows one of the possible way to create a new layer.
+Layers with activation function
+*******************************
+
+If you want to have a layer that behaves like any other built-in layer with activation function in the NeuPy, you should inherit your class from the other NeuPy class. Let's consider and example of layer with a square activation function.
 
 .. code-block:: python
 
@@ -38,20 +29,54 @@ The example below shows one of the possible way to create a new layer.
     from neupy import layers
 
     class SquareLayer(layers.ActivationLayer):
-        activation_function = T.square
+        def activation_function(self, input_value):
+            return T.square(input_value)
 
-First of all you can see different class :layer:`ActivationLayer`.
-This class expect ``activation_function`` property to be provided. It must be
-an one-argument function that returns Theano function.
-In this example we just use simple function which squares input value.
+Advanced methods
+****************
 
-And a low-level implementation of layer inherits :layer:`BaseLayer` class and contains method ``output``.
-It can be useful if you want to create a layer which will have custom behaviour.
+There are a few other methods that can be useful in case of more complecated layers.
+
+Some layers makes an output shape modification. If you don't define the new output shape in the layer class you will not be able to attach layer to the other in the network. Here is an example.
 
 .. code-block:: python
 
     from neupy import layers
 
-    class IncreaseByOneLayer(layers.BaseLayer):
-        def output(self, input_value):
-            return input_value + 1
+    class FeatureMeanLayer(layers.BaseLayer):
+        @property
+        def output_shape(self):
+            return (1,)
+
+        def output(self, value):
+            return value.mean(axis=1)
+
+The ``FeatureMeanLayer`` layer makes a feature transformation and modifies input matrix shape. We define ``output_shape`` property as an additional layer's parameter. Now other layers in the sequence know the expected layers output shape and adjust their parameters to the correct shape.
+
+If your parameter depends on the other layers in the layers sequence you can get them from the ``self.relate_to_layer`` and ``self.relate_from_layer`` attributes. They return next and previous layers respectively. Eahc of this layers have ``output_shape`` and ``input_shape`` attibutes, so you can read useful information from them.
+
+The other important method is an ``initialize``. The main purpose of this method is to apply all necesary initializations related to the network. For instance, random weight or bias parameters. You can't define them in the ``__init__`` method, because when you create layer instance full network structure is unknown and you don't have all the necessary information. Let's extend the previous layer with the ``initialize`` method.
+
+.. code-block:: python
+
+    from neupy import layers
+    from neupy.utils import asfloat
+
+    class FeatureMeanLayer(layers.BaseLayer):
+        def initialize(self):
+            super(FeatureMeanLayer, self).initialize()
+
+            self.scaler = theano.shared(
+                name="scaler_{}".format(self.layer_id),
+                value=asfloat(1)
+            )
+            self.parameters.append(self.scaler)
+
+        @property
+        def output_shape(self):
+            return (1,)
+
+        def output(self, value):
+            return self.scaler * value.mean(axis=1)
+
+In this example I've added a few other feature to consider a couple of useful attributes and functions. Let's check them one by one. ``self.layer_id`` defines layer's identifier as an integer number. This number is basically a layer's index number in the sequence. The ``self.parameters`` attribute is a list that contains all trainable parameters. Usually it is a weight or bias, but you can define any parameter you want. The ``asfloat`` function just converts any number to the float number. The type of the float number depends on the Theano's ``theano.config.floatX`` variable.

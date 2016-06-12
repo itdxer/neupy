@@ -55,7 +55,6 @@ def show_network_options(network, highlight_options=None):
         if not options:
             continue
 
-        logs.write("{}:".format(class_name))
         for key, data in sorted(options):
             if key in highlight_options:
                 msg_color = 'green'
@@ -68,7 +67,7 @@ def show_network_options(network, highlight_options=None):
             msg_text = "{} = {}".format(key, formated_value)
             logs.message("OPTION", msg_text, color=msg_color)
 
-        logs.newline()
+    logs.newline()
 
 
 def logging_info_about_the_data(network, input_train, input_test):
@@ -295,9 +294,7 @@ class BaseNetwork(BaseSkeleton):
         """
 
     def predict(self, input_data):
-        """ Return prediction results for the input data. Output result
-        includes post-processing step related to the final layer that
-        transforms output to convenient format for end-use.
+        """ Return prediction results for the input data.
 
         Parameters
         ----------
@@ -445,5 +442,3 @@ class BaseNetwork(BaseSkeleton):
 
             summary.finish()
             logs.newline()
-
-        logs.message("TRAIN", "Trainig finished")

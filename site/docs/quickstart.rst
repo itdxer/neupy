@@ -76,10 +76,10 @@ Let's start with an architecture. I didn't reinvent the wheel and used one of th
     >>>
     >>> network = algorithms.Momentum(
     ...     [
-    ...         layers.Relu(784),
+    ...         layers.Input(784),
     ...         layers.Relu(500),
-    ...         layers.Softmax(300),
-    ...         layers.ArgmaxOutput(10),
+    ...         layers.Relu(300),
+    ...         layers.Softmax(10),
     ...     ],
     ...     error='categorical_crossentropy',
     ...     step=0.01,
@@ -145,7 +145,7 @@ In the code above you can see two prediction releate to the different models. Th
     >>> estimators.binary_crossentropy(actual_values, model2_prediction)
     0.5108255743980408
 
-That is the result that we looked for. The second model made better prediction, but it got a higher cross entropy error value. That's because we less certain about our prediction. Similar situation we've observed in the plot above.
+That is the result that we looked for. The second model made better prediction, but it got a higher cross entropy error. It means that we less certain about our prediction. Similar situation we've observed in the plot above.
 
 Let's finally make a simple report for our classification result.
 
@@ -172,7 +172,7 @@ Let's finally make a simple report for our classification result.
 
     avg / total       0.98      0.98      0.98     10000
     >>> score = metrics.accuracy_score(y_test, y_predicted)
-    >>> print("Validation accuracy: {:.2f}%".format(100 * score))
+    >>> print("Validation accuracy: {:.2%}".format(score))
     Validation accuracy: 98.47%
 
 The 98.5% accuracy is pretty good for such a quick solution. Additional modification can improve prediction accuracy.

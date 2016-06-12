@@ -1,2 +1,1 @@
-recursive-include neupy/commands/new_project_template *
 recursive-include requirements *.txt

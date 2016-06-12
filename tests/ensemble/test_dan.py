@@ -2,7 +2,7 @@ import numpy as np
 
 from sklearn import datasets, preprocessing, cross_validation, metrics
 from neupy import algorithms, layers
-from neupy.layers import Relu, Sigmoid, Output
+from neupy.layers import Relu, Sigmoid, Input
 
 from base import BaseTestCase
 
@@ -34,9 +34,9 @@ class DANTestCase(BaseTestCase):
             dan = algorithms.DynamicallyAveragedNetwork([
                 algorithms.GradientDescent(
                     [
-                        Sigmoid(4),
-                        Relu(10, init_method='bounded', bounds=(0, 1)),
-                        Output(1),
+                        Input(4),
+                        Sigmoid(10),
+                        Relu(1, init_method='bounded', bounds=(0, 1)),
                     ],
                     step=0.01
                 ),

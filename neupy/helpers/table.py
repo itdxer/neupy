@@ -8,6 +8,7 @@ from abc import abstractmethod
 import numpy as np
 from six import with_metaclass
 
+from neupy.utils import number_type
 from neupy.core.docs import SharedDocs, SharedDocsABCMeta
 
 
@@ -139,7 +140,7 @@ class NumberColumn(Column):
         float
             Rounded input value.
         """
-        if not isinstance(value, (int, float, np.floating, np.integer)):
+        if not isinstance(value, number_type):
             return value
 
         if value > 100:
@@ -164,7 +165,7 @@ class BaseState(with_metaclass(SharedDocsABCMeta)):
         self.table = table
 
     def line(self):
-        """ Draw ASCII line. Line width depence on the table
+        """ Draw ASCII line. Line width depends on the table
         column sizes.
         """
         self.table.stdout('\r' + '-' * self.table.total_width)
@@ -301,6 +302,42 @@ class TableBuilder(SharedDocs):
         n_margins = 2 * n_columns
 
         self.total_width = text_width + n_separators + n_margins
+
+    @classmethod
+    def show_full_table(cls, columns, values, **kwargs):
+        """ Shows full table. This method is useful in case if all
+        table values are available and we can just show them all
+        in one table without interations.
+
+        Parameters
+        ----------
+        columns : list
+            List of columns.
+        values : list of list or tuple
+            List of values. Each element should be a list or
+            tuple that contains column values in the same order
+            as defined in the ``columns`` parameter.
+        **kwargs
+            Arguments for the ``TableBuilder`` class
+            initialization.
+        """
+
+        values_length = []
+        for row_values in values:
+            row_values_length = [len(str(value)) for value in row_values]
+            values_length.append(row_values_length)
+
+        columns_width = np.array(values_length).max(axis=0)
+        for column, proposed_column_width in zip(columns, columns_width):
+            column.width = max(column.width, proposed_column_width)
+
+        table_builder = cls(*columns, **kwargs)
+        table_builder.start()
+
+        for row_values in values:
+            table_builder.row(row_values)
+
+        table_builder.finish()
 
     def __getattr__(self, attr):
         if attr not in self.__dict__:

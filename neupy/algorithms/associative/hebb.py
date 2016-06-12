@@ -45,7 +45,7 @@ class HebbRule(BaseStepAssociative):
     Examples
     --------
     >>> import numpy as np
-    >>> from neupy import algorithms, layers
+    >>> from neupy import algorithms
     >>>
     ... pavlov_dog_data = np.array([
     ...     [1, 0],  # food, no bell
@@ -59,7 +59,8 @@ class HebbRule(BaseStepAssociative):
     ... ])
     >>>
     >>> hebbnet = algorithms.HebbRule(
-    ...     layers.Step(2) > layers.Output(1),
+    ...     n_inputs=2,
+    ...     n_outputs=1,
     ...     n_unconditioned=1,
     ...     step=0.1,
     ...     decay_rate=0.8,

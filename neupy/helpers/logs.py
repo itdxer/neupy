@@ -7,7 +7,7 @@ from contextlib import contextmanager
 
 from neupy.core.config import Configurable
 from neupy.core.properties import BaseProperty
-from neupy.helpers import progressbar
+from neupy.helpers import Progressbar
 from . import terminal
 
 
@@ -156,12 +156,12 @@ class TerminalLogger(object):
         ----------
         iterator : iterable object
         *args
-            Arguments for ``progressbar`` function.
+            Arguments for ``Progressbar`` class.
         **kwargs
-            Key defined arguments for ``progressbar`` function.
+            Key defined arguments for ``Progressbar`` class.
         """
         if self.enable:
-            return progressbar(iterator, *args, **kwargs)
+            return Progressbar(iterator, *args, **kwargs)
         return iterator
 
     @contextmanager

@@ -34,12 +34,12 @@ class BackPropAlgsTestCase(BaseTestCase):
         for bp_algorithm_class in self.bp_algorithms:
             network = bp_algorithm_class(
                 [
+                    layers.Input(2),
                     layers.Linear(
-                        size=2,
+                        size=1,
                         bias=np.zeros(1),
                         weight=np.zeros((2, 1))
                     ),
-                    layers.Output(1),
                 ],
                 verbose=False,
             )

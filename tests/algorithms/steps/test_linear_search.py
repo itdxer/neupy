@@ -32,9 +32,9 @@ class LinearSearchTestCase(BaseTestCase):
 
             cgnet = algorithms.ConjugateGradient(
                 connection=[
-                    layers.Sigmoid(13),
+                    layers.Input(13),
                     layers.Sigmoid(50),
-                    layers.Output(1),
+                    layers.Sigmoid(1),
                 ],
                 show_epoch=1,
                 verbose=False,

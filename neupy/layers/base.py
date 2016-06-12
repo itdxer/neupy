@@ -2,7 +2,7 @@ import numpy as np
 import theano
 import theano.tensor as T
 
-from neupy.utils import asfloat
+from neupy.utils import asfloat, as_tuple
 from neupy.core.config import Configurable
 from neupy.core.properties import (TypedListProperty, ArrayProperty,
                                    ChoiceProperty, IntProperty)
@@ -10,23 +10,55 @@ from neupy.layers.connections import ChainConnection
 from .utils import XAVIER_NORMAL, VALID_INIT_METHODS, generate_weight
 
 
-__all__ = ('BaseLayer', 'ParameterBasedLayer')
+__all__ = ('BaseLayer', 'ParameterBasedLayer', 'Input')
 
 
 class BaseLayer(ChainConnection, Configurable):
     """ Base class for all layers.
+
+    Methods
+    -------
+    initialize()
+        Set up important configurations related to the layer.
+    relate_to(right_layer)
+        Connect current layer with the next one.
+    disable_training_state()
+        Swith off trainig state.
+
+    Attributes
+    ----------
+    training_state : bool
+        Defines whether layer in training state or not.
+    layer_id : int
+        Layer's identifier.
+    parameters : list
+        List of layer's parameters.
+    relate_to_layer : BaseLayer or None
+    relate_from_layer : BaseLayer or None
     """
     def __init__(self, *args, **options):
-        super(BaseLayer, self).__init__()
+        super(BaseLayer, self).__init__(*args)
 
         self.parameters = []
 
-        # Default variables which will change after initialization
         self.relate_to_layer = None
         self.relate_from_layer = None
         self.layer_id = 1
+        self.updates = []
 
         Configurable.__init__(self, **options)
+
+    @property
+    def input_shape(self):
+        if self.relate_from_layer is not None:
+            return self.relate_from_layer.output_shape
+
+    @property
+    def output_shape(self):
+        return self.input_shape
+
+    def output(self, input_value):
+        return input_value
 
     def initialize(self):
         if self.relate_from_layer is not None:
@@ -93,11 +125,11 @@ class ParameterBasedLayer(BaseLayer):
     ----------
     size : int
         Layer input size.
-    weight : 2D array-like or None
+    weight : 2D array-like, Theano shared variable or None
         Define your layer weights. ``None`` means that your weights will be
         generate randomly dependence on property ``init_method``.
         ``None`` by default.
-    bias : 1D array-like or None
+    bias : 1D array-like, Theano shared variable or None
         Define your layer bias. ``None`` means that your weights will be
         generate randomly dependence on property ``init_method``.
     init_method : {{'bounded', 'normal', 'ortho', 'xavier_normal',\
@@ -148,13 +180,17 @@ class ParameterBasedLayer(BaseLayer):
             options['size'] = size
         super(ParameterBasedLayer, self).__init__(**options)
 
-    def weight_shape(self):
-        output_size = self.relate_to_layer.size
-        return (self.size, output_size)
+    @property
+    def output_shape(self):
+        return as_tuple(self.relate_to_layer.size)
 
+    @property
+    def weight_shape(self):
+        return as_tuple(self.input_shape, self.output_shape)
+
+    @property
     def bias_shape(self):
-        output_size = self.relate_to_layer.size
-        return (output_size,)
+        return as_tuple(self.output_shape)
 
     def initialize(self):
         super(ParameterBasedLayer, self).initialize()
@@ -162,18 +198,66 @@ class ParameterBasedLayer(BaseLayer):
         self.weight = create_shared_parameter(
             value=self.weight,
             name='weight_{}'.format(self.layer_id),
-            shape=self.weight_shape(),
+            shape=self.weight_shape,
             bounds=self.bounds,
             init_method=self.init_method,
         )
         self.bias = create_shared_parameter(
             value=self.bias,
             name='bias_{}'.format(self.layer_id),
-            shape=self.bias_shape(),
+            shape=self.bias_shape,
             bounds=self.bounds,
             init_method=self.init_method,
         )
         self.parameters = [self.weight, self.bias]
+
+    def __repr__(self):
+        classname = self.__class__.__name__
+        return '{name}({size})'.format(name=classname, size=self.size)
+
+
+class ArrayShapeProperty(TypedListProperty):
+    """ Property that identifies array's shape.
+    """
+    expected_type = (int, tuple, type(None))
+
+    def validate(self, value):
+        if isinstance(value, int):
+            if value < 1:
+                raise ValueError("Integer value is expected to be greater or "
+                                 " equal to one for the `{}` property, got {}"
+                                 "".format(self.name, value))
+        elif value is not None:
+            super(ArrayShapeProperty, self).validate(value)
+
+
+class Input(BaseLayer):
+    """ Input layer. It identifies feature shape/size for the
+    input value. Especially useful in the CNN.
+
+    Parameters
+    ----------
+    size : int, tuple or None
+        Identifies input data shape size. ``None`` means that network
+        doesn't have input feature with fixed size.
+        Defaults to ``None``.
+    """
+    size = ArrayShapeProperty()
+
+    def __init__(self, size, **options):
+        options['size'] = size
+        super(Input, self).__init__(**options)
+
+    @property
+    def input_shape(self):
+        return as_tuple(self.size)
+
+    @property
+    def output_shape(self):
+        return self.input_shape
+
+    def output(self, input_value):
+        return input_value
 
     def __repr__(self):
         classname = self.__class__.__name__

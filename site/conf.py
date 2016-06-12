@@ -61,7 +61,7 @@ slug_word_separator = '_'
 landing_page = 'home'
 
 # Set to override the default name of the first page ('Home')
-first_page_title = 'Tutorials'
+first_page_title = 'Articles'
 
 # **************************************************************
 # Edit lines below to further customize Sphinx build
@@ -96,7 +96,6 @@ html_sidebars = {
         'recent.html',
         'cheat-sheet.html',
         'installation.html',
-        'versions.html',
         'searchbox.html',
     ],
 }

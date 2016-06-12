@@ -1,6 +1,6 @@
 import numpy as np
 
-from neupy.utils import preformat_value
+from neupy.utils import preformat_value, number_type
 from neupy.core.docs import SharedDocs
 
 
@@ -48,7 +48,7 @@ class BaseProperty(SharedDocs):
         self.validate(value)
         instance.__dict__[self.name] = value
 
-    def __get__(self, instance, value):
+    def __get__(self, instance, owner):
         if instance is None:
             return
 
@@ -242,7 +242,7 @@ class NumberProperty(BoundedProperty):
     {BaseProperty.default}
     {BaseProperty.required}
     """
-    expected_type = (float, int)
+    expected_type = number_type
 
 
 class IntProperty(BoundedProperty):

@@ -1,6 +1,5 @@
 import numpy as np
 
-from neupy.layers import Linear, CompetitiveOutput
 from neupy import algorithms
 
 from base import BaseTestCase

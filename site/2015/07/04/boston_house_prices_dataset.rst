@@ -159,7 +159,7 @@ All columns description you can find below.
 - LSTAT    % lower status of the population
 
 From data set description we can find that there are 13 continuous attributes (including "class" attribute "MEDV") and 1 binary-valued attribute.
-There is no multiple categorical data, so we don't need to change feature dimention.
+There is no multiple categorical data, so we don't need to change feature dimension.
 But we already have one problem.
 If you look closer, you will find that every column has its own data range.
 This situation is a bad thing for Neural Network training, because input values ​​make different contributions to the calculation of the output values.
@@ -260,9 +260,9 @@ Now we are ready to build Neural Network which will predict house prices.
 
     cgnet = algorithms.ConjugateGradient(
         connection=[
-            layers.Sigmoid(13),
+            layers.Input(13),
             layers.Sigmoid(50),
-            layers.Output(1),
+            layers.Sigmoid(1),
         ],
         search_method='golden',
         show_epoch=25,
@@ -281,7 +281,7 @@ This value is just a guess.
 For better and more accurate result we should choose it with other methods, but for now we can use this value.
 As the main algorithm we take Conjugate Gradient.
 This implementation of backpropagation is a little bit different from main interpretation of Conjugate Gradient.
-For GradientDescent implementation we can't guarantee that we get the local minimum in n-th steps (where `n` is the dimention).
+For GradientDescent implementation we can't guarantee that we get the local minimum in n-th steps (where `n` is the dimension).
 To optimize it we should use linear search.
 It will fix and set up better steps for Conjugate Gradient.
 
