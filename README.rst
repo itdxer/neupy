@@ -27,11 +27,11 @@ Links
 
 * `Documentation <http://neupy.com>`_
 * `Issues <https://github.com/itdxer/neupy/issues>`_
-* `Tutorials <http://neupy.com/archive.html>`_
+* `Articles <http://neupy.com/archive.html>`_
 * `Available algorithms <http://neupy.com/docs/algorithms.html>`_
 
-Tutorials
----------
+Articles
+--------
 
 * `Password recovery <http://neupy.com/2015/09/21/password_recovery.html>`_
 * `Discrete Hopfield Network <http://neupy.com/2015/09/20/discrete_hopfield_network.html>`_
