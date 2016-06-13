@@ -1,7 +1,7 @@
 Boston house-prices dataset
 ===========================
 
-For this tutorial we are going to predict Boston house prices via Conjugate gradient.
+For this article we are going to predict Boston house prices via Conjugate gradient.
 
 For the beginning we should get some data.
 
@@ -386,7 +386,7 @@ In the table below you can find 10 randomly chosen errors.
     </table>
 
 The results are good for the first network implementation.
-There are a lot of things which we can do to improve network results, but we will discuss them in an another tutorial.
+There are a lot of things which we can do to improve network results, but we will discuss them in an another article.
 
 .. author:: default
 .. categories:: none

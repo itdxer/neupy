@@ -1,3 +1,5 @@
+.. _cheat-sheet:
+
 Cheat sheet
 ===========
 

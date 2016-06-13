@@ -21,7 +21,7 @@ The simplest one layer that makes only element-wise transformation. This layer d
 Layers with activation function
 *******************************
 
-If you want to have a layer that behaves like any other built-in layer with activation function in the NeuPy, you should inherit your class from the other NeuPy class. Let's consider and example of layer with a square activation function.
+If you want to have a layer that behaves like any other built-in layer with activation function in the NeuPy, you should inherit your class from the ``ActivationLayer`` class. Let's consider and example of layer with a square activation function.
 
 .. code-block:: python
 

@@ -117,7 +117,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     See Also
     --------
     :ref:`password-recovery`: Password recovery with Discrete Hopfield Network.
-    :ref:`discrete-hopfield-network`: Discrete Hopfield Network tutorial.
+    :ref:`discrete-hopfield-network`: Discrete Hopfield Network article.
     """
 
     check_limit = Property(default=True, expected_type=bool)

@@ -5,8 +5,8 @@ Password recovery
 
 .. contents::
 
-In this tutorial we are going to build a simple neural network that will recover password from a broken one.
-If you aren't familiar with a :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` algorithm, you can read :ref:`this tutorial <discrete-hopfield-network>`.
+In this article we are going to build a simple neural network that will recover password from a broken one.
+If you aren't familiar with a :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` algorithm, you can read :ref:`this article <discrete-hopfield-network>`.
 
 Before running all experiments, we need to set up ``seed`` parameter to make all results reproducible.
 But you can test code without it.
@@ -16,13 +16,13 @@ But you can test code without it.
     from neupy import environment
     environment.reproducible()
 
-If you can't reproduce with your version of Python or libraries you can install those ones that were used in this tutorial:
+If you can't reproduce with your version of Python or libraries you can install those ones that were used in this article:
 
 .. code-block:: python
 
     >>> import neupy
     >>> neupy.__version__
-    '0.2.0'
+    '0.3.0'
     >>> import numpy
     >>> numpy.__version__
     '1.9.2'
@@ -137,7 +137,7 @@ Let's define this function and later we will look at it step by step.
 
         return dhnet
 
-If you have already read :ref:`Discrete Hopfield Network tutorial <discrete-hopfield-network>`, you should know that if we add only one vector into the network we will get it dublicated or with reversed signs through the whole matrix.
+If you have already read :ref:`Discrete Hopfield Network article <discrete-hopfield-network>`, you should know that if we add only one vector into the network we will get it dublicated or with reversed signs through the whole matrix.
 To make it a little bit secure we can add some noise into the network.
 For this reason we introduce one additional parameter ``noise_level`` into the function.
 This parameter controls number of randomly generated binary vectors.
@@ -249,7 +249,7 @@ Network can produce a string which wasn't taught.
 This string can look almost like a password with a few different symbols.
 The problem appears when network creates additional local minimum somewhere between input patterns.
 We can't prevent it from running into the local minimum.
-For more information about this problem you can check :ref:`tutorial about Discrete Hopfield Network <discrete-hopfield-network>`.
+For more information about this problem you can check :ref:`article about Discrete Hopfield Network <discrete-hopfield-network>`.
 
 Test it using Monte Carlo
 -------------------------
@@ -296,7 +296,7 @@ At each step we create random password and try to recover it from a broken passw
     print("Number of fails for each test case:")
     pprint.pprint(results)
 
-After sumbmission your output should look the same as the one below (if you followed everything in this tutorial step by step)::
+After sumbmission your output should look the same as the one below (if you followed everything step by step)::
 
     Number of fails for each test case:
     {'exclude-one': 11,

@@ -5,7 +5,7 @@ Discrete Hopfiel Network
 
 .. contents::
 
-In this tutorial we are going to learn about :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` algorithm.
+In this article we are going to learn about :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` algorithm.
 
 :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` is a type of algorithms which is called - `Autoassociative memories <https://en.wikipedia.org/wiki/Autoassociative_memory>`_
 Don't be scared of the word `Autoassociative`.
@@ -20,7 +20,7 @@ Though you don't clearly see all objects in the picture, you start to remember t
 That's what it is all about.
 Autoassociative memory networks is a posibily to interprete functions of memory into neural network model.
 
-Don't worry if you have only basic knowledge in Linear Algebra; in this tutorial I'll try to explain the idea as simple as possible.
+Don't worry if you have only basic knowledge in Linear Algebra; in this article I'll try to explain the idea as simple as possible.
 If you are interested in proofs of the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` you can check them at R. Rojas. Neural Networks [1]_ book.
 
 Architecture
@@ -41,7 +41,7 @@ Instead, we will use bipolar numbers.
 They are almost the same, but instead of 0 we are going to use -1 to decode a negative state.
 We can't use zeros.
 And there are two main reasons for it.
-The first one is that zeros reduce information from the network weight, later in this tutorial you are going to see it.
+The first one is that zeros reduce information from the network weight, later in this article you are going to see it.
 The second one is more complex, it depends on the nature of bipolar vectors.
 Basically they are more likely to be orthogonal to each other which is a critical moment for the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
 But as I mentioned before we won't talk about proofs or anything not related to basic understanding of Linear Algebra operations.
@@ -737,7 +737,7 @@ Properties that we've reviewed so far are just the most interesting and maybe ot
 More reading
 ------------
 
-In addition you can read another tutorial about a ':ref:`Password recovery <password-recovery>`' from the memory using the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
+In addition you can read another article about a ':ref:`Password recovery <password-recovery>`' from the memory using the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
 
 References
 ----------

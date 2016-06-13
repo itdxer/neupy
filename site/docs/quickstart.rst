@@ -9,8 +9,7 @@ MNIST classification
 ********************
 
 The MNIST problem is probably the most known for those who have already
-heared about neural networks. This short tutorial contains simple solution for this
-problem that you can quickly build by your own using NeuPy. Let's dive in.
+heared about neural networks. This short tutorial shows you how to build prediction models in NeuPy. Let's start developing model.
 
 First of all we need to load data.
 
