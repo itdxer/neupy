@@ -89,7 +89,7 @@
                   <a href="../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../page1.html">Tutorials</a>
+                  <a href="../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../pages/documentation.html">Documentation</a>
@@ -117,13 +117,13 @@ functions.</p>
 parameters and will return only activation function
 output for the specified input value.</p>
 </div></blockquote>
-<p><strong>weight</strong> : 2D array-like or None</p>
+<p><strong>weight</strong> : 2D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
 <span class="docutils literal"><span class="pre">None</span></span> by default.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like or None</p>
+<p><strong>bias</strong> : 1D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer bias. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.</p>
@@ -158,12 +158,17 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.ActivationLayer.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'bias': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'bias': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'size': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.activations.ActivationLayer.output">
 <span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.activations.ActivationLayer.output_shape">
+<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -183,13 +188,13 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 parameters and will return only activation function
 output for the specified input value.</p>
 </div></blockquote>
-<p><strong>weight</strong> : 2D array-like or None</p>
+<p><strong>weight</strong> : 2D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
 <span class="docutils literal"><span class="pre">None</span></span> by default.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like or None</p>
+<p><strong>bias</strong> : 1D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer bias. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.</p>
@@ -217,14 +222,14 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 </tr>
 </tbody>
 </table>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="neupy.layers.activations.Linear.activation_function">
-<em class="property">static </em><span class="descname">activation_function</span><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">activation_function</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Linear.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'bias': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'bias': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'size': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -244,13 +249,13 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 parameters and will return only activation function
 output for the specified input value.</p>
 </div></blockquote>
-<p><strong>weight</strong> : 2D array-like or None</p>
+<p><strong>weight</strong> : 2D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
 <span class="docutils literal"><span class="pre">None</span></span> by default.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like or None</p>
+<p><strong>bias</strong> : 1D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer bias. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.</p>
@@ -278,14 +283,14 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 </tr>
 </tbody>
 </table>
-<dl class="attribute">
+<dl class="method">
 <dt id="neupy.layers.activations.Sigmoid.activation_function">
-<span class="descname">activation_function</span><em class="property"> = &lt;theano.tensor.elemwise.Elemwise object&gt;</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">activation_function</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Sigmoid.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'bias': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'bias': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'size': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -305,13 +310,13 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 parameters and will return only activation function
 output for the specified input value.</p>
 </div></blockquote>
-<p><strong>weight</strong> : 2D array-like or None</p>
+<p><strong>weight</strong> : 2D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
 <span class="docutils literal"><span class="pre">None</span></span> by default.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like or None</p>
+<p><strong>bias</strong> : 1D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer bias. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.</p>
@@ -339,18 +344,14 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 </tr>
 </tbody>
 </table>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="neupy.layers.activations.HardSigmoid.activation_function">
-<em class="property">static </em><span class="descname">activation_function</span><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>An approximation of sigmoid.</p>
-<p>More approximate and faster than ultra_fast_sigmoid.</p>
-<p>Approx in 3 parts: 0, scaled linear, 1.</p>
-<p>Removing the slope and shift does not make it faster.</p>
-</dd></dl>
+<span class="descname">activation_function</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.HardSigmoid.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'bias': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'bias': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'size': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -370,13 +371,13 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 parameters and will return only activation function
 output for the specified input value.</p>
 </div></blockquote>
-<p><strong>weight</strong> : 2D array-like or None</p>
+<p><strong>weight</strong> : 2D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
 <span class="docutils literal"><span class="pre">None</span></span> by default.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like or None</p>
+<p><strong>bias</strong> : 1D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer bias. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.</p>
@@ -404,41 +405,14 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 </tr>
 </tbody>
 </table>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="neupy.layers.activations.Step.activation_function">
-<em class="property">static </em><span class="descname">activation_function</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Step activation function.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> : symbolic tensor</p>
-<blockquote>
-<div><p>Tensor to compute the activation function for.</p>
-</div></blockquote>
-<p><strong>alpha</strong> : scalar or tensor, optional</p>
-<blockquote>
-<div><p>Slope for negative input, usually between 0 and 1. The
-default value of 0 will lead to the standard rectifier, 1 will lead to
-a linear activation function, and any value in between will give a
-leaky rectifier. A shared variable (broadcastable against <cite>x</cite>) will
-result in a parameterized rectifier with learnable slope(s).</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">symbolic tensor</p>
-<blockquote class="last">
-<div><p>Element-wise rectifier applied to <cite>x</cite>.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<span class="descname">activation_function</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Step.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'bias': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'bias': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'size': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -458,13 +432,13 @@ result in a parameterized rectifier with learnable slope(s).</p>
 parameters and will return only activation function
 output for the specified input value.</p>
 </div></blockquote>
-<p><strong>weight</strong> : 2D array-like or None</p>
+<p><strong>weight</strong> : 2D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
 <span class="docutils literal"><span class="pre">None</span></span> by default.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like or None</p>
+<p><strong>bias</strong> : 1D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer bias. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.</p>
@@ -492,14 +466,14 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 </tr>
 </tbody>
 </table>
-<dl class="attribute">
+<dl class="method">
 <dt id="neupy.layers.activations.Tanh.activation_function">
-<span class="descname">activation_function</span><em class="property"> = &lt;theano.tensor.elemwise.Elemwise object&gt;</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">activation_function</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Tanh.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'bias': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'bias': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'size': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -508,24 +482,31 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 <dt id="neupy.layers.activations.Relu">
 <em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Relu</span><span class="sig-paren">(</span><em>size=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#neupy.layers.activations.ActivationLayer" title="neupy.layers.activations.ActivationLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.activations.ActivationLayer</span></span></a></p>
-<p>The layer with the rectifier activation function.</p>
+<p>The layer with the rectifier (ReLu) activation function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : int or None</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha</strong> : float</p>
+<blockquote>
+<div><p>Alpha parameter defines the decreasing rate
+for the negative values. If <span class="docutils literal"><span class="pre">alpha</span></span>
+is non-zero value then layer behave like a
+leaky ReLu. Defaults to <span class="docutils literal"><span class="pre">0</span></span>.</p>
+</div></blockquote>
+<p><strong>size</strong> : int or None</p>
 <blockquote>
 <div><p>Layer input size. <span class="docutils literal"><span class="pre">None</span></span> means that layer will not create
 parameters and will return only activation function
 output for the specified input value.</p>
 </div></blockquote>
-<p><strong>weight</strong> : 2D array-like or None</p>
+<p><strong>weight</strong> : 2D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
 <span class="docutils literal"><span class="pre">None</span></span> by default.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like or None</p>
+<p><strong>bias</strong> : 1D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer bias. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.</p>
@@ -553,48 +534,19 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 </tr>
 </tbody>
 </table>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="neupy.layers.activations.Relu.activation_function">
-<em class="property">static </em><span class="descname">activation_function</span><span class="sig-paren">(</span><em>x</em>, <em>alpha=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Compute the element-wise rectified linear activation function.</p>
-<div class="versionadded">
-<p><span class="versionmodified">New in version 0.7.1.</span></p>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : symbolic tensor</p>
-<blockquote>
-<div><p>Tensor to compute the activation function for.</p>
-</div></blockquote>
-<p><strong>alpha</strong> : scalar or tensor, optional</p>
-<blockquote>
-<div><p>Slope for negative input, usually between 0 and 1. The default value
-of 0 will lead to the standard rectifier, 1 will lead to
-a linear activation function, and any value in between will give a
-leaky rectifier. A shared variable (broadcastable against <cite>x</cite>) will
-result in a parameterized rectifier with learnable slope(s).</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">symbolic tensor</p>
-<blockquote class="last">
-<div><p>Element-wise rectifier applied to <cite>x</cite>.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>This is numerically equivalent to <span class="docutils literal"><span class="pre">T.switch(x</span> <span class="pre">&gt;</span> <span class="pre">0,</span> <span class="pre">x,</span> <span class="pre">alpha</span> <span class="pre">*</span> <span class="pre">x)</span></span>
-(or <span class="docutils literal"><span class="pre">T.maximum(x,</span> <span class="pre">alpha</span> <span class="pre">*</span> <span class="pre">x)</span></span> for <span class="docutils literal"><span class="pre">alpha</span> <span class="pre">&lt;</span> <span class="pre">1</span></span>), but uses a faster
-formulation or an optimized Op, so we encourage to use this function.</p>
-</dd></dl>
+<span class="descname">activation_function</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.activations.Relu.alpha">
+<span class="descname">alpha</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Relu.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'bias': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'bias': Option(class_name='ParameterBasedLayer', value=None), 'alpha': Option(class_name='Relu', value=0), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'size': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -614,13 +566,13 @@ formulation or an optimized Op, so we encourage to use this function.</p>
 parameters and will return only activation function
 output for the specified input value.</p>
 </div></blockquote>
-<p><strong>weight</strong> : 2D array-like or None</p>
+<p><strong>weight</strong> : 2D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
 <span class="docutils literal"><span class="pre">None</span></span> by default.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like or None</p>
+<p><strong>bias</strong> : 1D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer bias. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.</p>
@@ -648,14 +600,14 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 </tr>
 </tbody>
 </table>
-<dl class="attribute">
+<dl class="method">
 <dt id="neupy.layers.activations.Softplus.activation_function">
-<span class="descname">activation_function</span><em class="property"> = &lt;theano.tensor.elemwise.Elemwise object&gt;</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">activation_function</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Softplus.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'bias': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'bias': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'size': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -675,13 +627,13 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 parameters and will return only activation function
 output for the specified input value.</p>
 </div></blockquote>
-<p><strong>weight</strong> : 2D array-like or None</p>
+<p><strong>weight</strong> : 2D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
 <span class="docutils literal"><span class="pre">None</span></span> by default.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like or None</p>
+<p><strong>bias</strong> : 1D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer bias. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.</p>
@@ -709,14 +661,193 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 </tr>
 </tbody>
 </table>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="neupy.layers.activations.Softmax.activation_function">
-<em class="property">static </em><span class="descname">activation_function</span><span class="sig-paren">(</span><em>c</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">activation_function</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Softmax.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'bias': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'bias': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'size': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.layers.activations.Elu">
+<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Elu</span><span class="sig-paren">(</span><em>size=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#neupy.layers.activations.ActivationLayer" title="neupy.layers.activations.ActivationLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.activations.ActivationLayer</span></span></a></p>
+<p>The layer with the exponensial linear unit (ELU)
+activation function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha</strong> : float</p>
+<blockquote>
+<div><p>Alpha parameter defines the decreasing exponensial
+rate for the negative values. Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</div></blockquote>
+<p><strong>size</strong> : int or None</p>
+<blockquote>
+<div><p>Layer input size. <span class="docutils literal"><span class="pre">None</span></span> means that layer will not create
+parameters and will return only activation function
+output for the specified input value.</p>
+</div></blockquote>
+<p><strong>weight</strong> : 2D array-like, Theano shared variable or None</p>
+<blockquote>
+<div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
+generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
+<span class="docutils literal"><span class="pre">None</span></span> by default.</p>
+</div></blockquote>
+<p><strong>bias</strong> : 1D array-like, Theano shared variable or None</p>
+<blockquote>
+<div><p>Define your layer bias. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
+generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.</p>
+</div></blockquote>
+<p><strong>init_method</strong> : {&#8216;bounded&#8217;, &#8216;normal&#8217;, &#8216;ortho&#8217;, &#8216;xavier_normal&#8217;,    &#8216;xavier_uniform&#8217;, &#8216;he_normal&#8217;, &#8216;he_uniform&#8217;}</p>
+<blockquote>
+<div><p>Weight initialization method. Defaults to <span class="docutils literal"><span class="pre">xavier_normal</span></span>.</p>
+<ul class="simple">
+<li><span class="docutils literal"><span class="pre">normal</span></span> will generate random weights from normal distribution         with standard deviation equal to <span class="docutils literal"><span class="pre">0.01</span></span>.</li>
+<li><span class="docutils literal"><span class="pre">bounded</span></span> generate random weights from Uniform distribution.</li>
+<li><span class="docutils literal"><span class="pre">ortho</span></span> generate random orthogonal matrix.</li>
+<li><span class="docutils literal"><span class="pre">xavier_normal</span></span> generate random matrix from normal distrubtion         where variance equal to <span class="math">\(\frac{2}{fan_{in} +         fan_{out}}\)</span>. Where <span class="math">\(fan_{in}\)</span> is a number of         layer input units and <span class="math">\(fan_{out}\)</span> - number of layer         output units.</li>
+<li><span class="docutils literal"><span class="pre">xavier_uniform</span></span> generate random matrix from uniform         distribution where <span class="math">\(w_{ij} \in         [-\sqrt{\frac{6}{fan_{in} + fan_{out}}},         \sqrt{\frac{6}{fan_{in} + fan_{out}}}\)</span>].</li>
+<li><span class="docutils literal"><span class="pre">he_normal</span></span> generate random matrix from normal distrubtion         where variance equal to <span class="math">\(\frac{2}{fan_{in}}\)</span>.         Where <span class="math">\(fan_{in}\)</span> is a number of layer input units.</li>
+<li><span class="docutils literal"><span class="pre">he_uniform</span></span> generate random matrix from uniformal         distribution where <span class="math">\(w_{ij} \in [        -\sqrt{\frac{6}{fan_{in}}},         \sqrt{\frac{6}{fan_{in}}}]\)</span></li>
+</ul>
+</div></blockquote>
+<p><strong>bounds</strong> : tuple of two float</p>
+<blockquote class="last">
+<div><p>Available only for <span class="docutils literal"><span class="pre">init_method</span></span> equal to <span class="docutils literal"><span class="pre">bounded</span></span>.  Value
+identify minimum and maximum possible value in random weights.
+Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span class="pre">1)</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R4]</a></td><td><a class="reference external" href="http://arxiv.org/pdf/1511.07289v3.pdf">http://arxiv.org/pdf/1511.07289v3.pdf</a></td></tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="neupy.layers.activations.Elu.activation_function">
+<span class="descname">activation_function</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.activations.Elu.alpha">
+<span class="descname">alpha</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.activations.Elu.options">
+<span class="descname">options</span><em class="property"> = {'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'bias': Option(class_name='ParameterBasedLayer', value=None), 'alpha': Option(class_name='Elu', value=1), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'size': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.layers.activations.PRelu">
+<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">PRelu</span><span class="sig-paren">(</span><em>size=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#neupy.layers.activations.ActivationLayer" title="neupy.layers.activations.ActivationLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.activations.ActivationLayer</span></span></a></p>
+<p>The layer with the parametrized ReLu activation
+function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha_axes</strong> : int or tuple</p>
+<blockquote>
+<div><p>Axes that will not include unique alpha parameter.
+Single integer value defines the same as a tuple with one value.
+Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</div></blockquote>
+<p><strong>alpha</strong> : array-like, Theano shared variable, scalar or None</p>
+<blockquote>
+<div><p>Alpha parameter per each non-shared axis for the ReLu.
+Scalar value means that each element in the tensor will be
+equal to the specified value.
+<span class="docutils literal"><span class="pre">None</span></span> means that parameters will be generated randomly.
+The exact random initialization algorithm depends on
+the <span class="docutils literal"><span class="pre">init_method</span></span> parameter.
+Defaults to <span class="docutils literal"><span class="pre">0.25</span></span>.</p>
+</div></blockquote>
+<p><strong>size</strong> : int or None</p>
+<blockquote>
+<div><p>Layer input size. <span class="docutils literal"><span class="pre">None</span></span> means that layer will not create
+parameters and will return only activation function
+output for the specified input value.</p>
+</div></blockquote>
+<p><strong>weight</strong> : 2D array-like, Theano shared variable or None</p>
+<blockquote>
+<div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
+generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
+<span class="docutils literal"><span class="pre">None</span></span> by default.</p>
+</div></blockquote>
+<p><strong>bias</strong> : 1D array-like, Theano shared variable or None</p>
+<blockquote>
+<div><p>Define your layer bias. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
+generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.</p>
+</div></blockquote>
+<p><strong>init_method</strong> : {&#8216;bounded&#8217;, &#8216;normal&#8217;, &#8216;ortho&#8217;, &#8216;xavier_normal&#8217;,    &#8216;xavier_uniform&#8217;, &#8216;he_normal&#8217;, &#8216;he_uniform&#8217;}</p>
+<blockquote>
+<div><p>Weight initialization method. Defaults to <span class="docutils literal"><span class="pre">xavier_normal</span></span>.</p>
+<ul class="simple">
+<li><span class="docutils literal"><span class="pre">normal</span></span> will generate random weights from normal distribution         with standard deviation equal to <span class="docutils literal"><span class="pre">0.01</span></span>.</li>
+<li><span class="docutils literal"><span class="pre">bounded</span></span> generate random weights from Uniform distribution.</li>
+<li><span class="docutils literal"><span class="pre">ortho</span></span> generate random orthogonal matrix.</li>
+<li><span class="docutils literal"><span class="pre">xavier_normal</span></span> generate random matrix from normal distrubtion         where variance equal to <span class="math">\(\frac{2}{fan_{in} +         fan_{out}}\)</span>. Where <span class="math">\(fan_{in}\)</span> is a number of         layer input units and <span class="math">\(fan_{out}\)</span> - number of layer         output units.</li>
+<li><span class="docutils literal"><span class="pre">xavier_uniform</span></span> generate random matrix from uniform         distribution where <span class="math">\(w_{ij} \in         [-\sqrt{\frac{6}{fan_{in} + fan_{out}}},         \sqrt{\frac{6}{fan_{in} + fan_{out}}}\)</span>].</li>
+<li><span class="docutils literal"><span class="pre">he_normal</span></span> generate random matrix from normal distrubtion         where variance equal to <span class="math">\(\frac{2}{fan_{in}}\)</span>.         Where <span class="math">\(fan_{in}\)</span> is a number of layer input units.</li>
+<li><span class="docutils literal"><span class="pre">he_uniform</span></span> generate random matrix from uniformal         distribution where <span class="math">\(w_{ij} \in [        -\sqrt{\frac{6}{fan_{in}}},         \sqrt{\frac{6}{fan_{in}}}]\)</span></li>
+</ul>
+</div></blockquote>
+<p><strong>bounds</strong> : tuple of two float</p>
+<blockquote class="last">
+<div><p>Available only for <span class="docutils literal"><span class="pre">init_method</span></span> equal to <span class="docutils literal"><span class="pre">bounded</span></span>.  Value
+identify minimum and maximum possible value in random weights.
+Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span class="pre">1)</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R5]</a></td><td><a class="reference external" href="https://arxiv.org/pdf/1502.01852v1.pdf">https://arxiv.org/pdf/1502.01852v1.pdf</a></td></tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="neupy.layers.activations.PRelu.activation_function">
+<span class="descname">activation_function</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.activations.PRelu.alpha">
+<span class="descname">alpha</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.activations.PRelu.alpha_axes">
+<span class="descname">alpha_axes</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.activations.PRelu.initialize">
+<span class="descname">initialize</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.activations.PRelu.options">
+<span class="descname">options</span><em class="property"> = {'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'bias': Option(class_name='ParameterBasedLayer', value=None), 'alpha': Option(class_name='PRelu', value=0.25), 'alpha_axes': Option(class_name='PRelu', value=1), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'size': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -736,7 +867,7 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -754,17 +885,7 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
         </div>
     </div>
     <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">

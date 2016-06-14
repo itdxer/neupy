@@ -89,7 +89,7 @@
                   <a href="../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../page1.html">Tutorials</a>
+                  <a href="../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../pages/documentation.html">Documentation</a>
@@ -101,30 +101,6 @@
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.layers.utils">
 <span id="neupy-layers-utils-module"></span><h1>neupy.layers.utils module</h1>
-<dl class="function">
-<dt id="neupy.layers.utils.generate_layers">
-<span class="descclassname">neupy.layers.utils.</span><span class="descname">generate_layers</span><span class="sig-paren">(</span><em>layers_sizes</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/utils.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Create from list of layer sizes basic linear network.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>layers_sizes</strong> : list or tuple</p>
-<blockquote>
-<div><p>Ordered list of network connection structure.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">LayerConnection</p>
-<blockquote class="last">
-<div><p>Constructed connection.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="function">
 <dt id="neupy.layers.utils.random_orthogonal">
 <span class="descclassname">neupy.layers.utils.</span><span class="descname">random_orthogonal</span><span class="sig-paren">(</span><em>shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/utils.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -220,6 +196,45 @@ Value identify minimum and maximum possible value in random weights.</p>
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="neupy.layers.utils.preformat_layer_shape">
+<span class="descclassname">neupy.layers.utils.</span><span class="descname">preformat_layer_shape</span><span class="sig-paren">(</span><em>shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Each layer should have input and output shape
+attributes. This function formats layer&#8217;s shape value to
+make it easy to read.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shape</strong> : int or tuple</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">int or tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.layers.utils.dimshuffle">
+<span class="descclassname">neupy.layers.utils.</span><span class="descname">dimshuffle</span><span class="sig-paren">(</span><em>value</em>, <em>ndim</em>, <em>axes</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Shuffle dimension based on the specified number of
+dimensions and axes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> : Theano variable</p>
+<p><strong>ndim</strong> : int</p>
+<p><strong>axes</strong> : tuple, list</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Theano variable</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
     <div class="postmeta">
@@ -235,7 +250,7 @@ Value identify minimum and maximum possible value in random weights.</p>
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -253,17 +268,7 @@ Value identify minimum and maximum possible value in random weights.</p>
         </div>
     </div>
     <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">

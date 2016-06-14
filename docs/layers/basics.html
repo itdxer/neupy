@@ -89,7 +89,7 @@
                   <a href="../../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../../page1.html">Tutorials</a>
+                  <a href="../../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../../pages/documentation.html">Documentation</a>
@@ -101,47 +101,142 @@
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="basics">
 <h1>Basics</h1>
+<p>In this chapter you will see how to set up different connections for the neural network.</p>
 <div class="section" id="syntax">
 <h2>Syntax</h2>
-<p>In the quick start chapter we saw the neural network that contains only sigmoid
-layers which are default in <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">GradientDescent</span></span></a> algorithms.
-But many problems need the specific structure for neural network connections.
-In this chapter you will see how to set up different connections for the neural network.</p>
-<p>There are three ways to set up your neural network connection.
-First one is the simplest one.
-You just define a list or tuple with the numbers of units for each layer in accordance to their order.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<p>There are three ways to set up your neural network connection between layers. First one is the simplest one. You just define a list or tuple with the integers. Each integer in the sequence identifies layer&#8217;s size.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>The second method is the most useful for tasks when you just want to test your network
-structure and don&#8217;t create final one for it.
-For example it can look like this.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+<p>In that way we don&#8217;t actually set up any layer types. By default NeuPy constructs from the tuple simple MLP networks that contains dense layers with sigmoid as a nonlinear activation function.</p>
+<p>The second method is the most useful common one. Here is a simple example.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
 <span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
     <span class="p">[</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Output</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
     <span class="p">],</span>
     <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
     <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span>
 <span class="p">)</span>
 </pre></div>
 </div>
+<p>The networks structure is clear from the example. You basically organize layer&#8217;s sequence in on big list.</p>
 <p>And the last one is the most intuitive.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
-    <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Output</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
     <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
     <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span>
 <span class="p">)</span>
 </pre></div>
 </div>
+<p>This one is not very useful in case when you have more than 5 layers. This method can be more useful in case of subnetworks.</p>
+</div>
+<div class="section" id="layers-with-activation-function">
+<h2>Layers with activation function</h2>
+<p>This layer can have two different behaviours. You&#8217;ve already seen the first case in the previous chapter. Let&#8217;s show it again.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+
+<span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Let&#8217;s consider the <span class="docutils literal"><span class="pre">layers.Sigmoid(40)</span></span> layer. This layer defines two different operations. The first one is a linear transformation that multiplies input by a weight matrix and adds bias to the result of this multiplication. The second one applies activation function to the linear transformation. The type of the linear function depends on the layer class. In the examples we use two layers with sigmoid activation function and one with a softmax.</p>
+<p>This layer combines two basic operations, but you can split it into the separate steps. Here is a previous examples divided into the separate steps.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+
+<span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+
+        <span class="n">layers</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(),</span>
+
+        <span class="n">layers</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(),</span>
+
+        <span class="n">layers</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(),</span>
+    <span class="p">],</span>
+    <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This structure defines exactly the same structure as in the first example, but it takes more layers to define it. In case of MLP networks the first example is easier to read. The main advantage of it is a readability. You can separate stacked layers in to the two columns. This first one defines the order of activation functions. In our examples it is <span class="docutils literal"><span class="pre">sigmoid</span> <span class="pre">&gt;</span> <span class="pre">sigmoid</span> <span class="pre">&gt;</span> <span class="pre">softmax</span></span>. And the second column shows you the network&#8217;s structure in the different layers. In out example it is <span class="docutils literal"><span class="pre">10</span> <span class="pre">&gt;</span> <span class="pre">40</span> <span class="pre">&gt;</span> <span class="pre">2</span> <span class="pre">&gt;</span> <span class="pre">2</span></span>.</p>
+<p>And probably you&#8217;ve noticed the other way to use layer with activation function. If you don&#8217;t set up layer&#8217;s output size it will not apply linear transformation procedure and just will pass input value through the nonlinear activation function.</p>
+</div>
+<div class="section" id="subnetworks">
+<h2>Subnetworks</h2>
+<p>Subnetworks is a simple trick that makes easier to read and understend the networks structure. Instead of explaining it&#8217;s much easier to show the main advantage of this method. Here is an example of the simpe convolutional network.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Adadelta</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)),</span>
+
+        <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+
+        <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">48</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+
+        <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+
+        <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">(),</span>
+
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">1024</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+
+        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Does it look simple to you? Not at all. However, this is a really simple network. It looks a bit complecated because it contains a lot of simple layers that usually different libraries combine in one. For instance, non-linearity like <a class="reference internal" href="../../apidocs/neupy.layers.activations.html#neupy.layers.activations.Relu" title="neupy.layers.activations.Relu"><span class="xref py py-class docutils literal"><span class="pre">Relu</span></span></a> is usually built-in inside the <a class="reference internal" href="../../apidocs/neupy.layers.convolutions.html#neupy.layers.convolutions.Convolution" title="neupy.layers.convolutions.Convolution"><span class="xref py py-class docutils literal"><span class="pre">Convolution</span></span></a> layer. So instead of combining simple layers in one complecated in NeuPy it&#8217;s better to use subnetworks. Here is an example on how to re-write network&#8217;s structure from the previous example in terms of subnetworks.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Adadelta</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)),</span>
+
+        <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">48</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+
+        <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+
+        <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">(),</span>
+
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>As you can see we use an ability to organize sequence of simple layer in one small network. Each subnetwork defines a sequence of simple operations. You can think about subnetworks as a simple way to define more complecated layers. But instead of creating redundant classes that define complex layers you can define everything in place. In addition it improves the readability, because now you can see order of these simple operations inside the subnetwork.</p>
 </div>
 </div>
 
@@ -161,7 +256,7 @@ For example it can look like this.</p>
         </li><li>
             <a href="../../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -179,17 +274,7 @@ For example it can look like this.</p>
         </div>
     </div>
     <p>Read more in <a href="../../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../../search.html" method="get">

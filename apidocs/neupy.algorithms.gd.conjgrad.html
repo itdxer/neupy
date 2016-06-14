@@ -89,7 +89,7 @@
                   <a href="../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../page1.html">Tutorials</a>
+                  <a href="../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../pages/documentation.html">Documentation</a>
@@ -129,10 +129,10 @@ integers. Each integer describe layer input size. For example,
 <span class="docutils literal"><span class="pre">(2,</span> <span class="pre">4,</span> <span class="pre">1)</span></span> means that network will have 3 layers with 2 input
 units, 4 hidden units and 1 output unit. The one limitation of that
 method is that all layers automaticaly would with sigmoid actiavtion
-function. Other way is just a list of <span class="docutils literal"><span class="pre">BaseLayer`</span></span> class
-instances. For example: <span class="docutils literal"><span class="pre">[Tanh(2),</span> <span class="pre">Relu(4),</span> <span class="pre">Output(1)].</span>
-<span class="pre">And</span> <span class="pre">the</span> <span class="pre">most</span> <span class="pre">readable</span> <span class="pre">one</span> <span class="pre">is</span> <span class="pre">just</span> <span class="pre">layer</span> <span class="pre">pipeline</span>
-<span class="pre">``Tanh(2)</span> <span class="pre">&gt;</span> <span class="pre">Relu(4)</span> <span class="pre">&gt;</span> <span class="pre">Output(1)</span></span>.</p>
+function. Other way is just a list of <span class="docutils literal"><span class="pre">layers.BaseLayer`</span></span> class
+instances. For example: <span class="docutils literal"><span class="pre">[Input(2),</span> <span class="pre">Tanh(4),</span> <span class="pre">Relu(1)]</span></span>.
+And the most readable one is pipeline
+<span class="docutils literal"><span class="pre">Input(2)</span> <span class="pre">&gt;</span> <span class="pre">Tanh(4)</span> <span class="pre">&gt;</span> <span class="pre">Relu(1)</span></span>.</p>
 </div></blockquote>
 <p><strong>error</strong> : {&#8216;mse&#8217;, &#8216;rmse&#8217;, &#8216;mae&#8217;, &#8216;categorical_crossentropy&#8217;,     &#8216;binary_crossentropy&#8217;} or function</p>
 <blockquote>
@@ -193,12 +193,12 @@ training your network, defaults to <span class="docutils literal"><span class="p
 <dl class="last docutils">
 <dt><a class="reference internal" href="neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">GradientDescent</span></span></a></dt>
 <dd>GradientDescent algorithm.</dd>
-<dt><a class="reference internal" href="neupy.algorithms.steps.linear_search.html#neupy.algorithms.steps.linear_search.LinearSearch" title="neupy.algorithms.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">LinearSearch</span></span></a></dt>
+<dt><a class="reference internal" href="neupy.algorithms.step_update.linear_search.html#neupy.algorithms.step_update.linear_search.LinearSearch" title="neupy.algorithms.step_update.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">LinearSearch</span></span></a></dt>
 <dd>Linear Search important algorithm for step     selection in Conjugate Gradient algorithm.</dd>
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">estimators</span><span class="p">,</span> <span class="n">environment</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -218,18 +218,18 @@ training your network, defaults to <span class="docutils literal"><span class="p
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cgnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">ConjugateGradient</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">connection</span><span class="o">=</span><span class="p">[</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span>
 <span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">RoundedOutput</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="p">],</span>
-<span class="gp">... </span>    <span class="n">search_method</span><span class="o">=</span><span class="s">&#39;golden&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">update_function</span><span class="o">=</span><span class="s">&#39;fletcher_reeves&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">search_method</span><span class="o">=</span><span class="s1">&#39;golden&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">update_function</span><span class="o">=</span><span class="s1">&#39;fletcher_reeves&#39;</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LinearSearch</span><span class="p">],</span>
 <span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cgnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y_predict</span> <span class="o">=</span> <span class="n">cgnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_predict</span> <span class="o">=</span> <span class="n">cgnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">real</span> <span class="o">=</span> <span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">predicted</span> <span class="o">=</span> <span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_predict</span><span class="p">)</span>
@@ -242,8 +242,8 @@ training your network, defaults to <span class="docutils literal"><span class="p
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="25%" />
-<col width="75%" />
+<col width="29%" />
+<col width="71%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>predict(input_data)</td>
@@ -254,9 +254,6 @@ training your network, defaults to <span class="docutils literal"><span class="p
 </tr>
 <tr class="row-odd"><td>fit(*args, **kwargs)</td>
 <td>The same as <span class="docutils literal"><span class="pre">train</span></span> method.</td>
-</tr>
-<tr class="row-even"><td>plot_errors(logx=False)</td>
-<td>Draws the error rate update plot. It always shows network learning progress. When you add cross validation data set into training function it displays validation data set error as separated curve. If parameter <span class="docutils literal"><span class="pre">logx</span></span> is equal to the <span class="docutils literal"><span class="pre">True</span></span> value it displays x-axis in logarithmic scale.</td>
 </tr>
 </tbody>
 </table>
@@ -272,7 +269,7 @@ training your network, defaults to <span class="docutils literal"><span class="p
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.conjgrad.ConjugateGradient.options">
-<span class="descname">options</span><em class="property"> = {'train_end_signal': Option(class_name='BaseNetwork', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'addons': Option(class_name='GradientDescent', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'update_function': Option(class_name='ConjugateGradient', value=fletcher_reeves), 'step': Option(class_name='BaseNetwork', value=0.1), 'error': Option(class_name='ConstructableNetwork', value=mse), 'verbose': Option(class_name='Verbose', value=False), 'shuffle_data': Option(class_name='BaseNetwork', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'update_function': Option(class_name='ConjugateGradient', value=fletcher_reeves), 'error': Option(class_name='ConstructableNetwork', value=mse), 'step': Option(class_name='BaseNetwork', value=0.1), 'verbose': Option(class_name='Verbose', value=False), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'addons': Option(class_name='GradientDescent', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -297,7 +294,7 @@ training your network, defaults to <span class="docutils literal"><span class="p
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -315,17 +312,7 @@ training your network, defaults to <span class="docutils literal"><span class="p
         </div>
     </div>
     <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">

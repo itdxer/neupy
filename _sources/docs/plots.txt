@@ -26,3 +26,24 @@ Small example and its output are shown below.
     :width: 100%
     :align: center
     :alt: Hinton diagram example from NeuPy library
+
+Error plot
+----------
+
+This plot shows the basic infomration about the network's training progress.
+
+.. code-block:: python
+
+    >>> from neupy import algorithms, plots
+    >>>
+    >>> gdnet = algorithms.GradientDescent((2, 3, 1))
+    >>> gdnet.train(x_train, y_train, x_test, y_test, epochs=100)
+    >>>
+    >>> plots.error_plot(gdnet)
+
+More information related to this plot function you can in the :plot:`error_plot` documentation.
+
+.. image:: ../_static/screenshots/bpnet-train-errors-plot.png
+    :width: 70%
+    :align: center
+    :alt: GradientDescent epoch errors plot

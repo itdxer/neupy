@@ -89,7 +89,7 @@
                   <a href="../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../page1.html">Tutorials</a>
+                  <a href="../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../pages/documentation.html">Documentation</a>
@@ -143,6 +143,88 @@
 <dd><p>Categorical cross-entropy error.</p>
 </dd></dl>
 
+<dl class="function">
+<dt id="neupy.network.errors.binary_hinge">
+<span class="descclassname">neupy.network.errors.</span><span class="descname">binary_hinge</span><span class="sig-paren">(</span><em>expected</em>, <em>predicted</em>, <em>delta=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/errors.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Computes the binary hinge loss between predictions
+and targets.</p>
+<div class="math">
+\[L_i = \max(0, \delta - t_i p_i)\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>expected</strong> : Theano tensor</p>
+<blockquote>
+<div><p>Targets in {-1, 1} such as ground truth labels.</p>
+</div></blockquote>
+<p><strong>predicted</strong> : Theano tensor</p>
+<blockquote>
+<div><p>Predictions in (-1, 1), such as hyprbolic tangent
+output of a neural network.</p>
+</div></blockquote>
+<p><strong>delta</strong> : scalar</p>
+<blockquote>
+<div><p>The hinge loss margin. Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Theano tensor</p>
+<blockquote class="last">
+<div><p>An expression for the element-wise binary hinge loss.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This is an alternative to the binary cross-entropy
+loss for binary classification problems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.network.errors.categorical_hinge">
+<span class="descclassname">neupy.network.errors.</span><span class="descname">categorical_hinge</span><span class="sig-paren">(</span><em>expected</em>, <em>predicted</em>, <em>delta=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/errors.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Computes the multi-class hinge loss between
+predictions and targets.</p>
+<div class="math">
+\[L_i = \max_{j \not = p_i} (0, t_j - t_{p_i} + \delta)\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>expected</strong> : Theano 2D tensor or 1D tensor</p>
+<blockquote>
+<div><p>Either a vector of int giving the correct class index
+per data point or a 2D tensor of one-hot encoding of
+the correct class in the same layout as predictions
+(non-binary targets in [0, 1] do not work!).</p>
+</div></blockquote>
+<p><strong>predicted</strong> : Theano 2D tensor</p>
+<blockquote>
+<div><p>Predictions in (0, 1), such as softmax output of
+a neural network, with data points in rows and class
+probabilities in columns.</p>
+</div></blockquote>
+<p><strong>delta</strong> : scalar</p>
+<blockquote>
+<div><p>The hinge loss margin. Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Theano 1D tensor</p>
+<blockquote class="last">
+<div><p>An expression for the item-wise multi-class hinge loss.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This is an alternative to the categorical cross-entropy
+loss for multi-class classification problems.</p>
+</dd></dl>
+
 </div>
 
     <div class="postmeta">
@@ -158,7 +240,7 @@
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -176,17 +258,7 @@
         </div>
     </div>
     <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">

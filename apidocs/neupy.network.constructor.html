@@ -89,7 +89,7 @@
                   <a href="../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../page1.html">Tutorials</a>
+                  <a href="../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../pages/documentation.html">Documentation</a>
@@ -119,10 +119,10 @@ integers. Each integer describe layer input size. For example,
 <span class="docutils literal"><span class="pre">(2,</span> <span class="pre">4,</span> <span class="pre">1)</span></span> means that network will have 3 layers with 2 input
 units, 4 hidden units and 1 output unit. The one limitation of that
 method is that all layers automaticaly would with sigmoid actiavtion
-function. Other way is just a list of <span class="docutils literal"><span class="pre">BaseLayer`</span></span> class
-instances. For example: <span class="docutils literal"><span class="pre">[Tanh(2),</span> <span class="pre">Relu(4),</span> <span class="pre">Output(1)].</span>
-<span class="pre">And</span> <span class="pre">the</span> <span class="pre">most</span> <span class="pre">readable</span> <span class="pre">one</span> <span class="pre">is</span> <span class="pre">just</span> <span class="pre">layer</span> <span class="pre">pipeline</span>
-<span class="pre">``Tanh(2)</span> <span class="pre">&gt;</span> <span class="pre">Relu(4)</span> <span class="pre">&gt;</span> <span class="pre">Output(1)</span></span>.</p>
+function. Other way is just a list of <span class="docutils literal"><span class="pre">layers.BaseLayer`</span></span> class
+instances. For example: <span class="docutils literal"><span class="pre">[Input(2),</span> <span class="pre">Tanh(4),</span> <span class="pre">Relu(1)]</span></span>.
+And the most readable one is pipeline
+<span class="docutils literal"><span class="pre">Input(2)</span> <span class="pre">&gt;</span> <span class="pre">Tanh(4)</span> <span class="pre">&gt;</span> <span class="pre">Relu(1)</span></span>.</p>
 </div></blockquote>
 <p><strong>error</strong> : {&#8216;mse&#8217;, &#8216;rmse&#8217;, &#8216;mae&#8217;, &#8216;categorical_crossentropy&#8217;,     &#8216;binary_crossentropy&#8217;} or function</p>
 <blockquote>
@@ -205,22 +205,12 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </tr>
 </tbody>
 </table>
-<p class="rubric">Methods</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="7%" />
-<col width="93%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>plot_errors(logx=False)</td>
-<td>Draws the error rate update plot. It always shows network learning progress. When you add cross validation data set into training function it displays validation data set error as separated curve. If parameter <span class="docutils literal"><span class="pre">logx</span></span> is equal to the <span class="docutils literal"><span class="pre">True</span></span> value it displays x-axis in logarithmic scale.</td>
-</tr>
-</tbody>
-</table>
 <dl class="method">
 <dt id="neupy.network.constructor.ConstructableNetwork.architecture">
 <span class="descname">architecture</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/constructor.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<dd><p>Shows network&#8217;s architecture in the terminal if
+<span class="docutils literal"><span class="pre">verbose</span></span> parameter is equal to <span class="docutils literal"><span class="pre">True</span></span>.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.network.constructor.ConstructableNetwork.error">
@@ -230,7 +220,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <dl class="method">
 <dt id="neupy.network.constructor.ConstructableNetwork.format_input_data">
 <span class="descname">format_input_data</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/constructor.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Input data format is depence on the input layer
+<dd><p>Input data format is depend on the input layer
 structure.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -252,7 +242,7 @@ structure.</p>
 <dl class="method">
 <dt id="neupy.network.constructor.ConstructableNetwork.format_target_data">
 <span class="descname">format_target_data</span><span class="sig-paren">(</span><em>target_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/constructor.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Target data format is depence on the output layer
+<dd><p>Target data format is depend on the output layer
 structure.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -282,7 +272,7 @@ would be trigger after each training epoch for each layer.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>layer</strong> : object</p>
 <blockquote>
-<div><p>Any layer that inherit from BaseLayer class.</p>
+<div><p>Any layer that inherit from layers.BaseLayer class.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -316,13 +306,17 @@ training procedures.</p>
 
 <dl class="method">
 <dt id="neupy.network.constructor.ConstructableNetwork.init_param_updates">
-<span class="descname">init_param_updates</span><span class="sig-paren">(</span><em>parameter</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/constructor.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">init_param_updates</span><span class="sig-paren">(</span><em>layer</em>, <em>parameter</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/constructor.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Initialize parameter updates.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>parameter</strong> : object</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>layer</strong> : object</p>
+<blockquote>
+<div><p>Any layer that inherit from BaseLayer class.</p>
+</div></blockquote>
+<p><strong>parameter</strong> : object</p>
 <blockquote>
 <div><p>Usualy it is a weight or bias.</p>
 </div></blockquote>
@@ -372,31 +366,13 @@ related to the current epoch.</p>
 
 <dl class="attribute">
 <dt id="neupy.network.constructor.ConstructableNetwork.options">
-<span class="descname">options</span><em class="property"> = {'step': Option(class_name='BaseNetwork', value=0.1), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'error': Option(class_name='ConstructableNetwork', value=mse), 'verbose': Option(class_name='Verbose', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'shuffle_data': Option(class_name='BaseNetwork', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/constructor.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'train_end_signal': Option(class_name='BaseNetwork', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'error': Option(class_name='ConstructableNetwork', value=mse), 'step': Option(class_name='BaseNetwork', value=0.1), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'verbose': Option(class_name='Verbose', value=False), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/constructor.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.network.constructor.ConstructableNetwork.predict">
 <span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/constructor.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Return prediction results for the input data. Output result also
-include postprocessing step related to the final layer that
-transform output to convenient format for end-use.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_data</strong> : array-like</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">array-like</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="neupy.network.constructor.ConstructableNetwork.predict_raw">
-<span class="descname">predict_raw</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/constructor.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Make raw prediction without final layer postprocessing step.</p>
+<dd><p>Return prediction results for the input data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -434,7 +410,8 @@ transform output to convenient format for end-use.</p>
 <dl class="method">
 <dt id="neupy.network.constructor.ConstructableNetwork.train">
 <span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em>, <em>input_test=None</em>, <em>target_test=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/constructor.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<dd><p>Trains neural network.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="neupy.network.constructor.ConstructableNetwork.train_epoch">
@@ -475,7 +452,7 @@ transform output to convenient format for end-use.</p>
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -493,17 +470,7 @@ transform output to convenient format for end-use.</p>
         </div>
     </div>
     <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">

@@ -89,7 +89,7 @@
                   <a href="../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../page1.html">Tutorials</a>
+                  <a href="../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../pages/documentation.html">Documentation</a>
@@ -104,10 +104,21 @@
 <dl class="class">
 <dt id="neupy.layers.connections.LayerConnection">
 <em class="property">class </em><span class="descclassname">neupy.layers.connections.</span><span class="descname">LayerConnection</span><span class="sig-paren">(</span><em>left</em>, <em>right</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.layers.connections.Connection" title="neupy.layers.connections.Connection"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.connections.Connection</span></span></a></p>
+<dd><p>Bases: <a class="reference internal" href="#neupy.layers.connections.ChainConnection" title="neupy.layers.connections.ChainConnection"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.connections.ChainConnection</span></span></a></p>
+<p>Connect to layers or connections together.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>left</strong> : ChainConnection instance</p>
+<p class="last"><strong>right</strong> : ChainConnection instance</p>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
-<dt id="neupy.layers.connections.LayerConnection.connect">
-<span class="descname">connect</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.connections.LayerConnection.initialize">
+<span class="descname">initialize</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -116,13 +127,28 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="neupy.layers.connections.LayerConnection.input_shape">
+<span class="descname">input_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="neupy.layers.connections.LayerConnection.left_layer">
 <span class="descname">left_layer</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.connections.LayerConnection.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.connections.LayerConnection.output_layer">
 <span class="descname">output_layer</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.connections.LayerConnection.output_shape">
+<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -133,36 +159,50 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="neupy.layers.connections.Connection">
-<em class="property">class </em><span class="descclassname">neupy.layers.connections.</span><span class="descname">Connection</span><span class="sig-paren">(</span><em>left</em>, <em>right</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.layers.connections.ChainConnection" title="neupy.layers.connections.ChainConnection"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.connections.ChainConnection</span></span></a></p>
-<dl class="method">
-<dt id="neupy.layers.connections.Connection.connect">
-<span class="descname">connect</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.connections.Connection.left_layer">
-<span class="descname">left_layer</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.connections.Connection.right_layer">
-<span class="descname">right_layer</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="neupy.layers.connections.ChainConnection">
 <em class="property">class </em><span class="descclassname">neupy.layers.connections.</span><span class="descname">ChainConnection</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">object</span></span></p>
+<dl class="method">
+<dt id="neupy.layers.connections.ChainConnection.disable_training_state">
+<span class="descname">disable_training_state</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.connections.ChainConnection.initialize">
+<span class="descname">initialize</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.connections.ChainConnection.input_shape">
+<span class="descname">input_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.connections.ChainConnection.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.connections.ChainConnection.output_shape">
+<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="exception">
 <dt id="neupy.layers.connections.NetworkConnectionError">
 <em class="property">exception </em><span class="descclassname">neupy.layers.connections.</span><span class="descname">NetworkConnectionError</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">Exception</span></span></p>
+<p>Error class that triggers in case of connection
+within layers in the network</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="neupy.layers.connections.LayerConnectionError">
+<em class="property">exception </em><span class="descclassname">neupy.layers.connections.</span><span class="descname">LayerConnectionError</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">Exception</span></span></p>
+<p>Error class that triggers in case of connection
+issues within layers.</p>
 </dd></dl>
 
 </div>
@@ -180,7 +220,7 @@
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -198,17 +238,7 @@
         </div>
     </div>
     <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">

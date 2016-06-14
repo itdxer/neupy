@@ -89,7 +89,7 @@
                   <a href="../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../page1.html">Tutorials</a>
+                  <a href="../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../pages/documentation.html">Documentation</a>
@@ -181,8 +181,8 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">train_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
 <span class="gp">... </span>    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
@@ -195,7 +195,8 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <span class="gp">... </span><span class="p">])</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">instnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Instar</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Output</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">n_inputs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">n_outputs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">n_unconditioned</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -211,8 +212,8 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="9%" />
-<col width="91%" />
+<col width="51%" />
+<col width="49%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>predict(input_data)</td>
@@ -224,14 +225,11 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <tr class="row-odd"><td>fit(*args, **kwargs)</td>
 <td>The same as <span class="docutils literal"><span class="pre">train</span></span> method.</td>
 </tr>
-<tr class="row-even"><td>plot_errors(logx=False)</td>
-<td>Draws the error rate update plot. It always shows network learning progress. When you add cross validation data set into training function it displays validation data set error as separated curve. If parameter <span class="docutils literal"><span class="pre">logx</span></span> is equal to the <span class="docutils literal"><span class="pre">True</span></span> value it displays x-axis in logarithmic scale.</td>
-</tr>
 </tbody>
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.associative.instar.Instar.options">
-<span class="descname">options</span><em class="property"> = {'n_inputs': Option(class_name='BaseStepAssociative', value=None), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'weight': Option(class_name='BaseAssociative', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'n_outputs': Option(class_name='BaseAssociative', value=None), 'step': Option(class_name='BaseNetwork', value=0.1), 'verbose': Option(class_name='Verbose', value=False), 'bias': Option(class_name='BaseStepAssociative', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'n_unconditioned': Option(class_name='BaseStepAssociative', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/instar.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'n_inputs': Option(class_name='BaseStepAssociative', value=None), 'bias': Option(class_name='BaseStepAssociative', value=None), 'n_outputs': Option(class_name='BaseAssociative', value=None), 'step': Option(class_name='BaseNetwork', value=0.1), 'verbose': Option(class_name='Verbose', value=False), 'weight': Option(class_name='BaseAssociative', value=None), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'n_unconditioned': Option(class_name='BaseStepAssociative', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/instar.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -256,7 +254,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -274,17 +272,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
         </div>
     </div>
     <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">

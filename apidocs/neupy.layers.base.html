@@ -89,7 +89,7 @@
                   <a href="../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../page1.html">Tutorials</a>
+                  <a href="../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../pages/documentation.html">Documentation</a>
@@ -106,14 +106,71 @@
 <em class="property">class </em><span class="descclassname">neupy.layers.base.</span><span class="descname">BaseLayer</span><span class="sig-paren">(</span><em>*args</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.layers.connections.html#neupy.layers.connections.ChainConnection" title="neupy.layers.connections.ChainConnection"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.connections.ChainConnection</span></span></a>, <a class="reference internal" href="neupy.core.config.html#neupy.core.config.Configurable" title="neupy.core.config.Configurable"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.config.Configurable</span></span></a></p>
 <p>Base class for all layers.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>training_state</td>
+<td>(bool) Defines whether layer in training state or not.</td>
+</tr>
+<tr class="row-even"><td>layer_id</td>
+<td>(int) Layer&#8217;s identifier.</td>
+</tr>
+<tr class="row-odd"><td>parameters</td>
+<td>(list) List of layer&#8217;s parameters.</td>
+</tr>
+<tr class="row-even"><td>relate_to_layer</td>
+<td>(BaseLayer or None)</td>
+</tr>
+<tr class="row-odd"><td>relate_from_layer</td>
+<td>(BaseLayer or None)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="69%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
+</tr>
+<tr class="row-even"><td>relate_to(right_layer)</td>
+<td>Connect current layer with the next one.</td>
+</tr>
+<tr class="row-odd"><td>disable_training_state()</td>
+<td>Swith off trainig state.</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="neupy.layers.base.BaseLayer.initialize">
 <span class="descname">initialize</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="neupy.layers.base.BaseLayer.input_shape">
+<span class="descname">input_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="neupy.layers.base.BaseLayer.options">
 <span class="descname">options</span><em class="property"> = {}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.base.BaseLayer.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.base.BaseLayer.output_shape">
+<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -136,13 +193,13 @@
 <blockquote>
 <div><p>Layer input size.</p>
 </div></blockquote>
-<p><strong>weight</strong> : 2D array-like or None</p>
+<p><strong>weight</strong> : 2D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer weights. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.
 <span class="docutils literal"><span class="pre">None</span></span> by default.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like or None</p>
+<p><strong>bias</strong> : 1D array-like, Theano shared variable or None</p>
 <blockquote>
 <div><p>Define your layer bias. <span class="docutils literal"><span class="pre">None</span></span> means that your weights will be
 generate randomly dependence on property <span class="docutils literal"><span class="pre">init_method</span></span>.</p>
@@ -175,9 +232,9 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 <span class="descname">bias</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="neupy.layers.base.ParameterBasedLayer.bias_shape">
-<span class="descname">bias_shape</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">bias_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -197,7 +254,12 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 
 <dl class="attribute">
 <dt id="neupy.layers.base.ParameterBasedLayer.options">
-<span class="descname">options</span><em class="property"> = {'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'bias': Option(class_name='ParameterBasedLayer', value=None), 'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'bounds': Option(class_name='ParameterBasedLayer', value=[0, 1]), 'weight': Option(class_name='ParameterBasedLayer', value=None), 'init_method': Option(class_name='ParameterBasedLayer', value=xavier_normal), 'bias': Option(class_name='ParameterBasedLayer', value=None), 'size': Option(class_name='ParameterBasedLayer', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.base.ParameterBasedLayer.output_shape">
+<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -210,9 +272,56 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
 <span class="descname">weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="neupy.layers.base.ParameterBasedLayer.weight_shape">
-<span class="descname">weight_shape</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">weight_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.layers.base.Input">
+<em class="property">class </em><span class="descclassname">neupy.layers.base.</span><span class="descname">Input</span><span class="sig-paren">(</span><em>size</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#neupy.layers.base.BaseLayer" title="neupy.layers.base.BaseLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.base.BaseLayer</span></span></a></p>
+<p>Input layer. It identifies feature shape/size for the
+input value. Especially useful in the CNN.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : int, tuple or None</p>
+<blockquote class="last">
+<div><p>Identifies input data shape size. <span class="docutils literal"><span class="pre">None</span></span> means that network
+doesn&#8217;t have input feature with fixed size.
+Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.layers.base.Input.input_shape">
+<span class="descname">input_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.base.Input.options">
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='Input', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.base.Input.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.base.Input.output_shape">
+<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.base.Input.size">
+<span class="descname">size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -232,7 +341,7 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -250,17 +359,7 @@ Defaults to <span class="docutils literal"><span class="pre">(0,</span> <span cl
         </div>
     </div>
     <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">

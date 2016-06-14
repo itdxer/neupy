@@ -89,7 +89,7 @@
                   <a href="../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../page1.html">Tutorials</a>
+                  <a href="../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../pages/documentation.html">Documentation</a>
@@ -125,10 +125,10 @@ integers. Each integer describe layer input size. For example,
 <span class="docutils literal"><span class="pre">(2,</span> <span class="pre">4,</span> <span class="pre">1)</span></span> means that network will have 3 layers with 2 input
 units, 4 hidden units and 1 output unit. The one limitation of that
 method is that all layers automaticaly would with sigmoid actiavtion
-function. Other way is just a list of <span class="docutils literal"><span class="pre">BaseLayer`</span></span> class
-instances. For example: <span class="docutils literal"><span class="pre">[Tanh(2),</span> <span class="pre">Relu(4),</span> <span class="pre">Output(1)].</span>
-<span class="pre">And</span> <span class="pre">the</span> <span class="pre">most</span> <span class="pre">readable</span> <span class="pre">one</span> <span class="pre">is</span> <span class="pre">just</span> <span class="pre">layer</span> <span class="pre">pipeline</span>
-<span class="pre">``Tanh(2)</span> <span class="pre">&gt;</span> <span class="pre">Relu(4)</span> <span class="pre">&gt;</span> <span class="pre">Output(1)</span></span>.</p>
+function. Other way is just a list of <span class="docutils literal"><span class="pre">layers.BaseLayer`</span></span> class
+instances. For example: <span class="docutils literal"><span class="pre">[Input(2),</span> <span class="pre">Tanh(4),</span> <span class="pre">Relu(1)]</span></span>.
+And the most readable one is pipeline
+<span class="docutils literal"><span class="pre">Input(2)</span> <span class="pre">&gt;</span> <span class="pre">Tanh(4)</span> <span class="pre">&gt;</span> <span class="pre">Relu(1)</span></span>.</p>
 </div></blockquote>
 <p><strong>error</strong> : {&#8216;mse&#8217;, &#8216;rmse&#8217;, &#8216;mae&#8217;, &#8216;categorical_crossentropy&#8217;,     &#8216;binary_crossentropy&#8217;} or function</p>
 <blockquote>
@@ -191,7 +191,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.algorithms</span> <span class="kn">import</span> <span class="n">GradientDescent</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
@@ -225,8 +225,8 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="25%" />
-<col width="75%" />
+<col width="29%" />
+<col width="71%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>predict(input_data)</td>
@@ -237,9 +237,6 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </tr>
 <tr class="row-odd"><td>fit(*args, **kwargs)</td>
 <td>The same as <span class="docutils literal"><span class="pre">train</span></span> method.</td>
-</tr>
-<tr class="row-even"><td>plot_errors(logx=False)</td>
-<td>Draws the error rate update plot. It always shows network learning progress. When you add cross validation data set into training function it displays validation data set error as separated curve. If parameter <span class="docutils literal"><span class="pre">logx</span></span> is equal to the <span class="docutils literal"><span class="pre">True</span></span> value it displays x-axis in logarithmic scale.</td>
 </tr>
 </tbody>
 </table>
@@ -265,7 +262,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.base.GradientDescent.options">
-<span class="descname">options</span><em class="property"> = {'train_end_signal': Option(class_name='BaseNetwork', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'addons': Option(class_name='GradientDescent', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'step': Option(class_name='BaseNetwork', value=0.1), 'error': Option(class_name='ConstructableNetwork', value=mse), 'verbose': Option(class_name='Verbose', value=False), 'shuffle_data': Option(class_name='BaseNetwork', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'error': Option(class_name='ConstructableNetwork', value=mse), 'step': Option(class_name='BaseNetwork', value=0.1), 'verbose': Option(class_name='Verbose', value=False), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'addons': Option(class_name='GradientDescent', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -305,10 +302,10 @@ integers. Each integer describe layer input size. For example,
 <span class="docutils literal"><span class="pre">(2,</span> <span class="pre">4,</span> <span class="pre">1)</span></span> means that network will have 3 layers with 2 input
 units, 4 hidden units and 1 output unit. The one limitation of that
 method is that all layers automaticaly would with sigmoid actiavtion
-function. Other way is just a list of <span class="docutils literal"><span class="pre">BaseLayer`</span></span> class
-instances. For example: <span class="docutils literal"><span class="pre">[Tanh(2),</span> <span class="pre">Relu(4),</span> <span class="pre">Output(1)].</span>
-<span class="pre">And</span> <span class="pre">the</span> <span class="pre">most</span> <span class="pre">readable</span> <span class="pre">one</span> <span class="pre">is</span> <span class="pre">just</span> <span class="pre">layer</span> <span class="pre">pipeline</span>
-<span class="pre">``Tanh(2)</span> <span class="pre">&gt;</span> <span class="pre">Relu(4)</span> <span class="pre">&gt;</span> <span class="pre">Output(1)</span></span>.</p>
+function. Other way is just a list of <span class="docutils literal"><span class="pre">layers.BaseLayer`</span></span> class
+instances. For example: <span class="docutils literal"><span class="pre">[Input(2),</span> <span class="pre">Tanh(4),</span> <span class="pre">Relu(1)]</span></span>.
+And the most readable one is pipeline
+<span class="docutils literal"><span class="pre">Input(2)</span> <span class="pre">&gt;</span> <span class="pre">Tanh(4)</span> <span class="pre">&gt;</span> <span class="pre">Relu(1)</span></span>.</p>
 </div></blockquote>
 <p><strong>error</strong> : {&#8216;mse&#8217;, &#8216;rmse&#8217;, &#8216;mae&#8217;, &#8216;categorical_crossentropy&#8217;,     &#8216;binary_crossentropy&#8217;} or function</p>
 <blockquote>
@@ -378,16 +375,14 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mgdnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">MinibatchGradientDescent</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mgdnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 </pre></div>
@@ -416,8 +411,8 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="25%" />
-<col width="75%" />
+<col width="29%" />
+<col width="71%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>predict(input_data)</td>
@@ -429,9 +424,6 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <tr class="row-odd"><td>fit(*args, **kwargs)</td>
 <td>The same as <span class="docutils literal"><span class="pre">train</span></span> method.</td>
 </tr>
-<tr class="row-even"><td>plot_errors(logx=False)</td>
-<td>Draws the error rate update plot. It always shows network learning progress. When you add cross validation data set into training function it displays validation data set error as separated curve. If parameter <span class="docutils literal"><span class="pre">logx</span></span> is equal to the <span class="docutils literal"><span class="pre">True</span></span> value it displays x-axis in logarithmic scale.</td>
-</tr>
 </tbody>
 </table>
 <dl class="attribute">
@@ -441,23 +433,52 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.base.MinibatchGradientDescent.options">
-<span class="descname">options</span><em class="property"> = {'train_end_signal': Option(class_name='BaseNetwork', value=None), 'batch_size': Option(class_name='MinibatchGradientDescent', value=100), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'addons': Option(class_name='GradientDescent', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'step': Option(class_name='BaseNetwork', value=0.1), 'error': Option(class_name='ConstructableNetwork', value=mse), 'verbose': Option(class_name='Verbose', value=False), 'shuffle_data': Option(class_name='BaseNetwork', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'error': Option(class_name='ConstructableNetwork', value=mse), 'step': Option(class_name='BaseNetwork', value=0.1), 'verbose': Option(class_name='Verbose', value=False), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'batch_size': Option(class_name='MinibatchGradientDescent', value=100), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'addons': Option(class_name='GradientDescent', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="neupy.algorithms.gd.base.MinibatchGradientDescent.predict_raw">
-<span class="descname">predict_raw</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<dt id="neupy.algorithms.gd.base.MinibatchGradientDescent.predict">
+<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Makes a raw prediction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_data</strong> : array-like</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">array-like</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.gd.base.MinibatchGradientDescent.prediction_error">
 <span class="descname">prediction_error</span><span class="sig-paren">(</span><em>input_data</em>, <em>target_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<dd><p>Check the prediction error for the specified input samples
+and their targets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_data</strong> : array-like</p>
+<p><strong>target_data</strong> : array-like</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
+<blockquote class="last">
+<div><p>Prediction error.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.gd.base.MinibatchGradientDescent.train_epoch">
 <span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Network training epoch.</p>
+<dd><p>Train one epoch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -474,8 +495,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
 <blockquote class="last">
-<div><p>Train data prediction error based on chosen
-error function.</p>
+<div><p>Training error.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -500,7 +520,7 @@ error function.</p>
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -518,17 +538,7 @@ error function.</p>
         </div>
     </div>
     <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">

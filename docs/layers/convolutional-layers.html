@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="next" title="Custom layers" href="create-custom-layers.html" /><link rel="prev" title="Basics" href="basics.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Create custom layers" href="create-custom-layers.html" /><link rel="prev" title="Basics" href="basics.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
         VERSION:     '1.5',
@@ -89,7 +89,7 @@
                   <a href="../../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../../page1.html">Tutorials</a>
+                  <a href="../../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../../pages/documentation.html">Documentation</a>
@@ -101,36 +101,48 @@
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="convolutional-layers">
 <h1>Convolutional layers</h1>
-<p>NeuPy supports CNN architectures. Here is a simple example that solves MNIST problem.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+<p>NeuPy supports CNN architectures. Here is a simple a network that aplies on the MNIST dataset.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 <span class="kn">from</span> <span class="nn">data</span> <span class="kn">import</span> <span class="n">load_mnist</span>
 
 <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">load_mnist</span><span class="p">()</span>
 
 <span class="n">network</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Adadelta</span><span class="p">(</span>
     <span class="p">[</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">))</span>
+
+        <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">48</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">48</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.2</span><span class="p">),</span>
 
         <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">(),</span>
 
-        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">6912</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.3</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">ArgmaxOutput</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
     <span class="p">],</span>
 
-    <span class="n">error</span><span class="o">=</span><span class="s">&#39;categorical_crossentropy&#39;</span><span class="p">,</span>
+    <span class="n">error</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span>
     <span class="n">step</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
     <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">network</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="section" id="convolution">
+<h2>Convolution</h2>
+<p>NeuPy supports only 2D convolution. It&#8217;s trivial to make a 1D convoltion. You just need to set up width or height equal to 1. In this section I will focuse only on 2D convoltuin, but with a small modifications everything work for 1D as well.</p>
+<p>In the previous example you should see a network that contains a couple of convolutional layers. Each of these layers takes one mandatory argument that defines convolutional layer structure. Each parameter excepts a tuple that contains three integers <span class="docutils literal"><span class="pre">(output</span> <span class="pre">channels,</span> <span class="pre">filter</span> <span class="pre">rows,</span> <span class="pre">filter</span> <span class="pre">columns)</span></span>. Information about the input channel takes from the previous layer.</p>
+<p>Convolutional layer has a few other attributes that you can modify. You can check the &#8216;<a class="reference internal" href="../../apidocs/neupy.layers.convolutions.html#neupy.layers.convolutions.Convolution" title="neupy.layers.convolutions.Convolution"><span class="xref py py-class docutils literal"><span class="pre">Convolution</span></span></a>&#8216; layer&#8217;s documentation and find more information ralated to this layer type.</p>
+</div>
+<div class="section" id="pooling">
+<h2>Pooling</h2>
+<p>Pooling works very similar. As in the convolutional layer you also need to set up one mandatory attribute as a tuple. But in case of pooling layer this attribute should be a tuple that contains only two integers. This parameters defines a factor by which to downscale <span class="docutils literal"><span class="pre">(vertical,</span> <span class="pre">horizontal)</span></span>. (2, 2) will halve the image in each dimension.</p>
+<p>Pooling defined as for the 2D layers, but you also can use in case of 1D convolution. In that case you need to define one of the downscale factors equal to 1. For instance, it can be somethig like that <span class="docutils literal"><span class="pre">(1,</span> <span class="pre">2)</span></span>.</p>
 </div>
 </div>
 
@@ -140,7 +152,7 @@
         
         </div><ul class="related clearfix">
             <li class="left"> &laquo; <a href="basics.html">Basics</a></li>
-            <li class="right"><a href="create-custom-layers.html">Custom layers</a> &raquo; </li>
+            <li class="right"><a href="create-custom-layers.html">Create custom layers</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
@@ -150,7 +162,7 @@
         </li><li>
             <a href="../../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -168,17 +180,7 @@
         </div>
     </div>
     <p>Read more in <a href="../../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../../search.html" method="get">

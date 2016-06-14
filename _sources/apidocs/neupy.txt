@@ -7,7 +7,6 @@ Subpackages
 .. toctree::
 
     neupy.algorithms
-    neupy.commands
     neupy.core
     neupy.datasets
     neupy.helpers
@@ -24,6 +23,7 @@ Submodules
    neupy.environment
    neupy.estimators
    neupy.preprocessing
+   neupy.surgery
    neupy.utils
 
 Module contents

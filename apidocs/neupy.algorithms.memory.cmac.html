@@ -89,7 +89,7 @@
                   <a href="../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../page1.html">Tutorials</a>
+                  <a href="../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../pages/documentation.html">Documentation</a>
@@ -160,10 +160,10 @@ training your network, defaults to <span class="docutils literal"><span class="p
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li>Network always use Mean Absolute Error (MAE).</li>
-<li>Works for multi dimentional target values.</li>
+<li>Works for multi dimensional target values.</li>
 </ul>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.algorithms</span> <span class="kn">import</span> <span class="n">CMAC</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">train_space</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
@@ -202,8 +202,8 @@ training your network, defaults to <span class="docutils literal"><span class="p
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="25%" />
-<col width="75%" />
+<col width="29%" />
+<col width="71%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>predict(input_data)</td>
@@ -214,9 +214,6 @@ training your network, defaults to <span class="docutils literal"><span class="p
 </tr>
 <tr class="row-odd"><td>fit(*args, **kwargs)</td>
 <td>The same as <span class="docutils literal"><span class="pre">train</span></span> method.</td>
-</tr>
-<tr class="row-even"><td>plot_errors(logx=False)</td>
-<td>Draws the error rate update plot. It always shows network learning progress. When you add cross validation data set into training function it displays validation data set error as separated curve. If parameter <span class="docutils literal"><span class="pre">logx</span></span> is equal to the <span class="docutils literal"><span class="pre">True</span></span> value it displays x-axis in logarithmic scale.</td>
 </tr>
 </tbody>
 </table>
@@ -237,7 +234,7 @@ training your network, defaults to <span class="docutils literal"><span class="p
 
 <dl class="attribute">
 <dt id="neupy.algorithms.memory.cmac.CMAC.options">
-<span class="descname">options</span><em class="property"> = {'step': Option(class_name='BaseNetwork', value=0.1), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'associative_unit_size': Option(class_name='CMAC', value=2), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'verbose': Option(class_name='Verbose', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'quantization': Option(class_name='CMAC', value=10)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'train_end_signal': Option(class_name='BaseNetwork', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'step': Option(class_name='BaseNetwork', value=0.1), 'quantization': Option(class_name='CMAC', value=10), 'associative_unit_size': Option(class_name='CMAC', value=2), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'verbose': Option(class_name='Verbose', value=False), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -277,7 +274,7 @@ training your network, defaults to <span class="docutils literal"><span class="p
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -295,17 +292,7 @@ training your network, defaults to <span class="docutils literal"><span class="p
         </div>
     </div>
     <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">

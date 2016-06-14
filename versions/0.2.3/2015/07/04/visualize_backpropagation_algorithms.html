@@ -1,0 +1,378 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="viewport" content="width=device-width">
+        <title>Visualize Gradient Descent Algorithms &mdash; NeuPy</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="prev" title="Boston house-prices dataset" href="boston_house_prices_dataset.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+<style media="screen" type="text/css">
+    #fork_me { display: none; }
+    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
+    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
+
+    .docutils { width: 100%; }
+    .docutils td { padding: 10px; }
+    .section { word-wrap:break-word; }
+    .descname { font-weight: bold; }
+    .highlight-python + .figure { margin-top: 20px; }
+    .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+    .dataframe td { padding: 5px; }
+
+    .math .gd { color: #000 !important; } /* Generic.Deleted */
+    .math .m { color: #000 !important; } /* Literal.Number */
+    .math .s { color: #000 !important; } /* Literal.String */
+    .math .mf { color: #000 !important; } /* Literal.Number.Float */
+    .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+    .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+    .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+    .math .sc { color: #000 !important; } /* Literal.String.Char */
+    .math .s2 { color: #000 !important; } /* Literal.String.Double */
+    .math .si { color: #000 !important; } /* Literal.String.Interpol */
+    .math .sx { color: #000 !important; } /* Literal.String.Other */
+    .math .s1 { color: #000 !important; } /* Literal.String.Single */
+    .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+    .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+</style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../../../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
+          </header>
+      <nav role="navigation">
+            <ul><li class="main-nav">
+                  <a href="../../../pages/home.html">Home</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../page1.html">Tutorials</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/documentation.html">Documentation</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/installation.html">Installation</a>
+                </li>
+              </ul>
+          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
+            <span>July 04, 2015</span>
+        </div>
+    <div class="section" id="visualize-gradient-descent-algorithms">
+<h1><a class="toc-backref" href="#id3">Visualize Gradient Descent Algorithms</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#visualize-gradient-descent-algorithms" id="id3">Visualize Gradient Descent Algorithms</a><ul>
+<li><a class="reference internal" href="#checking-data" id="id4">Checking data</a></li>
+<li><a class="reference internal" href="#initialize-contour" id="id5">Initialize contour</a></li>
+<li><a class="reference internal" href="#id1" id="id6">Visualize Gradient Descent algorithms</a><ul>
+<li><a class="reference internal" href="#gradient-descent" id="id7">Gradient Descent</a></li>
+<li><a class="reference internal" href="#momentum" id="id8">Momentum</a></li>
+<li><a class="reference internal" href="#rprop" id="id9">RPROP</a></li>
+<li><a class="reference internal" href="#irprop" id="id10">iRPROP+</a></li>
+<li><a class="reference internal" href="#conjugate-gradient-and-golden-search" id="id11">Conjugate Gradient and Golden Search</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bring-them-all-together" id="id12">Bring them all together</a></li>
+<li><a class="reference internal" href="#summary" id="id13">Summary</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>In this tutorial we will test different variations of Gradient Descent algorithms, visualize them and try to figure out some important features from a plot that we will get.</p>
+<div class="section" id="checking-data">
+<h2><a class="toc-backref" href="#id4">Checking data</a></h2>
+<p>First of all we need to define simple data set which contains 6 points with two features.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="n">input_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>
+<span class="p">])</span>
+<span class="n">target_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+<p>So we can make a scatter plot and look closer at this dots.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">input_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">input_data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">target_data</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/bp-vis-scatter.png"><img alt="Dataset scatter plot" src="../../../_images/bp-vis-scatter.png" style="width: 80%;" /></a>
+</div>
+<p>From the figure above we can clearly see that all dots are linearly separable and we are able to solve this problem with simple perceptron.
+But a goal of this tutorial is to make clear visualization of learning process for different Gradient Descent algorithm variations, so the problem must be as simple as possible, because in other cases it will be complex to visualize.</p>
+<p>So, as the problem is linear separable we can solve it without hidden layers in network.
+There are two features and two classes, so we can build network which will take 2 input values and 1 output.
+We need just two weights, so we can visualize them in contour plot.</p>
+</div>
+<div class="section" id="initialize-contour">
+<h2><a class="toc-backref" href="#id5">Initialize contour</a></h2>
+<p>I wouldn&#8217;t add all code related to the plots building. For understanding of the entire content of the article it is not necessary to understand all code. But if you are interested in the all code you can check the main script <a class="reference external" href="https://github.com/itdxer/neupy/blob/master/examples/gd/gd_algorithms_visualization.py">here</a>.</p>
+<a class="reference internal image-reference" href="../../../_images/raw-contour-plot.png"><img alt="Approximation function contour plot" class="align-center" src="../../../_images/raw-contour-plot.png" style="width: 80%;" /></a>
+<p>The plot above shows the approximation error rate depence on the network weights. The best error must be as small as possible. The best weights combination for this problem should be near the lower right corner in the blue area.</p>
+<p>Next, we are going to look at 5 algorithms based on Gradient Descent. They are:</p>
+<ul class="simple">
+<li>Gradient descent</li>
+<li>Momentum</li>
+<li>RPROP</li>
+<li>iRPROP+</li>
+<li>Conjugate Gradient + Golden Search</li>
+</ul>
+<p>Let&#8217;s define start point for our algorithms. As we can see from the figure above the position (-4, -4) is on the red part of the plot and the error for it would be approximetly 0.43, so we define default weights on this position.</p>
+<p>This function will train the network until the error will be smaller than <cite>0.125</cite>. Path for all networks would be the same. Every network starts at dot with coordinates <cite>(-4, -4)</cite> and finishes near the point with the closest value to <cite>0.125</cite>. The final result will depence on the selected algorithm.</p>
+</div>
+<div class="section" id="id1">
+<h2><a class="toc-backref" href="#id6">Visualize Gradient Descent algorithms</a></h2>
+<div class="section" id="gradient-descent">
+<h3><a class="toc-backref" href="#id7">Gradient Descent</a></h3>
+<p>Let&#8217;s primarily check <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">Gradient</span> <span class="pre">Descent</span></span></a>.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/bp-steps.png"><img alt="Weight update steps for the Gradient Descent" src="../../../_images/bp-steps.png" style="width: 80%;" /></a>
+</div>
+<p>Gradient Descent got to the value close to 0.125 using 797 steps and this black curve are just tiny steps of backpropagation algorithm. We can zoom it and look closer.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/bp-steps-zoom.png"><img alt="Zoomed weight update steps for the Gradient Descent" src="../../../_images/bp-steps-zoom.png" style="width: 80%;" /></a>
+</div>
+<p>Now we can see some information about gradient descent algorithm.
+All steps for gradient descent algorithm have approximately similar magnitude.
+Their direction doesn&#8217;t vary because contours in the zoomed picture are parallel to each other and in it we can see that there is still a lot of steps to achieve the minimum. Also we can see that small vectors are perpendicular to the contour.</p>
+</div>
+<div class="section" id="momentum">
+<h3><a class="toc-backref" href="#id8">Momentum</a></h3>
+<p>Now let&#8217;s look at another very popular algorithm - <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a>.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/momentum-steps.png"><img alt="Momentum steps" src="../../../_images/momentum-steps.png" style="width: 80%;" /></a>
+</div>
+<p><a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> got to the value close to 0.125 by 92 steps, which is more than 8 times fewer steps than gradient descent. The basic idea behind <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm is that it accumulates gradients from the previous epochs. It means that if the graient has the same direction after each epoch weight update vector magnitude will be bigger and bigger. But if the gradient stars changing its direction weight update vector magnitude will become smaller. You can see some analogy between this situation and ball rolls in the real world. Imagine that the error surface is some kind of a poll. You can roll a ball inside of it. Its clear that ball wouldn&#8217;t always move down. When it reachs the pool&#8217;s lowest point it will continue go up with decreasing speed, because it&#8217;s already has a certain speed and it can&#8217;t stop move instantly. Basically ball starts oscillate with decreasing frequency.</p>
+<p>Let&#8217;s zoom plot and find out these properties.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/momentum-steps-zoom.png"><img alt="Momentum steps zoom on increasing weight update size" src="../../../_images/momentum-steps-zoom.png" style="width: 80%;" /></a>
+</div>
+<p>When we zoom the plot we can see that the direction for weight update vectors is almost the same and gradient&#8217;s direction doesn&#8217;t change after each epoch. At the end of the zoomed plot above vector is bigger than the first one on the same plot. Since we always want to move forward we just speed up in one direction. But it clear that we wouldn&#8217;t reach minimum if we tried to move always forward. At some point in time gradient&#8217;s direction should change. We can observe this behaviour in the figure below.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/momentum-steps-zoom-decrease.png"><img alt="Momentum steps zoom on decreasing weight update size" src="../../../_images/momentum-steps-zoom-decrease.png" style="width: 80%;" /></a>
+</div>
+<p>From the figure above it&#8217;s clear that weight update magnitude become smaller. Like a ball that slows down and try to change it&#8217;s direction towards the minimum.</p>
+</div>
+<div class="section" id="rprop">
+<h3><a class="toc-backref" href="#id9">RPROP</a></h3>
+<p><a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> makes fewer steps for a prediction, but we still can find minimum in fewer number of steps. Now we are going to run <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/rprop-steps.png"><img alt="RPROP steps" src="../../../_images/rprop-steps.png" style="width: 80%;" /></a>
+</div>
+<p>This improvment looks impressive. Now we are able to see steps without zooming. We got almost the same value as before using just 20 steps, which is 5 times fewer than <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> and 40 times fewer than <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">Gradient</span> <span class="pre">Descent</span></span></a>.</p>
+<p>Now we are going to figure out what are the main features of <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> just by looking at the plot above. <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> has a unique step for each weight. There are just two steps for each weight in the input layer for this network. <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> will increase the step size if gradient don&#8217;t change the sign before its value, and it will decrease in a different situation.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/rprop-first-11-steps.png"><img alt="RPROP first 11 steps" src="../../../_images/rprop-first-11-steps.png" style="width: 80%;" /></a>
+</div>
+<p>From the figure above you can see that first 11 updates have the same direction, so both steps are increase after each iteration. For the first epoch steps are equal to the same value which we set up at network initialization step. On the every next iterations they have been increased by the same factor, so after six iteration they became bigger, but they are still equal because they were getting bigger by the same factor.</p>
+<p>Now let&#8217;s check the next epochs from the figure below. On the 12th epoch gradient changed the direction, but steps are still the same. But we can clearly see that gradient changed the sign for the second weight. <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> updated the step after weight had updated, so the step for the second weight must be fewer for the 13th epoch.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/rprop-11th-to-14th-epochs.png"><img alt="RPROP from 11th to 14th steps" src="../../../_images/rprop-11th-to-14th-epochs.png" style="width: 80%;" /></a>
+</div>
+<p>Now let&#8217;s look at the 13th epoch. It shows us how gradient sign difference on the 12th epoch updated steps. Now the steps are not equal. From the picture above we can see that update on the second weight (y axis) is smaler than on the first weight (x axis).</p>
+<p>On the 16th epoch gradient on y axis changed the sign again. Network decreased by constant factor and update for the second weight on the 17th epoch would be fewer than on the 16th.</p>
+<p>To train your intuition you can check the other epochs updates and try to figure out how steps are dependent on the direction.</p>
+</div>
+<div class="section" id="irprop">
+<h3><a class="toc-backref" href="#id10">iRPROP+</a></h3>
+<p><a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.IRPROPPlus" title="neupy.algorithms.gd.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> is almost the same algorithm as <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> except a small addition.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/irprop-plus-steps.png"><img alt="iRPROP+ steps" src="../../../_images/irprop-plus-steps.png" style="width: 80%;" /></a>
+</div>
+<p>As in <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.IRPROPPlus" title="neupy.algorithms.gd.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> make exacly the
+same first 11 steps.</p>
+<p>Now let&#8217;s look at the 12th step in the figure below.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/irprop-plus-second-part.png"><img alt="iRPROP+ second part" src="../../../_images/irprop-plus-second-part.png" style="width: 80%;" /></a>
+</div>
+<p>Second weight (on the y axis) didn&#8217;t change the value. On the same epoch <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> changed the gradient comparing to the previous epoch and just decreased step value after weight update. Instead, <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.IRPROPPlus" title="neupy.algorithms.gd.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> disabled weight update for current epoch (set it up to <cite>0</cite>). And of course it also decreased the step for the second weight. Also you can find that vector for the 12th epoch that looks fewer than for the <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm, because we ignored the second weight update. If we check the x axis update size we will find that it has the same value as in <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm.</p>
+<p>On 13th epoch network included again second weight into the update process, because compared to the previous epoch gradient didn&#8217;t change its sign.</p>
+<p>Next steps are doing the same job, but 15th epoch differs from others. There are a few updates which are related specifically to <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.IRPROPPlus" title="neupy.algorithms.gd.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a>, but the most important we have not seen before. After weight update on the 15th epoch network error increased, so our update made our prediction worse. Now on the 16th epoch network tried to rollback vector update. It decreased steps on the 15th epoch and weight update didn&#8217;t go to the same point after the rollback procedure, it just took opposite direction with a smaller step.</p>
+</div>
+<div class="section" id="conjugate-gradient-and-golden-search">
+<h3><a class="toc-backref" href="#id11">Conjugate Gradient and Golden Search</a></h3>
+<p>Now let&#8217;s look at <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> with <a class="reference internal" href="../../../apidocs/neupy.algorithms.steps.linear_search.html#neupy.algorithms.steps.linear_search.LinearSearch" title="neupy.algorithms.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a>. Conjugate Gradient in Gradient Descent variation is a little bit different than in Multivariable Calculus notation and it doesn&#8217;t guarantee converge into n-th steps (<cite>n</cite> means dimmention size for specific problem). Steps don&#8217;t have a perfect size for <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a>, so <a class="reference internal" href="../../../apidocs/neupy.algorithms.steps.linear_search.html#neupy.algorithms.steps.linear_search.LinearSearch" title="neupy.algorithms.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> is always a good choice for a step selection.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/conj-grad-and-gold-search-steps.png"><img alt="Conjugate Gradient with Golden Search steps" src="../../../_images/conj-grad-and-gold-search-steps.png" style="width: 80%;" /></a>
+</div>
+<p>From the figure above we can see almost perfect step for the specific direction. Each of the fourth steps make a great choice for the step size. Of course it&#8217;s not a great assumption. Golden Search is just trying to figure out the most perfect step size by using a simple search. But it doing a greate job.</p>
+<p>Finally network made 4 steps. If we add the same <a class="reference internal" href="../../../apidocs/neupy.algorithms.steps.linear_search.html#neupy.algorithms.steps.linear_search.LinearSearch" title="neupy.algorithms.steps.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> algorithm to the classic Gradient Descent we will get to the minimum using just 2 steps. You can try it by your own.</p>
+</div>
+</div>
+<div class="section" id="bring-them-all-together">
+<h2><a class="toc-backref" href="#id12">Bring them all together</a></h2>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/all-algorithms-steps.png"><img alt="All algorithms steps" src="../../../_images/all-algorithms-steps.png" style="width: 80%;" /></a>
+</div>
+</div>
+<div class="section" id="summary">
+<h2><a class="toc-backref" href="#id13">Summary</a></h2>
+<table border="1" class="docutils" id="id2">
+<caption><span class="caption-text">Summary table</caption>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Algorithm</th>
+<th class="head">Number of epochs</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Gradient Descent</td>
+<td>797</td>
+</tr>
+<tr class="row-odd"><td>Momentum</td>
+<td>92</td>
+</tr>
+<tr class="row-even"><td>RPROP</td>
+<td>20</td>
+</tr>
+<tr class="row-odd"><td>iRPROP+</td>
+<td>17</td>
+</tr>
+<tr class="row-even"><td>Conjugate Gradient + Golden Search</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/compare-number-of-epochs.png"><img alt="Compare number of epochs" src="../../../_images/compare-number-of-epochs.png" style="width: 80%;" /></a>
+</div>
+<p>There is no perfect algorithm for neural network that can solve all problems.
+All of them have there own pros and cons.
+Some of the algorithms can be memory or computationally expensive and you have to choose an algorithm depend on the task which you want to solve.</p>
+</div>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Posted by Yurii Shevchuk</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="../../../tags/supervised.html">supervised</a>, <a href="../../../tags/backpropagation.html">backpropagation</a>, <a href="../../../tags/visualization.html">visualization</a></span>
+        </div>
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="boston_house_prices_dataset.html">Boston house-prices dataset</a></li>
+            <li class="right"></li>
+        </ul><div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "neupy";    var disqus_identifier = "2015/07/04/visualize_backpropagation_algorithms";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Posts</h1>
+    <ul><li>
+            <a href="../../09/21/password_recovery.html">Password recovery</a>
+        </li><li>
+            <a href="../../09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
+        </li><li>
+            <a href="boston_house_prices_dataset.html">Boston house-prices dataset</a>
+        </li><li>
+            <a href="#">Visualize Gradient Descent Algorithms</a>
+        </li></ul>
+</div>
+</section><section><div class="widget">
+    <h1>Cheat sheet</h1>
+    <ul>
+        <li><a href="../../../docs/algorithms.html#algorithms">Algorithms</a></li>
+        <li><a href="../../../docs/algorithms.html#layers">Layers</a></li>
+        <li><a href="../../../docs/algorithms.html#error-functions">Error functions</a></li>
+    </ul>
+</div></section><section><div class="widget">
+    <h1>Installation</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neupy</pre>
+        </div>
+    </div>
+    <p>Read more in <a href="../../../pages/documentation.html">Documentation</a>.</p>
+</div></section><section><div class="widget">
+    <h1>Versions</h1>
+    <ul>
+        <li>0.2.3 (May 2016) - <a href="../../../index.html">documentation</a></li>
+        <li>0.2.2 (May 2016) - <a href="../../../index.html">documentation</a></li>
+        <li>0.2.1 (April 2016) - <a href="../../../index.html">documentation</a></li>
+        <li>0.2.0 (March 2016) - <a href="../../../versions/0.2.0/index.html">documentation</a></li>
+        <li>0.1.4 (November 2015) - <a href="../../../versions/0.1.4/index.html">documentation</a></li>
+        <li>0.1.3 (October 2015)</li>
+        <li>0.1.2 (October 2015)</li>
+        <li>0.1.1 (October 2015)</li>
+        <li>0.1.0 (September 2015)</li>
+    </ul>
+</div></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+    <a id="fork_me" href="http://github.com/itdxer/neupy">
+        <img alt="Fork me" src="../../../_static/img/github-fork-green.png" />
+    </a></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

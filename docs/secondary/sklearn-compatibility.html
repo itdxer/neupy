@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="next" title="Environments" href="environments.html" /><link rel="prev" title="Commands" href="commands.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Environments" href="environments.html" /><link rel="prev" title="Notifications" href="notifications.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
         VERSION:     '1.5',
@@ -89,7 +89,7 @@
                   <a href="../../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../../page1.html">Tutorials</a>
+                  <a href="../../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../../pages/documentation.html">Documentation</a>
@@ -104,19 +104,19 @@
 <p>There are also a lot of good stuff in scikit-learn that are also can be useful for neural network algorithms.
 NeuPy contains a few compatibilities for making possible interaction with some scikit-learn features.</p>
 <p>First of all instead of <span class="docutils literal"><span class="pre">train</span></span> method you can use <span class="docutils literal"><span class="pre">fit</span></span>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 
 <span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="mi">1</span><span class="p">))</span>
 <span class="n">bpnet</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Also you can use scikit-learn pipelines with NeuPy.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span><span class="p">,</span> <span class="n">pipeline</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span><span class="p">,</span> <span class="n">pipeline</span>
 <span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">Pipeline</span><span class="p">([</span>
-    <span class="p">(</span><span class="s">&#39;min_max_scaler&#39;</span><span class="p">,</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">MinMaxScaler</span><span class="p">()),</span>
-    <span class="p">(</span><span class="s">&#39;backpropagation&#39;</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))),</span>
+    <span class="p">(</span><span class="s1">&#39;min_max_scaler&#39;</span><span class="p">,</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">MinMaxScaler</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;backpropagation&#39;</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))),</span>
 <span class="p">])</span>
 
 <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">backpropagation__epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
@@ -130,7 +130,7 @@ NeuPy contains a few compatibilities for making possible interaction with some s
         
         
         </div><ul class="related clearfix">
-            <li class="left"> &laquo; <a href="commands.html">Commands</a></li>
+            <li class="left"> &laquo; <a href="notifications.html">Notifications</a></li>
             <li class="right"><a href="environments.html">Environments</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
@@ -141,7 +141,7 @@ NeuPy contains a few compatibilities for making possible interaction with some s
         </li><li>
             <a href="../../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -159,17 +159,7 @@ NeuPy contains a few compatibilities for making possible interaction with some s
         </div>
     </div>
     <p>Read more in <a href="../../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../../search.html" method="get">

@@ -28,3 +28,5 @@ site/blog/*
 site/drafts/*
 site/source/docs/*
 site/build/*
+
+examples/rbfn/music_speech/data/

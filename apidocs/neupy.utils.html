@@ -89,7 +89,7 @@
                   <a href="../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../page1.html">Tutorials</a>
+                  <a href="../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../pages/documentation.html">Documentation</a>
@@ -188,10 +188,10 @@ configured by theano floatX variable.</p>
 <p>Modified built-in Python <span class="docutils literal"><span class="pre">dict</span></span> class. That modification
 helps get and set values like attributes.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">attrdict</span> <span class="o">=</span> <span class="n">AttributeKeyDict</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">attrdict</span> <span class="o">=</span> <span class="n">AttributeKeyDict</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">attrdict</span>
 <span class="go">{}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">attrdict</span><span class="o">.</span><span class="n">test_key</span> <span class="o">=</span> <span class="s">&#39;test_value&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">attrdict</span><span class="o">.</span><span class="n">test_key</span> <span class="o">=</span> <span class="s1">&#39;test_value&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">attrdict</span>
 <span class="go">{&#39;test_key&#39;: &#39;test_value&#39;}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">attrdict</span><span class="o">.</span><span class="n">test_key</span>
@@ -228,7 +228,7 @@ is an integer. <span class="docutils literal"><span class="pre">False</span></sp
 <dl class="function">
 <dt id="neupy.utils.preformat_value">
 <span class="descclassname">neupy.utils.</span><span class="descname">preformat_value</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/utils.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Function pre-format input value depence on it&#8217;s type.</p>
+<dd><p>Function pre-format input value depending on it&#8217;s type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -289,6 +289,62 @@ smallest positive numbers.</p>
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="neupy.utils.as_tuple">
+<span class="descclassname">neupy.utils.</span><span class="descname">as_tuple</span><span class="sig-paren">(</span><em>*values</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Convert sequence of values in one big tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>*values</strong></p>
+<blockquote>
+<div><p>Values that needs to be combined in one big tuple.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">tuple</p>
+<blockquote class="last">
+<div><p>All input values combined in one tuple</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">as_tuple</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="bp">None</span><span class="p">)</span>
+<span class="go">(None, 1, 2, 3, None)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_tuple</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="go">(1, 2, 3, 4, 5, 3)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.utils.asint">
+<span class="descclassname">neupy.utils.</span><span class="descname">asint</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Convert variable to an integer type. Number of bits per
+integer depend on floatX Theano variable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> : matrix, ndarray, Theano variable or scalar</p>
+<blockquote>
+<div><p>Value that could be converted to the integer type.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">matrix, ndarray, Theano variable or scalar</p>
+<blockquote class="last">
+<div><p>Output would be input value converted to the integer type.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
     <div class="postmeta">
@@ -304,7 +360,7 @@ smallest positive numbers.</p>
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -322,17 +378,7 @@ smallest positive numbers.</p>
         </div>
     </div>
     <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">

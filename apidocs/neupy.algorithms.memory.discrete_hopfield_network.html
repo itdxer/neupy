@@ -89,7 +89,7 @@
                   <a href="../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../page1.html">Tutorials</a>
+                  <a href="../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../pages/documentation.html">Documentation</a>
@@ -138,7 +138,7 @@ logarithmically proportion rule. Defaults to <span class="docutils literal"><spa
 <dt><a class="reference internal" href="../2015/09/21/password_recovery.html#password-recovery"><span>Password recovery</span></a></dt>
 <dd>Password recovery with Discrete Hopfield Network.</dd>
 <dt><a class="reference internal" href="../2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>Discrete Hopfiel Network</span></a></dt>
-<dd>Discrete Hopfield Network tutorial.</dd>
+<dd>Discrete Hopfield Network article.</dd>
 </dl>
 </div>
 <p class="rubric">Notes</p>
@@ -146,12 +146,12 @@ logarithmically proportion rule. Defaults to <span class="docutils literal"><spa
 <li>Input and output vectors should contain only binary values.</li>
 </ul>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">draw_bin_image</span><span class="p">(</span><span class="n">image_matrix</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">image_matrix</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
-<span class="gp">... </span>        <span class="k">print</span><span class="p">(</span><span class="s">&#39;| &#39;</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39; *&#39;</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">row</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;| &#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; *&#39;</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">row</span><span class="p">))</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span>
 <span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
@@ -248,7 +248,7 @@ logarithmically proportion rule. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork.options">
-<span class="descname">options</span><em class="property"> = {'n_times': Option(class_name='DiscreteMemory', value=100), 'verbose': Option(class_name='Verbose', value=False), 'check_limit': Option(class_name='DiscreteHopfieldNetwork', value=True), 'mode': Option(class_name='DiscreteMemory', value=sync)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/discrete_hopfield_network.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'n_times': Option(class_name='DiscreteMemory', value=100), 'mode': Option(class_name='DiscreteMemory', value=sync), 'verbose': Option(class_name='Verbose', value=False), 'check_limit': Option(class_name='DiscreteHopfieldNetwork', value=True)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/discrete_hopfield_network.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -278,7 +278,7 @@ logarithmically proportion rule. Defaults to <span class="docutils literal"><spa
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -296,17 +296,7 @@ logarithmically proportion rule. Defaults to <span class="docutils literal"><spa
         </div>
     </div>
     <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">

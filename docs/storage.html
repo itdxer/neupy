@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="next" title="Plots" href="plots.html" /><link rel="prev" title="Custom layers" href="layers/create-custom-layers.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Neural Network Surgery" href="surgery.html" /><link rel="prev" title="Create custom layers" href="layers/create-custom-layers.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -89,7 +89,7 @@
                   <a href="../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../page1.html">Tutorials</a>
+                  <a href="../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../pages/documentation.html">Documentation</a>
@@ -106,23 +106,23 @@ There already exists awesome library - <a class="reference external" href="https
 As a <span class="docutils literal"><span class="pre">pickle</span></span> library <span class="docutils literal"><span class="pre">dill</span></span> provides similar interface to serialize and de-serialize built-in python objects.
 The main advantage of this is a functionality that can store a network class and attributes without additional functionality.</p>
 <p>First of all you need to install <span class="docutils literal"><span class="pre">dill</span></span> library</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install dill&gt;<span class="o">=</span>0.2.3
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ pip install dill&gt;<span class="o">=</span>0.2.3
 </pre></div>
 </div>
 <p>There is a simple example for network serialization.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dill</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dill</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># Prepare the data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Prepare the data</span>
 <span class="gp">... </span><span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">make_regression</span><span class="p">(</span><span class="n">n_features</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_targets</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">MinMaxScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">MinMaxScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># Init and train network</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Init and train network</span>
 <span class="gp">... </span><span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -130,24 +130,24 @@ The main advantage of this is a functionality that can store a network class and
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">predicted</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 <span class="go">0.000756823576315</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;network-storage.dill&#39;</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;network-storage.dill&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">dill</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">bpnet</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
 <span class="gp">...</span>
 </pre></div>
 </div>
 <p>And then you can use it from other file and try to reproduce the same error rate.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dill</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dill</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># Get the same data set because we use the same seed number.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get the same data set because we use the same seed number.</span>
 <span class="gp">... </span><span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">make_regression</span><span class="p">(</span><span class="n">n_features</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_targets</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">MinMaxScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">MinMaxScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;network-storage.dill&#39;</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;network-storage.dill&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">bpnet</span> <span class="o">=</span> <span class="n">dill</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">predicted</span> <span class="o">=</span> <span class="n">bpnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -164,8 +164,8 @@ like <span class="docutils literal"><span class="pre">dumps</span></span> or <sp
         
         
         </div><ul class="related clearfix">
-            <li class="left"> &laquo; <a href="layers/create-custom-layers.html">Custom layers</a></li>
-            <li class="right"><a href="plots.html">Plots</a> &raquo; </li>
+            <li class="left"> &laquo; <a href="layers/create-custom-layers.html">Create custom layers</a></li>
+            <li class="right"><a href="surgery.html">Neural Network Surgery</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
@@ -175,7 +175,7 @@ like <span class="docutils literal"><span class="pre">dumps</span></span> or <sp
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -193,17 +193,7 @@ like <span class="docutils literal"><span class="pre">dumps</span></span> or <sp
         </div>
     </div>
     <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">

@@ -89,7 +89,7 @@
                   <a href="../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../page1.html">Tutorials</a>
+                  <a href="../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../pages/documentation.html">Documentation</a>
@@ -101,11 +101,11 @@
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.helpers.progressbar">
 <span id="neupy-helpers-progressbar-module"></span><h1>neupy.helpers.progressbar module</h1>
-<p>Code from a <cite>tqdm</cite> library: <a class="reference external" href="https://github.com/noamraph/tqdm">https://github.com/noamraph/tqdm</a></p>
-<dl class="function">
-<dt id="neupy.helpers.progressbar.progressbar">
-<span class="descclassname">neupy.helpers.progressbar.</span><span class="descname">progressbar</span><span class="sig-paren">(</span><em>iterable</em>, <em>desc=''</em>, <em>total=None</em>, <em>file=&lt;_io.TextIOWrapper name='&lt;stderr&gt;' mode='w' encoding='UTF-8'&gt;</em>, <em>mininterval=0.05</em>, <em>miniters=1</em>, <em>init_interval=1.0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/helpers/progressbar.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Get an iterable object, and return an iterator which acts
+<dl class="class">
+<dt id="neupy.helpers.progressbar.Progressbar">
+<em class="property">class </em><span class="descclassname">neupy.helpers.progressbar.</span><span class="descname">Progressbar</span><span class="sig-paren">(</span><em>iterable</em>, <em>description=''</em>, <em>file=&lt;_io.TextIOWrapper name='&lt;stderr&gt;' mode='w' encoding='UTF-8'&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/helpers/progressbar.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">collections.abc.Iterable</span></span></p>
+<p>Get an iterable object, and return an iterator which acts
 exactly like the iterable, but prints a progress meter and updates
 it every time a value is requested.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -123,27 +123,45 @@ that is added in the beginning of the line.</p>
 len(iterable) is used if it is defined.</p>
 </div></blockquote>
 <p><strong>file</strong> : object</p>
-<blockquote>
-<div><p>Can be a file-like object to output the progress message to.</p>
-</div></blockquote>
-<p><strong>mininterval</strong> : float</p>
-<blockquote>
-<div><p>Defaults to <span class="docutils literal"><span class="pre">0.05</span></span>.</p>
-</div></blockquote>
-<p><strong>miniters</strong> : int</p>
-<blockquote>
-<div><p>If less than mininterval seconds or miniters
-iterations have passed since the last progress meter
-update, it is not updated again. Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
-<p><strong>init_interval</strong> : float</p>
 <blockquote class="last">
-<div><p>Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+<div><p>Can be a file-like object to output the progress message to.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="neupy.helpers.progressbar.Progressbar.clean">
+<span class="descname">clean</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/helpers/progressbar.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.helpers.progressbar.Progressbar.update_status">
+<span class="descname">update_status</span><span class="sig-paren">(</span><em>n_finished</em>, <em>elapsed</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/helpers/progressbar.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Update progressbar status in the specified IO file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_finished</strong> : int</p>
+<blockquote>
+<div><p>Number of finished iterations.</p>
+</div></blockquote>
+<p><strong>elapsed</strong> : int</p>
+<blockquote class="last">
+<div><p>Number of seconds passed since start</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="neupy.helpers.progressbar.Progressbar.write">
+<span class="descname">write</span><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/helpers/progressbar.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>
@@ -161,7 +179,7 @@ update, it is not updated again. Defaults to <span class="docutils literal"><spa
         </li><li>
             <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -179,17 +197,7 @@ update, it is not updated again. Defaults to <span class="docutils literal"><spa
         </div>
     </div>
     <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">

@@ -10,6 +10,7 @@ Documentation
     ../docs/quickstart
     ../docs/layers
     ../docs/storage
+    ../docs/surgery
     ../docs/plots
     ../docs/secondary
-    ../docs/algorithms
+    ../docs/cheatsheet

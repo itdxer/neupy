@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="Visualize Gradient Descent Algorithms" href="visualize_backpropagation_algorithms.html" /><link rel="prev" title="Discrete Hopfiel Network" href="../../09/20/discrete_hopfield_network.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Visualize Algorithms based on the Backpropagation" href="visualize_backpropagation_algorithms.html" /><link rel="prev" title="Discrete Hopfiel Network" href="../../09/20/discrete_hopfield_network.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.5',
@@ -89,7 +89,7 @@
                   <a href="../../../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../../../page1.html">Tutorials</a>
+                  <a href="../../../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../../../pages/documentation.html">Documentation</a>
@@ -103,9 +103,9 @@
         </div>
     <div class="section" id="boston-house-prices-dataset">
 <h1>Boston house-prices dataset</h1>
-<p>For this tutorial we are going to predict Boston house prices via Conjugate gradient.</p>
+<p>For this article we are going to predict Boston house prices via Conjugate gradient.</p>
 <p>For the beginning we should get some data.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
 
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_boston</span><span class="p">()</span>
 <span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">target</span>
@@ -253,14 +253,14 @@ All columns description you can find below.</p>
 <li>LSTAT    % lower status of the population</li>
 </ul>
 <p>From data set description we can find that there are 13 continuous attributes (including &#8220;class&#8221; attribute &#8220;MEDV&#8221;) and 1 binary-valued attribute.
-There is no multiple categorical data, so we don&#8217;t need to change feature dimention.
+There is no multiple categorical data, so we don&#8217;t need to change feature dimension.
 But we already have one problem.
 If you look closer, you will find that every column has its own data range.
 This situation is a bad thing for Neural Network training, because input values ​​make different contributions to the calculation of the output values.
 Bigger values will be more important for Network which can be perceived as invalid assumption based on data.
 For example in the first row, in the table above, column <span class="docutils literal"><span class="pre">B</span></span> contains value <cite>396.90</cite> and column <span class="docutils literal"><span class="pre">CRIM</span></span> - <cite>0.00632</cite>.
 To fix this issue we should transfrom all columns to get similar ranges.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span>
 
 <span class="n">data_scaler</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">MinMaxScaler</span><span class="p">()</span>
 <span class="n">target_scaler</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">MinMaxScaler</span><span class="p">()</span>
@@ -326,7 +326,7 @@ To fix this issue we should transfrom all columns to get similar ranges.</p>
 </table><p>All the data is now in the range between 0 and 1.</p>
 <p>Then we should split our data set into train and validation.
 We use 85% of data for train.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
 
 <span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
@@ -337,15 +337,15 @@ We use 85% of data for train.</p>
 </pre></div>
 </div>
 <p>Now we are ready to build Neural Network which will predict house prices.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
 <span class="n">cgnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">ConjugateGradient</span><span class="p">(</span>
     <span class="n">connection</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Output</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
     <span class="p">],</span>
-    <span class="n">search_method</span><span class="o">=</span><span class="s">&#39;golden&#39;</span><span class="p">,</span>
+    <span class="n">search_method</span><span class="o">=</span><span class="s1">&#39;golden&#39;</span><span class="p">,</span>
     <span class="n">show_epoch</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
     <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LinearSearch</span><span class="p">],</span>
@@ -361,20 +361,21 @@ This value is just a guess.
 For better and more accurate result we should choose it with other methods, but for now we can use this value.
 As the main algorithm we take Conjugate Gradient.
 This implementation of backpropagation is a little bit different from main interpretation of Conjugate Gradient.
-For GradientDescent implementation we can&#8217;t guarantee that we get the local minimum in n-th steps (where <cite>n</cite> is the dimention).
+For GradientDescent implementation we can&#8217;t guarantee that we get the local minimum in n-th steps (where <cite>n</cite> is the dimension).
 To optimize it we should use linear search.
 It will fix and set up better steps for Conjugate Gradient.</p>
 <p>Now we are going to train the network.
 For training we set up 100 epochs.
 Also we will add test data into training function to check validation error on every epoch.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">cgnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cgnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/cgnet-train.png"><img alt="Conjgate Gradient train" src="../../../_images/cgnet-train.png" style="width: 80%;" /></a>
 </div>
 <p>To make sure that all training processes go in a right way we can check erros updates while the training is in process.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">cgnet</span><span class="o">.</span><span class="n">plot_errors</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">error_plot</span><span class="p">(</span><span class="n">cgnet</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="figure align-center">
@@ -384,7 +385,7 @@ Also we will add test data into training function to check validation error on e
 The problem is, that last error doesn&#8217;t show us the full picture of prediction accuracy.
 Our output is always between zero and one and we count the results always into Mean Square Error.
 To fix it, we are going to inverse our transformation for predicted and actual values and for accuracy measurment we will use Root Mean Square Logarithmic Error (RMSLE).</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">neupy.estimators</span> <span class="kn">import</span> <span class="n">rmsle</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.estimators</span> <span class="kn">import</span> <span class="n">rmsle</span>
 
 <span class="n">y_predict</span> <span class="o">=</span> <span class="n">cgnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">error</span> <span class="o">=</span> <span class="n">rmsle</span><span class="p">(</span><span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_test</span><span class="p">),</span>
@@ -444,7 +445,7 @@ In the table below you can find 10 randomly chosen errors.</p>
     </tr>
   </tbody>
 </table><p>The results are good for the first network implementation.
-There are a lot of things which we can do to improve network results, but we will discuss them in an another tutorial.</p>
+There are a lot of things which we can do to improve network results, but we will discuss them in an another article.</p>
 </div>
 
     <div class="postmeta">
@@ -459,7 +460,7 @@ There are a lot of things which we can do to improve network results, but we wil
         </div>
         </div><ul class="related clearfix">
             <li class="left"> &laquo; <a href="../../09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a></li>
-            <li class="right"><a href="visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a> &raquo; </li>
+            <li class="right"><a href="visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a> &raquo; </li>
         </ul><div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "neupy";    var disqus_identifier = "2015/07/04/boston_house_prices_dataset";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
@@ -469,7 +470,7 @@ There are a lot of things which we can do to improve network results, but we wil
         </li><li>
             <a href="#">Boston house-prices dataset</a>
         </li><li>
-            <a href="visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -487,17 +488,7 @@ There are a lot of things which we can do to improve network results, but we wil
         </div>
     </div>
     <p>Read more in <a href="../../../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../../../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../../../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../../../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../../../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../../../search.html" method="get">

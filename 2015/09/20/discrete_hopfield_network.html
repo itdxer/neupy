@@ -89,7 +89,7 @@
                   <a href="../../../pages/home.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="../../../page1.html">Tutorials</a>
+                  <a href="../../../page1.html">Articles</a>
                 </li>
               <li class="main-nav">
                   <a href="../../../pages/documentation.html">Documentation</a>
@@ -125,7 +125,7 @@
 </li>
 </ul>
 </div>
-<p>In this tutorial we are going to learn about <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> algorithm.</p>
+<p>In this article we are going to learn about <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> algorithm.</p>
 <p><a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> is a type of algorithms which is called - <a class="reference external" href="https://en.wikipedia.org/wiki/Autoassociative_memory">Autoassociative memories</a>
 Don&#8217;t be scared of the word <cite>Autoassociative</cite>.
 The idea behind this type of algorithms is very simple.
@@ -138,7 +138,7 @@ With these details that you got from your memory so far other parts of picture s
 Though you don&#8217;t clearly see all objects in the picture, you start to remember things and withdraw from your memory some images, that cannot be seen in the picture, just because of those very familiarly-shaped details that you&#8217;ve got so far.
 That&#8217;s what it is all about.
 Autoassociative memory networks is a posibily to interprete functions of memory into neural network model.</p>
-<p>Don&#8217;t worry if you have only basic knowledge in Linear Algebra; in this tutorial I&#8217;ll try to explain the idea as simple as possible.
+<p>Don&#8217;t worry if you have only basic knowledge in Linear Algebra; in this article I&#8217;ll try to explain the idea as simple as possible.
 If you are interested in proofs of the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> you can check them at R. Rojas. Neural Networks <a class="footnote-reference" href="#id2" id="id1">[1]</a> book.</p>
 <div class="section" id="architecture">
 <h2><a class="toc-backref" href="#id6">Architecture</a></h2>
@@ -156,7 +156,7 @@ Instead, we will use bipolar numbers.
 They are almost the same, but instead of 0 we are going to use -1 to decode a negative state.
 We can&#8217;t use zeros.
 And there are two main reasons for it.
-The first one is that zeros reduce information from the network weight, later in this tutorial you are going to see it.
+The first one is that zeros reduce information from the network weight, later in this article you are going to see it.
 The second one is more complex, it depends on the nature of bipolar vectors.
 Basically they are more likely to be orthogonal to each other which is a critical moment for the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.
 But as I mentioned before we won&#8217;t talk about proofs or anything not related to basic understanding of Linear Algebra operations.</p>
@@ -230,7 +230,7 @@ If you have a matrix <span class="math">\(X \in \Bbb R^{m\times n}\)</span> wher
 <p>Where <span class="math">\(I\)</span> is an identity matrix (<span class="math">\(I \in \Bbb R^{n\times n}\)</span>), <span class="math">\(n\)</span> is a number of features in the input vector and <span class="math">\(m\)</span> is a number of input patterns inside the matrix <span class="math">\(X\)</span>.
 Term <span class="math">\(m I\)</span> removes all values from the diagonal.
 Basically we remove 1s for each stored pattern and since we have <span class="math">\(m\)</span> of them, we should do it <span class="math">\(m\)</span> times.
-Practically, it&#8217;s not very good to create an identity matrix just to set up zeros on the diagonal, especially when dimention on the matrix is very big.
+Practically, it&#8217;s not very good to create an identity matrix just to set up zeros on the diagonal, especially when dimension on the matrix is very big.
 Usually linear algebra libraries give you a possibility to set up diagonal values without creating an additional matrix and this solution would be more efficient.
 For example in NumPy library it&#8217;s a <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.fill_diagonal.html">numpy.fill_diagonal</a> function.</p>
 <p>Let&#8217;s check an example just to make sure that everything is clear.
@@ -468,7 +468,7 @@ We can repeat it as many times as we want, but we will be getting the same value
 <h2><a class="toc-backref" href="#id11">Memory limit</a></h2>
 <p>Obviously, you can&#8217;t store infinite number of vectors inside the network.
 There are two good rules of thumb.</p>
-<p>Concider that <span class="math">\(n\)</span> is the dimention (number of features) of your input vector and <span class="math">\(m\)</span> is the number of patterns that you want to store in the network.
+<p>Concider that <span class="math">\(n\)</span> is the dimension (number of features) of your input vector and <span class="math">\(m\)</span> is the number of patterns that you want to store in the network.
 The first rule gives us a simple ration between <span class="math">\(m\)</span> and <span class="math">\(n\)</span>.</p>
 <div class="math">
 \[m \approx 0.18 n\]</div>
@@ -513,20 +513,20 @@ Below you can see the plot that visualizes energy function for this situation.</
 <p>As you can see we have two minimum values at the same points as those patterns that are already stored inside the network.
 But between these two patterns function creates a saddle point somewhere at the point with coordinates <span class="math">\((0, 0)\)</span>.
 In this case we can&#8217;t stick to the points <span class="math">\((0, 0)\)</span>.
-But in situation with more dimentions this saddle points can be at the level of available values and they could be hallucination.
-Unfortunately, we are very limited in terms of numbers of dimentions we could plot, but the problem is still the same.</p>
+But in situation with more dimensions this saddle points can be at the level of available values and they could be hallucination.
+Unfortunately, we are very limited in terms of numbers of dimensions we could plot, but the problem is still the same.</p>
 <p>Full source code for this plot you can find on <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/memory/dhn_energy_func.py">github</a></p>
 </div>
 <div class="section" id="example">
 <h2><a class="toc-backref" href="#id13">Example</a></h2>
 <p>Now we are ready for a more practical example.
 Let&#8217;s define a few images that we are going to teach the network.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">draw_bin_image</span><span class="p">(</span><span class="n">image_matrix</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">image_matrix</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
-<span class="gp">... </span>        <span class="k">print</span><span class="p">(</span><span class="s">&#39;| &#39;</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39; *&#39;</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">row</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;| &#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; *&#39;</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">row</span><span class="p">))</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span>
 <span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
@@ -565,15 +565,15 @@ Let&#8217;s define a few images that we are going to teach the network.</p>
 </pre></div>
 </div>
 <p>We have 3 images, so now we can train network with these patterns.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">zero</span><span class="p">,</span> <span class="n">one</span><span class="p">,</span> <span class="n">two</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">zero</span><span class="p">,</span> <span class="n">one</span><span class="p">,</span> <span class="n">two</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dhnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">DiscreteHopfieldNetwork</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;sync&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dhnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">DiscreteHopfieldNetwork</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;sync&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dhnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>That&#8217;s all.
 Now to make sure that network has memorized patterns right we can define the broken patterns and check how the network will recover them.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">half_zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">half_zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span>
 <span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
@@ -607,7 +607,7 @@ Now to make sure that network has memorized patterns right we can define the bro
 </pre></div>
 </div>
 <p>Now we can reconstruct pattern from the memory.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">dhnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">half_zero</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">dhnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">half_zero</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">draw_bin_image</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">)))</span>
 <span class="go">|   * * *</span>
 <span class="go">| *       *</span>
@@ -630,7 +630,7 @@ Now to make sure that network has memorized patterns right we can define the bro
 Network catches the pattern right.</p>
 <p>But not always we will get the correct answer.
 Let&#8217;s define another broken pattern and check network output.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">half_two</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">half_two</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span>
 <span class="gp">... </span>    <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
@@ -653,10 +653,10 @@ Let&#8217;s define another broken pattern and check network output.</p>
 But if we look closer, it looks like mixed pattern of numbers 1 and 2.</p>
 <p>This problem we can solve using the asynchronous network approach.
 We don&#8217;t necessary need to create a new network, we can just simply switch its mode.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dhnet</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="s">&#39;async&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dhnet</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;async&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dhnet</span><span class="o">.</span><span class="n">n_times</span> <span class="o">=</span> <span class="mi">400</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">dhnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">half_two</span><span class="p">)</span>
@@ -689,11 +689,11 @@ Energy value was decreasing after each iteration until it reached the local mini
 <a class="reference internal image-reference" href="../../../_images/hopfield-energy-vis.png"><img alt="Asynchronous Discrete Hopfield Network energy update after each iteration" src="../../../_images/hopfield-energy-vis.png" style="width: 80%;" /></a>
 </div>
 <p>And finally we can look closer to the network memory using Hinton diagram.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&quot;Hinton diagram&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Hinton diagram&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plots</span><span class="o">.</span><span class="n">hinton</span><span class="p">(</span><span class="n">dhnet</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -733,7 +733,7 @@ If we have all perfectly opposite symmetric patterns then squares on the antidia
 </div>
 <div class="section" id="more-reading">
 <h2><a class="toc-backref" href="#id14">More reading</a></h2>
-<p>In addition you can read another tutorial about a &#8216;<a class="reference internal" href="../21/password_recovery.html#password-recovery"><span>Password recovery</span></a>&#8216; from the memory using the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
+<p>In addition you can read another article about a &#8216;<a class="reference internal" href="../21/password_recovery.html#password-recovery"><span>Password recovery</span></a>&#8216; from the memory using the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
 </div>
 <div class="section" id="references">
 <h2><a class="toc-backref" href="#id15">References</a></h2>
@@ -781,7 +781,7 @@ from <a class="reference external" href="https://www.youtube.com/watch?v=gfPUWwB
         </li><li>
             <a href="../../07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
         </li><li>
-            <a href="../../07/04/visualize_backpropagation_algorithms.html">Visualize Gradient Descent Algorithms</a>
+            <a href="../../07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
 </div>
 </section><section><div class="widget">
@@ -799,17 +799,7 @@ from <a class="reference external" href="https://www.youtube.com/watch?v=gfPUWwB
         </div>
     </div>
     <p>Read more in <a href="../../../pages/documentation.html">Documentation</a>.</p>
-</div></section><section><div class="widget">
-    <h1>Versions</h1>
-    <ul>
-        <li>0.2.1 (April 2016) - <a href="../../../index.html">documentation</a></li>
-        <li>0.2.0 (March 2016) - <a href="../../../versions/0.2.0/index.html">documentation</a></li>
-        <li>0.1.4 (November 2015) - <a href="../../../versions/0.1.4/index.html">documentation</a></li>
-        <li>0.1.3 (October 2015)</li>
-        <li>0.1.2 (October 2015)</li>
-        <li>0.1.1 (October 2015)</li>
-        <li>0.1.0 (September 2015)</li>
-    </ul>
+    <p>Old documentations you can find <a href="../../../pages/versions.html">here</a>.</p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../../../search.html" method="get">
