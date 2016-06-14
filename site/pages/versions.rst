@@ -9,9 +9,9 @@ Old versions
 
     <h3>Version 0.2</h3>
 
-    <li>0.2.3 (May 2016) - <a href="/versions/0.2.1/index.html">documentation</a></li>
-    <li>0.2.2 (May 2016) - <a href="/versions/0.2.1/index.html">documentation</a></li>
-    <li>0.2.1 (April 2016) - <a href="/versions/0.2.1/index.html">documentation</a></li>
+    <li>0.2.3 (May 2016) - <a href="/versions/0.2.3/index.html">documentation</a></li>
+    <li>0.2.2 (May 2016) - <a href="/versions/0.2.3/index.html">documentation</a></li>
+    <li>0.2.1 (April 2016) - <a href="/versions/0.2.3/index.html">documentation</a></li>
     <li>0.2.0 (March 2016) - <a href="/versions/0.2.0/index.html">documentation</a></li>
 
     <h3>Version 0.1</h3>
