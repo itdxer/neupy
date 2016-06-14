@@ -47,12 +47,12 @@ So we can make a scatter plot and look closer at this dots.
 
 From the figure above we can clearly see that all dots are linearly separable and we are able to solve this problem with simple perceptron. But a goal of this article is to make clear visualization of learning process for different algorithm based on the backpropagation method, so the problem must be as simple as possible, because in other cases it will be complex to visualize.
 
-So, as the problem is linear separable we can solve it without hidden layers in network. There are two features and two classes, so we can build network which will take 2 input values and 1 output. We need just two weights, so we can visualize them in contour plot.
+So, as the problem is linear separable we can solve it without hidden layers in network. There are two features and two classes, so we can build network which will take 2 input values and produces 1 output. We need just two weights, so we can visualize them in contour plot.
 
 Initialize contour
 ------------------
 
-I wouldn't add all code related to the plots building. In case if you are interested in the all code you can check the main script `here <https://github.com/itdxer/neupy/blob/master/examples/mlp/gd_algorithms_visualization.py>`_.
+I wouldn't add all code related to the plots building in the article. In case if you are interested in the all code you can check the main script `here <https://github.com/itdxer/neupy/blob/master/examples/mlp/gd_algorithms_visualization.py>`_.
 
 .. image:: images/visualize_gd/raw-contour-plot.png
     :width: 80%
@@ -61,7 +61,7 @@ I wouldn't add all code related to the plots building. In case if you are intere
 
 The plot above shows error rate that depends on the network's weights. The best result corresponds to the smallest error value. The best weights combination for this problem should be near the lower right corner in the white area.
 
-Next, we are going to look at 5 algorithms based on the Backpropagation. They are:
+Next, we are going to look at 5 algorithms based on the backpropagation. They are:
 
 * Gradient descent
 * Momentum
@@ -69,9 +69,9 @@ Next, we are going to look at 5 algorithms based on the Backpropagation. They ar
 * iRPROP+
 * Conjugate Gradient + Golden Search
 
-Let's define start point for our algorithms. As we can see from the figure above the position (-4, -4) and the error for it would be approximetly 0.43, so we define default weights on this position.
+Let's define start point for our algorithms. I've chosen the (-4, -4) point, because at this point network gives bad results and it will be iteresting to observe learning progress from a bad initialization point. In the script you can set up any other starting point you like.
 
-This function will train the network until the error will be smaller than `0.125`. Every network starts at place with coordinates `(-4, -4)` and finishes near the point with the closest value to `0.125`. The final result will depend on the selected algorithm.
+This function will train the network until the error will be smaller than `0.125`. Every network starts at place with coordinates `(-4, -4)` and finishes near the point with the error value lower than `0.125`.
 
 Visualize algorithms based on the Backpropagation
 -------------------------------------------------
@@ -86,7 +86,7 @@ Let's primarily check :network:`Gradient Descent <GradientDescent>`.
     :align: center
     :alt: Weight update steps for the Gradient Descent
 
-Gradient Descent got to the value close to 0.125 using 797 steps and this black curve are just tiny steps of gradient descent algorithm. We can zoom it and look closer.
+Gradient Descent got to the value close to 0.125 using 797 steps and this black curve is just tiny steps of gradient descent algorithm. We can zoom it and look closer.
 
 .. figure:: images/visualize_gd/bp-steps-zoom.png
     :width: 80%
