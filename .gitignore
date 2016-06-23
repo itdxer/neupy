@@ -29,4 +29,5 @@ site/drafts/*
 site/source/docs/*
 site/build/*
 
-examples/rbfn/music_speech/data/
+# Examples
+examples/rbfn/music_speech/*

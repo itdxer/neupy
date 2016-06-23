@@ -6,7 +6,7 @@ It's very easy to define relations between layers in NeuPy. Also NeuPy's syntax 
 Cutting layers from the network
 *******************************
 
-Cut is a first feature of a surgery module. You can cut network in a few different ways. To make it simple to understand I'm going to cinsider a simple pretraining autoencoder problem. Let's define the autoencoder network.
+Cut is a first feature of a surgery module. You can cut network in a few different ways. To make it simple to understand I'm going to consider a simple pretraining autoencoder problem. Let's define the autoencoder network.
 
 .. code-block:: python
 
