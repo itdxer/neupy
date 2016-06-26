@@ -120,7 +120,7 @@ class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
     >>>
     >>> error = estimators.rmsle(real, predicted)
     >>> error
-    0.20752676697596578
+    0.2472330191179734
 
     See Also
     --------

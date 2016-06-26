@@ -82,8 +82,6 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
 
     Examples
     --------
-    Simple example
-
     >>> import numpy as np
     >>> from neupy import algorithms
     >>>
@@ -95,48 +93,6 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
     ...     verbose=False
     ... )
     >>> lmnet.train(x_train, y_train)
-
-    Diabets dataset example
-
-    >>> import numpy as np
-    >>> from sklearn import datasets, preprocessing
-    >>> from sklearn.cross_validation import train_test_split
-    >>> from neupy import algorithms, layers
-    >>> from neupy.estimators import rmsle
-    >>>
-    >>> dataset = datasets.load_diabetes()
-    >>> data, target = dataset.data, dataset.target
-    >>>
-    >>> data_scaler = preprocessing.MinMaxScaler()
-    >>> target_scaler = preprocessing.MinMaxScaler()
-    >>>
-    >>> x_train, x_test, y_train, y_test = train_test_split(
-    ...     data_scaler.fit_transform(data),
-    ...     target_scaler.fit_transform(target),
-    ...     train_size=0.85
-    ... )
-    >>>
-    >>> # Network
-    ... lmnet = algorithms.LevenbergMarquardt(
-    ...     connection=[
-    ...         layers.Input(10),
-    ...         layers.Sigmoid(40),
-    ...         layers.Sigmoid(1),
-    ...     ],
-    ...     mu_update_factor=2,
-    ...     mu=0.1,
-    ...     step=0.25,
-    ...     show_epoch=10,
-    ...     use_bias=False,
-    ...     verbose=False
-    ... )
-    >>> lmnet.train(x_train, y_train, epochs=100)
-    >>> y_predict = lmnet.predict(x_test)
-    >>>
-    >>> error = rmsle(target_scaler.inverse_transform(y_test),
-    ...               target_scaler.inverse_transform(y_predict).round())
-    >>> error
-    0.47548200957888398
 
     See Also
     --------

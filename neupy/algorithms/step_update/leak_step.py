@@ -39,12 +39,10 @@ class LeakStepAdaptation(SingleStepConfigurable):
     Examples
     --------
     >>> from neupy import algorithms
-    >>>
     >>> bpnet = algorithms.GradientDescent(
     ...     (2, 4, 1),
     ...     addons=[algorithms.LeakStepAdaptation]
     ... )
-    >>>
 
     .. [1] Noboru M. "Adaptive on-line learning in changing
         environments", 1997

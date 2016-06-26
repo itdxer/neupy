@@ -29,14 +29,12 @@ class WeightElimination(WeightUpdateConfigurable):
     Examples
     --------
     >>> from neupy import algorithms
-    >>>
     >>> bpnet = algorithms.GradientDescent(
     ...     (2, 4, 1),
     ...     step=0.1,
     ...     verbose=False,
     ...     addons=[algorithms.WeightElimination]
     ... )
-    >>>
 
     See Also
     --------

@@ -144,8 +144,9 @@ draw_countour(
     network_target_function
 )
 
-cgnet_class = partial(algorithms.ConjugateGradient,
-                      addons=[algorithms.LinearSearch])
+cgnet_class = partial(algorithms.GradientDescent,
+                      addons=[algorithms.LinearSearch],
+                      search_method='golden')
 momentum_class = partial(algorithms.Momentum, batch_size='full')
 
 algorithms = (
@@ -153,7 +154,7 @@ algorithms = (
     (momentum_class, 'Momentum', 'g'),
     (algorithms.RPROP, 'RPROP', 'm'),
     (algorithms.IRPROPPlus, 'iRPROP+', 'r'),
-    (cgnet_class, 'Conjugate Gradient', 'y'),
+    (cgnet_class, 'Gradient Descent and\nGolden Search', 'y'),
 )
 
 patches = []
