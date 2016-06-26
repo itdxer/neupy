@@ -141,12 +141,10 @@ Typical this value is &gt; 1.</p>
 </table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
-<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LeakStepAdaptation</span><span class="p">]</span>
 <span class="gp">... </span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
 </pre></div>
 </div>
 <table class="docutils citation" frame="void" id="r2" rules="none">
@@ -189,7 +187,7 @@ environments&#8221;, 1997</td></tr>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.step_update.leak_step.LeakStepAdaptation.options">
-<span class="descname">options</span><em class="property"> = {'beta': Option(class_name='LeakStepAdaptation', value=20), 'leak_size': Option(class_name='LeakStepAdaptation', value=0.01), 'alpha': Option(class_name='LeakStepAdaptation', value=0.001)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'leak_size': Option(class_name='LeakStepAdaptation', value=0.01), 'alpha': Option(class_name='LeakStepAdaptation', value=0.001), 'beta': Option(class_name='LeakStepAdaptation', value=20)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
