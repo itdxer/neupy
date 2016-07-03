@@ -181,14 +181,12 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         ``(2, 4, 1)`` means that network will have 3 layers with 2 input
         units, 4 hidden units and 1 output unit. The one limitation of that
         method is that all layers automaticaly would with sigmoid actiavtion
-        function. Other way is just a list of ``layers.BaseLayer``` class
+        function. Other way is just a list of ``layers.BaseLayer`` class
         instances. For example: ``[Input(2), Tanh(4), Relu(1)]``.
         And the most readable one is pipeline
         ``Input(2) > Tanh(4) > Relu(1)``.
-    error : {{'mse', 'rmse', 'mae', 'categorical_crossentropy', \
-    'binary_crossentropy'}} or function
-        Function that calculate prediction error.
-        Defaults to ``mse``.
+    error : str or function
+        Error/loss function. Defaults to ``mse``.
 
         * ``mae`` - Mean Absolute Error.
 
@@ -204,8 +202,12 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
 
         * ``binary_crossentropy`` - Binary cross entropy.
 
-        * Custom function that accept two mandatory arguments.
-        The first one is expected value and the second one is
+        * ``binary_hinge`` - Binary hinge entropy.
+
+        * ``categorical_hinge`` - Categorical hinge entropy.
+
+        * Custom function which accepts two mandatory arguments. \
+        The first one is expected value and the second one is \
         predicted value. Example: ``custom_func(expected, predicted)``
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
@@ -227,8 +229,12 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         'rmse': errors.rmse,
         'msle': errors.msle,
         'rmsle': errors.rmsle,
+
         'binary_crossentropy': errors.binary_crossentropy,
         'categorical_crossentropy': errors.categorical_crossentropy,
+
+        'binary_hinge': errors.binary_hinge,
+        'categorical_hinge': errors.categorical_hinge,
     })
 
     def __init__(self, connection, *args, **kwargs):
