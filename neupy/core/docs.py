@@ -162,7 +162,8 @@ class SharedDocsMeta(type):
             parent_params = parameters[parent_name] = AttributeKeyDict()
 
             for name, type_, desc in iter_parameters(parent_docs):
-                parent_params[name] = "{} : {}{}".format(name, type_, desc)
+                parent_params[name] = "{} : {}{}".format(name, type_,
+                                                         desc.rstrip())
 
             for name, func_params, desc in iter_methods(parent_docs):
                 parent_params[name] = ''.join([name, func_params, desc])
@@ -172,7 +173,16 @@ class SharedDocsMeta(type):
                 parent_params['Warns'] = doc_warns
 
         try:
-            new_class.__doc__ = new_class.__doc__.format(**parameters)
+            new_class_docs = class_docs.format(**parameters)
+            # If we have multiple spaces between words, we need
+            # to trim them. For instance:
+            # change "hello   world" to "hello world"
+            new_class.__doc__ = re.sub(
+                pattern=r'([\S]+)(\ {2,})([\S]+)',
+                repl=r'\1 \3',
+                string=new_class_docs
+            )
+
         except Exception as exception:
             exception_classname = exception.__class__.__name__
             raise SharedDocsException(

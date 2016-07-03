@@ -7,12 +7,8 @@ __all__ = ('DynamicallyAveragedNetwork',)
 
 
 class DynamicallyAveragedNetwork(BaseEnsemble):
-    """ Dynamically Averaged Network (DAN) weighted ensamble for binary
-    classification problems.
-
-    Notes
-    -----
-    * Every network must has 1 output and result must be between 0 and 1.
+    """ Dynamically Averaged Network (DAN) weighted ensamble
+    for binary classification problems.
 
     Parameters
     ----------
@@ -21,14 +17,18 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
 
     Methods
     -------
-    train(self, input_data, target_data, *args, **kwargs)
+    train(self, input_data, target_data, \*args, \*\*kwargs)
         Use input data to train all neural network one by one.
 
     Attributes
     ----------
     weights : ndarray, shape = [n_predictors, n_networks]
-        After you get prediction you can also check weight which you
-        will get to combine the result.
+        After you get prediction you can also check weight
+        which you will get to combine the result.
+
+    Notes
+    -----
+    * Every network must has 1 output and result must be between 0 and 1.
 
     Examples
     --------
@@ -39,8 +39,10 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
     >>>
     >>> np.random.seed(50)
     >>>
-    >>> data, target = datasets.make_classification(300, n_features=4,
-    >>>                                             n_classes=2)
+    >>> data, target = datasets.make_classification(
+    ...     300, n_features=4, n_classes=2
+    ... )
+    >>>
     >>> x_train, x_test, y_train, y_test = train_test_split(
     >>>     data, target, train_size=0.7
     >>> )
@@ -74,8 +76,9 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
             network.train(input_data, target_data, *args, **kwargs)
 
     def predict_proba(self, input_data):
-        number_of_inputs = input_data.shape[0]
-        network_certainties = np.zeros((number_of_inputs, len(self.networks)))
+        n_inputs = input_data.shape[0]
+        n_networks = len(self.networks)
+        network_certainties = np.zeros((n_inputs, n_networks))
         network_outputs = network_certainties.copy()
 
         for i, network in enumerate(self.networks):
@@ -94,7 +97,7 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
             network_outputs[:, i:i + 1] = output
 
         total_output_sum = np.reshape(network_certainties.sum(axis=1),
-                                      (number_of_inputs, 1))
+                                      (n_inputs, 1))
         self.weights = network_certainties / total_output_sum
         return (self.weights * network_outputs).sum(axis=1)
 

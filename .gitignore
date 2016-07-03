@@ -30,4 +30,4 @@ site/source/docs/*
 site/build/*
 
 # Examples
-examples/rbfn/music_speach/*
+examples/rbfn/music_speech/data/*
