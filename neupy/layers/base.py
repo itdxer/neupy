@@ -150,7 +150,7 @@ class ParameterBasedLayer(BaseLayer):
         output units.
 
         * ``xavier_uniform`` generate random matrix from uniform \
-        distribution \ where :math:`w_{{ij}} \in \
+        distribution where :math:`w_{{ij}} \in \
         [-\\sqrt{{\\frac{{6}}{{fan_{{in}} + fan_{{out}}}}}}, \
         \\sqrt{{\\frac{{6}}{{fan_{{in}} + fan_{{out}}}}}}`].
 
