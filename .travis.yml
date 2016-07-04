@@ -2,6 +2,7 @@ language: python
 python:
   - "2.7"
   - "3.4"
+  - "3.5"
 install:
   - sudo apt-get update
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
@@ -20,11 +21,11 @@ install:
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION --file requirements/travis.txt
   - source activate test-environment
   - python setup.py install
-before_script:
-    # `xvfb` is important for matplotlib tests
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
+# before_script:
+#     # `xvfb` is important for matplotlib tests
+#   - "export DISPLAY=:99.0"
+#   - "sh -e /etc/init.d/xvfb start"
+#   - sleep 3 # give xvfb some time to start
 script:
   - export THEANO_FLAGS='floatX=float32' && export SKIP_PLOT_TEST='YES' && nosetests
   - export THEANO_FLAGS='floatX=float64' && export SKIP_PLOT_TEST='YES' && nosetests
