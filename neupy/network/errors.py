@@ -1,6 +1,8 @@
 from __future__ import division
 
 import theano.tensor as T
+
+from neupy.core.docs import shared_docs
 from neupy.utils import smallest_positive_number
 
 
@@ -8,8 +10,24 @@ __all__ = ('mse', 'rmse', 'mae', 'msle', 'rmsle', 'binary_crossentropy',
            'categorical_crossentropy', 'binary_hinge', 'categorical_hinge')
 
 
+def error_function(expected, predicted):
+    """
+    Parameters
+    ----------
+    expected : array-like, theano variable
+    predicted : array-like, theano variable
+    """
+
+
+@shared_docs(error_function)
 def mse(expected, predicted):
-    """ Mean squared error.
+    """
+    Mean squared error.
+
+    Parameters
+    ----------
+    {error_function.expected}
+    {error_function.predicted}
     """
     return T.square(predicted - expected).mean()
 
