@@ -33,32 +33,37 @@ def mse(expected, predicted):
 
 
 def rmse(expected, predicted):
-    """ Root mean squared error.
+    """
+    Root mean squared error.
     """
     return T.sqrt(mse(expected, predicted))
 
 
 def mae(expected, predicted):
-    """ Mean absolute error.
+    """
+    Mean absolute error.
     """
     return T.abs_(expected - predicted).mean()
 
 
 def msle(expected, predicted):
-    """ Mean squared logarithmic error.
+    """
+    Mean squared logarithmic error.
     """
     squared_log = (T.log(predicted + 1) - T.log(expected + 1)) ** 2
     return squared_log.mean()
 
 
 def rmsle(expected, predicted):
-    """ Root mean squared logarithmic error.
+    """
+    Root mean squared logarithmic error.
     """
     return T.sqrt(msle(expected, predicted))
 
 
 def binary_crossentropy(expected, predicted):
-    """ Binary cross-entropy error.
+    """
+    Binary cross-entropy error.
     """
     epsilon = smallest_positive_number()
     predicted = T.clip(predicted, epsilon, 1.0 - epsilon)
@@ -66,7 +71,8 @@ def binary_crossentropy(expected, predicted):
 
 
 def categorical_crossentropy(expected, predicted):
-    """ Categorical cross-entropy error.
+    """
+    Categorical cross-entropy error.
     """
     epsilon = smallest_positive_number()
     predicted = T.clip(predicted, epsilon, 1.0 - epsilon)
@@ -74,7 +80,8 @@ def categorical_crossentropy(expected, predicted):
 
 
 def binary_hinge(expected, predicted, delta=1):
-    """ Computes the binary hinge loss between predictions
+    """
+    Computes the binary hinge loss between predictions
     and targets.
 
     .. math:: L_i = \\max(0, \\delta - t_i p_i)
@@ -104,7 +111,8 @@ def binary_hinge(expected, predicted, delta=1):
 
 
 def categorical_hinge(expected, predicted, delta=1):
-    """ Computes the multi-class hinge loss between
+    """
+    Computes the multi-class hinge loss between
     predictions and targets.
 
     .. math:: L_i = \\max_{j \\not = p_i} (0, t_j - t_{p_i} + \\delta)

@@ -11,7 +11,8 @@ __all__ = ('Momentum',)
 
 
 class Momentum(MinibatchGradientDescent):
-    """ Momentum algorithm for :network:`GradientDescent` optimization.
+    """
+    Momentum algorithm for :network:`GradientDescent` optimization.
 
     Parameters
     ----------

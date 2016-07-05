@@ -15,7 +15,8 @@ __all__ = ('RBFKMeans',)
 
 
 class RBFKMeans(NoStepSelection, UnsupervisedLearning, BaseNetwork):
-    """ Radial basis function K-means for clustering.
+    """
+    Radial basis function K-means for clustering.
 
     Parameters
     ----------

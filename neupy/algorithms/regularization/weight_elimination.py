@@ -6,7 +6,8 @@ __all__ = ('WeightElimination',)
 
 
 class WeightElimination(WeightUpdateConfigurable):
-    """ Weight Elimination algorithm penalizes large weights and limits the
+    """
+    Weight Elimination algorithm penalizes large weights and limits the
     freedom in network. The algorithm is able to solve one of the possible
     problems of network overfitting.
 

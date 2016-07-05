@@ -13,7 +13,8 @@ __all__ = ('SOFM',)
 
 
 def neuron_neighbours(neurons, center, radius):
-    """ Function find all neighbours neurons by radius and coords.
+    """
+    Function find all neighbours neurons by radius and coords.
 
     Parameters
     ----------
@@ -58,7 +59,8 @@ def neuron_neighbours(neurons, center, radius):
 
 
 def dot_product(input_data, weight):
-    """ Simple dot product.
+    """
+    Simple dot product.
 
     Parameters
     ----------
@@ -73,7 +75,8 @@ def dot_product(input_data, weight):
 
 
 def neg_euclid_distance(input_data, weight):
-    """ Negative Euclidian distance between input
+    """
+    Negative Euclidian distance between input
     data and weight.
 
     Parameters
@@ -90,7 +93,8 @@ def neg_euclid_distance(input_data, weight):
 
 
 def cosine_similarity(input_data, weight):
-    """ Cosine similarity between input data and weight.
+    """
+    Cosine similarity between input data and weight.
 
     Parameters
     ----------
@@ -108,7 +112,8 @@ def cosine_similarity(input_data, weight):
 
 
 class SOFM(Kohonen):
-    """ Self-Organizing Feature Map.
+    """
+    Self-Organizing Feature Map.
 
     Parameters
     ----------

@@ -14,7 +14,8 @@ __all__ = ('Hessian',)
 
 
 def find_hessian_and_gradient(error_function, parameters):
-    """ Find Hessian and gradient for the Neural Network cost function.
+    """
+    Find Hessian and gradient for the Neural Network cost function.
 
     Parameters
     ----------
@@ -50,7 +51,8 @@ def find_hessian_and_gradient(error_function, parameters):
 
 
 class Hessian(NoStepSelection, GradientDescent):
-    """ Hessian gradient decent optimization. This GD algorithm
+    """
+    Hessian gradient decent optimization. This GD algorithm
     variation using second derivative information helps choose better
     gradient direction and as a consequence better weight update
     parameter after eqch epoch.

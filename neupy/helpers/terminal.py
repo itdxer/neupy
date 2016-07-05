@@ -7,7 +7,8 @@ __all__ = ('red', 'green', 'gray', 'white', 'bold', 'underline')
 
 
 def is_color_supported():
-    """ Returns ``True`` if the running system's terminal supports
+    """
+    Returns ``True`` if the running system's terminal supports
     color, and ``False`` otherwise.
 
     Notes
@@ -31,7 +32,8 @@ def is_color_supported():
 
 
 def create_style(ansi_code, use_bright_mode=False):
-    """ Create style based on ANSI code number.
+    """
+    Create style based on ANSI code number.
 
     Parameters
     ----------

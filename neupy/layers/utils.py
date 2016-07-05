@@ -6,7 +6,8 @@ __all__ = ('random_orthogonal', 'random_bounded', 'generate_weight',
 
 
 def random_orthogonal(shape):
-    """ Build random orthogonal 2D matrix.
+    """
+    Build random orthogonal 2D matrix.
 
     Parameters
     ----------
@@ -36,7 +37,8 @@ def random_orthogonal(shape):
 
 
 def random_bounded(shape, bounds=(-0.01, 0.01)):
-    """ Generate uniform random matrix which values between bounds.
+    """
+    Generate uniform random matrix which values between bounds.
 
     Parameters
     ----------
@@ -63,7 +65,8 @@ def random_bounded(shape, bounds=(-0.01, 0.01)):
 
 
 def identify_fans(shape):
-    """ Identify fans from shape.
+    """
+    Identify fans from shape.
 
     Parameters
     ----------
@@ -87,7 +90,8 @@ def identify_fans(shape):
 
 
 def he_normal(shape):
-    """ Kaiming He weight initialization from normal
+    """
+    Kaiming He weight initialization from normal
     distribution.
 
     Parameters
@@ -111,7 +115,8 @@ def he_normal(shape):
 
 
 def he_uniform(shape):
-    """ Kaiming He weight initialization from uniform
+    """
+    Kaiming He weight initialization from uniform
     distribution.
 
     Parameters
@@ -135,7 +140,8 @@ def he_uniform(shape):
 
 
 def xavier_normal(shape):
-    """ Xavier Glorot weight initialization from normal
+    """
+    Xavier Glorot weight initialization from normal
     distribution.
 
     Parameters
@@ -158,7 +164,8 @@ def xavier_normal(shape):
 
 
 def xavier_uniform(shape):
-    """ Xavier Glorot weight initialization from uniform
+    """
+    Xavier Glorot weight initialization from uniform
     distribution.
 
     Parameters
@@ -193,7 +200,8 @@ VALID_INIT_METHODS = (NORMAL, BOUNDED, ORTHOGONAL, XAVIER_NORMAL,
 
 
 def generate_weight(shape, bounds=None, init_method=XAVIER_NORMAL):
-    """ Generate random weights for neural network connections.
+    """
+    Generate random weights for neural network connections.
 
     Parameters
     ----------
@@ -263,7 +271,8 @@ def generate_weight(shape, bounds=None, init_method=XAVIER_NORMAL):
 
 
 def preformat_layer_shape(shape):
-    """ Each layer should have input and output shape
+    """
+    Each layer should have input and output shape
     attributes. This function formats layer's shape value to
     make it easy to read.
 
@@ -281,7 +290,8 @@ def preformat_layer_shape(shape):
 
 
 def dimshuffle(value, ndim, axes):
-    """ Shuffle dimension based on the specified number of
+    """
+    Shuffle dimension based on the specified number of
     dimensions and axes.
 
     Parameters

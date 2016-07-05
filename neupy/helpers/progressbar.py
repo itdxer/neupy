@@ -9,7 +9,8 @@ __all__ = ('Progressbar',)
 
 
 def format_time(time_in_seconds):
-    """ Format seconds into human readable format.
+    """
+    Format seconds into human readable format.
 
     Parameters
     ----------
@@ -30,7 +31,8 @@ def format_time(time_in_seconds):
 
 
 class FormatInlineDict(collections.OrderedDict):
-    """ Simple class that inherits all functionality from
+    """
+    Simple class that inherits all functionality from
     ``collections.OrderedDict`` class. It provides one
     additional method that makes inline formatting.
     """
@@ -43,7 +45,8 @@ class FormatInlineDict(collections.OrderedDict):
 
 
 class Progressbar(collections.Iterable):
-    """ Get an iterable object, and return an iterator which acts
+    """
+    Get an iterable object, and return an iterator which acts
     exactly like the iterable, but prints a progress meter and updates
     it every time a value is requested.
 
@@ -80,7 +83,8 @@ class Progressbar(collections.Iterable):
         self.file.write('\r')
 
     def update_status(self, n_finished, elapsed):
-        """ Update progressbar status in the specified IO file.
+        """
+        Update progressbar status in the specified IO file.
 
         Parameters
         ----------

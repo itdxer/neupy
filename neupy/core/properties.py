@@ -10,7 +10,8 @@ __all__ = ('BaseProperty', 'Property', 'ArrayProperty', 'BoundedProperty',
 
 
 class BaseProperty(SharedDocs):
-    """ Base class for properties.
+    """
+    Base class for properties.
 
     Parameters
     ----------
@@ -77,7 +78,8 @@ class BaseProperty(SharedDocs):
 
 
 class Property(BaseProperty):
-    """ Simple and flexible class that helps indetify properties with
+    """
+    Simple and flexible class that helps indetify properties with
     specified type.
 
     Parameters
@@ -93,7 +95,8 @@ class Property(BaseProperty):
 
 
 class ArrayProperty(BaseProperty):
-    """ Numpy array or matrix property.
+    """
+    Numpy array or matrix property.
 
     Parameters
     ----------
@@ -104,7 +107,8 @@ class ArrayProperty(BaseProperty):
 
 
 class TypedListProperty(BaseProperty):
-    """ List property that contains specified element types.
+    """
+    List property that contains specified element types.
 
     Parameters
     ----------
@@ -143,7 +147,8 @@ class TypedListProperty(BaseProperty):
 
 
 class ChoiceProperty(BaseProperty):
-    """ Property that can have discrete number of properties.
+    """
+    Property that can have discrete number of properties.
 
     Parameters
     ----------
@@ -191,7 +196,8 @@ class ChoiceProperty(BaseProperty):
 
 
 class BoundedProperty(BaseProperty):
-    """ Number property that have specified numerical bounds.
+    """
+    Number property that have specified numerical bounds.
 
     Parameters
     ----------
@@ -217,7 +223,8 @@ class BoundedProperty(BaseProperty):
 
 
 class ProperFractionProperty(BoundedProperty):
-    """ Proper fraction property. Identify all possible numbers
+    """
+    Proper fraction property. Identify all possible numbers
     between zero and one.
 
     Parameters
@@ -233,7 +240,8 @@ class ProperFractionProperty(BoundedProperty):
 
 
 class NumberProperty(BoundedProperty):
-    """ Float or integer number property.
+    """
+    Float or integer number property.
 
     Parameters
     ----------
@@ -246,7 +254,8 @@ class NumberProperty(BoundedProperty):
 
 
 class IntProperty(BoundedProperty):
-    """ Integer property.
+    """
+    Integer property.
 
     Parameters
     ----------

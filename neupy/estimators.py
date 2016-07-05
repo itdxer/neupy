@@ -9,7 +9,8 @@ __all__ = ('mse', 'rmse', 'mae', 'msle', 'rmsle', 'binary_crossentropy',
 
 
 def override_theano_function(function):
-    """ Override theano function and help evaluate output result.
+    """
+    Override theano function and help evaluate output result.
 
     Parameters
     ----------

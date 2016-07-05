@@ -9,7 +9,8 @@ __all__ = ('BaseStepAssociative',)
 
 
 class BaseAssociative(UnsupervisedLearning, BaseNetwork):
-    """ Base class for associative learning.
+    """
+    Base class for associative learning.
 
     Parameters
     ----------
@@ -63,7 +64,8 @@ class BaseAssociative(UnsupervisedLearning, BaseNetwork):
 
 
 class BaseStepAssociative(BaseAssociative):
-    """ Base class for associative algorithms which have 2 layers and first
+    """
+    Base class for associative algorithms which have 2 layers and first
     one is has step function as activation.
 
     Parameters

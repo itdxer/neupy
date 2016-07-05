@@ -14,7 +14,8 @@ __all__ = ('BaseLayer', 'ParameterBasedLayer', 'Input')
 
 
 class BaseLayer(ChainConnection, Configurable):
-    """ Base class for all layers.
+    """
+    Base class for all layers.
 
     Methods
     -------
@@ -74,7 +75,8 @@ class BaseLayer(ChainConnection, Configurable):
 
 
 def create_shared_parameter(value, name, shape, init_method, bounds):
-    """ Creates NN parameter as Theano shared variable.
+    """
+    Creates NN parameter as Theano shared variable.
 
     Parameters
     ----------
@@ -105,7 +107,8 @@ def create_shared_parameter(value, name, shape, init_method, bounds):
 
 
 class SharedArrayProperty(ArrayProperty):
-    """ In addition to Numpy arrays and matrix property support also
+    """
+    In addition to Numpy arrays and matrix property support also
     Theano shared variables.
 
     Parameters
@@ -119,7 +122,8 @@ class SharedArrayProperty(ArrayProperty):
 
 
 class ParameterBasedLayer(BaseLayer):
-    """ Layer that creates weight and bias parameters.
+    """
+    Layer that creates weight and bias parameters.
 
     Parameters
     ----------
@@ -217,7 +221,8 @@ class ParameterBasedLayer(BaseLayer):
 
 
 class ArrayShapeProperty(TypedListProperty):
-    """ Property that identifies array's shape.
+    """
+    Property that identifies array's shape.
     """
     expected_type = (int, tuple, type(None))
 
@@ -232,7 +237,8 @@ class ArrayShapeProperty(TypedListProperty):
 
 
 class Input(BaseLayer):
-    """ Input layer. It identifies feature shape/size for the
+    """
+    Input layer. It identifies feature shape/size for the
     input value. Especially useful in the CNN.
 
     Parameters

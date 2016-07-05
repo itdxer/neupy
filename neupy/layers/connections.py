@@ -6,13 +6,15 @@ __all__ = ('LayerConnection', 'ChainConnection', 'NetworkConnectionError',
 
 
 class LayerConnectionError(Exception):
-    """ Error class that triggers in case of connection
+    """
+    Error class that triggers in case of connection
     issues within layers.
     """
 
 
 class NetworkConnectionError(Exception):
-    """ Error class that triggers in case of connection
+    """
+    Error class that triggers in case of connection
     within layers in the network
     """
 
@@ -50,7 +52,8 @@ class ChainConnection(object):
 
 
 class LayerConnection(ChainConnection):
-    """ Connect to layers or connections together.
+    """
+    Connect to layers or connections together.
 
     Parameters
     ----------

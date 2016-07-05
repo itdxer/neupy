@@ -12,7 +12,8 @@ __all__ = ('RPROP', 'IRPROPPlus')
 
 
 class RPROP(StepSelectionBuiltIn, GradientDescent):
-    """ RPROP :network:`GradientDescent` algorithm optimization.
+    """
+    RPROP :network:`GradientDescent` algorithm optimization.
 
     Parameters
     ----------
@@ -133,7 +134,8 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
 
 
 class IRPROPPlus(RPROP):
-    """ iRPROP+ :network:`GradientDescent` algorithm optimization.
+    """
+    iRPROP+ :network:`GradientDescent` algorithm optimization.
 
     Parameters
     ----------

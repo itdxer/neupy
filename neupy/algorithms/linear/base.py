@@ -8,7 +8,8 @@ __all__ = ('BaseLinearNetwork',)
 
 
 class BaseLinearNetwork(ConstructableNetwork):
-    """ Base class for feedforward neural network without hidden layers.
+    """
+    Base class for feedforward neural network without hidden layers.
 
     Notes
     -----

@@ -21,7 +21,8 @@ __all__ = ('BaseNetwork',)
 
 
 def show_network_options(network, highlight_options=None):
-    """ Display all available parameters options for Neural Network.
+    """
+    Display all available parameters options for Neural Network.
 
     Parameters
     ----------
@@ -133,7 +134,8 @@ def create_training_epochs_iterator(network, epochs, epsilon=None):
 
 
 class ShowEpochProperty(BoundedProperty):
-    """ Class helps validate specific syntax for `show_epoch`
+    """
+    Class helps validate specific syntax for `show_epoch`
     property from ``BaseNetwork`` class.
 
     Parameters
@@ -177,7 +179,8 @@ class ShowEpochProperty(BoundedProperty):
 
 
 def is_valid_error_value(value):
-    """ Checks that error value has valid type.
+    """
+    Checks that error value has valid type.
 
     Parameters
     ----------
@@ -191,25 +194,29 @@ def is_valid_error_value(value):
 
 
 class ErrorHistoryList(list):
-    """ Wrapper around the built-in list class that adds a few
+    """
+    Wrapper around the built-in list class that adds a few
     additional methods.
     """
     def last(self):
-        """ Returns last element if list is not empty,
+        """
+        Returns last element if list is not empty,
         ``None`` otherwise.
         """
         if self and is_valid_error_value(self[-1]):
             return normalize_error(self[-1])
 
     def previous(self):
-        """ Returns last element if list is not empty,
+        """
+        Returns last element if list is not empty,
         ``None`` otherwise.
         """
         if len(self) >= 2 and is_valid_error_value(self[-2]):
             return normalize_error(self[-2])
 
     def normalized(self):
-        """ Normalize list that contains error outputs.
+        """
+        Normalize list that contains error outputs.
 
         Returns
         -------
@@ -225,7 +232,8 @@ class ErrorHistoryList(list):
 
 
 class BaseNetwork(BaseSkeleton):
-    """ Base class for Neural Network algorithms.
+    """
+    Base class for Neural Network algorithms.
 
     Parameters
     ----------
@@ -290,11 +298,13 @@ class BaseNetwork(BaseSkeleton):
             show_network_options(self, highlight_options=options)
 
     def init_properties(self):
-        """ Setup default values before populate the options.
+        """
+        Setup default values before populate the options.
         """
 
     def predict(self, input_data):
-        """ Return prediction results for the input data.
+        """
+        Return prediction results for the input data.
 
         Parameters
         ----------
@@ -306,7 +316,8 @@ class BaseNetwork(BaseSkeleton):
         """
 
     def on_epoch_start_update(self, epoch):
-        """ Function would be trigger before run all training procedure
+        """
+        Function would be trigger before run all training procedure
         related to the current epoch.
 
         Parameters
@@ -325,7 +336,8 @@ class BaseNetwork(BaseSkeleton):
     def train(self, input_train, target_train=None, input_test=None,
               target_test=None, epochs=100, epsilon=None,
               summary_type='table'):
-        """ Method train neural network.
+        """
+        Method train neural network.
 
         Parameters
         ----------

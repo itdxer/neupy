@@ -16,7 +16,8 @@ __all__ = ('LevenbergMarquardt',)
 
 
 def compute_jaccobian(errors, parameters):
-    """ Compute Jacobbian.
+    """
+    Compute Jacobbian.
 
     Parameters
     ----------
@@ -49,7 +50,8 @@ def compute_jaccobian(errors, parameters):
 
 
 class LevenbergMarquardt(NoStepSelection, GradientDescent):
-    """ Levenberg-Marquardt algorithm.
+    """
+    Levenberg-Marquardt algorithm.
 
     Notes
     -----

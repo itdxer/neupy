@@ -11,7 +11,8 @@ __all__ = ('Oja',)
 
 
 class Oja(UnsupervisedLearning, BaseNetwork):
-    """ Oja unsupervised algorithm that minimize input data feature
+    """
+    Oja unsupervised algorithm that minimize input data feature
     space.
 
     Notes

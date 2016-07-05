@@ -138,7 +138,8 @@ def linkcode_resolve(domain, info):
 
 
 def get_module_for_class(classname, moduletype):
-    """ Return model for class just using its name and module type.
+    """
+    Return model for class just using its name and module type.
     """
     available_module_types = {
         'network': 'neupy.algorithms',
@@ -160,7 +161,8 @@ def get_module_for_class(classname, moduletype):
 
 
 def process_docstring(app, what, name, obj, options, lines):
-    """ Function replace labeled class names to real links in
+    """
+    Function replace labeled class names to real links in
     documentation.
 
     Available types:
@@ -203,13 +205,15 @@ def process_docstring(app, what, name, obj, options, lines):
 
 
 def preprocess_texts(app, docname, source):
-    """ Call the same behaviour for all texts, not only for autodoc.
+    """
+    Call the same behaviour for all texts, not only for autodoc.
     """
     process_docstring(app, None, None, None, None, source)
 
 
 def setup(app):
-    """ Function with reserved name that would be trigger by Sphinx
+    """
+    Function with reserved name that would be trigger by Sphinx
     if it will find such function in configuration file.
     """
     app.connect('autodoc-process-docstring', process_docstring)

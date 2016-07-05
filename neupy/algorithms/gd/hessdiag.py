@@ -13,7 +13,8 @@ __all__ = ('HessianDiagonal',)
 
 
 class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
-    """ Hissian diagonal is a Hessian algorithm approximation which require
+    """
+    Hissian diagonal is a Hessian algorithm approximation which require
     only computation of hessian matrix diagonal elements and makes it
     invertion much easier and faster.
 

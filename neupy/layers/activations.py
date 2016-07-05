@@ -13,7 +13,8 @@ __all__ = ('ActivationLayer', 'Linear', 'Sigmoid', 'HardSigmoid', 'Step',
 
 
 class ActivationLayer(ParameterBasedLayer):
-    """ Base class for the layers based on the activation
+    """
+    Base class for the layers based on the activation
     functions.
 
     Parameters
@@ -52,7 +53,8 @@ class ActivationLayer(ParameterBasedLayer):
 
 
 class Linear(ActivationLayer):
-    """ The layer with the linear activation function.
+    """
+    The layer with the linear activation function.
 
     Parameters
     ----------
@@ -67,7 +69,8 @@ class Linear(ActivationLayer):
 
 
 class Sigmoid(ActivationLayer):
-    """ The layer with the sigmoid activation function.
+    """
+    The layer with the sigmoid activation function.
 
     Parameters
     ----------
@@ -82,7 +85,8 @@ class Sigmoid(ActivationLayer):
 
 
 class HardSigmoid(ActivationLayer):
-    """ The layer with the hard sigmoid activation function.
+    """
+    The layer with the hard sigmoid activation function.
 
     Parameters
     ----------
@@ -97,7 +101,8 @@ class HardSigmoid(ActivationLayer):
 
 
 class Step(ActivationLayer):
-    """ The layer with the the step activation function.
+    """
+    The layer with the the step activation function.
 
     Parameters
     ----------
@@ -112,7 +117,8 @@ class Step(ActivationLayer):
 
 
 class Tanh(ActivationLayer):
-    """ The layer with the `tanh` activation function.
+    """
+    The layer with the `tanh` activation function.
 
     Parameters
     ----------
@@ -127,7 +133,8 @@ class Tanh(ActivationLayer):
 
 
 class Relu(ActivationLayer):
-    """ The layer with the rectifier (ReLu) activation function.
+    """
+    The layer with the rectifier (ReLu) activation function.
 
     Parameters
     ----------
@@ -150,7 +157,8 @@ class Relu(ActivationLayer):
 
 
 class Softplus(ActivationLayer):
-    """ The layer with the softplus activation function.
+    """
+    The layer with the softplus activation function.
 
     Parameters
     ----------
@@ -166,7 +174,8 @@ class Softplus(ActivationLayer):
 
 
 class Softmax(ActivationLayer):
-    """ The layer with the softmax activation function.
+    """
+    The layer with the softmax activation function.
 
     Parameters
     ----------
@@ -182,7 +191,8 @@ class Softmax(ActivationLayer):
 
 
 class Elu(ActivationLayer):
-    """ The layer with the exponensial linear unit (ELU)
+    """
+    The layer with the exponensial linear unit (ELU)
     activation function.
 
     Parameters
@@ -208,7 +218,8 @@ class Elu(ActivationLayer):
 
 
 class PReluAlphaProperty(SharedArrayProperty):
-    """ Defines PReLu layer alpha parameter.
+    """
+    Defines PReLu layer alpha parameter.
 
     Parameters
     ----------
@@ -220,7 +231,8 @@ class PReluAlphaProperty(SharedArrayProperty):
 
 
 class AxesProperty(TypedListProperty):
-    """ Property defines axes parameter.
+    """
+    Property defines axes parameter.
 
     Parameters
     ----------
@@ -243,7 +255,8 @@ class AxesProperty(TypedListProperty):
 
 
 class PRelu(ActivationLayer):
-    """ The layer with the parametrized ReLu activation
+    """
+    The layer with the parametrized ReLu activation
     function.
 
     Parameters

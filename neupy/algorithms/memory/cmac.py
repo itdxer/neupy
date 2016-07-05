@@ -10,7 +10,8 @@ __all__ = ('CMAC',)
 
 
 class CMAC(SupervisedLearning, BaseNetwork):
-    """ CMAC Network based on memory.
+    """
+    CMAC Network based on memory.
 
     Notes
     -----

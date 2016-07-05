@@ -1,4 +1,5 @@
-""" Main source code from Pylearn2 library:
+"""
+Main source code from Pylearn2 library:
 https://github.com/lisa-lab/pylearn2/blob/master/pylearn2/\
 optimization/linesearch.py
 """
@@ -20,7 +21,8 @@ theano_false = T.constant(0)
 
 
 def sequential_or(*conditions):
-    """ Use ``or`` operator between all conditions. Function is just
+    """
+    Use ``or`` operator between all conditions. Function is just
     a syntax sugar that make long Theano logical conditions looks
     less ugly.
 
@@ -36,7 +38,8 @@ def sequential_or(*conditions):
 
 
 def sequential_and(*conditions):
-    """ Use ``and`` operator between all conditions. Function is just
+    """
+    Use ``and`` operator between all conditions. Function is just
     a syntax sugar that make long Theano logical conditions looks
     less ugly.
 
@@ -52,7 +55,8 @@ def sequential_and(*conditions):
 
 
 def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
-    """ Find ``x`` that satisfies strong Wolfe conditions.
+    """
+    Find ``x`` that satisfies strong Wolfe conditions.
     ``x > 0`` is assumed to be a descent direction.
 
     Parameters
@@ -178,7 +182,8 @@ def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
 
 
 def quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, bound_size_ratio=0.1):
-    """ Finds the minimizer for a quadratic polynomial that
+    """
+    Finds the minimizer for a quadratic polynomial that
     goes through the points (x_a, y_a), (x_b, y_b) with derivative
     at x_a of y_prime_a.
 
@@ -240,7 +245,8 @@ def quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, bound_size_ratio=0.1):
 
 def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c,
                     bound_size_ratio=0.2):
-    """ Finds the minimizer for a cubic polynomial that goes
+    """
+    Finds the minimizer for a cubic polynomial that goes
     through the points (x_a, y_a), (x_b, y_b), and (x_c, y_c) with
     derivative at ``x_a`` of y_prime_a. If no minimizer can be
     found return ``NaN``.

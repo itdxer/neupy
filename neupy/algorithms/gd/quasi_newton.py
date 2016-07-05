@@ -84,7 +84,8 @@ def sr1(inverse_hessian, weight_delta, gradient_delta, epsilon=1e-8):
 
 
 class QuasiNewton(NoStepSelection, GradientDescent):
-    """ Quasi-Newton algorithm optimization.
+    """
+    Quasi-Newton algorithm optimization.
 
     Parameters
     ----------

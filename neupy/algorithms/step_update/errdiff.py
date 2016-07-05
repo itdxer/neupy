@@ -11,7 +11,8 @@ __all__ = ('ErrDiffStepUpdate',)
 
 
 class ErrDiffStepUpdate(SingleStepConfigurable):
-    """ This algorithm make step update base on error difference between
+    """
+    This algorithm make step update base on error difference between
     epochs.
 
     Parameters

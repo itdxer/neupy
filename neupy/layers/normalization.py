@@ -13,7 +13,8 @@ __all__ = ('BatchNorm',)
 
 
 def find_opposite_axes(axes, ndim):
-    """ Based on the total number of dimensions function
+    """
+    Based on the total number of dimensions function
     finds all axes that are missed in the specified
     list ``axes``.
 
@@ -48,7 +49,8 @@ def find_opposite_axes(axes, ndim):
 
 
 class ArrayOrScalarProperty(SharedArrayProperty):
-    """ Defines array, Theano shared variable or scalar.
+    """
+    Defines array, Theano shared variable or scalar.
 
     Parameters
     ----------
@@ -60,7 +62,8 @@ class ArrayOrScalarProperty(SharedArrayProperty):
 
 
 class BatchNorm(BaseLayer):
-    """ Batch-normalization layer.
+    """
+    Batch-normalization layer.
 
     Parameters
     ----------

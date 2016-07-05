@@ -5,7 +5,8 @@ __all__ = ('LMS',)
 
 
 class LMS(BaseLinearNetwork):
-    """ LMS Neural Network. Algorithm has several names, including the
+    """
+    LMS Neural Network. Algorithm has several names, including the
     Widrow-Hoff or Delta rule. Algorithm similar to :network:`Perceptron`
     Neural Network, but has different idea behind learning process.
 

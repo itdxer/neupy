@@ -11,7 +11,8 @@ __all__ = ('RMSProp',)
 
 
 class RMSProp(MinibatchGradientDescent):
-    """ RMSProp algorithm.
+    """
+    RMSProp algorithm.
 
     Parameters
     ----------

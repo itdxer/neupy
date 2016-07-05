@@ -14,7 +14,8 @@ __all__ = ('Quickprop',)
 
 
 class Quickprop(GradientDescent):
-    """ Quickprop :network:`GradientDescent` algorithm optimization.
+    """
+    Quickprop :network:`GradientDescent` algorithm optimization.
 
     Parameters
     ----------

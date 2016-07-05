@@ -11,7 +11,8 @@ __all__ = ('Adam',)
 
 
 class Adam(MinibatchGradientDescent):
-    """ Adam algorithm.
+    """
+    Adam algorithm.
 
     Parameters
     ----------

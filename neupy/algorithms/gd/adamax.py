@@ -11,7 +11,8 @@ __all__ = ('Adamax',)
 
 
 class Adamax(MinibatchGradientDescent):
-    """ AdaMax algorithm.
+    """
+    AdaMax algorithm.
 
     Parameters
     ----------

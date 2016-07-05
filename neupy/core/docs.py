@@ -1,6 +1,6 @@
 import re
-import textwrap
 from abc import ABCMeta
+from inspect import isfunction
 
 from six import with_metaclass
 
@@ -131,7 +131,7 @@ def parse_warns(docs):
     return doc_warns
 
 
-def parse_variables_from_docs(instances):
+def parse_variables_from_docs(instance, parent_instances):
     """
     Parse documentation with NumPy style and returns all
     extracted information.
@@ -148,10 +148,10 @@ def parse_variables_from_docs(instances):
     """
     variables = {}
 
-    if not instances:
+    if not parent_instances:
         return variables
 
-    for instance in instances:
+    for instance in parent_instances:
         parent_docs = instance.__doc__
 
         if parent_docs is None:
@@ -160,8 +160,8 @@ def parse_variables_from_docs(instances):
         parent_variables = AttributeKeyDict()
 
         for name, type_, desc in iter_parameters(parent_docs):
-            variable = "{} : {}{}".format(name, type_, desc.rstrip())
-            parent_variables[name] = variable
+            parameter = "{} : {}{}".format(name, type_, desc.rstrip())
+            parent_variables[name] = parameter
 
         for name, func_params, desc in iter_methods(parent_docs):
             parent_variables[name] = ''.join([name, func_params, desc])
@@ -201,7 +201,7 @@ def format_docs(instance, parent_instances):
     """
     try:
         instance_docs = instance.__doc__
-        variables = parse_variables_from_docs(parent_instances)
+        variables = parse_variables_from_docs(instance, parent_instances)
         instance_new_docs = instance_docs.format(**variables)
         # If we have multiple spaces between words, we need
         # to trim them. For instance:
@@ -211,7 +211,7 @@ def format_docs(instance, parent_instances):
             repl=r'\1 \3',
             string=instance_new_docs
         )
-        return textwrap.dedent(instance_new_docs)
+        return instance_new_docs
 
     except Exception as exception:
         exception_classname = exception.__class__.__name__
@@ -232,6 +232,31 @@ class SharedDocsException(Exception):
     """
 
 
+def inherit_docs_for_methods(class_, attrs):
+    """
+    Class methods inherit documentation from the parent
+    classes in case if methods doesn't have it.
+
+    Parameters
+    ----------
+    class_ : object
+    attrs : dict
+        Class attributes.
+    """
+    for attrname, attrvalue in attrs.items():
+        if not isfunction(attrvalue) or attrvalue.__doc__ is not None:
+            continue
+
+        for parent_class in class_.__mro__:
+            if not hasattr(parent_class, attrname):
+                continue
+
+            parent_attrvalue = getattr(parent_class, attrname)
+            if parent_attrvalue.__doc__ is not None:
+                attrvalue.__doc__ = parent_attrvalue.__doc__
+                break
+
+
 class SharedDocsMeta(type):
     """
     Meta-class for shared documentation. This class conatains
@@ -239,10 +264,22 @@ class SharedDocsMeta(type):
     descriptions from parent classes. This class automaticaly
     format class documentation using basic python format syntax
     for objects.
+
+    Attributes
+    ----------
+    inherit_method_docs : bool
+        ``True`` means that methods that doesn't have
+        documentation will be inherited from the parent
+        methods. ``False`` will disable this option for
+        the specified class. Defaults to ``True``.
     """
     def __new__(cls, clsname, bases, attrs):
         new_class = super(SharedDocsMeta, cls).__new__(cls, clsname,
                                                        bases, attrs)
+
+        if attrs.get('inherit_method_docs', True):
+            inherit_docs_for_methods(new_class, attrs)
+
         if new_class.__doc__ is None:
             return new_class
 

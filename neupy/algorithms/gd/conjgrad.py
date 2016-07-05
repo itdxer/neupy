@@ -58,7 +58,8 @@ def dai_yuan(gradient_old, gradient_new, weight_old_delta):
 
 
 class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
-    """ Conjugate Gradient algorithm.
+    """
+    Conjugate Gradient algorithm.
 
     Parameters
     ----------

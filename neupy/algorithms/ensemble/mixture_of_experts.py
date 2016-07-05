@@ -13,7 +13,8 @@ __all__ = ('MixtureOfExperts',)
 
 
 class MixtureOfExperts(BaseEnsemble):
-    """ Mixture of Experts ensemble algorithm for GradientDescent
+    """
+    Mixture of Experts ensemble algorithm for GradientDescent
     based Neural Networks.
 
     Parameters

@@ -18,13 +18,15 @@ number_type = (int, float, np.floating, np.integer)
 
 
 class NotTrainedException(Exception):
-    """ Exception needs for cases when algorithm is not trained
+    """
+    Exception needs for cases when algorithm is not trained
     and can not be applied.
     """
 
 
 def format_data(data, is_feature1d=True, copy=False):
-    """ Transform data in a standardized format.
+    """
+    Transform data in a standardized format.
 
     Notes
     -----
@@ -67,7 +69,8 @@ def format_data(data, is_feature1d=True, copy=False):
 
 
 def does_layer_accept_1d_feature(layer):
-    """ Check if 1D feature values are valid for the layer.
+    """
+    Check if 1D feature values are valid for the layer.
 
     Parameters
     ----------
@@ -81,7 +84,8 @@ def does_layer_accept_1d_feature(layer):
 
 
 def asfloat(value):
-    """ Convert variable to float type configured by theano
+    """
+    Convert variable to float type configured by theano
     floatX variable.
 
     Parameters
@@ -114,7 +118,8 @@ def asfloat(value):
 
 
 def asint(value):
-    """ Convert variable to an integer type. Number of bits per
+    """
+    Convert variable to an integer type. Number of bits per
     integer depend on floatX Theano variable.
 
     Parameters
@@ -152,7 +157,8 @@ def asint(value):
 
 
 class AttributeKeyDict(dict):
-    """ Modified built-in Python ``dict`` class. That modification
+    """
+    Modified built-in Python ``dict`` class. That modification
     helps get and set values like attributes.
 
     Examples
@@ -178,7 +184,8 @@ class AttributeKeyDict(dict):
 
 
 def is_list_of_integers(sequence):
-    """ Check that sequence contains only integer numbers.
+    """
+    Check that sequence contains only integer numbers.
 
     Parameters
     ----------
@@ -195,7 +202,8 @@ def is_list_of_integers(sequence):
 
 
 def preformat_value(value):
-    """ Function pre-format input value depending on it's type.
+    """
+    Function pre-format input value depending on it's type.
 
     Parameters
     ----------
@@ -218,7 +226,8 @@ def preformat_value(value):
 
 
 def as_array2d(array):
-    """ Transform any array to 2D.
+    """
+    Transform any array to 2D.
 
     Parameters
     ----------
@@ -237,7 +246,8 @@ def as_array2d(array):
 
 
 def smallest_positive_number():
-    """ Based on the `floatX` variables function returns different
+    """
+    Based on the `floatX` variables function returns different
     smallest positive numbers.
 
     Returns
@@ -254,7 +264,8 @@ def smallest_positive_number():
 
 
 def as_tuple(*values):
-    """ Convert sequence of values in one big tuple.
+    """
+    Convert sequence of values in one big tuple.
 
     Parameters
     ----------

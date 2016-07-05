@@ -10,7 +10,8 @@ __all__ = ('LinearSearch',)
 
 
 class LinearSearch(SingleStepConfigurable):
-    """ Linear search for the step selection. Basicly this algorithms
+    """
+    Linear search for the step selection. Basicly this algorithms
     try different steps and compute your predicted error, after few
     iteration it will chose one which was better.
 

@@ -11,7 +11,8 @@ __all__ = ('Adadelta',)
 
 
 class Adadelta(MinibatchGradientDescent):
-    """ Adadelta algorithm.
+    """
+    Adadelta algorithm.
 
     Parameters
     ----------

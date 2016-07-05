@@ -7,7 +7,8 @@ __all__ = ('DynamicallyAveragedNetwork',)
 
 
 class DynamicallyAveragedNetwork(BaseEnsemble):
-    """ Dynamically Averaged Network (DAN) weighted ensamble
+    """
+    Dynamically Averaged Network (DAN) weighted ensamble
     for binary classification problems.
 
     Parameters

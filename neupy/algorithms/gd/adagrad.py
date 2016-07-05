@@ -11,7 +11,8 @@ __all__ = ('Adagrad',)
 
 
 class Adagrad(MinibatchGradientDescent):
-    """ Adagrad algorithm.
+    """
+    Adagrad algorithm.
 
     Parameters
     ----------

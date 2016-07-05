@@ -14,7 +14,8 @@ __all__ = ('Convolution', 'MaxPooling', 'AveragePooling', 'Upscale')
 
 
 class StrideProperty(TypedListProperty):
-    """ Stride property.
+    """
+    Stride property.
 
     Parameters
     ----------
@@ -49,7 +50,8 @@ class StrideProperty(TypedListProperty):
 
 
 class BorderModeProperty(Property):
-    """ Border mode property identifies border for the
+    """
+    Border mode property identifies border for the
     convolution operation.
     """
     expected_type = (six.string_types, int, tuple)
@@ -85,7 +87,8 @@ class BorderModeProperty(Property):
 
 
 def conv_output_shape(dimension_size, filter_size, border_mode, stride):
-    """ Computes convolution's output shape.
+    """
+    Computes convolution's output shape.
 
     Parameters
     ----------
@@ -127,7 +130,8 @@ def conv_output_shape(dimension_size, filter_size, border_mode, stride):
 
 
 class Convolution(ParameterBasedLayer):
-    """ Convolutional layer.
+    """
+    Convolutional layer.
 
     Parameters
     ----------
@@ -195,7 +199,8 @@ class Convolution(ParameterBasedLayer):
 
 
 class BasePooling(BaseLayer):
-    """ Base class for the pooling layers.
+    """
+    Base class for the pooling layers.
 
     Parameters
     ----------
@@ -256,7 +261,8 @@ class BasePooling(BaseLayer):
 
 
 class MaxPooling(BasePooling):
-    """ Maximum pooling layer.
+    """
+    Maximum pooling layer.
 
     Parameters
     ----------
@@ -270,7 +276,8 @@ class MaxPooling(BasePooling):
 
 
 class AveragePooling(BasePooling):
-    """ Average pooling layer.
+    """
+    Average pooling layer.
 
     Parameters
     ----------
@@ -295,7 +302,8 @@ class AveragePooling(BasePooling):
 
 
 class ScaleFactorProperty(TypedListProperty):
-    """ Defines sclaing factor for the Upscale layer.
+    """
+    Defines sclaing factor for the Upscale layer.
     """
     expected_type = (tuple, int)
 
@@ -312,7 +320,8 @@ class ScaleFactorProperty(TypedListProperty):
 
 
 class Upscale(BaseLayer):
-    """ Upscales input over two axis (height and width).
+    """
+    Upscales input over two axis (height and width).
 
     Parameters
     ----------

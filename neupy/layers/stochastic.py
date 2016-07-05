@@ -9,7 +9,8 @@ __all__ = ('Dropout', 'GaussianNoise')
 
 
 def theano_random_stream():
-    """ Create Theano random stream instance.
+    """
+    Create Theano random stream instance.
     """
     # Use NumPy seed to make Theano code easely reproducible
     max_possible_seed = 4e9
@@ -19,7 +20,8 @@ def theano_random_stream():
 
 
 class Dropout(BaseLayer):
-    """ Dropout layer
+    """
+    Dropout layer
 
     Parameters
     ----------
@@ -54,7 +56,8 @@ class Dropout(BaseLayer):
 
 
 class GaussianNoise(BaseLayer):
-    """ Add gaussian noise to the input value. Mean and standard
+    """
+    Add gaussian noise to the input value. Mean and standard
     deviation are layer's parameters.
 
     Parameters
