@@ -232,6 +232,22 @@ class SharedDocsException(Exception):
     """
 
 
+def has_docs(value):
+    """ Checks whether object has documentation.
+
+    Parameters
+    ----------
+    value : object
+
+    Returns
+    -------
+    bool
+        Function returns ``True`` if object has a documentation
+        and ``False`` otherwise.
+    """
+    return value.__doc__ is not None
+
+
 def inherit_docs_for_methods(class_, attrs):
     """
     Class methods inherit documentation from the parent
@@ -244,7 +260,7 @@ def inherit_docs_for_methods(class_, attrs):
         Class attributes.
     """
     for attrname, attrvalue in attrs.items():
-        if not isfunction(attrvalue) or attrvalue.__doc__ is not None:
+        if not isfunction(attrvalue) or has_docs(attrvalue):
             continue
 
         for parent_class in class_.__mro__:
@@ -252,7 +268,7 @@ def inherit_docs_for_methods(class_, attrs):
                 continue
 
             parent_attrvalue = getattr(parent_class, attrname)
-            if parent_attrvalue.__doc__ is not None:
+            if has_docs(parent_attrvalue):
                 attrvalue.__doc__ = parent_attrvalue.__doc__
                 break
 
