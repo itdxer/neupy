@@ -28,7 +28,7 @@ Links
 * `Documentation <http://neupy.com>`_
 * `Issues <https://github.com/itdxer/neupy/issues>`_
 * `Articles <http://neupy.com/archive.html>`_
-* `Available algorithms <http://neupy.com/docs/algorithms.html>`_
+* `Available algorithms <http://neupy.com/docs/cheatsheet.html#algorithms>`_
 
 Articles
 --------
