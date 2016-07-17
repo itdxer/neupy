@@ -260,7 +260,7 @@ class SharedDocsTestCase(BaseTestCase):
         class B(A):
             def method(self, x, y):
                 # It's suppose to inherit documentation
-                # from A class
+                # from the A class
                 return x + y
 
             def method2(self):
