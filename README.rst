@@ -1,10 +1,10 @@
-|Travis|_
+|Travis|_ |Dependency Status|_
 
 .. |Travis| image:: https://api.travis-ci.org/itdxer/neupy.png?branch=master
 .. _Travis: https://travis-ci.org/itdxer/neupy
 
-.. |Coveralls| image:: https://coveralls.io/repos/github/itdxer/neupy/badge.svg?branch=master
-.. _Coveralls: https://coveralls.io/github/itdxer/neupy?branch=master
+.. |Dependency Status| image:: https://dependencyci.com/github/itdxer/neupy/badge
+.. _Dependency Status: https://dependencyci.com/github/itdxer/neupy
 
 NeuPy v0.3.0 (beta)
 ===================
