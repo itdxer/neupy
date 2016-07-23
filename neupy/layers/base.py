@@ -113,8 +113,7 @@ class SharedArrayProperty(ArrayProperty):
 
     Parameters
     ----------
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {ArrayProperty.Parameters}
     """
     expected_type = (np.matrix, np.ndarray,
                      T.sharedvar.SharedVariable,
@@ -171,6 +170,14 @@ class ParameterBasedLayer(BaseLayer):
         Available only for ``init_method`` equal to ``bounded``.  Value
         identify minimum and maximum possible value in random weights.
         Defaults to ``(0, 1)``.
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
     """
     size = IntProperty(minval=1)
     weight = SharedArrayProperty(default=None)
@@ -247,6 +254,14 @@ class Input(BaseLayer):
         Identifies input data shape size. ``None`` means that network
         doesn't have input feature with fixed size.
         Defaults to ``None``.
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
     """
     size = ArrayShapeProperty()
 

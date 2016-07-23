@@ -27,27 +27,15 @@ class GradientDescent(ConstructableNetwork):
         If this option is not empty it will generate new class which
         will inherit all from this list. Support two types of
         addon algorithms: weight update and step update.
-    {ConstructableNetwork.connection}
-    {ConstructableNetwork.error}
-    {BaseNetwork.step}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
-    {Verbose.verbose}
+    {ConstructableNetwork.Parameters}
 
     Attributes
     ----------
-    {BaseNetwork.errors}
-    {BaseNetwork.train_errors}
-    {BaseNetwork.validation_errors}
-    {BaseNetwork.last_epoch}
+    {ConstructableNetwork.Attributes}
 
     Methods
     -------
-    {BaseSkeleton.predict}
-    {SupervisedLearning.train}
-    {BaseSkeleton.fit}
+    {ConstructableNetwork.Methods}
 
     Examples
     --------
@@ -347,28 +335,15 @@ class MinibatchGradientDescent(GradientDescent):
         Set up batch size for learning process. To set up batch size equal to
         sample size value should be equal to one of the values listed above.
         Defaults to ``100``.
-    {GradientDescent.addons}
-    {ConstructableNetwork.connection}
-    {ConstructableNetwork.error}
-    {BaseNetwork.step}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
-    {Verbose.verbose}
+    {GradientDescent.Parameters}
 
     Attributes
     ----------
-    {BaseNetwork.errors}
-    {BaseNetwork.train_errors}
-    {BaseNetwork.validation_errors}
-    {BaseNetwork.last_epoch}
+    {GradientDescent.Attributes}
 
     Methods
     -------
-    {BaseSkeleton.predict}
-    {SupervisedLearning.train}
-    {BaseSkeleton.fit}
+    {GradientDescent.Methods}
 
     Examples
     --------

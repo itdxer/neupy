@@ -67,20 +67,15 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
     error: {{'mse'}}
         Levenberg-Marquardt works only for quadratic functions.
         Defaults to ``mse``.
-    {GradientDescent.addons}
-    {ConstructableNetwork.connection}
-    {BaseNetwork.step}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
-    {Verbose.verbose}
+    {GradientDescent.Parameters}
+
+    Attributes
+    ----------
+    {GradientDescent.Attributes}
 
     Methods
     -------
-    {BaseSkeleton.predict}
-    {SupervisedLearning.train}
-    {BaseSkeleton.fit}
+    {GradientDescent.Methods}
 
     Examples
     --------

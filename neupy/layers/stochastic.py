@@ -28,6 +28,14 @@ class Dropout(BaseLayer):
     proba : float
         Fraction of the input units to drop. Value needs to be
         between 0 and 1.
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
     """
     proba = ProperFractionProperty(required=True)
 
@@ -67,6 +75,14 @@ class GaussianNoise(BaseLayer):
         be greater than zero. Defaults to ``1``.
     mean : float
         Mean of the gaussian noise. Defaults to ``0``.
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
     """
     std = NumberProperty(default=1, minval=0)
     mean = NumberProperty(default=0)

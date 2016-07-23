@@ -18,22 +18,15 @@ class Adagrad(MinibatchGradientDescent):
     ----------
     epsilon : float
         Value need to be greater than ``0``. Defaults to ``1e-5``.
-    {MinibatchGradientDescent.batch_size}
-    {GradientDescent.addons}
-    {ConstructableNetwork.connection}
-    {ConstructableNetwork.error}
-    {BaseNetwork.step}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
-    {Verbose.verbose}
+    {MinibatchGradientDescent.Parameters}
+
+    Attributes
+    ----------
+    {MinibatchGradientDescent.Attributes}
 
     Methods
     -------
-    {BaseSkeleton.predict}
-    {SupervisedLearning.train}
-    {BaseSkeleton.fit}
+    {MinibatchGradientDescent.Methods}
     """
     epsilon = NumberProperty(default=1e-5, minval=0)
 

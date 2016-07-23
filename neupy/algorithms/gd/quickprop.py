@@ -21,21 +21,15 @@ class Quickprop(GradientDescent):
     ----------
     upper_bound : float
         Maximum possible value for weight update. Defaults to ``1``.
-    {GradientDescent.addons}
-    {ConstructableNetwork.connection}
-    {ConstructableNetwork.error}
-    {BaseNetwork.step}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
-    {Verbose.verbose}
+    {GradientDescent.Parameters}
+
+    Attributes
+    ----------
+    {GradientDescent.Attributes}
 
     Methods
     -------
-    {BaseSkeleton.predict}
-    {SupervisedLearning.train}
-    {BaseSkeleton.fit}
+    {GradientDescent.Methods}
 
     Examples
     --------

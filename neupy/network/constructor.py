@@ -156,9 +156,7 @@ class ErrorFunctionProperty(ChoiceProperty):
 
     Parameters
     ----------
-    {ChoiceProperty.choices}
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {ChoiceProperty.Parameters}
     """
     def __set__(self, instance, value):
         if isinstance(value, types.FunctionType):
@@ -215,19 +213,17 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         * Custom function which accepts two mandatory arguments. \
         The first one is expected value and the second one is \
         predicted value. Example: ``custom_func(expected, predicted)``
-    {BaseNetwork.step}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
-    {Verbose.verbose}
+    {BaseNetwork.Parameters}
 
     Attributes
     ----------
-    {BaseNetwork.errors}
-    {BaseNetwork.train_errors}
-    {BaseNetwork.validation_errors}
-    {BaseNetwork.last_epoch}
+    {BaseNetwork.Attributes}
+
+    Methods
+    -------
+    {BaseSkeleton.predict}
+    {SupervisedLearning.train}
+    {BaseSkeleton.fit}
     """
     error = ErrorFunctionProperty(default='mse', choices={
         'mae': errors.mae,

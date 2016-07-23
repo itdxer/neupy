@@ -21,6 +21,14 @@ class Reshape(BaseLayer):
         will be flatten in 1D vector. If you need to get the
         output feature with more that 2 dimensions then you can
         set up new feature shape using tuples. Defaults to ``None``.
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
     """
     shape = TypedListProperty()
 

@@ -85,6 +85,14 @@ class BatchNorm(BaseLayer):
     gamma : float
     beta : float
 
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
+
     References
     ----------
     .. [1] Batch Normalization: Accelerating Deep Network Training

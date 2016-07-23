@@ -86,8 +86,7 @@ class Property(BaseProperty):
     ----------
     expected_type : object
         Valid data type.
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BaseProperty.Parameters}
     """
     def __init__(self, expected_type=object, *args, **kwargs):
         self.expected_type = expected_type
@@ -100,8 +99,7 @@ class ArrayProperty(BaseProperty):
 
     Parameters
     ----------
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BaseProperty.Parameters}
     """
     expected_type = (np.ndarray, np.matrix)
 
@@ -118,8 +116,7 @@ class TypedListProperty(BaseProperty):
     element_type : object or tuple
         There are could be defined valid list elementy type or a bunch
         of them as tuple.
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BaseProperty.Parameters}
     """
     expected_type = (list, tuple)
 
@@ -158,8 +155,7 @@ class ChoiceProperty(BaseProperty):
         some specific object like functions. List or tuple choices
         do the same as dictionary, but they are useful in case when
         keys and values should be the same.
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BaseProperty.Parameters}
     """
     choices = {}
 
@@ -205,8 +201,7 @@ class BoundedProperty(BaseProperty):
         Minimum possible value for the property.
     maxval : float
         Maximum possible value for the property.
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BaseProperty.Parameters}
     """
 
     def __init__(self, minval=-np.inf, maxval=np.inf, *args, **kwargs):
@@ -229,8 +224,7 @@ class ProperFractionProperty(BoundedProperty):
 
     Parameters
     ----------
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BaseProperty.Parameters}
     """
     expected_type = (float, int)
 
@@ -245,10 +239,7 @@ class NumberProperty(BoundedProperty):
 
     Parameters
     ----------
-    {BoundedProperty.minval}
-    {BoundedProperty.maxval}
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BoundedProperty.Parameters}
     """
     expected_type = number_type
 
@@ -259,9 +250,6 @@ class IntProperty(BoundedProperty):
 
     Parameters
     ----------
-    {BoundedProperty.minval}
-    {BoundedProperty.maxval}
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BoundedProperty.Parameters}
     """
     expected_type = (int, np.integer)

@@ -140,10 +140,7 @@ class ShowEpochProperty(BoundedProperty):
 
     Parameters
     ----------
-    {BoundedProperty.minval}
-    {BoundedProperty.maxval}
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BoundedProperty.Parameters}
     """
     expected_type = tuple([int] + [six.string_types])
 
@@ -260,7 +257,7 @@ class BaseNetwork(BaseSkeleton):
         Calls this function when train epoch finishes.
     train_end_signal : function
         Calls this function when train process finishes.
-    {Verbose.verbose}
+    {Verbose.Parameters}
 
     Attributes
     ----------

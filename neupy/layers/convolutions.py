@@ -19,8 +19,7 @@ class StrideProperty(TypedListProperty):
 
     Parameters
     ----------
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BaseProperty.Parameters}
     """
     expected_type = (list, tuple, int)
 
@@ -53,6 +52,10 @@ class BorderModeProperty(Property):
     """
     Border mode property identifies border for the
     convolution operation.
+
+    Parameters
+    ----------
+    {Property.Parameters}
     """
     expected_type = (six.string_types, int, tuple)
     valid_string_choices = ('valid', 'full', 'half')
@@ -142,6 +145,18 @@ class Convolution(ParameterBasedLayer):
         Convolution border mode. Check Theano's ``nnet.conv2d`` doc.
     stride_size : tuple with 1 or 2 integers or integer.
         Stride size.
+    {ParameterBasedLayer.weight}
+    {ParameterBasedLayer.bias}
+    {ParameterBasedLayer.init_method}
+    {ParameterBasedLayer.bounds}
+
+    Methods
+    -------
+    {ParameterBasedLayer.Methods}
+
+    Attributes
+    ----------
+    {ParameterBasedLayer.Attributes}
     """
     size = TypedListProperty(required=True, element_type=int)
     border_mode = BorderModeProperty(default='valid')
@@ -216,6 +231,14 @@ class BasePooling(BaseLayer):
         (pad_h, pad_w), pad zeros to extend beyond four borders of
         the images, pad_h is the size of the top and bottom margins,
         and pad_w is the size of the left and right margins.
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
     """
     size = TypedListProperty(required=True, element_type=int)
     stride_size = StrideProperty(default=None)
@@ -266,8 +289,15 @@ class MaxPooling(BasePooling):
 
     Parameters
     ----------
-    {BasePooling.size}
-    {BasePooling.stride_size}
+    {BasePooling.Parameters}
+
+    Methods
+    -------
+    {BasePooling.Methods}
+
+    Attributes
+    ----------
+    {BasePooling.Attributes}
     """
     def output(self, input_value):
         return pool.pool_2d(input_value, ds=self.size, mode='max',
@@ -284,8 +314,15 @@ class AveragePooling(BasePooling):
     mode : {{'include_padding', 'exclude_padding'}}
         Gives you the choice to include or exclude padding.
         Defaults to ``include_padding``.
-    {BasePooling.size}
-    {BasePooling.stride_size}
+    {BasePooling.Parameters}
+
+    Methods
+    -------
+    {BasePooling.Methods}
+
+    Attributes
+    ----------
+    {BasePooling.Attributes}
     """
     mode = ChoiceProperty(
         default='include_padding',
@@ -304,6 +341,10 @@ class AveragePooling(BasePooling):
 class ScaleFactorProperty(TypedListProperty):
     """
     Defines sclaing factor for the Upscale layer.
+
+    Parameters
+    ----------
+    {TypedListProperty.Parameters}
     """
     expected_type = (tuple, int)
 
@@ -329,6 +370,14 @@ class Upscale(BaseLayer):
         Scaling factor for the input value. In the tuple first
         parameter identifies scale of the height and the second
         one of the width.
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
     """
     scale = ScaleFactorProperty(required=True, n_elements=2)
 

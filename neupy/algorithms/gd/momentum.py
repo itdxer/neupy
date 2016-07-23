@@ -21,22 +21,15 @@ class Momentum(MinibatchGradientDescent):
     nesterov : bool
         Instead of classic momentum computes Nesterov momentum.
         Defaults to ``False``.
-    {MinibatchGradientDescent.batch_size}
-    {GradientDescent.addons}
-    {ConstructableNetwork.connection}
-    {ConstructableNetwork.error}
-    {BaseNetwork.step}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
-    {Verbose.verbose}
+    {MinibatchGradientDescent.Parameters}
+
+    Attributes
+    ----------
+    {MinibatchGradientDescent.Attributes}
 
     Methods
     -------
-    {BaseSkeleton.predict}
-    {SupervisedLearning.train}
-    {BaseSkeleton.fit}
+    {MinibatchGradientDescent.Methods}
 
     Examples
     --------

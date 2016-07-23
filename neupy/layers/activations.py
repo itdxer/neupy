@@ -27,6 +27,14 @@ class ActivationLayer(ParameterBasedLayer):
     {ParameterBasedLayer.bias}
     {ParameterBasedLayer.init_method}
     {ParameterBasedLayer.bounds}
+
+    Methods
+    -------
+    {ParameterBasedLayer.Methods}
+
+    Attributes
+    ----------
+    {ParameterBasedLayer.Attributes}
     """
     def __init__(self, size=None, **options):
         super(ActivationLayer, self).__init__(size, **options)
@@ -58,11 +66,15 @@ class Linear(ActivationLayer):
 
     Parameters
     ----------
-    {ActivationLayer.size}
-    {ParameterBasedLayer.weight}
-    {ParameterBasedLayer.bias}
-    {ParameterBasedLayer.init_method}
-    {ParameterBasedLayer.bounds}
+    {ActivationLayer.Parameters}
+
+    Methods
+    -------
+    {ActivationLayer.Methods}
+
+    Attributes
+    ----------
+    {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
         return input_value
@@ -74,11 +86,15 @@ class Sigmoid(ActivationLayer):
 
     Parameters
     ----------
-    {ActivationLayer.size}
-    {ParameterBasedLayer.weight}
-    {ParameterBasedLayer.bias}
-    {ParameterBasedLayer.init_method}
-    {ParameterBasedLayer.bounds}
+    {ActivationLayer.Parameters}
+
+    Methods
+    -------
+    {ActivationLayer.Methods}
+
+    Attributes
+    ----------
+    {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
         return T.nnet.sigmoid(input_value)
@@ -90,11 +106,15 @@ class HardSigmoid(ActivationLayer):
 
     Parameters
     ----------
-    {ActivationLayer.size}
-    {ParameterBasedLayer.weight}
-    {ParameterBasedLayer.bias}
-    {ParameterBasedLayer.init_method}
-    {ParameterBasedLayer.bounds}
+    {ActivationLayer.Parameters}
+
+    Methods
+    -------
+    {ActivationLayer.Methods}
+
+    Attributes
+    ----------
+    {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
         return T.nnet.hard_sigmoid(input_value)
@@ -106,11 +126,15 @@ class Step(ActivationLayer):
 
     Parameters
     ----------
-    {ActivationLayer.size}
-    {ParameterBasedLayer.weight}
-    {ParameterBasedLayer.bias}
-    {ParameterBasedLayer.init_method}
-    {ParameterBasedLayer.bounds}
+    {ActivationLayer.Parameters}
+
+    Methods
+    -------
+    {ActivationLayer.Methods}
+
+    Attributes
+    ----------
+    {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
         return T.gt(input_value, 0)
@@ -122,11 +146,15 @@ class Tanh(ActivationLayer):
 
     Parameters
     ----------
-    {ActivationLayer.size}
-    {ParameterBasedLayer.weight}
-    {ParameterBasedLayer.bias}
-    {ParameterBasedLayer.init_method}
-    {ParameterBasedLayer.bounds}
+    {ActivationLayer.Parameters}
+
+    Methods
+    -------
+    {ActivationLayer.Methods}
+
+    Attributes
+    ----------
+    {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
         return T.tanh(input_value)
@@ -143,11 +171,15 @@ class Relu(ActivationLayer):
         for the negative values. If ``alpha``
         is non-zero value then layer behave like a
         leaky ReLu. Defaults to ``0``.
-    {ActivationLayer.size}
-    {ParameterBasedLayer.weight}
-    {ParameterBasedLayer.bias}
-    {ParameterBasedLayer.init_method}
-    {ParameterBasedLayer.bounds}
+    {ActivationLayer.Parameters}
+
+    Methods
+    -------
+    {ActivationLayer.Methods}
+
+    Attributes
+    ----------
+    {ActivationLayer.Attributes}
     """
     alpha = NumberProperty(default=0, minval=0)
 
@@ -162,11 +194,15 @@ class Softplus(ActivationLayer):
 
     Parameters
     ----------
-    {ActivationLayer.size}
-    {ParameterBasedLayer.weight}
-    {ParameterBasedLayer.bias}
-    {ParameterBasedLayer.init_method}
-    {ParameterBasedLayer.bounds}
+    {ActivationLayer.Parameters}
+
+    Methods
+    -------
+    {ActivationLayer.Methods}
+
+    Attributes
+    ----------
+    {ActivationLayer.Attributes}
     """
 
     def activation_function(self, input_value):
@@ -179,11 +215,15 @@ class Softmax(ActivationLayer):
 
     Parameters
     ----------
-    {ActivationLayer.size}
-    {ParameterBasedLayer.weight}
-    {ParameterBasedLayer.bias}
-    {ParameterBasedLayer.init_method}
-    {ParameterBasedLayer.bounds}
+    {ActivationLayer.Parameters}
+
+    Methods
+    -------
+    {ActivationLayer.Methods}
+
+    Attributes
+    ----------
+    {ActivationLayer.Attributes}
     """
 
     def activation_function(self, input_value):
@@ -200,11 +240,15 @@ class Elu(ActivationLayer):
     alpha : float
         Alpha parameter defines the decreasing exponensial
         rate for the negative values. Defaults to ``1``.
-    {ActivationLayer.size}
-    {ParameterBasedLayer.weight}
-    {ParameterBasedLayer.bias}
-    {ParameterBasedLayer.init_method}
-    {ParameterBasedLayer.bounds}
+    {ActivationLayer.Parameters}
+
+    Methods
+    -------
+    {ActivationLayer.Methods}
+
+    Attributes
+    ----------
+    {ActivationLayer.Attributes}
 
     References
     ----------
@@ -223,8 +267,7 @@ class PReluAlphaProperty(SharedArrayProperty):
 
     Parameters
     ----------
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {SharedArrayProperty.Parameters}
     """
     expected_type = as_tuple(SharedArrayProperty.expected_type,
                              number_type, type(None))
@@ -273,11 +316,15 @@ class PRelu(ActivationLayer):
         The exact random initialization algorithm depends on
         the ``init_method`` parameter.
         Defaults to ``0.25``.
-    {ActivationLayer.size}
-    {ParameterBasedLayer.weight}
-    {ParameterBasedLayer.bias}
-    {ParameterBasedLayer.init_method}
-    {ParameterBasedLayer.bounds}
+    {ActivationLayer.Parameters}
+
+    Methods
+    -------
+    {ActivationLayer.Methods}
+
+    Attributes
+    ----------
+    {ActivationLayer.Attributes}
 
     References
     ----------

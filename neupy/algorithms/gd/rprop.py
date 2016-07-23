@@ -27,20 +27,15 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
     decrease_factor : float
         Decrease factor for step in case when gradient changes sign
         compare to previous epoch.
-    {GradientDescent.addons}
-    {ConstructableNetwork.connection}
-    {ConstructableNetwork.error}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
-    {Verbose.verbose}
+    {GradientDescent.Parameters}
+
+    Attributes
+    ----------
+    {GradientDescent.Attributes}
 
     Methods
     -------
-    {BaseSkeleton.predict}
-    {SupervisedLearning.train}
-    {BaseSkeleton.fit}
+    {GradientDescent.Methods}
 
     Examples
     --------
