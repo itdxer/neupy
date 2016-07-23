@@ -1,5 +1,4 @@
 import re
-from abc import ABCMeta
 from inspect import isfunction
 
 from six import with_metaclass
@@ -8,7 +7,7 @@ from neupy.utils import AttributeKeyDict
 
 
 __all__ = ("SharedDocsMeta", "SharedDocs", "SharedDocsException",
-           "SharedDocsABCMeta", 'shared_docs')
+           'shared_docs')
 
 
 def merge_dicts(left_dict, right_dict):
@@ -84,7 +83,7 @@ def iter_parameters(docs):
             parameter_name = name.lstrip('*')
             parameter_description = ''.join([name, type_, desc])
 
-            yield parameter_name, parameter_description
+            yield parameter_name, parameter_description.rstrip()
 
 
 def iter_methods(docs):
@@ -129,16 +128,22 @@ def parse_full_section(section_name, docs):
         Returns warnings from documentation or ``None`` if
         function didn't find it.
     """
-
-    parser = re.compile(r"{}\s+-+\s+(?P<section_text>(.+\n)+)"
+    parser = re.compile(r"{}\s+-+\s+(?P<section_text>(.*\n)+?)\s+"
+                        # Here we try to find next section title or
+                        # the end of the documentation
+                        r"([\w\ ]+\n\s+-+\s+|$)"
                         r"".format(section_name))
-    full_section = parser.findall(docs)
+    parsed_doc_parts = parser.findall(docs)
 
-    if not full_section:
+    if not parsed_doc_parts:
         return None
 
-    full_section, _ = full_section[0]
-    return full_section
+    section_text_block = parsed_doc_parts[0]
+    full_section_text = section_text_block[0]
+
+    # Regexp can catch multiple `\n` symbols at the and of
+    # the section. For this reason we need to get rid of them.
+    return full_section_text.rstrip()
 
 
 def parse_variables_from_docs(instances):
@@ -157,8 +162,11 @@ def parse_variables_from_docs(instances):
         Variables parsed from the documentations.
     """
     variables = {}
-    doc_sections = ['Warns', 'Examples', 'Yields', 'Parameters', 'Returns',
-                    'Raises', 'See Also', 'Attributes']
+    # Note: We do not include 'Examples' section because it
+    # includes class/function name which will be useless when
+    # we inerit documentation for the new object.
+    doc_sections = ['Warns', 'Returns', 'Yields', 'Raises', 'See Also',
+                    'Parameters', 'Attributes', 'Methods']
 
     if not instances:
         return variables
@@ -280,14 +288,6 @@ class SharedDocsMeta(type):
     descriptions from parent classes. This class automaticaly
     format class documentation using basic python format syntax
     for objects.
-
-    Attributes
-    ----------
-    inherit_method_docs : bool
-        ``True`` means that methods that doesn't have
-        documentation will be inherited from the parent
-        methods. ``False`` will disable this option for
-        the specified class. Defaults to ``True``.
     """
     def __new__(cls, clsname, bases, attrs):
         new_class = super(SharedDocsMeta, cls).__new__(cls, clsname,
@@ -308,18 +308,20 @@ class SharedDocsMeta(type):
         return new_class
 
 
-class SharedDocsABCMeta(SharedDocsMeta, ABCMeta):
-    """
-    Meta-class that combine ``SharedDocsMeta`` and ``ABCMeta``
-    meta-classes.
-    """
-
-
 class SharedDocs(with_metaclass(SharedDocsMeta)):
     """
     Main class that provide with shared documentation
     functionality.
+
+    Attributes
+    ----------
+    inherit_method_docs : bool
+        ``True`` means that methods that doesn't have
+        documentation will be inherited from the parent
+        methods. ``False`` will disable this option for
+        the specified class. Defaults to ``True``.
     """
+    inherit_method_docs = True
 
 
 def shared_docs(parent_function):

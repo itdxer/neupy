@@ -16,6 +16,10 @@ def error_function(expected, predicted):
     ----------
     expected : array-like, theano variable
     predicted : array-like, theano variable
+
+    Returns
+    -------
+    array-like, theano variable
     """
 
 
@@ -28,51 +32,115 @@ def mse(expected, predicted):
     ----------
     {error_function.expected}
     {error_function.predicted}
+
+    Returns
+    -------
+    {error_function.Returns}
     """
     return T.square(predicted - expected).mean()
 
 
+@shared_docs(error_function)
 def rmse(expected, predicted):
     """
     Root mean squared error.
+
+    Parameters
+    ----------
+    {error_function.expected}
+    {error_function.predicted}
+
+    Returns
+    -------
+    {error_function.Returns}
     """
     return T.sqrt(mse(expected, predicted))
 
 
+@shared_docs(error_function)
 def mae(expected, predicted):
     """
     Mean absolute error.
+
+    Parameters
+    ----------
+    {error_function.expected}
+    {error_function.predicted}
+
+    Returns
+    -------
+    {error_function.Returns}
     """
     return T.abs_(expected - predicted).mean()
 
 
+@shared_docs(error_function)
 def msle(expected, predicted):
     """
     Mean squared logarithmic error.
+
+    Parameters
+    ----------
+    {error_function.expected}
+    {error_function.predicted}
+
+    Returns
+    -------
+    {error_function.Returns}
     """
     squared_log = (T.log(predicted + 1) - T.log(expected + 1)) ** 2
     return squared_log.mean()
 
 
+@shared_docs(error_function)
 def rmsle(expected, predicted):
     """
     Root mean squared logarithmic error.
+
+    Parameters
+    ----------
+    {error_function.expected}
+    {error_function.predicted}
+
+    Returns
+    -------
+    {error_function.Returns}
     """
     return T.sqrt(msle(expected, predicted))
 
 
+@shared_docs(error_function)
 def binary_crossentropy(expected, predicted):
     """
     Binary cross-entropy error.
+
+    Parameters
+    ----------
+    {error_function.expected}
+    {error_function.predicted}
+
+    Returns
+    -------
+    {error_function.Returns}
     """
     epsilon = smallest_positive_number()
     predicted = T.clip(predicted, epsilon, 1.0 - epsilon)
     return T.nnet.binary_crossentropy(predicted, expected).mean()
 
 
+@shared_docs(error_function)
 def categorical_crossentropy(expected, predicted):
     """
     Categorical cross-entropy error.
+
+    Parameters
+    ----------
+    {error_function.expected}
+    {error_function.predicted}
+
+    Returns
+    -------
+    {error_function.Returns}
     """
     epsilon = smallest_positive_number()
     predicted = T.clip(predicted, epsilon, 1.0 - epsilon)
@@ -99,7 +167,7 @@ def binary_hinge(expected, predicted, delta=1):
     Returns
     -------
     Theano tensor
-        An expression for the element-wise binary hinge loss.
+        An expression for the average binary hinge loss.
 
     Notes
     -----
@@ -134,7 +202,7 @@ def categorical_hinge(expected, predicted, delta=1):
     Returns
     -------
     Theano 1D tensor
-        An expression for the item-wise multi-class hinge loss.
+        An expression for the average multi-class hinge loss.
 
     Notes
     -----

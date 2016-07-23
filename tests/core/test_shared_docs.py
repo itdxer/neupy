@@ -80,38 +80,6 @@ class SharedDocsTestCase(BaseTestCase):
         self.assertIn("param3=True)", B.__doc__)
         self.assertIn("Additional description for ``double_row``.", B.__doc__)
 
-    def test_shared_warns(self):
-        class A(SharedDocs):
-            """
-            Class A documentation.
-
-            Warns
-            -----
-            Important warning.
-            Additional information related to warning message.
-
-            Examples
-            --------
-            Just to put sth before `Warns`
-            """
-
-        class B(A):
-            """
-            Class B documentation.
-
-            Warns
-            -----
-            {A.Warns}
-            """
-
-        self.assertIn("Class B documentation", B.__doc__)
-
-        self.assertIn("Important warning", B.__doc__)
-        self.assertIn("related to warning message", B.__doc__)
-
-        self.assertNotIn("Just to", B.__doc__)
-        self.assertNotIn("Examples", B.__doc__)
-
     def test_complex_class_inheritance(self):
         class A(SharedDocs):
             """
@@ -149,48 +117,6 @@ class SharedDocsTestCase(BaseTestCase):
         self.assertIn("var_a : int", C.__doc__)
         self.assertIn("var_b : int", C.__doc__)
         self.assertIn("var_x : str", C.__doc__)
-
-    # def test_share_all_parameters(self):
-    #     class A(SharedDocs):
-    #         """
-    #         Class A documentation.
-    #
-    #         Parameters
-    #         ----------
-    #         var_a : int
-    #             Variable a
-    #         var_x : str
-    #             Variable x string
-    #         """
-    #
-    #     class B(A):
-    #         """
-    #         Class B documentation
-    #
-    #         Parameters
-    #         ----------
-    #         {A.var_a}
-    #         var_b : int
-    #             Variable b
-    #         var_x : float
-    #             Variable x float
-    #         """
-    #
-    #     class C(B):
-    #         """
-    #         Class C documentation.
-    #
-    #         Parameters
-    #         ----------
-    #         {B.Parameters}
-    #         """
-    #
-    #     docs = C.__doc__
-    #     self.assertIn("Class C documentation", docs)
-    #
-    #     self.assertIn("var_a : int", docs)
-    #     self.assertIn("var_b : int", docs)
-    #     self.assertIn("var_x : float", docs)
 
     def test_shared_docs_between_functions(self):
         def function_a(x, y):
@@ -303,3 +229,353 @@ class SharedDocsTestCase(BaseTestCase):
                 pass
 
         self.assertIsNotNone(C.method.__doc__)
+
+    def test_args_and_kwargs_parameters(self):
+        class A(SharedDocs):
+            """
+            Class A
+
+            Parameters
+            ----------
+            *args
+                Arguments.
+            **kwargs
+                Keyword Arguments.
+            """
+
+        class B(A):
+            """
+            Class B
+
+            Parameters
+            ----------
+            {A.args}
+            {A.kwargs}
+            """
+
+        docs = B.__doc__
+        self.assertIn("Class B", docs)
+
+        self.assertIn("*args", docs)
+        self.assertNotIn("*args :", docs)
+        self.assertIn("Arguments.", docs)
+
+        self.assertIn("**kwargs", docs)
+        self.assertNotIn("**kwargs :", docs)
+        self.assertIn("Keyword Arguments.", docs)
+
+
+class SharedDocsParseSectionsTestCase(BaseTestCase):
+    def test_shared_warns_section(self):
+        class A(SharedDocs):
+            """
+            Class A documentation.
+
+            Warns
+            -----
+            Important warning.
+            Additional information related to warning message.
+
+            Examples
+            --------
+            Some section before `Warns`
+            """
+
+        class B(A):
+            """
+            Class B documentation.
+
+            Warns
+            -----
+            {A.Warns}
+            """
+
+        docs = B.__doc__
+        self.assertIn("Class B documentation", docs)
+
+        self.assertIn("Important warning", docs)
+        self.assertIn("related to warning message", docs)
+
+        self.assertNotIn("Some section before", docs)
+        self.assertNotIn("Examples", docs)
+
+    def test_shared_returns_section(self):
+        class A(SharedDocs):
+            """
+            A class
+
+            Returns
+            -------
+            int
+                Add two number together
+            """
+
+        class B(A):
+            """
+            B class
+
+            Returns
+            -------
+            {A.Returns}
+            """
+
+            expected_doc = """
+            B class
+
+            Returns
+            -------
+            int
+                Add two number together
+            """
+
+        self.assertEqual(B.__doc__, B.expected_doc)
+
+    def test_shared_yields_section(self):
+        def foo(x, y):
+            """
+            foo function
+
+            Yields
+            ------
+            int
+                Integer values.
+            """
+
+        @shared_docs(foo)
+        def bar(x, y):
+            """
+            bar function
+
+            Yields
+            ------
+            {foo.Yields}
+            """
+
+        def expected(x, y):
+            """
+            bar function
+
+            Yields
+            ------
+            int
+                Integer values.
+            """
+
+        self.assertEqual(bar.__doc__, expected.__doc__)
+
+    def test_shared_raises_section(self):
+        def foo(x, y):
+            """
+            foo function
+
+            Raises
+            ------
+            ValueError
+                Just raise it all the time
+            """
+
+        @shared_docs(foo)
+        def bar(x, y):
+            """
+            bar function
+
+            Raises
+            ------
+            {foo.Raises}
+            """
+
+        def expected(x, y):
+            """
+            bar function
+
+            Raises
+            ------
+            ValueError
+                Just raise it all the time
+            """
+
+        self.assertEqual(bar.__doc__, expected.__doc__)
+
+    def test_shared_see_also(self):
+        def foo(x, y):
+            """
+            foo function
+
+            See Also
+            --------
+            foo1, foo2, foo3
+            foo4
+            """
+
+        @shared_docs(foo)
+        def bar(x, y):
+            """
+            bar function
+
+            See Also
+            --------
+            {foo.See Also}
+            """
+
+        def expected(x, y):
+            """
+            bar function
+
+            See Also
+            --------
+            foo1, foo2, foo3
+            foo4
+            """
+
+        self.assertEqual(bar.__doc__, expected.__doc__)
+
+    def test_share_all_parameters_section(self):
+        class A(SharedDocs):
+            """
+            Class A documentation.
+
+            Parameters
+            ----------
+            var_a : int
+                Variable a
+
+                * List element 1.
+
+                * List element 2.
+            var_x : str
+                Variable x string
+            """
+
+        class B(A):
+            """
+            Class B documentation
+
+            Parameters
+            ----------
+            {A.var_a}
+            var_b : int
+                Variable b
+            var_x : float
+                Variable x float
+            """
+
+        class C(B):
+            """
+            Class C documentation.
+
+            Parameters
+            ----------
+            {B.Parameters}
+            """
+
+        class ExpectedDoc(object):
+            """
+            Class C documentation.
+
+            Parameters
+            ----------
+            var_a : int
+                Variable a
+
+                * List element 1.
+
+                * List element 2.
+            var_b : int
+                Variable b
+            var_x : float
+                Variable x float
+            """
+
+        self.assertEqual(C.__doc__, ExpectedDoc.__doc__)
+
+    def test_shared_attributes_section(self):
+        class A(SharedDocs):
+            """
+            Class A.
+
+            Attributes
+            ----------
+            x : int
+            y : str
+                Short description.
+
+            Examples
+            --------
+            >>> a = A()
+            >>> a.x
+            0
+            """
+
+        class B(A):
+            """
+            Class B.
+
+            Attributes
+            ----------
+            {A.Attributes}
+
+            Examples
+            --------
+            >>> b = B()
+            >>> b.x
+            1
+            """
+
+        class ExpectedDoc(object):
+            """
+            Class B.
+
+            Attributes
+            ----------
+            x : int
+            y : str
+                Short description.
+
+            Examples
+            --------
+            >>> b = B()
+            >>> b.x
+            1
+            """
+
+        self.assertEqual(B.__doc__, ExpectedDoc.__doc__)
+
+    def test_shared_methods_section(self):
+        class A(SharedDocs):
+            """
+            Class A.
+
+            Methods
+            -------
+            add(x, y)
+                Returns x + y
+            mul(x, y)
+                Returns x * y
+
+            Warns
+            -----
+            Some warnings
+            """
+
+        class B(A):
+            """
+            Class B.
+
+            Methods
+            -------
+            {A.Methods}
+            """
+
+        class ExpectedDoc(object):
+            """
+            Class B.
+
+            Methods
+            -------
+            add(x, y)
+                Returns x + y
+            mul(x, y)
+                Returns x * y
+            """
+
+        self.assertEqual(B.__doc__, ExpectedDoc.__doc__)
