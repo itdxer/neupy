@@ -6,7 +6,7 @@
 .. |Dependency Status| image:: https://dependencyci.com/github/itdxer/neupy/badge
 .. _Dependency Status: https://dependencyci.com/github/itdxer/neupy
 
-NeuPy v0.3.0 (beta)
+NeuPy v0.3.1 (beta)
 ===================
 
 NeuPy is a Python library for Artificial Neural Networks.
