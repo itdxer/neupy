@@ -17,7 +17,8 @@ class WordEmbeddingNN(models.Word2Vec):
             train_method(data)
 
     def fit(self, X, y, n_epochs=100):
-        """ Function overrides `train` method. This trick adds
+        """
+        Function overrides `train` method. This trick adds
         scikit-learn compatibility.
         """
         self.train(X, n_epochs)

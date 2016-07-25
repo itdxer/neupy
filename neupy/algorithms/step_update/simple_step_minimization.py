@@ -6,7 +6,8 @@ __all__ = ('SimpleStepMinimization',)
 
 
 class SimpleStepMinimization(SingleStepConfigurable):
-    """ Algorithm minimizes learning step monotonically after
+    """
+    Algorithm minimizes learning step monotonically after
     each iteration.
 
     Parameters

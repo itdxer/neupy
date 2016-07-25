@@ -5,7 +5,8 @@ __all__ = ('Perceptron',)
 
 
 class Perceptron(BaseLinearNetwork):
-    """ Perceptron Neural Network. Simples linear model in Neural
+    """
+    Perceptron Neural Network. Simples linear model in Neural
     Networks.
 
     Parameters

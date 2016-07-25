@@ -6,7 +6,8 @@ __all__ = ('iter_until_converge', 'shuffle', 'normalize_error', 'step',
 
 
 class StopNetworkTraining(Exception):
-    """ Exception that needs to be triggered in case of
+    """
+    Exception that needs to be triggered in case of
     early training interruption.
     """
 
@@ -43,7 +44,8 @@ def iter_until_converge(network, epsilon, max_epochs):
 
 
 def shuffle(*arrays):
-    """ Make a random shuffle for all arrays.
+    """
+    Make a random shuffle for all arrays.
 
     Parameters
     ----------
@@ -82,7 +84,8 @@ def shuffle(*arrays):
 
 
 def normalize_error(output):
-    """ Normalize error output when result is non-scalar.
+    """
+    Normalize error output when result is non-scalar.
 
     Parameters
     ----------
@@ -98,6 +101,7 @@ def normalize_error(output):
 
 
 def step(input_value):
-    """ Step function.
+    """
+    Step function.
     """
     return np.where(input_value > 0, 1, 0)

@@ -9,7 +9,8 @@ __all__ = ('Dropout', 'GaussianNoise')
 
 
 def theano_random_stream():
-    """ Create Theano random stream instance.
+    """
+    Create Theano random stream instance.
     """
     # Use NumPy seed to make Theano code easely reproducible
     max_possible_seed = 4e9
@@ -19,13 +20,22 @@ def theano_random_stream():
 
 
 class Dropout(BaseLayer):
-    """ Dropout layer
+    """
+    Dropout layer
 
     Parameters
     ----------
     proba : float
         Fraction of the input units to drop. Value needs to be
         between 0 and 1.
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
     """
     proba = ProperFractionProperty(required=True)
 
@@ -54,7 +64,8 @@ class Dropout(BaseLayer):
 
 
 class GaussianNoise(BaseLayer):
-    """ Add gaussian noise to the input value. Mean and standard
+    """
+    Add gaussian noise to the input value. Mean and standard
     deviation are layer's parameters.
 
     Parameters
@@ -64,6 +75,14 @@ class GaussianNoise(BaseLayer):
         be greater than zero. Defaults to ``1``.
     mean : float
         Mean of the gaussian noise. Defaults to ``0``.
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
     """
     std = NumberProperty(default=1, minval=0)
     mean = NumberProperty(default=0)

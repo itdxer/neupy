@@ -21,7 +21,8 @@ reber_rules = {
 
 
 def is_valid_by_reber(word):
-    """ Сhecks whether a word belongs to grammar Reber.
+    """
+    Сhecks whether a word belongs to grammar Reber.
 
     Parameters
     ----------
@@ -61,7 +62,8 @@ def is_valid_by_reber(word):
 
 
 def make_reber(n_words=100):
-    """ Generate list of Reber grammar words.
+    """
+    Generate list of Reber grammar words.
 
     Parameters
     ----------
@@ -98,7 +100,8 @@ def make_reber(n_words=100):
 
 
 def make_reber_classification(n_samples, invalid_size=0.5):
-    """ Generate random dataset for Reber grammar classification.
+    """
+    Generate random dataset for Reber grammar classification.
     Invalid words contains the same letters as at Reber grammar, but
     they are build whithout grammar rules.
 

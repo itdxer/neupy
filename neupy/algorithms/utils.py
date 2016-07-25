@@ -9,7 +9,8 @@ __all__ = ('count_parameters', 'parameters2vector', 'iter_parameters',
 
 
 def iter_parameters(network):
-    """ Iterate over all network parameters.
+    """
+    Iterate over all network parameters.
 
     Parameters
     ----------
@@ -28,7 +29,8 @@ def iter_parameters(network):
 
 
 def parameters2vector(network):
-    """ Concatenate all network parameters in one big vector.
+    """
+    Concatenate all network parameters in one big vector.
 
     Parameters
     ----------
@@ -44,7 +46,8 @@ def parameters2vector(network):
 
 
 def count_parameters(network):
-    """ Count number of parameters in Neural Network.
+    """
+    Count number of parameters in Neural Network.
 
     Parameters
     ----------
@@ -60,7 +63,8 @@ def count_parameters(network):
 
 
 def setup_parameter_updates(parameters, parameter_update_vector):
-    """ Creates update rules for list of parameters from one vector.
+    """
+    Creates update rules for list of parameters from one vector.
     Function is useful in Conjugate Gradient or
     Levenberg-Marquardt optimization algorithms
 

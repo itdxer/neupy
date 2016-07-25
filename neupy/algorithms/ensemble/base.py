@@ -8,7 +8,8 @@ __all__ = ('BaseEnsemble',)
 
 
 class BaseEnsemble(BaseSkeleton, ConfigurableABC):
-    """ Base class for ensemble algorithms.
+    """
+    Base class for ensemble algorithms.
     """
     def __init__(self, networks):
         self.networks = networks

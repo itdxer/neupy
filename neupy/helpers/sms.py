@@ -7,7 +7,8 @@ __all__ = ('twilio_sms',)
 
 
 def twilio_sms(account_id, token, to_phone, from_phone, verbose=True):
-    """ Send SMS via Twilio service.
+    """
+    Send SMS via Twilio service.
 
     Parameters
     ----------

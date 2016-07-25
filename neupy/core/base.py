@@ -9,7 +9,8 @@ __all__ = ('BaseSkeleton',)
 
 
 class BaseSkeleton(ConfigurableABC, Verbose):
-    """ Base class for neural network algorithms.
+    """
+    Base class for neural network algorithms.
 
     Methods
     -------

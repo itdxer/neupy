@@ -17,7 +17,8 @@ __all__ = ('GradientDescent', 'MinibatchGradientDescent')
 
 
 class GradientDescent(ConstructableNetwork):
-    """ GradientDescent algorithm.
+    """
+    GradientDescent algorithm.
 
     Parameters
     ----------
@@ -26,27 +27,15 @@ class GradientDescent(ConstructableNetwork):
         If this option is not empty it will generate new class which
         will inherit all from this list. Support two types of
         addon algorithms: weight update and step update.
-    {ConstructableNetwork.connection}
-    {ConstructableNetwork.error}
-    {BaseNetwork.step}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
-    {Verbose.verbose}
+    {ConstructableNetwork.Parameters}
 
     Attributes
     ----------
-    {BaseNetwork.errors}
-    {BaseNetwork.train_errors}
-    {BaseNetwork.validation_errors}
-    {BaseNetwork.last_epoch}
+    {ConstructableNetwork.Attributes}
 
     Methods
     -------
-    {BaseSkeleton.predict}
-    {SupervisedLearning.train}
-    {BaseSkeleton.fit}
+    {ConstructableNetwork.Methods}
 
     Examples
     --------
@@ -63,10 +52,9 @@ class GradientDescent(ConstructableNetwork):
 
     addons = Property(default=None, expected_type=list)
 
-    # TODO: The None parameters that get useful only in
-    # case of dill.load operation don't look good.
-    # I should find a better way to solve this problem
-    # The same I need to do with `__init__` method
+    # TODO: The arguments that have default value equal to `None`
+    # are useful only in case if we need to save network in the
+    # file. This solution looks bad and I need to redesign it later.
     def __new__(cls, connection=None, options=None, floatX=None, **kwargs):
         # Argument `options` is a simple hack for the `__reduce__` method.
         # `__reduce__` can't retore class with keyword arguments and
@@ -143,7 +131,8 @@ class GradientDescent(ConstructableNetwork):
 
 
 class BatchSizeProperty(BoundedProperty):
-    """ Batch size property
+    """
+    Batch size property
 
     Parameters
     ----------
@@ -172,7 +161,8 @@ class BatchSizeProperty(BoundedProperty):
 
 
 def iter_batches(n_samples, batch_size):
-    """ Iterates batch slices.
+    """
+    Iterates batch slices.
 
     Parameters
     ----------
@@ -196,7 +186,8 @@ def iter_batches(n_samples, batch_size):
 
 
 def cannot_divide_into_batches(data, batch_size):
-    """ Checkes whether data can be divided into at least
+    """
+    Checkes whether data can be divided into at least
     two batches.
 
     Parameters
@@ -213,7 +204,8 @@ def cannot_divide_into_batches(data, batch_size):
 
 
 def format_error(error):
-    """ Format the error value.
+    """
+    Format the error value.
 
     Parameters
     ----------
@@ -244,7 +236,8 @@ def format_error(error):
 
 def apply_batches(function, arguments, batch_size, logger, description='',
                   show_progressbar=False, show_error_output=True):
-    """ Apply batches to a specified function.
+    """
+    Apply batches to a specified function.
 
     Parameters
     ----------
@@ -298,7 +291,8 @@ def apply_batches(function, arguments, batch_size, logger, description='',
 
 
 def average_batch_errors(errors, n_samples, batch_size):
-    """ Computes average error per sample.
+    """
+    Computes average error per sample.
 
     Parameters
     ----------
@@ -332,7 +326,8 @@ def average_batch_errors(errors, n_samples, batch_size):
 
 
 class MinibatchGradientDescent(GradientDescent):
-    """ Mini-batch Gradient Descent algorithm.
+    """
+    Mini-batch Gradient Descent algorithm.
 
     Parameters
     ----------
@@ -340,28 +335,15 @@ class MinibatchGradientDescent(GradientDescent):
         Set up batch size for learning process. To set up batch size equal to
         sample size value should be equal to one of the values listed above.
         Defaults to ``100``.
-    {GradientDescent.addons}
-    {ConstructableNetwork.connection}
-    {ConstructableNetwork.error}
-    {BaseNetwork.step}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
-    {Verbose.verbose}
+    {GradientDescent.Parameters}
 
     Attributes
     ----------
-    {BaseNetwork.errors}
-    {BaseNetwork.train_errors}
-    {BaseNetwork.validation_errors}
-    {BaseNetwork.last_epoch}
+    {GradientDescent.Attributes}
 
     Methods
     -------
-    {BaseSkeleton.predict}
-    {SupervisedLearning.train}
-    {BaseSkeleton.fit}
+    {GradientDescent.Methods}
 
     Examples
     --------
@@ -383,7 +365,8 @@ class MinibatchGradientDescent(GradientDescent):
     batch_size = BatchSizeProperty(default=100)
 
     def train_epoch(self, input_train, target_train):
-        """ Train one epoch.
+        """
+        Train one epoch.
 
         Parameters
         ----------
@@ -420,7 +403,8 @@ class MinibatchGradientDescent(GradientDescent):
         )
 
     def prediction_error(self, input_data, target_data):
-        """ Check the prediction error for the specified input samples
+        """
+        Check the prediction error for the specified input samples
         and their targets.
 
         Parameters
@@ -459,7 +443,8 @@ class MinibatchGradientDescent(GradientDescent):
         )
 
     def predict(self, input_data):
-        """ Makes a raw prediction.
+        """
+        Makes a raw prediction.
 
         Parameters
         ----------

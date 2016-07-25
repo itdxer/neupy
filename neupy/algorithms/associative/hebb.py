@@ -6,7 +6,8 @@ __all__ = ('HebbRule',)
 
 
 class HebbRule(BaseStepAssociative):
-    """ Hebbian Learning Unsupervised Neural Network.
+    """
+    Hebbian Learning Unsupervised Neural Network.
     Network can learn associations from data and emulate similar behaviour
     as dog in Pavlov experiment.
 

@@ -12,7 +12,8 @@ __all__ = ('ART1',)
 
 
 class ART1(BaseNetwork):
-    """ Adaptive Resonance Theory (ART1) Network for binary
+    """
+    Adaptive Resonance Theory (ART1) Network for binary
     data clustering.
 
     Notes

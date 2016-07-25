@@ -11,7 +11,8 @@ __all__ = ('GRNN',)
 
 
 class GRNN(LazyLearning, BaseNetwork):
-    """ Generalized Regression Neural Network.
+    """
+    Generalized Regression Neural Network.
 
     Parameters
     ----------

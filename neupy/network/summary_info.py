@@ -23,7 +23,8 @@ class BaseSummary(six.with_metaclass(ABCMeta)):
 
 
 class SummaryTable(BaseSummary):
-    """ Class that shows network's training in the formatted
+    """
+    Class that shows network's training in the formatted
     table.
 
     Parameters

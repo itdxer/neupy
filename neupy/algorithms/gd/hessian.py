@@ -14,7 +14,8 @@ __all__ = ('Hessian',)
 
 
 def find_hessian_and_gradient(error_function, parameters):
-    """ Find Hessian and gradient for the Neural Network cost function.
+    """
+    Find Hessian and gradient for the Neural Network cost function.
 
     Parameters
     ----------
@@ -50,7 +51,8 @@ def find_hessian_and_gradient(error_function, parameters):
 
 
 class Hessian(NoStepSelection, GradientDescent):
-    """ Hessian gradient decent optimization. This GD algorithm
+    """
+    Hessian gradient decent optimization. This GD algorithm
     variation using second derivative information helps choose better
     gradient direction and as a consequence better weight update
     parameter after eqch epoch.
@@ -61,20 +63,15 @@ class Hessian(NoStepSelection, GradientDescent):
         Inverse hessian could be singular matrix. For this reason
         algorithm include penalty that add to hessian matrix identity
         multiplied by defined constant. Defaults to ``1``.
-    {GradientDescent.addons}
-    {ConstructableNetwork.connection}
-    {ConstructableNetwork.error}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
-    {Verbose.verbose}
+    {GradientDescent.Parameters}
+
+    Attributes
+    ----------
+    {GradientDescent.Attributes}
 
     Methods
     -------
-    {BaseSkeleton.predict}
-    {SupervisedLearning.train}
-    {BaseSkeleton.fit}
+    {GradientDescent.Methods}
 
     See Also
     --------

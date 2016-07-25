@@ -12,7 +12,8 @@ __all__ = ('PNN',)
 
 
 class PNN(LazyLearning, BaseNetwork):
-    """ Probabilistic Neural Network for classification.
+    """
+    Probabilistic Neural Network for classification.
 
     Parameters
     ----------

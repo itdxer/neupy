@@ -11,7 +11,8 @@ __all__ = ('cut', 'sew_together', 'CutLine', 'cut_along_lines',
 
 
 def isolate_connection(connection):
-    """ Withdraw previous connections.
+    """
+    Withdraw previous connections.
 
     Parameters
     ----------
@@ -28,7 +29,8 @@ def isolate_connection(connection):
 
 
 def isolate_layer(layer):
-    """ Withdraw previous connections.
+    """
+    Withdraw previous connections.
 
     Parameters
     ----------
@@ -41,7 +43,8 @@ def isolate_layer(layer):
 
 
 def is_layer_isolated(connection):
-    """ Check whether connection is not depend on the
+    """
+    Check whether connection is not depend on the
     other connections.
 
     Parameters
@@ -62,7 +65,8 @@ def is_layer_isolated(connection):
 
 
 def is_connection_isolated(connection):
-    """ Check whether connection is not depend on the
+    """
+    Check whether connection is not depend on the
     other connections.
 
     Parameters
@@ -83,7 +87,8 @@ def is_connection_isolated(connection):
 
 
 def isolate_connection_if_needed(connection):
-    """ Function copies connection or layer if one is related
+    """
+    Function copies connection or layer if one is related
     to the other layers. In addition it gets rid of these
     connections.
 
@@ -149,7 +154,8 @@ def clean_and_validate_connection(connection):
 
 
 def cut(connection, start, end):
-    """ Function cuts a specific part of the neural networks
+    """
+    Function cuts a specific part of the neural networks
     structure. Function works in the same way as a slicing in
     Python. You can think about it as a ``layers[start:end]``.
 
@@ -206,7 +212,8 @@ def cut(connection, start, end):
 
 
 def sew_together(connections):
-    """ Connect layers and connections together.
+    """
+    Connect layers and connections together.
 
     Parameters
     ----------
@@ -249,14 +256,16 @@ def sew_together(connections):
 
 
 class CutLine(layers.BaseLayer):
-    """ Basic layer class that doesn't change network's structure.
+    """
+    Basic layer class that doesn't change network's structure.
     This class just help you to define places where you need to
     split your layer's structure.
     """
 
 
 def iter_cutted_regions(cutted_regions):
-    """ Takes a list of integer and iterates over non-empty
+    """
+    Takes a list of integer and iterates over non-empty
     slicing index pairs.
 
     Parameters
@@ -291,7 +300,8 @@ def iter_cutted_regions(cutted_regions):
 
 
 def find_cut_points(connection):
-    """ Function looks for the cut lines in the connection.
+    """
+    Function looks for the cut lines in the connection.
 
     Parameters
     ----------
@@ -342,7 +352,8 @@ def find_cut_points(connection):
 
 
 def cut_along_lines(connection):
-    """ Cuts layer's connection in the specified places.
+    """
+    Cuts layer's connection in the specified places.
     in the places where you need to cut layer you need to set up
     ``surgery.CutLine`` layer, that defines place where you need
     to cut the network.

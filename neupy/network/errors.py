@@ -1,6 +1,8 @@
 from __future__ import division
 
 import theano.tensor as T
+
+from neupy.core.docs import shared_docs
 from neupy.utils import smallest_positive_number
 
 
@@ -8,47 +10,137 @@ __all__ = ('mse', 'rmse', 'mae', 'msle', 'rmsle', 'binary_crossentropy',
            'categorical_crossentropy', 'binary_hinge', 'categorical_hinge')
 
 
+def error_function(expected, predicted):
+    """
+    Parameters
+    ----------
+    expected : array-like, theano variable
+    predicted : array-like, theano variable
+
+    Returns
+    -------
+    array-like, theano variable
+    """
+
+
+@shared_docs(error_function)
 def mse(expected, predicted):
-    """ Mean squared error.
+    """
+    Mean squared error.
+
+    Parameters
+    ----------
+    {error_function.expected}
+    {error_function.predicted}
+
+    Returns
+    -------
+    {error_function.Returns}
     """
     return T.square(predicted - expected).mean()
 
 
+@shared_docs(error_function)
 def rmse(expected, predicted):
-    """ Root mean squared error.
+    """
+    Root mean squared error.
+
+    Parameters
+    ----------
+    {error_function.expected}
+    {error_function.predicted}
+
+    Returns
+    -------
+    {error_function.Returns}
     """
     return T.sqrt(mse(expected, predicted))
 
 
+@shared_docs(error_function)
 def mae(expected, predicted):
-    """ Mean absolute error.
+    """
+    Mean absolute error.
+
+    Parameters
+    ----------
+    {error_function.expected}
+    {error_function.predicted}
+
+    Returns
+    -------
+    {error_function.Returns}
     """
     return T.abs_(expected - predicted).mean()
 
 
+@shared_docs(error_function)
 def msle(expected, predicted):
-    """ Mean squared logarithmic error.
+    """
+    Mean squared logarithmic error.
+
+    Parameters
+    ----------
+    {error_function.expected}
+    {error_function.predicted}
+
+    Returns
+    -------
+    {error_function.Returns}
     """
     squared_log = (T.log(predicted + 1) - T.log(expected + 1)) ** 2
     return squared_log.mean()
 
 
+@shared_docs(error_function)
 def rmsle(expected, predicted):
-    """ Root mean squared logarithmic error.
+    """
+    Root mean squared logarithmic error.
+
+    Parameters
+    ----------
+    {error_function.expected}
+    {error_function.predicted}
+
+    Returns
+    -------
+    {error_function.Returns}
     """
     return T.sqrt(msle(expected, predicted))
 
 
+@shared_docs(error_function)
 def binary_crossentropy(expected, predicted):
-    """ Binary cross-entropy error.
+    """
+    Binary cross-entropy error.
+
+    Parameters
+    ----------
+    {error_function.expected}
+    {error_function.predicted}
+
+    Returns
+    -------
+    {error_function.Returns}
     """
     epsilon = smallest_positive_number()
     predicted = T.clip(predicted, epsilon, 1.0 - epsilon)
     return T.nnet.binary_crossentropy(predicted, expected).mean()
 
 
+@shared_docs(error_function)
 def categorical_crossentropy(expected, predicted):
-    """ Categorical cross-entropy error.
+    """
+    Categorical cross-entropy error.
+
+    Parameters
+    ----------
+    {error_function.expected}
+    {error_function.predicted}
+
+    Returns
+    -------
+    {error_function.Returns}
     """
     epsilon = smallest_positive_number()
     predicted = T.clip(predicted, epsilon, 1.0 - epsilon)
@@ -56,7 +148,8 @@ def categorical_crossentropy(expected, predicted):
 
 
 def binary_hinge(expected, predicted, delta=1):
-    """ Computes the binary hinge loss between predictions
+    """
+    Computes the binary hinge loss between predictions
     and targets.
 
     .. math:: L_i = \\max(0, \\delta - t_i p_i)
@@ -74,7 +167,7 @@ def binary_hinge(expected, predicted, delta=1):
     Returns
     -------
     Theano tensor
-        An expression for the element-wise binary hinge loss.
+        An expression for the average binary hinge loss.
 
     Notes
     -----
@@ -86,7 +179,8 @@ def binary_hinge(expected, predicted, delta=1):
 
 
 def categorical_hinge(expected, predicted, delta=1):
-    """ Computes the multi-class hinge loss between
+    """
+    Computes the multi-class hinge loss between
     predictions and targets.
 
     .. math:: L_i = \\max_{j \\not = p_i} (0, t_j - t_{p_i} + \\delta)
@@ -108,7 +202,7 @@ def categorical_hinge(expected, predicted, delta=1):
     Returns
     -------
     Theano 1D tensor
-        An expression for the item-wise multi-class hinge loss.
+        An expression for the average multi-class hinge loss.
 
     Notes
     -----

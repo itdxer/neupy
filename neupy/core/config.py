@@ -14,7 +14,8 @@ Option = namedtuple('Option', 'class_name value')
 
 
 class ConfigMeta(SharedDocsMeta):
-    """ Meta-class that configure initialized properties. Also it helps
+    """
+    Meta-class that configure initialized properties. Also it helps
     inheit properties from parent classes and use them.
     """
     def __new__(cls, clsname, bases, attrs):
@@ -40,7 +41,8 @@ class ConfigMeta(SharedDocsMeta):
 
 
 class BaseConfigurable(object):
-    """ Base configuration class. It help set up and validate
+    """
+    Base configuration class. It help set up and validate
     initialized property values.
 
     Parameters
@@ -68,18 +70,21 @@ class BaseConfigurable(object):
 
 
 class Configurable(with_metaclass(ConfigMeta, BaseConfigurable)):
-    """ Class that combine ``BaseConfigurable`` class functionality and
+    """
+    Class that combine ``BaseConfigurable`` class functionality and
     ``ConfigMeta`` meta-class.
     """
 
 
 class ConfigABCMeta(ABCMeta, ConfigMeta):
-    """ Meta-class that combains ``ConfigMeta`` and ``abc.ABCMeta``
+    """
+    Meta-class that combains ``ConfigMeta`` and ``abc.ABCMeta``
     meta-classes.
     """
 
 
 class ConfigurableABC(with_metaclass(ConfigABCMeta, BaseConfigurable)):
-    """ Class that combine ``BaseConfigurable`` class functionality,
+    """
+    Class that combine ``BaseConfigurable`` class functionality,
     ``ConfigMeta`` and ``abc.ABCMeta`` meta-classes.
     """

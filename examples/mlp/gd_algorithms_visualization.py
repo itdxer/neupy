@@ -68,7 +68,8 @@ def copy_weight(weight):
 
 
 def save_epoch_weight(net):
-    """ Signal processor which save weight update for every
+    """
+    Signal processor which save weight update for every
     epoch.
     """
     global weights
@@ -79,7 +80,8 @@ def save_epoch_weight(net):
 
 
 def get_connection():
-    """ Generate new connections every time when we call it.
+    """
+    Generate new connections every time when we call it.
     """
     input_layer = layers.Input(2)
     output_layer = NoBiasSigmoid(1, weight=default_weight.copy())
@@ -87,7 +89,8 @@ def get_connection():
 
 
 def draw_quiver(network_class, name, color='r'):
-    """ Train algorithm and draw quiver for every epoch update
+    """
+    Train algorithm and draw quiver for every epoch update
     for this algorithm.
     """
     global weights

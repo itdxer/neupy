@@ -12,7 +12,8 @@ __all__ = ('fmin_golden_search',)
 
 
 def interval_location(f, minstep=1e-5, maxstep=50., maxiter=1024):
-    """ Identify interval where potentialy could be optimal step.
+    """
+    Identify interval where potentialy could be optimal step.
 
     Parameters
     ----------
@@ -60,7 +61,8 @@ def interval_location(f, minstep=1e-5, maxstep=50., maxiter=1024):
 
 
 def golden_search(f, maxstep=50, maxiter=1024, tol=1e-5):
-    """ Identify best step for function in specific direction.
+    """
+    Identify best step for function in specific direction.
 
     Parameters
     ----------
@@ -110,7 +112,8 @@ def golden_search(f, maxstep=50, maxiter=1024, tol=1e-5):
 
 
 def fmin_golden_search(f, minstep=1e-5, maxstep=50., maxiter=1024, tol=1e-5):
-    """ Minimize scalar function using Golden Search.
+    """
+    Minimize scalar function using Golden Search.
 
     Parameters
     ----------

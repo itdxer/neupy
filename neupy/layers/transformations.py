@@ -10,7 +10,8 @@ __all__ = ('Reshape',)
 
 
 class Reshape(BaseLayer):
-    """ Gives a new shape to an input value without changing
+    """
+    Gives a new shape to an input value without changing
     its data.
 
     Parameters
@@ -20,6 +21,14 @@ class Reshape(BaseLayer):
         will be flatten in 1D vector. If you need to get the
         output feature with more that 2 dimensions then you can
         set up new feature shape using tuples. Defaults to ``None``.
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
     """
     shape = TypedListProperty()
 
@@ -37,7 +46,8 @@ class Reshape(BaseLayer):
         return as_tuple(n_output_features)
 
     def output(self, input_value):
-        """ Reshape the feature space for the input value.
+        """
+        Reshape the feature space for the input value.
 
         Parameters
         ----------

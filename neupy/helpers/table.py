@@ -3,13 +3,13 @@ from __future__ import print_function
 import time
 import textwrap
 from operator import attrgetter
-from abc import abstractmethod
+from abc import ABCMeta, abstractmethod
 
 import numpy as np
 from six import with_metaclass
 
 from neupy.utils import number_type
-from neupy.core.docs import SharedDocs, SharedDocsABCMeta
+from neupy.core.docs import SharedDocs, SharedDocsMeta
 
 
 __all__ = ("TableBuilder", "Column", "TimeColumn", "NumberColumn",
@@ -17,12 +17,14 @@ __all__ = ("TableBuilder", "Column", "TimeColumn", "NumberColumn",
 
 
 class TableDrawingError(AttributeError):
-    """ Exception specific for ``TableBuilder`` class functionality.
+    """
+    Exception specific for ``TableBuilder`` class functionality.
     """
 
 
 class Column(SharedDocs):
-    """ Simple column class that helps discribe structure for
+    """
+    Simple column class that helps discribe structure for
     ``TableBuilder`` class instance.
 
     Parameters
@@ -46,7 +48,8 @@ class Column(SharedDocs):
         self.width = width
 
     def format_value(self, value):
-        """ Convert input value to specified type
+        """
+        Convert input value to specified type
 
         Parameters
         ----------
@@ -62,7 +65,8 @@ class Column(SharedDocs):
 
 
 def format_time(value):
-    """ Convert seconds to the value format that easy
+    """
+    Convert seconds to the value format that easy
     to understand.
 
     Parameters
@@ -98,7 +102,8 @@ def format_time(value):
 
 
 class TimeColumn(Column):
-    """ Columns useful for time formating from seconds to more
+    """
+    Columns useful for time formating from seconds to more
     informative and readable format.
 
     Parameters
@@ -113,7 +118,8 @@ class TimeColumn(Column):
 
 
 class NumberColumn(Column):
-    """ Class describe float column type.
+    """
+    Class describe float column type.
 
     Parameters
     ----------
@@ -129,7 +135,8 @@ class NumberColumn(Column):
         self.places = places
 
     def format_value(self, value):
-        """ Round a number to a given precision in decimal digits
+        """
+        Round a number to a given precision in decimal digits
 
         Parameters
         ----------
@@ -150,8 +157,16 @@ class NumberColumn(Column):
                                            places=self.places)
 
 
+class SharedDocsABCMeta(SharedDocsMeta, ABCMeta):
+    """
+    Meta-class that combine ``SharedDocsMeta`` and ``ABCMeta``
+    meta-classes.
+    """
+
+
 class BaseState(with_metaclass(SharedDocsABCMeta)):
-    """ Base abstract class that identify all important methods for
+    """
+    Base abstract class that identify all important methods for
     ``TableBuilder`` class states.
 
     Parameters
@@ -165,13 +180,15 @@ class BaseState(with_metaclass(SharedDocsABCMeta)):
         self.table = table
 
     def line(self):
-        """ Draw ASCII line. Line width depends on the table
+        """
+        Draw ASCII line. Line width depends on the table
         column sizes.
         """
         self.table.stdout('\r' + '-' * self.table.total_width)
 
     def message(self, text):
-        """ Write additional message in table. All seperators
+        """
+        Write additional message in table. All seperators
         between columns will be ignored.
         """
         self.line()
@@ -204,7 +221,8 @@ class BaseState(with_metaclass(SharedDocsABCMeta)):
 
 
 class DrawingState(BaseState):
-    """ Identify active state for ``TableBuilder`` class instance.
+    """
+    Identify active state for ``TableBuilder`` class instance.
     In this state summary table instance is able to show information
     in terminal.
 
@@ -233,7 +251,8 @@ class DrawingState(BaseState):
 
 
 class IdleState(BaseState):
-    """ Identify idle state for ``TableBuilder`` class instance.
+    """
+    Identify idle state for ``TableBuilder`` class instance.
     In this state summary table instance isn't able to show information
     in terminal.
 
@@ -267,7 +286,8 @@ class IdleState(BaseState):
 
 
 class TableBuilder(SharedDocs):
-    """ Build ASCII tables using simple structure.
+    """
+    Build ASCII tables using simple structure.
 
     Parameters
     ----------
@@ -305,7 +325,8 @@ class TableBuilder(SharedDocs):
 
     @classmethod
     def show_full_table(cls, columns, values, **kwargs):
-        """ Shows full table. This method is useful in case if all
+        """
+        Shows full table. This method is useful in case if all
         table values are available and we can just show them all
         in one table without interations.
 

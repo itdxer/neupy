@@ -14,7 +14,8 @@ __all__ = ('hinton',)
 
 
 def hinton(matrix, max_weight=None, ax=None, add_legend=True):
-    """ Draw Hinton diagram for visualizing a weight matrix.
+    """
+    Draw Hinton diagram for visualizing a weight matrix.
 
     Parameters
     ----------

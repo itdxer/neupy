@@ -30,7 +30,8 @@ class BaseTestCase(unittest.TestCase):
 
     def assertInvalidVectorTrain(self, network, input_vector, target=None,
                                  decimal=5, is_feature1d=True, **train_kwargs):
-        """ Method helps test network prediction training using different
+        """
+        Method helps test network prediction training using different
         types of row or column vector.
         """
         input_vectors = vectors_for_testing(input_vector, is_feature1d)
@@ -55,7 +56,8 @@ class BaseTestCase(unittest.TestCase):
 
     def assertInvalidVectorPred(self, network, input_vector, target,
                                 decimal=5, is_feature1d=True):
-        """ Method helps test network prediction procedure using different
+        """
+        Method helps test network prediction procedure using different
         types of row or column vector.
         """
         test_vectors = vectors_for_testing(input_vector, is_feature1d)
