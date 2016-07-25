@@ -16,20 +16,23 @@ addon_types = {
 
 
 class StepSelectionBuiltIn(object):
-    """ Mixin excludes add-ons that modify learning rate.
+    """
+    Mixin excludes add-ons that modify learning rate.
     """
     supported_addon_types = [WEIGHT_PENALTY]
 
 
 class NoMultipleStepSelection(object):
-    """ Mixin excludes add-ons that use multiple learning rates for
+    """
+    Mixin excludes add-ons that use multiple learning rates for
     one neural network.
     """
     supported_addon_types = [SINGLE_STEP_UPDATE, WEIGHT_PENALTY]
 
 
 class NoStepSelection(StepSelectionBuiltIn):
-    """ Mixin that excludes step property from neural network
+    """
+    Mixin that excludes step property from neural network
     class.
     """
     def init_properties(self):

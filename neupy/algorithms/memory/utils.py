@@ -6,7 +6,8 @@ __all__ = ('sign2bin', 'bin2sign', 'hopfield_energy')
 
 
 def sign2bin(matrix):
-    """ Convert -1 values in sign binary matrix to binary values.
+    """
+    Convert -1 values in sign binary matrix to binary values.
 
     Parameters
     ----------
@@ -21,7 +22,8 @@ def sign2bin(matrix):
 
 
 def bin2sign(matrix):
-    """ Convert zeros in banary matrix to -1 values.
+    """
+    Convert zeros in banary matrix to -1 values.
 
     Parameters
     ----------
@@ -36,7 +38,8 @@ def bin2sign(matrix):
 
 
 def hopfield_energy(weight, input_data, output_data):
-    """ Compute Hopfield energy between input data, output data and
+    """
+    Compute Hopfield energy between input data, output data and
     neural network weights.
 
     Parameters

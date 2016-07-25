@@ -9,7 +9,8 @@ __all__ = ('ZCA',)
 
 
 class ZCA(BaseSkeleton):
-    """ ZCA (zero-phase component analysis) whitening.
+    """
+    ZCA (zero-phase component analysis) whitening.
 
     Parameters
     ----------
@@ -39,7 +40,8 @@ class ZCA(BaseSkeleton):
         super(ZCA, self).__init__(**options)
 
     def fit(self, X, *args, **kwargs):
-        """ This method is an alias to `train` method.
+        """
+        This method is an alias to `train` method.
         This method is important for the scikit-learn
         compatibility.
 
@@ -55,7 +57,8 @@ class ZCA(BaseSkeleton):
         return self
 
     def train(self, data):
-        """ Train ZCA.
+        """
+        Train ZCA.
 
         Parameters
         ----------
@@ -72,7 +75,8 @@ class ZCA(BaseSkeleton):
         self.components = (U / np.sqrt(S + self.regularization)).dot(U.T)
 
     def transform(self, data):
-        """ Apply ZCA transformation on data.
+        """
+        Apply ZCA transformation on data.
 
         Parameters
         ----------

@@ -9,7 +9,8 @@ __all__ = ('DiscreteMemory',)
 
 
 class DiscreteMemory(BaseSkeleton, Configurable):
-    """ Base class for discrete memory networks.
+    """
+    Base class for discrete memory networks.
 
     Notes
     -----
@@ -39,7 +40,8 @@ class DiscreteMemory(BaseSkeleton, Configurable):
                               "`async` mode.")
 
     def discrete_validation(self, matrix):
-        """ Validate discrete matrix.
+        """
+        Validate discrete matrix.
 
         Parameters
         ----------

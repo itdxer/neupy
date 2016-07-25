@@ -10,7 +10,8 @@ __all__ = ('BaseProperty', 'Property', 'ArrayProperty', 'BoundedProperty',
 
 
 class BaseProperty(SharedDocs):
-    """ Base class for properties.
+    """
+    Base class for properties.
 
     Parameters
     ----------
@@ -77,15 +78,15 @@ class BaseProperty(SharedDocs):
 
 
 class Property(BaseProperty):
-    """ Simple and flexible class that helps indetify properties with
+    """
+    Simple and flexible class that helps indetify properties with
     specified type.
 
     Parameters
     ----------
     expected_type : object
         Valid data type.
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BaseProperty.Parameters}
     """
     def __init__(self, expected_type=object, *args, **kwargs):
         self.expected_type = expected_type
@@ -93,18 +94,19 @@ class Property(BaseProperty):
 
 
 class ArrayProperty(BaseProperty):
-    """ Numpy array or matrix property.
+    """
+    Numpy array or matrix property.
 
     Parameters
     ----------
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BaseProperty.Parameters}
     """
     expected_type = (np.ndarray, np.matrix)
 
 
 class TypedListProperty(BaseProperty):
-    """ List property that contains specified element types.
+    """
+    List property that contains specified element types.
 
     Parameters
     ----------
@@ -114,8 +116,7 @@ class TypedListProperty(BaseProperty):
     element_type : object or tuple
         There are could be defined valid list elementy type or a bunch
         of them as tuple.
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BaseProperty.Parameters}
     """
     expected_type = (list, tuple)
 
@@ -143,7 +144,8 @@ class TypedListProperty(BaseProperty):
 
 
 class ChoiceProperty(BaseProperty):
-    """ Property that can have discrete number of properties.
+    """
+    Property that can have discrete number of properties.
 
     Parameters
     ----------
@@ -153,8 +155,7 @@ class ChoiceProperty(BaseProperty):
         some specific object like functions. List or tuple choices
         do the same as dictionary, but they are useful in case when
         keys and values should be the same.
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BaseProperty.Parameters}
     """
     choices = {}
 
@@ -191,7 +192,8 @@ class ChoiceProperty(BaseProperty):
 
 
 class BoundedProperty(BaseProperty):
-    """ Number property that have specified numerical bounds.
+    """
+    Number property that have specified numerical bounds.
 
     Parameters
     ----------
@@ -199,8 +201,7 @@ class BoundedProperty(BaseProperty):
         Minimum possible value for the property.
     maxval : float
         Maximum possible value for the property.
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BaseProperty.Parameters}
     """
 
     def __init__(self, minval=-np.inf, maxval=np.inf, *args, **kwargs):
@@ -217,13 +218,13 @@ class BoundedProperty(BaseProperty):
 
 
 class ProperFractionProperty(BoundedProperty):
-    """ Proper fraction property. Identify all possible numbers
+    """
+    Proper fraction property. Identify all possible numbers
     between zero and one.
 
     Parameters
     ----------
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BaseProperty.Parameters}
     """
     expected_type = (float, int)
 
@@ -233,26 +234,22 @@ class ProperFractionProperty(BoundedProperty):
 
 
 class NumberProperty(BoundedProperty):
-    """ Float or integer number property.
+    """
+    Float or integer number property.
 
     Parameters
     ----------
-    {BoundedProperty.minval}
-    {BoundedProperty.maxval}
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BoundedProperty.Parameters}
     """
     expected_type = number_type
 
 
 class IntProperty(BoundedProperty):
-    """ Integer property.
+    """
+    Integer property.
 
     Parameters
     ----------
-    {BoundedProperty.minval}
-    {BoundedProperty.maxval}
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {BoundedProperty.Parameters}
     """
     expected_type = (int, np.integer)

@@ -11,7 +11,8 @@ __all__ = ('Adamax',)
 
 
 class Adamax(MinibatchGradientDescent):
-    """ AdaMax algorithm.
+    """
+    AdaMax algorithm.
 
     Parameters
     ----------
@@ -35,11 +36,13 @@ class Adamax(MinibatchGradientDescent):
     {BaseNetwork.train_end_signal}
     {Verbose.verbose}
 
+    Attributes
+    ----------
+    {MinibatchGradientDescent.Attributes}
+
     Methods
     -------
-    {BaseSkeleton.predict}
-    {SupervisedLearning.train}
-    {BaseSkeleton.fit}
+    {MinibatchGradientDescent.Methods}
     """
     step = NumberProperty(default=0.001, minval=0)
     beta1 = ProperFractionProperty(default=0.9)

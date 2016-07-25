@@ -12,7 +12,8 @@ __all__ = ('LeakStepAdaptation',)
 
 
 class LeakStepAdaptation(SingleStepConfigurable):
-    """ Leak Learning Rate Adaptation algorithm for step adaptation procedure
+    """
+    Leak Learning Rate Adaptation algorithm for step adaptation procedure
     in backpropagation algortihm. By default every layer has the same value
     as ``step`` parameter in network, but after first training epoch they
     must be different.

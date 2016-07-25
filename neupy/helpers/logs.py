@@ -15,7 +15,8 @@ __all__ = ('Verbose',)
 
 
 def terminal_echo(enabled, file_descriptor=sys.stdin):
-    """ Enable/disable echo in the terminal.
+    """
+    Enable/disable echo in the terminal.
 
     Parameters
     ----------
@@ -48,7 +49,8 @@ def terminal_echo(enabled, file_descriptor=sys.stdin):
 
 
 class TerminalLogger(object):
-    """ Customized logging class that replace standard logging
+    """
+    Customized logging class that replace standard logging
     functionality.
 
     Attributes
@@ -75,7 +77,8 @@ class TerminalLogger(object):
         self.stdout = sys.stdout
 
     def write(self, text):
-        """ Method writes text in terminal if logging is enable.
+        """
+        Method writes text in terminal if logging is enable.
 
         Parameters
         ----------
@@ -85,12 +88,14 @@ class TerminalLogger(object):
             self.stdout.write(str(text) + '\n')
 
     def newline(self):
-        """ Just writes an empty line.
+        """
+        Just writes an empty line.
         """
         self.write('\r')
 
     def message(self, tag, text, color='green'):
-        """ Methods writes message in terminal using specific template.
+        """
+        Methods writes message in terminal using specific template.
         Each row should have tag and text. Tag identifies message
         category and text information reletad to this category.
 
@@ -114,7 +119,8 @@ class TerminalLogger(object):
         self.write(message)
 
     def title(self, text):
-        """ Method write text as a title message. Text will be displayed
+        """
+        Method write text as a title message. Text will be displayed
         using bold and underline text styles. Also there will be empty
         lines before and after the message.
 
@@ -127,7 +133,8 @@ class TerminalLogger(object):
         self.write(message)
 
     def error(self, text):
-        """" Method writes messages that related to error type.
+        """"
+Method writes messages that related to error type.
         Text will be displayed as message with ``tag`` parameter equal
         to ``'ERROR'``. Color will be red.
 
@@ -138,7 +145,8 @@ class TerminalLogger(object):
         self.message('ERROR', text, color='red')
 
     def warning(self, text):
-        """" Method writes messages that related to warning type.
+        """"
+Method writes messages that related to warning type.
         Text will be displayed as message with ``tag`` parameter equal
         to ``'WARN'``. Color will be red.
 
@@ -149,7 +157,8 @@ class TerminalLogger(object):
         self.message('WARN', text, color='red')
 
     def progressbar(self, iterator, *args, **kwargs):
-        """ Make progressbar for specific iteration if logging
+        """
+        Make progressbar for specific iteration if logging
         is enable.
 
         Parameters
@@ -166,7 +175,8 @@ class TerminalLogger(object):
 
     @contextmanager
     def disable_user_input(self):
-        """ Context manager helps ignore user input in
+        """
+        Context manager helps ignore user input in
         terminal for UNIX.
         """
 
@@ -181,7 +191,8 @@ class TerminalLogger(object):
 
 
 class VerboseProperty(BaseProperty):
-    """ Property that synchronize updates with ``enable`` attribute in
+    """
+    Property that synchronize updates with ``enable`` attribute in
     logging instance.
 
     Parameters
@@ -197,7 +208,8 @@ class VerboseProperty(BaseProperty):
 
 
 class Verbose(Configurable):
-    """ Class that controls NeuPy logging.
+    """
+    Class that controls NeuPy logging.
 
     Parameters
     ----------

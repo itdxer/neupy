@@ -13,7 +13,8 @@ __all__ = ('DiscreteHopfieldNetwork',)
 
 
 class DiscreteHopfieldNetwork(DiscreteMemory):
-    """ Discrete Hopfield Network. Memory algorithm which works only with
+    """
+    Discrete Hopfield Network. Memory algorithm which works only with
     binary vectors.
 
     Parameters

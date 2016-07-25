@@ -8,7 +8,8 @@ __all__ = ('ModifiedRelaxation',)
 
 
 class ModifiedRelaxation(BaseLinearNetwork):
-    """ Modified Relaxation Neural Network. Simple linear network. If the
+    """
+    Modified Relaxation Neural Network. Simple linear network. If the
     output value of the network received more than the set limit, the
     weight is updated in the same way as the :network:`LMS`, if less
     than the set value - the update will be in proportion to the

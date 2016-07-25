@@ -8,8 +8,10 @@ __all__ = ('SearchThenConverge',)
 
 
 class SearchThenConverge(SingleStepConfigurable):
-    """ Algorithm minimize learning step. Similar to
-    :network:`SimpleStepMinimization`, but more complicated step update rule.
+    """
+    Algorithm minimize learning step. Similar to
+    :network:`SimpleStepMinimization`, but more complicated
+    step update rule.
 
     Parameters
     ----------

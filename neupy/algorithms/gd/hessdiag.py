@@ -13,7 +13,8 @@ __all__ = ('HessianDiagonal',)
 
 
 class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
-    """ Hissian diagonal is a Hessian algorithm approximation which require
+    """
+    Hissian diagonal is a Hessian algorithm approximation which require
     only computation of hessian matrix diagonal elements and makes it
     invertion much easier and faster.
 
@@ -24,21 +25,15 @@ class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
         iteration elements will be extremly small and matrix inverse
         produce huge number in hessian diagonal elements. This
         parameter control diagonal elements size. Defaults to ``1e-2``.
-    {GradientDescent.addons}
-    {ConstructableNetwork.connection}
-    {ConstructableNetwork.error}
-    {BaseNetwork.step}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
-    {Verbose.verbose}
+    {GradientDescent.Parameters}
+
+    Attributes
+    ----------
+    {GradientDescent.Attributes}
 
     Methods
     -------
-    {BaseSkeleton.predict}
-    {SupervisedLearning.train}
-    {BaseSkeleton.fit}
+    {GradientDescent.Methods}
 
     Examples
     --------

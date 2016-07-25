@@ -58,27 +58,23 @@ def dai_yuan(gradient_old, gradient_new, weight_old_delta):
 
 
 class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
-    """ Conjugate Gradient algorithm.
+    """
+    Conjugate Gradient algorithm.
 
     Parameters
     ----------
     update_function : {{'fletcher_reeves', 'polak_ribiere',\
     'hentenes_stiefel', 'conjugate_descent', 'liu_storey', 'dai_yuan'}}
         Update function. Defaults to ``fletcher_reeves``.
-    {GradientDescent.addons}
-    {ConstructableNetwork.connection}
-    {ConstructableNetwork.error}
-    {BaseNetwork.step}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
+    {GradientDescent.Parameters}
+
+    Attributes
+    ----------
+    {GradientDescent.Attributes}
 
     Methods
     -------
-    {BaseSkeleton.predict}
-    {SupervisedLearning.train}
-    {BaseSkeleton.fit}
+    {GradientDescent.Methods}
 
     Examples
     --------

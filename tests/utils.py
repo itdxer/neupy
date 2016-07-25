@@ -20,7 +20,8 @@ from data import xor_input_train, xor_target_train
 
 @contextmanager
 def catch_stdout():
-    """ Context manager that catch stdout and return StringIO instance.
+    """
+    Context manager that catch stdout and return StringIO instance.
     It's good to test any type of terminal outputs.
     """
     old_out = sys.stdout
@@ -33,7 +34,8 @@ def catch_stdout():
 
 
 def compare_networks(default_class, tested_class, data, **kwargs):
-    """ Compare two network arcitectures.
+    """
+    Compare two network arcitectures.
 
     Parameters
     ----------
@@ -81,7 +83,8 @@ def compare_networks(default_class, tested_class, data, **kwargs):
 
 
 def format_image_name(name):
-    """ Add to image name prefix that identify Python versions.
+    """
+    Add to image name prefix that identify Python versions.
 
     Parameters
     ----------
@@ -97,7 +100,8 @@ def format_image_name(name):
 
 @contextmanager
 def image_comparison(original_image_path, figsize=(10, 10), tol=1e-3):
-    """ Context manager that initialize figure that should contain figure
+    """
+    Context manager that initialize figure that should contain figure
     that should be compared with expected one.
 
     Parameters
@@ -137,7 +141,8 @@ class StepOutput(layers.BaseLayer):
 
 
 def reproducible_network_train(seed=0, epochs=500, **additional_params):
-    """ Make a reproducible train for Gradient Descent based neural
+    """
+    Make a reproducible train for Gradient Descent based neural
     network with a XOR problem and return trained network.
 
     Parameters
@@ -169,7 +174,8 @@ def reproducible_network_train(seed=0, epochs=500, **additional_params):
 
 
 def vectors_for_testing(vector, is_feature1d=True):
-    """ Function generate different possible variations of one vector.
+    """
+    Function generate different possible variations of one vector.
     That feature useful for testing algorithms input data.
 
     Parameters
@@ -209,7 +215,8 @@ def vectors_for_testing(vector, is_feature1d=True):
 
 
 def skip_image_comparison_if_specified(func):
-    """ Decorator identifies tests that involve image comparison.
+    """
+    Decorator identifies tests that involve image comparison.
     Before run test function check if environemnt variable
     `SKIP_PLOT_TEST` exists and has non-empty value. If it exists,
     step will be skipped.

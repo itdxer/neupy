@@ -6,7 +6,8 @@ __all__ = ('error_plot',)
 
 
 def error_plot(network, logx=False, ax=None, show=True):
-    """ Makes line plot that shows training progress. x-axis
+    """
+    Makes line plot that shows training progress. x-axis
     is an epoch number and y-axis is an error.
 
     Parameters

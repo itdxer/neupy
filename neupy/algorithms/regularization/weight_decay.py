@@ -6,15 +6,16 @@ __all__ = ('WeightDecay',)
 
 
 class WeightDecay(WeightUpdateConfigurable):
-    """ Weight decay algorithm penalizes large weights and limits the
-    freedom in network. The algorithm is able to solve one of the possible
-    problems of network overfitting.
+    """
+    Weight decay algorithm penalizes large weights and
+    limits the freedom in network. The algorithm is able to solve
+    one of the possible problems of network overfitting.
 
     Parameters
     ----------
     decay_rate : float
-        Controls the effect of penalties on the update network weights.
-        Defaults to ``0.1``.
+        Controls the effect of penalties on the update network
+        weights. Defaults to ``0.1``.
 
     Warns
     -----

@@ -21,7 +21,8 @@ __all__ = ('ConstructableNetwork',)
 
 
 def generate_layers(layers_sizes):
-    """ Create from list of layer sizes basic linear network.
+    """
+    Create from list of layer sizes basic linear network.
 
     Parameters
     ----------
@@ -48,7 +49,8 @@ def generate_layers(layers_sizes):
 
 
 def clean_layers(connection):
-    """ Clean layers connections and format transform them into one format.
+    """
+    Clean layers connections and format transform them into one format.
     Also this function validate layers connections.
 
     Parameters
@@ -91,7 +93,8 @@ def clean_layers(connection):
 
 
 def create_input_variable(input_layer, variable_name):
-    """ Create input variable based on input layer information.
+    """
+    Create input variable based on input layer information.
 
     Parameters
     ----------
@@ -124,7 +127,8 @@ def create_input_variable(input_layer, variable_name):
 
 
 def create_output_variable(error_function, variable_name):
-    """ Create output variable based on error function.
+    """
+    Create output variable based on error function.
 
     Parameters
     ----------
@@ -146,14 +150,13 @@ def create_output_variable(error_function, variable_name):
 
 
 class ErrorFunctionProperty(ChoiceProperty):
-    """ Property that helps select error function from
+    """
+    Property that helps select error function from
     available or define a new one.
 
     Parameters
     ----------
-    {ChoiceProperty.choices}
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {ChoiceProperty.Parameters}
     """
     def __set__(self, instance, value):
         if isinstance(value, types.FunctionType):
@@ -169,7 +172,8 @@ class ErrorFunctionProperty(ChoiceProperty):
 
 
 class ConstructableNetwork(SupervisedLearning, BaseNetwork):
-    """ Class contains functionality that helps work with network that have
+    """
+    Class contains functionality that helps work with network that have
     constructable layers architecture.
 
     Parameters
@@ -181,14 +185,12 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         ``(2, 4, 1)`` means that network will have 3 layers with 2 input
         units, 4 hidden units and 1 output unit. The one limitation of that
         method is that all layers automaticaly would with sigmoid actiavtion
-        function. Other way is just a list of ``layers.BaseLayer``` class
+        function. Other way is just a list of ``layers.BaseLayer`` class
         instances. For example: ``[Input(2), Tanh(4), Relu(1)]``.
         And the most readable one is pipeline
         ``Input(2) > Tanh(4) > Relu(1)``.
-    error : {{'mse', 'rmse', 'mae', 'categorical_crossentropy', \
-    'binary_crossentropy'}} or function
-        Function that calculate prediction error.
-        Defaults to ``mse``.
+    error : str or function
+        Error/loss function. Defaults to ``mse``.
 
         * ``mae`` - Mean Absolute Error.
 
@@ -204,22 +206,24 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
 
         * ``binary_crossentropy`` - Binary cross entropy.
 
-        * Custom function that accept two mandatory arguments.
-        The first one is expected value and the second one is
+        * ``binary_hinge`` - Binary hinge entropy.
+
+        * ``categorical_hinge`` - Categorical hinge entropy.
+
+        * Custom function which accepts two mandatory arguments. \
+        The first one is expected value and the second one is \
         predicted value. Example: ``custom_func(expected, predicted)``
-    {BaseNetwork.step}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
-    {Verbose.verbose}
+    {BaseNetwork.Parameters}
 
     Attributes
     ----------
-    {BaseNetwork.errors}
-    {BaseNetwork.train_errors}
-    {BaseNetwork.validation_errors}
-    {BaseNetwork.last_epoch}
+    {BaseNetwork.Attributes}
+
+    Methods
+    -------
+    {BaseSkeleton.predict}
+    {SupervisedLearning.train}
+    {BaseSkeleton.fit}
     """
     error = ErrorFunctionProperty(default='mse', choices={
         'mae': errors.mae,
@@ -227,8 +231,12 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         'rmse': errors.rmse,
         'msle': errors.msle,
         'rmsle': errors.rmsle,
+
         'binary_crossentropy': errors.binary_crossentropy,
         'categorical_crossentropy': errors.categorical_crossentropy,
+
+        'binary_hinge': errors.binary_hinge,
+        'categorical_hinge': errors.categorical_hinge,
     })
 
     def __init__(self, connection, *args, **kwargs):
@@ -266,7 +274,8 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
                           "".format(finish_init_time - start_init_time))
 
     def init_variables(self):
-        """ Initialize Theano variables.
+        """
+        Initialize Theano variables.
         """
         network_input = self.variables.network_input
         network_output = self.variables.network_output
@@ -287,7 +296,8 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         )
 
     def init_methods(self):
-        """ Initialize all methods that needed for prediction and
+        """
+        Initialize all methods that needed for prediction and
         training procedures.
         """
         network_input = self.variables.network_input
@@ -308,13 +318,15 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         )
 
     def init_layers(self):
-        """ Initialize layers in the same order as they were list in
+        """
+        Initialize layers in the same order as they were list in
         network initialization step.
         """
         self.connection.initialize()
 
     def init_train_updates(self):
-        """ Initialize train function update in Theano format that
+        """
+        Initialize train function update in Theano format that
         would be trigger after each training epoch.
         """
         updates = []
@@ -323,7 +335,8 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         return updates
 
     def init_layer_updates(self, layer):
-        """ Initialize train function update in Theano format that
+        """
+        Initialize train function update in Theano format that
         would be trigger after each training epoch for each layer.
 
         Parameters
@@ -347,7 +360,8 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         return updates
 
     def init_param_updates(self, layer, parameter):
-        """ Initialize parameter updates.
+        """
+        Initialize parameter updates.
 
         Parameters
         ----------
@@ -364,7 +378,8 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         return []
 
     def format_input_data(self, input_data):
-        """ Input data format is depend on the input layer
+        """
+        Input data format is depend on the input layer
         structure.
 
         Parameters
@@ -381,7 +396,8 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
             return format_data(input_data, is_feature1d)
 
     def format_target_data(self, target_data):
-        """ Target data format is depend on the output layer
+        """
+        Target data format is depend on the output layer
         structure.
 
         Parameters
@@ -398,7 +414,8 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
             return format_data(target_data, is_feature1d)
 
     def prediction_error(self, input_data, target_data):
-        """ Calculate prediction accuracy for input data.
+        """
+        Calculate prediction accuracy for input data.
 
         Parameters
         ----------
@@ -416,7 +433,8 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         )
 
     def predict(self, input_data):
-        """ Return prediction results for the input data.
+        """
+        Return prediction results for the input data.
 
         Parameters
         ----------
@@ -430,7 +448,8 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         return self.methods.predict(input_data)
 
     def on_epoch_start_update(self, epoch):
-        """ Function would be trigger before run all training procedure
+        """
+        Function would be trigger before run all training procedure
         related to the current epoch.
 
         Parameters
@@ -443,7 +462,8 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
 
     def train(self, input_train, target_train, input_test=None,
               target_test=None, *args, **kwargs):
-        """ Trains neural network.
+        """
+        Trains neural network.
         """
         return super(ConstructableNetwork, self).train(
             self.format_input_data(input_train),
@@ -454,7 +474,8 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         )
 
     def train_epoch(self, input_train, target_train):
-        """ Trains neural network over one epoch.
+        """
+        Trains neural network over one epoch.
 
         Parameters
         ----------
@@ -469,7 +490,8 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         return self.methods.train_epoch(input_train, target_train)
 
     def architecture(self):
-        """ Shows network's architecture in the terminal if
+        """
+        Shows network's architecture in the terminal if
         ``verbose`` parameter is equal to ``True``.
         """
         self.logs.title("Network's architecture")

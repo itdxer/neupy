@@ -14,7 +14,8 @@ __all__ = ('BaseLayer', 'ParameterBasedLayer', 'Input')
 
 
 class BaseLayer(ChainConnection, Configurable):
-    """ Base class for all layers.
+    """
+    Base class for all layers.
 
     Methods
     -------
@@ -74,7 +75,8 @@ class BaseLayer(ChainConnection, Configurable):
 
 
 def create_shared_parameter(value, name, shape, init_method, bounds):
-    """ Creates NN parameter as Theano shared variable.
+    """
+    Creates NN parameter as Theano shared variable.
 
     Parameters
     ----------
@@ -105,13 +107,13 @@ def create_shared_parameter(value, name, shape, init_method, bounds):
 
 
 class SharedArrayProperty(ArrayProperty):
-    """ In addition to Numpy arrays and matrix property support also
+    """
+    In addition to Numpy arrays and matrix property support also
     Theano shared variables.
 
     Parameters
     ----------
-    {BaseProperty.default}
-    {BaseProperty.required}
+    {ArrayProperty.Parameters}
     """
     expected_type = (np.matrix, np.ndarray,
                      T.sharedvar.SharedVariable,
@@ -119,7 +121,8 @@ class SharedArrayProperty(ArrayProperty):
 
 
 class ParameterBasedLayer(BaseLayer):
-    """ Layer that creates weight and bias parameters.
+    """
+    Layer that creates weight and bias parameters.
 
     Parameters
     ----------
@@ -150,7 +153,7 @@ class ParameterBasedLayer(BaseLayer):
         output units.
 
         * ``xavier_uniform`` generate random matrix from uniform \
-        distribution \ where :math:`w_{{ij}} \in \
+        distribution where :math:`w_{{ij}} \in \
         [-\\sqrt{{\\frac{{6}}{{fan_{{in}} + fan_{{out}}}}}}, \
         \\sqrt{{\\frac{{6}}{{fan_{{in}} + fan_{{out}}}}}}`].
 
@@ -167,6 +170,14 @@ class ParameterBasedLayer(BaseLayer):
         Available only for ``init_method`` equal to ``bounded``.  Value
         identify minimum and maximum possible value in random weights.
         Defaults to ``(0, 1)``.
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
     """
     size = IntProperty(minval=1)
     weight = SharedArrayProperty(default=None)
@@ -217,7 +228,8 @@ class ParameterBasedLayer(BaseLayer):
 
 
 class ArrayShapeProperty(TypedListProperty):
-    """ Property that identifies array's shape.
+    """
+    Property that identifies array's shape.
     """
     expected_type = (int, tuple, type(None))
 
@@ -232,7 +244,8 @@ class ArrayShapeProperty(TypedListProperty):
 
 
 class Input(BaseLayer):
-    """ Input layer. It identifies feature shape/size for the
+    """
+    Input layer. It identifies feature shape/size for the
     input value. Especially useful in the CNN.
 
     Parameters
@@ -241,6 +254,14 @@ class Input(BaseLayer):
         Identifies input data shape size. ``None`` means that network
         doesn't have input feature with fixed size.
         Defaults to ``None``.
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
     """
     size = ArrayShapeProperty()
 

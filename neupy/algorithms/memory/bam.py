@@ -12,7 +12,8 @@ __all__ = ('DiscreteBAM',)
 
 
 class DiscreteBAM(DiscreteMemory):
-    """ Discrete BAM Network with associations.
+    """
+    Discrete BAM Network with associations.
     Network associate every input with some target value.
 
     Parameters

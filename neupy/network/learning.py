@@ -5,7 +5,8 @@ __all__ = ('SupervisedLearning', 'UnsupervisedLearning', 'LazyLearning')
 
 
 class SupervisedLearning(object):
-    """ Mixin for Supervised Neural Network algorithms.
+    """
+    Mixin for Supervised Neural Network algorithms.
 
     Methods
     -------
@@ -47,7 +48,8 @@ class SupervisedLearning(object):
 
 
 class UnsupervisedLearning(object):
-    """ Mixin for Unsupervised Neural Network algorithms.
+    """
+    Mixin for Unsupervised Neural Network algorithms.
 
     Methods
     -------
@@ -69,7 +71,8 @@ class UnsupervisedLearning(object):
 
 
 class LazyLearning(object):
-    """ Mixin for lazy learning Neural Network algorithms.
+    """
+    Mixin for lazy learning Neural Network algorithms.
 
     Methods
     -------

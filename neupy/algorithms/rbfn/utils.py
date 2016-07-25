@@ -8,7 +8,8 @@ __all__ = ('pdf_between_data',)
 
 
 def pdf_between_data(train_data, input_data, std):
-    """ Compute PDF between two samples.
+    """
+    Compute PDF between two samples.
 
     Parameters
     ----------

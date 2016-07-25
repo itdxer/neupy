@@ -7,7 +7,8 @@ __all__ = ('Instar',)
 
 
 class Instar(BaseStepAssociative):
-    """ Instar is a simple unsupervised Neural Network algortihm which
+    """
+    Instar is a simple unsupervised Neural Network algortihm which
     detect associations in features. Algorithm very similar to
     :network:`HebbRule` except the learning rule.
 

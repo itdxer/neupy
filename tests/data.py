@@ -47,7 +47,8 @@ lenses = np.array([
 
 
 def simple_classification(n_samples=100, n_features=10, random_state=33):
-    """ Generate simple classification task for training.
+    """
+    Generate simple classification task for training.
 
     Parameters
     ----------

@@ -8,7 +8,8 @@ __all__ = ('sandbox', 'reproducible')
 
 
 def sandbox():
-    """ Sandbox mode set up Theano configurations in the way that
+    """
+    Sandbox mode set up Theano configurations in the way that
     make compilation faster.
     """
     theano.config.optimizer = 'fast_compile'
@@ -16,7 +17,8 @@ def sandbox():
 
 
 def reproducible(seed=0):
-    """ Set up the same seed value for the NumPy and
+    """
+    Set up the same seed value for the NumPy and
     python random module to make your code reproducible.
 
     Parameters
