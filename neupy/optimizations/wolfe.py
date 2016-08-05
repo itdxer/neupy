@@ -14,7 +14,6 @@ from neupy.utils import asfloat
 
 one = T.constant(asfloat(1))
 zero = T.constant(asfloat(0))
-nan = T.constant(asfloat(np.nan))
 
 theano_true = T.constant(1)
 theano_false = T.constant(0)
@@ -98,6 +97,8 @@ def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
     if maxiter <= 0:
         raise ValueError("maxiter needs to be greater than 0")
 
+    c1, c2 = asfloat(c1), asfloat(c2)
+
     def search_iteration_step(x_previous, x_current, y_previous, y_current,
                               y_deriv_previous, is_first_iteration, x_star):
 
@@ -150,7 +151,6 @@ def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
             y_current,
             y_new
         )
-
         return (
             [
                 x_current, x_new, y_current, y_current_new,
@@ -221,7 +221,7 @@ def quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, bound_size_ratio=0.1):
     # shift function to the left side and put point ``a``
     # at ``0`` position.
     x_range = x_b - x_a
-    coef = (y_b - y_a - y_prime_a * x_range) / (x_range ** 2)
+    coef = (y_b - y_a - y_prime_a * x_range) / (x_range ** asfloat(2))
     minimizer = -y_prime_a / (asfloat(2) * coef) + x_a
     bound_size_ratio = asfloat(bound_size_ratio)
 
@@ -231,6 +231,7 @@ def quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, bound_size_ratio=0.1):
             T.eq(x_range, zero),
             coef <= zero,
 
+            T.isnan(minimizer),
             T.gt(minimizer, x_b - bound_size_ratio * x_range),
             T.lt(minimizer, x_a + bound_size_ratio * x_range),
         ),
@@ -248,8 +249,7 @@ def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c,
     """
     Finds the minimizer for a cubic polynomial that goes
     through the points (x_a, y_a), (x_b, y_b), and (x_c, y_c) with
-    derivative at ``x_a`` of y_prime_a. If no minimizer can be
-    found return ``NaN``.
+    derivative at ``x_a`` of y_prime_a.
 
     Parameters
     ----------
@@ -285,25 +285,27 @@ def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c,
         raise ValueError("Value ``bound_size_ratio`` need to be a float "
                          "between 0 and 1, got {}".format(bound_size_ratio))
 
+    bound_size_ratio = asfloat(bound_size_ratio)
+
     from_a2b_dist = x_b - x_a
     from_a2c_dist = x_c - x_a
 
     denominator = (
-        (from_a2b_dist * from_a2c_dist) ** 2 *
+        (from_a2b_dist * from_a2c_dist) ** asfloat(2) *
         (from_a2b_dist - from_a2c_dist)
     )
     tau_ab = y_b - y_a - y_prime_a * from_a2b_dist
     tau_ac = y_c - y_a - y_prime_a * from_a2c_dist
 
     alpha = (
-        from_a2c_dist ** 2 * tau_ab -
-        from_a2b_dist ** 2 * tau_ac
+        from_a2c_dist ** asfloat(2) * tau_ab -
+        from_a2b_dist ** asfloat(2) * tau_ac
     ) / denominator
     beta = (
-        from_a2b_dist ** 3 * tau_ac -
-        from_a2c_dist ** 3 * tau_ab
+        from_a2b_dist ** asfloat(3) * tau_ac -
+        from_a2c_dist ** asfloat(3) * tau_ab
     ) / denominator
-    radical = beta ** 2 - 3 * alpha * y_prime_a
+    radical = beta ** asfloat(2) - asfloat(3) * alpha * y_prime_a
 
     minimizer = x_a + (-beta + T.sqrt(radical)) / (asfloat(3) * alpha)
 
@@ -311,13 +313,15 @@ def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c,
         sequential_or(
             # Handle bad cases
             radical < zero,
+
             T.eq(x_a, x_b),
             T.eq(x_a, x_c),
             T.eq(x_b, x_c),
             T.eq(alpha, zero),
 
-            # T.gt(minimizer, x_b - bound_size_ratio * from_a2b_dist),
-            # T.lt(minimizer, x_a + bound_size_ratio * from_a2b_dist),
+            T.isnan(minimizer),
+            T.gt(minimizer, x_b - bound_size_ratio * from_a2b_dist),
+            T.lt(minimizer, x_a + bound_size_ratio * from_a2b_dist),
         ),
         quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b),
         minimizer
