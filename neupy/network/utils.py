@@ -94,10 +94,11 @@ def normalize_error(output):
 
     Returns
     -------
-    int, float
+    int, float, None
         Return sum of all absolute values.
     """
-    return np.sum(np.abs(output))
+    if output is not None:
+        return np.sum(np.abs(output))
 
 
 def step(input_value):

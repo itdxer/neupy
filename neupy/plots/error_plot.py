@@ -53,7 +53,7 @@ def error_plot(network, logx=False, ax=None, show=True):
                              "not the same. Ignored validation errors.")
         validation_errors = []
 
-    if all(np.isnan(validation_errors)):
+    if all(err is None for err in validation_errors):
         validation_errors = []
 
     errors_range = np.arange(len(train_errors))
