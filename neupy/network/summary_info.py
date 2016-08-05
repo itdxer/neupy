@@ -61,10 +61,13 @@ class SummaryTable(BaseSummary):
             time_delta = now - self.prev_summary_time
             terminal_output_delays.append(time_delta)
 
+        training_error = network.errors.last()
+        validation_error = network.validation_errors.last()
+
         table_builder.row([
             network.last_epoch,
-            network.errors.last() or '-',
-            network.validation_errors.last() or '-',
+            training_error if training_error is not None else '-',
+            validation_error if validation_error is not None else '-',
             network.training.epoch_time,
         ])
         self.prev_summary_time = now

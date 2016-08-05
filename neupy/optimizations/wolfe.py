@@ -7,7 +7,6 @@ optimization/linesearch.py
 import theano
 import theano.tensor as T
 from theano.ifelse import ifelse
-import numpy as np
 
 from neupy.utils import asfloat
 

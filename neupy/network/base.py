@@ -5,7 +5,6 @@ import types
 from itertools import groupby
 
 import six
-import numpy as np
 
 from neupy.utils import preformat_value, AttributeKeyDict
 from neupy.helpers import table
@@ -175,21 +174,6 @@ class ShowEpochProperty(BoundedProperty):
                              "equal to one.".format(self.name))
 
 
-def is_valid_error_value(value):
-    """
-    Checks that error value has valid type.
-
-    Parameters
-    ----------
-    value : object
-
-    Returns
-    -------
-    bool
-    """
-    return value is not None and not np.all(np.isnan(value))
-
-
 class ErrorHistoryList(list):
     """
     Wrapper around the built-in list class that adds a few
@@ -200,7 +184,7 @@ class ErrorHistoryList(list):
         Returns last element if list is not empty,
         ``None`` otherwise.
         """
-        if self and is_valid_error_value(self[-1]):
+        if self and self[-1] is not None:
             return normalize_error(self[-1])
 
     def previous(self):
@@ -208,7 +192,7 @@ class ErrorHistoryList(list):
         Returns last element if list is not empty,
         ``None`` otherwise.
         """
-        if len(self) >= 2 and is_valid_error_value(self[-2]):
+        if len(self) >= 2 and self[-2] is not None:
             return normalize_error(self[-2])
 
     def normalized(self):
@@ -221,7 +205,7 @@ class ErrorHistoryList(list):
             Return the same list with normalized values if there
             where some problems.
         """
-        if not self or isinstance(self[0], float):
+        if not self:
             return self
 
         normalized_errors = map(normalize_error, self)
@@ -407,7 +391,7 @@ class BaseNetwork(BaseSkeleton):
 
         with logs.disable_user_input():
             for epoch in iterepochs:
-                validation_error = np.nan
+                validation_error = None
                 epoch_start_time = time.time()
                 on_epoch_start_update(epoch)
 
