@@ -3,13 +3,13 @@ from __future__ import print_function
 import time
 import textwrap
 from operator import attrgetter
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod
 
 import numpy as np
 from six import with_metaclass
 
 from neupy.utils import number_type
-from neupy.core.docs import SharedDocs, SharedDocsMeta
+from neupy.core.docs import SharedDocs, SharedDocsABCMeta
 
 
 __all__ = ("TableBuilder", "Column", "TimeColumn", "NumberColumn",
@@ -155,13 +155,6 @@ class NumberColumn(Column):
 
         return "{value:.{places}f}".format(value=value,
                                            places=self.places)
-
-
-class SharedDocsABCMeta(SharedDocsMeta, ABCMeta):
-    """
-    Meta-class that combine ``SharedDocsMeta`` and ``ABCMeta``
-    meta-classes.
-    """
 
 
 class BaseState(with_metaclass(SharedDocsABCMeta)):

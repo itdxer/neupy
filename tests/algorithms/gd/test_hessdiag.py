@@ -4,6 +4,7 @@ import numpy as np
 
 from sklearn import datasets, cross_validation, preprocessing
 from neupy import algorithms, layers, estimators
+from neupy.layers import init
 
 from utils import compare_networks
 from data import simple_classification
@@ -18,8 +19,12 @@ class HessianDiagonalTestCase(BaseTestCase):
         nw = algorithms.HessianDiagonal(
             connection=[
                 layers.Input(10),
-                layers.Sigmoid(20, init_method='bounded', bounds=(-1, 1)),
-                layers.Sigmoid(1, init_method='bounded', bounds=(-1, 1))
+                layers.Sigmoid(20,
+                               weight=init.Uniform(-1, 1),
+                               bias=init.Uniform(-1, 1)),
+                layers.Sigmoid(1,
+                               weight=init.Uniform(-1, 1),
+                               bias=init.Uniform(-1, 1)),
             ],
             step=0.1,
             shuffle_data=False,
@@ -42,8 +47,12 @@ class HessianDiagonalTestCase(BaseTestCase):
             # Network configurations
             connection=[
                 layers.Input(10),
-                layers.Sigmoid(20, init_method='bounded', bounds=(-1, 1)),
-                layers.Sigmoid(1, init_method='bounded', bounds=(-1, 1)),
+                layers.Sigmoid(20,
+                               weight=init.Uniform(-1, 1),
+                               bias=init.Uniform(-1, 1)),
+                layers.Sigmoid(1,
+                               weight=init.Uniform(-1, 1),
+                               bias=init.Uniform(-1, 1)),
             ],
             step=0.1,
             shuffle_data=True,

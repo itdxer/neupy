@@ -3,10 +3,11 @@ import theano.tensor as T
 import numpy as np
 
 from neupy.core.properties import NumberProperty, ProperFractionProperty
-from neupy.utils import asfloat, as_tuple, number_type
+from neupy.utils import asfloat, as_tuple
 from .activations import AxesProperty
 from .utils import dimshuffle
-from .base import BaseLayer, SharedArrayProperty
+from .base import BaseLayer, ParameterProperty
+from .init import Initializer, Constant
 
 
 __all__ = ('BatchNorm',)
@@ -48,19 +49,6 @@ def find_opposite_axes(axes, ndim):
     return [axis for axis in range(ndim) if axis not in axes]
 
 
-class ArrayOrScalarProperty(SharedArrayProperty):
-    """
-    Defines array, Theano shared variable or scalar.
-
-    Parameters
-    ----------
-    {BaseProperty.default}
-    {BaseProperty.required}
-    """
-    expected_type = as_tuple(SharedArrayProperty.expected_type,
-                             number_type)
-
-
 class BatchNorm(BaseLayer):
     """
     Batch-normalization layer.
@@ -82,8 +70,14 @@ class BatchNorm(BaseLayer):
         training; the closer to one, the more it will depend on
         the last batches seen. Value needs to be between ``0`` and ``1``.
         Defaults to ``0.1``.
-    gamma : float
-    beta : float
+    gamma : array-like, Theano variable, scalar or Initializer
+        Default initialization methods you can
+        find :ref:`here <init-methods>`.
+        Defaults to ``Constant(value=1)``.
+    beta : array-like, Theano variable, scalar or Initializer
+        Default initialization methods you can
+        find :ref:`here <init-methods>`.
+        Defaults to ``Constant(value=0)``.
 
     Methods
     -------
@@ -102,8 +96,8 @@ class BatchNorm(BaseLayer):
     axes = AxesProperty(default=None)
     alpha = ProperFractionProperty(default=0.1)
     epsilon = NumberProperty(default=1e-5, minval=0)
-    gamma = ArrayOrScalarProperty(default=1)
-    beta = ArrayOrScalarProperty(default=0)
+    gamma = ParameterProperty(default=Constant(value=1))
+    beta = ParameterProperty(default=Constant(value=0))
 
     def initialize(self):
         super(BatchNorm, self).initialize()
@@ -138,11 +132,11 @@ class BatchNorm(BaseLayer):
             value=asfloat(np.ones(parameter_shape))
         )
 
-        if isinstance(self.gamma, number_type):
-            self.gamma = np.ones(parameter_shape) * self.gamma
+        if isinstance(self.gamma, Initializer):
+            self.gamma = self.gamma.sample(parameter_shape)
 
-        if isinstance(self.beta, number_type):
-            self.beta = np.ones(parameter_shape) * self.beta
+        if isinstance(self.beta, Initializer):
+            self.beta = self.beta.sample(parameter_shape)
 
         self.gamma = theano.shared(
             name='gamma_{}'.format(self.layer_id),

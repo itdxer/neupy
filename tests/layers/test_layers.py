@@ -9,6 +9,7 @@ from neupy import layers, algorithms
 from neupy.algorithms import GradientDescent
 from neupy.layers.connections import NetworkConnectionError
 from neupy.layers import *
+from neupy.layers import init
 
 from base import BaseTestCase
 from data import simple_classification
@@ -157,7 +158,7 @@ class PReluTestCase(BaseTestCase):
             prelu_layer.initialize()
 
     def test_prelu_random_params(self):
-        prelu_layer = layers.PRelu(10, alpha=None)
+        prelu_layer = layers.PRelu(10, alpha=init.XavierNormal())
         connection = layers.Input(10) > prelu_layer
         prelu_layer.initialize()
 

@@ -2,12 +2,12 @@ import numpy as np
 import theano
 import theano.tensor as T
 
-from neupy.utils import asfloat, as_tuple
+from neupy.utils import asfloat, as_tuple, number_type
 from neupy.core.config import Configurable
 from neupy.core.properties import (TypedListProperty, ArrayProperty,
-                                   ChoiceProperty, IntProperty)
+                                   IntProperty)
 from neupy.layers.connections import ChainConnection
-from .utils import XAVIER_NORMAL, VALID_INIT_METHODS, generate_weight
+from .init import XavierNormal, Initializer, Constant
 
 
 __all__ = ('BaseLayer', 'ParameterBasedLayer', 'Input')
@@ -74,24 +74,18 @@ class BaseLayer(ChainConnection, Configurable):
         return '{name}()'.format(name=classname)
 
 
-def create_shared_parameter(value, name, shape, init_method, bounds):
+def create_shared_parameter(value, name, shape):
     """
     Creates NN parameter as Theano shared variable.
 
     Parameters
     ----------
-    value : array-like, theano shared variable or None
-        Default value for the parameter. If value eqaul to ``None``
-        parameter will be created bsaed on the ``init_method`` value.
+    value : array-like, Theano variable, scalar or Initializer
+        Default value for the parameter.
     name : str
         Sahred variable name.
     shape : tuple
-        Parameter shape.
-    init_method : str
-        Weight initialization procedure name.
-    bounds : tuple
-        Specific parameter for the one of the ``init_method``
-        argument.
+        Parameter's shape.
 
     Returns
     -------
@@ -100,24 +94,29 @@ def create_shared_parameter(value, name, shape, init_method, bounds):
     if isinstance(value, (T.sharedvar.SharedVariable, T.Variable)):
         return value
 
-    if value is None:
-        value = generate_weight(shape, bounds, init_method)
+    if isinstance(value, Initializer):
+        value = value.sample(shape)
 
     return theano.shared(value=asfloat(value), name=name, borrow=True)
 
 
-class SharedArrayProperty(ArrayProperty):
+class ParameterProperty(ArrayProperty):
     """
     In addition to Numpy arrays and matrix property support also
-    Theano shared variables.
+    Theano shared variables and NeuPy Initializers.
 
     Parameters
     ----------
     {ArrayProperty.Parameters}
     """
     expected_type = (np.matrix, np.ndarray,
-                     T.sharedvar.SharedVariable,
-                     T.Variable)
+                     T.sharedvar.SharedVariable, T.Variable,
+                     Initializer, number_type)
+
+    def __set__(self, instance, value):
+        if isinstance(value, number_type):
+            value = Constant(value)
+        super(ParameterProperty, self).__set__(instance, value)
 
 
 class ParameterBasedLayer(BaseLayer):
@@ -128,48 +127,14 @@ class ParameterBasedLayer(BaseLayer):
     ----------
     size : int
         Layer input size.
-    weight : 2D array-like, Theano shared variable or None
-        Define your layer weights. ``None`` means that your weights will be
-        generate randomly dependence on property ``init_method``.
-        ``None`` by default.
-    bias : 1D array-like, Theano shared variable or None
-        Define your layer bias. ``None`` means that your weights will be
-        generate randomly dependence on property ``init_method``.
-    init_method : {{'bounded', 'normal', 'ortho', 'xavier_normal',\
-    'xavier_uniform', 'he_normal', 'he_uniform'}}
-        Weight initialization method. Defaults to ``xavier_normal``.
-
-        * ``normal`` will generate random weights from normal distribution \
-        with standard deviation equal to ``0.01``.
-
-        * ``bounded`` generate random weights from Uniform distribution.
-
-        * ``ortho`` generate random orthogonal matrix.
-
-        * ``xavier_normal`` generate random matrix from normal distrubtion \
-        where variance equal to :math:`\\frac{{2}}{{fan_{{in}} + \
-        fan_{{out}}}}`. Where :math:`fan_{{in}}` is a number of \
-        layer input units and :math:`fan_{{out}}` - number of layer \
-        output units.
-
-        * ``xavier_uniform`` generate random matrix from uniform \
-        distribution where :math:`w_{{ij}} \in \
-        [-\\sqrt{{\\frac{{6}}{{fan_{{in}} + fan_{{out}}}}}}, \
-        \\sqrt{{\\frac{{6}}{{fan_{{in}} + fan_{{out}}}}}}`].
-
-        * ``he_normal`` generate random matrix from normal distrubtion \
-        where variance equal to :math:`\\frac{{2}}{{fan_{{in}}}}`. \
-        Where :math:`fan_{{in}}` is a number of layer input units.
-
-        * ``he_uniform`` generate random matrix from uniformal \
-        distribution where :math:`w_{{ij}} \in [\
-        -\\sqrt{{\\frac{{6}}{{fan_{{in}}}}}}, \
-        \\sqrt{{\\frac{{6}}{{fan_{{in}}}}}}]`
-
-    bounds : tuple of two float
-        Available only for ``init_method`` equal to ``bounded``.  Value
-        identify minimum and maximum possible value in random weights.
-        Defaults to ``(0, 1)``.
+    weight : array-like, Theano variable, scalar or Initializer
+        Defines layer's weights. Default initialization methods
+        you can find :ref:`here <init-methods>`.
+        Defaults to :class:`XavierNormal <neupy.layers.init.XavierNormal>`.
+    bias : 1D array-like, Theano variable, scalar or Initializer
+        Defines layer's bias. Default initialization methods
+        you can find :ref:`here <init-methods>`.
+        Defaults to :class:`XavierNormal <neupy.layers.init.XavierNormal>`.
 
     Methods
     -------
@@ -180,11 +145,8 @@ class ParameterBasedLayer(BaseLayer):
     {BaseLayer.Attributes}
     """
     size = IntProperty(minval=1)
-    weight = SharedArrayProperty(default=None)
-    bias = SharedArrayProperty(default=None)
-    bounds = TypedListProperty(default=(0, 1), element_type=(int, float))
-    init_method = ChoiceProperty(default=XAVIER_NORMAL,
-                                 choices=VALID_INIT_METHODS)
+    weight = ParameterProperty(default=XavierNormal())
+    bias = ParameterProperty(default=XavierNormal())
 
     def __init__(self, size, **options):
         if size is not None:
@@ -209,16 +171,12 @@ class ParameterBasedLayer(BaseLayer):
         self.weight = create_shared_parameter(
             value=self.weight,
             name='weight_{}'.format(self.layer_id),
-            shape=self.weight_shape,
-            bounds=self.bounds,
-            init_method=self.init_method,
+            shape=self.weight_shape
         )
         self.bias = create_shared_parameter(
             value=self.bias,
             name='bias_{}'.format(self.layer_id),
-            shape=self.bias_shape,
-            bounds=self.bounds,
-            init_method=self.init_method,
+            shape=self.bias_shape
         )
         self.parameters = [self.weight, self.bias]
 

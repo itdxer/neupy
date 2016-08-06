@@ -60,7 +60,6 @@ class UnsupervisedLearning(object):
     """
     def train(self, input_train, epochs=100, epsilon=None,
               summary_type='table'):
-
         input_train = format_data(input_train, is_feature1d=True)
         return super(UnsupervisedLearning, self).train(
             input_train=input_train, target_train=None,

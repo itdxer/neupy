@@ -2,7 +2,7 @@ import numpy as np
 
 from sklearn import datasets, preprocessing, cross_validation, metrics
 from neupy import algorithms, layers
-from neupy.layers import Relu, Sigmoid, Input
+from neupy.layers import Relu, Sigmoid, Input, init
 
 from base import BaseTestCase
 
@@ -36,7 +36,7 @@ class DANTestCase(BaseTestCase):
                     [
                         Input(4),
                         Sigmoid(10),
-                        Relu(1, init_method='bounded', bounds=(0, 1)),
+                        Relu(1, weight=init.Uniform(), bias=init.Uniform()),
                     ],
                     step=0.01
                 ),
