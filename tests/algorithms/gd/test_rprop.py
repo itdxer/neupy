@@ -4,6 +4,7 @@ import numpy as np
 
 from neupy import algorithms
 from neupy.layers import *
+from neupy.layers import init
 
 from data import simple_input_train, simple_target_train
 from utils import compare_networks
@@ -57,8 +58,8 @@ class RPROPTestCase(BaseTestCase):
         )
         connection = [
             Input(3),
-            Sigmoid(10, init_method='bounded', bounds=(0, 1)),
-            Sigmoid(2, init_method='bounded', bounds=(0, 1)),
+            Sigmoid(10, weight=init.Uniform(), bias=init.Uniform()),
+            Sigmoid(2, weight=init.Uniform(), bias=init.Uniform()),
         ]
 
         nw = algorithms.IRPROPPlus(copy.deepcopy(connection), **options)

@@ -334,7 +334,7 @@ class MinibatchGradientDescent(GradientDescent):
     batch_size : int or {{None, -1, 'all', '*', 'full'}}
         Set up batch size for learning process. To set up batch size equal to
         sample size value should be equal to one of the values listed above.
-        Defaults to ``100``.
+        Defaults to ``128``.
     {GradientDescent.Parameters}
 
     Attributes
@@ -362,7 +362,7 @@ class MinibatchGradientDescent(GradientDescent):
     --------
     :network:`GradientDescent` : GradientDescent algorithm.
     """
-    batch_size = BatchSizeProperty(default=100)
+    batch_size = BatchSizeProperty(default=128)
 
     def train_epoch(self, input_train, target_train):
         """

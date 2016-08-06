@@ -1,5 +1,6 @@
 import re
 from inspect import isfunction
+from abc import ABCMeta
 
 from six import with_metaclass
 
@@ -7,7 +8,7 @@ from neupy.utils import AttributeKeyDict
 
 
 __all__ = ("SharedDocsMeta", "SharedDocs", "SharedDocsException",
-           'shared_docs')
+           "SharedDocsABCMeta", "shared_docs")
 
 
 def merge_dicts(left_dict, right_dict):
@@ -306,6 +307,13 @@ class SharedDocsMeta(type):
             new_class.__doc__ = format_docs(new_class, new_class.__mro__)
 
         return new_class
+
+
+class SharedDocsABCMeta(SharedDocsMeta, ABCMeta):
+    """
+    Meta-class that combine ``SharedDocsMeta`` and ``ABCMeta``
+    meta-classes.
+    """
 
 
 class SharedDocs(with_metaclass(SharedDocsMeta)):

@@ -1,11 +1,11 @@
-import numpy as np
 import theano.tensor as T
 
-from neupy.utils import asfloat, as_tuple, number_type
+from neupy.utils import asfloat, as_tuple
 from neupy.core.properties import NumberProperty, TypedListProperty
+from .init import Initializer, Constant
 from .utils import dimshuffle
 from .base import (ParameterBasedLayer, create_shared_parameter,
-                   SharedArrayProperty)
+                   ParameterProperty)
 
 
 __all__ = ('ActivationLayer', 'Linear', 'Sigmoid', 'HardSigmoid', 'Step',
@@ -25,8 +25,6 @@ class ActivationLayer(ParameterBasedLayer):
         output for the specified input value.
     {ParameterBasedLayer.weight}
     {ParameterBasedLayer.bias}
-    {ParameterBasedLayer.init_method}
-    {ParameterBasedLayer.bounds}
 
     Methods
     -------
@@ -261,18 +259,6 @@ class Elu(ActivationLayer):
         return T.nnet.elu(input_value, alpha)
 
 
-class PReluAlphaProperty(SharedArrayProperty):
-    """
-    Defines PReLu layer alpha parameter.
-
-    Parameters
-    ----------
-    {SharedArrayProperty.Parameters}
-    """
-    expected_type = as_tuple(SharedArrayProperty.expected_type,
-                             number_type, type(None))
-
-
 class AxesProperty(TypedListProperty):
     """
     Property defines axes parameter.
@@ -308,14 +294,13 @@ class PRelu(ActivationLayer):
         Axes that will not include unique alpha parameter.
         Single integer value defines the same as a tuple with one value.
         Defaults to ``1``.
-    alpha : array-like, Theano shared variable, scalar or None
+    alpha : array-like, Theano shared variable, scalar or Initializer
         Alpha parameter per each non-shared axis for the ReLu.
         Scalar value means that each element in the tensor will be
         equal to the specified value.
-        ``None`` means that parameters will be generated randomly.
-        The exact random initialization algorithm depends on
-        the ``init_method`` parameter.
-        Defaults to ``0.25``.
+        Default initialization methods you can find
+        :ref:`here <init-methods>`.
+        Defaults to ``Constant(value=0.25)``.
     {ActivationLayer.Parameters}
 
     Methods
@@ -331,7 +316,7 @@ class PRelu(ActivationLayer):
     .. [1] https://arxiv.org/pdf/1502.01852v1.pdf
     """
     alpha_axes = AxesProperty(default=1)
-    alpha = PReluAlphaProperty(default=0.25)
+    alpha = ParameterProperty(default=Constant(value=0.25))
 
     def initialize(self):
         super(PRelu, self).initialize()
@@ -350,15 +335,13 @@ class PRelu(ActivationLayer):
 
         alpha_shape = [output_shape[axis - 1] for axis in alpha_axes]
 
-        if isinstance(alpha, number_type):
-            alpha = alpha * np.ones(alpha_shape)
+        if isinstance(alpha, Initializer):
+            alpha = alpha.sample(alpha_shape)
 
         self.alpha = create_shared_parameter(
             value=alpha,
             name='alpha_{}'.format(self.layer_id),
-            shape=alpha_shape,
-            bounds=self.bounds,
-            init_method=self.init_method,
+            shape=alpha_shape
         )
         self.parameters.append(self.alpha)
 

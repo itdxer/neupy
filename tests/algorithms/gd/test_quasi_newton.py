@@ -8,6 +8,7 @@ from sklearn import datasets, metrics
 from sklearn.cross_validation import StratifiedShuffleSplit
 
 from neupy import algorithms, layers
+from neupy.layers import init
 from neupy.algorithms.gd import quasi_newton as qn
 
 from data import simple_classification
@@ -36,8 +37,8 @@ class QuasiNewtonTestCase(BaseTestCase):
         qnnet = algorithms.QuasiNewton(
             connection=[
                 layers.Input(10),
-                layers.Sigmoid(30, init_method='ortho'),
-                layers.Sigmoid(1, init_method='ortho'),
+                layers.Sigmoid(30, weight=init.Orthogonal()),
+                layers.Sigmoid(1, weight=init.Orthogonal()),
             ],
             shuffle_data=True,
             show_epoch='20 times',
@@ -130,8 +131,8 @@ class QuasiNewtonTestCase(BaseTestCase):
         qnnet = algorithms.QuasiNewton(
             connection=[
                 layers.Input(10),
-                layers.Sigmoid(30, init_method='ortho'),
-                layers.Sigmoid(1, init_method='ortho'),
+                layers.Sigmoid(30, weight=init.Orthogonal()),
+                layers.Sigmoid(1, weight=init.Orthogonal()),
             ],
             shuffle_data=True,
             show_epoch=20,
@@ -153,8 +154,8 @@ class QuasiNewtonTestCase(BaseTestCase):
         qnnet = algorithms.QuasiNewton(
             connection=[
                 layers.Input(10),
-                layers.Sigmoid(30, init_method='ortho'),
-                layers.Sigmoid(1, init_method='ortho'),
+                layers.Sigmoid(30, weight=init.Orthogonal()),
+                layers.Sigmoid(1, weight=init.Orthogonal()),
             ],
             shuffle_data=True,
             show_epoch=20,
@@ -176,8 +177,8 @@ class QuasiNewtonTestCase(BaseTestCase):
         qnnet = algorithms.QuasiNewton(
             connection=[
                 layers.Input(10),
-                layers.Sigmoid(30, init_method='ortho'),
-                layers.Sigmoid(1, init_method='ortho'),
+                layers.Sigmoid(30, weight=init.Orthogonal()),
+                layers.Sigmoid(1, weight=init.Orthogonal()),
             ],
             shuffle_data=True,
             show_epoch=20,

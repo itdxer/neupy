@@ -21,6 +21,7 @@ Submodules
 
 .. toctree::
 
+   neupy.algorithms.rbm
    neupy.algorithms.utils
 
 Module contents

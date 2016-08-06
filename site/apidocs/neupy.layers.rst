@@ -10,6 +10,7 @@ Submodules
    neupy.layers.base
    neupy.layers.connections
    neupy.layers.convolutions
+   neupy.layers.init
    neupy.layers.normalization
    neupy.layers.stochastic
    neupy.layers.transformations
