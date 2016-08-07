@@ -61,6 +61,9 @@ class Initializer(six.with_metaclass(SharedDocsABCMeta)):
         array-like
         """
 
+    def __repr__(self):
+        return '{}()'.format(self.__class__.__name__)
+
 
 class Constant(Initializer):
     """
@@ -81,6 +84,9 @@ class Constant(Initializer):
 
     def sample(self, shape):
         return np.ones(shape) * self.value
+
+    def __repr__(self):
+        return '{}({})'.format(self.__class__.__name__, self.value)
 
 
 class Normal(Initializer):
@@ -105,6 +111,10 @@ class Normal(Initializer):
     def sample(self, shape):
         return np.random.normal(loc=self.mean, scale=self.std, size=shape)
 
+    def __repr__(self):
+        return '{}(mean={}, std={})'.format(self.__class__.__name__,
+                                            self.mean, self.std)
+
 
 class Uniform(Initializer):
     """
@@ -128,6 +138,10 @@ class Uniform(Initializer):
     def sample(self, shape):
         minval, maxval = self.minval, self.maxval
         return np.random.random(shape) * (maxval - minval) + minval
+
+    def __repr__(self):
+        return '{}({}, {})'.format(self.__class__.__name__,
+                                  self.minval, self.maxval)
 
 
 class Orthogonal(Initializer):
@@ -168,6 +182,9 @@ class Orthogonal(Initializer):
         ortho_base = u if nrows > ncols else v
 
         return self.scale * ortho_base[:nrows, :ncols]
+
+    def __repr__(self):
+        return '{}(scale={})'.format(self.__class__.__name__, self.scale)
 
 
 class HeNormal(Initializer):
