@@ -35,6 +35,21 @@ def identify_fans(shape):
     return fan_in, fan_out
 
 
+def classname(instance):
+    """
+    Returns instances class name.
+
+    Parameters
+    ----------
+    instance : object
+
+    Returns
+    -------
+    str
+    """
+    return instance.__class__.__name__
+
+
 class Initializer(six.with_metaclass(SharedDocsABCMeta)):
     """
     Base class for parameter initialization.
@@ -62,7 +77,7 @@ class Initializer(six.with_metaclass(SharedDocsABCMeta)):
         """
 
     def __repr__(self):
-        return '{}()'.format(self.__class__.__name__)
+        return '{}()'.format(classname(self))
 
 
 class Constant(Initializer):
@@ -86,7 +101,7 @@ class Constant(Initializer):
         return np.ones(shape) * self.value
 
     def __repr__(self):
-        return '{}({})'.format(self.__class__.__name__, self.value)
+        return '{}({})'.format(classname(self), self.value)
 
 
 class Normal(Initializer):
@@ -112,7 +127,7 @@ class Normal(Initializer):
         return np.random.normal(loc=self.mean, scale=self.std, size=shape)
 
     def __repr__(self):
-        return '{}(mean={}, std={})'.format(self.__class__.__name__,
+        return '{}(mean={}, std={})'.format(classname(self),
                                             self.mean, self.std)
 
 
@@ -140,8 +155,8 @@ class Uniform(Initializer):
         return np.random.random(shape) * (maxval - minval) + minval
 
     def __repr__(self):
-        return '{}({}, {})'.format(self.__class__.__name__,
-                                  self.minval, self.maxval)
+        return '{}({}, {})'.format(classname(self),
+                                   self.minval, self.maxval)
 
 
 class Orthogonal(Initializer):
@@ -184,7 +199,7 @@ class Orthogonal(Initializer):
         return self.scale * ortho_base[:nrows, :ncols]
 
     def __repr__(self):
-        return '{}(scale={})'.format(self.__class__.__name__, self.scale)
+        return '{}(scale={})'.format(classname(self), self.scale)
 
 
 class HeNormal(Initializer):
