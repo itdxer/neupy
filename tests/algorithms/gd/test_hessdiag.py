@@ -4,7 +4,7 @@ import numpy as np
 
 from sklearn import datasets, cross_validation, preprocessing
 from neupy import algorithms, layers, estimators
-from neupy.layers import init
+from neupy import init
 
 from utils import compare_networks
 from data import simple_classification

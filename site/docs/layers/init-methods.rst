@@ -20,8 +20,7 @@ This way is fine, but you can see that we need to hardcode parameter shape. In c
 
 .. code-block:: python
 
-    from neupy import layers, algorithms
-    from neupy.layers import init
+    from neupy import layers, algorithms, init
 
     gdnet = algorithms.GradientDescent(
         [
@@ -43,8 +42,7 @@ It is possible to define custom initialization method.
 .. code-block:: python
 
     import numpy as np
-    from neupy.layers import init
-    from neupy import layers, algorithms
+    from neupy import layers, algorithms, init
 
     class Exponential(init.Initializer):
         def __init__(self, scale=0.01):

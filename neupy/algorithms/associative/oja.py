@@ -1,16 +1,16 @@
-from numpy import dot, abs as np_abs, sum as np_sum
-from numpy.random import randn
+import numpy as np
 
-from neupy.utils import format_data
-from neupy.core.properties import IntProperty, ArrayProperty
+from neupy.utils import format_data, NotTrainedException
+from neupy.core.properties import IntProperty, ParameterProperty
 from neupy.network.base import BaseNetwork
-from neupy.network.learning import UnsupervisedLearning
+from neupy.network.learning import UnsupervisedLearningMixin
+from neupy import init
 
 
 __all__ = ('Oja',)
 
 
-class Oja(UnsupervisedLearning, BaseNetwork):
+class Oja(UnsupervisedLearningMixin, BaseNetwork):
     """
     Oja unsupervised algorithm that minimize input data feature
     space.
@@ -43,7 +43,7 @@ class Oja(UnsupervisedLearning, BaseNetwork):
     reconstruct(input_data):
         Reconstruct your minimized data.
     {BaseSkeleton.predict}
-    {UnsupervisedLearning.train}
+    {UnsupervisedLearningMixin.train}
     {BaseSkeleton.fit}
 
     Raises
@@ -80,7 +80,7 @@ class Oja(UnsupervisedLearning, BaseNetwork):
            [ 5.00000116,  5.00000116]])
     """
     minimized_data_size = IntProperty(minval=1)
-    weights = ArrayProperty()
+    weights = ParameterProperty(default=init.XavierNormal())
 
     def init_properties(self):
         del self.shuffle_data
@@ -89,13 +89,13 @@ class Oja(UnsupervisedLearning, BaseNetwork):
     def train_epoch(self, input_data, target_train):
         weights = self.weights
 
-        minimized = dot(input_data, weights)
-        reconstruct = dot(minimized, weights.T)
+        minimized = np.dot(input_data, weights)
+        reconstruct = np.dot(minimized, weights.T)
         error = input_data - reconstruct
 
-        weights += self.step * dot(error.T, minimized)
+        weights += self.step * np.dot(error.T, minimized)
 
-        mae = np_sum(np_abs(error)) / input_data.size
+        mae = np.sum(np.abs(error)) / input_data.size
 
         # Clear memory
         del minimized
@@ -108,36 +108,41 @@ class Oja(UnsupervisedLearning, BaseNetwork):
         input_data = format_data(input_data)
         n_input_features = input_data.shape[1]
 
-        if self.weights is None:
-            self.weights = randn(n_input_features, self.minimized_data_size)
+        if isinstance(self.weights, init.Initializer):
+            weight_shape = (n_input_features, self.minimized_data_size)
+            self.weights = self.weights.sample(weight_shape)
 
         if n_input_features != self.weights.shape[0]:
             raise ValueError(
                 "Invalid number of features. Expected {}, got {}".format(
-                    self.weights.shape[0], n_input_features
+                    self.weights.shape[0],
+                    n_input_features
                 )
             )
 
         super(Oja, self).train(input_data, epsilon=epsilon, epochs=epochs)
 
     def reconstruct(self, input_data):
-        if self.weights is None:
-            raise ValueError("Train network before use reconstruct method.")
+        if not isinstance(self.weights, np.ndarray):
+            raise NotTrainedException("Train network before use "
+                                      "reconstruct method.")
 
         input_data = format_data(input_data)
         if input_data.shape[1] != self.minimized_data_size:
             raise ValueError(
                 "Invalid input data feature space, expected "
                 "{}, got {}.".format(
-                    input_data.shape[1], self.minimized_data_size
+                    input_data.shape[1],
+                    self.minimized_data_size
                 )
             )
 
-        return dot(input_data, self.weights.T)
+        return np.dot(input_data, self.weights.T)
 
     def predict(self, input_data):
-        if self.weights is None:
-            raise ValueError("Train network before use prediction method.")
+        if not isinstance(self.weights, np.ndarray):
+            raise NotTrainedException("Train network before use "
+                                      "prediction method.")
 
         input_data = format_data(input_data)
-        return dot(input_data, self.weights)
+        return np.dot(input_data, self.weights)

@@ -243,8 +243,7 @@ class BasePooling(BaseLayer):
     padding = TypedListProperty(default=(0, 0), element_type=int, n_elements=2)
 
     def __init__(self, size, **options):
-        options['size'] = size
-        super(BasePooling, self).__init__(**options)
+        super(BasePooling, self).__init__(size=size, **options)
 
     @property
     def output_shape(self):
@@ -380,8 +379,7 @@ class Upscale(BaseLayer):
     scale = ScaleFactorProperty(required=True, n_elements=2)
 
     def __init__(self, scale, **options):
-        options['scale'] = scale
-        super(Upscale, self).__init__(**options)
+        super(Upscale, self).__init__(scale=scale, **options)
 
     @property
     def output_shape(self):

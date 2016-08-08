@@ -23,7 +23,7 @@ class Perceptron(BaseLinearNetwork):
     Methods
     -------
     {BaseSkeleton.predict}
-    {SupervisedLearning.train}
+    {SupervisedLearningMixin.train}
     {BaseSkeleton.fit}
 
     Examples

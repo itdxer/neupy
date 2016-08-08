@@ -331,7 +331,6 @@ class BaseNetwork(BaseSkeleton):
         epsilon : float or None
             Defaults to ``None``.
         """
-
         show_epoch = self.show_epoch
         logs = self.logs
         training = self.training = AttributeKeyDict()

@@ -44,3 +44,5 @@ from .rbfn.grnn import *
 from .linear.lms import *
 from .linear.modify_relaxation import *
 from .linear.perceptron import *
+
+from .rbm import *

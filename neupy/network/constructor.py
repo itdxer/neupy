@@ -1,3 +1,4 @@
+import abc
 import time
 import types
 
@@ -13,7 +14,7 @@ from neupy.layers.connections import LayerConnection, NetworkConnectionError
 from neupy.helpers import table
 from neupy.core.properties import ChoiceProperty
 from neupy.network import errors
-from .learning import SupervisedLearning
+from .learning import SupervisedLearningMixin
 from .base import BaseNetwork
 
 
@@ -120,7 +121,7 @@ def create_input_variable(input_layer, variable_name):
 
     if ndim not in dim_to_variable_type:
         raise ValueError("Layer's input needs to be 2, 3 or 4 dimensional. "
-                         "Found {}".format(ndim))
+                         "Found {} dimensions".format(ndim))
 
     variable_type = dim_to_variable_type[ndim]
     return variable_type(variable_name)
@@ -171,7 +172,57 @@ class ErrorFunctionProperty(ChoiceProperty):
                                                           founded_value)
 
 
-class ConstructableNetwork(SupervisedLearning, BaseNetwork):
+class BaseAlgorithm(abc.ABC):
+    """
+    Base class for algorithms implemeted in Theano.
+
+    Attributes
+    ----------
+    variables : dict
+        Theano variables.
+    methods : dict
+        Theano functions.
+    """
+    def __init__(self, *args, **kwargs):
+        super(BaseAlgorithm, self).__init__(*args, **kwargs)
+
+        self.logs.message("THEANO", "Initializing Theano variables and "
+                                    "functions.")
+        start_init_time = time.time()
+
+        self.variables = AttributeKeyDict()
+        self.methods = AttributeKeyDict()
+
+        self.init_input_output_variables()
+        self.init_variables()
+        self.init_methods()
+
+        finish_init_time = time.time()
+        self.logs.message("THEANO", "Initialization finished sucessfully. "
+                          "It took {:.2f} seconds"
+                          "".format(finish_init_time - start_init_time))
+
+    @abc.abstractmethod
+    def init_input_output_variables(self):
+        """
+        Initialize input and output Theano variables.
+        """
+
+    @abc.abstractmethod
+    def init_variables(self):
+        """
+        Initialize Theano variables.
+        """
+
+    @abc.abstractmethod
+    def init_methods(self):
+        """
+        Initialize Theano functions.
+        """
+
+
+class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
+                           BaseNetwork):
     """
     Class contains functionality that helps work with network that have
     constructable layers architecture.
@@ -222,7 +273,7 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
     Methods
     -------
     {BaseSkeleton.predict}
-    {SupervisedLearning.train}
+    {SupervisedLearningMixin.train}
     {BaseSkeleton.fit}
     """
     error = ErrorFunctionProperty(default='mse', choices={
@@ -251,32 +302,19 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         self.init_layers()
         super(ConstructableNetwork, self).__init__(*args, **kwargs)
 
-        self.logs.message("THEANO", "Initializing Theano variables and "
-                                    "functions.")
-        start_init_time = time.time()
-
-        self.variables = AttributeKeyDict(
+    def init_input_output_variables(self):
+        self.variables.update(
             network_input=create_input_variable(
-                self.input_layer, variable_name='x'
+                self.input_layer,
+                variable_name='x'
             ),
             network_output=create_output_variable(
-                self.error, variable_name='y'
+                self.error,
+                variable_name='y'
             ),
         )
-        self.methods = AttributeKeyDict()
-
-        self.init_variables()
-        self.init_methods()
-
-        finish_init_time = time.time()
-        self.logs.message("THEANO", "Initialization finished sucessfully. "
-                          "It took {:.2f} seconds"
-                          "".format(finish_init_time - start_init_time))
 
     def init_variables(self):
-        """
-        Initialize Theano variables.
-        """
         network_input = self.variables.network_input
         network_output = self.variables.network_output
 
@@ -296,25 +334,23 @@ class ConstructableNetwork(SupervisedLearning, BaseNetwork):
         )
 
     def init_methods(self):
-        """
-        Initialize all methods that needed for prediction and
-        training procedures.
-        """
         network_input = self.variables.network_input
         network_output = self.variables.network_output
 
-        self.methods.predict = theano.function(
-            inputs=[self.variables.network_input],
-            outputs=self.variables.prediction_func
-        )
-        self.methods.train_epoch = theano.function(
-            inputs=[network_input, network_output],
-            outputs=self.variables.error_func,
-            updates=self.init_train_updates(),
-        )
-        self.methods.prediction_error = theano.function(
-            inputs=[network_input, network_output],
-            outputs=self.variables.validation_error_func
+        self.methods.update(
+            predict=theano.function(
+                inputs=[self.variables.network_input],
+                outputs=self.variables.prediction_func
+            ),
+            train_epoch=theano.function(
+                inputs=[network_input, network_output],
+                outputs=self.variables.error_func,
+                updates=self.init_train_updates(),
+            ),
+            prediction_error=theano.function(
+                inputs=[network_input, network_output],
+                outputs=self.variables.validation_error_func
+            )
         )
 
     def init_layers(self):

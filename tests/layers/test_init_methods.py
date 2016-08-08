@@ -4,7 +4,7 @@ from scipy import stats
 import numpy as np
 
 from neupy.layers import *
-from neupy.layers import init
+from neupy import init
 
 from base import BaseTestCase
 

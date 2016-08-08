@@ -1,22 +1,9 @@
-import numpy as np
-import theano.tensor as T
-
 from neupy.core.properties import ProperFractionProperty, NumberProperty
+from neupy.utils import theano_random_stream
 from .base import BaseLayer
 
 
 __all__ = ('Dropout', 'GaussianNoise')
-
-
-def theano_random_stream():
-    """
-    Create Theano random stream instance.
-    """
-    # Use NumPy seed to make Theano code easely reproducible
-    max_possible_seed = 4e9
-    seed = np.random.randint(max_possible_seed)
-    theano_random = T.shared_randomstreams.RandomStreams(seed)
-    return theano_random
 
 
 class Dropout(BaseLayer):
@@ -40,8 +27,7 @@ class Dropout(BaseLayer):
     proba = ProperFractionProperty(required=True)
 
     def __init__(self, proba, **options):
-        options['proba'] = proba
-        super(Dropout, self).__init__(**options)
+        super(Dropout, self).__init__(proba=proba, **options)
 
     @property
     def size(self):
@@ -88,8 +74,7 @@ class GaussianNoise(BaseLayer):
     mean = NumberProperty(default=0)
 
     def __init__(self, std, **options):
-        options['std'] = std
-        super(GaussianNoise, self).__init__(**options)
+        super(GaussianNoise, self).__init__(std=std, **options)
 
     def output(self, input_value):
         if not self.training_state:

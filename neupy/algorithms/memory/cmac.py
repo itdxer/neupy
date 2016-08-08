@@ -2,14 +2,14 @@ from numpy import concatenate, array
 
 from neupy.utils import format_data
 from neupy.core.properties import IntProperty
-from neupy.network.learning import SupervisedLearning
+from neupy.network.learning import SupervisedLearningMixin
 from neupy.network.base import BaseNetwork
 
 
 __all__ = ('CMAC',)
 
 
-class CMAC(SupervisedLearning, BaseNetwork):
+class CMAC(SupervisedLearningMixin, BaseNetwork):
     """
     CMAC Network based on memory.
 
@@ -40,7 +40,7 @@ class CMAC(SupervisedLearning, BaseNetwork):
     Methods
     -------
     {BaseSkeleton.predict}
-    {SupervisedLearning.train}
+    {SupervisedLearningMixin.train}
     {BaseSkeleton.fit}
 
     Examples

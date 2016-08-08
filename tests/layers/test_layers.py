@@ -9,7 +9,7 @@ from neupy import layers, algorithms
 from neupy.algorithms import GradientDescent
 from neupy.layers.connections import NetworkConnectionError
 from neupy.layers import *
-from neupy.layers import init
+from neupy import init
 
 from base import BaseTestCase
 from data import simple_classification

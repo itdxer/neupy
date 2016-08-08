@@ -83,6 +83,11 @@ Memory based Neural Networks
 * `Visualize Discrete Hopfield Neural Network energy function <examples/memory/dhn_energy_func.py>`_
 * `Password recovery, Discrete Hopfield Neural Network <examples/memory/password_recovery.py>`_
 
+Boltzmann Machine
+~~~~~~~~~~~~~~~~~
+
+* `Feature Learning from the MNIST Images, Restricted Boltzmann Machine <examples/boltzmann_machine/bernoulli_rbm.py>`_
+
 Dependencies
 ------------
 

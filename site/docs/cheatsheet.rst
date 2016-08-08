@@ -114,6 +114,14 @@ Associative
     :network:`Instar`, Instar
     :network:`HebbRule`, Hebb)
 
+Boltzmann Machine
+~~~~~~~~~~~~~~~~~
+
+.. csv-table::
+    :header: "Class name", "Name"
+
+    :network:`RBM`, Boolean/Bernoulli Restricted Boltzmann Machine
+
 Layers
 ******
 
@@ -180,8 +188,7 @@ Example
 
 .. code-block:: python
 
-    from neupy.layers import init
-    from neupy import layers, algorithms
+    from neupy import algorithms, layers, init
 
     gdnet = algorithms.GradientDescent(
         [
@@ -197,14 +204,14 @@ Available initialization methods
 .. csv-table::
     :header: "Class name", "Description"
 
-    ":class:`Constant <neupy.layers.init.Constant>`", "Initialize weights with constant values"
-    ":class:`Normal <neupy.layers.init.Normal>`", "Sample weights from the Normal distribution"
-    ":class:`Uniform <neupy.layers.init.Uniform>`", "Sample weights from the Uniformal distribution"
-    ":class:`Orthogonal <neupy.layers.init.Orthogonal>`", "Initialize matrix with orthogonal basis"
-    ":class:`HeNormal <neupy.layers.init.HeNormal>`", "Kaiming He parameter initialization method based on the Normal distribution."
-    ":class:`HeUniform <neupy.layers.init.HeUniform>`", "Kaiming He parameter initialization method based on the Uniformal distribution."
-    ":class:`XavierNormal <neupy.layers.init.XavierNormal>`", "Glorot Xavier parameter initialization method based on the Normal distribution."
-    ":class:`XavierUniform <neupy.layers.init.XavierUniform>`", "Glorot Xavier parameter initialization method based on the Uniformal distribution."
+    ":class:`Constant <neupy.core.init.Constant>`", "Initialize weights with constant values"
+    ":class:`Normal <neupy.core.init.Normal>`", "Sample weights from the Normal distribution"
+    ":class:`Uniform <neupy.core.init.Uniform>`", "Sample weights from the Uniformal distribution"
+    ":class:`Orthogonal <neupy.core.init.Orthogonal>`", "Initialize matrix with orthogonal basis"
+    ":class:`HeNormal <neupy.core.init.HeNormal>`", "Kaiming He parameter initialization method based on the Normal distribution."
+    ":class:`HeUniform <neupy.core.init.HeUniform>`", "Kaiming He parameter initialization method based on the Uniformal distribution."
+    ":class:`XavierNormal <neupy.core.init.XavierNormal>`", "Glorot Xavier parameter initialization method based on the Normal distribution."
+    ":class:`XavierUniform <neupy.core.init.XavierUniform>`", "Glorot Xavier parameter initialization method based on the Uniformal distribution."
 
 Error functions
 ***************

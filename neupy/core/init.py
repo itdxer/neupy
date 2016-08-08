@@ -37,7 +37,7 @@ def identify_fans(shape):
 
 def classname(instance):
     """
-    Returns instances class name.
+    Returns instance class name.
 
     Parameters
     ----------

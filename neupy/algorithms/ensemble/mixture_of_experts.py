@@ -115,9 +115,13 @@ class MixtureOfExperts(BaseEnsemble):
         n_networks = len(self.networks)
 
         if gating_network_output_size != n_networks:
-            raise ValueError("Invalid Gating network output size. Expected "
-                             "{0}, got {1}".format(n_networks,
-                                                   gating_network_output_size))
+            raise ValueError(
+                "Invalid Gating network output size. Expected "
+                "{0}, got {1}".format(
+                    n_networks,
+                    gating_network_output_size
+                )
+            )
 
         if gating_network.error.__name__ != 'mse':
             raise ValueError(
