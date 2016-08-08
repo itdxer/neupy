@@ -2,13 +2,13 @@ import numpy as np
 
 from neupy.utils import format_data
 from neupy.core.properties import IntProperty, ArrayProperty
-from neupy.network import BaseNetwork, UnsupervisedLearning
+from neupy.network import BaseNetwork, UnsupervisedLearningMixin
 
 
 __all__ = ('BaseStepAssociative',)
 
 
-class BaseAssociative(UnsupervisedLearning, BaseNetwork):
+class BaseAssociative(UnsupervisedLearningMixin, BaseNetwork):
     """
     Base class for associative learning.
 

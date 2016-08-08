@@ -9,6 +9,7 @@ Submodules
    neupy.core.base
    neupy.core.config
    neupy.core.docs
+   neupy.core.init
    neupy.core.properties
 
 Module contents

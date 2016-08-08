@@ -150,7 +150,7 @@ class IRPROPPlus(RPROP):
     Methods
     -------
     {BaseSkeleton.predict}
-    {SupervisedLearning.train}
+    {SupervisedLearningMixin.train}
     {BaseSkeleton.fit}
 
     Examples

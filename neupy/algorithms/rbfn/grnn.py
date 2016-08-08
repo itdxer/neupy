@@ -3,14 +3,14 @@ from numpy import dot
 from neupy.utils import format_data
 from neupy.core.properties import BoundedProperty
 from neupy.network.base import BaseNetwork
-from neupy.network.learning import LazyLearning
+from neupy.network.learning import LazyLearningMixin
 from .utils import pdf_between_data
 
 
 __all__ = ('GRNN',)
 
 
-class GRNN(LazyLearning, BaseNetwork):
+class GRNN(LazyLearningMixin, BaseNetwork):
     """
     Generalized Regression Neural Network.
 
@@ -22,7 +22,7 @@ class GRNN(LazyLearning, BaseNetwork):
 
     Methods
     -------
-    {LazyLearning.train}
+    {LazyLearningMixin.train}
     {BaseSkeleton.predict}
     {BaseSkeleton.fit}
 
@@ -55,7 +55,7 @@ class GRNN(LazyLearning, BaseNetwork):
         if target_train.shape[1] != 1:
             raise ValueError("Target value must be one dimensional array")
 
-        LazyLearning.train(self, input_train, target_train)
+        LazyLearningMixin.train(self, input_train, target_train)
 
     def predict(self, input_data):
         super(GRNN, self).predict(input_data)

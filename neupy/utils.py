@@ -11,7 +11,7 @@ from scipy.sparse import issparse
 __all__ = ('format_data', 'does_layer_accept_1d_feature', 'asfloat',
            'AttributeKeyDict', 'is_list_of_integers', 'preformat_value',
            'as_array2d', 'NotTrainedException', 'smallest_positive_number',
-           'as_tuple', 'asint', 'number_type')
+           'as_tuple', 'asint', 'number_type', 'theano_random_stream')
 
 
 number_type = (int, float, np.floating, np.integer)
@@ -291,3 +291,14 @@ def as_tuple(*values):
         else:
             cleaned_values.append(value)
     return tuple(cleaned_values)
+
+
+def theano_random_stream():
+    """
+    Create Theano random stream instance.
+    """
+    # Use NumPy seed to make Theano code easely reproducible
+    max_possible_seed = 4e9
+    seed = np.random.randint(max_possible_seed)
+    theano_random = T.shared_randomstreams.RandomStreams(seed)
+    return theano_random

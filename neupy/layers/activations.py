@@ -1,11 +1,11 @@
 import theano.tensor as T
 
 from neupy.utils import asfloat, as_tuple
-from neupy.core.properties import NumberProperty, TypedListProperty
-from .init import Initializer, Constant
+from neupy.core.properties import (NumberProperty, TypedListProperty,
+                                   ParameterProperty)
+from neupy.core.init import Initializer, Constant
 from .utils import dimshuffle
-from .base import (ParameterBasedLayer, create_shared_parameter,
-                   ParameterProperty)
+from .base import ParameterBasedLayer, create_shared_parameter
 
 
 __all__ = ('ActivationLayer', 'Linear', 'Sigmoid', 'HardSigmoid', 'Step',

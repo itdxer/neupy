@@ -1,7 +1,9 @@
 import numpy as np
+import theano.tensor as T
 
 from neupy.utils import preformat_value, number_type
 from neupy.core.docs import SharedDocs
+from neupy.core import init
 
 
 __all__ = ('BaseProperty', 'Property', 'ArrayProperty', 'BoundedProperty',
@@ -253,3 +255,21 @@ class IntProperty(BoundedProperty):
     {BoundedProperty.Parameters}
     """
     expected_type = (int, np.integer)
+
+
+class ParameterProperty(ArrayProperty):
+    """
+    In addition to Numpy arrays and matrix property support also
+    Theano shared variables and NeuPy Initializers.
+
+    Parameters
+    ----------
+    {ArrayProperty.Parameters}
+    """
+    expected_type = (np.ndarray, T.sharedvar.SharedVariable, T.Variable,
+                     init.Initializer, number_type)
+
+    def __set__(self, instance, value):
+        if isinstance(value, number_type):
+            value = init.Constant(value)
+        super(ParameterProperty, self).__set__(instance, value)

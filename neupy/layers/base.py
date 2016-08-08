@@ -1,13 +1,12 @@
-import numpy as np
 import theano
 import theano.tensor as T
 
-from neupy.utils import asfloat, as_tuple, number_type
+from neupy.utils import asfloat, as_tuple
 from neupy.core.config import Configurable
-from neupy.core.properties import (TypedListProperty, ArrayProperty,
-                                   IntProperty)
+from neupy.core.properties import (TypedListProperty, IntProperty,
+                                   ParameterProperty)
 from neupy.layers.connections import ChainConnection
-from .init import XavierNormal, Initializer, Constant
+from neupy.core.init import XavierNormal, Initializer
 
 
 __all__ = ('BaseLayer', 'ParameterBasedLayer', 'Input')
@@ -100,25 +99,6 @@ def create_shared_parameter(value, name, shape):
     return theano.shared(value=asfloat(value), name=name, borrow=True)
 
 
-class ParameterProperty(ArrayProperty):
-    """
-    In addition to Numpy arrays and matrix property support also
-    Theano shared variables and NeuPy Initializers.
-
-    Parameters
-    ----------
-    {ArrayProperty.Parameters}
-    """
-    expected_type = (np.matrix, np.ndarray,
-                     T.sharedvar.SharedVariable, T.Variable,
-                     Initializer, number_type)
-
-    def __set__(self, instance, value):
-        if isinstance(value, number_type):
-            value = Constant(value)
-        super(ParameterProperty, self).__set__(instance, value)
-
-
 class ParameterBasedLayer(BaseLayer):
     """
     Layer that creates weight and bias parameters.
@@ -130,11 +110,11 @@ class ParameterBasedLayer(BaseLayer):
     weight : array-like, Theano variable, scalar or Initializer
         Defines layer's weights. Default initialization methods
         you can find :ref:`here <init-methods>`.
-        Defaults to :class:`XavierNormal <neupy.layers.init.XavierNormal>`.
+        Defaults to :class:`XavierNormal <neupy.core.init.XavierNormal>`.
     bias : 1D array-like, Theano variable, scalar or Initializer
         Defines layer's bias. Default initialization methods
         you can find :ref:`here <init-methods>`.
-        Defaults to :class:`XavierNormal <neupy.layers.init.XavierNormal>`.
+        Defaults to :class:`XavierNormal <neupy.core.init.XavierNormal>`.
 
     Methods
     -------

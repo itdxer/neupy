@@ -4,7 +4,7 @@ import numpy as np
 
 from neupy import algorithms
 from neupy.layers import *
-from neupy.layers import init
+from neupy import init
 
 from data import simple_input_train, simple_target_train
 from utils import compare_networks

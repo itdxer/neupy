@@ -1,10 +1,11 @@
 from neupy.utils import format_data
 
 
-__all__ = ('SupervisedLearning', 'UnsupervisedLearning', 'LazyLearning')
+__all__ = ('SupervisedLearningMixin', 'UnsupervisedLearningMixin',
+           'LazyLearningMixin')
 
 
-class SupervisedLearning(object):
+class SupervisedLearningMixin(object):
     """
     Mixin for Supervised Neural Network algorithms.
 
@@ -39,7 +40,7 @@ class SupervisedLearning(object):
         if target_test is not None:
             target_test = format_data(target_test)
 
-        return super(SupervisedLearning, self).train(
+        return super(SupervisedLearningMixin, self).train(
             input_train=input_train, target_train=target_train,
             input_test=input_test, target_test=target_test,
             epochs=epochs, epsilon=epsilon,
@@ -47,7 +48,7 @@ class SupervisedLearning(object):
         )
 
 
-class UnsupervisedLearning(object):
+class UnsupervisedLearningMixin(object):
     """
     Mixin for Unsupervised Neural Network algorithms.
 
@@ -61,7 +62,7 @@ class UnsupervisedLearning(object):
     def train(self, input_train, epochs=100, epsilon=None,
               summary_type='table'):
         input_train = format_data(input_train, is_feature1d=True)
-        return super(UnsupervisedLearning, self).train(
+        return super(UnsupervisedLearningMixin, self).train(
             input_train=input_train, target_train=None,
             input_test=None, target_test=None,
             epochs=epochs, epsilon=epsilon,
@@ -69,7 +70,7 @@ class UnsupervisedLearning(object):
         )
 
 
-class LazyLearning(object):
+class LazyLearningMixin(object):
     """
     Mixin for lazy learning Neural Network algorithms.
 
@@ -83,7 +84,7 @@ class LazyLearning(object):
     def __init__(self, *args, **kwargs):
         self.input_train = None
         self.target_train = None
-        super(LazyLearning, self).__init__(*args, **kwargs)
+        super(LazyLearningMixin, self).__init__(*args, **kwargs)
 
     def init_properties(self):
         del self.shuffle_data

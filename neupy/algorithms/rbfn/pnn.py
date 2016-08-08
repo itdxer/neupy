@@ -3,7 +3,7 @@ from numpy import unique, zeros, dot, sum as np_sum
 from neupy.utils import format_data
 from neupy.core.properties import BoundedProperty
 from neupy.network.base import BaseNetwork
-from neupy.network.learning import LazyLearning
+from neupy.network.learning import LazyLearningMixin
 
 from .utils import pdf_between_data
 
@@ -11,7 +11,7 @@ from .utils import pdf_between_data
 __all__ = ('PNN',)
 
 
-class PNN(LazyLearning, BaseNetwork):
+class PNN(LazyLearningMixin, BaseNetwork):
     """
     Probabilistic Neural Network for classification.
 
@@ -23,7 +23,7 @@ class PNN(LazyLearning, BaseNetwork):
 
     Methods
     -------
-    {LazyLearning.train}
+    {LazyLearningMixin.train}
     {BaseSkeleton.predict}
     {BaseSkeleton.fit}
 
@@ -59,7 +59,7 @@ class PNN(LazyLearning, BaseNetwork):
         input_train = format_data(input_train, copy=copy)
         target_train = format_data(target_train, copy=copy)
 
-        LazyLearning.train(self, input_train, target_train)
+        LazyLearningMixin.train(self, input_train, target_train)
 
         if target_train.shape[1] != 1:
             raise ValueError("Target value must be in 1 dimension")
@@ -98,12 +98,10 @@ class PNN(LazyLearning, BaseNetwork):
             raise ValueError("Input data must contains {0} features, got "
                              "{1}".format(train_data_size, input_data_size))
 
-        class_ratios = self.class_ratios
-        pdf_outputs = pdf_between_data(self.input_train, input_data,
-                                       self.std)
-        return dot(
-            self.row_comb_matrix, pdf_outputs
-        ) / class_ratios.reshape((class_ratios.size, 1))
+        class_ratios = self.class_ratios.reshape((-1, 1))
+        pdf_outputs = pdf_between_data(self.input_train, input_data, self.std)
+
+        return dot(self.row_comb_matrix, pdf_outputs) / class_ratios
 
     def predict(self, input_data):
         raw_output = self.predict_raw(input_data)

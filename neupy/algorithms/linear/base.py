@@ -32,7 +32,7 @@ class BaseLinearNetwork(ConstructableNetwork):
     Methods
     -------
     {BaseSkeleton.predict}
-    {SupervisedLearning.train}
+    {SupervisedLearningMixin.train}
     {BaseSkeleton.fit}
     """
 

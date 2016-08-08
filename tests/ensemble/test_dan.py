@@ -1,8 +1,8 @@
 import numpy as np
 
 from sklearn import datasets, preprocessing, cross_validation, metrics
-from neupy import algorithms, layers
-from neupy.layers import Relu, Sigmoid, Input, init
+from neupy import algorithms, layers, init
+from neupy.layers import Relu, Sigmoid, Input
 
 from base import BaseTestCase
 

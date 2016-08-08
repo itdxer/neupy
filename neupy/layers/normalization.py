@@ -2,12 +2,13 @@ import theano
 import theano.tensor as T
 import numpy as np
 
-from neupy.core.properties import NumberProperty, ProperFractionProperty
+from neupy.core.properties import (NumberProperty, ProperFractionProperty,
+                                   ParameterProperty)
 from neupy.utils import asfloat, as_tuple
+from neupy.core.init import Initializer, Constant
 from .activations import AxesProperty
 from .utils import dimshuffle
-from .base import BaseLayer, ParameterProperty
-from .init import Initializer, Constant
+from .base import BaseLayer
 
 
 __all__ = ('BatchNorm',)
