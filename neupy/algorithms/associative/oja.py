@@ -20,7 +20,7 @@ class Oja(UnsupervisedLearningMixin, BaseNetwork):
     * In practice use step as very small value. For example ``1e-7``.
     * Normalize the input data before use Oja algorithm. Input data \
     shouldn't contains large values.
-    * Set up smaller values for weights if error for a few first iterations \
+    * Set up smaller values for weight if error for a few first iterations \
     is big compare to the input values scale. For example, if your input \
     data have values between 0 and 1 error value equal to 100 is big.
 
@@ -28,10 +28,9 @@ class Oja(UnsupervisedLearningMixin, BaseNetwork):
     ----------
     minimized_data_size : int
         Expected number of features after minimization, defaults to ``1``
-    weights : array-like or ``None``
-        Predefine default weights which controll your data in two sides.
-        If weights are, ``None`` before train algorithms generate random
-        weights. Defaults to ``None``.
+    weight : array-like or ``None``
+        Defines networks weights.
+        Defaults to :class:`XavierNormal() <neupy.core.init.XavierNormal>`.
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.epoch_end_signal}
@@ -80,20 +79,20 @@ class Oja(UnsupervisedLearningMixin, BaseNetwork):
            [ 5.00000116,  5.00000116]])
     """
     minimized_data_size = IntProperty(minval=1)
-    weights = ParameterProperty(default=init.XavierNormal())
+    weight = ParameterProperty(default=init.XavierNormal())
 
     def init_properties(self):
         del self.shuffle_data
         super(Oja, self).init_properties()
 
     def train_epoch(self, input_data, target_train):
-        weights = self.weights
+        weight = self.weight
 
-        minimized = np.dot(input_data, weights)
-        reconstruct = np.dot(minimized, weights.T)
+        minimized = np.dot(input_data, weight)
+        reconstruct = np.dot(minimized, weight.T)
         error = input_data - reconstruct
 
-        weights += self.step * np.dot(error.T, minimized)
+        weight += self.step * np.dot(error.T, minimized)
 
         mae = np.sum(np.abs(error)) / input_data.size
 
@@ -108,14 +107,14 @@ class Oja(UnsupervisedLearningMixin, BaseNetwork):
         input_data = format_data(input_data)
         n_input_features = input_data.shape[1]
 
-        if isinstance(self.weights, init.Initializer):
+        if isinstance(self.weight, init.Initializer):
             weight_shape = (n_input_features, self.minimized_data_size)
-            self.weights = self.weights.sample(weight_shape)
+            self.weight = self.weight.sample(weight_shape)
 
-        if n_input_features != self.weights.shape[0]:
+        if n_input_features != self.weight.shape[0]:
             raise ValueError(
                 "Invalid number of features. Expected {}, got {}".format(
-                    self.weights.shape[0],
+                    self.weight.shape[0],
                     n_input_features
                 )
             )
@@ -123,7 +122,7 @@ class Oja(UnsupervisedLearningMixin, BaseNetwork):
         super(Oja, self).train(input_data, epsilon=epsilon, epochs=epochs)
 
     def reconstruct(self, input_data):
-        if not isinstance(self.weights, np.ndarray):
+        if not isinstance(self.weight, np.ndarray):
             raise NotTrainedException("Train network before use "
                                       "reconstruct method.")
 
@@ -137,12 +136,12 @@ class Oja(UnsupervisedLearningMixin, BaseNetwork):
                 )
             )
 
-        return np.dot(input_data, self.weights.T)
+        return np.dot(input_data, self.weight.T)
 
     def predict(self, input_data):
-        if not isinstance(self.weights, np.ndarray):
+        if not isinstance(self.weight, np.ndarray):
             raise NotTrainedException("Train network before use "
                                       "prediction method.")
 
         input_data = format_data(input_data)
-        return np.dot(input_data, self.weights)
+        return np.dot(input_data, self.weight)

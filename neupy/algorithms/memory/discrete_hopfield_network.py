@@ -3,7 +3,7 @@ from math import log, ceil
 from numpy import zeros, fill_diagonal, random, sign
 
 from neupy.utils import format_data
-from neupy.network.utils import step
+from neupy.network.utils import step_function
 from neupy.core.properties import Property
 from .utils import bin2sign, hopfield_energy
 from .base import DiscreteMemory
@@ -175,7 +175,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         else:
             output_data = input_data.dot(self.weight)
 
-        return step(output_data).astype(int)
+        return step_function(output_data).astype(int)
 
     def energy(self, input_data):
         self.discrete_validation(input_data)

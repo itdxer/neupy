@@ -110,11 +110,11 @@ class ParameterBasedLayer(BaseLayer):
     weight : array-like, Theano variable, scalar or Initializer
         Defines layer's weights. Default initialization methods
         you can find :ref:`here <init-methods>`.
-        Defaults to :class:`XavierNormal <neupy.core.init.XavierNormal>`.
+        Defaults to :class:`XavierNormal() <neupy.core.init.XavierNormal>`.
     bias : 1D array-like, Theano variable, scalar or Initializer
         Defines layer's bias. Default initialization methods
         you can find :ref:`here <init-methods>`.
-        Defaults to :class:`XavierNormal <neupy.core.init.XavierNormal>`.
+        Defaults to :class:`XavierNormal() <neupy.core.init.XavierNormal>`.
 
     Methods
     -------
@@ -204,8 +204,7 @@ class Input(BaseLayer):
     size = ArrayShapeProperty()
 
     def __init__(self, size, **options):
-        options['size'] = size
-        super(Input, self).__init__(**options)
+        super(Input, self).__init__(size=size, **options)
 
     @property
     def input_shape(self):

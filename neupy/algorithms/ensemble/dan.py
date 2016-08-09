@@ -23,7 +23,7 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
 
     Attributes
     ----------
-    weights : ndarray, shape = [n_predictors, n_networks]
+    weight : ndarray, shape = [n_predictors, n_networks]
         After you get prediction you can also check weight
         which you will get to combine the result.
 
@@ -60,7 +60,7 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
     """
     def __init__(self, networks):
         super(DynamicallyAveragedNetwork, self).__init__(networks)
-        self.weights = None
+        self.weight = None
 
         for network in networks:
             output_layer_size = network.output_layer.size
@@ -99,8 +99,8 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
 
         total_output_sum = np.reshape(network_certainties.sum(axis=1),
                                       (n_inputs, 1))
-        self.weights = network_certainties / total_output_sum
-        return (self.weights * network_outputs).sum(axis=1)
+        self.weight = network_certainties / total_output_sum
+        return (self.weight * network_outputs).sum(axis=1)
 
     def predict(self, input_data):
         raw_output = self.predict_proba(input_data)

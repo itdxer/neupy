@@ -2,7 +2,7 @@ import math
 
 import numpy as np
 
-from neupy import algorithms
+from neupy import algorithms, init
 from neupy.algorithms.competitive.sofm import (neuron_neighbours, dot_product,
                                                neg_euclid_distance,
                                                cosine_similarity)
@@ -176,6 +176,7 @@ class SOFMTestCase(BaseTestCase):
             transform='cos',
             learning_radius=1,
             features_grid=(3, 1),
+            weight=init.Normal(mean=0, std=1),
             verbose=False
         )
 
