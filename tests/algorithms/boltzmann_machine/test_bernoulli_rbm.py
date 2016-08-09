@@ -27,7 +27,7 @@ class BernoulliRBMTestCase(BaseTestCase):
     def test_simple_bernoulli_rbm(self):
         data = self.data
 
-        rbm = algorithms.RBM(n_hidden=1, n_visible=4, verbose=True, step=0.1)
+        rbm = algorithms.RBM(n_hidden=1, n_visible=4, step=0.1)
         rbm.train(data, epochs=500)
 
         output = rbm.transform(data)
