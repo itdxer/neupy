@@ -1,6 +1,6 @@
 import numpy as np
 
-from neupy import algorithms
+from neupy import algorithms, init
 from neupy.utils import NotTrainedException
 
 from base import BaseTestCase
@@ -27,7 +27,7 @@ class OjaTestCase(BaseTestCase):
         ojanet = algorithms.Oja(
             minimized_data_size=1,
             step=0.01,
-            weight=np.ones((2, 1)) * 0.1,
+            weight=init.Constant(0.1),
             verbose=False
         )
 

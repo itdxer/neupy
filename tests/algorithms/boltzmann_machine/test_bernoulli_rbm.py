@@ -38,12 +38,12 @@ class BernoulliRBMTestCase(BaseTestCase):
 
         typical_class1_sample = output[0]
         incomplete_class1_sample = output[2]
-        # Check that probability for a typical case is
+        # Check that probability of a typical case is
         # closer to 0 (because 0 is a class defined by RBM)
+        # than for the incomplete case.
         self.assertLess(typical_class1_sample, incomplete_class1_sample)
 
         typical_class2_sample = output[4]
         incomplete_class2_sample = output[5]
-        # Check that probability for a typical case is
-        # closer to 1 (because 1 is a class defined by RBM)
+        # Same as before but for the class 1.
         self.assertGreater(typical_class2_sample, incomplete_class2_sample)
