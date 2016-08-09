@@ -1,8 +1,10 @@
 import numpy as np
 
 from neupy.utils import format_data
-from neupy.core.properties import IntProperty, ArrayProperty
+from neupy.core.properties import IntProperty, ParameterProperty, ArrayProperty
+from neupy.core.init import Initializer, Normal, Constant
 from neupy.network import BaseNetwork, UnsupervisedLearningMixin
+from neupy.network.utils import step_function
 
 
 __all__ = ('BaseStepAssociative',)
@@ -18,10 +20,10 @@ class BaseAssociative(UnsupervisedLearningMixin, BaseNetwork):
         Number of input units.
     n_outputs : int
         Number of output units.
-    weight : array-like
-        Neural network weights. ``None`` mean that network weight would
-        be generated randomly. Value defined manualy should have
-        shape ``(n_inputs, n_outputs)``. Defaults to ``None``.
+    weight : array-like, Initializer
+        Neural network weights.
+        Value defined manualy should have shape ``(n_inputs, n_outputs)``.
+        Defaults to :class:`Normal() <neupy.core.init.Normal>`.
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
@@ -39,7 +41,7 @@ class BaseAssociative(UnsupervisedLearningMixin, BaseNetwork):
 
     n_inputs = IntProperty(minval=1, required=True)
     n_outputs = IntProperty(minval=1, required=True)
-    weight = ArrayProperty()
+    weight = ParameterProperty(default=Normal())
 
     def __init__(self, **options):
         super(BaseAssociative, self).__init__(**options)
@@ -48,8 +50,8 @@ class BaseAssociative(UnsupervisedLearningMixin, BaseNetwork):
     def init_layers(self):
         valid_weight_shape = (self.n_inputs, self.n_outputs)
 
-        if self.weight is None:
-            self.weight = np.random.randn(*valid_weight_shape)
+        if isinstance(self.weight, Initializer):
+            self.weight = self.weight.sample(valid_weight_shape)
 
         if self.weight.shape != valid_weight_shape:
             raise ValueError("Weight matrix has invalid shape. Got {}, "
@@ -75,11 +77,15 @@ class BaseStepAssociative(BaseAssociative):
     n_unconditioned : int
         Number of unconditioned units in neraul networks. All these
         units wouldn't update during the training procedure.
-        Unconditioned should be the first features in dataset.
-    {BaseAssociative.weight}
-    bias : array-like
-        Neural network bias units. The same behaviour as for parameter
-        ``weight``. Defaults to ``None``.
+        Unconditioned should be the first feature in the dataset.
+    weight : array-like
+        Neural network weights.
+        Value defined manualy should have shape ``(n_inputs, n_outputs)``.
+        Defaults to ``None`` which means that all unconditional
+        weights will be equal to ``1``. Other weights equal to ``0``.
+    bias : array-like, Initializer
+        Neural network bias units.
+        Defaults to :class:`Constant(-0.5) <neupy.core.init.Constant>`.
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
@@ -93,10 +99,11 @@ class BaseStepAssociative(BaseAssociative):
     {BaseAssociative.train}
     {BaseSkeleton.fit}
     """
-
     n_inputs = IntProperty(minval=2, required=True)
     n_unconditioned = IntProperty(minval=1, required=True)
-    bias = ArrayProperty()
+
+    weight = ArrayProperty()
+    bias = ParameterProperty(default=Constant(-0.5))
 
     def init_layers(self):
         if self.n_inputs <= self.n_unconditioned:
@@ -116,8 +123,8 @@ class BaseStepAssociative(BaseAssociative):
             self.weight = np.zeros(valid_weight_shape)
             self.weight[:self.n_unconditioned, :] = 1
 
-        if self.bias is None:
-            self.bias = -0.5 * np.ones(valid_bias_shape)
+        if isinstance(self.bias, Initializer):
+            self.bias = self.bias.sample(valid_bias_shape)
 
         super(BaseStepAssociative, self).init_layers()
 
@@ -131,7 +138,7 @@ class BaseStepAssociative(BaseAssociative):
     def predict(self, input_data):
         input_data = format_data(input_data, is_feature1d=False)
         raw_output = input_data.dot(self.weight) + self.bias
-        return np.where(raw_output > 0, 1, 0)
+        return step_function(raw_output)
 
     def train(self, input_train, *args, **kwargs):
         input_train = format_data(input_train, is_feature1d=False)

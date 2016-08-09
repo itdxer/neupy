@@ -3,7 +3,7 @@ from random import randint
 from numpy import zeros, sign
 
 from neupy.utils import format_data
-from neupy.network.utils import step
+from neupy.network.utils import step_function
 from .utils import bin2sign, hopfield_energy
 from .base import DiscreteMemory
 
@@ -90,7 +90,7 @@ class DiscreteBAM(DiscreteMemory):
     """
 
     def format_predict(self, predicted_result):
-        return step(predicted_result).astype(int)
+        return step_function(predicted_result).astype(int)
 
     def predict_input(self, output_data, n_times=None):
         output_data = format_data(output_data, is_feature1d=False)

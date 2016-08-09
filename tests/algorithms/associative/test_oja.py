@@ -27,7 +27,7 @@ class OjaTestCase(BaseTestCase):
         ojanet = algorithms.Oja(
             minimized_data_size=1,
             step=0.01,
-            weights=np.ones((2, 1)) * 0.1,
+            weight=np.ones((2, 1)) * 0.1,
             verbose=False
         )
 

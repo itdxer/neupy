@@ -34,8 +34,8 @@ class CMAC(SupervisedLearningMixin, BaseNetwork):
 
     Attributes
     ----------
-    weights : dict
-        Neural network weights that contain memorized patterns.
+    weight : dict
+        Neural network weight that contains memorized patterns.
 
     Methods
     -------
@@ -72,7 +72,7 @@ class CMAC(SupervisedLearningMixin, BaseNetwork):
     associative_unit_size = IntProperty(default=2, minval=2)
 
     def __init__(self, **options):
-        self.weights = {}
+        self.weight = {}
         super(CMAC, self).__init__(**options)
 
     def predict(self, input_data):
@@ -90,7 +90,7 @@ class CMAC(SupervisedLearningMixin, BaseNetwork):
 
     def get_result_by_coords(self, coords):
         return sum(
-            self.weights.setdefault(coord, 0) for coord in coords
+            self.weight.setdefault(coord, 0) for coord in coords
         ) / self.associative_unit_size
 
     def get_memory_coords(self, quantized_value):
@@ -106,7 +106,7 @@ class CMAC(SupervisedLearningMixin, BaseNetwork):
     def train_epoch(self, input_train, target_train):
         get_memory_coords = self.get_memory_coords
         get_result_by_coords = self.get_result_by_coords
-        weights = self.weights
+        weight = self.weight
         step = self.step
 
         quantized_input = self.quantize(input_train)
@@ -118,7 +118,7 @@ class CMAC(SupervisedLearningMixin, BaseNetwork):
 
             error = target_sample - predicted
             for coord in coords:
-                weights[coord] += step * error
+                weight[coord] += step * error
 
             errors += abs(error)
         return errors / input_train.shape[0]

@@ -1,8 +1,8 @@
 import numpy as np
 
 
-__all__ = ('iter_until_converge', 'shuffle', 'normalize_error', 'step',
-           'StopNetworkTraining')
+__all__ = ('iter_until_converge', 'shuffle', 'normalize_error',
+           'step_function', 'StopNetworkTraining')
 
 
 class StopNetworkTraining(Exception):
@@ -101,7 +101,7 @@ def normalize_error(output):
         return np.sum(np.abs(output))
 
 
-def step(input_value):
+def step_function(input_value):
     """
     Step function.
     """
