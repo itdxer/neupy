@@ -21,7 +21,7 @@ rbm.train(data, epochs=10)
 weight = rbm.weight.get_value()
 plt.figure(figsize=(12, 12))
 
-for i, row in enumerate(weight.T[:100, :], start=1):
+for i, row in enumerate(weight.T, start=1):
     plt.subplot(10, 10, i)
     plt.imshow(row.reshape((28, 28)), cmap=plt.cm.binary)
     plt.xticks([], [])

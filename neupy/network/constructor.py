@@ -2,6 +2,7 @@ import abc
 import time
 import types
 
+import six
 import theano
 import theano.sparse
 import theano.tensor as T
@@ -172,7 +173,7 @@ class ErrorFunctionProperty(ChoiceProperty):
                                                           founded_value)
 
 
-class BaseAlgorithm(abc.ABC):
+class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
     """
     Base class for algorithms implemeted in Theano.
 
