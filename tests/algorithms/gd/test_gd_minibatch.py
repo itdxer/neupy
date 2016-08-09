@@ -62,7 +62,7 @@ class MinibatchGDTestCase(BaseTestCase):
         actual_error = average_batch_errors([1, 1, 0.5], 250, 100)
         self.assertAlmostEqual(expected_error, actual_error)
 
-        expected_error = 0.8  # or 270 / 300
+        expected_error = 0.8  # or 240 / 300
         actual_error = average_batch_errors([1, 1, 0.4], 300, 100)
         self.assertAlmostEqual(expected_error, actual_error)
 

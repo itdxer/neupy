@@ -312,7 +312,7 @@ def average_batch_errors(errors, n_samples, batch_size):
     n_samples_in_final_batch = n_samples % batch_size
 
     if n_samples_in_final_batch == 0:
-        return np.mean(batch_size * np.array(errors))
+        return batch_size * sum(errors) / n_samples
 
     all_errors_without_last = errors[:-1]
     last_error = errors[-1]
