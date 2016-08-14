@@ -44,7 +44,7 @@ As you can see this operation is similar to Python's slicings. Basically this op
     # not work in the NeuPy
     encoder = autoencoder_layers[0:2]
 
-Since we can part of the network that do an encoding procedure we can attach pretrained part to the other network that will manage to do classification.
+Since we have a part of the network that do an encoding procedure we can attach pretrained part to the other network that will manage to do classification.
 
 .. code-block:: python
 

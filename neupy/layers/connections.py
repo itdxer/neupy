@@ -66,6 +66,19 @@ class LayerConnection(ChainConnection):
         self.left = left.connection or left
         self.right = right.connection or right
 
+        input_shape = self.right.input_shape
+        output_shape = self.left.output_shape
+
+        if input_shape and output_shape and output_shape != input_shape:
+            raise NetworkConnectionError(
+                "Cannot connect {} to the {}. Output shape from one "
+                "layer is equal to {} and Input shape to the next "
+                "one is equal to {}".format(
+                    self.left, self.right,
+                    output_shape, input_shape,
+                )
+            )
+
         self.left.connection = self
         self.right.connection = self
 

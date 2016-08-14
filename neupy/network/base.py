@@ -323,7 +323,7 @@ class BaseNetwork(BaseSkeleton):
         Parameters
         ----------
         input_train : array-like
-        target_train : array-like or Npne
+        target_train : array-like or None
         input_test : array-like or None
         target_test : array-like or None
         epochs : int

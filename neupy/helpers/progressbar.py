@@ -52,19 +52,24 @@ class Progressbar(collections.Iterable):
 
     Parameters
     ----------
-    desc : str
+    iterable : list, tuple
+    update_freq : float
+        Says how often to update progressbar (is seconds).
+        Useful in case if iterations are very fast.
+        Defaults to ``0.1``.
+    description : str
         Can contain a short string, describing the progress,
         that is added in the beginning of the line.
-    total : int
-        Can give the number of expected iterations. If not given,
-        len(iterable) is used if it is defined.
     file : object
         Can be a file-like object to output the progress message to.
     """
-    def __init__(self, iterable, description='', file=sys.stderr):
+    def __init__(self, iterable, update_freq=0.1, description='',
+                 file=sys.stderr):
+
         self.iterable = iterable
         self.file = file
         self.description = description
+        self.update_freq = update_freq
 
         self.total = len(iterable)
         self.last_printed_len = 0
@@ -127,17 +132,23 @@ class Progressbar(collections.Iterable):
 
     def __iter__(self):
         start_time = time.time()
+        update_freq = self.update_freq
 
         self.last_printed_len = 0
         self.update_status(n_finished=0, elapsed=0)
+
+        last_update_time = start_time
 
         try:
             for i, element in enumerate(self.iterable, start=1):
                 yield element
 
                 current_time = time.time()
-                time_delta = current_time - start_time
-                self.update_status(n_finished=i, elapsed=time_delta)
+
+                if current_time - last_update_time > update_freq:
+                    last_update_time = current_time
+                    time_delta = current_time - start_time
+                    self.update_status(n_finished=i, elapsed=time_delta)
 
         finally:
             self.clean()
