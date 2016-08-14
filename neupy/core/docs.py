@@ -167,7 +167,7 @@ def parse_variables_from_docs(instances):
     # includes class/function name which will be useless when
     # we inerit documentation for the new object.
     doc_sections = ['Warns', 'Returns', 'Yields', 'Raises', 'See Also',
-                    'Parameters', 'Attributes', 'Methods']
+                    'Parameters', 'Attributes', 'Methods', 'Notes']
 
     if not instances:
         return variables

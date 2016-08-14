@@ -215,7 +215,18 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
             )
         )
 
-    def train_epoch(self, input_train, target_train):
+    def train_epoch(self, input_train, target_train=None):
+        """
+        Train one epoch.
+
+        Parameters
+        ----------
+        input_train : array-like (n_samples, n_features)
+
+        Returns
+        -------
+        float
+        """
         errors = self.apply_batches(
             function=self.methods.train_epoch,
             input_data=input_train,
@@ -234,7 +245,7 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
 
         Parameters
         ----------
-        input_data : array-like
+        input_data : array-like (n_samples, n_features)
 
         Returns
         -------
@@ -255,6 +266,9 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
         return np.concatenate(outputs, axis=0)
 
     def predict(self, input_data):
+        """
+        Alias to ``transform`` method.
+        """
         return self.transform(input_data)
 
     def prediction_error(self, input_data, target_data=None):
