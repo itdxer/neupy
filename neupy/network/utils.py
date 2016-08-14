@@ -70,8 +70,8 @@ def shuffle(*arrays):
 
     for array in arrays_without_none:
         if n_samples != array.shape[0]:
-            raise ValueError("All matrices should have the same "
-                             "number of rows")
+            raise ValueError("Cannot shuffle matrices. All matrices should "
+                             "have the same number of rows")
 
     indices = np.arange(n_samples)
     np.random.shuffle(indices)
@@ -79,6 +79,9 @@ def shuffle(*arrays):
     arrays = list(arrays)
     for i, array in enumerate(arrays):
         arrays[i] = array[indices] if array is not None else None
+
+    if len(arrays) == 1:
+        return arrays[0]
 
     return arrays
 
@@ -98,7 +101,7 @@ def normalize_error(output):
         Return sum of all absolute values.
     """
     if output is not None:
-        return np.sum(np.abs(output))
+        return np.sum(output)
 
 
 def step_function(input_value):

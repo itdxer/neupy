@@ -86,7 +86,8 @@ Memory based Neural Networks
 Boltzmann Machine
 ~~~~~~~~~~~~~~~~~
 
-* `Feature Learning from the MNIST Images, Restricted Boltzmann Machine (RBM) <examples/boltzmann_machine/bernoulli_rbm.py>`_
+* `Feature Learning from the MNIST Images, Restricted Boltzmann Machine (RBM) <examples/boltzmann_machine/rbm_mnist.py>`_
+* `Gibbs sampling using face images, Restricted Boltzmann Machine (RBM) <examples/boltzmann_machine/rbm_faces_sampling.py>`_
 
 Dependencies
 ------------

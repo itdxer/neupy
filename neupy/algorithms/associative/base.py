@@ -61,7 +61,7 @@ class BaseAssociative(UnsupervisedLearningMixin, BaseNetwork):
         self.weight = self.weight.astype(float)
 
     def train(self, input_train, epochs=100):
-        return super(BaseAssociative, self).train(input_train, epochs,
+        return super(BaseAssociative, self).train(input_train, epochs=epochs,
                                                   epsilon=None)
 
 

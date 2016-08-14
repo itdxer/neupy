@@ -231,6 +231,9 @@ def format_error(error):
     if isinstance(error, collections.Iterable):
         error = np.atleast_1d(error).item(0)
 
+    if abs(error) > 100:
+        return "{:.0f}".format(error)
+
     return '{:.5f}'.format(error)
 
 

@@ -27,23 +27,35 @@ class BernoulliRBMTestCase(BaseTestCase):
     def test_simple_bernoulli_rbm(self):
         data = self.data
 
-        rbm = algorithms.RBM(n_hidden=1, n_visible=4, step=0.1)
+        rbm = algorithms.RBM(n_hidden=1, n_visible=4, step=0.1, batch_size=10)
         rbm.train(data, epochs=500)
 
         output = rbm.transform(data)
         np.testing.assert_array_equal(
             output.round(),
-            np.array([[0, 0, 0, 0, 1, 1, 1, 1, 1, 1]]).T
+            np.array([[1, 1, 1, 1, 0, 0, 0, 0, 0, 0]]).T
         )
 
         typical_class1_sample = output[0]
         incomplete_class1_sample = output[2]
         # Check that probability of a typical case is
-        # closer to 0 (because 0 is a class defined by RBM)
+        # closer to 1 (because 1 is a class defined by RBM)
         # than for the incomplete case.
-        self.assertLess(typical_class1_sample, incomplete_class1_sample)
+        self.assertGreater(typical_class1_sample, incomplete_class1_sample)
 
         typical_class2_sample = output[4]
         incomplete_class2_sample = output[5]
-        # Same as before but for the class 1.
-        self.assertGreater(typical_class2_sample, incomplete_class2_sample)
+        # Same as before but for class 0.
+        self.assertLess(typical_class2_sample, incomplete_class2_sample)
+
+    def test_rbm_batch_size(self):
+        data = self.data
+        batch_size = 7
+
+        self.assertNotEqual(len(data) % batch_size, 0)
+
+        rbm = algorithms.RBM(n_hidden=1, n_visible=4, step=0.1,
+                             batch_size=batch_size)
+        # Check if it's possilbe to train RBM in case if
+        # we cannot divide dataset into full mini-batches
+        rbm.train(data, epochs=2)

@@ -22,7 +22,7 @@ class LayersBasicsTestCase(BaseTestCase):
             GradientDescent(layers.Sigmoid(10) > layers.Sigmoid(1))
 
         with self.assertRaises(NetworkConnectionError):
-            # Cannot use input layer inside the netowkr
+            # Cannot use input layer inside the network
             GradientDescent([
                 layers.Input(1),
                 layers.Sigmoid(10),
