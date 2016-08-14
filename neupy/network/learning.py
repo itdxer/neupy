@@ -79,6 +79,12 @@ class LazyLearningMixin(object):
     """
     Mixin for lazy learning Neural Network algorithms.
 
+    Notes
+    -----
+    Network uses lazy learning which mean that network doesn't involve
+    iterative training procedure. It just stores parameters
+    and use them to make a predictions.
+
     Methods
     -------
     train(input_train, target_train, copy=True)

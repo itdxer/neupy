@@ -25,10 +25,11 @@ Installation
 Links
 -----
 
+* `Quick start <http://neupy.com/docs/quickstart.html#mnist-classification>`_
 * `Documentation <http://neupy.com>`_
-* `Issues <https://github.com/itdxer/neupy/issues>`_
 * `Articles <http://neupy.com/archive.html>`_
-* `Available algorithms <http://neupy.com/docs/cheatsheet.html#algorithms>`_
+* `Cheat sheet <http://neupy.com/docs/cheatsheet.html#algorithms>`_
+* `Open Issues <https://github.com/itdxer/neupy/issues>`_
 
 Articles
 --------

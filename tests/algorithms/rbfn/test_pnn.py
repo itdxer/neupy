@@ -120,3 +120,20 @@ class PNNTestCase(BaseTestCase):
         pnnet.train(data, target)
         self.assertInvalidVectorPred(pnnet, data.ravel(), target.ravel(),
                                      decimal=2)
+
+    def test_pnn_mini_batches(self):
+        dataset = datasets.load_digits()
+        n_classes = len(np.unique(dataset.target))
+        x_train, x_test, y_train, y_test = train_test_split(
+            dataset.data, dataset.target, train_size=0.7
+        )
+
+        pnnet = algorithms.PNN(verbose=False, batch_size=100)
+        pnnet.train(x_train, y_train)
+
+        y_predicted = pnnet.predict(x_test)
+        self.assertEqual(y_predicted.shape, y_test.shape)
+
+        y_predicted = pnnet.predict_proba(x_test)
+        self.assertEqual(y_predicted.shape,
+                         (y_test.shape[0], n_classes))
