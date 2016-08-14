@@ -8,8 +8,10 @@ import theano
 import theano.tensor as T
 import numpy as np
 
+from neupy.core.config import Configurable
 from neupy.core.properties import Property, BoundedProperty
 from neupy.network import ConstructableNetwork
+from neupy.utils import as_tuple
 from . import addon_types
 
 
@@ -169,7 +171,7 @@ def iter_batches(n_samples, batch_size):
     n_samples : int
         Number of samples. Number should be greater than 0.
     batch_size : int
-        Batch size. Number should be greater than 0.
+        Mini-batch size. Number should be greater than 0.
 
     Yields
     ------
@@ -252,13 +254,13 @@ def apply_batches(function, arguments, batch_size, logger, description='',
         The arguemnts that will be provided to the function specified
         in the ``function`` argument.
     batch_size : int
-        Batch size.
+        Mini-batch size.
     logger : TerminalLogger instance
     description : str
         Short description that will be displayed near the progressbar
         in verbose mode. Defaults to ``''`` (empty string).
     show_progressbar : bool
-        ``True`` mean that function will show progressbar in the
+        ``True`` means that function will show progressbar in the
         terminal. Defaults to ``False``.
 
     Returns
@@ -305,13 +307,16 @@ def average_batch_errors(errors, n_samples, batch_size):
     n_samples : int
         Number of samples in the dataset.
     batch_size : int
-        Batch size.
+        Mini-batch size.
 
     Returns
     -------
     float
         Average error per sample.
     """
+    if batch_size is None:
+        return errors[0]
+
     n_samples_in_final_batch = n_samples % batch_size
 
     if n_samples_in_final_batch == 0:
@@ -328,16 +333,83 @@ def average_batch_errors(errors, n_samples, batch_size):
     return average_error
 
 
-class MinibatchGradientDescent(GradientDescent):
+class MinibatchTrainingMixin(Configurable):
+    """
+    Mixin that helps to train network using mini-batches.
+
+    Notes
+    -----
+    Works with ``BaseNetwork`` class.
+
+    Parameters
+    ----------
+    batch_size : int or {{None, -1, 'all', '*', 'full'}}
+        Set up min-batch size. If mini-batch size is equal
+        to one of the values from the list (like ``full``) then
+        it's just a batch that equal to number of samples.
+        Defaults to ``128``.
+    """
+    batch_size = BatchSizeProperty(default=128)
+
+    def apply_batches(self, function, input_data, arguments=(), description='',
+                      show_progressbar=None, show_error_output=False):
+        """
+        Apply function per each mini-batch.
+
+        Parameters
+        ----------
+        function : callable
+        input_data : array-like
+            First argument to the function that can be divided
+            into mini-batches.
+        arguments : tuple
+            Additional arguments to the function.
+        description : str
+            Some description for the progressbar. Defaults to ``''``.
+        show_progressbar : None or bool
+            ``True``/``False`` will show/hide progressbar. If value
+            is equal to ``None`` than progressbar will be visible in
+            case if network expects to see logging after each
+            training epoch.
+        show_error_output : bool
+            Assumes that outputs from the function errors.
+            ``True`` will show information in the progressbar.
+            Error will be related to the last epoch.
+
+        Returns
+        -------
+        list
+            List of outputs from the function. Each output is an
+            object that ``function`` returned.
+        """
+        arguments = as_tuple(input_data, arguments)
+
+        if cannot_divide_into_batches(input_data, self.batch_size):
+            return [function(*arguments)]
+
+        if show_progressbar is None:
+            show_progressbar = (self.training and
+                                self.training.show_epoch == 1)
+
+        return apply_batches(
+            function=function,
+            arguments=arguments,
+            batch_size=self.batch_size,
+
+            description=description,
+            logger=self.logs,
+            show_progressbar=show_progressbar,
+            show_error_output=show_error_output,
+        )
+
+
+class MinibatchGradientDescent(GradientDescent, MinibatchTrainingMixin):
     """
     Mini-batch Gradient Descent algorithm.
 
     Parameters
     ----------
-    batch_size : int or {{None, -1, 'all', '*', 'full'}}
-        Set up batch size for learning process. To set up batch size equal to
-        sample size value should be equal to one of the values listed above.
-        Defaults to ``128``.
+    {MinibatchTrainingMixin.Parameters}
     {GradientDescent.Parameters}
 
     Attributes
@@ -365,7 +437,6 @@ class MinibatchGradientDescent(GradientDescent):
     --------
     :network:`GradientDescent` : GradientDescent algorithm.
     """
-    batch_size = BatchSizeProperty(default=128)
 
     def train_epoch(self, input_train, target_train):
         """
@@ -383,20 +454,12 @@ class MinibatchGradientDescent(GradientDescent):
         float
             Training error.
         """
-        train_epoch = self.methods.train_epoch
-
-        if cannot_divide_into_batches(input_train, self.batch_size):
-            return train_epoch(input_train, target_train)
-
-        show_progressbar = (self.training and self.training.show_epoch == 1)
-        errors = apply_batches(
-            function=train_epoch,
-            arguments=(input_train, target_train),
-            batch_size=self.batch_size,
+        errors = self.apply_batches(
+            function=self.methods.train_epoch,
+            input_data=input_train,
+            arguments=as_tuple(target_train),
 
             description='Training batches',
-            logger=self.logs,
-            show_progressbar=show_progressbar,
             show_error_output=True,
         )
         return average_batch_errors(
@@ -423,20 +486,12 @@ class MinibatchGradientDescent(GradientDescent):
         input_data = self.format_input_data(input_data)
         target_data = self.format_target_data(target_data)
 
-        prediction_error = self.methods.prediction_error
-
-        if cannot_divide_into_batches(input_data, self.batch_size):
-            return prediction_error(input_data, target_data)
-
-        show_progressbar = (self.training and self.training.show_epoch == 1)
-        errors = apply_batches(
-            function=prediction_error,
-            arguments=(input_data, target_data),
-            batch_size=self.batch_size,
+        errors = self.apply_batches(
+            function=self.methods.prediction_error,
+            input_data=input_data,
+            arguments=as_tuple(target_data),
 
             description='Validation batches',
-            logger=self.logs,
-            show_progressbar=show_progressbar,
             show_error_output=True,
         )
         return average_batch_errors(
@@ -457,21 +512,12 @@ class MinibatchGradientDescent(GradientDescent):
         -------
         array-like
         """
-        input_data = self.format_input_data(input_data)
-        predict = self.methods.predict
-
-        if cannot_divide_into_batches(input_data, self.batch_size):
-            return predict(input_data)
-
-        outputs = apply_batches(
-            function=predict,
-            arguments=(input_data,),
-            batch_size=self.batch_size,
+        outputs = self.apply_batches(
+            function=self.methods.predict,
+            input_data=self.format_input_data(input_data),
 
             description='Prediction batches',
-            logger=self.logs,
             show_progressbar=True,
             show_error_output=False,
         )
-
         return np.concatenate(outputs, axis=0)

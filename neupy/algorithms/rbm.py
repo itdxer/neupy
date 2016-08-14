@@ -7,9 +7,8 @@ from neupy.core.properties import IntProperty, ParameterProperty
 from neupy.network.constructor import BaseAlgorithm
 from neupy.network.base import BaseNetwork
 from neupy.network.learning import UnsupervisedLearningMixin
-from neupy.algorithms.gd.base import (BatchSizeProperty, average_batch_errors,
-                                      cannot_divide_into_batches,
-                                      apply_batches)
+from neupy.algorithms.gd.base import (MinibatchTrainingMixin,
+                                      average_batch_errors)
 from neupy.layers.base import create_shared_parameter
 from neupy.utils import theano_random_stream, asint, asfloat, format_data
 from neupy import init
@@ -18,7 +17,8 @@ from neupy import init
 __all__ = ('RBM',)
 
 
-class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork):
+class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
+          MinibatchTrainingMixin):
     """
     Boolean/Bernoulli Restricted Boltzmann Machine (RBM).
     Algorithm assumes that inputs are either binary
@@ -30,10 +30,7 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork):
         Number of visible units.
     n_hidden : int
         Number of hidden units.
-    batch_size : int or {{None, -1, 'all', '*', 'full'}}
-        Set up batch size for learning process. To set up batch size equal to
-        sample size value should be equal to one of the values listed above.
-        Defaults to ``128``.
+    {MinibatchTrainingMixin.batch_size}
     n_gibbs_steps : int
         Number of Gibbs samples that algorithm need to perfom during
         the training procedure. Defaults to ``1``.
@@ -56,6 +53,10 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork):
     {UnsupervisedLearningMixin.train}
     {BaseSkeleton.fit}
     transform(input_data)
+        Propagates input data through the network and return
+        output from the hidden units.
+    predict(input_data)
+        Alias to ``transform`` method.
     gibbs_sampling(visible_input, n_iter=1)
         Makes Gibbs sampling n times using visible input.
 
@@ -68,12 +69,11 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork):
     n_visible = IntProperty(required=True, minval=1)
     n_hidden = IntProperty(required=True, minval=1)
 
+    n_gibbs_steps = IntProperty(default=1, minval=1)
+
     weight = ParameterProperty(default=init.XavierNormal())
     hidden_bias = ParameterProperty(default=init.Constant(value=0))
     visible_bias = ParameterProperty(default=init.Constant(value=0))
-
-    n_gibbs_steps = IntProperty(default=1, minval=1)
-    batch_size = BatchSizeProperty(default=10)
 
     def __init__(self, n_hidden, **options):
         self.theano_random = theano_random_stream()
@@ -216,24 +216,15 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork):
         )
 
     def train_epoch(self, input_train, target_train):
-        train_epoch = self.methods.train_epoch
-        n_samples = len(input_train)
-
-        if cannot_divide_into_batches(input_train, self.batch_size):
-            return train_epoch(input_train)
-
-        show_progressbar = (self.training and self.training.show_epoch == 1)
-        errors = apply_batches(
-            function=train_epoch,
-            arguments=(input_train,),
-            batch_size=self.batch_size,
+        errors = self.apply_batches(
+            function=self.methods.train_epoch,
+            input_data=input_train,
 
             description='Training batches',
-            logger=self.logs,
-            show_progressbar=show_progressbar,
             show_error_output=True,
         )
 
+        n_samples = len(input_train)
         return average_batch_errors(errors, n_samples, self.batch_size)
 
     def transform(self, input_data):
@@ -251,18 +242,12 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork):
         """
         is_input_feature1d = (self.n_visible == 1)
         input_data = format_data(input_data, is_input_feature1d)
-        hidden_from_visible = self.methods.hidden_from_visible
 
-        if cannot_divide_into_batches(input_data, self.batch_size):
-            return hidden_from_visible(input_data)
-
-        outputs = apply_batches(
-            function=hidden_from_visible,
-            arguments=(input_data,),
-            batch_size=self.batch_size,
+        outputs = self.apply_batches(
+            function=self.methods.hidden_from_visible,
+            input_data=input_data,
 
             description='Transformation batches',
-            logger=self.logs,
             show_progressbar=True,
             show_error_output=False,
         )
@@ -289,20 +274,11 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork):
         is_input_feature1d = (self.n_visible == 1)
         input_data = format_data(input_data, is_input_feature1d)
 
-        prediction_error = self.methods.prediction_error
-
-        if cannot_divide_into_batches(input_data, self.batch_size):
-            return prediction_error(input_data)
-
-        show_progressbar = (self.training and self.training.show_epoch == 1)
-        errors = apply_batches(
-            function=prediction_error,
-            arguments=(input_data,),
-            batch_size=self.batch_size,
+        errors = self.apply_batches(
+            function=self.methods.prediction_error,
+            input_data=input_data,
 
             description='Validation batches',
-            logger=self.logs,
-            show_progressbar=show_progressbar,
             show_error_output=True,
         )
         return average_batch_errors(

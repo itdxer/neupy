@@ -12,13 +12,18 @@ __all__ = ('GRNN',)
 
 class GRNN(LazyLearningMixin, BaseNetwork):
     """
-    Generalized Regression Neural Network.
+    Generalized Regression Neural Network (GRNN). Network applies
+    only to the regression problems.
 
     Parameters
     ----------
     std : float
         standard deviation for PDF function, default to 0.1.
     {Verbose.verbose}
+
+    Notes
+    -----
+    {LazyLearningMixin.Notes}
 
     Methods
     -------
@@ -49,6 +54,23 @@ class GRNN(LazyLearningMixin, BaseNetwork):
     std = BoundedProperty(default=0.1, minval=0)
 
     def train(self, input_train, target_train, copy=True):
+        """
+        Trains network. PNN doesn't actually train, it just stores
+        input data and use it for prediction.
+
+        Parameters
+        ----------
+        input_train : array-like (n_samples, n_features)
+        target_train : array-like (n_samples,)
+        copy : bool
+            If value equal to ``True`` than input matrices will
+            be copied. Defaults to ``True``.
+
+        Raises
+        ------
+        ValueError
+            In case if something is wrong with input data.
+        """
         input_train = format_data(input_train, copy=copy)
         target_train = format_data(target_train, copy=copy)
 
@@ -58,6 +80,22 @@ class GRNN(LazyLearningMixin, BaseNetwork):
         LazyLearningMixin.train(self, input_train, target_train)
 
     def predict(self, input_data):
+        """
+        Make a prediction from the input data.
+
+        Parameters
+        ----------
+        input_data : array-like (n_samples, n_features)
+
+        Raises
+        ------
+        ValueError
+            In case if something is wrong with input data.
+
+        Returns
+        -------
+        array-like (n_samples,)
+        """
         super(GRNN, self).predict(input_data)
 
         input_data = format_data(input_data)
@@ -69,6 +107,5 @@ class GRNN(LazyLearningMixin, BaseNetwork):
             raise ValueError("Input data must contains {0} features, got "
                              "{1}".format(train_data_size, input_data_size))
 
-        ratios = pdf_between_data(self.input_train, input_data,
-                                  self.std)
+        ratios = pdf_between_data(self.input_train, input_data, self.std)
         return (dot(self.target_train.T, ratios) / ratios.sum(axis=0)).T
