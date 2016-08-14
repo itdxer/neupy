@@ -1,3 +1,4 @@
+from neupy.core.docs import SharedDocs
 from neupy.utils import format_data
 
 
@@ -75,7 +76,7 @@ class UnsupervisedLearningMixin(object):
         )
 
 
-class LazyLearningMixin(object):
+class LazyLearningMixin(SharedDocs):
     """
     Mixin for lazy learning Neural Network algorithms.
 

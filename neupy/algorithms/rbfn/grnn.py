@@ -10,7 +10,7 @@ from .utils import pdf_between_data
 __all__ = ('GRNN',)
 
 
-class GRNN(LazyLearningMixin, BaseNetwork):
+class GRNN(BaseNetwork, LazyLearningMixin):
     """
     Generalized Regression Neural Network (GRNN). Network applies
     only to the regression problems.

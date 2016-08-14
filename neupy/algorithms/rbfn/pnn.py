@@ -12,7 +12,7 @@ from .utils import pdf_between_data
 __all__ = ('PNN',)
 
 
-class PNN(LazyLearningMixin, BaseNetwork, MinibatchTrainingMixin):
+class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
     """
     Probabilistic Neural Network (PNN). Network applies only to
     the classification problems.
