@@ -21,11 +21,6 @@ class GRNNTestCase(BaseTestCase):
                 np.array([[0], [0]]), np.array([[0]])
             )
 
-        with self.assertRaises(AttributeError):
-            # Wrong: can't use iterative learning process for this
-            # algorithm
-            algorithms.GRNN(verbose=False).train_epoch()
-
         with self.assertRaises(ValueError):
             # Wrong: invalid feature size for prediction data
             grnet = algorithms.GRNN(verbose=False)
