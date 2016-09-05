@@ -3,9 +3,13 @@ Old versions
 
 .. raw:: html
 
+    <h3>Version 0.4</h3>
+
+    <li>0.4.0 (October 2016) - <a href="/index.html">documentation</a></li>
+
     <h3>Version 0.3</h3>
 
-    <li>0.3.1 (September 2016) - <a href="/index.html">documentation</a></li>
+    <li>0.3.1 (September 2016) - <a href="/versions/0.3.1/index.html">documentation</a></li>
     <li>0.3.0 (June 2016) - <a href="/versions/0.3.0/index.html">documentation</a></li>
 
     <h3>Version 0.2</h3>
