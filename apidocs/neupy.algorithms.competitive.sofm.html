@@ -100,10 +100,10 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.competitive.sofm">
-<span id="neupy-algorithms-competitive-sofm-module"></span><h1>neupy.algorithms.competitive.sofm module</h1>
+<span id="neupy-algorithms-competitive-sofm-module"></span><h1>neupy.algorithms.competitive.sofm module<a class="headerlink" href="#module-neupy.algorithms.competitive.sofm" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.algorithms.competitive.sofm.SOFM">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.competitive.sofm.</span><span class="descname">SOFM</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.competitive.sofm.</span><span class="descname">SOFM</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.sofm.SOFM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.associative.kohonen.html#neupy.algorithms.associative.kohonen.Kohonen" title="neupy.algorithms.associative.kohonen.Kohonen"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.associative.kohonen.Kohonen</span></span></a></p>
 <p>Self-Organizing Feature Map.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -135,11 +135,11 @@ similarity. Defaults to <span class="docutils literal"><span class="pre">linear<
 <blockquote>
 <div><p>Number of output units.</p>
 </div></blockquote>
-<p><strong>weight</strong> : array-like</p>
+<p><strong>weight</strong> : array-like, Initializer</p>
 <blockquote>
-<div><p>Neural network weights. <span class="docutils literal"><span class="pre">None</span></span> mean that network weight would
-be generated randomly. Value defined manualy should have
-shape <span class="docutils literal"><span class="pre">(n_inputs,</span> <span class="pre">n_outputs)</span></span>. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+<div><p>Neural network weights.
+Value defined manualy should have shape <span class="docutils literal"><span class="pre">(n_inputs,</span> <span class="pre">n_outputs)</span></span>.
+Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.Normal" title="neupy.core.init.Normal"><span class="xref py py-class docutils literal"><span class="pre">Normal()</span></span></a>.</p>
 </div></blockquote>
 <p><strong>step</strong> : float</p>
 <blockquote>
@@ -204,37 +204,38 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.sofm.SOFM.features_grid">
-<span class="descname">features_grid</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">features_grid</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.sofm.SOFM.features_grid" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.competitive.sofm.SOFM.init_properties">
-<span class="descname">init_properties</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<span class="descname">init_properties</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.sofm.SOFM.init_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup default values before populate the options.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.sofm.SOFM.learning_radius">
-<span class="descname">learning_radius</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">learning_radius</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.sofm.SOFM.learning_radius" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.sofm.SOFM.options">
-<span class="descname">options</span><em class="property"> = {'transform': Option(class_name='SOFM', value=linear), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'weight': Option(class_name='BaseAssociative', value=None), 'n_outputs': Option(class_name='BaseAssociative', value=None), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'verbose': Option(class_name='Verbose', value=False), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'step': Option(class_name='BaseNetwork', value=0.1), 'learning_radius': Option(class_name='SOFM', value=0), 'n_inputs': Option(class_name='BaseAssociative', value=None), 'features_grid': Option(class_name='SOFM', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'transform': Option(class_name='SOFM', value=linear), 'n_inputs': Option(class_name='BaseAssociative', value=None), 'step': Option(class_name='BaseNetwork', value=0.1), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'features_grid': Option(class_name='SOFM', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'learning_radius': Option(class_name='SOFM', value=0), 'n_outputs': Option(class_name='BaseAssociative', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'weight': Option(class_name='BaseAssociative', value=Normal(mean=0, std=0.01))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.sofm.SOFM.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.competitive.sofm.SOFM.predict_raw">
-<span class="descname">predict_raw</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">predict_raw</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.sofm.SOFM.predict_raw" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.sofm.SOFM.transform">
-<span class="descname">transform</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">transform</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.sofm.SOFM.transform" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.competitive.sofm.SOFM.update_indexes">
-<span class="descname">update_indexes</span><span class="sig-paren">(</span><em>layer_output</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">update_indexes</span><span class="sig-paren">(</span><em>layer_output</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.sofm.SOFM.update_indexes" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -262,6 +263,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
     <ul>
         <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

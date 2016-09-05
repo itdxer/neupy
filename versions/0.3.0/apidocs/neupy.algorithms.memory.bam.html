@@ -1,0 +1,295 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="viewport" content="width=device-width">
+        <title>neupy.algorithms.memory.bam module &mdash; NeuPy</title>
+            <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../_static/plugins.js"></script>
+        <script src="../_static/main.js"></script>
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+<style media="screen" type="text/css">
+    #fork_me { display: none; }
+    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
+    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
+
+    .docutils { width: 100%; }
+    .docutils td { padding: 10px; }
+    .section { word-wrap:break-word; }
+    .descname { font-weight: bold; }
+    .highlight-python + .figure { margin-top: 20px; }
+    .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+    .dataframe td { padding: 5px; }
+
+    .math .gd { color: #000 !important; } /* Generic.Deleted */
+    .math .m { color: #000 !important; } /* Literal.Number */
+    .math .s { color: #000 !important; } /* Literal.String */
+    .math .mf { color: #000 !important; } /* Literal.Number.Float */
+    .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+    .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+    .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+    .math .sc { color: #000 !important; } /* Literal.String.Char */
+    .math .s2 { color: #000 !important; } /* Literal.String.Double */
+    .math .si { color: #000 !important; } /* Literal.String.Interpol */
+    .math .sx { color: #000 !important; } /* Literal.String.Other */
+    .math .s1 { color: #000 !important; } /* Literal.String.Single */
+    .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+    .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+</style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
+          </header>
+      <nav role="navigation">
+            <ul><li class="main-nav">
+                  <a href="../pages/home.html">Home</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../page1.html">Articles</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../pages/documentation.html">Documentation</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../pages/installation.html">Installation</a>
+                </li>
+              </ul>
+          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+    <div class="section" id="module-neupy.algorithms.memory.bam">
+<span id="neupy-algorithms-memory-bam-module"></span><h1>neupy.algorithms.memory.bam module<a class="headerlink" href="#module-neupy.algorithms.memory.bam" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="neupy.algorithms.memory.bam.DiscreteBAM">
+<em class="property">class </em><span class="descclassname">neupy.algorithms.memory.bam.</span><span class="descname">DiscreteBAM</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.bam.DiscreteBAM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neupy.algorithms.memory.base.html#neupy.algorithms.memory.base.DiscreteMemory" title="neupy.algorithms.memory.base.DiscreteMemory"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.memory.base.DiscreteMemory</span></span></a></p>
+<p>Discrete BAM Network with associations.
+Network associate every input with some target value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : {&#8216;sync&#8217;, &#8216;async&#8217;}</p>
+<blockquote>
+<div><p>Indentify pattern recovery mode. <span class="docutils literal"><span class="pre">sync</span></span> mode try recovery a pattern
+using the all input vector. <span class="docutils literal"><span class="pre">async</span></span> mode randomly chose some
+values from the input vector and repeat this procedure the number
+of times a given variable <span class="docutils literal"><span class="pre">n_times</span></span>. Defaults to <span class="docutils literal"><span class="pre">sync</span></span>.</p>
+</div></blockquote>
+<p><strong>n_times</strong> : int</p>
+<blockquote class="last">
+<div><p>Available only in <span class="docutils literal"><span class="pre">async</span></span> mode. Identify number of random trials.
+Defaults to <span class="docutils literal"><span class="pre">100</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>Input and output vectors should contain only binary values.</li>
+</ul>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span>
+<span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+<span class="gp">... </span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">one</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span>
+<span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+<span class="gp">... </span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zero</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">half_zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span>
+<span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zero_hint</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">one_hint</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">zero</span><span class="p">,</span> <span class="n">one</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hints</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">zero_hint</span><span class="p">,</span> <span class="n">one_hint</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bamnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">DiscreteBAM</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;sync&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bamnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">hints</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recovered_zero</span><span class="p">,</span> <span class="n">recovered_hint</span> <span class="o">=</span> <span class="n">bamnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">half_zero</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recovered_hint</span>
+<span class="go">matrix([[0, 1, 0, 0]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zero_hint</span>
+<span class="go">matrix([[0, 1, 0, 0]])</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>train(input_data, output_data)</td>
+<td>Train network and update network weights.</td>
+</tr>
+<tr class="row-even"><td>predict_output(input_data, n_times=None)</td>
+<td>Using input data recover output data. Returns two arguments. First is input data, second is output data.</td>
+</tr>
+<tr class="row-odd"><td>predict(input_data, n_times=None)</td>
+<td>The same as <span class="docutils literal"><span class="pre">predict_output</span></span>.</td>
+</tr>
+<tr class="row-even"><td>predict_input(output_data, n_times=None)</td>
+<td>Using output data recover input data. Returns two arguments. First is input data, second is output data.</td>
+</tr>
+<tr class="row-odd"><td>energy(input_data, output_data)</td>
+<td>Calculate Hopfiel Energy for the input and output data.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="neupy.algorithms.memory.bam.DiscreteBAM.energy">
+<span class="descname">energy</span><span class="sig-paren">(</span><em>input_data</em>, <em>output_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.bam.DiscreteBAM.energy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.memory.bam.DiscreteBAM.format_predict">
+<span class="descname">format_predict</span><span class="sig-paren">(</span><em>predicted_result</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.bam.DiscreteBAM.format_predict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.memory.bam.DiscreteBAM.options">
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'mode': Option(class_name='DiscreteMemory', value=sync), 'n_times': Option(class_name='DiscreteMemory', value=100)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.bam.DiscreteBAM.options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.memory.bam.DiscreteBAM.predict">
+<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em>, <em>n_times=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.bam.DiscreteBAM.predict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.memory.bam.DiscreteBAM.predict_input">
+<span class="descname">predict_input</span><span class="sig-paren">(</span><em>output_data</em>, <em>n_times=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.bam.DiscreteBAM.predict_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.memory.bam.DiscreteBAM.predict_output">
+<span class="descname">predict_output</span><span class="sig-paren">(</span><em>input_data</em>, <em>n_times=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.bam.DiscreteBAM.predict_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.memory.bam.DiscreteBAM.train">
+<span class="descname">train</span><span class="sig-paren">(</span><em>input_data</em>, <em>output_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.bam.DiscreteBAM.train" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+    <div class="postmeta">
+        
+        
+        
+        </div></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Posts</h1>
+    <ul><li>
+            <a href="../2015/09/21/password_recovery.html">Password recovery</a>
+        </li><li>
+            <a href="../2015/09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
+        </li><li>
+            <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
+        </li><li>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
+        </li></ul>
+</div>
+</section><section><div class="widget">
+    <h1>Cheat sheet</h1>
+    <ul>
+        <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
+        <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
+    </ul>
+</div></section><section><div class="widget">
+    <h1>Installation</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neupy</pre>
+        </div>
+    </div>
+    <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
+</div></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+    <a id="fork_me" href="http://github.com/itdxer/neupy">
+        <img alt="Fork me" src="../_static/img/github-fork-green.png" />
+    </a></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

@@ -100,10 +100,10 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.associative.base">
-<span id="neupy-algorithms-associative-base-module"></span><h1>neupy.algorithms.associative.base module</h1>
+<span id="neupy-algorithms-associative-base-module"></span><h1>neupy.algorithms.associative.base module<a class="headerlink" href="#module-neupy.algorithms.associative.base" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.algorithms.associative.base.BaseStepAssociative">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.associative.base.</span><span class="descname">BaseStepAssociative</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.associative.base.</span><span class="descname">BaseStepAssociative</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.base.BaseStepAssociative" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.associative.base.BaseAssociative</span></span></p>
 <p>Base class for associative algorithms which have 2 layers and first
 one is has step function as activation.</p>
@@ -123,18 +123,19 @@ one is has step function as activation.</p>
 <blockquote>
 <div><p>Number of unconditioned units in neraul networks. All these
 units wouldn&#8217;t update during the training procedure.
-Unconditioned should be the first features in dataset.</p>
+Unconditioned should be the first feature in the dataset.</p>
 </div></blockquote>
 <p><strong>weight</strong> : array-like</p>
 <blockquote>
-<div><p>Neural network weights. <span class="docutils literal"><span class="pre">None</span></span> mean that network weight would
-be generated randomly. Value defined manualy should have
-shape <span class="docutils literal"><span class="pre">(n_inputs,</span> <span class="pre">n_outputs)</span></span>. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+<div><p>Neural network weights.
+Value defined manualy should have shape <span class="docutils literal"><span class="pre">(n_inputs,</span> <span class="pre">n_outputs)</span></span>.
+Defaults to <span class="docutils literal"><span class="pre">None</span></span> which means that all unconditional
+weights will be equal to <span class="docutils literal"><span class="pre">1</span></span>. Other weights equal to <span class="docutils literal"><span class="pre">0</span></span>.</p>
 </div></blockquote>
-<p><strong>bias</strong> : array-like</p>
+<p><strong>bias</strong> : array-like, Initializer</p>
 <blockquote>
-<div><p>Neural network bias units. The same behaviour as for parameter
-<span class="docutils literal"><span class="pre">weight</span></span>. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+<div><p>Neural network bias units.
+Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.Constant" title="neupy.core.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(-0.5)</span></span></a>.</p>
 </div></blockquote>
 <p><strong>step</strong> : float</p>
 <blockquote>
@@ -199,42 +200,79 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.associative.base.BaseStepAssociative.bias">
-<span class="descname">bias</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">bias</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.base.BaseStepAssociative.bias" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.associative.base.BaseStepAssociative.init_layers">
-<span class="descname">init_layers</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">init_layers</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.base.BaseStepAssociative.init_layers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.associative.base.BaseStepAssociative.n_inputs">
-<span class="descname">n_inputs</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">n_inputs</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.base.BaseStepAssociative.n_inputs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.associative.base.BaseStepAssociative.n_unconditioned">
-<span class="descname">n_unconditioned</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">n_unconditioned</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.base.BaseStepAssociative.n_unconditioned" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.associative.base.BaseStepAssociative.options">
-<span class="descname">options</span><em class="property"> = {'weight': Option(class_name='BaseAssociative', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'n_outputs': Option(class_name='BaseAssociative', value=None), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'n_unconditioned': Option(class_name='BaseStepAssociative', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'verbose': Option(class_name='Verbose', value=False), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'step': Option(class_name='BaseNetwork', value=0.1), 'bias': Option(class_name='BaseStepAssociative', value=None), 'n_inputs': Option(class_name='BaseStepAssociative', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'n_unconditioned': Option(class_name='BaseStepAssociative', value=None), 'n_inputs': Option(class_name='BaseStepAssociative', value=None), 'step': Option(class_name='BaseNetwork', value=0.1), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'n_outputs': Option(class_name='BaseAssociative', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'weight': Option(class_name='BaseStepAssociative', value=None), 'bias': Option(class_name='BaseStepAssociative', value=Constant(-0.5))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.base.BaseStepAssociative.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.associative.base.BaseStepAssociative.predict">
-<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.base.BaseStepAssociative.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return prediction results for the input data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_data</strong> : array-like</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">array-like</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.associative.base.BaseStepAssociative.train">
-<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.base.BaseStepAssociative.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method train neural network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_train</strong> : array-like</p>
+<p><strong>target_train</strong> : array-like or None</p>
+<p><strong>input_test</strong> : array-like or None</p>
+<p><strong>target_test</strong> : array-like or None</p>
+<p><strong>epochs</strong> : int</p>
+<blockquote>
+<div><p>Defaults to <cite>100</cite>.</p>
+</div></blockquote>
+<p><strong>epsilon</strong> : float or None</p>
+<blockquote class="last">
+<div><p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.associative.base.BaseStepAssociative.train_epoch">
-<span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.base.BaseStepAssociative.train_epoch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.associative.base.BaseStepAssociative.weight">
+<span class="descname">weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.base.BaseStepAssociative.weight" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -262,6 +300,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
     <ul>
         <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

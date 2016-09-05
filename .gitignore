@@ -17,7 +17,6 @@ build/
 .tox/*
 .DS_Store
 .python-version
-examples/drafts
 
 # Vim
 *.swp
@@ -30,4 +29,4 @@ site/source/docs/*
 site/build/*
 
 # Examples
-examples/rbfn/music_speech/*
+examples/rbfn/music_speech/data/*

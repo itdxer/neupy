@@ -11,6 +11,9 @@ Algorithms
 Algorithms that use Backpropagation training approach
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Trainig algorithms
+++++++++++++++++++
+
 .. csv-table::
     :header: "Class name", "Name"
 
@@ -31,8 +34,8 @@ Algorithms that use Backpropagation training approach
     :network:`Adam`, Adam
     :network:`Adamax`, AdaMax
 
-Weight update rules
-~~~~~~~~~~~~~~~~~~~
+Regularization methods
+++++++++++++++++++++++
 
 .. csv-table::
     :header: "Class name", "Name"
@@ -41,7 +44,7 @@ Weight update rules
     :network:`WeightElimination`, Weight Elimination
 
 Learning rate update rules
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++++++
 
 .. csv-table::
     :header: "Class name", "Name"
@@ -91,7 +94,7 @@ Competitive Networks
     :network:`SOFM`, Self-Organizing Feature Map (SOFM or SOM)
 
 Linear networks
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
 .. csv-table::
     :header: "Class name", "Name"
@@ -109,7 +112,15 @@ Associative
     :network:`Oja`, OJA
     :network:`Kohonen`, Kohonen
     :network:`Instar`, Instar
-    :network:`HebbRule`, Hebb
+    :network:`HebbRule`, Hebb)
+
+Boltzmann Machine
+~~~~~~~~~~~~~~~~~
+
+.. csv-table::
+    :header: "Class name", "Name"
+
+    :network:`RBM`, Boolean/Bernoulli Restricted Boltzmann Machine
 
 Layers
 ******
@@ -167,18 +178,53 @@ Transformation Layers
 
     ":layer:`Reshape`", "Reshape tensor input"
 
+.. _init-methods:
+
+Parameter Initialization Methods
+********************************
+
+Example
+~~~~~~~
+
+.. code-block:: python
+
+    from neupy import algorithms, layers, init
+
+    gdnet = algorithms.GradientDescent(
+        [
+            layers.Input(784),
+            layers.Relu(100, weight=init.HeNormal(), bias=init.HeNormal()),
+            layers.Softmax(10, weight=init.Uniform(-0.01, 0.01)),
+        ]
+    )
+
+Available initialization methods
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. csv-table::
+    :header: "Class name", "Description"
+
+    ":class:`Constant <neupy.core.init.Constant>`", "Initialize weights with constant values"
+    ":class:`Normal <neupy.core.init.Normal>`", "Sample weights from the Normal distribution"
+    ":class:`Uniform <neupy.core.init.Uniform>`", "Sample weights from the Uniformal distribution"
+    ":class:`Orthogonal <neupy.core.init.Orthogonal>`", "Initialize matrix with orthogonal basis"
+    ":class:`HeNormal <neupy.core.init.HeNormal>`", "Kaiming He parameter initialization method based on the Normal distribution."
+    ":class:`HeUniform <neupy.core.init.HeUniform>`", "Kaiming He parameter initialization method based on the Uniformal distribution."
+    ":class:`XavierNormal <neupy.core.init.XavierNormal>`", "Glorot Xavier parameter initialization method based on the Normal distribution."
+    ":class:`XavierUniform <neupy.core.init.XavierUniform>`", "Glorot Xavier parameter initialization method based on the Uniformal distribution."
+
 Error functions
 ***************
 
 .. csv-table::
     :header: "Function name", "Description"
 
-    "mae", "Mean absolute error"
-    "mse", "Mean squared error"
-    "rmse", "Root mean squared error"
-    "msle", "Mean squared logarithmic error"
-    "rmsle", "Root mean squared logarithmic error"
-    "binary_crossentropy", "Cross entropy error function for the binary classification"
-    "categorical_crossentropy", "Cross entropy error function for the multi-class classification"
-    "binary_hinge", "Hinge error function for the binary classification"
-    "categorical_hinge", "Hinge error function for the multi-class classification"
+    ":class:`mae <neupy.network.errors.mae>`", "Mean absolute error"
+    ":class:`mse <neupy.network.errors.mse>`", "Mean squared error"
+    ":class:`rmse <neupy.network.errors.rmse>`", "Root mean squared error"
+    ":class:`msle <neupy.network.errors.msle>`", "Mean squared logarithmic error"
+    ":class:`rmsle <neupy.network.errors.rmsle>`", "Root mean squared logarithmic error"
+    ":class:`binary_crossentropy <neupy.network.errors.binary_crossentropy>`", "Cross entropy error function for the binary classification"
+    ":class:`categorical_crossentropy <neupy.network.errors.categorical_crossentropy>`", "Cross entropy error function for the multi-class classification"
+    ":class:`binary_hinge <neupy.network.errors.binary_hinge>`", "Hinge error function for the binary classification"
+    ":class:`categorical_hinge <neupy.network.errors.categorical_hinge>`", "Hinge error function for the multi-class classification"

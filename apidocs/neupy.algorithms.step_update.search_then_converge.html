@@ -100,13 +100,14 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.step_update.search_then_converge">
-<span id="neupy-algorithms-step-update-search-then-converge-module"></span><h1>neupy.algorithms.step_update.search_then_converge module</h1>
+<span id="neupy-algorithms-step-update-search-then-converge-module"></span><h1>neupy.algorithms.step_update.search_then_converge module<a class="headerlink" href="#module-neupy.algorithms.step_update.search_then_converge" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.algorithms.step_update.search_then_converge.SearchThenConverge">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.step_update.search_then_converge.</span><span class="descname">SearchThenConverge</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/search_then_converge.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.step_update.search_then_converge.</span><span class="descname">SearchThenConverge</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/search_then_converge.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.step_update.search_then_converge.SearchThenConverge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.step_update.base.html#neupy.algorithms.step_update.base.SingleStepConfigurable" title="neupy.algorithms.step_update.base.SingleStepConfigurable"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.step_update.base.SingleStepConfigurable</span></span></a></p>
 <p>Algorithm minimize learning step. Similar to
-<a class="reference internal" href="neupy.algorithms.step_update.simple_step_minimization.html#neupy.algorithms.step_update.simple_step_minimization.SimpleStepMinimization" title="neupy.algorithms.step_update.simple_step_minimization.SimpleStepMinimization"><span class="xref py py-class docutils literal"><span class="pre">SimpleStepMinimization</span></span></a>, but more complicated step update rule.</p>
+<a class="reference internal" href="neupy.algorithms.step_update.simple_step_minimization.html#neupy.algorithms.step_update.simple_step_minimization.SimpleStepMinimization" title="neupy.algorithms.step_update.simple_step_minimization.SimpleStepMinimization"><span class="xref py py-class docutils literal"><span class="pre">SimpleStepMinimization</span></span></a>, but more complicated
+step update rule.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -124,8 +125,8 @@ Defaults to <span class="docutils literal"><span class="pre">0.2</span></span></
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><p class="first"><strong>It works with any algorithm based on backpropagation. Class can&#8217;t</strong></p>
-<p class="last"><strong>work without it.</strong></p>
+<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><p class="first"><strong>It works with any algorithm based on backpropagation. Class</strong></p>
+<p class="last"><strong>can&#8217;t work without it.</strong></p>
 </td>
 </tr>
 </tbody>
@@ -148,22 +149,22 @@ Defaults to <span class="docutils literal"><span class="pre">0.2</span></span></
 </div>
 <dl class="attribute">
 <dt id="neupy.algorithms.step_update.search_then_converge.SearchThenConverge.epochs_step_minimizator">
-<span class="descname">epochs_step_minimizator</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/search_then_converge.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">epochs_step_minimizator</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/search_then_converge.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.step_update.search_then_converge.SearchThenConverge.epochs_step_minimizator" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.step_update.search_then_converge.SearchThenConverge.init_train_updates">
-<span class="descname">init_train_updates</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/search_then_converge.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">init_train_updates</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/search_then_converge.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.step_update.search_then_converge.SearchThenConverge.init_train_updates" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.step_update.search_then_converge.SearchThenConverge.options">
-<span class="descname">options</span><em class="property"> = {'epochs_step_minimizator': Option(class_name='SearchThenConverge', value=100), 'rate_coefitient': Option(class_name='SearchThenConverge', value=0.2)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/search_then_converge.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'rate_coefitient': Option(class_name='SearchThenConverge', value=0.2), 'epochs_step_minimizator': Option(class_name='SearchThenConverge', value=100)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/search_then_converge.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.step_update.search_then_converge.SearchThenConverge.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.step_update.search_then_converge.SearchThenConverge.rate_coefitient">
-<span class="descname">rate_coefitient</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/search_then_converge.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">rate_coefitient</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/search_then_converge.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.step_update.search_then_converge.SearchThenConverge.rate_coefitient" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -191,6 +192,7 @@ Defaults to <span class="docutils literal"><span class="pre">0.2</span></span></
     <ul>
         <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

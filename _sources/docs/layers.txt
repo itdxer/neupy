@@ -10,3 +10,4 @@ This part of documentation contains main information about layers.
     layers/basics
     layers/convolutional-layers
     layers/create-custom-layers
+    layers/init-methods

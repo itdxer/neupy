@@ -100,10 +100,10 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.regularization.weight_elimination">
-<span id="neupy-algorithms-regularization-weight-elimination-module"></span><h1>neupy.algorithms.regularization.weight_elimination module</h1>
+<span id="neupy-algorithms-regularization-weight-elimination-module"></span><h1>neupy.algorithms.regularization.weight_elimination module<a class="headerlink" href="#module-neupy.algorithms.regularization.weight_elimination" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.algorithms.regularization.weight_elimination.WeightElimination">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.regularization.weight_elimination.</span><span class="descname">WeightElimination</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/regularization/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.regularization.weight_elimination.</span><span class="descname">WeightElimination</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/regularization/weight_elimination.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.regularization.weight_elimination.WeightElimination" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.regularization.base.html#neupy.algorithms.regularization.base.WeightUpdateConfigurable" title="neupy.algorithms.regularization.base.WeightUpdateConfigurable"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.regularization.base.WeightUpdateConfigurable</span></span></a></p>
 <p>Weight Elimination algorithm penalizes large weights and limits the
 freedom in network. The algorithm is able to solve one of the possible
@@ -127,8 +127,8 @@ the weights.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><p class="first"><strong>It works with any algorithm based on backpropagation. Class can&#8217;t</strong></p>
-<p class="last"><strong>work without it.</strong></p>
+<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><p class="first"><strong>It works with any algorithm based on backpropagation. Class</strong></p>
+<p class="last"><strong>can&#8217;t work without it.</strong></p>
 </td>
 </tr>
 </tbody>
@@ -163,22 +163,22 @@ could be near zero.</p>
 </div>
 <dl class="attribute">
 <dt id="neupy.algorithms.regularization.weight_elimination.WeightElimination.decay_rate">
-<span class="descname">decay_rate</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/regularization/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">decay_rate</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/regularization/weight_elimination.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.regularization.weight_elimination.WeightElimination.decay_rate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.regularization.weight_elimination.WeightElimination.init_param_updates">
-<span class="descname">init_param_updates</span><span class="sig-paren">(</span><em>layer</em>, <em>parameter</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/regularization/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">init_param_updates</span><span class="sig-paren">(</span><em>layer</em>, <em>parameter</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/regularization/weight_elimination.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.regularization.weight_elimination.WeightElimination.init_param_updates" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.regularization.weight_elimination.WeightElimination.options">
-<span class="descname">options</span><em class="property"> = {'zero_weight': Option(class_name='WeightElimination', value=1), 'decay_rate': Option(class_name='WeightElimination', value=0.1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/regularization/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'zero_weight': Option(class_name='WeightElimination', value=1), 'decay_rate': Option(class_name='WeightElimination', value=0.1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/regularization/weight_elimination.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.regularization.weight_elimination.WeightElimination.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.regularization.weight_elimination.WeightElimination.zero_weight">
-<span class="descname">zero_weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/regularization/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">zero_weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/regularization/weight_elimination.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.regularization.weight_elimination.WeightElimination.zero_weight" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -206,6 +206,7 @@ could be near zero.</p>
     <ul>
         <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

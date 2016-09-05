@@ -102,7 +102,7 @@
             <span>September 21, 2015</span>
         </div>
         <div class="section">
-            <span id="id1"/><h1><a href="2015/09/21/password_recovery.html"><a class="toc-backref" href="#id2">Password recovery</a></a></h1>
+            <span id="id1"/><h1><a href="2015/09/21/password_recovery.html"><a class="toc-backref" href="#id2">Password recovery</a><a class="headerlink" href="#password-recovery" title="Permalink to this headline">¶</a></a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
@@ -140,7 +140,7 @@ But you can test code without it.</p>
 </div>
 <p>Code works with a Python 2.7 as well.</p>
 <div class="section" id="data-transformation">
-<h2><a class="toc-backref" href="#id3">Data transformation</a></h2>
+<h2><a class="toc-backref" href="#id3">Data transformation</a><a class="headerlink" href="#data-transformation" title="Permalink to this headline">¶</a></h2>
 <p>Before building the network that will save and recover passwords, we should make transformations for input and output data.
 But it wouldn’t be enough just to encode it, we should set up a constant length for an input string to make sure that strings will have the same length
 Also we should define what string encoding we will use.
@@ -201,7 +201,7 @@ So before we begin to store data in neural network, we should define another fun
 We assume that password won’t contain space at the beggining.</p>
 </div>
 <div class="section" id="saving-password-into-the-network">
-<h2><a class="toc-backref" href="#id4">Saving password into the network</a></h2>
+<h2><a class="toc-backref" href="#id4">Saving password into the network</a><a class="headerlink" href="#saving-password-into-the-network" title="Permalink to this headline">¶</a></h2>
 <p>Now we are ready to save the password into the network.
 For this task we are going to define another function that create network and save password inside of it.
 Let’s define this function and later we will look at it step by step.</p>
@@ -283,7 +283,7 @@ For this reason we use randomly generated binary vector instead of random passwo
 <p>Of course it’s better to save not randomly generated noise vectors but randomly generated passwords converted into binary vectors, cuz if you use wrong input pattern randomly generated password might be recovered instead of the correct one.</p>
 </div>
 <div class="section" id="recovering-password-from-the-network">
-<h2><a class="toc-backref" href="#id5">Recovering password from the network</a></h2>
+<h2><a class="toc-backref" href="#id5">Recovering password from the network</a><a class="headerlink" href="#recovering-password-from-the-network" title="Permalink to this headline">¶</a></h2>
 <p>Now we are going to define the last function which will recover a password from the network.</p>
 <div class="highlight-python"><div class="highlight"><pre><span/><span class="k">def</span> <span class="nf">recover_password</span><span class="p">(</span><span class="n">dhnet</span><span class="p">,</span> <span class="n">broken_password</span><span class="p">):</span>
     <span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">str2bin</span><span class="p">(</span><span class="n">broken_password</span><span class="p">))</span>
@@ -327,7 +327,7 @@ We can’t prevent it from running into the local minimum.
 For more information about this problem you can check <a class="reference internal" href="2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>article about Discrete Hopfield Network</span></a>.</p>
 </div>
 <div class="section" id="test-it-using-monte-carlo">
-<h2><a class="toc-backref" href="#id6">Test it using Monte Carlo</a></h2>
+<h2><a class="toc-backref" href="#id6">Test it using Monte Carlo</a><a class="headerlink" href="#test-it-using-monte-carlo" title="Permalink to this headline">¶</a></h2>
 <p>Let’s test our solution with randomly generated passwords.
 For this task we can use Monte Carlo experiment.
 At each step we create random password and try to recover it from a broken password.</p>
@@ -418,7 +418,7 @@ So removing symbols is not a very good idea.</p>
 <p>All functions that you need for experiments you can find at the <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py">github</a>.</p>
 </div>
 <div class="section" id="possible-problems">
-<h2><a class="toc-backref" href="#id7">Possible problems</a></h2>
+<h2><a class="toc-backref" href="#id7">Possible problems</a><a class="headerlink" href="#possible-problems" title="Permalink to this headline">¶</a></h2>
 <p>There are a few possible problems in the Discrete Hopfile Network.</p>
 <ol class="arabic simple">
 <li>As we saw from the last experiments, shifted passwords are harder to recover than the passwords with missed symbols. It’s better to replace missed symbols with some other things.</li>
@@ -427,13 +427,13 @@ So removing symbols is not a very good idea.</p>
 </ol>
 </div>
 <div class="section" id="summary">
-<h2><a class="toc-backref" href="#id8">Summary</a></h2>
+<h2><a class="toc-backref" href="#id8">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
 <p>Despite some problems, network recovers passwords very well.
 Monte Carlo experiment shows that the fewer symbols we know the less is probability for recovering them correctly.</p>
 <p>Even this simple network can be a powerful tool if you know its limitations.</p>
 </div>
 <div class="section" id="download-script">
-<h2><a class="toc-backref" href="#id9">Download script</a></h2>
+<h2><a class="toc-backref" href="#id9">Download script</a><a class="headerlink" href="#download-script" title="Permalink to this headline">¶</a></h2>
 <p>You can download and test a full script from the <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py">github repository</a>.</p>
 <p>It doesn’t contain a fixed <span class="docutils literal"><span class="pre">environment.reproducible</span></span> function, so you will get different outputs after each run.</p>
 </div>
@@ -455,7 +455,7 @@ Monte Carlo experiment shows that the fewer symbols we know the less is probabil
             <span>September 20, 2015</span>
         </div>
         <div class="section">
-            <span id="discrete-hopfield-network"/><h1><a href="2015/09/20/discrete_hopfield_network.html"><a class="toc-backref" href="#id5">Discrete Hopfiel Network</a></a></h1>
+            <span id="discrete-hopfield-network"/><h1><a href="2015/09/20/discrete_hopfield_network.html"><a class="toc-backref" href="#id5">Discrete Hopfiel Network</a><a class="headerlink" href="#discrete-hopfiel-network" title="Permalink to this headline">¶</a></a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
@@ -494,7 +494,7 @@ Autoassociative memory networks is a posibily to interprete functions of memory 
 <p>Don’t worry if you have only basic knowledge in Linear Algebra; in this article I’ll try to explain the idea as simple as possible.
 If you are interested in proofs of the <a class="reference internal" href="apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> you can check them at R. Rojas. Neural Networks <a class="footnote-reference" href="#id2" id="id1">[1]</a> book.</p>
 <div class="section" id="architecture">
-<h2><a class="toc-backref" href="#id6">Architecture</a></h2>
+<h2><a class="toc-backref" href="#id6">Architecture</a><a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> is an easy algorithm.
 It’s simple because you don’t need a lot of background knowledge in Maths for using it.
 Everything you need to know is how to make a basic Linear Algebra operations, like outer product or sum of two matrices.</p>
@@ -515,7 +515,7 @@ Basically they are more likely to be orthogonal to each other which is a critica
 But as I mentioned before we won’t talk about proofs or anything not related to basic understanding of Linear Algebra operations.</p>
 <p>So, let’s look at how we can train and use the <a class="reference internal" href="apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
 <div class="section" id="training-procedure">
-<h3><a class="toc-backref" href="#id7">Training procedure</a></h3>
+<h3><a class="toc-backref" href="#id7">Training procedure</a><a class="headerlink" href="#training-procedure" title="Permalink to this headline">¶</a></h3>
 <p>We can’t use memory without any patterns stored in it.
 So first of all we are going to learn how to train the network.
 For the <a class="reference internal" href="apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> train procedure doesn’t require any iterations.
@@ -654,12 +654,12 @@ The main problem would appear when we have more than one vector stored in the we
 Each value on the diagonal would be equal to the number of stored vectors in it.</p>
 </div>
 <div class="section" id="recovery-from-memory">
-<h3><a class="toc-backref" href="#id8">Recovery from memory</a></h3>
+<h3><a class="toc-backref" href="#id8">Recovery from memory</a><a class="headerlink" href="#recovery-from-memory" title="Permalink to this headline">¶</a></h3>
 <p>The main advantage of Autoassociative network is that it is able to recover pattern from the memory using just a partial information about the pattern.
 There are already two main approaches to this situation, synchronous and asynchronous.
 We are going to master both of them.</p>
 <div class="section" id="synchronous">
-<h4><a class="toc-backref" href="#id9">Synchronous</a></h4>
+<h4><a class="toc-backref" href="#id9">Synchronous</a><a class="headerlink" href="#synchronous" title="Permalink to this headline">¶</a></h4>
 <p>Synchronous approach is much more easier for understanding, so we are going to look at it firstly.
 To recover your pattern from memory you just need to multiply the weight matrix by the input vector.</p>
 <div class="math">
@@ -722,7 +722,7 @@ In <cite>voting</cite> procedure we use each row that was multiplied by bipolar 
 <p>Of course you can use 0 and 1 values and sometime you will get the correct result, but this approach give you much worse results than explained above.</p>
 </div>
 <div class="section" id="asynchronous">
-<h4><a class="toc-backref" href="#id10">Asynchronous</a></h4>
+<h4><a class="toc-backref" href="#id10">Asynchronous</a><a class="headerlink" href="#asynchronous" title="Permalink to this headline">¶</a></h4>
 <p>Previous approach is good, but it has some limitations.
 If you change one value in the input vector it can change your output result and value won’t converge to the known pattern.
 Another popular approach is an <strong>asynchronous</strong>.
@@ -818,7 +818,7 @@ We can repeat it as many times as we want, but we will be getting the same value
 </div>
 </div>
 <div class="section" id="memory-limit">
-<h2><a class="toc-backref" href="#id11">Memory limit</a></h2>
+<h2><a class="toc-backref" href="#id11">Memory limit</a><a class="headerlink" href="#memory-limit" title="Permalink to this headline">¶</a></h2>
 <p>Obviously, you can’t store infinite number of vectors inside the network.
 There are two good rules of thumb.</p>
 <p>Concider that <span class="math">\(n\)</span> is the dimension (number of features) of your input vector and <span class="math">\(m\)</span> is the number of patterns that you want to store in the network.
@@ -840,7 +840,7 @@ Before use this rule you have to think about type of your input patterns.</p>
 Of course you can find situations when these rules will fail.</p>
 </div>
 <div class="section" id="hallucinations">
-<h2><a class="toc-backref" href="#id12">Hallucinations</a></h2>
+<h2><a class="toc-backref" href="#id12">Hallucinations</a><a class="headerlink" href="#hallucinations" title="Permalink to this headline">¶</a></h2>
 <p>Hallucinations is one of the main problems in the <a class="reference internal" href="apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.
 Sometimes network output can be something that we hasn’t taught it.</p>
 <p>To understand this phenomena we should firstly define the Hopfield energy function.</p>
@@ -871,7 +871,7 @@ Unfortunately, we are very limited in terms of numbers of dimensions we could pl
 <p>Full source code for this plot you can find on <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/memory/dhn_energy_func.py">github</a></p>
 </div>
 <div class="section" id="example">
-<h2><a class="toc-backref" href="#id13">Example</a></h2>
+<h2><a class="toc-backref" href="#id13">Example</a><a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>Now we are ready for a more practical example.
 Let’s define a few images that we are going to teach the network.</p>
 <div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -1085,11 +1085,11 @@ If we have all perfectly opposite symmetric patterns then squares on the antidia
 <p>Properties that we’ve reviewed so far are just the most interesting and maybe other patterns you can encounter on your own.</p>
 </div>
 <div class="section" id="more-reading">
-<h2><a class="toc-backref" href="#id14">More reading</a></h2>
+<h2><a class="toc-backref" href="#id14">More reading</a><a class="headerlink" href="#more-reading" title="Permalink to this headline">¶</a></h2>
 <p>In addition you can read another article about a ‘<a class="reference internal" href="2015/09/21/password_recovery.html#password-recovery"><span>Password recovery</span></a>‘ from the memory using the <a class="reference internal" href="apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
 </div>
 <div class="section" id="references">
-<h2><a class="toc-backref" href="#id15">References</a></h2>
+<h2><a class="toc-backref" href="#id15">References</a><a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <table class="docutils footnote" frame="void" id="id2" rules="none">
 <colgroup><col class="label"/><col/></colgroup>
 <tbody valign="top">
@@ -1128,7 +1128,7 @@ from <a class="reference external" href="https://www.youtube.com/watch?v=gfPUWwB
             <span>July 04, 2015</span>
         </div>
         <div class="section">
-            <h1><a href="2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a></h1>
+            <h1><a href="2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset<a class="headerlink" href="#boston-house-prices-dataset" title="Permalink to this headline">¶</a></a></h1>
 <p>For this article we are going to predict Boston house prices via Conjugate gradient.</p>
 <p>For the beginning we should get some data.</p>
 <div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
@@ -1490,7 +1490,7 @@ There are a lot of things which we can do to improve network results, but we wil
             <span>July 04, 2015</span>
         </div>
         <div class="section">
-            <h1><a href="2015/07/04/visualize_backpropagation_algorithms.html"><a class="toc-backref" href="#id3">Visualize Algorithms based on the Backpropagation</a></a></h1>
+            <h1><a href="2015/07/04/visualize_backpropagation_algorithms.html"><a class="toc-backref" href="#id3">Visualize Algorithms based on the Backpropagation</a><a class="headerlink" href="#visualize-algorithms-based-on-the-backpropagation" title="Permalink to this headline">¶</a></a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
@@ -1513,7 +1513,7 @@ There are a lot of things which we can do to improve network results, but we wil
 </div>
 <p>In this article we will be testing different algorithms based on the backpropagation method, visualizing them and trying to figure out some important features from a blog that we will get.</p>
 <div class="section" id="checking-data">
-<h2><a class="toc-backref" href="#id4">Checking data</a></h2>
+<h2><a class="toc-backref" href="#id4">Checking data</a><a class="headerlink" href="#checking-data" title="Permalink to this headline">¶</a></h2>
 <p>First of all we need to define simple dataset which contains 6 points with two features.</p>
 <div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
@@ -1549,7 +1549,7 @@ There are a lot of things which we can do to improve network results, but we wil
 <p>So, since the problem is linear separable we can solve it without hidden layers in network. There are two features and two classes, so we can build network which will take 2 input values and will produce 1 output. We need just two weights, so we can visualize them in contour plot.</p>
 </div>
 <div class="section" id="initialize-contour">
-<h2><a class="toc-backref" href="#id5">Initialize contour</a></h2>
+<h2><a class="toc-backref" href="#id5">Initialize contour</a><a class="headerlink" href="#initialize-contour" title="Permalink to this headline">¶</a></h2>
 <p>I won’t  add all code related to the plots building in the article. In case if you are interested you can check the main script <a class="reference external" href="https://github.com/itdxer/neupy/blob/master/examples/mlp/gd_algorithms_visualization.py">here</a>.</p>
 <a class="reference internal image-reference" href="_images/raw-contour-plot.png"><img alt="Approximation function contour plot" class="align-center" src="_images/raw-contour-plot.png" style="width: 80%;"/></a>
 <p>The plot above shows error rate that depends on the network’s weights. The best result corresponds to the smallest error value. The best weights combination for this problem should be near the bottom right corner in the white area.</p>
@@ -1565,9 +1565,9 @@ There are a lot of things which we can do to improve network results, but we wil
 <p>This function will train the network until the error will be smaller than <cite>0.125</cite>. Every network starts at place with coordinates <cite>(-4, -4)</cite> and finishes near the point with the error value lower than <cite>0.125</cite>.</p>
 </div>
 <div class="section" id="id1">
-<h2><a class="toc-backref" href="#id6">Visualize algorithms based on the Backpropagation</a></h2>
+<h2><a class="toc-backref" href="#id6">Visualize algorithms based on the Backpropagation</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="gradient-descent">
-<h3><a class="toc-backref" href="#id7">Gradient Descent</a></h3>
+<h3><a class="toc-backref" href="#id7">Gradient Descent</a><a class="headerlink" href="#gradient-descent" title="Permalink to this headline">¶</a></h3>
 <p>Let’s primarily check <a class="reference internal" href="apidocs/neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">Gradient</span> <span class="pre">Descent</span></span></a>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/bp-steps.png"><img alt="Weight update steps for the Gradient Descent" src="_images/bp-steps.png" style="width: 80%;"/></a>
@@ -1580,7 +1580,7 @@ There are a lot of things which we can do to improve network results, but we wil
 <p>The problem is that the step size is a very sensitive parameter for the gradient descent. In typical problem we won’t be able to visualize the learning progress and we won’t have an ability to see that our updates over the epochs are inefficient. For this result I’ve used step size equal to <span class="docutils literal"><span class="pre">0.3</span></span>, but if we increased it to <span class="docutils literal"><span class="pre">10</span></span> we would reach our goal in <span class="docutils literal"><span class="pre">25</span></span> steps. I haven’t added any improvements to make a fair comparison to other algorithms in the summary chapter.</p>
 </div>
 <div class="section" id="momentum">
-<h3><a class="toc-backref" href="#id8">Momentum</a></h3>
+<h3><a class="toc-backref" href="#id8">Momentum</a><a class="headerlink" href="#momentum" title="Permalink to this headline">¶</a></h3>
 <p>Now let’s look at another very popular algorithm - <a class="reference internal" href="apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/momentum-steps.png"><img alt="Momentum steps" src="_images/momentum-steps.png" style="width: 80%;"/></a>
@@ -1601,7 +1601,7 @@ There are a lot of things which we can do to improve network results, but we wil
 </div>
 </div>
 <div class="section" id="rprop">
-<h3><a class="toc-backref" href="#id9">RPROP</a></h3>
+<h3><a class="toc-backref" href="#id9">RPROP</a><a class="headerlink" href="#rprop" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference internal" href="apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> makes fewer steps to reach the specified minimum point, but we still can do better. Next algorithm that we are going to check is <a class="reference internal" href="apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/rprop-steps.png"><img alt="RPROP steps" src="_images/rprop-steps.png" style="width: 80%;"/></a>
@@ -1622,7 +1622,7 @@ There are a lot of things which we can do to improve network results, but we wil
 <p>To train your intuition you can check the other epochs updates and try to figure out how steps depend on the direction.</p>
 </div>
 <div class="section" id="irprop">
-<h3><a class="toc-backref" href="#id10">iRPROP+</a></h3>
+<h3><a class="toc-backref" href="#id10">iRPROP+</a><a class="headerlink" href="#irprop" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference internal" href="apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.IRPROPPlus" title="neupy.algorithms.gd.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> is almost the same algorithm as <a class="reference internal" href="apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> except a small alteration.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/irprop-plus-steps.png"><img alt="iRPROP+ steps" src="_images/irprop-plus-steps.png" style="width: 80%;"/></a>
@@ -1637,7 +1637,7 @@ There are a lot of things which we can do to improve network results, but we wil
 <p>The nice thing about this algorithm is that it tries to move in a new direction instead of going back and force and trying to redo updates from the previous epochs.</p>
 </div>
 <div class="section" id="gradient-descent-and-golden-search">
-<h3><a class="toc-backref" href="#id11">Gradient Descent and Golden Search</a></h3>
+<h3><a class="toc-backref" href="#id11">Gradient Descent and Golden Search</a><a class="headerlink" href="#gradient-descent-and-golden-search" title="Permalink to this headline">¶</a></h3>
 <p>The last algorithm that I want to show is a <a class="reference internal" href="apidocs/neupy.algorithms.step_update.linear_search.html#neupy.algorithms.step_update.linear_search.LinearSearch" title="neupy.algorithms.step_update.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a>. This algorithm is not able to train a network by itself, but it can help other algorithms to do it better. I will use Gradient Descent to show the huge improvement that gives <a class="reference internal" href="apidocs/neupy.algorithms.step_update.linear_search.html#neupy.algorithms.step_update.linear_search.LinearSearch" title="neupy.algorithms.step_update.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/grad-descent-and-gold-search-steps.png"><img alt="Gradient Descent with Golden Search steps" src="_images/grad-descent-and-gold-search-steps.png" style="width: 80%;"/></a>
@@ -1647,15 +1647,15 @@ There are a lot of things which we can do to improve network results, but we wil
 </div>
 </div>
 <div class="section" id="bring-them-all-together">
-<h2><a class="toc-backref" href="#id12">Bring them all together</a></h2>
+<h2><a class="toc-backref" href="#id12">Bring them all together</a><a class="headerlink" href="#bring-them-all-together" title="Permalink to this headline">¶</a></h2>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/all-algorithms-steps.png"><img alt="All algorithms steps" src="_images/all-algorithms-steps.png" style="width: 80%;"/></a>
 </div>
 </div>
 <div class="section" id="summary">
-<h2><a class="toc-backref" href="#id13">Summary</a></h2>
+<h2><a class="toc-backref" href="#id13">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils" id="id2">
-<caption><span class="caption-text">Summary table</span></caption>
+<caption><span class="caption-text">Summary table</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="50%"/>
 <col width="50%"/>
@@ -1722,6 +1722,7 @@ There are a lot of things which we can do to improve network results, but we wil
     <ul>
         <li><a href="docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

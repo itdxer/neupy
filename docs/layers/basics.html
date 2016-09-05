@@ -100,10 +100,10 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="basics">
-<h1>Basics</h1>
+<h1>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h1>
 <p>In this chapter you will see how to set up different connections for the neural network.</p>
 <div class="section" id="syntax">
-<h2>Syntax</h2>
+<h2>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
 <p>There are three ways to set up your neural network connection between layers. First one is the simplest one. You just define a list or tuple with the integers. Each integer in the sequence identifies layer&#8217;s size.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -140,7 +140,7 @@
 <p>This one is not very useful in case when you have more than 5 layers. This method can be more useful in case of subnetworks.</p>
 </div>
 <div class="section" id="layers-with-activation-function">
-<h2>Layers with activation function</h2>
+<h2>Layers with activation function<a class="headerlink" href="#layers-with-activation-function" title="Permalink to this headline">¶</a></h2>
 <p>This layer can have two different behaviours. You&#8217;ve already seen the first case in the previous chapter. Let&#8217;s show it again.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
@@ -182,7 +182,7 @@
 <p>And probably you&#8217;ve noticed the other way to use layer with activation function. If you don&#8217;t set up layer&#8217;s output size it will not apply linear transformation procedure and just will pass input value through the nonlinear activation function.</p>
 </div>
 <div class="section" id="subnetworks">
-<h2>Subnetworks</h2>
+<h2>Subnetworks<a class="headerlink" href="#subnetworks" title="Permalink to this headline">¶</a></h2>
 <p>Subnetworks is a simple trick that makes easier to read and understend the networks structure. Instead of explaining it&#8217;s much easier to show the main advantage of this method. Here is an example of the simpe convolutional network.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
@@ -264,6 +264,7 @@
     <ul>
         <li><a href="../cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

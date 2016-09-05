@@ -100,16 +100,15 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.optimizations.wolfe">
-<span id="neupy-optimizations-wolfe-module"></span><h1>neupy.optimizations.wolfe module</h1>
+<span id="neupy-optimizations-wolfe-module"></span><h1>neupy.optimizations.wolfe module<a class="headerlink" href="#module-neupy.optimizations.wolfe" title="Permalink to this headline">¶</a></h1>
 <p>Main source code from Pylearn2 library:
 <a class="reference external" href="https://github.com/lisa-lab/pylearn2/blob/master/pylearn2/optimization/linesearch.py">https://github.com/lisa-lab/pylearn2/blob/master/pylearn2/optimization/linesearch.py</a></p>
 <dl class="function">
 <dt id="neupy.optimizations.wolfe.cubic_minimizer">
-<span class="descclassname">neupy.optimizations.wolfe.</span><span class="descname">cubic_minimizer</span><span class="sig-paren">(</span><em>x_a</em>, <em>y_a</em>, <em>y_prime_a</em>, <em>x_b</em>, <em>y_b</em>, <em>x_c</em>, <em>y_c</em>, <em>bound_size_ratio=0.2</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/optimizations/wolfe.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.optimizations.wolfe.</span><span class="descname">cubic_minimizer</span><span class="sig-paren">(</span><em>x_a</em>, <em>y_a</em>, <em>y_prime_a</em>, <em>x_b</em>, <em>y_b</em>, <em>x_c</em>, <em>y_c</em>, <em>bound_size_ratio=0.2</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/optimizations/wolfe.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.optimizations.wolfe.cubic_minimizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds the minimizer for a cubic polynomial that goes
 through the points (x_a, y_a), (x_b, y_b), and (x_c, y_c) with
-derivative at <span class="docutils literal"><span class="pre">x_a</span></span> of y_prime_a. If no minimizer can be
-found return <span class="docutils literal"><span class="pre">NaN</span></span>.</p>
+derivative at <span class="docutils literal"><span class="pre">x_a</span></span> of y_prime_a.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -165,7 +164,7 @@ point <span class="docutils literal"><span class="pre">x</span></span> which is 
 
 <dl class="function">
 <dt id="neupy.optimizations.wolfe.line_search">
-<span class="descclassname">neupy.optimizations.wolfe.</span><span class="descname">line_search</span><span class="sig-paren">(</span><em>f</em>, <em>f_deriv</em>, <em>maxiter=20</em>, <em>c1=0.0001</em>, <em>c2=0.9</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/optimizations/wolfe.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.optimizations.wolfe.</span><span class="descname">line_search</span><span class="sig-paren">(</span><em>f</em>, <em>f_deriv</em>, <em>maxiter=20</em>, <em>c1=0.0001</em>, <em>c2=0.9</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/optimizations/wolfe.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.optimizations.wolfe.line_search" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find <span class="docutils literal"><span class="pre">x</span></span> that satisfies strong Wolfe conditions.
 <span class="docutils literal"><span class="pre">x</span> <span class="pre">&gt;</span> <span class="pre">0</span></span> is assumed to be a descent direction.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -212,7 +211,7 @@ For the zoom phase it uses an algorithm by [...].</p>
 
 <dl class="function">
 <dt id="neupy.optimizations.wolfe.quadratic_minimizer">
-<span class="descclassname">neupy.optimizations.wolfe.</span><span class="descname">quadratic_minimizer</span><span class="sig-paren">(</span><em>x_a</em>, <em>y_a</em>, <em>y_prime_a</em>, <em>x_b</em>, <em>y_b</em>, <em>bound_size_ratio=0.1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/optimizations/wolfe.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.optimizations.wolfe.</span><span class="descname">quadratic_minimizer</span><span class="sig-paren">(</span><em>x_a</em>, <em>y_a</em>, <em>y_prime_a</em>, <em>x_b</em>, <em>y_b</em>, <em>bound_size_ratio=0.1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/optimizations/wolfe.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.optimizations.wolfe.quadratic_minimizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds the minimizer for a quadratic polynomial that
 goes through the points (x_a, y_a), (x_b, y_b) with derivative
 at x_a of y_prime_a.</p>
@@ -263,7 +262,7 @@ point <span class="docutils literal"><span class="pre">x</span></span> which is 
 
 <dl class="function">
 <dt id="neupy.optimizations.wolfe.sequential_and">
-<span class="descclassname">neupy.optimizations.wolfe.</span><span class="descname">sequential_and</span><span class="sig-paren">(</span><em>*conditions</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/optimizations/wolfe.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.optimizations.wolfe.</span><span class="descname">sequential_and</span><span class="sig-paren">(</span><em>*conditions</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/optimizations/wolfe.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.optimizations.wolfe.sequential_and" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use <span class="docutils literal"><span class="pre">and</span></span> operator between all conditions. Function is just
 a syntax sugar that make long Theano logical conditions looks
 less ugly.</p>
@@ -283,7 +282,7 @@ less ugly.</p>
 
 <dl class="function">
 <dt id="neupy.optimizations.wolfe.sequential_or">
-<span class="descclassname">neupy.optimizations.wolfe.</span><span class="descname">sequential_or</span><span class="sig-paren">(</span><em>*conditions</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/optimizations/wolfe.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.optimizations.wolfe.</span><span class="descname">sequential_or</span><span class="sig-paren">(</span><em>*conditions</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/optimizations/wolfe.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.optimizations.wolfe.sequential_or" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use <span class="docutils literal"><span class="pre">or</span></span> operator between all conditions. Function is just
 a syntax sugar that make long Theano logical conditions looks
 less ugly.</p>
@@ -303,7 +302,7 @@ less ugly.</p>
 
 <dl class="function">
 <dt id="neupy.optimizations.wolfe.zoom">
-<span class="descclassname">neupy.optimizations.wolfe.</span><span class="descname">zoom</span><span class="sig-paren">(</span><em>x_low</em>, <em>x_high</em>, <em>y_low</em>, <em>y_high</em>, <em>y_deriv_low</em>, <em>f</em>, <em>f_deriv</em>, <em>y0</em>, <em>y_deriv_0</em>, <em>c1</em>, <em>c2</em>, <em>maxiter=10</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/optimizations/wolfe.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.optimizations.wolfe.</span><span class="descname">zoom</span><span class="sig-paren">(</span><em>x_low</em>, <em>x_high</em>, <em>y_low</em>, <em>y_high</em>, <em>y_deriv_low</em>, <em>f</em>, <em>f_deriv</em>, <em>y0</em>, <em>y_deriv_0</em>, <em>c1</em>, <em>c2</em>, <em>maxiter=10</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/optimizations/wolfe.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.optimizations.wolfe.zoom" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -383,6 +382,7 @@ less ugly.</p>
     <ul>
         <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

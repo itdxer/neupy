@@ -100,13 +100,13 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.ensemble.dan">
-<span id="neupy-algorithms-ensemble-dan-module"></span><h1>neupy.algorithms.ensemble.dan module</h1>
+<span id="neupy-algorithms-ensemble-dan-module"></span><h1>neupy.algorithms.ensemble.dan module<a class="headerlink" href="#module-neupy.algorithms.ensemble.dan" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.algorithms.ensemble.dan.DynamicallyAveragedNetwork">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.ensemble.dan.</span><span class="descname">DynamicallyAveragedNetwork</span><span class="sig-paren">(</span><em>networks</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/ensemble/dan.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.ensemble.dan.</span><span class="descname">DynamicallyAveragedNetwork</span><span class="sig-paren">(</span><em>networks</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/ensemble/dan.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.ensemble.dan.DynamicallyAveragedNetwork" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.ensemble.base.html#neupy.algorithms.ensemble.base.BaseEnsemble" title="neupy.algorithms.ensemble.base.BaseEnsemble"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.ensemble.base.BaseEnsemble</span></span></a></p>
-<p>Dynamically Averaged Network (DAN) weighted ensamble for binary
-classification problems.</p>
+<p>Dynamically Averaged Network (DAN) weighted ensamble
+for binary classification problems.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -131,8 +131,10 @@ classification problems.</p>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">make_classification</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                                            <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">make_classification</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="mi">300</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mf">0.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
@@ -151,11 +153,11 @@ classification problems.</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="5%" />
-<col width="95%" />
+<col width="4%" />
+<col width="96%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>weights</td>
+<tr class="row-odd"><td>weight</td>
 <td>(ndarray, shape = [n_predictors, n_networks]) After you get prediction you can also check weight which you will get to combine the result.</td>
 </tr>
 </tbody>
@@ -163,33 +165,33 @@ classification problems.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="51%" />
+<col width="49%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>train(self, input_data, target_data, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs)</td>
+<tr class="row-odd"><td>train(self, input_data, target_data, *args, **kwargs)</td>
 <td>Use input data to train all neural network one by one.</td>
 </tr>
 </tbody>
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.ensemble.dan.DynamicallyAveragedNetwork.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/ensemble/dan.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/ensemble/dan.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.ensemble.dan.DynamicallyAveragedNetwork.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.ensemble.dan.DynamicallyAveragedNetwork.predict">
-<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/ensemble/dan.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/ensemble/dan.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.ensemble.dan.DynamicallyAveragedNetwork.predict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.ensemble.dan.DynamicallyAveragedNetwork.predict_proba">
-<span class="descname">predict_proba</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/ensemble/dan.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">predict_proba</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/ensemble/dan.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.ensemble.dan.DynamicallyAveragedNetwork.predict_proba" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.ensemble.dan.DynamicallyAveragedNetwork.train">
-<span class="descname">train</span><span class="sig-paren">(</span><em>input_data</em>, <em>target_data</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/ensemble/dan.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">train</span><span class="sig-paren">(</span><em>input_data</em>, <em>target_data</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/ensemble/dan.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.ensemble.dan.DynamicallyAveragedNetwork.train" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -217,6 +219,7 @@ classification problems.</p>
     <ul>
         <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

@@ -100,10 +100,10 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="neural-network-surgery">
-<h1>Neural Network Surgery</h1>
+<h1>Neural Network Surgery<a class="headerlink" href="#neural-network-surgery" title="Permalink to this headline">¶</a></h1>
 <p>It&#8217;s very easy to define relations between layers in NeuPy. Also NeuPy&#8217;s syntax makes it easy to read and understand your network&#8217;s strucutre. But any method should have its pros and cons. The main disadvantage of this approach is that it&#8217;s a bit complecated to use a part of the network when you define full network. To solve this issue in NeuPy exists module named as a surgery. The idea is simple. You still can define your networks using very simple syntax and then cut pieces from them and connect these pieces together in the new networks.</p>
 <div class="section" id="cutting-layers-from-the-network">
-<h2>Cutting layers from the network</h2>
+<h2>Cutting layers from the network<a class="headerlink" href="#cutting-layers-from-the-network" title="Permalink to this headline">¶</a></h2>
 <p>Cut is a first feature of a surgery module. You can cut network in a few different ways. To make it simple to understand I&#8217;m going to consider a simple pretraining autoencoder problem. Let&#8217;s define the autoencoder network.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
@@ -136,7 +136,7 @@
 <span class="n">encoder</span> <span class="o">=</span> <span class="n">autoencoder_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Since we can part of the network that do an encoding procedure we can attach pretrained part to the other network that will manage to do classification.</p>
+<p>Since we have a part of the network that do an encoding procedure we can attach pretrained part to the other network that will manage to do classification.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">classifier</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span>
     <span class="n">encoder</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
     <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
@@ -195,7 +195,7 @@
 <p>As in the autoencoder case we can use this layers in the other networks</p>
 </div>
 <div class="section" id="sew-layers-together">
-<h2>Sew layers together</h2>
+<h2>Sew layers together<a class="headerlink" href="#sew-layers-together" title="Permalink to this headline">¶</a></h2>
 <p>Surgery module not only can break networks into pieces, but it also cut join different pieces together. It&#8217;s known as <strong>sewing</strong>. We can use cutted layers from the previous example.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span>
 <span class="go">Input(784) &gt; Sigmoid(100)</span>
@@ -241,6 +241,7 @@
     <ul>
         <li><a href="cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="cheatsheet.html#layers">Layers</a></li>
+        <li><a href="cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

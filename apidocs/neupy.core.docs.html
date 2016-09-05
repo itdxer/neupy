@@ -100,27 +100,46 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.core.docs">
-<span id="neupy-core-docs-module"></span><h1>neupy.core.docs module</h1>
+<span id="neupy-core-docs-module"></span><h1>neupy.core.docs module<a class="headerlink" href="#module-neupy.core.docs" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.core.docs.SharedDocsMeta">
-<em class="property">class </em><span class="descclassname">neupy.core.docs.</span><span class="descname">SharedDocsMeta</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/docs.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.core.docs.</span><span class="descname">SharedDocsMeta</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/docs.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.core.docs.SharedDocsMeta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">type</span></span></p>
-<p>Meta-class for shared documentation. This class conatains main
-functionality that help inherit parameters and methods descriptions
-from parent classes. This class automaticaly format class documentation
-using basic python format syntax for objects.</p>
+<p>Meta-class for shared documentation. This class conatains
+main functionality that help inherit parameters and methods
+descriptions from parent classes. This class automaticaly
+format class documentation using basic python format syntax
+for objects.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="neupy.core.docs.SharedDocs">
-<em class="property">class </em><span class="descclassname">neupy.core.docs.</span><span class="descname">SharedDocs</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/docs.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.core.docs.</span><span class="descname">SharedDocs</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/docs.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.core.docs.SharedDocs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">object</span></span></p>
-<p>Main class that provide with shared documentation functionality.</p>
+<p>Main class that provide with shared documentation
+functionality.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="91%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>inherit_method_docs</td>
+<td>(bool) <span class="docutils literal"><span class="pre">True</span></span> means that methods that doesn&#8217;t have documentation will be inherited from the parent methods. <span class="docutils literal"><span class="pre">False</span></span> will disable this option for the specified class. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.core.docs.SharedDocs.inherit_method_docs">
+<span class="descname">inherit_method_docs</span><em class="property"> = True</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/docs.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.core.docs.SharedDocs.inherit_method_docs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="exception">
 <dt id="neupy.core.docs.SharedDocsException">
-<em class="property">exception </em><span class="descclassname">neupy.core.docs.</span><span class="descname">SharedDocsException</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/docs.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">exception </em><span class="descclassname">neupy.core.docs.</span><span class="descname">SharedDocsException</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/docs.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.core.docs.SharedDocsException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">Exception</span></span></p>
 <p>Exception that help identify problems related to shared
 documentation.</p>
@@ -128,10 +147,28 @@ documentation.</p>
 
 <dl class="class">
 <dt id="neupy.core.docs.SharedDocsABCMeta">
-<em class="property">class </em><span class="descclassname">neupy.core.docs.</span><span class="descname">SharedDocsABCMeta</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/docs.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.core.docs.</span><span class="descname">SharedDocsABCMeta</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/docs.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.core.docs.SharedDocsABCMeta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#neupy.core.docs.SharedDocsMeta" title="neupy.core.docs.SharedDocsMeta"><span class="xref py py-class docutils literal"><span class="pre">neupy.core.docs.SharedDocsMeta</span></span></a>, <span class="xref py py-class docutils literal"><span class="pre">abc.ABCMeta</span></span></p>
 <p>Meta-class that combine <span class="docutils literal"><span class="pre">SharedDocsMeta</span></span> and <span class="docutils literal"><span class="pre">ABCMeta</span></span>
 meta-classes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.core.docs.shared_docs">
+<span class="descclassname">neupy.core.docs.</span><span class="descname">shared_docs</span><span class="sig-paren">(</span><em>parent_function</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/docs.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.core.docs.shared_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator shares documentation between functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>parent_function</strong> : object</p>
+<blockquote class="last">
+<div><p>Any object that has documentation.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -157,6 +194,7 @@ meta-classes.</p>
     <ul>
         <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

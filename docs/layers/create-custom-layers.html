@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="next" title="Storage" href="../storage.html" /><link rel="prev" title="Convolutional layers" href="convolutional-layers.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Parameter Initialization Methods" href="init-methods.html" /><link rel="prev" title="Convolutional layers" href="convolutional-layers.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
         VERSION:     '1.5',
@@ -100,10 +100,10 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="create-custom-layers">
-<h1>Create custom layers</h1>
+<h1>Create custom layers<a class="headerlink" href="#create-custom-layers" title="Permalink to this headline">¶</a></h1>
 <p>There are a few main types of layers. We are going to check them one by one in order of complexity.</p>
 <div class="section" id="element-wise-transformation">
-<h2>Element-wise transformation</h2>
+<h2>Element-wise transformation<a class="headerlink" href="#element-wise-transformation" title="Permalink to this headline">¶</a></h2>
 <p>The simplest one layer that makes only element-wise transformation. This layer doesn&#8217;t include any trainable parameters and it doesn&#8217;t change input&#8217;s shape. For simplisity we can build a layer that adds one to each elements in the input tensor.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 
@@ -115,7 +115,7 @@
 <p><span class="docutils literal"><span class="pre">BaseLayer</span></span> is a main class that contains all important methods and attributes that any layer requires.</p>
 </div>
 <div class="section" id="layers-with-activation-function">
-<h2>Layers with activation function</h2>
+<h2>Layers with activation function<a class="headerlink" href="#layers-with-activation-function" title="Permalink to this headline">¶</a></h2>
 <p>If you want to have a layer that behaves like any other built-in layer with activation function in the NeuPy, you should inherit your class from the <span class="docutils literal"><span class="pre">ActivationLayer</span></span> class. Let&#8217;s consider and example of layer with a square activation function.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
 <span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
@@ -127,7 +127,7 @@
 </div>
 </div>
 <div class="section" id="advanced-methods">
-<h2>Advanced methods</h2>
+<h2>Advanced methods<a class="headerlink" href="#advanced-methods" title="Permalink to this headline">¶</a></h2>
 <p>There are a few other methods that can be useful in case of more complecated layers.</p>
 <p>Some layers makes an output shape modification. If you don&#8217;t define the new output shape in the layer class you will not be able to attach layer to the other in the network. Here is an example.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
@@ -175,7 +175,7 @@
         
         </div><ul class="related clearfix">
             <li class="left"> &laquo; <a href="convolutional-layers.html">Convolutional layers</a></li>
-            <li class="right"><a href="../storage.html">Storage</a> &raquo; </li>
+            <li class="right"><a href="init-methods.html">Parameter Initialization Methods</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
@@ -193,6 +193,7 @@
     <ul>
         <li><a href="../cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

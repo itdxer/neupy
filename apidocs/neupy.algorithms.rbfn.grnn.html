@@ -100,12 +100,13 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.rbfn.grnn">
-<span id="neupy-algorithms-rbfn-grnn-module"></span><h1>neupy.algorithms.rbfn.grnn module</h1>
+<span id="neupy-algorithms-rbfn-grnn-module"></span><h1>neupy.algorithms.rbfn.grnn module<a class="headerlink" href="#module-neupy.algorithms.rbfn.grnn" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.algorithms.rbfn.grnn.GRNN">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.rbfn.grnn.</span><span class="descname">GRNN</span><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="neupy.network.learning.html#neupy.network.learning.LazyLearning" title="neupy.network.learning.LazyLearning"><span class="xref py py-class docutils literal"><span class="pre">neupy.network.learning.LazyLearning</span></span></a>, <a class="reference internal" href="neupy.network.base.html#neupy.network.base.BaseNetwork" title="neupy.network.base.BaseNetwork"><span class="xref py py-class docutils literal"><span class="pre">neupy.network.base.BaseNetwork</span></span></a></p>
-<p>Generalized Regression Neural Network.</p>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.rbfn.grnn.</span><span class="descname">GRNN</span><span class="sig-paren">(</span><em>*args</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.grnn.GRNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neupy.network.base.html#neupy.network.base.BaseNetwork" title="neupy.network.base.BaseNetwork"><span class="xref py py-class docutils literal"><span class="pre">neupy.network.base.BaseNetwork</span></span></a>, <a class="reference internal" href="neupy.network.learning.html#neupy.network.learning.LazyLearningMixin" title="neupy.network.learning.LazyLearningMixin"><span class="xref py py-class docutils literal"><span class="pre">neupy.network.learning.LazyLearningMixin</span></span></a></p>
+<p>Generalized Regression Neural Network (GRNN). Network applies
+only to the regression problems.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -124,6 +125,10 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>Network uses lazy learning which mean that network doesn&#8217;t involve
+iterative training procedure. It just stores parameters
+and use them to make a predictions.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
@@ -164,23 +169,65 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.rbfn.grnn.GRNN.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'step': Option(class_name='BaseNetwork', value=0.1), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'std': Option(class_name='GRNN', value=0.1), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'std': Option(class_name='GRNN', value=0.1), 'verbose': Option(class_name='Verbose', value=False), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'step': Option(class_name='BaseNetwork', value=0.1), 'train_end_signal': Option(class_name='BaseNetwork', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.grnn.GRNN.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbfn.grnn.GRNN.predict">
-<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.grnn.GRNN.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a prediction from the input data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_data</strong> : array-like (n_samples, n_features)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">array-like (n_samples,)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>In case if something is wrong with input data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.rbfn.grnn.GRNN.std">
-<span class="descname">std</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">std</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.grnn.GRNN.std" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbfn.grnn.GRNN.train">
-<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em>, <em>copy=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em>, <em>copy=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.grnn.GRNN.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trains network. PNN doesn&#8217;t actually train, it just stores
+input data and use it for prediction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_train</strong> : array-like (n_samples, n_features)</p>
+<p><strong>target_train</strong> : array-like (n_samples,)</p>
+<p><strong>copy</strong> : bool</p>
+<blockquote>
+<div><p>If value equal to <span class="docutils literal"><span class="pre">True</span></span> than input matrices will
+be copied. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>In case if something is wrong with input data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -207,6 +254,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
     <ul>
         <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

@@ -100,10 +100,10 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.surgery">
-<span id="neupy-surgery-module"></span><h1>neupy.surgery module</h1>
+<span id="neupy-surgery-module"></span><h1>neupy.surgery module<a class="headerlink" href="#module-neupy.surgery" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="neupy.surgery.cut">
-<span class="descclassname">neupy.surgery.</span><span class="descname">cut</span><span class="sig-paren">(</span><em>connection</em>, <em>start</em>, <em>end</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/surgery.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.surgery.</span><span class="descname">cut</span><span class="sig-paren">(</span><em>connection</em>, <em>start</em>, <em>end</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/surgery.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.surgery.cut" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function cuts a specific part of the neural networks
 structure. Function works in the same way as a slicing in
 Python. You can think about it as a <span class="docutils literal"><span class="pre">layers[start:end]</span></span>.</p>
@@ -160,7 +160,7 @@ connected layers.</p>
 
 <dl class="function">
 <dt id="neupy.surgery.sew_together">
-<span class="descclassname">neupy.surgery.</span><span class="descname">sew_together</span><span class="sig-paren">(</span><em>connections</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/surgery.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.surgery.</span><span class="descname">sew_together</span><span class="sig-paren">(</span><em>connections</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/surgery.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.surgery.sew_together" title="Permalink to this definition">¶</a></dt>
 <dd><p>Connect layers and connections together.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -199,21 +199,21 @@ sequence.</p>
 
 <dl class="class">
 <dt id="neupy.surgery.CutLine">
-<em class="property">class </em><span class="descclassname">neupy.surgery.</span><span class="descname">CutLine</span><span class="sig-paren">(</span><em>*args</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/surgery.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.surgery.</span><span class="descname">CutLine</span><span class="sig-paren">(</span><em>*args</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/surgery.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.surgery.CutLine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.layers.base.html#neupy.layers.base.BaseLayer" title="neupy.layers.base.BaseLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.base.BaseLayer</span></span></a></p>
 <p>Basic layer class that doesn&#8217;t change network&#8217;s structure.
 This class just help you to define places where you need to
 split your layer&#8217;s structure.</p>
 <dl class="attribute">
 <dt id="neupy.surgery.CutLine.options">
-<span class="descname">options</span><em class="property"> = {}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/surgery.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/surgery.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.surgery.CutLine.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="function">
 <dt id="neupy.surgery.cut_along_lines">
-<span class="descclassname">neupy.surgery.</span><span class="descname">cut_along_lines</span><span class="sig-paren">(</span><em>connection</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/surgery.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.surgery.</span><span class="descname">cut_along_lines</span><span class="sig-paren">(</span><em>connection</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/surgery.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.surgery.cut_along_lines" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cuts layer&#8217;s connection in the specified places.
 in the places where you need to cut layer you need to set up
 <span class="docutils literal"><span class="pre">surgery.CutLine</span></span> layer, that defines place where you need
@@ -262,7 +262,7 @@ connected layers.</p>
 
 <dl class="function">
 <dt id="neupy.surgery.isolate_connection_if_needed">
-<span class="descclassname">neupy.surgery.</span><span class="descname">isolate_connection_if_needed</span><span class="sig-paren">(</span><em>connection</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/surgery.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.surgery.</span><span class="descname">isolate_connection_if_needed</span><span class="sig-paren">(</span><em>connection</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/surgery.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.surgery.isolate_connection_if_needed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function copies connection or layer if one is related
 to the other layers. In addition it gets rid of these
 connections.</p>
@@ -315,6 +315,7 @@ connections.</p>
     <ul>
         <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

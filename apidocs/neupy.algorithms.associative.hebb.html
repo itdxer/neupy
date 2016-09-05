@@ -100,10 +100,10 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.associative.hebb">
-<span id="neupy-algorithms-associative-hebb-module"></span><h1>neupy.algorithms.associative.hebb module</h1>
+<span id="neupy-algorithms-associative-hebb-module"></span><h1>neupy.algorithms.associative.hebb module<a class="headerlink" href="#module-neupy.algorithms.associative.hebb" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.algorithms.associative.hebb.HebbRule">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.associative.hebb.</span><span class="descname">HebbRule</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/hebb.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.associative.hebb.</span><span class="descname">HebbRule</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/hebb.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.hebb.HebbRule" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.associative.base.html#neupy.algorithms.associative.base.BaseStepAssociative" title="neupy.algorithms.associative.base.BaseStepAssociative"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.associative.base.BaseStepAssociative</span></span></a></p>
 <p>Hebbian Learning Unsupervised Neural Network.
 Network can learn associations from data and emulate similar behaviour
@@ -130,18 +130,18 @@ parameter network weight will grow. Defaults to <span class="docutils literal"><
 <blockquote>
 <div><p>Number of unconditioned units in neraul networks. All these
 units wouldn&#8217;t update during the training procedure.
-Unconditioned should be the first features in dataset.</p>
+Unconditioned should be the first feature in the dataset.</p>
 </div></blockquote>
-<p><strong>weight</strong> : array-like</p>
+<p><strong>weight</strong> : array-like, Initializer</p>
 <blockquote>
-<div><p>Neural network weights. <span class="docutils literal"><span class="pre">None</span></span> mean that network weight would
-be generated randomly. Value defined manualy should have
-shape <span class="docutils literal"><span class="pre">(n_inputs,</span> <span class="pre">n_outputs)</span></span>. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+<div><p>Neural network weights.
+Value defined manualy should have shape <span class="docutils literal"><span class="pre">(n_inputs,</span> <span class="pre">n_outputs)</span></span>.
+Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.Normal" title="neupy.core.init.Normal"><span class="xref py py-class docutils literal"><span class="pre">Normal()</span></span></a>.</p>
 </div></blockquote>
-<p><strong>bias</strong> : array-like</p>
+<p><strong>bias</strong> : array-like, Initializer</p>
 <blockquote>
-<div><p>Neural network bias units. The same behaviour as for parameter
-<span class="docutils literal"><span class="pre">weight</span></span>. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+<div><p>Neural network bias units.
+Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.Constant" title="neupy.core.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(-0.5)</span></span></a>.</p>
 </div></blockquote>
 <p><strong>step</strong> : float</p>
 <blockquote>
@@ -242,17 +242,17 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.associative.hebb.HebbRule.decay_rate">
-<span class="descname">decay_rate</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/hebb.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">decay_rate</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/hebb.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.hebb.HebbRule.decay_rate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.associative.hebb.HebbRule.options">
-<span class="descname">options</span><em class="property"> = {'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'weight': Option(class_name='BaseAssociative', value=None), 'n_outputs': Option(class_name='BaseAssociative', value=None), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'n_unconditioned': Option(class_name='BaseStepAssociative', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'verbose': Option(class_name='Verbose', value=False), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'step': Option(class_name='BaseNetwork', value=0.1), 'bias': Option(class_name='BaseStepAssociative', value=None), 'n_inputs': Option(class_name='BaseStepAssociative', value=None), 'decay_rate': Option(class_name='HebbRule', value=0.2)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/hebb.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'n_inputs': Option(class_name='BaseStepAssociative', value=None), 'n_unconditioned': Option(class_name='BaseStepAssociative', value=None), 'step': Option(class_name='BaseNetwork', value=0.1), 'decay_rate': Option(class_name='HebbRule', value=0.2), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'n_outputs': Option(class_name='BaseAssociative', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'weight': Option(class_name='BaseStepAssociative', value=None), 'bias': Option(class_name='BaseStepAssociative', value=Constant(-0.5))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/hebb.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.hebb.HebbRule.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.associative.hebb.HebbRule.weight_delta">
-<span class="descname">weight_delta</span><span class="sig-paren">(</span><em>input_row</em>, <em>layer_output</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/hebb.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">weight_delta</span><span class="sig-paren">(</span><em>input_row</em>, <em>layer_output</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/hebb.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.hebb.HebbRule.weight_delta" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -280,6 +280,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
     <ul>
         <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

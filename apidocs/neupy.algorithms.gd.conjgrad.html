@@ -100,10 +100,10 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.gd.conjgrad">
-<span id="neupy-algorithms-gd-conjgrad-module"></span><h1>neupy.algorithms.gd.conjgrad module</h1>
+<span id="neupy-algorithms-gd-conjgrad-module"></span><h1>neupy.algorithms.gd.conjgrad module<a class="headerlink" href="#module-neupy.algorithms.gd.conjgrad" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.algorithms.gd.conjgrad.ConjugateGradient">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.gd.conjgrad.</span><span class="descname">ConjugateGradient</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>floatX=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.gd.conjgrad.</span><span class="descname">ConjugateGradient</span><span class="sig-paren">(</span><em>connection</em>, <em>options=None</em>, <em>floatX=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.gd.html#neupy.algorithms.gd.NoMultipleStepSelection" title="neupy.algorithms.gd.NoMultipleStepSelection"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.gd.NoMultipleStepSelection</span></span></a>, <a class="reference internal" href="neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.gd.base.GradientDescent</span></span></a></p>
 <p>Conjugate Gradient algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -129,15 +129,14 @@ integers. Each integer describe layer input size. For example,
 <span class="docutils literal"><span class="pre">(2,</span> <span class="pre">4,</span> <span class="pre">1)</span></span> means that network will have 3 layers with 2 input
 units, 4 hidden units and 1 output unit. The one limitation of that
 method is that all layers automaticaly would with sigmoid actiavtion
-function. Other way is just a list of <span class="docutils literal"><span class="pre">layers.BaseLayer`</span></span> class
+function. Other way is just a list of <span class="docutils literal"><span class="pre">layers.BaseLayer</span></span> class
 instances. For example: <span class="docutils literal"><span class="pre">[Input(2),</span> <span class="pre">Tanh(4),</span> <span class="pre">Relu(1)]</span></span>.
 And the most readable one is pipeline
 <span class="docutils literal"><span class="pre">Input(2)</span> <span class="pre">&gt;</span> <span class="pre">Tanh(4)</span> <span class="pre">&gt;</span> <span class="pre">Relu(1)</span></span>.</p>
 </div></blockquote>
-<p><strong>error</strong> : {&#8216;mse&#8217;, &#8216;rmse&#8217;, &#8216;mae&#8217;, &#8216;categorical_crossentropy&#8217;,     &#8216;binary_crossentropy&#8217;} or function</p>
+<p><strong>error</strong> : str or function</p>
 <blockquote>
-<div><p>Function that calculate prediction error.
-Defaults to <span class="docutils literal"><span class="pre">mse</span></span>.</p>
+<div><p>Error/loss function. Defaults to <span class="docutils literal"><span class="pre">mse</span></span>.</p>
 <ul class="simple">
 <li><span class="docutils literal"><span class="pre">mae</span></span> - Mean Absolute Error.</li>
 <li><span class="docutils literal"><span class="pre">mse</span></span> - Mean Squared Error.</li>
@@ -146,10 +145,10 @@ Defaults to <span class="docutils literal"><span class="pre">mse</span></span>.<
 <li><span class="docutils literal"><span class="pre">rmsle</span></span> - Root Mean Squared Logarithmic Error.</li>
 <li><span class="docutils literal"><span class="pre">categorical_crossentropy</span></span> - Categorical cross entropy.</li>
 <li><span class="docutils literal"><span class="pre">binary_crossentropy</span></span> - Binary cross entropy.</li>
-<li>Custom function that accept two mandatory arguments.</li>
+<li><span class="docutils literal"><span class="pre">binary_hinge</span></span> - Binary hinge entropy.</li>
+<li><span class="docutils literal"><span class="pre">categorical_hinge</span></span> - Categorical hinge entropy.</li>
+<li>Custom function which accepts two mandatory arguments.         The first one is expected value and the second one is         predicted value. Example: <span class="docutils literal"><span class="pre">custom_func(expected,</span> <span class="pre">predicted)</span></span></li>
 </ul>
-<p>The first one is expected value and the second one is
-predicted value. Example: <span class="docutils literal"><span class="pre">custom_func(expected,</span> <span class="pre">predicted)</span></span></p>
 </div></blockquote>
 <p><strong>step</strong> : float</p>
 <blockquote>
@@ -181,8 +180,14 @@ training your network, defaults to <span class="docutils literal"><span class="p
 <div><p>Calls this function when train epoch finishes.</p>
 </div></blockquote>
 <p><strong>train_end_signal</strong> : function</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Calls this function when train process finishes.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool</p>
+<blockquote class="last">
+<div><p>Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
+informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> -
+disable it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -239,6 +244,27 @@ training your network, defaults to <span class="docutils literal"><span class="p
 <span class="go">0.2472330191179734</span>
 </pre></div>
 </div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="92%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>errors</td>
+<td>(ErrorHistoryList) Contains list of training errors. This object has the same properties as list and in addition there are three additional useful methods: <cite>last</cite>, <cite>previous</cite> and <cite>normalized</cite>.</td>
+</tr>
+<tr class="row-even"><td>train_errors</td>
+<td>(ErrorHistoryList) Alias to <cite>errors</cite> attribute.</td>
+</tr>
+<tr class="row-odd"><td>validation_errors</td>
+<td>(ErrorHistoryList) The same as <cite>errors</cite> attribute, but it contains only validation errors.</td>
+</tr>
+<tr class="row-even"><td>last_epoch</td>
+<td>(int) Value equals to the last trained epoch. After initialization it is equal to <span class="docutils literal"><span class="pre">0</span></span>.</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -259,22 +285,25 @@ training your network, defaults to <span class="docutils literal"><span class="p
 </table>
 <dl class="method">
 <dt id="neupy.algorithms.gd.conjgrad.ConjugateGradient.init_train_updates">
-<span class="descname">init_train_updates</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<span class="descname">init_train_updates</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.conjgrad.ConjugateGradient.init_train_updates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize train function update in Theano format that
+would be trigger after each training epoch.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.gd.conjgrad.ConjugateGradient.init_variables">
-<span class="descname">init_variables</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<span class="descname">init_variables</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.conjgrad.ConjugateGradient.init_variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize Theano variables.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.conjgrad.ConjugateGradient.options">
-<span class="descname">options</span><em class="property"> = {'update_function': Option(class_name='ConjugateGradient', value=fletcher_reeves), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'verbose': Option(class_name='Verbose', value=False), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'addons': Option(class_name='GradientDescent', value=None), 'step': Option(class_name='BaseNetwork', value=0.1), 'error': Option(class_name='ConstructableNetwork', value=mse)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'error': Option(class_name='ConstructableNetwork', value=mse), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'step': Option(class_name='BaseNetwork', value=0.1), 'addons': Option(class_name='GradientDescent', value=None), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'update_function': Option(class_name='ConjugateGradient', value=fletcher_reeves), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.conjgrad.ConjugateGradient.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.conjgrad.ConjugateGradient.update_function">
-<span class="descname">update_function</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">update_function</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.conjgrad.ConjugateGradient.update_function" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -302,6 +331,7 @@ training your network, defaults to <span class="docutils literal"><span class="p
     <ul>
         <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

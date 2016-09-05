@@ -1,0 +1,351 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="viewport" content="width=device-width">
+        <title>neupy.algorithms.associative.oja module &mdash; NeuPy</title>
+            <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../_static/plugins.js"></script>
+        <script src="../_static/main.js"></script>
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+<style media="screen" type="text/css">
+    #fork_me { display: none; }
+    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
+    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
+
+    .docutils { width: 100%; }
+    .docutils td { padding: 10px; }
+    .section { word-wrap:break-word; }
+    .descname { font-weight: bold; }
+    .highlight-python + .figure { margin-top: 20px; }
+    .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+    .dataframe td { padding: 5px; }
+
+    .math .gd { color: #000 !important; } /* Generic.Deleted */
+    .math .m { color: #000 !important; } /* Literal.Number */
+    .math .s { color: #000 !important; } /* Literal.String */
+    .math .mf { color: #000 !important; } /* Literal.Number.Float */
+    .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+    .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+    .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+    .math .sc { color: #000 !important; } /* Literal.String.Char */
+    .math .s2 { color: #000 !important; } /* Literal.String.Double */
+    .math .si { color: #000 !important; } /* Literal.String.Interpol */
+    .math .sx { color: #000 !important; } /* Literal.String.Other */
+    .math .s1 { color: #000 !important; } /* Literal.String.Single */
+    .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+    .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+</style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
+          </header>
+      <nav role="navigation">
+            <ul><li class="main-nav">
+                  <a href="../pages/home.html">Home</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../page1.html">Articles</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../pages/documentation.html">Documentation</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../pages/installation.html">Installation</a>
+                </li>
+              </ul>
+          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+    <div class="section" id="module-neupy.algorithms.associative.oja">
+<span id="neupy-algorithms-associative-oja-module"></span><h1>neupy.algorithms.associative.oja module<a class="headerlink" href="#module-neupy.algorithms.associative.oja" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="neupy.algorithms.associative.oja.Oja">
+<em class="property">class </em><span class="descclassname">neupy.algorithms.associative.oja.</span><span class="descname">Oja</span><span class="sig-paren">(</span><em>*args</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/oja.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.oja.Oja" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neupy.network.learning.html#neupy.network.learning.UnsupervisedLearning" title="neupy.network.learning.UnsupervisedLearning"><span class="xref py py-class docutils literal"><span class="pre">neupy.network.learning.UnsupervisedLearning</span></span></a>, <a class="reference internal" href="neupy.network.base.html#neupy.network.base.BaseNetwork" title="neupy.network.base.BaseNetwork"><span class="xref py py-class docutils literal"><span class="pre">neupy.network.base.BaseNetwork</span></span></a></p>
+<p>Oja unsupervised algorithm that minimize input data feature
+space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minimized_data_size</strong> : int</p>
+<blockquote>
+<div><p>Expected number of features after minimization, defaults to <span class="docutils literal"><span class="pre">1</span></span></p>
+</div></blockquote>
+<p><strong>weights</strong> : array-like or <span class="docutils literal"><span class="pre">None</span></span></p>
+<blockquote>
+<div><p>Predefine default weights which controll your data in two sides.
+If weights are, <span class="docutils literal"><span class="pre">None</span></span> before train algorithms generate random
+weights. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+<p><strong>step</strong> : float</p>
+<blockquote>
+<div><p>Learning rate, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
+</div></blockquote>
+<p><strong>show_epoch</strong> : int or str</p>
+<blockquote>
+<div><p>This property controls how often the network will display information
+about training. There are two main syntaxes for this property.
+You can describe it as positive integer number and it
+will describe how offen would you like to see summary output in
+terminal. For instance, number <cite>100</cite> mean that network will show you
+summary in 100, 200, 300 ... epochs. String value should be in a
+specific format. It should contain the number of times that the output
+will be displayed in the terminal. The second part is just
+a syntax word <span class="docutils literal"><span class="pre">time</span></span> or <span class="docutils literal"><span class="pre">times</span></span> just to make text readable.
+For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that the network will show
+output twice with approximately equal period of epochs and one
+additional output would be after the finall epoch.
+Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</div></blockquote>
+<p><strong>epoch_end_signal</strong> : function</p>
+<blockquote>
+<div><p>Calls this function when train epoch finishes.</p>
+</div></blockquote>
+<p><strong>train_end_signal</strong> : function</p>
+<blockquote>
+<div><p>Calls this function when train process finishes.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool</p>
+<blockquote>
+<div><p>Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
+informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> -
+disable it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>Try reconstruct without training.</li>
+<li>Invalid number of input data features for <span class="docutils literal"><span class="pre">train</span></span> and         <span class="docutils literal"><span class="pre">reconstruct</span></span> methods.</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>In practice use step as very small value. For example <span class="docutils literal"><span class="pre">1e-7</span></span>.</li>
+<li>Normalize the input data before use Oja algorithm. Input data     shouldn&#8217;t contains large values.</li>
+<li>Set up smaller values for weights if error for a few first iterations     is big compare to the input values scale. For example, if your input     data have values between 0 and 1 error value equal to 100 is big.</li>
+</ul>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ojanet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Oja</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">minimized_data_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ojanet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">minimized</span> <span class="o">=</span> <span class="n">ojanet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">minimized</span>
+<span class="go">array([[-2.82843122],</span>
+<span class="go">       [-1.41421561],</span>
+<span class="go">       [-5.65686243],</span>
+<span class="go">       [-7.07107804]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ojanet</span><span class="o">.</span><span class="n">reconstruct</span><span class="p">(</span><span class="n">minimized</span><span class="p">)</span>
+<span class="go">array([[ 2.00000046,  2.00000046],</span>
+<span class="go">       [ 1.00000023,  1.00000023],</span>
+<span class="go">       [ 4.00000093,  4.00000093],</span>
+<span class="go">       [ 5.00000116,  5.00000116]])</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>reconstruct(input_data):</td>
+<td>Reconstruct your minimized data.</td>
+</tr>
+<tr class="row-even"><td>predict(input_data)</td>
+<td>Predict value.</td>
+</tr>
+<tr class="row-odd"><td>train(input_train, epsilon=1e-5, epochs=100)</td>
+<td>Trains network until it converge. Parameter <span class="docutils literal"><span class="pre">epochs</span></span> control maximum number of iterations, just to make sure that network will stop training procedure if it can&#8217;t converge.</td>
+</tr>
+<tr class="row-even"><td>fit(*args, **kwargs)</td>
+<td>The same as <span class="docutils literal"><span class="pre">train</span></span> method.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="neupy.algorithms.associative.oja.Oja.init_properties">
+<span class="descname">init_properties</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/oja.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.oja.Oja.init_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup default values before populate the options.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.associative.oja.Oja.minimized_data_size">
+<span class="descname">minimized_data_size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/oja.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.oja.Oja.minimized_data_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.associative.oja.Oja.options">
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'step': Option(class_name='BaseNetwork', value=0.1), 'minimized_data_size': Option(class_name='Oja', value=None), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'weights': Option(class_name='Oja', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/oja.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.oja.Oja.options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.associative.oja.Oja.predict">
+<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/oja.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.oja.Oja.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return prediction results for the input data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_data</strong> : array-like</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">array-like</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.associative.oja.Oja.reconstruct">
+<span class="descname">reconstruct</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/oja.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.oja.Oja.reconstruct" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.associative.oja.Oja.train">
+<span class="descname">train</span><span class="sig-paren">(</span><em>input_data</em>, <em>epsilon=0.01</em>, <em>epochs=100</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/oja.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.oja.Oja.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method train neural network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_train</strong> : array-like</p>
+<p><strong>target_train</strong> : array-like or Npne</p>
+<p><strong>input_test</strong> : array-like or None</p>
+<p><strong>target_test</strong> : array-like or None</p>
+<p><strong>epochs</strong> : int</p>
+<blockquote>
+<div><p>Defaults to <cite>100</cite>.</p>
+</div></blockquote>
+<p><strong>epsilon</strong> : float or None</p>
+<blockquote class="last">
+<div><p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.associative.oja.Oja.train_epoch">
+<span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_data</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/oja.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.oja.Oja.train_epoch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.associative.oja.Oja.weights">
+<span class="descname">weights</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/oja.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.oja.Oja.weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+    <div class="postmeta">
+        
+        
+        
+        </div></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Posts</h1>
+    <ul><li>
+            <a href="../2015/09/21/password_recovery.html">Password recovery</a>
+        </li><li>
+            <a href="../2015/09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
+        </li><li>
+            <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
+        </li><li>
+            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
+        </li></ul>
+</div>
+</section><section><div class="widget">
+    <h1>Cheat sheet</h1>
+    <ul>
+        <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
+        <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
+    </ul>
+</div></section><section><div class="widget">
+    <h1>Installation</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neupy</pre>
+        </div>
+    </div>
+    <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
+    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
+</div></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+    <a id="fork_me" href="http://github.com/itdxer/neupy">
+        <img alt="Fork me" src="../_static/img/github-fork-green.png" />
+    </a></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

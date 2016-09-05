@@ -100,10 +100,10 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.layers.transformations">
-<span id="neupy-layers-transformations-module"></span><h1>neupy.layers.transformations module</h1>
+<span id="neupy-layers-transformations-module"></span><h1>neupy.layers.transformations module<a class="headerlink" href="#module-neupy.layers.transformations" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.layers.transformations.Reshape">
-<em class="property">class </em><span class="descclassname">neupy.layers.transformations.</span><span class="descname">Reshape</span><span class="sig-paren">(</span><em>shape=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.layers.transformations.</span><span class="descname">Reshape</span><span class="sig-paren">(</span><em>shape=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Reshape" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.layers.base.html#neupy.layers.base.BaseLayer" title="neupy.layers.base.BaseLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.base.BaseLayer</span></span></a></p>
 <p>Gives a new shape to an input value without changing
 its data.</p>
@@ -122,14 +122,56 @@ set up new feature shape using tuples. Defaults to <span class="docutils literal
 </tr>
 </tbody>
 </table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>training_state</td>
+<td>(bool) Defines whether layer in training state or not.</td>
+</tr>
+<tr class="row-even"><td>layer_id</td>
+<td>(int) Layer&#8217;s identifier.</td>
+</tr>
+<tr class="row-odd"><td>parameters</td>
+<td>(list) List of layer&#8217;s parameters.</td>
+</tr>
+<tr class="row-even"><td>relate_to_layer</td>
+<td>(BaseLayer or None)</td>
+</tr>
+<tr class="row-odd"><td>relate_from_layer</td>
+<td>(BaseLayer or None)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="69%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
+</tr>
+<tr class="row-even"><td>relate_to(right_layer)</td>
+<td>Connect current layer with the next one.</td>
+</tr>
+<tr class="row-odd"><td>disable_training_state()</td>
+<td>Swith off trainig state.</td>
+</tr>
+</tbody>
+</table>
 <dl class="attribute">
 <dt id="neupy.layers.transformations.Reshape.options">
-<span class="descname">options</span><em class="property"> = {'shape': Option(class_name='Reshape', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'shape': Option(class_name='Reshape', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Reshape.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.transformations.Reshape.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Reshape.output" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reshape the feature space for the input value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -143,12 +185,12 @@ set up new feature shape using tuples. Defaults to <span class="docutils literal
 
 <dl class="attribute">
 <dt id="neupy.layers.transformations.Reshape.output_shape">
-<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Reshape.output_shape" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.transformations.Reshape.shape">
-<span class="descname">shape</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">shape</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Reshape.shape" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -176,6 +218,7 @@ set up new feature shape using tuples. Defaults to <span class="docutils literal
     <ul>
         <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

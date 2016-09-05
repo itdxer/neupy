@@ -1,0 +1,225 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="viewport" content="width=device-width">
+        <title>Create custom layers &mdash; NeuPy</title>
+            <link rel="stylesheet" href="../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../_static/plugins.js"></script>
+        <script src="../../_static/main.js"></script>
+        <link rel="next" title="Storage" href="../storage.html" /><link rel="prev" title="Convolutional layers" href="convolutional-layers.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+<style media="screen" type="text/css">
+    #fork_me { display: none; }
+    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
+    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
+
+    .docutils { width: 100%; }
+    .docutils td { padding: 10px; }
+    .section { word-wrap:break-word; }
+    .descname { font-weight: bold; }
+    .highlight-python + .figure { margin-top: 20px; }
+    .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+    .dataframe td { padding: 5px; }
+
+    .math .gd { color: #000 !important; } /* Generic.Deleted */
+    .math .m { color: #000 !important; } /* Literal.Number */
+    .math .s { color: #000 !important; } /* Literal.String */
+    .math .mf { color: #000 !important; } /* Literal.Number.Float */
+    .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+    .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+    .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+    .math .sc { color: #000 !important; } /* Literal.String.Char */
+    .math .s2 { color: #000 !important; } /* Literal.String.Double */
+    .math .si { color: #000 !important; } /* Literal.String.Interpol */
+    .math .sx { color: #000 !important; } /* Literal.String.Other */
+    .math .s1 { color: #000 !important; } /* Literal.String.Single */
+    .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+    .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+</style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
+          </header>
+      <nav role="navigation">
+            <ul><li class="main-nav">
+                  <a href="../../pages/home.html">Home</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../page1.html">Articles</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../pages/documentation.html">Documentation</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../pages/installation.html">Installation</a>
+                </li>
+              </ul>
+          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+    <div class="section" id="create-custom-layers">
+<h1>Create custom layers<a class="headerlink" href="#create-custom-layers" title="Permalink to this headline">¶</a></h1>
+<p>There are a few main types of layers. We are going to check them one by one in order of complexity.</p>
+<div class="section" id="element-wise-transformation">
+<h2>Element-wise transformation<a class="headerlink" href="#element-wise-transformation" title="Permalink to this headline">¶</a></h2>
+<p>The simplest one layer that makes only element-wise transformation. This layer doesn&#8217;t include any trainable parameters and it doesn&#8217;t change input&#8217;s shape. For simplisity we can build a layer that adds one to each elements in the input tensor.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="k">class</span> <span class="nc">ShiftByOneLayer</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p><span class="docutils literal"><span class="pre">BaseLayer</span></span> is a main class that contains all important methods and attributes that any layer requires.</p>
+</div>
+<div class="section" id="layers-with-activation-function">
+<h2>Layers with activation function<a class="headerlink" href="#layers-with-activation-function" title="Permalink to this headline">¶</a></h2>
+<p>If you want to have a layer that behaves like any other built-in layer with activation function in the NeuPy, you should inherit your class from the <span class="docutils literal"><span class="pre">ActivationLayer</span></span> class. Let&#8217;s consider and example of layer with a square activation function.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="k">class</span> <span class="nc">SquareLayer</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">ActivationLayer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">activation_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">T</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">input_value</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="advanced-methods">
+<h2>Advanced methods<a class="headerlink" href="#advanced-methods" title="Permalink to this headline">¶</a></h2>
+<p>There are a few other methods that can be useful in case of more complecated layers.</p>
+<p>Some layers makes an output shape modification. If you don&#8217;t define the new output shape in the layer class you will not be able to attach layer to the other in the network. Here is an example.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="k">class</span> <span class="nc">FeatureMeanLayer</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <span class="docutils literal"><span class="pre">FeatureMeanLayer</span></span> layer makes a feature transformation and modifies input matrix shape. We define <span class="docutils literal"><span class="pre">output_shape</span></span> property as an additional layer&#8217;s parameter. Now other layers in the sequence know the expected layers output shape and adjust their parameters to the correct shape.</p>
+<p>If your parameter depends on the other layers in the layers sequence you can get them from the <span class="docutils literal"><span class="pre">self.relate_to_layer</span></span> and <span class="docutils literal"><span class="pre">self.relate_from_layer</span></span> attributes. They return next and previous layers respectively. Eahc of this layers have <span class="docutils literal"><span class="pre">output_shape</span></span> and <span class="docutils literal"><span class="pre">input_shape</span></span> attibutes, so you can read useful information from them.</p>
+<p>The other important method is an <span class="docutils literal"><span class="pre">initialize</span></span>. The main purpose of this method is to apply all necesary initializations related to the network. For instance, random weight or bias parameters. You can&#8217;t define them in the <span class="docutils literal"><span class="pre">__init__</span></span> method, because when you create layer instance full network structure is unknown and you don&#8217;t have all the necessary information. Let&#8217;s extend the previous layer with the <span class="docutils literal"><span class="pre">initialize</span></span> method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="kn">from</span> <span class="nn">neupy.utils</span> <span class="kn">import</span> <span class="n">asfloat</span>
+
+<span class="k">class</span> <span class="nc">FeatureMeanLayer</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FeatureMeanLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">scaler</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">shared</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;scaler_{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer_id</span><span class="p">),</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">asfloat</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scaler</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaler</span> <span class="o">*</span> <span class="n">value</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this example I&#8217;ve added a few other feature to consider a couple of useful attributes and functions. Let&#8217;s check them one by one. <span class="docutils literal"><span class="pre">self.layer_id</span></span> defines layer&#8217;s identifier as an integer number. This number is basically a layer&#8217;s index number in the sequence. The <span class="docutils literal"><span class="pre">self.parameters</span></span> attribute is a list that contains all trainable parameters. Usually it is a weight or bias, but you can define any parameter you want. The <span class="docutils literal"><span class="pre">asfloat</span></span> function just converts any number to the float number. The type of the float number depends on the Theano&#8217;s <span class="docutils literal"><span class="pre">theano.config.floatX</span></span> variable.</p>
+</div>
+</div>
+
+    <div class="postmeta">
+        
+        
+        
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="convolutional-layers.html">Convolutional layers</a></li>
+            <li class="right"><a href="../storage.html">Storage</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Posts</h1>
+    <ul><li>
+            <a href="../../2015/09/21/password_recovery.html">Password recovery</a>
+        </li><li>
+            <a href="../../2015/09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
+        </li><li>
+            <a href="../../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
+        </li><li>
+            <a href="../../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
+        </li></ul>
+</div>
+</section><section><div class="widget">
+    <h1>Cheat sheet</h1>
+    <ul>
+        <li><a href="../cheatsheet.html#algorithms">Algorithms</a></li>
+        <li><a href="../cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../cheatsheet.html#error-functions">Error functions</a></li>
+    </ul>
+</div></section><section><div class="widget">
+    <h1>Installation</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neupy</pre>
+        </div>
+    </div>
+    <p>Read more in <a href="../../pages/documentation.html">Documentation</a>.</p>
+    <p>Old documentations you can find <a href="../../pages/versions.html">here</a>.</p>
+</div></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
+    <a id="fork_me" href="http://github.com/itdxer/neupy">
+        <img alt="Fork me" src="../../_static/img/github-fork-green.png" />
+    </a></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

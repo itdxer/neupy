@@ -100,10 +100,10 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.linear.perceptron">
-<span id="neupy-algorithms-linear-perceptron-module"></span><h1>neupy.algorithms.linear.perceptron module</h1>
+<span id="neupy-algorithms-linear-perceptron-module"></span><h1>neupy.algorithms.linear.perceptron module<a class="headerlink" href="#module-neupy.algorithms.linear.perceptron" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.algorithms.linear.perceptron.Perceptron">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.linear.perceptron.</span><span class="descname">Perceptron</span><span class="sig-paren">(</span><em>connection</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/linear/perceptron.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.linear.perceptron.</span><span class="descname">Perceptron</span><span class="sig-paren">(</span><em>connection</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/linear/perceptron.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.linear.perceptron.Perceptron" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.algorithms.linear.base.html#neupy.algorithms.linear.base.BaseLinearNetwork" title="neupy.algorithms.linear.base.BaseLinearNetwork"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.linear.base.BaseLinearNetwork</span></span></a></p>
 <p>Perceptron Neural Network. Simples linear model in Neural
 Networks.</p>
@@ -117,10 +117,9 @@ Networks.</p>
 describe number of input units and the seconds one number of output
 units.</p>
 </div></blockquote>
-<p><strong>error</strong> : {&#8216;mse&#8217;, &#8216;rmse&#8217;, &#8216;mae&#8217;, &#8216;categorical_crossentropy&#8217;,     &#8216;binary_crossentropy&#8217;} or function</p>
+<p><strong>error</strong> : str or function</p>
 <blockquote>
-<div><p>Function that calculate prediction error.
-Defaults to <span class="docutils literal"><span class="pre">mse</span></span>.</p>
+<div><p>Error/loss function. Defaults to <span class="docutils literal"><span class="pre">mse</span></span>.</p>
 <ul class="simple">
 <li><span class="docutils literal"><span class="pre">mae</span></span> - Mean Absolute Error.</li>
 <li><span class="docutils literal"><span class="pre">mse</span></span> - Mean Squared Error.</li>
@@ -129,10 +128,10 @@ Defaults to <span class="docutils literal"><span class="pre">mse</span></span>.<
 <li><span class="docutils literal"><span class="pre">rmsle</span></span> - Root Mean Squared Logarithmic Error.</li>
 <li><span class="docutils literal"><span class="pre">categorical_crossentropy</span></span> - Categorical cross entropy.</li>
 <li><span class="docutils literal"><span class="pre">binary_crossentropy</span></span> - Binary cross entropy.</li>
-<li>Custom function that accept two mandatory arguments.</li>
+<li><span class="docutils literal"><span class="pre">binary_hinge</span></span> - Binary hinge entropy.</li>
+<li><span class="docutils literal"><span class="pre">categorical_hinge</span></span> - Categorical hinge entropy.</li>
+<li>Custom function which accepts two mandatory arguments.         The first one is expected value and the second one is         predicted value. Example: <span class="docutils literal"><span class="pre">custom_func(expected,</span> <span class="pre">predicted)</span></span></li>
 </ul>
-<p>The first one is expected value and the second one is
-predicted value. Example: <span class="docutils literal"><span class="pre">custom_func(expected,</span> <span class="pre">predicted)</span></span></p>
 </div></blockquote>
 <p><strong>step</strong> : float</p>
 <blockquote>
@@ -211,12 +210,36 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </table>
 <dl class="method">
 <dt id="neupy.algorithms.linear.perceptron.Perceptron.init_layer_updates">
-<span class="descname">init_layer_updates</span><span class="sig-paren">(</span><em>layer</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/linear/perceptron.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<span class="descname">init_layer_updates</span><span class="sig-paren">(</span><em>layer</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/linear/perceptron.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.linear.perceptron.Perceptron.init_layer_updates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize train function update in Theano format that
+would be trigger after each training epoch for each layer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>layer</strong> : object</p>
+<blockquote>
+<div><p>Any layer that inherit from layers.BaseLayer class.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list</p>
+<blockquote class="last">
+<div><p>Update that excaptable by <span class="docutils literal"><span class="pre">theano.function</span></span>. There should be
+a lits that contains tuples with 2 elements. First one should
+be parameter that would be updated after epoch and the second one
+should update rules for this parameter. For example parameter
+could be a layer&#8217;s weight and bias.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.linear.perceptron.Perceptron.options">
-<span class="descname">options</span><em class="property"> = {'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'verbose': Option(class_name='Verbose', value=False), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'step': Option(class_name='BaseNetwork', value=0.1), 'error': Option(class_name='ConstructableNetwork', value=mse)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/linear/perceptron.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'error': Option(class_name='ConstructableNetwork', value=mse), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'step': Option(class_name='BaseNetwork', value=0.1), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/linear/perceptron.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.linear.perceptron.Perceptron.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -244,6 +267,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
     <ul>
         <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

@@ -100,10 +100,10 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.competitive.art">
-<span id="neupy-algorithms-competitive-art-module"></span><h1>neupy.algorithms.competitive.art module</h1>
+<span id="neupy-algorithms-competitive-art-module"></span><h1>neupy.algorithms.competitive.art module<a class="headerlink" href="#module-neupy.algorithms.competitive.art" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.algorithms.competitive.art.ART1">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.competitive.art.</span><span class="descname">ART1</span><span class="sig-paren">(</span><em>*args</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/art.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.competitive.art.</span><span class="descname">ART1</span><span class="sig-paren">(</span><em>*args</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/art.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.art.ART1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="neupy.network.base.html#neupy.network.base.BaseNetwork" title="neupy.network.base.BaseNetwork"><span class="xref py py-class docutils literal"><span class="pre">neupy.network.base.BaseNetwork</span></span></a></p>
 <p>Adaptive Resonance Theory (ART1) Network for binary
 data clustering.</p>
@@ -201,28 +201,60 @@ training your network, defaults to <span class="docutils literal"><span class="p
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.art.ART1.n_clusters">
-<span class="descname">n_clusters</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/art.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">n_clusters</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/art.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.art.ART1.n_clusters" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.art.ART1.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'step': Option(class_name='BaseNetwork', value=0.1), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'n_clusters': Option(class_name='ART1', value=2), 'rho': Option(class_name='ART1', value=0.5), 'show_epoch': Option(class_name='BaseNetwork', value=1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/art.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'n_clusters': Option(class_name='ART1', value=2), 'rho': Option(class_name='ART1', value=0.5), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'step': Option(class_name='BaseNetwork', value=0.1), 'train_end_signal': Option(class_name='BaseNetwork', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/art.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.art.ART1.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.competitive.art.ART1.predict">
-<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/art.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/art.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.art.ART1.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return prediction results for the input data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_data</strong> : array-like</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">array-like</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.art.ART1.rho">
-<span class="descname">rho</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/art.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">rho</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/art.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.art.ART1.rho" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.competitive.art.ART1.train">
-<span class="descname">train</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/art.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<span class="descname">train</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/art.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.art.ART1.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method train neural network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_train</strong> : array-like</p>
+<p><strong>target_train</strong> : array-like or None</p>
+<p><strong>input_test</strong> : array-like or None</p>
+<p><strong>target_test</strong> : array-like or None</p>
+<p><strong>epochs</strong> : int</p>
+<blockquote>
+<div><p>Defaults to <cite>100</cite>.</p>
+</div></blockquote>
+<p><strong>epsilon</strong> : float or None</p>
+<blockquote class="last">
+<div><p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -249,6 +281,7 @@ training your network, defaults to <span class="docutils literal"><span class="p
     <ul>
         <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">

@@ -100,15 +100,15 @@
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.network.utils">
-<span id="neupy-network-utils-module"></span><h1>neupy.network.utils module</h1>
+<span id="neupy-network-utils-module"></span><h1>neupy.network.utils module<a class="headerlink" href="#module-neupy.network.utils" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="neupy.network.utils.iter_until_converge">
-<span class="descclassname">neupy.network.utils.</span><span class="descname">iter_until_converge</span><span class="sig-paren">(</span><em>network</em>, <em>epsilon</em>, <em>max_epochs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.network.utils.</span><span class="descname">iter_until_converge</span><span class="sig-paren">(</span><em>network</em>, <em>epsilon</em>, <em>max_epochs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.network.utils.iter_until_converge" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="neupy.network.utils.shuffle">
-<span class="descclassname">neupy.network.utils.</span><span class="descname">shuffle</span><span class="sig-paren">(</span><em>*arrays</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.network.utils.</span><span class="descname">shuffle</span><span class="sig-paren">(</span><em>*arrays</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.network.utils.shuffle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a random shuffle for all arrays.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -132,7 +132,7 @@
 
 <dl class="function">
 <dt id="neupy.network.utils.normalize_error">
-<span class="descclassname">neupy.network.utils.</span><span class="descname">normalize_error</span><span class="sig-paren">(</span><em>output</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.network.utils.</span><span class="descname">normalize_error</span><span class="sig-paren">(</span><em>output</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.network.utils.normalize_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize error output when result is non-scalar.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -144,7 +144,7 @@
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int, float</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int, float, None</p>
 <blockquote class="last">
 <div><p>Return sum of all absolute values.</p>
 </div></blockquote>
@@ -155,14 +155,14 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="neupy.network.utils.step">
-<span class="descclassname">neupy.network.utils.</span><span class="descname">step</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.network.utils.step_function">
+<span class="descclassname">neupy.network.utils.</span><span class="descname">step_function</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.network.utils.step_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Step function.</p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="neupy.network.utils.StopNetworkTraining">
-<em class="property">exception </em><span class="descclassname">neupy.network.utils.</span><span class="descname">StopNetworkTraining</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">exception </em><span class="descclassname">neupy.network.utils.</span><span class="descname">StopNetworkTraining</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/network/utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.network.utils.StopNetworkTraining" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">Exception</span></span></p>
 <p>Exception that needs to be triggered in case of
 early training interruption.</p>
@@ -191,6 +191,7 @@ early training interruption.</p>
     <ul>
         <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
         <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
+        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
         <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
     </ul>
 </div></section><section><div class="widget">
