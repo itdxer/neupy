@@ -27,10 +27,11 @@ class BernoulliRBMTestCase(BaseTestCase):
     def test_simple_bernoulli_rbm(self):
         data = self.data
 
-        rbm = algorithms.RBM(n_hidden=1, n_visible=4, step=0.1, batch_size=10)
+        rbm = algorithms.RBM(n_visible=4, n_hidden=1,
+                             step=0.1, batch_size=10)
         rbm.train(data, epochs=500)
 
-        output = rbm.transform(data)
+        output = rbm.visible_to_hidden(data)
         np.testing.assert_array_equal(
             output.round(),
             np.array([[1, 1, 1, 1, 0, 0, 0, 0, 0, 0]]).T
@@ -54,8 +55,37 @@ class BernoulliRBMTestCase(BaseTestCase):
 
         self.assertNotEqual(len(data) % batch_size, 0)
 
-        rbm = algorithms.RBM(n_hidden=1, n_visible=4, step=0.1,
+        rbm = algorithms.RBM(n_visible=4, n_hidden=1, step=0.1,
                              batch_size=batch_size)
         # Check if it's possilbe to train RBM in case if
         # we cannot divide dataset into full mini-batches
         rbm.train(data, epochs=2)
+
+    def test_rbm_sampling(self):
+        data = self.data
+
+        rbm = algorithms.RBM(n_visible=4, n_hidden=1)
+        rbm.train(data, epochs=100)
+
+        proba_sample = rbm.hidden_to_visible(
+            rbm.visible_to_hidden(data)
+        )
+        np.testing.assert_array_equal(
+            proba_sample.round(),
+            np.array([
+                [1, 0, 1, 0],
+                [1, 0, 1, 0],
+                [1, 0, 1, 0],  # fixed sample
+                [1, 0, 1, 0],
+
+                [0, 1, 0, 1],
+                [0, 1, 0, 1],  # fixed sample
+                [0, 1, 0, 1],
+                [0, 1, 0, 1],
+                [0, 1, 0, 1],
+                [0, 1, 0, 1],
+            ])
+        )
+
+        sampled_data = rbm.gibbs_sampling(data, n_iter=1)
+        self.assertNotEqual(0, np.abs(sampled_data - self.data).sum())

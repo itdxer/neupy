@@ -52,11 +52,12 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
     -------
     {UnsupervisedLearningMixin.train}
     {BaseSkeleton.fit}
-    transform(input_data)
-        Propagates input data through the network and return
-        output from the hidden units.
-    predict(input_data)
-        Alias to ``transform`` method.
+    visible_to_hidden(visible_input)
+        Populates data throught the network and returns output
+        from the hidden layer.
+    hidden_to_visible(hidden_input)
+        Propagates output from the hidden layer backward
+        to the visible.
     gibbs_sampling(visible_input, n_iter=1)
         Makes Gibbs sampling n times using visible input.
 
@@ -106,7 +107,6 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
 
     def init_variables(self):
         self.init_layers()
-
         self.variables.update(
             h_samples=theano.shared(
                 name='h_samples',
@@ -114,35 +114,35 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
             ),
         )
 
-    def free_energy(self, visible_sample):
-        wx_b = T.dot(visible_sample, self.weight) + self.hidden_bias
-        visible_bias_term = T.dot(visible_sample, self.visible_bias)
-        hidden_term = T.log(asfloat(1) + T.exp(wx_b)).sum(axis=1)
-        return -visible_bias_term - hidden_term
-
-    def hidden_from_visible(self, visible_sample):
-        wx_b = T.dot(visible_sample, self.weight) + self.hidden_bias
-        return T.nnet.sigmoid(wx_b)
-
-    def visible_from_hidden(self, hidden_sample):
-        wx_b = T.dot(hidden_sample, self.weight.T) + self.visible_bias
-        return T.nnet.sigmoid(wx_b)
-
-    def sample_hidden_from_visible(self, visible_sample):
-        theano_random = self.theano_random
-        hidden_prob = self.hidden_from_visible(visible_sample)
-        hidden_sample = theano_random.binomial(n=1, p=hidden_prob,
-                                               dtype=theano.config.floatX)
-        return hidden_sample
-
-    def sample_visible_from_hidden(self, hidden_sample):
-        theano_random = self.theano_random
-        visible_prob = self.visible_from_hidden(hidden_sample)
-        visible_sample = theano_random.binomial(n=1, p=visible_prob,
-                                                dtype=theano.config.floatX)
-        return visible_sample
-
     def init_methods(self):
+        def free_energy(visible_sample):
+            wx_b = T.dot(visible_sample, self.weight) + self.hidden_bias
+            visible_bias_term = T.dot(visible_sample, self.visible_bias)
+            hidden_term = T.log(asfloat(1) + T.exp(wx_b)).sum(axis=1)
+            return -visible_bias_term - hidden_term
+
+        def visible_to_hidden(visible_sample):
+            wx_b = T.dot(visible_sample, self.weight) + self.hidden_bias
+            return T.nnet.sigmoid(wx_b)
+
+        def hidden_to_visible(hidden_sample):
+            wx_b = T.dot(hidden_sample, self.weight.T) + self.visible_bias
+            return T.nnet.sigmoid(wx_b)
+
+        def sample_hidden_from_visible(visible_sample):
+            theano_random = self.theano_random
+            hidden_prob = visible_to_hidden(visible_sample)
+            hidden_sample = theano_random.binomial(n=1, p=hidden_prob,
+                                                   dtype=theano.config.floatX)
+            return hidden_sample
+
+        def sample_visible_from_hidden(hidden_sample):
+            theano_random = self.theano_random
+            visible_prob = hidden_to_visible(hidden_sample)
+            visible_sample = theano_random.binomial(n=1, p=visible_prob,
+                                                    dtype=theano.config.floatX)
+            return visible_sample
+
         network_input = self.variables.network_input
         n_samples = asfloat(network_input.shape[0])
         theano_random = self.theano_random
@@ -164,10 +164,10 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
             # samples then expected
             network_input[sample_indeces]
         )
-        h_pos = self.hidden_from_visible(v_pos)
+        h_pos = visible_to_hidden(v_pos)
 
-        v_neg = self.sample_visible_from_hidden(h_samples)
-        h_neg = self.hidden_from_visible(v_neg)
+        v_neg = sample_visible_from_hidden(h_samples)
+        h_neg = visible_to_hidden(v_neg)
 
         weight_update = v_pos.T.dot(h_pos) - v_neg.T.dot(h_neg)
         h_bias_update = (h_pos - h_neg).mean(axis=0)
@@ -178,7 +178,7 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
             low=0,
             high=self.n_visible - 1,
         )
-        # rounded_input = T.round(network_input)
+        rounded_input = T.round(network_input)
         rounded_input = network_input
         rounded_input_flip = T.set_subtensor(
             rounded_input[:, feature_index_to_flip],
@@ -186,8 +186,8 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
         )
         error = T.mean(
             self.n_visible * T.log(T.nnet.sigmoid(
-                self.free_energy(rounded_input_flip) -
-                self.free_energy(rounded_input)
+                free_energy(rounded_input_flip) -
+                free_energy(rounded_input)
             ))
         )
 
@@ -203,14 +203,18 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
                 ]
             ),
             prediction_error=theano.function([network_input], error),
-            hidden_from_visible=theano.function(
+            visible_to_hidden=theano.function(
                 [network_input],
-                self.hidden_from_visible(network_input)
+                visible_to_hidden(network_input)
+            ),
+            hidden_to_visible=theano.function(
+                [network_input],
+                hidden_to_visible(network_input)
             ),
             gibbs_sampling=theano.function(
                 [network_input],
-                self.visible_from_hidden(
-                    self.sample_hidden_from_visible(network_input)
+                sample_visible_from_hidden(
+                    sample_hidden_from_visible(network_input)
                 )
             )
         )
@@ -238,52 +242,73 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
         n_samples = len(input_train)
         return average_batch_errors(errors, n_samples, self.batch_size)
 
-    def transform(self, input_data):
+    def visible_to_hidden(self, visible_input):
         """
         Populates data throught the network and returns output
         from the hidden layer.
 
         Parameters
         ----------
-        input_data : array-like (n_samples, n_features)
+        visible_input : array-like (n_samples, n_visible_features)
 
         Returns
         -------
         array-like
         """
         is_input_feature1d = (self.n_visible == 1)
-        input_data = format_data(input_data, is_input_feature1d)
+        visible_input = format_data(visible_input, is_input_feature1d)
 
         outputs = self.apply_batches(
-            function=self.methods.hidden_from_visible,
-            input_data=input_data,
+            function=self.methods.visible_to_hidden,
+            input_data=visible_input,
 
-            description='Transformation batches',
+            description='Hidden from visible batches',
             show_progressbar=True,
             show_error_output=False,
         )
 
         return np.concatenate(outputs, axis=0)
 
-    def predict(self, input_data):
+    def hidden_to_visible(self, hidden_input):
         """
-        Alias to ``transform`` method.
+        Propagates output from the hidden layer backward
+        to the visible.
+
+        Parameters
+        ----------
+        hidden_input : array-like (n_samples, n_hidden_features)
+
+        Returns
+        -------
+        array-like
         """
-        return self.transform(input_data)
+        is_input_feature1d = (self.n_hidden == 1)
+        hidden_input = format_data(hidden_input, is_input_feature1d)
+
+        outputs = self.apply_batches(
+            function=self.methods.hidden_to_visible,
+            input_data=hidden_input,
+
+            description='Visible from hidden batches',
+            show_progressbar=True,
+            show_error_output=False,
+        )
+
+        return np.concatenate(outputs, axis=0)
 
     def prediction_error(self, input_data, target_data=None):
         """
-        Check the prediction error for the specified input samples
-        and their targets.
+        Compute the pseudo-likelihood of input samples.
 
         Parameters
         ----------
         input_data : array-like
+            Values of the visible layer
 
         Returns
         -------
         float
-            Prediction error.
+            Value of the pseudo-likelihood.
         """
         is_input_feature1d = (self.n_visible == 1)
         input_data = format_data(input_data, is_input_feature1d)
@@ -307,7 +332,7 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
 
         Parameters
         ----------
-        visible_input : array-like
+        visible_input : 1d or 2d array
         n_iter : int
             Number of Gibbs sampling iterations. Defaults to ``1``.
 
@@ -315,7 +340,8 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
         -------
         array-like
             Output from the visible units after perfoming n
-            Gibbs samples.
+            Gibbs samples. Array will contain only binary
+            units (0 and 1).
         """
         is_input_feature1d = (self.n_visible == 1)
         visible_input = format_data(visible_input, is_input_feature1d)
