@@ -61,6 +61,41 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
     gibbs_sampling(visible_input, n_iter=1)
         Makes Gibbs sampling n times using visible input.
 
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from neupy import algorithms
+    >>>
+    >>> data = np.array([
+    ...     [1, 0, 1, 0],
+    ...     [1, 0, 1, 0],
+    ...     [1, 0, 0, 0],  # incomplete sample
+    ...     [1, 0, 1, 0],
+    ...
+    ...     [0, 1, 0, 1],
+    ...     [0, 0, 0, 1],  # incomplete sample
+    ...     [0, 1, 0, 1],
+    ...     [0, 1, 0, 1],
+    ...     [0, 1, 0, 1],
+    ...     [0, 1, 0, 1],
+    ... ])
+    >>>
+    >>> rbm = algorithms.RBM(n_visible=4, n_hidden=1)
+    >>> rbm.train(data, epochs=100)
+    >>>
+    >>> hidden_states = rbm.visible_to_hidden(data)
+    >>> hidden_states.round(2)
+    array([[ 0.99],
+           [ 0.99],
+           [ 0.95],
+           [ 0.99],
+           [ 0.  ],
+           [ 0.01],
+           [ 0.  ],
+           [ 0.  ],
+           [ 0.  ],
+           [ 0.  ]])
+
     References
     ----------
     [1] G. Hinton, A Practical Guide to Training Restricted
