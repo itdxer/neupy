@@ -44,7 +44,9 @@ def terminal_echo(enabled, file_descriptor=sys.stdin):
             attributes[3] = lflag
             termios.tcsetattr(file_descriptor, termios.TCSANOW, attributes)
 
-        except termios.error:
+        except Exception:
+            # Any error can crash program, so it's easier to
+            # ignore it in case if something went wrong
             pass
 
 
@@ -133,8 +135,8 @@ class TerminalLogger(object):
         self.write(message)
 
     def error(self, text):
-        """"
-Method writes messages that related to error type.
+        """
+        Method writes messages that related to error type.
         Text will be displayed as message with ``tag`` parameter equal
         to ``'ERROR'``. Color will be red.
 
@@ -145,8 +147,8 @@ Method writes messages that related to error type.
         self.message('ERROR', text, color='red')
 
     def warning(self, text):
-        """"
-Method writes messages that related to warning type.
+        """
+        Method writes messages that related to warning type.
         Text will be displayed as message with ``tag`` parameter equal
         to ``'WARN'``. Color will be red.
 
