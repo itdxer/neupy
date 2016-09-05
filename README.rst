@@ -1,10 +1,14 @@
-|Travis|_ |Dependency Status|_
+|Travis|_ |Dependency Status|_ |License|_
 
 .. |Travis| image:: https://api.travis-ci.org/itdxer/neupy.png?branch=master
 .. _Travis: https://travis-ci.org/itdxer/neupy
 
 .. |Dependency Status| image:: https://dependencyci.com/github/itdxer/neupy/badge
 .. _Dependency Status: https://dependencyci.com/github/itdxer/neupy
+
+.. |License| image:: https://img.shields.io/badge/license-MIT-blue.svg
+.. _License: https://github.com/itdxer/neupy/blob/master/LICENSE
+
 
 NeuPy v0.3.1 (beta)
 ===================
