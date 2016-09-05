@@ -31,9 +31,6 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
     n_hidden : int
         Number of hidden units.
     {MinibatchTrainingMixin.batch_size}
-    n_gibbs_steps : int
-        Number of Gibbs samples that algorithm need to perfom during
-        the training procedure. Defaults to ``1``.
     weight : array-like, Theano variable, Initializer or scalar
         Default initialization methods
         you can find :ref:`here <init-methods>`.
@@ -104,8 +101,6 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
     """
     n_visible = IntProperty(required=True, minval=1)
     n_hidden = IntProperty(required=True, minval=1)
-
-    n_gibbs_steps = IntProperty(default=1, minval=1)
 
     weight = ParameterProperty(default=init.XavierNormal())
     hidden_bias = ParameterProperty(default=init.Constant(value=0))
