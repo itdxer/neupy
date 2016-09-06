@@ -9,8 +9,8 @@ class CMACTestCase(BaseTestCase):
     def test_cmac(self):
         input_train = np.reshape(np.linspace(0, 2 * np.pi, 100), (100, 1))
         input_train_before = input_train.copy()
+
         input_test = np.reshape(np.linspace(np.pi, 2 * np.pi, 50), (50, 1))
-        input_test_before = input_test.copy()
 
         target_train = np.sin(input_train)
         target_train_before = target_train.copy()

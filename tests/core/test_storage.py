@@ -1,5 +1,3 @@
-import unittest
-import platform
 import tempfile
 
 import dill

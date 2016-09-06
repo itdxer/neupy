@@ -1,9 +1,6 @@
 from functools import partial
 
-import numpy as np
-
-from sklearn import datasets, cross_validation, preprocessing
-from neupy import algorithms, layers, estimators
+from neupy import algorithms, layers
 from neupy import init
 
 from utils import compare_networks
@@ -32,8 +29,6 @@ class HessianDiagonalTestCase(BaseTestCase):
             min_eigval=0.01,
         )
         nw.train(x_train / 2, y_train, epochs=10)
-        y_predict = nw.predict(x_test)
-
         self.assertAlmostEqual(0.10, nw.errors.last(), places=2)
 
     def test_compare_bp_and_hessian(self):

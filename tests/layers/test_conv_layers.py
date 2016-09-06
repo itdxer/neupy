@@ -21,7 +21,7 @@ class ConvLayersTestCase(BaseTestCase):
         input_layer = layers.Input((1, 5, 5))
         conv_layer = layers.Convolution((6, 2, 2))
 
-        connection = input_layer > conv_layer
+        input_layer > conv_layer
         conv_layer.initialize()
 
         self.assertEqual(weight_shape, conv_layer.weight.get_value().shape)
@@ -42,7 +42,7 @@ class ConvLayersTestCase(BaseTestCase):
                                             border_mode=border_mode,
                                             stride_size=stride)
 
-            connection = input_layer > conv_layer
+            input_layer > conv_layer
             conv_layer.initialize()
 
             y = conv_layer.output(x).eval()
@@ -151,7 +151,7 @@ class PoolingLayersTestCase(BaseTestCase):
             # Input shape should have 3 feature dimensions
             # (and +1 for the batch)
             upscale_layer = layers.Upscale((2, 2))
-            connection = layers.Input(10) > upscale_layer
+            layers.Input(10) > upscale_layer
             upscale_layer.output_shape
 
         invalid_scales = [-1, (2, 0), (-4, 1), (3, 3, 3)]
@@ -171,7 +171,7 @@ class PoolingLayersTestCase(BaseTestCase):
 
         for testcase in testcases:
             upscale_layer = layers.Upscale(testcase.scale)
-            connection = layers.Input((1, 14, 14)) > upscale_layer
+            layers.Input((1, 14, 14)) > upscale_layer
 
             self.assertEqual(upscale_layer.output_shape,
                              testcase.expected_shape,
@@ -192,7 +192,7 @@ class PoolingLayersTestCase(BaseTestCase):
         ]).reshape((1, 1, 6, 8))
 
         upscale_layer = layers.Upscale((3, 2))
-        connection = layers.Input((1, 2, 4)) > upscale_layer
+        layers.Input((1, 2, 4)) > upscale_layer
 
         x = T.tensor4('x')
         actual_output = upscale_layer.output(x)

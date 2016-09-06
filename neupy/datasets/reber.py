@@ -63,7 +63,7 @@ def is_valid_by_reber(word):
 
 def make_reber(n_words=100):
     """
-    Generate list of Reber grammar words.
+    Generate list of words valid by Reber grammar.
 
     Parameters
     ----------

@@ -1,5 +1,3 @@
-import numpy as np
-
 from neupy import algorithms, layers
 
 from data import xor_input_train, xor_target_train

@@ -32,9 +32,9 @@ class ConfigsTestCase(BaseTestCase):
         class A(Configurable):
             correct_property = Property()
 
-        a = A(correct_property=3)
+        A(correct_property=3)
         with self.assertRaises(ValueError):
-            a = A(invalid_property=3)
+            A(invalid_property=3)
 
     def test_abc_config(self):
         class A(ConfigurableABC):

@@ -80,7 +80,7 @@ class BatchNormTestCase(BaseTestCase):
 
     def test_batch_norm_in_non_training_state(self):
         batch_norm = layers.BatchNorm()
-        conneciton = layers.Input(10) > batch_norm
+        layers.Input(10) > batch_norm
         batch_norm.initialize()
 
         input_value = theano.shared(value=np.random.random((30, 10)))

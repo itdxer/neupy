@@ -4,7 +4,7 @@ import theano.tensor as T
 from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
 
-from neupy import algorithms, layers, estimators
+from neupy import algorithms, layers
 from neupy.utils import asfloat
 from neupy.algorithms.gd.lev_marq import compute_jaccobian
 

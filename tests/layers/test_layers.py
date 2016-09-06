@@ -8,7 +8,6 @@ from neupy.utils import asfloat
 from neupy import layers, algorithms
 from neupy.algorithms import GradientDescent
 from neupy.layers.connections import NetworkConnectionError
-from neupy.layers import *
 from neupy import init
 
 from base import BaseTestCase
@@ -64,11 +63,11 @@ class LayersBasicsTestCase(BaseTestCase):
 
 class HiddenLayersOperationsTestCase(BaseTestCase):
     def test_sigmoid_layer(self):
-        layer1 = Sigmoid(1)
+        layer1 = layers.Sigmoid(1)
         self.assertGreater(1, layer1.activation_function(1).eval())
 
     def test_hard_sigmoid_layer(self):
-        layer1 = HardSigmoid(6)
+        layer1 = layers.HardSigmoid(6)
 
         test_value = asfloat(np.array([[-3, -2, -1, 0, 1, 2]]))
         expected = np.array([[0, 0.1, 0.3, 0.5, 0.7, 0.9]])
@@ -79,7 +78,7 @@ class HiddenLayersOperationsTestCase(BaseTestCase):
         np.testing.assert_array_almost_equal(output, expected)
 
     def test_step_layer(self):
-        layer1 = Step(1)
+        layer1 = layers.Step(1)
 
         input_vector = theano.shared(np.array([-10, -1, 0, 1, 10]))
         expected = np.array([0, 0, 0, 1, 1])
@@ -87,15 +86,15 @@ class HiddenLayersOperationsTestCase(BaseTestCase):
         np.testing.assert_array_equal(output, expected)
 
     def test_linear_layer(self):
-        layer = Linear(1)
+        layer = layers.Linear(1)
         self.assertEqual(layer.activation_function(1), 1)
 
     def test_tanh_layer(self):
-        layer1 = Tanh(1)
+        layer1 = layers.Tanh(1)
         self.assertGreater(1, layer1.activation_function(1).eval())
 
     def test_relu_layer(self):
-        layer = Relu(1)
+        layer = layers.Relu(1)
         self.assertEqual(0, layer.activation_function(-10))
         self.assertEqual(0, layer.activation_function(0))
         self.assertEqual(10, layer.activation_function(10))
@@ -103,7 +102,7 @@ class HiddenLayersOperationsTestCase(BaseTestCase):
     def test_leaky_relu(self):
         input_data = np.array([[10, 1, 0.1, 0, -0.1, -1]]).T
         expected_output = np.array([[10, 1, 0.1, 0, -0.01, -0.1]]).T
-        layer = Relu(1, alpha=0.1)
+        layer = layers.Relu(1, alpha=0.1)
 
         actual_output = layer.activation_function(input_data)
         np.testing.assert_array_almost_equal(
@@ -112,7 +111,7 @@ class HiddenLayersOperationsTestCase(BaseTestCase):
         )
 
     def test_softplus_layer(self):
-        layer = Softplus(1)
+        layer = layers.Softplus(1)
         self.assertAlmostEqual(
             math.log(2),
             layer.activation_function(0).eval()
@@ -121,7 +120,7 @@ class HiddenLayersOperationsTestCase(BaseTestCase):
     def test_softmax_layer(self):
         test_input = np.array([[0.5, 0.5, 0.1]])
 
-        softmax_layer = Softmax(3)
+        softmax_layer = layers.Softmax(3)
         correct_result = np.array([[0.37448695, 0.37448695, 0.25102611]])
         np.testing.assert_array_almost_equal(
             correct_result,
@@ -147,19 +146,19 @@ class PReluTestCase(BaseTestCase):
     def test_invalid_alpha_axes_parameter(self):
         # there are can be specified axis 1, but not 2
         prelu_layer = layers.PRelu(10, alpha_axes=2)
-        connection = layers.Input(10) > prelu_layer
+        layers.Input(10) > prelu_layer
         with self.assertRaises(ValueError):
             prelu_layer.initialize()
 
         # cannot specify alpha per input sample
         prelu_layer = layers.PRelu(10, alpha_axes=0)
-        connection = layers.Input(10) > prelu_layer
+        layers.Input(10) > prelu_layer
         with self.assertRaises(ValueError):
             prelu_layer.initialize()
 
     def test_prelu_random_params(self):
         prelu_layer = layers.PRelu(10, alpha=init.XavierNormal())
-        connection = layers.Input(10) > prelu_layer
+        layers.Input(10) > prelu_layer
         prelu_layer.initialize()
 
         alpha = prelu_layer.alpha.get_value()
@@ -167,7 +166,7 @@ class PReluTestCase(BaseTestCase):
 
     def test_prelu_layer_param_dense(self):
         prelu_layer = layers.PRelu(10, alpha=0.25)
-        connection = layers.Input(10) > prelu_layer
+        layers.Input(10) > prelu_layer
         prelu_layer.initialize()
 
         alpha = prelu_layer.alpha.get_value()
@@ -179,7 +178,7 @@ class PReluTestCase(BaseTestCase):
         input_layer = layers.Input((3, 10, 10))
         conv_layer = layers.Convolution((5, 3, 3))
         prelu_layer = layers.PRelu(alpha=0.25, alpha_axes=(1, 3))
-        connection = input_layer > conv_layer > prelu_layer
+        input_layer > conv_layer > prelu_layer
 
         conv_layer.initialize()
         prelu_layer.initialize()
@@ -192,7 +191,7 @@ class PReluTestCase(BaseTestCase):
 
     def test_prelu_output_by_dense_input(self):
         prelu_layer = layers.PRelu(1, alpha=0.25)
-        connection = layers.Input(1) > prelu_layer
+        layers.Input(1) > prelu_layer
         prelu_layer.initialize()
 
         input_data = np.array([[10, 1, 0.1, 0, -0.1, -1]]).T
@@ -257,7 +256,7 @@ class TransformationLayersTestCase(BaseTestCase):
 
         input_layer = layers.Input((4, 3, 2, 1))
         reshape_layer = layers.Reshape()
-        connection = input_layer > reshape_layer
+        input_layer > reshape_layer
 
         y = reshape_layer.output(x).eval()
         self.assertEqual(y.shape, (5, 4 * 3 * 2 * 1))
@@ -267,7 +266,7 @@ class TransformationLayersTestCase(BaseTestCase):
 
         input_layer = layers.Input(20)
         reshape_layer = layers.Reshape((4, 5))
-        connection = input_layer > input_layer
+        input_layer > reshape_layer
 
         y = reshape_layer.output(x).eval()
         self.assertEqual(y.shape, (5, 4, 5))

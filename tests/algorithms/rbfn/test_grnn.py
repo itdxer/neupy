@@ -52,7 +52,7 @@ class GRNNTestCase(BaseTestCase):
 
         x_train[:, :] = 0
         result = grnnet.predict(x_test)
-        total_classes_prob = np.round(result.sum(axis=1), 10)
+
         np.testing.assert_array_almost_equal(result, old_result)
 
     def test_train_different_inputs(self):

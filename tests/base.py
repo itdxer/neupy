@@ -1,11 +1,8 @@
-import random
 import inspect
 import logging
 import unittest
 
-import theano
 import numpy as np
-import pandas as pd
 
 from neupy import environment
 

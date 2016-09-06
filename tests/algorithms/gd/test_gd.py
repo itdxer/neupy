@@ -1,7 +1,5 @@
 from functools import partial
 
-import numpy as np
-
 from neupy import algorithms, layers
 
 from utils import compare_networks
@@ -49,7 +47,7 @@ class GradientDescentTestCase(BaseTestCase):
             # Dublicate optimization algorithms from one type
             algorithms.GradientDescent(
                 (2, 3, 1), addons=[algorithms.WeightDecay,
-                                          algorithms.WeightDecay]
+                                   algorithms.WeightDecay]
             )
 
         algorithms.GradientDescent(
@@ -65,7 +63,7 @@ class GradientDescentTestCase(BaseTestCase):
         algorithms.GradientDescent(
             (2, 3, 1),
             addons=[algorithms.WeightDecay,
-                           algorithms.SearchThenConverge],
+                    algorithms.SearchThenConverge],
             verbose=False
         )
 

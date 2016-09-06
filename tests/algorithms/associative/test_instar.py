@@ -1,6 +1,6 @@
 import numpy as np
 
-from neupy import algorithms, layers
+from neupy import algorithms
 
 from base import BaseTestCase
 

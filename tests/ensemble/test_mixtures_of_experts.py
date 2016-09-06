@@ -119,7 +119,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         data, target = asfloat(dataset.data), asfloat(dataset.target)
         insize, outsize = data.shape[1], 1
 
-        input_scaler = preprocessing.MinMaxScaler((-1 ,1))
+        input_scaler = preprocessing.MinMaxScaler((-1, 1))
         output_scaler = preprocessing.MinMaxScaler()
         x_train, x_test, y_train, y_test = cross_validation.train_test_split(
             input_scaler.fit_transform(data),

@@ -202,7 +202,6 @@ class SharedDocsTestCase(BaseTestCase):
                 """
                 return x + y
 
-
         self.assertNotEqual(C.method.__doc__, A.method.__doc__)
         self.assertIn("Updated documentation for the method.",
                       C.method.__doc__)

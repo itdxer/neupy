@@ -1,11 +1,8 @@
-import unittest
 from collections import namedtuple
-from functools import partial
 
 import theano
 import numpy as np
-from sklearn import datasets, metrics
-from sklearn.cross_validation import StratifiedShuffleSplit
+from sklearn import metrics
 
 from neupy import algorithms, layers
 from neupy import init

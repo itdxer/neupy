@@ -3,7 +3,9 @@ from collections import namedtuple
 import numpy as np
 
 from neupy.core.config import Configurable
-from neupy.core.properties import *
+from neupy.core.properties import (Property, ArrayProperty, TypedListProperty,
+                                   BoundedProperty, ProperFractionProperty,
+                                   NumberProperty, IntProperty, ChoiceProperty)
 
 from base import BaseTestCase
 
@@ -32,9 +34,9 @@ class PropertiesBasicsTestCase(BaseTestCase):
         class A(Configurable):
             required_prop = Property(required=True)
 
-        a = A(required_prop='defined')
+        A(required_prop='defined')
         with self.assertRaises(ValueError):
-            a = A()
+            A()
 
     def test_properties_with_specified_typse(self):
         Case = namedtuple("Case", "property_class valid invalid")
@@ -47,7 +49,7 @@ class PropertiesBasicsTestCase(BaseTestCase):
                  invalid=['invalid', [4, 5]]),
             Case(property_class=ArrayProperty,
                  valid=[np.array([]), np.ones((5, 3)), np.matrix([1, 2])],
-                 invalid=[[1, 2 ,3], 'invalid']),
+                 invalid=[[1, 2, 3], 'invalid']),
         )
 
         for test_case in test_cases:

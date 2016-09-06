@@ -55,7 +55,7 @@ class WeightEliminationTestCase(BaseTestCase):
             decay_rate=0.25,
             zero_weight=10,
             addons=[algorithms.WeightElimination,
-                           algorithms.SimpleStepMinimization]
+                    algorithms.SimpleStepMinimization]
         )
 
         # Check that step is valid for each network

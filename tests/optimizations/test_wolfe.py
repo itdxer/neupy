@@ -4,7 +4,6 @@ from collections import namedtuple
 from itertools import product
 
 import numpy as np
-import theano.tensor as T
 
 from neupy.optimizations import wolfe
 
@@ -43,10 +42,12 @@ class WolfeInterpolationTestCase(BaseTestCase):
             dict(c1=0.05, c2=0.1, maxiter=0),
         ]
 
+        def func(x):
+            return x
+
         for testcase in testcases:
             error_desc = "Line search for {}".format(testcase)
             with self.assertRaises(ValueError, msg=error_desc):
-                func = lambda x: x
                 wolfe.line_search(f=func, f_deriv=func, **testcase)
 
     def test_sequential_and(self):
@@ -69,7 +70,6 @@ class WolfeInterpolationTestCase(BaseTestCase):
                                       bound_size_ratio=2)
 
     def test_quadratic_minimizer(self):
-        nan = np.array(np.nan)
         testcases = (
             Case(func_input=dict(x_a=0, y_a=1, y_prime_a=-1, x_b=1, y_b=2),
                  func_expected=0.25),
