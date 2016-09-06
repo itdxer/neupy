@@ -73,12 +73,12 @@ class LoggingTestCase(BaseTestCase):
 class NeuralNetworkLoggingTestCase(BaseTestCase):
     def test_nn_init_logging(self):
         with catch_stdout() as out:
-            gdnet = algorithms.GradientDescent((2, 3, 1), verbose=False)
+            algorithms.GradientDescent((2, 3, 1), verbose=False)
             terminal_output = out.getvalue()
             self.assertEqual("", terminal_output.strip())
 
         with catch_stdout() as out:
-            gdnet = algorithms.GradientDescent((2, 3, 1), verbose=True)
+            algorithms.GradientDescent((2, 3, 1), verbose=True)
             terminal_output = out.getvalue()
 
             self.assertNotEqual("", terminal_output.strip())

@@ -130,7 +130,6 @@ class SurgerySewTogetherTestCase(BaseTestCase):
         self.assertEqual(second_part.output_shape, (20,))
         self.assertEqual(second_part.input_shape, (10,))
 
-
     def test_sew_together_basic(self):
         connection = surgery.sew_together([
             layers.Sigmoid(24),
@@ -152,7 +151,7 @@ class SurgerySewTogetherTestCase(BaseTestCase):
         encoder = surgery.cut(autoencoder, start=0, end=2)
         self.assertEqual(len(encoder), 2)
 
-        classifier = algorithms.Momentum(encoder > layers.Softmax(10))
+        algorithms.Momentum(encoder > layers.Softmax(10))
 
         network = algorithms.GradientDescent([
             layers.Input(5),

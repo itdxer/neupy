@@ -1,5 +1,3 @@
-import numpy as np
-
 from neupy import algorithms, layers
 from neupy.utils import asfloat
 

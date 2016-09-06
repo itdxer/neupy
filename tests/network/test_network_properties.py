@@ -49,7 +49,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
 
         for wrong_input_value in wrong_input_values:
             with self.assertRaises(ValueError):
-                bpnet = algorithms.GradientDescent(
+                algorithms.GradientDescent(
                     (2, 3, 1),
                     step=0.1,
                     verbose=False,

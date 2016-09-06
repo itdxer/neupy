@@ -2,7 +2,6 @@ import theano
 import numpy as np
 
 from neupy import algorithms
-from neupy.utils import asfloat
 
 from base import BaseTestCase
 

@@ -1,6 +1,5 @@
 import os
 
-import six
 import numpy as np
 import theano
 import matplotlib.pyplot as plt

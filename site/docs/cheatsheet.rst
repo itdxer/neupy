@@ -228,3 +228,15 @@ Error functions
     ":class:`categorical_crossentropy <neupy.network.errors.categorical_crossentropy>`", "Cross entropy error function for the multi-class classification"
     ":class:`binary_hinge <neupy.network.errors.binary_hinge>`", "Hinge error function for the binary classification"
     ":class:`categorical_hinge <neupy.network.errors.categorical_hinge>`", "Hinge error function for the multi-class classification"
+
+
+Datasets
+********
+
+.. csv-table::
+    :header: "Dataset name", "Description"
+
+    ":class:`load_digits <neupy.datasets.digits.load_digits>`", "Load 10 discrete digit images with shape (6, 4)"
+    ":class:`make_digits <neupy.datasets.digits.make_digits>`", "Load discrete digits that has additional noise."
+    ":class:`make_reber <neupy.datasets.reber.make_reber>`", "Generate list of words valid by Grammar rules."
+    ":class:`make_reber_classification <neupy.datasets.reber.make_reber_classification>`", "Generate random dataset for Reber grammar classification."

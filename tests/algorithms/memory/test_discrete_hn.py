@@ -2,7 +2,8 @@ import numpy as np
 
 from neupy import algorithms
 
-from algorithms.memory.data import *
+from algorithms.memory.data import (zero, one, two, half_one,
+                                    half_zero, half_two)
 from base import BaseTestCase
 
 
@@ -15,7 +16,7 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
         ])
 
         with self.assertRaises(ValueError):
-            # To many data samples comparison to number of feature
+            # To many data samples compare to the number of feature
             dhnet = algorithms.DiscreteHopfieldNetwork(check_limit=True)
             dhnet.train(data)
 

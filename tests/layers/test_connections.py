@@ -2,7 +2,7 @@ import numpy as np
 
 from neupy import layers, algorithms
 from neupy.utils import asfloat
-from neupy.layers import *
+from neupy.layers import Input, Relu, Tanh, Sigmoid
 
 from base import BaseTestCase
 

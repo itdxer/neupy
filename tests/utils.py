@@ -9,7 +9,6 @@ import six
 import numpy as np
 import pandas as pd
 import theano.tensor as T
-from theano.ifelse import ifelse
 from matplotlib import pyplot as plt
 from matplotlib.testing.compare import compare_images
 

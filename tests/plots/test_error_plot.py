@@ -1,7 +1,6 @@
 import os
 
 import theano
-import numpy as np
 
 from neupy import plots, algorithms
 

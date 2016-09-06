@@ -1,5 +1,4 @@
 from functools import partial
-import numpy as np
 
 from neupy import algorithms
 
