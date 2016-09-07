@@ -1,12 +1,12 @@
 import theano
 import theano.tensor as T
 
+from neupy import init
 from neupy.utils import asfloat, as_tuple
 from neupy.core.config import Configurable
 from neupy.core.properties import (TypedListProperty, IntProperty,
                                    ParameterProperty)
 from neupy.layers.connections import ChainConnection
-from neupy.core.init import XavierNormal, Initializer
 
 
 __all__ = ('BaseLayer', 'ParameterBasedLayer', 'Input')
@@ -61,12 +61,21 @@ class BaseLayer(ChainConnection, Configurable):
         return input_value
 
     def initialize(self):
+        self.parameters = []
         if self.relate_from_layer is not None:
             self.layer_id = self.relate_from_layer.layer_id + 1
 
     def relate_to(self, right_layer):
         self.relate_to_layer = right_layer
         right_layer.relate_from_layer = self
+
+    def add_parameter(self, value, name, shape):
+        theano_name = '{}_{}'.format(name, self.layer_id)
+
+        parameter = create_shared_parameter(value, theano_name, shape)
+        self.parameters.append(parameter)
+
+        setattr(self, name, parameter)
 
     def __repr__(self):
         classname = self.__class__.__name__
@@ -93,7 +102,7 @@ def create_shared_parameter(value, name, shape):
     if isinstance(value, (T.sharedvar.SharedVariable, T.Variable)):
         return value
 
-    if isinstance(value, Initializer):
+    if isinstance(value, init.Initializer):
         value = value.sample(shape)
 
     return theano.shared(value=asfloat(value), name=name, borrow=True)
@@ -106,7 +115,7 @@ class ParameterBasedLayer(BaseLayer):
     Parameters
     ----------
     size : int
-        Layer input size.
+        Layer's output size.
     weight : array-like, Theano variable, scalar or Initializer
         Defines layer's weights. Default initialization methods
         you can find :ref:`here <init-methods>`.
@@ -125,8 +134,8 @@ class ParameterBasedLayer(BaseLayer):
     {BaseLayer.Attributes}
     """
     size = IntProperty(minval=1)
-    weight = ParameterProperty(default=XavierNormal())
-    bias = ParameterProperty(default=XavierNormal())
+    weight = ParameterProperty(default=init.XavierNormal())
+    bias = ParameterProperty(default=init.XavierNormal())
 
     def __init__(self, size, **options):
         if size is not None:
@@ -147,18 +156,10 @@ class ParameterBasedLayer(BaseLayer):
 
     def initialize(self):
         super(ParameterBasedLayer, self).initialize()
-
-        self.weight = create_shared_parameter(
-            value=self.weight,
-            name='weight_{}'.format(self.layer_id),
-            shape=self.weight_shape
-        )
-        self.bias = create_shared_parameter(
-            value=self.bias,
-            name='bias_{}'.format(self.layer_id),
-            shape=self.bias_shape
-        )
-        self.parameters = [self.weight, self.bias]
+        self.add_parameter(value=self.weight, name='weight',
+                           shape=self.weight_shape)
+        self.add_parameter(value=self.bias, name='bias',
+                           shape=self.bias_shape)
 
     def __repr__(self):
         classname = self.__class__.__name__

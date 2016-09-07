@@ -94,14 +94,14 @@ def clean_layers(connection):
     return connection
 
 
-def create_input_variable(input_layer, variable_name):
+def create_input_variable(input_layer, name):
     """
     Create input variable based on input layer information.
 
     Parameters
     ----------
     input_layer : object
-    variable_name : str
+    name : str
 
     Returns
     -------
@@ -125,17 +125,17 @@ def create_input_variable(input_layer, variable_name):
                          "Found {} dimensions".format(ndim))
 
     variable_type = dim_to_variable_type[ndim]
-    return variable_type(variable_name)
+    return variable_type(name)
 
 
-def create_output_variable(error_function, variable_name):
+def create_output_variable(error_function, name):
     """
     Create output variable based on error function.
 
     Parameters
     ----------
     error_function : function
-    variable_name : str
+    name : str
 
     Returns
     -------
@@ -148,7 +148,7 @@ def create_output_variable(error_function, variable_name):
     else:
         network_output_dtype = T.matrix
 
-    return network_output_dtype(variable_name)
+    return network_output_dtype(name)
 
 
 class ErrorFunctionProperty(ChoiceProperty):
@@ -305,14 +305,8 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
 
     def init_input_output_variables(self):
         self.variables.update(
-            network_input=create_input_variable(
-                self.input_layer,
-                variable_name='x'
-            ),
-            network_output=create_output_variable(
-                self.error,
-                variable_name='y'
-            ),
+            network_input=create_input_variable(self.input_layer, name='x'),
+            network_output=create_output_variable(self.error, name='y'),
         )
 
     def init_variables(self):

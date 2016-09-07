@@ -4,3 +4,5 @@ from .transformations import *
 from .convolutions import *
 from .stochastic import *
 from .normalization import *
+
+from .utils import join

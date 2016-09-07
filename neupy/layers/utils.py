@@ -1,4 +1,7 @@
-__all__ = ('preformat_layer_shape', 'dimshuffle')
+from .connections import LayerConnection
+
+
+__all__ = ('preformat_layer_shape', 'dimshuffle', 'join')
 
 
 def preformat_layer_shape(shape):
@@ -39,3 +42,20 @@ def dimshuffle(value, ndim, axes):
     for i, axis in enumerate(axes):
         pattern[axis] = i
     return value.dimshuffle(pattern)
+
+
+def join(left_connection, right_connection):
+    """
+    Connect two layers.
+
+    Parameters
+    ----------
+    left_connection : layer or connection
+    right_connection : layer or connection
+
+    Returns
+    -------
+    connection
+        Layers connected in a sequence.
+    """
+    return LayerConnection(left_connection, right_connection)
