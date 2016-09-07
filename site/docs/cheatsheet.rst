@@ -177,6 +177,7 @@ Transformation Layers
     :header: "Class name", "Description"
 
     ":layer:`Reshape`", "Reshape tensor input"
+    ":layer:`Emedding`", "Embedding layer accepts indeces as an input and returns rows from the weight matrix associated with these indeces."
 
 .. _init-methods:
 

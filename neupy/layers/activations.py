@@ -1,11 +1,11 @@
 import theano.tensor as T
 
+from neupy import init
 from neupy.utils import asfloat, as_tuple
 from neupy.core.properties import (NumberProperty, TypedListProperty,
                                    ParameterProperty)
-from neupy.core.init import Initializer, Constant
 from .utils import dimshuffle
-from .base import ParameterBasedLayer, create_shared_parameter
+from .base import ParameterBasedLayer
 
 
 __all__ = ('ActivationLayer', 'Linear', 'Sigmoid', 'HardSigmoid', 'Step',
@@ -316,7 +316,7 @@ class PRelu(ActivationLayer):
     .. [1] https://arxiv.org/pdf/1502.01852v1.pdf
     """
     alpha_axes = AxesProperty(default=1)
-    alpha = ParameterProperty(default=Constant(value=0.25))
+    alpha = ParameterProperty(default=init.Constant(value=0.25))
 
     def initialize(self):
         super(PRelu, self).initialize()
@@ -334,16 +334,7 @@ class PRelu(ActivationLayer):
                              "".format(max(alpha_axes), len(output_shape) - 1))
 
         alpha_shape = [output_shape[axis - 1] for axis in alpha_axes]
-
-        if isinstance(alpha, Initializer):
-            alpha = alpha.sample(alpha_shape)
-
-        self.alpha = create_shared_parameter(
-            value=alpha,
-            name='alpha_{}'.format(self.layer_id),
-            shape=alpha_shape
-        )
-        self.parameters.append(self.alpha)
+        self.add_parameter(value=alpha, name='alpha', shape=alpha_shape)
 
     def activation_function(self, input_value):
         alpha = dimshuffle(self.alpha, input_value.ndim, self.alpha_axes)
