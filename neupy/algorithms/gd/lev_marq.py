@@ -15,9 +15,9 @@ from neupy.algorithms.utils import (parameters2vector, iter_parameters,
 __all__ = ('LevenbergMarquardt',)
 
 
-def compute_jaccobian(errors, parameters):
+def compute_jacobian(errors, parameters):
     """
-    Compute Jacobbian.
+    Compute jacobian.
 
     Parameters
     ----------
@@ -31,22 +31,14 @@ def compute_jaccobian(errors, parameters):
     Theano variable
     """
     n_samples = errors.shape[0]
+    J = T.jacobian(errors, wrt=parameters)
 
-    def find_jacobbian(i, errors, *params):
-        return T.grad(T.sum(errors[i]), wrt=params)
+    jacobians = []
+    for jacobian, parameter in zip(J, parameters):
+        jacobian = jacobian.reshape((n_samples, parameter.size))
+        jacobians.append(jacobian)
 
-    J, _ = theano.scan(
-        find_jacobbian,
-        sequences=T.arange(n_samples),
-        non_sequences=[errors] + parameters
-    )
-
-    jaccobians = []
-    for jaccobian, parameter in zip(J, parameters):
-        jaccobian = jaccobian.reshape((n_samples, parameter.size))
-        jaccobians.append(jaccobian)
-
-    return T.concatenate(jaccobians, axis=1)
+    return T.concatenate(jacobians, axis=1)
 
 
 class LevenbergMarquardt(NoStepSelection, GradientDescent):
@@ -56,6 +48,8 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
     Notes
     -----
     * Network minimizes only Mean Squared Error function.
+    * Efficient for small training datasets.
+    * Efficient for small-sized networks.
 
     Parameters
     ----------
@@ -120,20 +114,19 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
             mu / self.mu_update_factor,
         )
 
-        mse_for_each_sample = T.mean(
-            (network_output - prediction_func) ** 2,
-            axis=1
-        )
+        se_for_each_sample = (
+            (network_output - prediction_func) ** 2
+        ).ravel()
 
         params = list(iter_parameters(self))
         param_vector = parameters2vector(self)
 
-        J = compute_jaccobian(mse_for_each_sample, params)
+        J = compute_jacobian(se_for_each_sample, params)
         n_params = J.shape[1]
 
         updated_params = param_vector - T.nlinalg.matrix_inverse(
             J.T.dot(J) + new_mu * T.eye(n_params)
-        ).dot(J.T).dot(mse_for_each_sample)
+        ).dot(J.T).dot(se_for_each_sample)
 
         updates = [(mu, new_mu)]
         parameter_updates = setup_parameter_updates(params, updated_params)
