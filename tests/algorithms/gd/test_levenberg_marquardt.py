@@ -6,13 +6,13 @@ from sklearn.cross_validation import train_test_split
 
 from neupy import algorithms, layers
 from neupy.utils import asfloat
-from neupy.algorithms.gd.lev_marq import compute_jaccobian
+from neupy.algorithms.gd.lev_marq import compute_jacobian
 
 from base import BaseTestCase
 
 
 class LevenbergMarquardtTestCase(BaseTestCase):
-    def test_jaccobian(self):
+    def test_jacobian(self):
         w1 = theano.shared(name='w1', value=asfloat(np.array([[1]])))
         b1 = theano.shared(name='b1', value=asfloat(np.array([0])))
         w2 = theano.shared(name='w2', value=asfloat(np.array([[2]])))
@@ -32,15 +32,15 @@ class LevenbergMarquardtTestCase(BaseTestCase):
             output_expected
         )
 
-        jaccobian_expected = asfloat(np.array([
+        jacobian_expected = asfloat(np.array([
             [-4, -4, -1, -1],
             [-16, -8, -4, -1],
             [-36, -12, -9, -1],
         ]))
-        jaccobian_actual = compute_jaccobian(error_func, [w1, b1, w2, b2])
+        jacobian_actual = compute_jacobian(error_func, [w1, b1, w2, b2])
         np.testing.assert_array_almost_equal(
-            jaccobian_expected,
-            jaccobian_actual.eval({x: x_train, y: y_train})
+            jacobian_expected,
+            jacobian_actual.eval({x: x_train, y: y_train})
         )
 
     def test_exceptions(self):
