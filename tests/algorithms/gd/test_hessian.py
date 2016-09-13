@@ -45,12 +45,22 @@ class HessianTestCase(BaseTestCase):
         y = T.scalar('y')
 
         f = x ** 2 + y ** 3 + 7 * x * y
+        # Gradient function:
+        # [2 * x + 7 * y,
+        #  3 * y ** 2 + 7 * x]
+        # Hessian function:
+        # [[2, 7    ]
+        #  [7, 6 * y]]
         hessian, gradient = find_hessian_and_gradient(f, [x, y])
 
         func = theano.function([x, y], [hessian, gradient])
         hessian_output, gradient_output = func(1, 2)
 
-        np.testing.assert_array_almost_equal(
+        np.testing.assert_array_equal(
+            gradient_output,
+            np.array([16, 19])
+        )
+        np.testing.assert_array_equal(
             hessian_output,
             np.array([
                 [2, 7],

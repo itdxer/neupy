@@ -32,13 +32,8 @@ def find_hessian_and_gradient(error_function, parameters):
     full_gradient = T.concatenate([grad.flatten() for grad in gradients])
 
     def find_hessian(i, full_gradient, *parameters):
-        second_derivatives = []
-        g = full_gradient[i]
-        for parameter in parameters:
-            second_derivative = T.grad(g, wrt=parameter)
-            second_derivatives.append(second_derivative.flatten())
-
-        return T.concatenate(second_derivatives)
+        second_derivatives = T.grad(full_gradient[i], wrt=parameters)
+        return T.concatenate([s.flatten() for s in second_derivatives])
 
     hessian, _ = theano.scan(
         find_hessian,
@@ -55,7 +50,7 @@ class Hessian(NoStepSelection, GradientDescent):
     Hessian gradient decent optimization. This GD algorithm
     variation using second derivative information helps choose better
     gradient direction and as a consequence better weight update
-    parameter after eqch epoch.
+    parameter after each epoch.
 
     Parameters
     ----------

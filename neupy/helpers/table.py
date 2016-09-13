@@ -149,15 +149,7 @@ class NumberColumn(Column):
         """
         if not isinstance(value, number_type):
             return value
-
-        if abs(value) > 100:
-            return "{:.0f}".format(value)
-
-        elif abs(value) > 10:
-            return "{:.2f}".format(value)
-
-        return "{value:.{places}f}".format(value=value,
-                                           places=self.places)
+        return "{value:.{places}g}".format(value=value, places=self.places)
 
 
 class BaseState(with_metaclass(SharedDocsABCMeta)):

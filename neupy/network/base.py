@@ -350,8 +350,8 @@ class BaseNetwork(BaseSkeleton):
             summary = SummaryTable(
                 table_builder=table.TableBuilder(
                     table.Column(name="Epoch #"),
-                    table.NumberColumn(name="Train err"),
-                    table.NumberColumn(name="Valid err"),
+                    table.NumberColumn(name="Train err", places=4),
+                    table.NumberColumn(name="Valid err", places=4),
                     table.TimeColumn(name="Time", width=10),
                     stdout=logs.write
                 ),
