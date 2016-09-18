@@ -1,6 +1,5 @@
 import os
 import sys
-import platform
 
 
 __all__ = ('red', 'green', 'gray', 'white', 'bold', 'underline')
@@ -21,11 +20,11 @@ def is_color_supported():
     bool
     """
     supported_platform = (
-        platform != 'Pocket PC' and
-        (platform != 'win32' or 'ANSICON' in os.environ)
+        sys.platform != 'Pocket PC' and
+        (sys.platform != 'win32' or 'ANSICON' in os.environ)
     )
 
-    # isatty is not always implemented, #6223.
+    # isatty is not always implemented
     is_a_tty = hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
     is_support = (supported_platform and is_a_tty)
     return is_support
