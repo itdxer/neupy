@@ -1,6 +1,7 @@
 import theano
 import theano.typed_list
 import theano.tensor as T
+from theano.tensor import slinalg
 
 from neupy.core.properties import BoundedProperty
 from neupy.utils import asfloat
@@ -83,11 +84,11 @@ class Hessian(NoStepSelection, GradientDescent):
         hessian_matrix, full_gradient = find_hessian_and_gradient(
             self.variables.error_func, parameters
         )
-        hessian_inverse = T.nlinalg.matrix_inverse(
-            hessian_matrix + penalty_const * T.eye(n_parameters)
-        )
 
-        updated_parameters = param_vector - hessian_inverse.dot(full_gradient)
+        updated_parameters = param_vector - slinalg.solve(
+            hessian_matrix + penalty_const * T.eye(n_parameters),
+            full_gradient
+        )
         updates = setup_parameter_updates(parameters, updated_parameters)
 
         return updates
