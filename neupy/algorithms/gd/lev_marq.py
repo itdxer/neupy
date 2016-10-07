@@ -1,6 +1,7 @@
 import theano
 import theano.tensor as T
 from theano.ifelse import ifelse
+from theano.tensor import slinalg
 import numpy as np
 
 from neupy.utils import asfloat
@@ -124,9 +125,10 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
         J = compute_jacobian(se_for_each_sample, params)
         n_params = J.shape[1]
 
-        updated_params = param_vector - T.nlinalg.matrix_inverse(
-            J.T.dot(J) + new_mu * T.eye(n_params)
-        ).dot(J.T).dot(se_for_each_sample)
+        updated_params = param_vector - slinalg.solve(
+            J.T.dot(J) + new_mu * T.eye(n_params),
+            J.T.dot(se_for_each_sample)
+        )
 
         updates = [(mu, new_mu)]
         parameter_updates = setup_parameter_updates(params, updated_params)

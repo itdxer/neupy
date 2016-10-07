@@ -41,7 +41,7 @@ setup(
     install_requires=get_requirements(),
     include_package_data=True,
     zip_safe=False,
-    keywords=['neural networks'],
+    keywords=['neural networks', 'deep learning'],
 
     # Other
     classifiers=[

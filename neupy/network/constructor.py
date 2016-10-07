@@ -264,7 +264,13 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
 
         * Custom function which accepts two mandatory arguments. \
         The first one is expected value and the second one is \
-        predicted value. Example: ``custom_func(expected, predicted)``
+        predicted value. Example:
+
+        .. code-block:: python
+
+            def custom_func(expected, predicted):
+                return expected - predicted
+
     {BaseNetwork.Parameters}
 
     Attributes
