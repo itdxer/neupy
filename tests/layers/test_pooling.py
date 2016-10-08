@@ -107,6 +107,13 @@ class PoolingLayersTestCase(BaseTestCase):
             actual_output
         )
 
+    def test_global_pooling_output_shape(self):
+        input_layer = layers.Input((3, 8, 8))
+        global_pooling_layer = layers.GlobalPooling()
+
+        layers.join(input_layer, global_pooling_layer)
+        self.assertEqual(global_pooling_layer.output_shape, (3,))
+
     def test_global_pooling(self):
         x = np.ones((2, 3, 4, 5))
         expected_outputs = np.ones((2, 3))
