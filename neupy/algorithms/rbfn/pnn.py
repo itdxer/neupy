@@ -19,12 +19,28 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
 
     Notes
     -----
+    * PNN Network is sensitive for cases when one input feature has \
+    higher values than the other one. Before use it make sure that \
+    input values are normalized and have similar scales.
+
+    * Make sure that standard deviation in the same range as \
+    input features. Check ``std`` parameter description for \
+    more information.
+
+    * The bigger training dataset the slower prediction. \
+    It's much more efficient for small datasets.
+
     {LazyLearningMixin.Notes}
 
     Parameters
     ----------
     std : float
         Standard deviation for the PDF function. Default to ``0.1``.
+        If your input features have high values than standard
+        deviation should also be high. For instance, if input features
+        from range ``[0, 20]`` that standard deviation should be
+        also a big value like ``10`` or ``15``. Small values will
+        lead to bad prediction.
     {MinibatchTrainingMixin.batch_size}
     {BaseNetwork.verbose}
 
@@ -40,8 +56,7 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
     --------
     >>> import numpy as np
     >>>
-    >>> from sklearn import datasets
-    >>> from sklearn import metrics
+    >>> from sklearn import datasets, metrics
     >>> from sklearn.cross_validation import train_test_split
     >>> from neupy import algorithms, environment
     >>>
@@ -52,9 +67,9 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
     ...     dataset.data, dataset.target, train_size=0.7
     ... )
     >>>
-    >>> nw = algorithms.PNN(std=10, verbose=False)
-    >>> nw.train(x_train, y_train)
-    >>> result = nw.predict(x_test)
+    >>> pnn = algorithms.PNN(std=10, verbose=False)
+    >>> pnn.train(x_train, y_train)
+    >>> result = pnn.predict(x_test)
     >>> metrics.accuracy_score(y_test, result)
     0.98888888888888893
     """

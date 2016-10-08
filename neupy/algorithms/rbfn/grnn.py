@@ -18,11 +18,27 @@ class GRNN(BaseNetwork, LazyLearningMixin):
     Parameters
     ----------
     std : float
-        standard deviation for PDF function, default to 0.1.
+        Standard deviation for PDF function, defaults to ``0.1``.
+        If your input features have high values than standard
+        deviation should also be high. For instance, if input features
+        from range ``[0, 20]`` that standard deviation should be
+        also a big value like ``10`` or ``15``. Small values will
+        lead to bad prediction.
     {Verbose.verbose}
 
     Notes
     -----
+    * GRNN Network is sensitive for cases when one input feature has \
+    higher values than the other one. Before use it make sure that \
+    input values are normalized and have similar scales.
+
+    * Make sure that standard deviation in the same range as \
+    input features. Check ``std`` parameter description for \
+    more information.
+
+    * The bigger training dataset the slower prediction. \
+    It's much more efficient for small datasets.
+
     {LazyLearningMixin.Notes}
 
     Methods
@@ -33,7 +49,7 @@ class GRNN(BaseNetwork, LazyLearningMixin):
 
     Examples
     --------
-    >>> from sklearn import datasets
+    >>> from sklearn import datasets, preprocessing
     >>> from sklearn.cross_validation import train_test_split
     >>> from neupy import algorithms, estimators, environment
     >>>
@@ -41,15 +57,16 @@ class GRNN(BaseNetwork, LazyLearningMixin):
     >>>
     >>> dataset = datasets.load_diabetes()
     >>> x_train, x_test, y_train, y_test = train_test_split(
-    ...     dataset.data, dataset.target, train_size=0.7,
-    ...     random_state=0
+    ...     preprocessing.minmax_scale(dataset.data),
+    ...     preprocessing.minmax_scale(dataset.target.reshape((-1, 1))),
+    ...     train_size=0.7,
     ... )
     >>>
     >>> nw = algorithms.GRNN(std=0.1, verbose=False)
     >>> nw.train(x_train, y_train)
     >>> result = nw.predict(x_test)
-    >>> estimators.rmsle(result, y_test)
-    0.4245120142774001
+    >>> estimators.rmse(result, y_test)
+    0.2381013391408185
     """
     std = BoundedProperty(default=0.1, minval=0)
 
