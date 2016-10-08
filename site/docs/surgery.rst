@@ -112,6 +112,24 @@ It returns a list that contains all of these pieces. Now you can get piece that 
 
 As in the autoencoder case we can use this layers in the other networks
 
+In case if you need to use cutted layers without additional training you compile them into Theano functions.
+
+.. code-block:: python
+
+    >>> import theano
+    >>> import theano.tensor as T
+    >>> import numpy as np
+    >>>
+    >>> x = T.matrix('x')
+    >>> y = hidden_layers.output(x)
+    >>>
+    >>> f = theano.function([x], y)
+    >>>
+    >>> input_matrix = np.random.random((100, 5))
+    >>> output_matrix = f(input_matrix)
+    >>> output_matrix.shape
+    (100, 30)
+
 Sew layers together
 *******************
 

@@ -234,7 +234,7 @@ class GlobalPooling(BaseLayer):
 
     @property
     def output_shape(self):
-        return self.input_shape[:2]
+        return as_tuple(self.input_shape[0])
 
     def output(self, input_value):
         if input_value.ndim in (1, 2):
