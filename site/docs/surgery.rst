@@ -112,7 +112,7 @@ It returns a list that contains all of these pieces. Now you can get piece that 
 
 As in the autoencoder case we can use this layers in the other networks
 
-In case if you need to use cutted layers without additional training you compile them into Theano functions.
+In case if you need to use cutted layers without additional training you can compile them into Theano function.
 
 .. code-block:: python
 

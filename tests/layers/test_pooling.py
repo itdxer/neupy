@@ -4,8 +4,8 @@ import theano
 import theano.tensor as T
 import numpy as np
 
-from neupy.utils import asfloat
 from neupy import layers
+from neupy.utils import asfloat
 from neupy.layers.connections import LayerConnectionError
 
 from base import BaseTestCase
@@ -115,7 +115,7 @@ class PoolingLayersTestCase(BaseTestCase):
         self.assertEqual(global_pooling_layer.output_shape, (3,))
 
     def test_global_pooling(self):
-        x = np.ones((2, 3, 4, 5))
+        x = asfloat(np.ones((2, 3, 4, 5)))
         expected_outputs = np.ones((2, 3))
 
         global_mena_pooling_layer = layers.GlobalPooling()
@@ -125,7 +125,7 @@ class PoolingLayersTestCase(BaseTestCase):
         np.testing.assert_array_equal(expected_outputs, actual_output)
 
     def test_global_pooling_other_function(self):
-        x = np.ones((2, 3, 4, 5))
+        x = asfloat(np.ones((2, 3, 4, 5)))
         expected_outputs = 20 * np.ones((2, 3))
 
         global_sum_pooling_layer = layers.GlobalPooling(function=T.sum)
