@@ -1,4 +1,4 @@
-from sklearn import datasets, cross_validation, metrics
+from sklearn import datasets, model_selection, metrics
 from neupy import algorithms, init
 from neupy.layers import Relu, Sigmoid, Input
 
@@ -9,7 +9,7 @@ class DANTestCase(BaseTestCase):
     def test_handle_errors(self):
         data, target = datasets.make_classification(300, n_features=4,
                                                     n_classes=2)
-        x_train, x_test, y_train, y_test = cross_validation.train_test_split(
+        x_train, x_test, y_train, y_test = model_selection.train_test_split(
             data, target, train_size=0.7
         )
 
@@ -46,7 +46,7 @@ class DANTestCase(BaseTestCase):
     def test_dan(self):
         data, target = datasets.make_classification(300, n_features=4,
                                                     n_classes=2)
-        x_train, x_test, y_train, y_test = cross_validation.train_test_split(
+        x_train, x_test, y_train, y_test = model_selection.train_test_split(
             data, target, train_size=0.7
         )
 

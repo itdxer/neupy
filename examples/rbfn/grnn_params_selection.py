@@ -2,7 +2,7 @@ from operator import itemgetter
 
 import numpy as np
 from sklearn import datasets, grid_search
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 from neupy import algorithms, estimators, environment
 
 

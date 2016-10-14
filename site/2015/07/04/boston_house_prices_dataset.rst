@@ -243,7 +243,7 @@ We use 85% of data for train.
 
 .. code-block:: python
 
-    from sklearn.cross_validation import train_test_split
+    from sklearn.model_selection import train_test_split
     from neupy import environment
 
     environment.reproducible()

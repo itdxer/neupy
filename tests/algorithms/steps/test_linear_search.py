@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn import datasets, preprocessing
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 
 from neupy import algorithms, layers
 from neupy.estimators import rmsle

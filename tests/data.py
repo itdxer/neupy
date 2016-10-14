@@ -1,7 +1,7 @@
 import numpy as np
 
 from sklearn import datasets
-from sklearn.cross_validation import StratifiedShuffleSplit
+from sklearn.model_selection import StratifiedShuffleSplit
 
 
 xor_input_train = np.array([[-1, -1], [-1, 1], [1, -1], [1, 1]])
@@ -68,10 +68,10 @@ def simple_classification(n_samples=100, n_features=10, random_state=33):
     X, y = datasets.make_classification(n_samples=n_samples,
                                         n_features=n_features,
                                         random_state=random_state)
-    shuffle_split = StratifiedShuffleSplit(y, 1, train_size=0.6,
+    shuffle_split = StratifiedShuffleSplit(n_splits=1, train_size=0.6,
                                            random_state=random_state)
 
-    train_index, test_index = next(shuffle_split.__iter__())
+    train_index, test_index = next(shuffle_split.split(X, y))
     x_train, x_test = X[train_index], X[test_index]
     y_train, y_test = y[train_index], y[test_index]
 

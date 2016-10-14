@@ -1,4 +1,4 @@
-from sklearn import cross_validation, metrics
+from sklearn import model_selection, metrics
 from skdata.larochelle_etal_2007 import dataset
 from neupy import algorithms, layers, environment
 
@@ -9,7 +9,7 @@ rectangle_dataset = dataset.Rectangles()
 rectangle_dataset.fetch(download_if_missing=True)
 
 data, target = rectangle_dataset.classification_task()
-x_train, x_test, y_train, y_test = cross_validation.train_test_split(
+x_train, x_test, y_train, y_test = model_selection.train_test_split(
     data, target, train_size=0.5
 )
 

@@ -1,8 +1,8 @@
 from operator import itemgetter
 
 import numpy as np
-from sklearn import datasets, preprocessing, metrics, grid_search
-from sklearn.cross_validation import train_test_split
+from sklearn import datasets, preprocessing, metrics, model_selection
+from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from neupy import algorithms, layers
 from neupy.estimators import rmsle
@@ -81,7 +81,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
 
         self.assertAlmostEqual(0.513, error, places=3)
 
-        random_search = grid_search.RandomizedSearchCV(
+        random_search = model_selection.RandomizedSearchCV(
             grnnet,
             param_distributions={'std': np.arange(1e-2, 0.1, 1e-4)},
             n_iter=10,
