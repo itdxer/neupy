@@ -1,7 +1,7 @@
 import theano
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
-from sklearn import cross_validation, metrics, datasets
+from sklearn import model_selection, metrics, datasets
 from neupy import algorithms, layers, environment
 
 
@@ -18,7 +18,7 @@ target = target_scaler.fit_transform(target).todense()
 n_samples = data.shape[0]
 data = data.reshape((n_samples, 1, 28, 28))
 
-x_train, x_test, y_train, y_test = cross_validation.train_test_split(
+x_train, x_test, y_train, y_test = model_selection.train_test_split(
     data.astype(np.float32),
     target.astype(np.float32),
     train_size=(6 / 7.)

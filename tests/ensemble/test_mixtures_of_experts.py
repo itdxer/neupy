@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn import datasets, preprocessing, cross_validation
+from sklearn import datasets, preprocessing, model_selection
 from neupy import algorithms, layers
 from neupy.utils import asfloat
 from neupy.estimators import rmsle
@@ -121,7 +121,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
 
         input_scaler = preprocessing.MinMaxScaler((-1, 1))
         output_scaler = preprocessing.MinMaxScaler()
-        x_train, x_test, y_train, y_test = cross_validation.train_test_split(
+        x_train, x_test, y_train, y_test = model_selection.train_test_split(
             input_scaler.fit_transform(data),
             output_scaler.fit_transform(target.reshape(-1, 1)),
             train_size=0.8

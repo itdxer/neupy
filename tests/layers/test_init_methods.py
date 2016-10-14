@@ -10,11 +10,11 @@ from base import BaseTestCase
 
 class LayersInitializationTestCase(BaseTestCase):
     def assertUniformlyDistributed(self, value):
-        self.assertTrue(stats.kstest(value, 'uniform'),
+        self.assertTrue(stats.kstest(value.ravel(), 'uniform'),
                         msg="Sampled distribution is not uniformal")
 
     def assertNormalyDistributed(self, value):
-        self.assertTrue(stats.mstats.normaltest(value),
+        self.assertTrue(stats.mstats.normaltest(value.ravel()),
                         msg="Sampled distribution is not normal")
 
     def test_constant_initializer(self):

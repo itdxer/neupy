@@ -54,7 +54,7 @@ class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
     Diabets dataset example
 
     >>> import numpy as np
-    >>> from sklearn.cross_validation import train_test_split
+    >>> from sklearn.model_selection import train_test_split
     >>> from sklearn import datasets, preprocessing
     >>> from neupy import algorithms, layers, environment
     >>> from neupy.estimators import rmsle

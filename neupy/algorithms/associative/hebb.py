@@ -23,7 +23,7 @@ class HebbRule(BaseStepAssociative):
     ----------
     decay_rate : float
         Decay rate is control your network weights. It helps network
-        'forgote' information and control weight sizes. Without this
+        'forget' information and control weight sizes. Without this
         parameter network weight will grow. Defaults to ``0.2``.
     {BaseAssociative.n_inputs}
     {BaseAssociative.n_outputs}

@@ -4,7 +4,7 @@ import theano
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 from skimage.filters import threshold_adaptive
 from neupy import algorithms, environment
 from neupy.utils import asfloat

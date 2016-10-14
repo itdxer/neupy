@@ -12,7 +12,7 @@ Dataset file: http://opihi.cs.uvic.ca/sound/music_speech.tar.gz
 """
 import numpy as np
 from neupy import algorithms
-from sklearn import preprocessing, cross_validation, metrics, decomposition
+from sklearn import preprocessing, model_selection, metrics, decomposition
 import matplotlib.pyplot as plt
 from librosa.feature import mfcc
 from sklearn.utils import shuffle
@@ -67,10 +67,11 @@ if args.apply_pca:
 
 print("\n> Train prediction")
 
-skf = cross_validation.StratifiedKFold(y_train, n_folds=5)
+skf = model_selection.StratifiedKFold(n_splits=5)
+skf_iterator = skf.split(x_train, y_train)
 scores = []
 
-for i, (train_index, test_index) in enumerate(skf, start=1):
+for i, (train_index, test_index) in enumerate(skf_iterator, start=1):
     print("\nK-fold #{}".format(i))
     pnnet = algorithms.PNN(std=std, verbose=False)
 

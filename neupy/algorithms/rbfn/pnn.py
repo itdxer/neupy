@@ -57,7 +57,7 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
     >>> import numpy as np
     >>>
     >>> from sklearn import datasets, metrics
-    >>> from sklearn.cross_validation import train_test_split
+    >>> from sklearn.model_selection import train_test_split
     >>> from neupy import algorithms, environment
     >>>
     >>> environment.reproducible()

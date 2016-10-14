@@ -1,4 +1,4 @@
-scikit-learn>=0.15.2
+scikit-learn>=0.18.0
 pandas==0.16.0
 Pillow==3.0.0
 

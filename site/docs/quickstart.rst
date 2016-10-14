@@ -15,7 +15,7 @@ First of all we need to load data.
 
 .. code-block:: python
 
-    >>> from sklearn import datasets, cross_validation
+    >>> from sklearn import datasets, model_selection
     >>> mnist = datasets.fetch_mldata('MNIST original')
     >>> data, target = mnist.data, mnist.target
 
@@ -43,7 +43,7 @@ samples for training and 10,000 for test.
 
     >>> from neupy import environment
     >>> import numpy as np
-    >>> from sklearn.cross_validation import train_test_split
+    >>> from sklearn.model_selection import train_test_split
     >>>
     >>> environment.reproducible()
     >>>

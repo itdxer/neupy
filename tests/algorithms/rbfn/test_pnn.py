@@ -3,7 +3,7 @@ from __future__ import division
 import numpy as np
 from sklearn import datasets
 from sklearn import metrics
-from sklearn.cross_validation import StratifiedKFold, train_test_split
+from sklearn.model_selection import StratifiedKFold, train_test_split
 
 from neupy import algorithms
 from base import BaseTestCase
@@ -36,10 +36,10 @@ class PNNTestCase(BaseTestCase):
         target = dataset.target
 
         test_data_size = 10
-        skfold = StratifiedKFold(target, test_data_size)
+        skfold = StratifiedKFold(n_splits=test_data_size)
         avarage_result = 0
 
-        for train, test in skfold:
+        for train, test in skfold.split(data, target):
             x_train, x_test = data[train], data[test]
             y_train, y_test = target[train], target[test]
 

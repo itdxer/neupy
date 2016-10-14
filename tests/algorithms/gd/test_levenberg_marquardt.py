@@ -2,7 +2,7 @@ import numpy as np
 import theano
 import theano.tensor as T
 from sklearn import datasets, preprocessing
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 
 from neupy import algorithms, layers
 from neupy.utils import asfloat

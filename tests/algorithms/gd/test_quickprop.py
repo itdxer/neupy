@@ -1,6 +1,6 @@
 from functools import partial
 
-from sklearn import datasets, cross_validation, preprocessing
+from sklearn import datasets, model_selection, preprocessing
 
 from neupy import algorithms
 
@@ -16,7 +16,7 @@ class QuickPropTestCase(BaseTestCase):
                                                 random_state=33)
         target_scaler = preprocessing.MinMaxScaler()
         target = target_scaler.fit_transform(target.reshape(-1, 1))
-        self.data = cross_validation.train_test_split(data, target,
+        self.data = model_selection.train_test_split(data, target,
                                                       train_size=0.75)
         self.connection = (5, 10, 1)
 

@@ -50,7 +50,7 @@ class GRNN(BaseNetwork, LazyLearningMixin):
     Examples
     --------
     >>> from sklearn import datasets, preprocessing
-    >>> from sklearn.cross_validation import train_test_split
+    >>> from sklearn.model_selection import train_test_split
     >>> from neupy import algorithms, estimators, environment
     >>>
     >>> environment.reproducible()
