@@ -21,7 +21,7 @@ class TransformationLayersTestCase(BaseTestCase):
 
         input_layer = layers.Input(20)
         reshape_layer = layers.Reshape((4, 5))
-        input_layer > input_layer
+        input_layer > reshape_layer
 
         y = reshape_layer.output(x).eval()
         self.assertEqual(y.shape, (5, 4, 5))
@@ -42,6 +42,6 @@ class EmbeddingLayerTestCase(BaseTestCase):
             [[2, 3]],
             [[8, 9]],
         ])
-        actual_output = connection.output(input_vector)
+        actual_output = connection.output(input_vector).eval()
 
         np.testing.assert_array_equal(expected_output, actual_output)

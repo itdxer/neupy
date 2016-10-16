@@ -11,7 +11,7 @@ from neupy import layers
 from neupy.utils import (AttributeKeyDict, asfloat, is_list_of_integers,
                          format_data, does_layer_accept_1d_feature)
 from neupy.layers.utils import preformat_layer_shape
-from neupy.layers.connections import LayerConnection, NetworkConnectionError
+from neupy.layers.connections import LayerConnection
 from neupy.helpers import table
 from neupy.core.properties import ChoiceProperty
 from neupy.network import errors
@@ -66,30 +66,17 @@ def clean_layers(connection):
         Cleaned layers connection.
     """
 
-    if is_list_of_integers(connection):
-        connection = generate_layers(list(connection))
-
     if isinstance(connection, tuple):
         connection = list(connection)
+
+    if is_list_of_integers(connection):
+        connection = generate_layers(connection)
 
     islist = isinstance(connection, list)
     layer_types = (layers.BaseLayer, LayerConnection)
 
     if islist and isinstance(connection[0], layer_types):
-        chain_connection = connection.pop()
-        for layer in reversed(connection):
-            chain_connection = LayerConnection(layer, chain_connection)
-        connection = chain_connection
-
-    if not isinstance(connection.input_layer, layers.Input):
-        raise NetworkConnectionError("First layer must be layers.Input class "
-                                     "instance.")
-
-    all_layers = list(connection)
-
-    if any(isinstance(layer, layers.Input) for layer in all_layers[1:]):
-        raise NetworkConnectionError("Only the first layer can be instance "
-                                     "of layers.Input class.")
+        connection = layers.join(*connection)
 
     return connection
 

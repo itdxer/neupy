@@ -7,7 +7,6 @@ import theano.tensor as T
 from neupy.utils import asfloat
 from neupy import layers, algorithms
 from neupy.algorithms import GradientDescent
-from neupy.layers.connections import NetworkConnectionError
 from neupy import init
 
 from base import BaseTestCase
@@ -15,20 +14,6 @@ from data import simple_classification
 
 
 class LayersBasicsTestCase(BaseTestCase):
-    def test_connection_errors(self):
-        with self.assertRaises(NetworkConnectionError):
-            # Missed Input layer
-            GradientDescent(layers.Sigmoid(10) > layers.Sigmoid(1))
-
-        with self.assertRaises(NetworkConnectionError):
-            # Cannot use input layer inside the network
-            GradientDescent([
-                layers.Input(1),
-                layers.Sigmoid(10),
-                layers.Input(1),
-                layers.Sigmoid(1),
-            ])
-
     def test_list_of_layers(self):
         bpnet = GradientDescent([
             layers.Input(2),
@@ -40,16 +25,6 @@ class LayersBasicsTestCase(BaseTestCase):
             [layer.size for layer in bpnet.layers],
             [2, 3, 1, 10]
         )
-
-    def test_layers_iteratinos(self):
-        network = GradientDescent((2, 2, 1))
-
-        layers = list(network.layers)
-        output_layer = layers.pop()
-
-        self.assertIsNone(output_layer.relate_to_layer)
-        for layer in layers:
-            self.assertIsNotNone(layer.relate_to_layer)
 
     def test_activation_layers_without_size(self):
         input_data = np.array([1, 2, -1, 10])
@@ -146,15 +121,13 @@ class PReluTestCase(BaseTestCase):
     def test_invalid_alpha_axes_parameter(self):
         # there are can be specified axis 1, but not 2
         prelu_layer = layers.PRelu(10, alpha_axes=2)
-        layers.Input(10) > prelu_layer
         with self.assertRaises(ValueError):
-            prelu_layer.initialize()
+            layers.Input(10) > prelu_layer
 
         # cannot specify alpha per input sample
         prelu_layer = layers.PRelu(10, alpha_axes=0)
-        layers.Input(10) > prelu_layer
         with self.assertRaises(ValueError):
-            prelu_layer.initialize()
+            layers.Input(10) > prelu_layer
 
     def test_prelu_random_params(self):
         prelu_layer = layers.PRelu(10, alpha=init.XavierNormal())
