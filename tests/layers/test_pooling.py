@@ -130,7 +130,7 @@ class PoolingLayersTestCase(BaseTestCase):
 
         global_sum_pooling_layer = layers.GlobalPooling(function=T.sum)
         a = T.tensor4()
-        actual_output = global_sum_pooling_layer.output(a).eval({a:x})
+        actual_output = global_sum_pooling_layer.output(a).eval({a: x})
 
         self.assertEqual(actual_output.shape, (2, 3))
         np.testing.assert_array_equal(expected_outputs, actual_output)

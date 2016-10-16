@@ -18,40 +18,47 @@ class BaseLayer(ChainConnection, Configurable):
 
     Methods
     -------
-    initialize()
-        Set up important configurations related to the layer.
-    relate_to(right_layer)
-        Connect current layer with the next one.
     disable_training_state()
         Swith off trainig state.
+    initialize()
+        Set up important configurations related to the layer.
 
     Attributes
     ----------
+    input_shape : tuple
+    output_shape : tuple
     training_state : bool
         Defines whether layer in training state or not.
     layer_id : int
         Layer's identifier.
     parameters : list
         List of layer's parameters.
-    relate_to_layer : BaseLayer or None
-    relate_from_layer : BaseLayer or None
+    graph : LayerGraph instance or None
     """
     def __init__(self, *args, **options):
         super(BaseLayer, self).__init__(*args)
 
         self.parameters = []
 
-        self.relate_to_layer = None
         self.relate_from_layer = None
+        self.relate_to_layer = None
         self.layer_id = 1
         self.updates = []
+        self.input_shape_ = None
 
         Configurable.__init__(self, **options)
 
     @property
     def input_shape(self):
+        if self.input_shape_ is not None:
+            return self.input_shape_
+
         if self.relate_from_layer is not None:
             return self.relate_from_layer.output_shape
+
+    @input_shape.setter
+    def input_shape(self, value):
+        self.input_shape_ = value
 
     @property
     def output_shape(self):
@@ -64,10 +71,6 @@ class BaseLayer(ChainConnection, Configurable):
         self.parameters = []
         if self.relate_from_layer is not None:
             self.layer_id = self.relate_from_layer.layer_id + 1
-
-    def relate_to(self, right_layer):
-        self.relate_to_layer = right_layer
-        right_layer.relate_from_layer = self
 
     def add_parameter(self, value, name, shape):
         theano_name = '{}_{}'.format(name, self.layer_id)
@@ -143,10 +146,6 @@ class ParameterBasedLayer(BaseLayer):
         super(ParameterBasedLayer, self).__init__(**options)
 
     @property
-    def output_shape(self):
-        return as_tuple(self.relate_to_layer.size)
-
-    @property
     def weight_shape(self):
         return as_tuple(self.input_shape, self.output_shape)
 
@@ -206,10 +205,7 @@ class Input(BaseLayer):
 
     def __init__(self, size, **options):
         super(Input, self).__init__(size=size, **options)
-
-    @property
-    def input_shape(self):
-        return as_tuple(self.size)
+        self.input_shape = as_tuple(self.size)
 
     @property
     def output_shape(self):

@@ -29,10 +29,6 @@ class Dropout(BaseLayer):
     def __init__(self, proba, **options):
         super(Dropout, self).__init__(proba=proba, **options)
 
-    @property
-    def size(self):
-        return self.relate_to_layer.size
-
     def output(self, input_value):
         if not self.training_state:
             return input_value

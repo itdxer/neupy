@@ -5,5 +5,6 @@ from .convolutions import *
 from .pooling import *
 from .stochastic import *
 from .normalization import *
+from .merge import *
 
 from .utils import join

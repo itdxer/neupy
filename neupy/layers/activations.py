@@ -330,7 +330,7 @@ class PRelu(ActivationLayer):
 
         if max(alpha_axes) > len(output_shape):
             raise ValueError("Cannot specify alpha for the axis #{}. "
-                             "Maximum available axis is #{}"
+                             "Maximum available axis is #{} (0-based indeces)."
                              "".format(max(alpha_axes), len(output_shape) - 1))
 
         alpha_shape = [output_shape[axis - 1] for axis in alpha_axes]

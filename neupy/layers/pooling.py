@@ -183,6 +183,9 @@ class Upscale(BaseLayer):
 
     @property
     def output_shape(self):
+        if self.input_shape is None:
+            return None
+
         if len(self.input_shape) != 3:
             raise LayerConnectionError(
                 "Upscale layer should have an input value that have "
@@ -234,6 +237,8 @@ class GlobalPooling(BaseLayer):
 
     @property
     def output_shape(self):
+        if self.input_shape is None:
+            return None
         return as_tuple(self.input_shape[0])
 
     def output(self, input_value):

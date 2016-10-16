@@ -1,3 +1,6 @@
+import collections
+from functools import reduce
+
 from .connections import LayerConnection
 
 
@@ -44,18 +47,38 @@ def dimshuffle(value, ndim, axes):
     return value.dimshuffle(pattern)
 
 
-def join(left_connection, right_connection):
+def join(*connections):
     """
     Connect two layers.
 
     Parameters
     ----------
-    left_connection : layer or connection
-    right_connection : layer or connection
+    *connections : layers or connections
 
     Returns
     -------
     connection
         Layers connected in a sequence.
+
+    Examples
+    --------
+    >>> from neupy import layers
+    >>> conn = layers.join(
+    ...     layers.Input(784),
+    ...     layers.Relu(500),
+    ...     layers.Relu(300),
+    ...     layers.Softmax(10),
+    ... )
+    >>>
+    >>> conn = layers.join([
+    ...     layers.Input(784),
+    ...     layers.Sigmoid(100),
+    ...     layers.Softmax(10),
+    ... ])
     """
-    return LayerConnection(left_connection, right_connection)
+    n_layers = len(connections)
+    if n_layers == 1 and isinstance(connections[0], collections.Iterable):
+        connections = connections[0]
+
+    merged_connections = reduce(LayerConnection, connections)
+    return merged_connections

@@ -17,7 +17,7 @@ class QuickPropTestCase(BaseTestCase):
         target_scaler = preprocessing.MinMaxScaler()
         target = target_scaler.fit_transform(target.reshape(-1, 1))
         self.data = model_selection.train_test_split(data, target,
-                                                      train_size=0.75)
+                                                     train_size=0.75)
         self.connection = (5, 10, 1)
 
     def test_quickprop(self):
