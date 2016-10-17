@@ -38,10 +38,10 @@ class LayerGraphTestCase(BaseTestCase):
         graph.connect_layers(l2, l4)
 
         subgraph = graph.subgraph_for_output(l6)
-        self.assertEqual(1, len(subgraph.output_vertecies))
-        self.assertIs(l6, subgraph.output_vertecies[0])
-        self.assertEqual(1, len(subgraph.input_vertecies))
-        self.assertIs(l0, subgraph.input_vertecies[0])
+        self.assertEqual(1, len(subgraph.output_layers))
+        self.assertIs(l6, subgraph.output_layers[0])
+        self.assertEqual(1, len(subgraph.input_layers))
+        self.assertIs(l0, subgraph.input_layers[0])
 
         x = T.matrix()
         outputs = graph.propagate_forward(x)
@@ -72,7 +72,7 @@ class LayerGraphTestCase(BaseTestCase):
         graph2 = {1: [2], 2: [3], 3: [4]}
         self.assertFalse(is_cyclic(graph2), msg=graph2)
 
-    def test_graph_edge_connection_error(self):
+    def test_graph_connection_error(self):
         l1 = layers.Input(10)
         l2 = layers.Input(20)
         l3 = layers.Sigmoid(30)
@@ -121,13 +121,13 @@ class LayerGraphTestCase(BaseTestCase):
         self.assertIsNot(l3, subgraph.forward_graph)
         self.assertEqual(6, len(subgraph.forward_graph))
 
-        # Input vertecies
-        self.assertEqual(1, len(subgraph.input_vertecies))
-        self.assertEqual([l0], subgraph.input_vertecies)
+        # Input layers
+        self.assertEqual(1, len(subgraph.input_layers))
+        self.assertEqual([l0], subgraph.input_layers)
 
-        # Output vertecies
-        self.assertEqual(1, len(subgraph.output_vertecies))
-        self.assertEqual([le], subgraph.output_vertecies)
+        # Output layers
+        self.assertEqual(1, len(subgraph.output_layers))
+        self.assertEqual([le], subgraph.output_layers)
 
         x = T.matrix()
         y = subgraph.propagate_forward(x)
@@ -175,14 +175,14 @@ class LayerGraphTestCase(BaseTestCase):
         self.assertIsNot(l3, subgraph.forward_graph)
         self.assertEqual(6, len(subgraph.forward_graph))
 
-        # Input vertecies
-        self.assertEqual(2, len(subgraph.input_vertecies))
-        self.assertIn(l0, subgraph.input_vertecies)
-        self.assertIn(l5, subgraph.input_vertecies)
+        # Input layers
+        self.assertEqual(2, len(subgraph.input_layers))
+        self.assertIn(l0, subgraph.input_layers)
+        self.assertIn(l5, subgraph.input_layers)
 
-        # Output vertecies
-        self.assertEqual(1, len(subgraph.output_vertecies))
-        self.assertEqual([l6], subgraph.output_vertecies)
+        # Output layers
+        self.assertEqual(1, len(subgraph.output_layers))
+        self.assertEqual([l6], subgraph.output_layers)
 
     def test_many_to_many_graph(self):
         l0 = layers.Input(1)

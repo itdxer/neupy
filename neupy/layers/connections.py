@@ -21,10 +21,26 @@ class NetworkConnectionError(Exception):
     """
 
 
-def filter_dict(dictionary, valid_keys):
+def filter_dict(dictionary, include_keys):
+    """
+    Creates new dictionary that contains only some of the
+    keys from the original one.
+
+    Parameters
+    ----------
+    dictionary : dict
+        Original dictionary
+    include_keys : list or tuple
+        Keys that will copied from original dictionary
+        into a new one.
+
+    Returns
+    -------
+    dict
+    """
     filtered_dict = {}
     for key, value in dictionary.items():
-        if key in valid_keys:
+        if key in include_keys:
             filtered_dict[key] = value
     return filtered_dict
 
@@ -72,6 +88,24 @@ def is_cyclic(graph):
 
 
 def does_layer_expect_one_input(layer):
+    """
+    Check whether layer can except only one input layer.
+
+    Parameters
+    ----------
+    layer : BaseLayer or LayerConnection instance
+
+    Raises
+    ------
+    ValueError
+        In case if argument is not a layer.
+
+    Retruns
+    -------
+    bool
+        Returns ``True`` if layer can accept onl one input
+        layer, ``False`` otherwise.
+    """
     if not hasattr(layer, 'output'):
         raise ValueError("Layer `{}` doesn't have "
                          "output method".format(layer))
@@ -90,6 +124,20 @@ def does_layer_expect_one_input(layer):
 
 
 class LayerGraph(object):
+    """
+    Direct Acyclic Graph (DAG) for layer connections.
+
+    Parameters
+    ----------
+    forward_graph : None or dict
+    backward_graph : None or dict
+    initialized_graph : None or dict
+
+    Raises
+    ------
+    LayerConnectionError
+        If graph cannot connect layers.
+    """
     def __init__(self, forward_graph=None, backward_graph=None,
                  initialized_graph=None):
         if forward_graph is None:
@@ -107,34 +155,87 @@ class LayerGraph(object):
 
     @classmethod
     def merge(cls, left_graph, right_graph):
+        """
+        Combine two separated graphs into one.
+
+        Parameters
+        ----------
+        left_graph : LayerGraph instance
+        right_graph : LayerGraph instance
+
+        Returns
+        -------
+        LayerGraph instance
+            New graph that contains layers and connections
+            from input graphs.
+        """
         left_forward_graph = left_graph.forward_graph.copy()
         left_backward_graph = left_graph.backward_graph.copy()
+        left_initialized_graph = left_graph.initialized_graph.copy()
 
         forward_graph = left_forward_graph.update(right_graph.forward_graph)
         backward_graph = left_backward_graph.update(right_graph.backward_graph)
+        initialized_graph = left_initialized_graph.update(
+            right_graph.initialized_graph
+        )
 
-        return cls(forward_graph, backward_graph)
+        return cls(forward_graph, backward_graph, initialized_graph)
 
-    def add_vertex(self, vertex):
-        if vertex not in self.forward_graph:
-            self.forward_graph[vertex] = []
-            self.backward_graph[vertex] = []
-            return True
-        return False
+    def add_layer(self, layer):
+        """
+        Add new layer into the graph.
 
-    def add_edge(self, from_vertex, to_vertex):
-        if from_vertex is to_vertex:
+        Parameters
+        ----------
+        layer : hashable object
+
+        Returns
+        -------
+        bool
+            Returns ``False`` if layer has beed already added into
+            graph and there is no need to add it again, and
+            ``True`` - if layer is a new and was added successfully.
+        """
+        if layer in self.forward_graph:
+            return False
+
+        self.forward_graph[layer] = []
+        self.backward_graph[layer] = []
+        return True
+
+    def add_connection(self, from_layer, to_layer):
+        """
+        Add new directional connection between two layers.
+
+        Parameters
+        ----------
+        from_layer : hashable object
+        to_layer : hashable object
+
+        Raises
+        ------
+        LayerConnectionError
+            Raises if it's impossible to connect two layers or
+            new connection creates cycles in graph.
+
+        Returns
+        -------
+        bool
+            Returns ``False`` if connection has already been added into
+            the graph, and ``True`` if connection was added successfully.
+        """
+        if from_layer is to_layer:
             raise LayerConnectionError("Cannot connect layer `{}` "
-                                       "to itself".format(from_vertex))
+                                       "to itself".format(from_layer))
 
-        self.add_vertex(from_vertex)
-        self.add_vertex(to_vertex)
+        self.add_layer(from_layer)
+        self.add_layer(to_layer)
 
-        expect_one_input_layer = does_layer_expect_one_input(to_vertex)
-        forward_connections = self.forward_graph[from_vertex]
-        backward_connections = self.backward_graph[to_vertex]
+        expect_one_input_layer = does_layer_expect_one_input(to_layer)
+        forward_connections = self.forward_graph[from_layer]
+        backward_connections = self.backward_graph[to_layer]
 
-        if to_vertex in forward_connections:
+        if to_layer in forward_connections:
             # Layers have been already connected
             return False
 
@@ -144,125 +245,190 @@ class LayerGraph(object):
                 "Layer `{to_layer}` expectes input only from one "
                 "layer and it has been alredy connected with "
                 "`{to_layer_connection}`.".format(
-                    from_layer=from_vertex,
-                    to_layer=to_vertex,
+                    from_layer=from_layer,
+                    to_layer=to_layer,
                     to_layer_connection=backward_connections[0]
                 )
             )
-        forward_connections.append(to_vertex)
+
+        forward_connections.append(to_layer)
 
         if is_cyclic(self.forward_graph):
             # Rollback changes in case if user cathes exception
-            self.forward_graph[from_vertex].pop()
+            self.forward_graph[from_layer].pop()
             raise LayerConnectionError("Graph cannot have cycles")
 
-        backward_connections.append(from_vertex)
+        backward_connections.append(from_layer)
         return True
 
-    def connect_layers(self, from_vertex, to_vertex):
-        edge_added = self.add_edge(from_vertex, to_vertex)
+    def connect_layers(self, from_layer, to_layer):
+        """
+        Connect two layers together and update other layers
+        in the graph.
 
-        if from_vertex.input_shape is None or not edge_added:
-            return
+        Parameters
+        ----------
+        from_layer : hashable object
+        to_layer : hashable object
+
+        Raises
+        ------
+        LayerConnectionError
+            Raises if cannot graph cannot connect two layers.
+
+        Returns
+        -------
+        bool
+            Returns ``False`` if connection has already been added into
+            the graph, and ``True`` if connection was added successfully.
+        """
+        connection_added = self.add_connection(from_layer, to_layer)
+
+        if from_layer.input_shape is None or not connection_added:
+            return False
 
         # Layer has an input shape which means that we can
         # propagate this information through the graph and
         # set up input shape for layers that don't have it.
-        vertecies = [from_vertex]
+        layers = [from_layer]
 
-        while vertecies:
-            current_vertex = vertecies.pop()
-            next_vertecies = self.forward_graph[current_vertex]
+        while layers:
+            current_layer = layers.pop()
+            next_layers = self.forward_graph[current_layer]
 
-            for next_vertex in next_vertecies:
-                if next_vertex in self.initialized_graph[current_vertex]:
+            for next_layer in next_layers:
+                if next_layer in self.initialized_graph[current_layer]:
                     continue
 
-                in_shape = next_vertex.input_shape
-                out_shape = current_vertex.output_shape
-                one_input_layer = does_layer_expect_one_input(next_vertex)
+                in_shape = next_layer.input_shape
+                out_shape = current_layer.output_shape
+                one_input_layer = does_layer_expect_one_input(next_layer)
 
                 if not in_shape or not one_input_layer:
-                    next_vertex.input_shape = out_shape
-                    self.initialized_graph[current_vertex].append(next_vertex)
-                    next_vertex.initialize()
+                    next_layer.input_shape = out_shape
+                    self.initialized_graph[current_layer].append(next_layer)
+                    next_layer.initialize()
 
                 elif one_input_layer and in_shape != out_shape:
                     raise LayerConnectionError(
                         "Cannot connect `{}` to the `{}`. Output shape "
                         "from one layer is equal to {} and input shape "
                         "to the next one is equal to {}".format(
-                            current_vertex, next_vertex,
+                            current_layer, next_layer,
                             out_shape, in_shape,
                         )
                     )
 
-            vertecies.extend(next_vertecies)
+            layers.extend(next_layers)
 
-    def subgraph_for_output(self, vertex):
-        vertecies = [vertex]
-        observed_vertecies = [vertex]
+        return True
 
-        while vertecies:
-            current_vertex = vertecies.pop()
-            next_vertecies = self.backward_graph[current_vertex]
+    def subgraph_for_output(self, layer):
+        layers = [layer]
+        observed_layers = [layer]
 
-            vertecies.extend(next_vertecies)
-            observed_vertecies.extend(next_vertecies)
+        while layers:
+            current_layer = layers.pop()
+            next_layers = self.backward_graph[current_layer]
+
+            layers.extend(next_layers)
+            observed_layers.extend(next_layers)
 
         forward_subgraph = filter_dict(self.forward_graph,
-                                       observed_vertecies)
+                                       observed_layers)
         backward_subgraph = filter_dict(self.backward_graph,
-                                        observed_vertecies)
+                                        observed_layers)
+        initialized_subgraph = filter_dict(self.initialized_graph,
+                                            observed_layers)
 
-        return LayerGraph(forward_subgraph, backward_subgraph)
-
-    @property
-    def input_vertecies(self):
-        input_vertecies = []
-        for vertex, next_vertecies in self.backward_graph.items():
-            if not next_vertecies:
-                input_vertecies.append(vertex)
-
-        if not input_vertecies:
-            raise LayerConnectionError("Graph doesn't have input vertecies")
-
-        return input_vertecies
+        return LayerGraph(forward_subgraph, backward_subgraph,
+                          initialized_subgraph)
 
     @property
-    def output_vertecies(self):
-        output_vertecies = []
-        for vertex, next_vertecies in self.forward_graph.items():
-            if not next_vertecies:
-                output_vertecies.append(vertex)
+    def input_layers(self):
+        """
+        List of input layers.
 
-        if not output_vertecies:
-            raise LayerConnectionError("Graph doesn't have output vertecies")
+        Raises
+        ------
+        LayerConnectionError
+            If graph doesn't have input layers.
 
-        return output_vertecies
+        Returns
+        -------
+        list
+            List of input layers.
+        """
+        input_layers = []
+        for layer, next_layers in self.backward_graph.items():
+            if not next_layers:
+                input_layers.append(layer)
+
+        if not input_layers:
+            raise LayerConnectionError("Graph doesn't have input layers")
+
+        return input_layers
+
+    @property
+    def output_layers(self):
+        """
+        List of output layers.
+
+        Raises
+        ------
+        LayerConnectionError
+            If graph doesn't have output layers.
+
+        Returns
+        -------
+        list
+            List of output layers.
+        """
+        output_layers = []
+        for layer, next_layers in self.forward_graph.items():
+            if not next_layers:
+                output_layers.append(layer)
+
+        if not output_layers:
+            raise LayerConnectionError("Graph doesn't have output layers")
+
+        return output_layers
 
     def propagate_forward(self, input_):
-        outputs = {}
-        for input_vertex in self.input_vertecies:
-            outputs[input_vertex] = input_vertex.output(input_)
+        """
+        Propagates input variable through the directed acyclic
+        graph and returns output from the final layers.
 
-        def output_from_vertex(vertex):
-            input_vertecies = self.backward_graph[vertex]
+        Parameters
+        ----------
+        input_ : array-like or Theano variable
+
+        Returns
+        -------
+        object
+            Output from the final layers.
+        """
+        outputs = {}
+        for input_layer in self.input_layers:
+            outputs[input_layer] = input_layer.output(input_)
+
+        def output_from_layer(layer):
+            input_layers = self.backward_graph[layer]
             inputs = []
-            for input_vertex in input_vertecies:
-                if input_vertex in outputs:
-                    res = outputs[input_vertex]
+            for input_layer in input_layers:
+                if input_layer in outputs:
+                    res = outputs[input_layer]
                 else:
-                    res = output_from_vertex(input_vertex)
-                    outputs[input_vertex] = res
+                    res = output_from_layer(input_layer)
+                    outputs[input_layer] = res
 
                 inputs.append(res)
 
-            return vertex.output(*inputs)
+            return layer.output(*inputs)
 
         results = []
-        for output_vertex in self.output_vertecies:
-            results.append(output_from_vertex(output_vertex))
+        for output_layer in self.output_layers:
+            results.append(output_from_layer(output_layer))
 
         if len(results) == 1:
             results = results[0]
@@ -271,6 +437,9 @@ class LayerGraph(object):
 
 
 class ChainConnection(object):
+    """
+    Base class from chain connections.
+    """
     graph = None
 
     def __init__(self):
@@ -297,6 +466,20 @@ class ChainConnection(object):
 
 
 def make_common_graph(left_layer, right_layer):
+    """
+    Makes common graph for two layers that exists
+    in different graphs.
+
+    Parameters
+    ----------
+    left_layer : BaseLayer instance
+    right_layer : BaseLayer instance
+
+    Returns
+    -------
+    LayerGraph instance
+        Graph that contains both layers and their connections.
+    """
     left_graph = left_layer.graph
     right_graph = right_layer.graph
 
