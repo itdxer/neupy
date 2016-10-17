@@ -186,7 +186,7 @@ class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
         self.init_methods()
 
         finish_init_time = time.time()
-        self.logs.message("THEANO", "Initialization finished sucessfully. "
+        self.logs.message("THEANO", "Initialization finished successfully. "
                           "It took {:.2f} seconds"
                           "".format(finish_init_time - start_init_time))
 
