@@ -13,4 +13,4 @@ Documentation
     ../docs/surgery
     ../docs/plots
     ../docs/secondary
-    ../docs/cheatsheet
+    ../pages/cheatsheet
