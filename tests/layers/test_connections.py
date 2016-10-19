@@ -1,4 +1,6 @@
 import numpy as np
+import theano
+import theano.tensor as T
 
 from neupy import layers, algorithms
 from neupy.utils import asfloat, as_tuple
@@ -103,3 +105,32 @@ class ConnectionsTestCase(BaseTestCase):
         self.assertEqual(conn1.output_shape, as_tuple(60))
         self.assertEqual(conn2.output_shape, as_tuple(30))
         self.assertEqual(conn3.output_shape, as_tuple(40))
+
+    def test_save_link_to_assigned_connections(self):
+        # Tree structure:
+        #
+        #                       Sigmoid(10)
+        #                      /
+        # Input(10) - Sigmoid(5)
+        #                      \
+        #                       Softmax(10)
+        #
+        input_layer = layers.Input(10)
+        minimized = input_layer > layers.Sigmoid(5)
+        reconstructed = minimized > layers.Sigmoid(10)
+        classifier = minimized > layers.Softmax(20)
+
+        x = T.matrix()
+        y_minimized = theano.function([x], minimized.output(x))
+        y_reconstructed = theano.function([x], reconstructed.output(x))
+        y_classifier = theano.function([x], classifier.output(x))
+
+        x_matrix = np.random.random((3, 10))
+        minimized_output = y_minimized(x_matrix)
+        self.assertEqual((3, 5), minimized_output.shape)
+
+        reconstructed_output = y_reconstructed(x_matrix)
+        self.assertEqual((3, 10), reconstructed_output.shape)
+
+        classifier_output = y_classifier(x_matrix)
+        self.assertEqual((3, 20), classifier_output.shape)

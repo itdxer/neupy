@@ -341,6 +341,10 @@ class LayerGraph(object):
         initialized_subgraph = filter_dict(self.initialized_graph,
                                             observed_layers)
 
+        # Remove old relations to the other layers.
+        # Output layer cannot point to some other layers.
+        forward_subgraph[layer] = []
+
         return LayerGraph(forward_subgraph, backward_subgraph,
                           initialized_subgraph)
 
