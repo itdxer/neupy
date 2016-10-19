@@ -45,6 +45,35 @@ def filter_dict(dictionary, include_keys):
     return filtered_dict
 
 
+def merge_dicts_with_list(first_dict, second_dict):
+    """
+    Create new dict that contains all elements from the first
+    one and from the second one. Function assumes that all value
+    elements are lists. In case if one key appears in both dicts
+    function will merge these lists into one.
+
+    Parameters
+    ----------
+    first_dict : dict
+    second_dict : dict
+
+    Returns
+    -------
+    dict
+    """
+    common_dict = first_dict.copy()
+
+    for key, values in second_dict.items():
+        if key not in common_dict:
+            common_dict[key] = values
+        else:
+            for value in values:
+                if value not in common_dict[key]:
+                    common_dict[key].append(value)
+
+    return common_dict
+
+
 def is_cyclic(graph):
     """
     Check if graph has cycles.
@@ -169,16 +198,18 @@ class LayerGraph(object):
             New graph that contains layers and connections
             from input graphs.
         """
-        left_forward_graph = left_graph.forward_graph.copy()
-        left_backward_graph = left_graph.backward_graph.copy()
-        left_initialized_graph = left_graph.initialized_graph.copy()
-
-        forward_graph = left_forward_graph.update(right_graph.forward_graph)
-        backward_graph = left_backward_graph.update(right_graph.backward_graph)
-        initialized_graph = left_initialized_graph.update(
+        forward_graph = merge_dicts_with_list(
+            left_graph.forward_graph,
+            right_graph.forward_graph
+        )
+        backward_graph = merge_dicts_with_list(
+            left_graph.backward_graph,
+            right_graph.backward_graph
+        )
+        initialized_graph = merge_dicts_with_list(
+            left_graph.initialized_graph,
             right_graph.initialized_graph
         )
-
         return cls(forward_graph, backward_graph, initialized_graph)
 
     def add_layer(self, layer):
@@ -292,12 +323,15 @@ class LayerGraph(object):
         # set up input shape for layers that don't have it.
         layers = [from_layer]
 
+        initialized_graph = self.initialized_graph
+        forward_graph = self.forward_graph
+
         while layers:
             current_layer = layers.pop()
-            next_layers = self.forward_graph[current_layer]
+            next_layers = forward_graph[current_layer]
 
             for next_layer in next_layers:
-                if next_layer in self.initialized_graph[current_layer]:
+                if next_layer in initialized_graph[current_layer]:
                     continue
 
                 in_shape = next_layer.input_shape
@@ -306,7 +340,7 @@ class LayerGraph(object):
 
                 if not in_shape or not one_input_layer:
                     next_layer.input_shape = out_shape
-                    self.initialized_graph[current_layer].append(next_layer)
+                    initialized_graph[current_layer].append(next_layer)
                     next_layer.initialize()
 
                 elif one_input_layer and in_shape != out_shape:
@@ -339,7 +373,7 @@ class LayerGraph(object):
         backward_subgraph = filter_dict(self.backward_graph,
                                         observed_layers)
         initialized_subgraph = filter_dict(self.initialized_graph,
-                                            observed_layers)
+                                           observed_layers)
 
         # Remove old relations to the other layers.
         # Output layer cannot point to some other layers.
@@ -365,7 +399,10 @@ class LayerGraph(object):
         """
         input_layers = []
         for layer, next_layers in self.backward_graph.items():
-            if not next_layers:
+            # TODO: I should check whether it's always useful
+            # to have only an input layers that have defined input
+            # shape
+            if not next_layers and layer.input_shape:
                 input_layers.append(layer)
 
         if not input_layers:
@@ -405,7 +442,15 @@ class LayerGraph(object):
 
         Parameters
         ----------
-        input_ : array-like or Theano variable
+        input_ : array-like, Theano variable or dict
+            If input has array or Theano variable type than it will
+            be used as a direct input for input layer/layers. The
+            dict type input should has a specific structure. Each
+            key of the dict is a layer and each value is array or
+            Theano variable. Dict defines input values for specific
+            layers. In the dict input layer is not necessary should
+            be an instance of the ``layers.Input`` class. It can be
+            any layer from the graph.
 
         Returns
         -------
@@ -413,10 +458,23 @@ class LayerGraph(object):
             Output from the final layers.
         """
         outputs = {}
-        for input_layer in self.input_layers:
-            outputs[input_layer] = input_layer.output(input_)
+
+        if isinstance(input_, dict):
+            for layer, input_variable in input_.items():
+                if layer not in self.forward_graph:
+                    raise ValueError("The `{}` layer doesn't appear "
+                                     "in this graph".format(layer))
+
+                outputs[layer] = layer.output(input_variable)
+
+        else:
+            for input_layer in self.input_layers:
+                outputs[input_layer] = input_layer.output(input_)
 
         def output_from_layer(layer):
+            if layer in outputs:
+                return outputs[layer]
+
             input_layers = self.backward_graph[layer]
             inputs = []
             for input_layer in input_layers:
@@ -500,7 +558,7 @@ def make_common_graph(left_layer, right_layer):
         if left_graph is right_graph:
             graph = left_graph
         else:
-            graph = LayerGraph.merge(left_layer.graph, right_layer.graph)
+            graph = LayerGraph.merge(left_graph, right_graph)
 
     for layer in graph.forward_graph.keys():
         layer.graph = graph

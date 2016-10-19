@@ -142,9 +142,9 @@ class LayerGraphTestCase(BaseTestCase):
         le = layers.Elementwise()
         l3 = layers.Sigmoid(30)
         l4 = layers.Sigmoid(40)
-        l5 = layers.Sigmoid(50)
+        l5 = layers.Input(50)
         l6 = layers.Sigmoid(60)
-        l12 = layers.Sigmoid(70)
+        l12 = layers.Sigmoid(10)
 
         # Graph Structure:
         # [l0, l12] -> l6

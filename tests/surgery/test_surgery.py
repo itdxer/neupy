@@ -149,7 +149,6 @@ class SurgerySewTogetherTestCase(BaseTestCase):
         ])
 
         encoder = surgery.cut(autoencoder, start=0, end=2)
-        print(encoder)
         self.assertEqual(len(encoder), 2)
 
         algorithms.Momentum(encoder > layers.Softmax(10))

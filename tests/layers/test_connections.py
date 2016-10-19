@@ -125,7 +125,7 @@ class ConnectionsTestCase(BaseTestCase):
         y_reconstructed = theano.function([x], reconstructed.output(x))
         y_classifier = theano.function([x], classifier.output(x))
 
-        x_matrix = np.random.random((3, 10))
+        x_matrix = asfloat(np.random.random((3, 10)))
         minimized_output = y_minimized(x_matrix)
         self.assertEqual((3, 5), minimized_output.shape)
 
@@ -134,3 +134,30 @@ class ConnectionsTestCase(BaseTestCase):
 
         classifier_output = y_classifier(x_matrix)
         self.assertEqual((3, 20), classifier_output.shape)
+
+    def test_dict_based_inputs_into_connection(self):
+        # Tree structure:
+        #
+        # Input(10) - Sigmoid(5) - Sigmoid(10)
+        #
+        input_layer = layers.Input(10)
+        hidden_layer = layers.Sigmoid(5)
+        output_layer = layers.Sigmoid(10)
+
+        minimized = input_layer > hidden_layer
+        reconstructed = minimized > output_layer
+
+        x = T.matrix()
+        y_minimized = theano.function([x], minimized.output(x))
+
+        x_matrix = asfloat(np.random.random((3, 10)))
+        minimized_output = y_minimized(x_matrix)
+        self.assertEqual((3, 5), minimized_output.shape)
+
+        h_output = T.matrix()
+        y_reconstructed = theano.function(
+            [h_output],
+            reconstructed.output({output_layer: h_output})
+        )
+        reconstructed_output = y_reconstructed(minimized_output)
+        self.assertEqual((3, 10), reconstructed_output.shape)

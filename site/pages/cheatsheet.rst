@@ -112,7 +112,7 @@ Associative
     :network:`Oja`, OJA
     :network:`Kohonen`, Kohonen
     :network:`Instar`, Instar
-    :network:`HebbRule`, Hebb)
+    :network:`HebbRule`, Hebbian Neural Network
 
 Boltzmann Machine
 ~~~~~~~~~~~~~~~~~
@@ -157,9 +157,17 @@ Convolutional layers
     :header: "Class name", "Description"
 
     ":layer:`Convolution`", "Convolutional layer"
+
+Pooling layers
+~~~~~~~~~~~~~~~~~~~~
+
+.. csv-table::
+    :header: "Class name", "Description"
+
     ":layer:`MaxPooling`", "Maximum pooling layer"
     ":layer:`AveragePooling`", "Average pooling layer"
     ":layer:`Upscale`", "Upscale layer"
+    ":layer:`GlobalPooling`", "Global pooling layer"
 
 Stochastic layers
 ~~~~~~~~~~~~~~~~~
@@ -170,14 +178,24 @@ Stochastic layers
     ":layer:`Dropout`", "Dropout layer"
     ":layer:`GaussianNoise`", "Add gaussian noise to the input"
 
-Transformation Layers
-~~~~~~~~~~~~~~~~~~~~~
+Merge layers
+~~~~~~~~~~~~
+
+.. csv-table::
+    :header: "Class name", "Description"
+
+    ":layer:`Elementwise`", "Merge multiple input layers in one with elementwise function"
+    ":layer:`Concatenate`", "Concatenate multiple input layers in one based on the specified axes."
+
+Other layers
+~~~~~~~~~~~~
 
 .. csv-table::
     :header: "Class name", "Description"
 
     ":layer:`Reshape`", "Reshape tensor input"
-    ":layer:`Emedding`", "Embedding layer accepts indeces as an input and returns rows from the weight matrix associated with these indeces."
+    ":layer:`Parallel`", "Parallel layer connections"
+    ":layer:`Embedding`", "Embedding layer accepts indeces as an input and returns rows from the weight matrix associated with these indeces."
 
 .. _init-methods:
 

@@ -87,10 +87,10 @@ class Elementwise(MultiInputLayer):
         if self.input_shape:
             return self.input_shape[0]
 
-    def output(self, *input_layers):
-        if len(input_layers) == 1:
-            return input_layers[0]
-        return reduce(self.merge_function, input_layers)
+    def output(self, *input_values):
+        if len(input_values) == 1:
+            return input_values[0]
+        return reduce(self.merge_function, input_values)
 
 
 class Concatenate(MultiInputLayer):
@@ -144,5 +144,5 @@ class Concatenate(MultiInputLayer):
 
         return tuple(output_shape)
 
-    def output(self, *input_layers):
-        return T.concatenate(input_layers, axis=self.axis)
+    def output(self, *input_values):
+        return T.concatenate(input_values, axis=self.axis)
