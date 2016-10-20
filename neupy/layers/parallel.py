@@ -3,10 +3,16 @@ from .utils import join as layers_join
 from .base import BaseLayer
 
 
-__all__ = ('Parallel',)
+__all__ = ('Parallel', 'parallel')
 
 
-class Parallel(BaseLayer):
+class TransferLayer(BaseLayer):
+    """
+    Hack layer for parallel connections.
+    """
+
+
+def parallel(connections, merge_layer):
     """
     Propagate input value through the multiple parallel layer
     connections and then combine output result.
@@ -15,14 +21,13 @@ class Parallel(BaseLayer):
     ----------
     connections : list of lists
         List that contains list of layer connections.
+    merge_layer : BaseLayer instance
+        Layer that merges final outputs from each parallel
+        connection.
 
-    Methods
+    Returns
     -------
-    {BaseLayer.Methods}
-
-    Attributes
-    ----------
-    {BaseLayer.Attributes}
+    LayerConnection
 
     Examples
     --------
@@ -39,41 +44,23 @@ class Parallel(BaseLayer):
     ...     layers.Concatenate()
     ... ),
     """
-    merge_layer = Property(required=True, expected_type=BaseLayer)
+    if not isinstance(connections, (list, tuple)):
+        raise ValueError("Connections should be a list or a tuple.")
 
-    def __init__(self, connections, merge_layer, **options):
-        self.connections = connections.copy()
-        super(Parallel, self).__init__(merge_layer=merge_layer, **options)
+    if not isinstance(merge_layer, BaseLayer):
+        raise ValueError("The `merge_layer` layer is not an instance of "
+                         "BaseLayer class.")
 
-        for i, connection in enumerate(self.connections):
-            if isinstance(connection, (list, tuple)):
-                connection = layers_join(connection)
-                self.connections[i] = connection
+    input_layer = TransferLayer()
 
-            layers_join(connection, self.merge_layer)
+    for i, connection in enumerate(connections):
+        if isinstance(connection, (list, tuple)):
+            connection = layers_join(connection)
+            connections[i] = connection
 
-    @BaseLayer.input_shape.setter
-    def input_shape(self, value):
-        input_layers = self.graph.input_layers
+        full_connection = layers_join(input_layer, connection, merge_layer)
 
-        if not input_layers:
-            raise TypeError("Cannot assign new shape. Layer doesn't have "
-                            "an input in the graph.")
+    return full_connection
 
-        input_layer = self.graph.input_layers[0]
-        for connection in self.connections:
-            layers_join(input_layer, connection)
 
-        self.input_shape_ = value
-
-    @property
-    def output_shape(self):
-        return self.merge_layer.output_shape
-
-    def output(self, input_value):
-        outputs = []
-        for connection in self.connections:
-            output = connection.output(input_value)
-            outputs.append(output)
-
-        return self.merge_layer.output(*outputs)
+Parallel = parallel  # alias
