@@ -39,14 +39,11 @@ class BaseProperty(SharedDocs):
             else:
                 availabe_types = availabe_types.__name__
 
-            raise TypeError(
-                "Invalid data type `{0}` for `{1}` property. Expected "
-                "types: {2}".format(
-                    value.__class__.__name__,
-                    self.name,
-                    availabe_types
-                )
-            )
+            raise TypeError("Invalid data type `{0}` for `{1}` property. "
+                            "Expected types: {2}".format(
+                                value.__class__.__name__, self.name,
+                                availabe_types
+                            ))
 
         self.validate(value)
         instance.__dict__[self.name] = value
