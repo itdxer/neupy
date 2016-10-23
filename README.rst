@@ -102,11 +102,3 @@ Dependencies
 * NumPy >= 1.9.0
 * SciPy >= 0.14.0
 * Matplotlib >= 1.4.0
-
-Next steps
-----------
-
-* Adding reccurent neural network layers (`Issue #57 <https://github.com/itdxer/neupy/issues/57>`_)
-* Bug fixing and version stabilization  (`Known bugs <https://github.com/itdxer/neupy/issues?q=is%3Aissue+is%3Aopen+label%3Abug>`_)
-* Speeding up algorithms
-* Adding more algorithms

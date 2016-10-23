@@ -3,15 +3,16 @@ import theano.tensor as T
 import numpy as np
 
 from neupy.core.properties import (NumberProperty, ProperFractionProperty,
-                                   ParameterProperty)
+                                   ParameterProperty, IntProperty)
 from neupy.utils import asfloat, as_tuple
 from neupy.core.init import Initializer, Constant
+from .connections import LayerConnectionError
 from .activations import AxesProperty
 from .utils import dimshuffle
 from .base import BaseLayer
 
 
-__all__ = ('BatchNorm',)
+__all__ = ('BatchNorm', 'LocalResponseNorm')
 
 
 def find_opposite_axes(axes, ndim):
@@ -189,3 +190,60 @@ class BatchNorm(BaseLayer):
 
         normalized_value = (input_value - mean) * inv_std
         return gamma * normalized_value + beta
+
+
+class LocalResponseNorm(BaseLayer):
+    """
+    Local Response Normalization Layer.
+
+    Parameters
+    ----------
+    alpha : float
+    beta : float
+    k : float
+    n : int
+        Number of adjacent channels to normalize over, must be odd
+    """
+    alpha = NumberProperty(default=1e-4)
+    beta = NumberProperty(default=0.75)
+    k = NumberProperty(default=2)
+    n = IntProperty(default=5)
+
+    def __init__(self, **options):
+        super(LocalResponseNorm, self).__init__(**options)
+
+        if self.n % 2 == 0:
+            raise ValueError("Only works with odd ``n``")
+
+    def output(self, input_value):
+        if not self.input_shape:
+            raise LayerConnectionError("Layer `{}` doesn't have defined "
+                                       "input shape. Probably it doesn't "
+                                       "have an input layer.".format(self))
+
+        n_dims = len(self.input_shape) + 1  # +1 for batch
+        if n_dims != 4:
+            raise LayerConnectionError("Layer `{}` expected input with 4 "
+                                       "dimensions as an input, got {} "
+                                       "dimensions".format(self, n_dims))
+
+        half = self.n // 2
+
+        squared_value = input_value ** 2
+        n_samples = input_value.shape[0]
+        channel, width, height = self.input_shape
+
+        zero = asfloat(0)
+        extra_channels = T.alloc(zero, n_samples, channel + 2 * half,
+                                 width, height)
+        squared_value = T.set_subtensor(
+            extra_channels[:, half:half + channel, :, :],
+            squared_value
+        )
+        scale = self.k
+
+        for i in range(self.n):
+            scale += self.alpha * squared_value[:, i:i + channel, :, :]
+
+        scale = scale ** self.beta
+        return input_value / scale

@@ -1,9 +1,12 @@
 import numpy as np
 import theano
+import theano.tensor as T
 from scipy import stats
 
 from neupy import layers
+from neupy.utils import asfloat
 from neupy.layers.normalization import find_opposite_axes
+from neupy.layers.connections import LayerConnectionError
 
 from base import BaseTestCase
 
@@ -95,3 +98,32 @@ class BatchNormTestCase(BaseTestCase):
                 input_value.get_value(),
                 output_value
             )
+
+
+class LocalResponseNormTestCase(BaseTestCase):
+    def test_local_response_norm_exceptions(self):
+        with self.assertRaises(ValueError):
+            layers.LocalResponseNorm(n=2)
+
+        conn = layers.Input(10) > layers.LocalResponseNorm()
+        with self.assertRaises(LayerConnectionError):
+            conn.output(T.matrix())
+
+        conn = layers.LocalResponseNorm()
+        with self.assertRaises(LayerConnectionError):
+            conn.output(T.tensor4())
+
+    def test_local_response_normalization_layer(self):
+        input_layer = layers.Input((1, 1, 1))
+        conn = input_layer > layers.LocalResponseNorm()
+
+        x = T.tensor4()
+        y = theano.function([x], conn.output(x))
+
+        x_tensor = asfloat(np.ones((1, 1, 1, 1)))
+        actual_output = y(x_tensor)
+        expected_output = np.array([0.59458]).reshape((-1, 1, 1, 1))
+
+        np.testing.assert_array_almost_equal(
+            expected_output, actual_output, decimal=5
+        )

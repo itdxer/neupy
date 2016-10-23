@@ -159,7 +159,7 @@ Convolutional layers
     ":layer:`Convolution`", "Convolutional layer"
 
 Pooling layers
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 
 .. csv-table::
     :header: "Class name", "Description"
@@ -168,6 +168,15 @@ Pooling layers
     ":layer:`AveragePooling`", "Average pooling layer"
     ":layer:`Upscale`", "Upscale layer"
     ":layer:`GlobalPooling`", "Global pooling layer"
+
+Normalization layers
+~~~~~~~~~~~~~~~~~~~~
+
+.. csv-table::
+    :header: "Class name", "Description"
+
+    ":layer:`BatchNorm`", "Batch normalization layer"
+    ":layer:`LocalResponseNorm`", "Local Response Normalization layer"
 
 Stochastic layers
 ~~~~~~~~~~~~~~~~~

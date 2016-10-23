@@ -1,4 +1,3 @@
-from neupy.core.properties import Property
 from .utils import join as layers_join
 from .base import BaseLayer
 
@@ -33,8 +32,7 @@ def parallel(connections, merge_layer):
     --------
     >>> from neupy import layers
     >>>
-    >>> input_layer = layers.Input((3, 8, 8))
-    >>> parallel_layer = layers.Parallel(
+    >>> parallel_layer = layers.parallel(
     ...     [[
     ...         layers.Convolution((3, 5, 5)),
     ...     ], [
