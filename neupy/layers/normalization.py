@@ -231,11 +231,11 @@ class LocalResponseNorm(BaseLayer):
 
         squared_value = input_value ** 2
         n_samples = input_value.shape[0]
-        channel, width, height = self.input_shape
+        channel, height, width = self.input_shape
 
         zero = asfloat(0)
         extra_channels = T.alloc(zero, n_samples, channel + 2 * half,
-                                 width, height)
+                                 height, width)
         squared_value = T.set_subtensor(
             extra_channels[:, half:half + channel, :, :],
             squared_value

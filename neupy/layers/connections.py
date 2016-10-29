@@ -627,6 +627,14 @@ class LayerConnection(ChainConnection):
         subgraph = self.graph.subgraph_for_output(self.output_layer)
         return subgraph.propagate_forward(*input_values)
 
+    @contextmanager
+    def disable_training_state(self):
+        for layer in self:
+            layer.training_state = False
+        yield
+        for layer in self:
+            layer.training_state = True
+
     def __len__(self):
         layers = list(iter(self))
         return len(layers)
