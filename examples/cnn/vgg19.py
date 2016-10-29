@@ -6,7 +6,7 @@ import theano.tensor as T
 from neupy import layers
 
 from imagenet_tools import (CURRENT_DIR, FILES_DIR, load_image, print_top_n,
-                            download_file, extract_params)
+                            download_file, extract_params, set_parameters)
 
 
 theano.config.floatX = 'float32'
@@ -85,12 +85,7 @@ parameters = [
     extract_params(all_params, 'dense_3'),
 ]
 
-for layer in vgg19:
-    if layer.parameters:
-        new_parameters = parameters.pop(0)
-        for param_name, param_value in new_parameters.items():
-            layer_param = getattr(layer, param_name)
-            layer_param.set_value(param_value)
+set_parameters(vgg19, parameters)
 
 dog_image = load_image(os.path.join(CURRENT_DIR, 'images', 'dog.jpg'),
                        image_size=(256, 256),
