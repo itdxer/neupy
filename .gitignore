@@ -17,6 +17,7 @@ build/
 .tox/*
 .DS_Store
 .python-version
+*.h5
 
 # Vim
 *.swp
