@@ -47,6 +47,28 @@ Articles
 Examples
 --------
 
+Convolutional Neural Networks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* `MNIST CNN <examples/cnn/mnist_cnn.py>`_
+* `CIFAR10 CNN <examples/cnn/cifar10_cnn.py>`_
+* `Pretrained AlexNet CNN <examples/cnn/alexnet.py>`_
+* `Pretrained VGG16 CNN <examples/cnn/vgg16.py>`_
+* `Pretrained VGG19 CNN <examples/cnn/vgg19.py>`_
+
+Autoencoders
+~~~~~~~~~~~~
+
+* `MNIST, Denoising Autoencoder <examples/autoencoder/denoising_autoencoder.py>`_
+* `MNIST, Convolutional Autoencoder <examples/autoencoder/conv_autoencoder.py>`_
+* `MNIST, Stacked Convolutional Autoencoders <examples/autoencoder/stacked_conv_autoencoders.py>`_
+
+Boltzmann Machine
+~~~~~~~~~~~~~~~~~
+
+* `Feature Learning from the MNIST Images, Restricted Boltzmann Machine (RBM) <examples/boltzmann_machine/rbm_mnist.py>`_
+* `Gibbs sampling using face images, Restricted Boltzmann Machine (RBM) <examples/boltzmann_machine/rbm_faces_sampling.py>`_
+
 MLP Neural Networks
 ~~~~~~~~~~~~~~~~~~~
 
@@ -55,19 +77,6 @@ MLP Neural Networks
 * `Boston House Price prediction, Hessian algorithm <examples/mlp/boston_price_prediction.py>`_
 * `Learning Algorithms Visualization, Gradient Descent, Momentum, RPROP and Conjugate Gradient <examples/mlp/gd_algorithms_visualization.py>`_
 * `IMDB review classification using CBOW and RPROP MLP <examples/mlp/imdb_review_classification>`_
-
-Convolutional Neural Networks
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* `MNIST CNN <examples/cnn/mnist_cnn.py>`_
-* `CIFAR10 CNN <examples/cnn/cifar10_cnn.py>`_
-
-Autoencoders
-~~~~~~~~~~~~
-
-* `MNIST, Denoising Autoencoder <examples/autoencoder/denoising_autoencoder.py>`_
-* `MNIST, Convolutional Autoencoder <examples/autoencoder/conv_autoencoder.py>`_
-* `MNIST, Stacked Convolutional Autoencoders <examples/autoencoder/stacked_conv_autoencoders.py>`_
 
 Competitive Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -87,12 +96,6 @@ Memory based Neural Networks
 * `Sinus function approximation, CMAC <examples/memory/cmac_basic.py>`_
 * `Visualize Discrete Hopfield Neural Network energy function <examples/memory/dhn_energy_func.py>`_
 * `Password recovery, Discrete Hopfield Neural Network <examples/memory/password_recovery.py>`_
-
-Boltzmann Machine
-~~~~~~~~~~~~~~~~~
-
-* `Feature Learning from the MNIST Images, Restricted Boltzmann Machine (RBM) <examples/boltzmann_machine/rbm_mnist.py>`_
-* `Gibbs sampling using face images, Restricted Boltzmann Machine (RBM) <examples/boltzmann_machine/rbm_faces_sampling.py>`_
 
 Dependencies
 ------------

@@ -11,16 +11,36 @@ FILES_DIR = os.path.join(CURRENT_DIR, 'files')
 IMAGENET_CLASSES_FILE = os.path.join(FILES_DIR, 'imagenet_classes.txt')
 
 
-def download_file(url, filepath):
+def download_file(url, filepath, description=''):
     response = requests.get(url, stream=True)
     chunk_size = int(1e7)
 
+    print(description)
     with open(filepath, "wb") as handle:
         for data in tqdm(response.iter_content(chunk_size)):
             handle.write(data)
 
+    print('Downloaded sucessfully')
 
-def load_image(image_name, image_size=None, crop_size=None):
+
+def extract_params(all_params, name):
+    params = all_params[name]
+    return {
+        'weight': params['{}_W'.format(name)].value,
+        'bias': params['{}_b'.format(name)].value,
+    }
+
+
+def set_parameters(connection, parameters):
+    for layer in connection:
+        if layer.parameters:
+            new_parameters = parameters.pop(0)
+            for param_name, param_value in new_parameters.items():
+                layer_param = getattr(layer, param_name)
+                layer_param.set_value(param_value)
+
+
+def load_image(image_name, image_size=None, crop_size=None, use_bgr=True):
     image = imread(image_name)
 
     if image_size is not None:
@@ -39,8 +59,10 @@ def load_image(image_name, image_size=None, crop_size=None):
             :,
         ]
 
-    # RGB -> BGR
-    image[:, :, (0, 1, 2)] = image[:, :, (2, 1, 0)]
+    if use_bgr:
+        # RGB -> BGR
+        image[:, :, (0, 1, 2)] = image[:, :, (2, 1, 0)]
+
     image = image.astype('float32')
 
     # Normalize channels (based on the pretrained VGG16 configurations)
