@@ -6,7 +6,7 @@ import theano.tensor as T
 from neupy import layers
 
 from imagenet_tools import (CURRENT_DIR, FILES_DIR, load_image, print_top_n,
-                            download_file)
+                            download_file, extract_params)
 
 
 theano.config.floatX = 'float32'
@@ -49,21 +49,12 @@ vgg19 = layers.join(
 )
 
 
-def extract_params(all_params, name):
-    params = all_params[name]
-    return {
-        'weight': params['{}_W'.format(name)].value,
-        'bias': params['{}_b'.format(name)].value,
-    }
-
-
 if not os.path.exists(VGG19_WEIGHTS_FILE):
-    print('Downloading weights')
     download_file(
         url="http://files.heuritech.com/weights/vgg19_weights.h5",
-        filepath=VGG19_WEIGHTS_FILE
+        filepath=VGG19_WEIGHTS_FILE,
+        description='Downloading weights'
     )
-    print('Downloaded sucessfully')
 
 
 all_params = h5py.File(VGG19_WEIGHTS_FILE, 'r')

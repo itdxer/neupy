@@ -1,6 +1,6 @@
 import inspect
 from contextlib import contextmanager
-from collections import defaultdict
+from collections import OrderedDict
 
 
 __all__ = ('LayerConnection', 'ChainConnection', 'NetworkConnectionError',
@@ -170,13 +170,13 @@ class LayerGraph(object):
     def __init__(self, forward_graph=None, backward_graph=None,
                  initialized_graph=None):
         if forward_graph is None:
-            forward_graph = defaultdict(list)
+            forward_graph = OrderedDict()
 
         if backward_graph is None:
-            backward_graph = defaultdict(list)
+            backward_graph = OrderedDict()
 
         if initialized_graph is None:
-            initialized_graph = defaultdict(list)
+            initialized_graph = OrderedDict()
 
         self.forward_graph = forward_graph
         self.backward_graph = backward_graph
@@ -232,6 +232,8 @@ class LayerGraph(object):
 
         self.forward_graph[layer] = []
         self.backward_graph[layer] = []
+        self.initialized_graph[layer] = []
+
         return True
 
     def add_connection(self, from_layer, to_layer):
@@ -569,6 +571,49 @@ def make_common_graph(left_layer, right_layer):
     return graph
 
 
+def topological_sort(graph):
+    """
+    Repeatedly go through all of the nodes in the graph, moving each of
+    the nodes that has all its edges resolved, onto a sequence that
+    forms our sorted graph. A node has all of its edges resolved and
+    can be moved once all the nodes its edges point to, have been moved
+    from the unsorted graph onto the sorted one.
+
+    Parameters
+    ----------
+    graph : dict
+        Dictionary that has graph structure.
+
+    Raises
+    ------
+    RuntimeError
+        If graph has cycles.
+
+    Returns
+    -------
+    list
+        List of nodes sorted in topological order.
+    """
+    sorted_nodes = []
+    graph_unsorted = graph.copy()
+
+    while graph_unsorted:
+        acyclic = False
+        for node, edges in list(graph_unsorted.items()):
+            for edge in edges:
+                if edge in graph_unsorted:
+                    break
+            else:
+                acyclic = True
+                del graph_unsorted[node]
+                sorted_nodes.append(node)
+
+        if not acyclic:
+            raise RuntimeError("A cyclic dependency occurred")
+
+    return sorted_nodes
+
+
 class LayerConnection(ChainConnection):
     """
     Connect to layers or connections together.
@@ -631,7 +676,9 @@ class LayerConnection(ChainConnection):
     def disable_training_state(self):
         for layer in self:
             layer.training_state = False
+
         yield
+
         for layer in self:
             layer.training_state = True
 
@@ -640,17 +687,9 @@ class LayerConnection(ChainConnection):
         return len(layers)
 
     def __iter__(self):
-        if isinstance(self.left, LayerConnection):
-            for conn in self.left:
-                yield conn
-        else:
-            yield self.left
-
-        if isinstance(self.right, LayerConnection):
-            for conn in self.right:
-                yield conn
-        else:
-            yield self.right
+        subgraph = self.graph.subgraph_for_output(self.output_layer)
+        for layer in topological_sort(subgraph.backward_graph):
+            yield layer
 
     def __repr__(self):
         layers_reprs = map(repr, self)
