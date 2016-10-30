@@ -55,6 +55,7 @@ Convolutional Neural Networks
 * `Pretrained AlexNet CNN <examples/cnn/alexnet.py>`_
 * `Pretrained VGG16 CNN <examples/cnn/vgg16.py>`_
 * `Pretrained VGG19 CNN <examples/cnn/vgg19.py>`_
+* `SqueezeNet <examples/cnn/squeezenet.py>`_
 
 Autoencoders
 ~~~~~~~~~~~~
