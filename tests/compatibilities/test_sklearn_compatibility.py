@@ -88,7 +88,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
             scoring=scorer
         )
         random_search.fit(dataset.data, dataset.target)
-        scores = random_search.grid_scores_
+        scores = random_search.cv_results_
 
-        best_score = min(scores, key=itemgetter(1))
-        self.assertAlmostEqual(0.4303, best_score[1], places=3)
+        best_score = min(scores['mean_test_score'])
+        self.assertAlmostEqual(0.4303, best_score, places=3)

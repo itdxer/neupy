@@ -18,34 +18,6 @@ class ConnectionIsolationTestCase(BaseTestCase):
         with self.assertRaises(TypeError):
             surgery.isolate_connection_if_needed('invalid object')
 
-    def test_isolate_connection_and_layer(self):
-        input_connection = layers.Input(1) > layers.Sigmoid(2)
-        output_layer = layers.Sigmoid(3)
-        output_connection = input_connection > output_layer
-
-        self.assertEqual(len(output_connection), 3)
-
-        # Test isolation for multiple layers
-        self.assertIs(input_connection.output_layer.relate_to_layer,
-                      output_layer)
-        self.assertFalse(surgery.is_connection_isolated(input_connection))
-
-        surgery.isolate_connection(input_connection)
-
-        self.assertIsNot(input_connection.output_layer.relate_to_layer,
-                         output_layer)
-        self.assertTrue(surgery.is_connection_isolated(input_connection))
-
-        # Test single layer isolation
-        self.assertIs(output_layer.relate_from_layer,
-                      input_connection.output_layer)
-        self.assertFalse(surgery.is_layer_isolated(output_layer))
-
-        surgery.isolate_layer(output_layer)
-        self.assertIsNot(output_layer.relate_from_layer,
-                         input_connection.output_layer)
-        self.assertTrue(surgery.is_layer_isolated(output_layer))
-
 
 class SurgeryCutTestCase(BaseTestCase):
     def setUp(self):
@@ -78,6 +50,7 @@ class SurgeryCutTestCase(BaseTestCase):
         ]
 
         for testcase in testcases:
+            print('\nconnection', self.network.connection)
             layers = surgery.cut(**testcase['kwargs'])
             output_shapes = [layer.output_shape for layer in iter(layers)]
             self.assertEqual(
@@ -151,8 +124,6 @@ class SurgerySewTogetherTestCase(BaseTestCase):
         encoder = surgery.cut(autoencoder, start=0, end=2)
         self.assertEqual(len(encoder), 2)
 
-        algorithms.Momentum(encoder > layers.Softmax(10))
-
         network = algorithms.GradientDescent([
             layers.Input(5),
 
@@ -174,6 +145,7 @@ class SurgerySewTogetherTestCase(BaseTestCase):
             layers.Relu(5),
             hidden_layers
         ])
+        print(connected_layers)
         self.assertEqual(len(connected_layers), 6)
 
     def test_sew_together_empty_list(self):
