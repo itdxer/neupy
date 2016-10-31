@@ -102,6 +102,9 @@ def conv_output_shape(dimension_size, filter_size, border_mode, stride):
     -------
     int
     """
+    if dimension_size is None:
+        return None
+
     if not isinstance(stride, int):
         raise ValueError("Stride needs to be an integer, got {} (value {!r})"
                          "".format(type(stride), stride))

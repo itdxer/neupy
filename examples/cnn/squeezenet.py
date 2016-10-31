@@ -1,5 +1,9 @@
+import theano
 import theano.tensor as T
 from neupy import layers
+
+
+theano.config.floatX = 'float32'
 
 
 def Fire(s_1x1, e_1x1, e_3x3):
@@ -20,6 +24,7 @@ def Fire(s_1x1, e_1x1, e_3x3):
     )
 
 
+# Networks weight ~4.8 Mb
 squeezenet = layers.join(
     layers.Input((3, 224, 224)),
 
@@ -27,15 +32,15 @@ squeezenet = layers.join(
     layers.Relu(),
     layers.MaxPooling((3, 3), stride_size=(2, 2)),
 
-    Fire(s_1x1=16, e_1x1=64, e_3x3=64),
-    Fire(s_1x1=16, e_1x1=64, e_3x3=64),
-    Fire(s_1x1=32, e_1x1=128, e_3x3=128),
+    Fire(16, 64, 64),
+    Fire(16, 64, 64),
+    Fire(32, 128, 128),
     layers.MaxPooling((2, 2)),
 
-    Fire(s_1x1=32, e_1x1=128, e_3x3=128),
-    Fire(s_1x1=48, e_1x1=192, e_3x3=192),
-    Fire(s_1x1=48, e_1x1=192, e_3x3=192),
-    Fire(s_1x1=64, e_1x1=256, e_3x3=256),
+    Fire(32, 128, 128),
+    Fire(48, 192, 192),
+    Fire(48, 192, 192),
+    Fire(64, 256, 256),
     layers.MaxPooling((2, 2)),
 
     Fire(64, 256, 256),
