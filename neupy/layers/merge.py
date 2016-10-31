@@ -1,3 +1,4 @@
+import copy
 from functools import reduce
 
 import theano.tensor as T
@@ -136,7 +137,7 @@ class Concatenate(MultiInputLayer):
             return
 
         axis = self.axis - 1  # because we do not include #0 dim
-        input_shapes = self.input_shape.copy()
+        input_shapes = copy.copy(self.input_shape)
         output_shape = list(input_shapes.pop(0))
 
         for input_shape in input_shapes:
