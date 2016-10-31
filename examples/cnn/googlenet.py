@@ -60,9 +60,3 @@ googlenet = layers.join(
 
     layers.Softmax(1000),
 )
-
-
-import numpy as np
-from neupy.utils import asfloat
-x = asfloat(np.random.random((1, 3, 224, 224)))
-print(googlenet.output(x).eval().shape)
