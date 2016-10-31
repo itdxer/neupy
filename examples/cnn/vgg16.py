@@ -15,27 +15,27 @@ VGG16_WEIGHTS_FILE = os.path.join(FILES_DIR, 'vgg16_weights.h5')
 vgg16 = layers.join(
     layers.Input((3, 224, 224)),
 
-    layers.Convolution((64, 3, 3), border_mode=1) > layers.Relu(),
-    layers.Convolution((64, 3, 3), border_mode=1) > layers.Relu(),
+    layers.Convolution((64, 3, 3), padding=1) > layers.Relu(),
+    layers.Convolution((64, 3, 3), padding=1) > layers.Relu(),
     layers.MaxPooling((2, 2)),
 
-    layers.Convolution((128, 3, 3), border_mode=1) > layers.Relu(),
-    layers.Convolution((128, 3, 3), border_mode=1) > layers.Relu(),
+    layers.Convolution((128, 3, 3), padding=1) > layers.Relu(),
+    layers.Convolution((128, 3, 3), padding=1) > layers.Relu(),
     layers.MaxPooling((2, 2)),
 
-    layers.Convolution((256, 3, 3), border_mode=1) > layers.Relu(),
-    layers.Convolution((256, 3, 3), border_mode=1) > layers.Relu(),
-    layers.Convolution((256, 3, 3), border_mode=1) > layers.Relu(),
+    layers.Convolution((256, 3, 3), padding=1) > layers.Relu(),
+    layers.Convolution((256, 3, 3), padding=1) > layers.Relu(),
+    layers.Convolution((256, 3, 3), padding=1) > layers.Relu(),
     layers.MaxPooling((2, 2)),
 
-    layers.Convolution((512, 3, 3), border_mode=1) > layers.Relu(),
-    layers.Convolution((512, 3, 3), border_mode=1) > layers.Relu(),
-    layers.Convolution((512, 3, 3), border_mode=1) > layers.Relu(),
+    layers.Convolution((512, 3, 3), padding=1) > layers.Relu(),
+    layers.Convolution((512, 3, 3), padding=1) > layers.Relu(),
+    layers.Convolution((512, 3, 3), padding=1) > layers.Relu(),
     layers.MaxPooling((2, 2)),
 
-    layers.Convolution((512, 3, 3), border_mode=1) > layers.Relu(),
-    layers.Convolution((512, 3, 3), border_mode=1) > layers.Relu(),
-    layers.Convolution((512, 3, 3), border_mode=1) > layers.Relu(),
+    layers.Convolution((512, 3, 3), padding=1) > layers.Relu(),
+    layers.Convolution((512, 3, 3), padding=1) > layers.Relu(),
+    layers.Convolution((512, 3, 3), padding=1) > layers.Relu(),
     layers.MaxPooling((2, 2)),
 
     layers.Reshape(),

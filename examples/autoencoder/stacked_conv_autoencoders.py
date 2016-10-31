@@ -55,11 +55,11 @@ conv_autoencoder = algorithms.Momentum(
         layers.Reshape((32, 5, 5)),
 
         layers.Upscale((2, 2)),
-        layers.Convolution((16, 3, 3), border_mode='full') > layers.Relu(),
+        layers.Convolution((16, 3, 3), padding='full') > layers.Relu(),
 
         layers.Upscale((2, 2)),
-        layers.Convolution((16, 3, 3), border_mode='full') > layers.Relu(),
-        layers.Convolution((1, 3, 3), border_mode='full') > layers.Sigmoid(),
+        layers.Convolution((16, 3, 3), padding='full') > layers.Relu(),
+        layers.Convolution((1, 3, 3), padding='full') > layers.Sigmoid(),
 
         layers.Reshape(),
     ],

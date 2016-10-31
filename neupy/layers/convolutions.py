@@ -87,7 +87,7 @@ class BorderModeProperty(Property):
                              "got {}".format(value))
 
 
-def conv_output_shape(dimension_size, filter_size, border_mode, stride):
+def conv_output_shape(dimension_size, filter_size, padding, stride):
     """
     Computes convolution's output shape.
 
@@ -95,7 +95,7 @@ def conv_output_shape(dimension_size, filter_size, border_mode, stride):
     ----------
     dimension_size : int
     filter_size : int
-    border_mode : {'valid', 'full', 'half'} or int
+    padding : {'valid', 'full', 'half'} or int
     stride : int
 
     Returns
@@ -114,21 +114,21 @@ def conv_output_shape(dimension_size, filter_size, border_mode, stride):
                          "(value {!r})".format(type(filter_size),
                                                filter_size))
 
-    if border_mode == 'valid':
+    if padding == 'valid':
         output_size = dimension_size - filter_size + 1
 
-    elif border_mode == 'half':
+    elif padding == 'half':
         output_size = dimension_size + 2 * (filter_size // 2) - filter_size + 1
 
-    elif border_mode == 'full':
+    elif padding == 'full':
         output_size = dimension_size + filter_size - 1
 
-    elif isinstance(border_mode, int):
-        output_size = dimension_size + 2 * border_mode - filter_size + 1
+    elif isinstance(padding, int):
+        output_size = dimension_size + 2 * padding - filter_size + 1
 
     else:
         raise ValueError("`{!r}` is unknown convolution's border mode value"
-                         "".format(border_mode))
+                         "".format(padding))
 
     return (output_size + stride - 1) // stride
 
@@ -142,9 +142,9 @@ class Convolution(ParameterBasedLayer):
     size : tuple of int
         Filter shape. In should be defined as a tuple with three integers
         ``(output channels, filter rows, filter columns)``.
-    border_mode : {{'valid', 'full', 'half'}} or int or tuple with 2 int
+    padding : {{'valid', 'full', 'half'}} or int or tuple with 2 int
         Convolution border mode. Check Theano's ``nnet.conv2d`` doc.
-    stride_size : tuple with 1 or 2 integers or integer.
+    stride : tuple with 1 or 2 integers or integer.
         Stride size.
     {ParameterBasedLayer.weight}
     {ParameterBasedLayer.bias}
@@ -158,8 +158,8 @@ class Convolution(ParameterBasedLayer):
     {ParameterBasedLayer.Attributes}
     """
     size = TypedListProperty(required=True, element_type=int)
-    border_mode = BorderModeProperty(default='valid')
-    stride_size = StrideProperty(default=(1, 1))
+    padding = BorderModeProperty(default='valid')
+    stride = StrideProperty(default=(1, 1))
 
     @property
     def output_shape(self):
@@ -175,21 +175,21 @@ class Convolution(ParameterBasedLayer):
                 )
             )
 
-        border_mode = self.border_mode
+        padding = self.padding
         n_kernels = self.size[0]
         rows, cols = self.input_shape[-2:]
         row_filter_size, col_filter_size = self.size[-2:]
-        row_stride, col_stride = self.stride_size
+        row_stride, col_stride = self.stride
 
-        if isinstance(border_mode, tuple):
-            row_border_mode, col_border_mode = border_mode[-2:]
+        if isinstance(padding, tuple):
+            row_padding, col_padding = padding[-2:]
         else:
-            row_border_mode, col_border_mode = border_mode, border_mode
+            row_padding, col_padding = padding, padding
 
         output_rows = conv_output_shape(rows, row_filter_size,
-                                        row_border_mode, row_stride)
+                                        row_padding, row_stride)
         output_cols = conv_output_shape(cols, col_filter_size,
-                                        col_border_mode, col_stride)
+                                        col_padding, col_stride)
         return (n_kernels, output_rows, output_cols)
 
     @property
@@ -207,6 +207,6 @@ class Convolution(ParameterBasedLayer):
         output = T.nnet.conv2d(input_value, self.weight,
                                input_shape=as_tuple(None, self.input_shape),
                                filter_shape=self.weight_shape,
-                               border_mode=self.border_mode,
-                               subsample=self.stride_size)
+                               border_mode=self.padding,
+                               subsample=self.stride)
         return output + bias
