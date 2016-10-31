@@ -25,7 +25,7 @@ class ConvLayersTestCase(BaseTestCase):
         self.assertEqual(bias_shape, conv_layer.bias.get_value().shape)
 
     def test_conv_shapes(self):
-        border_modes = [
+        paddings = [
             'valid', 'full', 'half',
             4, 5,
             (6, 3), (4, 4), (1, 1)
@@ -33,11 +33,11 @@ class ConvLayersTestCase(BaseTestCase):
         strides = [(1, 1), (2, 1), (2, 2)]
         x = asfloat(np.random.random((20, 2, 12, 11)))
 
-        for stride, border_mode in product(strides, border_modes):
+        for stride, padding in product(strides, paddings):
             input_layer = layers.Input((2, 12, 11))
             conv_layer = layers.Convolution((5, 3, 4),
-                                            border_mode=border_mode,
-                                            stride_size=stride)
+                                            padding=padding,
+                                            stride=stride)
 
             input_layer > conv_layer
             conv_layer.initialize()
@@ -46,21 +46,21 @@ class ConvLayersTestCase(BaseTestCase):
             actual_output_shape = as_tuple(y.shape[1:])
 
             self.assertEqual(actual_output_shape, conv_layer.output_shape,
-                             msg='border_mode={}'.format(border_mode))
+                             msg='padding={}'.format(padding))
 
     def test_valid_strides(self):
-        Case = namedtuple("Case", "stride_size expected_output")
+        Case = namedtuple("Case", "stride expected_output")
         testcases = (
-            Case(stride_size=(4, 4), expected_output=(4, 4)),
-            Case(stride_size=(4,), expected_output=(4, 1)),
-            Case(stride_size=4, expected_output=(4, 4)),
+            Case(stride=(4, 4), expected_output=(4, 4)),
+            Case(stride=(4,), expected_output=(4, 1)),
+            Case(stride=4, expected_output=(4, 4)),
         )
 
         for testcase in testcases:
             conv_layer = layers.Convolution((1, 2, 3),
-                                            stride_size=testcase.stride_size)
-            msg = "Input stride size: {}".format(testcase.stride_size)
-            self.assertEqual(testcase.expected_output, conv_layer.stride_size,
+                                            stride=testcase.stride)
+            msg = "Input stride size: {}".format(testcase.stride)
+            self.assertEqual(testcase.expected_output, conv_layer.stride,
                              msg=msg)
 
     def test_invalid_strides(self):
@@ -72,33 +72,33 @@ class ConvLayersTestCase(BaseTestCase):
             (-5, 0),
         )
 
-        for stride_size in invalid_strides:
-            msg = "Input stride size: {}".format(stride_size)
+        for stride in invalid_strides:
+            msg = "Input stride size: {}".format(stride)
             with self.assertRaises(ValueError, msg=msg):
-                layers.Convolution((1, 2, 3), stride_size=stride_size)
+                layers.Convolution((1, 2, 3), stride=stride)
 
-    def test_valid_border_mode(self):
-        valid_border_modes = ('valid', 'full', 'half', (5, 3), 4, (4, 0))
-        for border_mode in valid_border_modes:
-            layers.Convolution((1, 2, 3), border_mode=border_mode)
+    def test_valid_padding(self):
+        valid_paddings = ('valid', 'full', 'half', (5, 3), 4, (4, 0))
+        for padding in valid_paddings:
+            layers.Convolution((1, 2, 3), padding=padding)
 
-    def test_invalid_border_mode(self):
-        invalid_border_modes = ('invalid mode', -10, (10, -5))
+    def test_invalid_padding(self):
+        invalid_paddings = ('invalid mode', -10, (10, -5))
 
-        for border_mode in invalid_border_modes:
-            msg = "Input border mode: {}".format(border_mode)
+        for padding in invalid_paddings:
+            msg = "Input border mode: {}".format(padding)
             with self.assertRaises(ValueError, msg=msg):
-                layers.Convolution((1, 2, 3), border_mode=border_mode)
+                layers.Convolution((1, 2, 3), padding=padding)
 
     def test_conv_output_shape_func_exceptions(self):
         with self.assertRaises(ValueError):
-            conv_output_shape(dimension_size=5, filter_size=5, border_mode=5,
+            conv_output_shape(dimension_size=5, filter_size=5, padding=5,
                               stride='not int')
 
         with self.assertRaises(ValueError):
             conv_output_shape(dimension_size=5, filter_size='not int',
-                              border_mode=5, stride=5)
+                              padding=5, stride=5)
 
         with self.assertRaises(ValueError):
             conv_output_shape(dimension_size=5, filter_size=5,
-                              border_mode='invalid value', stride=5)
+                              padding='invalid value', stride=5)

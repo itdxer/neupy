@@ -20,9 +20,9 @@ class BasePooling(BaseLayer):
     size : tuple with 2 integers
         Factor by which to downscale (vertical, horizontal).
         (2, 2) will halve the image in each dimension.
-    stride_size : tuple with 1 or 2 integers or integer.
+    stride : tuple with 1 or 2 integers or integer.
         Stride size, which is the number of shifts over
-        rows/cols to get the next pool region. If stride_size is
+        rows/cols to get the next pool region. If stride is
         None, it is considered equal to ds (no overlap on
         pooling regions).
     padding : tuple of two ints
@@ -39,7 +39,7 @@ class BasePooling(BaseLayer):
     {BaseLayer.Attributes}
     """
     size = TypedListProperty(required=True, element_type=int)
-    stride_size = StrideProperty(default=None)
+    stride = StrideProperty(default=None)
     padding = TypedListProperty(default=(0, 0), element_type=int, n_elements=2)
 
     def __init__(self, size, **options):
@@ -62,17 +62,17 @@ class BasePooling(BaseLayer):
         n_kernels, rows, cols = self.input_shape[-3:]
         row_filter_size, col_filter_size = self.size
 
-        stride_size = self.stride_size
-        if stride_size is None:
-            stride_size = self.size
+        stride = self.stride
+        if stride is None:
+            stride = self.size
 
-        row_stride, col_stride = stride_size
-        row_border_mode, col_border_mode = self.padding
+        row_stride, col_stride = stride
+        row_padding, col_padding = self.padding
 
         output_rows = conv_output_shape(rows, row_filter_size,
-                                        row_border_mode, row_stride)
+                                        row_padding, row_stride)
         output_cols = conv_output_shape(cols, col_filter_size,
-                                        col_border_mode, col_stride)
+                                        col_padding, col_stride)
         return (n_kernels, output_rows, output_cols)
 
     def __repr__(self):
@@ -98,7 +98,7 @@ class MaxPooling(BasePooling):
     """
     def output(self, input_value):
         return pool.pool_2d(input_value, ds=self.size, mode='max',
-                            ignore_border=True, st=self.stride_size,
+                            ignore_border=True, st=self.stride,
                             padding=self.padding)
 
 
@@ -131,7 +131,7 @@ class AveragePooling(BasePooling):
 
     def output(self, input_value):
         return pool.pool_2d(input_value, ds=self.size, mode=self.mode,
-                            ignore_border=True, st=self.stride_size,
+                            ignore_border=True, st=self.stride,
                             padding=self.padding)
 
 
