@@ -363,6 +363,9 @@ class LayerGraph(object):
         layers = [layer]
         observed_layers = [layer]
 
+        if layer not in self.forward_graph:
+            return LayerGraph()
+
         while layers:
             current_layer = layers.pop()
             next_layers = self.backward_graph[current_layer]
@@ -402,8 +405,8 @@ class LayerGraph(object):
         input_layers = []
         for layer, next_layers in self.backward_graph.items():
             # TODO: I should check whether it's always useful
-            # to have only an input layers that have defined input
-            # shape
+            # to have only an input layers that have specified
+            # input shape
             if not next_layers and layer.input_shape:
                 input_layers.append(layer)
 
@@ -646,9 +649,9 @@ class LayerConnection(ChainConnection):
             self.layers = [self.left]
 
         if isinstance(self.right, LayerConnection):
-            temp = self.right.layers
-            self.right_layer = temp[0]
-            self.layers.extend(temp)
+            right_layers = self.right.layers
+            self.right_layer = right_layers[0]
+            self.layers.extend(right_layers)
         else:
             self.right_layer = self.right
             self.layers.append(self.right)

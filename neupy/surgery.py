@@ -19,12 +19,8 @@ def isolate_connection(connection):
     connection : LayerConnection instance
         Connection that you need to isolate.
     """
-    connection.input_layer.relate_from_layer = None
     connection.input_layer.connection = None
-
-    connection.output_layer.relate_to_layer = None
     connection.output_layer.connection = None
-
     connection.connection = None
 
 
@@ -37,53 +33,7 @@ def isolate_layer(layer):
     layer : BaseLayer instance
         Layer that you need to isolate.
     """
-    layer.relate_from_layer = None
     layer.connection = None
-    layer.relate_to_layer = None
-
-
-def is_layer_isolated(connection):
-    """
-    Check whether connection is not depend on the
-    other connections.
-
-    Parameters
-    ----------
-    connection : BaseLayer instance
-        Layer or connection that you need to validate.
-
-    Returns
-    -------
-    bool
-        ``True`` means that connection or layer is independent.
-        ``False`` means that instance is related to some other
-        layers.
-    """
-    is_not_relate_from_sb = (connection.relate_from_layer is None)
-    is_not_relate_to_sb = (connection.relate_to_layer is None)
-    return (is_not_relate_from_sb and is_not_relate_to_sb)
-
-
-def is_connection_isolated(connection):
-    """
-    Check whether connection is not depend on the
-    other connections.
-
-    Parameters
-    ----------
-    connection : LayerConnection or BaseLayer instance
-        Layer or connection that you need validate.
-
-    Returns
-    -------
-    bool
-        ``True`` means that connection or layer is independent.
-        ``False`` means that instance is related to some other
-        layers.
-    """
-    is_not_relate_from_sb = (connection.input_layer.relate_from_layer is None)
-    is_not_relate_to_sb = (connection.output_layer.relate_to_layer is None)
-    return (is_not_relate_from_sb and is_not_relate_to_sb)
 
 
 def isolate_connection_if_needed(connection):
@@ -110,11 +60,11 @@ def isolate_connection_if_needed(connection):
     is_layer = isinstance(connection, layers.BaseLayer)
     is_connection = isinstance(connection, LayerConnection)
 
-    if is_layer and not is_layer_isolated(connection):
+    if is_layer:
         connection = deepcopy(connection)
         isolate_layer(connection)
 
-    elif is_connection and not is_connection_isolated(connection):
+    elif is_connection:
         connection = deepcopy(connection)
         isolate_connection(connection)
 
@@ -205,6 +155,10 @@ def cut(connection, start, end):
 
     cutted_layers = layers[start:end]
 
+    for layer in cutted_layers:
+        layer.graph = None
+        layer.connection = None
+
     if not cutted_layers:
         raise ValueError("Your slice didn't cut any layer.")
 
@@ -243,6 +197,7 @@ def sew_together(connections):
     if not connections:
         return
 
+    # cleaned_connections = connections
     cleaned_connections = []
     for connection in connections:
         # Since connection can be related to some other network,
