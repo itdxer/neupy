@@ -201,7 +201,7 @@ class Input(BaseLayer):
     ----------
     {BaseLayer.Attributes}
     """
-    size = ArrayShapeProperty()
+    size = ArrayShapeProperty(element_type=(int, type(None)))
 
     def __init__(self, size, **options):
         super(Input, self).__init__(size=size, **options)

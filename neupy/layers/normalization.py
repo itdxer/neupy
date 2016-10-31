@@ -230,8 +230,11 @@ class LocalResponseNorm(BaseLayer):
         half = self.n // 2
 
         squared_value = input_value ** 2
+
         n_samples = input_value.shape[0]
-        channel, height, width = self.input_shape
+        channel = input_value.shape[1]
+        height = input_value.shape[2]
+        width = input_value.shape[3]
 
         zero = asfloat(0)
         extra_channels = T.alloc(zero, n_samples, channel + 2 * half,
