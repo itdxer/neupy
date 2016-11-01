@@ -10,8 +10,8 @@
 .. _License: https://github.com/itdxer/neupy/blob/master/LICENSE
 
 
-NeuPy v0.4.0 (beta)
-===================
+NeuPy v0.4.0
+============
 
 NeuPy is a Python library for Artificial Neural Networks.
 
@@ -56,6 +56,8 @@ Convolutional Neural Networks
 * `Pretrained VGG16 CNN <examples/cnn/vgg16.py>`_
 * `Pretrained VGG19 CNN <examples/cnn/vgg19.py>`_
 * `SqueezeNet <examples/cnn/squeezenet.py>`_
+* `GoogleNet <examples/cnn/googlenet.py>`_
+* `Inception v3 <examples/cnn/inception_v3.py>`_
 
 Autoencoders
 ~~~~~~~~~~~~

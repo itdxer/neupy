@@ -33,20 +33,20 @@ class BernoulliRBMTestCase(BaseTestCase):
         output = rbm.visible_to_hidden(data)
         np.testing.assert_array_equal(
             output.round(),
-            np.array([[1, 1, 1, 1, 0, 0, 0, 0, 0, 0]]).T
+            np.array([[0, 0, 0, 0, 1, 1, 1, 1, 1, 1]]).T
         )
 
         typical_class1_sample = output[0]
         incomplete_class1_sample = output[2]
         # Check that probability of a typical case is
-        # closer to 1 (because 1 is a class defined by RBM)
+        # closer to 0 (because 0 is a class defined by RBM)
         # than for the incomplete case.
-        self.assertGreater(typical_class1_sample, incomplete_class1_sample)
+        self.assertLess(typical_class1_sample, incomplete_class1_sample)
 
         typical_class2_sample = output[4]
         incomplete_class2_sample = output[5]
-        # Same as before but for class 0.
-        self.assertLess(typical_class2_sample, incomplete_class2_sample)
+        # Same as before but for class 1.
+        self.assertGreater(typical_class2_sample, incomplete_class2_sample)
 
     def test_rbm_batch_size(self):
         data = self.data

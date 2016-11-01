@@ -38,6 +38,7 @@ class Adadelta(MinibatchGradientDescent):
         super(Adadelta, self).init_layers()
         for layer in self.layers:
             for parameter in layer.parameters:
+                # TODO: This is not a right way to do it
                 parameter_shape = T.shape(parameter).eval()
                 parameter.prev_mean_squred_grad = theano.shared(
                     name="prev_mean_squred_grad_" + parameter.name,
