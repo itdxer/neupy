@@ -298,7 +298,7 @@ def theano_random_stream():
     Create Theano random stream instance.
     """
     # Use NumPy seed to make Theano code easely reproducible
-    max_possible_seed = 4e9
+    max_possible_seed = 2147483647
     seed = np.random.randint(max_possible_seed)
     theano_random = T.shared_randomstreams.RandomStreams(seed)
     return theano_random
