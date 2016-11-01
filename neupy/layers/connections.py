@@ -1,4 +1,6 @@
+import copy
 import inspect
+from itertools import chain
 from contextlib import contextmanager
 from collections import OrderedDict
 
@@ -19,6 +21,36 @@ class NetworkConnectionError(Exception):
     Error class that triggers in case of connection
     within layers in the network
     """
+
+
+def is_feedforward(connection):
+    """
+    Check whether graph connection is feedforward.
+
+    Parameters
+    ----------
+    connection : ChainConnection instance
+
+    Returns
+    -------
+    bool
+    """
+    graph = connection.graph
+
+    if not graph:
+        # Single layer is a feedforward connection
+        return True
+
+    f_graph = graph.forward_graph
+    b_graph = graph.backward_graph
+
+    for layers in chain(f_graph.values(), b_graph.values()):
+        if len(layers) >= 2:
+            # One of the layers has multiple input
+            # or output connections
+            return False
+
+    return True
 
 
 def filter_dict(dictionary, include_keys):
@@ -61,11 +93,16 @@ def merge_dicts_with_list(first_dict, second_dict):
     -------
     dict
     """
-    common_dict = first_dict.copy()
+    common_dict = OrderedDict()
+
+    for key, value in first_dict.items():
+        # To make sure that we copied lists inside of the
+        # dictionary, but didn't copied values inside of the list
+        common_dict[key] = copy.copy(value)
 
     for key, values in second_dict.items():
         if key not in common_dict:
-            common_dict[key] = values
+            common_dict[key] = copy.copy(values)
         else:
             for value in values:
                 if value not in common_dict[key]:
@@ -550,20 +587,13 @@ def make_common_graph(left_layer, right_layer):
     left_graph = left_layer.graph
     right_graph = right_layer.graph
 
-    if left_graph is None and right_graph is None:
-        graph = LayerGraph()
+    if left_graph is None:
+        left_graph = LayerGraph()
 
-    elif left_graph is not None and right_graph is None:
-        graph = left_graph
+    if right_graph is None:
+        right_graph = LayerGraph()
 
-    elif left_graph is None and right_graph is not None:
-        graph = right_graph
-
-    elif left_graph is not None and right_graph is not None:
-        if left_graph is right_graph:
-            graph = left_graph
-        else:
-            graph = LayerGraph.merge(left_graph, right_graph)
+    graph = LayerGraph.merge(left_graph, right_graph)
 
     for layer in graph.forward_graph.keys():
         layer.graph = graph
@@ -642,7 +672,7 @@ class LayerConnection(ChainConnection):
         self.layers = []
 
         if isinstance(self.left, LayerConnection):
-            self.layers = self.left.layers
+            self.layers = copy.copy(self.left.layers)
             self.left_layer = self.layers[-1]
         else:
             self.left_layer = self.left
@@ -668,7 +698,7 @@ class LayerConnection(ChainConnection):
         self.graph.connect_layers(self.left_layer, self.right_layer)
 
     def initialize(self):
-        for layer in self.layers:
+        for layer in self:
             layer.initialize()
 
     def output(self, *input_values):

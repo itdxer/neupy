@@ -2,38 +2,12 @@ from copy import deepcopy
 from functools import reduce
 
 from neupy.network import ConstructableNetwork
-from neupy.layers.connections import LayerConnection
+from neupy.layers.connections import LayerConnection, is_feedforward
 from neupy import layers
 
 
 __all__ = ('cut', 'sew_together', 'CutLine', 'cut_along_lines',
            'isolate_connection_if_needed')
-
-
-def isolate_connection(connection):
-    """
-    Withdraw previous connections.
-
-    Parameters
-    ----------
-    connection : LayerConnection instance
-        Connection that you need to isolate.
-    """
-    connection.input_layer.connection = None
-    connection.output_layer.connection = None
-    connection.connection = None
-
-
-def isolate_layer(layer):
-    """
-    Withdraw previous connections.
-
-    Parameters
-    ----------
-    layer : BaseLayer instance
-        Layer that you need to isolate.
-    """
-    layer.connection = None
 
 
 def isolate_connection_if_needed(connection):
@@ -62,11 +36,14 @@ def isolate_connection_if_needed(connection):
 
     if is_layer:
         connection = deepcopy(connection)
-        isolate_layer(connection)
+        connection.connection = None
 
     elif is_connection:
         connection = deepcopy(connection)
-        isolate_connection(connection)
+
+        connection.input_layer.connection = None
+        connection.output_layer.connection = None
+        connection.connection = None
 
     elif not is_layer and not is_connection:
         raise TypeError("Unknown data type: {}. Surgery module supports "
@@ -129,6 +106,10 @@ def cut(connection, start, end):
     ValueError
         In case if something is wrong with the input parameters.
 
+    Notes
+    -----
+    Works only for feedforward connections.
+
     Examples
     --------
     >>> from neupy import layers, surgery
@@ -146,6 +127,11 @@ def cut(connection, start, end):
     Sigmoid(20) > Sigmoid(30)
     """
     connection = clean_and_validate_connection(connection)
+
+    if not is_feedforward(connection):
+        raise ValueError("Can cut only layers that have "
+                         "feedforward connections.")
+
     layers = list(connection)
     n_layers = len(layers)
 
@@ -182,6 +168,10 @@ def sew_together(connections):
         is an empty list or tuple. If you get a layer instead
         of connection it mean that you have just one layer in the
         sequence.
+
+    Notes
+    -----
+    Functon make a copy of each layer/connection.
 
     Examples
     --------
@@ -346,6 +336,11 @@ def cut_along_lines(connection):
     Sigmoid(1)
     """
     connection = clean_and_validate_connection(connection)
+
+    if not is_feedforward(connection):
+        raise ValueError("Can cut only layers that have "
+                         "feedforward connections.")
+
     cut_points = find_cut_points(connection)
 
     connections = []

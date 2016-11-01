@@ -50,7 +50,6 @@ class SurgeryCutTestCase(BaseTestCase):
         ]
 
         for testcase in testcases:
-            print('\nconnection', self.network.connection)
             layers = surgery.cut(**testcase['kwargs'])
             output_shapes = [layer.output_shape for layer in iter(layers)]
             self.assertEqual(
@@ -145,7 +144,6 @@ class SurgerySewTogetherTestCase(BaseTestCase):
             layers.Relu(5),
             hidden_layers
         ])
-        print(connected_layers)
         self.assertEqual(len(connected_layers), 6)
 
     def test_sew_together_empty_list(self):

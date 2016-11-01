@@ -1,3 +1,5 @@
+import unittest
+
 import numpy as np
 import theano
 import theano.tensor as T
@@ -5,6 +7,7 @@ import theano.tensor as T
 from neupy import layers, algorithms
 from neupy.utils import asfloat, as_tuple
 from neupy.layers import Input, Relu, Tanh, Sigmoid
+from neupy.layers.connections import is_feedforward
 
 from base import BaseTestCase
 
@@ -161,3 +164,30 @@ class ConnectionsTestCase(BaseTestCase):
         )
         reconstructed_output = y_reconstructed(minimized_output)
         self.assertEqual((3, 10), reconstructed_output.shape)
+
+    @unittest.skip("broken")
+    def test_is_feedforward_connection(self):
+        connection1 = layers.join(
+            layers.Input(10),
+            layers.Sigmoid(5),
+            layers.Sigmoid(1),
+        )
+        self.assertTrue(is_feedforward(connection1))
+
+        connection_2 = layers.Input(10) > layers.Sigmoid(5)
+        connection_31 = connection_2 > layers.Sigmoid(1)
+        connection_32 = connection_2 > layers.Sigmoid(2)
+
+        concatenate = layers.Concatenate()
+
+        connection_4 = connection_31 > concatenate
+        connection_4 = connection_32 > concatenate
+
+        self.assertFalse(is_feedforward(connection_4))
+
+        print(connection_4.graph.forward_graph)
+        print(connection_31.graph.forward_graph)
+        print(connection_32.graph.forward_graph)
+
+        self.assertTrue(is_feedforward(connection_31))
+        self.assertTrue(is_feedforward(connection_32))
