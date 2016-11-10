@@ -16,6 +16,10 @@ class MultiInputLayer(BaseLayer):
     """
     Base class for layers that accepts multiple inputs.
 
+    Parameters
+    ----------
+    {BaseLayer.Parameters}
+
     Methods
     -------
     {BaseLayer.Methods}

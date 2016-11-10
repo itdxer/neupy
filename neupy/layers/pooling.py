@@ -11,6 +11,15 @@ from .convolutions import StrideProperty, conv_output_shape
 __all__ = ('MaxPooling', 'AveragePooling', 'Upscale', 'GlobalPooling')
 
 
+class PaddingProperty(TypedListProperty):
+    expected_type = as_tuple(TypedListProperty.expected_type, int)
+
+    def __set__(self, instance, value):
+        if isinstance(value, int):
+            value = (value, value)
+        super(PaddingProperty, self).__set__(instance, value)
+
+
 class BasePooling(BaseLayer):
     """
     Base class for the pooling layers.
@@ -29,6 +38,7 @@ class BasePooling(BaseLayer):
         (pad_h, pad_w), pad zeros to extend beyond four borders of
         the images, pad_h is the size of the top and bottom margins,
         and pad_w is the size of the left and right margins.
+    {BaseLayer.Parameters}
 
     Methods
     -------
@@ -40,7 +50,7 @@ class BasePooling(BaseLayer):
     """
     size = TypedListProperty(required=True, element_type=int)
     stride = StrideProperty(default=None)
-    padding = TypedListProperty(default=(0, 0), element_type=int, n_elements=2)
+    padding = PaddingProperty(default=0, element_type=int, n_elements=2)
 
     def __init__(self, size, **options):
         super(BasePooling, self).__init__(size=size, **options)

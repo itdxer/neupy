@@ -23,6 +23,7 @@ class Reshape(BaseLayer):
         will be flatten in 1D vector. If you need to get the
         output feature with more that 2 dimensions then you can
         set up new feature shape using tuples. Defaults to ``None``.
+    {BaseLayer.Parameters}
 
     Methods
     -------
@@ -78,6 +79,7 @@ class Embedding(BaseLayer):
         Defines layer's weights. Default initialization methods
         you can find :ref:`here <init-methods>`.
         Defaults to :class:`XavierNormal() <neupy.core.init.XavierNormal>`.
+    {BaseLayer.Parameters}
 
     Methods
     -------

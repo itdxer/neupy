@@ -1,3 +1,5 @@
+import inspect
+
 import theano
 import theano.tensor as T
 from theano.ifelse import ifelse
@@ -137,15 +139,15 @@ class QuasiNewton(NoStepSelection, GradientDescent):
         n_params = sum(p.get_value().size for p in iter_parameters(self))
         self.variables.update(
             inv_hessian=theano.shared(
-                name='inv_hessian',
+                name='quasi-newton/inv-hessian',
                 value=asfloat(self.h0_scale * np.eye(int(n_params))),
             ),
             prev_params=theano.shared(
-                name='prev_params',
+                name='quasi-newton/prev-params',
                 value=asfloat(np.zeros(n_params)),
             ),
             prev_full_gradient=theano.shared(
-                name='prev_full_gradient',
+                name='quasi-newton/prev-full-gradient',
                 value=asfloat(np.zeros(n_params)),
             ),
         )
@@ -172,23 +174,43 @@ class QuasiNewton(NoStepSelection, GradientDescent):
         )
         param_delta = -new_inv_hessian.dot(full_gradient)
 
+        def find_param_name(layer, parameter):
+            for member_name, member_value in inspect.getmembers(layer):
+                if member_value is parameter:
+                    return member_name
+
+            raise ValueError("Cannot find parameter in the layer")
+
+        def iter_layers_and_parameters(layers):
+            for layer in layers:
+                for parameter in layer.parameters:
+                    attrname = find_param_name(layer, parameter)
+                    yield layer, attrname, parameter
+
+        layers_and_parameters = list(iter_layers_and_parameters(self.layers))
+
         def prediction(step):
-            # TODO: I need to update this ugly solution later
             updated_params = param_vector + step * param_delta
 
-            layer_input = network_input
+            # This trick allow us to replace shared variables
+            # with theano variables and get output from the network
             start_pos = 0
-            for layer in self.layers:
-                for param in layer.parameters:
-                    end_pos = start_pos + param.size
-                    parameter_name, parameter_id = param.name.split('_')
-                    setattr(layer, parameter_name, T.reshape(
-                        updated_params[start_pos:end_pos],
-                        param.shape
-                    ))
-                    start_pos = end_pos
-                layer_input = layer.output(layer_input)
-            return layer_input
+            for layer, attrname, param in layers_and_parameters:
+                end_pos = start_pos + param.size
+                updated_param_value = T.reshape(
+                    updated_params[start_pos:end_pos],
+                    param.shape
+                )
+                setattr(layer, attrname, updated_param_value)
+                start_pos = end_pos
+
+            output = self.connection.output(network_input)
+
+            # We need to replace back parameter to shared variable
+            for layer, attrname, param in layers_and_parameters:
+                setattr(layer, attrname, param)
+
+            return output
 
         def phi(step):
             return self.error(network_output, prediction(step))

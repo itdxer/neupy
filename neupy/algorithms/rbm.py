@@ -139,7 +139,7 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
         self.init_layers()
         self.variables.update(
             h_samples=theano.shared(
-                name='h_samples',
+                name='rbm/hidden-samples',
                 value=asint(np.zeros((self.batch_size, self.n_hidden))),
             ),
         )

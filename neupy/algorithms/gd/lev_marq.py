@@ -98,8 +98,8 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
     def init_variables(self):
         super(LevenbergMarquardt, self).init_variables()
         self.variables.update(
-            mu=theano.shared(name='mu', value=asfloat(self.mu)),
-            last_error=theano.shared(name='last_error', value=np.nan),
+            mu=theano.shared(name='lev-marq/mu', value=asfloat(self.mu)),
+            last_error=theano.shared(name='lev-marq/last-error', value=np.nan),
         )
 
     def init_train_updates(self):

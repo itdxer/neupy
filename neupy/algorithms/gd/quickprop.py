@@ -59,11 +59,11 @@ class Quickprop(GradientDescent):
             for parameter in layer.parameters:
                 parameter_shape = T.shape(parameter).eval()
                 parameter.prev_delta = theano.shared(
-                    name="prev_delta_" + parameter.name,
+                    name="{}/prev-delta".format(parameter.name),
                     value=asfloat(np.zeros(parameter_shape)),
                 )
                 parameter.prev_gradient = theano.shared(
-                    name="prev_grad_" + parameter.name,
+                    name="{}/prev-grad".format(parameter.name),
                     value=asfloat(np.zeros(parameter_shape)),
                 )
 

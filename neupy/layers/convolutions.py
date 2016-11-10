@@ -148,6 +148,7 @@ class Convolution(ParameterBasedLayer):
         Stride size.
     {ParameterBasedLayer.weight}
     {ParameterBasedLayer.bias}
+    {BaseLayer.Parameters}
 
     Methods
     -------
