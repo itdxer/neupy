@@ -74,15 +74,15 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
             for parameter in layer.parameters:
                 parameter_shape = T.shape(parameter).eval()
                 parameter.prev_delta = theano.shared(
-                    name="prev_delta_" + parameter.name,
+                    name="{}/prev-delta".format(parameter.name),
                     value=asfloat(np.zeros(parameter_shape)),
                 )
                 parameter.prev_gradient = theano.shared(
-                    name="prev_grad_" + parameter.name,
+                    name="{}/prev-grad".format(parameter.name),
                     value=asfloat(np.zeros(parameter_shape)),
                 )
                 parameter.steps = theano.shared(
-                    name="steps_{}" + parameter.name,
+                    name="{}/steps".format(parameter.name),
                     value=asfloat(np.ones(parameter_shape) * self.step),
                 )
 
@@ -178,8 +178,10 @@ class IRPROPPlus(RPROP):
     def init_variables(self):
         super(IRPROPPlus, self).init_variables()
         self.variables.update(
-            last_error=theano.shared(name='last_error', value=np.nan),
-            previous_error=theano.shared(name='previous_error', value=np.nan),
+            last_error=theano.shared(name='irprop-plus/last-error',
+                                     value=np.nan),
+            previous_error=theano.shared(name='irprop-plus/previous-error',
+                                         value=np.nan),
         )
 
     def on_epoch_start_update(self, epoch):

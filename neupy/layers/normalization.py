@@ -80,6 +80,7 @@ class BatchNorm(BaseLayer):
         Default initialization methods you can
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=0)``.
+    {BaseLayer.Parameters}
 
     Methods
     -------
@@ -126,11 +127,11 @@ class BatchNorm(BaseLayer):
                              "(0-based indeces).".format(unknown_dim_index))
 
         self.running_mean = theano.shared(
-            name='running_mean_{}'.format(self.layer_id),
+            name='{}/running-mean'.format(self.name),
             value=asfloat(np.zeros(parameter_shape))
         )
         self.running_inv_std = theano.shared(
-            name='running_inv_std_{}'.format(self.layer_id),
+            name='{}/running-inv-std'.format(self.name),
             value=asfloat(np.ones(parameter_shape))
         )
 
@@ -140,14 +141,18 @@ class BatchNorm(BaseLayer):
         if isinstance(self.beta, Initializer):
             self.beta = self.beta.sample(parameter_shape)
 
-        self.gamma = theano.shared(
-            name='gamma_{}'.format(self.layer_id),
-            value=asfloat(self.gamma),
-        )
-        self.beta = theano.shared(
-            name='beta_{}'.format(self.layer_id),
-            value=asfloat(self.beta),
-        )
+        if not isinstance(self.gamma, T.sharedvar.SharedVariable):
+            self.gamma = theano.shared(
+                name='{}/gamma'.format(self.name),
+                value=asfloat(self.gamma),
+            )
+
+        if not isinstance(self.beta, T.sharedvar.SharedVariable):
+            self.beta = theano.shared(
+                name='{}/beta'.format(self.name),
+                value=asfloat(self.beta),
+            )
+
         self.parameters = [self.gamma, self.beta]
 
     def output(self, input_value):
@@ -203,6 +208,15 @@ class LocalResponseNorm(BaseLayer):
     k : float
     n : int
         Number of adjacent channels to normalize over, must be odd
+    {BaseLayer.Parameters}
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
     """
     alpha = NumberProperty(default=1e-4)
     beta = NumberProperty(default=0.75)

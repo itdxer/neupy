@@ -57,8 +57,8 @@ class LeakStepAdaptation(SingleStepConfigurable):
         super(LeakStepAdaptation, self).init_variables()
         n_parameters = count_parameters(self)
         self.variables.leak_average = theano.shared(
+            name='leak-step-adapt/leak-average',
             value=asfloat(np.zeros(n_parameters)),
-            name='leak_average'
         )
 
     def init_train_updates(self):

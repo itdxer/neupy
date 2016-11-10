@@ -51,8 +51,14 @@ class ErrDiffStepUpdate(SingleStepConfigurable):
 
     def init_variables(self):
         self.variables.update(
-            last_error=theano.shared(name='last_error', value=np.nan),
-            previous_error=theano.shared(name='previous_error', value=np.nan),
+            last_error=theano.shared(
+                name='err-diff-step-update/last-error',
+                value=np.nan
+            ),
+            previous_error=theano.shared(
+                name='err-diff-step-update/previous-error',
+                value=np.nan
+            ),
         )
         super(ErrDiffStepUpdate, self).init_variables()
 

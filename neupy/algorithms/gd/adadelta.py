@@ -41,11 +41,11 @@ class Adadelta(MinibatchGradientDescent):
                 # TODO: This is not a right way to do it
                 parameter_shape = T.shape(parameter).eval()
                 parameter.prev_mean_squred_grad = theano.shared(
-                    name="prev_mean_squred_grad_" + parameter.name,
+                    name="{}/prev-mean-squred-grad".format(parameter.name),
                     value=asfloat(np.zeros(parameter_shape)),
                 )
                 parameter.prev_mean_squred_dx = theano.shared(
-                    name="prev_mean_squred_dx_" + parameter.name,
+                    name="{}/prev-mean-squred-dx".format(parameter.name),
                     value=asfloat(np.zeros(parameter_shape)),
                 )
 

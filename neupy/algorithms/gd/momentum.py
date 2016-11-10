@@ -58,9 +58,10 @@ class Momentum(MinibatchGradientDescent):
         super(Momentum, self).init_layers()
         for layer in self.layers:
             for parameter in layer.parameters:
+                # TODO: evaluate shape in a different way
                 parameter_shape = T.shape(parameter).eval()
                 parameter.prev_param_delta = theano.shared(
-                    name="prev_param_delta_" + parameter.name,
+                    name="{}/prev-param-delta".format(parameter.name),
                     value=asfloat(np.zeros(parameter_shape)),
                 )
 

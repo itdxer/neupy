@@ -20,7 +20,6 @@ Submodules
 
 .. toctree::
 
-   neupy.architectures
    neupy.environment
    neupy.estimators
    neupy.preprocessing

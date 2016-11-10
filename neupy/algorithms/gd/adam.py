@@ -55,11 +55,11 @@ class Adam(MinibatchGradientDescent):
             for parameter in layer.parameters:
                 parameter_shape = T.shape(parameter).eval()
                 parameter.prev_first_moment = theano.shared(
-                    name="prev_first_moment_" + parameter.name,
+                    name="{}/prev-first-moment".format(parameter.name),
                     value=asfloat(np.zeros(parameter_shape)),
                 )
                 parameter.prev_second_moment = theano.shared(
-                    name="prev_second_moment_" + parameter.name,
+                    name="{}/prev-second-moment".format(parameter.name),
                     value=asfloat(np.zeros(parameter_shape)),
                 )
 

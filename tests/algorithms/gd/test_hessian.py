@@ -13,8 +13,8 @@ from base import BaseTestCase
 
 
 class HessianTestCase(BaseTestCase):
-    # In case of Hessian this solution will give significant
-    # improvment
+    # In case of Hessian this solution will give
+    # significant improvement.
     use_sandbox_mode = False
 
     def test_hessian_exceptions(self):

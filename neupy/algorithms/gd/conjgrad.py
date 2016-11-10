@@ -142,11 +142,11 @@ class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
 
         self.variables.update(
             prev_delta=theano.shared(
-                name="prev_delta",
+                name="conj-grad/prev-delta",
                 value=asfloat(np.zeros(n_parameters)),
             ),
             prev_gradient=theano.shared(
-                name="prev_gradient",
+                name="conj-grad/prev-gradient",
                 value=asfloat(np.zeros(n_parameters)),
             )
         )

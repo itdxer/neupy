@@ -267,6 +267,9 @@ class LayerGraph(object):
         if layer in self.forward_graph:
             return False
 
+        if layer.input_shape is not None:
+            layer.initialize()
+
         self.forward_graph[layer] = []
         self.backward_graph[layer] = []
         self.initialized_graph[layer] = []
@@ -354,8 +357,11 @@ class LayerGraph(object):
         """
         connection_added = self.add_connection(from_layer, to_layer)
 
-        if from_layer.input_shape is None or not connection_added:
+        if not connection_added:
             return False
+
+        if from_layer.input_shape is None:
+            return True
 
         # Layer has an input shape which means that we can
         # propagate this information through the graph and
@@ -369,8 +375,10 @@ class LayerGraph(object):
             current_layer = layers.pop()
             next_layers = forward_graph[current_layer]
 
+            current_layer_init_rel = initialized_graph[current_layer]
+
             for next_layer in next_layers:
-                if next_layer in initialized_graph[current_layer]:
+                if next_layer in current_layer_init_rel:
                     continue
 
                 in_shape = next_layer.input_shape
@@ -379,7 +387,7 @@ class LayerGraph(object):
 
                 if not in_shape or not one_input_layer:
                     next_layer.input_shape = out_shape
-                    initialized_graph[current_layer].append(next_layer)
+                    current_layer_init_rel.append(next_layer)
                     next_layer.initialize()
 
                 elif one_input_layer and in_shape != out_shape:

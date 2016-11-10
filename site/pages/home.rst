@@ -12,8 +12,8 @@ Library Supports
 
 * Deep Learning
 * Convolutional Neural Networks (CNN)
-* Multilayer Perceptron (MLP)
 * Restricted Boltzmann Machine (RBM)
+* Multilayer Perceptron (MLP)
 * Networks based on the Radial Basis Functions (RBFN)
 * Associative and Autoasociative Memory
 * Ensemble Networks

@@ -55,11 +55,11 @@ class Adamax(MinibatchGradientDescent):
             for parameter in layer.parameters:
                 parameter_shape = T.shape(parameter).eval()
                 parameter.prev_first_moment = theano.shared(
-                    name="prev_first_moment_" + parameter.name,
+                    name="{}/prev-first-moment".format(parameter.name),
                     value=asfloat(np.zeros(parameter_shape)),
                 )
                 parameter.prev_weighted_inf_norm = theano.shared(
-                    name="prev_weighted_inf_norm_" + parameter.name,
+                    name="{}/prev-weighted-inf-norm".format(parameter.name),
                     value=asfloat(np.zeros(parameter_shape)),
                 )
 

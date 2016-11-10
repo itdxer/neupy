@@ -289,9 +289,9 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
 
         self.layers = list(self.connection)
 
-        self.input_layer = self.layers[0]
-        self.hidden_layers = self.layers[1:]
-        self.output_layer = self.layers[-1]
+        # TODO: remove these attributes
+        self.input_layer = self.connection.graph.input_layers[0]
+        self.output_layer = self.connection.graph.output_layers[0]
 
         self.init_layers()
         super(ConstructableNetwork, self).__init__(*args, **kwargs)
@@ -311,8 +311,14 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
             prediction = self.connection.output(network_input)
 
         self.variables.update(
-            step=theano.shared(name='step', value=asfloat(self.step)),
-            epoch=theano.shared(name='epoch', value=asfloat(self.last_epoch)),
+            step=theano.shared(
+                name='network/step',
+                value=asfloat(self.step)
+            ),
+            epoch=theano.shared(
+                name='network/epoch',
+                value=asfloat(self.last_epoch)
+            ),
 
             prediction_func=prediction,
             train_prediction_func=train_prediction,
