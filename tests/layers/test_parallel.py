@@ -24,6 +24,7 @@ class ParallelLayerTestCase(BaseTestCase):
 
         conn = layers.join(input_layer, parallel_layer)
         output_connection = layers.join(conn, output_layer)
+        output_connection.initialize()
 
         x = T.tensor4()
         y = theano.function([x], conn.output(x))

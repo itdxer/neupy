@@ -37,6 +37,9 @@ class LayerGraphTestCase(BaseTestCase):
         # Connection #3
         graph.connect_layers(l2, l4)
 
+        for layer in graph.forward_graph:
+            layer.initialize()
+
         subgraph = graph.subgraph_for_output(l6)
         self.assertEqual(1, len(subgraph.output_layers))
         self.assertIs(l6, subgraph.output_layers[0])
@@ -116,6 +119,9 @@ class LayerGraphTestCase(BaseTestCase):
 
         # Connection #2
         graph.connect_layers(l2, l3)
+
+        for layer in graph.forward_graph:
+            layer.initialize()
 
         subgraph = graph.subgraph_for_output(le)
         self.assertIsNot(l3, subgraph.forward_graph)

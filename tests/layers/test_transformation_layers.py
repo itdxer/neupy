@@ -35,6 +35,7 @@ class EmbeddingLayerTestCase(BaseTestCase):
         embedding_layer = layers.Embedding(5, 2, weight=weight)
 
         connection = layers.join(input_layer, embedding_layer)
+        connection.initialize()
 
         input_vector = np.array([[0, 1, 4]]).T
         expected_output = np.array([

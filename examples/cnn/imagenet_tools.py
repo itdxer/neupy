@@ -33,11 +33,13 @@ def extract_params(all_params, name):
 
 def set_parameters(connection, parameters):
     for layer in connection:
-        if layer.parameters:
-            new_parameters = parameters.pop(0)
-            for param_name, param_value in new_parameters.items():
-                layer_param = getattr(layer, param_name)
-                layer_param.set_value(param_value)
+        if not layer.parameters:
+            continue
+
+        new_parameters = parameters.pop(0)
+        for param_name, param_value in new_parameters.items():
+            layer_param = getattr(layer, param_name)
+            layer_param.set_value(param_value)
 
 
 def load_image(image_name, image_size=None, crop_size=None, use_bgr=True):

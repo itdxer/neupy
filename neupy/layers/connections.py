@@ -197,27 +197,21 @@ class LayerGraph(object):
     ----------
     forward_graph : None or dict
     backward_graph : None or dict
-    initialized_graph : None or dict
 
     Raises
     ------
     LayerConnectionError
         If graph cannot connect layers.
     """
-    def __init__(self, forward_graph=None, backward_graph=None,
-                 initialized_graph=None):
+    def __init__(self, forward_graph=None, backward_graph=None):
         if forward_graph is None:
             forward_graph = OrderedDict()
 
         if backward_graph is None:
             backward_graph = OrderedDict()
 
-        if initialized_graph is None:
-            initialized_graph = OrderedDict()
-
         self.forward_graph = forward_graph
         self.backward_graph = backward_graph
-        self.initialized_graph = initialized_graph
 
     @classmethod
     def merge(cls, left_graph, right_graph):
@@ -243,11 +237,7 @@ class LayerGraph(object):
             left_graph.backward_graph,
             right_graph.backward_graph
         )
-        initialized_graph = merge_dicts_with_list(
-            left_graph.initialized_graph,
-            right_graph.initialized_graph
-        )
-        return cls(forward_graph, backward_graph, initialized_graph)
+        return cls(forward_graph, backward_graph)
 
     def add_layer(self, layer):
         """
@@ -267,12 +257,8 @@ class LayerGraph(object):
         if layer in self.forward_graph:
             return False
 
-        if layer.input_shape is not None:
-            layer.initialize()
-
         self.forward_graph[layer] = []
         self.backward_graph[layer] = []
-        self.initialized_graph[layer] = []
 
         return True
 
@@ -367,28 +353,32 @@ class LayerGraph(object):
         # propagate this information through the graph and
         # set up input shape for layers that don't have it.
         layers = [from_layer]
-
-        initialized_graph = self.initialized_graph
         forward_graph = self.forward_graph
 
         while layers:
             current_layer = layers.pop()
             next_layers = forward_graph[current_layer]
 
-            current_layer_init_rel = initialized_graph[current_layer]
-
             for next_layer in next_layers:
-                if next_layer in current_layer_init_rel:
-                    continue
-
                 in_shape = next_layer.input_shape
                 out_shape = current_layer.output_shape
                 one_input_layer = does_layer_expect_one_input(next_layer)
 
-                if not in_shape or not one_input_layer:
+                if not in_shape and one_input_layer:
                     next_layer.input_shape = out_shape
-                    current_layer_init_rel.append(next_layer)
-                    next_layer.initialize()
+
+                elif not one_input_layer:
+                    input_shapes = []
+                    for incoming_layer in self.backward_graph[next_layer]:
+                        input_shapes.append(incoming_layer.output_shape)
+
+                    if None in input_shapes:
+                        # It means that some of the previous layers still
+                        # don't have input shape. We can put layer at the
+                        # end of the queue and check it later
+                        layers.insert(0, current_layer)
+                    else:
+                        next_layer.input_shape = input_shapes
 
                 elif one_input_layer and in_shape != out_shape:
                     raise LayerConnectionError(
@@ -425,15 +415,12 @@ class LayerGraph(object):
                                        observed_layers)
         backward_subgraph = filter_dict(self.backward_graph,
                                         observed_layers)
-        initialized_subgraph = filter_dict(self.initialized_graph,
-                                           observed_layers)
 
         # Remove old relations to the other layers.
         # Output layer cannot point to some other layers.
         forward_subgraph[layer] = []
 
-        return LayerGraph(forward_subgraph, backward_subgraph,
-                          initialized_subgraph)
+        return LayerGraph(forward_subgraph, backward_subgraph)
 
     @property
     def input_layers(self):

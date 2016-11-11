@@ -12,38 +12,14 @@ from .connections import LayerConnectionError
 __all__ = ('Elementwise', 'Concatenate')
 
 
-class MultiInputLayer(BaseLayer):
+class CallableProperty(Property):
     """
-    Base class for layers that accepts multiple inputs.
+    Property for callable objects.
 
     Parameters
     ----------
-    {BaseLayer.Parameters}
-
-    Methods
-    -------
-    {BaseLayer.Methods}
-
-    Attributes
-    ----------
-    {BaseLayer.Attributes}
+    {Property.Parameters}
     """
-    def __init__(self, *args, **kwargs):
-        super(MultiInputLayer, self).__init__(*args, **kwargs)
-        self.input_shapes_ = []
-
-    @property
-    def input_shape(self):
-        if not self.input_shapes_:
-            return None
-        return self.input_shapes_
-
-    @input_shape.setter
-    def input_shape(self, value):
-        self.input_shapes_.append(value)
-
-
-class CallableProperty(Property):
     def validate(self, value):
         if not callable(value):
             raise ValueError("The `{}` property expected to be "
@@ -51,7 +27,7 @@ class CallableProperty(Property):
         super(CallableProperty, self).validate(value)
 
 
-class Elementwise(MultiInputLayer):
+class Elementwise(BaseLayer):
     """
     Merge multiple input layers in one with elementwise
     function.
@@ -62,14 +38,15 @@ class Elementwise(MultiInputLayer):
         Callable object that accepts multiple arguments and
         combine them in one with elementwise operation.
         Defaults to ``theano.tensor.add``
+    {BaseLayer.Parameters}
 
     Methods
     -------
-    {MultiInputLayer.Methods}
+    {BaseLayer.Methods}
 
     Attributes
     ----------
-    {MultiInputLayer.Attributes}
+    {BaseLayer.Attributes}
     """
     merge_function = CallableProperty(default=T.add)
 
@@ -98,7 +75,7 @@ class Elementwise(MultiInputLayer):
         return reduce(self.merge_function, input_values)
 
 
-class Concatenate(MultiInputLayer):
+class Concatenate(BaseLayer):
     """
     Concatenate multiple input layers in one based on the
     specified axes.
@@ -108,14 +85,15 @@ class Concatenate(MultiInputLayer):
     axis : int
         The axis along which the inputs will be joined.
         Default is ``1``.
+    {BaseLayer.Parameters}
 
     Methods
     -------
-    {MultiInputLayer.Methods}
+    {BaseLayer.Methods}
 
     Attributes
     ----------
-    {MultiInputLayer.Attributes}
+    {BaseLayer.Attributes}
     """
     axis = IntProperty(default=1)
 

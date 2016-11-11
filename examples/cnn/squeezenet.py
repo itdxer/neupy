@@ -1,6 +1,6 @@
 import theano
 import theano.tensor as T
-from neupy import layers
+from neupy import layers, plots
 
 
 theano.config.floatX = 'float32'
@@ -51,3 +51,6 @@ squeezenet = layers.join(
     layers.Reshape(),
     layers.Softmax(),
 )
+squeezenet.initialize()
+
+plots.layer_structure(squeezenet)
