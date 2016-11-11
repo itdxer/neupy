@@ -29,18 +29,16 @@ def twilio_sms(account_id, token, to_phone, from_phone, verbose=True):
         Retunr function which take one text message argument and send it
         via Twilio API.
     """
-    logs = Verbose(verbose=verbose).logs
+    verbose = Verbose(verbose=verbose)
 
     try:
         import twilio
     except ImportError:
-        logs.error("Install twilio module before use this function. Command:")
-        logs.simple("pip install twilio")
-        sys.exit()
+        raise ImportError("Install `twilio` library.")
 
     def send_message(text_message):
         formated_message = "Send SMS with text: '{}'".format(text_message)
-        logs.message("SMS", formated_message)
+        verbose.message("SMS", formated_message)
 
         client = twilio.rest.TwilioRestClient(account_id, token)
         message = client.messages.create(body=text_message, to=to_phone,

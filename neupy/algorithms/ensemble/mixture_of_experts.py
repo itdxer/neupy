@@ -165,7 +165,10 @@ class MixtureOfExperts(BaseEnsemble):
             outputs_concat
         )
 
-        self.prediction = theano.function([x], self.prediction_func)
+        self.prediction = theano.function(
+            [x], self.prediction_func,
+            name='algo:mixture-of-experts/func:prediction'
+        )
 
     def train(self, input_data, target_data, epochs=100):
         if target_data.ndim == 1:
