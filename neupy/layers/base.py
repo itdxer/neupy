@@ -15,6 +15,28 @@ from neupy.layers.connections import ChainConnection
 __all__ = ('BaseLayer', 'ParameterBasedLayer', 'Input')
 
 
+def next_identifier(identifiers):
+    """
+    Find next identifier.
+
+    Parameters
+    ----------
+    identifiers : list of int
+        List of identifiers
+
+    Returns
+    -------
+    int
+        Next identifier that doesn't appears in
+        the list.
+    """
+    if not identifiers:
+        return 1
+
+    max_identifier = max(identifiers)
+    return max_identifier + 1
+
+
 def generate_layer_name(layer):
     """ Based on the information inside of the layer generates
     name that identifies layer inside of the graph.
@@ -34,7 +56,10 @@ def generate_layer_name(layer):
     if layer.layer_id is not None:
         layer_id = layer.layer_id
 
-    elif graph is not None:
+    elif graph is None:
+        layer_id = 1
+
+    else:
         graph_layers = graph.forward_graph.keys()
         layer_identifiers = []
 
@@ -42,10 +67,7 @@ def generate_layer_name(layer):
             if type(graph_layer) is type(layer) and graph_layer.layer_id:
                 layer_identifiers.append(graph_layer.layer_id)
 
-        layer_id = 1 + max(layer_identifiers, default=0)
-
-    else:
-        layer_id = 1
+        layer_id = next_identifier(layer_identifiers)
 
     layer.layer_id = layer_id
 

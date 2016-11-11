@@ -406,7 +406,7 @@ class LayerGraph(object):
 
     def subgraph_for_output(self, layer):
         layers = [layer]
-        observed_layers = [layer]
+        observed_layers = []
 
         if layer not in self.forward_graph:
             return LayerGraph()
@@ -415,8 +415,11 @@ class LayerGraph(object):
             current_layer = layers.pop()
             next_layers = self.backward_graph[current_layer]
 
-            layers.extend(next_layers)
-            observed_layers.extend(next_layers)
+            for next_layer in next_layers:
+                if next_layer not in observed_layers:
+                    layers.append(next_layer)
+
+            observed_layers.append(current_layer)
 
         forward_subgraph = filter_dict(self.forward_graph,
                                        observed_layers)
@@ -724,8 +727,7 @@ class LayerConnection(ChainConnection):
             layer.training_state = True
 
     def __len__(self):
-        layers = list(iter(self))
-        return len(layers)
+        return len(self.layers)
 
     def __iter__(self):
         subgraph = self.graph.subgraph_for_output(self.output_layer)
