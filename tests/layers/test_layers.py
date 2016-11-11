@@ -75,6 +75,11 @@ class LayerNameTestCase(BaseTestCase):
         self.assertEqual(output_layer.weight.name, 'sigmoid-2/weight')
         self.assertEqual(output_layer.bias.name, 'sigmoid-2/bias')
 
+    def test_layer_name_for_connected_subgraphs(self):
+        # Try to construct two separater networks and then
+        # connect them into one big network
+        assert False
+
 
 class HiddenLayersOperationsTestCase(BaseTestCase):
     def test_sigmoid_layer(self):
