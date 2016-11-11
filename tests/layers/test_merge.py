@@ -31,7 +31,8 @@ class ElementwiseTestCase(BaseTestCase):
 
         layers.join(input_layer_1, elem_layer)
         with self.assertRaises(LayerConnectionError):
-            layers.join(input_layer_2, elem_layer)
+            connection = layers.join(input_layer_2, elem_layer)
+            connection.initialize()
 
     def test_elementwise_not_function(self):
         with self.assertRaises(ValueError):
@@ -48,6 +49,7 @@ class ElementwiseTestCase(BaseTestCase):
 
         connection = layers.join(input_layer, hidden_layer_1, elem_layer)
         connection = layers.join(input_layer, hidden_layer_2, elem_layer)
+        connection.initialize()
 
         self.assertEqual(elem_layer.output_shape, (1,))
 
@@ -85,9 +87,10 @@ class ConcatenateTestCase(BaseTestCase):
         input_layer_2 = layers.Input((1, 28, 28))
         concat_layer = layers.Concatenate(axis=2)
 
-        layers.join(input_layer_1, concat_layer)
+        connection = layers.join(input_layer_1, concat_layer)
         with self.assertRaises(LayerConnectionError):
-            layers.join(input_layer_2, concat_layer)
+            connection = layers.join(input_layer_2, concat_layer)
+            connection.initialize()
 
     def test_concatenate_conv_layers(self):
         input_layer = layers.Input((3, 28, 28))
@@ -99,6 +102,7 @@ class ConcatenateTestCase(BaseTestCase):
         connection = layers.join(input_layer, hidden_layer_1, concat_layer)
         connection = layers.join(input_layer, hidden_layer_21,
                                  hidden_layer_22, concat_layer)
+        connection.initialize()
 
         self.assertEqual((11, 24, 24), concat_layer.output_shape)
 

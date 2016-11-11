@@ -47,7 +47,7 @@ vgg19 = layers.join(
     layers.Relu(4096) > layers.Dropout(0.5),
     layers.Softmax(1000),
 )
-
+vgg19.initialize()
 
 if not os.path.exists(VGG19_WEIGHTS_FILE):
     download_file(
@@ -55,7 +55,6 @@ if not os.path.exists(VGG19_WEIGHTS_FILE):
         filepath=VGG19_WEIGHTS_FILE,
         description='Downloading weights'
     )
-
 
 all_params = h5py.File(VGG19_WEIGHTS_FILE, 'r')
 parameters = [

@@ -31,6 +31,8 @@ class ConnectionsTestCase(BaseTestCase):
             layers.Relu(4) > layers.Relu(7),
             layers.Relu(3) > layers.Relu(1),
         )
+        connection.initialize()
+
         expected_sizes = [2, 10, 4, 7, 3, 1]
         for layer, expected_size in zip(connection.layers, expected_sizes):
             self.assertEqual(expected_size, layer.size)
@@ -46,6 +48,8 @@ class ConnectionsTestCase(BaseTestCase):
             layers.Reshape(),
             layers.Softmax(1),
         )
+        connection.initialize()
+
         self.assertEqual(8, len(connection))
 
         self.assertIsInstance(connection.layers[1], layers.Convolution)
@@ -65,6 +69,7 @@ class ConnectionsTestCase(BaseTestCase):
 
         connection = Input(2) > Relu(10) > Relu(1)
         connection.initialize()
+
         output_value = connection.output(input_value).eval()
 
         self.assertEqual(output_value.shape, (10, 1))
@@ -123,6 +128,9 @@ class ConnectionsTestCase(BaseTestCase):
         reconstructed = minimized > layers.Sigmoid(10)
         classifier = minimized > layers.Softmax(20)
 
+        reconstructed.initialize()
+        classifier.initialize()
+
         x = T.matrix()
         y_minimized = theano.function([x], minimized.output(x))
         y_reconstructed = theano.function([x], reconstructed.output(x))
@@ -149,6 +157,9 @@ class ConnectionsTestCase(BaseTestCase):
 
         minimized = input_layer > hidden_layer
         reconstructed = minimized > output_layer
+
+        minimized.initialize()
+        reconstructed.initialize()
 
         x = T.matrix()
         y_minimized = theano.function([x], minimized.output(x))

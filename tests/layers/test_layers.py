@@ -49,7 +49,8 @@ class LayerNameTestCase(BaseTestCase):
         input_layer = layers.Input(10)
         output_layer = layers.Sigmoid(1)
 
-        layers.join(input_layer, output_layer)
+        connection = layers.join(input_layer, output_layer)
+        connection.initialize()
 
         self.assertEqual(output_layer.name, 'sigmoid-1')
         self.assertEqual(input_layer.name, 'input-1')
@@ -63,7 +64,8 @@ class LayerNameTestCase(BaseTestCase):
         hidden_layer = layers.Sigmoid(5)
         output_layer = layers.Sigmoid(10)
 
-        layers.join(input_layer, hidden_layer, output_layer)
+        connection = layers.join(input_layer, hidden_layer, output_layer)
+        connection.initialize()
 
         name = generate_layer_name(hidden_layer)
         self.assertEqual(name, 'sigmoid-1')
@@ -168,12 +170,14 @@ class PReluTestCase(BaseTestCase):
         # there are can be specified axis 1, but not 2
         prelu_layer = layers.PRelu(10, alpha_axes=2)
         with self.assertRaises(ValueError):
-            layers.Input(10) > prelu_layer
+            connection = layers.Input(10) > prelu_layer
+            connection.initialize()
 
         # cannot specify alpha per input sample
         prelu_layer = layers.PRelu(10, alpha_axes=0)
         with self.assertRaises(ValueError):
-            layers.Input(10) > prelu_layer
+            connection = layers.Input(10) > prelu_layer
+            connection.initialize()
 
     def test_prelu_random_params(self):
         prelu_layer = layers.PRelu(10, alpha=init.XavierNormal())

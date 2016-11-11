@@ -1,6 +1,6 @@
 import theano
 import theano.tensor as T
-from neupy import layers
+from neupy import layers, plots
 
 
 theano.config.floatX = 'float32'
@@ -60,3 +60,6 @@ googlenet = layers.join(
 
     layers.Softmax(1000),
 )
+googlenet.initialize()
+
+plots.layer_structure(googlenet)
