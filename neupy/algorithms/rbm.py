@@ -116,30 +116,30 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
 
         self.weight = create_shared_parameter(
             value=self.weight,
-            name='weight',
+            name='algo:rbm/matrix:weight',
             shape=(n_visible, n_hidden)
         )
         self.hidden_bias = create_shared_parameter(
             value=self.hidden_bias,
-            name='hidden_bias',
+            name='algo:rbm/vector:hidden-bias',
             shape=(n_hidden,),
         )
         self.visible_bias = create_shared_parameter(
             value=self.visible_bias,
-            name='visible_bias',
+            name='algo:rbm/vector:visible-bias',
             shape=(n_visible,),
         )
 
     def init_input_output_variables(self):
         self.variables.update(
-            network_input=T.matrix(name='network_input'),
+            network_input=T.matrix(name='algo:rbm/var:network-input'),
         )
 
     def init_variables(self):
         self.init_layers()
         self.variables.update(
             h_samples=theano.shared(
-                name='rbm/hidden-samples',
+                name='algo:rbm/matrix:hidden-samples',
                 value=asint(np.zeros((self.batch_size, self.n_hidden))),
             ),
         )
@@ -225,6 +225,7 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
             train_epoch=theano.function(
                 [network_input],
                 error,
+                name='algo:rbm/func:train-epoch',
                 updates=[
                     (weight, weight + step * weight_update / n_samples),
                     (h_bias, h_bias + step * h_bias_update),
@@ -232,20 +233,26 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
                     (h_samples, asint(theano_random.binomial(n=1, p=h_neg))),
                 ]
             ),
-            prediction_error=theano.function([network_input], error),
+            prediction_error=theano.function(
+                [network_input], error,
+                name='algo:rbm/func:prediction-error',
+            ),
             visible_to_hidden=theano.function(
                 [network_input],
-                visible_to_hidden(network_input)
+                visible_to_hidden(network_input),
+                name='algo:rbm/func:visible-to-hidden',
             ),
             hidden_to_visible=theano.function(
                 [network_input],
-                hidden_to_visible(network_input)
+                hidden_to_visible(network_input),
+                name='algo:rbm/func:hidden-to-visible',
             ),
             gibbs_sampling=theano.function(
                 [network_input],
                 sample_visible_from_hidden(
                     sample_hidden_from_visible(network_input)
-                )
+                ),
+                name='algo:rbm/func:gibbs-sampling',
             )
         )
 

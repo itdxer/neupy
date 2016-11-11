@@ -298,8 +298,14 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
 
     def init_input_output_variables(self):
         self.variables.update(
-            network_input=create_input_variable(self.input_layer, name='x'),
-            network_output=create_output_variable(self.error, name='y'),
+            network_input=create_input_variable(
+                self.input_layer,
+                name='algo:network/var:network-input',
+            ),
+            network_output=create_output_variable(
+                self.error,
+                name='algo:network/var:network-output',
+            ),
         )
 
     def init_variables(self):
@@ -312,11 +318,11 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
 
         self.variables.update(
             step=theano.shared(
-                name='network/step',
+                name='algo:network/scalar:step',
                 value=asfloat(self.step)
             ),
             epoch=theano.shared(
-                name='network/epoch',
+                name='algo:network/scalar:epoch',
                 value=asfloat(self.last_epoch)
             ),
 
@@ -334,16 +340,19 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
         self.methods.update(
             predict=theano.function(
                 inputs=[self.variables.network_input],
-                outputs=self.variables.prediction_func
+                outputs=self.variables.prediction_func,
+                name='algo:network/func:predict'
             ),
             train_epoch=theano.function(
                 inputs=[network_input, network_output],
                 outputs=self.variables.error_func,
                 updates=self.init_train_updates(),
+                name='algo:network/func:train-epoch'
             ),
             prediction_error=theano.function(
                 inputs=[network_input, network_output],
-                outputs=self.variables.validation_error_func
+                outputs=self.variables.validation_error_func,
+                name='algo:network/func:prediction-error'
             )
         )
 

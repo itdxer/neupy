@@ -142,7 +142,7 @@ class BaseLayer(ChainConnection, Configurable):
             self.name = generate_layer_name(layer=self)
 
     def add_parameter(self, value, name, shape):
-        theano_name = '{layer_name}/{parameter_name}'.format(
+        theano_name = 'layer:{layer_name}/{parameter_name}'.format(
             layer_name=self.name,
             parameter_name=name
         )
