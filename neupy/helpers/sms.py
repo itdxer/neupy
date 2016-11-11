@@ -1,5 +1,3 @@
-import sys
-
 from neupy.helpers.logs import Verbose
 
 
