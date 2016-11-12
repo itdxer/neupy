@@ -1,6 +1,6 @@
 from math import log, ceil
 
-from numpy import zeros, fill_diagonal, random, sign
+import numpy as np
 
 from neupy.utils import format_data
 from neupy.network.utils import step_function
@@ -14,8 +14,13 @@ __all__ = ('DiscreteHopfieldNetwork',)
 
 class DiscreteHopfieldNetwork(DiscreteMemory):
     """
-    Discrete Hopfield Network. Memory algorithm which works only with
-    binary vectors.
+    Discrete Hopfield Network. It can memorize binary samples
+    and reconstruct them from corrupted samples.
+
+    Notes
+    -----
+    Works only with binary data. Input matrix should contain
+    only zeros and ones.
 
     Parameters
     ----------
@@ -37,10 +42,6 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         If you set up this value equal to ``None`` then the value would be
         equal to the value that you set up for the property with
         the same name - ``n_times``.
-
-    Notes
-    -----
-    * Input and output vectors should contain only binary values.
 
     Examples
     --------
@@ -120,12 +121,11 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     :ref:`password-recovery`: Password recovery with Discrete Hopfield Network.
     :ref:`discrete-hopfield-network`: Discrete Hopfield Network article.
     """
-
     check_limit = Property(default=True, expected_type=bool)
 
     def __init__(self, **options):
         super(DiscreteHopfieldNetwork, self).__init__(**options)
-        self.n_remembered_data = 0
+        self.n_memorized_samples = 0
 
     def train(self, input_data):
         self.discrete_validation(input_data)
@@ -133,29 +133,30 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         input_data = bin2sign(input_data)
         input_data = format_data(input_data, is_feature1d=False)
 
-        nrows, n_features = input_data.shape
-        nrows_after_update = self.n_remembered_data + nrows
+        n_rows, n_features = input_data.shape
+        n_rows_after_update = self.n_memorized_samples + n_rows
 
         if self.check_limit:
-            memory_limit = ceil(n_features / (2 * log(n_features)))
+            memory_limit = np.ceil(n_features / (2 * np.log(n_features)))
 
-            if nrows_after_update > memory_limit:
+            if n_rows_after_update > memory_limit:
                 raise ValueError("You can't memorize more than {0} "
                                  "samples".format(memory_limit))
 
         weight_shape = (n_features, n_features)
 
         if self.weight is None:
-            self.weight = zeros(weight_shape, dtype=int)
+            self.weight = np.zeros(weight_shape, dtype=int)
 
         if self.weight.shape != weight_shape:
-            raise ValueError("Invalid input shapes. Number of input "
-                             "features must be equal to {} and {} output "
-                             "features".format(*weight_shape))
+            n_features_expected = self.weight.shape[1]
+            raise ValueError("Input data has invalid number of features. "
+                             "Got {} features instead of {}."
+                             "".format(n_features, n_features_expected))
 
         self.weight = input_data.T.dot(input_data)
-        fill_diagonal(self.weight, zeros(len(self.weight)))
-        self.n_remembered_data = nrows_after_update
+        np.fill_diagonal(self.weight, np.zeros(len(self.weight)))
+        self.n_memorized_samples = n_rows_after_update
 
     def predict(self, input_data, n_times=None):
         self.discrete_validation(input_data)
@@ -169,9 +170,9 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
             output_data = input_data
 
             for _ in range(n_times):
-                position = random.randint(0, n_features - 1)
+                position = np.random.randint(0, n_features - 1)
                 raw_new_value = output_data.dot(self.weight[:, position])
-                output_data[:, position] = sign(raw_new_value)
+                output_data[:, position] = np.sign(raw_new_value)
         else:
             output_data = input_data.dot(self.weight)
 
@@ -181,12 +182,12 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         self.discrete_validation(input_data)
         input_data = bin2sign(input_data)
         input_data = format_data(input_data, is_feature1d=False)
-        nrows, n_features = input_data.shape
+        n_rows, n_features = input_data.shape
 
-        if nrows == 1:
+        if n_rows == 1:
             return hopfield_energy(self.weight, input_data, input_data)
 
-        output = zeros(nrows)
+        output = np.zeros(n_rows)
         for i, row in enumerate(input_data):
             output[i] = hopfield_energy(self.weight, row, row)
 

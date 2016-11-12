@@ -1,4 +1,4 @@
-from numpy import any as np_any
+import numpy as np
 
 from neupy.core.base import BaseSkeleton
 from neupy.core.properties import ChoiceProperty, IntProperty
@@ -54,6 +54,6 @@ class DiscreteMemory(BaseSkeleton, Configurable):
             Got ``True`` all ``matrix`` discrete values are in
             `discrete_values` list and `False` otherwise.
         """
-        if np_any((matrix != 0) & (matrix != 1)):
+        if np.any((matrix != 0) & (matrix != 1)):
             raise ValueError("This network is descrete. This mean that you "
                              "can use data which contains 0 and 1 values")

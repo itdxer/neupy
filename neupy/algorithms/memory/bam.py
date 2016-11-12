@@ -1,6 +1,6 @@
 from random import randint
 
-from numpy import zeros, sign
+import numpy as np
 
 from neupy.utils import format_data
 from neupy.network.utils import step_function
@@ -109,12 +109,12 @@ class DiscreteBAM(DiscreteMemory):
         if input_data is None and output_data is not None:
             self.discrete_validation(output_data)
             output_data = bin2sign(output_data)
-            input_data = sign(output_data.dot(self.weight.T))
+            input_data = np.sign(output_data.dot(self.weight.T))
 
         elif input_data is not None and output_data is None:
             self.discrete_validation(input_data)
             input_data = bin2sign(input_data)
-            output_data = sign(input_data.dot(self.weight))
+            output_data = np.sign(input_data.dot(self.weight))
 
         else:
             raise ValueError("Input or output data have to be equal to `None`")
@@ -130,10 +130,10 @@ class DiscreteBAM(DiscreteMemory):
                 input_position = randint(0, n_input_features - 1)
                 output_position = randint(0, n_output_features - 1)
 
-                input_data[:, input_position] = sign(
+                input_data[:, input_position] = np.sign(
                     output_data.dot(self.weight[input_position, :])
                 )
-                output_data[:, output_position] = sign(
+                output_data[:, output_position] = np.sign(
                     input_data.dot(self.weight[:, output_position])
                 )
 
@@ -154,7 +154,7 @@ class DiscreteBAM(DiscreteMemory):
         weight_shape = (wight_nrows, wight_ncols)
 
         if self.weight is None:
-            self.weight = zeros(weight_shape)
+            self.weight = np.zeros(weight_shape)
 
         if self.weight.shape != weight_shape:
             raise ValueError("Invalid input shapes. Number of input "
@@ -175,7 +175,7 @@ class DiscreteBAM(DiscreteMemory):
         if nrows == 1:
             return hopfield_energy(self.weight, input_data, output_data)
 
-        output = zeros(nrows)
+        output = np.zeros(nrows)
         for i, rows in enumerate(zip(input_data, output_data)):
             output[i] = hopfield_energy(self.weight, *rows)
 
