@@ -11,7 +11,7 @@ from neupy import layers
 from neupy.utils import (AttributeKeyDict, asfloat, is_list_of_integers,
                          format_data, does_layer_accept_1d_feature)
 from neupy.layers.utils import preformat_layer_shape
-from neupy.layers.connections import LayerConnection
+from neupy.layers.connections import LayerConnection, NetworkConnectionError
 from neupy.helpers import table
 from neupy.core.properties import ChoiceProperty
 from neupy.network import errors
