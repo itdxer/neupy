@@ -288,10 +288,20 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
         self.connection = clean_layers(connection)
 
         self.layers = list(self.connection)
+        graph = self.connection.graph
 
-        # TODO: remove these attributes
-        self.input_layer = self.connection.graph.input_layers[0]
-        self.output_layer = self.connection.graph.output_layers[0]
+        if len(graph.input_layers) != 1:
+            raise NetworkConnectionError("Layer connections expect to have "
+                                         "one input, got {}"
+                                         "".format(len(graph.input_layers)))
+
+        if len(graph.output_layers) != 1:
+            raise NetworkConnectionError("Layer connections expect to have "
+                                         "one output, got {}"
+                                         "".format(len(graph.output_layers)))
+
+        self.input_layer = graph.input_layers[0]
+        self.output_layer = graph.output_layers[0]
 
         self.init_layers()
         super(ConstructableNetwork, self).__init__(*args, **kwargs)

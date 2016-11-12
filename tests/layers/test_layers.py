@@ -78,10 +78,23 @@ class LayerNameTestCase(BaseTestCase):
         self.assertEqual(output_layer.bias.name, 'layer:sigmoid-2/bias')
 
     def test_layer_name_for_connected_subgraphs(self):
-        # # Try to construct two separater networks and then
-        # # connect them into one big network
-        # assert False
-        pass
+        # Try to construct two separater networks and then
+        # connect them into one big network
+        input_layer = layers.Input(1)
+        hidden1_layer = layers.Relu(2)
+        conn1 = input_layer > hidden1_layer
+
+        hidden2_layer = layers.Relu(3)
+        output_layer = layers.Relu(4)
+        conn2 = hidden2_layer > output_layer
+
+        conn = conn1 > conn2
+        conn.initialize()
+
+        self.assertEqual(input_layer.name, 'input-1')
+        self.assertEqual(hidden1_layer.name, 'relu-1')
+        self.assertEqual(hidden2_layer.name, 'relu-2')
+        self.assertEqual(output_layer.name, 'relu-3')
 
 
 class HiddenLayersOperationsTestCase(BaseTestCase):
@@ -163,6 +176,22 @@ class HiddenLayersOperationsTestCase(BaseTestCase):
             expected_output,
             actual_output
         )
+
+    def test_linear_layer_withut_bias(self):
+        input_layer = layers.Input(10)
+        output_layer = layers.Linear(2, weight=init.Constant(0.1), bias=None)
+
+        connection = input_layer > output_layer
+        connection.initialize()
+
+        input_value = asfloat(np.ones((1, 10)))
+        actual_output = connection.output(input_value).eval()
+        expected_output = np.ones((1, 2))
+
+        np.testing.assert_array_almost_equal(expected_output, actual_output)
+
+        with self.assertRaises(TypeError):
+            layers.Linear(2, weight=None)
 
 
 class PReluTestCase(BaseTestCase):
