@@ -1,4 +1,4 @@
-from math import log, ceil
+import math
 
 import numpy as np
 
@@ -137,7 +137,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         n_rows_after_update = self.n_memorized_samples + n_rows
 
         if self.check_limit:
-            memory_limit = np.ceil(n_features / (2 * np.log(n_features)))
+            memory_limit = math.ceil(n_features / (2 * math.log(n_features)))
 
             if n_rows_after_update > memory_limit:
                 raise ValueError("You can't memorize more than {0} "
