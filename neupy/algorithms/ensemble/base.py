@@ -1,5 +1,3 @@
-from abc import abstractmethod
-
 from neupy.core.base import BaseSkeleton
 from neupy.core.config import Configurable
 
