@@ -1,14 +1,22 @@
 Home
 ====
 
-NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple linear models to deep learning models.
+NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.
 
-.. image:: ../_static/img/mnist-solution-code.png
+.. image:: ../docs/layers/images/conv-parallel-connection.png
     :width: 100%
     :align: center
 
-Library Supports
-****************
+User Guide
+----------
+
+* `Install NeuPy <installation.html>`_
+* Check the `tutorials <tutorials.html>`_
+* Learn more about NeuPy in the `documentation <documentation.html>`_
+* Explore lots of different `neural network algorithms <cheatsheet.html>`_.
+
+Supported Features
+------------------
 
 * Deep Learning
 * Convolutional Neural Networks (CNN)

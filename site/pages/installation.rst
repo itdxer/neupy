@@ -13,7 +13,7 @@ Install the latest development version
 
     $ pip install git+https://github.com/itdxer/neupy.git
 
-Or just from source
+Or just from a source code
 
 .. code-block:: bash
 
