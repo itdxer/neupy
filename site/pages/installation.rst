@@ -21,4 +21,4 @@ Or just from source
     cd neupy
     python setup.py install
 
-Check the :ref:`quick_start` tutorial next.
+Check :ref:`tutorials` next.
