@@ -94,8 +94,9 @@ exclude_patterns = ['drafts/*', '_templates/*']
 html_sidebars = {
     '**': [
         'recent.html',
-        'cheat-sheet.html',
         'installation.html',
+        'issues.html',
+        'old-versions.html',
         'searchbox.html',
     ],
 }
