@@ -1,5 +1,5 @@
-Storage
-=======
+Storage for Neural Networks
+===========================
 
 After succesful learning you can save network and later use it for prediction tasks.
 There already exists awesome library - `dill <https://github.com/uqfoundation/dill>`_.

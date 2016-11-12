@@ -101,7 +101,7 @@ And probably you've noticed the other way to use layer with activation function.
 Subnetworks
 ***********
 
-Subnetworks is a simple trick that makes easier to read and understend the networks structure. Instead of explaining it's much easier to show the main advantage of this method. Here is an example of the simpe convolutional network.
+Subnetworks is a simple trick that makes easier to read and understend network's structure. Instead of explaining it's much easier to show the main advantage of this method. Here is an example of the simpe convolutional network.
 
 .. code-block:: python
 

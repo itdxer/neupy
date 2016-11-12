@@ -43,7 +43,7 @@ This plot shows the basic infomration about the network's training progress.
 
 More information related to this plot function you can in the :plot:`error_plot` documentation.
 
-.. image:: ../_static/screenshots/bpnet-train-errors-plot.png
+.. image:: images/bpnet-train-errors-plot.png
     :width: 70%
     :align: center
     :alt: GradientDescent epoch errors plot

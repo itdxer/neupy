@@ -1,0 +1,37 @@
+{%- extends "!layout.html" -%}
+
+{%- block header -%}
+
+    <header role="banner">
+        <div>
+          <h1><a href="{{ pathto(pages[0][0]) }}">{{ shorttitle|e }}</a></h1>
+          <h2>{{ tagline|e }}</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="{{ pathto('pages/home') }}">Home</a>
+        </li>
+        <li class="main-nav">
+          <a href="{{ pathto('docs/tutorials') }}">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="{{ pathto('pages/installation') }}">Installation</a>
+        </li>
+        <li class="main-nav">
+          <a href="{{ pathto('pages/documentation') }}">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="{{ pathto('archive') }}">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="{{ pathto('pages/cheatsheet') }}">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
+
+{% endblock -%}
+
+{%- block navigation -%}
+{%- endblock -%}

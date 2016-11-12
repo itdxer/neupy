@@ -1,9 +1,11 @@
-Boston house-prices dataset
-===========================
+.. _boston-house-price:
 
-For this article we are going to predict Boston house prices via Conjugate gradient.
+Predict prices for houses in the area of Boston
+===============================================
 
-For the beginning we should get some data.
+For this article we are going to predict house prices using Conjugate Gradient algorithm.
+
+For the beginning we should load the data.
 
 .. code-block:: python
 
@@ -390,5 +392,5 @@ There are a lot of things which we can do to improve network results, but we wil
 
 .. author:: default
 .. categories:: none
-.. tags:: supervised, backpropagation, regression
+.. tags:: supervised, backpropagation, regression, tutorials
 .. comments::

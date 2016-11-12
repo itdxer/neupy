@@ -125,14 +125,6 @@ Boltzmann Machine
 Layers
 ******
 
-Basic Layers
-~~~~~~~~~~~~
-
-.. csv-table::
-    :header: "Class name", "Description"
-
-    ":layer:`Input`", "Layer defines input value's feature shape"
-
 Layers with activation function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -202,6 +194,7 @@ Other layers
 .. csv-table::
     :header: "Class name", "Description"
 
+    ":layer:`Input`", "Layer defines input value's feature shape"
     ":layer:`Reshape`", "Reshape tensor input"
     ":layer:`Parallel`", "Parallel layer connections"
     ":layer:`Embedding`", "Embedding layer accepts indeces as an input and returns rows from the weight matrix associated with these indeces."
@@ -210,9 +203,6 @@ Other layers
 
 Parameter Initialization Methods
 ********************************
-
-Example
-~~~~~~~
 
 .. code-block:: python
 
@@ -226,8 +216,9 @@ Example
         ]
     )
 
-Available initialization methods
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. raw:: html
+
+    <br>
 
 .. csv-table::
     :header: "Class name", "Description"

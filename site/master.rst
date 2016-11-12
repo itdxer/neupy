@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2016/11/12/mnist_classification
    2016/09/26/hyperparameter_optimization_for_neural_networks
    2015/09/21/password_recovery
    2015/09/20/discrete_hopfield_network

@@ -29,7 +29,7 @@ Installation
 Links
 -----
 
-* `Quick start <http://neupy.com/docs/quickstart.html#mnist-classification>`_
+* `Tutorials <http://neupy.com/docs/tutorials.html>`_
 * `Documentation <http://neupy.com>`_
 * `Articles <http://neupy.com/archive.html>`_
 * `Cheat sheet <http://neupy.com/docs/cheatsheet.html#algorithms>`_
@@ -40,9 +40,9 @@ Articles
 
 * `Password recovery <http://neupy.com/2015/09/21/password_recovery.html>`_
 * `Discrete Hopfield Network <http://neupy.com/2015/09/20/discrete_hopfield_network.html>`_
-* `Boston house-prices dataset <http://neupy.com/2015/07/04/boston_house_prices_dataset.html>`_
+* `Predict prices for houses in the area of Boston <http://neupy.com/2015/07/04/boston_house_prices_dataset.html>`_
 * `Visualize Backpropagation Algorithms <http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html>`_
-* `MNIST classification <http://neupy.com/docs/quickstart.html#mnist-classification>`_
+* `MNIST classification <http://neupy.com/2016/11/12/mnist_classification.html>`_
 
 Examples
 --------
