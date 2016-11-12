@@ -1,7 +1,7 @@
 import numpy as np
 import theano.tensor as T
 
-from neupy.utils import preformat_value, number_type
+from neupy.utils import preformat_value, number_type, as_tuple
 from neupy.core.docs import SharedDocs
 from neupy.core import init
 
@@ -23,13 +23,19 @@ class BaseProperty(SharedDocs):
         If parameter equal to ``True`` and value undefined after
         initialization class then it will cause an error.
         Defaults to ``False``.
+    allow_none : bool
+        When value is equal to ``True`` than ``None`` is a valid
+        value for the parameter. Defaults to ``False``.
     """
     expected_type = object
 
-    def __init__(self, default=None, required=False):
+    def __init__(self, default=None, required=False, allow_none=False):
         self.name = None
         self.default = default
         self.required = required
+
+        if allow_none:
+            self.expected_type = as_tuple(self.expected_type, type(None))
 
     def __set__(self, instance, value):
         if not isinstance(value, self.expected_type):
@@ -263,8 +269,8 @@ class ParameterProperty(ArrayProperty):
     ----------
     {ArrayProperty.Parameters}
     """
-    expected_type = (np.ndarray, T.sharedvar.SharedVariable, T.Variable,
-                     init.Initializer, number_type)
+    expected_type = as_tuple(np.ndarray, T.sharedvar.SharedVariable,
+                             T.Variable, init.Initializer, number_type)
 
     def __set__(self, instance, value):
         if isinstance(value, number_type):

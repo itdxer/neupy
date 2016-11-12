@@ -6,7 +6,7 @@ In this chapter you will see how to set up different connections for the neural 
 Syntax
 ******
 
-There are three ways to set up your neural network connection between layers. First one is the simplest one. You just define a list or tuple with the integers. Each integer in the sequence identifies layer's size.
+There are three ways to set up your connection between layers. First one is the simplest one. You just define a list or tuple with the integers. Each integer in the sequence identifies layer's size.
 
 .. code-block:: python
 

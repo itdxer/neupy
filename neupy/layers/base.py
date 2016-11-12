@@ -195,10 +195,14 @@ class ParameterBasedLayer(BaseLayer):
         Defines layer's weights. Default initialization methods
         you can find :ref:`here <init-methods>`.
         Defaults to :class:`XavierNormal() <neupy.core.init.XavierNormal>`.
-    bias : 1D array-like, Theano variable, scalar or Initializer
-        Defines layer's bias. Default initialization methods
-        you can find :ref:`here <init-methods>`.
-        Defaults to :class:`XavierNormal() <neupy.core.init.XavierNormal>`.
+    bias : 1D array-like, Theano variable, scalar, Initializer or None
+        Defines layer's bias.
+        Default initialization methods you can find
+        :ref:`here <init-methods>`. Defaults to
+        :class:`XavierNormal() <neupy.core.init.XavierNormal>`.
+        The ``None`` value excludes bias from the calculations and
+        do not add it into parameters list.
+    {BaseLayer.Parameters}
 
     Methods
     -------
@@ -210,7 +214,7 @@ class ParameterBasedLayer(BaseLayer):
     """
     size = IntProperty(minval=1)
     weight = ParameterProperty(default=init.XavierNormal())
-    bias = ParameterProperty(default=init.XavierNormal())
+    bias = ParameterProperty(default=init.XavierNormal(), allow_none=True)
 
     def __init__(self, size, **options):
         if size is not None:
@@ -223,14 +227,17 @@ class ParameterBasedLayer(BaseLayer):
 
     @property
     def bias_shape(self):
-        return as_tuple(self.output_shape)
+        if self.bias is not None:
+            return as_tuple(self.output_shape)
 
     def initialize(self):
         super(ParameterBasedLayer, self).initialize()
         self.add_parameter(value=self.weight, name='weight',
                            shape=self.weight_shape)
-        self.add_parameter(value=self.bias, name='bias',
-                           shape=self.bias_shape)
+
+        if self.bias is not None:
+            self.add_parameter(value=self.bias, name='bias',
+                               shape=self.bias_shape)
 
     def __repr__(self):
         classname = self.__class__.__name__

@@ -25,6 +25,7 @@ class ActivationLayer(ParameterBasedLayer):
         output for the specified input value.
     {ParameterBasedLayer.weight}
     {ParameterBasedLayer.bias}
+    {BaseLayer.Parameters}
 
     Methods
     -------
@@ -49,7 +50,11 @@ class ActivationLayer(ParameterBasedLayer):
 
     def output(self, input_value):
         if self.size is not None:
-            input_value = T.dot(input_value, self.weight) + self.bias
+            input_value = T.dot(input_value, self.weight)
+
+            if self.bias is not None:
+                input_value += self.bias
+
         return self.activation_function(input_value)
 
     def __repr__(self):

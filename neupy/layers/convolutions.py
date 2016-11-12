@@ -204,10 +204,14 @@ class Convolution(ParameterBasedLayer):
         return as_tuple(self.size[0])
 
     def output(self, input_value):
-        bias = T.reshape(self.bias, (1, -1, 1, 1))
         output = T.nnet.conv2d(input_value, self.weight,
                                input_shape=as_tuple(None, self.input_shape),
                                filter_shape=self.weight_shape,
                                border_mode=self.padding,
                                subsample=self.stride)
-        return output + bias
+
+        if self.bias is not None:
+            bias = T.reshape(self.bias, (1, -1, 1, 1))
+            output += bias
+
+        return output
