@@ -24,6 +24,7 @@ class ErrorPlotTestCase(BaseTestCase):
         # little bit, but this change can cause test failers
         theano.config.floatX = 'float64'
 
+    @skip_image_comparison_if_specified
     def test_error_plot_and_validation_error_warnings(self):
         with catch_stdout() as out:
             network = algorithms.GradientDescent((2, 3, 1), verbose=True)
@@ -35,6 +36,7 @@ class ErrorPlotTestCase(BaseTestCase):
             terminal_output = out.getvalue()
             self.assertIn("error will be ignored", terminal_output)
 
+    @skip_image_comparison_if_specified
     def test_error_plot_ax_none(self):
         ax = plt.gca()
 
@@ -43,6 +45,7 @@ class ErrorPlotTestCase(BaseTestCase):
 
         self.assertIs(ax_returned, ax)
 
+    @skip_image_comparison_if_specified
     def test_error_plot_show_image(self):
         def mock_plt_show():
             pass
