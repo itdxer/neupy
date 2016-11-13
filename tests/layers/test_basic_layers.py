@@ -299,26 +299,3 @@ class PReluTestCase(BaseTestCase):
             prelu2_alpha_before_training,
             prelu2_alpha_after_training,
         )))
-
-
-class TransformationLayersTestCase(BaseTestCase):
-    def test_reshape_layer(self):
-        # 1D shape
-        x = np.random.random((5, 4, 3, 2, 1))
-
-        input_layer = layers.Input((4, 3, 2, 1))
-        reshape_layer = layers.Reshape()
-        input_layer > reshape_layer
-
-        y = reshape_layer.output(x).eval()
-        self.assertEqual(y.shape, (5, 4 * 3 * 2 * 1))
-
-        # 2D shape
-        x = np.random.random((5, 20))
-
-        input_layer = layers.Input(20)
-        reshape_layer = layers.Reshape((4, 5))
-        input_layer > reshape_layer
-
-        y = reshape_layer.output(x).eval()
-        self.assertEqual(y.shape, (5, 4, 5))

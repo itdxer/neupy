@@ -7,9 +7,11 @@ from scipy.sparse import csr_matrix
 from neupy.utils import (preformat_value, as_array2d, AttributeKeyDict, asint,
                          smallest_positive_number, asfloat, format_data,
                          as_tuple)
-from neupy.network.utils import shuffle
+from neupy.network.utils import shuffle, iter_until_converge
+from neupy import algorithms
 
 from base import BaseTestCase
+from utils import catch_stdout
 
 
 class UtilsTestCase(BaseTestCase):
@@ -44,16 +46,6 @@ class UtilsTestCase(BaseTestCase):
         expected = (1, 2)
         actual = preformat_value(np.matrix([[1, 1]]))
         np.testing.assert_array_equal(expected, actual)
-
-    def test_shuffle(self):
-        input_data = np.arange(10)
-        shuffeled_data = shuffle(input_data, input_data)
-        np.testing.assert_array_equal(*shuffeled_data)
-
-        np.testing.assert_array_equal(tuple(), shuffle())
-
-        with self.assertRaises(ValueError):
-            shuffle(input_data, input_data[:len(input_data) - 1])
 
     def test_as_array2d(self):
         test_input = np.ones(5)
@@ -168,3 +160,43 @@ class UtilsTestCase(BaseTestCase):
             actual_output = as_tuple(*testcase.input_args)
             self.assertEqual(actual_output, testcase.expected_output,
                              msg="Input args: {}".format(testcase.input_args))
+
+
+class IterUntilConvergeTestCase(BaseTestCase):
+    def test_iter_until_converge_critical_cases(self):
+        with catch_stdout() as out:
+            network = algorithms.GradientDescent((2, 3, 1), verbose=True)
+            iterator = iter_until_converge(network, epsilon=1e-5, max_epochs=5)
+
+            for epoch in iterator:
+                network.errors.append(np.nan)
+
+            terminal_output = out.getvalue()
+            self.assertIn('NaN or Inf', terminal_output)
+
+
+class ShuffleTestCase(BaseTestCase):
+    def test_shuffle_basic(self):
+        input_data = np.arange(10)
+        shuffeled_data = shuffle(input_data, input_data)
+        np.testing.assert_array_equal(*shuffeled_data)
+
+    def test_shuffle_empty_input(self):
+        np.testing.assert_array_equal(tuple(), shuffle())
+
+    def test_shuffle_single_input(self):
+        input_data = np.ones(10)
+        shuffeled_data = shuffle(input_data)
+        # Output suppose to be a shuffled array, but
+        # not a tuple with shuffled array
+        np.testing.assert_array_equal(input_data, shuffeled_data)
+
+    def test_shuffle_invalid_shapes_exception(self):
+        input_data = np.arange(10)
+        with self.assertRaises(ValueError):
+            shuffle(input_data, input_data[:len(input_data) - 1])
+
+    def test_shuffle_with_nones(self):
+        input_with_nones = (None, None)
+        actual_output = shuffle(*input_with_nones)
+        self.assertEqual(input_with_nones, actual_output)
