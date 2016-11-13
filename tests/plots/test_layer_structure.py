@@ -4,7 +4,6 @@ import random
 import tempfile
 from contextlib import contextmanager
 
-from mock import MagicMock
 from neupy import plots, layers, algorithms
 
 from base import BaseTestCase
