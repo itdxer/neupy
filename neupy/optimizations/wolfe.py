@@ -247,8 +247,8 @@ def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c,
                     bound_size_ratio=0.2):
     """
     Finds the minimizer for a cubic polynomial that goes
-    through the points (x_a, y_a), (x_b, y_b), and (x_c, y_c) with
-    derivative at ``x_a`` of y_prime_a.
+    through the points (x_a, y_a), (x_b, y_b), and (x_c, y_c)
+    with derivative at ``x_a`` of y_prime_a.
 
     Parameters
     ----------
@@ -268,21 +268,23 @@ def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c,
     y_c : float or theano variable
         Output from function ``y`` at point ``c``.
     bound_size_ratio : float
-        Value control acceptable bounds for interpolation. If value
-        close to one of the points interpolation result will be ignored.
-        The bigger ratio, the more likely to reject interpolation.
-        Value needs to be between ``0`` and ``1``. Defaults to ``0.1``.
+        Value control acceptable bounds for interpolation. If
+        value is close to one of the points than interpolation
+        result will be ignored. The bigger the ratio, the more
+        likely it's going to reject interpolation. Value needs
+        to be between ``0`` and ``1``. Defaults to ``0.1``.
 
     Returns
     -------
     object
         Theano variable that after evaluation is equal to
-        point ``x`` which is minimizer for cubic function.
+        the point ``x`` which is a minimizer for the cubic function.
     """
 
     if not 0 <= bound_size_ratio < 1:
-        raise ValueError("Value ``bound_size_ratio`` need to be a float "
-                         "between 0 and 1, got {}".format(bound_size_ratio))
+        raise ValueError("The `bound_size_ratio` value should be a float "
+                         "number between 0 and 1, got {}"
+                         "".format(bound_size_ratio))
 
     bound_size_ratio = asfloat(bound_size_ratio)
 
