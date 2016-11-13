@@ -56,7 +56,7 @@ def generate_password(min_length=5, max_length=30):
 
 def save_password(real_password, noise_level=5):
     if noise_level < 1:
-        raise ValueError("`noise_level` must be equal or greater than 1.")
+        raise ValueError("`noise_level` must be equal or greater than one")
 
     binary_password = str2bin(real_password)
     bin_password_len = len(binary_password)

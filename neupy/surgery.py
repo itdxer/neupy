@@ -31,24 +31,21 @@ def isolate_connection_if_needed(connection):
     ValueError
         If input data type is incorrect.
     """
-    is_layer = isinstance(connection, layers.BaseLayer)
-    is_connection = isinstance(connection, LayerConnection)
-
-    if is_layer:
+    if isinstance(connection, layers.BaseLayer):
         connection = deepcopy(connection)
         connection.connection = None
 
-    elif is_connection:
+    elif isinstance(connection, LayerConnection):
         connection = deepcopy(connection)
 
         connection.input_layer.connection = None
         connection.output_layer.connection = None
         connection.connection = None
 
-    elif not is_layer and not is_connection:
+    else:
         raise TypeError("Unknown data type: {}. Surgery module supports "
-                        "only procedures with layers and connections "
-                        "between layers.".format(type(connection)))
+                        "only operations with layers and connections."
+                        "".format(type(connection)))
 
     return connection
 
@@ -76,6 +73,10 @@ def clean_and_validate_connection(connection):
 
     if not isinstance(connection, LayerConnection):
         raise ValueError("You can cut only layer connections.")
+
+    if not is_feedforward(connection):
+        raise ValueError("Cannot cut connection that has non-feedforward "
+                         "relations between layers.")
 
     return connection
 
@@ -128,10 +129,6 @@ def cut(connection, start, end):
     """
     connection = clean_and_validate_connection(connection)
 
-    if not is_feedforward(connection):
-        raise ValueError("Can cut only layers that have "
-                         "feedforward connections.")
-
     layers = list(connection)
     n_layers = len(layers)
 
@@ -146,7 +143,7 @@ def cut(connection, start, end):
         layer.connection = None
 
     if not cutted_layers:
-        raise ValueError("Your slice didn't cut any layer.")
+        raise ValueError("Specified slice didn't cut any layer.")
 
     return sew_together(cutted_layers)
 
@@ -336,11 +333,6 @@ def cut_along_lines(connection):
     Sigmoid(1)
     """
     connection = clean_and_validate_connection(connection)
-
-    if not is_feedforward(connection):
-        raise ValueError("Can cut only layers that have "
-                         "feedforward connections.")
-
     cut_points = find_cut_points(connection)
 
     connections = []

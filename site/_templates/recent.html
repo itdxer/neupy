@@ -1,7 +1,7 @@
 <div class="widget">
     <h1>Recent Articles</h1>
     <ul>
-        {%- for post, post_title in recent[:5] -%}
+        {%- for post, post_title in recent[:3] -%}
         <li>
             <a href="{{ pathto(post) }}">{{ post_title }}</a>
         </li>
