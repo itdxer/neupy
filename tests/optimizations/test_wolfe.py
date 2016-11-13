@@ -82,6 +82,15 @@ class WolfeInterpolationTestCase(BaseTestCase):
             self.assertAlmostEqual(actual_output.eval(),
                                    testcase.func_expected)
 
+    def test_cubic_minimizer_exceptions(self):
+        with self.assertRaisesRegexp(ValueError, "bound_size_ratio"):
+            # bound_size_ratio < 0
+            wolfe.cubic_minimizer(0, 1, -1, 5, 10, 10, 60, bound_size_ratio=-1)
+
+        with self.assertRaisesRegexp(ValueError, "bound_size_ratio"):
+            # bound_size_ratio >= 1
+            wolfe.cubic_minimizer(0, 1, -1, 5, 10, 10, 60, bound_size_ratio=2)
+
     def test_cubic_minimizer(self):
         testcases = (
             Case(func_input=dict(x_a=0., y_a=1., y_prime_a=-1.,
