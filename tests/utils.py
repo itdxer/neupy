@@ -20,8 +20,19 @@ from data import xor_input_train, xor_target_train
 @contextmanager
 def catch_stdout():
     """
-    Context manager that catch stdout and return StringIO instance.
-    It's good to test any type of terminal outputs.
+    Context manager that catches output in terminal and returns
+    StringIO instance.
+
+    Yields
+    ------
+    StringIO instance
+
+    Examples
+    --------
+    >>> with catch_stdout() as out:
+    ...     print("Unittest")
+    ...     terminal_output = out.getvalue()
+    ...     self.assertIn("test", terminal_output)
     """
     old_out = sys.stdout
     out = six.StringIO()
