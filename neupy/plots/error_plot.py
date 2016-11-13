@@ -49,8 +49,8 @@ def error_plot(network, logx=False, ax=None, show=True):
     validation_errors = network.validation_errors.normalized()
 
     if len(train_errors) != len(validation_errors):
-        network.logs.warning("Number of train and validation errors are "
-                             "not the same. Ignored validation errors.")
+        network.logs.warning("Mismatch in number of training and validation "
+                             "errors. Validation error will be ignored.")
         validation_errors = []
 
     if all(err is None for err in validation_errors):
