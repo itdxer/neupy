@@ -1,5 +1,7 @@
 import tempfile
 
+import graphviz
+
 from neupy.network.base import BaseNetwork
 
 
@@ -40,11 +42,6 @@ def layer_structure(connection, filepath=None, show=True):
     ImportError
         In case if ``graphviz`` library hasn't been installed.
     """
-    try:
-        import graphviz
-    except ImportError:
-        raise ImportError("Install `graphviz` library.")
-
     if isinstance(connection, BaseNetwork):
         connection = connection.connection
 

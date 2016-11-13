@@ -1,6 +1,4 @@
 import os
-import sys
-import random
 import tempfile
 from contextlib import contextmanager
 
@@ -62,19 +60,3 @@ class LayerSturcturePlotTestCase(BaseTestCase):
             temp_filename = tempfile.mktemp()
             filesize_after = os.path.getsize(temp_filename)
             self.assertGreater(filesize_after, 0)
-
-    def test_layer_structure_graphviz_import_error(self):
-        connection = layers.Input(10) > layers.Sigmoid(1)
-
-        system_pathes = sys.path
-        # Make sure that python cannot find graphviz library
-        sys.path = []
-
-        # Delete it from module cache in case of it exists
-        if 'graphviz' in sys.modules:
-            del sys.modules['graphviz']
-
-        with self.assertRaises(ImportError):
-            plots.layer_structure(connection, filepath=None, show=False)
-
-        sys.path = system_pathes
