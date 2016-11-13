@@ -14,3 +14,5 @@ Sitemap
    pages/documentation
    pages/installation
    pages/cheatsheet
+   pages/versions
+   apidocs/modules
