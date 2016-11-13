@@ -9,12 +9,14 @@ from base import BaseTestCase
 
 
 class ConnectionIsolationTestCase(BaseTestCase):
-    def test_isolate_wrong_data_type(self):
+    def test_layer_isolation(self):
         surgery.isolate_connection_if_needed(layers.Sigmoid(10))
 
+    def test_connection_isolation(self):
         connection = layers.Input(5) > layers.Sigmoid(10)
         surgery.isolate_connection_if_needed(connection)
 
+    def test_isolate_invalid_data_type(self):
         with self.assertRaises(TypeError):
             surgery.isolate_connection_if_needed('invalid object')
 
@@ -263,3 +265,24 @@ class SurgeryCutAlongLinesTestCase(BaseTestCase):
                 testcase['expected_shapes'],
                 msg="Test ID: {}".format(test_id)
             )
+
+    def test_cut_expcetion_non_feedforward(self):
+        input_layer = layers.Input(10)
+        layers.join(input_layer, layers.Sigmoid(1))
+        connection = layers.join(input_layer, layers.Sigmoid(2))
+
+        with self.assertRaisesRegexp(ValueError, r"non-feedforward"):
+            # Relations betweeen layers is not feedforward
+            surgery.cut(connection, start=0, end=1)
+
+    def test_cut_expcetion_invalid_end_parameter(self):
+        connection = layers.Input(10) > layers.Sigmoid(1)
+        with self.assertRaises(ValueError):
+            # Cannot cut till the 10th layer, bacuase connection has
+            # only two layers
+            surgery.cut(connection, start=0, end=10)
+
+    def test_cut_expection_slice_cutted_nothing(self):
+        connection = layers.Input(10) > layers.Sigmoid(1)
+        with self.assertRaises(ValueError):
+            surgery.cut(connection, start=0, end=0)
