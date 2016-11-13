@@ -3,7 +3,7 @@ numpy>=1.9.0
 scipy>=0.14.0
 matplotlib==1.5.1
 Pillow==3.0.0
-graphviz==0.5.1
+git+https://github.com/xflr6/graphviz.git@0.5.1
 
 scikit-learn>=0.17
 pandas>=0.15.0
