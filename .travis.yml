@@ -19,6 +19,7 @@ install:
 
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION --file requirements/travis.txt
   - source activate test-environment
+  - pip install graphviz==0.5.1
   - pip install Theano>=0.8.1
   - python setup.py install
 # before_script:
