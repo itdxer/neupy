@@ -1,9 +1,7 @@
 import math
 import time
-from abc import ABCMeta, abstractmethod
 from collections import deque
 
-import six
 import numpy as np
 
 from neupy.helpers.table import format_time
@@ -12,30 +10,21 @@ from neupy.helpers.table import format_time
 __all__ = ('SummaryTable', 'InlineSummary')
 
 
-class BaseSummary(six.with_metaclass(ABCMeta)):
-    @abstractmethod
-    def show_last(self, network):
-        pass
-
-    @abstractmethod
-    def finish(self):
-        pass
-
-
-class SummaryTable(BaseSummary):
+class SummaryTable(object):
     """
-    Class that shows network's training in the formatted
-    table.
+    Class that shows network's training errors in the
+    form of a table.
 
     Parameters
     ----------
     network : BaseNetwork
         Network instance.
     table_builder : TableBuilder
-        Pre-defined table builder with specified table
-        structure.
+        Pre-defined table builder with specified table structure.
     delay_limit : float
+        Defaults to ``1``.
     delay_history_length : int
+        Defaults to ``10``.
     """
     def __init__(self, network, table_builder, delay_limit=1.,
                  delay_history_length=10):
@@ -77,10 +66,10 @@ class SummaryTable(BaseSummary):
             average_delay = np.mean(terminal_output_delays)
 
             if average_delay < self.delay_limit:
-                show_epoch = int(
-                    network.training.show_epoch *
-                    math.ceil(self.delay_limit / average_delay)
-                )
+                show_epoch = network.training.show_epoch
+                scale = math.ceil(self.delay_limit / average_delay)
+
+                show_epoch = int(show_epoch * scale)
                 table_builder.message("Too many outputs in the terminal. "
                                       "Set up logging after each {} epochs"
                                       "".format(show_epoch))
@@ -92,7 +81,16 @@ class SummaryTable(BaseSummary):
         self.table_builder.finish()
 
 
-class InlineSummary(BaseSummary):
+class InlineSummary(object):
+    """
+    Class that shows network's training errors in the
+    form of a table.
+
+    Parameters
+    ----------
+    network : BaseNetwork
+        Network instance.
+    """
     def __init__(self, network):
         self.network = network
 

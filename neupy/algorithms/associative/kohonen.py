@@ -8,16 +8,8 @@ __all__ = ('Kohonen',)
 
 
 class Kohonen(BaseAssociative):
-    """Kohonen unsupervised associative Neural Network.
-    This algorith similar to :network:`Instar`. Like the instar rule, the
-    Kohonen rule allows the weights of a neuron to learn an input vector
-    and is therefore suitable for recognition applications. One difference
-    that this algorithm is not proportional to output. This Kohonen network
-    interpretetion update only weights with non-zero output.
-
-    Notes
-    -----
-    * Network architecture must contains two layers.
+    """
+    Kohonen Neural Network used for unsupervised learning.
 
     Parameters
     ----------

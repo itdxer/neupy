@@ -11,7 +11,8 @@ from neupy import layers
 from neupy.utils import (AttributeKeyDict, asfloat, is_list_of_integers,
                          format_data, does_layer_accept_1d_feature)
 from neupy.layers.utils import preformat_layer_shape
-from neupy.layers.connections import LayerConnection, NetworkConnectionError
+from neupy.layers.connections import (LayerConnection, NetworkConnectionError,
+                                      is_feedforward)
 from neupy.helpers import table
 from neupy.core.properties import ChoiceProperty
 from neupy.network import errors
@@ -36,9 +37,11 @@ def generate_layers(layers_sizes):
     LayerConnection
         Constructed connection.
     """
+    n_layers = len(layers_sizes)
 
-    if len(layers_sizes) < 2:
-        raise ValueError("Network must contains at least 2 layers.")
+    if n_layers <= 1:
+        raise ValueError("Cannot generate network that "
+                         "has less than two layers")
 
     input_layer_size = layers_sizes.pop(0)
     connection = layers.Input(input_layer_size)
@@ -100,12 +103,9 @@ def create_input_variable(input_layer, name):
         4: T.tensor4,
     }
 
-    if isinstance(input_layer.input_shape, tuple):
-        # Shape doesn't include batch size dimension, that's why
-        # we need add one
-        ndim = len(input_layer.input_shape) + 1
-    else:
-        ndim = 2
+    # Shape doesn't include batch size dimension,
+    # that's why we need to add one
+    ndim = len(input_layer.input_shape) + 1
 
     if ndim not in dim_to_variable_type:
         raise ValueError("Layer's input needs to be 2, 3 or 4 dimensional. "
@@ -291,14 +291,14 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
         graph = self.connection.graph
 
         if len(graph.input_layers) != 1:
-            raise NetworkConnectionError("Layer connections expect to have "
-                                         "one input, got {}"
-                                         "".format(len(graph.input_layers)))
+            n_inputs = len(graph.input_layers)
+            raise NetworkConnectionError("Connection should have one input "
+                                         "layer, got {}".format(n_inputs))
 
         if len(graph.output_layers) != 1:
-            raise NetworkConnectionError("Layer connections expect to have "
-                                         "one output, got {}"
-                                         "".format(len(graph.output_layers)))
+            n_outputs = len(graph.output_layers)
+            raise NetworkConnectionError("Connection should have one output "
+                                         "layer, got {}".format(n_outputs))
 
         self.input_layer = graph.input_layers[0]
         self.output_layer = graph.output_layers[0]
@@ -543,6 +543,12 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
         Shows network's architecture in the terminal if
         ``verbose`` parameter is equal to ``True``.
         """
+        if not is_feedforward(self.connection):
+            raise TypeError("You can check architecture only for feedforward "
+                            "connections. For other types of connections it's "
+                            "better to use the `neupy.plots.layer_structure` "
+                            "function.")
+
         self.logs.title("Network's architecture")
 
         values = []
@@ -568,7 +574,7 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
     def __repr__(self):
         n_layers = len(self.connection)
 
-        if n_layers > 5:
+        if n_layers > 5 or not is_feedforward(self.connection):
             connection = '[... {} layers ...]'.format(n_layers)
         else:
             connection = self.connection

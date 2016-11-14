@@ -714,7 +714,7 @@ class LayerConnection(ChainConnection):
             layer.training_state = True
 
     def __len__(self):
-        return len(self.layers)
+        return len(self.graph.forward_graph)
 
     def __iter__(self):
         subgraph = self.graph.subgraph_for_output(self.output_layer)

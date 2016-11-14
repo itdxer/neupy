@@ -109,6 +109,7 @@ class CMAC(SupervisedLearningMixin, BaseNetwork):
         weight = self.weight
         step = self.step
 
+        n_samples = input_train.shape[0]
         quantized_input = self.quantize(input_train)
         errors = 0
 
@@ -121,4 +122,5 @@ class CMAC(SupervisedLearningMixin, BaseNetwork):
                 weight[coord] += step * error
 
             errors += abs(error)
-        return errors / input_train.shape[0]
+
+        return errors / n_samples

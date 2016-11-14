@@ -1,7 +1,9 @@
 import numpy as np
+import theano.tensor as T
 
 from neupy import estimators
 from neupy.utils import asfloat
+from neupy.network import errors
 
 from base import BaseTestCase
 
@@ -109,3 +111,23 @@ class ErrorFuncTestCase(BaseTestCase):
 
         actual = estimators.categorical_hinge(targets, predictions)
         self.assertAlmostEqual(expected, actual)
+
+    def test_categorical_hinge_without_one_hot_encoding(self):
+        targets = asfloat(np.array([2, 0]))
+        predictions = asfloat(np.array([
+            [0.1, 0.2, 0.7],
+            [0.0, 0.9, 0.1],
+        ]))
+        expected = asfloat(np.array([0.5, 1.9]).mean())
+
+        prediction_var = T.matrix()
+        target_var = T.vector()
+
+        error_output = errors.categorical_hinge(target_var, prediction_var)
+        actual = error_output.eval({prediction_var: predictions,
+                                    target_var: targets})
+        self.assertAlmostEqual(expected, actual)
+
+    def test_categorical_hinge_invalid_dimension(self):
+        with self.assertRaises(TypeError):
+            errors.categorical_hinge(T.tensor3(), T.matrix())

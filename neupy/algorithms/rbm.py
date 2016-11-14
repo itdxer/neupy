@@ -6,7 +6,6 @@ import numpy as np
 from neupy.core.properties import IntProperty, ParameterProperty
 from neupy.network.constructor import BaseAlgorithm
 from neupy.network.base import BaseNetwork
-from neupy.network.learning import UnsupervisedLearningMixin
 from neupy.algorithms.gd.base import (MinibatchTrainingMixin,
                                       average_batch_errors)
 from neupy.layers.base import create_shared_parameter
@@ -17,8 +16,7 @@ from neupy import init
 __all__ = ('RBM',)
 
 
-class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
-          MinibatchTrainingMixin):
+class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
     """
     Boolean/Bernoulli Restricted Boltzmann Machine (RBM).
     Algorithm assumes that inputs are either binary
@@ -47,7 +45,7 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
 
     Methods
     -------
-    {UnsupervisedLearningMixin.train}
+    train(input_train, epochs=100)
     {BaseSkeleton.fit}
     visible_to_hidden(visible_input)
         Populates data throught the network and returns output
@@ -254,6 +252,27 @@ class RBM(UnsupervisedLearningMixin, BaseAlgorithm, BaseNetwork,
                 ),
                 name='algo:rbm/func:gibbs-sampling',
             )
+        )
+
+    def train(self, input_train, input_test=None, epochs=100,
+              summary='table'):
+        """
+        Train RBM.
+
+        Parameters
+        ----------
+        input_train : 1D or 2D array-like
+        input_test : 1D or 2D array-like or None
+            Defaults to ``None``.
+        epochs : int
+            Number of training epochs. Defaults to ``100``.
+        summary : {'table', 'inline'}
+            Training summary type. Defaults to ``'table'``.
+        """
+        return super(RBM, self).train(
+            input_train=input_train, target_train=None,
+            input_test=input_test, target_test=None,
+            epochs=epochs, epsilon=None, summary=summary
         )
 
     def train_epoch(self, input_train, target_train=None):

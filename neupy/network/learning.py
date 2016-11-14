@@ -2,8 +2,7 @@ from neupy.core.docs import SharedDocs
 from neupy.utils import format_data
 
 
-__all__ = ('SupervisedLearningMixin', 'UnsupervisedLearningMixin',
-           'LazyLearningMixin')
+__all__ = ('SupervisedLearningMixin', 'LazyLearningMixin')
 
 
 class SupervisedLearningMixin(object):
@@ -14,14 +13,15 @@ class SupervisedLearningMixin(object):
     -------
     train(input_train, target_train, input_test=None, target_test=None,\
     epochs=100, epsilon=None)
-        Trains network. You can control network training procedure
-        iterations with the number of epochs or converge value epsilon.
-        Also you can specify ``input_test`` and ``target_test`` and control
-        your validation data error on each iteration.
+        Train network. You can control network's training procedure
+        with ``epochs`` and ``epsilon`` parameters.
+        The ``input_test`` and ``target_test`` should be presented
+        both in case of you need to validate network's training
+        after each iteration.
     """
     def train(self, input_train, target_train, input_test=None,
               target_test=None, epochs=100, epsilon=None,
-              summary_type='table'):
+              summary='table'):
 
         is_test_data_partialy_missed = (
             (input_test is None and target_test is not None) or
@@ -45,34 +45,7 @@ class SupervisedLearningMixin(object):
             input_train=input_train, target_train=target_train,
             input_test=input_test, target_test=target_test,
             epochs=epochs, epsilon=epsilon,
-            summary_type=summary_type
-        )
-
-
-class UnsupervisedLearningMixin(object):
-    """
-    Mixin for Unsupervised Neural Network algorithms.
-
-    Methods
-    -------
-    train(input_train, input_test=None, epsilon=1e-5, epochs=100)
-        Trains network until it converges. Parameter ``epochs`` control
-        maximum number of iterations, just to make sure that network will
-        stop training procedure if it can't converge.
-    """
-    def train(self, input_train, input_test=None, epochs=100, epsilon=None,
-              summary_type='table'):
-
-        input_train = format_data(input_train, is_feature1d=True)
-
-        if input_test is not None:
-            input_test = format_data(input_test)
-
-        return super(UnsupervisedLearningMixin, self).train(
-            input_train=input_train, target_train=None,
-            input_test=input_test, target_test=None,
-            epochs=epochs, epsilon=epsilon,
-            summary_type=summary_type
+            summary=summary
         )
 
 
@@ -110,12 +83,12 @@ class LazyLearningMixin(SharedDocs):
         self.target_train = target_train
 
         if input_train.shape[0] != target_train.shape[0]:
-            raise ValueError("Input data size should be the same as "
-                             "target data size")
+            raise ValueError("Number of samples in the input and target "
+                             "datasets are different")
 
     def train_epoch(self, *args, **kwargs):
         raise AttributeError("This network doesn't have train epochs")
 
     def predict(self, input_data):
         if self.input_train is None:
-            raise ValueError("Train neural network before make prediction")
+            raise ValueError("Network hasn't been trained yet")
