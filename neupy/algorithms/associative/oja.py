@@ -3,17 +3,16 @@ import numpy as np
 from neupy.utils import format_data, NotTrainedException
 from neupy.core.properties import IntProperty, ParameterProperty
 from neupy.network.base import BaseNetwork
-from neupy.network.learning import UnsupervisedLearningMixin
 from neupy import init
 
 
 __all__ = ('Oja',)
 
 
-class Oja(UnsupervisedLearningMixin, BaseNetwork):
+class Oja(BaseNetwork):
     """
-    Oja unsupervised algorithm that minimize input data feature
-    space.
+    Oja is an unsupervised technique used for the
+    dimensionality reduction tasks.
 
     Notes
     -----
@@ -39,17 +38,18 @@ class Oja(UnsupervisedLearningMixin, BaseNetwork):
 
     Methods
     -------
-    reconstruct(input_data):
+    reconstruct(input_data)
         Reconstruct your minimized data.
+    train(input_data, epsilon=1e-2, epochs=100)
+        Train Oja algorithm.
     {BaseSkeleton.predict}
-    {UnsupervisedLearningMixin.train}
     {BaseSkeleton.fit}
 
     Raises
     ------
     ValueError
-        * Try reconstruct without training.
-        * Invalid number of input data features for ``train`` and \
+        * Triggers when you try to reconstruct output without training.
+        * Invalid number of input data features for the ``train`` and \
         ``reconstruct`` methods.
 
     Examples

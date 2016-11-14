@@ -14,10 +14,9 @@ First of all we need to load data.
     >>> mnist = datasets.fetch_mldata('MNIST original')
     >>> data, target = mnist.data, mnist.target
 
-I used scikit-learn to fetch the MNIST dataset, but you can do that load it in different way.
+I used scikit-learn to fetch the MNIST dataset, but you can load it in different way.
 
-Data doesn't have appropriate format for neural network, so we need to make simple
-transformation before use it.
+Data doesn't have appropriate format for neural network, so we need to make simple transformation before use it.
 
 .. code-block:: python
 
@@ -88,11 +87,22 @@ Isn't it simple and clear? All the most important information related to the neu
 .. image:: images/bpnet-config-logs.png
     :width: 70%
     :align: center
-    :alt: GradientDescent configuration output
+    :alt: Gradient Descent configuration
 
 From this output we can extract a lot of information about network configurations.
 
 First of all, as we can see, most of options have green color label, but some of them are gray. Green color defines all options which we put in network manually and gray color options are default parameters. All properties separeted on few groups and each group is a :network:`Momentum`  parent classes. More information about :network:`Momentum` algorithm properties you will find in documentation, just click on algorithm name link and you will see it.
+
+In addition for feedforward neural networks it's possible to check architecture in form of a table.
+
+.. code-block:: python
+
+    >>> network.architecture()
+
+.. image:: images/bpnet-architecture.png
+    :width: 70%
+    :align: center
+    :alt: Neural Network Architecture
 
 Now we are going to train network. Let set up 20 epochs for training procedure and check the result.
 
@@ -151,25 +161,26 @@ Let's finally make a simple report for our classification result.
     >>> y_test = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))
     >>>
     >>> print(metrics.classification_report(y_test, y_predicted))
-                  precision    recall  f1-score   support
+            precision    recall  f1-score   support
 
-              0       0.98      0.99      0.99       936
-              1       1.00      0.99      0.99      1163
-              2       0.98      0.98      0.98       982
-              3       0.98      0.98      0.98      1038
-              4       0.98      0.98      0.98       948
-              5       0.98      0.98      0.98       921
-              6       0.98      0.99      0.99      1013
-              7       0.98      0.98      0.98      1029
-              8       0.98      0.99      0.99       978
-              9       0.98      0.97      0.98       992
+        0       0.98      0.99      0.99       936
+        1       0.99      0.99      0.99      1163
+        2       0.98      0.98      0.98       982
+        3       0.98      0.99      0.98      1038
+        4       0.98      0.98      0.98       948
+        5       0.99      0.98      0.98       921
+        6       0.99      0.99      0.99      1013
+        7       0.98      0.98      0.98      1029
+        8       0.98      0.98      0.98       978
+        9       0.98      0.96      0.97       992
 
-    avg / total       0.98      0.98      0.98     10000
+        avg / total       0.98      0.98      0.98     10000
+
     >>> score = metrics.accuracy_score(y_test, y_predicted)
     >>> print("Validation accuracy: {:.2%}".format(score))
-    Validation accuracy: 98.47%
+    Validation accuracy: 98.37%
 
-The 98.5% accuracy is pretty good for such a quick solution. Additional modification can improve prediction accuracy.
+The 98.37% accuracy is pretty good for such a quick solution. Additional modification can improve prediction accuracy.
 
 
 .. author:: default

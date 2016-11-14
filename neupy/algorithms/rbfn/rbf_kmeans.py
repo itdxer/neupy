@@ -8,13 +8,12 @@ from neupy.utils import format_data
 from neupy.core.properties import IntProperty
 from neupy.algorithms.gd import NoStepSelection
 from neupy.network.base import BaseNetwork
-from neupy.network.learning import UnsupervisedLearningMixin
 
 
 __all__ = ('RBFKMeans',)
 
 
-class RBFKMeans(NoStepSelection, UnsupervisedLearningMixin, BaseNetwork):
+class RBFKMeans(NoStepSelection, BaseNetwork):
     """
     Radial basis function K-means for clustering.
 
@@ -36,7 +35,8 @@ class RBFKMeans(NoStepSelection, UnsupervisedLearningMixin, BaseNetwork):
 
     Methods
     -------
-    {UnsupervisedLearningMixin.train}
+    train(input_train, epsilon=1e-5, epochs=100)
+        Train network.
     {BaseSkeleton.predict}
     {BaseSkeleton.fit}
 

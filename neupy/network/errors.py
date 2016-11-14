@@ -3,7 +3,7 @@ from __future__ import division
 import theano.tensor as T
 
 from neupy.core.docs import shared_docs
-from neupy.utils import smallest_positive_number
+from neupy.utils import smallest_positive_number, asint
 
 
 __all__ = ('mse', 'rmse', 'mae', 'msle', 'rmsle', 'binary_crossentropy',
@@ -209,18 +209,18 @@ def categorical_hinge(expected, predicted, delta=1):
     This is an alternative to the categorical cross-entropy
     loss for multi-class classification problems.
     """
-    num_cls = predicted.shape[1]
+    n_classes = predicted.shape[1]
 
     if expected.ndim == (predicted.ndim - 1):
-        expected = T.extra_ops.to_one_hot(expected, num_cls)
+        expected = T.extra_ops.to_one_hot(asint(expected), n_classes)
 
-    elif expected.ndim != predicted.ndim:
+    if expected.ndim != predicted.ndim:
         raise TypeError('Rank mismatch between targets and predictions')
 
     invalid_class_indeces = expected.nonzero()
     valid_class_indeces = (1 - expected).nonzero()
 
-    new_shape = (-1, num_cls - 1)
+    new_shape = (-1, n_classes - 1)
     rest = T.reshape(predicted[valid_class_indeces], new_shape)
     rest = T.max(rest, axis=1)
 

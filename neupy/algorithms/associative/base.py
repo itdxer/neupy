@@ -3,14 +3,14 @@ import numpy as np
 from neupy.utils import format_data
 from neupy.core.properties import IntProperty, ParameterProperty, ArrayProperty
 from neupy.core.init import Initializer, Normal, Constant
-from neupy.network import BaseNetwork, UnsupervisedLearningMixin
+from neupy.network import BaseNetwork
 from neupy.network.utils import step_function
 
 
 __all__ = ('BaseStepAssociative',)
 
 
-class BaseAssociative(UnsupervisedLearningMixin, BaseNetwork):
+class BaseAssociative(BaseNetwork):
     """
     Base class for associative learning.
 
@@ -38,7 +38,6 @@ class BaseAssociative(UnsupervisedLearningMixin, BaseNetwork):
         Train neural network.
     {BaseSkeleton.fit}
     """
-
     n_inputs = IntProperty(minval=1, required=True)
     n_outputs = IntProperty(minval=1, required=True)
     weight = ParameterProperty(default=Normal())
@@ -61,8 +60,14 @@ class BaseAssociative(UnsupervisedLearningMixin, BaseNetwork):
         self.weight = self.weight.astype(float)
 
     def train(self, input_train, epochs=100):
-        return super(BaseAssociative, self).train(input_train, epochs=epochs,
-                                                  epsilon=None)
+        input_train = format_data(input_train, is_feature1d=True)
+
+        return super(BaseAssociative, self).train(
+            input_train=input_train, target_train=None,
+            input_test=None, target_test=None,
+            epochs=epochs, epsilon=None,
+            summary='table'
+        )
 
 
 class BaseStepAssociative(BaseAssociative):

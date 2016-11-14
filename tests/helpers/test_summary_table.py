@@ -1,3 +1,4 @@
+import textwrap
 from collections import namedtuple
 
 from neupy.helpers import table
@@ -7,19 +8,6 @@ from base import BaseTestCase
 
 
 Case = namedtuple("Case", "input_value expected_output")
-
-table_drawing_result = """
-------------------------------
-| Col 1 | Col 2 | Col 3      |
-------------------------------
-| test  | 33.0  | val        |
-| test2 | -3.0  | val 2      |
-------------------------------
-| Warning message            |
-------------------------------
-| test3 | 0.0   | val 3      |
-------------------------------
-""".strip()
 
 
 class TableColumnsTestCase(BaseTestCase):
@@ -92,6 +80,19 @@ class TableBuilderTestCase(BaseTestCase):
                 table_drawing.header()
 
     def test_table_drawing(self):
+        table_drawing_result = textwrap.dedent("""
+        ------------------------------
+        | Col 1 | Col 2 | Col 3      |
+        ------------------------------
+        | test  | 33.0  | val        |
+        | test2 | -3.0  | val 2      |
+        ------------------------------
+        | Warning message            |
+        ------------------------------
+        | test3 | 0.0   | val 3      |
+        ------------------------------
+        """).strip()
+
         table_drawing = table.TableBuilder(
             table.Column("Col 1"),
             table.Column("Col 2", dtype=float),
@@ -108,6 +109,8 @@ class TableBuilderTestCase(BaseTestCase):
 
             table_drawing.finish()
             terminal_output = out.getvalue().strip()
+            terminal_output = terminal_output.replace('\r', '')
 
-        self.assertEqual(table_drawing_result,
-                         terminal_output.replace('\r', ''))
+        # Use assertTrue to make sure that it won't through
+        # all variables in terminal in case of error
+        self.assertTrue(table_drawing_result == terminal_output)

@@ -316,7 +316,7 @@ class BaseNetwork(BaseSkeleton):
 
     def train(self, input_train, target_train=None, input_test=None,
               target_test=None, epochs=100, epsilon=None,
-              summary_type='table'):
+              summary='table'):
         """
         Method train neural network.
 
@@ -342,7 +342,7 @@ class BaseNetwork(BaseSkeleton):
             raise ValueError("Network should train at teast 3 epochs before "
                              "check the difference between errors")
 
-        if summary_type == 'table':
+        if summary == 'table':
             logging_info_about_the_data(self, input_train, input_test)
             logging_info_about_training(self, epochs, epsilon)
             logs.newline()
@@ -360,12 +360,12 @@ class BaseNetwork(BaseSkeleton):
                 delay_history_length=10,
             )
 
-        elif summary_type == 'inline':
+        elif summary == 'inline':
             summary = InlineSummary(network=self)
 
         else:
             raise ValueError("`{}` is unknown summary type"
-                             "".format(summary_type))
+                             "".format(summary))
 
         iterepochs = create_training_epochs_iterator(self, epochs, epsilon)
         show_epoch = parse_show_epoch_property(self, epochs, epsilon)
