@@ -114,3 +114,13 @@ class TableBuilderTestCase(BaseTestCase):
         # Use assertTrue to make sure that it won't through
         # all variables in terminal in case of error
         self.assertTrue(table_drawing_result == terminal_output)
+
+    def test_table_builder_exception(self):
+        with self.assertRaises(ValueError):
+            table.TableBuilder(invalid=True)
+
+        with self.assertRaises(TypeError):
+            table.TableBuilder(
+                table.Column("Col 1"),
+                'not a column',
+            )

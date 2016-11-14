@@ -8,6 +8,7 @@ from neupy.utils import (preformat_value, as_array2d, AttributeKeyDict, asint,
                          smallest_positive_number, asfloat, format_data,
                          as_tuple)
 from neupy.network.utils import shuffle, iter_until_converge
+from neupy.layers.utils import preformat_layer_shape
 from neupy import algorithms
 
 from base import BaseTestCase
@@ -46,6 +47,10 @@ class UtilsTestCase(BaseTestCase):
         expected = (1, 2)
         actual = preformat_value(np.matrix([[1, 1]]))
         np.testing.assert_array_equal(expected, actual)
+
+    def test_preformat_layer_shape(self):
+        self.assertEqual((2, 3, 1), preformat_layer_shape((2, 3, 1)))
+        self.assertEqual(10, preformat_layer_shape((10,)))
 
     def test_as_array2d(self):
         test_input = np.ones(5)

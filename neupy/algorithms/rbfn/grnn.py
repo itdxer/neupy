@@ -1,6 +1,6 @@
 from numpy import dot
 
-from neupy.utils import format_data
+from neupy.utils import format_data, NotTrainedException
 from neupy.core.properties import BoundedProperty
 from neupy.network.base import BaseNetwork
 from neupy.network.learning import LazyLearningMixin
@@ -10,7 +10,7 @@ from .utils import pdf_between_data
 __all__ = ('GRNN',)
 
 
-class GRNN(BaseNetwork, LazyLearningMixin):
+class GRNN(LazyLearningMixin, BaseNetwork):
     """
     Generalized Regression Neural Network (GRNN). Network applies
     only to the regression problems.
@@ -113,7 +113,9 @@ class GRNN(BaseNetwork, LazyLearningMixin):
         -------
         array-like (n_samples,)
         """
-        super(GRNN, self).predict(input_data)
+        if self.input_train is None:
+            raise NotTrainedException("Cannot make a prediction. Network "
+                                      "hasn't been trained yet")
 
         input_data = format_data(input_data)
 

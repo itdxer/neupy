@@ -52,9 +52,6 @@ def show_network_options(network, highlight_options=None):
     logs.newline()
 
     for (_, class_name), options in grouped_options:
-        if not options:
-            continue
-
         for key, data in sorted(options):
             if key in highlight_options:
                 msg_color = 'green'
@@ -209,7 +206,7 @@ class ErrorHistoryList(list):
             return self
 
         normalized_errors = map(normalize_error, self)
-        return list(normalized_errors)
+        return ErrorHistoryList(normalized_errors)
 
 
 class BaseNetwork(BaseSkeleton):

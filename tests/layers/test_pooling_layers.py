@@ -14,6 +14,31 @@ from base import BaseTestCase
 class PoolingLayersTestCase(BaseTestCase):
     use_sandbox_mode = False
 
+    def test_pooling_size_property_int(self):
+        max_pool_layer = layers.MaxPooling((2, 2), padding=3)
+        self.assertEqual((3, 3), max_pool_layer.padding)
+
+    def test_pooling_size_property_tuple(self):
+        max_pool_layer = layers.MaxPooling((2, 2), padding=(3, 3))
+        self.assertEqual((3, 3), max_pool_layer.padding)
+
+    def test_pooling_stride_int(self):
+        max_pool_layer = layers.MaxPooling((2, 2), stride=1)
+        self.assertEqual(max_pool_layer.input_shape,
+                         max_pool_layer.output_shape)
+
+    def test_pooling_invalid_connections(self):
+        input_layer = layers.Input(10)
+        max_pool_layer = layers.MaxPooling((2, 2))
+
+        layers.join(input_layer, max_pool_layer)
+        with self.assertRaises(LayerConnectionError):
+            max_pool_layer.output_shape
+
+    def test_pooling_repr(self):
+        layer = layers.MaxPooling((2, 2))
+        self.assertEqual("MaxPooling((2, 2))", str(layer))
+
     def test_max_pooling(self):
         input_data = theano.shared(
             asfloat(np.array([
@@ -50,6 +75,8 @@ class PoolingLayersTestCase(BaseTestCase):
         actual_output = average_pool_layer.output(input_data).eval()
         np.testing.assert_array_almost_equal(actual_output, expected_output)
 
+
+class UpscaleLayersTestCase(BaseTestCase):
     def test_upscale_layer_exceptions(self):
         with self.assertRaises(LayerConnectionError):
             # Input shape should have 3 feature dimensions
@@ -62,6 +89,12 @@ class PoolingLayersTestCase(BaseTestCase):
         for invalid_scale in invalid_scales:
             with self.assertRaises(ValueError):
                 layers.Upscale(invalid_scale)
+
+    def test_upscale_layer_with_one_by_one_scale(self):
+        upscale_layer = layers.Upscale((1, 1))
+
+        x = np.ones((2, 3))
+        self.assertIs(x, upscale_layer.output(x))
 
     def test_upscale_layer_shape(self):
         Case = namedtuple("Case", "scale expected_shape")
@@ -107,6 +140,8 @@ class PoolingLayersTestCase(BaseTestCase):
             actual_output
         )
 
+
+class GlobalPoolingLayersTestCase(BaseTestCase):
     def test_global_pooling_output_shape(self):
         input_layer = layers.Input((3, 8, 8))
         global_pooling_layer = layers.GlobalPooling()
@@ -134,3 +169,8 @@ class PoolingLayersTestCase(BaseTestCase):
 
         self.assertEqual(actual_output.shape, (2, 3))
         np.testing.assert_array_equal(expected_outputs, actual_output)
+
+    def test_global_pooling_for_lower_dimensions(self):
+        layer = layers.GlobalPooling()
+        x = np.ones((1, 5))
+        np.testing.assert_array_equal(x, layer.output(x))

@@ -193,19 +193,19 @@ class BaseState(with_metaclass(SharedDocsABCMeta)):
 
     @abstractmethod
     def start(self):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def finish(self):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def header(self):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def row(self, data):
-        pass
+        raise NotImplementedError
 
 
 class DrawingState(BaseState):
@@ -285,10 +285,10 @@ class TableBuilder(SharedDocs):
         Function through which the message will be transmitted.
     """
     def __init__(self, *columns, **kwargs):
-        valid_kwargs = ['stdout']
         # In Python 2 doesn't work syntax like
         # def __init__(self, *columns, stdout=print):
         # Code below implements the same.
+        valid_kwargs = ['stdout']
         stdout = kwargs.get('stdout', print)
 
         if any(kwarg not in valid_kwargs for kwarg in kwargs):
@@ -297,8 +297,8 @@ class TableBuilder(SharedDocs):
 
         for column in columns:
             if not isinstance(column, Column):
-                raise TypeError("Column should be ``Column`` class "
-                                "instance.")
+                raise TypeError("Column should be an instance of "
+                                "the `Column` class")
 
         self.columns = columns
         self.stdout = stdout

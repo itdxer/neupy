@@ -24,6 +24,17 @@ class ElementwiseTestCase(BaseTestCase):
         actual_output = y(x1_matrix, x2_matrix)
         np.testing.assert_array_almost_equal(expected_output, actual_output)
 
+    def test_elementwise_initialize(self):
+        # Suppose not to fail if you initialize
+        # it without connection
+        elem_layer = layers.Elementwise()
+        elem_layer.initialize()
+
+    def test_elementwise_single_input(self):
+        elem_layer = layers.Elementwise()
+        output = elem_layer.output(None)
+        self.assertEqual(output, None)
+
     def test_elementwise_init_error(self):
         input_layer_1 = layers.Input(10)
         input_layer_2 = layers.Input(20)
@@ -113,3 +124,9 @@ class ConcatenateTestCase(BaseTestCase):
 
         actual_output = y(x_tensor4)
         self.assertEqual((5, 11, 24, 24), actual_output.shape)
+
+    def test_elementwise_concatenate(self):
+        # Suppose not to fail if you initialize
+        # it without connection
+        layer = layers.Concatenate()
+        layer.initialize()

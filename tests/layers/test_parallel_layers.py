@@ -37,6 +37,16 @@ class ParallelLayerTestCase(BaseTestCase):
         final_output = output_function(x_tensor4)
         self.assertEqual(final_output.shape, (10, 11 + 5, 2, 2))
 
+    def test_parallel_with_joined_connections(self):
+        # Should work without errors
+        layers.parallel(
+            [
+                layers.Convolution((11, 5, 5)) > layers.Relu(),
+                layers.Convolution((10, 3, 3)) > layers.Relu(),
+            ],
+            layers.Concatenate(),
+        )
+
     def test_parallel_layer_exceptions(self):
         with self.assertRaises(ValueError):
             layers.parallel(layers.Convolution((11, 5, 5)),

@@ -46,7 +46,7 @@ def parallel(connections, merge_layer):
         raise ValueError("Connections should be a list or a tuple.")
 
     if not isinstance(merge_layer, BaseLayer):
-        raise ValueError("The `merge_layer` layer is not an instance of "
+        raise ValueError("The `merge_layer` argument is not an instance of "
                          "BaseLayer class.")
 
     input_layer = TransferLayer()

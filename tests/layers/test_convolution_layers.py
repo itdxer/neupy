@@ -3,9 +3,10 @@ from collections import namedtuple
 
 import numpy as np
 
-from neupy.utils import asfloat, as_tuple
 from neupy import layers
+from neupy.utils import asfloat, as_tuple
 from neupy.layers.convolutions import conv_output_shape
+from neupy.layers.connections import LayerConnectionError
 
 from base import BaseTestCase
 
@@ -63,7 +64,7 @@ class ConvLayersTestCase(BaseTestCase):
             self.assertEqual(testcase.expected_output, conv_layer.stride,
                              msg=msg)
 
-    def test_invalid_strides(self):
+    def test_conv_invalid_strides(self):
         invalid_strides = (
             (4, 4, 4),
             -10,
@@ -102,3 +103,31 @@ class ConvLayersTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             conv_output_shape(dimension_size=5, filter_size=5,
                               padding='invalid value', stride=5)
+
+    def test_conv_unknown_dim_size(self):
+        shape = conv_output_shape(dimension_size=None, filter_size=5,
+                                  padding=5, stride=5)
+        self.assertEqual(shape, None)
+
+    def test_conv_invalid_padding_exception(self):
+        with self.assertRaises(ValueError):
+            layers.Convolution((1, 3, 3), padding=(3, 3, 3))
+
+    def test_conv_invalid_input_shape(self):
+        with self.assertRaises(LayerConnectionError):
+            conv = layers.Convolution((1, 3, 3))
+            layers.join(layers.Input(10), conv)
+            conv.output_shape
+
+    def test_conv_without_bias(self):
+        input_layer = layers.Input((1, 5, 5))
+        conv = layers.Convolution((1, 3, 3), bias=None, weight=1)
+
+        connection = input_layer > conv
+        connection.initialize()
+
+        x = asfloat(np.ones((1, 1, 5, 5)))
+        expected_output = 9 * np.ones((1, 1, 3, 3))
+        actual_output = connection.output(x).eval()
+
+        np.testing.assert_array_almost_equal(expected_output, actual_output)

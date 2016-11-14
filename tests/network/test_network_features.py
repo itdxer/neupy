@@ -4,7 +4,9 @@ from collections import namedtuple
 import numpy as np
 from sklearn import datasets
 from neupy import algorithms, layers
-from neupy.network.base import StopNetworkTraining
+from neupy.network.base import (StopNetworkTraining, show_network_options,
+                                parse_show_epoch_property, ErrorHistoryList,
+                                logging_info_about_the_data)
 
 from utils import catch_stdout
 from base import BaseTestCase
@@ -57,6 +59,85 @@ class NetworkMainTestCase(BaseTestCase):
         network.train(data, target, epochs=10)
 
         self.assertEqual(network.last_epoch, 5)
+
+    def test_show_network_options_function(self):
+        # Suppose not to fail
+        with catch_stdout() as out:
+            # Disable verbose and than enable it again just
+            # to make sure that `show_network_options` won't
+            # trigger in the __init__ method
+            network = algorithms.GradientDescent((2, 3, 1), verbose=False)
+            network.verbose = True
+
+            show_network_options(network)
+            terminal_output = out.getvalue()
+
+        self.assertIn('step', terminal_output)
+
+    def test_logging_info_about_the_data(self):
+        network = algorithms.GradientDescent((2, 3, 1))
+
+        x = np.zeros((5, 2))
+        y = np.zeros((4, 1))
+
+        with self.assertRaises(ValueError):
+            logging_info_about_the_data(network, x, y)
+
+    def test_parse_show_epoch_property(self):
+        with catch_stdout() as out:
+            network = algorithms.GradientDescent(
+                (2, 3, 1), show_epoch='5 times', verbose=True
+            )
+
+            show_epoch = parse_show_epoch_property(network, 100, epsilon=1e-2)
+            self.assertEqual(show_epoch, 1)
+
+            terminal_output = out.getvalue()
+
+        self.assertIn("Can't use", terminal_output)
+
+    def test_empty_error_history_list(self):
+        errlist = ErrorHistoryList()
+        norm_errlist = errlist.normalized()
+        self.assertIs(norm_errlist, errlist)
+
+    def test_network_train_epsilon_exception(self):
+        network = algorithms.GradientDescent((2, 3, 1))
+
+        x = np.zeros((5, 2))
+        y = np.zeros((5, 1))
+
+        with self.assertRaises(ValueError):
+            network.train(x, y, epochs=-1)
+
+        with self.assertRaises(ValueError):
+            network.train(x, y, epsilon=1e-2, epochs=1)
+
+    def test_network_training_with_unknown_summary_type(self):
+        network = algorithms.GradientDescent((2, 3, 1))
+
+        x = np.zeros((5, 2))
+        y = np.zeros((5, 1))
+
+        with self.assertRaises(ValueError):
+            network.train(x, y, summary='unknown')
+
+    def test_network_training_summary_inline(self):
+        with catch_stdout() as out:
+            network = algorithms.GradientDescent((2, 3, 1), verbose=False)
+
+            x = np.zeros((5, 2))
+            y = np.zeros((5, 1))
+
+            network.verbose = True
+            n_epochs = 10
+            network.train(x, y, summary='inline', epochs=n_epochs)
+
+            terminal_output = out.getvalue().strip()
+
+        # `n_epochs - 1` becuase \n appears only between
+        # inline summary lines
+        self.assertEqual(terminal_output.count('\n'), n_epochs - 1)
 
 
 class NetworkPropertiesTestCase(BaseTestCase):

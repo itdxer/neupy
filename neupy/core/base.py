@@ -47,7 +47,7 @@ class BaseSkeleton(ConfigurableABC, Verbose):
 
     @abstractmethod
     def train(self, input_data, target_data):
-        pass
+        raise NotImplementedError
 
     def predict(self, input_data):
         pass

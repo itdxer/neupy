@@ -106,10 +106,6 @@ class ConnectionsTestCase(BaseTestCase):
         conn2 = layers.join(l0, l1, l2, l3)
         conn3 = layers.join(l0, l1, l2, l4)
 
-        self.assertEqual(4, len(conn1))
-        self.assertEqual(4, len(conn2))
-        self.assertEqual(4, len(conn3))
-
         self.assertEqual(conn1.output_shape, as_tuple(60))
         self.assertEqual(conn2.output_shape, as_tuple(30))
         self.assertEqual(conn3.output_shape, as_tuple(40))

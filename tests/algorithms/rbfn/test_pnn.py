@@ -6,29 +6,37 @@ from sklearn import metrics
 from sklearn.model_selection import StratifiedKFold, train_test_split
 
 from neupy import algorithms
+from neupy.utils import NotTrainedException
+
 from base import BaseTestCase
 
 
 class PNNTestCase(BaseTestCase):
     def test_handle_errors(self):
         with self.assertRaises(ValueError):
-            # Wrong: size of target data not the same as size of
-            # input data.
+            # size of target data not the same as
+            # size of input data.
             algorithms.PNN(verbose=False).train(
                 np.array([[0], [0]]), np.array([0])
             )
 
         with self.assertRaises(ValueError):
-            # Wrong: 2-D target vector (must be 1-D)
+            # 2-D target vector (must be 1-D)
             algorithms.PNN(verbose=False).train(
                 np.array([[0], [0]]), np.array([[0]])
             )
 
         with self.assertRaises(ValueError):
-            # Wrong: invalid feature size for prediction data
-            grnet = algorithms.PNN(verbose=False)
-            grnet.train(np.array([[0], [0]]), np.array([0]))
-            grnet.predict(np.array([[0]]))
+            # invalid feature size for prediction data
+            pnnet = algorithms.PNN(verbose=False)
+            pnnet.train(np.array([[0], [0]]), np.array([0]))
+            pnnet.predict(np.array([[0]]))
+
+        msg = "hasn't been trained"
+        with self.assertRaisesRegexp(NotTrainedException, msg):
+            # predict without training
+            pnnet = algorithms.PNN(verbose=False)
+            pnnet.predict(np.array([[0]]))
 
     def test_simple_pnn(self):
         dataset = datasets.load_iris()
