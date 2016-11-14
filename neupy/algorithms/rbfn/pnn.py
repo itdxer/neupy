@@ -12,7 +12,7 @@ from .utils import pdf_between_data
 __all__ = ('PNN',)
 
 
-class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
+class PNN(LazyLearningMixin, BaseNetwork, MinibatchTrainingMixin):
     """
     Probabilistic Neural Network (PNN). Network applies only to
     the classification problems.
@@ -166,9 +166,7 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
         """
         if self.classes is None:
             raise NotTrainedException("Cannot make a prediction. Network "
-                                      "haven't been trained")
-
-        super(PNN, self).predict(input_data)
+                                      "hasn't been trained yet")
 
         input_data_size = input_data.shape[1]
         train_data_size = self.input_train.shape[1]

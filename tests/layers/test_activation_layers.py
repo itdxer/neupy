@@ -16,6 +16,10 @@ class ActivationLayersTestCase(BaseTestCase):
         layer1 = layers.Sigmoid(1)
         self.assertGreater(1, layer1.activation_function(1).eval())
 
+    def test_sigmoid_repr_without_size(self):
+        layer = layers.Sigmoid()
+        self.assertEqual("Sigmoid()", str(layer))
+
     def test_hard_sigmoid_layer(self):
         layer1 = layers.HardSigmoid(6)
 
@@ -213,3 +217,7 @@ class PReluTestCase(BaseTestCase):
             prelu2_alpha_before_training,
             prelu2_alpha_after_training,
         )))
+
+    def test_prelu_axes_property_exceptions(self):
+        with self.assertRaises(ValueError):
+            layers.PRelu(20, alpha_axes=(-2, -1))

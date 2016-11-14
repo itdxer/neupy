@@ -8,10 +8,11 @@ from neupy.helpers.progressbar import format_time, FormatInlineDict
 from neupy.algorithms.gd.base import format_error
 
 from base import BaseTestCase
+from utils import catch_stdout
 
 
 class ProgressbarTestCase(BaseTestCase):
-    def test_simple_progressbar(self):
+    def test_progressbar(self):
         out = six.StringIO()
         iterator = Progressbar(range(10), file=out)
 
@@ -25,6 +26,17 @@ class ProgressbarTestCase(BaseTestCase):
                     '#' * i, '-' * (10 - i), i, i * 10
                 )
             )
+
+    def test_progressbar_with_long_update_freq(self):
+        with catch_stdout() as out:
+            iterator = Progressbar(range(10), file=out, update_freq=100)
+
+            for i in iterator:
+                pass
+
+            terminal_output = out.getvalue()
+
+        self.assertIn('0/10', terminal_output)
 
     def test_time_format(self):
         testcases = (

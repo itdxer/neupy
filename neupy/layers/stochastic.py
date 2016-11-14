@@ -71,8 +71,8 @@ class GaussianNoise(BaseLayer):
     std = NumberProperty(default=1, minval=0)
     mean = NumberProperty(default=0)
 
-    def __init__(self, std, **options):
-        super(GaussianNoise, self).__init__(std=std, **options)
+    def __init__(self, mean=1, std=0, **options):
+        super(GaussianNoise, self).__init__(mean=mean, std=std, **options)
 
     def output(self, input_value):
         if not self.training_state:

@@ -6,6 +6,7 @@ import theano.tensor as T
 from neupy.utils import as_tuple
 from neupy.core.properties import TypedListProperty, Property
 from .base import ParameterBasedLayer
+from .connections import LayerConnectionError
 
 
 __all__ = ('Convolution',)
@@ -168,12 +169,10 @@ class Convolution(ParameterBasedLayer):
             return None
 
         if len(self.input_shape) < 2:
-            raise ValueError(
-                "Convolutional layer expects an input shape with least 2 "
-                "dimensions, got {} with shape {}".format(
-                    len(self.input_shape),
-                    self.input_shape
-                )
+            raise LayerConnectionError(
+                "Convolutional layer expects an input with at least 2 "
+                "dimensions, got {} with shape {}"
+                "".format(len(self.input_shape), self.input_shape)
             )
 
         padding = self.padding

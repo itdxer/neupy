@@ -19,6 +19,17 @@ class BatchNormTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             find_opposite_axes(axes=[0, 1], ndim=1)
 
+    def test_batch_norm_as_shared_variable(self):
+        gamma = theano.shared(value=asfloat(np.ones(2)))
+        beta = theano.shared(value=asfloat(2 * np.ones(2)))
+
+        batch_norm = layers.BatchNorm(gamma=gamma, beta=beta)
+        connection = layers.Input(10) > batch_norm
+        connection.initialize()
+
+        self.assertIs(gamma, batch_norm.gamma)
+        self.assertIs(beta, batch_norm.beta)
+
     def test_find_pposite_axis_valid_cases(self):
         testcases = (
             dict(input_kwargs={'axes': [0, 1], 'ndim': 4},

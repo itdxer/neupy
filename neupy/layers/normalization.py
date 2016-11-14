@@ -2,10 +2,10 @@ import theano
 import theano.tensor as T
 import numpy as np
 
+from neupy import init
 from neupy.core.properties import (NumberProperty, ProperFractionProperty,
                                    ParameterProperty, IntProperty)
 from neupy.utils import asfloat, as_tuple
-from neupy.core.init import Initializer, Constant
 from .connections import LayerConnectionError
 from .activations import AxesProperty
 from .utils import dimshuffle
@@ -99,8 +99,8 @@ class BatchNorm(BaseLayer):
     axes = AxesProperty(default=None)
     alpha = ProperFractionProperty(default=0.1)
     epsilon = NumberProperty(default=1e-5, minval=0)
-    gamma = ParameterProperty(default=Constant(value=1))
-    beta = ParameterProperty(default=Constant(value=0))
+    gamma = ParameterProperty(default=init.Constant(value=1))
+    beta = ParameterProperty(default=init.Constant(value=0))
 
     def initialize(self):
         super(BatchNorm, self).initialize()
@@ -135,10 +135,10 @@ class BatchNorm(BaseLayer):
             value=asfloat(np.ones(parameter_shape))
         )
 
-        if isinstance(self.gamma, Initializer):
+        if isinstance(self.gamma, init.Initializer):
             self.gamma = self.gamma.sample(parameter_shape)
 
-        if isinstance(self.beta, Initializer):
+        if isinstance(self.beta, init.Initializer):
             self.beta = self.beta.sample(parameter_shape)
 
         if not isinstance(self.gamma, T.sharedvar.SharedVariable):

@@ -29,12 +29,12 @@ class BasePooling(BaseLayer):
     size : tuple with 2 integers
         Factor by which to downscale (vertical, horizontal).
         (2, 2) will halve the image in each dimension.
-    stride : tuple with 1 or 2 integers or integer.
+    stride : tuple or int.
         Stride size, which is the number of shifts over
         rows/cols to get the next pool region. If stride is
         None, it is considered equal to ds (no overlap on
         pooling regions).
-    padding : tuple of two ints
+    padding : tuple or int
         (pad_h, pad_w), pad zeros to extend beyond four borders of
         the images, pad_h is the size of the top and bottom margins,
         and pad_w is the size of the left and right margins.
@@ -57,24 +57,22 @@ class BasePooling(BaseLayer):
 
     @property
     def output_shape(self):
-        if self.input_shape is None:
+        input_shape = self.input_shape
+
+        if input_shape is None:
             return None
 
-        if len(self.input_shape) < 3:
-            raise ValueError(
-                "Convolutional layer expects an input shape with least 3 "
-                "dimensions, got {} with shape {}".format(
-                    len(self.input_shape),
-                    self.input_shape
-                )
+        if len(input_shape) != 3:
+            raise LayerConnectionError(
+                "Pooling layer expects an input with 3 "
+                "dimensions, got {} with shape {}"
+                "".format(len(input_shape), input_shape)
             )
 
-        n_kernels, rows, cols = self.input_shape[-3:]
+        n_kernels, rows, cols = input_shape
         row_filter_size, col_filter_size = self.size
 
-        stride = self.stride
-        if stride is None:
-            stride = self.size
+        stride = self.size if self.stride is None else self.stride
 
         row_stride, col_stride = stride
         row_padding, col_padding = self.padding
@@ -247,9 +245,8 @@ class GlobalPooling(BaseLayer):
 
     @property
     def output_shape(self):
-        if self.input_shape is None:
-            return None
-        return as_tuple(self.input_shape[0])
+        if self.input_shape is not None:
+            return as_tuple(self.input_shape[0])
 
     def output(self, input_value):
         if input_value.ndim in (1, 2):

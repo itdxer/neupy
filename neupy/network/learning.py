@@ -85,10 +85,3 @@ class LazyLearningMixin(SharedDocs):
         if input_train.shape[0] != target_train.shape[0]:
             raise ValueError("Number of samples in the input and target "
                              "datasets are different")
-
-    def train_epoch(self, *args, **kwargs):
-        raise AttributeError("This network doesn't have train epochs")
-
-    def predict(self, input_data):
-        if self.input_train is None:
-            raise ValueError("Network hasn't been trained yet")

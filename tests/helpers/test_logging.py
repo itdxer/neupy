@@ -1,6 +1,7 @@
 from collections import namedtuple
 
 from neupy.helpers.logs import Verbose, TerminalLogger
+from neupy.helpers import terminal
 from neupy import algorithms
 
 from base import BaseTestCase
@@ -68,6 +69,23 @@ class LoggingTestCase(BaseTestCase):
                 terminal_output = out.getvalue()
                 self.assertRegexpMatches(terminal_output,
                                          test_case.expectation)
+
+
+class TerminalTestCase(BaseTestCase):
+    def test_terminal_colors(self):
+        real_is_color_supported = terminal.is_color_supported
+
+        terminal.is_color_supported = lambda: False
+        self.assertEqual('test', terminal.red('test'))
+
+        terminal.is_color_supported = lambda: True
+        self.assertNotEqual('test', terminal.red('test'))
+        self.assertIn('test', terminal.red('test'))
+
+        terminal.is_color_supported = real_is_color_supported
+
+    def test_terminal_echo(self):
+        pass
 
 
 class NeuralNetworkLoggingTestCase(BaseTestCase):
