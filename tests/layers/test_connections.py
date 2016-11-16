@@ -7,7 +7,8 @@ import theano.tensor as T
 from neupy import layers, algorithms
 from neupy.utils import asfloat, as_tuple
 from neupy.layers import Input, Relu, Tanh, Sigmoid
-from neupy.layers.connections import is_feedforward
+from neupy.layers.connections import (is_sequential, merge_dicts_with_list,
+                                      does_layer_expect_one_input)
 
 from base import BaseTestCase
 
@@ -18,6 +19,7 @@ class ConnectionsTestCase(BaseTestCase):
             (2, 3, 1),
             [Input(2), Sigmoid(3), Tanh(1)],
             Input(2) > Relu(10) > Tanh(1),
+            Tanh(1) < Relu(10) < Input(2),
         )
 
         for connection in possible_connections:
@@ -74,6 +76,8 @@ class ConnectionsTestCase(BaseTestCase):
 
         self.assertEqual(output_value.shape, (10, 1))
 
+
+class ConnectionTypesTestCase(BaseTestCase):
     def test_inline_connections(self):
         conn = layers.Input(784)
         conn = conn > layers.Sigmoid(20)
@@ -172,15 +176,61 @@ class ConnectionsTestCase(BaseTestCase):
         reconstructed_output = y_reconstructed(minimized_output)
         self.assertEqual((3, 10), reconstructed_output.shape)
 
-    @unittest.skip("broken")
-    def test_is_feedforward_connection(self):
+    def test_connections_with_complex_parallel_relations(self):
+        input_layer = layers.Input((3, 5, 5))
+        connection = layers.Parallel(
+            [[
+                layers.Convolution((8, 1, 1)),
+            ], [
+                layers.Convolution((4, 1, 1)),
+                layers.Parallel(
+                    [[
+
+                        layers.Convolution((2, 1, 3), padding=(0, 1)),
+                    ], [
+                        layers.Convolution((2, 3, 1), padding=(1, 0)),
+                    ]],
+                    layers.Concatenate(),
+                )
+            ], [
+                layers.Convolution((8, 1, 1)),
+                layers.Convolution((4, 3, 3), padding=1),
+                layers.Parallel(
+                    [[
+
+                        layers.Convolution((2, 1, 3), padding=(0, 1)),
+                    ], [
+                        layers.Convolution((2, 3, 1), padding=(1, 0)),
+                    ]],
+                    layers.Concatenate(),
+                )
+            ], [
+                layers.MaxPooling((3, 3), stride=(1, 1), padding=1),
+                layers.Convolution((8, 1, 1)),
+            ]],
+            layers.Concatenate(),
+        )
+        # Connect them at the end, because we need to make
+        # sure tha parallel connections defined without
+        # input shapes
+        connection = input_layer > connection
+        self.assertEqual((24, 5, 5), connection.output_shape)
+
+
+class ConnectionSecondaryFunctionsTestCase(BaseTestCase):
+    def test_is_sequential_connection(self):
         connection1 = layers.join(
             layers.Input(10),
             layers.Sigmoid(5),
             layers.Sigmoid(1),
         )
-        self.assertTrue(is_feedforward(connection1))
+        self.assertTrue(is_sequential(connection1))
 
+        layer = layers.Input(10)
+        self.assertTrue(is_sequential(layer))
+
+    @unittest.skip("broken")
+    def test_is_sequential_partial_connection(self):
         connection_2 = layers.Input(10) > layers.Sigmoid(5)
         connection_31 = connection_2 > layers.Sigmoid(1)
         connection_32 = connection_2 > layers.Sigmoid(2)
@@ -190,11 +240,25 @@ class ConnectionsTestCase(BaseTestCase):
         connection_4 = connection_31 > concatenate
         connection_4 = connection_32 > concatenate
 
-        self.assertFalse(is_feedforward(connection_4))
+        self.assertFalse(is_sequential(connection_4))
+        self.assertTrue(is_sequential(connection_31))
+        self.assertTrue(is_sequential(connection_32))
 
-        print(connection_4.graph.forward_graph)
-        print(connection_31.graph.forward_graph)
-        print(connection_32.graph.forward_graph)
+    def test_dict_merging(self):
+        first_dict = dict(a=[1, 2, 3])
+        second_dict = dict(a=[3, 4])
 
-        self.assertTrue(is_feedforward(connection_31))
-        self.assertTrue(is_feedforward(connection_32))
+        merged_dict = merge_dicts_with_list(first_dict, second_dict)
+
+        self.assertEqual(['a'], list(merged_dict.keys()))
+        self.assertEqual([1, 2, 3, 4], merged_dict['a'])
+
+    def test_does_layer_expect_one_input_function(self):
+        with self.assertRaises(ValueError):
+            does_layer_expect_one_input('not a layer')
+
+        with self.assertRaisesRegexp(ValueError, 'not a method'):
+            class A(object):
+                output = 'attribute'
+
+            does_layer_expect_one_input(A)

@@ -14,6 +14,13 @@ class ReberTestCase(BaseTestCase):
         for word in words:
             self.assertTrue(is_valid_by_reber(word))
 
+    def test_reber_expcetions(self):
+        with self.assertRaises(ValueError):
+            make_reber(n_words=0)
+
+        with self.assertRaises(ValueError):
+            make_reber(n_words=-1)
+
     def test_reber_classification_data(self):
         invalid_data_ratio = 0.5
         n_words = 100
@@ -27,3 +34,13 @@ class ReberTestCase(BaseTestCase):
 
         for word, label in zip(words, labels):
             self.assertEqual(bool(label), is_valid_by_reber(word))
+
+    def test_reber_classification_exceptions(self):
+        with self.assertRaisesRegexp(ValueError, "at least 2 samples"):
+            make_reber_classification(n_samples=1)
+
+        with self.assertRaises(ValueError):
+            make_reber_classification(n_samples=10, invalid_size=-1)
+
+        with self.assertRaises(ValueError):
+            make_reber_classification(n_samples=10, invalid_size=2)

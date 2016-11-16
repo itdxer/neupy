@@ -16,15 +16,13 @@ class PNNTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             # size of target data not the same as
             # size of input data.
-            algorithms.PNN(verbose=False).train(
-                np.array([[0], [0]]), np.array([0])
-            )
+            pnnet = algorithms.PNN(verbose=False)
+            pnnet.train(np.array([[0], [0]]), np.array([0]))
 
         with self.assertRaises(ValueError):
             # 2-D target vector (must be 1-D)
-            algorithms.PNN(verbose=False).train(
-                np.array([[0], [0]]), np.array([[0]])
-            )
+            pnnet = algorithms.PNN(verbose=False)
+            pnnet.train(np.array([[0]]), np.array([[0, 0]]))
 
         with self.assertRaises(ValueError):
             # invalid feature size for prediction data
@@ -37,6 +35,13 @@ class PNNTestCase(BaseTestCase):
             # predict without training
             pnnet = algorithms.PNN(verbose=False)
             pnnet.predict(np.array([[0]]))
+
+        with self.assertRaises(ValueError):
+            # different number of features for
+            # train and test data
+            grnet = algorithms.PNN(verbose=False)
+            grnet.train(np.array([[0]]), np.array([0]))
+            grnet.predict(np.array([[0, 0]]))
 
     def test_simple_pnn(self):
         dataset = datasets.load_iris()
@@ -140,3 +145,10 @@ class PNNTestCase(BaseTestCase):
         y_predicted = pnnet.predict_proba(x_test)
         self.assertEqual(y_predicted.shape,
                          (y_test.shape[0], n_classes))
+
+    def test_pnn_repr(self):
+        pnn = algorithms.PNN()
+
+        self.assertIn('PNN', str(pnn))
+        self.assertIn('std', str(pnn))
+        self.assertIn('batch_size', str(pnn))

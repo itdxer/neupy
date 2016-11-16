@@ -102,7 +102,8 @@ class PNN(LazyLearningMixin, BaseNetwork, MinibatchTrainingMixin):
 
         LazyLearningMixin.train(self, input_train, target_train)
 
-        if target_train.shape[1] != 1:
+        n_target_features = target_train.shape[1]
+        if n_target_features != 1:
             raise ValueError("Target value should be a vector or a "
                              "matrix with one column")
 

@@ -15,7 +15,7 @@ There are three ways to set up your connection between layers. First one is the 
 
 In that way we don't actually set up any layer types. By default NeuPy constructs from the tuple simple MLP networks that contains dense layers with sigmoid as a nonlinear activation function.
 
-The second method is the most useful common one. Here is a simple example.
+The second method is the most common one.
 
 .. code-block:: python
 

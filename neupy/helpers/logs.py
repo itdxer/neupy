@@ -29,25 +29,28 @@ def terminal_echo(enabled, file_descriptor=sys.stdin):
     """
     is_windows = (os.name == 'nt')
 
-    if not is_windows:
-        termios = importlib.import_module('termios')
+    if is_windows:
+        return
 
-        try:
-            attributes = termios.tcgetattr(file_descriptor)
-            lflag = attributes[3]
+    termios = importlib.import_module('termios')
 
-            if enabled:
-                lflag |= termios.ECHO
-            else:
-                lflag &= ~termios.ECHO
+    try:
+        attributes = termios.tcgetattr(file_descriptor)
+        lflag = attributes[3]
 
-            attributes[3] = lflag
-            termios.tcsetattr(file_descriptor, termios.TCSANOW, attributes)
+        if enabled:
+            lflag |= termios.ECHO
+        else:
+            lflag &= ~termios.ECHO
 
-        except Exception:
-            # Any error can crash program, so it's easier to
-            # ignore it in case if something went wrong
-            pass
+        attributes[3] = lflag
+        termios.tcsetattr(file_descriptor, termios.TCSANOW, attributes)
+
+    except Exception:
+        # This feature is not very important, but any error in
+        # this function can crash program, so it's easier to
+        # ignore it in case if something went wrong
+        pass
 
 
 class TerminalLogger(object):
@@ -109,7 +112,6 @@ class TerminalLogger(object):
             Property that color text defined as ``tag`` parameter.
             Defaults to ``green``.
         """
-
         if color not in self.colors:
             available_colors = ', '.join(self.colors.keys())
             raise ValueError("Invalid color `{}`. Available colors: {}"

@@ -47,3 +47,19 @@ class ConfigsTestCase(BaseTestCase):
 
         with self.assertRaises(TypeError):
             InheritA()
+
+    def test_config_with_parent_without_options(self):
+        print('------------------')
+
+        class A(object):
+            # Doesn't have Configurable as a parent class
+            property_a = Property()
+
+        class B(Configurable):
+            property_b = Property()
+
+        class C(A, B):
+            pass
+
+        self.assertIn('property_b', C.options)
+        self.assertNotIn('property_a', C.options)

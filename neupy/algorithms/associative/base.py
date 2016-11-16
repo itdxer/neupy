@@ -1,8 +1,8 @@
 import numpy as np
 
+from neupy import init
 from neupy.utils import format_data
 from neupy.core.properties import IntProperty, ParameterProperty, ArrayProperty
-from neupy.core.init import Initializer, Normal, Constant
 from neupy.network import BaseNetwork
 from neupy.network.utils import step_function
 
@@ -23,7 +23,7 @@ class BaseAssociative(BaseNetwork):
     weight : array-like, Initializer
         Neural network weights.
         Value defined manualy should have shape ``(n_inputs, n_outputs)``.
-        Defaults to :class:`Normal() <neupy.core.init.Normal>`.
+        Defaults to :class:`Normal() <neupy.init.Normal>`.
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
@@ -40,7 +40,7 @@ class BaseAssociative(BaseNetwork):
     """
     n_inputs = IntProperty(minval=1, required=True)
     n_outputs = IntProperty(minval=1, required=True)
-    weight = ParameterProperty(default=Normal())
+    weight = ParameterProperty(default=init.Normal())
 
     def __init__(self, **options):
         super(BaseAssociative, self).__init__(**options)
@@ -49,7 +49,7 @@ class BaseAssociative(BaseNetwork):
     def init_layers(self):
         valid_weight_shape = (self.n_inputs, self.n_outputs)
 
-        if isinstance(self.weight, Initializer):
+        if isinstance(self.weight, init.Initializer):
             self.weight = self.weight.sample(valid_weight_shape)
 
         if self.weight.shape != valid_weight_shape:
@@ -90,7 +90,7 @@ class BaseStepAssociative(BaseAssociative):
         weights will be equal to ``1``. Other weights equal to ``0``.
     bias : array-like, Initializer
         Neural network bias units.
-        Defaults to :class:`Constant(-0.5) <neupy.core.init.Constant>`.
+        Defaults to :class:`Constant(-0.5) <neupy.init.Constant>`.
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.shuffle_data}
@@ -108,7 +108,7 @@ class BaseStepAssociative(BaseAssociative):
     n_unconditioned = IntProperty(minval=1, required=True)
 
     weight = ArrayProperty()
-    bias = ParameterProperty(default=Constant(-0.5))
+    bias = ParameterProperty(default=init.Constant(-0.5))
 
     def init_layers(self):
         if self.n_inputs <= self.n_unconditioned:
@@ -128,7 +128,7 @@ class BaseStepAssociative(BaseAssociative):
             self.weight = np.zeros(valid_weight_shape)
             self.weight[:self.n_unconditioned, :] = 1
 
-        if isinstance(self.bias, Initializer):
+        if isinstance(self.bias, init.Initializer):
             self.bias = self.bias.sample(valid_bias_shape)
 
         super(BaseStepAssociative, self).init_layers()

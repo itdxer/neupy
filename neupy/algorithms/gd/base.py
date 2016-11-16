@@ -262,6 +262,11 @@ def apply_batches(function, arguments, batch_size, logger, description='',
     show_progressbar : bool
         ``True`` means that function will show progressbar in the
         terminal. Defaults to ``False``.
+    show_error_output : bool
+        Assumes that outputs from the function errors.
+        ``True`` will show information in the progressbar.
+        Error will be related to the last epoch.
+        Defaults to ``True``.
 
     Returns
     -------
@@ -269,8 +274,8 @@ def apply_batches(function, arguments, batch_size, logger, description='',
         List of function outputs.
     """
     if not arguments:
-        raise ValueError("The arguments parameter should have at "
-                         "least one element.")
+        raise ValueError("The argument parameter should be list or "
+                         "tuple with at least one element.")
 
     samples = arguments[0]
     n_samples = len(samples)

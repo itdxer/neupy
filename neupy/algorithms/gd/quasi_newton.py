@@ -18,6 +18,45 @@ from .base import GradientDescent
 __all__ = ('QuasiNewton',)
 
 
+def find_param_name(layer, parameter):
+    """
+    Find attribute name inside that has a link to parameter
+
+    Parameters
+    ----------
+    layer : BaseLayer instance
+    parameter : object
+
+    Returns
+    -------
+    str or None
+        Returns parameter name in case if it defined in the
+        layer and ``None`` otherwise.
+    """
+    for member_name, member_value in inspect.getmembers(layer):
+        if member_value is parameter:
+            return member_name
+
+
+def iter_layers_and_parameters(layers):
+    """
+    Iterate through layer parameters.
+
+    Parameters
+    ----------
+    layers : list or LayerConnection instance
+
+    Yields
+    ------
+    tuple
+        Tuple with three ariables: (layer, attribute_name, parameter)
+    """
+    for layer in layers:
+        for parameter in layer.parameters:
+            attrname = find_param_name(layer, parameter)
+            yield layer, attrname, parameter
+
+
 def bfgs(inverse_hessian, weight_delta, gradient_delta, maxrho=1e4):
     ident_matrix = T.eye(inverse_hessian.shape[0])
 
@@ -173,20 +212,6 @@ class QuasiNewton(NoStepSelection, GradientDescent):
                                  full_gradient - prev_full_gradient)
         )
         param_delta = -new_inv_hessian.dot(full_gradient)
-
-        def find_param_name(layer, parameter):
-            for member_name, member_value in inspect.getmembers(layer):
-                if member_value is parameter:
-                    return member_name
-
-            raise ValueError("Cannot find parameter in the layer")
-
-        def iter_layers_and_parameters(layers):
-            for layer in layers:
-                for parameter in layer.parameters:
-                    attrname = find_param_name(layer, parameter)
-                    yield layer, attrname, parameter
-
         layers_and_parameters = list(iter_layers_and_parameters(self.layers))
 
         def prediction(step):

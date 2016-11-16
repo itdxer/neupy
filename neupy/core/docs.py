@@ -11,22 +11,6 @@ __all__ = ("SharedDocsMeta", "SharedDocs", "SharedDocsException",
            "SharedDocsABCMeta", "shared_docs")
 
 
-def merge_dicts(left_dict, right_dict):
-    """
-    Merge two dictionaries in one.
-
-    Parameters
-    ----------
-    left_dict : dict
-    right_dict : dict
-
-    Returns
-    -------
-    dict
-    """
-    return dict(left_dict, **right_dict)
-
-
 def find_numpy_doc_indent(docs):
     """
     Find indent for Numpy styled documentation and return

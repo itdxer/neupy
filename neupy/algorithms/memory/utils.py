@@ -2,23 +2,7 @@ import numpy as np
 from numpy.core.umath_tests import inner1d
 
 
-__all__ = ('sign2bin', 'bin2sign', 'hopfield_energy')
-
-
-def sign2bin(matrix):
-    """
-    Convert -1 values in sign binary matrix to binary values.
-
-    Parameters
-    ----------
-    matrix : array-like
-
-    Returns
-    -------
-    array-like
-        Return they same matrix with modified values.
-    """
-    return np.where(matrix == 1, 1, 0)
+__all__ = ('bin2sign', 'hopfield_energy')
 
 
 def bin2sign(matrix):

@@ -91,7 +91,8 @@ class GRNN(LazyLearningMixin, BaseNetwork):
         input_train = format_data(input_train, copy=copy)
         target_train = format_data(target_train, copy=copy)
 
-        if target_train.shape[1] != 1:
+        n_target_features = target_train.shape[1]
+        if n_target_features != 1:
             raise ValueError("Target value must be one dimensional array")
 
         LazyLearningMixin.train(self, input_train, target_train)
@@ -123,7 +124,7 @@ class GRNN(LazyLearningMixin, BaseNetwork):
         train_data_size = self.input_train.shape[1]
 
         if input_data_size != train_data_size:
-            raise ValueError("Input data must contains {0} features, got "
+            raise ValueError("Input data must contain {0} features, got "
                              "{1}".format(train_data_size, input_data_size))
 
         ratios = pdf_between_data(self.input_train, input_data, self.std)

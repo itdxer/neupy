@@ -194,12 +194,12 @@ class ParameterBasedLayer(BaseLayer):
     weight : array-like, Theano variable, scalar or Initializer
         Defines layer's weights. Default initialization methods
         you can find :ref:`here <init-methods>`.
-        Defaults to :class:`XavierNormal() <neupy.core.init.XavierNormal>`.
+        Defaults to :class:`XavierNormal() <neupy.init.XavierNormal>`.
     bias : 1D array-like, Theano variable, scalar, Initializer or None
         Defines layer's bias.
         Default initialization methods you can find
         :ref:`here <init-methods>`. Defaults to
-        :class:`XavierNormal() <neupy.core.init.XavierNormal>`.
+        :class:`XavierNormal() <neupy.init.XavierNormal>`.
         The ``None`` value excludes bias from the calculations and
         do not add it into parameters list.
     {BaseLayer.Parameters}
@@ -248,7 +248,7 @@ class ArrayShapeProperty(TypedListProperty):
     """
     Property that identifies array's shape.
     """
-    expected_type = (int, tuple, type(None))
+    expected_type = (int, tuple)
 
     def validate(self, value):
         if isinstance(value, int):
@@ -256,7 +256,7 @@ class ArrayShapeProperty(TypedListProperty):
                 raise ValueError("Integer value is expected to be greater or "
                                  " equal to one for the `{}` property, got {}"
                                  "".format(self.name, value))
-        elif value is not None:
+        else:
             super(ArrayShapeProperty, self).validate(value)
 
 
@@ -268,9 +268,7 @@ class Input(BaseLayer):
     Parameters
     ----------
     size : int, tuple or None
-        Identifies input data shape size. ``None`` means that network
-        doesn't have input feature with fixed size.
-        Defaults to ``None``.
+        Identifies input data shape.
     {BaseLayer.Parameters}
 
     Methods

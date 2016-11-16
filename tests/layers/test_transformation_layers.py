@@ -45,8 +45,13 @@ class EmbeddingLayerTestCase(BaseTestCase):
         ])
         actual_output = connection.output(input_vector).eval()
 
+        self.assertEqual(embedding_layer.output_shape, (1, 2))
         np.testing.assert_array_equal(expected_output, actual_output)
 
     def test_embedding_layer_repr(self):
         layer = layers.Embedding(5, 2)
         self.assertEqual("Embedding(5, 2)", str(layer))
+
+    def test_embedding_output_shape(self):
+        layer = layers.Embedding(5, 2)
+        self.assertEqual(layer.output_shape, None)

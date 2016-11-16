@@ -4,7 +4,7 @@ import theano.tensor as T
 from neupy import layers
 from neupy.utils import asfloat
 from neupy.layers.connections import (LayerGraph, LayerConnectionError,
-                                      is_cyclic)
+                                      is_cyclic, topological_sort)
 
 from base import BaseTestCase
 
@@ -224,3 +224,65 @@ class LayerGraphTestCase(BaseTestCase):
 
         # Connection #4
         graph.connect_layers(l12, le)
+
+    def test_topological_sort_exception(self):
+        cyclic_graph = {'a': ['b'], 'b': ['a']}
+        with self.assertRaises(RuntimeError):
+            topological_sort(cyclic_graph)
+
+    def test_subgraph_by_layer(self):
+        layer_1 = layers.Input(1)
+        layer_2 = layers.Input(2)
+
+        graph = LayerGraph()
+        graph.add_layer(layer_1)
+
+        subgraph = graph.subgraph_for_output(layer_1)
+        self.assertEqual(len(subgraph.forward_graph), 1)
+
+        subgraph = graph.subgraph_for_output(layer_2)
+        self.assertEqual(len(subgraph.forward_graph), 0)
+
+    def test_graph_propagate_forward(self):
+        layer_1 = layers.Input(1)
+        layer_2 = layers.Input(2)
+
+        graph = LayerGraph()
+        graph.add_layer(layer_1)
+
+        with self.assertRaises(ValueError):
+            graph.propagate_forward({layer_2: T.matrix()})
+
+    def test_graph_connect_layer_missed_input_shapes(self):
+        # input_layer_1 -> concatenate
+        #                    /
+        #              hidden_layer
+        #                  /
+        #         input_layer_2
+        input_layer_1 = layers.Input(10)
+        hidden_layer = layers.Sigmoid(10)
+        input_layer_2 = layers.Input(2)
+        merge_layer = layers.Concatenate()
+
+        graph = LayerGraph()
+
+        # First we join layers that doesn't have input shapes
+        graph.connect_layers(hidden_layer, merge_layer)
+        self.assertEqual(merge_layer.output_shape, None)
+
+        # Now we can join layer that has input shape
+        graph.connect_layers(input_layer_1, merge_layer)
+        self.assertEqual(merge_layer.output_shape, None)
+
+        # At this point we have fully constructed connection
+        graph.connect_layers(input_layer_2, hidden_layer)
+        self.assertEqual(merge_layer.output_shape, (20,))
+
+    def test_graph_layer_connection_exception(self):
+        input_layer_1 = layers.Input(10)
+        input_layer_2 = layers.Input(20)
+
+        graph = LayerGraph()
+
+        with self.assertRaises(LayerConnectionError):
+            graph.connect_layers(input_layer_1, input_layer_2)

@@ -233,18 +233,6 @@ class SurgeryCutAlongLinesTestCase(BaseTestCase):
                 ]),
                 expected_shapes=[(5, 10, 20, 30, 1)]
             ),
-            dict(
-                network=surgery.sew_together([
-                    surgery.CutLine(),
-                    layers.Input(5),
-                    layers.Sigmoid(10),
-                    layers.Sigmoid(20),
-                    layers.Sigmoid(30),
-                    layers.Sigmoid(1),
-                    surgery.CutLine(),
-                ]),
-                expected_shapes=[(5, 10, 20, 30, 1)]
-            ),
         )
 
         for test_id, testcase in enumerate(testcases):
@@ -271,8 +259,8 @@ class SurgeryCutAlongLinesTestCase(BaseTestCase):
         layers.join(input_layer, layers.Sigmoid(1))
         connection = layers.join(input_layer, layers.Sigmoid(2))
 
-        with self.assertRaisesRegexp(ValueError, r"non-feedforward"):
-            # Relations betweeen layers is not feedforward
+        with self.assertRaisesRegexp(ValueError, r"non-sequential"):
+            # Relations betweeen layers is not sequential
             surgery.cut(connection, start=0, end=1)
 
     def test_cut_expcetion_invalid_end_parameter(self):

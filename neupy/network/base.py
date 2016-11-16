@@ -292,6 +292,7 @@ class BaseNetwork(BaseSkeleton):
         -------
         array-like
         """
+        raise NotImplementedError
 
     def on_epoch_start_update(self, epoch):
         """

@@ -19,6 +19,8 @@ class ConvLayersTestCase(BaseTestCase):
         input_layer = layers.Input((1, 5, 5))
         conv_layer = layers.Convolution((6, 2, 2))
 
+        self.assertEqual(conv_layer.output_shape, None)
+
         input_layer > conv_layer
         conv_layer.initialize()
 

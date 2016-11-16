@@ -23,9 +23,9 @@ class NetworkConnectionError(Exception):
     """
 
 
-def is_feedforward(connection):
+def is_sequential(connection):
     """
-    Check whether graph connection is feedforward.
+    Check whether graph connection is a sequence.
 
     Parameters
     ----------
@@ -38,7 +38,7 @@ def is_feedforward(connection):
     graph = connection.graph
 
     if not graph:
-        # Single layer is a feedforward connection
+        # Single layer is a sequential connection
         return True
 
     f_graph = graph.forward_graph
@@ -177,7 +177,7 @@ def does_layer_expect_one_input(layer):
                          "output method".format(layer))
 
     if not inspect.ismethod(layer.output):
-        raise ValueError("The `output` attribute is not a method.")
+        raise ValueError("The `output` attribute is not a method")
 
     arginfo = inspect.getargspec(layer.output)
 
@@ -355,38 +355,46 @@ class LayerGraph(object):
         layers = [from_layer]
         forward_graph = self.forward_graph
 
+        # We need to know whether all input layers
+        # have defined input shape
+        all_inputs_has_shape = True
+        for layer, next_layers in self.backward_graph.items():
+            if not next_layers and not layer.input_shape:
+                all_inputs_has_shape = False
+                break
+
         while layers:
             current_layer = layers.pop()
             next_layers = forward_graph[current_layer]
 
             for next_layer in next_layers:
-                in_shape = next_layer.input_shape
-                out_shape = current_layer.output_shape
+                next_in_shape = next_layer.input_shape
+                current_out_shape = current_layer.output_shape
                 one_input_layer = does_layer_expect_one_input(next_layer)
 
-                if not in_shape and one_input_layer:
-                    next_layer.input_shape = out_shape
+                if not next_in_shape and one_input_layer:
+                    next_layer.input_shape = current_out_shape
 
-                elif not one_input_layer:
+                elif not one_input_layer and all_inputs_has_shape:
                     input_shapes = []
                     for incoming_layer in self.backward_graph[next_layer]:
                         input_shapes.append(incoming_layer.output_shape)
 
-                    if None in input_shapes:
-                        # It means that some of the previous layers still
-                        # don't have input shape. We can put layer at the
-                        # end of the queue and check it later
-                        layers.insert(0, current_layer)
-                    else:
+                    if None not in input_shapes:
                         next_layer.input_shape = input_shapes
+                    else:
+                        # Some of the previous layers still don't
+                        # have input shape. We can put layer at the
+                        # end of the stack and check it again at the end
+                        layers.insert(0, current_layer)
 
-                elif one_input_layer and in_shape != out_shape:
+                elif one_input_layer and next_in_shape != current_out_shape:
                     raise LayerConnectionError(
                         "Cannot connect `{}` to the `{}`. Output shape "
                         "from one layer is equal to {} and input shape "
                         "to the next one is equal to {}".format(
                             current_layer, next_layer,
-                            out_shape, in_shape,
+                            current_out_shape, next_in_shape,
                         )
                     )
 
@@ -445,9 +453,6 @@ class LayerGraph(object):
             if not next_layers and layer.input_shape:
                 input_layers.append(layer)
 
-        if not input_layers:
-            raise LayerConnectionError("Graph doesn't have input layers")
-
         return input_layers
 
     @property
@@ -469,9 +474,6 @@ class LayerGraph(object):
         for layer, next_layers in self.forward_graph.items():
             if not next_layers:
                 output_layers.append(layer)
-
-        if not output_layers:
-            raise LayerConnectionError("Graph doesn't have output layers")
 
         return output_layers
 
@@ -558,7 +560,7 @@ class ChainConnection(object):
         raise NotImplementedError
 
     def initialize(self):
-        pass
+        raise NotImplementedError
 
     @contextmanager
     def disable_training_state(self):
@@ -686,14 +688,24 @@ class LayerConnection(ChainConnection):
 
         self.input_layer = self.layers[0]
         self.output_layer = self.layers[-1]
-        self.input_shape = self.input_layer.input_shape
-        self.output_shape = self.output_layer.output_shape
 
         self.left.connection = self
         self.right.connection = self
 
         self.graph = make_common_graph(self.left_layer, self.right_layer)
         self.graph.connect_layers(self.left_layer, self.right_layer)
+
+    @property
+    def input_shape(self):
+        # Cannot save them one time because shape
+        # can be modified later
+        return self.input_layer.input_shape
+
+    @property
+    def output_shape(self):
+        # Cannot save them one time because shape
+        # can be modified later
+        return self.output_layer.output_shape
 
     def initialize(self):
         for layer in self:

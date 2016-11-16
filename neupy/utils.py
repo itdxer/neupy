@@ -39,8 +39,8 @@ def format_data(data, is_feature1d=True, copy=False):
         Data that should be formated. That could be, matrix, vector or
         Pandas DataFrame instance.
     is_feature1d : bool
-        Should be equal to ``True`` if input data if a vector that
-        contains n samples with 1 feature each. Defaults to ``True``.
+        Should be equal to ``True`` if input data is a vector that
+        contains N samples with 1 feature each. Defaults to ``True``.
     copy : bool
         Defaults to ``False``.
 

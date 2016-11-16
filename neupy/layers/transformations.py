@@ -78,7 +78,7 @@ class Embedding(BaseLayer):
     weight : array-like, Theano variable, scalar or Initializer
         Defines layer's weights. Default initialization methods
         you can find :ref:`here <init-methods>`.
-        Defaults to :class:`XavierNormal() <neupy.core.init.XavierNormal>`.
+        Defaults to :class:`XavierNormal() <neupy.init.XavierNormal>`.
     {BaseLayer.Parameters}
 
     Methods
@@ -99,7 +99,8 @@ class Embedding(BaseLayer):
 
     @property
     def output_shape(self):
-        return as_tuple(self.output_size)
+        if self.input_shape is not None:
+            return as_tuple(self.input_shape, self.output_size)
 
     def initialize(self):
         super(Embedding, self).initialize()

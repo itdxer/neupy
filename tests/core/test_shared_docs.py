@@ -1,4 +1,4 @@
-from neupy.core.docs import SharedDocs, shared_docs
+from neupy.core.docs import SharedDocs, shared_docs, parse_variables_from_docs
 
 from base import BaseTestCase
 
@@ -578,3 +578,11 @@ class SharedDocsParseSectionsTestCase(BaseTestCase):
             """
 
         self.assertEqual(B.__doc__, ExpectedDoc.__doc__)
+
+    def test_parse_variables_from_docs(self):
+        self.assertEqual({}, parse_variables_from_docs([]))
+
+        class A(object):
+            pass
+
+        self.assertEqual({}, parse_variables_from_docs([A]))

@@ -64,6 +64,15 @@ class PropertiesBasicsTestCase(BaseTestCase):
                 with self.assertRaises(TypeError):
                     a.value = invalid_value
 
+    def test_property_get_method(self):
+        prop = Property(default=3)
+        self.assertEqual(None, prop.__get__(None, None))
+
+    def test_property_repr(self):
+        prop = Property(default=3)
+        self.assertEqual('3', str(prop))
+        self.assertEqual('3', repr(prop))
+
 
 class BoundedPropertiesTestCase(BaseTestCase):
     def test_bounded_properties(self):
@@ -152,3 +161,16 @@ class ChoicesPropertiesTestCase(BaseTestCase):
 
         with self.assertRaises(ValueError):
             a.choice = 1
+
+    def test_choice_property_exceptions(self):
+        with self.assertRaises(ValueError):
+            class A(Configurable):
+                choice = ChoiceProperty(choices='test')
+
+        with self.assertRaises(ValueError):
+            class B(Configurable):
+                choice = ChoiceProperty(choices=[])
+
+    def test_choice_property_on_unknown_instance(self):
+        prop = ChoiceProperty(choices=[1, 2, 3])
+        self.assertEqual(None, prop.__get__(None, None))
