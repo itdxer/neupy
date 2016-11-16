@@ -8,7 +8,7 @@ from neupy import init
 from base import BaseTestCase
 
 
-class LayersInitializationTestCase(BaseTestCase):
+class BaseInitializerTestCase(BaseTestCase):
     def assertUniformlyDistributed(self, value):
         self.assertTrue(stats.kstest(value.ravel(), 'uniform'),
                         msg="Sampled distribution is not uniformal")
@@ -17,6 +17,8 @@ class LayersInitializationTestCase(BaseTestCase):
         self.assertTrue(stats.mstats.normaltest(value.ravel()),
                         msg="Sampled distribution is not normal")
 
+
+class ConstantInitializationTestCase(BaseInitializerTestCase):
     def test_constant_initializer(self):
         const = init.Constant(value=0)
         np.testing.assert_array_almost_equal(
@@ -30,12 +32,24 @@ class LayersInitializationTestCase(BaseTestCase):
             np.ones((2, 3)) * 1.5
         )
 
+    def test_constant_initialize_repr(self):
+        const_initializer = init.Constant(value=3)
+        self.assertEqual("Constant(3)", str(const_initializer))
+
+
+class NormalInitializeTestCase(BaseInitializerTestCase):
     def test_normal_initializer(self):
         norm = init.Normal(mean=0, std=0.01)
         weight = norm.sample((30, 30))
 
         self.assertNormalyDistributed(weight)
 
+    def test_normal_initialize_repr(self):
+        hormal_initializer = init.Normal(mean=0, std=0.01)
+        self.assertEqual("Normal(mean=0, std=0.01)", str(hormal_initializer))
+
+
+class UniformInitializeTestCase(BaseInitializerTestCase):
     def test_uniformal_initializer(self):
         uniform = init.Uniform(minval=-10, maxval=10)
         weight = uniform.sample((30, 30))
@@ -44,6 +58,66 @@ class LayersInitializationTestCase(BaseTestCase):
         self.assertAlmostEqual(-10, np.min(weight), places=1)
         self.assertAlmostEqual(10, np.max(weight), places=1)
 
+    def test_uniform_initializer_repr(self):
+        uniform_initializer = init.Uniform(minval=0, maxval=1)
+        self.assertEqual("Uniform(0, 1)", str(uniform_initializer))
+
+
+class HeInitializeTestCase(BaseInitializerTestCase):
+    def test_he_normal(self):
+        he_normal = init.HeNormal()
+        weight = he_normal.sample((10, 30))
+
+        self.assertNormalyDistributed(weight)
+        self.assertAlmostEqual(weight.mean(), 0, places=1)
+        self.assertAlmostEqual(weight.std(), math.sqrt(2. / 10),
+                               places=2)
+
+    def test_he_uniform(self):
+        n_inputs = 30
+        bound = math.sqrt(6. / n_inputs)
+
+        he_uniform = init.HeUniform()
+        weight = he_uniform.sample((n_inputs, 30))
+
+        self.assertUniformlyDistributed(weight)
+        self.assertAlmostEqual(weight.mean(), 0, places=1)
+        self.assertGreaterEqual(weight.min(), -bound)
+        self.assertLessEqual(weight.max(), bound)
+
+    def test_he_initializer_repr(self):
+        he_initializer = init.HeNormal()
+        self.assertEqual("HeNormal()", str(he_initializer))
+
+
+class XavierInitializeTestCase(BaseInitializerTestCase):
+    def test_xavier_normal(self):
+        n_inputs, n_outputs = 30, 30
+
+        xavier_normal = init.XavierNormal()
+        weight = xavier_normal.sample((n_inputs, n_outputs))
+
+        self.assertNormalyDistributed(weight)
+        self.assertAlmostEqual(weight.mean(), 0, places=1)
+        self.assertAlmostEqual(weight.std(),
+                               math.sqrt(2. / (n_inputs + n_outputs)),
+                               places=2)
+
+    def test_xavier_uniform(self):
+        n_inputs, n_outputs = 10, 30
+        n_inputs, n_outputs = 30, 30
+        xavier_uniform = init.XavierUniform()
+        weight = xavier_uniform.sample((n_inputs, n_outputs))
+        bound = math.sqrt(6. / (n_inputs + n_outputs))
+
+        self.assertUniformlyDistributed(weight)
+
+        self.assertAlmostEqual(weight.mean(), 0, places=1)
+        self.assertGreaterEqual(weight.min(), -bound)
+        self.assertLessEqual(weight.max(), bound)
+
+
+class OrthogonalInitializeTestCase(BaseInitializerTestCase):
     def test_orthogonal_matrix_initializer_errors(self):
         with self.assertRaises(ValueError):
             ortho = init.Orthogonal()
@@ -72,48 +146,11 @@ class LayersInitializationTestCase(BaseTestCase):
             decimal=5
         )
 
-    def test_he_normal(self):
-        he_normal = init.HeNormal()
-        weight = he_normal.sample((10, 30))
+    def test_orthogonal_init_repr(self):
+        ortho_initializer = init.Orthogonal(scale=1)
+        self.assertEqual("Orthogonal(scale=1)", str(ortho_initializer))
 
-        self.assertNormalyDistributed(weight)
-        self.assertAlmostEqual(weight.mean(), 0, places=1)
-        self.assertAlmostEqual(weight.std(), math.sqrt(2. / 10),
-                               places=2)
-
-    def test_he_uniform(self):
-        n_inputs = 30
-        bound = math.sqrt(6. / n_inputs)
-
-        he_uniform = init.HeUniform()
-        weight = he_uniform.sample((n_inputs, 30))
-
-        self.assertUniformlyDistributed(weight)
-        self.assertAlmostEqual(weight.mean(), 0, places=1)
-        self.assertGreaterEqual(weight.min(), -bound)
-        self.assertLessEqual(weight.max(), bound)
-
-    def test_xavier_normal(self):
-        n_inputs, n_outputs = 30, 30
-
-        xavier_normal = init.XavierNormal()
-        weight = xavier_normal.sample((n_inputs, n_outputs))
-
-        self.assertNormalyDistributed(weight)
-        self.assertAlmostEqual(weight.mean(), 0, places=1)
-        self.assertAlmostEqual(weight.std(),
-                               math.sqrt(2. / (n_inputs + n_outputs)),
-                               places=2)
-
-    def test_xavier_uniform(self):
-        n_inputs, n_outputs = 10, 30
-        n_inputs, n_outputs = 30, 30
-        xavier_uniform = init.XavierUniform()
-        weight = xavier_uniform.sample((n_inputs, n_outputs))
-        bound = math.sqrt(6. / (n_inputs + n_outputs))
-
-        self.assertUniformlyDistributed(weight)
-
-        self.assertAlmostEqual(weight.mean(), 0, places=1)
-        self.assertGreaterEqual(weight.min(), -bound)
-        self.assertLessEqual(weight.max(), bound)
+    def test_orthogonal_1d_shape(self):
+        ortho = init.Orthogonal(scale=1)
+        sampled_data = ortho.sample(shape=(1,))
+        self.assertEqual((1,), sampled_data.shape)

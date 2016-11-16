@@ -83,19 +83,19 @@ class MixtureOfExperts(BaseEnsemble):
         algorithms = sys.modules['neupy.algorithms']
 
         if not isinstance(gating_network, algorithms.GradientDescent):
-            raise ValueError("Gating network must use GradientDescent "
-                             "learning algorihtm")
+            raise ValueError("Gating network should be an instance of "
+                             "`GradientDescent` algorithm")
 
         for network in self.networks:
             if not isinstance(network, algorithms.GradientDescent):
                 raise ValueError(
-                    "Network must use GradientDescent learning algorithm, "
-                    "got {0}".format(network.__class__.__name__)
+                    "Network should be an isntance of `GradientDescent` "
+                    "algorithm, got {0}".format(network.__class__.__name__)
                 )
 
             if network.output_layer.size != 1:
-                raise ValueError("Network must contains one output unit, got "
-                                 "{0}".format(network.output_layer.size))
+                raise ValueError("Network should contains one output unit, "
+                                 "got {0}".format(network.output_layer.size))
 
             if network.error.__name__ != 'mse':
                 raise ValueError(
@@ -171,8 +171,7 @@ class MixtureOfExperts(BaseEnsemble):
         )
 
     def train(self, input_data, target_data, epochs=100):
-        if target_data.ndim == 1:
-            target_data = target_data.reshape((target_data.size, 1))
+        target_data = format_data(target_data, is_feature1d=True)
 
         output_size = target_data.shape[1]
         if output_size != 1:

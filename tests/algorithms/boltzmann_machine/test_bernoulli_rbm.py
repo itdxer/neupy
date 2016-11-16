@@ -23,6 +23,16 @@ class BernoulliRBMTestCase(BaseTestCase):
             [0, 1, 0, 1],
         ], dtype=theano.config.floatX)
 
+    def test_rbm_prediction_error(self):
+        rbm = algorithms.RBM(n_visible=4, n_hidden=1,
+                             step=0.1, batch_size=10)
+        rbm.train(self.data, epochs=500)
+
+        rbm_error_for_known = rbm.prediction_error(np.array([[0, 1, 0, 1]]))
+        rbm_error_for_unknown = rbm.prediction_error(np.array([[0, 1, 0, 0]]))
+
+        self.assertLess(rbm_error_for_unknown, rbm_error_for_known)
+
     def test_simple_bernoulli_rbm(self):
         data = self.data
 

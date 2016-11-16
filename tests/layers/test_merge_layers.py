@@ -50,6 +50,10 @@ class ElementwiseTestCase(BaseTestCase):
             not_callable_object = (1, 2, 3)
             layers.Elementwise(merge_function=not_callable_object)
 
+    def test_elementwise_output_shape_no_connection(self):
+        elem_layer = layers.Elementwise()
+        self.assertEqual(elem_layer.output_shape, None)
+
     def test_elementwise_in_connections(self):
         input_layer = layers.Input(2)
         hidden_layer_1 = layers.Relu(1, weight=init.Constant(1),

@@ -1,6 +1,7 @@
+import os
 from collections import namedtuple
 
-from neupy.helpers.logs import Verbose, TerminalLogger
+from neupy.helpers.logs import Verbose, TerminalLogger, terminal_echo
 from neupy.helpers import terminal
 from neupy import algorithms
 
@@ -10,6 +11,20 @@ from data import simple_classification
 
 
 class LoggingTestCase(BaseTestCase):
+    def test_logging_exceptions(self):
+        with self.assertRaises(ValueError):
+            logs = TerminalLogger()
+            logs.message("tag", "text", color="unknown-color")
+
+    def test_terminal_echo_simulate_windows_behvaiour(self):
+        default_os_name = os.name
+
+        try:
+            os.name = 'nt'
+            terminal_echo(enabled=True)
+        finally:
+            os.name = default_os_name
+
     def test_logging_switcher(self):
         class A(Verbose):
             def callme(self):

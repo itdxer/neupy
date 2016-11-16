@@ -102,6 +102,8 @@ class ActivationLayersTestCase(BaseTestCase):
         connection = input_layer > output_layer
         connection.initialize()
 
+        self.assertEqual(output_layer.bias_shape, None)
+
         input_value = asfloat(np.ones((1, 10)))
         actual_output = connection.output(input_value).eval()
         expected_output = np.ones((1, 2))

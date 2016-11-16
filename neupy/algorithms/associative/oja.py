@@ -29,7 +29,7 @@ class Oja(BaseNetwork):
         Expected number of features after minimization, defaults to ``1``
     weight : array-like or ``None``
         Defines networks weights.
-        Defaults to :class:`XavierNormal() <neupy.core.init.XavierNormal>`.
+        Defaults to :class:`XavierNormal() <neupy.init.XavierNormal>`.
     {BaseNetwork.step}
     {BaseNetwork.show_epoch}
     {BaseNetwork.epoch_end_signal}

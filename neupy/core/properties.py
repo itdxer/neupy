@@ -1,9 +1,9 @@
 import numpy as np
 import theano.tensor as T
 
+from neupy import init
 from neupy.utils import preformat_value, number_type, as_tuple
 from neupy.core.docs import SharedDocs
-from neupy.core import init
 
 
 __all__ = ('BaseProperty', 'Property', 'ArrayProperty', 'BoundedProperty',
@@ -65,9 +65,6 @@ class BaseProperty(SharedDocs):
 
     def __delete__(self, instance):
         name = self.name
-
-        if name in instance.__dict__:
-            del instance.__dict__[name]
 
         if name in instance.options:
             del instance.options[name]

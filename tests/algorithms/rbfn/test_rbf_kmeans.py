@@ -21,7 +21,7 @@ data = np.array([
 
 
 class RBFKMeansTestCase(BaseTestCase):
-    def test_validation(self):
+    def test_rbfk_exceptions(self):
         with self.assertRaises(ValueError):
             # More clusters than samples
             nw = algorithms.RBFKMeans(n_clusters=1000, verbose=False)
@@ -38,7 +38,7 @@ class RBFKMeansTestCase(BaseTestCase):
             nw = algorithms.RBFKMeans(n_clusters=1, verbose=False)
             nw.train(data, epsilon=1e-5)
 
-    def test_classification(self):
+    def test_rbfk_classification(self):
         expected_centers = np.array([
             [0.228, 0.312],
             [0.482,  0.767],
@@ -49,13 +49,13 @@ class RBFKMeansTestCase(BaseTestCase):
         np.testing.assert_array_almost_equal(expected_centers, nw.centers,
                                              decimal=3)
 
-    def test_train_different_inputs(self):
+    def test_rbfk_train_different_inputs(self):
         self.assertInvalidVectorTrain(
             algorithms.RBFKMeans(n_clusters=2, verbose=False),
             np.array([1, 2, 10]),
         )
 
-    def test_predict_different_inputs(self):
+    def test_rbfk_predict_different_inputs(self):
         kmnet = algorithms.RBFKMeans(verbose=False, n_clusters=2)
 
         data = np.array([[1, 2, 10]]).T

@@ -19,7 +19,6 @@ class BaseSkeleton(ConfigurableABC, Verbose):
     predict(input_data)
         Predict value.
     """
-
     def get_params(self, deep=False):
         options = {}
         for property_name, option in self.options.items():
@@ -50,7 +49,7 @@ class BaseSkeleton(ConfigurableABC, Verbose):
         raise NotImplementedError
 
     def predict(self, input_data):
-        pass
+        raise NotImplementedError
 
     def fit(self, X, y, *args, **kwargs):
         self.train(X, y, *args, **kwargs)
@@ -59,7 +58,7 @@ class BaseSkeleton(ConfigurableABC, Verbose):
     def class_name(self):
         return self.__class__.__name__
 
-    def _repr_options(self):
+    def repr_options(self):
         options = []
         for option_name in self.options:
             option_value = getattr(self, option_name)
@@ -72,5 +71,5 @@ class BaseSkeleton(ConfigurableABC, Verbose):
 
     def __repr__(self):
         class_name = self.class_name()
-        available_options = self._repr_options()
+        available_options = self.repr_options()
         return "{}({})".format(class_name, available_options)

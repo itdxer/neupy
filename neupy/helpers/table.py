@@ -330,7 +330,6 @@ class TableBuilder(SharedDocs):
             Arguments for the ``TableBuilder`` class
             initialization.
         """
-
         values_length = []
         for row_values in values:
             row_values_length = [len(str(value)) for value in row_values]
@@ -349,6 +348,6 @@ class TableBuilder(SharedDocs):
         table_builder.finish()
 
     def __getattr__(self, attr):
-        if attr not in self.__dict__:
+        if attr not in self.__dict__ and hasattr(self.state, attr):
             return getattr(self.state, attr)
-        return super(TableBuilder, self).__getattr__(attr)
+        return super(TableBuilder, self).__getattribute__(attr)

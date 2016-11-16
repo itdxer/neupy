@@ -2,7 +2,7 @@ from copy import deepcopy
 from functools import reduce
 
 from neupy.network import ConstructableNetwork
-from neupy.layers.connections import LayerConnection, is_feedforward
+from neupy.layers.connections import LayerConnection, is_sequential
 from neupy import layers
 
 
@@ -74,8 +74,8 @@ def clean_and_validate_connection(connection):
     if not isinstance(connection, LayerConnection):
         raise ValueError("You can cut only layer connections.")
 
-    if not is_feedforward(connection):
-        raise ValueError("Cannot cut connection that has non-feedforward "
+    if not is_sequential(connection):
+        raise ValueError("Cannot cut connection that has non-sequential "
                          "relations between layers.")
 
     return connection

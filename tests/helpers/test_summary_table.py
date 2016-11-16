@@ -124,3 +124,12 @@ class TableBuilderTestCase(BaseTestCase):
                 table.Column("Col 1"),
                 'not a column',
             )
+
+    def test_table_state_variables(self):
+        table_builder = table.TableBuilder(table.Column("Col 1"))
+
+        # use direct access to __getattr__ for code coverage
+        self.assertEqual(len(table_builder.__getattr__('columns')), 1)
+        # self.assertIn is not working here
+        self.assertEqual(id(table_builder.__getattr__('row')),
+                         id(table_builder.state.row))

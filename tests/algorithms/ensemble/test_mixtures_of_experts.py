@@ -8,8 +8,9 @@ from base import BaseTestCase
 
 
 class MixtureOfExpertsTestCase(BaseTestCase):
-    def test_handle_errors(self):
-        networks = [
+    def setUp(self):
+        super(MixtureOfExpertsTestCase, self).setUp()
+        self.networks = [
             algorithms.GradientDescent(
                 (1, 20, 1),
                 step=0.2,
@@ -22,8 +23,11 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             ),
         ]
 
+    def test_mixture_of_experts_init_networks_exceptions(self):
+        networks = self.networks
+
         with self.assertRaises(ValueError):
-            # Ivalid network (not GradientDescent)
+            # Invalid network (not GradientDescent)
             algorithms.MixtureOfExperts(
                 networks=networks + [
                     algorithms.GRNN(verbose=False)
@@ -35,7 +39,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             )
 
         with self.assertRaises(ValueError):
-            # Ivalid number of outputs in third network
+            # Invalid number of outputs in third network
             algorithms.MixtureOfExperts(
                 networks=networks + [
                     algorithms.GradientDescent(
@@ -51,27 +55,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             )
 
         with self.assertRaises(ValueError):
-            # Ivalid gating network output layer size
-            algorithms.MixtureOfExperts(
-                networks=networks,
-                gating_network=algorithms.GradientDescent(
-                    layers.Input(1) > layers.Softmax(1),
-                    verbose=False,
-                )
-            )
-
-        with self.assertRaises(ValueError):
-            # Ivalid gating network input layer
-            algorithms.MixtureOfExperts(
-                networks=networks,
-                gating_network=algorithms.GradientDescent(
-                    layers.Input(1) > layers.Sigmoid(2),
-                    verbose=False,
-                )
-            )
-
-        with self.assertRaises(ValueError):
-            # Ivalid network error function
+            # Invalid network error function
             algorithms.MixtureOfExperts(
                 networks=networks + [
                     algorithms.GradientDescent(
@@ -87,9 +71,12 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                 ),
             )
 
+    def test_mixture_of_experts_init_gating_network_exceptions(self):
+        networks = self.networks
+
         with self.assertRaises(ValueError):
-            moe = algorithms.MixtureOfExperts(
-                # Ivalid gating error function
+            # Invalid gating error function
+            algorithms.MixtureOfExperts(
                 networks=networks,
                 gating_network=algorithms.GradientDescent(
                     layers.Input(1) > layers.Softmax(2),
@@ -98,9 +85,37 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                 ),
             )
 
+        with self.assertRaises(ValueError):
+            # Invalid gating network algorithm
+            algorithms.MixtureOfExperts(
+                networks=networks,
+                gating_network=algorithms.PNN(),
+            )
+
+        with self.assertRaises(ValueError):
+            # Invalid gating network output layer
+            algorithms.MixtureOfExperts(
+                networks=networks,
+                gating_network=algorithms.GradientDescent(
+                    layers.Input(1) > layers.Sigmoid(2),
+                    verbose=False,
+                )
+            )
+
+        with self.assertRaises(ValueError):
+            # Invalid gating network output layer size
+            algorithms.MixtureOfExperts(
+                networks=networks,
+                gating_network=algorithms.GradientDescent(
+                    layers.Input(1) > layers.Softmax(1),
+                    verbose=False,
+                )
+            )
+
+    def test_mixture_of_experts_training_exceptions(self):
         moe = algorithms.MixtureOfExperts(
-            # Ivalid gating network output layer
-            networks=networks,
+            # Invalid gating network output layer
+            networks=self.networks,
             gating_network=algorithms.GradientDescent(
                 layers.Input(1) > layers.Softmax(2),
                 verbose=False
@@ -175,3 +190,20 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         )
 
         self.assertGreater(network_error, ensemlbe_error)
+
+    def test_mixture_of_experts_repr(self):
+        moe = algorithms.MixtureOfExperts(
+            networks=[
+                algorithms.Momentum((3, 2, 1)),
+                algorithms.GradientDescent((3, 2, 1)),
+            ],
+            gating_network=algorithms.Adadelta(
+                layers.Input(3) > layers.Softmax(2),
+            )
+        )
+        moe_repr = str(moe)
+
+        self.assertIn('MixtureOfExperts', moe_repr)
+        self.assertIn('Momentum', moe_repr)
+        self.assertIn('GradientDescent', moe_repr)
+        self.assertIn('Adadelta', moe_repr)

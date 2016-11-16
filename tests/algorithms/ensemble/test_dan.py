@@ -60,3 +60,14 @@ class DANTestCase(BaseTestCase):
         result = dan.predict(x_test)
         ensemble_result = metrics.accuracy_score(y_test, result)
         self.assertAlmostEqual(0.9222, ensemble_result, places=4)
+
+    def test_dan_repr(self):
+        dan = algorithms.DynamicallyAveragedNetwork([
+            algorithms.Momentum((3, 2, 1)),
+            algorithms.GradientDescent((3, 2, 1)),
+        ])
+        dan_repr = str(dan)
+
+        self.assertIn('DynamicallyAveragedNetwork', dan_repr)
+        self.assertIn('Momentum', dan_repr)
+        self.assertIn('GradientDescent', dan_repr)

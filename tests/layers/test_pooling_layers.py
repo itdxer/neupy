@@ -14,6 +14,17 @@ from base import BaseTestCase
 class PoolingLayersTestCase(BaseTestCase):
     use_sandbox_mode = False
 
+    def test_pooling_undefined_output_shape(self):
+        max_pool_layer = layers.MaxPooling((2, 2))
+        self.assertEqual(max_pool_layer.output_shape, None)
+
+    def test_pooling_defined_output_shape(self):
+        input_layer = layers.Input((3, 10, 10))
+        max_pool_layer = layers.MaxPooling((2, 2))
+        input_layer > max_pool_layer
+
+        self.assertEqual(max_pool_layer.output_shape, (3, 5, 5))
+
     def test_pooling_size_property_int(self):
         max_pool_layer = layers.MaxPooling((2, 2), padding=3)
         self.assertEqual((3, 3), max_pool_layer.padding)
@@ -129,6 +140,8 @@ class UpscaleLayersTestCase(BaseTestCase):
         ]).reshape((1, 1, 6, 8))
 
         upscale_layer = layers.Upscale((3, 2))
+        self.assertEqual(upscale_layer.output_shape, None)
+
         layers.Input((1, 2, 4)) > upscale_layer
 
         x = T.tensor4('x')
@@ -145,6 +158,7 @@ class GlobalPoolingLayersTestCase(BaseTestCase):
     def test_global_pooling_output_shape(self):
         input_layer = layers.Input((3, 8, 8))
         global_pooling_layer = layers.GlobalPooling()
+        self.assertEqual(global_pooling_layer.output_shape, None)
 
         layers.join(input_layer, global_pooling_layer)
         self.assertEqual(global_pooling_layer.output_shape, (3,))

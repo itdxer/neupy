@@ -3,29 +3,41 @@ from sklearn import datasets, metrics
 from sklearn.model_selection import train_test_split
 
 from neupy import algorithms
+from neupy.utils import NotTrainedException
+
 from base import BaseTestCase
 
 
 class GRNNTestCase(BaseTestCase):
-    def test_handle_errors(self):
+    def test_grrn_exceptions(self):
         with self.assertRaises(ValueError):
-            # Wrong: size of target data not the same as size of
+            # size of target data not the same as size of
             # input data.
-            algorithms.GRNN(verbose=False).train(
-                np.array([[0], [0]]), np.array([0])
-            )
+            grnet = algorithms.GRNN(verbose=False)
+            grnet.train(np.array([[0], [0]]), np.array([0]))
 
         with self.assertRaises(ValueError):
-            # Wrong: 2-D target vector (must be 1-D)
-            algorithms.GRNN(verbose=False).train(
-                np.array([[0], [0]]), np.array([[0]])
-            )
+            # 2 features for target data
+            grnet = algorithms.GRNN(verbose=False)
+            grnet.train(np.array([[0], [0]]), np.array([[0, 0]]))
 
         with self.assertRaises(ValueError):
-            # Wrong: invalid feature size for prediction data
+            # invalid feature size for prediction data
             grnet = algorithms.GRNN(verbose=False)
             grnet.train(np.array([[0], [0]]), np.array([0]))
             grnet.predict(np.array([[0]]))
+
+        with self.assertRaises(NotTrainedException):
+            # Prediction without training
+            grnet = algorithms.GRNN(verbose=False)
+            grnet.predict(np.array([[0]]))
+
+        with self.assertRaises(ValueError):
+            # different number of features for
+            # train and test data
+            grnet = algorithms.GRNN(verbose=False)
+            grnet.train(np.array([[0]]), np.array([0]))
+            grnet.predict(np.array([[0, 0]]))
 
     def test_simple_grnn(self):
         dataset = datasets.load_diabetes()

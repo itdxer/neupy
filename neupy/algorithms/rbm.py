@@ -32,15 +32,15 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
     weight : array-like, Theano variable, Initializer or scalar
         Default initialization methods
         you can find :ref:`here <init-methods>`.
-        Defaults to :class:`XavierNormal <neupy.core.init.XavierNormal>`.
+        Defaults to :class:`XavierNormal <neupy.init.XavierNormal>`.
     hidden_bias : array-like, Theano variable, Initializer or scalar
         Default initialization methods
         you can find :ref:`here <init-methods>`.
-        Defaults to :class:`Constant(value=0) <neupy.core.init.Constant>`.
+        Defaults to :class:`Constant(value=0) <neupy.init.Constant>`.
     visible_bias : array-like, Theano variable, Initializer or scalar
         Default initialization methods
         you can find :ref:`here <init-methods>`.
-        Defaults to :class:`Constant(value=0) <neupy.core.init.Constant>`.
+        Defaults to :class:`Constant(value=0) <neupy.init.Constant>`.
     {BaseNetwork.Parameters}
 
     Methods

@@ -12,7 +12,7 @@ from neupy.utils import (AttributeKeyDict, asfloat, is_list_of_integers,
                          format_data, does_layer_accept_1d_feature)
 from neupy.layers.utils import preformat_layer_shape
 from neupy.layers.connections import (LayerConnection, NetworkConnectionError,
-                                      is_feedforward)
+                                      is_sequential)
 from neupy.helpers import table
 from neupy.core.properties import ChoiceProperty
 from neupy.network import errors
@@ -195,18 +195,21 @@ class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
         """
         Initialize input and output Theano variables.
         """
+        raise NotImplementedError
 
     @abc.abstractmethod
     def init_variables(self):
         """
         Initialize Theano variables.
         """
+        raise NotImplementedError
 
     @abc.abstractmethod
     def init_methods(self):
         """
         Initialize Theano functions.
         """
+        raise NotImplementedError
 
 
 class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
@@ -543,8 +546,8 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
         Shows network's architecture in the terminal if
         ``verbose`` parameter is equal to ``True``.
         """
-        if not is_feedforward(self.connection):
-            raise TypeError("You can check architecture only for feedforward "
+        if not is_sequential(self.connection):
+            raise TypeError("You can check architecture only for sequential "
                             "connections. For other types of connections it's "
                             "better to use the `neupy.plots.layer_structure` "
                             "function.")
@@ -574,10 +577,10 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
     def __repr__(self):
         n_layers = len(self.connection)
 
-        if n_layers > 5 or not is_feedforward(self.connection):
+        if n_layers > 5 or not is_sequential(self.connection):
             connection = '[... {} layers ...]'.format(n_layers)
         else:
             connection = self.connection
 
         return "{}({}, {})".format(self.class_name(), connection,
-                                   self._repr_options())
+                                   self.repr_options())

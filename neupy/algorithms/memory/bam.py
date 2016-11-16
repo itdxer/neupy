@@ -2,7 +2,7 @@ from random import randint
 
 import numpy as np
 
-from neupy.utils import format_data
+from neupy.utils import format_data, NotTrainedException
 from neupy.network.utils import step_function
 from .utils import bin2sign, hopfield_energy
 from .base import DiscreteMemory
@@ -94,17 +94,17 @@ class DiscreteBAM(DiscreteMemory):
 
     def predict_input(self, output_data, n_times=None):
         output_data = format_data(output_data, is_feature1d=False)
-        return self._predict(input_data=None, output_data=output_data,
-                             n_times=n_times)
+        return self.prediction(input_data=None, output_data=output_data,
+                               n_times=n_times)
 
     def predict_output(self, input_data, n_times=None):
         input_data = format_data(input_data, is_feature1d=False)
-        return self._predict(input_data=input_data, output_data=None,
-                             n_times=n_times)
+        return self.prediction(input_data=input_data, output_data=None,
+                               n_times=n_times)
 
-    def _predict(self, input_data=None, output_data=None, n_times=None):
+    def prediction(self, input_data=None, output_data=None, n_times=None):
         if self.weight is None:
-            raise AttributeError("Train network before predict the values")
+            raise NotTrainedException("Network hasn't been trained yet")
 
         if input_data is None and output_data is not None:
             self.discrete_validation(output_data)
@@ -117,7 +117,7 @@ class DiscreteBAM(DiscreteMemory):
             output_data = np.sign(input_data.dot(self.weight))
 
         else:
-            raise ValueError("Input or output data have to be equal to `None`")
+            raise ValueError("Prediction is possible only for input or output")
 
         n_output_features = output_data.shape[-1]
         n_input_features = input_data.shape[-1]

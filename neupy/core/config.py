@@ -25,11 +25,9 @@ class ConfigMeta(SharedDocsMeta):
         if not hasattr(new_class, 'options'):
             new_class.options = {}
 
-        # Populate parent classes options
         for base_class in parents:
-            if hasattr(base_class, 'options'):
-                new_class.options = dict(base_class.options,
-                                         **new_class.options)
+            new_class.options = dict(base_class.options,
+                                     **new_class.options)
 
         # Set properties names and save options for different classes
         for key, value in attrs.items():

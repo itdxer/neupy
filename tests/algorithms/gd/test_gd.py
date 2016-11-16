@@ -1,8 +1,13 @@
+import time
 from functools import partial
 
-from neupy import algorithms, layers
+import numpy as np
 
-from utils import compare_networks
+from neupy import algorithms, layers
+from neupy.helpers.logs import TerminalLogger
+from neupy.algorithms.gd.base import format_error, apply_batches
+
+from utils import compare_networks, catch_stdout
 from base import BaseTestCase
 from data import simple_classification
 
@@ -28,14 +33,14 @@ class GradientDescentTestCase(BaseTestCase):
         x_train, _, y_train, _ = simple_classification()
 
         network = algorithms.GradientDescent(
-            (layers.Input(10) > layers.Tanh(20) > layers.Tanh(1)),
+            layers.Input(10) > layers.Tanh(20) > layers.Tanh(1),
             step=0.3,
             verbose=False
         )
         network.train(x_train, y_train, epochs=500)
         self.assertAlmostEqual(network.errors.last(), 0.02, places=3)
 
-    def test_optimization_validations(self):
+    def test_addons_exceptions(self):
         with self.assertRaises(ValueError):
             # Invalid optimization class
             algorithms.GradientDescent(
@@ -84,3 +89,47 @@ class GradientDescentTestCase(BaseTestCase):
            epochs=40,
            show_comparison_plot=False
         )
+
+    def test_gd_get_params_method(self):
+        network = algorithms.GradientDescent((2, 3, 1))
+
+        self.assertIn('connection', network.get_params(with_connection=True))
+        self.assertNotIn('connection',
+                         network.get_params(with_connection=False))
+
+
+class GDAdditionalFunctionsTestCase(BaseTestCase):
+    def test_gd_format_error_function(self):
+        self.assertEqual('?', format_error(None))
+        self.assertEqual('1.00000', format_error(np.array([1])))
+
+        self.assertEqual('101', format_error(101))
+        self.assertEqual('101', format_error(101.01))
+
+        self.assertEqual('0.12000', format_error(0.12))
+        self.assertEqual('0.00000', format_error(0.00000001))
+
+    def test_gd_apply_batches_exceptions(self):
+        with self.assertRaisesRegexp(ValueError, "at least one element"):
+            apply_batches(function=lambda x: x, arguments=[],
+                          batch_size=12, logger=None)
+
+    def test_gd_apply_batches(self):
+        def function(x):
+            time.sleep(0.02)
+            print()
+            return 12345
+
+        with catch_stdout() as out:
+            apply_batches(
+                function=function,
+                arguments=[np.ones(100)],
+                batch_size=10,
+                logger=TerminalLogger(),
+                show_progressbar=True,
+                show_error_output=True
+            )
+            terminal_output = out.getvalue()
+
+        self.assertIn('12345', terminal_output)
+        self.assertIn('error', terminal_output)

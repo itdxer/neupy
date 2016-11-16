@@ -75,6 +75,7 @@ class Initializer(six.with_metaclass(SharedDocsABCMeta)):
         -------
         array-like
         """
+        raise NotImplementedError
 
     def __repr__(self):
         return '{}()'.format(classname(self))

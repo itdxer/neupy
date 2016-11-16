@@ -5,6 +5,7 @@ from neupy import algorithms
 from algorithms.memory.data import (zero, one, two, half_one,
                                     half_zero, half_two)
 from base import BaseTestCase
+from utils import catch_stdout
 
 
 class DiscreteHopfieldNetworkTestCase(BaseTestCase):
@@ -136,3 +137,14 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
         dhnet.train(data)
         self.assertInvalidVectorPred(dhnet, np.array([1, 0, 0, 1]), data,
                                      is_feature1d=False)
+
+    def test_discrete_hn_warning(self):
+        with catch_stdout() as out:
+            algorithms.DiscreteHopfieldNetwork(
+                verbose=True,
+                n_times=100,
+                mode='sync'
+            )
+            terminal_output = out.getvalue()
+
+        self.assertIn('only in `async` mode', terminal_output)

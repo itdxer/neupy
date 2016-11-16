@@ -21,6 +21,7 @@ def error_function(expected, predicted):
     -------
     array-like, theano variable
     """
+    raise NotImplementedError
 
 
 @shared_docs(error_function)

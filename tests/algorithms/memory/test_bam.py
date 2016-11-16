@@ -1,6 +1,7 @@
 import numpy as np
 
 from neupy import algorithms
+from neupy.utils import NotTrainedException
 
 from algorithms.memory.data import zero, one, half_one, half_zero
 from base import BaseTestCase
@@ -17,25 +18,45 @@ class BAMTestCase(BaseTestCase):
         self.data = np.concatenate([zero, one], axis=0)
         self.hints = np.concatenate([zero_hint, one_hint], axis=0)
 
-    def test_input_data_validation(self):
-        dhnet = algorithms.DiscreteBAM()
-        dhnet.weight = np.array([[0, 1], [1, 0]])
-
-        # Invalid discrete input values
-        with self.assertRaises(ValueError):
-            dhnet.train(np.array([-1, 1]), np.array([0, 1]))
+    def test_bam_prediction_method(self):
+        dbnet = algorithms.DiscreteBAM()
+        dbnet.weight = np.array([[0, 1], [1, 0]])
 
         with self.assertRaises(ValueError):
-            dhnet.train(np.array([0, 1]), np.array([-1, 1]))
+            dbnet.prediction()
 
         with self.assertRaises(ValueError):
-            dhnet.energy(np.array([-1, 1]), np.array([0, 1]))
+            dbnet.prediction(np.array([0, 1]), np.array([0, 1]))
+
+    def test_bam_exceptions(self):
+        with self.assertRaises(NotTrainedException):
+            dbnet = algorithms.DiscreteBAM()
+            dbnet.predict(np.array([-1, 1]))
 
         with self.assertRaises(ValueError):
-            dhnet.energy(np.array([0, 1]), np.array([-1, 1]))
+            dbnet = algorithms.DiscreteBAM()
+            dbnet.weight = np.array([[0, 1], [1, 0]])
+            dbnet.train(np.array([0, 1, 1]), np.array([0, 1]))
+
+    def test_bam_input_data_validation(self):
+        dbnet = algorithms.DiscreteBAM()
+        dbnet.weight = np.array([[0, 1], [1, 0]])
 
         with self.assertRaises(ValueError):
-            dhnet.predict(np.array([-1, 1]))
+            # Invalid discrete input values
+            dbnet.train(np.array([-1, 1]), np.array([0, 1]))
+
+        with self.assertRaises(ValueError):
+            dbnet.train(np.array([0, 1]), np.array([-1, 1]))
+
+        with self.assertRaises(ValueError):
+            dbnet.energy(np.array([-1, 1]), np.array([0, 1]))
+
+        with self.assertRaises(ValueError):
+            dbnet.energy(np.array([0, 1]), np.array([-1, 1]))
+
+        with self.assertRaises(ValueError):
+            dbnet.predict(np.array([-1, 1]))
 
     def test_discrete_bam_sync(self):
         bamnet = algorithms.DiscreteBAM(mode='sync')
@@ -117,34 +138,34 @@ class BAMTestCase(BaseTestCase):
         np.testing.assert_array_equal(output_matrix, output_matrix_before)
         np.testing.assert_array_equal(input_matrix, input_matrix_before)
 
-    def test_argument_in_predict_method(self):
-        dhnet = algorithms.DiscreteBAM(mode='async', n_times=1)
-        dhnet.train(self.data, self.hints)
+    def test_bam_argument_in_predict_method(self):
+        dbnet = algorithms.DiscreteBAM(mode='async', n_times=1)
+        dbnet.train(self.data, self.hints)
 
-        self.assertTrue(np.any(one != dhnet.predict_output(half_one)[0]))
+        self.assertTrue(np.any(one != dbnet.predict_output(half_one)[0]))
         np.testing.assert_array_almost_equal(
             one,
-            dhnet.predict_output(half_one, n_times=100)[0]
+            dbnet.predict_output(half_one, n_times=100)[0]
         )
 
-    def test_energy_function(self):
+    def test_bam_energy_function(self):
         input_vector = np.array([[1, 0, 0, 1, 1, 0, 0]])
         output_vector = np.array([[1, 0]])
-        dhnet = algorithms.DiscreteBAM()
-        dhnet.train(input_vector, output_vector)
+        dbnet = algorithms.DiscreteBAM()
+        dbnet.train(input_vector, output_vector)
 
-        self.assertEqual(-7, dhnet.energy(input_vector, output_vector))
-        self.assertEqual(0, dhnet.energy(
+        self.assertEqual(-7, dbnet.energy(input_vector, output_vector))
+        self.assertEqual(0, dbnet.energy(
             np.array([[0, 0, 0, 0, 0, 0, 0]]),
             np.array([[0, 0]])
         ))
-        self.assertEqual(-7, dhnet.energy(
+        self.assertEqual(-7, dbnet.energy(
             np.array([[0, 1, 1, 0, 0, 1, 1]]),
             np.array([[0, 1]])
         ))
 
         # Test 1d array
-        self.assertEqual(-7, dhnet.energy(
+        self.assertEqual(-7, dbnet.energy(
             np.array([0, 1, 1, 0, 0, 1, 1]),
             np.array([0, 1])
         ))
@@ -152,7 +173,7 @@ class BAMTestCase(BaseTestCase):
         # Test multiple input values energy calculation
         np.testing.assert_array_almost_equal(
             np.array([-7, 0]),
-            dhnet.energy(
+            dbnet.energy(
                 np.array([
                     [0, 1, 1, 0, 0, 1, 1],
                     [0, 0, 0, 0, 0, 0, 0],
@@ -164,7 +185,7 @@ class BAMTestCase(BaseTestCase):
             )
         )
 
-    def test_train_different_inputs(self):
+    def test_bam_train_different_inputs(self):
         self.assertInvalidVectorTrain(
             algorithms.DiscreteBAM(),
             np.array([1, 0, 0, 1]),
@@ -172,7 +193,7 @@ class BAMTestCase(BaseTestCase):
             is_feature1d=False
         )
 
-    def test_predict_different_inputs(self):
+    def test_bam_predict_different_inputs(self):
         bamnet = algorithms.DiscreteBAM()
 
         data = np.array([[1, 0, 0, 1]])
