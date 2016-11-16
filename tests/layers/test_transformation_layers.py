@@ -1,6 +1,7 @@
 import numpy as np
 
 from neupy import layers
+from neupy.utils import asfloat
 
 from base import BaseTestCase
 
@@ -37,7 +38,7 @@ class EmbeddingLayerTestCase(BaseTestCase):
         connection = layers.join(input_layer, embedding_layer)
         connection.initialize()
 
-        input_vector = np.array([[0, 1, 4]]).T
+        input_vector = asfloat(np.array([[0, 1, 4]]).T)
         expected_output = np.array([
             [[0, 1]],
             [[2, 3]],
