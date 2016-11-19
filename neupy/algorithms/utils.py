@@ -19,10 +19,10 @@ def iter_parameters(network):
     Returns
     -------
     iterator
-        Returns iterator that contains all weights and biases from the
-        network. Parameters from the first layer will be at the beggining
-        and the other will be in the same order as layers in the
-        network.
+        Returns iterator that contains all weights and biases
+        from the network. Parameters from the first layer will
+        be at the beggining and the other will be in the same
+        order as layers in the network.
     """
     parameters = [layer.parameters for layer in network.layers]
     return chain(*parameters)
@@ -39,7 +39,7 @@ def parameters2vector(network):
     Returns
     -------
     object
-        Returns concatenated parameters in one big vector.
+        Returns all parameters concatenated in one big vector.
     """
     params = iter_parameters(network)
     return T.concatenate([param.flatten() for param in params])
@@ -71,7 +71,10 @@ def setup_parameter_updates(parameters, parameter_update_vector):
     Parameters
     ----------
     parameters : list
+        List of parameters.
+
     parameter_update_vector : Theano varible
+        Vector that contains updates for all parameters.
 
     Returns
     -------

@@ -20,11 +20,16 @@ class RBFKMeans(NoStepSelection, BaseNetwork):
     Parameters
     ----------
     n_clusters : int
-        number of clusters in dataset.
+        Number of clusters.
+
     {BaseNetwork.show_epoch}
+
     {BaseNetwork.shuffle_data}
+
     {BaseNetwork.epoch_end_signal}
+
     {BaseNetwork.train_end_signal}
+
     {Verbose.verbose}
 
     Attributes
@@ -36,8 +41,10 @@ class RBFKMeans(NoStepSelection, BaseNetwork):
     Methods
     -------
     train(input_train, epsilon=1e-5, epochs=100)
-        Train network.
+        Trains network.
+
     {BaseSkeleton.predict}
+
     {BaseSkeleton.fit}
 
     Examples

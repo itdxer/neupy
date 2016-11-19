@@ -13,25 +13,24 @@ __all__ = ('LeakStepAdaptation',)
 
 class LeakStepAdaptation(SingleStepConfigurable):
     """
-    Leak Learning Rate Adaptation algorithm for step adaptation procedure
-    in backpropagation algortihm. By default every layer has the same value
-    as ``step`` parameter in network, but after first training epoch they
-    must be different.
+    Leak Learning Rate Adaptation algorithm is a step
+    adaptation procedure in backpropagation algortihm.
 
     Parameters
     ----------
     leak_size : float
-        Defaults to ``0.01``. This variable identified proportion, so it's
-        always between 0 and 1. Usualy this value is small.
+        Defaults to ``0.01``. This variable identified
+        proportion, so it's always between 0 and 1.
+        Typically this value is small.
+
     alpha : float
-        The ``alpha`` is control total step update ratio (It's similar to
-        step role in weight update procedure). Defaults to ``0.001``.
-        Typical this value is small.
+        The ``alpha`` is control total step update ratio.
+        Defaults to ``0.001``. Typically this value is small.
+
     beta : float
-        This similar to ``alpha``, but it control ration only for update
-        matrix norms. Defaults to ``20``.
-        Typical this value is > 1.
-    beta : float
+        This similar to ``alpha``, but it control ration
+        only for update matrix norms. Defaults to ``20``.
+        Typically this value is bigger than ``1``.
 
     Warns
     -----
@@ -45,9 +44,12 @@ class LeakStepAdaptation(SingleStepConfigurable):
     ...     addons=[algorithms.LeakStepAdaptation]
     ... )
 
-    .. [1] Noboru M. "Adaptive on-line learning in changing
+    References
+    ----------
+    [1] Noboru M. "Adaptive on-line learning in changing
         environments", 1997
-    .. [2] LeCun, "Efficient BackProp", 1998
+
+    [2] LeCun, "Efficient BackProp", 1998
     """
     leak_size = ProperFractionProperty(default=0.01)
     alpha = BoundedProperty(default=0.001, minval=0)

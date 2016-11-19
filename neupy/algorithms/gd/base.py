@@ -29,6 +29,7 @@ class GradientDescent(ConstructableNetwork):
         If this option is not empty it will generate new class which
         will inherit all from this list. Support two types of
         addon algorithms: weight update and step update.
+
     {ConstructableNetwork.Parameters}
 
     Attributes
@@ -139,7 +140,9 @@ class BatchSizeProperty(BoundedProperty):
     Parameters
     ----------
     {BoundedProperty.maxval}
+
     {BaseProperty.default}
+
     {BaseProperty.required}
     """
     expected_type = (type(None), int)
@@ -169,9 +172,10 @@ def iter_batches(n_samples, batch_size):
     Parameters
     ----------
     n_samples : int
-        Number of samples. Number should be greater than 0.
+        Number of samples. Number should be greater than ``0``.
+
     batch_size : int
-        Mini-batch size. Number should be greater than 0.
+        Mini-batch size. Number should be greater than ``0``.
 
     Yields
     ------
@@ -195,7 +199,10 @@ def cannot_divide_into_batches(data, batch_size):
     Parameters
     ----------
     data : array-like
+        Dataset.
+
     batch_size : int or None
+        Size of the batch.
 
     Returns
     -------
@@ -250,18 +257,24 @@ def apply_batches(function, arguments, batch_size, logger, description='',
         Function that accepts one or more positional arguments.
         Each of them should be an array-like variable that
         have exactly the same number of rows.
+
     arguments : tuple, list
         The arguemnts that will be provided to the function specified
         in the ``function`` argument.
+
     batch_size : int
         Mini-batch size.
+
     logger : TerminalLogger instance
+
     description : str
         Short description that will be displayed near the progressbar
         in verbose mode. Defaults to ``''`` (empty string).
+
     show_progressbar : bool
         ``True`` means that function will show progressbar in the
         terminal. Defaults to ``False``.
+
     show_error_output : bool
         Assumes that outputs from the function errors.
         ``True`` will show information in the progressbar.
@@ -309,8 +322,10 @@ def average_batch_errors(errors, n_samples, batch_size):
     errors : list
         List of errors where each element is a average error
         per batch.
+
     n_samples : int
         Number of samples in the dataset.
+
     batch_size : int
         Mini-batch size.
 
@@ -364,18 +379,23 @@ class MinibatchTrainingMixin(Configurable):
         Parameters
         ----------
         function : callable
+
         input_data : array-like
             First argument to the function that can be divided
             into mini-batches.
+
         arguments : tuple
             Additional arguments to the function.
+
         description : str
             Some description for the progressbar. Defaults to ``''``.
+
         show_progressbar : None or bool
             ``True``/``False`` will show/hide progressbar. If value
             is equal to ``None`` than progressbar will be visible in
             case if network expects to see logging after each
             training epoch.
+
         show_error_output : bool
             Assumes that outputs from the function errors.
             ``True`` will show information in the progressbar.
@@ -415,6 +435,7 @@ class MinibatchGradientDescent(GradientDescent, MinibatchTrainingMixin):
     Parameters
     ----------
     {MinibatchTrainingMixin.Parameters}
+
     {GradientDescent.Parameters}
 
     Attributes
@@ -450,9 +471,10 @@ class MinibatchGradientDescent(GradientDescent, MinibatchTrainingMixin):
         Parameters
         ----------
         input_train : array-like
-            Training input array.
+            Training input dataset.
+
         target_train : array-like
-            Training target array.
+            Training target dataset.
 
         Returns
         -------

@@ -19,21 +19,33 @@ class Adamax(MinibatchGradientDescent):
     beta1 : float
         Decay rate. Value need to be between ``0`` and ``1``.
         Defaults to ``0.95``.
+
     beta2 : float
         Decay rate. Value need to be between ``0`` and ``1``.
         Defaults to ``0.95``.
+
     epsilon : float
         Value need to be greater than ``0``. Defaults to ``1e-5``.
+
     step : float
         Learning rate, defaults to ``0.001``.
+
     {MinibatchGradientDescent.batch_size}
+
     {GradientDescent.addons}
+
     {ConstructableNetwork.connection}
+
     {ConstructableNetwork.error}
+
     {BaseNetwork.show_epoch}
+
     {BaseNetwork.shuffle_data}
+
     {BaseNetwork.epoch_end_signal}
+
     {BaseNetwork.train_end_signal}
+
     {Verbose.verbose}
 
     Attributes

@@ -18,27 +18,37 @@ class ART1(BaseNetwork):
 
     Notes
     -----
-    * Weights are not random, so the result will be always reproduceble.
+    - Weights are not random, so the result will be
+      always reproduceble.
 
     Parameters
     ----------
     rho : float
         Control reset action in training process. Value must be
         between ``0`` and ``1``, defaults to ``0.5``.
+
     n_clusters : int
         Number of clusters, defaults to ``2``. Min value is also ``2``.
+
     {BaseNetwork.step}
+
     {BaseNetwork.show_epoch}
+
     {BaseNetwork.shuffle_data}
+
     {BaseNetwork.epoch_end_signal}
+
     {BaseNetwork.train_end_signal}
 
     Methods
     -------
-    train(input_data):
-        Network network will train until it clusters all samples.
+    train(input_data)
+        ART trains until all clusters are found.
+
     predict(input_data)
-        Each prediction trains a new network.
+        Each prediction trains a new network. Basically it's
+        an alias to the ``train`` method.
+
     {BaseSkeleton.fit}
 
     Examples

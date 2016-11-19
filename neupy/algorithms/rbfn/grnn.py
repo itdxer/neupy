@@ -24,27 +24,30 @@ class GRNN(LazyLearningMixin, BaseNetwork):
         from range ``[0, 20]`` that standard deviation should be
         also a big value like ``10`` or ``15``. Small values will
         lead to bad prediction.
+
     {Verbose.verbose}
 
     Notes
     -----
-    * GRNN Network is sensitive for cases when one input feature has \
-    higher values than the other one. Before use it make sure that \
-    input values are normalized and have similar scales.
+    - GRNN Network is sensitive for cases when one input feature has
+      higher values than the other one. Before use it make sure that
+      input values are normalized and have similar scales.
 
-    * Make sure that standard deviation in the same range as \
-    input features. Check ``std`` parameter description for \
-    more information.
+    - Make sure that standard deviation in the same range as
+      input features. Check ``std`` parameter description for
+      more information.
 
-    * The bigger training dataset the slower prediction. \
-    It's much more efficient for small datasets.
+    - The bigger training dataset the slower prediction.
+      It's much more efficient for small datasets.
 
     {LazyLearningMixin.Notes}
 
     Methods
     -------
     {LazyLearningMixin.train}
+
     {BaseSkeleton.predict}
+
     {BaseSkeleton.fit}
 
     Examples
@@ -64,8 +67,9 @@ class GRNN(LazyLearningMixin, BaseNetwork):
     >>>
     >>> nw = algorithms.GRNN(std=0.1, verbose=False)
     >>> nw.train(x_train, y_train)
-    >>> result = nw.predict(x_test)
-    >>> estimators.rmse(result, y_test)
+    >>>
+    >>> y_predicted = nw.predict(x_test)
+    >>> estimators.rmse(y_predicted, y_test)
     0.2381013391408185
     """
     std = BoundedProperty(default=0.1, minval=0)
@@ -78,7 +82,11 @@ class GRNN(LazyLearningMixin, BaseNetwork):
         Parameters
         ----------
         input_train : array-like (n_samples, n_features)
+
         target_train : array-like (n_samples,)
+            Target variable should be vector or matrix
+            with one feature column.
+
         copy : bool
             If value equal to ``True`` than input matrices will
             be copied. Defaults to ``True``.

@@ -5,8 +5,7 @@ import theano.tensor as T
 from theano.ifelse import ifelse
 import numpy as np
 
-from neupy.core.properties import (ChoiceProperty, ProperFractionProperty,
-                                   NumberProperty)
+from neupy.core.properties import ChoiceProperty, NumberProperty
 from neupy.algorithms.gd import NoStepSelection
 from neupy.algorithms.utils import (parameters2vector, iter_parameters,
                                     setup_parameter_updates)
@@ -25,6 +24,7 @@ def find_param_name(layer, parameter):
     Parameters
     ----------
     layer : BaseLayer instance
+
     parameter : object
 
     Returns
@@ -130,6 +130,14 @@ class QuasiNewton(NoStepSelection, GradientDescent):
 
     Parameters
     ----------
+    update_function : {{'bfgs', 'dfp', 'psb', 'sr1'}}
+        Update function. Defaults to ``bfgs``.
+
+    h0_scale : float
+        Default Hessian matrix is an identity matrix. The
+        ``h0_scale`` parameter scales identity matrix.
+        Defaults to ``1``.
+
     {GradientDescent.Parameters}
 
     Attributes
@@ -171,7 +179,6 @@ class QuasiNewton(NoStepSelection, GradientDescent):
         }
     )
     h0_scale = NumberProperty(default=1, minval=0)
-    gradient_tol = ProperFractionProperty(default=1e-5)
 
     def init_variables(self):
         super(QuasiNewton, self).init_variables()

@@ -14,18 +14,26 @@ class DiscreteMemory(BaseSkeleton, Configurable):
 
     Notes
     -----
-    * Input and output vectors should contain only binary values.
+    - Input and output vectors should contain only binary values.
 
     Parameters
     ----------
     mode : {{'sync', 'async'}}
-        Indentify pattern recovery mode. ``sync`` mode try recovery a pattern
-        using the all input vector. ``async`` mode randomly chose some
-        values from the input vector and repeat this procedure the number
-        of times a given variable ``n_times``. Defaults to ``sync``.
+        Indentify pattern recovery mode.
+
+        - ``sync`` mode tries to recover pattern using all
+          values from the input vector.
+
+        - ``async`` mode choose randomly some values from the
+          input vector and iteratively repeat this procedure.
+          Number of iterations defines by the ``n_times``
+          parameter.
+
+        Defaults to ``sync``.
+
     n_times : int
-        Available only in ``async`` mode. Identify number of random trials.
-        Defaults to ``100``.
+        Available only in ``async`` mode. Identify number
+        of random trials. Defaults to ``100``.
     """
 
     mode = ChoiceProperty(default='sync', choices=['async', 'sync'])
@@ -47,12 +55,6 @@ class DiscreteMemory(BaseSkeleton, Configurable):
         ----------
         matrix : array-like
             Matrix for validation.
-
-        Returns
-        -------
-        bool
-            Got ``True`` all ``matrix`` discrete values are in
-            `discrete_values` list and `False` otherwise.
         """
         if np.any((matrix != 0) & (matrix != 1)):
             raise ValueError("This network is descrete. This mean that you "

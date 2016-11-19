@@ -25,6 +25,7 @@ class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
         iteration elements will be extremly small and matrix inverse
         produce huge number in hessian diagonal elements. This
         parameter control diagonal elements size. Defaults to ``1e-2``.
+
     {GradientDescent.Parameters}
 
     Attributes

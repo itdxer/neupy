@@ -20,13 +20,14 @@ class MixtureOfExperts(BaseEnsemble):
     Parameters
     ----------
     networks : list
-        List of networks based on :network:`GradientDescent` algorithm.
+        List of networks based on :network:`GradientDescent`
+        algorithm. Each network should have the same input size.
+
     gating_network : object
-        2-Layer Neural Network based on :network:`GradientDescent` which
-        has :layer:`Softmax` layer. Network's output size must be
-        equal to number of networks in the mixture model.
-        Also important to notice that in the every network
-        input size must be equal.
+        :network:`GradientDescent` based neural network that
+        has 2 layers and final layer is a :layer:`Softmax`.
+        Network's output size must be equal to number of
+        networks in the mixture model.
 
     Methods
     -------

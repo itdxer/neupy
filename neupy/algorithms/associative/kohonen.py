@@ -14,19 +14,29 @@ class Kohonen(BaseAssociative):
     Parameters
     ----------
     {BaseAssociative.n_inputs}
+
     {BaseAssociative.n_outputs}
+
     {BaseAssociative.weight}
+
     {BaseNetwork.step}
+
     {BaseNetwork.show_epoch}
+
     {BaseNetwork.shuffle_data}
+
     {BaseNetwork.epoch_end_signal}
+
     {BaseNetwork.train_end_signal}
+
     {Verbose.verbose}
 
     Methods
     -------
     {BaseSkeleton.predict}
+
     {BaseAssociative.train}
+
     {BaseSkeleton.fit}
 
     Examples
@@ -60,7 +70,6 @@ class Kohonen(BaseAssociative):
            [ 0.,  0.,  1.],
            [ 0.,  0.,  1.]])
     """
-
     def predict_raw(self, input_data):
         input_data = format_data(input_data)
         return input_data.dot(self.weight)

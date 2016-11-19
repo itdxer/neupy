@@ -15,9 +15,10 @@ class BaseSkeleton(ConfigurableABC, Verbose):
     Methods
     -------
     fit(\*args, \*\*kwargs)
-        The same as ``train`` method.
+        Alias to the ``train`` method.
+
     predict(input_data)
-        Predict value.
+        Predicts output for the specified input.
     """
     def get_params(self, deep=False):
         options = {}

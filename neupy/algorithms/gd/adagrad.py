@@ -17,7 +17,9 @@ class Adagrad(MinibatchGradientDescent):
     Parameters
     ----------
     epsilon : float
-        Value need to be greater than ``0``. Defaults to ``1e-5``.
+        Value need to be greater than ``0``.
+        Defaults to ``1e-5``.
+
     {MinibatchGradientDescent.Parameters}
 
     Attributes

@@ -7,21 +7,24 @@ __all__ = ('WeightElimination',)
 
 class WeightElimination(WeightUpdateConfigurable):
     """
-    Weight Elimination algorithm penalizes large weights and limits the
-    freedom in network. The algorithm is able to solve one of the possible
-    problems of network overfitting.
+    Weight Elimination algorithm penalizes large weights
+    and limits the freedom in network. The algorithm is
+    able to solve one of the possible problems of network
+    overfitting.
 
     Parameters
     ----------
     decay_rate : float
-        Controls the effect of penalties on the update network weights.
-        Defaults to ``0.1``.
+        Controls the effect of penalties on the update
+        network weights. Defaults to ``0.1``.
+
     zero_weight : float
-        Second important parameter for weights penalization. Defaults
-        to ``1``. Small value can make all weights close to zero. Big value
-        will make less significant contribution in weight update. That mean
-        with a big value ``zero_weight`` network allow higher values for
-        the weights.
+        Second important parameter for weights penalization.
+        Defaults to ``1``. Small value can make all weights
+        close to zero. Big value will make less significant
+        contribution in weights update. Which mean that with
+        a bigger value of the ``zero_weight`` parameter network
+        allows higher values for the weights.
 
     Warns
     -----
@@ -43,16 +46,18 @@ class WeightElimination(WeightUpdateConfigurable):
 
     Notes
     -----
-    Before adding that regularization parameter carefully choose
-    ``decay_rate`` and ``zero_weight`` parameters for the problem.
-    Invalid parameters could significatly reduce weight sizes and norm
-    could be near zero.
+    Before adding that regularization parameter carefully
+    choose ``decay_rate`` and ``zero_weight`` parameters
+    for the problem. Invalid parameters could significatly
+    reduce weight sizes and norm could be near zero.
 
-    .. [1] Weigend, A. S.; Rumelhart, D. E. & Huberman, B. A. (1991), \
-        Generalization by Weight-Elimination with Application to Forecasting, \
-        in Richard P. Lippmann; John E. Moody & David S. Touretzky, ed., \
-        Advances in Neural Information Processing Systems, San Francisco, \
-        CA: Morgan Kaufmann, pp. 875--882 .
+    References
+    ----------
+    [1] Weigend, A. S.; Rumelhart, D. E. & Huberman, B. A. (1991),
+        Generalization by Weight-Elimination with Application to
+        Forecasting, in Richard P. Lippmann; John E. Moody & David S.
+        Touretzky, ed., Advances in Neural Information Processing
+        Systems, San Francisco, CA: Morgan Kaufmann, pp. 875--882 .
     """
     decay_rate = BoundedProperty(default=0.1, minval=0)
     zero_weight = BoundedProperty(default=1, minval=0)

@@ -11,18 +11,22 @@ __all__ = ('LinearSearch',)
 
 class LinearSearch(SingleStepConfigurable):
     """
-    Linear search for the step selection. Basicly this algorithms
-    try different steps and compute your predicted error, after few
-    iteration it will chose one which was better.
+    Linear search is a step selection algorithm.
 
     Parameters
     ----------
     tol : float
-        Tolerance for termination, default to ``0.1``. Can be any number
-        greater that zero.
+        Tolerance for termination, default to ``0.1``.
+        Can be any number greater that ``0``.
+
+    maxiter : int
+        Maximum number of interations. Works only for
+        the ``brent`` method. Defaults to ``10``.
+
     search_method : 'gloden', 'brent'
-        Linear search method. Can be ``golden`` for golden search or ``brent``
-        for Brent's search, default to ``golden``.
+        Linear search method. Can be ``golden`` for
+        golden search or ``brent`` for Brent's search,
+        default to ``golden``.
 
     Warns
     -----
@@ -73,7 +77,6 @@ class LinearSearch(SingleStepConfigurable):
     --------
     :network:`ConjugateGradient`
     """
-
     tol = BoundedProperty(default=0.1, minval=0)
     maxiter = BoundedProperty(default=10, minval=1)
     search_method = ChoiceProperty(choices=['golden', 'brent'],

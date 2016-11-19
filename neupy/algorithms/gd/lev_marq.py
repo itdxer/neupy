@@ -24,6 +24,7 @@ def compute_jacobian(errors, parameters):
     ----------
     errors : Theano variable
         Computed MSE for each sample separetly.
+
     parameters : list of Theano variable
         Neural network parameters (e.g. weights, biases).
 
@@ -48,20 +49,23 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
 
     Notes
     -----
-    * Network minimizes only Mean Squared Error function.
-    * Efficient for small training datasets.
-    * Efficient for small-sized networks.
+    - Network minimizes only Mean Squared Error function.
+    - Efficient for small training datasets.
+    - Efficient for small-sized networks.
 
     Parameters
     ----------
     mu : float
         Control invertion for J.T * J matrix, defaults to `0.1`.
+
     mu_update_factor : float
         Factor to decrease the mu if update decrese the error, otherwise
         increse mu by the same factor. Defaults to ``1.2``
+
     error: {{'mse'}}
         Levenberg-Marquardt works only for quadratic functions.
         Defaults to ``mse``.
+
     {GradientDescent.Parameters}
 
     Attributes
@@ -90,7 +94,6 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
     --------
     :network:`GradientDescent` : GradientDescent algorithm.
     """
-
     mu = BoundedProperty(default=0.01, minval=0)
     mu_update_factor = BoundedProperty(default=1.2, minval=1)
     error = ChoiceProperty(default='mse', choices={'mse': errors.mse})

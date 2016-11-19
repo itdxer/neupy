@@ -20,19 +20,27 @@ class ModifiedRelaxation(BaseLinearNetwork):
     dead_zone_radius : float
         Indicates the line between stable outcome network output and
         weak, and depending on the result of doing different updates.
+
     {BaseLinearNetwork.connection}
-    {ConstructableNetwork.error}
+
     {BaseNetwork.step}
+
     {BaseNetwork.show_epoch}
+
     {BaseNetwork.shuffle_data}
+
     {BaseNetwork.epoch_end_signal}
+
     {BaseNetwork.train_end_signal}
+
     {Verbose.verbose}
 
     Methods
     -------
     {BaseSkeleton.predict}
+
     {SupervisedLearningMixin.train}
+
     {BaseSkeleton.fit}
 
     Examples
@@ -43,7 +51,10 @@ class ModifiedRelaxation(BaseLinearNetwork):
     >>> input_data = np.array([[1, 0], [2, 2], [3, 3], [0, 0]])
     >>> target_data = np.array([[1], [0], [0], [1]])
     >>>
-    >>> mrnet = algorithms.ModifiedRelaxation((2, 1), step=1, verbose=False)
+    >>> mrnet = algorithms.ModifiedRelaxation(
+    ...     (2, 1), step=1, verbose=False
+    ... )
+    ...
     >>> mrnet.train(input_data, target_data, epochs=100)
     >>> mrnet.predict(np.array([[4, 4], [0, 0]]))
     array([[0],

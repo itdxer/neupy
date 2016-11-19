@@ -15,32 +15,32 @@ class CMAC(SupervisedLearningMixin, BaseNetwork):
 
     Notes
     -----
-    * Network always use Mean Absolute Error (MAE).
-    * Works for multi dimensional target values.
+    - Network always use Mean Absolute Error (MAE).
+    - Network works for multi dimensional target values.
 
     Parameters
     ----------
     quantization : int
-        Network transform every input to discrete values. Quantization
-        value contol number of total possible values after
-        quantization, defaults to ``10``.
+        Network transforms every input to discrete value.
+        Quantization value contol number of total possible
+        categories after quantization, defaults to ``10``.
+
     associative_unit_size : int
         Number of associative blocks in memory, defaults to ``2``.
-    {BaseNetwork.step}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
+
+    {BaseNetwork.Parameters}
 
     Attributes
     ----------
     weight : dict
-        Neural network weight that contains memorized patterns.
+        Network's weight that contains memorized patterns.
 
     Methods
     -------
     {BaseSkeleton.predict}
+
     {SupervisedLearningMixin.train}
+
     {BaseSkeleton.fit}
 
     Examples
@@ -64,6 +64,7 @@ class CMAC(SupervisedLearningMixin, BaseNetwork):
     ... )
     ...
     >>> cmac.train(input_train, target_train, epochs=100)
+    >>>
     >>> predicted_test = cmac.predict(input_test)
     >>> cmac.error(target_test, predicted_test)
     0.0023639417543036569

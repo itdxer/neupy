@@ -20,7 +20,9 @@ class Quickprop(GradientDescent):
     Parameters
     ----------
     upper_bound : float
-        Maximum possible value for weight update. Defaults to ``1``.
+        Maximum possible value for weight update.
+        Defaults to ``1``.
+
     {GradientDescent.Parameters}
 
     Attributes
@@ -33,8 +35,6 @@ class Quickprop(GradientDescent):
 
     Examples
     --------
-    Simple example
-
     >>> import numpy as np
     >>> from neupy import algorithms
     >>>

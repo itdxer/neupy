@@ -12,15 +12,17 @@ __all__ = ('Momentum',)
 
 class Momentum(MinibatchGradientDescent):
     """
-    Momentum algorithm for :network:`GradientDescent` optimization.
+    Momentum algorithm.
 
     Parameters
     ----------
     momentum : float
         Control previous gradient ratio. Defaults to ``0.9``.
+
     nesterov : bool
         Instead of classic momentum computes Nesterov momentum.
         Defaults to ``False``.
+
     {MinibatchGradientDescent.Parameters}
 
     Attributes

@@ -9,15 +9,14 @@ class HebbRule(BaseStepAssociative):
     """
     Hebbian Learning Neural Network is an unsupervised
     learning technique. Network can learn associations from
-    the data and emulate similar behaviour as dog in
-    Pavlov's experiment.
+    the data.
 
     Notes
     -----
-    * Network always generates weights which contains ``0`` \
-    weight for the conditioned stimulus and ``1`` the other. \
-    This set up helps to controll your default state for the \
-    feature learning.
+    - Network always generates weights that contains ``0``
+      weight for the conditioned stimulus and ``1`` for the other.
+      Such initialization helps to controll your default state
+      for the feature learning.
 
     Parameters
     ----------
@@ -26,22 +25,35 @@ class HebbRule(BaseStepAssociative):
         'forget' information and control weight's size. Without this
         parameter network's weights will increase fast.
         Defaults to ``0.2``.
+
     {BaseAssociative.n_inputs}
+
     {BaseAssociative.n_outputs}
+
     {BaseStepAssociative.n_unconditioned}
+
     {BaseAssociative.weight}
+
     {BaseStepAssociative.bias}
+
     {BaseNetwork.step}
+
     {BaseNetwork.show_epoch}
+
     {BaseNetwork.shuffle_data}
+
     {BaseNetwork.epoch_end_signal}
+
     {BaseNetwork.train_end_signal}
+
     {Verbose.verbose}
 
     Methods
     -------
     {BaseSkeleton.predict}
+
     {BaseAssociative.train}
+
     {BaseSkeleton.fit}
 
     Examples
@@ -75,7 +87,6 @@ class HebbRule(BaseStepAssociative):
            [ 1],
            [ 1]])
     """
-
     decay_rate = BoundedProperty(default=0.2, minval=0)
 
     def weight_delta(self, input_row, layer_output):

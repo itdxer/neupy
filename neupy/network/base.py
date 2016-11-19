@@ -27,6 +27,7 @@ def show_network_options(network, highlight_options=None):
     ----------
     network : object
         Neural network instance.
+
     highlight_options : list
         List of enabled options. In that case all options from that
         list would be marked with a green color.
@@ -217,27 +218,36 @@ class BaseNetwork(BaseSkeleton):
     ----------
     step : float
         Learning rate, defaults to ``0.1``.
+
     show_epoch : int or str
-        This property controls how often the network will display information
-        about training. There are two main syntaxes for this property.
-        You can describe it as positive integer number and it
-        will describe how offen would you like to see summary output in
-        terminal. For instance, number `100` mean that network will show you
-        summary in 100, 200, 300 ... epochs. String value should be in a
-        specific format. It should contain the number of times that the output
-        will be displayed in the terminal. The second part is just
-        a syntax word ``time`` or ``times`` just to make text readable.
-        For instance, value ``'2 times'`` mean that the network will show
-        output twice with approximately equal period of epochs and one
-        additional output would be after the finall epoch.
+        This property controls how often the network will
+        display information about training. There are two
+        main syntaxes for this property.
+
+        - You can define it as a positive integer number. It
+          defines how offen would you like to see summary
+          output in terminal. For instance, number `100` mean
+          that network shows summary at 100th, 200th,
+          300th ... epochs.
+
+        - String defines number of times you want to see output in
+          terminal. For instance, value ``'2 times'`` mean that
+          the network will show output twice with approximately
+          equal period of epochs and one additional output would
+          be after the finall epoch.
+
         Defaults to ``1``.
+
     shuffle_data : bool
         If it's ``True`` class shuffles all your training data before
         training your network, defaults to ``True``.
+
     epoch_end_signal : function
         Calls this function when train epoch finishes.
+
     train_end_signal : function
         Calls this function when train process finishes.
+
     {Verbose.Parameters}
 
     Attributes
@@ -246,11 +256,14 @@ class BaseNetwork(BaseSkeleton):
         Contains list of training errors. This object has the same
         properties as list and in addition there are three additional
         useful methods: `last`, `previous` and `normalized`.
+
     train_errors : ErrorHistoryList
-        Alias to `errors` attribute.
+        Alias to the ``errors`` attribute.
+
     validation_errors : ErrorHistoryList
         The same as `errors` attribute, but it contains only validation
         errors.
+
     last_epoch : int
         Value equals to the last trained epoch. After initialization
         it is equal to ``0``.
@@ -321,11 +334,16 @@ class BaseNetwork(BaseSkeleton):
         Parameters
         ----------
         input_train : array-like
+
         target_train : array-like or None
+
         input_test : array-like or None
+
         target_test : array-like or None
+
         epochs : int
             Defaults to `100`.
+
         epsilon : float or None
             Defaults to ``None``.
         """

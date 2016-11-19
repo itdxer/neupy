@@ -13,29 +13,37 @@ class BaseLinearNetwork(ConstructableNetwork):
 
     Notes
     -----
-    * Input layer should be :layer:`Step` class instance.
+    - Input layer should be :layer:`Step` class instance.
+
+    - If you need to define specific weights for the
+      network then you should initialize connection
+
+      .. code-block:: python
+
+          import numpy as np
+          from neupy.layers import Input, Step
+
+          connection = Input(5) > Step(1, weight=np.ones((5, 1)))
 
     Parameters
     ----------
-    connection : list, tuple or object
-        Should be a list or tuple that contains two integers. First integer
-        describe number of input units and the seconds one number of output
-        units.
+    connection : list, tuple or LayerConnection instance
+        Should be a list or tuple that contains two integers.
+        First integer defines number of input units and the
+        seconds one number of output units.
+
     {ConstructableNetwork.error}
-    {BaseNetwork.step}
-    {BaseNetwork.show_epoch}
-    {BaseNetwork.shuffle_data}
-    {BaseNetwork.epoch_end_signal}
-    {BaseNetwork.train_end_signal}
-    {Verbose.verbose}
+
+    {BaseNetwork.Parameters}
 
     Methods
     -------
     {BaseSkeleton.predict}
+
     {SupervisedLearningMixin.train}
+
     {BaseSkeleton.fit}
     """
-
     def __init__(self, connection, **options):
         if len(connection) != 2:
             raise ValueError("This network should contains two layers.")

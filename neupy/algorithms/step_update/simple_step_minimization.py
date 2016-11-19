@@ -13,9 +13,10 @@ class SimpleStepMinimization(SingleStepConfigurable):
     Parameters
     ----------
     epochs_step_minimizator : int
-        The parameter controls the frequency reduction step with respect
-        to epochs. Defaults to ``100`` epochs. Can't be less than ``1``.
-        Less value mean that step decrease faster.
+        The parameter controls the frequency reduction step
+        with respect to epochs. Defaults to ``100`` epochs.
+        Can't be less than ``1``. Less value means that
+        step is decreasing faster.
 
     Warns
     -----

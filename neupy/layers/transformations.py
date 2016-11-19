@@ -32,6 +32,39 @@ class Reshape(BaseLayer):
     Attributes
     ----------
     {BaseLayer.Attributes}
+
+    Examples
+    --------
+
+    Covert 4D input to 2D
+
+    >>> from neupy import layers
+    >>>
+    >>> connection = layers.join(
+    ...     layers.Input((2, 5, 5)),
+    ...     layers.Reshape()
+    ... )
+    >>>
+    >>> print("Input shape: {{}}".format(connection.input_shape))
+    Input shape: (2, 5, 5)
+    >>>
+    >>> print("Output shape: {{}}".format(connection.output_shape))
+    Output shape: (50,)
+
+    Convert 3D to 4D
+
+    >>> from neupy import layers
+    >>>
+    >>> connection = layers.join(
+    ...     layers.Input((5, 4)),
+    ...     layers.Reshape((5, 2, 2))
+    ... )
+    >>>
+    >>> print("Input shape: {{}}".format(connection.input_shape))
+    Input shape: (5, 4)
+    >>>
+    >>> print("Output shape: {{}}".format(connection.output_shape))
+    Output shape: (5, 2, 2)
     """
     shape = TypedListProperty()
 
@@ -88,6 +121,45 @@ class Embedding(BaseLayer):
     Attributes
     ----------
     {BaseLayer.Attributes}
+
+    Examples
+    --------
+
+    This example converts dataset that has only categorical
+    variables into format that suitable for Embedding layer.
+
+    >>> import numpy as np
+    >>> from neupy import layers
+    >>>
+    >>> dataset = np.array([
+    ...     ['cold', 'high'],
+    ...     ['hot',  'low'],
+    ...     ['cold', 'low'],
+    ...     ['hot',  'low'],
+    ... ])
+    >>>
+    >>> unique_value, dataset_indeces = np.unique(
+    ...     dataset, return_inverse=True
+    ... )
+    >>> dataset_indeces = dataset_indeces.reshape((4, 2))
+    >>> dataset_indeces
+    array([[0, 1],
+           [2, 3],
+           [0, 3],
+           [2, 3]])
+    >>>
+    >>> n_features = dataset.shape[1]
+    >>> n_unique_categories = len(unique_value)
+    >>> embedded_size = 1
+    >>>
+    >>> connection = layers.join(
+    ...     layers.Input(n_features),
+    ...     layers.Embedding(n_unique_categories, embedded_size),
+    ...     # Output from the embedding layer is 3D
+    ...     # For this reason we need to reshape dimensions
+    ...     # and make output 2D
+    ...     layers.Reshape(),
+    ... )
     """
     input_size = IntProperty(minval=1)
     output_size = IntProperty(minval=1)

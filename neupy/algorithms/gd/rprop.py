@@ -19,14 +19,18 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
     ----------
     minstep : float
         Minimum possible value for step. Defaults to ``0.1``.
+
     maxstep : float
         Maximum possible value for step. Defaults to ``50``.
+
     increase_factor : float
         Increase factor for step in case when gradient doesn't change
         sign compare to previous epoch.
+
     decrease_factor : float
         Decrease factor for step in case when gradient changes sign
         compare to previous epoch.
+
     {GradientDescent.Parameters}
 
     Attributes
@@ -135,28 +139,39 @@ class IRPROPPlus(RPROP):
     Parameters
     ----------
     {RPROP.minstep}
+
     {RPROP.maxstep}
+
     {RPROP.increase_factor}
+
     {RPROP.decrease_factor}
+
     {GradientDescent.addons}
+
     {ConstructableNetwork.connection}
+
     {ConstructableNetwork.error}
+
     {BaseNetwork.show_epoch}
+
     {BaseNetwork.shuffle_data}
+
     {BaseNetwork.epoch_end_signal}
+
     {BaseNetwork.train_end_signal}
+
     {Verbose.verbose}
 
     Methods
     -------
     {BaseSkeleton.predict}
+
     {SupervisedLearningMixin.train}
+
     {BaseSkeleton.fit}
 
     Examples
     --------
-    Simple example
-
     >>> import numpy as np
     >>> from neupy import algorithms
     >>>

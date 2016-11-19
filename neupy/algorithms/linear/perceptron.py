@@ -9,21 +9,32 @@ class Perceptron(BaseLinearNetwork):
     Perceptron Neural Network. Simples linear model in Neural
     Networks.
 
+    Notes
+    -----
+    {BaseLinearNetwork.Notes}
+
     Parameters
     ----------
     {BaseLinearNetwork.connection}
-    {ConstructableNetwork.error}
+
     {BaseNetwork.step}
+
     {BaseNetwork.show_epoch}
+
     {BaseNetwork.shuffle_data}
+
     {BaseNetwork.epoch_end_signal}
+
     {BaseNetwork.train_end_signal}
+
     {Verbose.verbose}
 
     Methods
     -------
     {BaseSkeleton.predict}
+
     {SupervisedLearningMixin.train}
+
     {BaseSkeleton.fit}
 
     Examples
@@ -40,7 +51,6 @@ class Perceptron(BaseLinearNetwork):
     array([[-1],
            [ 1]])
     """
-
     def init_layer_updates(self, layer):
         if not layer.parameters:
             return []

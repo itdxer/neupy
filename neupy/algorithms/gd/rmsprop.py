@@ -19,8 +19,10 @@ class RMSProp(MinibatchGradientDescent):
     decay : float
         Decay rate. Value need to be between ``0`` and ``1``.
         Defaults to ``0.95``.
+
     epsilon : float
         Value need to be greater than ``0``. Defaults to ``1e-5``.
+
     {MinibatchGradientDescent.Parameters}
 
     Attributes

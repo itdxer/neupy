@@ -19,26 +19,31 @@ class DiscreteBAM(DiscreteMemory):
     Parameters
     ----------
     {DiscreteMemory.mode}
+
     {DiscreteMemory.n_times}
 
     Methods
     -------
     train(input_data, output_data)
         Train network and update network weights.
+
     predict_output(input_data, n_times=None)
         Using input data recover output data. Returns two arguments.
-        First is input data, second is output data.
+        First is an input data, second is an output data.
+
     predict(input_data, n_times=None)
-        The same as ``predict_output``.
+        Alias to the ``predict_output`` method.
+
     predict_input(output_data, n_times=None)
         Using output data recover input data. Returns two arguments.
         First is input data, second is output data.
+
     energy(input_data, output_data)
         Calculate Hopfiel Energy for the input and output data.
 
     Notes
     -----
-    * Input and output vectors should contain only binary values.
+    - Input and output vectors should contain only binary values.
 
     Examples
     --------
@@ -85,6 +90,7 @@ class DiscreteBAM(DiscreteMemory):
     >>> recovered_zero, recovered_hint = bamnet.predict(half_zero)
     >>> recovered_hint
     matrix([[0, 1, 0, 0]])
+    >>>
     >>> zero_hint
     matrix([[0, 1, 0, 0]])
     """
