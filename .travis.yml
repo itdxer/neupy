@@ -31,6 +31,6 @@ before_script:
 #   - sleep 3 # give xvfb some time to start
 
 script:
-  - export THEANO_FLAGS='floatX=float32' && export SKIP_PLOT_TEST='YES' && nosetests
-  - export THEANO_FLAGS='floatX=float64' && export SKIP_PLOT_TEST='YES' && nosetests
+  - export THEANO_FLAGS='floatX=float32,gcc.cxxflags="-march=core2"'  && export SKIP_PLOT_TEST='YES' && nosetests
+  - export THEANO_FLAGS='floatX=float64,gcc.cxxflags="-march=core2"' && export SKIP_PLOT_TEST='YES' && nosetests
   - flake8 neupy
