@@ -12,8 +12,8 @@ class SingleStepConfigurable(Configurable):
 
     Warns
     -----
-    It works with any algorithm based on backpropagation. Class
-    can't work without it.
+    It works with any algorithm based on backpropagation.
+    Class can't work without it.
     """
     addon_type = SINGLE_STEP_UPDATE
 
@@ -26,7 +26,7 @@ class MultipleStepConfigurable(Configurable):
 
     Warns
     -----
-    It works with any algorithm based on backpropagation. Class
-    can't work without it.
+    It works with any algorithm based on backpropagation.
+    Class can't work without it.
     """
     addon_type = MULTIPLE_STEP_UPDATE

@@ -6,25 +6,31 @@ __all__ = ('LMS',)
 
 class LMS(BaseLinearNetwork):
     """
-    LMS Neural Network. Algorithm has several names, including the
-    Widrow-Hoff or Delta rule. Algorithm similar to :network:`Perceptron`
-    Neural Network, but has different idea behind learning process.
+    LMS Neural Network. Algorithm has several names,
+    including the Widrow-Hoff or Delta rule.
 
     Parameters
     ----------
     {BaseLinearNetwork.connection}
-    {ConstructableNetwork.error}
+
     {BaseNetwork.step}
+
     {BaseNetwork.show_epoch}
+
     {BaseNetwork.shuffle_data}
+
     {BaseNetwork.epoch_end_signal}
+
     {BaseNetwork.train_end_signal}
+
     {Verbose.verbose}
 
     Methods
     -------
     {BaseSkeleton.predict}
+
     {SupervisedLearningMixin.train}
+
     {BaseSkeleton.fit}
 
     Examples

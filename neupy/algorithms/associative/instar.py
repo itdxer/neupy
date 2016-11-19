@@ -14,21 +14,33 @@ class Instar(BaseStepAssociative):
     Parameters
     ----------
     {BaseAssociative.n_inputs}
+
     {BaseAssociative.n_outputs}
+
     {BaseStepAssociative.n_unconditioned}
+
     {BaseAssociative.weight}
+
     {BaseStepAssociative.bias}
+
     {BaseNetwork.step}
+
     {BaseNetwork.show_epoch}
+
     {BaseNetwork.shuffle_data}
+
     {BaseNetwork.epoch_end_signal}
+
     {BaseNetwork.train_end_signal}
+
     {Verbose.verbose}
 
     Methods
     -------
     {BaseSkeleton.predict}
+
     {BaseAssociative.train}
+
     {BaseSkeleton.fit}
 
     Examples
@@ -60,7 +72,6 @@ class Instar(BaseStepAssociative):
            [0],
            [0]])
     """
-
     def weight_delta(self, input_row, layer_output):
         n_unconditioned = self.n_unconditioned
         weight = self.weight[n_unconditioned:, :]

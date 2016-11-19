@@ -1,6 +1,6 @@
-from math import sqrt, pi
+import math
 
-from numpy import zeros, tile, exp
+import numpy as np
 from numpy.core.umath_tests import inner1d
 
 
@@ -14,27 +14,30 @@ def pdf_between_data(train_data, input_data, std):
     Parameters
     ----------
     train_data : array
-        train sample
+        Training dataset.
+
     input_data : array
-        input sample
+        Input dataset
+
     std : float
-        standard deviation for PDF
+        Standard deviation for Probability Density
+        Function (PDF).
 
     Returns
     -------
     array-like
     """
-    # Note: This implementation works faster than 3D arrays
-    # and use less memory.
-    results = zeros((train_data.shape[0], input_data.shape[0]))
+    n_train_samples = train_data.shape[0]
+    n_samples = input_data.shape[0]
+
+    results = np.zeros((n_train_samples, n_samples))
     variance = std ** 2
-    function_const = std * sqrt(2 * pi)
-    train_data_size = train_data.shape[0]
+    const = std * math.sqrt(2 * math.pi)
 
     for i, input_row in enumerate(input_data):
-        inputs = tile(input_row, (train_data_size, 1))
+        inputs = np.tile(input_row, (n_train_samples, 1))
         class_difference = (train_data - inputs)
         total_distance = inner1d(class_difference, class_difference)
-        results[:, i] = exp(-total_distance / variance) / function_const
+        results[:, i] = np.exp(-total_distance / variance) / const
 
     return results

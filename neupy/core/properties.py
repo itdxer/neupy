@@ -19,10 +19,12 @@ class BaseProperty(SharedDocs):
     ----------
     default : object
         Default property value. Defaults to ``None``.
+
     required : bool
-        If parameter equal to ``True`` and value undefined after
-        initialization class then it will cause an error.
+        If parameter equal to ``True`` and value is not defined
+        after initialization then exception will be triggered.
         Defaults to ``False``.
+
     allow_none : bool
         When value is equal to ``True`` than ``None`` is a valid
         value for the parameter. Defaults to ``False``.
@@ -40,6 +42,7 @@ class BaseProperty(SharedDocs):
     def __set__(self, instance, value):
         if not isinstance(value, self.expected_type):
             availabe_types = self.expected_type
+
             if isinstance(availabe_types, (list, tuple)):
                 availabe_types = ', '.join(t.__name__ for t in availabe_types)
             else:
@@ -87,7 +90,8 @@ class Property(BaseProperty):
     Parameters
     ----------
     expected_type : object
-        Valid data type.
+        Valid data types.
+
     {BaseProperty.Parameters}
     """
     def __init__(self, expected_type=object, *args, **kwargs):
@@ -113,11 +117,14 @@ class TypedListProperty(BaseProperty):
     Parameters
     ----------
     n_elements : int
-        Indentify fixed number of elements in list. ``None`` value mean
-        that list can contains any number of elements. Defaults to ``None``.
+        Indentify fixed number of elements in list. ``None``
+        value mean that list can contains any number of
+        elements. Defaults to ``None``.
+
     element_type : object or tuple
-        There are could be defined valid list elementy type or a bunch
-        of them as tuple.
+        There are could be defined valid list elementy type
+        or a bunch of them as tuple.
+
     {BaseProperty.Parameters}
     """
     expected_type = (list, tuple)
@@ -152,11 +159,10 @@ class ChoiceProperty(BaseProperty):
     Parameters
     ----------
     choices : list, tuple or dict
-        Identify all posible choices. Dictionary choices ties values
-        with some names that can help easily chang options between
-        some specific object like functions. List or tuple choices
-        do the same as dictionary, but they are useful in case when
-        keys and values should be the same.
+        Stores all posible choices. Defines list of possible
+        choices. If value specified as a dictionary than key
+        would be just an alias to the expected value.
+
     {BaseProperty.Parameters}
     """
     choices = {}
@@ -201,8 +207,10 @@ class BoundedProperty(BaseProperty):
     ----------
     minval : float
         Minimum possible value for the property.
+
     maxval : float
         Maximum possible value for the property.
+
     {BaseProperty.Parameters}
     """
 

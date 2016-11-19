@@ -9,19 +9,19 @@ __all__ = ('SearchThenConverge',)
 
 class SearchThenConverge(SingleStepConfigurable):
     """
-    Algorithm minimize learning step. Similar to
-    :network:`SimpleStepMinimization`, but more complicated
-    step update rule.
+    Algorithm decrease learning step after each epoch.
 
     Parameters
     ----------
     epochs_step_minimizator : int
-        The parameter controls the frequency reduction step with respect
-        to epochs. Defaults to ``100`` epochs. Can't be less than ``1``.
-        Less value mean that step decrease faster.
+        The parameter controls the frequency reduction step
+        with respect to epochs. Defaults to ``100`` epochs.
+        Can't be less than ``1``. Less value mean that step
+        decrease faster.
+
     rate_coefitient : float
-        Second important parameter to control the rate of error reduction.
-        Defaults to ``0.2``
+        Second important parameter to control the rate of
+        error reduction. Defaults to ``0.2``
 
     Warns
     -----

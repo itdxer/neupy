@@ -26,35 +26,46 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
     ----------
     n_visible : int
         Number of visible units.
+
     n_hidden : int
         Number of hidden units.
+
     {MinibatchTrainingMixin.batch_size}
+
     weight : array-like, Theano variable, Initializer or scalar
         Default initialization methods
         you can find :ref:`here <init-methods>`.
         Defaults to :class:`XavierNormal <neupy.init.XavierNormal>`.
+
     hidden_bias : array-like, Theano variable, Initializer or scalar
         Default initialization methods
         you can find :ref:`here <init-methods>`.
         Defaults to :class:`Constant(value=0) <neupy.init.Constant>`.
+
     visible_bias : array-like, Theano variable, Initializer or scalar
         Default initialization methods
         you can find :ref:`here <init-methods>`.
         Defaults to :class:`Constant(value=0) <neupy.init.Constant>`.
+
     {BaseNetwork.Parameters}
 
     Methods
     -------
     train(input_train, epochs=100)
+        Trains network.
+
     {BaseSkeleton.fit}
+
     visible_to_hidden(visible_input)
         Populates data throught the network and returns output
         from the hidden layer.
+
     hidden_to_visible(hidden_input)
         Propagates output from the hidden layer backward
         to the visible.
+
     gibbs_sampling(visible_input, n_iter=1)
-        Makes Gibbs sampling n times using visible input.
+        Makes Gibbs sampling ``n`` times using visible input.
 
     Examples
     --------

@@ -18,24 +18,34 @@ class BaseAssociative(BaseNetwork):
     ----------
     n_inputs : int
         Number of input units.
+
     n_outputs : int
         Number of output units.
+
     weight : array-like, Initializer
         Neural network weights.
         Value defined manualy should have shape ``(n_inputs, n_outputs)``.
         Defaults to :class:`Normal() <neupy.init.Normal>`.
+
     {BaseNetwork.step}
+
     {BaseNetwork.show_epoch}
+
     {BaseNetwork.shuffle_data}
+
     {BaseNetwork.epoch_end_signal}
+
     {BaseNetwork.train_end_signal}
+
     {Verbose.verbose}
 
     Methods
     -------
     {BaseSkeleton.predict}
-    train(input_train, epochs=100):
+
+    train(input_train, epochs=100)
         Train neural network.
+
     {BaseSkeleton.fit}
     """
     n_inputs = IntProperty(minval=1, required=True)
@@ -61,7 +71,6 @@ class BaseAssociative(BaseNetwork):
 
     def train(self, input_train, epochs=100):
         input_train = format_data(input_train, is_feature1d=True)
-
         return super(BaseAssociative, self).train(
             input_train=input_train, target_train=None,
             input_test=None, target_test=None,
@@ -78,30 +87,42 @@ class BaseStepAssociative(BaseAssociative):
     Parameters
     ----------
     {BaseAssociative.n_inputs}
+
     {BaseAssociative.n_outputs}
+
     n_unconditioned : int
         Number of unconditioned units in neraul networks. All these
         units wouldn't update during the training procedure.
         Unconditioned should be the first feature in the dataset.
+
     weight : array-like
         Neural network weights.
         Value defined manualy should have shape ``(n_inputs, n_outputs)``.
         Defaults to ``None`` which means that all unconditional
         weights will be equal to ``1``. Other weights equal to ``0``.
+
     bias : array-like, Initializer
         Neural network bias units.
         Defaults to :class:`Constant(-0.5) <neupy.init.Constant>`.
+
     {BaseNetwork.step}
+
     {BaseNetwork.show_epoch}
+
     {BaseNetwork.shuffle_data}
+
     {BaseNetwork.epoch_end_signal}
+
     {BaseNetwork.train_end_signal}
+
     {Verbose.verbose}
 
     Methods
     -------
     {BaseSkeleton.predict}
+
     {BaseAssociative.train}
+
     {BaseSkeleton.fit}
     """
     n_inputs = IntProperty(minval=2, required=True)

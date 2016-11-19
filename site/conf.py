@@ -73,10 +73,14 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.linkcode',
     'sphinx.ext.mathjax',
-    'numpydoc',
+
     'tinkerer.ext.blog',
     'tinkerer.ext.disqus',
+
+    'numpydoc',
 ]
+
+autodoc_default_flags = []
 
 # Add other template paths here
 templates_path = ['_templates']
@@ -101,6 +105,8 @@ html_sidebars = {
     ],
 }
 
+autodoc_default_flags = ['members', 'undoc-members']
+
 # Add an index to the HTML documents.
 html_use_index = False
 
@@ -120,8 +126,8 @@ autoclass_content = "class"
 # **************************************************************
 
 numpydoc_show_class_members = False
-
-numpydoc_class_members_toctree = False
+numpydoc_show_inherited_class_members = False
+numpydoc_class_members_toctree = True
 
 # **************************************************************
 # Customizations
@@ -163,15 +169,14 @@ def get_module_for_class(classname, moduletype):
 
 def process_docstring(app, what, name, obj, options, lines):
     """
-    Function replace labeled class names to real links in
-    documentation.
+    Function replaces labeled class names to real links in
+    the documentation.
 
     Available types:
-    * :network:`NetworkClassName`
-    * :layer:`LayerClassName`
-    * :plot:`function_name`
+    - :network:`NetworkClassName`
+    - :layer:`LayerClassName`
+    - :plot:`function_name`
     """
-
     labels = ['network', 'layer', 'plot']
     labels_regexp = '|'.join(labels)
 
@@ -179,6 +184,10 @@ def process_docstring(app, what, name, obj, options, lines):
         r'\:({})+?\:'
         r'\`(.+?)(|\s<.+?>)\`'.format(labels_regexp)
     )
+
+    if options is not None:
+        # Do not show information about parent classes
+        options['show-inheritance'] = False
 
     for i, line in enumerate(lines):
         # Replace values one by one to make sure that there is no overlaps.
@@ -201,7 +210,9 @@ def process_docstring(app, what, name, obj, options, lines):
                 newline_pattern = r':class:`\2 <{}\.{}>`'.format(module,
                                                                  classname)
 
-            line = lines[i] = regexp.sub(newline_pattern, line, count=1)
+            line = regexp.sub(newline_pattern, line, count=1)
+            line = line.replace('\.', '.')
+            lines[i] = line
             replacement = regexp.search(line)
 
 
@@ -212,12 +223,22 @@ def preprocess_texts(app, docname, source):
     process_docstring(app, None, None, None, None, source)
 
 
+def process_arguments(app, what, name, obj, options, signature,
+                      return_annotation):
+    """
+    Exclude arguments for classes in the documentation.
+    """
+    if what == 'class':
+        return (None, None)
+
+
 def setup(app):
     """
     Function with reserved name that would be trigger by Sphinx
     if it will find such function in configuration file.
     """
     app.connect('autodoc-process-docstring', process_docstring)
+    app.connect('autodoc-process-signature', process_arguments)
     app.connect('source-read', preprocess_texts)
 
 # **************************************************************

@@ -83,10 +83,11 @@ class SklearnCompatibilityTestCase(BaseTestCase):
             grnnet,
             param_distributions={'std': np.arange(1e-2, 0.1, 1e-4)},
             n_iter=10,
-            scoring=scorer
+            scoring=scorer,
+            random_state=self.random_seed
         )
         random_search.fit(dataset.data, dataset.target)
         scores = random_search.cv_results_
 
         best_score = min(scores['mean_test_score'])
-        self.assertAlmostEqual(0.4303, best_score, places=3)
+        self.assertAlmostEqual(0.4266, best_score, places=3)

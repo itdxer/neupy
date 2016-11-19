@@ -40,7 +40,7 @@ def parallel(connections, merge_layer):
     ...         layers.Convolution((5, 3, 3)),
     ...     ]],
     ...     layers.Concatenate()
-    ... ),
+    ... )
     """
     if not isinstance(connections, (list, tuple)):
         raise ValueError("Connections should be a list or a tuple.")

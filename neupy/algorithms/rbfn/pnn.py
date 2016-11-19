@@ -19,37 +19,45 @@ class PNN(LazyLearningMixin, BaseNetwork, MinibatchTrainingMixin):
 
     Notes
     -----
-    * PNN Network is sensitive for cases when one input feature has \
-    higher values than the other one. Before use it make sure that \
-    input values are normalized and have similar scales.
+    - PNN Network is sensitive for cases when one input feature
+      has higher values than the other one. Before use it make
+      sure that input values are normalized and have similar scales.
 
-    * Make sure that standard deviation in the same range as \
-    input features. Check ``std`` parameter description for \
-    more information.
+    - Make sure that standard deviation in the same range as
+      input features. Check ``std`` parameter description for
+      more information.
 
-    * The bigger training dataset the slower prediction. \
-    It's much more efficient for small datasets.
+    - The bigger training dataset the slower prediction.
+      It's much more efficient for small datasets.
 
     {LazyLearningMixin.Notes}
 
     Parameters
     ----------
     std : float
-        Standard deviation for the PDF function. Default to ``0.1``.
-        If your input features have high values than standard
-        deviation should also be high. For instance, if input features
-        from range ``[0, 20]`` that standard deviation should be
-        also a big value like ``10`` or ``15``. Small values will
-        lead to bad prediction.
+        Standard deviation for the Probability Density Function (PDF).
+        Defaults to ``0.1``. If your input features have high values
+        than standard deviation should also be high. For instance,
+        if input features from range ``[0, 20]`` that standard
+        deviation should be also a big value like ``10`` or ``15``.
+        Small values will lead to bad prediction.
+
     {MinibatchTrainingMixin.batch_size}
+
     {BaseNetwork.verbose}
 
     Methods
     -------
     {LazyLearningMixin.train}
+
+        The ``target_train`` argument should be a vector or
+        matrix with one feature column.
+
     {BaseSkeleton.predict}
+
     predict_proba(input_data)
         Predict probabilities for each class.
+
     {BaseSkeleton.fit}
 
     Examples
@@ -69,8 +77,9 @@ class PNN(LazyLearningMixin, BaseNetwork, MinibatchTrainingMixin):
     >>>
     >>> pnn = algorithms.PNN(std=10, verbose=False)
     >>> pnn.train(x_train, y_train)
-    >>> result = pnn.predict(x_test)
-    >>> metrics.accuracy_score(y_test, result)
+    >>>
+    >>> y_predicted = pnn.predict(x_test)
+    >>> metrics.accuracy_score(y_test, y_predicted)
     0.98888888888888893
     """
     std = BoundedProperty(default=0.1, minval=0)
@@ -87,7 +96,11 @@ class PNN(LazyLearningMixin, BaseNetwork, MinibatchTrainingMixin):
         Parameters
         ----------
         input_train : array-like (n_samples, n_features)
+
         target_train : array-like (n_samples,)
+            Target variable should be vector or matrix
+            with one feature column.
+
         copy : bool
             If value equal to ``True`` than input matrices will
             be copied. Defaults to ``True``.
@@ -158,6 +171,7 @@ class PNN(LazyLearningMixin, BaseNetwork, MinibatchTrainingMixin):
         ------
         NotTrainedException
             If network hasn't been trained.
+
         ValueError
             In case if something is wrong with input data.
 

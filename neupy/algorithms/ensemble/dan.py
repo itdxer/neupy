@@ -29,7 +29,8 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
 
     Notes
     -----
-    * Every network must has 1 output and result must be between 0 and 1.
+    - Every network must has 1 output and result must
+      be between ``0`` and ``1``.
 
     Examples
     --------

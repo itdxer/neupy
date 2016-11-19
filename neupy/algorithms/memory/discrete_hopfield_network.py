@@ -19,29 +19,38 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
     Notes
     -----
-    Works only with binary data. Input matrix should contain
-    only zeros and ones.
+    - Works only with binary data. Input matrix should
+      contain only zeros and ones.
 
     Parameters
     ----------
     {DiscreteMemory.mode}
+
     {DiscreteMemory.n_times}
+
     check_limit : bool
-        Option enable a limit of patterns control for the network using
-        logarithmically proportion rule. Defaults to ``True``.
+        Option enable a limit of patterns control for the
+        network using logarithmically proportion rule.
+        Defaults to ``True``.
+
+        .. math::
+
+            \\frac{{n_{{features}}}}{{2 \\cdot log_{{e}}(n_{{features}})}}
 
     Methods
     -------
     energy(input_data)
         Compute Discrete Hopfiel Energy.
+
     train(input_data)
         Save input data pattern into the network memory.
+
     predict(input_data, n_times=None)
         Recover data from the memory using input pattern.
-        For the prediction procedure you can control number of iterations.
-        If you set up this value equal to ``None`` then the value would be
-        equal to the value that you set up for the property with
-        the same name - ``n_times``.
+        For the prediction procedure you can control number
+        of iterations. If you set up this value equal to ``None``
+        then the value would be equal to the value that you
+        set up for the property with the same name - ``n_times``.
 
     Examples
     --------

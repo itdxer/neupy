@@ -16,41 +16,59 @@ class Oja(BaseNetwork):
 
     Notes
     -----
-    * In practice use step as very small value. For example ``1e-7``.
-    * Normalize the input data before use Oja algorithm. Input data \
-    shouldn't contains large values.
-    * Set up smaller values for weight if error for a few first iterations \
-    is big compare to the input values scale. For example, if your input \
-    data have values between 0 and 1 error value equal to 100 is big.
+    - In practice use step as very small value.
+      For instance, value ``1e-7`` can be a good choice.
+
+    - Normalize the input data before use Oja algorithm.
+      Input data shouldn't contains large values.
+
+    - Set up smaller values for weight if error for a few
+      first iterations is big compare to the input values scale.
+      For instance, if your input data have values between
+      ``0`` and ``1`` error value equal to ``100`` is big.
 
     Parameters
     ----------
     minimized_data_size : int
-        Expected number of features after minimization, defaults to ``1``
+        Expected number of features after minimization,
+        defaults to ``1``.
+
     weight : array-like or ``None``
         Defines networks weights.
         Defaults to :class:`XavierNormal() <neupy.init.XavierNormal>`.
+
     {BaseNetwork.step}
+
     {BaseNetwork.show_epoch}
+
     {BaseNetwork.epoch_end_signal}
+
     {BaseNetwork.train_end_signal}
+
     {Verbose.verbose}
 
     Methods
     -------
     reconstruct(input_data)
-        Reconstruct your minimized data.
+        Reconstruct original dataset from the minimized input.
+
     train(input_data, epsilon=1e-2, epochs=100)
-        Train Oja algorithm.
+        Trains algorithm based on the input dataset.
+        For the dimensionality reduction input dataset
+        assumes to be also a target.
+
     {BaseSkeleton.predict}
+
     {BaseSkeleton.fit}
 
     Raises
     ------
     ValueError
-        * Triggers when you try to reconstruct output without training.
-        * Invalid number of input data features for the ``train`` and \
-        ``reconstruct`` methods.
+        - Triggers when you try to reconstruct output
+          without training.
+
+        - Invalid number of input data features for the
+          ``train`` and ``reconstruct`` methods.
 
     Examples
     --------
@@ -96,7 +114,7 @@ class Oja(BaseNetwork):
 
         mae = np.sum(np.abs(error)) / input_data.size
 
-        # Clear memory
+        # Clean objects from the memory
         del minimized
         del reconstruct
         del error

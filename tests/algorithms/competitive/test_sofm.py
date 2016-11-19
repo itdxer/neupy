@@ -3,9 +3,8 @@ import math
 import numpy as np
 
 from neupy import algorithms, init
-from neupy.algorithms.competitive.sofm import (neuron_neighbours, dot_product,
-                                               neg_euclid_distance,
-                                               cosine_similarity)
+from neupy.algorithms.competitive import sofm
+
 from base import BaseTestCase
 
 
@@ -36,17 +35,9 @@ class SOFMTransformationsTestCase(BaseTestCase):
             decimal=decimal
         )
 
-    def test_linear_transform(self):
-        self.assert_invalid_transformation(
-            dot_product,
-            np.array([[1, 2, 3]]),
-            np.array([[1, 2, 3]]).T,
-            np.array([[14]])
-        )
-
     def test_euclid_transform(self):
         self.assert_invalid_transformation(
-            neg_euclid_distance,
+            sofm.neg_euclid_distance,
             np.array([[1, 2, 3]]),
             np.array([
                 [1, 2, 3],
@@ -59,7 +50,7 @@ class SOFMTransformationsTestCase(BaseTestCase):
 
     def test_cosine_transform(self):
         self.assert_invalid_transformation(
-            cosine_similarity,
+            sofm.cosine_similarity,
             np.array([[1, 2, 3]]),
             np.array([
                 [1, 2, 3],
@@ -81,7 +72,7 @@ class SOFMTestCase(BaseTestCase):
         ])
 
     def test_neightbours(self):
-        result = neuron_neighbours(np.zeros((3, 3)), (0, 0), 1)
+        result = sofm.neuron_neighbours(np.zeros((3, 3)), (0, 0), 1)
         answer = np.array([
             [1., 1., 0.],
             [1., 0., 0.],
@@ -89,7 +80,7 @@ class SOFMTestCase(BaseTestCase):
         ])
         self.assertTrue(np.all(result == answer))
 
-        result = neuron_neighbours(np.zeros((5, 5)), (2, 2), 2)
+        result = sofm.neuron_neighbours(np.zeros((5, 5)), (2, 2), 2)
         answer = np.array([
             [0., 0., 1., 0., 0.],
             [0., 1., 1., 1., 0.],
@@ -99,7 +90,7 @@ class SOFMTestCase(BaseTestCase):
         ])
         self.assertTrue(np.all(result == answer))
 
-        result = neuron_neighbours(np.zeros((3, 3)), (1, 1), 0)
+        result = sofm.neuron_neighbours(np.zeros((3, 3)), (1, 1), 0)
         answer = np.array([
             [0., 0., 0.],
             [0., 1., 0.],

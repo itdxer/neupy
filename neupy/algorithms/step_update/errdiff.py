@@ -18,16 +18,19 @@ class ErrDiffStepUpdate(SingleStepConfigurable):
     Parameters
     ----------
     update_for_smaller_error : float
-        Multiplies this option to ``step`` in if the error was less than in
-        previous epochs. Defaults to ``1.05``. Value can't be less
-        than ``1``.
+        Multiplies this option to ``step`` in if the error
+        was less than in previous epochs. Defaults to ``1.05``.
+        Value can't be less than ``1``.
+
     update_for_bigger_error : float
-        Multiplies this option to ``step`` in if the error was more than in
-        previous epochs. Defaults to ``0.7``.
+        Multiplies this option to ``step`` in if the error
+        was more than in previous epochs. Defaults to ``0.7``.
+
     error_difference : float
-        The value indicates how many had to increase the error from the
-        previous epochs that would produce a reduction step. Defaults
-        to ``1.04``. Value can't be less than ``1``.
+        The value indicates how many had to increase the
+        error from the previous epochs that would produce
+        reduction step. Defaults to ``1.04``.
+        Value can't be less than ``1``.
 
     Warns
     -----
@@ -43,7 +46,6 @@ class ErrDiffStepUpdate(SingleStepConfigurable):
     ...     verbose=False,
     ...     addons=[algorithms.ErrDiffStepUpdate]
     ... )
-    >>>
     """
     update_for_smaller_error = BoundedProperty(default=1.05, minval=1)
     update_for_bigger_error = ProperFractionProperty(default=0.7)

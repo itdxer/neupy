@@ -29,8 +29,13 @@ def hopfield_energy(weight, input_data, output_data):
     Parameters
     ----------
     input_data : vector
+        Input dataset
+
     output_data : vector
-    weight : 2d array-like
+        Output dataset
+
+    weight : 2D array
+        Network's weights.
 
     Returns
     -------

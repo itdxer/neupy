@@ -137,7 +137,6 @@ class QuasiNewtonTestCase(BaseTestCase):
 
             update_function='dfp',
             h0_scale=2,
-            gradient_tol=1e-5,
         )
         qnnet.train(x_train, y_train, x_test, y_test, epochs=10)
         result = qnnet.predict(x_test).round()
@@ -160,7 +159,6 @@ class QuasiNewtonTestCase(BaseTestCase):
 
             update_function='psb',
             h0_scale=2,
-            gradient_tol=1e-10,
         )
         qnnet.train(x_train, y_train, x_test, y_test, epochs=10)
         result = qnnet.predict(x_test).round()
@@ -183,7 +181,6 @@ class QuasiNewtonTestCase(BaseTestCase):
 
             update_function='sr1',
             h0_scale=2,
-            gradient_tol=1e-5,
         )
         qnnet.train(x_train, y_train, x_test, y_test, epochs=10)
         result = qnnet.predict(x_test).round()

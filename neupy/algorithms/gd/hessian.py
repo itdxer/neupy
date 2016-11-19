@@ -21,6 +21,7 @@ def find_hessian_and_gradient(error_function, parameters):
     Parameters
     ----------
     function : Theano function
+
     parameters : list
         List of all Neural Network parameters.
 
@@ -59,6 +60,7 @@ class Hessian(NoStepSelection, GradientDescent):
         Inverse hessian could be singular matrix. For this reason
         algorithm include penalty that add to hessian matrix identity
         multiplied by defined constant. Defaults to ``1``.
+
     {GradientDescent.Parameters}
 
     Attributes

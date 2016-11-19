@@ -221,40 +221,44 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
     Parameters
     ----------
     connection : list, tuple or object
-        Network architecture. That variables could be described in
-        different ways. The simples one is a list or tuple that contains
-        integers. Each integer describe layer input size. For example,
-        ``(2, 4, 1)`` means that network will have 3 layers with 2 input
-        units, 4 hidden units and 1 output unit. The one limitation of that
-        method is that all layers automaticaly would with sigmoid actiavtion
-        function. Other way is just a list of ``layers.BaseLayer`` class
-        instances. For example: ``[Input(2), Tanh(4), Relu(1)]``.
-        And the most readable one is pipeline
-        ``Input(2) > Tanh(4) > Relu(1)``.
+        Network's architecture. There are a few ways to
+        define architecture.
+
+        - List of layers.
+          For instance, ``[Input(2), Tanh(4), Relu(1)]``.
+
+        - Construct layer connections.
+          For instance, ``Input(2) > Tanh(4) > Relu(1)``.
+
+        - Tuple of integers. Each integer defines Sigmoid layer
+          and it's input size.  For instance,  value ``(2, 4, 1)``
+          means that network has 3 layers with 2 input units,
+          4 hidden units and 1 output unit.
+
     error : str or function
         Error/loss function. Defaults to ``mse``.
 
-        * ``mae`` - Mean Absolute Error.
+        - ``mae`` - Mean Absolute Error.
 
-        * ``mse`` - Mean Squared Error.
+        - ``mse`` - Mean Squared Error.
 
-        * ``rmse`` - Root Mean Squared Error.
+        - ``rmse`` - Root Mean Squared Error.
 
-        * ``msle`` - Mean Squared Logarithmic Error.
+        - ``msle`` - Mean Squared Logarithmic Error.
 
-        * ``rmsle`` - Root Mean Squared Logarithmic Error.
+        - ``rmsle`` - Root Mean Squared Logarithmic Error.
 
-        * ``categorical_crossentropy`` - Categorical cross entropy.
+        - ``categorical_crossentropy`` - Categorical cross entropy.
 
-        * ``binary_crossentropy`` - Binary cross entropy.
+        - ``binary_crossentropy`` - Binary cross entropy.
 
-        * ``binary_hinge`` - Binary hinge entropy.
+        - ``binary_hinge`` - Binary hinge entropy.
 
-        * ``categorical_hinge`` - Categorical hinge entropy.
+        - ``categorical_hinge`` - Categorical hinge entropy.
 
-        * Custom function which accepts two mandatory arguments. \
-        The first one is expected value and the second one is \
-        predicted value. Example:
+        - Custom function which accepts two mandatory arguments.
+          The first one is expected value and the second one is
+          predicted value. Example:
 
         .. code-block:: python
 
@@ -270,7 +274,9 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
     Methods
     -------
     {BaseSkeleton.predict}
+
     {SupervisedLearningMixin.train}
+
     {BaseSkeleton.fit}
     """
     error = ErrorFunctionProperty(default='mse', choices={
