@@ -1,6 +1,5 @@
 # Main
-numpy>=1.9.0
-scipy>=0.14.0
+# Install numpy and scipy from conda
 matplotlib==1.5.1
 Pillow==3.0.0
 
