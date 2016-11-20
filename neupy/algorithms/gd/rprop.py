@@ -43,18 +43,13 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
 
     Examples
     --------
-    Simple example
-
     >>> import numpy as np
     >>> from neupy import algorithms
     >>>
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> rpropnet = algorithms.RPROP(
-    ...     (2, 3, 1),
-    ...     verbose=False
-    ... )
+    >>> rpropnet = algorithms.RPROP((2, 3, 1))
     >>> rpropnet.train(x_train, y_train)
 
     See Also
@@ -178,10 +173,7 @@ class IRPROPPlus(RPROP):
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> rpropnet = algorithms.IRPROPPlus(
-    ...     (2, 3, 1),
-    ...     verbose=False
-    ... )
+    >>> rpropnet = algorithms.IRPROPPlus((2, 3, 1))
     >>> rpropnet.train(x_train, y_train)
 
     See Also

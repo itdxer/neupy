@@ -150,8 +150,6 @@ class QuasiNewton(NoStepSelection, GradientDescent):
 
     Examples
     --------
-    Simple example
-
     >>> import numpy as np
     >>> from neupy import algorithms
     >>>
@@ -160,8 +158,7 @@ class QuasiNewton(NoStepSelection, GradientDescent):
     >>>
     >>> qnnet = algorithms.QuasiNewton(
     ...     (2, 3, 1),
-    ...     update_function='bfgs',
-    ...     verbose=False
+    ...     update_function='bfgs'
     ... )
     >>> qnnet.train(x_train, y_train, epochs=10)
 

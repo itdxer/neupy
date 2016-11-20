@@ -55,6 +55,17 @@ class Adamax(MinibatchGradientDescent):
     Methods
     -------
     {MinibatchGradientDescent.Methods}
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from neupy import algorithms
+    >>>
+    >>> x_train = np.array([[1, 2], [3, 4]])
+    >>> y_train = np.array([[1], [0]])
+    >>>
+    >>> mnet = algorithms.Adamax((2, 3, 1))
+    >>> mnet.train(x_train, y_train)
     """
     step = NumberProperty(default=0.001, minval=0)
     beta1 = ProperFractionProperty(default=0.9)

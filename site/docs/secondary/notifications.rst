@@ -29,7 +29,7 @@ process will be finished.
 
     def on_train_end(network):
         last_error = network.errors.last()
-        send_sms("Train finished. Last error: {}".format(last_error))
+        send_sms("Training finished. Last error: {}".format(last_error))
 
     lmnet = algorithms.LevenbergMarquardt(
         (10, 40, 1),

@@ -29,6 +29,17 @@ class Adagrad(MinibatchGradientDescent):
     Methods
     -------
     {MinibatchGradientDescent.Methods}
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from neupy import algorithms
+    >>>
+    >>> x_train = np.array([[1, 2], [3, 4]])
+    >>> y_train = np.array([[1], [0]])
+    >>>
+    >>> mnet = algorithms.Adagrad((2, 3, 1))
+    >>> mnet.train(x_train, y_train)
     """
     epsilon = NumberProperty(default=1e-5, minval=0)
 

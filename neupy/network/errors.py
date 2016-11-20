@@ -29,6 +29,11 @@ def mse(expected, predicted):
     """
     Mean squared error.
 
+    .. math::
+        mse(t, o) = mean((t - o) ^ 2)
+
+    where :math:`t=expected` and :math:`o=predicted`
+
     Parameters
     ----------
     {error_function.expected}
@@ -45,6 +50,11 @@ def mse(expected, predicted):
 def rmse(expected, predicted):
     """
     Root mean squared error.
+
+    .. math::
+        rmse(t, o) = \\sqrt{{mean((t - o) ^ 2)}} = \\sqrt{{mse(t, 0)}}
+
+    where :math:`t=expected` and :math:`o=predicted`
 
     Parameters
     ----------
@@ -63,6 +73,11 @@ def mae(expected, predicted):
     """
     Mean absolute error.
 
+    .. math::
+        mae(t, o) = mean(\\left| t - o \\right|)
+
+    where :math:`t=expected` and :math:`o=predicted`
+
     Parameters
     ----------
     {error_function.expected}
@@ -80,6 +95,11 @@ def msle(expected, predicted):
     """
     Mean squared logarithmic error.
 
+    .. math::
+        msle(t, o) = mean((\\log(t + 1) - \\log(o + 1)) ^ 2)
+
+    where :math:`t=expected` and :math:`o=predicted`
+
     Parameters
     ----------
     {error_function.expected}
@@ -89,7 +109,7 @@ def msle(expected, predicted):
     -------
     {error_function.Returns}
     """
-    squared_log = (T.log(predicted + 1) - T.log(expected + 1)) ** 2
+    squared_log = T.square(T.log(predicted + 1) - T.log(expected + 1))
     return squared_log.mean()
 
 
@@ -97,6 +117,13 @@ def msle(expected, predicted):
 def rmsle(expected, predicted):
     """
     Root mean squared logarithmic error.
+
+    .. math::
+        rmsle(t, o) = \\sqrt{{
+            mean((\\log(t + 1) - \\log(o + 1)) ^ 2)
+        }} = \\sqrt{{msle(t, o)}}
+
+    where :math:`t=expected` and :math:`o=predicted`
 
     Parameters
     ----------
@@ -114,6 +141,11 @@ def rmsle(expected, predicted):
 def binary_crossentropy(expected, predicted):
     """
     Binary cross-entropy error.
+
+    .. math::
+        crossentropy(t, o) = -(t\\cdot log(o) + (1 - t) \\cdot log(1 - o))
+
+    where :math:`t=expected` and :math:`o=predicted`
 
     Parameters
     ----------
@@ -153,15 +185,20 @@ def binary_hinge(expected, predicted, delta=1):
     Computes the binary hinge loss between predictions
     and targets.
 
-    .. math:: L_i = \\max(0, \\delta - t_i p_i)
+    .. math::
+        hinge(t, o) = \\max(0, \\delta - t o)
+
+    where :math:`t=expected` and :math:`o=predicted`
 
     Parameters
     ----------
     expected : Theano tensor
         Targets in {-1, 1} such as ground truth labels.
+
     predicted : Theano tensor
         Predictions in (-1, 1), such as hyprbolic tangent
         output of a neural network.
+
     delta : scalar
         The hinge loss margin. Defaults to ``1``.
 
@@ -184,7 +221,8 @@ def categorical_hinge(expected, predicted, delta=1):
     Computes the multi-class hinge loss between
     predictions and targets.
 
-    .. math:: L_i = \\max_{j \\not = p_i} (0, t_j - t_{p_i} + \\delta)
+    .. math::
+        hinge_{i}(t, o) = \\max_{j \\not = o_i} (0, t_j - t_{o_i} + \\delta)
 
     Parameters
     ----------
@@ -193,10 +231,12 @@ def categorical_hinge(expected, predicted, delta=1):
         per data point or a 2D tensor of one-hot encoding of
         the correct class in the same layout as predictions
         (non-binary targets in [0, 1] do not work!).
+
     predicted : Theano 2D tensor
         Predictions in (0, 1), such as softmax output of
         a neural network, with data points in rows and class
         probabilities in columns.
+
     delta : scalar
         The hinge loss margin. Defaults to ``1``.
 
@@ -216,7 +256,7 @@ def categorical_hinge(expected, predicted, delta=1):
         expected = T.extra_ops.to_one_hot(asint(expected), n_classes)
 
     if expected.ndim != predicted.ndim:
-        raise TypeError('Rank mismatch between targets and predictions')
+        raise TypeError('Rank mismatch between expected and prediced values')
 
     invalid_class_indeces = expected.nonzero()
     valid_class_indeces = (1 - expected).nonzero()

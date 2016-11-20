@@ -45,7 +45,8 @@ class Perceptron(BaseLinearNetwork):
     >>> input_data = np.array([[1, 0], [2, 2], [3, 3], [0, 0]])
     >>> target_data = np.array([[1], [-1], [-1], [1]])
     >>>
-    >>> mrnet = algorithms.Perceptron((2, 1), step=0.4, verbose=False)
+    >>> mrnet = algorithms.Perceptron((2, 1), step=0.4)
+    >>>
     >>> mrnet.train(input_data, target_data, epochs=30)
     >>> mrnet.predict(np.array([[4, 4], [-1, -1]]))
     array([[-1],
