@@ -48,8 +48,9 @@ class WeightElimination(WeightUpdateConfigurable):
     -----
     Before adding that regularization parameter carefully
     choose ``decay_rate`` and ``zero_weight`` parameters
-    for the problem. Invalid parameters could significatly
-    reduce weight sizes and norm could be near zero.
+    for the problem. Invalid parameters can make weight
+    very close to the origin (all values become
+    close to zero).
 
     References
     ----------

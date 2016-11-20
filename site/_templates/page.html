@@ -5,10 +5,6 @@
 {%- block extrahead -%}
     {{ super() }}
 <style media="screen" type="text/css">
-    #fork_me { display: none; }
-    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
-    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
-
     .docutils { width: 100%; }
     .docutils td { padding: 10px; }
     .section { word-wrap:break-word; }
@@ -31,5 +27,12 @@
     .math .s1 { color: #000 !important; } /* Literal.String.Single */
     .math .ss { color: #000 !important; } /* Literal.String.Symbol */
     .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+    dt[id^="neupy."] {
+        background-color: #e6edf2;
+        border: 1px solid #f8fafb;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
 </style>
 {%- endblock -%}

@@ -88,8 +88,8 @@ class Constant(Initializer):
     Parameters
     ----------
     value : float, int
-        All parameters in the tensor will be equal to this value.
-        Defaults to ``0``.
+        All parameters in the tensor will be equal to
+        this value. Defaults to ``0``.
 
     Methods
     -------
@@ -107,12 +107,14 @@ class Constant(Initializer):
 
 class Normal(Initializer):
     """
-    Initialize parameter sampling from the normal distribution.
+    Initialize parameter sampling from the normal
+    distribution.
 
     Parameters
     ----------
     mean : int, float
         Mean of the normal distribution.
+
     std : int, float
         Standard deviation of the normal distribution.
 
@@ -134,12 +136,14 @@ class Normal(Initializer):
 
 class Uniform(Initializer):
     """
-    Initialize parameter sampling from the uniformal distribution.
+    Initialize parameter sampling from the uniformal
+    distribution.
 
     Parameters
     ----------
     minval : int, float
         Minimum possible value.
+
     maxval : int, float
         Maximum possible value.
 
@@ -167,12 +171,14 @@ class Orthogonal(Initializer):
     Parameters
     ----------
     scale : int, float
-        Scales output matrix by a specified factor. Defaults to ``1``.
+        Scales output matrix by a specified factor.
+        Defaults to ``1``.
 
     Raises
     ------
     ValueError
-        In case if tensor shape has more than 2 dimensions.
+        In case if tensor shape has more than 2
+        dimensions.
 
     Methods
     -------
@@ -251,8 +257,8 @@ class HeUniform(Initializer):
 
 class XavierNormal(Initializer):
     """
-    Xavier Glorot parameter initialization method based on normal
-    distribution.
+    Xavier Glorot parameter initialization method based on
+    normal distribution.
 
     Methods
     -------
@@ -260,8 +266,8 @@ class XavierNormal(Initializer):
 
     References
     ----------
-    [1] X Glorot, Y Bengio. Understanding the difficulty of training
-        deep feedforward neural networks, 2010.
+    [1] Xavier Glorot, Y Bengio. Understanding the difficulty
+        of training deep feedforward neural networks, 2010.
     """
     def sample(self, shape):
         fan_in, fan_out = identify_fans(shape)
@@ -272,8 +278,8 @@ class XavierNormal(Initializer):
 
 class XavierUniform(Initializer):
     """
-    Xavier Glorot parameter initialization method based on uniform
-    distribution.
+    Xavier Glorot parameter initialization method based
+    on uniform distribution.
 
     Methods
     -------
@@ -281,8 +287,8 @@ class XavierUniform(Initializer):
 
     References
     ----------
-    [1] X Glorot, Y Bengio. Understanding the difficulty of training
-        deep feedforward neural networks, 2010.
+    [1] Xavier Glorot, Y Bengio. Understanding the difficulty
+        of training deep feedforward neural networks, 2010.
     """
     def sample(self, shape):
         fan_in, fan_out = identify_fans(shape)

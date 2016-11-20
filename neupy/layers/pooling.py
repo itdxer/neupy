@@ -103,6 +103,17 @@ class MaxPooling(BasePooling):
     Attributes
     ----------
     {BasePooling.Attributes}
+
+    Examples
+    --------
+    >>> from neupy import layers
+    >>>
+    >>> connection = layers.join(
+    ...     layers.Input((3, 10, 10)),
+    ...     layers.MaxPooling((2, 2)),
+    ... )
+    >>> connection.output_shape
+    (3, 5, 5)
     """
     def output(self, input_value):
         return pool.pool_2d(input_value, ds=self.size, mode='max',
@@ -128,6 +139,17 @@ class AveragePooling(BasePooling):
     Attributes
     ----------
     {BasePooling.Attributes}
+
+    Examples
+    --------
+    >>> from neupy import layers
+    >>>
+    >>> connection = layers.join(
+    ...     layers.Input((3, 10, 10)),
+    ...     layers.AveragePooling((2, 2)),
+    ... )
+    >>> connection.output_shape
+    (3, 5, 5)
     """
     mode = ChoiceProperty(
         default='include_padding',
@@ -183,6 +205,17 @@ class Upscale(BaseLayer):
     Attributes
     ----------
     {BaseLayer.Attributes}
+
+    Examples
+    --------
+    >>> from neupy import layers
+    >>>
+    >>> connection = layers.join(
+    ...     layers.Input((3, 10, 10)),
+    ...     layers.Upscale((2, 2)),
+    ... )
+    >>> connection.output_shape
+    (3, 20, 20)
     """
     scale = ScaleFactorProperty(required=True, n_elements=2)
 
@@ -240,6 +273,17 @@ class GlobalPooling(BaseLayer):
     Attributes
     ----------
     {BaseLayer.Attributes}
+
+    Examples
+    --------
+    >>> from neupy import layers
+    >>>
+    >>> connection = layers.join(
+    ...     layers.Input((16, 4, 4)),
+    ...     layers.GlobalPooling(),
+    ... )
+    >>> connection.output_shape
+    (16,)
     """
     function = Property(default=T.mean)
 

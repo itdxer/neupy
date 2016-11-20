@@ -161,6 +161,34 @@ class SOFM(Kohonen):
     {BaseAssociative.train}
 
     {BaseSkeleton.fit}
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from neupy import algorithms, environment
+    >>>
+    >>> environment.reproducible()
+    >>>
+    >>> data = np.array([
+    ...     [0.1961, 0.9806],
+    ...     [-0.1961, 0.9806],
+    ...     [-0.5812, -0.8137],
+    ...     [-0.8137, -0.5812],
+    ... ])
+    >>>
+    >>> sofmnet = algorithms.SOFM(
+    ...     n_inputs=2,
+    ...     n_outputs=2,
+    ...     step=0.1,
+    ...     learning_radius=0,
+    ...     features_grid=(2, 1),
+    ... )
+    >>> sofmnet.train(data, epochs=100)
+    >>> sofmnet.predict(data)
+    array([[0, 1],
+           [0, 1],
+           [1, 0],
+           [1, 0]])
     """
     learning_radius = IntProperty(default=0, minval=0)
     features_grid = TypedListProperty(allow_none=True, default=None)

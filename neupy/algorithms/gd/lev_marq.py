@@ -50,7 +50,8 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
     Notes
     -----
     - Network minimizes only Mean Squared Error function.
-    - Efficient for small training datasets.
+    - Efficient for small training datasets, becuase it
+      computes gradient per each sample separately.
     - Efficient for small-sized networks.
 
     Parameters
@@ -84,10 +85,7 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> lmnet = algorithms.LevenbergMarquardt(
-    ...     (2, 3, 1),
-    ...     verbose=False
-    ... )
+    >>> lmnet = algorithms.LevenbergMarquardt((2, 3, 1))
     >>> lmnet.train(x_train, y_train)
 
     See Also

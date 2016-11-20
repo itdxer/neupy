@@ -51,10 +51,8 @@ class ModifiedRelaxation(BaseLinearNetwork):
     >>> input_data = np.array([[1, 0], [2, 2], [3, 3], [0, 0]])
     >>> target_data = np.array([[1], [0], [0], [1]])
     >>>
-    >>> mrnet = algorithms.ModifiedRelaxation(
-    ...     (2, 1), step=1, verbose=False
-    ... )
-    ...
+    >>> mrnet = algorithms.ModifiedRelaxation((2, 1), step=1)
+    >>>
     >>> mrnet.train(input_data, target_data, epochs=100)
     >>> mrnet.predict(np.array([[4, 4], [0, 0]]))
     array([[0],

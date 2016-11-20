@@ -34,9 +34,8 @@ class RBFKMeans(NoStepSelection, BaseNetwork):
 
     Attributes
     ----------
-    centers : numpy array [n_clusters, n_futures]
-        After training this property will contain coordinates
-        to cluster centers.
+    centers : array-like with shape (n_clusters, n_futures)
+        Cluster centers.
 
     Methods
     -------
@@ -112,10 +111,13 @@ class RBFKMeans(NoStepSelection, BaseNetwork):
     def train(self, input_train, epsilon=1e-5, epochs=100):
         n_clusters = self.n_clusters
         input_train = format_data(input_train)
+        n_samples = input_train.shape[0]
 
-        if input_train.shape[0] <= n_clusters:
-            raise ValueError("Count of clusters must be less than count of "
-                             "input data.")
+        if n_samples <= n_clusters:
+            raise ValueError("Number of samples in the dataset is less than "
+                             "spcified number of clusters. Got {} samples, "
+                             "expected at least {} (for {} clusters)"
+                             "".format(n_samples, n_clusters + 1, n_clusters))
 
         self.centers = input_train[:n_clusters, :].copy()
         super(RBFKMeans, self).train(input_train, epsilon=epsilon,

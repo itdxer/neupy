@@ -41,10 +41,7 @@ class Quickprop(GradientDescent):
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> qpnet = algorithms.Quickprop(
-    ...     (2, 3, 1),
-    ...     verbose=False
-    ... )
+    >>> qpnet = algorithms.Quickprop((2, 3, 1))
     >>> qpnet.train(x_train, y_train)
 
     See Also

@@ -38,18 +38,13 @@ class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
 
     Examples
     --------
-    Simple example
-
     >>> import numpy as np
     >>> from neupy import algorithms
     >>>
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> hdnet = algorithms.HessianDiagonal(
-    ...     (2, 3, 1),
-    ...     verbose=False
-    ... )
+    >>> hdnet = algorithms.HessianDiagonal((2, 3, 1))
     >>> hdnet.train(x_train, y_train)
 
     Diabets dataset example
