@@ -124,7 +124,7 @@ class SOFM(Kohonen):
         The new shape should be compatible with the number
         of outputs. Defaults to ``(n_outputs, 1)``.
 
-    transform : {{'linear', 'euclid', 'cos'}}
+    transform : {{``linear``, ``euclid``, ``cos``}}
         Indicate transformation operation related to the
         input layer.
 

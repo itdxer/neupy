@@ -18,7 +18,7 @@ class DiscreteMemory(BaseSkeleton, Configurable):
 
     Parameters
     ----------
-    mode : {{'sync', 'async'}}
+    mode : {{``sync``, ``async``}}
         Indentify pattern recovery mode.
 
         - ``sync`` mode tries to recover pattern using all

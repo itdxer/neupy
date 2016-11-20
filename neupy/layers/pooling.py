@@ -127,8 +127,8 @@ class AveragePooling(BasePooling):
 
     Parameters
     ----------
-    mode : {{'include_padding', 'exclude_padding'}}
-        Gives you the choice to include or exclude padding.
+    mode : {{``include_padding``, ``exclude_padding``}}
+        Give a choice to include or exclude padding.
         Defaults to ``include_padding``.
     {BasePooling.Parameters}
 
