@@ -23,7 +23,7 @@ class LinearSearch(SingleStepConfigurable):
         Maximum number of interations. Works only for
         the ``brent`` method. Defaults to ``10``.
 
-    search_method : 'gloden', 'brent'
+    search_method : {{``gloden``, ``brent``}}
         Linear search method. Can be ``golden`` for
         golden search or ``brent`` for Brent's search,
         default to ``golden``.

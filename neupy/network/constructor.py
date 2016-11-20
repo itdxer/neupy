@@ -220,9 +220,9 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
 
     Parameters
     ----------
-    connection : list, tuple or object
-        Network's architecture. There are a few ways to
-        define architecture.
+    connection : list, tuple or LayerConnection instance
+        Network's architecture. There are a few ways
+        to define it.
 
         - List of layers.
           For instance, ``[Input(2), Tanh(4), Relu(1)]``.
