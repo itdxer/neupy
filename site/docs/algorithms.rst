@@ -5,6 +5,7 @@ Training Algorithms
     :glob:
     :maxdepth: 2
 
+    algorithms/basics
     algorithms/constructable-architecture
     algorithms/fixed-architecture
     algorithms/signals
