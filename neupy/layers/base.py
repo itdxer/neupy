@@ -278,7 +278,6 @@ class ArrayShapeProperty(TypedListProperty):
                              "".format(self.name, value))
 
 
-
 class Input(BaseLayer):
     """
     Input layer. It identifies feature shape/size for the
