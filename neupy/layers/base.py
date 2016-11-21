@@ -92,20 +92,29 @@ class BaseLayer(ChainConnection, Configurable):
     -------
     disable_training_state()
         Swith off trainig state.
+
     initialize()
         Set up important configurations related to the layer.
 
     Attributes
     ----------
     input_shape : tuple
+        Layer's input shape.
+
     output_shape : tuple
+        Layer's output shape.
+
     training_state : bool
         Defines whether layer in training state or not.
+
     layer_id : int
         Layer's identifier.
+
     parameters : list
         List of layer's parameters.
+
     graph : LayerGraph instance or None
+        Graphs that stores all relations between layers.
     """
     name = Property(expected_type=six.string_types)
 
@@ -165,8 +174,10 @@ def create_shared_parameter(value, name, shape):
     ----------
     value : array-like, Theano variable, scalar or Initializer
         Default value for the parameter.
+
     name : str
-        Sahred variable name.
+        Shared variable name.
+
     shape : tuple
         Parameter's shape.
 
@@ -191,10 +202,12 @@ class ParameterBasedLayer(BaseLayer):
     ----------
     size : int
         Layer's output size.
+
     weight : array-like, Theano variable, scalar or Initializer
         Defines layer's weights. Default initialization methods
         you can find :ref:`here <init-methods>`.
         Defaults to :class:`XavierNormal() <neupy.init.XavierNormal>`.
+
     bias : 1D array-like, Theano variable, scalar, Initializer or None
         Defines layer's bias.
         Default initialization methods you can find
@@ -202,6 +215,7 @@ class ParameterBasedLayer(BaseLayer):
         :class:`XavierNormal() <neupy.init.XavierNormal>`.
         The ``None`` value excludes bias from the calculations and
         do not add it into parameters list.
+
     {BaseLayer.Parameters}
 
     Methods
@@ -247,17 +261,22 @@ class ParameterBasedLayer(BaseLayer):
 class ArrayShapeProperty(TypedListProperty):
     """
     Property that identifies array's shape.
+
+    Parameters
+    ----------
+    {TypedListProperty.Parameters}
     """
     expected_type = (int, tuple)
 
     def validate(self, value):
-        if isinstance(value, int):
-            if value < 1:
-                raise ValueError("Integer value is expected to be greater or "
-                                 " equal to one for the `{}` property, got {}"
-                                 "".format(self.name, value))
-        else:
+        if not isinstance(value, int):
             super(ArrayShapeProperty, self).validate(value)
+
+        elif value < 1:
+            raise ValueError("Integer value is expected to be greater or "
+                             " equal to one for the `{}` property, got {}"
+                             "".format(self.name, value))
+
 
 
 class Input(BaseLayer):
@@ -269,6 +288,7 @@ class Input(BaseLayer):
     ----------
     size : int, tuple or None
         Identifies input data shape.
+
     {BaseLayer.Parameters}
 
     Methods

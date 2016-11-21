@@ -1,5 +1,5 @@
-Plots
-=====
+Visualizations
+==============
 
 Hinton diagram
 --------------

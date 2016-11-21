@@ -23,8 +23,11 @@ class ActivationLayer(ParameterBasedLayer):
         Layer input size. ``None`` means that layer will not create
         parameters and will return only activation function
         output for the specified input value.
+
     {ParameterBasedLayer.weight}
+
     {ParameterBasedLayer.bias}
+
     {BaseLayer.Parameters}
 
     Methods
@@ -174,6 +177,7 @@ class Relu(ActivationLayer):
         for the negative values. If ``alpha``
         is non-zero value then layer behave like a
         leaky ReLu. Defaults to ``0``.
+
     {ActivationLayer.Parameters}
 
     Methods
@@ -243,6 +247,7 @@ class Elu(ActivationLayer):
     alpha : float
         Alpha parameter defines the decreasing exponensial
         rate for the negative values. Defaults to ``1``.
+
     {ActivationLayer.Parameters}
 
     Methods
@@ -271,8 +276,11 @@ class AxesProperty(TypedListProperty):
     Parameters
     ----------
     {TypedListProperty.n_elements}
+
     {TypedListProperty.element_type}
+
     {BaseProperty.default}
+
     {BaseProperty.required}
     """
     def __set__(self, instance, value):
@@ -299,6 +307,7 @@ class PRelu(ActivationLayer):
         Axes that will not include unique alpha parameter.
         Single integer value defines the same as a tuple with one value.
         Defaults to ``1``.
+
     alpha : array-like, Theano shared variable, scalar or Initializer
         Alpha parameter per each non-shared axis for the ReLu.
         Scalar value means that each element in the tensor will be
@@ -306,6 +315,7 @@ class PRelu(ActivationLayer):
         Default initialization methods you can find
         :ref:`here <init-methods>`.
         Defaults to ``Constant(value=0.25)``.
+
     {ActivationLayer.Parameters}
 
     Methods

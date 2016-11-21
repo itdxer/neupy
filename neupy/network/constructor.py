@@ -581,12 +581,5 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
         self.logs.newline()
 
     def __repr__(self):
-        n_layers = len(self.connection)
-
-        if n_layers > 5 or not is_sequential(self.connection):
-            connection = '[... {} layers ...]'.format(n_layers)
-        else:
-            connection = self.connection
-
-        return "{}({}, {})".format(self.class_name(), connection,
+        return "{}({}, {})".format(self.class_name(), self.connection,
                                    self.repr_options())

@@ -1,8 +1,6 @@
 import collections
 from functools import reduce
 
-from .connections import LayerConnection
-
 
 __all__ = ('preformat_layer_shape', 'dimshuffle', 'join')
 
@@ -76,6 +74,8 @@ def join(*connections):
     ...     layers.Softmax(10),
     ... ])
     """
+    from neupy.layers.connections import LayerConnection
+
     n_layers = len(connections)
     if n_layers == 1 and isinstance(connections[0], collections.Iterable):
         connections = connections[0]

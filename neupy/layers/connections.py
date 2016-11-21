@@ -4,6 +4,8 @@ from itertools import chain
 from contextlib import contextmanager
 from collections import OrderedDict
 
+from neupy.layers.utils import preformat_layer_shape
+
 
 __all__ = ('LayerConnection', 'ChainConnection', 'NetworkConnectionError',
            'LayerConnectionError', 'LayerGraph')
@@ -734,5 +736,15 @@ class LayerConnection(ChainConnection):
             yield layer
 
     def __repr__(self):
-        layers_reprs = map(repr, self)
-        return ' > '.join(layers_reprs)
+        n_layers = len(self)
+
+        if n_layers > 5 or not is_sequential(self):
+            conn = '{} -> [... {} layers ...] -> {}'.format(
+                preformat_layer_shape(self.input_shape),
+                n_layers,
+                preformat_layer_shape(self.output_shape)
+            )
+        else:
+            conn = ' > '.join([repr(layer) for layer in self])
+
+        return conn

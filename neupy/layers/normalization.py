@@ -25,8 +25,9 @@ def find_opposite_axes(axes, ndim):
     ----------
     axes : list or tuple
         Already known axes.
+
     ndim : int
-        Total number of dimensions
+        Total number of dimensions.
 
     Returns
     -------
@@ -62,24 +63,29 @@ class BatchNorm(BaseLayer):
         ``None`` means that normalization will be applied over
         all axes except the first one. In case of 4D tensor it will
         be equal to ``(0, 2, 3)``. Defaults to ``None``.
+
     epsilon : float
         Epsilon is a positive constant that adds to the standard
         deviation to prevent the division by zero.
         Defaults to ``1e-5``.
+
     alpha : float
         Coefficient for the exponential moving average of
         batch-wise means and standard deviations computed during
         training; the closer to one, the more it will depend on
         the last batches seen. Value needs to be between ``0`` and ``1``.
         Defaults to ``0.1``.
+
     gamma : array-like, Theano variable, scalar or Initializer
         Default initialization methods you can
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=1)``.
+
     beta : array-like, Theano variable, scalar or Initializer
         Default initialization methods you can
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=0)``.
+
     {BaseLayer.Parameters}
 
     Methods
@@ -201,13 +207,31 @@ class LocalResponseNorm(BaseLayer):
     """
     Local Response Normalization Layer.
 
+    Aggregation is purely across channels, not within channels,
+    and performed "pixelwise".
+
+    If the value of the :math:`i` th channel is :math:`x_i`, the output is
+
+    .. math::
+        x_i = \\frac{{x_i}}{{ (k + ( \\alpha \\sum_j x_j^2 ))^\\beta }}
+
+    where the summation is performed over this position on :math:`n`
+    neighboring channels.
+
     Parameters
     ----------
     alpha : float
+        coefficient, see equation above
+
     beta : float
+        offset, see equation above
+
     k : float
+        exponent, see equation above
+
     n : int
         Number of adjacent channels to normalize over, must be odd
+
     {BaseLayer.Parameters}
 
     Methods

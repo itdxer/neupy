@@ -31,9 +31,11 @@ def layer_structure(connection, filepath=None, show=True):
     Parameters
     ----------
     connection : BaseLayer instance, BaseNetwork instance
+
     filepath : str or None
         Path to the file that stores graph. ``None`` means that file
         will be saved in temporary file. Defaults to ``None``.
+
     show : bool
         ``True`` opens PDF file. Defaults to ``True``.
 
