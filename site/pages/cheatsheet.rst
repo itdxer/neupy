@@ -11,6 +11,8 @@ Algorithms
 Algorithms that use Backpropagation training approach
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. _cheatsheet-backprop-algorithms:
+
 Trainig algorithms
 ++++++++++++++++++
 
@@ -53,7 +55,7 @@ Learning rate update rules
     :network:`ErrDiffStepUpdate`, Error difference Update
     :network:`LinearSearch`, Linear search by Golden Search or Brent
     :network:`SearchThenConverge`, Search than converge
-    :network:`SimpleStepMinimization`, Simple Step Minimization
+    :network:`StepMinimizer`, Minimize step linearly after each epoch
 
 Ensembles
 ~~~~~~~~~
@@ -231,6 +233,8 @@ Parameter Initialization Methods
     ":class:`HeUniform <neupy.init.HeUniform>`", "Kaiming He parameter initialization method based on the Uniformal distribution."
     ":class:`XavierNormal <neupy.init.XavierNormal>`", "Glorot Xavier parameter initialization method based on the Normal distribution."
     ":class:`XavierUniform <neupy.init.XavierUniform>`", "Glorot Xavier parameter initialization method based on the Uniformal distribution."
+
+.. _cheatsheet-error-function:
 
 Error functions
 ***************

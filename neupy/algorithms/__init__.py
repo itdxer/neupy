@@ -19,7 +19,7 @@ from .ensemble.mixture_of_experts import *
 from .regularization.weight_decay import *
 from .regularization.weight_elimination import *
 
-from .step_update.simple_step_minimization import *
+from .step_update.step_minimizer import *
 from .step_update.search_then_converge import *
 from .step_update.errdiff import *
 from .step_update.leak_step import *

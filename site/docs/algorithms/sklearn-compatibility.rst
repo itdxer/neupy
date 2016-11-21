@@ -2,9 +2,9 @@ Scikit-learn compatibility
 --------------------------
 
 There are also a lot of good stuff in scikit-learn that are also can be useful for neural network algorithms.
-NeuPy contains a few compatibilities for making possible interaction with some scikit-learn features.
+NeuPy contains a few compatibilities for making possible interaction with scikit-learn library.
 
-First of all instead of ``train`` method you can use ``fit``.
+Instead of the ``train`` method you can use ``fit``.
 
 .. code-block:: python
 

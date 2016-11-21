@@ -11,7 +11,7 @@ from base import BaseTestCase
 class ParallelLayerTestCase(BaseTestCase):
     def test_parallel_layer(self):
         input_layer = layers.Input((3, 8, 8))
-        parallel_layer = layers.parallel(
+        parallel_layer = layers.Parallel(
             [[
                 layers.Convolution((11, 5, 5)),
             ], [
@@ -39,7 +39,7 @@ class ParallelLayerTestCase(BaseTestCase):
 
     def test_parallel_with_joined_connections(self):
         # Should work without errors
-        layers.parallel(
+        layers.Parallel(
             [
                 layers.Convolution((11, 5, 5)) > layers.Relu(),
                 layers.Convolution((10, 3, 3)) > layers.Relu(),
@@ -49,11 +49,11 @@ class ParallelLayerTestCase(BaseTestCase):
 
     def test_parallel_layer_exceptions(self):
         with self.assertRaises(ValueError):
-            layers.parallel(layers.Convolution((11, 5, 5)),
+            layers.Parallel(layers.Convolution((11, 5, 5)),
                             layers.Concatenate())
 
         with self.assertRaises(ValueError):
-            layers.parallel([[layers.Convolution((11, 5, 5))]],
+            layers.Parallel([[layers.Convolution((11, 5, 5))]],
                             'not a layer object')
 
     def test_parallel_layer_with_residual_connections(self):

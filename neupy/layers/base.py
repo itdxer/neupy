@@ -280,13 +280,12 @@ class ArrayShapeProperty(TypedListProperty):
 
 class Input(BaseLayer):
     """
-    Input layer. It identifies feature shape/size for the
-    input value. Especially useful in the CNN.
+    Input layer defines input's feature shape.
 
     Parameters
     ----------
     size : int, tuple or None
-        Identifies input data shape.
+        Identifies input's feature shape.
 
     {BaseLayer.Parameters}
 
@@ -297,6 +296,13 @@ class Input(BaseLayer):
     Attributes
     ----------
     {BaseLayer.Attributes}
+
+    Examples
+    --------
+    >>> from neupy import layers
+    >>> input_layer = layers.Input(10)
+    >>> input_layer
+    Input(10)
     """
     size = ArrayShapeProperty(element_type=(int, type(None)))
 

@@ -12,6 +12,5 @@ class WeightUpdateConfigurable(Configurable):
     Warns
     -----
     It works with any algorithm based on the backpropagation.
-    Class can't work without it.
     """
     addon_type = WEIGHT_PENALTY

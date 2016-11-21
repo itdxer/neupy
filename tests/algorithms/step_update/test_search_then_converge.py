@@ -13,7 +13,7 @@ class LearningRateUpdatesTestCase(BaseTestCase):
                 layers.Tanh(1),
             ],
             step=0.3,
-            epochs_step_minimizator=50,
+            reduction_freq=50,
             rate_coefitient=0.2,
             addons=[algorithms.SearchThenConverge]
         )
