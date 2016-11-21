@@ -126,57 +126,6 @@ In addition you can create custom functions. Function suppose to accept two mand
         error=mean_absolute_error,
     )
 
-Training
---------
-
-When we defined our training algorithm we can train the network.
-
-.. code-block:: python
-
-    nnet.train(x_train, y_train, epochs=1000)
-
-If you want to validate your training results with validation dataset you can pass it as additional argument.
-
-.. code-block:: python
-
-    nnet.train(x_train, y_train, x_test, y_test, epochs=1000)
-
-To be able to see output after each epoch you can set up ``verbose=True`` in the network initialization step.
-
-
-.. code-block:: python
-
-    nnet = algorithms.MinibatchGradientDescent(
-        [
-            layers.Input(784),
-            layers.Relu(500),
-            layers.Relu(300),
-            layers.Softmax(10),
-        ],
-        verbose=True
-    )
-
-Or you can switch ``verbose`` mode after the initialization
-
-.. code-block:: python
-
-    nnet.vebose = True
-
-Prediction
-----------
-
-After the training you can make a prediction.
-
-.. code-block:: python
-
-    y_predicted = nnet.predict(x_test)
-
-In case if you are interested only in error, you can simply use ``prediction_error`` function.
-
-.. code-block:: python
-
-    test_error = nnet.predict(x_test, y_test)
-
 Add-ons
 -------
 

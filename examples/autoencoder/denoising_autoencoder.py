@@ -8,16 +8,6 @@ from neupy import algorithms, layers, environment
 environment.reproducible()
 theano.config.floatX = 'float32'
 
-
-def reduce_dimension(network, data):
-    """
-    Function minimize input data dimension using
-    pre-trained autoencoder.
-    """
-    minimized_data = network.input_layer.output(data)
-    return minimized_data.eval()
-
-
 mnist = datasets.fetch_mldata('MNIST original')
 
 data = mnist.data
