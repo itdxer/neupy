@@ -28,9 +28,18 @@ def pooling_output_shape(dimension_size, pool_size, padding, stride,
     Parameters
     ----------
     dimension_size : int
+        Size of the dimension. Typically it's image's
+        weight or height.
+
     filter_size : int
+        Size of the pooling filter.
+
     padding : int
+        Size of the zero-padding.
+
     stride : int
+        Stride size.
+
     ignore_border : bool
         Defaults to ``True``.
 
