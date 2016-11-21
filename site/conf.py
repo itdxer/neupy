@@ -137,11 +137,9 @@ GITHUB_REPO = 'https://github.com/itdxer/neupy/tree/master'
 
 
 def linkcode_resolve(domain, info):
-    if domain != 'py' or not info['module']:
-        return None
-
-    filename = info['module'].replace('.', '/')
-    return "{}/{}.py".format(GITHUB_REPO, filename)
+    if domain == 'py' and info['module']:
+        filename = info['module'].replace('.', '/')
+        return "{}/{}.py".format(GITHUB_REPO, filename)
 
 
 def get_module_for_class(classname, moduletype):

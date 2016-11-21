@@ -8,5 +8,6 @@ Documentation
     ../pages/installation
     ../docs/tutorials
     ../docs/layers
+    ../docs/algorithms
     ../docs/storage
     ../docs/secondary

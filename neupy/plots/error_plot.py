@@ -15,10 +15,12 @@ def error_plot(network, logx=False, ax=None, show=True):
     logx : bool
         Parameter set up logarithmic scale to x-axis.
         Defaults to ``False``.
+
     ax : object or None
         Matplotlib axis object. ``None`` values means that axis equal
         to the current one (the same as ``ax = plt.gca()``).
         Defaults to ``None``.
+
     show : bool
         If parameter is equal to ``True`` plot will instantly shows
         the plot. Defaults to ``True``.
@@ -37,7 +39,6 @@ def error_plot(network, logx=False, ax=None, show=True):
     >>>
     >>> plots.error_plot(gdnet)
     """
-
     if ax is None:
         ax = plt.gca()
 

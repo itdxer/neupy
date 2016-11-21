@@ -5,7 +5,7 @@ from neupy.utils import as_tuple
 from neupy.core.properties import TypedListProperty, ChoiceProperty, Property
 from .base import BaseLayer
 from .connections import LayerConnectionError
-from .convolutions import StrideProperty, conv_output_shape
+from .convolutions import StrideProperty
 
 
 __all__ = ('MaxPooling', 'AveragePooling', 'Upscale', 'GlobalPooling')
@@ -20,6 +20,41 @@ class PaddingProperty(TypedListProperty):
         super(PaddingProperty, self).__set__(instance, value)
 
 
+def pooling_output_shape(dimension_size, pool_size, padding, stride,
+                         ignore_border=True):
+    """
+    Computes output shape for pooling operation.
+
+    Parameters
+    ----------
+    dimension_size : int
+    filter_size : int
+    padding : int
+    stride : int
+    ignore_border : bool
+        Defaults to ``True``.
+
+    Returns
+    -------
+    int
+    """
+    if dimension_size is None:
+        return None
+
+    if ignore_border:
+        output_size = dimension_size + 2 * padding - pool_size + 1
+        output_size = (output_size + stride - 1) // stride
+
+    elif stride >= pool_size:
+        output_size = (dimension_size + stride - 1) // stride
+
+    else:
+        output_size = (dimension_size - pool_size + stride - 1) // stride
+        output_size = max(1, output_size + 1)
+
+    return output_size
+
+
 class BasePooling(BaseLayer):
     """
     Base class for the pooling layers.
@@ -29,15 +64,23 @@ class BasePooling(BaseLayer):
     size : tuple with 2 integers
         Factor by which to downscale (vertical, horizontal).
         (2, 2) will halve the image in each dimension.
+
     stride : tuple or int.
         Stride size, which is the number of shifts over
         rows/cols to get the next pool region. If stride is
         None, it is considered equal to ds (no overlap on
         pooling regions).
+
     padding : tuple or int
         (pad_h, pad_w), pad zeros to extend beyond four borders of
         the images, pad_h is the size of the top and bottom margins,
         and pad_w is the size of the left and right margins.
+
+    ignore_border : bool
+        When ``True``, ``(5, 5)`` input with size ``(2, 2)``
+        will generate a `(2, 2)` output. ``(3, 3)`` otherwise.
+        Defaults to ``True``.
+
     {BaseLayer.Parameters}
 
     Methods
@@ -51,9 +94,15 @@ class BasePooling(BaseLayer):
     size = TypedListProperty(required=True, element_type=int)
     stride = StrideProperty(default=None)
     padding = PaddingProperty(default=0, element_type=int, n_elements=2)
+    ignore_border = Property(default=True, expected_type=bool)
 
     def __init__(self, size, **options):
         super(BasePooling, self).__init__(size=size, **options)
+
+        if not self.ignore_border and self.padding != (0, 0):
+            raise ValueError("Cannot set padding parameter equal to {} while "
+                             "``ignore_border`` is equal to ``False``"
+                             "".format(self.padding))
 
     @property
     def output_shape(self):
@@ -77,10 +126,11 @@ class BasePooling(BaseLayer):
         row_stride, col_stride = stride
         row_padding, col_padding = self.padding
 
-        output_rows = conv_output_shape(rows, row_filter_size,
-                                        row_padding, row_stride)
-        output_cols = conv_output_shape(cols, col_filter_size,
-                                        col_padding, col_stride)
+        output_rows = pooling_output_shape(rows, row_filter_size, row_padding,
+                                           row_stride, self.ignore_border)
+        output_cols = pooling_output_shape(cols, col_filter_size, col_padding,
+                                           col_stride, self.ignore_border)
+
         return (n_kernels, output_rows, output_cols)
 
     def __repr__(self):
@@ -117,8 +167,8 @@ class MaxPooling(BasePooling):
     """
     def output(self, input_value):
         return pool.pool_2d(input_value, ds=self.size, mode='max',
-                            ignore_border=True, st=self.stride,
-                            padding=self.padding)
+                            ignore_border=self.ignore_border,
+                            st=self.stride, padding=self.padding)
 
 
 class AveragePooling(BasePooling):
@@ -130,6 +180,7 @@ class AveragePooling(BasePooling):
     mode : {{``include_padding``, ``exclude_padding``}}
         Give a choice to include or exclude padding.
         Defaults to ``include_padding``.
+
     {BasePooling.Parameters}
 
     Methods
@@ -161,8 +212,8 @@ class AveragePooling(BasePooling):
 
     def output(self, input_value):
         return pool.pool_2d(input_value, ds=self.size, mode=self.mode,
-                            ignore_border=True, st=self.stride,
-                            padding=self.padding)
+                            ignore_border=self.ignore_border,
+                            st=self.stride, padding=self.padding)
 
 
 class ScaleFactorProperty(TypedListProperty):
@@ -197,6 +248,8 @@ class Upscale(BaseLayer):
         Scaling factor for the input value. In the tuple first
         parameter identifies scale of the height and the second
         one of the width.
+
+    {BaseLayer.Parameters}
 
     Methods
     -------
@@ -265,6 +318,8 @@ class GlobalPooling(BaseLayer):
 
             def agg_func(x, axis=None):
                 pass
+
+    {BaseLayer.Parameters}
 
     Methods
     -------

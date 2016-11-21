@@ -44,7 +44,7 @@ class ParallelLayerTestCase(BaseTestCase):
                 layers.Convolution((11, 5, 5)) > layers.Relu(),
                 layers.Convolution((10, 3, 3)) > layers.Relu(),
             ],
-            layers.Concatenate(),
+            layers.Concatenate() > layers.Relu(),
         )
 
     def test_parallel_layer_exceptions(self):
@@ -55,3 +55,15 @@ class ParallelLayerTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             layers.parallel([[layers.Convolution((11, 5, 5))]],
                             'not a layer object')
+
+    def test_parallel_layer_with_residual_connections(self):
+        connection = layers.Input((3, 8, 8)) > layers.Parallel(
+            [[
+                layers.Convolution((7, 1, 1)),
+                layers.Relu()
+            ], [
+                # Residual connection
+            ]],
+            layers.Concatenate(),
+        )
+        self.assertEqual(connection.output_shape, (10, 8, 8))

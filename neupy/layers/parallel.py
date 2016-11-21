@@ -1,3 +1,4 @@
+from .connections import ChainConnection
 from .utils import join as layers_join
 from .base import BaseLayer
 
@@ -20,6 +21,7 @@ def parallel(connections, merge_layer):
     ----------
     connections : list of lists
         List that contains list of layer connections.
+
     merge_layer : BaseLayer instance
         Layer that merges final outputs from each parallel
         connection.
@@ -45,13 +47,17 @@ def parallel(connections, merge_layer):
     if not isinstance(connections, (list, tuple)):
         raise ValueError("Connections should be a list or a tuple.")
 
-    if not isinstance(merge_layer, BaseLayer):
-        raise ValueError("The `merge_layer` argument is not an instance of "
-                         "BaseLayer class.")
+    if not isinstance(merge_layer, ChainConnection):
+        raise ValueError("The `merge_layer` argument is not "
+                         "a layer or connection")
 
     input_layer = TransferLayer()
 
     for i, connection in enumerate(connections):
+        if not connection:
+            full_connection = layers_join(input_layer, merge_layer)
+            continue
+
         if isinstance(connection, (list, tuple)):
             connection = layers_join(connection)
             connections[i] = connection

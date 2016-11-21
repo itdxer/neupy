@@ -95,13 +95,23 @@ def conv_output_shape(dimension_size, filter_size, padding, stride):
     Parameters
     ----------
     dimension_size : int
+        Size of the dimension. Typically it's image's
+        weight or height.
+
     filter_size : int
-    padding : {'valid', 'full', 'half'} or int
+        Size of the convolution filter.
+
+    padding : {``valid``, ``full``, ``half``} or int
+        Type or size of the zero-padding.
+
     stride : int
+        Stride size.
 
     Returns
     -------
     int
+        Dimension size after applying convolution
+        operation with specified configurations.
     """
     if dimension_size is None:
         return None
@@ -143,12 +153,18 @@ class Convolution(ParameterBasedLayer):
     size : tuple of int
         Filter shape. In should be defined as a tuple with three integers
         ``(output channels, filter rows, filter columns)``.
-    padding : {{'valid', 'full', 'half'}} or int or tuple with 2 int
+
+    padding : {{``valid``, ``full``, ``half``}} or int or tuple with 2 int
         Convolution border mode. Check Theano's ``nnet.conv2d`` doc.
+        Defaults to ``valid``.
+
     stride : tuple with 1 or 2 integers or integer.
-        Stride size.
+        Stride size. Defaults to ``(1, 1)``
+
     {ParameterBasedLayer.weight}
+
     {ParameterBasedLayer.bias}
+
     {BaseLayer.Parameters}
 
     Methods

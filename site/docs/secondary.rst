@@ -11,5 +11,4 @@ This part of documentation contains secondary feature from NeuPy library.
     secondary/notifications
     secondary/environments
     secondary/surgery
-    secondary/plots
-    secondary/sklearn-compatibility
+    secondary/visualizations

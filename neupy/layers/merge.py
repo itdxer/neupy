@@ -38,6 +38,7 @@ class Elementwise(BaseLayer):
         Callable object that accepts multiple arguments and
         combine them in one with elementwise operation.
         Defaults to ``theano.tensor.add``
+
     {BaseLayer.Parameters}
 
     Methods
@@ -85,6 +86,7 @@ class Concatenate(BaseLayer):
     axis : int
         The axis along which the inputs will be joined.
         Default is ``1``.
+
     {BaseLayer.Parameters}
 
     Methods

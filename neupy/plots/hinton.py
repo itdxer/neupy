@@ -21,13 +21,16 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
     ----------
     matrix: array-like
         Matrix that you want to visualise using Hinton diagram.
+
     max_weight : float
-        Maximum value of the matrix. If it's equal to ``None`` than value
-        would be calculated using the maximum from the matrix. Defaults
-        to ``None``.
+        Maximum value of the matrix. If it's equal to ``None``
+        than value would be calculated using the maximum from
+        the matrix. Defaults to ``None``.
+
     ax : object
-        Matplotlib Axes instantce. If value equal to ``None`` then function
-        generate the new Axes instance. Defaults to ``None``.
+        Matplotlib Axes instantce. If value equal to ``None``
+        then function generate the new Axes instance. Defaults
+        to ``None``.
 
     Returns
     -------

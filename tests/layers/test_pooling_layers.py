@@ -6,6 +6,7 @@ import numpy as np
 
 from neupy import layers
 from neupy.utils import asfloat
+from neupy.layers.pooling import pooling_output_shape
 from neupy.layers.connections import LayerConnectionError
 
 from base import BaseTestCase
@@ -13,6 +14,30 @@ from base import BaseTestCase
 
 class PoolingLayersTestCase(BaseTestCase):
     use_sandbox_mode = False
+
+    def test_pooling_output_shape(self):
+        otuput_shape = pooling_output_shape(None, None, None, None)
+        self.assertEqual(otuput_shape, None)
+
+        otuput_shape = pooling_output_shape(dimension_size=5, pool_size=2,
+                                            padding=0, stride=2,
+                                            ignore_border=True)
+        self.assertEqual(otuput_shape, 2)
+
+        otuput_shape = pooling_output_shape(dimension_size=5, pool_size=2,
+                                            padding=0, stride=2,
+                                            ignore_border=False)
+        self.assertEqual(otuput_shape, 3)
+
+        otuput_shape = pooling_output_shape(dimension_size=5, pool_size=2,
+                                            padding=0, stride=1,
+                                            ignore_border=False)
+        self.assertEqual(otuput_shape, 4)
+
+        otuput_shape = pooling_output_shape(dimension_size=5, pool_size=2,
+                                            padding=0, stride=4,
+                                            ignore_border=False)
+        self.assertEqual(otuput_shape, 2)
 
     def test_pooling_undefined_output_shape(self):
         max_pool_layer = layers.MaxPooling((2, 2))
@@ -38,13 +63,18 @@ class PoolingLayersTestCase(BaseTestCase):
         self.assertEqual(max_pool_layer.input_shape,
                          max_pool_layer.output_shape)
 
-    def test_pooling_invalid_connections(self):
+    def test_pooling_invalid_connections_exceptions(self):
+        # Invalid input shape
         input_layer = layers.Input(10)
         max_pool_layer = layers.MaxPooling((2, 2))
 
         layers.join(input_layer, max_pool_layer)
         with self.assertRaises(LayerConnectionError):
             max_pool_layer.output_shape
+
+        # Invalid combination of parameters
+        with self.assertRaises(ValueError):
+            layers.MaxPooling((2, 2), ignore_border=False, padding=1)
 
     def test_pooling_repr(self):
         layer = layers.MaxPooling((2, 2))
