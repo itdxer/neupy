@@ -67,6 +67,7 @@ Convolutional Neural Networks
 * `SqueezeNet <examples/cnn/squeezenet.py>`_
 * `GoogleNet <examples/cnn/googlenet.py>`_
 * `Inception v3 <examples/cnn/inception_v3.py>`_
+* `ResNet 50 <examples/cnn/resnet50.py>`_
 
 Autoencoders
 ~~~~~~~~~~~~

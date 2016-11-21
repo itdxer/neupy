@@ -3,23 +3,23 @@ from .utils import join as layers_join
 from .base import BaseLayer
 
 
-__all__ = ('Parallel', 'parallel')
+__all__ = ('Parallel',)
 
 
 class TransferLayer(BaseLayer):
     """
-    Hack layer for parallel connections.
+    Hack for parallel connections.
     """
 
 
-def parallel(connections, merge_layer):
+def Parallel(connections, merge_layer):
     """
     Propagate input value through the multiple parallel layer
     connections and then combine output result.
 
     Parameters
     ----------
-    connections : list of lists
+    connections : list of lists, list of LayerConnection
         List that contains list of layer connections.
 
     merge_layer : BaseLayer instance
@@ -34,7 +34,7 @@ def parallel(connections, merge_layer):
     --------
     >>> from neupy import layers
     >>>
-    >>> parallel_layer = layers.parallel(
+    >>> parallel_layer = layers.Parallel(
     ...     [[
     ...         layers.Convolution((3, 5, 5)),
     ...     ], [
@@ -65,6 +65,3 @@ def parallel(connections, merge_layer):
         full_connection = layers_join(input_layer, connection, merge_layer)
 
     return full_connection
-
-
-Parallel = parallel  # alias

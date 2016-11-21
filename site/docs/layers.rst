@@ -8,7 +8,6 @@ This part of documentation contains main information about layers.
     :maxdepth: 2
 
     layers/basics
-    layers/connections
-    layers/convolutional-layers
     layers/create-custom-layers
     layers/init-methods
+    layers/debug

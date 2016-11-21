@@ -23,6 +23,7 @@ Convolutional Neural Networks
 * `SqueezeNet <https://github.com/itdxer/neupy/tree/release/v0.4.0/examples/cnn/squeezenet.py>`_
 * `GoogleNet <https://github.com/itdxer/neupy/tree/release/v0.4.0/examples/cnn/googlenet.py>`_
 * `Inception v3 <https://github.com/itdxer/neupy/tree/release/v0.4.0/examples/cnn/inception_v3.py>`_
+* `ResNet 50 <https://github.com/itdxer/neupy/tree/release/v0.4.0/examples/cnn/resnet50.py>`_
 
 Autoencoders
 ~~~~~~~~~~~~

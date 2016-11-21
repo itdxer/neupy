@@ -15,8 +15,8 @@ class LearningRateUpdatesTestCase(BaseTestCase):
                 layers.Tanh(1),
             ],
             step=first_step,
-            epochs_step_minimizator=50,
-            addons=[algorithms.SimpleStepMinimization]
+            reduction_freq=50,
+            addons=[algorithms.StepMinimizer]
         )
         network.train(xor_input_train, xor_target_train, epochs=100)
         self.assertAlmostEqual(

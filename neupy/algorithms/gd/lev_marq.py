@@ -63,7 +63,7 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
         Factor to decrease the mu if update decrese the error, otherwise
         increse mu by the same factor. Defaults to ``1.2``
 
-    error: {{``mse``}}
+    error : {{``mse``}}
         Levenberg-Marquardt works only for quadratic functions.
         Defaults to ``mse``.
 

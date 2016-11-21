@@ -39,10 +39,12 @@ def layer_structure(connection, filepath=None, show=True):
     show : bool
         ``True`` opens PDF file. Defaults to ``True``.
 
-    Raises
-    ------
-    ImportError
-        In case if ``graphviz`` library hasn't been installed.
+    Examples
+    --------
+    >>> from neupy import layers, plots
+    >>>
+    >>> connection = layers.Input(10) > layers.Sigmoid(1)
+    >>> plots.layer_structure(connection)
     """
     if isinstance(connection, BaseNetwork):
         connection = connection.connection

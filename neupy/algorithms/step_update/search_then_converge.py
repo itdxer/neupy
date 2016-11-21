@@ -13,7 +13,7 @@ class SearchThenConverge(SingleStepConfigurable):
 
     Parameters
     ----------
-    epochs_step_minimizator : int
+    reduction_freq : int
         The parameter controls the frequency reduction step
         with respect to epochs. Defaults to ``100`` epochs.
         Can't be less than ``1``. Less value mean that step
@@ -41,24 +41,24 @@ class SearchThenConverge(SingleStepConfigurable):
 
     See Also
     --------
-    :network:`SimpleStepMinimization`
+    :network:`StepMinimizer`
     """
-    epochs_step_minimizator = IntProperty(minval=1, default=100)
+    reduction_freq = IntProperty(minval=1, default=100)
     rate_coefitient = NumberProperty(default=0.2)
 
     def init_train_updates(self):
         updates = super(SearchThenConverge, self).init_train_updates()
 
         first_step = self.step
-        epochs_step_minimizator = self.epochs_step_minimizator
+        reduction_freq = self.reduction_freq
 
         step = self.variables.step
         epoch = self.variables.epoch
 
-        epoch_value = epoch / epochs_step_minimizator
+        epoch_value = epoch / reduction_freq
         rated_value = 1 + (self.rate_coefitient / first_step) * epoch_value
         step_update_condition = (first_step * rated_value) / (
-            rated_value + epochs_step_minimizator * epoch_value ** 2
+            rated_value + reduction_freq * epoch_value ** 2
         )
 
         updates.append((step, step_update_condition))

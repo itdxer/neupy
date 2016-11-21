@@ -53,8 +53,8 @@ network = algorithms.Adadelta(
     verbose=True,
     shuffle_data=True,
 
-    epochs_step_minimizator=8,
-    addons=[algorithms.SimpleStepMinimization],
+    reduction_freq=8,
+    addons=[algorithms.StepMinimizer],
 )
 network.architecture()
 network.train(x_train, y_train, x_test, y_test, epochs=15)

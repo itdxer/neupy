@@ -50,7 +50,7 @@ class WeightDecayTestCase(BaseTestCase):
         net3 = reproducible_network_train(
             step=default_step,
             addons=[algorithms.WeightDecay,
-                    algorithms.SimpleStepMinimization]
+                    algorithms.StepMinimizer]
         )
 
         # Check that step is valid for each network
