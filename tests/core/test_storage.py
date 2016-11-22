@@ -1,10 +1,13 @@
+import os
 import tempfile
 
 import dill
 import theano
 import numpy as np
 from sklearn import datasets, preprocessing
-from neupy import algorithms
+from six.moves import cPickle as pickle
+
+from neupy import algorithms, layers, storage
 
 from base import BaseTestCase
 from data import simple_classification
@@ -132,3 +135,114 @@ class StorageTestCase(BaseTestCase):
                 test_layer_weights,
                 restored_bpnet.layers[1].weight.get_value()
             )
+
+
+class LayerStorageTestCase(BaseTestCase):
+    def test_storage_save_conection_from_network(self):
+        network = algorithms.GradientDescent([
+            layers.Input(10),
+            layers.Sigmoid(5),
+            layers.Sigmoid(2),
+        ])
+
+        with tempfile.NamedTemporaryFile() as temp:
+            storage.save(network, temp.name)
+            temp.file.seek(0)
+
+            filesize_after = os.path.getsize(temp.name)
+            self.assertGreater(filesize_after, 0)
+
+    def test_simple_storage(self):
+        connection = layers.join(
+            layers.Input(10),
+            layers.Sigmoid(5),
+            layers.Sigmoid(2),
+        )
+        connection.initialize()
+
+        with tempfile.NamedTemporaryFile() as temp:
+            storage.save(connection, temp.name)
+            temp.file.seek(0)
+
+            filesize_after = os.path.getsize(temp.name)
+            self.assertGreater(filesize_after, 0)
+
+            data = pickle.load(temp.file)
+
+            self.assertIn('sigmoid-1', data)
+            self.assertIn('sigmoid-2', data)
+
+            self.assertIn('weight', data['sigmoid-1'])
+            self.assertIn('bias', data['sigmoid-1'])
+            self.assertIn('weight', data['sigmoid-2'])
+            self.assertIn('bias', data['sigmoid-2'])
+
+            self.assertEqual(data['sigmoid-1']['weight'].shape, (10, 5))
+            self.assertEqual(data['sigmoid-1']['bias'].shape, (5,))
+            self.assertEqual(data['sigmoid-2']['weight'].shape, (5, 2))
+            self.assertEqual(data['sigmoid-2']['bias'].shape, (2,))
+
+    def test_storage_save_load_save(self):
+        connection = layers.join(
+            layers.Input(10),
+            layers.Sigmoid(5),
+            layers.Sigmoid(2),
+        )
+        connection.initialize()
+
+        with tempfile.NamedTemporaryFile() as temp:
+            storage.save(connection, temp.name)
+            temp.file.seek(0)
+
+            filesize_first = os.path.getsize(temp.name)
+
+            storage.load(connection, temp.name)
+
+        with tempfile.NamedTemporaryFile() as temp:
+            storage.save(connection, temp.name)
+            temp.file.seek(0)
+
+            filesize_second = os.path.getsize(temp.name)
+
+        self.assertEqual(filesize_first, filesize_second)
+
+    def test_storage_load_invalid_source(self):
+        connection = layers.join(
+            layers.Input(10),
+            layers.Sigmoid(5),
+            layers.Sigmoid(2),
+        )
+
+        with self.assertRaisesRegexp(TypeError, "Source type is unknown"):
+            storage.load(connection, object)
+
+    def test_storage_load_unknown_parameter(self):
+        connection = layers.join(
+            layers.Input(10),
+            layers.Relu(1),
+        )
+        connection.initialize()
+
+        with self.assertRaisesRegexp(ValueError, "Cannot load parameters"):
+            storage.load(connection, {}, ignore_missed=False)
+
+        # Nothing happens in case if we ignore it
+        storage.load(connection, {}, ignore_missed=True)
+
+    def test_storage_load_from_dict(self):
+        relu = layers.Relu(2, name='relu')
+        connection = layers.Input(10) > relu
+        connection.initialize()
+
+        weight = np.ones((10, 2))
+        bias = np.ones((2,))
+
+        storage.load(connection, {
+            'relu': {
+                'weight': weight,
+                'bias': bias,
+            }
+        })
+
+        np.testing.assert_array_almost_equal(weight, relu.weight.get_value())
+        np.testing.assert_array_almost_equal(bias, relu.bias.get_value())

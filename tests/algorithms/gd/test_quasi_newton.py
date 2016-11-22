@@ -187,19 +187,3 @@ class QuasiNewtonTestCase(BaseTestCase):
 
         roc_curve_score = metrics.roc_auc_score(result, y_test)
         self.assertAlmostEqual(0.92, roc_curve_score, places=2)
-
-    def test_quasi_newton_parameter_search(self):
-        input_layer = layers.Input(10)
-        output_layer = layers.Sigmoid(1)
-
-        connection = input_layer > output_layer
-        connection.initialize()
-
-        self.assertEqual(
-            'weight',
-            qn.find_param_name(output_layer, output_layer.weight)
-        )
-        self.assertEqual(
-            None,
-            qn.find_param_name(output_layer, 'invalid-variable')
-        )

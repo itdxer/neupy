@@ -1,5 +1,3 @@
-import inspect
-
 import theano
 import theano.tensor as T
 from theano.ifelse import ifelse
@@ -7,54 +5,15 @@ import numpy as np
 
 from neupy.core.properties import ChoiceProperty, NumberProperty
 from neupy.algorithms.gd import NoStepSelection
-from neupy.algorithms.utils import (parameters2vector, iter_parameters,
+from neupy.algorithms.utils import (parameters2vector, iter_parameter_values,
                                     setup_parameter_updates)
 from neupy.optimizations.wolfe import line_search
+from neupy.layers.utils import count_parameters, iter_parameters
 from neupy.utils import asfloat
 from .base import GradientDescent
 
 
 __all__ = ('QuasiNewton',)
-
-
-def find_param_name(layer, parameter):
-    """
-    Find attribute name inside that has a link to parameter
-
-    Parameters
-    ----------
-    layer : BaseLayer instance
-
-    parameter : object
-
-    Returns
-    -------
-    str or None
-        Returns parameter name in case if it defined in the
-        layer and ``None`` otherwise.
-    """
-    for member_name, member_value in inspect.getmembers(layer):
-        if member_value is parameter:
-            return member_name
-
-
-def iter_layers_and_parameters(layers):
-    """
-    Iterate through layer parameters.
-
-    Parameters
-    ----------
-    layers : list or LayerConnection instance
-
-    Yields
-    ------
-    tuple
-        Tuple with three ariables: (layer, attribute_name, parameter)
-    """
-    for layer in layers:
-        for parameter in layer.parameters:
-            attrname = find_param_name(layer, parameter)
-            yield layer, attrname, parameter
 
 
 def bfgs(inverse_hessian, weight_delta, gradient_delta, maxrho=1e4):
@@ -179,7 +138,7 @@ class QuasiNewton(NoStepSelection, GradientDescent):
 
     def init_variables(self):
         super(QuasiNewton, self).init_variables()
-        n_params = sum(p.get_value().size for p in iter_parameters(self))
+        n_params = count_parameters(self.connection)
         self.variables.update(
             inv_hessian=theano.shared(
                 name='quasi-newton/inv-hessian',
@@ -202,7 +161,7 @@ class QuasiNewton(NoStepSelection, GradientDescent):
         prev_params = self.variables.prev_params
         prev_full_gradient = self.variables.prev_full_gradient
 
-        params = list(iter_parameters(self))
+        params = list(iter_parameter_values(self))
         param_vector = parameters2vector(self)
 
         gradients = T.grad(self.variables.error_func, wrt=params)
@@ -216,7 +175,7 @@ class QuasiNewton(NoStepSelection, GradientDescent):
                                  full_gradient - prev_full_gradient)
         )
         param_delta = -new_inv_hessian.dot(full_gradient)
-        layers_and_parameters = list(iter_layers_and_parameters(self.layers))
+        layers_and_parameters = list(iter_parameters(self.layers))
 
         def prediction(step):
             updated_params = param_vector + step * param_delta

@@ -53,7 +53,7 @@ class Quickprop(GradientDescent):
     def init_layers(self):
         super(Quickprop, self).init_layers()
         for layer in self.layers:
-            for parameter in layer.parameters:
+            for parameter in layer.parameters.values():
                 parameter_shape = T.shape(parameter).eval()
                 parameter.prev_delta = theano.shared(
                     name="{}/prev-delta".format(parameter.name),

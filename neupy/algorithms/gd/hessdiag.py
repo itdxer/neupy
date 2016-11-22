@@ -4,7 +4,7 @@ import theano.tensor as T
 
 from neupy.core.properties import ProperFractionProperty
 from neupy.algorithms.utils import (parameters2vector, setup_parameter_updates,
-                                    iter_parameters)
+                                    iter_parameter_values)
 from neupy.algorithms.gd import NoMultipleStepSelection
 from .base import GradientDescent
 
@@ -98,7 +98,7 @@ class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
     def init_train_updates(self):
         step = self.variables.step
         min_eigval = self.min_eigval
-        parameters = list(iter_parameters(self))
+        parameters = list(iter_parameter_values(self))
         param_vector = parameters2vector(self)
 
         gradients = T.grad(self.variables.error_func, wrt=parameters)

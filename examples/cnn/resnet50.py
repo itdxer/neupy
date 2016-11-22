@@ -64,4 +64,4 @@ resnet50 = layers.join(
 )
 resnet50.initialize()
 
-plots.layer_structure(resnet50)
+# plots.layer_structure(resnet50)

@@ -8,4 +8,4 @@ from .normalization import *
 from .merge import *
 from .parallel import *
 
-from .utils import join
+from .utils import join, count_parameters

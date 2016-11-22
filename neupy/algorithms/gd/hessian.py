@@ -6,8 +6,9 @@ from theano.tensor import slinalg
 from neupy.core.properties import BoundedProperty
 from neupy.utils import asfloat
 from neupy.algorithms.gd import NoStepSelection
-from neupy.algorithms.utils import (parameters2vector, count_parameters,
-                                    iter_parameters, setup_parameter_updates)
+from neupy.algorithms.utils import (parameters2vector, iter_parameter_values,
+                                    setup_parameter_updates)
+from neupy.layers.utils import count_parameters
 from .base import GradientDescent
 
 
@@ -89,8 +90,8 @@ class Hessian(NoStepSelection, GradientDescent):
     penalty_const = BoundedProperty(default=1, minval=0)
 
     def init_train_updates(self):
-        n_parameters = count_parameters(self)
-        parameters = list(iter_parameters(self))
+        n_parameters = count_parameters(self.connection)
+        parameters = list(iter_parameter_values(self))
         param_vector = parameters2vector(self)
         penalty_const = asfloat(self.penalty_const)
 

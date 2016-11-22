@@ -38,7 +38,7 @@ def find_numpy_doc_indent(docs):
     return len(indent)
 
 
-def iter_parameters(docs):
+def iter_doc_parameters(docs):
     """
     Find parameters defined in the documentation.
 
@@ -71,7 +71,7 @@ def iter_parameters(docs):
             yield parameter_name, parameter_description.rstrip()
 
 
-def iter_methods(docs):
+def iter_doc_methods(docs):
     """
     Find methods defined in the documentation.
 
@@ -163,8 +163,8 @@ def parse_variables_from_docs(instances):
             continue
 
         parent_variables = AttributeKeyDict()
-        parent_variables.update(iter_parameters(parent_docs))
-        parent_variables.update(iter_methods(parent_docs))
+        parent_variables.update(iter_doc_parameters(parent_docs))
+        parent_variables.update(iter_doc_methods(parent_docs))
 
         for section_name in doc_sections:
             full_section = parse_full_section(section_name, parent_docs)

@@ -78,6 +78,34 @@ def generate_layer_name(layer):
     return layer_name
 
 
+def create_shared_parameter(value, name, shape):
+    """
+    Creates NN parameter as Theano shared variable.
+
+    Parameters
+    ----------
+    value : array-like, Theano variable, scalar or Initializer
+        Default value for the parameter.
+
+    name : str
+        Shared variable name.
+
+    shape : tuple
+        Parameter's shape.
+
+    Returns
+    -------
+    Theano shared variable.
+    """
+    if isinstance(value, (T.sharedvar.SharedVariable, T.Variable)):
+        return value
+
+    if isinstance(value, init.Initializer):
+        value = value.sample(shape)
+
+    return theano.shared(value=asfloat(value), name=name, borrow=True)
+
+
 class BaseLayer(ChainConnection, Configurable):
     """
     Base class for all layers.
@@ -121,7 +149,7 @@ class BaseLayer(ChainConnection, Configurable):
     def __init__(self, *args, **options):
         super(BaseLayer, self).__init__(*args)
 
-        self.parameters = []
+        self.parameters = {}
         self.updates = []
         self.layer_id = None
         self.input_shape_ = None
@@ -145,53 +173,25 @@ class BaseLayer(ChainConnection, Configurable):
         return input_value
 
     def initialize(self):
-        self.parameters = []
+        self.parameters = {}
 
         if self.name is None:
             self.name = generate_layer_name(layer=self)
 
-    def add_parameter(self, value, name, shape):
+    def add_parameter(self, value, name, shape=None):
         theano_name = 'layer:{layer_name}/{parameter_name}'.format(
             layer_name=self.name,
-            parameter_name=name
+            parameter_name=name.replace('_', '-')
         )
 
         parameter = create_shared_parameter(value, theano_name, shape)
-        self.parameters.append(parameter)
+        self.parameters[name] = parameter
 
         setattr(self, name, parameter)
 
     def __repr__(self):
         classname = self.__class__.__name__
         return '{name}()'.format(name=classname)
-
-
-def create_shared_parameter(value, name, shape):
-    """
-    Creates NN parameter as Theano shared variable.
-
-    Parameters
-    ----------
-    value : array-like, Theano variable, scalar or Initializer
-        Default value for the parameter.
-
-    name : str
-        Shared variable name.
-
-    shape : tuple
-        Parameter's shape.
-
-    Returns
-    -------
-    Theano shared variable.
-    """
-    if isinstance(value, (T.sharedvar.SharedVariable, T.Variable)):
-        return value
-
-    if isinstance(value, init.Initializer):
-        value = value.sample(shape)
-
-    return theano.shared(value=asfloat(value), name=name, borrow=True)
 
 
 class ParameterBasedLayer(BaseLayer):
@@ -246,6 +246,7 @@ class ParameterBasedLayer(BaseLayer):
 
     def initialize(self):
         super(ParameterBasedLayer, self).initialize()
+
         self.add_parameter(value=self.weight, name='weight',
                            shape=self.weight_shape)
 

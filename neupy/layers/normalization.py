@@ -1,4 +1,3 @@
-import theano
 import theano.tensor as T
 import numpy as np
 
@@ -132,34 +131,17 @@ class BatchNorm(BaseLayer):
                              "with unknown size over the dimension #{} "
                              "(0-based indeces).".format(unknown_dim_index))
 
-        self.running_mean = theano.shared(
-            name='{}/running-mean'.format(self.name),
-            value=asfloat(np.zeros(parameter_shape))
-        )
-        self.running_inv_std = theano.shared(
-            name='{}/running-inv-std'.format(self.name),
-            value=asfloat(np.ones(parameter_shape))
-        )
+        self.add_parameter(value=np.zeros(parameter_shape),
+                           name='running_mean', shape=parameter_shape)
 
-        if isinstance(self.gamma, init.Initializer):
-            self.gamma = self.gamma.sample(parameter_shape)
+        self.add_parameter(value=np.ones(parameter_shape),
+                           name='running_inv_std', shape=parameter_shape)
 
-        if isinstance(self.beta, init.Initializer):
-            self.beta = self.beta.sample(parameter_shape)
+        self.add_parameter(value=self.gamma, name='gamma',
+                           shape=parameter_shape)
 
-        if not isinstance(self.gamma, T.sharedvar.SharedVariable):
-            self.gamma = theano.shared(
-                name='{}/gamma'.format(self.name),
-                value=asfloat(self.gamma),
-            )
-
-        if not isinstance(self.beta, T.sharedvar.SharedVariable):
-            self.beta = theano.shared(
-                name='{}/beta'.format(self.name),
-                value=asfloat(self.beta),
-            )
-
-        self.parameters = [self.gamma, self.beta]
+        self.add_parameter(value=self.beta, name='beta',
+                           shape=parameter_shape)
 
     def output(self, input_value):
         epsilon = asfloat(self.epsilon)
