@@ -412,7 +412,7 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
             could be a layer's weight and bias.
         """
         updates = []
-        for parameter in layer.parameters:
+        for parameter in layer.parameters.values():
             updates.extend(self.init_param_updates(layer, parameter))
         updates.extend(layer.updates)
         return updates

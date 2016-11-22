@@ -75,7 +75,7 @@ class Adam(MinibatchGradientDescent):
     def init_layers(self):
         super(Adam, self).init_layers()
         for layer in self.layers:
-            for parameter in layer.parameters:
+            for parameter in layer.parameters.values():
                 parameter_shape = T.shape(parameter).eval()
                 parameter.prev_first_moment = theano.shared(
                     name="{}/prev-first-moment".format(parameter.name),

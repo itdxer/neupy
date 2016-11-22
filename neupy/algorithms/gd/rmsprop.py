@@ -50,7 +50,7 @@ class RMSProp(MinibatchGradientDescent):
     def init_layers(self):
         super(RMSProp, self).init_layers()
         for layer in self.layers:
-            for parameter in layer.parameters:
+            for parameter in layer.parameters.values():
                 parameter_shape = T.shape(parameter).eval()
                 parameter.prev_mean_squred_grad = theano.shared(
                     name="{}/prev-mean-squared-grad".format(parameter.name),

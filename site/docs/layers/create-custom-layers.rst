@@ -63,12 +63,7 @@ The other important method is an ``initialize``. The main purpose of this method
     class FeatureMeanLayer(layers.BaseLayer):
         def initialize(self):
             super(FeatureMeanLayer, self).initialize()
-
-            self.scaler = theano.shared(
-                name="{}/scaler".format(self.name),
-                value=asfloat(1)
-            )
-            self.parameters.append(self.scaler)
+            self.add_parameter(value=1, name='scaler')
 
         @property
         def output_shape(self):

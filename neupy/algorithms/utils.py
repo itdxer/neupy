@@ -1,14 +1,13 @@
 from itertools import chain
 
-import numpy as np
 import theano.tensor as T
 
 
-__all__ = ('count_parameters', 'parameters2vector', 'iter_parameters',
+__all__ = ('parameters2vector', 'iter_parameter_values',
            'setup_parameter_updates')
 
 
-def iter_parameters(network):
+def iter_parameter_values(network):
     """
     Iterate over all network parameters.
 
@@ -24,7 +23,7 @@ def iter_parameters(network):
         be at the beggining and the other will be in the same
         order as layers in the network.
     """
-    parameters = [layer.parameters for layer in network.layers]
+    parameters = [layer.parameters.values() for layer in network.layers]
     return chain(*parameters)
 
 
@@ -41,25 +40,8 @@ def parameters2vector(network):
     object
         Returns all parameters concatenated in one big vector.
     """
-    params = iter_parameters(network)
+    params = iter_parameter_values(network)
     return T.concatenate([param.flatten() for param in params])
-
-
-def count_parameters(network):
-    """
-    Count number of parameters in Neural Network.
-
-    Parameters
-    ----------
-    network : ConstructableNetwork instance
-
-    Returns
-    -------
-    int
-        Number of parameters.
-    """
-    params = iter_parameters(network)
-    return np.sum([param.get_value().size for param in params])
 
 
 def setup_parameter_updates(parameters, parameter_update_vector):

@@ -4,7 +4,8 @@ import theano.tensor as T
 
 from neupy.utils import asfloat
 from neupy.core.properties import ProperFractionProperty, BoundedProperty
-from neupy.algorithms.utils import iter_parameters, count_parameters
+from neupy.algorithms.utils import iter_parameter_values
+from neupy.layers.utils import count_parameters
 from .base import SingleStepConfigurable
 
 
@@ -57,7 +58,7 @@ class LeakStepAdaptation(SingleStepConfigurable):
 
     def init_variables(self):
         super(LeakStepAdaptation, self).init_variables()
-        n_parameters = count_parameters(self)
+        n_parameters = count_parameters(self.connection)
         self.variables.leak_average = theano.shared(
             name='leak-step-adapt/leak-average',
             value=asfloat(np.zeros(n_parameters)),
@@ -73,7 +74,7 @@ class LeakStepAdaptation(SingleStepConfigurable):
         step = self.variables.step
         leak_average = self.variables.leak_average
 
-        parameters = list(iter_parameters(self))
+        parameters = list(iter_parameter_values(self))
         gradients = T.grad(self.variables.error_func, wrt=parameters)
         full_gradient = T.concatenate([grad.flatten() for grad in gradients])
 

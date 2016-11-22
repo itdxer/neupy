@@ -70,8 +70,8 @@ class PropertiesBasicsTestCase(BaseTestCase):
 
     def test_property_repr(self):
         prop = Property(default=3)
-        self.assertEqual('3', str(prop))
-        self.assertEqual('3', repr(prop))
+        self.assertEqual('Property()', str(prop))
+        self.assertEqual('Property()', repr(prop))
 
 
 class BoundedPropertiesTestCase(BaseTestCase):

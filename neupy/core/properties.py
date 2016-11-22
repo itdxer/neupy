@@ -2,7 +2,7 @@ import numpy as np
 import theano.tensor as T
 
 from neupy import init
-from neupy.utils import preformat_value, number_type, as_tuple
+from neupy.utils import number_type, as_tuple
 from neupy.core.docs import SharedDocs
 
 
@@ -73,7 +73,10 @@ class BaseProperty(SharedDocs):
             del instance.options[name]
 
     def __str__(self):
-        return str(preformat_value(self.default))
+        classname = self.__class__.__name__
+        if self.name is None:
+            return '{}()'.format(classname)
+        return '{}(name="{}")'.format(classname, self.name)
 
     def __repr__(self):
         return self.__str__()

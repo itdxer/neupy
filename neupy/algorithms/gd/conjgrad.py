@@ -6,8 +6,9 @@ import theano.tensor as T
 from neupy.utils import asfloat
 from neupy.core.properties import ChoiceProperty
 from neupy.algorithms.gd import NoMultipleStepSelection
-from neupy.algorithms.utils import (parameters2vector, count_parameters,
-                                    iter_parameters, setup_parameter_updates)
+from neupy.algorithms.utils import (parameters2vector, iter_parameter_values,
+                                    setup_parameter_updates)
+from neupy.layers.utils import count_parameters
 from .base import GradientDescent
 
 
@@ -140,7 +141,7 @@ class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
 
     def init_variables(self):
         super(ConjugateGradient, self).init_variables()
-        n_parameters = count_parameters(self)
+        n_parameters = count_parameters(self.connection)
 
         self.variables.update(
             prev_delta=theano.shared(
@@ -158,8 +159,8 @@ class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
         previous_delta = self.variables.prev_delta
         previous_gradient = self.variables.prev_gradient
 
-        n_parameters = count_parameters(self)
-        parameters = list(iter_parameters(self))
+        n_parameters = count_parameters(self.connection)
+        parameters = list(iter_parameter_values(self))
         param_vector = parameters2vector(self)
 
         gradients = T.grad(self.variables.error_func, wrt=parameters)

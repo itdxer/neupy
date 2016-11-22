@@ -2,7 +2,7 @@ import collections
 from functools import reduce
 
 
-__all__ = ('preformat_layer_shape', 'dimshuffle', 'join')
+__all__ = ('preformat_layer_shape', 'dimshuffle', 'join', 'iter_parameters')
 
 
 def preformat_layer_shape(shape):
@@ -82,3 +82,41 @@ def join(*connections):
 
     merged_connections = reduce(LayerConnection, connections)
     return merged_connections
+
+
+def iter_parameters(layers):
+    """
+    Iterate through layer parameters.
+
+    Parameters
+    ----------
+    layers : list of layers or connection
+
+    Yields
+    ------
+    tuple
+        Tuple with three ariables: (layer, attribute_name, parameter)
+    """
+    for layer in layers:
+        for attrname, parameter in layer.parameters.items():
+            yield layer, attrname, parameter
+
+
+def count_parameters(connection):
+    """
+    Count number of parameters in Neural Network.
+
+    Parameters
+    ----------
+    connection : list of laters or connection
+
+    Returns
+    -------
+    int
+        Number of parameters.
+    """
+    n_parameters = 0
+    for _, _, parameter in iter_parameters(connection):
+        parameter = parameter.get_value()
+        n_parameters += parameter.size
+    return n_parameters

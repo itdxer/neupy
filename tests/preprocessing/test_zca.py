@@ -18,7 +18,7 @@ IMGDIR = os.path.join(CURRENT_DIR, "images")
 
 
 class ZCATestCase(BaseTestCase):
-    def test_exceptions(self):
+    def test_zca_exceptions(self):
         with self.assertRaises(NotTrainedException):
             data = np.random.random((3, 2))
             zca = preprocessing.ZCA()

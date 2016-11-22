@@ -9,7 +9,7 @@ from neupy.network import errors
 from neupy.core.properties import BoundedProperty, ChoiceProperty
 from neupy.algorithms import GradientDescent
 from neupy.algorithms.gd import NoStepSelection
-from neupy.algorithms.utils import (parameters2vector, iter_parameters,
+from neupy.algorithms.utils import (parameters2vector, iter_parameter_values,
                                     setup_parameter_updates)
 
 
@@ -120,7 +120,7 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
             (network_output - prediction_func) ** 2
         ).ravel()
 
-        params = list(iter_parameters(self))
+        params = list(iter_parameter_values(self))
         param_vector = parameters2vector(self)
 
         J = compute_jacobian(se_for_each_sample, params)

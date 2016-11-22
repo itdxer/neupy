@@ -21,6 +21,7 @@ class ZCA(BaseSkeleton):
     ----------
     mean : 1D array
         Mean for each feature.
+
     components : array-like
         ZCA components.
 
@@ -28,6 +29,7 @@ class ZCA(BaseSkeleton):
     -------
     train(data)
         Train ZCA.
+
     transform(data)
         Transform input data.
     """
