@@ -2,7 +2,8 @@ import collections
 from functools import reduce
 
 
-__all__ = ('preformat_layer_shape', 'dimshuffle', 'join', 'iter_parameters')
+__all__ = ('preformat_layer_shape', 'dimshuffle', 'join', 'iter_parameters',
+           'count_parameters')
 
 
 def preformat_layer_shape(shape):
@@ -115,6 +116,9 @@ def count_parameters(connection):
     int
         Number of parameters.
     """
+    if not isinstance(connection, collections.Iterable):
+        connection = [connection]
+
     n_parameters = 0
     for _, _, parameter in iter_parameters(connection):
         parameter = parameter.get_value()
