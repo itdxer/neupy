@@ -96,6 +96,23 @@ Function also works for the networks.
     nnet = algorithms.GradientDescent((2, 3, 1))
     plots.layer_structure(nnet)
 
+Count number of parameters
+--------------------------
+
+.. code-block:: python
+
+    >>> from neupy import layers
+    >>>
+    >>> connection = layers.join(
+    ...     layers.Input(10),
+    ...     layers.Relu(5),  # weight: 10 * 5, bias: 5, total: 55
+    ...     layers.Relu(2),  # weight:  5 * 2, bias: 2, total: 12
+    ... )
+    >>> connection.initialize()
+    >>>
+    >>> layers.count_parameters(connection)
+    67
+
 Exploring graph connections
 ---------------------------
 

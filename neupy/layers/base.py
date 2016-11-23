@@ -138,8 +138,8 @@ class BaseLayer(ChainConnection, Configurable):
     layer_id : int
         Layer's identifier.
 
-    parameters : list
-        List of layer's parameters.
+    parameters : dict
+        Trainable parameters.
 
     graph : LayerGraph instance or None
         Graphs that stores all relations between layers.

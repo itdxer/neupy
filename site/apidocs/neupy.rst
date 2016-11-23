@@ -24,6 +24,7 @@ Submodules
    neupy.estimators
    neupy.init
    neupy.preprocessing
+   neupy.storage
    neupy.surgery
    neupy.utils
 
