@@ -5,10 +5,9 @@ from theano.tensor import slinalg
 import numpy as np
 
 from neupy.utils import asfloat
-from neupy.network import errors
 from neupy.core.properties import BoundedProperty, ChoiceProperty
 from neupy.algorithms import GradientDescent
-from neupy.algorithms.gd import NoStepSelection
+from neupy.algorithms.gd import NoStepSelection, errors
 from neupy.algorithms.utils import (parameters2vector, iter_parameter_values,
                                     setup_parameter_updates)
 

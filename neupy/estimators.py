@@ -1,6 +1,6 @@
 from functools import wraps
 
-from neupy.network import errors
+from neupy.algorithms.gd import errors
 from neupy.utils import format_data, number_type
 
 

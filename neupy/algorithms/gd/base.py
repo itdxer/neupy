@@ -10,9 +10,9 @@ import numpy as np
 
 from neupy.core.config import Configurable
 from neupy.core.properties import Property, BoundedProperty
-from neupy.network import ConstructableNetwork
 from neupy.utils import as_tuple
-from . import addon_types
+from neupy.algorithms.constructor import ConstructableNetwork
+from neupy.algorithms.gd import addon_types
 
 
 __all__ = ('GradientDescent', 'MinibatchGradientDescent')

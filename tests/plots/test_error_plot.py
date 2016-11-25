@@ -4,7 +4,7 @@ import theano
 
 import matplotlib.pyplot as plt
 from neupy import plots, algorithms
-from neupy.network.base import ErrorHistoryList
+from neupy.algorithms.base import ErrorHistoryList
 
 from base import BaseTestCase
 from data import simple_classification

@@ -15,9 +15,9 @@ from neupy.layers.connections import (LayerConnection, NetworkConnectionError,
                                       is_sequential)
 from neupy.helpers import table
 from neupy.core.properties import ChoiceProperty
-from neupy.network import errors
-from .learning import SupervisedLearningMixin
-from .base import BaseNetwork
+from neupy.algorithms.base import BaseNetwork
+from neupy.algorithms.learning import SupervisedLearningMixin
+from .gd import errors
 
 
 __all__ = ('ConstructableNetwork',)

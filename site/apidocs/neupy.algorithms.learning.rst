@@ -1,7 +1,7 @@
-neupy.network.constructor module
+neupy.algorithms.learning module
 ================================
 
-.. automodule:: neupy.network.constructor
+.. automodule:: neupy.algorithms.learning
     :members:
     :undoc-members:
     :show-inheritance:

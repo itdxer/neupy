@@ -3,8 +3,7 @@ from random import randint
 import numpy as np
 
 from neupy.utils import format_data, NotTrainedException
-from neupy.network.utils import step_function
-from .utils import bin2sign, hopfield_energy
+from .utils import bin2sign, hopfield_energy, step_function
 from .base import DiscreteMemory
 
 

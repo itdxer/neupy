@@ -3,7 +3,7 @@ import theano.tensor as T
 
 from neupy import estimators
 from neupy.utils import asfloat
-from neupy.network import errors
+from neupy.algorithms.gd import errors
 
 from base import BaseTestCase
 

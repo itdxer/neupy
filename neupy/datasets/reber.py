@@ -4,7 +4,7 @@ from random import choice, randint
 
 import numpy as np
 
-from neupy.network.utils import shuffle
+from neupy.algorithms.utils import shuffle
 
 
 __all__ = ('make_reber', 'is_valid_by_reber', 'make_reber_classification')

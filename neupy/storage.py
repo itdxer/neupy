@@ -3,7 +3,7 @@ from collections import defaultdict
 import six
 from six.moves import cPickle as pickle
 
-from neupy.network.base import BaseNetwork
+from neupy.algorithms.base import BaseNetwork
 from neupy.layers.utils import iter_parameters
 
 

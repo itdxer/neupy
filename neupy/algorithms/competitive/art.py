@@ -5,7 +5,7 @@ import numpy as np
 from neupy.utils import format_data
 from neupy.core.properties import (ProperFractionProperty,
                                    IntProperty)
-from neupy.network.base import BaseNetwork
+from neupy.algorithms.base import BaseNetwork
 
 
 __all__ = ('ART1',)

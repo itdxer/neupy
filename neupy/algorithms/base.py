@@ -13,7 +13,7 @@ from neupy.core.properties import (BoundedProperty, NumberProperty,
                                    Property)
 from .summary_info import SummaryTable, InlineSummary
 from .utils import (iter_until_converge, shuffle, normalize_error,
-                    StopNetworkTraining)
+                    StopTrainingException)
 
 
 __all__ = ('BaseNetwork',)
@@ -435,7 +435,7 @@ class BaseNetwork(BaseSkeleton):
 
                     is_first_iteration = False
 
-                except StopNetworkTraining as err:
+                except StopTrainingException as err:
                     # TODO: This notification breaks table view in terminal.
                     # I need to show it in a different way.
                     logs.message("TRAIN", "Epoch #{} stopped. {}"
