@@ -56,7 +56,7 @@ def generate_layer_name(layer):
     if layer.layer_id is not None:
         layer_id = layer.layer_id
 
-    elif graph is None:
+    elif not graph:
         layer_id = 1
 
     else:
@@ -156,6 +156,9 @@ class BaseLayer(ChainConnection, Configurable):
 
         Configurable.__init__(self, **options)
 
+    def validate(self, input_shape):
+        pass
+
     @property
     def input_shape(self):
         if self.input_shape_ is not None:
@@ -163,6 +166,7 @@ class BaseLayer(ChainConnection, Configurable):
 
     @input_shape.setter
     def input_shape(self, value):
+        self.validate(value)
         self.input_shape_ = value
 
     @property

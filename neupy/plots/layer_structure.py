@@ -107,9 +107,6 @@ def layer_structure(connection, ignore_layers=None, filepath=None, show=True):
     if isinstance(connection, BaseNetwork):
         connection = connection.connection
 
-    if connection.graph is None:
-        return
-
     if ignore_layers is None:
         ignore_layers = []
 

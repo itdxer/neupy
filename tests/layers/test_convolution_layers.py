@@ -116,10 +116,9 @@ class ConvLayersTestCase(BaseTestCase):
             layers.Convolution((1, 3, 3), padding=(3, 3, 3))
 
     def test_conv_invalid_input_shape(self):
+        conv = layers.Convolution((1, 3, 3))
         with self.assertRaises(LayerConnectionError):
-            conv = layers.Convolution((1, 3, 3))
             layers.join(layers.Input(10), conv)
-            conv.output_shape
 
     def test_conv_without_bias(self):
         input_layer = layers.Input((1, 5, 5))

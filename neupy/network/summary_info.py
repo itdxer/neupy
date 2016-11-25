@@ -19,16 +19,18 @@ class SummaryTable(object):
     ----------
     network : BaseNetwork
         Network instance.
+
     table_builder : TableBuilder
         Pre-defined table builder with specified table structure.
+
     delay_limit : float
         Defaults to ``1``.
+
     delay_history_length : int
         Defaults to ``10``.
     """
     def __init__(self, network, table_builder, delay_limit=1.,
                  delay_history_length=10):
-
         self.network = network
         self.table_builder = table_builder
         self.delay_limit = delay_limit

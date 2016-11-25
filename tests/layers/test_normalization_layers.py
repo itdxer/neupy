@@ -121,9 +121,8 @@ class LocalResponseNormTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             layers.LocalResponseNorm(n=2)
 
-        conn = layers.Input(10) > layers.LocalResponseNorm()
         with self.assertRaises(LayerConnectionError):
-            conn.output(T.matrix())
+            layers.Input(10) > layers.LocalResponseNorm()
 
         conn = layers.LocalResponseNorm()
         with self.assertRaises(LayerConnectionError):

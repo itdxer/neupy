@@ -68,9 +68,8 @@ class PoolingLayersTestCase(BaseTestCase):
         input_layer = layers.Input(10)
         max_pool_layer = layers.MaxPooling((2, 2))
 
-        layers.join(input_layer, max_pool_layer)
         with self.assertRaises(LayerConnectionError):
-            max_pool_layer.output_shape
+            layers.join(input_layer, max_pool_layer)
 
         # Invalid combination of parameters
         with self.assertRaises(ValueError):
@@ -119,12 +118,11 @@ class PoolingLayersTestCase(BaseTestCase):
 
 class UpscaleLayersTestCase(BaseTestCase):
     def test_upscale_layer_exceptions(self):
+        upscale_layer = layers.Upscale((2, 2))
         with self.assertRaises(LayerConnectionError):
             # Input shape should have 3 feature dimensions
             # (and +1 for the batch)
-            upscale_layer = layers.Upscale((2, 2))
             layers.Input(10) > upscale_layer
-            upscale_layer.output_shape
 
         invalid_scales = [-1, (2, 0), (-4, 1), (3, 3, 3)]
         for invalid_scale in invalid_scales:

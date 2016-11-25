@@ -2,7 +2,7 @@ from copy import deepcopy
 from functools import reduce
 
 from neupy.network import ConstructableNetwork
-from neupy.layers.connections import LayerConnection, is_sequential
+from neupy.layers.connections import LayerConnection, is_sequential, LayerGraph
 from neupy import layers
 
 
@@ -139,7 +139,7 @@ def cut(connection, start, end):
     cutted_layers = layers[start:end]
 
     for layer in cutted_layers:
-        layer.graph = None
+        layer.graph = LayerGraph()
         layer.connection = None
 
     if not cutted_layers:

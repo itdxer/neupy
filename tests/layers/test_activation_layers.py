@@ -116,17 +116,15 @@ class ActivationLayersTestCase(BaseTestCase):
 
 class PReluTestCase(BaseTestCase):
     def test_invalid_alpha_axes_parameter(self):
-        # there are can be specified axis 1, but not 2
         prelu_layer = layers.PRelu(10, alpha_axes=2)
         with self.assertRaises(ValueError):
-            connection = layers.Input(10) > prelu_layer
-            connection.initialize()
+            # cannot specify 2-axis, because we only
+            # have 0 and 1 axes (2D input)
+            layers.Input(10) > prelu_layer
 
-        # cannot specify alpha per input sample
-        prelu_layer = layers.PRelu(10, alpha_axes=0)
         with self.assertRaises(ValueError):
-            connection = layers.Input(10) > prelu_layer
-            connection.initialize()
+            # 0-axis is not allowed
+            layers.PRelu(10, alpha_axes=0)
 
     def test_prelu_random_params(self):
         prelu_layer = layers.PRelu(10, alpha=init.XavierNormal())

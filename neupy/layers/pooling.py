@@ -113,13 +113,7 @@ class BasePooling(BaseLayer):
                              "``ignore_border`` is equal to ``False``"
                              "".format(self.padding))
 
-    @property
-    def output_shape(self):
-        input_shape = self.input_shape
-
-        if input_shape is None:
-            return None
-
+    def validate(self, input_shape):
         if len(input_shape) != 3:
             raise LayerConnectionError(
                 "Pooling layer expects an input with 3 "
@@ -127,7 +121,12 @@ class BasePooling(BaseLayer):
                 "".format(len(input_shape), input_shape)
             )
 
-        n_kernels, rows, cols = input_shape
+    @property
+    def output_shape(self):
+        if self.input_shape is None:
+            return None
+
+        n_kernels, rows, cols = self.input_shape
         row_filter_size, col_filter_size = self.size
 
         stride = self.size if self.stride is None else self.stride
@@ -284,16 +283,17 @@ class Upscale(BaseLayer):
     def __init__(self, scale, **options):
         super(Upscale, self).__init__(scale=scale, **options)
 
+    def validate(self, input_shape):
+        if len(input_shape) != 3:
+            raise LayerConnectionError(
+                "Upscale layer should have an input value with "
+                "3 feature dimensions (channel, height, width)"
+            )
+
     @property
     def output_shape(self):
         if self.input_shape is None:
             return None
-
-        if len(self.input_shape) != 3:
-            raise LayerConnectionError(
-                "Upscale layer should have an input value that have "
-                "3 feature dimensions (channel, height and width)"
-            )
 
         channel, height, width = self.input_shape
         height_scale, width_scale = self.scale
