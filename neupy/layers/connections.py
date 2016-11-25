@@ -64,6 +64,7 @@ def filter_dict(dictionary, include_keys):
     ----------
     dictionary : dict
         Original dictionary
+
     include_keys : list or tuple
         Keys that will copied from original dictionary
         into a new one.
@@ -161,7 +162,7 @@ def does_layer_expect_one_input(layer):
 
     Parameters
     ----------
-    layer : BaseLayer or LayerConnection instance
+    layer : layer or connection
 
     Raises
     ------
@@ -247,7 +248,7 @@ class LayerGraph(object):
 
         Parameters
         ----------
-        layer : hashable object
+        layer : layer
 
         Returns
         -------
@@ -270,8 +271,8 @@ class LayerGraph(object):
 
         Parameters
         ----------
-        from_layer : hashable object
-        to_layer : hashable object
+        from_layer : layer
+        to_layer : layer
 
         Raises
         ------
@@ -329,8 +330,8 @@ class LayerGraph(object):
 
         Parameters
         ----------
-        from_layer : hashable object
-        to_layer : hashable object
+        from_layer : layer
+        to_layer : layer
 
         Raises
         ------
@@ -541,16 +542,18 @@ class LayerGraph(object):
 
         return results
 
+    def __len__(self):
+        return len(self.forward_graph)
+
 
 class ChainConnection(object):
     """
     Base class from chain connections.
     """
-    graph = None
-
     def __init__(self):
         self.connection = None
         self.training_state = True
+        self.graph = LayerGraph()
 
     def __gt__(self, other):
         return LayerConnection(self, other)
@@ -578,8 +581,8 @@ def make_common_graph(left_layer, right_layer):
 
     Parameters
     ----------
-    left_layer : BaseLayer instance
-    right_layer : BaseLayer instance
+    left_layer : layer
+    right_layer : layer
 
     Returns
     -------
@@ -588,12 +591,6 @@ def make_common_graph(left_layer, right_layer):
     """
     left_graph = left_layer.graph
     right_graph = right_layer.graph
-
-    if left_graph is None:
-        left_graph = LayerGraph()
-
-    if right_graph is None:
-        right_graph = LayerGraph()
 
     graph = LayerGraph.merge(left_graph, right_graph)
 
@@ -655,8 +652,8 @@ class LayerConnection(ChainConnection):
 
     Parameters
     ----------
-    left : ChainConnection instance
-    right : ChainConnection instance
+    left : layer or connection
+    right : layer or conenction
     """
     def __init__(self, left, right):
         super(LayerConnection, self).__init__()

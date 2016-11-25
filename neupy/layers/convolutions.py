@@ -179,17 +179,18 @@ class Convolution(ParameterBasedLayer):
     padding = BorderModeProperty(default='valid')
     stride = StrideProperty(default=(1, 1))
 
+    def validate(self, input_shape):
+        if len(input_shape) != 3:
+            raise LayerConnectionError(
+                "Convolutional layer expects an input with 3 "
+                "dimensions, got {} with shape {}"
+                "".format(len(input_shape), input_shape)
+            )
+
     @property
     def output_shape(self):
         if self.input_shape is None:
             return None
-
-        if len(self.input_shape) < 2:
-            raise LayerConnectionError(
-                "Convolutional layer expects an input with at least 2 "
-                "dimensions, got {} with shape {}"
-                "".format(len(self.input_shape), self.input_shape)
-            )
 
         padding = self.padding
         n_kernels = self.size[0]

@@ -14,11 +14,13 @@ class StopNetworkTraining(Exception):
 
 def iter_until_converge(network, epsilon, max_epochs):
     logs = network.logs
+
     # Trigger first iteration and store first error term
     yield network.last_epoch
-    previous_error = error_delta = network.errors.last()
 
+    previous_error = error_delta = network.errors.last()
     epoch = network.last_epoch
+
     while error_delta > epsilon:
         epoch = epoch + 1
         network.last_epoch += 1

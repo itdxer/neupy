@@ -42,17 +42,6 @@ class LayerStructurePlotTestCase(BaseTestCase):
             self.assertEqual(filesize_before, 0)
             self.assertGreater(filesize_after, filesize_before)
 
-    def test_layer_structure_for_one_layer(self):
-        layer = layers.Input(10)
-
-        with tempfile.NamedTemporaryFile() as temp:
-            filesize_before = os.path.getsize(temp.name)
-            plots.layer_structure(layer, filepath=temp.name, show=False)
-            filesize_after = os.path.getsize(temp.name)
-
-            self.assertEqual(filesize_before, 0)
-            self.assertEqual(filesize_after, 0)
-
     def test_layer_structure_undefined_file_name(self):
         connection = layers.Input(10) > layers.Sigmoid(1)
 

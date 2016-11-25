@@ -333,23 +333,23 @@ class PRelu(ActivationLayer):
     alpha_axes = AxesProperty(default=1)
     alpha = ParameterProperty(default=init.Constant(value=0.25))
 
-    def initialize(self):
-        super(PRelu, self).initialize()
+    def __init__(self, *args, **options):
+        super(PRelu, self).__init__(*args, **options)
 
-        alpha = self.alpha
-        alpha_axes = self.alpha_axes
-        output_shape = self.output_shape
+        if 0 in self.alpha_axes:
+            raise ValueError("Cannot specify alpha for 0-axis")
 
-        if 0 in alpha_axes:
-            raise ValueError("Cannot specify alpha per input sample.")
-
-        if max(alpha_axes) > len(output_shape):
+    def validate(self, input_shape):
+        if max(self.alpha_axes) > len(input_shape):
+            max_axis_index = len(input_shape) - 1
             raise ValueError("Cannot specify alpha for the axis #{}. "
                              "Maximum available axis is #{} (0-based indeces)."
-                             "".format(max(alpha_axes), len(output_shape) - 1))
+                             "".format(max(self.alpha_axes), max_axis_index))
 
-        alpha_shape = [output_shape[axis - 1] for axis in alpha_axes]
-        self.add_parameter(value=alpha, name='alpha', shape=alpha_shape)
+    def initialize(self):
+        super(PRelu, self).initialize()
+        alpha_shape = [self.output_shape[axis - 1] for axis in self.alpha_axes]
+        self.add_parameter(value=self.alpha, name='alpha', shape=alpha_shape)
 
     def activation_function(self, input_value):
         alpha = dimshuffle(self.alpha, input_value.ndim, self.alpha_axes)

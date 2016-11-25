@@ -51,19 +51,14 @@ class Elementwise(BaseLayer):
     """
     merge_function = CallableProperty(default=T.add)
 
-    def initialize(self):
-        if not self.input_shape:
-            return
-
-        n_unique_shapes = len(set(self.input_shape))
+    def validate(self, input_shapes):
+        n_unique_shapes = len(set(input_shapes))
         if n_unique_shapes != 1:
             raise LayerConnectionError(
                 "The `{}` layer expects all input values with the "
                 "same shapes. Input shapes: {}"
-                "".format(self, self.input_shape)
+                "".format(self, input_shapes)
             )
-
-        super(Elementwise, self).initialize()
 
     @property
     def output_shape(self):
@@ -99,11 +94,7 @@ class Concatenate(BaseLayer):
     """
     axis = IntProperty(default=1)
 
-    def initialize(self):
-        if not self.input_shape:
-            return
-
-        input_shapes = self.input_shape
+    def validate(self, input_shapes):
         valid_shape = as_tuple(None, input_shapes[0])
 
         for input_shape in input_shapes[1:]:
