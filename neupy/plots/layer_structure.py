@@ -5,7 +5,7 @@ from collections import OrderedDict
 import graphviz
 
 from neupy.layers.parallel import TransferLayer
-from neupy.network.base import BaseNetwork
+from neupy.algorithms.base import BaseNetwork
 
 
 __all__ = ('layer_structure',)

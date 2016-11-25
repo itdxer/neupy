@@ -2,7 +2,7 @@ import numpy as np
 from numpy.core.umath_tests import inner1d
 
 
-__all__ = ('bin2sign', 'hopfield_energy')
+__all__ = ('bin2sign', 'hopfield_energy', 'step_function')
 
 
 def bin2sign(matrix):
@@ -43,3 +43,18 @@ def hopfield_energy(weight, input_data, output_data):
         Hopfield energy for specific data and weights.
     """
     return -0.5 * inner1d(input_data.dot(weight), output_data)
+
+
+def step_function(input_value):
+    """
+    Step function.
+
+    Parameters
+    ----------
+    input_value : array-like
+
+    Returns
+    -------
+    array-like
+    """
+    return np.where(input_value > 0, 1, 0)

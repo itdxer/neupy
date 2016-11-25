@@ -7,7 +7,7 @@ from scipy.sparse import csr_matrix
 from neupy.utils import (preformat_value, as_array2d, AttributeKeyDict, asint,
                          smallest_positive_number, asfloat, format_data,
                          as_tuple)
-from neupy.network.utils import shuffle, iter_until_converge
+from neupy.algorithms.utils import shuffle, iter_until_converge
 from neupy.layers.utils import preformat_layer_shape
 from neupy import algorithms
 

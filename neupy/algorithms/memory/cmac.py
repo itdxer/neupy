@@ -2,8 +2,8 @@ from numpy import concatenate, array
 
 from neupy.utils import format_data
 from neupy.core.properties import IntProperty
-from neupy.network.learning import SupervisedLearningMixin
-from neupy.network.base import BaseNetwork
+from neupy.algorithms.learning import SupervisedLearningMixin
+from neupy.algorithms.base import BaseNetwork
 
 
 __all__ = ('CMAC',)

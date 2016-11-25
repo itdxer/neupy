@@ -3,9 +3,8 @@ import math
 import numpy as np
 
 from neupy.utils import format_data
-from neupy.network.utils import step_function
 from neupy.core.properties import Property
-from .utils import bin2sign, hopfield_energy
+from .utils import bin2sign, hopfield_energy, step_function
 from .base import DiscreteMemory
 
 

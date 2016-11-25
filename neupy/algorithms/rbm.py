@@ -4,8 +4,8 @@ from theano.ifelse import ifelse
 import numpy as np
 
 from neupy.core.properties import IntProperty, ParameterProperty
-from neupy.network.constructor import BaseAlgorithm
-from neupy.network.base import BaseNetwork
+from neupy.algorithms.base import BaseNetwork
+from neupy.algorithms.constructor import BaseAlgorithm
 from neupy.algorithms.gd.base import (MinibatchTrainingMixin,
                                       average_batch_errors)
 from neupy.layers.base import create_shared_parameter

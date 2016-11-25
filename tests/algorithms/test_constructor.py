@@ -2,9 +2,10 @@ import theano.tensor as T
 
 from neupy import layers
 from neupy.layers.connections import NetworkConnectionError
-from neupy.network.constructor import (generate_layers, create_input_variable,
-                                       create_output_variable,
-                                       ConstructableNetwork)
+from neupy.algorithms.constructor import (generate_layers,
+                                          create_input_variable,
+                                          create_output_variable,
+                                          ConstructableNetwork)
 
 from base import BaseTestCase
 

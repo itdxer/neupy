@@ -11,7 +11,6 @@ Subpackages
     neupy.datasets
     neupy.helpers
     neupy.layers
-    neupy.network
     neupy.optimizations
     neupy.plots
 

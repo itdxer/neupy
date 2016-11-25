@@ -3,8 +3,7 @@ import numpy as np
 from neupy import init
 from neupy.utils import format_data
 from neupy.core.properties import IntProperty, ParameterProperty, ArrayProperty
-from neupy.network import BaseNetwork
-from neupy.network.utils import step_function
+from neupy.algorithms.base import BaseNetwork
 
 
 __all__ = ('BaseStepAssociative',)
@@ -164,7 +163,7 @@ class BaseStepAssociative(BaseAssociative):
     def predict(self, input_data):
         input_data = format_data(input_data, is_feature1d=False)
         raw_output = input_data.dot(self.weight) + self.bias
-        return step_function(raw_output)
+        return np.where(raw_output > 0, 1, 0)
 
     def train(self, input_train, *args, **kwargs):
         input_train = format_data(input_train, is_feature1d=False)

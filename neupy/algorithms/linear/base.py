@@ -1,7 +1,7 @@
 from neupy.utils import is_list_of_integers
-from neupy.layers.connections import NetworkConnectionError, LayerConnection
-from neupy.network import ConstructableNetwork
 from neupy.layers import Step, Input
+from neupy.layers.connections import NetworkConnectionError, LayerConnection
+from neupy.algorithms.constructor import ConstructableNetwork
 
 
 __all__ = ('BaseLinearNetwork',)

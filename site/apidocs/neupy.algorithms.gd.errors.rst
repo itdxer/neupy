@@ -1,7 +1,7 @@
-neupy.network.summary_info module
+neupy.algorithms.gd.errors module
 =================================
 
-.. automodule:: neupy.network.summary_info
+.. automodule:: neupy.algorithms.gd.errors
     :members:
     :undoc-members:
     :show-inheritance:

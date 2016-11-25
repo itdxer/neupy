@@ -2,8 +2,8 @@ from numpy import dot
 
 from neupy.utils import format_data, NotTrainedException
 from neupy.core.properties import BoundedProperty
-from neupy.network.base import BaseNetwork
-from neupy.network.learning import LazyLearningMixin
+from neupy.algorithms.base import BaseNetwork
+from neupy.algorithms.learning import LazyLearningMixin
 from .utils import pdf_between_data
 
 

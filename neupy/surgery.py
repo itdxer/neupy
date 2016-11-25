@@ -1,7 +1,7 @@
 from copy import deepcopy
 from functools import reduce
 
-from neupy.network import ConstructableNetwork
+from neupy.algorithms.constructor import ConstructableNetwork
 from neupy.layers.connections import LayerConnection, is_sequential, LayerGraph
 from neupy import layers
 
@@ -92,8 +92,10 @@ def cut(connection, start, end):
     connection : ConstructableNetwork ot LayerConnection instance
         Network class that has constructuble layers or
         connected layers.
+
     start : int
         Index of the first layer in the new sequence.
+
     end : int
         Index of the final layer in the new sequence.
 

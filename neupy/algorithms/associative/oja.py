@@ -2,7 +2,7 @@ import numpy as np
 
 from neupy.utils import format_data, NotTrainedException
 from neupy.core.properties import IntProperty, ParameterProperty
-from neupy.network.base import BaseNetwork
+from neupy.algorithms.base import BaseNetwork
 from neupy import init
 
 

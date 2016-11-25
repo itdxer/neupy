@@ -1,3 +1,4 @@
+# Algorithms
 from .gd.base import *
 from .gd.lev_marq import *
 from .gd.quasi_newton import *
@@ -46,3 +47,6 @@ from .linear.modify_relaxation import *
 from .linear.perceptron import *
 
 from .rbm import *
+
+# Other
+from .utils import StopTrainingException

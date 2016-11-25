@@ -4,9 +4,10 @@ from collections import namedtuple
 import numpy as np
 from sklearn import datasets
 from neupy import algorithms, layers
-from neupy.network.base import (StopNetworkTraining, show_network_options,
-                                parse_show_epoch_property, ErrorHistoryList,
-                                logging_info_about_the_data)
+from neupy.algorithms import StopTrainingException
+from neupy.algorithms.base import (ErrorHistoryList, show_network_options,
+                                   logging_info_about_the_data,
+                                   parse_show_epoch_property)
 
 from utils import catch_stdout
 from base import BaseTestCase
@@ -48,7 +49,7 @@ class NetworkMainTestCase(BaseTestCase):
     def test_stop_iteration(self):
         def stop_training_after_the_5th_epoch(network):
             if network.last_epoch == 5:
-                raise StopNetworkTraining("Stopped training")
+                raise StopTrainingException("Stopped training")
 
         data, target = datasets.make_classification(30, n_features=10,
                                                     n_classes=2)

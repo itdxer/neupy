@@ -12,6 +12,7 @@ Submodules
    neupy.algorithms.gd.adamax
    neupy.algorithms.gd.base
    neupy.algorithms.gd.conjgrad
+   neupy.algorithms.gd.errors
    neupy.algorithms.gd.hessdiag
    neupy.algorithms.gd.hessian
    neupy.algorithms.gd.lev_marq

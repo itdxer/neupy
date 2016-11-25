@@ -1,6 +1,6 @@
 from neupy import algorithms
 from neupy.helpers import table
-from neupy.network.summary_info import InlineSummary, SummaryTable
+from neupy.algorithms.summary_info import InlineSummary, SummaryTable
 
 from base import BaseTestCase
 from utils import catch_stdout
