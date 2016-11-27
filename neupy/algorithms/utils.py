@@ -4,16 +4,9 @@ import numpy as np
 import theano.tensor as T
 
 
-__all__ = ('StopTrainingException', 'shuffle', 'parameters2vector',
+__all__ = ('shuffle', 'parameters2vector', 'iter_until_converge',
            'iter_parameter_values', 'setup_parameter_updates',
-           'iter_until_converge', 'normalize_error')
-
-
-class StopTrainingException(Exception):
-    """
-    Exception that needs to be triggered in case of
-    early training interruption.
-    """
+           'normalize_error')
 
 
 def iter_parameter_values(network):

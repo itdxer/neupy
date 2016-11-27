@@ -3,7 +3,7 @@ from sklearn import datasets, metrics
 from sklearn.model_selection import train_test_split
 
 from neupy import algorithms
-from neupy.utils import NotTrainedException
+from neupy.exceptions import NotTrained
 
 from base import BaseTestCase
 
@@ -27,7 +27,7 @@ class GRNNTestCase(BaseTestCase):
             grnet.train(np.array([[0], [0]]), np.array([0]))
             grnet.predict(np.array([[0]]))
 
-        with self.assertRaises(NotTrainedException):
+        with self.assertRaises(NotTrained):
             # Prediction without training
             grnet = algorithms.GRNN(verbose=False)
             grnet.predict(np.array([[0]]))

@@ -7,7 +7,7 @@ theano.config.floatX = 'float32'
 
 
 def Inception(nfilters):
-    return layers.Parallel(
+    return layers.join(
         [[
             layers.MaxPooling((3, 3), stride=1, padding=(1, 1)),
             layers.Convolution((nfilters[0], 1, 1)),
@@ -60,6 +60,4 @@ googlenet = layers.join(
 
     layers.Softmax(1000),
 )
-googlenet.initialize()
-
 plots.layer_structure(googlenet)

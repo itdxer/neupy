@@ -4,9 +4,8 @@ import theano
 import numpy as np
 from scipy.sparse import csr_matrix
 
-from neupy.utils import (preformat_value, as_array2d, AttributeKeyDict, asint,
-                         smallest_positive_number, asfloat, format_data,
-                         as_tuple)
+from neupy.utils import (preformat_value, as_tuple, AttributeKeyDict, asint,
+                         asfloat, format_data)
 from neupy.algorithms.utils import shuffle, iter_until_converge
 from neupy.layers.utils import preformat_layer_shape
 from neupy import algorithms
@@ -52,11 +51,6 @@ class UtilsTestCase(BaseTestCase):
         self.assertEqual((2, 3, 1), preformat_layer_shape((2, 3, 1)))
         self.assertEqual(10, preformat_layer_shape((10,)))
 
-    def test_as_array2d(self):
-        test_input = np.ones(5)
-        actual_output = as_array2d(test_input)
-        self.assertEqual((1, 5), actual_output.shape)
-
     def test_attribute_key_dict(self):
         attrdict = AttributeKeyDict(val1='hello', val2='world')
 
@@ -75,11 +69,6 @@ class UtilsTestCase(BaseTestCase):
         del attrdict.val1
         with self.assertRaises(KeyError):
             attrdict.val1
-
-    def test_smallest_positive_number(self):
-        epsilon = smallest_positive_number()
-        self.assertNotEqual(0, asfloat(1) - (asfloat(1) - asfloat(epsilon)))
-        self.assertEqual(0, asfloat(1) - (asfloat(1) - asfloat(epsilon / 10)))
 
     def test_format_data(self):
         # None input

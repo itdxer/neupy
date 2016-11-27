@@ -21,10 +21,9 @@ Submodules
 
    neupy.environment
    neupy.estimators
+   neupy.exceptions
    neupy.init
-   neupy.preprocessing
    neupy.storage
-   neupy.surgery
    neupy.utils
 
 Module contents

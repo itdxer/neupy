@@ -2,7 +2,8 @@ from random import randint
 
 import numpy as np
 
-from neupy.utils import format_data, NotTrainedException
+from neupy.utils import format_data
+from neupy.exceptions import NotTrained
 from .utils import bin2sign, hopfield_energy, step_function
 from .base import DiscreteMemory
 
@@ -109,7 +110,7 @@ class DiscreteBAM(DiscreteMemory):
 
     def prediction(self, input_data=None, output_data=None, n_times=None):
         if self.weight is None:
-            raise NotTrainedException("Network hasn't been trained yet")
+            raise NotTrained("Network hasn't been trained yet")
 
         if input_data is None and output_data is not None:
             self.discrete_validation(output_data)

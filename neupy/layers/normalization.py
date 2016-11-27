@@ -1,3 +1,4 @@
+import theano
 import theano.tensor as T
 import numpy as np
 
@@ -5,7 +6,7 @@ from neupy import init
 from neupy.core.properties import (NumberProperty, ProperFractionProperty,
                                    ParameterProperty, IntProperty)
 from neupy.utils import asfloat, as_tuple
-from .connections import LayerConnectionError
+from neupy.exceptions import LayerConnectionError
 from .activations import AxesProperty
 from .utils import dimshuffle
 from .base import BaseLayer
@@ -131,11 +132,14 @@ class BatchNorm(BaseLayer):
                              "with unknown size over the dimension #{} "
                              "(0-based indeces).".format(unknown_dim_index))
 
-        self.add_parameter(value=np.zeros(parameter_shape),
-                           name='running_mean', shape=parameter_shape)
-
-        self.add_parameter(value=np.ones(parameter_shape),
-                           name='running_inv_std', shape=parameter_shape)
+        self.running_mean = theano.shared(
+            name='layer:{}/running-mean'.format(self.name),
+            value=np.zeros(parameter_shape),
+        )
+        self.running_inv_std = theano.shared(
+            name='layer:{}/running-inv-std'.format(self.name),
+            value=np.ones(parameter_shape),
+        )
 
         self.add_parameter(value=self.gamma, name='gamma',
                            shape=parameter_shape)

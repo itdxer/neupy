@@ -72,17 +72,22 @@ class BaseProperty(SharedDocs):
         if name in instance.options:
             del instance.options[name]
 
-    def __str__(self):
-        classname = self.__class__.__name__
-        if self.name is None:
-            return '{}()'.format(classname)
-        return '{}(name="{}")'.format(classname, self.name)
+    def validate(self, value):
+        """
+        Validate properties value
+
+        Parameters
+        ----------
+        value : object
+        """
 
     def __repr__(self):
-        return self.__str__()
+        classname = self.__class__.__name__
 
-    def validate(self, value):
-        pass
+        if self.name is None:
+            return '{}()'.format(classname)
+
+        return '{}(name="{}")'.format(classname, self.name)
 
 
 class Property(BaseProperty):

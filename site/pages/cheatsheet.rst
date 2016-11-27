@@ -198,7 +198,6 @@ Other layers
 
     ":layer:`Input`", "Layer defines input value's feature shape"
     ":layer:`Reshape`", "Reshape tensor input"
-    ":layer:`Parallel`", "Parallel layer connections"
     ":layer:`Embedding`", "Embedding layer accepts indeces as an input and returns rows from the weight matrix associated with these indeces."
 
 .. _init-methods:

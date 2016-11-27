@@ -66,7 +66,7 @@ def compare_networks(default_class, tested_class, data, **kwargs):
     # Compute result for default network (which must be slower)
     network = default_class(**kwargs)
 
-    default_connections = layers.join(copy.deepcopy(network.layers))
+    default_connections = copy.deepcopy(network.connection)
 
     network.train(*data, epochs=epochs)
 

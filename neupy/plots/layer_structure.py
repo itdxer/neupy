@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 import graphviz
 
-from neupy.layers.parallel import TransferLayer
+from neupy.layers.base import ResidualConnection
 from neupy.algorithms.base import BaseNetwork
 
 
@@ -17,13 +17,30 @@ def layer_uid(layer):
 
     Parameters
     ----------
-    layer : BaseLayer instance
+    layer : layer
 
     Returns
     -------
     str
     """
     return str(id(layer))
+
+
+def format_label(info):
+    """
+    Format label information.
+
+    Parameters
+    ----------
+    object
+
+    Returns
+    -------
+    str
+    """
+    # Space at the beggining shifts string
+    # to the right
+    return " {}".format(info)
 
 
 def exclude_layer_from_graph(graph, ignore_layers):
@@ -113,9 +130,7 @@ def layer_structure(connection, ignore_layers=None, filepath=None, show=True):
     if filepath is None:
         filepath = tempfile.mktemp()
 
-    # TransferLayer is a hack for the Parallel layer,
-    # so we don't need it anyway
-    ignore_layers = [TransferLayer] + ignore_layers
+    ignore_layers = [ResidualConnection] + ignore_layers
 
     forward_graph = connection.graph.forward_graph
     forward_graph = exclude_layer_from_graph(forward_graph, ignore_layers)
@@ -125,12 +140,19 @@ def layer_structure(connection, ignore_layers=None, filepath=None, show=True):
     for layer in forward_graph.keys():
         digraph.node(layer_uid(layer), str(layer))
 
+    output_id = 1
     for from_layer, to_layers in forward_graph.items():
         for to_layer in to_layers:
-            digraph.edge(layer_uid(from_layer),
-                         layer_uid(to_layer),
-                         # Space at the beggining shifts string
-                         # to the right
+            digraph.edge(layer_uid(from_layer), layer_uid(to_layer),
+                         label=format_label(from_layer.output_shape))
+
+        if not to_layers:
+            output = 'output-{}'.format(output_id)
+
+            digraph.node(output, 'Output #{}'.format(output_id))
+            digraph.edge(layer_uid(from_layer), output,
                          label=" {}".format(from_layer.output_shape))
+
+            output_id += 1
 
     digraph.render(filepath, view=show)

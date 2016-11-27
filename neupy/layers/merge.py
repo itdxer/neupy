@@ -4,9 +4,9 @@ from functools import reduce
 import theano.tensor as T
 
 from neupy.core.properties import IntProperty, Property
+from neupy.exceptions import LayerConnectionError
 from neupy.utils import as_tuple
 from .base import BaseLayer
-from .connections import LayerConnectionError
 
 
 __all__ = ('Elementwise', 'Concatenate')

@@ -1,4 +1,5 @@
 import abc
+import math
 
 import six
 import numpy as np
@@ -225,10 +226,33 @@ class Orthogonal(Initializer):
         return '{}(scale={})'.format(classname(self), self.scale)
 
 
-class HeNormal(Initializer):
+class InitializerWithGain(Initializer):
+    """
+    Initialization class that has gain property
+
+    Parameters
+    ----------
+    gain : float or {{'relu'}}
+        Multiplies scaling factor by speified gain.
+        The ``relu`` values set up gain equal to :math:`\\sqrt{{2}}`
+        Defaults to ``1``.
+    """
+    def __init__(self, gain=1.0):
+        if gain == 'relu':
+            gain = math.sqrt(2)
+
+        self.gain = gain
+        super(InitializerWithGain, self).__init__()
+
+
+class HeNormal(InitializerWithGain):
     """
     Kaiming He parameter initialization method based on the
     normal distribution.
+
+    Parameters
+    ----------
+    {InitializerWithGain.Parameters}
 
     Methods
     -------
@@ -243,14 +267,18 @@ class HeNormal(Initializer):
     def sample(self, shape):
         fan_in, _ = identify_fans(shape)
         variance = 2. / fan_in
-        std = np.sqrt(variance)
+        std = self.gain * np.sqrt(variance)
         return np.random.normal(loc=0, scale=std, size=shape)
 
 
-class HeUniform(Initializer):
+class HeUniform(InitializerWithGain):
     """
     Kaiming He parameter initialization method based on the
     uniformal distribution.
+
+    Parameters
+    ----------
+    {InitializerWithGain.Parameters}
 
     Methods
     -------
@@ -265,16 +293,23 @@ class HeUniform(Initializer):
     def sample(self, shape):
         fan_in, _ = identify_fans(shape)
         variance = 6. / fan_in
-        abs_max_value = np.sqrt(variance)
+        abs_max_value = self.gain * np.sqrt(variance)
 
         uniform = Uniform(minval=-abs_max_value, maxval=abs_max_value)
         return uniform.sample(shape)
 
 
-class XavierNormal(Initializer):
+class XavierNormal(InitializerWithGain):
     """
     Xavier Glorot parameter initialization method based on
     normal distribution.
+
+    Parameters
+    ----------
+    gain : float or {{'relu'}}
+        Multiplies scaling factor by speified gain.
+        The ``relu`` values set up gain equal to :math:`\\sqrt{{2}}`
+        Defaults to ``1``.
 
     Methods
     -------
@@ -288,11 +323,11 @@ class XavierNormal(Initializer):
     def sample(self, shape):
         fan_in, fan_out = identify_fans(shape)
         variance = 2. / (fan_in + fan_out)
-        std = np.sqrt(variance)
+        std = self.gain * np.sqrt(variance)
         return np.random.normal(loc=0, scale=std, size=shape)
 
 
-class XavierUniform(Initializer):
+class XavierUniform(InitializerWithGain):
     """
     Xavier Glorot parameter initialization method based
     on uniform distribution.
@@ -309,7 +344,7 @@ class XavierUniform(Initializer):
     def sample(self, shape):
         fan_in, fan_out = identify_fans(shape)
         variance = 6. / (fan_in + fan_out)
-        abs_max_value = np.sqrt(variance)
+        abs_max_value = self.gain * np.sqrt(variance)
 
         uniform = Uniform(minval=-abs_max_value, maxval=abs_max_value)
         return uniform.sample(shape)

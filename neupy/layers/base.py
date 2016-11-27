@@ -9,10 +9,10 @@ from neupy.utils import asfloat, as_tuple
 from neupy.core.config import Configurable
 from neupy.core.properties import (TypedListProperty, IntProperty, Property,
                                    ParameterProperty)
-from neupy.layers.connections import ChainConnection
+from neupy.layers.connections import BaseConnection
 
 
-__all__ = ('BaseLayer', 'ParameterBasedLayer', 'Input')
+__all__ = ('BaseLayer', 'ParameterBasedLayer', 'Input', 'ResidualConnection')
 
 
 def next_identifier(identifiers):
@@ -55,9 +55,6 @@ def generate_layer_name(layer):
 
     if layer.layer_id is not None:
         layer_id = layer.layer_id
-
-    elif not graph:
-        layer_id = 1
 
     else:
         graph_layers = graph.forward_graph.keys()
@@ -106,7 +103,7 @@ def create_shared_parameter(value, name, shape):
     return theano.shared(value=asfloat(value), name=name, borrow=True)
 
 
-class BaseLayer(ChainConnection, Configurable):
+class BaseLayer(BaseConnection, Configurable):
     """
     Base class for all layers.
 
@@ -141,18 +138,31 @@ class BaseLayer(ChainConnection, Configurable):
     parameters : dict
         Trainable parameters.
 
-    graph : LayerGraph instance or None
+    graph : LayerGraph instance
         Graphs that stores all relations between layers.
     """
     name = Property(expected_type=six.string_types)
+
+    # Stores global identifier index for each layer class
+    global_identifiers_map = {}
+
+    def __new__(cls, *args, **kwargs):
+        if cls not in cls.global_identifiers_map:
+            cls.global_identifiers_map[cls] = 1
+        return super(BaseLayer, cls).__new__(cls)
 
     def __init__(self, *args, **options):
         super(BaseLayer, self).__init__(*args)
 
         self.parameters = {}
         self.updates = []
-        self.layer_id = None
         self.input_shape_ = None
+
+        cls = self.__class__
+        self.layer_id = self.global_identifiers_map[cls]
+        self.global_identifiers_map[cls] += 1
+
+        self.graph.add_layer(self)
 
         Configurable.__init__(self, **options)
 
@@ -196,6 +206,10 @@ class BaseLayer(ChainConnection, Configurable):
     def __repr__(self):
         classname = self.__class__.__name__
         return '{name}()'.format(name=classname)
+
+
+class ResidualConnection(BaseLayer):
+    pass
 
 
 class ParameterBasedLayer(BaseLayer):
@@ -313,7 +327,9 @@ class Input(BaseLayer):
 
     def __init__(self, size, **options):
         super(Input, self).__init__(size=size, **options)
+
         self.input_shape = as_tuple(self.size)
+        self.initialize()
 
     @property
     def output_shape(self):

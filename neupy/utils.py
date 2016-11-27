@@ -8,20 +8,11 @@ import numpy as np
 from scipy.sparse import issparse
 
 
-__all__ = ('format_data', 'does_layer_accept_1d_feature', 'asfloat',
-           'AttributeKeyDict', 'is_list_of_integers', 'preformat_value',
-           'as_array2d', 'NotTrainedException', 'smallest_positive_number',
+__all__ = ('format_data', 'asfloat', 'AttributeKeyDict', 'preformat_value',
            'as_tuple', 'asint', 'number_type', 'theano_random_stream')
 
 
 number_type = (int, float, np.floating, np.integer)
-
-
-class NotTrainedException(Exception):
-    """
-    Exception needs for cases when algorithm is not trained
-    and can not be applied.
-    """
 
 
 def format_data(data, is_feature1d=True, copy=False):
@@ -38,9 +29,11 @@ def format_data(data, is_feature1d=True, copy=False):
     data : array-like
         Data that should be formated. That could be, matrix, vector or
         Pandas DataFrame instance.
+
     is_feature1d : bool
         Should be equal to ``True`` if input data is a vector that
         contains N samples with 1 feature each. Defaults to ``True``.
+
     copy : bool
         Defaults to ``False``.
 
@@ -66,21 +59,6 @@ def format_data(data, is_feature1d=True, copy=False):
         data = data.reshape(data_shape)
 
     return data
-
-
-def does_layer_accept_1d_feature(layer):
-    """
-    Check if 1D feature values are valid for the layer.
-
-    Parameters
-    ----------
-    layer : object
-
-    Returns
-    -------
-    bool
-    """
-    return (layer.output_shape == (1,))
 
 
 def asfloat(value):
@@ -183,24 +161,6 @@ class AttributeKeyDict(dict):
         del self[attrname]
 
 
-def is_list_of_integers(sequence):
-    """
-    Check that sequence contains only integer numbers.
-
-    Parameters
-    ----------
-    sequence : list, tuple
-        Array that should be validated.
-
-    Returns
-    -------
-    bool
-        Result would be ``True`` only if each element in a sequence contains
-        is an integer. ``False`` otherwise.
-    """
-    return all(isinstance(element, int) for element in sequence)
-
-
 def preformat_value(value):
     """
     Function pre-format input value depending on it's type.
@@ -222,45 +182,10 @@ def preformat_value(value):
     elif isinstance(value, (np.ndarray, np.matrix)):
         return value.shape
 
+    elif hasattr(value, 'default'):
+        return value.default
+
     return value
-
-
-def as_array2d(array):
-    """
-    Transform any array to 2D.
-
-    Parameters
-    ----------
-    array : array-like
-
-    Returns
-    -------
-    array-like
-        The same array transformed to 2D.
-    """
-    if array.ndim == 1:
-        return array.reshape((1, -1))
-
-    n_samples, feature_shape = array.shape[0], array.shape[1:]
-    return array.reshape((n_samples, np.prod(feature_shape)))
-
-
-def smallest_positive_number():
-    """
-    Based on the `floatX` variables function returns different
-    smallest positive numbers.
-
-    Returns
-    -------
-    float
-        Smallest positive float number.
-    """
-    float_type = theano.config.floatX
-    epsilon_values = {
-        'float32': 1e-7,
-        'float64': 1e-16,
-    }
-    return epsilon_values[float_type]
 
 
 def as_tuple(*values):
@@ -281,8 +206,9 @@ def as_tuple(*values):
     --------
     >>> as_tuple(None, (1, 2, 3), None)
     (None, 1, 2, 3, None)
-    >>> as_tuple((1, 2, 3), (4, 5, 3))
-    (1, 2, 3, 4, 5, 3)
+    >>>
+    >>> as_tuple((1, 2, 3), (4, 5, 6))
+    (1, 2, 3, 4, 5, 6)
     """
     cleaned_values = []
     for value in values:
@@ -298,7 +224,7 @@ def theano_random_stream():
     Create Theano random stream instance.
     """
     # Use NumPy seed to make Theano code easely reproducible
-    max_possible_seed = 2147483647
+    max_possible_seed = 2147483647  # max 32-bit integer
     seed = np.random.randint(max_possible_seed)
     theano_random = T.shared_randomstreams.RandomStreams(seed)
     return theano_random

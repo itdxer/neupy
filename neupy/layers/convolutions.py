@@ -4,9 +4,9 @@ import six
 import theano.tensor as T
 
 from neupy.utils import as_tuple
+from neupy.exceptions import LayerConnectionError
 from neupy.core.properties import TypedListProperty, Property
 from .base import ParameterBasedLayer
-from .connections import LayerConnectionError
 
 
 __all__ = ('Convolution',)

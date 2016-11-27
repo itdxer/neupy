@@ -1,6 +1,7 @@
 import numpy as np
 
-from neupy.utils import format_data, NotTrainedException
+from neupy.utils import format_data
+from neupy.exceptions import NotTrained
 from neupy.core.properties import BoundedProperty
 from neupy.algorithms.base import BaseNetwork
 from neupy.algorithms.learning import LazyLearningMixin
@@ -169,7 +170,7 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
 
         Raises
         ------
-        NotTrainedException
+        NotTrained
             If network hasn't been trained.
 
         ValueError
@@ -180,8 +181,8 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
         array-like (n_samples, n_classes)
         """
         if self.classes is None:
-            raise NotTrainedException("Cannot make a prediction. Network "
-                                      "hasn't been trained yet")
+            raise NotTrained("Cannot make a prediction. Network "
+                             "hasn't been trained yet")
 
         input_data_size = input_data.shape[1]
         train_data_size = self.input_train.shape[1]

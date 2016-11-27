@@ -47,6 +47,3 @@ from .linear.modify_relaxation import *
 from .linear.perceptron import *
 
 from .rbm import *
-
-# Other
-from .utils import StopTrainingException

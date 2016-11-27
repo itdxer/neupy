@@ -6,7 +6,7 @@ import numpy as np
 from neupy import layers
 from neupy.utils import asfloat, as_tuple
 from neupy.layers.convolutions import conv_output_shape
-from neupy.layers.connections import LayerConnectionError
+from neupy.exceptions import LayerConnectionError
 
 from base import BaseTestCase
 

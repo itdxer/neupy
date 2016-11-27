@@ -72,47 +72,44 @@ alexnet = layers.join(
     layers.MaxPooling((3, 3), stride=(2, 2)),
     layers.LocalResponseNorm(),
 
-    layers.Parallel(
-        [[
-            SliceChannels(0, 48),
-            layers.Convolution((128, 5, 5), padding=2, **conv_2_1),
-            layers.Relu(),
-        ], [
-            SliceChannels(48, 96),
-            layers.Convolution((128, 5, 5), padding=2, **conv_2_2),
-            layers.Relu(),
-        ]],
-        layers.Concatenate(),
-    ),
+    [[
+        SliceChannels(0, 48),
+        layers.Convolution((128, 5, 5), padding=2, **conv_2_1),
+        layers.Relu(),
+    ], [
+        SliceChannels(48, 96),
+        layers.Convolution((128, 5, 5), padding=2, **conv_2_2),
+        layers.Relu(),
+    ]],
+    layers.Concatenate(),
+
     layers.MaxPooling((3, 3), stride=(2, 2)),
     layers.LocalResponseNorm(),
 
     layers.Convolution((384, 3, 3), padding=1, **conv_3) > layers.Relu(),
 
-    layers.Parallel(
-        [[
-            SliceChannels(0, 192),
-            layers.Convolution((192, 3, 3), padding=1, **conv_4_1),
-            layers.Relu(),
-        ], [
-            SliceChannels(192, 384),
-            layers.Convolution((192, 3, 3), padding=1, **conv_4_2),
-            layers.Relu(),
-        ]],
-        layers.Concatenate(),
-    ),
-    layers.Parallel(
-        [[
-            SliceChannels(0, 192),
-            layers.Convolution((128, 3, 3), padding=1, **conv_5_1),
-            layers.Relu(),
-        ], [
-            SliceChannels(192, 384),
-            layers.Convolution((128, 3, 3), padding=1, **conv_5_2),
-            layers.Relu(),
-        ]],
-        layers.Concatenate(),
-    ),
+    [[
+        SliceChannels(0, 192),
+        layers.Convolution((192, 3, 3), padding=1, **conv_4_1),
+        layers.Relu(),
+    ], [
+        SliceChannels(192, 384),
+        layers.Convolution((192, 3, 3), padding=1, **conv_4_2),
+        layers.Relu(),
+    ]],
+    layers.Concatenate(),
+
+    [[
+        SliceChannels(0, 192),
+        layers.Convolution((128, 3, 3), padding=1, **conv_5_1),
+        layers.Relu(),
+    ], [
+        SliceChannels(192, 384),
+        layers.Convolution((128, 3, 3), padding=1, **conv_5_2),
+        layers.Relu(),
+    ]],
+    layers.Concatenate(),
+
     layers.MaxPooling((3, 3), stride=(2, 2)),
 
     layers.Reshape(),

@@ -5,8 +5,8 @@ from scipy import stats
 
 from neupy import layers
 from neupy.utils import asfloat
+from neupy.exceptions import LayerConnectionError
 from neupy.layers.normalization import find_opposite_axes
-from neupy.layers.connections import LayerConnectionError
 
 from base import BaseTestCase
 
@@ -24,8 +24,7 @@ class BatchNormTestCase(BaseTestCase):
         beta = theano.shared(value=asfloat(2 * np.ones(2)))
 
         batch_norm = layers.BatchNorm(gamma=gamma, beta=beta)
-        connection = layers.Input(10) > batch_norm
-        connection.initialize()
+        layers.Input(10) > batch_norm
 
         self.assertIs(gamma, batch_norm.gamma)
         self.assertIs(beta, batch_norm.beta)
@@ -47,7 +46,6 @@ class BatchNormTestCase(BaseTestCase):
 
     def test_simple_batch_norm(self):
         connection = layers.Input(10) > layers.BatchNorm()
-        connection.initialize()
 
         input_value = theano.shared(value=np.random.random((30, 10)))
         output_value = connection.output(input_value).eval()
@@ -63,7 +61,6 @@ class BatchNormTestCase(BaseTestCase):
             layers.Input(10),
             layers.BatchNorm(gamma=default_gamma, beta=default_beta)
         )
-        connection.initialize()
 
         input_value = theano.shared(value=np.random.random((30, 10)))
         output_value = connection.output(input_value).eval()
@@ -78,7 +75,6 @@ class BatchNormTestCase(BaseTestCase):
             layers.BatchNorm(),
             layers.Relu(1),
         )
-        connection.initialize()
 
         input_value = np.random.random((30, 10))
         outpu_value = connection.output(input_value).eval()
@@ -88,8 +84,7 @@ class BatchNormTestCase(BaseTestCase):
     def test_batch_norm_exceptions(self):
         with self.assertRaises(ValueError):
             # Axis does not exist
-            connection = layers.Input(10) > layers.BatchNorm(axes=2)
-            connection.initialize()
+            layers.Input(10) > layers.BatchNorm(axes=2)
 
         with self.assertRaises(ValueError):
             connection = layers.Relu() > layers.BatchNorm()
@@ -97,12 +92,12 @@ class BatchNormTestCase(BaseTestCase):
 
     def test_batch_norm_in_non_training_state(self):
         batch_norm = layers.BatchNorm()
-        connection = layers.Input(10) > batch_norm
-        connection.initialize()
+        layers.Input(10) > batch_norm
 
         input_value = theano.shared(value=np.random.random((30, 10)))
 
         self.assertEqual(len(batch_norm.updates), 0)
+
         batch_norm.output(input_value)
         self.assertEqual(len(batch_norm.updates), 2)
 

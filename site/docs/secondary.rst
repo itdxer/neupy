@@ -7,7 +7,5 @@ This part of documentation contains secondary feature from NeuPy library.
     :glob:
     :maxdepth: 2
 
-    secondary/notifications
     secondary/environments
-    secondary/surgery
     secondary/visualizations

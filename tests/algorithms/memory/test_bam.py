@@ -1,7 +1,7 @@
 import numpy as np
 
 from neupy import algorithms
-from neupy.utils import NotTrainedException
+from neupy.exceptions import NotTrained
 
 from algorithms.memory.data import zero, one, half_one, half_zero
 from base import BaseTestCase
@@ -29,7 +29,7 @@ class BAMTestCase(BaseTestCase):
             dbnet.prediction(np.array([0, 1]), np.array([0, 1]))
 
     def test_bam_exceptions(self):
-        with self.assertRaises(NotTrainedException):
+        with self.assertRaises(NotTrained):
             dbnet = algorithms.DiscreteBAM()
             dbnet.predict(np.array([-1, 1]))
 

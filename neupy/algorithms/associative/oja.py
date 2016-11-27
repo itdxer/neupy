@@ -1,6 +1,7 @@
 import numpy as np
 
-from neupy.utils import format_data, NotTrainedException
+from neupy.utils import format_data
+from neupy.exceptions import NotTrained
 from neupy.core.properties import IntProperty, ParameterProperty
 from neupy.algorithms.base import BaseNetwork
 from neupy import init
@@ -141,8 +142,7 @@ class Oja(BaseNetwork):
 
     def reconstruct(self, input_data):
         if not isinstance(self.weight, np.ndarray):
-            raise NotTrainedException("Train network before use "
-                                      "reconstruct method.")
+            raise NotTrained("Network hasn't been trained yet")
 
         input_data = format_data(input_data)
         if input_data.shape[1] != self.minimized_data_size:
@@ -158,8 +158,7 @@ class Oja(BaseNetwork):
 
     def predict(self, input_data):
         if not isinstance(self.weight, np.ndarray):
-            raise NotTrainedException("Train network before use "
-                                      "prediction method.")
+            raise NotTrained("Network hasn't been trained yet")
 
         input_data = format_data(input_data)
         return np.dot(input_data, self.weight)

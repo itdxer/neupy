@@ -55,17 +55,17 @@ For the debugging it's useful to explore connection's structure. It's possible t
 
     connection = layers.join(
         layers.Input((3, 10, 10)),
-        layers.Parallel(
-            [[
-                layers.Convolution((32, 3, 3)),
-                layers.Relu(),
-                layers.MaxPooling((2, 2)),
-            ], [
-                layers.Convolution((16, 7, 7)),
-                layers.Relu(),
-            ]],
-            layers.Concatenate()
-        ),
+
+        [[
+            layers.Convolution((32, 3, 3)),
+            layers.Relu(),
+            layers.MaxPooling((2, 2)),
+        ], [
+            layers.Convolution((16, 7, 7)),
+            layers.Relu(),
+        ]],
+        layers.Concatenate()
+
         layers.Reshape(),
         layers.Softmax(10),
     )
@@ -108,8 +108,6 @@ Count number of parameters
     ...     layers.Relu(5),  # weight: 10 * 5, bias: 5, total: 55
     ...     layers.Relu(2),  # weight:  5 * 2, bias: 2, total: 12
     ... )
-    >>> connection.initialize()
-    >>>
     >>> layers.count_parameters(connection)
     67
 

@@ -98,9 +98,7 @@ class ActivationLayersTestCase(BaseTestCase):
     def test_linear_layer_withut_bias(self):
         input_layer = layers.Input(10)
         output_layer = layers.Linear(2, weight=init.Constant(0.1), bias=None)
-
         connection = input_layer > output_layer
-        connection.initialize()
 
         self.assertEqual(output_layer.bias_shape, None)
 
@@ -129,7 +127,6 @@ class PReluTestCase(BaseTestCase):
     def test_prelu_random_params(self):
         prelu_layer = layers.PRelu(10, alpha=init.XavierNormal())
         layers.Input(10) > prelu_layer
-        prelu_layer.initialize()
 
         alpha = prelu_layer.alpha.get_value()
         self.assertEqual(10, np.unique(alpha).size)
@@ -137,7 +134,6 @@ class PReluTestCase(BaseTestCase):
     def test_prelu_layer_param_dense(self):
         prelu_layer = layers.PRelu(10, alpha=0.25)
         layers.Input(10) > prelu_layer
-        prelu_layer.initialize()
 
         alpha = prelu_layer.alpha.get_value()
 
@@ -148,10 +144,8 @@ class PReluTestCase(BaseTestCase):
         input_layer = layers.Input((3, 10, 10))
         conv_layer = layers.Convolution((5, 3, 3))
         prelu_layer = layers.PRelu(alpha=0.25, alpha_axes=(1, 3))
-        input_layer > conv_layer > prelu_layer
 
-        conv_layer.initialize()
-        prelu_layer.initialize()
+        input_layer > conv_layer > prelu_layer
 
         alpha = prelu_layer.alpha.get_value()
         expected_alpha = np.ones((5, 8)) * 0.25
@@ -162,7 +156,6 @@ class PReluTestCase(BaseTestCase):
     def test_prelu_output_by_dense_input(self):
         prelu_layer = layers.PRelu(1, alpha=0.25)
         layers.Input(1) > prelu_layer
-        prelu_layer.initialize()
 
         input_data = np.array([[10, 1, 0.1, 0, -0.1, -1]]).T
         expected_output = np.array([[10, 1, 0.1, 0, -0.025, -0.25]]).T
@@ -176,10 +169,8 @@ class PReluTestCase(BaseTestCase):
         input_layer = layers.Input((3, 10, 10))
         conv_layer = layers.Convolution((5, 3, 3))
         prelu_layer = layers.PRelu(alpha=0.25, alpha_axes=(1, 3))
-        connection = input_layer > conv_layer > prelu_layer
 
-        conv_layer.initialize()
-        prelu_layer.initialize()
+        connection = input_layer > conv_layer > prelu_layer
 
         actual_output = input_data
         for layer in connection:

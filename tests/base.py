@@ -4,7 +4,7 @@ import unittest
 
 import numpy as np
 
-from neupy import environment
+from neupy import environment, layers
 
 from utils import vectors_for_testing
 
@@ -24,6 +24,9 @@ class BaseTestCase(unittest.TestCase):
             # Optimize unit tests speed. In general all task very
             # simple so some Theano optimizations can be redundant.
             environment.sandbox()
+
+        # Clean identifiers map for each test
+        layers.BaseLayer.global_identifiers_map = {}
 
     def assertInvalidVectorTrain(self, network, input_vector, target=None,
                                  decimal=5, is_feature1d=True, **train_kwargs):

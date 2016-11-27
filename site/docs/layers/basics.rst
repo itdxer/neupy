@@ -58,31 +58,6 @@ Even thought we know the output shape we don't know an input. To be able to cons
     >>> connection.input_shape
     (3,)
 
-Layer initialization
---------------------
-
-Since layers are defined independently from each other we cannot perfom all initialization procedure after we connected layers. To be able to do that we need to call ``initialization`` method when all connections are defined.
-
-.. code-block:: python
-
-    >>> from neupy import layers
-    >>>
-    >>> sigmoid_layer = layers.Sigmoid(3)
-    >>> connection = layers.Input(2) > sigmoid_layer
-    >>>
-    >>> sigmoid_layer.weight.get_value()
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    neupy.init.UninitializedException: Cannot get parameter value.
-    Parameter hasn't been initialized yet
-    >>>
-    >>> connection.initialize()
-    >>> sigmoid_layer.weight.get_value()
-    array([[ 0.90131086,  0.38221973, -0.69804142],
-           [-0.54882893,  0.81503922, -0.53348505]])
-
-Only after the initialization we was able to get parameter.
-
 Mutlilayer Perceptron (MLP)
 ===========================
 
@@ -218,17 +193,16 @@ Any connection between layers in NeuPy is a `Directional Acyclic Graph (DAG) <ht
 
     connection = layers.join(
         layers.Input((3, 10, 10)),
-        layers.Parallel(
-            [[
-                layers.Convolution((32, 3, 3)),
-                layers.Relu(),
-                layers.MaxPooling((2, 2)),
-            ], [
-                layers.Convolution((16, 7, 7)),
-                layers.Relu(),
-            ]],
-            layers.Concatenate()
-        ),
+        [[
+            layers.Convolution((32, 3, 3)),
+            layers.Relu(),
+            layers.MaxPooling((2, 2)),
+        ], [
+            layers.Convolution((16, 7, 7)),
+            layers.Relu(),
+        ]],
+        layers.Concatenate()
+
         layers.Reshape(),
         layers.Softmax(10),
     )
@@ -237,7 +211,7 @@ Any connection between layers in NeuPy is a `Directional Acyclic Graph (DAG) <ht
     :align: center
     :alt: Graph connections in NeuPy
 
-You can see two new layers. The first one is the :layer:`Parallel` layer. This layer accepts two parameters. First one is an array of multiple connections. As you can see from the figure above each of the connections above accepts the same input, but each of the do different transformation to this input. The second parameter is an layer that accepts multiple inputs and combine then into single output. From our example we can see that from the left branch we got output shape equal to ``(32, 4, 4)`` and from the right branch - ``(16, 4, 4)``. The :layer:`Concatenate` layer joins layers over the firts dimension and as output returns tensor with shape ``(48, 4, 4)```
+You can see two new layers. The first one is the Parallel layer. This layer accepts two parameters. First one is an array of multiple connections. As you can see from the figure above each of the connections above accepts the same input, but each of the do different transformation to this input. The second parameter is an layer that accepts multiple inputs and combine then into single output. From our example we can see that from the left branch we got output shape equal to ``(32, 4, 4)`` and from the right branch - ``(16, 4, 4)``. The :layer:`Concatenate` layer joins layers over the firts dimension and as output returns tensor with shape ``(48, 4, 4)```
 
 .. raw:: html
 

@@ -43,8 +43,7 @@ class LayerNameTestCase(BaseTestCase):
         input_layer = layers.Input(10)
         output_layer = layers.Sigmoid(1)
 
-        connection = layers.join(input_layer, output_layer)
-        connection.initialize()
+        layers.join(input_layer, output_layer)
 
         self.assertEqual(output_layer.name, 'sigmoid-1')
         self.assertEqual(input_layer.name, 'input-1')
@@ -58,8 +57,7 @@ class LayerNameTestCase(BaseTestCase):
         hidden_layer = layers.Sigmoid(5)
         output_layer = layers.Sigmoid(10)
 
-        connection = layers.join(input_layer, hidden_layer, output_layer)
-        connection.initialize()
+        layers.join(input_layer, hidden_layer, output_layer)
 
         name = generate_layer_name(hidden_layer)
         self.assertEqual(name, 'sigmoid-1')
@@ -82,8 +80,7 @@ class LayerNameTestCase(BaseTestCase):
         output_layer = layers.Relu(4)
         conn2 = hidden2_layer > output_layer
 
-        conn = conn1 > conn2
-        conn.initialize()
+        conn1 > conn2
 
         self.assertEqual(input_layer.name, 'input-1')
         self.assertEqual(hidden1_layer.name, 'relu-1')
