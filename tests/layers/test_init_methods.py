@@ -3,7 +3,7 @@ import math
 from scipy import stats
 import numpy as np
 
-from neupy import init
+from neupy import init, environment
 
 from base import BaseTestCase
 
@@ -68,6 +68,23 @@ class UniformInitializeTestCase(BaseInitializerTestCase):
         self.assertEqual("Uniform(0, 1)", str(uniform_initializer))
 
 
+class InitializerWithGainTestCase(BaseInitializerTestCase):
+    def test_gain_relu(self):
+        he_initializer = init.HeNormal(gain='relu')
+        self.assertEqual(he_initializer.gain, math.sqrt(2))
+
+    def test_gain_relu_he_normal_scale(self):
+        environment.reproducible()
+        he_initializer = init.HeNormal(gain=1)
+        sample_1 = he_initializer.sample((3, 2))
+
+        environment.reproducible()
+        he_initializer = init.HeNormal(gain='relu')
+        sample_2 = he_initializer.sample((3, 2))
+
+        self.assertAlmostEqual(np.mean(sample_2 / sample_1), math.sqrt(2))
+
+
 class HeInitializeTestCase(BaseInitializerTestCase):
     def test_he_normal(self):
         he_normal = init.HeNormal()
@@ -110,9 +127,10 @@ class XavierInitializeTestCase(BaseInitializerTestCase):
 
     def test_xavier_uniform(self):
         n_inputs, n_outputs = 10, 30
-        n_inputs, n_outputs = 30, 30
+
         xavier_uniform = init.XavierUniform()
         weight = xavier_uniform.sample((n_inputs, n_outputs))
+
         bound = math.sqrt(6. / (n_inputs + n_outputs))
 
         self.assertUniformlyDistributed(weight)

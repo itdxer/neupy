@@ -7,8 +7,9 @@ import theano.tensor as T
 from neupy import layers, algorithms
 from neupy.utils import asfloat, as_tuple
 from neupy.layers import Input, Relu, Tanh, Sigmoid
-from neupy.layers.connections import (is_sequential, merge_dicts_with_list,
-                                      does_layer_expect_one_input)
+from neupy.layers.connections import is_sequential
+from neupy.layers.connections.graph import (merge_dicts_with_list,
+                                            does_layer_expect_one_input)
 
 from base import BaseTestCase
 
@@ -36,7 +37,7 @@ class ConnectionsTestCase(BaseTestCase):
         connection.initialize()
 
         expected_sizes = [2, 10, 4, 7, 3, 1]
-        for layer, expected_size in zip(connection.layers, expected_sizes):
+        for layer, expected_size in zip(connection, expected_sizes):
             self.assertEqual(expected_size, layer.size)
 
     def test_connection_inside_connection_conv(self):
@@ -54,11 +55,13 @@ class ConnectionsTestCase(BaseTestCase):
 
         self.assertEqual(8, len(connection))
 
-        self.assertIsInstance(connection.layers[1], layers.Convolution)
-        self.assertIsInstance(connection.layers[2], layers.Relu)
-        self.assertIsInstance(connection.layers[3], layers.Convolution)
-        self.assertIsInstance(connection.layers[4], layers.Relu)
-        self.assertIsInstance(connection.layers[5], layers.MaxPooling)
+        expected_order = [
+            layers.Input, layers.Convolution, layers.Relu,
+            layers.Convolution, layers.Relu, layers.MaxPooling,
+            layers.Reshape, layers.Softmax
+        ]
+        for actual_layer, expected_layer in zip(connection, expected_order):
+            self.assertIsInstance(actual_layer, expected_layer)
 
     def test_connection_shapes(self):
         connection = Input(2) > Relu(10) > Tanh(1)
@@ -178,32 +181,24 @@ class ConnectionTypesTestCase(BaseTestCase):
 
     def test_connections_with_complex_parallel_relations(self):
         input_layer = layers.Input((3, 5, 5))
-        connection = layers.Parallel(
+        connection = layers.join(
             [[
                 layers.Convolution((8, 1, 1)),
             ], [
                 layers.Convolution((4, 1, 1)),
-                layers.Parallel(
-                    [[
-
-                        layers.Convolution((2, 1, 3), padding=(0, 1)),
-                    ], [
-                        layers.Convolution((2, 3, 1), padding=(1, 0)),
-                    ]],
-                    layers.Concatenate(),
-                )
+                [[
+                    layers.Convolution((2, 1, 3), padding=(0, 1)),
+                ], [
+                    layers.Convolution((2, 3, 1), padding=(1, 0)),
+                ]],
             ], [
                 layers.Convolution((8, 1, 1)),
                 layers.Convolution((4, 3, 3), padding=1),
-                layers.Parallel(
-                    [[
-
-                        layers.Convolution((2, 1, 3), padding=(0, 1)),
-                    ], [
-                        layers.Convolution((2, 3, 1), padding=(1, 0)),
-                    ]],
-                    layers.Concatenate(),
-                )
+                [[
+                    layers.Convolution((2, 1, 3), padding=(0, 1)),
+                ], [
+                    layers.Convolution((2, 3, 1), padding=(1, 0)),
+                ]],
             ], [
                 layers.MaxPooling((3, 3), stride=(1, 1), padding=1),
                 layers.Convolution((8, 1, 1)),
@@ -229,7 +224,6 @@ class ConnectionSecondaryFunctionsTestCase(BaseTestCase):
         layer = layers.Input(10)
         self.assertTrue(is_sequential(layer))
 
-    @unittest.skip("broken")
     def test_is_sequential_partial_connection(self):
         connection_2 = layers.Input(10) > layers.Sigmoid(5)
         connection_31 = connection_2 > layers.Sigmoid(1)
@@ -262,3 +256,56 @@ class ConnectionSecondaryFunctionsTestCase(BaseTestCase):
                 output = 'attribute'
 
             does_layer_expect_one_input(A)
+
+
+class TestParallelConnectionsTestCase(BaseTestCase):
+    def test_parallel_layer(self):
+        input_layer = layers.Input((3, 8, 8))
+        parallel_layer = layers.join(
+            [[
+                layers.Convolution((11, 5, 5)),
+            ], [
+                layers.Convolution((10, 3, 3)),
+                layers.Convolution((5, 3, 3)),
+            ]],
+            layers.Concatenate(),
+        )
+        output_layer = layers.MaxPooling((2, 2))
+
+        conn = layers.join(input_layer, parallel_layer)
+        output_connection = layers.join(conn, output_layer)
+        output_connection.initialize()
+
+        x = T.tensor4()
+        y = theano.function([x], conn.output(x))
+
+        x_tensor4 = asfloat(np.random.random((10, 3, 8, 8)))
+        output = y(x_tensor4)
+        self.assertEqual(output.shape, (10, 11 + 5, 4, 4))
+
+        output_function = theano.function([x], output_connection.output(x))
+        final_output = output_function(x_tensor4)
+        self.assertEqual(final_output.shape, (10, 11 + 5, 2, 2))
+
+    def test_parallel_with_joined_connections(self):
+        # Should work without errors
+        layers.join(
+            [
+                layers.Convolution((11, 5, 5)) > layers.Relu(),
+                layers.Convolution((10, 3, 3)) > layers.Relu(),
+            ],
+            layers.Concatenate() > layers.Relu(),
+        )
+
+    def test_parallel_layer_with_residual_connections(self):
+        connection = layers.join(
+            layers.Input((3, 8, 8)),
+            [[
+                layers.Convolution((7, 1, 1)),
+                layers.Relu()
+            ], [
+                # Residual connection
+            ]],
+            layers.Concatenate(),
+        )
+        self.assertEqual(connection.output_shape, (10, 8, 8))

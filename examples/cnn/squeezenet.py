@@ -10,17 +10,14 @@ def Fire(s_1x1, e_1x1, e_3x3):
     return layers.join(
         layers.Convolution((s_1x1, 1, 1), padding='half'),
         layers.Relu(),
-
-        layers.Parallel(
-            [[
-                layers.Convolution((e_1x1, 1, 1), padding='half'),
-                layers.Relu(),
-            ], [
-                layers.Convolution((e_3x3, 3, 3), padding='half'),
-                layers.Relu(),
-            ]],
-            layers.Concatenate(),
-        )
+        [[
+            layers.Convolution((e_1x1, 1, 1), padding='half'),
+            layers.Relu(),
+        ], [
+            layers.Convolution((e_3x3, 3, 3), padding='half'),
+            layers.Relu(),
+        ]],
+        layers.Concatenate(),
     )
 
 
@@ -51,6 +48,4 @@ squeezenet = layers.join(
     layers.Reshape(),
     layers.Softmax(),
 )
-squeezenet.initialize()
-
 plots.layer_structure(squeezenet)

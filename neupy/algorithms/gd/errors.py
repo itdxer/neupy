@@ -1,13 +1,35 @@
 from __future__ import division
 
+import theano
 import theano.tensor as T
 
 from neupy.core.docs import shared_docs
-from neupy.utils import smallest_positive_number, asint
+from neupy.utils import asint
 
 
 __all__ = ('mse', 'rmse', 'mae', 'msle', 'rmsle', 'binary_crossentropy',
            'categorical_crossentropy', 'binary_hinge', 'categorical_hinge')
+
+
+def smallest_positive_number():
+    """
+    Function returns different nubmer for different
+    ``theano.config.floatX`` values.
+
+    * ``1e-7`` for 32-bit float
+    * ``1e-16`` for 64-bit float
+
+    Returns
+    -------
+    float
+        Smallest positive float number.
+    """
+    float_type = theano.config.floatX
+    epsilon_values = {
+        'float32': 1e-7,
+        'float64': 1e-16,
+    }
+    return epsilon_values[float_type]
 
 
 def error_function(expected, predicted):

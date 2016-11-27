@@ -131,3 +131,8 @@ class ErrorFuncTestCase(BaseTestCase):
     def test_categorical_hinge_invalid_dimension(self):
         with self.assertRaises(TypeError):
             errors.categorical_hinge(T.tensor3(), T.matrix())
+
+    def test_smallest_positive_number(self):
+        epsilon = errors.smallest_positive_number()
+        self.assertNotEqual(0, asfloat(1) - (asfloat(1) - asfloat(epsilon)))
+        self.assertEqual(0, asfloat(1) - (asfloat(1) - asfloat(epsilon / 10)))

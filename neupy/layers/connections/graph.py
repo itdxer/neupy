@@ -1,64 +1,48 @@
 import copy
+import pprint
 import inspect
-from itertools import chain
-from contextlib import contextmanager
 from collections import OrderedDict
 
-from neupy.layers.utils import preformat_layer_shape
+from neupy.exceptions import LayerConnectionError
 
 
-__all__ = ('LayerConnection', 'ChainConnection', 'NetworkConnectionError',
-           'LayerConnectionError', 'LayerGraph')
+__all__ = ('LayerGraph',)
 
 
-class LayerConnectionError(Exception):
+def filter_list(iterable, include_values):
     """
-    Error class that triggers in case of connection
-    issues within layers.
-    """
-
-
-class NetworkConnectionError(Exception):
-    """
-    Error class that triggers in case of connection
-    within layers in the network
-    """
-
-
-def is_sequential(connection):
-    """
-    Check whether graph connection is a sequence.
+    Create new list that contains only values
+    specified in the ``include_values`` attribute.
 
     Parameters
     ----------
-    connection : ChainConnection instance
+    iterable : list
+        List that needs to be filtered.
+
+    include_values : list, tuple
+        List of values that needs to be included in the
+        filtered list. Other values that hasn't been
+        defined in the list will be excluded from the
+        list specified by ``iterable`` attribute.
 
     Returns
     -------
-    bool
+    list
+        Filtered list.
     """
-    graph = connection.graph
+    filtered_list = []
 
-    if not graph:
-        # Single layer is a sequential connection
-        return True
+    for value in iterable:
+        if value in include_values:
+            filtered_list.append(value)
 
-    f_graph = graph.forward_graph
-    b_graph = graph.backward_graph
-
-    for layers in chain(f_graph.values(), b_graph.values()):
-        if len(layers) >= 2:
-            # One of the layers has multiple input
-            # or output connections
-            return False
-
-    return True
+    return filtered_list
 
 
 def filter_dict(dictionary, include_keys):
     """
-    Creates new dictionary that contains only some of the
-    keys from the original one.
+    Create new list that contains only values
+    specified in the ``include_keys`` attribute.
 
     Parameters
     ----------
@@ -73,10 +57,12 @@ def filter_dict(dictionary, include_keys):
     -------
     dict
     """
-    filtered_dict = {}
+    filtered_dict = OrderedDict()
+
     for key, value in dictionary.items():
         if key in include_keys:
-            filtered_dict[key] = value
+            filtered_dict[key] = filter_list(value, include_keys)
+
     return filtered_dict
 
 
@@ -104,12 +90,12 @@ def merge_dicts_with_list(first_dict, second_dict):
         common_dict[key] = copy.copy(value)
 
     for key, values in second_dict.items():
-        if key not in common_dict:
-            common_dict[key] = copy.copy(values)
-        else:
+        if key in common_dict:
             for value in values:
                 if value not in common_dict[key]:
                     common_dict[key].append(value)
+        else:
+            common_dict[key] = copy.copy(values)
 
     return common_dict
 
@@ -180,7 +166,7 @@ def does_layer_expect_one_input(layer):
                          "output method".format(layer))
 
     if not inspect.ismethod(layer.output):
-        raise ValueError("The `output` attribute is not a method")
+        raise ValueError("Layer has an `output` property, but it not a method")
 
     arginfo = inspect.getargspec(layer.output)
 
@@ -260,6 +246,9 @@ class LayerGraph(object):
         if layer in self.forward_graph:
             return False
 
+        if layer.input_shape:
+            layer.initialize()
+
         self.forward_graph[layer] = []
         self.backward_graph[layer] = []
 
@@ -293,7 +282,6 @@ class LayerGraph(object):
         self.add_layer(from_layer)
         self.add_layer(to_layer)
 
-        expect_one_input_layer = does_layer_expect_one_input(to_layer)
         forward_connections = self.forward_graph[from_layer]
         backward_connections = self.backward_graph[to_layer]
 
@@ -301,37 +289,38 @@ class LayerGraph(object):
             # Layers have been already connected
             return False
 
-        if expect_one_input_layer and backward_connections:
-            raise LayerConnectionError(
-                "Cannot connect `{from_layer}` to the `{to_layer}`. "
-                "Layer `{to_layer}` expectes input only from one "
-                "layer and it has been alredy connected with "
-                "`{to_layer_connection}`.".format(
-                    from_layer=from_layer,
-                    to_layer=to_layer,
-                    to_layer_connection=backward_connections[0]
-                )
-            )
+        # expect_one_input_layer = does_layer_expect_one_input(to_layer)
+        # if expect_one_input_layer and backward_connections:
+        #     raise LayerConnectionError(
+        #         "Cannot connect `{from_layer}` to the `{to_layer}`. "
+        #         "Layer `{to_layer}` expectes input only from one "
+        #         "layer and it has been alredy connected with "
+        #         "`{to_layer_connection}`.".format(
+        #             from_layer=from_layer,
+        #             to_layer=to_layer,
+        #             to_layer_connection=backward_connections[0]
+        #         ))
 
         forward_connections.append(to_layer)
+        backward_connections.append(from_layer)
 
         if is_cyclic(self.forward_graph):
-            # Rollback changes in case if user cathes exception
-            self.forward_graph[from_layer].pop()
-            raise LayerConnectionError("Graph cannot have cycles")
+            raise LayerConnectionError(
+                "Cannot connect layer `{}` to `{}`, because this "
+                "connection creates cycle in the graph."
+                "".format(from_layer, to_layer))
 
-        backward_connections.append(from_layer)
         return True
 
-    def connect_layers(self, from_layer, to_layer):
+    def connect_layers(self, from_layers, to_layers):
         """
         Connect two layers together and update other layers
         in the graph.
 
         Parameters
         ----------
-        from_layer : layer
-        to_layer : layer
+        from_layer : layer or list of layers
+        to_layer : layer or list of layers
 
         Raises
         ------
@@ -344,77 +333,114 @@ class LayerGraph(object):
             Returns ``False`` if connection has already been added into
             the graph, and ``True`` if connection was added successfully.
         """
-        connection_added = self.add_connection(from_layer, to_layer)
+        if not isinstance(from_layers, (list, tuple)):
+            from_layers = [from_layers]
 
-        if not connection_added:
+        if not isinstance(to_layers, (list, tuple)):
+            to_layers = [to_layers]
+
+        connections_added = []
+        for from_layer in from_layers:
+            for to_layer in to_layers:
+                connection_added = self.add_connection(from_layer, to_layer)
+                connections_added.append(connection_added)
+
+        if not any(connections_added):
             return False
 
-        if from_layer.input_shape is None:
+        if all(layer.input_shape is None for layer in from_layers):
             return True
 
         # Layer has an input shape which means that we can
         # propagate this information through the graph and
         # set up input shape for layers that don't have it.
-        layers = [from_layer]
+        layers = copy.copy(from_layers)
         forward_graph = self.forward_graph
 
         # We need to know whether all input layers
         # have defined input shape
-        all_inputs_has_shape = True
-        for layer, next_layers in self.backward_graph.items():
-            if not next_layers and not layer.input_shape:
-                all_inputs_has_shape = False
-                break
+        all_inputs_has_shape = all(
+            layer.input_shape for layer in self.input_layers)
 
         while layers:
             current_layer = layers.pop()
             next_layers = forward_graph[current_layer]
 
             for next_layer in next_layers:
-                next_in_shape = next_layer.input_shape
+                next_inp_shape = next_layer.input_shape
                 current_out_shape = current_layer.output_shape
-                one_input_layer = does_layer_expect_one_input(next_layer)
+                expect_one_input = does_layer_expect_one_input(next_layer)
 
-                if not next_in_shape and one_input_layer:
+                if not next_inp_shape and expect_one_input:
                     next_layer.input_shape = current_out_shape
+                    next_layer.initialize()
 
-                elif not one_input_layer and all_inputs_has_shape:
+                elif not expect_one_input and all_inputs_has_shape:
                     input_shapes = []
                     for incoming_layer in self.backward_graph[next_layer]:
                         input_shapes.append(incoming_layer.output_shape)
 
                     if None not in input_shapes:
                         next_layer.input_shape = input_shapes
+                        next_layer.initialize()
+
                     else:
                         # Some of the previous layers still don't
                         # have input shape. We can put layer at the
                         # end of the stack and check it again at the end
                         layers.insert(0, current_layer)
 
-                elif one_input_layer and next_in_shape != current_out_shape:
+                elif expect_one_input and next_inp_shape != current_out_shape:
                     raise LayerConnectionError(
                         "Cannot connect `{}` to the `{}`. Output shape "
                         "from one layer is equal to {} and input shape "
                         "to the next one is equal to {}".format(
                             current_layer, next_layer,
-                            current_out_shape, next_in_shape,
-                        )
-                    )
+                            current_out_shape, next_inp_shape,
+                        ))
 
             layers.extend(next_layers)
 
         return True
 
-    def subgraph_for_output(self, layer):
-        layers = [layer]
-        observed_layers = []
+    def subgraph(self, from_layers, to_layers):
+        pass
 
-        if layer not in self.forward_graph:
+    def subgraph_for_output(self, layers, graph='backward'):
+        """
+        Exctract subgraph from a graph that contains only
+        layers related to the output layer.
+
+        Parameters
+        ----------
+        layer : layer
+
+        Returns
+        -------
+        LayerGraph instance
+        """
+        if not isinstance(layers, (list, tuple)):
+            layers = [layers]
+
+        l = layers
+
+        if all(layer not in self.forward_graph for layer in layers):
             return LayerGraph()
+
+        if graph == 'backward':
+            graph = self.backward_graph
+        else:
+            graph = self.forward_graph
+
+        observed_layers = []
+        layers = copy.copy(layers)
 
         while layers:
             current_layer = layers.pop()
-            next_layers = self.backward_graph[current_layer]
+            if current_layer not in graph:
+                print(pprint.pformat(list(self.backward_graph.items())))
+                print(self)
+            next_layers = graph[current_layer]
 
             for next_layer in next_layers:
                 if next_layer not in observed_layers:
@@ -427,9 +453,14 @@ class LayerGraph(object):
         backward_subgraph = filter_dict(self.backward_graph,
                                         observed_layers)
 
-        # Remove old relations to the other layers.
-        # Output layer cannot point to some other layers.
-        forward_subgraph[layer] = []
+        # # Remove old relations to the other layers.
+        # # Output layer cannot point to some other layers.
+        # if graph == 'backward':
+        #     for layer in l:
+        #         forward_subgraph[layer] = []
+        # else:
+        #     for layer in l:
+        #         backward_subgraph[layer] = []
 
         return LayerGraph(forward_subgraph, backward_subgraph)
 
@@ -449,11 +480,9 @@ class LayerGraph(object):
             List of input layers.
         """
         input_layers = []
+
         for layer, next_layers in self.backward_graph.items():
-            # TODO: I should check whether it's always useful
-            # to have only an input layers that have specified
-            # input shape
-            if not next_layers and layer.input_shape:
+            if not next_layers:
                 input_layers.append(layer)
 
         return input_layers
@@ -474,47 +503,49 @@ class LayerGraph(object):
             List of output layers.
         """
         output_layers = []
+
         for layer, next_layers in self.forward_graph.items():
             if not next_layers:
                 output_layers.append(layer)
 
         return output_layers
 
-    def propagate_forward(self, input_):
+    def propagate_forward(self, input_value):
         """
         Propagates input variable through the directed acyclic
         graph and returns output from the final layers.
 
         Parameters
         ----------
-        input_ : array-like, Theano variable or dict
-            If input has array or Theano variable type than it will
-            be used as a direct input for input layer/layers. The
-            dict type input should has a specific structure. Each
-            key of the dict is a layer and each value is array or
-            Theano variable. Dict defines input values for specific
-            layers. In the dict input layer is not necessary should
-            be an instance of the ``layers.Input`` class. It can be
-            any layer from the graph.
+        input_value : array-like, Theano variable or dict
+            - If input is an array or Theano variable than it will
+              be used as a direct input to the input layer/layers.
+
+            - The dict type input should has a specific structure.
+              Each key of the dict is a layer and each value array or
+              Theano variable. Dict defines input values for specific
+              layers. In the dict input layer is not necessary should
+              be an instance of the ``layers.Input`` class. It can be
+              any layer from the graph.
 
         Returns
         -------
         object
-            Output from the final layers.
+            Output from the final layer/layers.
         """
         outputs = {}
 
-        if isinstance(input_, dict):
-            for layer, input_variable in input_.items():
+        if isinstance(input_value, dict):
+            for layer, input_variable in input_value.items():
                 if layer not in self.forward_graph:
                     raise ValueError("The `{}` layer doesn't appear "
-                                     "in this graph".format(layer))
+                                     "in the graph".format(layer))
 
                 outputs[layer] = layer.output(input_variable)
 
         else:
             for input_layer in self.input_layers:
-                outputs[input_layer] = input_layer.output(input_)
+                outputs[input_layer] = input_layer.output(input_value)
 
         def output_from_layer(layer):
             if layer in outputs:
@@ -545,203 +576,10 @@ class LayerGraph(object):
     def __len__(self):
         return len(self.forward_graph)
 
-
-class ChainConnection(object):
-    """
-    Base class from chain connections.
-    """
-    def __init__(self):
-        self.connection = None
-        self.training_state = True
-        self.graph = LayerGraph()
-
-    def __gt__(self, other):
-        return LayerConnection(self, other)
-
-    def __lt__(self, other):
-        return LayerConnection(other, self)
-
-    def output(self, input_value):
-        raise NotImplementedError
-
-    def initialize(self):
-        raise NotImplementedError
-
-    @contextmanager
-    def disable_training_state(self):
-        self.training_state = False
-        yield
-        self.training_state = True
-
-
-def make_common_graph(left_layer, right_layer):
-    """
-    Makes common graph for two layers that exists
-    in different graphs.
-
-    Parameters
-    ----------
-    left_layer : layer
-    right_layer : layer
-
-    Returns
-    -------
-    LayerGraph instance
-        Graph that contains both layers and their connections.
-    """
-    left_graph = left_layer.graph
-    right_graph = right_layer.graph
-
-    graph = LayerGraph.merge(left_graph, right_graph)
-
-    for layer in graph.forward_graph.keys():
-        layer.graph = graph
-
-    left_layer.graph = graph
-    right_layer.graph = graph
-
-    return graph
-
-
-def topological_sort(graph):
-    """
-    Repeatedly go through all of the nodes in the graph, moving each of
-    the nodes that has all its edges resolved, onto a sequence that
-    forms our sorted graph. A node has all of its edges resolved and
-    can be moved once all the nodes its edges point to, have been moved
-    from the unsorted graph onto the sorted one.
-
-    Parameters
-    ----------
-    graph : dict
-        Dictionary that has graph structure.
-
-    Raises
-    ------
-    RuntimeError
-        If graph has cycles.
-
-    Returns
-    -------
-    list
-        List of nodes sorted in topological order.
-    """
-    sorted_nodes = []
-    graph_unsorted = graph.copy()
-
-    while graph_unsorted:
-        acyclic = False
-        for node, edges in list(graph_unsorted.items()):
-            for edge in edges:
-                if edge in graph_unsorted:
-                    break
-            else:
-                acyclic = True
-                del graph_unsorted[node]
-                sorted_nodes.append(node)
-
-        if not acyclic:
-            raise RuntimeError("A cyclic dependency occurred")
-
-    return sorted_nodes
-
-
-class LayerConnection(ChainConnection):
-    """
-    Connect to layers or connections together.
-
-    Parameters
-    ----------
-    left : layer or connection
-    right : layer or conenction
-    """
-    def __init__(self, left, right):
-        super(LayerConnection, self).__init__()
-
-        if left.connection and left.connection.output_layer is left:
-            self.left = left.connection
-        else:
-            self.left = left
-
-        if right.connection and right.connection.input_layer is right:
-            self.right = right.connection
-        else:
-            self.right = right
-
-        self.layers = []
-
-        if isinstance(self.left, LayerConnection):
-            self.layers = copy.copy(self.left.layers)
-            self.left_layer = self.layers[-1]
-        else:
-            self.left_layer = self.left
-            self.layers = [self.left]
-
-        if isinstance(self.right, LayerConnection):
-            right_layers = self.right.layers
-            self.right_layer = right_layers[0]
-            self.layers.extend(right_layers)
-        else:
-            self.right_layer = self.right
-            self.layers.append(self.right)
-
-        self.input_layer = self.layers[0]
-        self.output_layer = self.layers[-1]
-
-        self.left.connection = self
-        self.right.connection = self
-
-        self.graph = make_common_graph(self.left_layer, self.right_layer)
-        self.graph.connect_layers(self.left_layer, self.right_layer)
-
-    @property
-    def input_shape(self):
-        # Cannot save them one time because shape
-        # can be modified later
-        return self.input_layer.input_shape
-
-    @property
-    def output_shape(self):
-        # Cannot save them one time because shape
-        # can be modified later
-        return self.output_layer.output_shape
-
-    def initialize(self):
-        for layer in self:
-            layer.initialize()
-
-    def output(self, *input_values):
-        subgraph = self.graph.subgraph_for_output(self.output_layer)
-        return subgraph.propagate_forward(*input_values)
-
-    @contextmanager
-    def disable_training_state(self):
-        for layer in self:
-            layer.training_state = False
-
-        yield
-
-        for layer in self:
-            layer.training_state = True
-
-    def __len__(self):
-        return len(self.graph.forward_graph)
-
-    def __iter__(self):
-        subgraph = self.graph.subgraph_for_output(self.output_layer)
-        for layer in topological_sort(subgraph.backward_graph):
-            yield layer
-
     def __repr__(self):
-        n_layers = len(self)
+        graph = self.forward_graph
 
-        if n_layers > 5 or not is_sequential(self):
-            conn = '{} -> [... {} layers ...] -> {}'.format(
-                preformat_layer_shape(self.input_shape),
-                n_layers,
-                preformat_layer_shape(self.output_shape)
-            )
-        else:
-            conn = ' > '.join([repr(layer) for layer in self])
+        if isinstance(graph, OrderedDict):
+            graph = list(graph.items())
 
-        return conn
+        return pprint.pformat(graph)

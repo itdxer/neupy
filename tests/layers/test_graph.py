@@ -3,8 +3,9 @@ import theano.tensor as T
 
 from neupy import layers
 from neupy.utils import asfloat
-from neupy.layers.connections import (LayerGraph, LayerConnectionError,
-                                      is_cyclic, topological_sort)
+from neupy.exceptions import LayerConnectionError
+from neupy.layers.connections.graph import LayerGraph, is_cyclic
+from neupy.layers.connections.base import topological_sort
 
 from base import BaseTestCase
 

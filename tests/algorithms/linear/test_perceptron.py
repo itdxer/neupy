@@ -1,7 +1,7 @@
 import numpy as np
 
 from neupy import algorithms, layers
-from neupy.layers.connections import NetworkConnectionError
+from neupy.exceptions import InvalidConnection
 
 from base import BaseTestCase
 
@@ -14,7 +14,7 @@ class PerceptronTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             algorithms.Perceptron((2, 2.5), verbose=False)
 
-        with self.assertRaises(NetworkConnectionError):
+        with self.assertRaises(InvalidConnection):
             algorithms.Perceptron(
                 layers.Input(2) > layers.Sigmoid(1),
                 verbose=False

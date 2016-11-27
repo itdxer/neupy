@@ -1,7 +1,7 @@
 import numpy as np
 
 from neupy import algorithms, init
-from neupy.utils import NotTrainedException
+from neupy.exceptions import NotTrained
 
 from base import BaseTestCase
 from utils import vectors_for_testing
@@ -48,11 +48,11 @@ class OjaTestCase(BaseTestCase):
         ojanet = algorithms.Oja(minimized_data_size=1, step=0.01,
                                 verbose=False)
 
-        with self.assertRaises(NotTrainedException):
+        with self.assertRaises(NotTrained):
             # Can't reconstruct without training
             ojanet.reconstruct(np.random.random((4, 1)))
 
-        with self.assertRaises(NotTrainedException):
+        with self.assertRaises(NotTrained):
             # Can't predict without training
             ojanet.predict(np.random.random((4, 1)))
 

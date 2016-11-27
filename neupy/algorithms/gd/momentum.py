@@ -56,8 +56,8 @@ class Momentum(MinibatchGradientDescent):
         for layer in self.layers:
             for parameter in layer.parameters.values():
                 parameter_shape = parameter.get_value().shape
-                parameter.prev_param_delta = theano.shared(
-                    name="{}/prev-param-delta".format(parameter.name),
+                parameter.previous_velocity = theano.shared(
+                    name="{}/previous-velocity".format(parameter.name),
                     value=asfloat(np.zeros(parameter_shape)),
                 )
 
@@ -65,13 +65,13 @@ class Momentum(MinibatchGradientDescent):
         step = self.variables.step
         gradient = T.grad(self.variables.error_func, wrt=parameter)
 
-        prev_param_delta = parameter.prev_param_delta
-        parameter_delta = self.momentum * prev_param_delta - step * gradient
+        previous_velocity = parameter.previous_velocity
+        velocity = self.momentum * previous_velocity - step * gradient
 
         if self.nesterov:
-            parameter_delta = self.momentum * parameter_delta - step * gradient
+            velocity = self.momentum * velocity - step * gradient
 
         return [
-            (parameter, parameter + parameter_delta),
-            (prev_param_delta, parameter_delta),
+            (parameter, parameter + velocity),
+            (previous_velocity, velocity),
         ]

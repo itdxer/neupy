@@ -6,7 +6,7 @@ from sklearn import metrics
 from sklearn.model_selection import StratifiedKFold, train_test_split
 
 from neupy import algorithms
-from neupy.utils import NotTrainedException
+from neupy.exceptions import NotTrained
 
 from base import BaseTestCase
 
@@ -31,7 +31,7 @@ class PNNTestCase(BaseTestCase):
             pnnet.predict(np.array([[0]]))
 
         msg = "hasn't been trained"
-        with self.assertRaisesRegexp(NotTrainedException, msg):
+        with self.assertRaisesRegexp(NotTrained, msg):
             # predict without training
             pnnet = algorithms.PNN(verbose=False)
             pnnet.predict(np.array([[0]]))

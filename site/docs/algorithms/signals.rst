@@ -46,11 +46,11 @@ The other useful feature releated to the signals is that you can can implement y
 .. code-block:: python
 
     from neupy import algorithms
-    from neupy.algorithms import StopTrainingException
+    from neupy.exceptions import StopTraining
 
     def on_epoch_end(network):
         if network.errors.last() < 0.001:
-            raise StopTrainingException("Stop training")
+            raise StopTraining("Stop training")
 
     gdnet = algorithms.GradientDescent(
         (2, 3, 1),

@@ -1,6 +1,7 @@
 from numpy import dot
 
-from neupy.utils import format_data, NotTrainedException
+from neupy.utils import format_data
+from neupy.exceptions import NotTrained
 from neupy.core.properties import BoundedProperty
 from neupy.algorithms.base import BaseNetwork
 from neupy.algorithms.learning import LazyLearningMixin
@@ -123,8 +124,8 @@ class GRNN(LazyLearningMixin, BaseNetwork):
         array-like (n_samples,)
         """
         if self.input_train is None:
-            raise NotTrainedException("Cannot make a prediction. Network "
-                                      "hasn't been trained yet")
+            raise NotTrained("Cannot make a prediction. Network "
+                             "hasn't been trained yet")
 
         input_data = format_data(input_data)
 

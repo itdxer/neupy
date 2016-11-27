@@ -6,8 +6,8 @@ import numpy as np
 
 from neupy import layers
 from neupy.utils import asfloat
+from neupy.exceptions import LayerConnectionError
 from neupy.layers.pooling import pooling_output_shape
-from neupy.layers.connections import LayerConnectionError
 
 from base import BaseTestCase
 

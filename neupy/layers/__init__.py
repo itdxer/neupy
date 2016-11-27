@@ -6,6 +6,6 @@ from .pooling import *
 from .stochastic import *
 from .normalization import *
 from .merge import *
-from .parallel import *
 
-from .utils import join, count_parameters
+from .connections import join
+from .utils import count_parameters

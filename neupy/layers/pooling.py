@@ -3,8 +3,8 @@ from theano.tensor.signal import pool
 
 from neupy.utils import as_tuple
 from neupy.core.properties import TypedListProperty, ChoiceProperty, Property
+from neupy.exceptions import LayerConnectionError
 from .base import BaseLayer
-from .connections import LayerConnectionError
 from .convolutions import StrideProperty
 
 

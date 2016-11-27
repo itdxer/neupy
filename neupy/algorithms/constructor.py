@@ -8,11 +8,10 @@ import theano.sparse
 import theano.tensor as T
 
 from neupy import layers
-from neupy.utils import (AttributeKeyDict, asfloat, is_list_of_integers,
-                         format_data, does_layer_accept_1d_feature)
+from neupy.utils import AttributeKeyDict, asfloat, format_data
 from neupy.layers.utils import preformat_layer_shape
-from neupy.layers.connections import (LayerConnection, NetworkConnectionError,
-                                      is_sequential)
+from neupy.layers.connections import LayerConnection, is_sequential
+from neupy.exceptions import InvalidConnection
 from neupy.helpers import table
 from neupy.core.properties import ChoiceProperty
 from neupy.algorithms.base import BaseNetwork
@@ -21,6 +20,21 @@ from .gd import errors
 
 
 __all__ = ('ConstructableNetwork',)
+
+
+def does_layer_accept_1d_feature(layer):
+    """
+    Check if 1D feature values are valid for the layer.
+
+    Parameters
+    ----------
+    layer : object
+
+    Returns
+    -------
+    bool
+    """
+    return (layer.output_shape == (1,))
 
 
 def generate_layers(layers_sizes):
@@ -72,7 +86,7 @@ def clean_layers(connection):
     if isinstance(connection, tuple):
         connection = list(connection)
 
-    if is_list_of_integers(connection):
+    if all(isinstance(element, int) for element in connection):
         connection = generate_layers(connection)
 
     islist = isinstance(connection, list)
@@ -299,15 +313,15 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
         self.layers = list(self.connection)
         graph = self.connection.graph
 
-        if len(graph.input_layers) != 1:
+        if len(self.connection.input_layers) != 1:
             n_inputs = len(graph.input_layers)
-            raise NetworkConnectionError("Connection should have one input "
-                                         "layer, got {}".format(n_inputs))
+            raise InvalidConnection("Connection should have one input "
+                                    "layer, got {}".format(n_inputs))
 
-        if len(graph.output_layers) != 1:
+        if len(self.connection.output_layers) != 1:
             n_outputs = len(graph.output_layers)
-            raise NetworkConnectionError("Connection should have one output "
-                                         "layer, got {}".format(n_outputs))
+            raise InvalidConnection("Connection should have one output "
+                                    "layer, got {}".format(n_outputs))
 
         self.input_layer = graph.input_layers[0]
         self.output_layer = graph.output_layers[0]
@@ -380,7 +394,6 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
         Initialize layers in the same order as they were list in
         network initialization step.
         """
-        self.connection.initialize()
 
     def init_train_updates(self):
         """

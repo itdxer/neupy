@@ -1,16 +1,13 @@
 import collections
-from functools import reduce
 
 
-__all__ = ('preformat_layer_shape', 'dimshuffle', 'join', 'iter_parameters',
+__all__ = ('preformat_layer_shape', 'dimshuffle', 'iter_parameters',
            'count_parameters')
 
 
 def preformat_layer_shape(shape):
     """
-    Each layer should have input and output shape
-    attributes. This function formats layer's shape value to
-    make it easy to read.
+    Format layer's input or output shape.
 
     Parameters
     ----------
@@ -41,48 +38,11 @@ def dimshuffle(value, ndim, axes):
     Theano variable
     """
     pattern = ['x'] * ndim
+
     for i, axis in enumerate(axes):
         pattern[axis] = i
+
     return value.dimshuffle(pattern)
-
-
-def join(*connections):
-    """
-    Connect two layers.
-
-    Parameters
-    ----------
-    *connections : layers or connections
-
-    Returns
-    -------
-    connection
-        Layers connected in a sequence.
-
-    Examples
-    --------
-    >>> from neupy import layers
-    >>> conn = layers.join(
-    ...     layers.Input(784),
-    ...     layers.Relu(500),
-    ...     layers.Relu(300),
-    ...     layers.Softmax(10),
-    ... )
-    >>>
-    >>> conn = layers.join([
-    ...     layers.Input(784),
-    ...     layers.Sigmoid(100),
-    ...     layers.Softmax(10),
-    ... ])
-    """
-    from neupy.layers.connections import LayerConnection
-
-    n_layers = len(connections)
-    if n_layers == 1 and isinstance(connections[0], collections.Iterable):
-        connections = connections[0]
-
-    merged_connections = reduce(LayerConnection, connections)
-    return merged_connections
 
 
 def iter_parameters(layers):
@@ -116,11 +76,10 @@ def count_parameters(connection):
     int
         Number of parameters.
     """
-    if not isinstance(connection, collections.Iterable):
-        connection = [connection]
-
     n_parameters = 0
+
     for _, _, parameter in iter_parameters(connection):
         parameter = parameter.get_value()
         n_parameters += parameter.size
+
     return n_parameters

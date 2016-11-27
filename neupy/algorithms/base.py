@@ -8,12 +8,12 @@ import six
 
 from neupy.utils import preformat_value, AttributeKeyDict
 from neupy.helpers import table
+from neupy.exceptions import StopTraining
 from neupy.core.base import BaseSkeleton
 from neupy.core.properties import (BoundedProperty, NumberProperty,
                                    Property)
 from .summary_info import SummaryTable, InlineSummary
-from .utils import (iter_until_converge, shuffle, normalize_error,
-                    StopTrainingException)
+from .utils import iter_until_converge, shuffle, normalize_error
 
 
 __all__ = ('BaseNetwork',)
@@ -435,7 +435,7 @@ class BaseNetwork(BaseSkeleton):
 
                     is_first_iteration = False
 
-                except StopTrainingException as err:
+                except StopTraining as err:
                     # TODO: This notification breaks table view in terminal.
                     # I need to show it in a different way.
                     logs.message("TRAIN", "Epoch #{} stopped. {}"

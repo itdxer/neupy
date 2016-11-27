@@ -4,7 +4,7 @@ import numpy as np
 
 from neupy import layers, init
 from neupy.utils import asfloat
-from neupy.layers.connections import LayerConnectionError
+from neupy.exceptions import LayerConnectionError
 
 from base import BaseTestCase
 

@@ -1,6 +1,13 @@
 neupy.layers package
 ====================
 
+Subpackages
+-----------
+
+.. toctree::
+
+    neupy.layers.connections
+
 Submodules
 ----------
 
@@ -8,11 +15,9 @@ Submodules
 
    neupy.layers.activations
    neupy.layers.base
-   neupy.layers.connections
    neupy.layers.convolutions
    neupy.layers.merge
    neupy.layers.normalization
-   neupy.layers.parallel
    neupy.layers.pooling
    neupy.layers.recurrent
    neupy.layers.stochastic

@@ -189,6 +189,9 @@ class Relu(ActivationLayer):
     {ActivationLayer.Attributes}
     """
     alpha = NumberProperty(default=0, minval=0)
+    weight = ParameterProperty(default=init.XavierNormal(gain='relu'))
+    bias = ParameterProperty(default=init.XavierNormal(gain='relu'),
+                             allow_none=True)
 
     def activation_function(self, input_value):
         alpha = asfloat(self.alpha)

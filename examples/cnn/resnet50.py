@@ -23,7 +23,7 @@ def ResidualUnit(n_in_filters, n_out_filters, stride, has_branch=False):
             layers.BatchNorm(),
         )
 
-    return layers.Parallel(
+    return layers.join(
         [main_branch, residual_branch],
         layers.Elementwise() > layers.Relu(),
     )
@@ -62,6 +62,4 @@ resnet50 = layers.join(
     layers.Reshape(),
     layers.Softmax(1000),
 )
-resnet50.initialize()
-
 plots.layer_structure(resnet50)

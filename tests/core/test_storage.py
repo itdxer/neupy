@@ -158,7 +158,6 @@ class LayerStorageTestCase(BaseTestCase):
             layers.Sigmoid(5),
             layers.Sigmoid(2),
         )
-        connection.initialize()
 
         with tempfile.NamedTemporaryFile() as temp:
             storage.save(connection, temp.name)
@@ -188,7 +187,6 @@ class LayerStorageTestCase(BaseTestCase):
             layers.Sigmoid(5),
             layers.Sigmoid(2),
         )
-        connection.initialize()
 
         with tempfile.NamedTemporaryFile() as temp:
             storage.save(connection, temp.name)
@@ -221,7 +219,6 @@ class LayerStorageTestCase(BaseTestCase):
             layers.Input(10),
             layers.Relu(1),
         )
-        connection.initialize()
 
         with self.assertRaisesRegexp(ValueError, "Cannot load parameters"):
             storage.load(connection, {}, ignore_missed=False)
@@ -232,7 +229,6 @@ class LayerStorageTestCase(BaseTestCase):
     def test_storage_load_from_dict(self):
         relu = layers.Relu(2, name='relu')
         connection = layers.Input(10) > relu
-        connection.initialize()
 
         weight = np.ones((10, 2))
         bias = np.ones((2,))

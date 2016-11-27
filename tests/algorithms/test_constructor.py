@@ -1,11 +1,11 @@
 import theano.tensor as T
 
 from neupy import layers
-from neupy.layers.connections import NetworkConnectionError
-from neupy.algorithms.constructor import (generate_layers,
-                                          create_input_variable,
+from neupy.exceptions import InvalidConnection
+from neupy.algorithms.constructor import (create_input_variable,
                                           create_output_variable,
-                                          ConstructableNetwork)
+                                          ConstructableNetwork,
+                                          generate_layers)
 
 from base import BaseTestCase
 
@@ -31,25 +31,21 @@ class NetworkConstructorTestCase(BaseTestCase):
 
 class ConstructableNetworkTestCase(BaseTestCase):
     def test_multi_input_exception(self):
-        input_layer_1 = layers.Input(10)
-        input_layer_2 = layers.Input(10)
-        output_layer = layers.Concatenate()
+        connection = layers.join([
+            [layers.Input(10)],
+            [layers.Input(10)],
+        ]) > layers.Concatenate()
 
-        connection = layers.join(input_layer_1, output_layer)
-        connection = layers.join(input_layer_2, output_layer)
-
-        with self.assertRaises(NetworkConnectionError):
+        with self.assertRaises(InvalidConnection):
             ConstructableNetwork(connection)
 
     def test_multi_output_exception(self):
-        input_layer = layers.Input(10)
-        output_layer_1 = layers.Sigmoid(20)
-        output_layer_2 = layers.Sigmoid(30)
+        connection = layers.Input(10) > [
+            [layers.Sigmoid(20)],
+            [layers.Sigmoid(30)],
+        ]
 
-        connection = layers.join(input_layer, output_layer_1)
-        connection = layers.join(input_layer, output_layer_2)
-
-        with self.assertRaises(NetworkConnectionError):
+        with self.assertRaises(InvalidConnection):
             ConstructableNetwork(connection)
 
     def test_no_updates_by_default(self):
