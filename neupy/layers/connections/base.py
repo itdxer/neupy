@@ -34,7 +34,7 @@ class BaseConnection(object):
         raise NotImplementedError
 
     def initialize(self):
-        raise NotImplementedError
+        pass
 
     @contextmanager
     def disable_training_state(self):

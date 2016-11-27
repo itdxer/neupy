@@ -1,6 +1,3 @@
-import collections
-
-
 __all__ = ('preformat_layer_shape', 'dimshuffle', 'iter_parameters',
            'count_parameters')
 

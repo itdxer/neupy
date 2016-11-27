@@ -246,9 +246,6 @@ class LayerGraph(object):
         if layer in self.forward_graph:
             return False
 
-        if layer.input_shape:
-            layer.initialize()
-
         self.forward_graph[layer] = []
         self.backward_graph[layer] = []
 
@@ -422,7 +419,7 @@ class LayerGraph(object):
         if not isinstance(layers, (list, tuple)):
             layers = [layers]
 
-        l = layers
+        # l = layers
 
         if all(layer not in self.forward_graph for layer in layers):
             return LayerGraph()
