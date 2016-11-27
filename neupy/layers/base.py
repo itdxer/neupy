@@ -15,28 +15,6 @@ from neupy.layers.connections import BaseConnection
 __all__ = ('BaseLayer', 'ParameterBasedLayer', 'Input', 'ResidualConnection')
 
 
-def next_identifier(identifiers):
-    """
-    Find next identifier.
-
-    Parameters
-    ----------
-    identifiers : list of int
-        List of identifiers
-
-    Returns
-    -------
-    int
-        Next identifier that doesn't appears in
-        the list.
-    """
-    if not identifiers:
-        return 1
-
-    max_identifier = max(identifiers)
-    return max_identifier + 1
-
-
 def generate_layer_name(layer):
     """ Based on the information inside of the layer generates
     name that identifies layer inside of the graph.
@@ -50,29 +28,9 @@ def generate_layer_name(layer):
     str
         Layer's name
     """
-    graph = layer.graph
-    layer_class_name = layer.__class__.__name__
-
-    if layer.layer_id is not None:
-        layer_id = layer.layer_id
-
-    else:
-        graph_layers = graph.forward_graph.keys()
-        layer_identifiers = []
-
-        for graph_layer in graph_layers:
-            if type(graph_layer) is type(layer) and graph_layer.layer_id:
-                layer_identifiers.append(graph_layer.layer_id)
-
-        layer_id = next_identifier(layer_identifiers)
-
-    layer.layer_id = layer_id
-
-    to_lowercase_regexp = re.compile(r'(?<!^)(?=[A-Z])')
-    name_lower_case = to_lowercase_regexp.sub('-', layer_class_name).lower()
-    layer_name = "{}-{}".format(name_lower_case, layer_id)
-
-    return layer_name
+    classname = layer.__class__.__name__
+    layer_name = re.sub(re.compile(r'(?<!^)(?=[A-Z])'), '-', classname)
+    return "{}-{}".format(layer_name.lower(), layer.layer_id)
 
 
 def create_shared_parameter(value, name, shape):
@@ -161,13 +119,20 @@ class BaseLayer(BaseConnection, Configurable):
         cls = self.__class__
         self.layer_id = self.global_identifiers_map[cls]
         self.global_identifiers_map[cls] += 1
+        self.name = generate_layer_name(layer=self)
 
         self.graph.add_layer(self)
 
         Configurable.__init__(self, **options)
 
     def validate(self, input_shape):
-        pass
+        """
+        Validate input shape value before assigning it.
+
+        Parameters
+        ----------
+        input_shape : tuple
+        """
 
     @property
     def input_shape(self):
@@ -185,12 +150,6 @@ class BaseLayer(BaseConnection, Configurable):
 
     def output(self, input_value):
         return input_value
-
-    def initialize(self):
-        self.parameters = {}
-
-        if self.name is None:
-            self.name = generate_layer_name(layer=self)
 
     def add_parameter(self, value, name, shape=None):
         theano_name = 'layer:{layer_name}/{parameter_name}'.format(
@@ -293,7 +252,7 @@ class ArrayShapeProperty(TypedListProperty):
 
         elif value < 1:
             raise ValueError("Integer value is expected to be greater or "
-                             " equal to one for the `{}` property, got {}"
+                             "equal to one for the `{}` property, got {}"
                              "".format(self.name, value))
 
 
@@ -330,13 +289,6 @@ class Input(BaseLayer):
 
         self.input_shape = as_tuple(self.size)
         self.initialize()
-
-    @property
-    def output_shape(self):
-        return self.input_shape
-
-    def output(self, input_value):
-        return input_value
 
     def __repr__(self):
         classname = self.__class__.__name__
