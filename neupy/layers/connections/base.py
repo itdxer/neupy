@@ -178,6 +178,86 @@ class ParallelConnection(BaseConnection):
             self.input_layers.extend(connection.input_layers)
             self.output_layers.extend(connection.output_layers)
 
+    @property
+    def input_shape(self):
+        """
+        Returns input shape per each network parallel
+        connection.
+        """
+        input_shapes = []
+        for connection in self.connections:
+            input_shapes.append(connection.input_shape)
+        return input_shapes
+
+    @property
+    def output_shape(self):
+        """
+        Returns output shape per each network parallel
+        connection.
+        """
+        output_shapes = []
+        for connection in self.connections:
+            output_shapes.append(connection.output_shape)
+        return output_shapes
+
+    def initialize(self):
+        """
+        Initialize all connections.
+        """
+        for connection in self.connections:
+            connection.initialize()
+
+    def output(self, *input_values):
+        """
+        Compute outputs per each network in parallel
+        connection.
+
+        Parameters
+        ----------
+        *input_values
+
+        Returns
+        -------
+        list
+        """
+        n_inputs = len(input_values)
+        n_connections = len(self.connections)
+
+        if n_inputs == 1:
+            input_values = list(input_values) * n_connections
+
+        elif n_inputs != n_connections:
+            raise ValueError("Expected {} input values for parallel "
+                             "connection, got {}".format(n_connections,
+                                                         n_inputs))
+
+        outputs = []
+        for input_value, connection in zip(input_values, self.connections):
+            connection_output = connection.output(input_values)
+            outputs.append(connection_output)
+
+        return outputs
+
+    @contextmanager
+    def disable_training_state(self):
+        """
+        Disable training state for all layers in all
+        connections.
+        """
+        for connection in self.connections:
+            for layer in connection:
+                layer.training_state = False
+
+        yield
+
+        for connection in self.connections:
+            for layer in connection:
+                layer.training_state = True
+
+    def __iter__(self):
+        for connection in self.connections:
+            yield connection
+
 
 class LayerConnection(BaseConnection):
     """
@@ -195,12 +275,18 @@ class LayerConnection(BaseConnection):
             left = ParallelConnection(left)
 
         elif left.connection and left in left.connection.output_layers:
+            # In case layer has already connected to another layer
+            # For instance: in connection `a > b > c` layer `b`
+            # first connects to the `a` layer and then connects
+            # directly to the `c` layer. In both cases connection
+            # was between layers (not between connection and layer)
             left = left.connection
 
         if isinstance(right, (list, tuple)):
             right = ParallelConnection(right)
 
         elif right.connection and right in right.connection.input_layers:
+            # Check comment above
             right = right.connection
 
         self.left = left
@@ -238,9 +324,6 @@ class LayerConnection(BaseConnection):
 
             - tuple: in case if there is one input layer.
               Tuple object defines input layer's shape.
-
-            - None: In case if connection don't have
-              input layers.
         """
         # Cannot save them during initialization step,
         # because input shape can be modified later
@@ -268,9 +351,6 @@ class LayerConnection(BaseConnection):
 
             - tuple: in case if there is one input layer.
               Tuple object defines input layer's shape.
-
-            - None: In case if connection don't have
-              output layers.
         """
         # Cannot save them during initialization step,
         # because input shape can be modified later
