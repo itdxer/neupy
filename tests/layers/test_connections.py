@@ -80,16 +80,32 @@ class ConnectionsTestCase(BaseTestCase):
 
 class ConnectionTypesTestCase(BaseTestCase):
     def test_inline_connections(self):
-        conn = layers.Input(784)
-        conn = conn > layers.Sigmoid(20)
+        input_layer = layers.Input(784)
+        conn = input_layer > layers.Sigmoid(20)
         conn = conn > layers.Sigmoid(10)
 
         self.assertEqual(3, len(conn))
+
         in_sizes = [784, 784, 20]
         out_sizes = [784, 20, 10]
+
         for layer, in_size, out_size in zip(conn, in_sizes, out_sizes):
-            self.assertEqual(layer.input_shape, as_tuple(in_size))
-            self.assertEqual(layer.output_shape, as_tuple(out_size))
+            self.assertEqual(layer.input_shape, as_tuple(in_size),
+                             msg="Layer: {}".format(layer))
+            self.assertEqual(layer.output_shape, as_tuple(out_size),
+                             msg="Layer: {}".format(layer))
+
+    def test_connection_shape_multiple_inputs(self):
+        input_layer_1 = layers.Input(10)
+        input_layer_2 = layers.Input(20)
+        conn = [input_layer_1, input_layer_2] > layers.Concatenate()
+
+        self.assertEqual(conn.input_shape, [(10,), (20,)])
+
+    def test_connection_shape_multiple_outputs(self):
+        conn = layers.Input(10) > [layers.Sigmoid(1), layers.Sigmoid(2)]
+
+        self.assertEqual(conn.output_shape, [(1,), (2,)])
 
     def test_tree_connection_structure(self):
         l0 = layers.Input(1)
@@ -203,6 +219,9 @@ class ConnectionTypesTestCase(BaseTestCase):
             ]],
             layers.Concatenate(),
         )
+
+        self.assertEqual(connection.input_shape, [None, None, None, None])
+
         # Connect them at the end, because we need to make
         # sure tha parallel connections defined without
         # input shapes
