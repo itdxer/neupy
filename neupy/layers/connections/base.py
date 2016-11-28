@@ -218,15 +218,11 @@ class LayerConnection(BaseConnection):
         self.input_layers = self.left.input_layers
         self.output_layers = self.right.output_layers
 
-        # Generates subgraph that contains only layers
-        # between input and output layers
-        self.graph = self.full_graph
-        if self.output_layers:
-            self.graph = self.graph.subgraph_for_output(self.output_layers)
-
-        if self.input_layers:
-            self.graph = self.graph.subgraph_for_output(self.input_layers,
-                                                        graph='forward')
+        # Generates subgraph that contains only connections
+        # between specified input and output layers
+        graph = self.full_graph.subgraph_for_output(self.output_layers)
+        self.graph = graph.subgraph_for_output(self.input_layers,
+                                               graph='forward')
 
     @property
     def input_shape(self):
@@ -248,9 +244,6 @@ class LayerConnection(BaseConnection):
         """
         # Cannot save them during initialization step,
         # because input shape can be modified later
-        if not self.input_layers:
-            return
-
         if len(self.input_layers) == 1:
             input_layer = self.input_layers[0]
             return input_layer.input_shape
@@ -281,9 +274,6 @@ class LayerConnection(BaseConnection):
         """
         # Cannot save them during initialization step,
         # because input shape can be modified later
-        if not self.output_layers:
-            return
-
         if len(self.output_layers) == 1:
             output_layer = self.output_layers[0]
             return output_layer.output_shape
