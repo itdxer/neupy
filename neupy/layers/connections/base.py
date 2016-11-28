@@ -12,6 +12,23 @@ __all__ = ('LayerConnection', 'BaseConnection', 'ParallelConnection')
 class BaseConnection(object):
     """
     Base class from chain connections.
+
+    Attributes
+    ----------
+    connection : LayerConnection or None
+
+    graph : LayerGraph
+        Reference to the graph that contains all lations
+        between layers specified in the connection.
+
+    training_state : bool
+        Defines state of the connection. Defaults to ``True``.
+
+    input_layers : list of layers
+        List of connection's input layers.
+
+    output_layers : list of layers
+        List of connection's output layers.
     """
     def __init__(self):
         self.connection = None
@@ -31,13 +48,25 @@ class BaseConnection(object):
         yield self
 
     def output(self, input_value):
+        """
+        Return output base on the input value.
+
+        Parameters
+        ----------
+        input_value
+        """
         raise NotImplementedError
 
     def initialize(self):
-        pass
+        """
+        Initialize connection
+        """
 
     @contextmanager
     def disable_training_state(self):
+        """
+        Disable connection's training state
+        """
         self.training_state = False
         yield
         self.training_state = True
@@ -108,6 +137,28 @@ def topological_sort(graph):
 
 
 class ParallelConnection(BaseConnection):
+    """
+    Connection between separate layer networks in parallel.
+    Each network has it's own input and out layers.
+
+    Parameters
+    ----------
+    connections : list of list or connection
+        List of networks.
+
+    Attributes
+    ----------
+    connections : list of connections
+        List of networks.
+
+    input_layers : list of connections
+        Combined list of all input layers that each
+        parallel connection has.
+
+    output_layers : list of connections
+        Combined list of all output layers that each
+        parallel connection has.
+    """
     def __init__(self, connections):
         from neupy.layers.base import ResidualConnection
 
@@ -167,6 +218,8 @@ class LayerConnection(BaseConnection):
         self.input_layers = self.left.input_layers
         self.output_layers = self.right.output_layers
 
+        # Generates subgraph that contains only layers
+        # between input and output layers
         self.graph = self.full_graph
         if self.output_layers:
             self.graph = self.graph.subgraph_for_output(self.output_layers)
@@ -177,6 +230,22 @@ class LayerConnection(BaseConnection):
 
     @property
     def input_shape(self):
+        """
+        Connection's input shape/shapes.
+
+        Returns
+        -------
+        list of tuples, tuple or None
+            - List of tuples: in case if there are more than
+              one input layer. Each tuple is a shape of the
+              specific input layer.
+
+            - tuple: in case if there is one input layer.
+              Tuple object defines input layer's shape.
+
+            - None: In case if connection don't have
+              input layers.
+        """
         # Cannot save them during initialization step,
         # because input shape can be modified later
         if not self.input_layers:
@@ -194,6 +263,22 @@ class LayerConnection(BaseConnection):
 
     @property
     def output_shape(self):
+        """
+        Connection's output shape/shapes.
+
+        Returns
+        -------
+        list of tuples, tuple or None
+            - List of tuples: in case if there are more than
+              one input layer. Each tuple is a shape of the
+              specific input layer.
+
+            - tuple: in case if there is one input layer.
+              Tuple object defines input layer's shape.
+
+            - None: In case if connection don't have
+              output layers.
+        """
         # Cannot save them during initialization step,
         # because input shape can be modified later
         if not self.output_layers:
@@ -210,10 +295,31 @@ class LayerConnection(BaseConnection):
         return output_shapes
 
     def initialize(self):
+        """
+        Initialize all layers in the connection.
+        """
         for layer in self:
             layer.initialize()
 
     def output(self, *input_values):
+        """
+        Propagate input values through all layers in the
+        connections and returns output from the final layers.
+
+        Parameters
+        ----------
+        *input_values
+            - Input values can be Theano variables or
+              array-like objects
+
+            - Dictionary inputs should have key that
+              define input layer and value is a variables
+              that needs to be propagated through all layers.
+
+        Returns
+        -------
+        Theano expression
+        """
         subgraph = self.graph
         n_inputs = len(input_values)
 
@@ -230,6 +336,10 @@ class LayerConnection(BaseConnection):
 
     @contextmanager
     def disable_training_state(self):
+        """
+        Disable training state for all layers in the
+        connection.
+        """
         for layer in self:
             layer.training_state = False
 

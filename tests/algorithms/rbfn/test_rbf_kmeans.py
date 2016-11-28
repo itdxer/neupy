@@ -63,3 +63,7 @@ class RBFKMeansTestCase(BaseTestCase):
 
         kmnet.train(data)
         self.assertInvalidVectorPred(kmnet, data.ravel(), target, decimal=2)
+
+    def test_rbfk_means_assign_step_exception(self):
+        with self.assertRaises(ValueError):
+            algorithms.RBFKMeans(n_cluster=2, step=0.01)

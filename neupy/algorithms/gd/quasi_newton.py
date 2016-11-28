@@ -3,8 +3,9 @@ import theano.tensor as T
 from theano.ifelse import ifelse
 import numpy as np
 
-from neupy.core.properties import ChoiceProperty, NumberProperty
-from neupy.algorithms.gd import NoStepSelection
+from neupy.core.properties import (ChoiceProperty, NumberProperty,
+                                   WithdrawProperty)
+from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.algorithms.utils import (parameters2vector, iter_parameter_values,
                                     setup_parameter_updates)
 from neupy.optimizations.wolfe import line_search
@@ -83,7 +84,7 @@ def sr1(inverse_hessian, weight_delta, gradient_delta, epsilon=1e-8):
     )
 
 
-class QuasiNewton(NoStepSelection, GradientDescent):
+class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
     """
     Quasi-Newton algorithm optimization.
 
@@ -97,7 +98,21 @@ class QuasiNewton(NoStepSelection, GradientDescent):
         ``h0_scale`` parameter scales identity matrix.
         Defaults to ``1``.
 
-    {GradientDescent.Parameters}
+    {GradientDescent.connection}
+
+    {GradientDescent.error}
+
+    {GradientDescent.show_epoch}
+
+    {GradientDescent.shuffle_data}
+
+    {GradientDescent.epoch_end_signal}
+
+    {GradientDescent.train_end_signal}
+
+    {GradientDescent.verbose}
+
+    {GradientDescent.addons}
 
     Attributes
     ----------
@@ -136,20 +151,22 @@ class QuasiNewton(NoStepSelection, GradientDescent):
     )
     h0_scale = NumberProperty(default=1, minval=0)
 
+    step = WithdrawProperty()
+
     def init_variables(self):
         super(QuasiNewton, self).init_variables()
         n_params = count_parameters(self.connection)
         self.variables.update(
             inv_hessian=theano.shared(
-                name='quasi-newton/inv-hessian',
+                name='algo:quasi-newton/matrix:inv-hessian',
                 value=asfloat(self.h0_scale * np.eye(int(n_params))),
             ),
             prev_params=theano.shared(
-                name='quasi-newton/prev-params',
+                name='algo:quasi-newton/vector:prev-params',
                 value=asfloat(np.zeros(n_params)),
             ),
             prev_full_gradient=theano.shared(
-                name='quasi-newton/prev-full-gradient',
+                name='algo:quasi-newton/vector:prev-full-gradient',
                 value=asfloat(np.zeros(n_params)),
             ),
         )

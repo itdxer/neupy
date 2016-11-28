@@ -3,7 +3,7 @@ import theano.tensor as T
 from neupy import init
 from neupy.utils import asfloat, as_tuple
 from neupy.core.properties import (NumberProperty, TypedListProperty,
-                                   ParameterProperty)
+                                   ParameterProperty, IntProperty)
 from .utils import dimshuffle
 from .base import ParameterBasedLayer
 
@@ -38,8 +38,10 @@ class ActivationLayer(ParameterBasedLayer):
     ----------
     {ParameterBasedLayer.Attributes}
     """
+    size = IntProperty(minval=1, default=None, allow_none=True)
+
     def __init__(self, size=None, **options):
-        super(ActivationLayer, self).__init__(size, **options)
+        super(ActivationLayer, self).__init__(size=size, **options)
 
     @property
     def output_shape(self):

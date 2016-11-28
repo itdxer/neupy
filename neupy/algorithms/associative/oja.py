@@ -100,10 +100,6 @@ class Oja(BaseNetwork):
     minimized_data_size = IntProperty(minval=1)
     weight = ParameterProperty(default=init.XavierNormal())
 
-    def init_properties(self):
-        del self.shuffle_data
-        super(Oja, self).init_properties()
-
     def train_epoch(self, input_data, target_train):
         weight = self.weight
 

@@ -1,19 +1,18 @@
 from __future__ import division
 
-from numpy import (zeros, argmin, argwhere, take, sum as np_sum,
-                   any as np_any, abs as np_abs)
+import numpy as np
 from numpy.linalg import norm
 
 from neupy.utils import format_data
-from neupy.core.properties import IntProperty
-from neupy.algorithms.gd import NoStepSelection
+from neupy.core.properties import IntProperty, WithdrawProperty
+from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.algorithms.base import BaseNetwork
 
 
 __all__ = ('RBFKMeans',)
 
 
-class RBFKMeans(NoStepSelection, BaseNetwork):
+class RBFKMeans(StepSelectionBuiltIn, BaseNetwork):
     """
     Radial basis function K-means for clustering.
 
@@ -76,6 +75,7 @@ class RBFKMeans(NoStepSelection, BaseNetwork):
            [ 1.]])
     """
     n_clusters = IntProperty(minval=2)
+    step = WithdrawProperty()
 
     def __init__(self, **options):
         self.centers = None
@@ -85,10 +85,10 @@ class RBFKMeans(NoStepSelection, BaseNetwork):
         input_data = format_data(input_data)
 
         centers = self.centers
-        classes = zeros((input_data.shape[0], 1))
+        classes = np.zeros((input_data.shape[0], 1))
 
         for i, value in enumerate(input_data):
-            classes[i] = argmin(norm(centers - value, axis=1))
+            classes[i] = np.argmin(norm(centers - value, axis=1))
 
         return classes
 
@@ -98,15 +98,15 @@ class RBFKMeans(NoStepSelection, BaseNetwork):
         output_train = self.predict(input_train)
 
         for i, center in enumerate(centers):
-            positions = argwhere(output_train[:, 0] == i)
+            positions = np.argwhere(output_train[:, 0] == i)
 
-            if not np_any(positions):
+            if not np.any(positions):
                 continue
 
-            class_data = take(input_train, positions, axis=0)
-            centers[i, :] = (1 / len(class_data)) * np_sum(class_data, axis=0)
+            class_data = np.take(input_train, positions, axis=0)
+            centers[i, :] = (1 / len(class_data)) * np.sum(class_data, axis=0)
 
-        return np_abs(old_centers - centers)
+        return np.abs(old_centers - centers)
 
     def train(self, input_train, epsilon=1e-5, epochs=100):
         n_clusters = self.n_clusters

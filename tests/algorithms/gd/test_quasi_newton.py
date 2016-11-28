@@ -187,3 +187,7 @@ class QuasiNewtonTestCase(BaseTestCase):
 
         roc_curve_score = metrics.roc_auc_score(result, y_test)
         self.assertAlmostEqual(0.92, roc_curve_score, places=2)
+
+    def test_quasi_newton_assign_step_exception(self):
+        with self.assertRaises(ValueError):
+            algorithms.QuasiNewton((2, 3, 1), step=0.01)

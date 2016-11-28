@@ -5,9 +5,10 @@ from theano.tensor import slinalg
 import numpy as np
 
 from neupy.utils import asfloat
-from neupy.core.properties import BoundedProperty, ChoiceProperty
+from neupy.core.properties import (BoundedProperty, ChoiceProperty,
+                                   WithdrawProperty)
 from neupy.algorithms import GradientDescent
-from neupy.algorithms.gd import NoStepSelection, errors
+from neupy.algorithms.gd import StepSelectionBuiltIn, errors
 from neupy.algorithms.utils import (parameters2vector, iter_parameter_values,
                                     setup_parameter_updates)
 
@@ -42,7 +43,7 @@ def compute_jacobian(errors, parameters):
     return T.concatenate(jacobians, axis=1)
 
 
-class LevenbergMarquardt(NoStepSelection, GradientDescent):
+class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
     """
     Levenberg-Marquardt algorithm.
 
@@ -55,6 +56,8 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
 
     Parameters
     ----------
+    {GradientDescent.connection}
+
     mu : float
         Control invertion for J.T * J matrix, defaults to `0.1`.
 
@@ -66,7 +69,17 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
         Levenberg-Marquardt works only for quadratic functions.
         Defaults to ``mse``.
 
-    {GradientDescent.Parameters}
+    {GradientDescent.show_epoch}
+
+    {GradientDescent.shuffle_data}
+
+    {GradientDescent.epoch_end_signal}
+
+    {GradientDescent.train_end_signal}
+
+    {GradientDescent.verbose}
+
+    {GradientDescent.addons}
 
     Attributes
     ----------
@@ -94,6 +107,8 @@ class LevenbergMarquardt(NoStepSelection, GradientDescent):
     mu = BoundedProperty(default=0.01, minval=0)
     mu_update_factor = BoundedProperty(default=1.2, minval=1)
     error = ChoiceProperty(default='mse', choices={'mse': errors.mse})
+
+    step = WithdrawProperty()
 
     def init_variables(self):
         super(LevenbergMarquardt, self).init_variables()
