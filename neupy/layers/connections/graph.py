@@ -166,7 +166,8 @@ def does_layer_expect_one_input(layer):
                          "output method".format(layer))
 
     if not inspect.ismethod(layer.output):
-        raise ValueError("Layer has an `output` property, but it not a method")
+        raise ValueError("Layer has an `output` property, "
+                         "but it not a method")
 
     arginfo = inspect.getargspec(layer.output)
 
@@ -286,18 +287,6 @@ class LayerGraph(object):
             # Layers have been already connected
             return False
 
-        # expect_one_input_layer = does_layer_expect_one_input(to_layer)
-        # if expect_one_input_layer and backward_connections:
-        #     raise LayerConnectionError(
-        #         "Cannot connect `{from_layer}` to the `{to_layer}`. "
-        #         "Layer `{to_layer}` expectes input only from one "
-        #         "layer and it has been alredy connected with "
-        #         "`{to_layer_connection}`.".format(
-        #             from_layer=from_layer,
-        #             to_layer=to_layer,
-        #             to_layer_connection=backward_connections[0]
-        #         ))
-
         forward_connections.append(to_layer)
         backward_connections.append(from_layer)
 
@@ -400,44 +389,37 @@ class LayerGraph(object):
 
         return True
 
-    def subgraph(self, from_layers, to_layers):
-        pass
-
-    def subgraph_for_output(self, layers, graph='backward'):
+    def reverse(self):
         """
-        Exctract subgraph from a graph that contains only
-        layers related to the output layer.
+        Returns graph with reversed connections.
+        """
+        return LayerGraph(self.backward_graph, self.forward_graph)
+
+    def subgraph_for_output(self, output_layers):
+        """
+        Extract subgraph in with specified set
+        of output layers.
 
         Parameters
         ----------
-        layer : layer
+        layers : layer, list of layers
 
         Returns
         -------
         LayerGraph instance
         """
-        if not isinstance(layers, (list, tuple)):
-            layers = [layers]
+        if not isinstance(output_layers, (list, tuple)):
+            output_layers = [output_layers]
 
-        # l = layers
-
-        if all(layer not in self.forward_graph for layer in layers):
+        if all(layer not in self.forward_graph for layer in output_layers):
             return LayerGraph()
 
-        if graph == 'backward':
-            graph = self.backward_graph
-        else:
-            graph = self.forward_graph
-
         observed_layers = []
-        layers = copy.copy(layers)
+        layers = copy.copy(output_layers)
 
         while layers:
             current_layer = layers.pop()
-            if current_layer not in graph:
-                print(pprint.pformat(list(self.backward_graph.items())))
-                print(self)
-            next_layers = graph[current_layer]
+            next_layers = self.backward_graph[current_layer]
 
             for next_layer in next_layers:
                 if next_layer not in observed_layers:
@@ -450,16 +432,37 @@ class LayerGraph(object):
         backward_subgraph = filter_dict(self.backward_graph,
                                         observed_layers)
 
-        # # Remove old relations to the other layers.
-        # # Output layer cannot point to some other layers.
-        # if graph == 'backward':
-        #     for layer in l:
-        #         forward_subgraph[layer] = []
-        # else:
-        #     for layer in l:
-        #         backward_subgraph[layer] = []
+        # Remove old relations to the other layers.
+        # Output layer cannot point to some other layers.
+        for layer in output_layers:
+            forward_subgraph[layer] = []
 
         return LayerGraph(forward_subgraph, backward_subgraph)
+
+    def subgraph(self, input_layers, output_layers):
+        """
+        Create subgraph that contains only layers that
+        has relations between specified input and output
+        layers.
+
+        Parameters
+        ----------
+        input_layers : layer, list of layers
+        output_layers : layer, list of layers
+
+        Returns
+        -------
+        LayerGraph
+        """
+        subgraph = self.subgraph_for_output(output_layers)
+
+        # Output layers for the reversed graph are
+        # input layers for normal graph
+        subgraph_reversed = subgraph.reverse()
+        subgraph_reversed = subgraph_reversed.subgraph_for_output(input_layers)
+
+        # Reverse it to make normal graph
+        return subgraph_reversed.reverse()
 
     @property
     def input_layers(self):
@@ -574,9 +577,5 @@ class LayerGraph(object):
         return len(self.forward_graph)
 
     def __repr__(self):
-        graph = self.forward_graph
-
-        if isinstance(graph, OrderedDict):
-            graph = list(graph.items())
-
+        graph = list(self.forward_graph.items())
         return pprint.pformat(graph)

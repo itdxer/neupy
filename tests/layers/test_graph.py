@@ -1,3 +1,5 @@
+import textwrap
+
 import numpy as np
 import theano.tensor as T
 
@@ -126,7 +128,7 @@ class LayerGraphTestCase(BaseTestCase):
 
         subgraph = graph.subgraph_for_output(le)
         self.assertIsNot(l3, subgraph.forward_graph)
-        self.assertEqual(6, len(subgraph.forward_graph))
+        self.assertEqual(6, len(subgraph))
 
         # Input layers
         self.assertEqual(1, len(subgraph.input_layers))
@@ -180,7 +182,7 @@ class LayerGraphTestCase(BaseTestCase):
         subgraph = graph.subgraph_for_output(l6)
         self.assertIsNot(l4, subgraph.forward_graph)
         self.assertIsNot(l3, subgraph.forward_graph)
-        self.assertEqual(6, len(subgraph.forward_graph))
+        self.assertEqual(6, len(subgraph))
 
         # Input layers
         self.assertEqual(2, len(subgraph.input_layers))
@@ -287,3 +289,24 @@ class LayerGraphTestCase(BaseTestCase):
 
         with self.assertRaises(LayerConnectionError):
             graph.connect_layers(input_layer_1, input_layer_2)
+
+    def test_graph_repr(self):
+        l1 = layers.Input(1)
+        l2 = layers.Sigmoid(2)
+        l3 = layers.Sigmoid(3)
+        l4 = layers.Sigmoid(4)
+
+        graph = LayerGraph()
+
+        graph.connect_layers(l1, l2)
+        graph.connect_layers(l2, l3)
+        graph.connect_layers(l3, l4)
+
+        expected_output = textwrap.dedent("""
+        [(Input(1), [Sigmoid(2)]),
+         (Sigmoid(2), [Sigmoid(3)]),
+         (Sigmoid(3), [Sigmoid(4)]),
+         (Sigmoid(4), [])]
+        """).strip()
+
+        self.assertEqual(expected_output, repr(graph).strip())

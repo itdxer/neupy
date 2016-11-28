@@ -306,9 +306,8 @@ class LayerConnection(BaseConnection):
 
         # Generates subgraph that contains only connections
         # between specified input and output layers
-        graph = self.full_graph.subgraph_for_output(self.output_layers)
-        self.graph = graph.subgraph_for_output(self.input_layers,
-                                               graph='forward')
+        self.graph = self.full_graph.subgraph(self.input_layers,
+                                              self.output_layers)
 
     @property
     def input_shape(self):
