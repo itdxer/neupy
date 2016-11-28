@@ -5,7 +5,8 @@ import numpy as np
 from neupy.core.config import Configurable
 from neupy.core.properties import (Property, ArrayProperty, TypedListProperty,
                                    BoundedProperty, ProperFractionProperty,
-                                   NumberProperty, IntProperty, ChoiceProperty)
+                                   NumberProperty, IntProperty, ChoiceProperty,
+                                   WithdrawProperty)
 
 from base import BaseTestCase
 
@@ -179,3 +180,19 @@ class ChoicesPropertiesTestCase(BaseTestCase):
     def test_choice_property_on_unknown_instance(self):
         prop = ChoiceProperty(choices=[1, 2, 3])
         self.assertEqual(None, prop.__get__(None, None))
+
+
+class WithdrawPropertyTestCase(BaseTestCase):
+    def test_withdraw_property(self):
+        class A(Configurable):
+            prop = Property(default=3)
+
+        class B(A):
+            prop = WithdrawProperty()
+
+        a = A()
+        self.assertIn('prop', a.options)
+        self.assertEqual(a.prop, 3)
+
+        b = B()
+        self.assertNotIn('prop', b.options)

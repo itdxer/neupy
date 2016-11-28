@@ -1,4 +1,5 @@
 from neupy.core.docs import SharedDocs
+from neupy.core.properties import WithdrawProperty
 from neupy.utils import format_data
 
 
@@ -66,17 +67,16 @@ class LazyLearningMixin(SharedDocs):
         it for the prediction. Parameter ``copy`` copies input data
         before saving it inside the network.
     """
+    step = WithdrawProperty()
+    show_epoch = WithdrawProperty()
+    shuffle_data = WithdrawProperty()
+    train_end_signal = WithdrawProperty()
+    epoch_end_signal = WithdrawProperty()
+
     def __init__(self, *args, **kwargs):
         self.input_train = None
         self.target_train = None
         super(LazyLearningMixin, self).__init__(*args, **kwargs)
-
-    def init_properties(self):
-        del self.shuffle_data
-        del self.step
-        del self.show_epoch
-        del self.train_end_signal
-        del self.epoch_end_signal
 
     def train(self, input_train, target_train):
         self.input_train = input_train

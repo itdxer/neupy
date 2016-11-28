@@ -67,3 +67,7 @@ class HessianTestCase(BaseTestCase):
                 [7, 12],
             ])
         )
+
+    def test_hessian_assign_step_exception(self):
+        with self.assertRaises(ValueError):
+            algorithms.Hessian((2, 3, 1), step=0.01)

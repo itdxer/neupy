@@ -8,7 +8,7 @@ from neupy.core.docs import SharedDocs
 
 __all__ = ('BaseProperty', 'Property', 'ArrayProperty', 'BoundedProperty',
            'ProperFractionProperty', 'NumberProperty', 'IntProperty',
-           'TypedListProperty', 'ChoiceProperty')
+           'TypedListProperty', 'ChoiceProperty', 'WithdrawProperty')
 
 
 class BaseProperty(SharedDocs):
@@ -28,6 +28,15 @@ class BaseProperty(SharedDocs):
     allow_none : bool
         When value is equal to ``True`` than ``None`` is a valid
         value for the parameter. Defaults to ``False``.
+
+    Attributes
+    ----------
+    name : str or None
+        Name of the property. ``None`` in case if name
+        wasn't specified.
+
+    expected_type : tuple or object
+        Expected data types of the property.
     """
     expected_type = object
 
@@ -35,6 +44,7 @@ class BaseProperty(SharedDocs):
         self.name = None
         self.default = default
         self.required = required
+        self.allow_none = allow_none
 
         if allow_none:
             self.expected_type = as_tuple(self.expected_type, type(None))
@@ -54,7 +64,9 @@ class BaseProperty(SharedDocs):
                                 availabe_types
                             ))
 
-        self.validate(value)
+        if not self.allow_none or value is not None:
+            self.validate(value)
+
         instance.__dict__[self.name] = value
 
     def __get__(self, instance, owner):
@@ -65,12 +77,6 @@ class BaseProperty(SharedDocs):
             self.__set__(instance, self.default)
 
         return instance.__dict__.get(self.name, None)
-
-    def __delete__(self, instance):
-        name = self.name
-
-        if name in instance.options:
-            del instance.options[name]
 
     def validate(self, value):
         """
@@ -88,6 +94,29 @@ class BaseProperty(SharedDocs):
             return '{}()'.format(classname)
 
         return '{}(name="{}")'.format(classname, self.name)
+
+
+class WithdrawProperty(object):
+    """
+    Defines inherited property that needs to
+    be withdrawed.
+
+    Attributes
+    ----------
+    name : str or None
+        Name of the property. ``None`` in case if name
+        wasn't specified.
+    """
+    def __get__(self, instance, owner):
+        # Remove itself, to make sure that instance doen't
+        # have reference to this property. Instead user should
+        # be able to see default value from the parent classes,
+        # but not alowed to assign different value in __init__
+        # method.
+        #
+        # Other part of functioality defined in the
+        # ``ConfigMeta`` class.
+        del self
 
 
 class Property(BaseProperty):

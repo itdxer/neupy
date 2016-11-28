@@ -3,9 +3,9 @@ import theano.typed_list
 import theano.tensor as T
 from theano.tensor import slinalg
 
-from neupy.core.properties import BoundedProperty
+from neupy.core.properties import BoundedProperty, WithdrawProperty
 from neupy.utils import asfloat
-from neupy.algorithms.gd import NoStepSelection
+from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.algorithms.utils import (parameters2vector, iter_parameter_values,
                                     setup_parameter_updates)
 from neupy.layers.utils import count_parameters
@@ -48,7 +48,7 @@ def find_hessian_and_gradient(error_function, parameters):
     return hessian_matrix, full_gradient
 
 
-class Hessian(NoStepSelection, GradientDescent):
+class Hessian(StepSelectionBuiltIn, GradientDescent):
     """
     Hessian gradient decent optimization. This GD algorithm
     variation using second derivative information helps choose better
@@ -62,7 +62,21 @@ class Hessian(NoStepSelection, GradientDescent):
         algorithm include penalty that add to hessian matrix identity
         multiplied by defined constant. Defaults to ``1``.
 
-    {GradientDescent.Parameters}
+    {GradientDescent.connection}
+
+    {GradientDescent.error}
+
+    {GradientDescent.show_epoch}
+
+    {GradientDescent.shuffle_data}
+
+    {GradientDescent.epoch_end_signal}
+
+    {GradientDescent.train_end_signal}
+
+    {GradientDescent.verbose}
+
+    {GradientDescent.addons}
 
     Attributes
     ----------
@@ -88,6 +102,8 @@ class Hessian(NoStepSelection, GradientDescent):
     :network:`HessianDiagonal` : Hessian diagonal approximation.
     """
     penalty_const = BoundedProperty(default=1, minval=0)
+
+    step = WithdrawProperty()
 
     def init_train_updates(self):
         n_parameters = count_parameters(self.connection)

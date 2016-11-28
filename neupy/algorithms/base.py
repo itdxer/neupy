@@ -283,15 +283,9 @@ class BaseNetwork(BaseSkeleton):
         self.last_epoch = 0
 
         super(BaseNetwork, self).__init__(*args, **options)
-        self.init_properties()
 
         if self.verbose:
             show_network_options(self, highlight_options=options)
-
-    def init_properties(self):
-        """
-        Setup default values before populate the options.
-        """
 
     def predict(self, input_data):
         """

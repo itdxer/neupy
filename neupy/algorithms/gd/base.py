@@ -24,13 +24,13 @@ class GradientDescent(ConstructableNetwork):
 
     Parameters
     ----------
+    {ConstructableNetwork.Parameters}
+
     addons : list or None
         The list of addon algortihms. ``None`` by default.
         If this option is not empty it will generate new class which
         will inherit all from this list. Support two types of
         addon algorithms: weight update and step update.
-
-    {ConstructableNetwork.Parameters}
 
     Attributes
     ----------

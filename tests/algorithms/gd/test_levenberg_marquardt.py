@@ -12,7 +12,7 @@ from base import BaseTestCase
 
 
 class LevenbergMarquardtTestCase(BaseTestCase):
-    def test_jacobian(self):
+    def test_jacobian_for_levenberg_marquardt(self):
         w1 = theano.shared(name='w1', value=asfloat(np.array([[1]])))
         b1 = theano.shared(name='b1', value=asfloat(np.array([0])))
         w2 = theano.shared(name='w2', value=asfloat(np.array([[2]])))
@@ -43,7 +43,7 @@ class LevenbergMarquardtTestCase(BaseTestCase):
             jacobian_actual.eval({x: x_train, y: y_train})
         )
 
-    def test_exceptions(self):
+    def test_levenberg_marquardt_invalid_error_exceptions(self):
         with self.assertRaises(ValueError):
             algorithms.LevenbergMarquardt((2, 3, 1),
                                           error='categorical_crossentropy')
@@ -76,3 +76,7 @@ class LevenbergMarquardtTestCase(BaseTestCase):
         error = lmnet.prediction_error(x_test, y_test)
 
         self.assertAlmostEqual(0.009, error, places=3)
+
+    def test_levenberg_marquardt_assign_step_exception(self):
+        with self.assertRaises(ValueError):
+            algorithms.LevenbergMarquardt((2, 3, 1), step=0.01)

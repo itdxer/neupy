@@ -3,7 +3,7 @@ from collections import namedtuple
 
 from six import with_metaclass
 
-from .properties import BaseProperty
+from .properties import BaseProperty, WithdrawProperty
 from .docs import SharedDocsMeta
 
 
@@ -29,12 +29,17 @@ class ConfigMeta(SharedDocsMeta):
             new_class.options = dict(base_class.options,
                                      **new_class.options)
 
+        options = new_class.options
+
         # Set properties names and save options for different classes
         for key, value in attrs.items():
             if isinstance(value, BaseProperty):
                 value.name = key
-                new_class.options[key] = Option(class_name=clsname,
-                                                value=value)
+                options[key] = Option(class_name=clsname, value=value)
+
+            if isinstance(value, WithdrawProperty) and key in options:
+                del options[key]
+
         return new_class
 
 

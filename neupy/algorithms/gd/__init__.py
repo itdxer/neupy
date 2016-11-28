@@ -27,13 +27,3 @@ class NoMultipleStepSelection(object):
     one neural network.
     """
     supported_addon_types = [SINGLE_STEP_UPDATE, WEIGHT_PENALTY]
-
-
-class NoStepSelection(StepSelectionBuiltIn):
-    """
-    Mixin that excludes step property from neural network
-    class.
-    """
-    def init_properties(self):
-        del self.step
-        super(NoStepSelection, self).init_properties()

@@ -7,8 +7,8 @@ import theano.tensor as T
 from neupy import init
 from neupy.utils import asfloat, as_tuple
 from neupy.core.config import Configurable
-from neupy.core.properties import (TypedListProperty, IntProperty, Property,
-                                   ParameterProperty)
+from neupy.core.properties import (TypedListProperty, IntProperty,
+                                   Property, ParameterProperty)
 from neupy.layers.connections import BaseConnection
 
 
@@ -16,21 +16,18 @@ __all__ = ('BaseLayer', 'ParameterBasedLayer', 'Input', 'ResidualConnection')
 
 
 def generate_layer_name(layer):
-    """ Based on the information inside of the layer generates
-    name that identifies layer inside of the graph.
-
-    Parameters
-    ----------
-    layer : BaseLayer instance
-
-    Returns
-    -------
-    str
-        Layer's name
     """
-    classname = layer.__class__.__name__
-    layer_name = re.sub(re.compile(r'(?<!^)(?=[A-Z])'), '-', classname)
-    return "{}-{}".format(layer_name.lower(), layer.layer_id)
+    Generates unique name for layer.
+    """
+    cls = layer.__class__
+
+    layer_id = cls.global_identifiers_map[cls]
+    cls.global_identifiers_map[cls] += 1
+
+    classname = cls.__name__
+    layer_name = re.sub(r'(?<!^)(?=[A-Z])', '-', classname)
+
+    return "{}-{}".format(layer_name.lower(), layer_id)
 
 
 def create_shared_parameter(value, name, shape):
@@ -90,9 +87,6 @@ class BaseLayer(BaseConnection, Configurable):
     training_state : bool
         Defines whether layer in training state or not.
 
-    layer_id : int
-        Layer's identifier.
-
     parameters : dict
         Trainable parameters.
 
@@ -114,12 +108,8 @@ class BaseLayer(BaseConnection, Configurable):
 
         self.parameters = {}
         self.updates = []
-        self.input_shape_ = None
-
-        cls = self.__class__
-        self.layer_id = self.global_identifiers_map[cls]
-        self.global_identifiers_map[cls] += 1
         self.name = generate_layer_name(layer=self)
+        self.input_shape_ = None
 
         self.graph.add_layer(self)
 
@@ -131,13 +121,12 @@ class BaseLayer(BaseConnection, Configurable):
 
         Parameters
         ----------
-        input_shape : tuple
+        input_shape : tuple with int
         """
 
     @property
     def input_shape(self):
-        if self.input_shape_ is not None:
-            return self.input_shape_
+        return self.input_shape_
 
     @input_shape.setter
     def input_shape(self, value):
@@ -168,7 +157,9 @@ class BaseLayer(BaseConnection, Configurable):
 
 
 class ResidualConnection(BaseLayer):
-    pass
+    """
+    Residual skip connection.
+    """
 
 
 class ParameterBasedLayer(BaseLayer):
@@ -208,9 +199,7 @@ class ParameterBasedLayer(BaseLayer):
     bias = ParameterProperty(default=init.XavierNormal(), allow_none=True)
 
     def __init__(self, size, **options):
-        if size is not None:
-            options['size'] = size
-        super(ParameterBasedLayer, self).__init__(**options)
+        super(ParameterBasedLayer, self).__init__(size=size, **options)
 
     @property
     def weight_shape(self):
