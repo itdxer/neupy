@@ -57,7 +57,7 @@ network = algorithms.Adadelta(
     addons=[algorithms.StepDecay],
 )
 network.architecture()
-network.train(x_train, y_train, x_test, y_test, epochs=15)
+network.train(x_train, y_train, x_test, y_test, epochs=2)
 
 y_predicted = network.predict(x_test).argmax(axis=1)
 y_test_labels = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))

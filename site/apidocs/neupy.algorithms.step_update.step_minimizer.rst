@@ -1,7 +1,7 @@
-neupy.algorithms.step_update.step_minimizer module
+neupy.algorithms.step_update.step_decay module
 ==================================================
 
-.. automodule:: neupy.algorithms.step_update.step_minimizer
+.. automodule:: neupy.algorithms.step_update.step_decay
     :members:
     :undoc-members:
     :show-inheritance:
