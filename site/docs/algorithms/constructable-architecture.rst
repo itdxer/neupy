@@ -129,7 +129,7 @@ In addition you can create custom functions. Function suppose to accept two mand
 Add-ons
 -------
 
-Algorithms with constructuble architectures allow to use additional update rules for parameter regularization and step update. For instance, we want to add :network:`Weight Decay <WeightDecay>` regularization and we want to minimize step monothonically after each epoch.
+Algorithms with constructuble architectures allow to use additional update rules for parameter regularization and step update. For instance, we want to add :network:`Weight Decay <WeightDecay>` regularization and we want to minimize step monotonically after each epoch.
 
 .. code-block:: python
 
@@ -146,10 +146,10 @@ Algorithms with constructuble architectures allow to use additional update rules
         batch_size=16,
 
         addons=[algorithms.WeightDecay,
-                algorithms.StepMinimizer]
+                algorithms.StepDecay]
     )
 
-Both :network:`WeightDecay` and :network:`StepMinimizer` algorithms have additional parameters. In case if you need to modify them - you can add them to the training algorithm.
+Both :network:`WeightDecay` and :network:`StepDecay` algorithms have additional parameters. In case if you need to modify them - you can add them to the training algorithm.
 
 .. code-block:: python
 
@@ -167,12 +167,12 @@ Both :network:`WeightDecay` and :network:`StepMinimizer` algorithms have additio
         step=0.1,
         batch_size=16,
 
-        # Parameters from StepMinimizer
+        # Parameters from StepDecay
         reduction_freq=50,
 
         # Parameters from WeightDecay
         decay_rate=0.05,
 
         addons=[algorithms.WeightDecay,
-                algorithms.StepMinimizer]
+                algorithms.StepDecay]
     )

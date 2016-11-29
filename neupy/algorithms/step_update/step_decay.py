@@ -2,10 +2,10 @@ from neupy.core.properties import IntProperty
 from .base import SingleStepConfigurable
 
 
-__all__ = ('StepMinimizer',)
+__all__ = ('StepDecay',)
 
 
-class StepMinimizer(SingleStepConfigurable):
+class StepDecay(SingleStepConfigurable):
     """
     Algorithm minimizes learning step monotonically after
     each iteration.
@@ -45,7 +45,7 @@ class StepMinimizer(SingleStepConfigurable):
     ...     (2, 4, 1),
     ...     step=0.1,
     ...     reduction_freq=100,
-    ...     addons=[algorithms.StepMinimizer]
+    ...     addons=[algorithms.StepDecay]
     ... )
     >>>
 
@@ -56,7 +56,7 @@ class StepMinimizer(SingleStepConfigurable):
     reduction_freq = IntProperty(minval=1, default=100)
 
     def init_train_updates(self):
-        updates = super(StepMinimizer, self).init_train_updates()
+        updates = super(StepDecay, self).init_train_updates()
         epoch = self.variables.epoch
         step = self.variables.step
 

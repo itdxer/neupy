@@ -55,7 +55,7 @@ Learning rate update rules
     :network:`ErrDiffStepUpdate`, Error difference Update
     :network:`LinearSearch`, Linear search by Golden Search or Brent
     :network:`SearchThenConverge`, Search than converge
-    :network:`StepMinimizer`, Minimize step linearly after each epoch
+    :network:`StepDecay`, Minimize step monotonically after each epoch
 
 Ensembles
 ~~~~~~~~~
