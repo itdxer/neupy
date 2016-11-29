@@ -6,7 +6,7 @@ import numpy as np
 from neupy.core.properties import (ChoiceProperty, NumberProperty,
                                    WithdrawProperty)
 from neupy.algorithms.gd import StepSelectionBuiltIn
-from neupy.algorithms.utils import (parameters2vector, iter_parameter_values,
+from neupy.algorithms.utils import (parameters2vector, parameter_values,
                                     setup_parameter_updates)
 from neupy.optimizations.wolfe import line_search
 from neupy.layers.utils import count_parameters, iter_parameters
@@ -178,7 +178,7 @@ class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
         prev_params = self.variables.prev_params
         prev_full_gradient = self.variables.prev_full_gradient
 
-        params = list(iter_parameter_values(self))
+        params = parameter_values(self.connection)
         param_vector = parameters2vector(self)
 
         gradients = T.grad(self.variables.error_func, wrt=params)

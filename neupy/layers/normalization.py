@@ -1,6 +1,4 @@
-import theano
 import theano.tensor as T
-import numpy as np
 
 from neupy import init
 from neupy.core.properties import (NumberProperty, ProperFractionProperty,
@@ -86,6 +84,16 @@ class BatchNorm(BaseLayer):
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=0)``.
 
+    running_mean : array-like, Theano variable, scalar or Initializer
+        Default initialization methods you can
+        find :ref:`here <init-methods>`.
+        Defaults to ``Constant(value=0)``.
+
+    running_inv_std : array-like, Theano variable, scalar or Initializer
+        Default initialization methods you can
+        find :ref:`here <init-methods>`.
+        Defaults to ``Constant(value=1)``.
+
     {BaseLayer.Parameters}
 
     Methods
@@ -103,10 +111,13 @@ class BatchNorm(BaseLayer):
            http://arxiv.org/pdf/1502.03167v3.pdf
     """
     axes = AxesProperty(default=None)
-    alpha = ProperFractionProperty(default=0.1)
     epsilon = NumberProperty(default=1e-5, minval=0)
-    gamma = ParameterProperty(default=init.Constant(value=1))
+    alpha = ProperFractionProperty(default=0.1)
     beta = ParameterProperty(default=init.Constant(value=0))
+    gamma = ParameterProperty(default=init.Constant(value=1))
+
+    running_mean = ParameterProperty(default=init.Constant(value=0))
+    running_inv_std = ParameterProperty(default=init.Constant(value=1))
 
     def initialize(self):
         super(BatchNorm, self).initialize()
@@ -132,20 +143,15 @@ class BatchNorm(BaseLayer):
                              "with unknown size over the dimension #{} "
                              "(0-based indeces).".format(unknown_dim_index))
 
-        self.running_mean = theano.shared(
-            name='layer:{}/running-mean'.format(self.name),
-            value=np.zeros(parameter_shape),
-        )
-        self.running_inv_std = theano.shared(
-            name='layer:{}/running-inv-std'.format(self.name),
-            value=np.ones(parameter_shape),
-        )
+        self.add_parameter(value=self.running_mean, shape=parameter_shape,
+                           name='running_mean', trainable=False)
+        self.add_parameter(value=self.running_inv_std, shape=parameter_shape,
+                           name='running_inv_std', trainable=False)
 
         self.add_parameter(value=self.gamma, name='gamma',
-                           shape=parameter_shape)
-
+                           shape=parameter_shape, trainable=True)
         self.add_parameter(value=self.beta, name='beta',
-                           shape=parameter_shape)
+                           shape=parameter_shape, trainable=True)
 
     def output(self, input_value):
         epsilon = asfloat(self.epsilon)

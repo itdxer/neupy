@@ -1,4 +1,5 @@
 import re
+from collections import OrderedDict
 
 import six
 import theano
@@ -106,8 +107,8 @@ class BaseLayer(BaseConnection, Configurable):
     def __init__(self, *args, **options):
         super(BaseLayer, self).__init__(*args)
 
-        self.parameters = {}
         self.updates = []
+        self.parameters = OrderedDict()
         self.name = generate_layer_name(layer=self)
         self.input_shape_ = None
 
@@ -140,13 +141,14 @@ class BaseLayer(BaseConnection, Configurable):
     def output(self, input_value):
         return input_value
 
-    def add_parameter(self, value, name, shape=None):
+    def add_parameter(self, value, name, shape=None, trainable=True):
         theano_name = 'layer:{layer_name}/{parameter_name}'.format(
             layer_name=self.name,
-            parameter_name=name.replace('_', '-')
-        )
+            parameter_name=name.replace('_', '-'))
 
         parameter = create_shared_parameter(value, theano_name, shape)
+        parameter.trainable = trainable
+
         self.parameters[name] = parameter
 
         setattr(self, name, parameter)
@@ -214,11 +216,11 @@ class ParameterBasedLayer(BaseLayer):
         super(ParameterBasedLayer, self).initialize()
 
         self.add_parameter(value=self.weight, name='weight',
-                           shape=self.weight_shape)
+                           shape=self.weight_shape, trainable=True)
 
         if self.bias is not None:
             self.add_parameter(value=self.bias, name='bias',
-                               shape=self.bias_shape)
+                               shape=self.bias_shape, trainable=True)
 
     def __repr__(self):
         classname = self.__class__.__name__

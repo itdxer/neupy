@@ -15,6 +15,7 @@ from neupy.exceptions import InvalidConnection
 from neupy.helpers import table
 from neupy.core.properties import ChoiceProperty
 from neupy.algorithms.base import BaseNetwork
+from neupy.algorithms.utils import parameter_values
 from neupy.algorithms.learning import SupervisedLearningMixin
 from .gd import errors
 
@@ -182,8 +183,9 @@ class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
     ----------
     variables : dict
         Theano variables.
+
     methods : dict
-        Theano functions.
+        Compiled Theano functions.
     """
     def __init__(self, *args, **kwargs):
         super(BaseAlgorithm, self).__init__(*args, **kwargs)
@@ -326,7 +328,6 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
         self.input_layer = graph.input_layers[0]
         self.output_layer = graph.output_layers[0]
 
-        self.init_layers()
         super(ConstructableNetwork, self).__init__(*args, **kwargs)
 
     def init_input_output_variables(self):
@@ -389,12 +390,6 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
             )
         )
 
-    def init_layers(self):
-        """
-        Initialize layers in the same order as they were list in
-        network initialization step.
-        """
-
     def init_train_updates(self):
         """
         Initialize train function update in Theano format that
@@ -425,7 +420,7 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
             could be a layer's weight and bias.
         """
         updates = []
-        for parameter in layer.parameters.values():
+        for parameter in parameter_values(layer):
             updates.extend(self.init_param_updates(layer, parameter))
         updates.extend(layer.updates)
         return updates

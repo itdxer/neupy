@@ -72,28 +72,21 @@ class Adamax(MinibatchGradientDescent):
     beta2 = ProperFractionProperty(default=0.999)
     epsilon = NumberProperty(default=1e-8, minval=0)
 
-    def init_layers(self):
-        super(Adamax, self).init_layers()
-        for layer in self.layers:
-            for parameter in layer.parameters.values():
-                parameter_shape = T.shape(parameter).eval()
-                parameter.prev_first_moment = theano.shared(
-                    name="{}/prev-first-moment".format(parameter.name),
-                    value=asfloat(np.zeros(parameter_shape)),
-                )
-                parameter.prev_weighted_inf_norm = theano.shared(
-                    name="{}/prev-weighted-inf-norm".format(parameter.name),
-                    value=asfloat(np.zeros(parameter_shape)),
-                )
-
     def init_param_updates(self, layer, parameter):
         epoch = self.variables.epoch
-        prev_first_moment = parameter.prev_first_moment
-        prev_weighted_inf_norm = parameter.prev_weighted_inf_norm
-
         step = self.variables.step
         beta1 = self.beta1
         beta2 = self.beta2
+
+        parameter_shape = T.shape(parameter).eval()
+        prev_first_moment = theano.shared(
+            name="{}/prev-first-moment".format(parameter.name),
+            value=asfloat(np.zeros(parameter_shape)),
+        )
+        prev_weighted_inf_norm = theano.shared(
+            name="{}/prev-weighted-inf-norm".format(parameter.name),
+            value=asfloat(np.zeros(parameter_shape)),
+        )
 
         gradient = T.grad(self.variables.error_func, wrt=parameter)
 

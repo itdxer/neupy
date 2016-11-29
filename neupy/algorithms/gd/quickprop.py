@@ -50,26 +50,20 @@ class Quickprop(GradientDescent):
     """
     upper_bound = BoundedProperty(default=1, minval=0)
 
-    def init_layers(self):
-        super(Quickprop, self).init_layers()
-        for layer in self.layers:
-            for parameter in layer.parameters.values():
-                parameter_shape = T.shape(parameter).eval()
-                parameter.prev_delta = theano.shared(
-                    name="{}/prev-delta".format(parameter.name),
-                    value=asfloat(np.zeros(parameter_shape)),
-                )
-                parameter.prev_gradient = theano.shared(
-                    name="{}/prev-grad".format(parameter.name),
-                    value=asfloat(np.zeros(parameter_shape)),
-                )
-
     def init_param_updates(self, layer, parameter):
         step = self.variables.step
-        gradient = T.grad(self.variables.error_func, wrt=parameter)
 
-        prev_delta = parameter.prev_delta
-        prev_gradient = parameter.prev_gradient
+        parameter_shape = T.shape(parameter).eval()
+        prev_delta = theano.shared(
+            name="{}/prev-delta".format(parameter.name),
+            value=asfloat(np.zeros(parameter_shape)),
+        )
+        prev_gradient = theano.shared(
+            name="{}/prev-grad".format(parameter.name),
+            value=asfloat(np.zeros(parameter_shape)),
+        )
+
+        gradient = T.grad(self.variables.error_func, wrt=parameter)
         grad_delta = T.abs_(prev_gradient - gradient)
 
         parameter_delta = ifelse(

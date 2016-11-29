@@ -67,33 +67,28 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
     increase_factor = BoundedProperty(minval=1, default=1.2)
     decrease_factor = ProperFractionProperty(default=0.5)
 
-    def init_layers(self):
-        super(RPROP, self).init_layers()
-        for layer in self.layers:
-            for parameter in layer.parameters.values():
-                parameter_shape = T.shape(parameter).eval()
-                parameter.prev_delta = theano.shared(
-                    name="{}/prev-delta".format(parameter.name),
-                    value=asfloat(np.zeros(parameter_shape)),
-                )
-                parameter.prev_gradient = theano.shared(
-                    name="{}/prev-grad".format(parameter.name),
-                    value=asfloat(np.zeros(parameter_shape)),
-                )
-                parameter.steps = theano.shared(
-                    name="{}/steps".format(parameter.name),
-                    value=asfloat(np.ones(parameter_shape) * self.step),
-                )
-
     def init_prev_delta(self, parameter):
-        return parameter.prev_delta
+        parameter_shape = T.shape(parameter).eval()
+        self.prev_delta = theano.shared(
+            name="{}/prev-delta".format(parameter.name),
+            value=asfloat(np.zeros(parameter_shape)),
+        )
+        return self.prev_delta
 
     def init_param_updates(self, layer, parameter):
-        gradient = T.grad(self.variables.error_func, wrt=parameter)
-
-        steps = parameter.steps
         prev_delta = self.init_prev_delta(parameter)
-        prev_gradient = parameter.prev_gradient
+
+        parameter_shape = T.shape(parameter).eval()
+        steps = theano.shared(
+            name="{}/steps".format(parameter.name),
+            value=asfloat(np.ones(parameter_shape) * self.step),
+        )
+        prev_gradient = theano.shared(
+            name="{}/prev-grad".format(parameter.name),
+            value=asfloat(np.zeros(parameter_shape)),
+        )
+
+        gradient = T.grad(self.variables.error_func, wrt=parameter)
 
         grad_product = prev_gradient * gradient
         negative_gradients = T.lt(grad_product, 0)
@@ -123,7 +118,7 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
             (parameter, parameter - parameter_delta),
             (steps, updated_steps),
             (prev_gradient, updated_prev_gradient),
-            (parameter.prev_delta, -parameter_delta),
+            (self.prev_delta, -parameter_delta),
         ]
 
 
@@ -201,6 +196,9 @@ class IRPROPPlus(RPROP):
             self.variables.previous_error.set_value(previous_error)
 
     def init_prev_delta(self, parameter):
+        prev_delta = super(IRPROPPlus, self).init_prev_delta(parameter)
+
         last_error = self.variables.last_error
         prev_error = self.variables.previous_error
-        return T.switch(last_error > prev_error, parameter.prev_delta, 0)
+
+        return T.switch(last_error > prev_error, prev_delta, 0)
