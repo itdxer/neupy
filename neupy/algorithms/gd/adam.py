@@ -72,24 +72,18 @@ class Adam(MinibatchGradientDescent):
     beta2 = ProperFractionProperty(default=0.999)
     epsilon = NumberProperty(default=1e-7, minval=0)
 
-    def init_layers(self):
-        super(Adam, self).init_layers()
-        for layer in self.layers:
-            for parameter in layer.parameters.values():
-                parameter_shape = T.shape(parameter).eval()
-                parameter.prev_first_moment = theano.shared(
-                    name="{}/prev-first-moment".format(parameter.name),
-                    value=asfloat(np.zeros(parameter_shape)),
-                )
-                parameter.prev_second_moment = theano.shared(
-                    name="{}/prev-second-moment".format(parameter.name),
-                    value=asfloat(np.zeros(parameter_shape)),
-                )
-
     def init_param_updates(self, layer, parameter):
         epoch = self.variables.epoch
-        prev_first_moment = parameter.prev_first_moment
-        prev_second_moment = parameter.prev_second_moment
+
+        parameter_shape = T.shape(parameter).eval()
+        prev_first_moment = theano.shared(
+            name="{}/prev-first-moment".format(parameter.name),
+            value=asfloat(np.zeros(parameter_shape)),
+        )
+        prev_second_moment = theano.shared(
+            name="{}/prev-second-moment".format(parameter.name),
+            value=asfloat(np.zeros(parameter_shape)),
+        )
 
         step = asfloat(self.variables.step)
         beta1 = asfloat(self.beta1)

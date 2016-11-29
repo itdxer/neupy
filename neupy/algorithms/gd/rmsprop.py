@@ -47,19 +47,15 @@ class RMSProp(MinibatchGradientDescent):
     decay = ProperFractionProperty(default=0.95)
     epsilon = NumberProperty(default=1e-5, minval=0)
 
-    def init_layers(self):
-        super(RMSProp, self).init_layers()
-        for layer in self.layers:
-            for parameter in layer.parameters.values():
-                parameter_shape = T.shape(parameter).eval()
-                parameter.prev_mean_squred_grad = theano.shared(
-                    name="{}/prev-mean-squared-grad".format(parameter.name),
-                    value=asfloat(np.zeros(parameter_shape)),
-                )
-
     def init_param_updates(self, layer, parameter):
-        prev_mean_squred_grad = parameter.prev_mean_squred_grad
         step = self.variables.step
+
+        parameter_shape = T.shape(parameter).eval()
+        prev_mean_squred_grad = theano.shared(
+            name="{}/prev-mean-squared-grad".format(parameter.name),
+            value=asfloat(np.zeros(parameter_shape)),
+        )
+
         gradient = T.grad(self.variables.error_func, wrt=parameter)
 
         mean_squred_grad = (

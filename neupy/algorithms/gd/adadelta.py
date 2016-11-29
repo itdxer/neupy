@@ -48,28 +48,21 @@ class Adadelta(MinibatchGradientDescent):
     decay = ProperFractionProperty(default=0.95)
     epsilon = NumberProperty(default=1e-5, minval=0)
 
-    def init_layers(self):
-        super(Adadelta, self).init_layers()
-        for layer in self.layers:
-            for parameter in layer.parameters.values():
-                parameter_shape = parameter.get_value().shape
-                parameter.prev_mean_squred_grad = theano.shared(
-                    name="{}/prev-mean-squred-grad".format(parameter.name),
-                    value=asfloat(np.zeros(parameter_shape)),
-                )
-                parameter.prev_mean_squred_dx = theano.shared(
-                    name="{}/prev-mean-squred-dx".format(parameter.name),
-                    value=asfloat(np.zeros(parameter_shape)),
-                )
-
     def init_param_updates(self, layer, parameter):
         step = self.variables.step
         epsilon = self.epsilon
+        parameter_shape = parameter.get_value().shape
+
+        prev_mean_squred_grad = theano.shared(
+            name="{}/prev-mean-squred-grad".format(parameter.name),
+            value=asfloat(np.zeros(parameter_shape)),
+        )
+        prev_mean_squred_dx = theano.shared(
+            name="{}/prev-mean-squred-dx".format(parameter.name),
+            value=asfloat(np.zeros(parameter_shape)),
+        )
 
         gradient = T.grad(self.variables.error_func, wrt=parameter)
-
-        prev_mean_squred_grad = parameter.prev_mean_squred_grad
-        prev_mean_squred_dx = parameter.prev_mean_squred_dx
 
         mean_squred_grad = (
             self.decay * prev_mean_squred_grad +

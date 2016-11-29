@@ -1,32 +1,33 @@
-from itertools import chain
-
 import numpy as np
 import theano.tensor as T
 
+from neupy.layers.utils import iter_parameters
+
 
 __all__ = ('shuffle', 'parameters2vector', 'iter_until_converge',
-           'iter_parameter_values', 'setup_parameter_updates',
+           'parameter_values', 'setup_parameter_updates',
            'normalize_error')
 
 
-def iter_parameter_values(network):
+def parameter_values(connection):
     """
-    Iterate over all network parameters.
+    Iterate over all network's trainable parameters.
 
     Parameters
     ----------
-    network : ConstructableNetwork instance
+    connection : layer, connection
 
-    Returns
-    -------
-    iterator
-        Returns iterator that contains all weights and biases
-        from the network. Parameters from the first layer will
-        be at the beggining and the other will be in the same
-        order as layers in the network.
+    Yields
+    ------
+    Theano shared variable
+        Network's trainable parameter.
     """
-    parameters = [layer.parameters.values() for layer in network.layers]
-    return chain(*parameters)
+    parameters = []
+
+    for _, _, parameter in iter_parameters(connection):
+        parameters.append(parameter)
+
+    return parameters
 
 
 def parameters2vector(network):
@@ -42,7 +43,7 @@ def parameters2vector(network):
     object
         Returns all parameters concatenated in one big vector.
     """
-    params = iter_parameter_values(network)
+    params = parameter_values(network.connection)
     return T.concatenate([param.flatten() for param in params])
 
 

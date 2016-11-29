@@ -42,7 +42,7 @@ def dimshuffle(value, ndim, axes):
     return value.dimshuffle(pattern)
 
 
-def iter_parameters(layers):
+def iter_parameters(layers, only_trainable=True):
     """
     Iterate through layer parameters.
 
@@ -57,7 +57,8 @@ def iter_parameters(layers):
     """
     for layer in layers:
         for attrname, parameter in layer.parameters.items():
-            yield layer, attrname, parameter
+            if parameter.trainable or not only_trainable:
+                yield layer, attrname, parameter
 
 
 def count_parameters(connection):

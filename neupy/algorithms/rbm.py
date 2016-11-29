@@ -3,6 +3,7 @@ import theano.tensor as T
 from theano.ifelse import ifelse
 import numpy as np
 
+from neupy.core.config import ConfigurableABC
 from neupy.core.properties import IntProperty, ParameterProperty
 from neupy.algorithms.base import BaseNetwork
 from neupy.algorithms.constructor import BaseAlgorithm
@@ -115,13 +116,11 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
     hidden_bias = ParameterProperty(default=init.Constant(value=0))
     visible_bias = ParameterProperty(default=init.Constant(value=0))
 
-    def __init__(self, n_hidden, **options):
+    def __init__(self, n_visible, n_hidden, **options):
         self.theano_random = theano_random_stream()
-        super(RBM, self).__init__(n_hidden=n_hidden, **options)
 
-    def init_layers(self):
-        n_hidden = self.n_hidden
-        n_visible = self.n_visible
+        super(ConfigurableABC, self).__init__(n_hidden=n_hidden,
+                                              n_visible=n_visible, **options)
 
         self.weight = create_shared_parameter(
             value=self.weight,
@@ -139,13 +138,14 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
             shape=(n_visible,),
         )
 
+        super(RBM, self).__init__(**options)
+
     def init_input_output_variables(self):
         self.variables.update(
             network_input=T.matrix(name='algo:rbm/var:network-input'),
         )
 
     def init_variables(self):
-        self.init_layers()
         self.variables.update(
             h_samples=theano.shared(
                 name='algo:rbm/matrix:hidden-samples',

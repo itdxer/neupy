@@ -19,9 +19,14 @@ class BackPropAlgsTestCase(BaseTestCase):
         algorithms.QuasiNewton,
         algorithms.RPROP,
         algorithms.IRPROPPlus,
+        algorithms.Adadelta,
+        algorithms.Adagrad,
+        algorithms.Adam,
+        algorithms.Adamax,
+        algorithms.RMSProp,
     ]
 
-    def test_train_data(self):
+    def test_gd_train_data(self):
         for bp_algorithm_class in self.bp_algorithms:
             self.assertInvalidVectorTrain(
                 bp_algorithm_class((2, 1), verbose=False),

@@ -1,14 +1,17 @@
+import tempfile
+
 import numpy as np
 import theano
 import theano.tensor as T
 from scipy import stats
 
-from neupy import layers
+from neupy import layers, algorithms, storage
 from neupy.utils import asfloat
 from neupy.exceptions import LayerConnectionError
 from neupy.layers.normalization import find_opposite_axes
 
 from base import BaseTestCase
+from data import simple_classification
 
 
 class BatchNormTestCase(BaseTestCase):
@@ -109,6 +112,39 @@ class BatchNormTestCase(BaseTestCase):
                 input_value.get_value(),
                 output_value
             )
+
+    def test_batch_norm_storage(self):
+        x_train, x_test, y_train, y_test = simple_classification()
+
+        batch_norm = layers.BatchNorm()
+        gdnet = algorithms.MinibatchGradientDescent(
+            [
+                layers.Input(10),
+                layers.Relu(5),
+                batch_norm,
+                layers.Sigmoid(1),
+            ],
+            batch_size=10,
+        )
+        gdnet.train(x_train, y_train)
+
+        error_before_save = gdnet.prediction_error(x_test, y_test)
+        mean_before_save = batch_norm.running_mean.get_value()
+        inv_std_before_save = batch_norm.running_inv_std.get_value()
+
+        with tempfile.NamedTemporaryFile() as temp:
+            storage.save(gdnet, temp.name)
+            storage.load(gdnet, temp.name)
+
+            error_after_load = gdnet.prediction_error(x_test, y_test)
+            mean_after_load = batch_norm.running_mean.get_value()
+            inv_std_after_load = batch_norm.running_inv_std.get_value()
+
+            self.assertAlmostEqual(error_before_save, error_after_load)
+            np.testing.assert_array_almost_equal(mean_before_save,
+                                                 mean_after_load)
+            np.testing.assert_array_almost_equal(inv_std_before_save,
+                                                 inv_std_after_load)
 
 
 class LocalResponseNormTestCase(BaseTestCase):

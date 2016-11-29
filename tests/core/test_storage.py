@@ -244,7 +244,7 @@ class LayerStorageTestCase(BaseTestCase):
         np.testing.assert_array_almost_equal(weight, relu.weight.get_value())
         np.testing.assert_array_almost_equal(bias, relu.bias.get_value())
 
-    def test_storage_during_the_training(self):
+    def test_storage_save_and_load_during_the_training(self):
         tempdir = tempfile.mkdtemp()
         x_train, x_test, y_train, y_test = simple_classification()
 
@@ -259,8 +259,7 @@ class LayerStorageTestCase(BaseTestCase):
                 storage.load(
                     network.connection,
                     os.path.join(tempdir, 'training-epoch-2'))
-
-                raise StopTraining()
+                raise StopTraining('Stop training process after 4th epoch')
             else:
                 storage.save(
                     network.connection,

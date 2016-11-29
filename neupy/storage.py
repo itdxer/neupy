@@ -1,14 +1,18 @@
+from functools import partial
 from collections import defaultdict
 
 import six
 from six.moves import cPickle as pickle
-from theano.tensor.sharedvar import SharedVariable
 
+from neupy.utils import asfloat
 from neupy.algorithms.base import BaseNetwork
 from neupy.layers.utils import iter_parameters
 
 
 __all__ = ('save', 'load')
+
+
+iter_parameters = partial(iter_parameters, only_trainable=False)
 
 
 def save(connection, filepath):
@@ -61,6 +65,9 @@ def load(connection, source, ignore_missed=False):
     TypeError
         In case if source has invalid data type.
     """
+    if isinstance(connection, BaseNetwork):
+        connection = connection.connection
+
     if isinstance(source, six.string_types):
         with open(source, 'rb') as f:
             data = pickle.load(f)
@@ -83,12 +90,9 @@ def load(connection, source, ignore_missed=False):
                              "".format(layer.name, attrname))
 
         loaded_parameter = data[layer.name][attrname]
-        attrvalue = getattr(layer, attrname, None)
 
-        if attrvalue and isinstance(attrvalue, SharedVariable):
-            attrvalue.set_value(loaded_parameter)
-        else:
-            setattr(layer, attrname, loaded_parameter)
+        attrvalue = getattr(layer, attrname)
+        attrvalue.set_value(asfloat(loaded_parameter))
 
     # We need to initalize connection, to make sure
     # that each layer will generate shared variables

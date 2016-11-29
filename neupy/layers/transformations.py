@@ -160,8 +160,7 @@ class Embedding(BaseLayer):
     ...     layers.Input(n_features),
     ...     layers.Embedding(n_unique_categories, embedded_size),
     ...     # Output from the embedding layer is 3D
-    ...     # For this reason we need to reshape dimensions
-    ...     # and make output 2D
+    ...     # To make output 2D we need to reshape dimensions
     ...     layers.Reshape(),
     ... )
     """
@@ -182,8 +181,8 @@ class Embedding(BaseLayer):
         super(Embedding, self).initialize()
         self.add_parameter(
             value=self.weight, name='weight',
-            shape=as_tuple(self.input_size, self.output_size)
-        )
+            shape=as_tuple(self.input_size, self.output_size),
+            trainable=True)
 
     def output(self, input_value):
         return self.weight[asint(input_value)]

@@ -353,8 +353,10 @@ class PRelu(ActivationLayer):
 
     def initialize(self):
         super(PRelu, self).initialize()
+
         alpha_shape = [self.output_shape[axis - 1] for axis in self.alpha_axes]
-        self.add_parameter(value=self.alpha, name='alpha', shape=alpha_shape)
+        self.add_parameter(value=self.alpha, name='alpha',
+                           shape=alpha_shape, trainable=True)
 
     def activation_function(self, input_value):
         alpha = dimshuffle(self.alpha, input_value.ndim, self.alpha_axes)
