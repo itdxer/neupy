@@ -2,6 +2,7 @@ from collections import defaultdict
 
 import six
 from six.moves import cPickle as pickle
+from theano.tensor.sharedvar import SharedVariable
 
 from neupy.algorithms.base import BaseNetwork
 from neupy.layers.utils import iter_parameters
@@ -82,7 +83,12 @@ def load(connection, source, ignore_missed=False):
                              "".format(layer.name, attrname))
 
         loaded_parameter = data[layer.name][attrname]
-        setattr(layer, attrname, loaded_parameter)
+        attrvalue = getattr(layer, attrname, None)
+
+        if attrvalue and isinstance(attrvalue, SharedVariable):
+            attrvalue.set_value(loaded_parameter)
+        else:
+            setattr(layer, attrname, loaded_parameter)
 
     # We need to initalize connection, to make sure
     # that each layer will generate shared variables

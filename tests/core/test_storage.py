@@ -8,13 +8,14 @@ from sklearn import datasets, preprocessing
 from six.moves import cPickle as pickle
 
 from neupy import algorithms, layers, storage
+from neupy.exceptions import StopTraining
 
 from base import BaseTestCase
 from data import simple_classification
 
 
 class StorageTestCase(BaseTestCase):
-    def test_simple_storage(self):
+    def test_simple_dill_storage(self):
         bpnet = algorithms.GradientDescent((2, 3, 1), step=0.25)
         data, target = datasets.make_regression(n_features=2, n_targets=1)
 
@@ -242,3 +243,38 @@ class LayerStorageTestCase(BaseTestCase):
 
         np.testing.assert_array_almost_equal(weight, relu.weight.get_value())
         np.testing.assert_array_almost_equal(bias, relu.bias.get_value())
+
+    def test_storage_during_the_training(self):
+        tempdir = tempfile.mkdtemp()
+        x_train, x_test, y_train, y_test = simple_classification()
+
+        errors = {}
+
+        def on_epoch_end(network):
+            epoch = network.last_epoch
+
+            errors[epoch] = network.prediction_error(x_test, y_test)
+
+            if epoch == 4:
+                storage.load(
+                    network.connection,
+                    os.path.join(tempdir, 'training-epoch-2'))
+
+                raise StopTraining()
+            else:
+                storage.save(
+                    network.connection,
+                    os.path.join(tempdir, 'training-epoch-{}'.format(epoch)))
+
+        gdnet = algorithms.GradientDescent(
+            connection=(10, 4, 1),
+            epoch_end_signal=on_epoch_end,
+            step=0.5
+        )
+        gdnet.train(x_train, y_train)
+
+        validation_error = gdnet.prediction_error(x_test, y_test)
+
+        self.assertGreater(errors[2], errors[4])
+        self.assertAlmostEqual(validation_error, errors[2])
+        self.assertNotAlmostEqual(validation_error, errors[4])
