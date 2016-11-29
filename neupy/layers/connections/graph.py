@@ -397,7 +397,7 @@ class LayerGraph(object):
 
     def subgraph_for_output(self, output_layers):
         """
-        Extract subgraph in with specified set
+        Extract subgraph with specified set
         of output layers.
 
         Parameters
