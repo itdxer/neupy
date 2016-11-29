@@ -11,8 +11,8 @@ from base import BaseTestCase
 class LinearSearchTestCase(BaseTestCase):
     def test_linear_search(self):
         methods = [
-            ('golden', 0.34202),
-            ('brent', 0.34942),
+            ('golden', 0.34276),
+            ('brent', 0.35192),
         ]
 
         for method_name, valid_error in methods:

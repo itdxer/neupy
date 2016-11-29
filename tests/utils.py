@@ -135,7 +135,9 @@ def image_comparison(original_image_path, figsize=(10, 10), tol=1e-3):
 
     with tempfile.NamedTemporaryFile(suffix='.png') as f:
         figure = plt.figure(figsize=figsize)
+
         yield figure
+
         figure.savefig(f.name)
         error = compare_images(f.name, original_image_path, tol=tol)
 

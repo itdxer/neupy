@@ -16,7 +16,6 @@ class GradientDescentTestCase(BaseTestCase):
     def test_network_attrs(self):
         network = algorithms.GradientDescent((2, 2, 1), verbose=False)
         network.step = 0.1
-        network.bias = True
         network.error = 'mse'
         network.shuffle_data = True
 
@@ -38,7 +37,7 @@ class GradientDescentTestCase(BaseTestCase):
             verbose=False
         )
         network.train(x_train, y_train, epochs=500)
-        self.assertAlmostEqual(network.errors.last(), 0.02, places=3)
+        self.assertAlmostEqual(network.errors.last(), 0.014, places=3)
 
     def test_addons_exceptions(self):
         with self.assertRaises(ValueError):
