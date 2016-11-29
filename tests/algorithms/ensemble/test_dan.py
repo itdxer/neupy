@@ -59,7 +59,7 @@ class DANTestCase(BaseTestCase):
         dan.train(x_train, y_train, epochs=500)
         result = dan.predict(x_test)
         ensemble_result = metrics.accuracy_score(y_test, result)
-        self.assertAlmostEqual(0.9222, ensemble_result, places=4)
+        self.assertAlmostEqual(0.9444, ensemble_result, places=4)
 
     def test_dan_repr(self):
         dan = algorithms.DynamicallyAveragedNetwork([

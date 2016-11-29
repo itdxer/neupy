@@ -182,7 +182,7 @@ class ParameterBasedLayer(BaseLayer):
         Defines layer's bias.
         Default initialization methods you can find
         :ref:`here <init-methods>`. Defaults to
-        :class:`XavierNormal() <neupy.init.XavierNormal>`.
+        :class:`Constant(0) <neupy.init.Constant>`.
         The ``None`` value excludes bias from the calculations and
         do not add it into parameters list.
 
@@ -198,7 +198,7 @@ class ParameterBasedLayer(BaseLayer):
     """
     size = IntProperty(minval=1)
     weight = ParameterProperty(default=init.XavierNormal())
-    bias = ParameterProperty(default=init.XavierNormal(), allow_none=True)
+    bias = ParameterProperty(default=init.Constant(value=0), allow_none=True)
 
     def __init__(self, size, **options):
         super(ParameterBasedLayer, self).__init__(size=size, **options)

@@ -38,7 +38,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
 
         error = rmsle(target_scaler.inverse_transform(y_test),
                       target_scaler.inverse_transform(y_predict).round())
-        self.assertAlmostEqual(0.47, error, places=2)
+        self.assertAlmostEqual(0.48, error, places=2)
 
     def test_ensemble(self):
         data, target = datasets.make_classification(300, n_features=4,
@@ -61,7 +61,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
 
         result = pipeline.predict(x_test)
         ensemble_result = metrics.accuracy_score(y_test, result)
-        self.assertAlmostEqual(0.9222, ensemble_result, places=4)
+        self.assertAlmostEqual(0.9444, ensemble_result, places=4)
 
     def test_grid_search(self):
         def scorer(network, X, y):
