@@ -54,7 +54,7 @@ network = algorithms.Adadelta(
     shuffle_data=True,
 
     reduction_freq=8,
-    addons=[algorithms.StepMinimizer],
+    addons=[algorithms.StepDecay],
 )
 network.architecture()
 network.train(x_train, y_train, x_test, y_test, epochs=15)

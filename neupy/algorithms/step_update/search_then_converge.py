@@ -41,7 +41,7 @@ class SearchThenConverge(SingleStepConfigurable):
 
     See Also
     --------
-    :network:`StepMinimizer`
+    :network:`StepDecay`
     """
     reduction_freq = IntProperty(minval=1, default=100)
     rate_coefitient = NumberProperty(default=0.2)

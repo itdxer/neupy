@@ -16,7 +16,7 @@ class LearningRateUpdatesTestCase(BaseTestCase):
             ],
             step=first_step,
             reduction_freq=50,
-            addons=[algorithms.StepMinimizer]
+            addons=[algorithms.StepDecay]
         )
         network.train(xor_input_train, xor_target_train, epochs=100)
         self.assertAlmostEqual(
