@@ -111,6 +111,7 @@ def asint(value):
         Output would be input value converted to the integer type.
     """
     int2float_types = {
+        'float16': 'int16',
         'float32': 'int32',
         'float64': 'int64',
     }

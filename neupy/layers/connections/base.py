@@ -9,14 +9,23 @@ from .graph import LayerGraph
 __all__ = ('LayerConnection', 'BaseConnection', 'ParallelConnection')
 
 
+class GlobalConnectionState(dict):
+    def __setitem__(self, key, value):
+        return super(GlobalConnectionState, self).__setitem__(id(key), value)
+
+    def __getitem__(self, key):
+        return super(GlobalConnectionState, self).__getitem__(id(key))
+
+    def __contains__(self, key):
+        return super(GlobalConnectionState, self).__contains__(id(key))
+
+
 class BaseConnection(object):
     """
     Base class from chain connections.
 
     Attributes
     ----------
-    connection : LayerConnection or None
-
     graph : LayerGraph
         Reference to the graph that contains all lations
         between layers specified in the connection.
@@ -30,19 +39,41 @@ class BaseConnection(object):
     output_layers : list of layers
         List of connection's output layers.
     """
+    left_states = GlobalConnectionState()
+    right_states = GlobalConnectionState()
+
     def __init__(self):
-        self.connection = None
         self.training_state = True
         self.graph = LayerGraph()
 
         self.input_layers = [self]
         self.output_layers = [self]
 
+    @classmethod
+    def connect(self, left, right):
+        """
+        Make connection between two objects.
+        """
+        main_left, main_right = left, right
+
+        if left in self.right_states and left not in self.left_states:
+            left = self.right_states[left]
+
+        if right in self.left_states and right not in self.right_states:
+            right = self.left_states[right]
+
+        connection = LayerConnection(left, right)
+
+        self.left_states[main_left] = connection
+        self.right_states[main_right] = connection
+
+        return connection
+
     def __gt__(self, other):
-        return LayerConnection(self, other)
+        return self.__class__.connect(self, other)
 
     def __lt__(self, other):
-        return LayerConnection(other, self)
+        return self.__class__.connect(other, self)
 
     def __iter__(self):
         yield self
@@ -169,10 +200,12 @@ class ParallelConnection(BaseConnection):
         self.output_layers = []
 
         for layers in connections:
-            if layers:
-                connection = join(*layers)
-            else:
+            if isinstance(layers, BaseConnection):
+                connection = layers
+            elif not layers:
                 connection = ResidualConnection()
+            else:
+                connection = join(*layers)
 
             self.connections.append(connection)
             self.input_layers.extend(connection.input_layers)
@@ -274,26 +307,11 @@ class LayerConnection(BaseConnection):
         if isinstance(left, (list, tuple)):
             left = ParallelConnection(left)
 
-        elif left.connection and left in left.connection.output_layers:
-            # In case layer has already connected to another layer
-            # For instance: in connection `a > b > c` layer `b`
-            # first connects to the `a` layer and then connects
-            # directly to the `c` layer. In both cases connection
-            # was between layers (not between connection and layer)
-            left = left.connection
-
         if isinstance(right, (list, tuple)):
             right = ParallelConnection(right)
 
-        elif right.connection and right in right.connection.input_layers:
-            # Check comment above
-            right = right.connection
-
         self.left = left
         self.right = right
-
-        self.left.connection = self
-        self.right.connection = self
 
         layers = product(left.output_layers, right.input_layers)
         for left_output, right_input in layers:

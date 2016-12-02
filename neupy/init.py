@@ -232,9 +232,9 @@ class InitializerWithGain(Initializer):
 
     Parameters
     ----------
-    gain : float or {{'relu'}}
+    gain : float or {{``relu``}}
         Multiplies scaling factor by speified gain.
-        The ``relu`` values set up gain equal to :math:`\\sqrt{{2}}`
+        The ``relu`` values set up gain equal to :math:`\\sqrt{{2}}`.
         Defaults to ``1``.
     """
     def __init__(self, gain=1.0):
@@ -306,10 +306,7 @@ class XavierNormal(InitializerWithGain):
 
     Parameters
     ----------
-    gain : float or {{'relu'}}
-        Multiplies scaling factor by speified gain.
-        The ``relu`` values set up gain equal to :math:`\\sqrt{{2}}`
-        Defaults to ``1``.
+    {InitializerWithGain.Parameters}
 
     Methods
     -------
