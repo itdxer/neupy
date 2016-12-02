@@ -467,7 +467,7 @@ Where :math:`w_{ij}` is a weight value on the :math:`i`-th row and :math:`j`-th 
 :math:`\theta` is a threshold.
 Threshold defines the bound to the sign function.
 For this reason :math:`\theta` is equal to 0 for the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>`.
-In terms of a linear algebra we can write formula for the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` energy Function more simplier.
+In terms of a linear algebra we can write formula for the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` energy Function more simpler.
 
 .. math::
 

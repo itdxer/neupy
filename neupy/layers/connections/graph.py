@@ -326,7 +326,12 @@ class LayerGraph(object):
             to_layers = [to_layers]
 
         connections_added = []
+        do_not_have_shapes = True
+
         for from_layer in from_layers:
+            if from_layer.input_shape or from_layer.output_shape:
+                do_not_have_shapes = False
+
             for to_layer in to_layers:
                 connection_added = self.add_connection(from_layer, to_layer)
                 connections_added.append(connection_added)
@@ -334,7 +339,7 @@ class LayerGraph(object):
         if not any(connections_added):
             return False
 
-        if all(layer.input_shape is None for layer in from_layers):
+        if do_not_have_shapes:
             return True
 
         # Layer has an input shape which means that we can

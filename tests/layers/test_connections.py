@@ -23,7 +23,7 @@ class ConnectionsTestCase(BaseTestCase):
 
         for connection in possible_connections:
             network = algorithms.GradientDescent(connection)
-            self.assertEqual(len(network.layers), 3)
+            self.assertEqual(len(network.layers), 3, msg=connection)
 
     def test_connection_inside_connection_mlp(self):
         connection = layers.join(
@@ -219,6 +219,51 @@ class ConnectionTypesTestCase(BaseTestCase):
         self.assertEqual((24, 5, 5), connection.output_shape)
 
 
+class InlineConnectionsTestCase(BaseTestCase):
+    def test_inline_connection_with_parallel_connection(self):
+        left_branch = layers.join(
+            layers.Convolution((32, 3, 3)),
+            layers.Relu(),
+            layers.MaxPooling((2, 2)),
+        )
+
+        right_branch = layers.join(
+            layers.Convolution((16, 7, 7)),
+            layers.Relu(),
+        )
+
+        input_layer = layers.Input((3, 10, 10))
+        concat = layers.Concatenate()
+
+        network_concat = input_layer > [left_branch, right_branch] > concat
+        network = network_concat > layers.Reshape() > layers.Softmax()
+
+        self.assertEqual(network_concat.input_shape, (3, 10, 10))
+        self.assertEqual(network_concat.output_shape, (48, 4, 4))
+
+        self.assertEqual(network.input_shape, (3, 10, 10))
+        self.assertEqual(network.output_shape, (768,))
+
+    def test_inline_connection_wtih_different_pointers(self):
+        relu_2 = layers.Relu(2)
+
+        connection_1 = layers.Input(1) > relu_2 > layers.Relu(3)
+        connection_2 = relu_2 > layers.Relu(4)
+        connection_3 = layers.Input(1) > relu_2
+
+        self.assertEqual(connection_1.input_shape, (1,))
+        self.assertEqual(connection_1.output_shape, (3,))
+
+        self.assertEqual(connection_2.input_shape, (1,))
+        self.assertEqual(connection_2.output_shape, (4,))
+
+        self.assertEqual(connection_3.input_shape, (1,))
+        self.assertEqual(connection_3.output_shape, (2,))
+
+        self.assertIn(relu_2, connection_2.input_layers)
+        self.assertIn(relu_2, connection_3.output_layers)
+
+
 class ConnectionSecondaryFunctionsTestCase(BaseTestCase):
     def test_is_sequential_connection(self):
         connection1 = layers.join(
@@ -263,6 +308,17 @@ class ConnectionSecondaryFunctionsTestCase(BaseTestCase):
                 output = 'attribute'
 
             does_layer_expect_one_input(A)
+
+    def test_partial_connection(self):
+        network = layers.Sigmoid(1) > layers.Sigmoid(2)
+
+        layer_1, layer_2 = list(network)
+
+        self.assertEqual(layer_1.input_shape, None)
+        self.assertEqual(layer_1.output_shape, (1,))
+
+        self.assertEqual(layer_2.input_shape, (1,))
+        self.assertEqual(layer_2.output_shape, (2,))
 
 
 class TestParallelConnectionsTestCase(BaseTestCase):

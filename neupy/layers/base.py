@@ -19,6 +19,14 @@ __all__ = ('BaseLayer', 'ParameterBasedLayer', 'Input', 'ResidualConnection')
 def generate_layer_name(layer):
     """
     Generates unique name for layer.
+
+    Parameters
+    ----------
+    layer : BaseLayer
+
+    Returns
+    -------
+    str
     """
     cls = layer.__class__
 

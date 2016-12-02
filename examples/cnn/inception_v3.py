@@ -112,7 +112,6 @@ inception_v3 = layers.join(
         ConvReluBN((64, 1, 1)),
         ConvReluBN((96, 3, 3), padding=1),
         ConvReluBN((96, 3, 3), stride=2),
-
     ], [
         layers.MaxPooling((3, 3), stride=(2, 2))
     ]],
