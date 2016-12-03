@@ -1,13 +1,13 @@
 from neupy.layers import Step, Input
 from neupy.layers.connections import LayerConnection
 from neupy.exceptions import InvalidConnection
-from neupy.algorithms.constructor import ConstructableNetwork
+from neupy.algorithms.constructor import ConstructibleNetwork
 
 
 __all__ = ('BaseLinearNetwork',)
 
 
-class BaseLinearNetwork(ConstructableNetwork):
+class BaseLinearNetwork(ConstructibleNetwork):
     """
     Base class for feedforward neural network without hidden layers.
 
@@ -32,7 +32,7 @@ class BaseLinearNetwork(ConstructableNetwork):
         First integer defines number of input units and the
         seconds one number of output units.
 
-    {ConstructableNetwork.error}
+    {ConstructibleNetwork.error}
 
     {BaseNetwork.Parameters}
 

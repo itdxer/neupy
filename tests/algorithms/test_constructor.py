@@ -4,7 +4,7 @@ from neupy import layers
 from neupy.exceptions import InvalidConnection
 from neupy.algorithms.constructor import (create_input_variable,
                                           create_output_variable,
-                                          ConstructableNetwork,
+                                          ConstructibleNetwork,
                                           generate_layers)
 
 from base import BaseTestCase
@@ -29,7 +29,7 @@ class NetworkConstructorTestCase(BaseTestCase):
         self.assertIn('vector', str(var.type))
 
 
-class ConstructableNetworkTestCase(BaseTestCase):
+class ConstructibleNetworkTestCase(BaseTestCase):
     def test_multi_input_exception(self):
         connection = layers.join([
             [layers.Input(10)],
@@ -37,7 +37,7 @@ class ConstructableNetworkTestCase(BaseTestCase):
         ]) > layers.Concatenate()
 
         with self.assertRaises(InvalidConnection):
-            ConstructableNetwork(connection)
+            ConstructibleNetwork(connection)
 
     def test_multi_output_exception(self):
         connection = layers.Input(10) > [
@@ -46,9 +46,9 @@ class ConstructableNetworkTestCase(BaseTestCase):
         ]
 
         with self.assertRaises(InvalidConnection):
-            ConstructableNetwork(connection)
+            ConstructibleNetwork(connection)
 
     def test_no_updates_by_default(self):
-        net = ConstructableNetwork(layers.Input(10) > layers.Sigmoid(1))
+        net = ConstructibleNetwork(layers.Input(10) > layers.Sigmoid(1))
         updates = net.init_param_updates(layer=None, parameter=None)
         self.assertEqual(updates, [])

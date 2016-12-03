@@ -6,8 +6,7 @@ from neupy import algorithms, layers, environment
 
 
 environment.reproducible()
-theano.config.floatX = 'float32'
-theano.config.allow_gc = False
+environment.speedup()
 
 mnist = datasets.fetch_mldata('MNIST original')
 

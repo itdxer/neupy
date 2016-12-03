@@ -11,20 +11,20 @@ import numpy as np
 from neupy.core.config import Configurable
 from neupy.core.properties import Property, BoundedProperty
 from neupy.utils import as_tuple
-from neupy.algorithms.constructor import ConstructableNetwork
+from neupy.algorithms.constructor import ConstructibleNetwork
 from neupy.algorithms.gd import addon_types
 
 
 __all__ = ('GradientDescent', 'MinibatchGradientDescent')
 
 
-class GradientDescent(ConstructableNetwork):
+class GradientDescent(ConstructibleNetwork):
     """
-    GradientDescent algorithm.
+    Gradient descent algorithm.
 
     Parameters
     ----------
-    {ConstructableNetwork.Parameters}
+    {ConstructibleNetwork.Parameters}
 
     addons : list or None
         The list of addon algortihms. ``None`` by default.
@@ -34,11 +34,11 @@ class GradientDescent(ConstructableNetwork):
 
     Attributes
     ----------
-    {ConstructableNetwork.Attributes}
+    {ConstructibleNetwork.Attributes}
 
     Methods
     -------
-    {ConstructableNetwork.Methods}
+    {ConstructibleNetwork.Methods}
 
     Examples
     --------
@@ -85,14 +85,14 @@ class GradientDescent(ConstructableNetwork):
                 opt_class_name = addon_class.__name__
                 supported_opts = ', '.join(addon_types.values())
                 raise ValueError(
-                    "Invalid add-on class `{}`. Class supports only "
+                    "Invalid add-on class '{}'. Class supports only "
                     "{}".format(opt_class_name, supported_opts)
                 )
 
             if opt_class_type in identified_types:
                 raise ValueError(
                     "There can be only one add-on class with "
-                    "type `{}`".format(addon_types[opt_class_type])
+                    "type '{}'".format(addon_types[opt_class_type])
                 )
 
             identified_types.append(opt_class_type)
@@ -229,8 +229,10 @@ def format_error(error):
     --------
     >>> format_error(None)
     '?'
+    >>>
     >>> format_error(0.43)
     '0.43000'
+    >>>
     >>> format_error(1 / 3.)
     '0.33333'
     """

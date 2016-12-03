@@ -1,8 +1,6 @@
 Environments
 ============
 
-This is a simple functionality that can help you set up your environment.
-
 Reproducible environment
 ------------------------
 
@@ -24,3 +22,13 @@ This functionality helps set up some Theano configurations that can speed up com
 
     from neupy import environment
     environment.sandbox()
+
+Speedup calculation
+-------------------
+
+Set up 32-bit float type for all tensors and scallers. In addition this method disables garbage collector and speed up calculation, but it increases amount of memory that Theano use for computation.
+
+.. code-block:: python
+
+    from neupy import environment
+    environment.speedup()

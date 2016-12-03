@@ -13,6 +13,7 @@ User Guide
 * Check the `tutorials <tutorials.html>`_
 * Learn more about NeuPy in the `documentation <documentation.html>`_
 * Explore lots of different `neural network algorithms <cheatsheet.html>`_.
+* Read `articles <archive.html>`_ and learn more about Neural Networks.
 
 Supported Features
 ------------------

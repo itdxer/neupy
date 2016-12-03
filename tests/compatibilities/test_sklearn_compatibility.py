@@ -91,3 +91,14 @@ class SklearnCompatibilityTestCase(BaseTestCase):
 
         best_score = min(scores['mean_test_score'])
         self.assertAlmostEqual(0.4266, best_score, places=3)
+
+    def test_transfrom_method(self):
+        dataset = datasets.load_diabetes()
+
+        grnnet = algorithms.GRNN(std=0.5, verbose=False)
+        grnnet.train(dataset.data, dataset.target)
+
+        y_predicted = grnnet.predict(dataset.data)
+        y_transformed = grnnet.transform(dataset.data)
+
+        np.testing.assert_array_almost_equal(y_predicted, y_transformed)

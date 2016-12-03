@@ -6,7 +6,7 @@ Training Algorithms
     :maxdepth: 2
 
     algorithms/basics
-    algorithms/constructable-architecture
+    algorithms/constructible-architecture
     algorithms/fixed-architecture
     algorithms/signals
     algorithms/sklearn-compatibility

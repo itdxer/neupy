@@ -12,6 +12,15 @@ from data import simple_classification
 
 
 class ActivationLayersTestCase(BaseTestCase):
+    def test_activation_layers_without_size(self):
+        input_data = np.array([1, 2, -1, 10])
+        expected_output = np.array([1, 2, 0, 10])
+
+        layer = layers.Relu()
+        actual_output = layer.output(input_data)
+
+        np.testing.assert_array_equal(actual_output, expected_output)
+
     def test_sigmoid_layer(self):
         layer1 = layers.Sigmoid(1)
         self.assertGreater(1, layer1.activation_function(1).eval())

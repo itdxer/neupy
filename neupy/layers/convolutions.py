@@ -167,6 +167,27 @@ class Convolution(ParameterBasedLayer):
 
     {BaseLayer.Parameters}
 
+    Examples
+    --------
+    2D Convolution
+
+    >>> from neupy import layers
+    >>>
+    >>> layers.join(
+    ...     layers.Input((3, 28, 28)),
+    ...     layers.Convolution((16, 3, 3)),
+    ... )
+
+    1D Convolution
+
+    >>> from neupy import layers
+    >>>
+    >>> layers.join(
+    ...     layers.Input((10, 30)),
+    ...     layers.Reshape((10, 30, 1)),
+    ...     layers.Convolution((16, 3, 1)),
+    ... )
+
     Methods
     -------
     {ParameterBasedLayer.Methods}

@@ -75,6 +75,12 @@ class BaseConnection(object):
     def __lt__(self, other):
         return self.__class__.connect(other, self)
 
+    def __rshift__(self, other):
+        return self.__class__.connect(self, other)
+
+    def __lshift__(self, other):
+        return self.__class__.connect(other, self)
+
     def __iter__(self):
         yield self
 

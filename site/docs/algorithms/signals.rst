@@ -1,27 +1,22 @@
-Signals
-=======
+Signals and Early stopping
+==========================
 
 Basics
-~~~~~~
+------
 
-Signal is a simple approach that helps you implement functions which will be triggered in specific case.
-In training process there are 2 of them.
-First one will be triggered after epoch training procedure.
-Also you can controll at the rate in which network will trigger this signal.
-The second one will be triggered when all traning is finished.
+Signals is a special type of functions that can be triggered after a certain event. Most of the NeuPy algorithm supports two types of events
 
-By default all signals are already defined and they display useful information about training in ``verbose`` mode.
-
-Here is the example where we define two custom signals which will display useful information.
+1. ``epoch_end_signal`` - event that triggers after each training epoch
+2. ``train_end_signal`` - event that triggers at the end of the training
 
 .. code-block:: python
 
     from neupy import algorithms
 
-    def on_epoch_end(network):
-        print(network.last_epoch)
+    def on_epoch_end(bpnet):
+        print("Last epoch: {}".format(bpnet.last_epoch))
 
-    def on_training_end(network):
+    def on_training_end(bpnet):
         print("Training finished")
 
     bpnet = algorithms.GradientDescent(
@@ -32,27 +27,57 @@ Here is the example where we define two custom signals which will display useful
         verbose=True
     )
 
-We define two new functions that rewrite all outputs and display their own information on every trigger signal.
-Also we define parameter ``show_epoch`` that will control ``epoch_end_signal`` signal frequency.
-It's useful when there are a lot of epochs in network and we don't want to see each of them.
-
-Property ``verbose`` just control logging output, but doesn't make any effect on signals.
+Each signal can be defined as a function that accepts one mandatory argument. When event callback function triggers training algorithm passes its instance as a first argument to the callback.
 
 Early stopping
-~~~~~~~~~~~~~~
+--------------
 
-The other useful feature releated to the signals is that you can can implement your own rule that can interrupt training procedure. Here is a simple example:
+Signals allow us to interrupt training process.
 
 .. code-block:: python
 
-    from neupy import algorithms
+    from neupy import algorithms, layers
     from neupy.exceptions import StopTraining
 
-    def on_epoch_end(network):
-        if network.errors.last() < 0.001:
-            raise StopTraining("Stop training")
+    def on_epoch_end(gdnet):
+        if gdnet.errors.last() < 0.001:
+            raise StopTraining("Training has been interrupted")
 
     gdnet = algorithms.GradientDescent(
-        (2, 3, 1),
+        [
+            layers.Input(784),
+            layers.Relu(500),
+            layers.Relu(300),
+            layers.Softmax(10),
+        ],
+        epoch_end_signal=on_epoch_end,
+    )
+
+If we use constructible architectures than it's possible to save parameter after each training epoch and load them in case if validation error increases.
+
+.. code-block:: python
+
+    from neupy import algorithms, layers, storage
+    from neupy.exceptions import StopTraining
+
+    def on_epoch_end(gdnet):
+        epoch = gdnet.last_epoch
+        errors = gdnet.validation_errors
+
+        if errors.previous() and errors.last() > errors.previous():
+            # Load parameters and stop training
+            storage.load(gdnet, 'training-epoch-{}.pickle'.format(epoch - 1))
+            raise StopTraining("Training has been interrupted")
+        else:
+            # Save parameters after successful epoch
+            storage.save(gdnet, 'training-epoch-{}.pickle'.format(epoch))
+
+    gdnet = algorithms.GradientDescent(
+        [
+            layers.Input(784),
+            layers.Relu(500),
+            layers.Relu(300),
+            layers.Softmax(10),
+        ],
         epoch_end_signal=on_epoch_end,
     )

@@ -1,8 +1,3 @@
-"""
-Code source:
-http://matplotlib.org/examples/specialty_plots/hinton_demo.html
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
@@ -50,6 +45,10 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
     >>> plt.figure(figsize=(16, 12))
     >>> plots.hinton(weight)
     >>> plt.show()
+
+    References
+    ----------
+    [1] http://matplotlib.org/examples/specialty_plots/hinton_demo.html
     """
     if ax is None:
         ax = plt.gca()

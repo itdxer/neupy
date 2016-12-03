@@ -36,7 +36,7 @@ def parameters2vector(network):
 
     Parameters
     ----------
-    network : ConstructableNetwork instance
+    network : ConstructibleNetwork instance
 
     Returns
     -------

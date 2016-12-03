@@ -1,22 +1,7 @@
 Parameter Initialization Methods
---------------------------------
+================================
 
-This is a small topic that help you to understand how to initialize weight, bias and other parameters in NeuPy. The simplest way is to define initial weights inside the code.
-
-.. code-block:: python
-
-    import numpy as np
-    from neupy import layers, algorithms
-
-    gdnet = algorithms.GradientDescent(
-        [
-            layers.Input(10),
-            layers.Sigmoid(30, weight=np.random.randn(10, 30)),
-            layers.Sigmoid(15, weight=np.random.randn(30, 15)),
-        ]
-    )
-
-This way is fine, but you can see that we need to hardcode parameter shape. In case if we want to change number of units in the hidden layer we need to update weight's shape as well. For more complicated rules code become messy. There is a better way to define parameters in the NeuPy. Here is an example.
+This is a small topic that help you to understand how to initialize weights, bias and other parameters in NeuPy.
 
 .. code-block:: python
 
@@ -32,10 +17,42 @@ This way is fine, but you can see that we need to hardcode parameter shape. In c
 
 Basically we set up parameter equal to initialization method. So weight parameter will be defined based on the algorithm inside of the class.
 
+Also it's possible to set up your own weight for layers.
+
+.. code-block:: python
+
+    import numpy as np
+    from neupy import layers, algorithms
+
+    gdnet = algorithms.GradientDescent(
+        [
+            layers.Input(10),
+            layers.Sigmoid(30, weight=np.random.randn(10, 30)),
+            layers.Sigmoid(15, weight=np.random.randn(30, 15)),
+        ]
+    )
+
 More initialization methods you can find :ref:`here <init-methods>`.
 
-Custom methods
-**************
+Shared parameters between layers
+--------------------------------
+
+.. code-block:: python
+
+    >>> from neupy import layers
+    >>>
+    >>> hidden_layer_1 = layers.Relu(10)
+    >>> network = layers.Input(10) > hidden_layer_1
+    >>>
+    >>> hidden_layer_2 = layers.Relu(10, weight=hidden_layer_1.weight,
+    ...                              bias=hidden_layer_1.bias)
+    >>>
+    >>> network = network > hidden_layer_2
+    >>> network
+    Input(10) > Relu(10) > Relu(10)
+
+Create custom initialization methods
+------------------------------------
 
 It is possible to define custom initialization method.
 
@@ -58,3 +75,5 @@ It is possible to define custom initialization method.
             layers.Sigmoid(15, weight=Exponential()),
         ]
     )
+
+Initialization class requires only the ``sample`` method that accepts ``shape`` argument and returns tensor with specified shape.
