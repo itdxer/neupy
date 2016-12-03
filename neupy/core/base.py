@@ -52,6 +52,9 @@ class BaseSkeleton(ConfigurableABC, Verbose):
     def predict(self, input_data):
         raise NotImplementedError
 
+    def transform(self, input_data):
+        return self.predict(input_data)
+
     def fit(self, X, y, *args, **kwargs):
         self.train(X, y, *args, **kwargs)
         return self

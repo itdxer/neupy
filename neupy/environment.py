@@ -4,7 +4,7 @@ import theano
 import numpy as np
 
 
-__all__ = ('sandbox', 'reproducible')
+__all__ = ('sandbox', 'reproducible', 'speedup')
 
 
 def sandbox():
@@ -28,3 +28,11 @@ def reproducible(seed=0):
     """
     np.random.seed(seed)
     random.seed(seed)
+
+
+def speedup():
+    """
+    Speed up Theano's computation.
+    """
+    theano.config.floatX = 'float32'
+    theano.config.allow_gc = False

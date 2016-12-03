@@ -34,9 +34,9 @@ class Adam(MinibatchGradientDescent):
 
     {GradientDescent.addons}
 
-    {ConstructableNetwork.connection}
+    {ConstructibleNetwork.connection}
 
-    {ConstructableNetwork.error}
+    {ConstructibleNetwork.error}
 
     {BaseNetwork.show_epoch}
 

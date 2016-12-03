@@ -6,11 +6,15 @@ Tutorials
 Tutorial Articles
 -----------------
 
+There are a few articles that can help you to start working with NeuPy. They provide a solution to different problems and explain each step of the overall process.
+
 * :ref:`mnist-classification`
 * :ref:`boston-house-price`
 
 Code Examples
 -------------
+
+NeuPy is very intuitive and it's easy to read and understand code. To learn more about different Neural Network types you can check these code examples.
 
 Convolutional Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

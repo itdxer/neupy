@@ -1,4 +1,4 @@
-Algorithms with Constructable Network Architecture
+Algorithms with Constructible Network Architecture
 ==================================================
 
 .. contents::
@@ -6,16 +6,25 @@ Algorithms with Constructable Network Architecture
 Set up connections
 ------------------
 
-There are three ways to set up your connection between layers. First one is the simplest one. You just define a list or tuple with the integers. Each integer in the sequence identifies layer's size.
+There are three ways to set up connection between layers. We can use predefined networks as a first argument
 
 .. code-block:: python
 
-    from neupy import algorithms
-    bpnet = algorithms.GradientDescent((2, 4, 1))
+    from neupy import algorithms, layers
 
-In that way we don't actually set up any layer types. By default NeuPy constructs from the tuple simple MLP networks that contains dense layers with sigmoid as a nonlinear activation function.
+    network = layers.join(
+        layers.Input(10),
+        layers.Sigmoid(40),
+        layers.Sigmoid(2),
+    )
 
-The second method is the most common one. Instead of defining connections using ``layers.join`` funtion we can simply define it as a parameter to the training algorithm.
+    bpnet = algorithms.GradientDescent(
+        network,
+        step=0.2,
+        shuffle_data=True
+    )
+
+Or we can set up a list of layers that define sequential relations between layers.
 
 .. code-block:: python
 
@@ -32,7 +41,9 @@ The second method is the most common one. Instead of defining connections using 
         shuffle_data=True
     )
 
-Also network accepts connections as an input
+This is just a syntax simplification that allows to avoid ``layer.join`` function usage.
+
+Small networks can be defined with a help of inline operator.
 
 .. code-block:: python
 
@@ -45,52 +56,26 @@ Also network accepts connections as an input
         shuffle_data=True
     )
 
-Or we can use predefined connection with ``layers.join`` function.
+And the last way to define connections is just to set up value equal to a list or a tuple of integers.
 
 .. code-block:: python
 
-    from neupy import algorithms, layers
+    from neupy import algorithms
+    bpnet = algorithms.GradientDescent((2, 4, 1))
 
-    connection = layers.join(
-        layers.Input(10),
-        layers.Sigmoid(40),
-        layers.Sigmoid(2),
-    )
-
-    bpnet = algorithms.GradientDescent(
-        connection,
-        step=0.2,
-        shuffle_data=True
-    )
-
-The nice thing that we don't need to initialize connections. Network will do it for you. In addition network compiles training and prediction functions after initializations, which simplifies overall procedrure.
+It's obvious that during initialization we didn't actually set up any layer types. By default NeuPy constructs from the tuple simple MLP network that contains dense layers with sigmoid activation function. This type of initialization typically suitable for tests or model benchmarks.
 
 Algorithms
 ----------
 
-NeuPy supports lots of different training algorithms. You can check :ref:`Cheat sheet <cheatsheet-backprop-algorithms>` if you want to learn more about them.
+NeuPy supports lots of different training algorithms based on the backpropagation. You can check :ref:`Cheat sheet <cheatsheet-backprop-algorithms>` if you want to learn more about them.
 
-Each algorithm has a specific set of parameters and not all of the algorithms are sutable for deep learning models. Some of the methods like :network:`Levenberg-Marquardt <LevenbergMarquardt>` or :network:`Conjugate Gradient <ConjugateGradient>` work better for small networks and they would be extremely slow for deep networks. In addtion some of the algorithm are not able to train on mini-batches, so you need to check whether algorithm support mini-batches before using it. Algorithm that support mini-batch training should have ``batch_size`` parameters.
-
-.. code-block:: python
-
-    from neupy import algorithms, layers
-
-    nnet = algorithms.MinibatchGradientDescent(
-        [
-            layers.Input(784),
-            layers.Relu(500),
-            layers.Relu(300),
-            layers.Softmax(10),
-        ],
-        step=0.1,
-        batch_size=16,
-    )
+Before using these algorithms you mut understand that not all of them are suitable for all problems. Some of the methods like :network:`Levenberg-Marquardt <LevenbergMarquardt>` or :network:`Conjugate Gradient <ConjugateGradient>` work better for small networks and they would be extremely slow for networks with millions of parameters. In addition it's important to note that not all algorithms are possible to train with mini-batches. Algorithms like :network:`Conjugate Gradient <ConjugateGradient>` are not able to train properly with mini-batch.
 
 Error functions
 ---------------
 
-NeuPy has many different :ref:`error functions <cheatsheet-error-function>`. You can use different error functions for different problem. For instance, we can use cross entropy for our previous architecture.
+NeuPy has many different :ref:`error functions <cheatsheet-error-function>`.
 
 .. code-block:: python
 
@@ -106,7 +91,7 @@ NeuPy has many different :ref:`error functions <cheatsheet-error-function>`. You
         error='categorical_crossentropy',
     )
 
-In addition you can create custom functions. Function suppose to accept two mandatory arguments and return scalar.
+Also it's possible to create custom error functions. Error function should have two mandatory arguments.
 
 .. code-block:: python
 
@@ -125,6 +110,8 @@ In addition you can create custom functions. Function suppose to accept two mand
         ],
         error=mean_absolute_error,
     )
+
+Error function should return a scalar, because during the training output from the error function will be used as a variable with respect to which we are differentiating
 
 Add-ons
 -------
@@ -149,7 +136,7 @@ Algorithms with constructuble architectures allow to use additional update rules
                 algorithms.StepDecay]
     )
 
-Both :network:`WeightDecay` and :network:`StepDecay` algorithms have additional parameters. In case if you need to modify them - you can add them to the training algorithm.
+Both :network:`WeightDecay` and :network:`StepDecay` algorithms have additional parameters. In case if we need to modify them we can add them to the training algorithm.
 
 .. code-block:: python
 
@@ -176,3 +163,25 @@ Both :network:`WeightDecay` and :network:`StepDecay` algorithms have additional 
         addons=[algorithms.WeightDecay,
                 algorithms.StepDecay]
     )
+
+NeuPy doesn't allow to use multiple regularization and step update add-ons for training algorithm.
+
+.. code-block:: python
+
+    >>> from neupy import algorithms, layers
+    >>>
+    >>> nnet = algorithms.MinibatchGradientDescent(
+    ...     [
+    ...         layers.Input(784),
+    ...         layers.Relu(500),
+    ...         layers.Relu(300),
+    ...         layers.Softmax(10),
+    ...     ],
+    ...     addons=[
+    ...         algorithms.WeightDecay,
+    ...         algorithms.WeightElimination,
+    ...     ]
+    ... )
+    Traceback (most recent call last):
+
+    ValueError: There can be only one add-on class with type 'Regularization'

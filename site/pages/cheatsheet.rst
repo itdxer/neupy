@@ -241,15 +241,15 @@ Error functions
 .. csv-table::
     :header: "Function name", "Description"
 
-    ":class:`mae <neupy.network.errors.mae>`", "Mean absolute error"
-    ":class:`mse <neupy.network.errors.mse>`", "Mean squared error"
-    ":class:`rmse <neupy.network.errors.rmse>`", "Root mean squared error"
-    ":class:`msle <neupy.network.errors.msle>`", "Mean squared logarithmic error"
-    ":class:`rmsle <neupy.network.errors.rmsle>`", "Root mean squared logarithmic error"
-    ":class:`binary_crossentropy <neupy.network.errors.binary_crossentropy>`", "Cross entropy error function for the binary classification"
-    ":class:`categorical_crossentropy <neupy.network.errors.categorical_crossentropy>`", "Cross entropy error function for the multi-class classification"
-    ":class:`binary_hinge <neupy.network.errors.binary_hinge>`", "Hinge error function for the binary classification"
-    ":class:`categorical_hinge <neupy.network.errors.categorical_hinge>`", "Hinge error function for the multi-class classification"
+    ":class:`mae <neupy.algorithms.gd.errors.mae>`", "Mean absolute error"
+    ":class:`mse <neupy.algorithms.gd.errors.mse>`", "Mean squared error"
+    ":class:`rmse <neupy.algorithms.gd.errors.rmse>`", "Root mean squared error"
+    ":class:`msle <neupy.algorithms.gd.errors.msle>`", "Mean squared logarithmic error"
+    ":class:`rmsle <neupy.algorithms.gd.errors.rmsle>`", "Root mean squared logarithmic error"
+    ":class:`binary_crossentropy <neupy.algorithms.gd.errors.binary_crossentropy>`", "Cross entropy error function for the binary classification"
+    ":class:`categorical_crossentropy <neupy.algorithms.gd.errors.categorical_crossentropy>`", "Cross entropy error function for the multi-class classification"
+    ":class:`binary_hinge <neupy.algorithms.gd.errors.binary_hinge>`", "Hinge error function for the binary classification"
+    ":class:`categorical_hinge <neupy.algorithms.gd.errors.categorical_hinge>`", "Hinge error function for the multi-class classification"
 
 
 Datasets

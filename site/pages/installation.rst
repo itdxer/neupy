@@ -1,7 +1,7 @@
 Installation
 ============
 
-Install last stable version
+Install latest stable version
 
 .. code-block:: bash
 
@@ -11,9 +11,9 @@ Install the latest development version
 
 .. code-block:: bash
 
-    $ pip install git+https://github.com/itdxer/neupy.git
+    $ pip install --upgrade git+https://github.com/itdxer/neupy.git@dev
 
-Or just from a source code
+Also you can clone a project and install it from a source code
 
 .. code-block:: bash
 
@@ -21,4 +21,4 @@ Or just from a source code
     cd neupy
     python setup.py install
 
-Check :ref:`tutorials` next.
+If you want learn more about NeuPy you can start with :ref:`tutorials <tutorials>` or read :ref:`documentation <documentation>`.

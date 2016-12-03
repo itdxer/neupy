@@ -1,32 +1,19 @@
-import numpy as np
-
 from neupy import layers
-from neupy.algorithms import GradientDescent
 
 from base import BaseTestCase
 
 
 class LayersBasicsTestCase(BaseTestCase):
-    def test_list_of_layers(self):
-        bpnet = GradientDescent([
-            layers.Input(2),
-            layers.Sigmoid(3),
-            layers.Sigmoid(1),
-            layers.Sigmoid(10),
-        ])
-        self.assertEqual(
-            [layer.size for layer in bpnet.layers],
-            [2, 3, 1, 10]
-        )
+    def test_shared_parameters_between_layers(self):
+        hidden_layer_1 = layers.Relu(10)
+        network = layers.Input(10) > hidden_layer_1
 
-    def test_activation_layers_without_size(self):
-        input_data = np.array([1, 2, -1, 10])
-        expected_output = np.array([1, 2, 0, 10])
+        hidden_layer_2 = layers.Relu(10, weight=hidden_layer_1.weight,
+                                     bias=hidden_layer_1.bias)
+        network = network > hidden_layer_2
 
-        layer = layers.Relu()
-        actual_output = layer.output(input_data)
-
-        np.testing.assert_array_equal(actual_output, expected_output)
+        self.assertIs(hidden_layer_1.weight, hidden_layer_2.weight)
+        self.assertIs(hidden_layer_1.bias, hidden_layer_2.bias)
 
 
 class LayerNameTestCase(BaseTestCase):

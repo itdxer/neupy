@@ -1,74 +1,167 @@
 Basics
 ======
 
-Layer is a building block for constructable neural networks. When network contains lots of layers it's become difficult to read architecture. With NeuPy it's not only easy to build deep learning models, but it's also easy to read network's architecture from the code.
+.. contents::
 
-Before we start I want to explain a few basics that we are going to use all the time.
+Layer is a building block for constructible neural networks. NeuPy has a simple and flexible framework that allows not only easely construct complex neural networks, but also its easy to read and understand network architectures from the code.
 
-Layers in the NeuPy can be defined independently from each other. Which means that we don't need to create first layer to be able to define a second one. Order matters only when we define relations between layers. The most useful function to define relations is ``layers.join``. It accepts sequence of layers and join them in the connection.
+Join layers
+-----------
+
+Let's start with basics. The most useful function to define relations between layers is ``layers.join``. It accepts sequence of layers and join them into the network.
 
 .. code-block:: python
 
     >>> from neupy import layers
     >>>
-    >>> layers.join(layers.Sigmoid(1), layers.Sigmoid(2))
+    >>> layers.join(
+    ...     layers.Sigmoid(1),
+    ...     layers.Sigmoid(2),
+    ... )
     Sigmoid(1) > Sigmoid(2)
     >>>
-    >>> layers.join(layers.Sigmoid(2), layers.Sigmoid(1))
+    >>> layers.join(
+    ...     layers.Sigmoid(2),
+    ...     layers.Sigmoid(1),
+    ... )
     Sigmoid(2) > Sigmoid(1)
 
-Another way to define relations between layer is to use ``>`` operator.
+Inline operator
+---------------
+
+Also NeuPy provides a special **inline** operator that helps to define sequential relations between layers.
 
 .. code-block:: python
 
     >>> from neupy import layers
     >>>
-    >>> connection = layers.Sigmoid(2) > layers.Sigmoid(1)
-    >>> connection
+    >>> network = layers.Sigmoid(2) > layers.Sigmoid(1)
+    >>> network
     Sigmoid(2) > Sigmoid(1)
 
-As you can see the syntax is very intuitive. One disadvantage is that it's difficult to construct networks that has more than 4 layers. This method is suitable only for small network. it's possible to use this syntax in deep networks in terms of subnetworks_ which we will discuss soon.
+Input and output shapes
+-----------------------
+
+In the previous examples each layer accepted one argument that defines it's output shape, but there is no information about network's input shape. We can check it easely.
+
+.. code-block:: python
+
+    >>> from neupy import layers
+    >>>
+    >>> network = layers.Sigmoid(2) > layers.Sigmoid(1)
+    >>> network
+    Sigmoid(2) > Sigmoid(1)
+    >>>
+    >>> print(network.input_shape)
+    None
+    >>> network.output_shape
+    (1,)
+
+Network has two properties that provide information about network's input and output shape. In addition we can iterate through each layer in the network and check their input and output shapes
+
+.. code-block:: python
+
+    >>> from neupy import layers
+    >>>
+    >>> network = layers.Sigmoid(2) > layers.Sigmoid(1)
+    >>>
+    >>> for layer in network:
+    ...     print(layer)
+    ...     print('----------')
+    ...     print('Input shape: {}'.format(layer.input_shape))
+    ...     print('Output shape: {}'.format(layer.output_shape))
+    ...     print()
+    ...
+    Sigmoid(2)
+    ----------
+    Input shape: None
+    Output shape: (2,)
+
+    Sigmoid(1)
+    ----------
+    Input shape: (2,)
+    Output shape: (1,)
+
+From the output we can clearly see that ``Sigmoid(1)`` layer has defined input and output shape. Input shape for the ``Sigmoid(1)`` layer has been provided by the ``Sigmoid(2)``, but ``Sigmoid(2)`` layer doesn't have any input connections and we know nothing about it's input shape.
 
 Input layer
 -----------
 
-Previous connections hasn't been completed yet.
+To complete our network we just need to add an input layer to it.
+
+.. code-block:: python
+
+    >>> network = layers.Input(3) > network
+    >>>
+    >>> for layer in network:
+    ...     print(layer)
+    ...     print('----------')
+    ...     print('Input shape: {}'.format(layer.input_shape))
+    ...     print('Output shape: {}'.format(layer.output_shape))
+    ...     print()
+    ...
+    Input(3)
+    ----------
+    Input shape: (3,)
+    Output shape: (3,)
+
+    Sigmoid(2)
+    ----------
+    Input shape: (3,)
+    Output shape: (2,)
+
+    Sigmoid(1)
+    ----------
+    Input shape: (2,)
+    Output shape: (1,)
+
+The :layer:`Input` layer accepts one parameter that defines network's input shape. When we connected this layer to our previous network we defined input shape for the whole network.
+
+You could notice that in the previous examples we was able to re-use previously defined network. In fact, we can simply construct networks from the code.
 
 .. code-block:: python
 
     >>> from neupy import layers
     >>>
-    >>> connection = layers.Sigmoid(2) > layers.Sigmoid(1)
-    >>> connection
-    Sigmoid(2) > Sigmoid(1)
+    >>> network = layers.Input(10)
     >>>
-    >>> print(connection.input_shape)
-    None
-    >>> connection.output_shape
-    (1,)
+    >>> for size in (8, 6, 4, 2):
+    ...     network = network > layers.Sigmoid(size)
+    ...
+    >>> network
+    Input(10) > Sigmoid(8) > Sigmoid(6) > Sigmoid(4) > Sigmoid(2)
 
-Even thought we know the output shape we don't know an input. To be able to construct a full connection any network should have :layer:`Input` layer.
+Code above is equivalent to the following code
 
 .. code-block:: python
 
-    >>> connection = layers.Input(3) > connection
-    >>> connection
-    Input(3) > Sigmoid(2) > Sigmoid(1)
+    >>> from neupy import layers
     >>>
-    >>> connection.input_shape
-    (3,)
+    >>> network = layers.join(
+    ...     layers.Input(10),
+    ...     layers.Sigmoid(8),
+    ...     layers.Sigmoid(6),
+    ...     layers.Sigmoid(4),
+    ...     layers.Sigmoid(2),
+    ... )
+    >>> network
+    Input(10) > Sigmoid(8) > Sigmoid(6) > Sigmoid(4) > Sigmoid(2)
+
+.. raw:: html
+
+    <br>
 
 Mutlilayer Perceptron (MLP)
 ===========================
 
-Let's start with some practical examples. Here is a networks that classify 28x28 digit images.
+In this section we are going to learn more about layers with activation function which are the most important building blocks for the MLP networks. Let's consider the following example.
 
 .. code-block:: python
 
     from neupy import layers
 
-    feedforward = layers.join(
-        layers.Input(784),  # 28 * 28 = 784
+    network = layers.join(
+        layers.Input(784),
         layers.Relu(500),
         layers.Relu(300),
         layers.Softmax(10),
@@ -78,13 +171,13 @@ Let's start with some practical examples. Here is a networks that classify 28x28
     :align: center
     :alt: Feedforward connections in NeuPy
 
-You can see from the figure above that we have dense connection even though we didn't define them. In NeuPy you can define dense connections within layers with activation function for simplicity. We can split layer with activation functions into simplier operations.
+You can see from the figure above that each layer with activation function defines dense connection. In NeuPy you can define dense connections between layers with activation function for simplicity. We can split layer with activation functions into simpler operations.
 
 .. code-block:: python
 
     from neupy import layers
 
-    connection = layers.join(
+    network = layers.join(
         layers.Input(784),
 
         layers.Linear(500),
@@ -97,12 +190,12 @@ You can see from the figure above that we have dense connection even though we d
         layers.Softmax(),
     )
 
-This connection has exactly the same structure as the previous one. We just split each layer with activation function into simple operations. Operation in the ``layers.Relu(500)`` is equivalent to ``layers.Linear(500) > layers.Relu()``.
+This connection has exactly the same architecture as the network in previous example. We just split each layer with activation function into simple operations. Operation in the ``layers.Relu(500)`` is equivalent to ``layers.Linear(500) > layers.Relu()``.
 
 Convolutional Neural Networks (CNN)
 ===================================
 
-NeuPy supports Convolutional Neural Networks. Here is an example of simple CNN.
+NeuPy supports Convolutional Neural Networks. Let's start with a simple convolutional network.
 
 .. code-block:: python
 
@@ -123,31 +216,7 @@ NeuPy supports Convolutional Neural Networks. Here is an example of simple CNN.
 
 .. figure:: images/conv-graph-connection.png
     :align: center
-    :alt: Feedforward convolutional connections in NeuPy
-
-Convolution
------------
-
-.. code-block:: python
-
-    layers.Convolution((32, 3, 3))
-
-NeuPy supports only 2D convolution. It's trivial to make a 1D convoltion. You just need to set up width or height equal to 1. In this section I will focuse only on 2D convoltuin, but with a small modifications everything work for 1D as well.
-
-In the previous example you should see a network that contains a couple of convolutional layers. Each of these layers takes one mandatory argument that defines convolutional layer structure. Each parameter excepts a tuple that contains three integers ``(output channels, filter rows, filter columns)``. Information about the input channel takes from the previous layer.
-
-Convolutional layer has a few other attributes that you can modify. You can check the :layer:`Convolutional <Convolution>` layer's documentation and find more information about this layer type.
-
-Pooling
--------
-
-.. code-block:: python
-
-    layers.MaxPooling((2, 2))
-
-Pooling works very similar. As in the convolutional layer you also need to set up one mandatory attribute as a tuple. But in case of pooling layer this attribute should be a tuple that contains only two integers. This parameters defines a factor by which to downscale ``(vertical, horizontal)``. (2, 2) will halve the image in each dimension.
-
-Pooling defined as for the 2D layers, but you also can use in case of 1D convolution. In that case you need to define one of the downscale factors equal to 1. For instance, it can be somethig like that ``(1, 2)``.
+    :alt: Convolutional Neural Network in NeuPy
 
 Reshape
 -------
@@ -167,7 +236,7 @@ This layer basically do the same as `numpy.reshape <https://docs.scipy.org/doc/n
     >>> connection.output_shape
     (300,)
 
-Additional argument for the :layer:`Reshape` layer can help to define a new shape for the input tensor.
+Also we can specify expected output shape as a parameters for the :layer:`Reshape` layer.
 
 .. code-block:: python
 
@@ -178,6 +247,51 @@ Additional argument for the :layer:`Reshape` layer can help to define a new shap
     >>> connection.output_shape
     (3, 100)
 
+Convolution
+-----------
+
+.. code-block:: python
+
+    layers.Convolution((32, 3, 3))
+
+NeuPy supports only 2D convolution. It's trivial to make a 1D convoltion. You can for instance set up width eqaul to ``1`` like in the following example.
+
+.. code-block:: python
+
+    >>> from neupy import layers
+    >>>
+    >>> layers.join(
+    ...     layers.Input((10, 30)),
+    ...     layers.Reshape((10, 30, 1)),
+    ...     layers.Convolution((16, 3, 1)),
+    ... )
+
+
+Each of the convolutional layers takes one mandatory argument that defines convolutional filter. Input argument contains three integers ``(number of filters, number of rows, number of columns)``. Information about the stack size takes from the previous layer.
+
+Convolutional layer has a few other attributes that you can modify. You can check the :layer:`Convolutional <Convolution>` layer's documentation and find more information about this layer type.
+
+Pooling
+-------
+
+.. code-block:: python
+
+    layers.MaxPooling((2, 2))
+
+Pooling layer has also one mandatory argument that defines a factor by which to downscale ``(vertical, horizontal)``. The ``(2, 2)`` value will halve the image in each dimension.
+
+Pooling defined as for the 2D layers, but you also can use in case of 1D convolution. In that case you need to define one of the downscale factors equal to ``1``.
+
+.. code-block:: python
+
+    >>> from neupy import layers
+    >>>
+    >>> layers.join(
+    ...     layers.Input((10, 30)),
+    ...     layers.Reshape((10, 30, 1)),
+    ...     layers.MaxPooling((2, 1)),
+    ... )
+
 .. raw:: html
 
     <br>
@@ -185,13 +299,13 @@ Additional argument for the :layer:`Reshape` layer can help to define a new shap
 Graph connections
 =================
 
-Any connection between layers in NeuPy is a `Directional Acyclic Graph (DAG) <https://en.wikipedia.org/wiki/Directed_acyclic_graph>`_. So far we've encountered only sequential connections. Here is an example of network with parallel connections.
+Any connection between layers in NeuPy is a `Directional Acyclic Graph (DAG) <https://en.wikipedia.org/wiki/Directed_acyclic_graph>`_. So far we've encountered only sequential connections which is just a simple case of DAG. Let's build more complex relations between layers.
 
 .. code-block:: python
 
     from neupy import layers
 
-    connection = layers.join(
+    network = layers.join(
         layers.Input((3, 10, 10)),
         [[
             layers.Convolution((32, 3, 3)),
@@ -211,18 +325,86 @@ Any connection between layers in NeuPy is a `Directional Acyclic Graph (DAG) <ht
     :align: center
     :alt: Graph connections in NeuPy
 
-You can see two new layers. The first one is the Parallel layer. This layer accepts two parameters. First one is an array of multiple connections. As you can see from the figure above each of the connections above accepts the same input, but each of the do different transformation to this input. The second parameter is an layer that accepts multiple inputs and combine then into single output. From our example we can see that from the left branch we got output shape equal to ``(32, 4, 4)`` and from the right branch - ``(16, 4, 4)``. The :layer:`Concatenate` layer joins layers over the firts dimension and as output returns tensor with shape ``(48, 4, 4)```
+You can see that we defined a list inside of the
+
+You can see two new layers. The first one is the Parallel layer. This layer accepts two parameters. First one is an array of multiple connections. As you can see from the figure above each of the connections above accepts the same input, but each of the do different transformation to this input. The second parameter is an layer that accepts multiple inputs and combine then into single output. From our example we can see that from the left branch we got output shape equal to ``(32, 4, 4)`` and from the right branch - ``(16, 4, 4)``. The :layer:`Concatenate` layer joins layers over the firts dimension and as output returns tensor with shape ``(48, 4, 4)``.
+
+Also its possible to define the same graph relations between layers with inline operator.
+
+.. code-block:: python
+
+    >>> from neupy import layers
+    >>>
+    >>> left_branch = layers.join(
+    ...    layers.Convolution((32, 3, 3)),
+    ...     layers.Relu(),
+    ...     layers.MaxPooling((2, 2)),
+    ... )
+    >>>
+    >>> right_branch = layers.join(
+    ...     layers.Convolution((16, 7, 7)),
+    ...     layers.Relu(),
+    ... )
+    >>>
+    >>> input_layer = layers.Input((3, 10, 10))
+    >>> network = input_layer > [left_branch, right_branch] > layers.Concatenate()
+    >>> network = network > layers.Reshape() > layers.Softmax()
 
 .. raw:: html
 
     <br>
+
+Compile Networks
+================
+
+.. code-block:: python
+
+    import numpy as np
+    from neupy import layers
+
+    network = layers.join(
+        layers.Input(10),
+        layers.Relu(20),
+        layers.Softmax(4),
+    )
+    network = network.compile()
+
+    x_test = np.random.random((12, 10))
+    network.predict(x_test)
+
+
+.. code-block:: python
+
+    >>> import theano
+    >>> import theano.tensor as T
+    >>> from neupy import layers
+    >>>
+    >>> network = layers.join(
+    ...     layers.Input(10),
+    ...     layers.Relu(20),
+    ...     layers.Softmax(4),
+    ... )
+    >>>
+    >>> x = T.matrix()
+    >>> # Compile prediction function
+    >>> predict = theano.function([x], network.output(x))
+    >>>
+    >>> import numpy as np
+    >>> from neupy import asfloat
+    >>>
+    >>> # Convert matrix to float. Type of the
+    ... # float depence on theano.config.floatX variable
+    ... x_test = asfloat(np.random.random((12, 10)))
+    >>>
+    >>> predict(x_test).shape
+    (12, 4)
 
 .. _subnetworks:
 
 Subnetworks
 ===========
 
-Subnetworks is a simple trick that makes easier to read and understend network's structure. Instead of explaining it's much easier to show the main advantage of this method. Here is an example of the simpe convolutional network.
+**Subnetworks** makes easier to read and understend network's structure. Instead of explaining it's much easier to show the main advantage of this method. Here is an example of the simpe convolutional network.
 
 .. code-block:: python
 

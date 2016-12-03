@@ -11,10 +11,11 @@ The simplest one layer that makes only element-wise transformation. This layer d
 .. code-block:: python
 
     from neupy import layers
+    from neupy.utils import asfloat
 
-    class ShiftByOneLayer(layers.BaseLayer):
+    class DoubleInput(layers.BaseLayer):
         def output(self, value):
-            return value + 1
+            return asfloat(2) * value
 
 ``BaseLayer`` is a main class that contains all important methods and attributes that any layer requires.
 

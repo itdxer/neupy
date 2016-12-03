@@ -164,14 +164,28 @@ class MaxPooling(BasePooling):
 
     Examples
     --------
+    2D pooling
+
     >>> from neupy import layers
     >>>
-    >>> connection = layers.join(
+    >>> network = layers.join(
     ...     layers.Input((3, 10, 10)),
     ...     layers.MaxPooling((2, 2)),
     ... )
-    >>> connection.output_shape
+    >>> network.output_shape
     (3, 5, 5)
+
+    1D pooling
+
+    >>> from neupy import layers
+    >>>
+    >>> network = layers.join(
+    ...     layers.Input((10, 30)),
+    ...     layers.Reshape((10, 30, 1)),
+    ...     layers.MaxPooling((2, 1)),
+    ... )
+    >>> network.output_shape
+    (10, 15, 1)
     """
     def output(self, input_value):
         return pool.pool_2d(input_value, ds=self.size, mode='max',
@@ -201,14 +215,28 @@ class AveragePooling(BasePooling):
 
     Examples
     --------
+    2D pooling
+
     >>> from neupy import layers
     >>>
-    >>> connection = layers.join(
+    >>> network = layers.join(
     ...     layers.Input((3, 10, 10)),
     ...     layers.AveragePooling((2, 2)),
     ... )
-    >>> connection.output_shape
+    >>> network.output_shape
     (3, 5, 5)
+
+    1D pooling
+
+    >>> from neupy import layers
+    >>>
+    >>> network = layers.join(
+    ...     layers.Input((10, 30)),
+    ...     layers.Reshape((10, 30, 1)),
+    ...     layers.AveragePooling((2, 1)),
+    ... )
+    >>> network.output_shape
+    (10, 15, 1)
     """
     mode = ChoiceProperty(
         default='include_padding',
@@ -271,11 +299,11 @@ class Upscale(BaseLayer):
     --------
     >>> from neupy import layers
     >>>
-    >>> connection = layers.join(
+    >>> network = layers.join(
     ...     layers.Input((3, 10, 10)),
     ...     layers.Upscale((2, 2)),
     ... )
-    >>> connection.output_shape
+    >>> network.output_shape
     (3, 20, 20)
     """
     scale = ScaleFactorProperty(required=True, n_elements=2)
@@ -342,11 +370,11 @@ class GlobalPooling(BaseLayer):
     --------
     >>> from neupy import layers
     >>>
-    >>> connection = layers.join(
+    >>> network = layers.join(
     ...     layers.Input((16, 4, 4)),
     ...     layers.GlobalPooling(),
     ... )
-    >>> connection.output_shape
+    >>> network.output_shape
     (16,)
     """
     function = Property(default=T.mean)

@@ -138,9 +138,9 @@ class IRPROPPlus(RPROP):
 
     {GradientDescent.addons}
 
-    {ConstructableNetwork.connection}
+    {ConstructibleNetwork.connection}
 
-    {ConstructableNetwork.error}
+    {ConstructibleNetwork.error}
 
     {BaseNetwork.show_epoch}
 

@@ -17,7 +17,9 @@ project = 'NeuPy'
 tagline = 'Neural Networks in Python'
 
 # Change this to the description of your blog
-description = 'Artificial Neural Network library implemented in Python'
+description = ('NeuPy is a Python library for Artificial Neural Networks. '
+               'NeuPy supports many different types of Neural Networks '
+               'from a simple perceptron to deep learning models.')
 
 # Change this to your name
 author = 'Yurii Shevchuk'

@@ -20,7 +20,7 @@ from neupy.algorithms.learning import SupervisedLearningMixin
 from .gd import errors
 
 
-__all__ = ('ConstructableNetwork',)
+__all__ = ('ConstructibleNetwork',)
 
 
 def does_layer_accept_1d_feature(layer):
@@ -228,11 +228,11 @@ class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
         raise NotImplementedError
 
 
-class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
+class ConstructibleNetwork(SupervisedLearningMixin, BaseAlgorithm,
                            BaseNetwork):
     """
     Class contains functionality that helps work with network that have
-    constructable layers architecture.
+    constructible layers architecture.
 
     Parameters
     ----------
@@ -328,7 +328,7 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
         self.input_layer = graph.input_layers[0]
         self.output_layer = graph.output_layers[0]
 
-        super(ConstructableNetwork, self).__init__(*args, **kwargs)
+        super(ConstructibleNetwork, self).__init__(*args, **kwargs)
 
     def init_input_output_variables(self):
         self.variables.update(
@@ -373,7 +373,7 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
 
         self.methods.update(
             predict=theano.function(
-                inputs=[self.variables.network_input],
+                inputs=[network_input],
                 outputs=self.variables.prediction_func,
                 name='algo:network/func:predict'
             ),
@@ -523,7 +523,7 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
         epoch : int
             Current epoch number.
         """
-        super(ConstructableNetwork, self).on_epoch_start_update(epoch)
+        super(ConstructibleNetwork, self).on_epoch_start_update(epoch)
         self.variables.epoch.set_value(epoch)
 
     def train(self, input_train, target_train, input_test=None,
@@ -531,7 +531,7 @@ class ConstructableNetwork(SupervisedLearningMixin, BaseAlgorithm,
         """
         Trains neural network.
         """
-        return super(ConstructableNetwork, self).train(
+        return super(ConstructibleNetwork, self).train(
             self.format_input_data(input_train),
             self.format_target_data(target_train),
             self.format_input_data(input_test),

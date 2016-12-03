@@ -53,7 +53,7 @@ For the debugging it's useful to explore connection's structure. It's possible t
 
     from neupy import layers
 
-    connection = layers.join(
+    network = layers.join(
         layers.Input((3, 10, 10)),
 
         [[
@@ -75,7 +75,16 @@ To be able to visualize it we can just use :class:`layer_structure <neupy.plots.
 .. code-block:: python
 
     from neupy import plots
-    plots.layer_structure(connection)
+    plots.layer_structure(network)
+
+.. raw:: html
+
+    <br>
+
+.. image:: images/layer-structure-debug.png
+    :width: 90%
+    :align: center
+    :alt: Debug network structure
 
 This function will pop-up PDF file with graph that defines all layers and relations between them. In addition it shows input and output shape per each layer.
 
@@ -96,6 +105,15 @@ Function also works for the networks.
     nnet = algorithms.GradientDescent((2, 3, 1))
     plots.layer_structure(nnet)
 
+.. raw:: html
+
+    <br>
+
+.. image:: images/network-structure-debug.png
+    :width: 60%
+    :align: center
+    :alt: Debug network structure
+
 Count number of parameters
 --------------------------
 
@@ -114,4 +132,44 @@ Count number of parameters
 Exploring graph connections
 ---------------------------
 
-Graph is a low-level representation of layer connections.
+Any relation between layers stores in the specific graph. To be able to debug connections you can check network graph to make sure that all connections defined correctly.
+
+.. code-block:: python
+
+    >>> from neupy import layers
+    >>>
+    >>> input_layer = layers.Input(10)
+    >>> input_layer.graph
+    [(Input(10), [])]
+
+Since layer doesn't have any relations its graph is empty. We can define new network and check graph again.
+
+.. code-block:: python
+
+    >>> network = layers.join(
+    ...     input_layer,
+    ...     [[
+    ...         layers.Relu(10),
+    ...         layers.Relu(20),
+    ...     ], [
+    ...         layers.Relu(30),
+    ...     ]],
+    ...     layers.Concatenate()
+    ... )
+    >>> network.graph
+    [(Input(10), [Relu(10), Relu(30)]),
+     (Relu(10), [Relu(20)]),
+     (Relu(20), [Concatenate()]),
+     (Relu(30), [Concatenate()]),
+     (Concatenate(), [])]
+
+Graph has formatted representation in case if you print it. But if you need to access it directly you need to get ``forward_graph`` attribute.
+
+.. code-block:: python
+
+    >>> network.graph.forward_graph
+    OrderedDict([(Input(10), [Relu(10), Relu(30)]), (Relu(10),
+    [Relu(20)]), (Relu(20), [Concatenate()]), (Relu(30),
+    [Concatenate()]), (Concatenate(), [])])
+
+**Do not try to modify graph**. Modifications can break relations between layers. This feature is only available for debugging.

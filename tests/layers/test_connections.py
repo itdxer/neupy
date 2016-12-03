@@ -1,10 +1,11 @@
+import unittest
+
 import numpy as np
 import theano
 import theano.tensor as T
 
 from neupy import layers, algorithms
 from neupy.utils import asfloat, as_tuple
-from neupy.layers import Input, Relu, Tanh, Sigmoid
 from neupy.layers.connections import is_sequential
 from neupy.layers.connections.graph import (merge_dicts_with_list,
                                             does_layer_expect_one_input)
@@ -16,9 +17,17 @@ class ConnectionsTestCase(BaseTestCase):
     def test_connection_initializations(self):
         possible_connections = (
             (2, 3, 1),
-            [Input(2), Sigmoid(3), Tanh(1)],
-            Input(2) > Relu(10) > Tanh(1),
-            Tanh(1) < Relu(10) < Input(2),
+
+            # as a list
+            [layers.Input(2), layers.Sigmoid(3), layers.Tanh(1)],
+
+            # as forward sequence with inline operators
+            layers.Input(2) > layers.Relu(10) > layers.Tanh(1),
+            layers.Input(2) >> layers.Relu(10) >> layers.Tanh(1),
+
+            # as backward sequence with inline operators
+            layers.Tanh(1) < layers.Relu(10) < layers.Input(2),
+            layers.Tanh(1) << layers.Relu(10) << layers.Input(2),
         )
 
         for connection in possible_connections:
@@ -60,7 +69,7 @@ class ConnectionsTestCase(BaseTestCase):
             self.assertIsInstance(actual_layer, expected_layer)
 
     def test_connection_shapes(self):
-        connection = Input(2) > Relu(10) > Tanh(1)
+        connection = layers.Input(2) > layers.Relu(10) > layers.Tanh(1)
 
         self.assertEqual(connection.input_shape, (2,))
         self.assertEqual(connection.output_shape, (1,))
@@ -68,7 +77,7 @@ class ConnectionsTestCase(BaseTestCase):
     def test_connection_output(self):
         input_value = asfloat(np.random.random((10, 2)))
 
-        connection = Input(2) > Relu(10) > Relu(1)
+        connection = layers.Input(2) > layers.Relu(10) > layers.Relu(1)
         output_value = connection.output(input_value).eval()
 
         self.assertEqual(output_value.shape, (10, 1))
@@ -262,6 +271,43 @@ class InlineConnectionsTestCase(BaseTestCase):
 
         self.assertIn(relu_2, connection_2.input_layers)
         self.assertIn(relu_2, connection_3.output_layers)
+
+    @unittest.skip("Bug has't been fixed yet")
+    def test_inline_connection_order(self):
+        input_layer_1 = layers.Input(1)
+        relu_2 = layers.Relu(2)
+        relu_3 = layers.Relu(3)
+
+        connection_1 = input_layer_1 > relu_2 > relu_3
+        self.assertEqual(list(connection_1), [input_layer_1, relu_2, relu_3])
+
+        input_layer_4 = layers.Input(4)
+        relu_5 = layers.Relu(5)
+        relu_6 = layers.Relu(6)
+
+        connection_2 = input_layer_4 > relu_5
+        self.assertEqual(list(connection_2), [input_layer_4, relu_5])
+
+        connection_3 = relu_5 > relu_6
+        self.assertEqual(list(connection_3), [relu_5, relu_6])
+
+    def test_right_shift_inplace_inline_operator(self):
+        network = layers.Input(1)
+        network >>= layers.Relu(2)
+        network >>= layers.Relu(3)
+
+        expected_shapes = [1, 2, 3]
+        for layer, expected_shape in zip(network, expected_shapes):
+            self.assertEqual(layer.output_shape[0], expected_shape)
+
+    def test_left_shift_inplace_inline_operator(self):
+        network = layers.Relu(3)
+        network <<= layers.Relu(2)
+        network <<= layers.Input(1)
+
+        expected_shapes = [1, 2, 3]
+        for layer, expected_shape in zip(network, expected_shapes):
+            self.assertEqual(layer.output_shape[0], expected_shape)
 
 
 class ConnectionSecondaryFunctionsTestCase(BaseTestCase):

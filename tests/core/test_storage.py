@@ -252,7 +252,6 @@ class LayerStorageTestCase(BaseTestCase):
 
         def on_epoch_end(network):
             epoch = network.last_epoch
-
             errors[epoch] = network.prediction_error(x_test, y_test)
 
             if epoch == 4:

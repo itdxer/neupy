@@ -9,8 +9,8 @@ WEIGHT_PENALTY = 3
 
 
 addon_types = {
-    SINGLE_STEP_UPDATE: "Single-step update",
-    WEIGHT_PENALTY: "Weight penalty",
+    SINGLE_STEP_UPDATE: "Step update",
+    WEIGHT_PENALTY: "Regularization",
 }
 
 
