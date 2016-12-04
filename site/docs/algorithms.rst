@@ -7,6 +7,5 @@ Training Algorithms
 
     algorithms/basics
     algorithms/constructible-architecture
-    algorithms/fixed-architecture
     algorithms/signals
     algorithms/sklearn-compatibility
