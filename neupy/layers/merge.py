@@ -48,6 +48,20 @@ class Elementwise(BaseLayer):
     Attributes
     ----------
     {BaseLayer.Attributes}
+
+    Examples
+    --------
+    >>> from neupy import layers
+    >>>
+    >>> input_1 = layers.Input(10)
+    >>> input_2 = layers.Input(10)
+    >>>
+    >>> network = [input_1, input_2] > layers.Elementwise()
+    >>>
+    >>> network.input_shape
+    [(10,), (10,)]
+    >>> network.output_shape
+    (10,)
     """
     merge_function = CallableProperty(default=T.add)
 
@@ -91,6 +105,20 @@ class Concatenate(BaseLayer):
     Attributes
     ----------
     {BaseLayer.Attributes}
+
+    Examples
+    --------
+    >>> from neupy import layers
+    >>>
+    >>> input_1 = layers.Input(10)
+    >>> input_2 = layers.Input(20)
+    >>>
+    >>> network = [input_1, input_2] > layers.Concatenate()
+    >>>
+    >>> network.input_shape
+    [(10,), (20,)]
+    >>> network.output_shape
+    (30,)
     """
     axis = IntProperty(default=1)
 

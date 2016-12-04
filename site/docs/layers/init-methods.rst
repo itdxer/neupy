@@ -1,7 +1,7 @@
 Parameter Initialization Methods
 ================================
 
-This is a small topic that help you to understand how to initialize weights, bias and other parameters in NeuPy.
+We can set up different initialization method for layer parameters.
 
 .. code-block:: python
 
@@ -10,14 +10,14 @@ This is a small topic that help you to understand how to initialize weights, bia
     gdnet = algorithms.GradientDescent(
         [
             layers.Input(10),
-            layers.Sigmoid(30, weight=init.HeNormal()),
-            layers.Sigmoid(15, weight=init.HeNormal()),
+            layers.Sigmoid(30, weight=init.Normal()),
+            layers.Sigmoid(15, weight=init.Normal()),
         ]
     )
 
-Basically we set up parameter equal to initialization method. So weight parameter will be defined based on the algorithm inside of the class.
+Initialization class has an ability to generate parameters based on the specified shape. For instance, first sigmoid layer has 10 inputs and 30 outputs which means that this layer should have weight with shape ``(10, 30)``. During initialization we don't need to specify the shape of the parameter. This information would be provided to the Initializer class during layer initialization step.
 
-Also it's possible to set up your own weight for layers.
+It's possible to set up our own weight for layers. Let's do the same initialization procedure with manually generated weights.
 
 .. code-block:: python
 
@@ -34,8 +34,8 @@ Also it's possible to set up your own weight for layers.
 
 More initialization methods you can find :ref:`here <init-methods>`.
 
-Shared parameters between layers
---------------------------------
+Share parameters between layers
+-------------------------------
 
 .. code-block:: python
 
@@ -54,7 +54,7 @@ Shared parameters between layers
 Create custom initialization methods
 ------------------------------------
 
-It is possible to define custom initialization method.
+It's very easy to create our own initialization method. All we need is just to inherit from the ``init.Initializer`` class and define ``sample`` method that accepts two argument (including the ``self`` argument).
 
 .. code-block:: python
 
@@ -71,9 +71,7 @@ It is possible to define custom initialization method.
     gdnet = algorithms.GradientDescent(
         [
             layers.Input(10),
-            layers.Sigmoid(30, weight=Exponential()),
-            layers.Sigmoid(15, weight=Exponential()),
+            layers.Sigmoid(30, weight=Exponential(scale=0.02)),
+            layers.Sigmoid(15, weight=Exponential(scale=0.05)),
         ]
     )
-
-Initialization class requires only the ``sample`` method that accepts ``shape`` argument and returns tensor with specified shape.
