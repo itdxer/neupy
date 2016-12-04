@@ -1,12 +1,10 @@
 Create custom layers
 ====================
 
-There are a few main types of layers. We are going to check them one by one in order of complexity.
-
 Element-wise transformation
-***************************
+---------------------------
 
-The simplest one layer that makes only element-wise transformation. This layer doesn't include any trainable parameters and it doesn't change input's shape. For simplisity we can build a layer that adds one to each elements in the input tensor.
+The simplest type of layers is the one that doesn't modify shape of the input value. To construct this layer we need to inherit from the ``BaseLayer`` class and define ``output`` method.
 
 .. code-block:: python
 
@@ -14,63 +12,94 @@ The simplest one layer that makes only element-wise transformation. This layer d
     from neupy.utils import asfloat
 
     class DoubleInput(layers.BaseLayer):
-        def output(self, value):
-            return asfloat(2) * value
+        def output(self, input_value):
+            return asfloat(2) * input_value
 
-``BaseLayer`` is a main class that contains all important methods and attributes that any layer requires.
+From the code you can see that I've used ``asfloat`` function. This function converts any number to a float. Type of the float depense on the ``theano.config.floatX`` variable. This function gives flexibility to automatically convert variable to the float type that Theano use on backend.
 
 Layers with activation function
-*******************************
+-------------------------------
 
-If you want to have a layer that behaves like any other built-in layer with activation function in the NeuPy, you should inherit your class from the ``ActivationLayer`` class. Let's consider and example of layer with a square activation function.
+Layers with activation function is a special type of layers. It have a different behaviour depending on the input size. If input size is specified it applies linear transformation to the input after that pass it through the activation function. If input size wasn't presented than layer passes input directly through the activation function
+
+.. code-block:: python
+
+    layers.Relu()  # relu(x)
+    layers.Relu(10)  # relu(W * x + b)
+
+To be able to construct your own layer with different activation function you need to inherit from the ``ActivationLayer`` class.
 
 .. code-block:: python
 
     import theano.tensor as T
     from neupy import layers
 
-    class SquareLayer(layers.ActivationLayer):
+    class Squared(layers.ActivationLayer):
         def activation_function(self, input_value):
             return T.square(input_value)
 
-Advanced methods
-****************
+Validate input shape
+--------------------
 
-There are a few other methods that can be useful in case of more complecated layers.
-
-Some layers makes an output shape modification. If you don't define the new output shape in the layer class you will not be able to attach layer to the other in the network. Here is an example.
+Not all relations between layers are suitable. For instance, we are not able to apply pooling to matrix. For this cases we need to have an ability to validate input shape and trigger error that will inform us about connection issues.
 
 .. code-block:: python
 
     from neupy import layers
+    from neupy.exceptions import LayerConnectionError
 
-    class FeatureMeanLayer(layers.BaseLayer):
+    class Pooling(layers.BaseLayer):
+        def validate(self, input_shape):
+            if len(input_shape) != 3:
+                raise LayerConnectionError("Invalid connection")
+
+We can use any type of exception, not only ``LayerConnectionError``.
+
+Layer that modify input shape
+-----------------------------
+
+.. code-block:: python
+
+    import theano.tensor as T
+    from neupy import layers
+
+    class Mean(layers.BaseLayer):
         @property
         def output_shape(self):
-            return (1,)
+            # convert: (3, 28, 28) -> (28, 28)
+            # convert: (10,) -> (1,)
+            return self.input_shape[1:] or (1,)
 
-        def output(self, value):
-            return value.mean(axis=1)
+        def output(self, input_value)
+            return T.mean(input_value, axis=1)
 
-The ``FeatureMeanLayer`` layer makes a feature transformation and modifies input matrix shape. We define ``output_shape`` property as an additional layer's parameter. Now other layers in the sequence know the expected layers output shape and adjust their parameters to the correct shape.
-
-The other important method is an ``initialize``. The main purpose of this method is to apply all necesary initializations related to the network. For instance, random weight or bias parameters. You can't define them in the ``__init__`` method, because when you create layer instance full network structure is unknown and you don't have all the necessary information. Let's extend the previous layer with the ``initialize`` method.
+Add parameters to the layer
+---------------------------
 
 .. code-block:: python
 
     from neupy import layers
-    from neupy.utils import asfloat
 
-    class FeatureMeanLayer(layers.BaseLayer):
+    class Wx(layers.BaseLayer):
         def initialize(self):
-            super(FeatureMeanLayer, self).initialize()
-            self.add_parameter(value=1, name='scaler')
+            super(Wx, self).initialize()
+            self.add_parameter(name='weight', shape=(10, 10),
+                               value=init.Uniform(), trainable=True)
 
-        @property
-        def output_shape(self):
-            return (1,)
+        def output(self, input_value):
+            return T.dot(self.weight, input_value)
 
-        def output(self, value):
-            return self.scaler * value.mean(axis=1)
+Initialization method triggers when layer has defined input shape.
 
-In this example I've added a few other feature to consider a couple of useful attributes and functions. Let's check them one by one. ``self.name`` defines layer's identifier as an integer number. This number is basically a layer's index number in the sequence. The ``self.parameters`` attribute is a list that contains all trainable parameters. Usually it is a weight or bias, but you can define any parameter you want. The ``asfloat`` function just converts any number to the float number. The type of the float number depends on the Theano's ``theano.config.floatX`` variable.
+Layer that accepts multiple inputs
+----------------------------------
+
+Layers like :layer:`Concatenate` accept multiple inputs and concatenate them in one. To be able to modify multiple inputs we need to make a small modification in the ``output`` method.
+
+.. code-block:: python
+
+    from neupy import layers
+
+    class SumElementwise(layers.BaseLayer):
+        def output(self, *input_values):
+            return sum(input_values)

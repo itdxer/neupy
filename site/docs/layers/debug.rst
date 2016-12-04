@@ -4,7 +4,7 @@ Debug layer connections
 Explore connection shapes
 --------------------------
 
-The simples way to debug you connection is just to explore input and output shapes.
+The simplest way to debug network is just to explore input and output shapes.
 
 .. code-block:: python
 
@@ -40,14 +40,12 @@ Also it's possible to iterate through layers and check shapes per each layer sep
     Input shape: (5,)
     Output shape: (3,)
 
-More complex connection that are not suitable for sequential iteration will be topologicaly sorted at first and then presented one by one during the iteration.
-
-Debug Theano
+More complex connection that are not suitable for sequential iteration will be topologically sorted at first and then presented one by one during the iteration.
 
 Visualize connections
 ---------------------
 
-For the debugging it's useful to explore connection's structure. It's possible to create graph visualization in NeuPy. Let's say we have this network.
+For the debugging it's useful to explore network architecture. It's possible to create visualize layer graph in NeuPy. Let's say we have this network.
 
 .. code-block:: python
 
@@ -88,7 +86,7 @@ To be able to visualize it we can just use :class:`layer_structure <neupy.plots.
 
 This function will pop-up PDF file with graph that defines all layers and relations between them. In addition it shows input and output shape per each layer.
 
-Also you can save it in separate file if you need.
+Instead of showing pop-up preview we can simply save it in separate file.
 
 .. code-block:: python
 
@@ -96,7 +94,7 @@ Also you can save it in separate file if you need.
     plots.layer_structure(connection, filepath='connection.pdf',
                           show=False)
 
-Function also works for the networks.
+Function also works for the training algorithms with constructible architectures. Basically it automatically extracts architecture from the algorithm and visualizae it.
 
 .. code-block:: python
 
@@ -132,7 +130,7 @@ Count number of parameters
 Exploring graph connections
 ---------------------------
 
-Any relation between layers stores in the specific graph. To be able to debug connections you can check network graph to make sure that all connections defined correctly.
+Any relation between layers stores in the specific graph. To be able to debug connections we can check network graph to make sure that all connections defined correctly.
 
 .. code-block:: python
 
@@ -142,7 +140,7 @@ Any relation between layers stores in the specific graph. To be able to debug co
     >>> input_layer.graph
     [(Input(10), [])]
 
-Since layer doesn't have any relations its graph is empty. We can define new network and check graph again.
+Since layer doesn't have any relations its graph is empty. We can define new layers and connect them in one network.
 
 .. code-block:: python
 
@@ -163,7 +161,7 @@ Since layer doesn't have any relations its graph is empty. We can define new net
      (Relu(30), [Concatenate()]),
      (Concatenate(), [])]
 
-Graph has formatted representation in case if you print it. But if you need to access it directly you need to get ``forward_graph`` attribute.
+Graph has formatted representation in case if it was printed. But if we need to access it directly than we shold check the ``forward_graph`` attribute.
 
 .. code-block:: python
 
