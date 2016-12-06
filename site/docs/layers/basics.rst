@@ -3,7 +3,7 @@ Basics
 
 .. contents::
 
-Layer is a building block for constructible neural networks. NeuPy has a simple and flexible framework that allows not only easely construct complex neural networks, but also its easy to read and understand network architectures from the code.
+Layer is a building block for constructible neural networks. NeuPy has a simple and flexible framework that allows to construct complex neural networks.
 
 Join layers
 -----------
@@ -42,7 +42,7 @@ Also NeuPy provides a special **inline** operator that helps to define sequentia
 Input and output shapes
 -----------------------
 
-In the previous examples each layer accepted one argument that defines it's output shape, but there is no information about network's input shape. We can check it easely.
+In the previous examples each layer accepted one argument that defines it's output shape, but there is no information about network's input shape.
 
 .. code-block:: python
 
@@ -57,7 +57,7 @@ In the previous examples each layer accepted one argument that defines it's outp
     >>> network.output_shape
     (1,)
 
-Network has two properties that provide information about network's input and output shape. In addition we can iterate through each layer in the network and check their input and output shapes
+Network has two properties that provide information about network's input and output shape. In addition we can iterate through each layer in the network and check their input and output shapes.
 
 .. code-block:: python
 
@@ -82,12 +82,12 @@ Network has two properties that provide information about network's input and ou
     Input shape: (2,)
     Output shape: (1,)
 
-From the output we can clearly see that ``Sigmoid(1)`` layer has defined input and output shape. Input shape for the ``Sigmoid(1)`` layer has been provided by the ``Sigmoid(2)``, but ``Sigmoid(2)`` layer doesn't have any input connections and we know nothing about it's input shape.
+From the output we can clearly see that ``Sigmoid(1)`` layer has defined input and output shape. Input shape for the ``Sigmoid(1)`` layer has been provided by the ``Sigmoid(2)``, but ``Sigmoid(2)`` layer doesn't have any input connections and we know nothing about it's input shape. To be able to fix it we need to add the :layer:`Input` layer.
 
 Input layer
 -----------
 
-To complete our network we just need to add an input layer to it.
+The :layer:`Input` layer defines input shape for the network.
 
 .. code-block:: python
 
@@ -117,7 +117,10 @@ To complete our network we just need to add an input layer to it.
 
 The :layer:`Input` layer accepts one parameter that defines network's input shape. When we connected this layer to our previous network we defined input shape for the whole network.
 
-You could notice that in the previous examples we was able to re-use previously defined network. In fact, we can simply construct networks from the code.
+Build networks from the code
+----------------------------
+
+You could have noticed that in the previous examples we was able to re-use previously defined network. In fact, we can simply construct network from the code.
 
 .. code-block:: python
 
@@ -171,7 +174,7 @@ In this section we are going to learn more about layers with activation function
     :align: center
     :alt: Feedforward connections in NeuPy
 
-You can see from the figure above that each layer with activation function defines dense connection. In NeuPy you can define dense connections between layers with activation function for simplicity. We can split layer with activation functions into simpler operations.
+You can see from the figure above that each layer with activation function defines dense connection. In NeuPy you can define dense connections between layers within activation function for simplicity. We can separate layer into to other layers that apply simplier operations.
 
 .. code-block:: python
 
@@ -190,12 +193,12 @@ You can see from the figure above that each layer with activation function defin
         layers.Softmax(),
     )
 
-This connection has exactly the same architecture as the network in previous example. We just split each layer with activation function into simple operations. Operation in the ``layers.Relu(500)`` is equivalent to ``layers.Linear(500) > layers.Relu()``.
+Network defined above has exactly the same architecture as the one in previous example. We just split each layer with activation function into simple operations. Operation in the ``layers.Relu(500)`` is equivalent to ``layers.Linear(500) > layers.Relu()``.
 
 Convolutional Neural Networks (CNN)
 ===================================
 
-NeuPy supports Convolutional Neural Networks. Let's start with a simple convolutional network.
+NeuPy supports Convolutional Neural Networks. Let's consider the following example.
 
 .. code-block:: python
 
@@ -218,6 +221,8 @@ NeuPy supports Convolutional Neural Networks. Let's start with a simple convolut
     :align: center
     :alt: Convolutional Neural Network in NeuPy
 
+There are a few new layers that we are going to explore in more details.
+
 Reshape
 -------
 
@@ -225,7 +230,7 @@ Reshape
 
     layers.Reshape()
 
-This layer basically do the same as `numpy.reshape <https://docs.scipy.org/doc/numpy/reference/generated/numpy.reshape.html>`_ function. One different is that the shape argument is optional. When shape is not defined :layer:`Reshape` layer converts input to 2D matrix.
+This layer basically do the same as `numpy.reshape <https://docs.scipy.org/doc/numpy/reference/generated/numpy.reshape.html>`_ function. The main different is that it has an optional argument that defines output shape. When shape is not defined :layer:`Reshape` layer converts input to 2D matrix.
 
 .. code-block:: python
 
@@ -254,7 +259,9 @@ Convolution
 
     layers.Convolution((32, 3, 3))
 
-NeuPy supports only 2D convolution. It's trivial to make a 1D convoltion. You can for instance set up width eqaul to ``1`` like in the following example.
+Each of the convolutional layers takes one mandatory argument that defines convolutional filter. Input argument contains three integers ``(number of filters, number of rows, number of columns)``. Information about the stack size takes from the previous layer.
+
+NeuPy supports only 2D convolution, but it's trivial to make a 1D convoltion. We can for instance set up width eqaul to ``1`` like in the following example.
 
 .. code-block:: python
 
@@ -266,10 +273,7 @@ NeuPy supports only 2D convolution. It's trivial to make a 1D convoltion. You ca
     ...     layers.Convolution((16, 3, 1)),
     ... )
 
-
-Each of the convolutional layers takes one mandatory argument that defines convolutional filter. Input argument contains three integers ``(number of filters, number of rows, number of columns)``. Information about the stack size takes from the previous layer.
-
-Convolutional layer has a few other attributes that you can modify. You can check the :layer:`Convolutional <Convolution>` layer's documentation and find more information about this layer type.
+Convolutional layer has a few other attributes that you can modify. You can check the :layer:`Convolutional <Convolution>` layer's documentation and find more information about its arguments.
 
 Pooling
 -------
@@ -280,7 +284,7 @@ Pooling
 
 Pooling layer has also one mandatory argument that defines a factor by which to downscale ``(vertical, horizontal)``. The ``(2, 2)`` value will halve the image in each dimension.
 
-Pooling defined as for the 2D layers, but you also can use in case of 1D convolution. In that case you need to define one of the downscale factors equal to ``1``.
+Pooling works only with 4D inputs, but you can use in case of 3D if you apply the same trick as we did it with convolutional layer. You need to define one of the downscale factors equal to ``1``.
 
 .. code-block:: python
 
@@ -299,7 +303,7 @@ Pooling defined as for the 2D layers, but you also can use in case of 1D convolu
 Graph connections
 =================
 
-Any connection between layers in NeuPy is a `Directional Acyclic Graph (DAG) <https://en.wikipedia.org/wiki/Directed_acyclic_graph>`_. So far we've encountered only sequential connections which is just a simple case of DAG. Let's build more complex relations between layers.
+Any connection between layers in NeuPy is a `Directional Acyclic Graph (DAG) <https://en.wikipedia.org/wiki/Directed_acyclic_graph>`_. So far we've encountered only sequential connections which is just a simple case of DAG. In NeuPy we are allowed to build much more complex relations between layers.
 
 .. code-block:: python
 
@@ -350,9 +354,17 @@ Also its possible to define the same graph relations between layers with inline 
     >>> network = input_layer > [left_branch, right_branch] > layers.Concatenate()
     >>> network = network > layers.Reshape() > layers.Softmax()
 
-.. raw:: html
+Notice that we've used Python's list with NeuPy's inline operator. List helps us to define one to many relations
 
-    <br>
+.. code-block:: python
+
+    input_layer > [left_branch, right_branch]
+
+Or many to one
+
+.. code-block:: python
+
+    [left_branch, right_branch] > layers.Concatenate()
 
 Compile Networks
 ================
@@ -404,7 +416,7 @@ Compile Networks
 Subnetworks
 ===========
 
-**Subnetworks** makes easier to read and understend network's structure. Instead of explaining it's much easier to show the main advantage of this method. Here is an example of the simpe convolutional network.
+**Subnetworks** is a method that improves readability of the networks architecture. Instead of explaining it's much easier to show the main advantage of this method. Here is an example of the simpe convolutional network.
 
 .. code-block:: python
 
@@ -435,7 +447,7 @@ Subnetworks
         layers.Softmax(10),
     )
 
-Does it look simple to you? Not at all. However, this is a really simple network. It looks a bit complecated because it contains a lot of simple layers that usually different libraries combine in one. For instance, non-linearity like :layer:`Relu` is usually built-in inside the :layer:`Convolution` layer. So instead of combining simple layers in one complecated in NeuPy it's better to use subnetworks. Here is an example on how to re-write network's structure from the previous example in terms of subnetworks.
+Does it look simple to you? Not at all. However, this is a really simple network. It looks a bit complecated because it contains a lot of simple layers that usually combined in one. For instance, non-linearity like :layer:`Relu` is usually built-in inside the :layer:`Convolution` layer. So instead of combining simple layers in one complecated in NeuPy it's better to use subnetworks. Here is an example on how to re-write network's structure from the previous example in terms of subnetworks.
 
 .. code-block:: python
 
