@@ -1,6 +1,8 @@
 Create custom layers
 ====================
 
+.. contents::
+
 Element-wise transformation
 ---------------------------
 
