@@ -15,7 +15,7 @@ We can set up different initialization method for layer parameters.
         ]
     )
 
-Initialization class has an ability to generate parameters based on the specified shape. For instance, first sigmoid layer has 10 inputs and 30 outputs which means that this layer should have weight with shape ``(10, 30)``. During initialization we don't need to specify the shape of the parameter. This information would be provided to the Initializer class during layer initialization step.
+Initialization class has an ability to generate parameters based on the specified shape. For instance, a first sigmoid layer has 10 inputs and 30 outputs which mean that this layer should have weight with shape ``(10, 30)``. During initialization, we don't need to specify the shape of the parameter. This information would be provided to the Initializer class during layer initialization step.
 
 It's possible to set up our own weight for layers. Let's do the same initialization procedure with manually generated weights.
 
@@ -54,7 +54,7 @@ Share parameters between layers
 Create custom initialization methods
 ------------------------------------
 
-It's very easy to create our own initialization method. All we need is just to inherit from the ``init.Initializer`` class and define ``sample`` method that accepts two argument (including the ``self`` argument).
+It's very easy to create our own initialization method. All we need is just to inherit from the ``init.Initializer`` class and define ``sample`` method that accepts two arguments (including the ``self`` argument).
 
 .. code-block:: python
 

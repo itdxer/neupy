@@ -6,14 +6,14 @@ NeuPy supports many different neural network types. These networks we can divide
 1. Neural Networks with constructible architecture.
 2. Neural Networks with fixed architecture.
 
-Networks with constructible architecture is basically a field related to the deep learning. These algorithms allows us to construct different neural network architectures. Another type is networks with fixed architecture. There are many different classes like :network:`RBM`, :network:`PNN`, :network:`CMAC` and so on. These networks has pre-defined architecture and there is no way to add or remove layers from it, but they have parameters that allow us to control them.
+Networks with constructible architecture is basically a field related to the deep learning. These algorithms allow us to construct different neural network architectures. Another type is networks with fixed architecture. There are many different classes like :network:`RBM`, :network:`PNN`, :network:`CMAC` and so on. These networks have pre-defined architecture and there is no way to add or remove layers from it, but they have parameters that allow us to control them.
 
 Despite the major differences between neural network algorithms the API for them looks very similar.
 
 Initialization
 --------------
 
-This is a first step to initialize neural network. Each algorithms has it's own set of parameters. Let's check :network:`MinibatchGradientDescent` algorithm as an example. Since most of the algorithms has lots of different parameters, NeuPy doesn't support ordered arguments.
+This is a first step to initialize the neural network. Each algorithm has its own set of parameters. Let's check :network:`MinibatchGradientDescent` algorithm as an example. Since most of the algorithms have lots of different parameters, NeuPy doesn't support ordered arguments.
 
 .. code-block:: python
 
@@ -50,7 +50,7 @@ If we need to validate our training results with validation dataset we can pass 
     nnet = algorithms.MinibatchGradientDescent((2, 3, 1))
     nnet.train(x_train, y_train, x_test, y_test, epochs=1000)
 
-To be able to see output after each epoch we can set up ``verbose=True`` in the network initialization step.
+To be able to see the output after each epoch we can set up ``verbose=True`` in the network initialization step.
 
 .. code-block:: python
 
@@ -71,7 +71,7 @@ Or we can switch on ``verbose`` parameter after the initialization.
 Prediction
 ----------
 
-To make a prediction we need to pass dataset to the ``predict`` method.
+To make a prediction we need to pass a dataset to the ``predict`` method.
 
 .. code-block:: python
 

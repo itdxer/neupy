@@ -14,7 +14,7 @@ There are a few articles that can help you to start working with NeuPy. They pro
 Code Examples
 -------------
 
-NeuPy is very intuitive and it's easy to read and understand code. To learn more about different Neural Network types you can check these code examples.
+NeuPy is very intuitive and it's easy to read and understand the code. To learn more about different Neural Network types you can check these code examples.
 
 Convolutional Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

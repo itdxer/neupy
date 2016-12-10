@@ -18,7 +18,7 @@ The simplest way to debug network is just to explore input and output shapes.
     >>> connection.output_shape
     (3,)
 
-Also it's possible to iterate through layers and check shapes per each layer separately.
+Also, it's possible to iterate through layers and check shapes per each layer separately.
 
 .. code-block:: python
 
@@ -40,12 +40,12 @@ Also it's possible to iterate through layers and check shapes per each layer sep
     Input shape: (5,)
     Output shape: (3,)
 
-More complex connection that are not suitable for sequential iteration will be topologically sorted at first and then presented one by one during the iteration.
+The more complex connection that is not suitable for sequential iteration will be topologically sorted at first and then presented one by one during the iteration.
 
 Visualize connections
 ---------------------
 
-For the debugging it's useful to explore network architecture. It's possible to create visualize layer graph in NeuPy. Let's say we have this network.
+For the debugging, it's useful to explore network architecture. It's possible to create visualize layer graph in NeuPy. Let's say we have this network.
 
 .. code-block:: python
 
@@ -84,9 +84,9 @@ To be able to visualize it we can just use :class:`layer_structure <neupy.plots.
     :align: center
     :alt: Debug network structure
 
-This function will pop-up PDF file with graph that defines all layers and relations between them. In addition it shows input and output shape per each layer.
+This function will pop-up PDF file with a graph that defines all layers and relations between them. In addition, it shows input and output shape per each layer.
 
-Instead of showing pop-up preview we can simply save it in separate file.
+Instead of showing pop-up preview we can simply save it in the separate file.
 
 .. code-block:: python
 
@@ -94,7 +94,7 @@ Instead of showing pop-up preview we can simply save it in separate file.
     plots.layer_structure(connection, filepath='connection.pdf',
                           show=False)
 
-Function also works for the training algorithms with constructible architectures. Basically it automatically extracts architecture from the algorithm and visualizae it.
+The function also works for the training algorithms with constructible architectures. Basically, it automatically extracts architecture from the algorithm and visualizes it.
 
 .. code-block:: python
 
@@ -140,7 +140,7 @@ Any relation between layers stores in the specific graph. To be able to debug co
     >>> input_layer.graph
     [(Input(10), [])]
 
-Since layer doesn't have any relations its graph is empty. We can define new layers and connect them in one network.
+Since layer doesn't have any relations its graph is empty. We can define new layers and create a new network.
 
 .. code-block:: python
 
@@ -161,7 +161,7 @@ Since layer doesn't have any relations its graph is empty. We can define new lay
      (Relu(30), [Concatenate()]),
      (Concatenate(), [])]
 
-Graph has formatted representation in case if it was printed. But if we need to access it directly than we shold check the ``forward_graph`` attribute.
+The graph has formatted representation in case if it was printed. But if we need to access it directly then we shold check the ``forward_graph`` attribute.
 
 .. code-block:: python
 

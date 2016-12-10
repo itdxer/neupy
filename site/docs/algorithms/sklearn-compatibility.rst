@@ -1,7 +1,7 @@
 Scikit-learn compatibility
 ==========================
 
-NeuPy contains a few compatibilities that makes it possible use NeuPy with scikit-learn library.
+NeuPy contains a few compatibilities that make it possible use NeuPy with the scikit-learn library.
 
 Fit method
 ----------

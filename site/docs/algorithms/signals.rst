@@ -4,7 +4,7 @@ Signals and Early stopping
 Basics
 ------
 
-Signals is a special type of functions that can be triggered after a certain event. Most of the NeuPy algorithm supports two types of events
+Signal is a special type of functions that can be triggered after a certain event. Most of the NeuPy algorithm supports two types of events
 
 1. ``epoch_end_signal`` - event that triggers after each training epoch
 2. ``train_end_signal`` - event that triggers at the end of the training

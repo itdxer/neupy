@@ -29,7 +29,7 @@ Let's start with basics. The most useful function to define relations between la
 Inline operator
 ---------------
 
-Also NeuPy provides a special **inline** operator that helps to define sequential relations between layers.
+Also, NeuPy provides a special **inline** operator that helps to define sequential relations between layers.
 
 .. code-block:: python
 
@@ -360,7 +360,7 @@ Notice that we've used Python's list with NeuPy's inline operator. List helps us
 
     input_layer > [left_branch, right_branch]
 
-Or many to one
+and many to one
 
 .. code-block:: python
 
