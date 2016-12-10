@@ -6,7 +6,7 @@ Create custom layers
 Element-wise transformation
 ---------------------------
 
-The simplest type of layers is the one that doesn't modify shape of the input value. To construct this layer we need to inherit from the ``BaseLayer`` class and define ``output`` method.
+The simplest type of layers is the one that doesn't modify a shape of the input value. To construct this layer we need to inherit from the ``BaseLayer`` class and define ``output`` method.
 
 .. code-block:: python
 
@@ -17,12 +17,12 @@ The simplest type of layers is the one that doesn't modify shape of the input va
         def output(self, input_value):
             return asfloat(2) * input_value
 
-From the code you can see that I've used ``asfloat`` function. This function converts any number to a float. Type of the float depense on the ``theano.config.floatX`` variable. This function gives flexibility to automatically convert variable to the float type that Theano use on backend.
+From the code, you can see that I've used ``asfloat`` function. This function converts any number to a float. Type of the float depends on the ``theano.config.floatX`` variable. This function gives flexibility to automatically convert input variable to the float type that Theano uses on the backend.
 
 Layers with activation function
 -------------------------------
 
-Layers with activation function is a special type of layers. It have a different behaviour depending on the input size. If input size is specified it applies linear transformation to the input after that pass it through the activation function. If input size wasn't presented than layer passes input directly through the activation function
+Layers with activation function is a special type of layers. It has a different behavior depending on the input size. If input size is specified it applies linear transformation to the input after that pass it through the activation function. If input size wasn't presented than layer passes input directly through the activation function
 
 .. code-block:: python
 
@@ -43,7 +43,7 @@ To be able to construct your own layer with different activation function you ne
 Validate input shape
 --------------------
 
-Not all relations between layers are suitable. For instance, we are not able to apply pooling to matrix. For this cases we need to have an ability to validate input shape and trigger error that will inform us about connection issues.
+Not all relations between layers are suitable. For instance, we are not able to apply pooling to the matrix. For this cases we need to have an ability to validate input shape and trigger error that will inform us about connection issues.
 
 .. code-block:: python
 
@@ -91,7 +91,7 @@ Add parameters to the layer
         def output(self, input_value):
             return T.dot(self.weight, input_value)
 
-Initialization method triggers when layer has defined input shape.
+Initialization method triggers when the layer has defined input shape.
 
 Layer that accepts multiple inputs
 ----------------------------------

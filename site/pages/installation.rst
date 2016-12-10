@@ -13,7 +13,7 @@ Install the latest development version
 
     $ pip install --upgrade git+https://github.com/itdxer/neupy.git@dev
 
-Also you can clone a project and install it from a source code
+Also, you can clone a project and install it from a source code
 
 .. code-block:: bash
 
@@ -21,4 +21,4 @@ Also you can clone a project and install it from a source code
     cd neupy
     python setup.py install
 
-If you want learn more about NeuPy you can start with :ref:`tutorials <tutorials>` or read :ref:`documentation <documentation>`.
+If you want to learn more about NeuPy you can start with :ref:`tutorials <tutorials>` or read the :ref:`documentation <documentation>`.

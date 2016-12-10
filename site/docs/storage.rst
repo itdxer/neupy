@@ -4,7 +4,7 @@ Storage for Neural Networks
 Save and load layer parameters
 ------------------------------
 
-NeuPy allows to store network's parameters in a pickle file. Here is an example
+NeuPy allows storing network's parameters in a pickle file. Here is an example
 
 .. code-block:: python
 
@@ -33,7 +33,7 @@ Since parameters are stored in a regular pickle files it's possible to load them
     with open('/path/to/file.pickle', 'rb') as f:
         parameters = pickle.load(f)
 
-Stored object in the pickle file has following format.
+The stored object in the pickle file has the following format.
 
 .. code-block:: python
 

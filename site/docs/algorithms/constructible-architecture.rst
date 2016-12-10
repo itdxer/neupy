@@ -6,7 +6,7 @@ Algorithms with Constructible Network Architecture
 Set up connections
 ------------------
 
-There are three ways to set up connection between layers. We can use predefined networks as a first argument
+There are three ways to define relations between layers inside the algorithm. We can use predefined networks as a first argument
 
 .. code-block:: python
 
@@ -41,7 +41,7 @@ Or we can set up a list of layers that define sequential relations between layer
         shuffle_data=True
     )
 
-This is just a syntax simplification that allows to avoid ``layer.join`` function usage.
+This is just a syntax simplification that allows avoiding ``layer.join`` function usage.
 
 Small networks can be defined with a help of inline operator.
 
@@ -70,7 +70,7 @@ Algorithms
 
 NeuPy supports lots of different training algorithms based on the backpropagation. You can check :ref:`Cheat sheet <cheatsheet-backprop-algorithms>` if you want to learn more about them.
 
-Before using these algorithms you mut understand that not all of them are suitable for all problems. Some of the methods like :network:`Levenberg-Marquardt <LevenbergMarquardt>` or :network:`Conjugate Gradient <ConjugateGradient>` work better for small networks and they would be extremely slow for networks with millions of parameters. In addition it's important to note that not all algorithms are possible to train with mini-batches. Algorithms like :network:`Conjugate Gradient <ConjugateGradient>` are not able to train properly with mini-batch.
+Before using these algorithms you must understand that not all of them are suitable for all problems. Some of the methods like :network:`Levenberg-Marquardt <LevenbergMarquardt>` or :network:`Conjugate Gradient <ConjugateGradient>` work better for small networks and they would be extremely slow for networks with millions of parameters. In addition, it's important to note that not all algorithms are possible to train with mini-batches. Algorithms like :network:`Conjugate Gradient <ConjugateGradient>` are not able to train properly with mini-batch.
 
 Error functions
 ---------------
@@ -91,7 +91,7 @@ NeuPy has many different :ref:`error functions <cheatsheet-error-function>`.
         error='categorical_crossentropy',
     )
 
-Also it's possible to create custom error functions. Error function should have two mandatory arguments.
+Also, it's possible to create custom error functions. Error function should have two mandatory arguments.
 
 .. code-block:: python
 
@@ -111,12 +111,12 @@ Also it's possible to create custom error functions. Error function should have 
         error=mean_absolute_error,
     )
 
-Error function should return a scalar, because during the training output from the error function will be used as a variable with respect to which we are differentiating
+Error function should return a scalar because during the training output from the error function will be used as a variable with respect to which we are differentiating
 
 Add-ons
 -------
 
-Algorithms with constructuble architectures allow to use additional update rules for parameter regularization and step update. For instance, we want to add :network:`Weight Decay <WeightDecay>` regularization and we want to minimize step monotonically after each epoch.
+Algorithms with constructible architectures allow to use additional update rules for parameter regularization and step update. For instance, we want to add :network:`Weight Decay <WeightDecay>` regularization and we want to minimize step monotonically after each epoch.
 
 .. code-block:: python
 
@@ -164,7 +164,7 @@ Both :network:`WeightDecay` and :network:`StepDecay` algorithms have additional 
                 algorithms.StepDecay]
     )
 
-NeuPy doesn't allow to use multiple regularization and step update add-ons for training algorithm.
+NeuPy doesn't allow to use multiple regularizations and step update add-ons for training algorithm.
 
 .. code-block:: python
 

@@ -4,7 +4,7 @@ Visualizations
 Hinton diagram
 --------------
 
-More information about the Hinton diagram you can find in :plot:`documentation <hinton>`. Small example shown below.
+More information about the Hinton diagram you can find in :plot:`documentation <hinton>`. The small example is shown below.
 
 .. code-block:: python
 
@@ -28,7 +28,7 @@ More information about the Hinton diagram you can find in :plot:`documentation <
 Error plot
 ----------
 
-Plot shows the basic information about network's training progress.
+The plot shows the basic information about network's training progress.
 
 .. code-block:: python
 
