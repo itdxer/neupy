@@ -1,3 +1,5 @@
+.. _constructible-architecture:
+
 Algorithms with Constructible Network Architecture
 ==================================================
 

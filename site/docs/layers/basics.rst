@@ -366,24 +366,14 @@ and many to one
 
     [left_branch, right_branch] > layers.Concatenate()
 
+.. raw:: html
+
+    <br>
+
 Compile Networks
 ================
 
-.. code-block:: python
-
-    import numpy as np
-    from neupy import layers
-
-    network = layers.join(
-        layers.Input(10),
-        layers.Relu(20),
-        layers.Softmax(4),
-    )
-    network = network.compile()
-
-    x_test = np.random.random((12, 10))
-    network.predict(x_test)
-
+NeuPy allows using Theano interface to compile network into function.
 
 .. code-block:: python
 
@@ -405,11 +395,26 @@ Compile Networks
     >>> from neupy import asfloat
     >>>
     >>> # Convert matrix to float. Type of the
-    ... # float depence on theano.config.floatX variable
+    ... # float depencds on theano.config.floatX variable
     ... x_test = asfloat(np.random.random((12, 10)))
     >>>
     >>> predict(x_test).shape
     (12, 4)
+
+Training algorithms are able to compile networks automaticaly.
+
+.. code-block:: python
+
+    from neupy import algorithms, layers
+
+    network = layers.join(
+        layers.Input(10),
+        layers.Sigmoid(40),
+        layers.Sigmoid(2),
+    )
+    bpnet = algorithms.GradientDescent(network)
+
+More information about training algorithms you can find :ref:`here <constructible-architecture>`.
 
 .. _subnetworks:
 
