@@ -13,7 +13,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
         <meta name="viewport" content="width=device-width">
         <title>Discrete Hopfiel Network &mdash; NeuPy</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="Boston house-prices dataset" href="../../07/04/boston_house_prices_dataset.html" /><link rel="prev" title="Password recovery" href="../21/password_recovery.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Predict prices for houses in the area of Boston" href="../../07/04/boston_house_prices_dataset.html" /><link rel="prev" title="Password recovery" href="../21/password_recovery.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.5',
@@ -48,10 +48,6 @@
         });
     </script>
 <style media="screen" type="text/css">
-    #fork_me { display: none; }
-    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
-    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
-
     .docutils { width: 100%; }
     .docutils td { padding: 10px; }
     .section { word-wrap:break-word; }
@@ -74,6 +70,16 @@
     .math .s1 { color: #000 !important; } /* Literal.String.Single */
     .math .ss { color: #000 !important; } /* Literal.String.Symbol */
     .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+    dt[id^="neupy."] {
+        background-color: #e6edf2;
+        border: 1px solid #f8fafb;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+    div[id^="module-neupy."] h1 {
+        display: none;
+    }
 </style></head>
     <body role="document">
         <!--[if lt IE 7]>
@@ -81,24 +87,29 @@
         <![endif]-->
 
       <div id="container"><header role="banner">
-            <hgroup>
-              <h1><a href="../../../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
-          </header>
-      <nav role="navigation">
-            <ul><li class="main-nav">
-                  <a href="../../../pages/home.html">Home</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../../../page1.html">Articles</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../../../pages/documentation.html">Documentation</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../../../pages/installation.html">Installation</a>
-                </li>
-              </ul>
-          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
+        <div>
+          <h1><a href="../../../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../docs/tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
             <span>September 20, 2015</span>
         </div>
     <div class="section" id="discrete-hopfiel-network">
@@ -168,7 +179,7 @@ So first of all we are going to learn how to train the network.
 For the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> train procedure doesn&#8217;t require any iterations.
 It includes just an outer product between input vector and transposed input vector.</p>
 <div class="math">
-\[\begin{split}\begin{align*}
+\[ \begin{align}\begin{aligned}\begin{split}\begin{align*}
     W = x \cdot x^T =
     \left[
     \begin{array}{c}
@@ -185,7 +196,7 @@ It includes just an outer product between input vector and transposed input vect
     \end{array}
     \right]
 \end{align*}
-=\end{split}\]\[\begin{split}\begin{align*}
+=\end{split}\\\begin{split}\begin{align*}
     =
     \left[
     \begin{array}{c}
@@ -195,7 +206,7 @@ It includes just an outer product between input vector and transposed input vect
       x_n x_1 &amp; x_n x_2 &amp; \cdots &amp; x_n^2 \\
     \end{array}
     \right]
-\end{align*}\end{split}\]</div>
+\end{align*}\end{split}\end{aligned}\end{align} \]</div>
 <p><span class="math">\(W\)</span> is a weight matrix and <span class="math">\(x\)</span> is an input vector.
 Each value <span class="math">\(x_i\)</span> in the input vector can only be -1 or 1.
 So on the matrix diagonal we only have squared values and it means we will always see 1s at those places.
@@ -272,7 +283,7 @@ The second and fourth are also the same, but with an opposite sign.
 That&#8217;s because in the vector <span class="math">\(u\)</span> we have 1 on the first and third places and -1 on the other.</p>
 <p>To make weight from the <span class="math">\(U\)</span> matrix, we need to remove ones from the diagonal.</p>
 <div class="math">
-\[W = U - I =\]\[\begin{split}= \left[
+\[ \begin{align}\begin{aligned}W = U - I =\\\begin{split}= \left[
     \begin{array}{cccc}
         1 &amp; -1 &amp; 1 &amp; -1\\
         -1 &amp; 1 &amp; -1 &amp; 1\\
@@ -287,14 +298,14 @@ That&#8217;s because in the vector <span class="math">\(u\)</span> we have 1 on 
         0 &amp; 0 &amp; 1 &amp; 0\\
         0 &amp; 0 &amp; 0 &amp; 1
     \end{array}
-\right] =\end{split}\]\[\begin{split}= \left[
+\right] =\end{split}\\\begin{split}= \left[
     \begin{array}{cccc}
         0 &amp; -1 &amp; 1 &amp; -1\\
         -1 &amp; 0 &amp; -1 &amp; 1\\
         1 &amp; -1 &amp; 0 &amp; -1\\
         -1 &amp; 1 &amp; -1 &amp; 0
     \end{array}
-\right]\end{split}\]</div>
+\right]\end{split}\end{aligned}\end{align} \]</div>
 <p><span class="math">\(I\)</span> is the identity matrix and <span class="math">\(I \in \Bbb R^{n \times n}\)</span>, where <span class="math">\(n\)</span> is a number of features in the input vector.</p>
 <p>When we have one stored vector inside the weights we don&#8217;t really need to remove 1s from the diagonal.
 The main problem would appear when we have more than one vector stored in the weights.
@@ -310,7 +321,7 @@ We are going to master both of them.</p>
 <p>Synchronous approach is much more easier for understanding, so we are going to look at it firstly.
 To recover your pattern from memory you just need to multiply the weight matrix by the input vector.</p>
 <div class="math">
-\[\begin{split}\begin{align*}
+\[ \begin{align}\begin{aligned}\begin{split}\begin{align*}
     s = {W}\cdot{x}=
     \left[
     \begin{array}{cccc}
@@ -329,7 +340,7 @@ To recover your pattern from memory you just need to multiply the weight matrix 
     \end{array}
     \right]
     =
-\end{align*}\end{split}\]\[\begin{split}\begin{align*}
+\end{align*}\end{split}\\\begin{split}\begin{align*}
     =
     \left[
         \begin{array}{c}
@@ -339,7 +350,7 @@ To recover your pattern from memory you just need to multiply the weight matrix 
           w_{n1}x_1+w_{n2}x_2 + \cdots + w_{nn} x_n\\
         \end{array}
     \right]
-\end{align*}\end{split}\]</div>
+\end{align*}\end{split}\end{aligned}\end{align} \]</div>
 <p>Let&#8217;s analyze the result.
 We summed up all information from the weights where each value can be any integer with an absolute value equal to or smaller than the number of patterns inside the network.
 It&#8217;s clear that total sum value for <span class="math">\(s_i\)</span> is not necessary equal to -1 or 1, so we have to make additional operations that will make bipolar vector from the vector <span class="math">\(s\)</span>.</p>
@@ -356,12 +367,12 @@ If the first two vectors have 1 in the first position and the third one has -1 a
 We can perform the same procedure with <span class="math">\(sign\)</span> function.
 So the output value should be 1 if total value is greater then zero and -1 otherwise.</p>
 <div class="math">
-\[\begin{split}sign(x) = \left\{
+\[ \begin{align}\begin{aligned}\begin{split}sign(x) = \left\{
     \begin{array}{lr}
         &amp;1 &amp;&amp; : x \ge 0\\
         &amp;-1 &amp;&amp; : x &lt; 0
     \end{array}
-\right.\\\end{split}\]\[y = sign(s)\]</div>
+\right.\\\end{split}\\y = sign(s)\end{aligned}\end{align} \]</div>
 <p>That&#8217;s it.
 Now <span class="math">\(y\)</span> store the recovered pattern from the input vector <span class="math">\(x\)</span>.</p>
 <p>Maybe now you can see why we can&#8217;t use zeros in the input vectors.
@@ -380,7 +391,7 @@ We iteratively repeat this operation multiple times and after some point network
 <p>Let&#8217;s look at this example:
 Consider that we already have a weight matrix <span class="math">\(W\)</span> with one pattern <span class="math">\(x\)</span>  inside of it.</p>
 <div class="math">
-\[\begin{split}\begin{align*}
+\[ \begin{align}\begin{aligned}\begin{split}\begin{align*}
     W =
     \left[
     \begin{array}{cccc}
@@ -389,7 +400,7 @@ Consider that we already have a weight matrix <span class="math">\(W\)</span> wi
       -1 &amp; -1 &amp; 0
     \end{array}
     \right]
-\end{align*}\end{split}\]\[\begin{split}\begin{align*}
+\end{align*}\end{split}\\\begin{split}\begin{align*}
     x =
     \left[
         \begin{array}{c}
@@ -398,7 +409,7 @@ Consider that we already have a weight matrix <span class="math">\(W\)</span> wi
           -1
         \end{array}
     \right]
-\end{align*}\end{split}\]</div>
+\end{align*}\end{split}\end{aligned}\end{align} \]</div>
 <p>Let&#8217;s assume that we have a vector <span class="math">\(x^{'}\)</span> from which we want to recover the pattern.</p>
 <div class="math">
 \[\begin{split}\begin{align*}
@@ -498,7 +509,7 @@ Sometimes network output can be something that we hasn&#8217;t taught it.</p>
 <span class="math">\(\theta\)</span> is a threshold.
 Threshold defines the bound to the sign function.
 For this reason <span class="math">\(\theta\)</span> is equal to 0 for the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.
-In terms of a linear algebra we can write formula for the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> energy Function more simplier.</p>
+In terms of a linear algebra we can write formula for the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> energy Function more simpler.</p>
 <div class="math">
 \[E = -\frac{1}{2} x^T W x\]</div>
 <p>But linear algebra notation works only with the <span class="math">\(x\)</span> vector, we can&#8217;t use matrix <span class="math">\(X\)</span> with multiple input patterns instead of the <span class="math">\(x\)</span> in this formula.
@@ -733,7 +744,7 @@ If we have all perfectly opposite symmetric patterns then squares on the antidia
 </div>
 <div class="section" id="more-reading">
 <h2><a class="toc-backref" href="#id14">More reading</a><a class="headerlink" href="#more-reading" title="Permalink to this headline">¶</a></h2>
-<p>In addition you can read another article about a &#8216;<a class="reference internal" href="../21/password_recovery.html#password-recovery"><span>Password recovery</span></a>&#8216; from the memory using the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
+<p>In addition you can read another article about a &#8216;<a class="reference internal" href="../21/password_recovery.html#password-recovery"><span class="std std-ref">Password recovery</span></a>&#8216; from the memory using the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
 </div>
 <div class="section" id="references">
 <h2><a class="toc-backref" href="#id15">References</a><a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
@@ -771,36 +782,37 @@ from <a class="reference external" href="https://www.youtube.com/watch?v=gfPUWwB
         </div>
         </div><ul class="related clearfix">
             <li class="left"> &laquo; <a href="../21/password_recovery.html">Password recovery</a></li>
-            <li class="right"><a href="../../07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a> &raquo; </li>
+            <li class="right"><a href="../../07/04/boston_house_prices_dataset.html">Predict prices for houses in the area of Boston</a> &raquo; </li>
         </ul><div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "neupy";    var disqus_identifier = "2015/09/20/discrete_hopfield_network";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Posts</h1>
+    <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../../../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
             <a href="../21/password_recovery.html">Password recovery</a>
         </li><li>
             <a href="#">Discrete Hopfiel Network</a>
-        </li><li>
-            <a href="../../07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
-        </li><li>
-            <a href="../../07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
-</div>
-</section><section><div class="widget">
-    <h1>Cheat sheet</h1>
-    <ul>
-        <li><a href="../../../docs/cheatsheet.html#algorithms">Algorithms</a></li>
-        <li><a href="../../../docs/cheatsheet.html#layers">Layers</a></li>
-        <li><a href="../../../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
-        <li><a href="../../../docs/cheatsheet.html#error-functions">Error functions</a></li>
-    </ul>
 </div></section><section><div class="widget">
-    <h1>Installation</h1>
+    <h1>Install NeuPy</h1>
     <div class="highligh-bash">
         <div class="highlight">
             <pre>pip install neupy</pre>
         </div>
     </div>
-    <p>Read more in <a href="../../../pages/documentation.html">Documentation</a>.</p>
-    <p>Old documentations you can find <a href="../../../pages/versions.html">here</a>.</p>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../../../docs/tutorials.html">tutorials</a> and <a href="../../../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature you can feel
+        free to <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a> on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../../../pages/versions.html">here</a>.</div>
+    </p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../../../search.html" method="get">
@@ -809,10 +821,7 @@ from <a class="reference external" href="https://www.youtube.com/watch?v=gfPUWwB
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
-    <a id="fork_me" href="http://github.com/itdxer/neupy">
-        <img alt="Fork me" src="../../../_static/img/github-fork-green.png" />
-    </a></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

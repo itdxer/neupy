@@ -13,7 +13,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
         <meta name="viewport" content="width=device-width">
         <title>neupy.optimizations.golden_search module &mdash; NeuPy</title>
             <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -48,10 +48,6 @@
         });
     </script>
 <style media="screen" type="text/css">
-    #fork_me { display: none; }
-    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
-    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
-
     .docutils { width: 100%; }
     .docutils td { padding: 10px; }
     .section { word-wrap:break-word; }
@@ -74,6 +70,16 @@
     .math .s1 { color: #000 !important; } /* Literal.String.Single */
     .math .ss { color: #000 !important; } /* Literal.String.Symbol */
     .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+    dt[id^="neupy."] {
+        background-color: #e6edf2;
+        border: 1px solid #f8fafb;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+    div[id^="module-neupy."] h1 {
+        display: none;
+    }
 </style></head>
     <body role="document">
         <!--[if lt IE 7]>
@@ -81,24 +87,29 @@
         <![endif]-->
 
       <div id="container"><header role="banner">
-            <hgroup>
-              <h1><a href="../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
-          </header>
-      <nav role="navigation">
-            <ul><li class="main-nav">
-                  <a href="../pages/home.html">Home</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../page1.html">Articles</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../pages/documentation.html">Documentation</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../pages/installation.html">Installation</a>
-                </li>
-              </ul>
-          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+        <div>
+          <h1><a href="../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../docs/tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.optimizations.golden_search">
 <span id="neupy-optimizations-golden-search-module"></span><h1>neupy.optimizations.golden_search module<a class="headerlink" href="#module-neupy.optimizations.golden_search" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
@@ -150,34 +161,35 @@ best possbile step for specified function.</p>
         
         
         </div></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Posts</h1>
+    <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
             <a href="../2015/09/21/password_recovery.html">Password recovery</a>
         </li><li>
             <a href="../2015/09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
-        </li><li>
-            <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
-        </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
-</div>
-</section><section><div class="widget">
-    <h1>Cheat sheet</h1>
-    <ul>
-        <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
-        <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
-        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
-        <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
-    </ul>
 </div></section><section><div class="widget">
-    <h1>Installation</h1>
+    <h1>Install NeuPy</h1>
     <div class="highligh-bash">
         <div class="highlight">
             <pre>pip install neupy</pre>
         </div>
     </div>
-    <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../docs/tutorials.html">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature you can feel
+        free to <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a> on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
+    </p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
@@ -186,10 +198,7 @@ best possbile step for specified function.</p>
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
-    <a id="fork_me" href="http://github.com/itdxer/neupy">
-        <img alt="Fork me" src="../_static/img/github-fork-green.png" />
-    </a></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

@@ -13,9 +13,9 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
         <meta name="viewport" content="width=device-width">
-        <title>Storage &mdash; NeuPy</title>
+        <title>Storage for Neural Networks &mdash; NeuPy</title>
             <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="next" title="Neural Network Surgery" href="surgery.html" /><link rel="prev" title="Parameter Initialization Methods" href="layers/init-methods.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Secondary" href="secondary.html" /><link rel="prev" title="Scikit-learn compatibility" href="algorithms/sklearn-compatibility.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -48,10 +48,6 @@
         });
     </script>
 <style media="screen" type="text/css">
-    #fork_me { display: none; }
-    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
-    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
-
     .docutils { width: 100%; }
     .docutils td { padding: 10px; }
     .section { word-wrap:break-word; }
@@ -74,6 +70,16 @@
     .math .s1 { color: #000 !important; } /* Literal.String.Single */
     .math .ss { color: #000 !important; } /* Literal.String.Symbol */
     .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+    dt[id^="neupy."] {
+        background-color: #e6edf2;
+        border: 1px solid #f8fafb;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+    div[id^="module-neupy."] h1 {
+        display: none;
+    }
 </style></head>
     <body role="document">
         <!--[if lt IE 7]>
@@ -81,30 +87,74 @@
         <![endif]-->
 
       <div id="container"><header role="banner">
-            <hgroup>
-              <h1><a href="../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
-          </header>
-      <nav role="navigation">
-            <ul><li class="main-nav">
-                  <a href="../pages/home.html">Home</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../page1.html">Articles</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../pages/documentation.html">Documentation</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../pages/installation.html">Installation</a>
-                </li>
-              </ul>
-          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
-    <div class="section" id="storage">
-<h1>Storage<a class="headerlink" href="#storage" title="Permalink to this headline">¶</a></h1>
-<p>After succesful learning you can save network and later use it for prediction tasks.
-There already exists awesome library - <a class="reference external" href="https://github.com/uqfoundation/dill">dill</a>.
-As a <span class="docutils literal"><span class="pre">pickle</span></span> library <span class="docutils literal"><span class="pre">dill</span></span> provides similar interface to serialize and de-serialize built-in python objects.
-The main advantage of this is a functionality that can store a network class and attributes without additional functionality.</p>
+        <div>
+          <h1><a href="../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+    <div class="section" id="storage-for-neural-networks">
+<h1>Storage for Neural Networks<a class="headerlink" href="#storage-for-neural-networks" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="save-and-load-layer-parameters">
+<h2>Save and load layer parameters<a class="headerlink" href="#save-and-load-layer-parameters" title="Permalink to this headline">¶</a></h2>
+<p>NeuPy allows storing network&#8217;s parameters in a pickle file. Here is an example</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">storage</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">storage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;/path/to/file.pickle&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To be able to load parameters you need to have predefined network structure. Using layer names NeuPy can restore parameters from the pickle file.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">storage</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;/path/to/file.pickle&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Since parameters are stored in a regular pickle files it&#8217;s possible to load them without NeuPy.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/path/to/file.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">parameters</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The stored object in the pickle file has the following format.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;layer-name-1&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">...</span><span class="p">]),</span>
+        <span class="s1">&#39;bias&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">...</span><span class="p">]),</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;layer-name-2&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">...</span><span class="p">]),</span>
+        <span class="s1">&#39;bias&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">...</span><span class="p">]),</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="save-and-load-algorithms">
+<h2>Save and load algorithms<a class="headerlink" href="#save-and-load-algorithms" title="Permalink to this headline">¶</a></h2>
+<p>After succesful learning you can save network and later use it for prediction tasks. There already exists awesome library - <a class="reference external" href="https://github.com/uqfoundation/dill">dill</a>. As a <span class="docutils literal"><span class="pre">pickle</span></span> library <span class="docutils literal"><span class="pre">dill</span></span> provides similar interface to serialize and de-serialize built-in python objects. The main advantage of this is a functionality that can store a network class and attributes without additional functionality.</p>
 <p>First of all you need to install <span class="docutils literal"><span class="pre">dill</span></span> library</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ pip install dill&gt;<span class="o">=</span>0.2.3
 </pre></div>
@@ -135,7 +185,7 @@ The main advantage of this is a functionality that can store a network class and
 <span class="gp">...</span>
 </pre></div>
 </div>
-<p>And then you can use it from other file and try to reproduce the same error rate.</p>
+<p>And then you can load it from the <span class="docutils literal"><span class="pre">network-storage.dill</span></span> file and try to reproduce the same error rate.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dill</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
@@ -158,43 +208,45 @@ The main advantage of this is a functionality that can store a network class and
 <p>The interface for <span class="docutils literal"><span class="pre">dill</span></span> library is the same as for <span class="docutils literal"><span class="pre">pickle</span></span>, so functions
 like <span class="docutils literal"><span class="pre">dumps</span></span> or <span class="docutils literal"><span class="pre">loads</span></span> are available.</p>
 </div>
+</div>
 
     <div class="postmeta">
         
         
         
         </div><ul class="related clearfix">
-            <li class="left"> &laquo; <a href="layers/init-methods.html">Parameter Initialization Methods</a></li>
-            <li class="right"><a href="surgery.html">Neural Network Surgery</a> &raquo; </li>
+            <li class="left"> &laquo; <a href="algorithms/sklearn-compatibility.html">Scikit-learn compatibility</a></li>
+            <li class="right"><a href="secondary.html">Secondary</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Posts</h1>
+    <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
             <a href="../2015/09/21/password_recovery.html">Password recovery</a>
         </li><li>
             <a href="../2015/09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
-        </li><li>
-            <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
-        </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
-</div>
-</section><section><div class="widget">
-    <h1>Cheat sheet</h1>
-    <ul>
-        <li><a href="cheatsheet.html#algorithms">Algorithms</a></li>
-        <li><a href="cheatsheet.html#layers">Layers</a></li>
-        <li><a href="cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
-        <li><a href="cheatsheet.html#error-functions">Error functions</a></li>
-    </ul>
 </div></section><section><div class="widget">
-    <h1>Installation</h1>
+    <h1>Install NeuPy</h1>
     <div class="highligh-bash">
         <div class="highlight">
             <pre>pip install neupy</pre>
         </div>
     </div>
-    <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
+    <p>
+        <div>Learn more about NeuPy reading <a href="tutorials.html">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature you can feel
+        free to <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a> on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
+    </p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
@@ -203,10 +255,7 @@ like <span class="docutils literal"><span class="pre">dumps</span></span> or <sp
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
-    <a id="fork_me" href="http://github.com/itdxer/neupy">
-        <img alt="Fork me" src="../_static/img/github-fork-green.png" />
-    </a></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

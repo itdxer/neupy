@@ -6,6 +6,7 @@ Submodules
 
 .. toctree::
 
+   neupy.datasets.digits
    neupy.datasets.reber
 
 Module contents

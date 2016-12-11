@@ -13,7 +13,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
         <meta name="viewport" content="width=device-width">
         <title>neupy.algorithms.competitive.sofm module &mdash; NeuPy</title>
             <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -48,10 +48,6 @@
         });
     </script>
 <style media="screen" type="text/css">
-    #fork_me { display: none; }
-    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
-    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
-
     .docutils { width: 100%; }
     .docutils td { padding: 10px; }
     .section { word-wrap:break-word; }
@@ -74,6 +70,16 @@
     .math .s1 { color: #000 !important; } /* Literal.String.Single */
     .math .ss { color: #000 !important; } /* Literal.String.Symbol */
     .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+    dt[id^="neupy."] {
+        background-color: #e6edf2;
+        border: 1px solid #f8fafb;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+    div[id^="module-neupy."] h1 {
+        display: none;
+    }
 </style></head>
     <body role="document">
         <!--[if lt IE 7]>
@@ -81,53 +87,40 @@
         <![endif]-->
 
       <div id="container"><header role="banner">
-            <hgroup>
-              <h1><a href="../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
-          </header>
-      <nav role="navigation">
-            <ul><li class="main-nav">
-                  <a href="../pages/home.html">Home</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../page1.html">Articles</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../pages/documentation.html">Documentation</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../pages/installation.html">Installation</a>
-                </li>
-              </ul>
-          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+        <div>
+          <h1><a href="../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../docs/tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.competitive.sofm">
 <span id="neupy-algorithms-competitive-sofm-module"></span><h1>neupy.algorithms.competitive.sofm module<a class="headerlink" href="#module-neupy.algorithms.competitive.sofm" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.algorithms.competitive.sofm.SOFM">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.competitive.sofm.</span><span class="descname">SOFM</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.sofm.SOFM" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="neupy.algorithms.associative.kohonen.html#neupy.algorithms.associative.kohonen.Kohonen" title="neupy.algorithms.associative.kohonen.Kohonen"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.associative.kohonen.Kohonen</span></span></a></p>
-<p>Self-Organizing Feature Map.</p>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.competitive.sofm.</span><span class="descname">SOFM</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.sofm.SOFM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Self-Organizing Feature Map (SOFM).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>learning_radius</strong> : int</p>
-<blockquote>
-<div><p>Learning radius.</p>
-</div></blockquote>
-<p><strong>features_grid</strong> : int</p>
-<blockquote>
-<div><p>Learning radius.</p>
-</div></blockquote>
-<p><strong>transform</strong> : {&#8216;linear&#8217;, &#8216;euclid&#8217;, &#8216;cos&#8217;}</p>
-<blockquote>
-<div><p>Indicate transformation operation related to the input layer.
-The <span class="docutils literal"><span class="pre">linear</span></span> value mean that input data would be multiplied by
-weights in typical way. The <span class="docutils literal"><span class="pre">euclid</span></span> method will identify the
-closest weight vector to the input one. The <span class="docutils literal"><span class="pre">cos</span></span> made the same
-as <span class="docutils literal"><span class="pre">euclid</span></span>, but instead of euclid distance it uses cosine
-similarity. Defaults to <span class="docutils literal"><span class="pre">linear</span></span>.</p>
-</div></blockquote>
-<p><strong>n_inputs</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_inputs</strong> : int</p>
 <blockquote>
 <div><p>Number of input units.</p>
 </div></blockquote>
@@ -135,11 +128,36 @@ similarity. Defaults to <span class="docutils literal"><span class="pre">linear<
 <blockquote>
 <div><p>Number of output units.</p>
 </div></blockquote>
+<p><strong>learning_radius</strong> : int</p>
+<blockquote>
+<div><p>Learning radius.</p>
+</div></blockquote>
+<p><strong>features_grid</strong> : list, tuple, None</p>
+<blockquote>
+<div><p>Feature grid defines shape of the output neurons.
+The new shape should be compatible with the number
+of outputs. Defaults to <span class="docutils literal"><span class="pre">(n_outputs,</span> <span class="pre">1)</span></span>.</p>
+</div></blockquote>
+<p><strong>transform</strong> : {<span class="docutils literal"><span class="pre">linear</span></span>, <span class="docutils literal"><span class="pre">euclid</span></span>, <span class="docutils literal"><span class="pre">cos</span></span>}</p>
+<blockquote>
+<div><p>Indicate transformation operation related to the
+input layer.</p>
+<ul class="simple">
+<li>The <span class="docutils literal"><span class="pre">linear</span></span> value mean that input data would be
+multiplied by weights in typical way.</li>
+<li>The <span class="docutils literal"><span class="pre">euclid</span></span> method will identify the closest
+weight vector to the input one.</li>
+<li>The <span class="docutils literal"><span class="pre">cos</span></span> transformation identifies cosine
+similarity between input dataset and
+network&#8217;s weights.</li>
+</ul>
+<p>Defaults to <span class="docutils literal"><span class="pre">linear</span></span>.</p>
+</div></blockquote>
 <p><strong>weight</strong> : array-like, Initializer</p>
 <blockquote>
 <div><p>Neural network weights.
 Value defined manualy should have shape <span class="docutils literal"><span class="pre">(n_inputs,</span> <span class="pre">n_outputs)</span></span>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.Normal" title="neupy.core.init.Normal"><span class="xref py py-class docutils literal"><span class="pre">Normal()</span></span></a>.</p>
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Normal" title="neupy.init.Normal"><span class="xref py py-class docutils literal"><span class="pre">Normal()</span></span></a>.</p>
 </div></blockquote>
 <p><strong>step</strong> : float</p>
 <blockquote>
@@ -147,19 +165,22 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 </div></blockquote>
 <p><strong>show_epoch</strong> : int or str</p>
 <blockquote>
-<div><p>This property controls how often the network will display information
-about training. There are two main syntaxes for this property.
-You can describe it as positive integer number and it
-will describe how offen would you like to see summary output in
-terminal. For instance, number <cite>100</cite> mean that network will show you
-summary in 100, 200, 300 ... epochs. String value should be in a
-specific format. It should contain the number of times that the output
-will be displayed in the terminal. The second part is just
-a syntax word <span class="docutils literal"><span class="pre">time</span></span> or <span class="docutils literal"><span class="pre">times</span></span> just to make text readable.
-For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that the network will show
-output twice with approximately equal period of epochs and one
-additional output would be after the finall epoch.
-Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+<div><p>This property controls how often the network will
+display information about training. There are two
+main syntaxes for this property.</p>
+<ul class="simple">
+<li>You can define it as a positive integer number. It
+defines how offen would you like to see summary
+output in terminal. For instance, number <cite>100</cite> mean
+that network shows summary at 100th, 200th,
+300th ... epochs.</li>
+<li>String defines number of times you want to see output in
+terminal. For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that
+the network will show output twice with approximately
+equal period of epochs and one additional output would
+be after the finall epoch.</li>
+</ul>
+<p>Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
 </div></blockquote>
 <p><strong>shuffle_data</strong> : bool</p>
 <blockquote>
@@ -184,21 +205,49 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">environment</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="mf">0.1961</span><span class="p">,</span> <span class="mf">0.9806</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="o">-</span><span class="mf">0.1961</span><span class="p">,</span> <span class="mf">0.9806</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="o">-</span><span class="mf">0.5812</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8137</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="o">-</span><span class="mf">0.8137</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5812</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sofmnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">SOFM</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">n_inputs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">n_outputs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">learning_radius</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">features_grid</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sofmnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sofmnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">array([[0, 1],</span>
+<span class="go">       [0, 1],</span>
+<span class="go">       [1, 0],</span>
+<span class="go">       [1, 0]])</span>
+</pre></div>
+</div>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="51%" />
-<col width="49%" />
+<col width="43%" />
+<col width="57%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>predict(input_data)</td>
-<td>Predict value.</td>
+<td>Predicts output for the specified input.</td>
 </tr>
 <tr class="row-even"><td>train(input_train, epochs=100)</td>
-<td>&nbsp;</td>
+<td>Train neural network.</td>
 </tr>
 <tr class="row-odd"><td>fit(*args, **kwargs)</td>
-<td>The same as <span class="docutils literal"><span class="pre">train</span></span> method.</td>
+<td>Alias to the <span class="docutils literal"><span class="pre">train</span></span> method.</td>
 </tr>
 </tbody>
 </table>
@@ -207,12 +256,6 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <span class="descname">features_grid</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.sofm.SOFM.features_grid" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="neupy.algorithms.competitive.sofm.SOFM.init_properties">
-<span class="descname">init_properties</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.sofm.SOFM.init_properties" title="Permalink to this definition">¶</a></dt>
-<dd><p>Setup default values before populate the options.</p>
-</dd></dl>
-
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.sofm.SOFM.learning_radius">
 <span class="descname">learning_radius</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.sofm.SOFM.learning_radius" title="Permalink to this definition">¶</a></dt>
@@ -220,7 +263,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.sofm.SOFM.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'transform': Option(class_name='SOFM', value=linear), 'n_inputs': Option(class_name='BaseAssociative', value=None), 'step': Option(class_name='BaseNetwork', value=0.1), 'train_end_signal': Option(class_name='BaseNetwork', value=None), 'features_grid': Option(class_name='SOFM', value=None), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'learning_radius': Option(class_name='SOFM', value=0), 'n_outputs': Option(class_name='BaseAssociative', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'weight': Option(class_name='BaseAssociative', value=Normal(mean=0, std=0.01))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.sofm.SOFM.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'n_outputs': Option(class_name='BaseAssociative', value=IntProperty(name=&quot;n_outputs&quot;)), 'features_grid': Option(class_name='SOFM', value=TypedListProperty(name=&quot;features_grid&quot;)), 'learning_radius': Option(class_name='SOFM', value=IntProperty(name=&quot;learning_radius&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'n_inputs': Option(class_name='BaseAssociative', value=IntProperty(name=&quot;n_inputs&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'weight': Option(class_name='BaseAssociative', value=ParameterProperty(name=&quot;weight&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'transform': Option(class_name='SOFM', value=ChoiceProperty(name=&quot;transform&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.competitive.sofm.SOFM.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -247,34 +290,35 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
         
         
         </div></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Posts</h1>
+    <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
             <a href="../2015/09/21/password_recovery.html">Password recovery</a>
         </li><li>
             <a href="../2015/09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
-        </li><li>
-            <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
-        </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
-</div>
-</section><section><div class="widget">
-    <h1>Cheat sheet</h1>
-    <ul>
-        <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
-        <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
-        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
-        <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
-    </ul>
 </div></section><section><div class="widget">
-    <h1>Installation</h1>
+    <h1>Install NeuPy</h1>
     <div class="highligh-bash">
         <div class="highlight">
             <pre>pip install neupy</pre>
         </div>
     </div>
-    <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../docs/tutorials.html">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature you can feel
+        free to <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a> on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
+    </p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
@@ -283,10 +327,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
-    <a id="fork_me" href="http://github.com/itdxer/neupy">
-        <img alt="Fork me" src="../_static/img/github-fork-green.png" />
-    </a></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

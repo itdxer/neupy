@@ -13,7 +13,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
         <meta name="viewport" content="width=device-width">
         <title>neupy.algorithms.rbfn.rbf_kmeans module &mdash; NeuPy</title>
             <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -48,10 +48,6 @@
         });
     </script>
 <style media="screen" type="text/css">
-    #fork_me { display: none; }
-    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
-    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
-
     .docutils { width: 100%; }
     .docutils td { padding: 10px; }
     .section { word-wrap:break-word; }
@@ -74,6 +70,16 @@
     .math .s1 { color: #000 !important; } /* Literal.String.Single */
     .math .ss { color: #000 !important; } /* Literal.String.Symbol */
     .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+    dt[id^="neupy."] {
+        background-color: #e6edf2;
+        border: 1px solid #f8fafb;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+    div[id^="module-neupy."] h1 {
+        display: none;
+    }
 </style></head>
     <body role="document">
         <!--[if lt IE 7]>
@@ -81,54 +87,61 @@
         <![endif]-->
 
       <div id="container"><header role="banner">
-            <hgroup>
-              <h1><a href="../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
-          </header>
-      <nav role="navigation">
-            <ul><li class="main-nav">
-                  <a href="../pages/home.html">Home</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../page1.html">Articles</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../pages/documentation.html">Documentation</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../pages/installation.html">Installation</a>
-                </li>
-              </ul>
-          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+        <div>
+          <h1><a href="../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../docs/tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.rbfn.rbf_kmeans">
 <span id="neupy-algorithms-rbfn-rbf-kmeans-module"></span><h1>neupy.algorithms.rbfn.rbf_kmeans module<a class="headerlink" href="#module-neupy.algorithms.rbfn.rbf_kmeans" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.algorithms.rbfn.rbf_kmeans.RBFKMeans">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.rbfn.rbf_kmeans.</span><span class="descname">RBFKMeans</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/rbf_kmeans.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.rbf_kmeans.RBFKMeans" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.gd.NoStepSelection</span></span>, <a class="reference internal" href="neupy.network.learning.html#neupy.network.learning.UnsupervisedLearningMixin" title="neupy.network.learning.UnsupervisedLearningMixin"><span class="xref py py-class docutils literal"><span class="pre">neupy.network.learning.UnsupervisedLearningMixin</span></span></a>, <a class="reference internal" href="neupy.network.base.html#neupy.network.base.BaseNetwork" title="neupy.network.base.BaseNetwork"><span class="xref py py-class docutils literal"><span class="pre">neupy.network.base.BaseNetwork</span></span></a></p>
-<p>Radial basis function K-means for clustering.</p>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.rbfn.rbf_kmeans.</span><span class="descname">RBFKMeans</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/rbf_kmeans.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.rbf_kmeans.RBFKMeans" title="Permalink to this definition">¶</a></dt>
+<dd><p>Radial basis function K-means for clustering.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_clusters</strong> : int</p>
 <blockquote>
-<div><p>number of clusters in dataset.</p>
+<div><p>Number of clusters.</p>
 </div></blockquote>
 <p><strong>show_epoch</strong> : int or str</p>
 <blockquote>
-<div><p>This property controls how often the network will display information
-about training. There are two main syntaxes for this property.
-You can describe it as positive integer number and it
-will describe how offen would you like to see summary output in
-terminal. For instance, number <cite>100</cite> mean that network will show you
-summary in 100, 200, 300 ... epochs. String value should be in a
-specific format. It should contain the number of times that the output
-will be displayed in the terminal. The second part is just
-a syntax word <span class="docutils literal"><span class="pre">time</span></span> or <span class="docutils literal"><span class="pre">times</span></span> just to make text readable.
-For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that the network will show
-output twice with approximately equal period of epochs and one
-additional output would be after the finall epoch.
-Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+<div><p>This property controls how often the network will
+display information about training. There are two
+main syntaxes for this property.</p>
+<ul class="simple">
+<li>You can define it as a positive integer number. It
+defines how offen would you like to see summary
+output in terminal. For instance, number <cite>100</cite> mean
+that network shows summary at 100th, 200th,
+300th ... epochs.</li>
+<li>String defines number of times you want to see output in
+terminal. For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that
+the network will show output twice with approximately
+equal period of epochs and one additional output would
+be after the finall epoch.</li>
+</ul>
+<p>Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
 </div></blockquote>
 <p><strong>shuffle_data</strong> : bool</p>
 <blockquote>
@@ -154,8 +167,8 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.algorithms</span> <span class="kn">import</span> <span class="n">RBFKMeans</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.algorithms</span> <span class="k">import</span> <span class="n">RBFKMeans</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
 <span class="gp">... </span>    <span class="p">[</span><span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">],</span>
@@ -170,8 +183,8 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <span class="gp">... </span>    <span class="p">[</span><span class="mf">0.56</span><span class="p">,</span> <span class="mf">0.67</span><span class="p">],</span>
 <span class="gp">... </span>    <span class="p">[</span><span class="mf">0.36</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">],</span>
 <span class="gp">... </span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rbfk_net</span> <span class="o">=</span> <span class="n">RBFKMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rbfk_net</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rbfk_net</span> <span class="o">=</span> <span class="n">RBFKMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rbfk_net</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rbfk_net</span><span class="o">.</span><span class="n">centers</span>
 <span class="go">array([[ 0.228     ,  0.312     ],</span>
 <span class="go">       [ 0.48166667,  0.76666667]])</span>
@@ -185,30 +198,30 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="6%" />
-<col width="94%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>centers</td>
-<td>(numpy array [n_clusters, n_futures]) After training this property will contain coordinates to cluster centers.</td>
+<td>(array-like with shape (n_clusters, n_futures)) Cluster centers.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="26%" />
-<col width="74%" />
+<col width="52%" />
+<col width="48%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>train(input_train, input_test=None, epsilon=1e-5, epochs=100)</td>
-<td>Trains network until it converges. Parameter <span class="docutils literal"><span class="pre">epochs</span></span> control maximum number of iterations, just to make sure that network will stop training procedure if it can&#8217;t converge.</td>
+<tr class="row-odd"><td>train(input_train, epsilon=1e-5, epochs=100)</td>
+<td>Trains network.</td>
 </tr>
 <tr class="row-even"><td>predict(input_data)</td>
-<td>Predict value.</td>
+<td>Predicts output for the specified input.</td>
 </tr>
 <tr class="row-odd"><td>fit(*args, **kwargs)</td>
-<td>The same as <span class="docutils literal"><span class="pre">train</span></span> method.</td>
+<td>Alias to the <span class="docutils literal"><span class="pre">train</span></span> method.</td>
 </tr>
 </tbody>
 </table>
@@ -219,7 +232,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 
 <dl class="attribute">
 <dt id="neupy.algorithms.rbfn.rbf_kmeans.RBFKMeans.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'epoch_end_signal': Option(class_name='BaseNetwork', value=None), 'shuffle_data': Option(class_name='BaseNetwork', value=False), 'n_clusters': Option(class_name='RBFKMeans', value=None), 'show_epoch': Option(class_name='BaseNetwork', value=1), 'step': Option(class_name='BaseNetwork', value=0.1), 'train_end_signal': Option(class_name='BaseNetwork', value=None)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/rbf_kmeans.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.rbf_kmeans.RBFKMeans.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'n_clusters': Option(class_name='RBFKMeans', value=IntProperty(name=&quot;n_clusters&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/rbf_kmeans.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.rbf_kmeans.RBFKMeans.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -237,6 +250,11 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.rbfn.rbf_kmeans.RBFKMeans.step">
+<span class="descname">step</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/rbf_kmeans.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.rbf_kmeans.RBFKMeans.step" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbfn.rbf_kmeans.RBFKMeans.train">
@@ -278,34 +296,35 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
         
         
         </div></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Posts</h1>
+    <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
             <a href="../2015/09/21/password_recovery.html">Password recovery</a>
         </li><li>
             <a href="../2015/09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
-        </li><li>
-            <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
-        </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
-</div>
-</section><section><div class="widget">
-    <h1>Cheat sheet</h1>
-    <ul>
-        <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
-        <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
-        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
-        <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
-    </ul>
 </div></section><section><div class="widget">
-    <h1>Installation</h1>
+    <h1>Install NeuPy</h1>
     <div class="highligh-bash">
         <div class="highlight">
             <pre>pip install neupy</pre>
         </div>
     </div>
-    <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../docs/tutorials.html">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature you can feel
+        free to <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a> on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
+    </p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
@@ -314,10 +333,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
-    <a id="fork_me" href="http://github.com/itdxer/neupy">
-        <img alt="Fork me" src="../_static/img/github-fork-green.png" />
-    </a></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

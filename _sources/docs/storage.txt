@@ -1,10 +1,59 @@
-Storage
-=======
+Storage for Neural Networks
+===========================
 
-After succesful learning you can save network and later use it for prediction tasks.
-There already exists awesome library - `dill <https://github.com/uqfoundation/dill>`_.
-As a ``pickle`` library ``dill`` provides similar interface to serialize and de-serialize built-in python objects.
-The main advantage of this is a functionality that can store a network class and attributes without additional functionality.
+Save and load layer parameters
+------------------------------
+
+NeuPy allows storing network's parameters in a pickle file. Here is an example
+
+.. code-block:: python
+
+    from neupy import layers, storage
+
+    network = layers.join(
+        layers.Input(10),
+        layers.Relu(20),
+        layers.Relu(30),
+        layers.Softmax(10),
+    )
+    storage.save(network, filepath='/path/to/file.pickle')
+
+To be able to load parameters you need to have predefined network structure. Using layer names NeuPy can restore parameters from the pickle file.
+
+.. code-block:: python
+
+    storage.load(network, filepath='/path/to/file.pickle')
+
+Since parameters are stored in a regular pickle files it's possible to load them without NeuPy.
+
+.. code-block:: python
+
+    import pickle
+
+    with open('/path/to/file.pickle', 'rb') as f:
+        parameters = pickle.load(f)
+
+The stored object in the pickle file has the following format.
+
+.. code-block:: python
+
+    {
+        'layer-name-1': {
+            'weight': np.array([...]),
+            'bias': np.array([...]),
+        },
+        'layer-name-2': {
+            'weight': np.array([...]),
+            'bias': np.array([...]),
+        },
+        ...
+    }
+
+
+Save and load algorithms
+------------------------
+
+After succesful learning you can save network and later use it for prediction tasks. There already exists awesome library - `dill <https://github.com/uqfoundation/dill>`_. As a ``pickle`` library ``dill`` provides similar interface to serialize and de-serialize built-in python objects. The main advantage of this is a functionality that can store a network class and attributes without additional functionality.
 
 First of all you need to install ``dill`` library
 
@@ -40,7 +89,7 @@ There is a simple example for network serialization.
     ...     dill.dump(bpnet, f)
     ...
 
-And then you can use it from other file and try to reproduce the same error rate.
+And then you can load it from the ``network-storage.dill`` file and try to reproduce the same error rate.
 
 .. code-block:: python
 

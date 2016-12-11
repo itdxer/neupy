@@ -11,7 +11,6 @@ Subpackages
     neupy.datasets
     neupy.helpers
     neupy.layers
-    neupy.network
     neupy.optimizations
     neupy.plots
 
@@ -22,8 +21,9 @@ Submodules
 
    neupy.environment
    neupy.estimators
-   neupy.preprocessing
-   neupy.surgery
+   neupy.exceptions
+   neupy.init
+   neupy.storage
    neupy.utils
 
 Module contents

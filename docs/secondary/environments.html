@@ -13,7 +13,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
         <meta name="viewport" content="width=device-width">
         <title>Environments &mdash; NeuPy</title>
             <link rel="stylesheet" href="../../_static/normalize.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="next" title="Cheat sheet" href="../cheatsheet.html" /><link rel="prev" title="Scikit-learn compatibility" href="sklearn-compatibility.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Visualizations" href="visualizations.html" /><link rel="prev" title="Secondary" href="../secondary.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
         VERSION:     '1.5',
@@ -48,10 +48,6 @@
         });
     </script>
 <style media="screen" type="text/css">
-    #fork_me { display: none; }
-    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
-    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
-
     .docutils { width: 100%; }
     .docutils td { padding: 10px; }
     .section { word-wrap:break-word; }
@@ -74,6 +70,16 @@
     .math .s1 { color: #000 !important; } /* Literal.String.Single */
     .math .ss { color: #000 !important; } /* Literal.String.Symbol */
     .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+    dt[id^="neupy."] {
+        background-color: #e6edf2;
+        border: 1px solid #f8fafb;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+    div[id^="module-neupy."] h1 {
+        display: none;
+    }
 </style></head>
     <body role="document">
         <!--[if lt IE 7]>
@@ -81,27 +87,31 @@
         <![endif]-->
 
       <div id="container"><header role="banner">
-            <hgroup>
-              <h1><a href="../../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
-          </header>
-      <nav role="navigation">
-            <ul><li class="main-nav">
-                  <a href="../../pages/home.html">Home</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../../page1.html">Articles</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../../pages/documentation.html">Documentation</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../../pages/installation.html">Installation</a>
-                </li>
-              </ul>
-          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+        <div>
+          <h1><a href="../../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="environments">
 <h1>Environments<a class="headerlink" href="#environments" title="Permalink to this headline">¶</a></h1>
-<p>This is a simple functionality that can help you set up your environment.</p>
 <div class="section" id="reproducible-environment">
 <h2>Reproducible environment<a class="headerlink" href="#reproducible-environment" title="Permalink to this headline">¶</a></h2>
 <p>This functionality can help you make your code reproducible.</p>
@@ -109,13 +119,21 @@
 <span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The <span class="docutils literal"><span class="pre">reproducible</span></span> function accepts only one optional argument <span class="docutils literal"><span class="pre">seed</span></span>. By default it is equal to <span class="docutils literal"><span class="pre">0</span></span>.</p>
+<p>The <span class="docutils literal"><span class="pre">reproducible</span></span> function accepts only one optional argument <span class="docutils literal"><span class="pre">seed</span></span>. By default, it is equal to <span class="docutils literal"><span class="pre">0</span></span>.</p>
 </div>
 <div class="section" id="sandbox-environment">
 <h2>Sandbox environment<a class="headerlink" href="#sandbox-environment" title="Permalink to this headline">¶</a></h2>
 <p>This functionality helps set up some Theano configurations that can speed up compilation time and slow down computation time. It is useful for experimentation.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
 <span class="n">environment</span><span class="o">.</span><span class="n">sandbox</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="speedup-calculation">
+<h2>Speedup calculation<a class="headerlink" href="#speedup-calculation" title="Permalink to this headline">¶</a></h2>
+<p>Set up 32-bit float type for all tensors and scallers. In addition, this method disables garbage collector and speed up the calculation, but it increases an amount of memory that Theano uses for computation.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
+<span class="n">environment</span><span class="o">.</span><span class="n">speedup</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -126,37 +144,38 @@
         
         
         </div><ul class="related clearfix">
-            <li class="left"> &laquo; <a href="sklearn-compatibility.html">Scikit-learn compatibility</a></li>
-            <li class="right"><a href="../cheatsheet.html">Cheat sheet</a> &raquo; </li>
+            <li class="left"> &laquo; <a href="../secondary.html">Secondary</a></li>
+            <li class="right"><a href="visualizations.html">Visualizations</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Posts</h1>
+    <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
             <a href="../../2015/09/21/password_recovery.html">Password recovery</a>
         </li><li>
             <a href="../../2015/09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
-        </li><li>
-            <a href="../../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
-        </li><li>
-            <a href="../../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
-</div>
-</section><section><div class="widget">
-    <h1>Cheat sheet</h1>
-    <ul>
-        <li><a href="../cheatsheet.html#algorithms">Algorithms</a></li>
-        <li><a href="../cheatsheet.html#layers">Layers</a></li>
-        <li><a href="../cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
-        <li><a href="../cheatsheet.html#error-functions">Error functions</a></li>
-    </ul>
 </div></section><section><div class="widget">
-    <h1>Installation</h1>
+    <h1>Install NeuPy</h1>
     <div class="highligh-bash">
         <div class="highlight">
             <pre>pip install neupy</pre>
         </div>
     </div>
-    <p>Read more in <a href="../../pages/documentation.html">Documentation</a>.</p>
-    <p>Old documentations you can find <a href="../../pages/versions.html">here</a>.</p>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../tutorials.html">tutorials</a> and <a href="../../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature you can feel
+        free to <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a> on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../../pages/versions.html">here</a>.</div>
+    </p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../../search.html" method="get">
@@ -165,10 +184,7 @@
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
-    <a id="fork_me" href="http://github.com/itdxer/neupy">
-        <img alt="Fork me" src="../../_static/img/github-fork-green.png" />
-    </a></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

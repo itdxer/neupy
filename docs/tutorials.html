@@ -1,0 +1,242 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
+        <meta name="viewport" content="width=device-width">
+        <title>Tutorials &mdash; NeuPy</title>
+            <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../_static/plugins.js"></script>
+        <script src="../_static/main.js"></script>
+        <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Layers" href="layers.html" /><link rel="prev" title="Installation" href="../pages/installation.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+<style media="screen" type="text/css">
+    .docutils { width: 100%; }
+    .docutils td { padding: 10px; }
+    .section { word-wrap:break-word; }
+    .descname { font-weight: bold; }
+    .highlight-python + .figure { margin-top: 20px; }
+    .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+    .dataframe td { padding: 5px; }
+
+    .math .gd { color: #000 !important; } /* Generic.Deleted */
+    .math .m { color: #000 !important; } /* Literal.Number */
+    .math .s { color: #000 !important; } /* Literal.String */
+    .math .mf { color: #000 !important; } /* Literal.Number.Float */
+    .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+    .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+    .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+    .math .sc { color: #000 !important; } /* Literal.String.Char */
+    .math .s2 { color: #000 !important; } /* Literal.String.Double */
+    .math .si { color: #000 !important; } /* Literal.String.Interpol */
+    .math .sx { color: #000 !important; } /* Literal.String.Other */
+    .math .s1 { color: #000 !important; } /* Literal.String.Single */
+    .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+    .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+    dt[id^="neupy."] {
+        background-color: #e6edf2;
+        border: 1px solid #f8fafb;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+    div[id^="module-neupy."] h1 {
+        display: none;
+    }
+</style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+        <div>
+          <h1><a href="../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="#">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+    <div class="section" id="tutorials">
+<span id="id1"></span><h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="tutorial-articles">
+<h2>Tutorial Articles<a class="headerlink" href="#tutorial-articles" title="Permalink to this headline">¶</a></h2>
+<p>There are a few articles that can help you to start working with NeuPy. They provide a solution to different problems and explain each step of the overall process.</p>
+<ul class="simple">
+<li><a class="reference internal" href="../2016/11/12/mnist_classification.html#mnist-classification"><span class="std std-ref">MNIST Classification</span></a></li>
+<li><a class="reference internal" href="../2015/07/04/boston_house_prices_dataset.html#boston-house-price"><span class="std std-ref">Predict prices for houses in the area of Boston</span></a></li>
+</ul>
+</div>
+<div class="section" id="code-examples">
+<h2>Code Examples<a class="headerlink" href="#code-examples" title="Permalink to this headline">¶</a></h2>
+<p>NeuPy is very intuitive and it&#8217;s easy to read and understand the code. To learn more about different Neural Network types you can check these code examples.</p>
+<div class="section" id="convolutional-neural-networks">
+<h3>Convolutional Neural Networks<a class="headerlink" href="#convolutional-neural-networks" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/mnist_cnn.py">MNIST CNN</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/cifar10_cnn.py">CIFAR10 CNN</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/alexnet.py">Pretrained AlexNet CNN</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/vgg16.py">Pretrained VGG16 CNN</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/vgg19.py">Pretrained VGG19 CNN</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/squeezenet.py">SqueezeNet</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/googlenet.py">GoogleNet</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/inception_v3.py">Inception v3</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/resnet50.py">ResNet 50</a></li>
+</ul>
+</div>
+<div class="section" id="autoencoders">
+<h3>Autoencoders<a class="headerlink" href="#autoencoders" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/autoencoder/denoising_autoencoder.py">MNIST, Denoising Autoencoder</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/autoencoder/conv_autoencoder.py">MNIST, Convolutional Autoencoder</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/autoencoder/stacked_conv_autoencoders.py">MNIST, Stacked Convolutional Autoencoders</a></li>
+</ul>
+</div>
+<div class="section" id="boltzmann-machine">
+<h3>Boltzmann Machine<a class="headerlink" href="#boltzmann-machine" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/boltzmann_machine/rbm_mnist.py">Feature Learning from the MNIST Images, Restricted Boltzmann Machine (RBM)</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/boltzmann_machine/rbm_faces_sampling.py">Gibbs sampling using face images, Restricted Boltzmann Machine (RBM)</a></li>
+</ul>
+</div>
+<div class="section" id="mlp-neural-networks">
+<h3>MLP Neural Networks<a class="headerlink" href="#mlp-neural-networks" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/mlp/mnist_mlp.py">MNIST, Multilayer perceptron</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/mlp/rectangles_mlp.py">Rectangle images, Multilayer perceptron</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/mlp/boston_price_prediction.py">Boston House Price prediction, Hessian algorithm</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/mlp/gd_algorithms_visualization.py">Learning Algorithms Visualization, Gradient Descent, Momentum, RPROP and Conjugate Gradient</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/mlp/imdb_review_classification">IMDB review classification using CBOW and RPROP MLP</a></li>
+</ul>
+</div>
+<div class="section" id="competitive-neural-networks">
+<h3>Competitive Neural Networks<a class="headerlink" href="#competitive-neural-networks" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_basic.py">Simple SOFM example</a></li>
+</ul>
+</div>
+<div class="section" id="neural-networks-with-radial-basis-functions">
+<h3>Neural Networks with Radial Basis Functions<a class="headerlink" href="#neural-networks-with-radial-basis-functions" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/rbfn/pnn_iris.py">Classify iris dataset, Probabilistic Neural Network (PNN)</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/rbfn/grnn_params_selection.py">Regression using Diabetes dataset, Generilized Neural Nerwork (GRNN)</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/rbfn/music_speech">Music-Speech audio classification, Probabilistic Neural Network (PNN)</a></li>
+</ul>
+</div>
+<div class="section" id="memory-based-neural-networks">
+<h3>Memory based Neural Networks<a class="headerlink" href="#memory-based-neural-networks" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/memory/cmac_basic.py">Sinus function approximation, CMAC</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/memory/dhn_energy_func.py">Visualize Discrete Hopfield Neural Network energy function</a></li>
+<li><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py">Password recovery, Discrete Hopfield Neural Network</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+    <div class="postmeta">
+        
+        
+        
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="../pages/installation.html">Installation</a></li>
+            <li class="right"><a href="layers.html">Layers</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Articles</h1>
+    <ul><li>
+            <a href="../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
+            <a href="../2015/09/21/password_recovery.html">Password recovery</a>
+        </li><li>
+            <a href="../2015/09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
+        </li></ul>
+</div></section><section><div class="widget">
+    <h1>Install NeuPy</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neupy</pre>
+        </div>
+    </div>
+    <p>
+        <div>Learn more about NeuPy reading <a href="#">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature you can feel
+        free to <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a> on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
+    </p>
+</div></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

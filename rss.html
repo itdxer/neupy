@@ -5,8 +5,148 @@
         <link>http://neupy.com/</link>
         <description>Neural Networks in Python</description>
         <language>en-us</language>
-        <pubDate>Mon, 21 Sep 2015 00:00:00 +0300</pubDate>
+        <pubDate>Sat, 12 Nov 2016 00:00:00 +0200</pubDate>
         
+        <item>
+            <link>http://neupy.com/2016/11/12/mnist_classification.html</link>
+            <guid>http://neupy.com/2016/11/12/mnist_classification.html</guid>
+            <title><![CDATA[MNIST Classification]]></title>
+            <description><![CDATA[<span id="id1"/><h1>MNIST Classification</h1>
+<p>The MNIST problem is probably the most known for those who have already
+heared about neural networks. This short tutorial shows you how to build prediction models in NeuPy. Let’s start developing model.</p>
+<p>First of all we need to load data.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">model_selection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mnist</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">fetch_mldata</span><span class="p">(</span><span class="s1">'MNIST original'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">mnist</span><span class="o">.</span><span class="n">target</span>
+</pre></div>
+</div>
+<p>I used scikit-learn to fetch the MNIST dataset, but you can load it in different way.</p>
+<p>Data doesn’t have appropriate format for neural network, so we need to make simple transformation before use it.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">/</span> <span class="mf">255.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">-</span> <span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target_scaler</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">target_scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Next we need to divide dataset into two parts: train and test. Regarding <a class="reference external" href="http://yann.lecun.com/exdb/mnist/">The
+MNIST Database</a> page we will use 60,000
+samples for training and 10,000 for test.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">target</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">train_size</span><span class="o">=</span><span class="p">(</span><span class="mf">6.</span> <span class="o">/</span> <span class="mi">7</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the previous procedure I converted all data to <cite>float32</cite> data type. This
+simple trick will help us use less memory and decrease computational time.
+Theano is a main backend for the Gradient Descent based algorithms in NeuPy.
+For the Theano we need to add additional configuration that will explain Theano that
+we are going to use 32bit float numbers.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">theano</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theano</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">floatX</span> <span class="o">=</span> <span class="s1">'float32'</span>
+</pre></div>
+</div>
+<p>We prepared everything that we need for the neural network training. Now we are
+able to create the neural network that will classify digits for us.</p>
+<p>Let’s start with an architecture. I didn’t reinvent the wheel and used one of the know architectures from <a class="reference external" href="http://yann.lecun.com/exdb/mnist/">The Database</a> page which is 784 &gt; 500 &gt; 300 &gt; 10. As the main activation function I used Relu and Softmax for the final layer. The main algorithm is a Nesterov Momentum that uses 100 samples per batch iteration. Actually all this and other network configuration should be clear from the code shown below.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="p">],</span>
+<span class="gp">... </span>    <span class="n">error</span><span class="o">=</span><span class="s1">'categorical_crossentropy'</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">momentum</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">nesterov</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Isn’t it simple and clear? All the most important information related to the neural network you can find in the terminal output. If you run the code that shown above you would get the same output as on the figure below.</p>
+<a class="reference internal image-reference" href="http://neupy.com/_images/bpnet-config-logs.png"><img alt="Gradient Descent configuration" class="align-center" src="http://neupy.com/_images/bpnet-config-logs.png" style="width: 70%;"/></a>
+<p>From this output we can extract a lot of information about network configurations.</p>
+<p>First of all, as we can see, most of options have green color label, but some of them are gray. Green color defines all options which we put in network manually and gray color options are default parameters. All properties separeted on few groups and each group is a <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a>  parent classes. More information about <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm properties you will find in documentation, just click on algorithm name link and you will see it.</p>
+<p>In addition for feedforward neural networks it’s possible to check architecture in form of a table.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">architecture</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="http://neupy.com/_images/bpnet-architecture.png"><img alt="Neural Network Architecture" class="align-center" src="http://neupy.com/_images/bpnet-architecture.png" style="width: 70%;"/></a>
+<p>Now we are going to train network. Let set up 20 epochs for training procedure and check the result.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output in terminal should look similar to this one:</p>
+<a class="reference internal image-reference" href="http://neupy.com/_images/bpnet-train-logs.png"><img alt="GradientDescent training procedure output" class="align-center" src="http://neupy.com/_images/bpnet-train-logs.png" style="width: 70%;"/></a>
+<p>Output show the most important information related to training procedure. Each epoch contains 4 columns. First one identified epoch. The second one show training error. The third one is optional. In case you have validation dataset, you can check learning perfomanse using dataset separated from the learning procedure. And the last column shows how many time network trains during this epoch.</p>
+<p>From the table is not clear network’s training progress. We can check it very easy. Network instance contains built-in method that build line plot that show training progress. Let’s check our progress.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plots</span><span class="o">.</span><span class="n">error_plot</span><span class="p">(</span><span class="n">network</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="http://neupy.com/_images/bpnet-train-errors-plot.png"><img alt="GradientDescent epoch errors plot" class="align-center" src="http://neupy.com/_images/bpnet-train-errors-plot.png" style="width: 70%;"/></a>
+<p>From the figure above you can notice that validation error does not decrease over time. Sometimes it goes up and sometimes down, but it doesn’t mean that network trains poorly. Let’s check small example that can make this problem clear.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">actual_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1_prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model2_prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>In the code above you can see two prediction releate to the different models. The first model predicted two samples right and one wrong. The second one predicted everything right. But second model’s predictions are less certain. Let’s check the cross entropy error.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">estimators</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimators</span><span class="o">.</span><span class="n">binary_crossentropy</span><span class="p">(</span><span class="n">actual_values</span><span class="p">,</span> <span class="n">model1_prediction</span><span class="p">)</span>
+<span class="go">0.3756706118583679</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimators</span><span class="o">.</span><span class="n">binary_crossentropy</span><span class="p">(</span><span class="n">actual_values</span><span class="p">,</span> <span class="n">model2_prediction</span><span class="p">)</span>
+<span class="go">0.5108255743980408</span>
+</pre></div>
+</div>
+<p>That is the result that we looked for. The second model made better prediction, but it got a higher cross entropy error. It means that we less certain about our prediction. Similar situation we’ve observed in the plot above.</p>
+<p>Let’s finally make a simple report for our classification result.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_predicted</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_test</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">))</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">))</span>
+<span class="go">        precision    recall  f1-score   support</span>
+
+<span class="go">    0       0.98      0.99      0.99       936</span>
+<span class="go">    1       0.99      0.99      0.99      1163</span>
+<span class="go">    2       0.98      0.98      0.98       982</span>
+<span class="go">    3       0.98      0.99      0.98      1038</span>
+<span class="go">    4       0.98      0.98      0.98       948</span>
+<span class="go">    5       0.99      0.98      0.98       921</span>
+<span class="go">    6       0.99      0.99      0.99      1013</span>
+<span class="go">    7       0.98      0.98      0.98      1029</span>
+<span class="go">    8       0.98      0.98      0.98       978</span>
+<span class="go">    9       0.98      0.96      0.97       992</span>
+
+<span class="go">    avg / total       0.98      0.98      0.98     10000</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">score</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s2">"Validation accuracy: {:.2%}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">score</span><span class="p">))</span>
+<span class="go">Validation accuracy: 98.37%</span>
+</pre></div>
+</div>
+<p>The 98.37% accuracy is pretty good for such a quick solution. Additional modification can improve prediction accuracy.</p>
+]]></description>
+             <pubDate>Sat, 12 Nov 2016 00:00:00 +0200</pubDate>
+        </item>
+    
         <item>
             <link>http://neupy.com/2015/09/21/password_recovery.html</link>
             <guid>http://neupy.com/2015/09/21/password_recovery.html</guid>
@@ -28,7 +168,7 @@
 </ul>
 </div>
 <p>In this article we are going to build a simple neural network that will recover password from a broken one.
-If you aren’t familiar with a <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> algorithm, you can read <a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>this article</span></a>.</p>
+If you aren’t familiar with a <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> algorithm, you can read <a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span class="std std-ref">this article</span></a>.</p>
 <p>Before running all experiments, we need to set up <span class="docutils literal"><span class="pre">seed</span></span> parameter to make all results reproducible.
 But you can test code without it.</p>
 <div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
@@ -138,7 +278,7 @@ Let’s define this function and later we will look at it step by step.</p>
     <span class="k">return</span> <span class="n">dhnet</span>
 </pre></div>
 </div>
-<p>If you have already read <a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>Discrete Hopfield Network article</span></a>, you should know that if we add only one vector into the network we will get it dublicated or with reversed signs through the whole matrix.
+<p>If you have already read <a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span class="std std-ref">Discrete Hopfield Network article</span></a>, you should know that if we add only one vector into the network we will get it dublicated or with reversed signs through the whole matrix.
 To make it a little bit secure we can add some noise into the network.
 For this reason we introduce one additional parameter <span class="docutils literal"><span class="pre">noise_level</span></span> into the function.
 This parameter controls number of randomly generated binary vectors.
@@ -233,7 +373,7 @@ Network can produce a string which wasn’t taught.
 This string can look almost like a password with a few different symbols.
 The problem appears when network creates additional local minimum somewhere between input patterns.
 We can’t prevent it from running into the local minimum.
-For more information about this problem you can check <a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>article about Discrete Hopfield Network</span></a>.</p>
+For more information about this problem you can check <a class="reference internal" href="http://neupy.com/2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span class="std std-ref">article about Discrete Hopfield Network</span></a>.</p>
 </div>
 <div class="section" id="test-it-using-monte-carlo">
 <h2><a class="toc-backref" href="#id6">Test it using Monte Carlo</a></h2>
@@ -278,12 +418,12 @@ At each step we create random password and try to recover it from a broken passw
 </pre></div>
 </div>
 <p>After sumbmission your output should look the same as the one below (if you followed everything step by step):</p>
-<div class="highlight-python"><div class="highlight"><pre><span/>Number of fails for each test case:
-{'exclude-one': 11,
- 'exclude-quarter': 729,
- 'exclude-half': 5823,
- 'just-one-symbol': 9998,
- 'empty-string': 10000}
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">Number</span> <span class="n">of</span> <span class="n">fails</span> <span class="k">for</span> <span class="n">each</span> <span class="n">test</span> <span class="n">case</span><span class="p">:</span>
+<span class="p">{</span><span class="s1">'exclude-one'</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
+ <span class="s1">'exclude-quarter'</span><span class="p">:</span> <span class="mi">729</span><span class="p">,</span>
+ <span class="s1">'exclude-half'</span><span class="p">:</span> <span class="mi">5823</span><span class="p">,</span>
+ <span class="s1">'just-one-symbol'</span><span class="p">:</span> <span class="mi">9998</span><span class="p">,</span>
+ <span class="s1">'empty-string'</span><span class="p">:</span> <span class="mi">10000</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>At this test we catch two situations when the network recovers the password from one symbol, which is not very good.
@@ -293,33 +433,33 @@ Sometimes it can recover a password from an empty string, but such situation is 
 <p>In the last test, on each iteration we cut password from the left side and filled other parts with spaces.
 Let’s test another approach.
 Let’s cut a password from the right side and see what we’ll get:</p>
-<div class="highlight-python"><div class="highlight"><pre><span/>Number of fails for each test case:
-{'exclude-one': 17,
- 'exclude-quarter': 705,
- 'exclude-half': 5815,
- 'just-one-symbol': 9995,
- 'empty-string': 10000}
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">Number</span> <span class="n">of</span> <span class="n">fails</span> <span class="k">for</span> <span class="n">each</span> <span class="n">test</span> <span class="n">case</span><span class="p">:</span>
+<span class="p">{</span><span class="s1">'exclude-one'</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span>
+ <span class="s1">'exclude-quarter'</span><span class="p">:</span> <span class="mi">705</span><span class="p">,</span>
+ <span class="s1">'exclude-half'</span><span class="p">:</span> <span class="mi">5815</span><span class="p">,</span>
+ <span class="s1">'just-one-symbol'</span><span class="p">:</span> <span class="mi">9995</span><span class="p">,</span>
+ <span class="s1">'empty-string'</span><span class="p">:</span> <span class="mi">10000</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Results look similar to the previous test.</p>
 <p>Another interesting test can take place if you randomly replace some symbols with spaces:</p>
-<div class="highlight-python"><div class="highlight"><pre><span/>Number of fails for each test case:
-{'exclude-one': 14,
- 'exclude-quarter': 749,
- 'exclude-half': 5760,
- 'just-one-symbol': 9998,
- 'empty-string': 10000}
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">Number</span> <span class="n">of</span> <span class="n">fails</span> <span class="k">for</span> <span class="n">each</span> <span class="n">test</span> <span class="n">case</span><span class="p">:</span>
+<span class="p">{</span><span class="s1">'exclude-one'</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+ <span class="s1">'exclude-quarter'</span><span class="p">:</span> <span class="mi">749</span><span class="p">,</span>
+ <span class="s1">'exclude-half'</span><span class="p">:</span> <span class="mi">5760</span><span class="p">,</span>
+ <span class="s1">'just-one-symbol'</span><span class="p">:</span> <span class="mi">9998</span><span class="p">,</span>
+ <span class="s1">'empty-string'</span><span class="p">:</span> <span class="mi">10000</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>The result is very similar to the previous two.</p>
 <p>And finally, instead of replacing symbols with spaces we can remove symbols without any replacements.
 Results do not look good:</p>
-<div class="highlight-python"><div class="highlight"><pre><span/>Number of fails for each test case:
-{'exclude-one': 3897,
- 'exclude-quarter': 9464,
- 'exclude-half': 9943,
- 'just-one-symbol': 9998,
- 'empty-string': 9998}
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">Number</span> <span class="n">of</span> <span class="n">fails</span> <span class="k">for</span> <span class="n">each</span> <span class="n">test</span> <span class="n">case</span><span class="p">:</span>
+<span class="p">{</span><span class="s1">'exclude-one'</span><span class="p">:</span> <span class="mi">3897</span><span class="p">,</span>
+ <span class="s1">'exclude-quarter'</span><span class="p">:</span> <span class="mi">9464</span><span class="p">,</span>
+ <span class="s1">'exclude-half'</span><span class="p">:</span> <span class="mi">9943</span><span class="p">,</span>
+ <span class="s1">'just-one-symbol'</span><span class="p">:</span> <span class="mi">9998</span><span class="p">,</span>
+ <span class="s1">'empty-string'</span><span class="p">:</span> <span class="mi">9998</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>I guess in first case (<span class="docutils literal"><span class="pre">exclude-one</span></span>) we just got lucky and after eliminating one symbol from the end didn’t shift most of the symbols.
@@ -420,7 +560,7 @@ So first of all we are going to learn how to train the network.
 For the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> train procedure doesn’t require any iterations.
 It includes just an outer product between input vector and transposed input vector.</p>
 <div class="math">
-\[\begin{split}\begin{align*}
+\[ \begin{align}\begin{aligned}\begin{split}\begin{align*}
     W = x \cdot x^T =
     \left[
     \begin{array}{c}
@@ -437,7 +577,7 @@ It includes just an outer product between input vector and transposed input vect
     \end{array}
     \right]
 \end{align*}
-=\end{split}\]\[\begin{split}\begin{align*}
+=\end{split}\\\begin{split}\begin{align*}
     =
     \left[
     \begin{array}{c}
@@ -447,7 +587,7 @@ It includes just an outer product between input vector and transposed input vect
       x_n x_1 &amp; x_n x_2 &amp; \cdots &amp; x_n^2 \\
     \end{array}
     \right]
-\end{align*}\end{split}\]</div>
+\end{align*}\end{split}\end{aligned}\end{align} \]</div>
 <p><span class="math">\(W\)</span> is a weight matrix and <span class="math">\(x\)</span> is an input vector.
 Each value <span class="math">\(x_i\)</span> in the input vector can only be -1 or 1.
 So on the matrix diagonal we only have squared values and it means we will always see 1s at those places.
@@ -524,7 +664,7 @@ The second and fourth are also the same, but with an opposite sign.
 That’s because in the vector <span class="math">\(u\)</span> we have 1 on the first and third places and -1 on the other.</p>
 <p>To make weight from the <span class="math">\(U\)</span> matrix, we need to remove ones from the diagonal.</p>
 <div class="math">
-\[W = U - I =\]\[\begin{split}= \left[
+\[ \begin{align}\begin{aligned}W = U - I =\\\begin{split}= \left[
     \begin{array}{cccc}
         1 &amp; -1 &amp; 1 &amp; -1\\
         -1 &amp; 1 &amp; -1 &amp; 1\\
@@ -539,14 +679,14 @@ That’s because in the vector <span class="math">\(u\)</span> we have 1 on the 
         0 &amp; 0 &amp; 1 &amp; 0\\
         0 &amp; 0 &amp; 0 &amp; 1
     \end{array}
-\right] =\end{split}\]\[\begin{split}= \left[
+\right] =\end{split}\\\begin{split}= \left[
     \begin{array}{cccc}
         0 &amp; -1 &amp; 1 &amp; -1\\
         -1 &amp; 0 &amp; -1 &amp; 1\\
         1 &amp; -1 &amp; 0 &amp; -1\\
         -1 &amp; 1 &amp; -1 &amp; 0
     \end{array}
-\right]\end{split}\]</div>
+\right]\end{split}\end{aligned}\end{align} \]</div>
 <p><span class="math">\(I\)</span> is the identity matrix and <span class="math">\(I \in \Bbb R^{n \times n}\)</span>, where <span class="math">\(n\)</span> is a number of features in the input vector.</p>
 <p>When we have one stored vector inside the weights we don’t really need to remove 1s from the diagonal.
 The main problem would appear when we have more than one vector stored in the weights.
@@ -562,7 +702,7 @@ We are going to master both of them.</p>
 <p>Synchronous approach is much more easier for understanding, so we are going to look at it firstly.
 To recover your pattern from memory you just need to multiply the weight matrix by the input vector.</p>
 <div class="math">
-\[\begin{split}\begin{align*}
+\[ \begin{align}\begin{aligned}\begin{split}\begin{align*}
     s = {W}\cdot{x}=
     \left[
     \begin{array}{cccc}
@@ -581,7 +721,7 @@ To recover your pattern from memory you just need to multiply the weight matrix 
     \end{array}
     \right]
     =
-\end{align*}\end{split}\]\[\begin{split}\begin{align*}
+\end{align*}\end{split}\\\begin{split}\begin{align*}
     =
     \left[
         \begin{array}{c}
@@ -591,7 +731,7 @@ To recover your pattern from memory you just need to multiply the weight matrix 
           w_{n1}x_1+w_{n2}x_2 + \cdots + w_{nn} x_n\\
         \end{array}
     \right]
-\end{align*}\end{split}\]</div>
+\end{align*}\end{split}\end{aligned}\end{align} \]</div>
 <p>Let’s analyze the result.
 We summed up all information from the weights where each value can be any integer with an absolute value equal to or smaller than the number of patterns inside the network.
 It’s clear that total sum value for <span class="math">\(s_i\)</span> is not necessary equal to -1 or 1, so we have to make additional operations that will make bipolar vector from the vector <span class="math">\(s\)</span>.</p>
@@ -608,12 +748,12 @@ If the first two vectors have 1 in the first position and the third one has -1 a
 We can perform the same procedure with <span class="math">\(sign\)</span> function.
 So the output value should be 1 if total value is greater then zero and -1 otherwise.</p>
 <div class="math">
-\[\begin{split}sign(x) = \left\{
+\[ \begin{align}\begin{aligned}\begin{split}sign(x) = \left\{
     \begin{array}{lr}
         &amp;1 &amp;&amp; : x \ge 0\\
         &amp;-1 &amp;&amp; : x &lt; 0
     \end{array}
-\right.\\\end{split}\]\[y = sign(s)\]</div>
+\right.\\\end{split}\\y = sign(s)\end{aligned}\end{align} \]</div>
 <p>That’s it.
 Now <span class="math">\(y\)</span> store the recovered pattern from the input vector <span class="math">\(x\)</span>.</p>
 <p>Maybe now you can see why we can’t use zeros in the input vectors.
@@ -632,7 +772,7 @@ We iteratively repeat this operation multiple times and after some point network
 <p>Let’s look at this example:
 Consider that we already have a weight matrix <span class="math">\(W\)</span> with one pattern <span class="math">\(x\)</span>  inside of it.</p>
 <div class="math">
-\[\begin{split}\begin{align*}
+\[ \begin{align}\begin{aligned}\begin{split}\begin{align*}
     W =
     \left[
     \begin{array}{cccc}
@@ -641,7 +781,7 @@ Consider that we already have a weight matrix <span class="math">\(W\)</span> wi
       -1 &amp; -1 &amp; 0
     \end{array}
     \right]
-\end{align*}\end{split}\]\[\begin{split}\begin{align*}
+\end{align*}\end{split}\\\begin{split}\begin{align*}
     x =
     \left[
         \begin{array}{c}
@@ -650,7 +790,7 @@ Consider that we already have a weight matrix <span class="math">\(W\)</span> wi
           -1
         \end{array}
     \right]
-\end{align*}\end{split}\]</div>
+\end{align*}\end{split}\end{aligned}\end{align} \]</div>
 <p>Let’s assume that we have a vector <span class="math">\(x^{'}\)</span> from which we want to recover the pattern.</p>
 <div class="math">
 \[\begin{split}\begin{align*}
@@ -750,7 +890,7 @@ Sometimes network output can be something that we hasn’t taught it.</p>
 <span class="math">\(\theta\)</span> is a threshold.
 Threshold defines the bound to the sign function.
 For this reason <span class="math">\(\theta\)</span> is equal to 0 for the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.
-In terms of a linear algebra we can write formula for the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> energy Function more simplier.</p>
+In terms of a linear algebra we can write formula for the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> energy Function more simpler.</p>
 <div class="math">
 \[E = -\frac{1}{2} x^T W x\]</div>
 <p>But linear algebra notation works only with the <span class="math">\(x\)</span> vector, we can’t use matrix <span class="math">\(X\)</span> with multiple input patterns instead of the <span class="math">\(x\)</span> in this formula.
@@ -985,7 +1125,7 @@ If we have all perfectly opposite symmetric patterns then squares on the antidia
 </div>
 <div class="section" id="more-reading">
 <h2><a class="toc-backref" href="#id14">More reading</a></h2>
-<p>In addition you can read another article about a ‘<a class="reference internal" href="http://neupy.com/2015/09/21/password_recovery.html#password-recovery"><span>Password recovery</span></a>‘ from the memory using the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
+<p>In addition you can read another article about a ‘<a class="reference internal" href="http://neupy.com/2015/09/21/password_recovery.html#password-recovery"><span class="std std-ref">Password recovery</span></a>‘ from the memory using the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
 </div>
 <div class="section" id="references">
 <h2><a class="toc-backref" href="#id15">References</a></h2>
@@ -1016,10 +1156,10 @@ from <a class="reference external" href="https://www.youtube.com/watch?v=gfPUWwB
         <item>
             <link>http://neupy.com/2015/07/04/boston_house_prices_dataset.html</link>
             <guid>http://neupy.com/2015/07/04/boston_house_prices_dataset.html</guid>
-            <title><![CDATA[Boston house-prices dataset]]></title>
-            <description><![CDATA[<h1>Boston house-prices dataset</h1>
-<p>For this article we are going to predict Boston house prices via Conjugate gradient.</p>
-<p>For the beginning we should get some data.</p>
+            <title><![CDATA[Predict prices for houses in the area of Boston]]></title>
+            <description><![CDATA[<span id="boston-house-price"/><h1>Predict prices for houses in the area of Boston</h1>
+<p>For this article we are going to predict house prices using Conjugate Gradient algorithm.</p>
+<p>For the beginning we should load the data.</p>
 <div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
 
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_boston</span><span class="p">()</span>
@@ -1241,7 +1381,7 @@ To fix this issue we should transfrom all columns to get similar ranges.</p>
 </table><p>All the data is now in the range between 0 and 1.</p>
 <p>Then we should split our data set into train and validation.
 We use 85% of data for train.</p>
-<div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
 
 <span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
@@ -1566,7 +1706,7 @@ There are a lot of things which we can do to improve network results, but we wil
 <a class="reference internal image-reference" href="http://neupy.com/_images/compare-number-of-epochs.png"><img alt="Compare number of epochs" src="http://neupy.com/_images/compare-number-of-epochs.png" style="width: 80%;"/></a>
 </div>
 <p>There is no perfect algorithm for neural network that can solve all problems. All of them have their own pros and cons. Some of the algorithms can be memory or computationally overwhelming and you have to choose an algorithm depending on the task you want to solve.</p>
-<p>All code is available at <a class="reference external" href="https://github.com/itdxer/neupy/blob/master/examples/mlp/gd_algorithms_visualization.py">GitHub</a>. You can play around with the script and set up different learning algorithms and hyperparameters. More algorithms you can find at NeuPy’s <a class="reference internal" href="http://neupy.com/docs/cheatsheet.html#cheat-sheet"><span>Cheat sheet</span></a>.</p>
+<p>All code is available at <a class="reference external" href="https://github.com/itdxer/neupy/blob/master/examples/mlp/gd_algorithms_visualization.py">GitHub</a>. You can play around with the script and set up different learning algorithms and hyperparameters. More algorithms you can find at NeuPy’s <a class="reference internal" href="http://neupy.com/pages/cheatsheet.html#cheat-sheet"><span class="std std-ref">Cheat sheet</span></a>.</p>
 </div>
 ]]></description>
              <pubDate>Sat, 04 Jul 2015 00:00:00 +0300</pubDate>

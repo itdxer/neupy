@@ -13,7 +13,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
         <meta name="viewport" content="width=device-width">
         <title>neupy.layers.activations module &mdash; NeuPy</title>
             <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -48,10 +48,6 @@
         });
     </script>
 <style media="screen" type="text/css">
-    #fork_me { display: none; }
-    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
-    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
-
     .docutils { width: 100%; }
     .docutils td { padding: 10px; }
     .section { word-wrap:break-word; }
@@ -74,6 +70,16 @@
     .math .s1 { color: #000 !important; } /* Literal.String.Single */
     .math .ss { color: #000 !important; } /* Literal.String.Symbol */
     .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+    dt[id^="neupy."] {
+        background-color: #e6edf2;
+        border: 1px solid #f8fafb;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+    div[id^="module-neupy."] h1 {
+        display: none;
+    }
 </style></head>
     <body role="document">
         <!--[if lt IE 7]>
@@ -81,31 +87,35 @@
         <![endif]-->
 
       <div id="container"><header role="banner">
-            <hgroup>
-              <h1><a href="../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
-          </header>
-      <nav role="navigation">
-            <ul><li class="main-nav">
-                  <a href="../pages/home.html">Home</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../page1.html">Articles</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../pages/documentation.html">Documentation</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../pages/installation.html">Installation</a>
-                </li>
-              </ul>
-          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+        <div>
+          <h1><a href="../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../docs/tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.layers.activations">
 <span id="neupy-layers-activations-module"></span><h1>neupy.layers.activations module<a class="headerlink" href="#module-neupy.layers.activations" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.layers.activations.ActivationLayer">
-<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">ActivationLayer</span><span class="sig-paren">(</span><em>size=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.ActivationLayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="neupy.layers.base.html#neupy.layers.base.ParameterBasedLayer" title="neupy.layers.base.ParameterBasedLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.base.ParameterBasedLayer</span></span></a></p>
-<p>Base class for the layers based on the activation
+<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">ActivationLayer</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.ActivationLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for the layers based on the activation
 functions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -120,14 +130,22 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like, Theano variable, scalar or Initializer</p>
+<p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
+<blockquote>
+<div><p>Defines layer&#8217;s bias.
+Default initialization methods you can find
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
+The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
+do not add it into parameters list.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
 <blockquote class="last">
-<div><p>Defines layer&#8217;s bias. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -136,24 +154,24 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="24%" />
-<col width="76%" />
+<col width="17%" />
+<col width="83%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
 <tr class="row-odd"><td>training_state</td>
 <td>(bool) Defines whether layer in training state or not.</td>
 </tr>
-<tr class="row-even"><td>layer_id</td>
-<td>(int) Layer&#8217;s identifier.</td>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
 </tr>
-<tr class="row-odd"><td>parameters</td>
-<td>(list) List of layer&#8217;s parameters.</td>
-</tr>
-<tr class="row-even"><td>relate_to_layer</td>
-<td>(BaseLayer or None)</td>
-</tr>
-<tr class="row-odd"><td>relate_from_layer</td>
-<td>(BaseLayer or None)</td>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
@@ -164,44 +182,55 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
-</tr>
-<tr class="row-even"><td>relate_to(right_layer)</td>
-<td>Connect current layer with the next one.</td>
-</tr>
 <tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
+</tr>
+<tr class="row-even"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="neupy.layers.activations.ActivationLayer.initialize">
 <span class="descname">initialize</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.ActivationLayer.initialize" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Initialize connection</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.ActivationLayer.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=XavierNormal()), 'bias': Option(class_name='ParameterBasedLayer', value=XavierNormal())}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.ActivationLayer.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.ActivationLayer.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.activations.ActivationLayer.output">
 <span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.ActivationLayer.output" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Return output base on the input value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.ActivationLayer.output_shape">
 <span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.ActivationLayer.output_shape" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="neupy.layers.activations.ActivationLayer.size">
+<span class="descname">size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.ActivationLayer.size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="neupy.layers.activations.Linear">
-<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Linear</span><span class="sig-paren">(</span><em>size=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Linear" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.layers.activations.ActivationLayer" title="neupy.layers.activations.ActivationLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.activations.ActivationLayer</span></span></a></p>
-<p>The layer with the linear activation function.</p>
+<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Linear</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Linear" title="Permalink to this definition">¶</a></dt>
+<dd><p>The layer with the linear activation function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -215,14 +244,22 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like, Theano variable, scalar or Initializer</p>
+<p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
+<blockquote>
+<div><p>Defines layer&#8217;s bias.
+Default initialization methods you can find
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
+The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
+do not add it into parameters list.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
 <blockquote class="last">
-<div><p>Defines layer&#8217;s bias. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -231,24 +268,24 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="24%" />
-<col width="76%" />
+<col width="17%" />
+<col width="83%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
 <tr class="row-odd"><td>training_state</td>
 <td>(bool) Defines whether layer in training state or not.</td>
 </tr>
-<tr class="row-even"><td>layer_id</td>
-<td>(int) Layer&#8217;s identifier.</td>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
 </tr>
-<tr class="row-odd"><td>parameters</td>
-<td>(list) List of layer&#8217;s parameters.</td>
-</tr>
-<tr class="row-even"><td>relate_to_layer</td>
-<td>(BaseLayer or None)</td>
-</tr>
-<tr class="row-odd"><td>relate_from_layer</td>
-<td>(BaseLayer or None)</td>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
@@ -259,14 +296,11 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
-</tr>
-<tr class="row-even"><td>relate_to(right_layer)</td>
-<td>Connect current layer with the next one.</td>
-</tr>
 <tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
+</tr>
+<tr class="row-even"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
 </table>
@@ -277,16 +311,15 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Linear.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=XavierNormal()), 'bias': Option(class_name='ParameterBasedLayer', value=XavierNormal())}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Linear.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Linear.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="neupy.layers.activations.Sigmoid">
-<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Sigmoid</span><span class="sig-paren">(</span><em>size=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Sigmoid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.layers.activations.ActivationLayer" title="neupy.layers.activations.ActivationLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.activations.ActivationLayer</span></span></a></p>
-<p>The layer with the sigmoid activation function.</p>
+<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Sigmoid</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Sigmoid" title="Permalink to this definition">¶</a></dt>
+<dd><p>The layer with the sigmoid activation function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -300,14 +333,22 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like, Theano variable, scalar or Initializer</p>
+<p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
+<blockquote>
+<div><p>Defines layer&#8217;s bias.
+Default initialization methods you can find
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
+The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
+do not add it into parameters list.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
 <blockquote class="last">
-<div><p>Defines layer&#8217;s bias. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -316,24 +357,24 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="24%" />
-<col width="76%" />
+<col width="17%" />
+<col width="83%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
 <tr class="row-odd"><td>training_state</td>
 <td>(bool) Defines whether layer in training state or not.</td>
 </tr>
-<tr class="row-even"><td>layer_id</td>
-<td>(int) Layer&#8217;s identifier.</td>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
 </tr>
-<tr class="row-odd"><td>parameters</td>
-<td>(list) List of layer&#8217;s parameters.</td>
-</tr>
-<tr class="row-even"><td>relate_to_layer</td>
-<td>(BaseLayer or None)</td>
-</tr>
-<tr class="row-odd"><td>relate_from_layer</td>
-<td>(BaseLayer or None)</td>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
@@ -344,14 +385,11 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
-</tr>
-<tr class="row-even"><td>relate_to(right_layer)</td>
-<td>Connect current layer with the next one.</td>
-</tr>
 <tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
+</tr>
+<tr class="row-even"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
 </table>
@@ -362,16 +400,15 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Sigmoid.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=XavierNormal()), 'bias': Option(class_name='ParameterBasedLayer', value=XavierNormal())}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Sigmoid.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Sigmoid.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="neupy.layers.activations.HardSigmoid">
-<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">HardSigmoid</span><span class="sig-paren">(</span><em>size=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.HardSigmoid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.layers.activations.ActivationLayer" title="neupy.layers.activations.ActivationLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.activations.ActivationLayer</span></span></a></p>
-<p>The layer with the hard sigmoid activation function.</p>
+<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">HardSigmoid</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.HardSigmoid" title="Permalink to this definition">¶</a></dt>
+<dd><p>The layer with the hard sigmoid activation function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -385,14 +422,22 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like, Theano variable, scalar or Initializer</p>
+<p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
+<blockquote>
+<div><p>Defines layer&#8217;s bias.
+Default initialization methods you can find
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
+The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
+do not add it into parameters list.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
 <blockquote class="last">
-<div><p>Defines layer&#8217;s bias. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -401,24 +446,24 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="24%" />
-<col width="76%" />
+<col width="17%" />
+<col width="83%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
 <tr class="row-odd"><td>training_state</td>
 <td>(bool) Defines whether layer in training state or not.</td>
 </tr>
-<tr class="row-even"><td>layer_id</td>
-<td>(int) Layer&#8217;s identifier.</td>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
 </tr>
-<tr class="row-odd"><td>parameters</td>
-<td>(list) List of layer&#8217;s parameters.</td>
-</tr>
-<tr class="row-even"><td>relate_to_layer</td>
-<td>(BaseLayer or None)</td>
-</tr>
-<tr class="row-odd"><td>relate_from_layer</td>
-<td>(BaseLayer or None)</td>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
@@ -429,14 +474,11 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
-</tr>
-<tr class="row-even"><td>relate_to(right_layer)</td>
-<td>Connect current layer with the next one.</td>
-</tr>
 <tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
+</tr>
+<tr class="row-even"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
 </table>
@@ -447,16 +489,15 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.HardSigmoid.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=XavierNormal()), 'bias': Option(class_name='ParameterBasedLayer', value=XavierNormal())}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.HardSigmoid.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.HardSigmoid.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="neupy.layers.activations.Step">
-<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Step</span><span class="sig-paren">(</span><em>size=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Step" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.layers.activations.ActivationLayer" title="neupy.layers.activations.ActivationLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.activations.ActivationLayer</span></span></a></p>
-<p>The layer with the the step activation function.</p>
+<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Step</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Step" title="Permalink to this definition">¶</a></dt>
+<dd><p>The layer with the the step activation function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -470,14 +511,22 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like, Theano variable, scalar or Initializer</p>
+<p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
+<blockquote>
+<div><p>Defines layer&#8217;s bias.
+Default initialization methods you can find
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
+The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
+do not add it into parameters list.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
 <blockquote class="last">
-<div><p>Defines layer&#8217;s bias. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -486,24 +535,24 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="24%" />
-<col width="76%" />
+<col width="17%" />
+<col width="83%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
 <tr class="row-odd"><td>training_state</td>
 <td>(bool) Defines whether layer in training state or not.</td>
 </tr>
-<tr class="row-even"><td>layer_id</td>
-<td>(int) Layer&#8217;s identifier.</td>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
 </tr>
-<tr class="row-odd"><td>parameters</td>
-<td>(list) List of layer&#8217;s parameters.</td>
-</tr>
-<tr class="row-even"><td>relate_to_layer</td>
-<td>(BaseLayer or None)</td>
-</tr>
-<tr class="row-odd"><td>relate_from_layer</td>
-<td>(BaseLayer or None)</td>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
@@ -514,14 +563,11 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
-</tr>
-<tr class="row-even"><td>relate_to(right_layer)</td>
-<td>Connect current layer with the next one.</td>
-</tr>
 <tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
+</tr>
+<tr class="row-even"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
 </table>
@@ -532,16 +578,15 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Step.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=XavierNormal()), 'bias': Option(class_name='ParameterBasedLayer', value=XavierNormal())}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Step.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Step.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="neupy.layers.activations.Tanh">
-<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Tanh</span><span class="sig-paren">(</span><em>size=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Tanh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.layers.activations.ActivationLayer" title="neupy.layers.activations.ActivationLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.activations.ActivationLayer</span></span></a></p>
-<p>The layer with the <cite>tanh</cite> activation function.</p>
+<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Tanh</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Tanh" title="Permalink to this definition">¶</a></dt>
+<dd><p>The layer with the <cite>tanh</cite> activation function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -555,14 +600,22 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like, Theano variable, scalar or Initializer</p>
+<p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
+<blockquote>
+<div><p>Defines layer&#8217;s bias.
+Default initialization methods you can find
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
+The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
+do not add it into parameters list.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
 <blockquote class="last">
-<div><p>Defines layer&#8217;s bias. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -571,24 +624,24 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="24%" />
-<col width="76%" />
+<col width="17%" />
+<col width="83%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
 <tr class="row-odd"><td>training_state</td>
 <td>(bool) Defines whether layer in training state or not.</td>
 </tr>
-<tr class="row-even"><td>layer_id</td>
-<td>(int) Layer&#8217;s identifier.</td>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
 </tr>
-<tr class="row-odd"><td>parameters</td>
-<td>(list) List of layer&#8217;s parameters.</td>
-</tr>
-<tr class="row-even"><td>relate_to_layer</td>
-<td>(BaseLayer or None)</td>
-</tr>
-<tr class="row-odd"><td>relate_from_layer</td>
-<td>(BaseLayer or None)</td>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
@@ -599,14 +652,11 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
-</tr>
-<tr class="row-even"><td>relate_to(right_layer)</td>
-<td>Connect current layer with the next one.</td>
-</tr>
 <tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
+</tr>
+<tr class="row-even"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
 </table>
@@ -617,16 +667,15 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Tanh.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=XavierNormal()), 'bias': Option(class_name='ParameterBasedLayer', value=XavierNormal())}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Tanh.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Tanh.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="neupy.layers.activations.Relu">
-<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Relu</span><span class="sig-paren">(</span><em>size=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Relu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.layers.activations.ActivationLayer" title="neupy.layers.activations.ActivationLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.activations.ActivationLayer</span></span></a></p>
-<p>The layer with the rectifier (ReLu) activation function.</p>
+<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Relu</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Relu" title="Permalink to this definition">¶</a></dt>
+<dd><p>The layer with the rectifier (ReLu) activation function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -647,14 +696,22 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like, Theano variable, scalar or Initializer</p>
+<p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
+<blockquote>
+<div><p>Defines layer&#8217;s bias.
+Default initialization methods you can find
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
+The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
+do not add it into parameters list.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
 <blockquote class="last">
-<div><p>Defines layer&#8217;s bias. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -663,24 +720,24 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="24%" />
-<col width="76%" />
+<col width="17%" />
+<col width="83%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
 <tr class="row-odd"><td>training_state</td>
 <td>(bool) Defines whether layer in training state or not.</td>
 </tr>
-<tr class="row-even"><td>layer_id</td>
-<td>(int) Layer&#8217;s identifier.</td>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
 </tr>
-<tr class="row-odd"><td>parameters</td>
-<td>(list) List of layer&#8217;s parameters.</td>
-</tr>
-<tr class="row-even"><td>relate_to_layer</td>
-<td>(BaseLayer or None)</td>
-</tr>
-<tr class="row-odd"><td>relate_from_layer</td>
-<td>(BaseLayer or None)</td>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
@@ -691,14 +748,11 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
-</tr>
-<tr class="row-even"><td>relate_to(right_layer)</td>
-<td>Connect current layer with the next one.</td>
-</tr>
 <tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
+</tr>
+<tr class="row-even"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
 </table>
@@ -714,16 +768,20 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Relu.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'alpha': Option(class_name='Relu', value=0), 'weight': Option(class_name='ParameterBasedLayer', value=XavierNormal()), 'bias': Option(class_name='ParameterBasedLayer', value=XavierNormal())}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Relu.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='Relu', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'alpha': Option(class_name='Relu', value=NumberProperty(name=&quot;alpha&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Relu.options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.activations.Relu.weight">
+<span class="descname">weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Relu.weight" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="neupy.layers.activations.Softplus">
-<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Softplus</span><span class="sig-paren">(</span><em>size=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Softplus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.layers.activations.ActivationLayer" title="neupy.layers.activations.ActivationLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.activations.ActivationLayer</span></span></a></p>
-<p>The layer with the softplus activation function.</p>
+<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Softplus</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Softplus" title="Permalink to this definition">¶</a></dt>
+<dd><p>The layer with the softplus activation function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -737,14 +795,22 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like, Theano variable, scalar or Initializer</p>
+<p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
+<blockquote>
+<div><p>Defines layer&#8217;s bias.
+Default initialization methods you can find
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
+The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
+do not add it into parameters list.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
 <blockquote class="last">
-<div><p>Defines layer&#8217;s bias. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -753,24 +819,24 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="24%" />
-<col width="76%" />
+<col width="17%" />
+<col width="83%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
 <tr class="row-odd"><td>training_state</td>
 <td>(bool) Defines whether layer in training state or not.</td>
 </tr>
-<tr class="row-even"><td>layer_id</td>
-<td>(int) Layer&#8217;s identifier.</td>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
 </tr>
-<tr class="row-odd"><td>parameters</td>
-<td>(list) List of layer&#8217;s parameters.</td>
-</tr>
-<tr class="row-even"><td>relate_to_layer</td>
-<td>(BaseLayer or None)</td>
-</tr>
-<tr class="row-odd"><td>relate_from_layer</td>
-<td>(BaseLayer or None)</td>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
@@ -781,14 +847,11 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
-</tr>
-<tr class="row-even"><td>relate_to(right_layer)</td>
-<td>Connect current layer with the next one.</td>
-</tr>
 <tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
+</tr>
+<tr class="row-even"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
 </table>
@@ -799,16 +862,15 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Softplus.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=XavierNormal()), 'bias': Option(class_name='ParameterBasedLayer', value=XavierNormal())}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Softplus.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Softplus.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="neupy.layers.activations.Softmax">
-<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Softmax</span><span class="sig-paren">(</span><em>size=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Softmax" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.layers.activations.ActivationLayer" title="neupy.layers.activations.ActivationLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.activations.ActivationLayer</span></span></a></p>
-<p>The layer with the softmax activation function.</p>
+<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Softmax</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Softmax" title="Permalink to this definition">¶</a></dt>
+<dd><p>The layer with the softmax activation function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -822,14 +884,22 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like, Theano variable, scalar or Initializer</p>
+<p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
+<blockquote>
+<div><p>Defines layer&#8217;s bias.
+Default initialization methods you can find
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
+The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
+do not add it into parameters list.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
 <blockquote class="last">
-<div><p>Defines layer&#8217;s bias. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -838,24 +908,24 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="24%" />
-<col width="76%" />
+<col width="17%" />
+<col width="83%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
 <tr class="row-odd"><td>training_state</td>
 <td>(bool) Defines whether layer in training state or not.</td>
 </tr>
-<tr class="row-even"><td>layer_id</td>
-<td>(int) Layer&#8217;s identifier.</td>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
 </tr>
-<tr class="row-odd"><td>parameters</td>
-<td>(list) List of layer&#8217;s parameters.</td>
-</tr>
-<tr class="row-even"><td>relate_to_layer</td>
-<td>(BaseLayer or None)</td>
-</tr>
-<tr class="row-odd"><td>relate_from_layer</td>
-<td>(BaseLayer or None)</td>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
@@ -866,14 +936,11 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
-</tr>
-<tr class="row-even"><td>relate_to(right_layer)</td>
-<td>Connect current layer with the next one.</td>
-</tr>
 <tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
+</tr>
+<tr class="row-even"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
 </table>
@@ -884,16 +951,15 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Softmax.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'weight': Option(class_name='ParameterBasedLayer', value=XavierNormal()), 'bias': Option(class_name='ParameterBasedLayer', value=XavierNormal())}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Softmax.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Softmax.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="neupy.layers.activations.Elu">
-<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Elu</span><span class="sig-paren">(</span><em>size=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Elu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.layers.activations.ActivationLayer" title="neupy.layers.activations.ActivationLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.activations.ActivationLayer</span></span></a></p>
-<p>The layer with the exponensial linear unit (ELU)
+<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Elu</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Elu" title="Permalink to this definition">¶</a></dt>
+<dd><p>The layer with the exponensial linear unit (ELU)
 activation function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -913,47 +979,55 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like, Theano variable, scalar or Initializer</p>
+<p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
+<blockquote>
+<div><p>Defines layer&#8217;s bias.
+Default initialization methods you can find
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
+The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
+do not add it into parameters list.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
 <blockquote class="last">
-<div><p>Defines layer&#8217;s bias. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r4" rules="none">
+<table class="docutils citation" frame="void" id="r1" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R4]</a></td><td><a class="reference external" href="http://arxiv.org/pdf/1511.07289v3.pdf">http://arxiv.org/pdf/1511.07289v3.pdf</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R1]</a></td><td><a class="reference external" href="http://arxiv.org/pdf/1511.07289v3.pdf">http://arxiv.org/pdf/1511.07289v3.pdf</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="24%" />
-<col width="76%" />
+<col width="17%" />
+<col width="83%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
 <tr class="row-odd"><td>training_state</td>
 <td>(bool) Defines whether layer in training state or not.</td>
 </tr>
-<tr class="row-even"><td>layer_id</td>
-<td>(int) Layer&#8217;s identifier.</td>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
 </tr>
-<tr class="row-odd"><td>parameters</td>
-<td>(list) List of layer&#8217;s parameters.</td>
-</tr>
-<tr class="row-even"><td>relate_to_layer</td>
-<td>(BaseLayer or None)</td>
-</tr>
-<tr class="row-odd"><td>relate_from_layer</td>
-<td>(BaseLayer or None)</td>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
@@ -964,14 +1038,11 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
-</tr>
-<tr class="row-even"><td>relate_to(right_layer)</td>
-<td>Connect current layer with the next one.</td>
-</tr>
 <tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
+</tr>
+<tr class="row-even"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
 </table>
@@ -987,16 +1058,15 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Elu.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'alpha': Option(class_name='Elu', value=1), 'weight': Option(class_name='ParameterBasedLayer', value=XavierNormal()), 'bias': Option(class_name='ParameterBasedLayer', value=XavierNormal())}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Elu.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'alpha': Option(class_name='Elu', value=NumberProperty(name=&quot;alpha&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Elu.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="neupy.layers.activations.PRelu">
-<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">PRelu</span><span class="sig-paren">(</span><em>size=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.PRelu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#neupy.layers.activations.ActivationLayer" title="neupy.layers.activations.ActivationLayer"><span class="xref py py-class docutils literal"><span class="pre">neupy.layers.activations.ActivationLayer</span></span></a></p>
-<p>The layer with the parametrized ReLu activation
+<em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">PRelu</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.PRelu" title="Permalink to this definition">¶</a></dt>
+<dd><p>The layer with the parametrized ReLu activation
 function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1014,7 +1084,7 @@ Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p
 Scalar value means that each element in the tensor will be
 equal to the specified value.
 Default initialization methods you can find
-<a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
 Defaults to <span class="docutils literal"><span class="pre">Constant(value=0.25)</span></span>.</p>
 </div></blockquote>
 <p><strong>size</strong> : int or None</p>
@@ -1026,47 +1096,55 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
-<p><strong>bias</strong> : 1D array-like, Theano variable, scalar or Initializer</p>
+<p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
+<blockquote>
+<div><p>Defines layer&#8217;s bias.
+Default initialization methods you can find
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
+The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
+do not add it into parameters list.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
 <blockquote class="last">
-<div><p>Defines layer&#8217;s bias. Default initialization methods
-you can find <a class="reference internal" href="../docs/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.init.XavierNormal" title="neupy.core.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r5" rules="none">
+<table class="docutils citation" frame="void" id="r2" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R5]</a></td><td><a class="reference external" href="https://arxiv.org/pdf/1502.01852v1.pdf">https://arxiv.org/pdf/1502.01852v1.pdf</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R2]</a></td><td><a class="reference external" href="https://arxiv.org/pdf/1502.01852v1.pdf">https://arxiv.org/pdf/1502.01852v1.pdf</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="24%" />
-<col width="76%" />
+<col width="17%" />
+<col width="83%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
 <tr class="row-odd"><td>training_state</td>
 <td>(bool) Defines whether layer in training state or not.</td>
 </tr>
-<tr class="row-even"><td>layer_id</td>
-<td>(int) Layer&#8217;s identifier.</td>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
 </tr>
-<tr class="row-odd"><td>parameters</td>
-<td>(list) List of layer&#8217;s parameters.</td>
-</tr>
-<tr class="row-even"><td>relate_to_layer</td>
-<td>(BaseLayer or None)</td>
-</tr>
-<tr class="row-odd"><td>relate_from_layer</td>
-<td>(BaseLayer or None)</td>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
@@ -1077,14 +1155,11 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
-</tr>
-<tr class="row-even"><td>relate_to(right_layer)</td>
-<td>Connect current layer with the next one.</td>
-</tr>
 <tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
+</tr>
+<tr class="row-even"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
 </table>
@@ -1106,12 +1181,27 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
 <dl class="method">
 <dt id="neupy.layers.activations.PRelu.initialize">
 <span class="descname">initialize</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.PRelu.initialize" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Initialize connection</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.PRelu.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=None), 'alpha': Option(class_name='PRelu', value=Constant(0.25)), 'weight': Option(class_name='ParameterBasedLayer', value=XavierNormal()), 'bias': Option(class_name='ParameterBasedLayer', value=XavierNormal()), 'alpha_axes': Option(class_name='PRelu', value=1)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.PRelu.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'alpha_axes': Option(class_name='PRelu', value=AxesProperty(name=&quot;alpha_axes&quot;)), 'alpha': Option(class_name='PRelu', value=ParameterProperty(name=&quot;alpha&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.PRelu.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.activations.PRelu.validate">
+<span class="descname">validate</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.PRelu.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate input shape value before assigning it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_shape</strong> : tuple with int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -1122,34 +1212,35 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
         
         
         </div></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Posts</h1>
+    <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
             <a href="../2015/09/21/password_recovery.html">Password recovery</a>
         </li><li>
             <a href="../2015/09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
-        </li><li>
-            <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
-        </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
-</div>
-</section><section><div class="widget">
-    <h1>Cheat sheet</h1>
-    <ul>
-        <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
-        <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
-        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
-        <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
-    </ul>
 </div></section><section><div class="widget">
-    <h1>Installation</h1>
+    <h1>Install NeuPy</h1>
     <div class="highligh-bash">
         <div class="highlight">
             <pre>pip install neupy</pre>
         </div>
     </div>
-    <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../docs/tutorials.html">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature you can feel
+        free to <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a> on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
+    </p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
@@ -1158,10 +1249,7 @@ Defaults to <a class="reference internal" href="neupy.core.init.html#neupy.core.
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
-    <a id="fork_me" href="http://github.com/itdxer/neupy">
-        <img alt="Fork me" src="../_static/img/github-fork-green.png" />
-    </a></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

@@ -13,7 +13,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
         <meta name="viewport" content="width=device-width">
         <title>Create custom layers &mdash; NeuPy</title>
             <link rel="stylesheet" href="../../_static/normalize.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="next" title="Parameter Initialization Methods" href="init-methods.html" /><link rel="prev" title="Convolutional layers" href="convolutional-layers.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Parameter Initialization Methods" href="init-methods.html" /><link rel="prev" title="Basics" href="basics.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
         VERSION:     '1.5',
@@ -48,10 +48,6 @@
         });
     </script>
 <style media="screen" type="text/css">
-    #fork_me { display: none; }
-    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
-    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
-
     .docutils { width: 100%; }
     .docutils td { padding: 10px; }
     .section { word-wrap:break-word; }
@@ -74,6 +70,16 @@
     .math .s1 { color: #000 !important; } /* Literal.String.Single */
     .math .ss { color: #000 !important; } /* Literal.String.Symbol */
     .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+    dt[id^="neupy."] {
+        background-color: #e6edf2;
+        border: 1px solid #f8fafb;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+    div[id^="module-neupy."] h1 {
+        display: none;
+    }
 </style></head>
     <body role="document">
         <!--[if lt IE 7]>
@@ -81,91 +87,132 @@
         <![endif]-->
 
       <div id="container"><header role="banner">
-            <hgroup>
-              <h1><a href="../../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
-          </header>
-      <nav role="navigation">
-            <ul><li class="main-nav">
-                  <a href="../../pages/home.html">Home</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../../page1.html">Articles</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../../pages/documentation.html">Documentation</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../../pages/installation.html">Installation</a>
-                </li>
-              </ul>
-          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
-    <div class="section" id="create-custom-layers">
-<h1>Create custom layers<a class="headerlink" href="#create-custom-layers" title="Permalink to this headline">¶</a></h1>
-<p>There are a few main types of layers. We are going to check them one by one in order of complexity.</p>
-<div class="section" id="element-wise-transformation">
-<h2>Element-wise transformation<a class="headerlink" href="#element-wise-transformation" title="Permalink to this headline">¶</a></h2>
-<p>The simplest one layer that makes only element-wise transformation. This layer doesn&#8217;t include any trainable parameters and it doesn&#8217;t change input&#8217;s shape. For simplisity we can build a layer that adds one to each elements in the input tensor.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+        <div>
+          <h1><a href="../../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
 
-<span class="k">class</span> <span class="nc">ShiftByOneLayer</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+    <div class="section" id="create-custom-layers">
+<h1><a class="toc-backref" href="#id1">Create custom layers</a><a class="headerlink" href="#create-custom-layers" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#create-custom-layers" id="id1">Create custom layers</a><ul>
+<li><a class="reference internal" href="#element-wise-transformation" id="id2">Element-wise transformation</a></li>
+<li><a class="reference internal" href="#layers-with-activation-function" id="id3">Layers with activation function</a></li>
+<li><a class="reference internal" href="#validate-input-shape" id="id4">Validate input shape</a></li>
+<li><a class="reference internal" href="#layer-that-modify-input-shape" id="id5">Layer that modify input shape</a></li>
+<li><a class="reference internal" href="#add-parameters-to-the-layer" id="id6">Add parameters to the layer</a></li>
+<li><a class="reference internal" href="#layer-that-accepts-multiple-inputs" id="id7">Layer that accepts multiple inputs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="element-wise-transformation">
+<h2><a class="toc-backref" href="#id2">Element-wise transformation</a><a class="headerlink" href="#element-wise-transformation" title="Permalink to this headline">¶</a></h2>
+<p>The simplest type of layers is the one that doesn&#8217;t modify a shape of the input value. To construct this layer we need to inherit from the <span class="docutils literal"><span class="pre">BaseLayer</span></span> class and define <span class="docutils literal"><span class="pre">output</span></span> method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="kn">from</span> <span class="nn">neupy.utils</span> <span class="kn">import</span> <span class="n">asfloat</span>
+
+<span class="k">class</span> <span class="nc">DoubleInput</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">asfloat</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">input_value</span>
 </pre></div>
 </div>
-<p><span class="docutils literal"><span class="pre">BaseLayer</span></span> is a main class that contains all important methods and attributes that any layer requires.</p>
+<p>From the code, you can see that I&#8217;ve used <span class="docutils literal"><span class="pre">asfloat</span></span> function. This function converts any number to a float. Type of the float depends on the <span class="docutils literal"><span class="pre">theano.config.floatX</span></span> variable. This function gives flexibility to automatically convert input variable to the float type that Theano uses on the backend.</p>
 </div>
 <div class="section" id="layers-with-activation-function">
-<h2>Layers with activation function<a class="headerlink" href="#layers-with-activation-function" title="Permalink to this headline">¶</a></h2>
-<p>If you want to have a layer that behaves like any other built-in layer with activation function in the NeuPy, you should inherit your class from the <span class="docutils literal"><span class="pre">ActivationLayer</span></span> class. Let&#8217;s consider and example of layer with a square activation function.</p>
+<h2><a class="toc-backref" href="#id3">Layers with activation function</a><a class="headerlink" href="#layers-with-activation-function" title="Permalink to this headline">¶</a></h2>
+<p>Layers with activation function is a special type of layers. It has a different behavior depending on the input size. If input size is specified it applies linear transformation to the input after that pass it through the activation function. If input size wasn&#8217;t presented than layer passes input directly through the activation function</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">()</span>  <span class="c1"># relu(x)</span>
+<span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># relu(W * x + b)</span>
+</pre></div>
+</div>
+<p>To be able to construct your own layer with different activation function you need to inherit from the <span class="docutils literal"><span class="pre">ActivationLayer</span></span> class.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
 <span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 
-<span class="k">class</span> <span class="nc">SquareLayer</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">ActivationLayer</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Squared</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">ActivationLayer</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">activation_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_value</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">T</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">input_value</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="advanced-methods">
-<h2>Advanced methods<a class="headerlink" href="#advanced-methods" title="Permalink to this headline">¶</a></h2>
-<p>There are a few other methods that can be useful in case of more complecated layers.</p>
-<p>Some layers makes an output shape modification. If you don&#8217;t define the new output shape in the layer class you will not be able to attach layer to the other in the network. Here is an example.</p>
+<div class="section" id="validate-input-shape">
+<h2><a class="toc-backref" href="#id4">Validate input shape</a><a class="headerlink" href="#validate-input-shape" title="Permalink to this headline">¶</a></h2>
+<p>Not all relations between layers are suitable. For instance, we are not able to apply pooling to the matrix. For this cases we need to have an ability to validate input shape and trigger error that will inform us about connection issues.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="kn">from</span> <span class="nn">neupy.exceptions</span> <span class="kn">import</span> <span class="n">LayerConnectionError</span>
 
-<span class="k">class</span> <span class="nc">FeatureMeanLayer</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">):</span>
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
-
-    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Pooling</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">LayerConnectionError</span><span class="p">(</span><span class="s2">&quot;Invalid connection&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The <span class="docutils literal"><span class="pre">FeatureMeanLayer</span></span> layer makes a feature transformation and modifies input matrix shape. We define <span class="docutils literal"><span class="pre">output_shape</span></span> property as an additional layer&#8217;s parameter. Now other layers in the sequence know the expected layers output shape and adjust their parameters to the correct shape.</p>
-<p>If your parameter depends on the other layers in the layers sequence you can get them from the <span class="docutils literal"><span class="pre">self.relate_to_layer</span></span> and <span class="docutils literal"><span class="pre">self.relate_from_layer</span></span> attributes. They return next and previous layers respectively. Eahc of this layers have <span class="docutils literal"><span class="pre">output_shape</span></span> and <span class="docutils literal"><span class="pre">input_shape</span></span> attibutes, so you can read useful information from them.</p>
-<p>The other important method is an <span class="docutils literal"><span class="pre">initialize</span></span>. The main purpose of this method is to apply all necesary initializations related to the network. For instance, random weight or bias parameters. You can&#8217;t define them in the <span class="docutils literal"><span class="pre">__init__</span></span> method, because when you create layer instance full network structure is unknown and you don&#8217;t have all the necessary information. Let&#8217;s extend the previous layer with the <span class="docutils literal"><span class="pre">initialize</span></span> method.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
-<span class="kn">from</span> <span class="nn">neupy.utils</span> <span class="kn">import</span> <span class="n">asfloat</span>
+<p>We can use any type of exception, not only <span class="docutils literal"><span class="pre">LayerConnectionError</span></span>.</p>
+</div>
+<div class="section" id="layer-that-modify-input-shape">
+<h2><a class="toc-backref" href="#id5">Layer that modify input shape</a><a class="headerlink" href="#layer-that-modify-input-shape" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 
-<span class="k">class</span> <span class="nc">FeatureMeanLayer</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Mean</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># convert: (3, 28, 28) -&gt; (28, 28)</span>
+        <span class="c1"># convert: (10,) -&gt; (1,)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="ow">or</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">T</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">input_value</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-parameters-to-the-layer">
+<h2><a class="toc-backref" href="#id6">Add parameters to the layer</a><a class="headerlink" href="#add-parameters-to-the-layer" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="k">class</span> <span class="nc">Wx</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">FeatureMeanLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Wx</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+                           <span class="n">value</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(),</span> <span class="n">trainable</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">scaler</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">shared</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;scaler_{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer_id</span><span class="p">),</span>
-            <span class="n">value</span><span class="o">=</span><span class="n">asfloat</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scaler</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
-
-    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaler</span> <span class="o">*</span> <span class="n">value</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">input_value</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>In this example I&#8217;ve added a few other feature to consider a couple of useful attributes and functions. Let&#8217;s check them one by one. <span class="docutils literal"><span class="pre">self.layer_id</span></span> defines layer&#8217;s identifier as an integer number. This number is basically a layer&#8217;s index number in the sequence. The <span class="docutils literal"><span class="pre">self.parameters</span></span> attribute is a list that contains all trainable parameters. Usually it is a weight or bias, but you can define any parameter you want. The <span class="docutils literal"><span class="pre">asfloat</span></span> function just converts any number to the float number. The type of the float number depends on the Theano&#8217;s <span class="docutils literal"><span class="pre">theano.config.floatX</span></span> variable.</p>
+<p>Initialization method triggers when the layer has defined input shape.</p>
+</div>
+<div class="section" id="layer-that-accepts-multiple-inputs">
+<h2><a class="toc-backref" href="#id7">Layer that accepts multiple inputs</a><a class="headerlink" href="#layer-that-accepts-multiple-inputs" title="Permalink to this headline">¶</a></h2>
+<p>Layers like <a class="reference internal" href="../../apidocs/neupy.layers.merge.html#neupy.layers.merge.Concatenate" title="neupy.layers.merge.Concatenate"><span class="xref py py-class docutils literal"><span class="pre">Concatenate</span></span></a> accept multiple inputs and concatenate them in one. To be able to modify multiple inputs we need to make a small modification in the <span class="docutils literal"><span class="pre">output</span></span> method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="k">class</span> <span class="nc">SumElementwise</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">input_values</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">input_values</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -174,37 +221,38 @@
         
         
         </div><ul class="related clearfix">
-            <li class="left"> &laquo; <a href="convolutional-layers.html">Convolutional layers</a></li>
+            <li class="left"> &laquo; <a href="basics.html">Basics</a></li>
             <li class="right"><a href="init-methods.html">Parameter Initialization Methods</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Posts</h1>
+    <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
             <a href="../../2015/09/21/password_recovery.html">Password recovery</a>
         </li><li>
             <a href="../../2015/09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
-        </li><li>
-            <a href="../../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
-        </li><li>
-            <a href="../../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
-</div>
-</section><section><div class="widget">
-    <h1>Cheat sheet</h1>
-    <ul>
-        <li><a href="../cheatsheet.html#algorithms">Algorithms</a></li>
-        <li><a href="../cheatsheet.html#layers">Layers</a></li>
-        <li><a href="../cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
-        <li><a href="../cheatsheet.html#error-functions">Error functions</a></li>
-    </ul>
 </div></section><section><div class="widget">
-    <h1>Installation</h1>
+    <h1>Install NeuPy</h1>
     <div class="highligh-bash">
         <div class="highlight">
             <pre>pip install neupy</pre>
         </div>
     </div>
-    <p>Read more in <a href="../../pages/documentation.html">Documentation</a>.</p>
-    <p>Old documentations you can find <a href="../../pages/versions.html">here</a>.</p>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../tutorials.html">tutorials</a> and <a href="../../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature you can feel
+        free to <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a> on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../../pages/versions.html">here</a>.</div>
+    </p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../../search.html" method="get">
@@ -213,10 +261,7 @@
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
-    <a id="fork_me" href="http://github.com/itdxer/neupy">
-        <img alt="Fork me" src="../../_static/img/github-fork-green.png" />
-    </a></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

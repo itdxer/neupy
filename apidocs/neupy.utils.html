@@ -13,7 +13,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
         <meta name="viewport" content="width=device-width">
         <title>neupy.utils module &mdash; NeuPy</title>
             <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -48,10 +48,6 @@
         });
     </script>
 <style media="screen" type="text/css">
-    #fork_me { display: none; }
-    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
-    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
-
     .docutils { width: 100%; }
     .docutils td { padding: 10px; }
     .section { word-wrap:break-word; }
@@ -74,6 +70,16 @@
     .math .s1 { color: #000 !important; } /* Literal.String.Single */
     .math .ss { color: #000 !important; } /* Literal.String.Symbol */
     .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+    dt[id^="neupy."] {
+        background-color: #e6edf2;
+        border: 1px solid #f8fafb;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+    div[id^="module-neupy."] h1 {
+        display: none;
+    }
 </style></head>
     <body role="document">
         <!--[if lt IE 7]>
@@ -81,24 +87,29 @@
         <![endif]-->
 
       <div id="container"><header role="banner">
-            <hgroup>
-              <h1><a href="../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
-          </header>
-      <nav role="navigation">
-            <ul><li class="main-nav">
-                  <a href="../pages/home.html">Home</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../page1.html">Articles</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../pages/documentation.html">Documentation</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../pages/installation.html">Installation</a>
-                </li>
-              </ul>
-          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+        <div>
+          <h1><a href="../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../docs/tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.utils">
 <span id="neupy-utils-module"></span><h1>neupy.utils module<a class="headerlink" href="#module-neupy.utils" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
@@ -116,8 +127,8 @@ Pandas DataFrame instance.</p>
 </div></blockquote>
 <p><strong>is_feature1d</strong> : bool</p>
 <blockquote>
-<div><p>Should be equal to <span class="docutils literal"><span class="pre">True</span></span> if input data if a vector that
-contains n samples with 1 feature each. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
+<div><p>Should be equal to <span class="docutils literal"><span class="pre">True</span></span> if input data is a vector that
+contains N samples with 1 feature each. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
 </div></blockquote>
 <p><strong>copy</strong> : bool</p>
 <blockquote>
@@ -137,22 +148,6 @@ for further use.</p>
 <p class="rubric">Notes</p>
 <p>It should be applied to the input data prior to use in
 learning algorithms.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="neupy.utils.does_layer_accept_1d_feature">
-<span class="descclassname">neupy.utils.</span><span class="descname">does_layer_accept_1d_feature</span><span class="sig-paren">(</span><em>layer</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.utils.does_layer_accept_1d_feature" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if 1D feature values are valid for the layer.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>layer</strong> : object</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">bool</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="function">
@@ -184,11 +179,10 @@ configured by theano floatX variable.</p>
 <dl class="class">
 <dt id="neupy.utils.AttributeKeyDict">
 <em class="property">class </em><span class="descclassname">neupy.utils.</span><span class="descname">AttributeKeyDict</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.utils.AttributeKeyDict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">dict</span></span></p>
-<p>Modified built-in Python <span class="docutils literal"><span class="pre">dict</span></span> class. That modification
+<dd><p>Modified built-in Python <span class="docutils literal"><span class="pre">dict</span></span> class. That modification
 helps get and set values like attributes.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">attrdict</span> <span class="o">=</span> <span class="n">AttributeKeyDict</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">attrdict</span> <span class="o">=</span> <span class="n">AttributeKeyDict</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">attrdict</span>
 <span class="go">{}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">attrdict</span><span class="o">.</span><span class="n">test_key</span> <span class="o">=</span> <span class="s1">&#39;test_value&#39;</span>
@@ -198,31 +192,6 @@ helps get and set values like attributes.</p>
 <span class="go">&#39;test_value&#39;</span>
 </pre></div>
 </div>
-</dd></dl>
-
-<dl class="function">
-<dt id="neupy.utils.is_list_of_integers">
-<span class="descclassname">neupy.utils.</span><span class="descname">is_list_of_integers</span><span class="sig-paren">(</span><em>sequence</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.utils.is_list_of_integers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check that sequence contains only integer numbers.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sequence</strong> : list, tuple</p>
-<blockquote>
-<div><p>Array that should be validated.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">bool</p>
-<blockquote class="last">
-<div><p>Result would be <span class="docutils literal"><span class="pre">True</span></span> only if each element in a sequence contains
-is an integer. <span class="docutils literal"><span class="pre">False</span></span> otherwise.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="function">
@@ -236,54 +205,6 @@ is an integer. <span class="docutils literal"><span class="pre">False</span></sp
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> : object</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">object</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="neupy.utils.as_array2d">
-<span class="descclassname">neupy.utils.</span><span class="descname">as_array2d</span><span class="sig-paren">(</span><em>array</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.utils.as_array2d" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transform any array to 2D.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>array</strong> : array-like</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">array-like</p>
-<blockquote class="last">
-<div><p>The same array transformed to 2D.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="exception">
-<dt id="neupy.utils.NotTrainedException">
-<em class="property">exception </em><span class="descclassname">neupy.utils.</span><span class="descname">NotTrainedException</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.utils.NotTrainedException" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <span class="xref py py-class docutils literal"><span class="pre">Exception</span></span></p>
-<p>Exception needs for cases when algorithm is not trained
-and can not be applied.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="neupy.utils.smallest_positive_number">
-<span class="descclassname">neupy.utils.</span><span class="descname">smallest_positive_number</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.utils.smallest_positive_number" title="Permalink to this definition">¶</a></dt>
-<dd><p>Based on the <cite>floatX</cite> variables function returns different
-smallest positive numbers.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
-<blockquote class="last">
-<div><p>Smallest positive float number.</p>
-</div></blockquote>
-</td>
 </tr>
 </tbody>
 </table>
@@ -312,10 +233,11 @@ smallest positive numbers.</p>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">as_tuple</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="bp">None</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">as_tuple</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
 <span class="go">(None, 1, 2, 3, None)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">as_tuple</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-<span class="go">(1, 2, 3, 4, 5, 3)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_tuple</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="go">(1, 2, 3, 4, 5, 6)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -358,34 +280,35 @@ integer depend on floatX Theano variable.</p>
         
         
         </div></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Posts</h1>
+    <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
             <a href="../2015/09/21/password_recovery.html">Password recovery</a>
         </li><li>
             <a href="../2015/09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
-        </li><li>
-            <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
-        </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
-</div>
-</section><section><div class="widget">
-    <h1>Cheat sheet</h1>
-    <ul>
-        <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
-        <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
-        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
-        <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
-    </ul>
 </div></section><section><div class="widget">
-    <h1>Installation</h1>
+    <h1>Install NeuPy</h1>
     <div class="highligh-bash">
         <div class="highlight">
             <pre>pip install neupy</pre>
         </div>
     </div>
-    <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../docs/tutorials.html">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature you can feel
+        free to <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a> on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
+    </p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
@@ -394,10 +317,7 @@ integer depend on floatX Theano variable.</p>
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
-    <a id="fork_me" href="http://github.com/itdxer/neupy">
-        <img alt="Fork me" src="../_static/img/github-fork-green.png" />
-    </a></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

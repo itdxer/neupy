@@ -13,7 +13,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="description" content="Artificial Neural Network library implemented in Python">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
         <meta name="viewport" content="width=device-width">
         <title>neupy.algorithms.memory.bam module &mdash; NeuPy</title>
             <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -48,10 +48,6 @@
         });
     </script>
 <style media="screen" type="text/css">
-    #fork_me { display: none; }
-    #fork_me img { position: fixed; top: 0; right: 0; border: 0; width: 130px; }
-    @media only screen and (min-width: 768px) { #fork_me { display: inline; } }
-
     .docutils { width: 100%; }
     .docutils td { padding: 10px; }
     .section { word-wrap:break-word; }
@@ -74,6 +70,16 @@
     .math .s1 { color: #000 !important; } /* Literal.String.Single */
     .math .ss { color: #000 !important; } /* Literal.String.Symbol */
     .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+    dt[id^="neupy."] {
+        background-color: #e6edf2;
+        border: 1px solid #f8fafb;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+    div[id^="module-neupy."] h1 {
+        display: none;
+    }
 </style></head>
     <body role="document">
         <!--[if lt IE 7]>
@@ -81,47 +87,57 @@
         <![endif]-->
 
       <div id="container"><header role="banner">
-            <hgroup>
-              <h1><a href="../pages/home.html">NeuPy</a></h1><h2>Neural Networks in Python</h2></hgroup>
-          </header>
-      <nav role="navigation">
-            <ul><li class="main-nav">
-                  <a href="../pages/home.html">Home</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../page1.html">Articles</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../pages/documentation.html">Documentation</a>
-                </li>
-              <li class="main-nav">
-                  <a href="../pages/installation.html">Installation</a>
-                </li>
-              </ul>
-          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+        <div>
+          <h1><a href="../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../docs/tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.memory.bam">
 <span id="neupy-algorithms-memory-bam-module"></span><h1>neupy.algorithms.memory.bam module<a class="headerlink" href="#module-neupy.algorithms.memory.bam" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="neupy.algorithms.memory.bam.DiscreteBAM">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.memory.bam.</span><span class="descname">DiscreteBAM</span><span class="sig-paren">(</span><em>**options</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.bam.DiscreteBAM" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="neupy.algorithms.memory.base.html#neupy.algorithms.memory.base.DiscreteMemory" title="neupy.algorithms.memory.base.DiscreteMemory"><span class="xref py py-class docutils literal"><span class="pre">neupy.algorithms.memory.base.DiscreteMemory</span></span></a></p>
-<p>Discrete BAM Network with associations.
+<em class="property">class </em><span class="descclassname">neupy.algorithms.memory.bam.</span><span class="descname">DiscreteBAM</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.bam.DiscreteBAM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discrete BAM Network with associations.
 Network associate every input with some target value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : {&#8216;sync&#8217;, &#8216;async&#8217;}</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : {<span class="docutils literal"><span class="pre">sync</span></span>, <span class="docutils literal"><span class="pre">async</span></span>}</p>
 <blockquote>
-<div><p>Indentify pattern recovery mode. <span class="docutils literal"><span class="pre">sync</span></span> mode try recovery a pattern
-using the all input vector. <span class="docutils literal"><span class="pre">async</span></span> mode randomly chose some
-values from the input vector and repeat this procedure the number
-of times a given variable <span class="docutils literal"><span class="pre">n_times</span></span>. Defaults to <span class="docutils literal"><span class="pre">sync</span></span>.</p>
+<div><p>Indentify pattern recovery mode.</p>
+<ul class="simple">
+<li><span class="docutils literal"><span class="pre">sync</span></span> mode tries to recover pattern using all
+values from the input vector.</li>
+<li><span class="docutils literal"><span class="pre">async</span></span> mode choose randomly some values from the
+input vector and iteratively repeat this procedure.
+Number of iterations defines by the <span class="docutils literal"><span class="pre">n_times</span></span>
+parameter.</li>
+</ul>
+<p>Defaults to <span class="docutils literal"><span class="pre">sync</span></span>.</p>
 </div></blockquote>
 <p><strong>n_times</strong> : int</p>
 <blockquote class="last">
-<div><p>Available only in <span class="docutils literal"><span class="pre">async</span></span> mode. Identify number of random trials.
-Defaults to <span class="docutils literal"><span class="pre">100</span></span>.</p>
+<div><p>Available only in <span class="docutils literal"><span class="pre">async</span></span> mode. Identify number
+of random trials. Defaults to <span class="docutils literal"><span class="pre">100</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -132,8 +148,8 @@ Defaults to <span class="docutils literal"><span class="pre">100</span></span>.<
 <li>Input and output vectors should contain only binary values.</li>
 </ul>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span>
 <span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
@@ -175,6 +191,7 @@ Defaults to <span class="docutils literal"><span class="pre">100</span></span>.<
 <span class="gp">&gt;&gt;&gt; </span><span class="n">recovered_zero</span><span class="p">,</span> <span class="n">recovered_hint</span> <span class="o">=</span> <span class="n">bamnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">half_zero</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">recovered_hint</span>
 <span class="go">matrix([[0, 1, 0, 0]])</span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">zero_hint</span>
 <span class="go">matrix([[0, 1, 0, 0]])</span>
 </pre></div>
@@ -182,18 +199,18 @@ Defaults to <span class="docutils literal"><span class="pre">100</span></span>.<
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="28%" />
-<col width="72%" />
+<col width="27%" />
+<col width="73%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>train(input_data, output_data)</td>
 <td>Train network and update network weights.</td>
 </tr>
 <tr class="row-even"><td>predict_output(input_data, n_times=None)</td>
-<td>Using input data recover output data. Returns two arguments. First is input data, second is output data.</td>
+<td>Using input data recover output data. Returns two arguments. First is an input data, second is an output data.</td>
 </tr>
 <tr class="row-odd"><td>predict(input_data, n_times=None)</td>
-<td>The same as <span class="docutils literal"><span class="pre">predict_output</span></span>.</td>
+<td>Alias to the <span class="docutils literal"><span class="pre">predict_output</span></span> method.</td>
 </tr>
 <tr class="row-even"><td>predict_input(output_data, n_times=None)</td>
 <td>Using output data recover input data. Returns two arguments. First is input data, second is output data.</td>
@@ -215,7 +232,7 @@ Defaults to <span class="docutils literal"><span class="pre">100</span></span>.<
 
 <dl class="attribute">
 <dt id="neupy.algorithms.memory.bam.DiscreteBAM.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=False), 'n_times': Option(class_name='DiscreteMemory', value=100), 'mode': Option(class_name='DiscreteMemory', value=sync)}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.bam.DiscreteBAM.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'mode': Option(class_name='DiscreteMemory', value=ChoiceProperty(name=&quot;mode&quot;)), 'n_times': Option(class_name='DiscreteMemory', value=IntProperty(name=&quot;n_times&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.bam.DiscreteBAM.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -234,6 +251,11 @@ Defaults to <span class="docutils literal"><span class="pre">100</span></span>.<
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="neupy.algorithms.memory.bam.DiscreteBAM.prediction">
+<span class="descname">prediction</span><span class="sig-paren">(</span><em>input_data=None</em>, <em>output_data=None</em>, <em>n_times=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.bam.DiscreteBAM.prediction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="neupy.algorithms.memory.bam.DiscreteBAM.train">
 <span class="descname">train</span><span class="sig-paren">(</span><em>input_data</em>, <em>output_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.bam.DiscreteBAM.train" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -247,34 +269,35 @@ Defaults to <span class="docutils literal"><span class="pre">100</span></span>.<
         
         
         </div></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Posts</h1>
+    <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
             <a href="../2015/09/21/password_recovery.html">Password recovery</a>
         </li><li>
             <a href="../2015/09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
-        </li><li>
-            <a href="../2015/07/04/boston_house_prices_dataset.html">Boston house-prices dataset</a>
-        </li><li>
-            <a href="../2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a>
         </li></ul>
-</div>
-</section><section><div class="widget">
-    <h1>Cheat sheet</h1>
-    <ul>
-        <li><a href="../docs/cheatsheet.html#algorithms">Algorithms</a></li>
-        <li><a href="../docs/cheatsheet.html#layers">Layers</a></li>
-        <li><a href="../docs/cheatsheet.html#parameter-initialization-methods">Parameter Initialization Methods</a></li>
-        <li><a href="../docs/cheatsheet.html#error-functions">Error functions</a></li>
-    </ul>
 </div></section><section><div class="widget">
-    <h1>Installation</h1>
+    <h1>Install NeuPy</h1>
     <div class="highligh-bash">
         <div class="highlight">
             <pre>pip install neupy</pre>
         </div>
     </div>
-    <p>Read more in <a href="../pages/documentation.html">Documentation</a>.</p>
-    <p>Old documentations you can find <a href="../pages/versions.html">here</a>.</p>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../docs/tutorials.html">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature you can feel
+        free to <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a> on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
+    </p>
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
@@ -283,10 +306,7 @@ Defaults to <span class="docutils literal"><span class="pre">100</span></span>.<
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer>
-    <a id="fork_me" href="http://github.com/itdxer/neupy">
-        <img alt="Fork me" src="../_static/img/github-fork-green.png" />
-    </a></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

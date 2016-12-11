@@ -1,7 +1,23 @@
 Parameter Initialization Methods
---------------------------------
+================================
 
-This is a small topic that help you to understand how to initialize weight, bias and other parameters in NeuPy. The simplest way is to define initial weights inside the code.
+We can set up different initialization method for layer parameters.
+
+.. code-block:: python
+
+    from neupy import layers, algorithms, init
+
+    gdnet = algorithms.GradientDescent(
+        [
+            layers.Input(10),
+            layers.Sigmoid(30, weight=init.Normal()),
+            layers.Sigmoid(15, weight=init.Normal()),
+        ]
+    )
+
+Initialization class has an ability to generate parameters based on the specified shape. For instance, a first sigmoid layer has 10 inputs and 30 outputs which mean that this layer should have weight with shape ``(10, 30)``. During initialization, we don't need to specify the shape of the parameter. This information would be provided to the Initializer class during layer initialization step.
+
+It's possible to set up our own weight for layers. Let's do the same initialization procedure with manually generated weights.
 
 .. code-block:: python
 
@@ -16,28 +32,29 @@ This is a small topic that help you to understand how to initialize weight, bias
         ]
     )
 
-This way is fine, but you can see that we need to hardcode parameter shape. In case if we want to change number of units in the hidden layer we need to update weight's shape as well. For more complicated rules code become messy. There is a better way to define parameters in the NeuPy. Here is an example.
+More initialization methods you can find :ref:`here <init-methods>`.
+
+Share parameters between layers
+-------------------------------
 
 .. code-block:: python
 
-    from neupy import layers, algorithms, init
+    >>> from neupy import layers
+    >>>
+    >>> hidden_layer_1 = layers.Relu(10)
+    >>> network = layers.Input(10) > hidden_layer_1
+    >>>
+    >>> hidden_layer_2 = layers.Relu(10, weight=hidden_layer_1.weight,
+    ...                              bias=hidden_layer_1.bias)
+    >>>
+    >>> network = network > hidden_layer_2
+    >>> network
+    Input(10) > Relu(10) > Relu(10)
 
-    gdnet = algorithms.GradientDescent(
-        [
-            layers.Input(10),
-            layers.Sigmoid(30, weight=init.HeNormal()),
-            layers.Sigmoid(15, weight=init.HeNormal()),
-        ]
-    )
+Create custom initialization methods
+------------------------------------
 
-Basically we set up parameter equal to initialization method. So weight parameter will be defined based on the algorithm inside of the class.
-
-More initialization methods you can find :ref:`here <init-methods>`.
-
-Custom methods
-**************
-
-It is possible to define custom initialization method.
+It's very easy to create our own initialization method. All we need is just to inherit from the ``init.Initializer`` class and define ``sample`` method that accepts two arguments (including the ``self`` argument).
 
 .. code-block:: python
 
@@ -54,7 +71,7 @@ It is possible to define custom initialization method.
     gdnet = algorithms.GradientDescent(
         [
             layers.Input(10),
-            layers.Sigmoid(30, weight=Exponential()),
-            layers.Sigmoid(15, weight=Exponential()),
+            layers.Sigmoid(30, weight=Exponential(scale=0.02)),
+            layers.Sigmoid(15, weight=Exponential(scale=0.05)),
         ]
     )

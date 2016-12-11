@@ -1,0 +1,651 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
+        <meta name="viewport" content="width=device-width">
+        <title>neupy.layers.pooling module &mdash; NeuPy</title>
+            <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../_static/plugins.js"></script>
+        <script src="../_static/main.js"></script>
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+<style media="screen" type="text/css">
+    .docutils { width: 100%; }
+    .docutils td { padding: 10px; }
+    .section { word-wrap:break-word; }
+    .descname { font-weight: bold; }
+    .highlight-python + .figure { margin-top: 20px; }
+    .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+    .dataframe td { padding: 5px; }
+
+    .math .gd { color: #000 !important; } /* Generic.Deleted */
+    .math .m { color: #000 !important; } /* Literal.Number */
+    .math .s { color: #000 !important; } /* Literal.String */
+    .math .mf { color: #000 !important; } /* Literal.Number.Float */
+    .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+    .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+    .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+    .math .sc { color: #000 !important; } /* Literal.String.Char */
+    .math .s2 { color: #000 !important; } /* Literal.String.Double */
+    .math .si { color: #000 !important; } /* Literal.String.Interpol */
+    .math .sx { color: #000 !important; } /* Literal.String.Other */
+    .math .s1 { color: #000 !important; } /* Literal.String.Single */
+    .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+    .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+    dt[id^="neupy."] {
+        background-color: #e6edf2;
+        border: 1px solid #f8fafb;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+    div[id^="module-neupy."] h1 {
+        display: none;
+    }
+</style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+        <div>
+          <h1><a href="../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../docs/tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+    <div class="section" id="module-neupy.layers.pooling">
+<span id="neupy-layers-pooling-module"></span><h1>neupy.layers.pooling module<a class="headerlink" href="#module-neupy.layers.pooling" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="neupy.layers.pooling.MaxPooling">
+<em class="property">class </em><span class="descclassname">neupy.layers.pooling.</span><span class="descname">MaxPooling</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.MaxPooling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum pooling layer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : tuple with 2 integers</p>
+<blockquote>
+<div><p>Factor by which to downscale (vertical, horizontal).
+(2, 2) will halve the image in each dimension.</p>
+</div></blockquote>
+<p><strong>stride</strong> : tuple or int.</p>
+<blockquote>
+<div><p>Stride size, which is the number of shifts over
+rows/cols to get the next pool region. If stride is
+None, it is considered equal to ds (no overlap on
+pooling regions).</p>
+</div></blockquote>
+<p><strong>padding</strong> : tuple or int</p>
+<blockquote>
+<div><p>(pad_h, pad_w), pad zeros to extend beyond four borders of
+the images, pad_h is the size of the top and bottom margins,
+and pad_w is the size of the left and right margins.</p>
+</div></blockquote>
+<p><strong>ignore_border</strong> : bool</p>
+<blockquote>
+<div><p>When <span class="docutils literal"><span class="pre">True</span></span>, <span class="docutils literal"><span class="pre">(5,</span> <span class="pre">5)</span></span> input with size <span class="docutils literal"><span class="pre">(2,</span> <span class="pre">2)</span></span>
+will generate a <cite>(2, 2)</cite> output. <span class="docutils literal"><span class="pre">(3,</span> <span class="pre">3)</span></span> otherwise.
+Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
+<blockquote class="last">
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>2D pooling</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
+<span class="go">(3, 5, 5)</span>
+</pre></div>
+</div>
+<p>1D pooling</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
+<span class="go">(10, 15, 1)</span>
+</pre></div>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
+<tr class="row-odd"><td>training_state</td>
+<td>(bool) Defines whether layer in training state or not.</td>
+</tr>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
+</tr>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="69%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>disable_training_state()</td>
+<td>Swith off trainig state.</td>
+</tr>
+<tr class="row-even"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.layers.pooling.MaxPooling.options">
+<span class="descname">options</span><em class="property"> = {'ignore_border': Option(class_name='BasePooling', value=Property(name=&quot;ignore_border&quot;)), 'stride': Option(class_name='BasePooling', value=StrideProperty(name=&quot;stride&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'padding': Option(class_name='BasePooling', value=PaddingProperty(name=&quot;padding&quot;)), 'size': Option(class_name='BasePooling', value=TypedListProperty(name=&quot;size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.MaxPooling.options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.pooling.MaxPooling.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.MaxPooling.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return output base on the input value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.layers.pooling.AveragePooling">
+<em class="property">class </em><span class="descclassname">neupy.layers.pooling.</span><span class="descname">AveragePooling</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.AveragePooling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Average pooling layer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : {<span class="docutils literal"><span class="pre">include_padding</span></span>, <span class="docutils literal"><span class="pre">exclude_padding</span></span>}</p>
+<blockquote>
+<div><p>Give a choice to include or exclude padding.
+Defaults to <span class="docutils literal"><span class="pre">include_padding</span></span>.</p>
+</div></blockquote>
+<p><strong>size</strong> : tuple with 2 integers</p>
+<blockquote>
+<div><p>Factor by which to downscale (vertical, horizontal).
+(2, 2) will halve the image in each dimension.</p>
+</div></blockquote>
+<p><strong>stride</strong> : tuple or int.</p>
+<blockquote>
+<div><p>Stride size, which is the number of shifts over
+rows/cols to get the next pool region. If stride is
+None, it is considered equal to ds (no overlap on
+pooling regions).</p>
+</div></blockquote>
+<p><strong>padding</strong> : tuple or int</p>
+<blockquote>
+<div><p>(pad_h, pad_w), pad zeros to extend beyond four borders of
+the images, pad_h is the size of the top and bottom margins,
+and pad_w is the size of the left and right margins.</p>
+</div></blockquote>
+<p><strong>ignore_border</strong> : bool</p>
+<blockquote>
+<div><p>When <span class="docutils literal"><span class="pre">True</span></span>, <span class="docutils literal"><span class="pre">(5,</span> <span class="pre">5)</span></span> input with size <span class="docutils literal"><span class="pre">(2,</span> <span class="pre">2)</span></span>
+will generate a <cite>(2, 2)</cite> output. <span class="docutils literal"><span class="pre">(3,</span> <span class="pre">3)</span></span> otherwise.
+Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
+<blockquote class="last">
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>2D pooling</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">AveragePooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
+<span class="go">(3, 5, 5)</span>
+</pre></div>
+</div>
+<p>1D pooling</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">AveragePooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
+<span class="go">(10, 15, 1)</span>
+</pre></div>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
+<tr class="row-odd"><td>training_state</td>
+<td>(bool) Defines whether layer in training state or not.</td>
+</tr>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
+</tr>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="69%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>disable_training_state()</td>
+<td>Swith off trainig state.</td>
+</tr>
+<tr class="row-even"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.layers.pooling.AveragePooling.mode">
+<span class="descname">mode</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.AveragePooling.mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.pooling.AveragePooling.options">
+<span class="descname">options</span><em class="property"> = {'mode': Option(class_name='AveragePooling', value=ChoiceProperty(name=&quot;mode&quot;)), 'ignore_border': Option(class_name='BasePooling', value=Property(name=&quot;ignore_border&quot;)), 'stride': Option(class_name='BasePooling', value=StrideProperty(name=&quot;stride&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'padding': Option(class_name='BasePooling', value=PaddingProperty(name=&quot;padding&quot;)), 'size': Option(class_name='BasePooling', value=TypedListProperty(name=&quot;size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.AveragePooling.options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.pooling.AveragePooling.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.AveragePooling.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return output base on the input value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.layers.pooling.Upscale">
+<em class="property">class </em><span class="descclassname">neupy.layers.pooling.</span><span class="descname">Upscale</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.Upscale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upscales input over two axis (height and width).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>scale</strong> : int or tuple with two int</p>
+<blockquote>
+<div><p>Scaling factor for the input value. In the tuple first
+parameter identifies scale of the height and the second
+one of the width.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
+<blockquote class="last">
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Upscale</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
+<span class="go">(3, 20, 20)</span>
+</pre></div>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
+<tr class="row-odd"><td>training_state</td>
+<td>(bool) Defines whether layer in training state or not.</td>
+</tr>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
+</tr>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="69%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>disable_training_state()</td>
+<td>Swith off trainig state.</td>
+</tr>
+<tr class="row-even"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.layers.pooling.Upscale.options">
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'scale': Option(class_name='Upscale', value=ScaleFactorProperty(name=&quot;scale&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.Upscale.options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.pooling.Upscale.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.Upscale.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return output base on the input value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.pooling.Upscale.output_shape">
+<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.Upscale.output_shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.pooling.Upscale.scale">
+<span class="descname">scale</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.Upscale.scale" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.pooling.Upscale.validate">
+<span class="descname">validate</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.Upscale.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate input shape value before assigning it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_shape</strong> : tuple with int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.layers.pooling.GlobalPooling">
+<em class="property">class </em><span class="descclassname">neupy.layers.pooling.</span><span class="descname">GlobalPooling</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.GlobalPooling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Global pooling layer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>function</strong> : callable</p>
+<blockquote>
+<div><p>Function that aggregates over dimensions.
+Defaults to <span class="docutils literal"><span class="pre">theano.tensor.mean</span></span>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">agg_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
+<blockquote class="last">
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">16</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">GlobalPooling</span><span class="p">(),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
+<span class="go">(16,)</span>
+</pre></div>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
+<tr class="row-odd"><td>training_state</td>
+<td>(bool) Defines whether layer in training state or not.</td>
+</tr>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
+</tr>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="69%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>disable_training_state()</td>
+<td>Swith off trainig state.</td>
+</tr>
+<tr class="row-even"><td>initialize()</td>
+<td>Set up important configurations related to the layer.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.layers.pooling.GlobalPooling.function">
+<span class="descname">function</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.GlobalPooling.function" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.pooling.GlobalPooling.options">
+<span class="descname">options</span><em class="property"> = {'function': Option(class_name='GlobalPooling', value=Property(name=&quot;function&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.GlobalPooling.options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.pooling.GlobalPooling.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.GlobalPooling.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return output base on the input value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.pooling.GlobalPooling.output_shape">
+<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.GlobalPooling.output_shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+    <div class="postmeta">
+        
+        
+        
+        </div></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Articles</h1>
+    <ul><li>
+            <a href="../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
+            <a href="../2015/09/21/password_recovery.html">Password recovery</a>
+        </li><li>
+            <a href="../2015/09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
+        </li></ul>
+</div></section><section><div class="widget">
+    <h1>Install NeuPy</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neupy</pre>
+        </div>
+    </div>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../docs/tutorials.html">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature you can feel
+        free to <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a> on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
+    </p>
+</div></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>
