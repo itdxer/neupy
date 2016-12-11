@@ -7,11 +7,11 @@ Install latest stable version
 
     $ pip install neupy
 
-Install the latest development version
+Install the latest development version from a specific ``branch``.
 
 .. code-block:: bash
 
-    $ pip install --upgrade git+https://github.com/itdxer/neupy.git@dev
+    $ pip install --upgrade git+https://github.com/itdxer/neupy.git@<branch>
 
 Also, you can clone a project and install it from a source code
 
