@@ -29,19 +29,19 @@ Installation
 User Guide
 ----------
 
-* `Install NeuPy <installation.html>`_
-* Check the `tutorials <tutorials.html>`_
-* Learn more about NeuPy in the `documentation <documentation.html>`_
-* Explore lots of different `neural network algorithms <cheatsheet.html>`_.
+* `Install NeuPy <http://neupy.com/pages/installation.html>`_
+* Check the `tutorials <http://neupy.com/docs/tutorials.html>`_
+* Learn more about NeuPy in the `documentation <http://neupy.com/pages/documentation.html>`_
+* Explore lots of different `neural network algorithms <http://neupy.com/pages/cheatsheet.html>`_.
 * Read `articles <http://neupy.com/archive.html>`_ and learn more about Neural Networks.
 
 Links
 -----
 
 * `Tutorials <http://neupy.com/docs/tutorials.html>`_
-* `Documentation <http://neupy.com>`_
+* `Documentation <http://neupy.com/pages/documentation.html>`_
 * `Articles <http://neupy.com/archive.html>`_
-* `Cheat sheet <http://neupy.com/docs/cheatsheet.html#algorithms>`_
+* `Cheat sheet <http://neupy.com/docs/cheatsheet.html>`_
 * `Open Issues <https://github.com/itdxer/neupy/issues>`_
 
 Articles
