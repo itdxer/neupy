@@ -1,16 +1,15 @@
 import os
 
-import h5py
 import theano
 import theano.tensor as T
-from neupy import layers
+from neupy import layers, storage
 
 from imagenet_tools import (CURRENT_DIR, FILES_DIR, load_image, print_top_n,
-                            download_file, extract_params)
+                            download_file)
 
 
 theano.config.floatX = 'float32'
-ALEXNET_WEIGHTS_FILE = os.path.join(FILES_DIR, 'alexnet_weights.h5')
+ALEXNET_WEIGHTS_FILE = os.path.join(FILES_DIR, 'alexnet.pickle')
 
 
 class SliceChannels(layers.BaseLayer):
@@ -37,36 +36,10 @@ class SliceChannels(layers.BaseLayer):
                                    self.from_channel, self.to_channel)
 
 
-if not os.path.exists(ALEXNET_WEIGHTS_FILE):
-    download_file(
-        url="http://files.heuritech.com/weights/alexnet_weights.h5",
-        filepath=ALEXNET_WEIGHTS_FILE,
-        description='Downloading weights'
-    )
-
-all_params = h5py.File(ALEXNET_WEIGHTS_FILE, 'r')
-
-conv_1 = extract_params(all_params, 'conv_1')
-
-conv_2_1 = extract_params(all_params, 'conv_2_1')
-conv_2_2 = extract_params(all_params, 'conv_2_2')
-
-conv_3 = extract_params(all_params, 'conv_3')
-
-conv_4_1 = extract_params(all_params, 'conv_4_1')
-conv_4_2 = extract_params(all_params, 'conv_4_2')
-
-conv_5_1 = extract_params(all_params, 'conv_5_1')
-conv_5_2 = extract_params(all_params, 'conv_5_2')
-
-dense_1 = extract_params(all_params, 'dense_1')
-dense_2 = extract_params(all_params, 'dense_2')
-dense_3 = extract_params(all_params, 'dense_3')
-
 alexnet = layers.join(
     layers.Input((3, 227, 227)),
 
-    layers.Convolution((96, 11, 11), stride=(4, 4), **conv_1),
+    layers.Convolution((96, 11, 11), stride=(4, 4), name='conv_1'),
     layers.Relu(),
 
     layers.MaxPooling((3, 3), stride=(2, 2)),
@@ -74,11 +47,11 @@ alexnet = layers.join(
 
     [[
         SliceChannels(0, 48),
-        layers.Convolution((128, 5, 5), padding=2, **conv_2_1),
+        layers.Convolution((128, 5, 5), padding=2, name='conv_2_1'),
         layers.Relu(),
     ], [
         SliceChannels(48, 96),
-        layers.Convolution((128, 5, 5), padding=2, **conv_2_2),
+        layers.Convolution((128, 5, 5), padding=2, name='conv_2_2'),
         layers.Relu(),
     ]],
     layers.Concatenate(),
@@ -86,26 +59,27 @@ alexnet = layers.join(
     layers.MaxPooling((3, 3), stride=(2, 2)),
     layers.LocalResponseNorm(),
 
-    layers.Convolution((384, 3, 3), padding=1, **conv_3) > layers.Relu(),
+    layers.Convolution((384, 3, 3), padding=1, name='conv_3'),
+    layers.Relu(),
 
     [[
         SliceChannels(0, 192),
-        layers.Convolution((192, 3, 3), padding=1, **conv_4_1),
+        layers.Convolution((192, 3, 3), padding=1, name='conv_4_1'),
         layers.Relu(),
     ], [
         SliceChannels(192, 384),
-        layers.Convolution((192, 3, 3), padding=1, **conv_4_2),
+        layers.Convolution((192, 3, 3), padding=1, name='conv_4_2'),
         layers.Relu(),
     ]],
     layers.Concatenate(),
 
     [[
         SliceChannels(0, 192),
-        layers.Convolution((128, 3, 3), padding=1, **conv_5_1),
+        layers.Convolution((128, 3, 3), padding=1, name='conv_5_1'),
         layers.Relu(),
     ], [
         SliceChannels(192, 384),
-        layers.Convolution((128, 3, 3), padding=1, **conv_5_2),
+        layers.Convolution((128, 3, 3), padding=1, name='conv_5_2'),
         layers.Relu(),
     ]],
     layers.Concatenate(),
@@ -113,10 +87,22 @@ alexnet = layers.join(
     layers.MaxPooling((3, 3), stride=(2, 2)),
 
     layers.Reshape(),
-    layers.Relu(4096, **dense_1) > layers.Dropout(0.5),
-    layers.Relu(4096, **dense_2) > layers.Dropout(0.5),
-    layers.Softmax(1000, **dense_3),
+    layers.Relu(4096, name='dense_1') > layers.Dropout(0.5),
+    layers.Relu(4096, name='dense_2') > layers.Dropout(0.5),
+    layers.Softmax(1000, name='dense_3'),
 )
+
+if not os.path.exists(ALEXNET_WEIGHTS_FILE):
+    download_file(
+        url=(
+            "http://srv70.putdrive.com/putstorage/DownloadFileHash/"
+            "F497B1D43A5A4A5QQWE2295998EWQS/alexnet.pickle"
+        ),
+        filepath=ALEXNET_WEIGHTS_FILE,
+        description='Downloading weights'
+    )
+
+storage.load(alexnet, ALEXNET_WEIGHTS_FILE)
 
 dog_image = load_image(os.path.join(CURRENT_DIR, 'images', 'dog.jpg'),
                        image_size=(256, 256),
