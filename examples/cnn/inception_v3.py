@@ -54,7 +54,7 @@ def Inception_2(conv_filters):
     )
 
 
-def Inception_3(conv_filters, pooling):
+def Inception_3(pooling):
     if pooling not in ('max', 'average'):
         raise ValueError("Invalid pooling option: {}".format(pooling))
 
@@ -66,25 +66,25 @@ def Inception_3(conv_filters, pooling):
 
     return layers.join(
         [[
-            ConvReluBN((conv_filters[0][0], 1, 1)),
+            ConvReluBN((320, 1, 1)),
         ], [
-            ConvReluBN((conv_filters[1][0], 1, 1)),
+            ConvReluBN((384, 1, 1)),
             [[
-                ConvReluBN((conv_filters[1][1], 1, 3), padding=(0, 1)),
+                ConvReluBN((384, 1, 3), padding=(0, 1)),
             ], [
-                ConvReluBN((conv_filters[1][2], 3, 1), padding=(1, 0)),
+                ConvReluBN((384, 3, 1), padding=(1, 0)),
             ]],
         ], [
-            ConvReluBN((conv_filters[2][0], 1, 1)),
-            ConvReluBN((conv_filters[2][1], 3, 3), padding=1),
+            ConvReluBN((448, 1, 1)),
+            ConvReluBN((384, 3, 3), padding=1),
             [[
-                ConvReluBN((conv_filters[2][2], 1, 3), padding=(0, 1)),
+                ConvReluBN((384, 1, 3), padding=(0, 1)),
             ], [
-                ConvReluBN((conv_filters[2][3], 3, 1), padding=(1, 0)),
+                ConvReluBN((384, 3, 1), padding=(1, 0)),
             ]],
         ], [
             Pooling((3, 3), stride=(1, 1), padding=1),
-            ConvReluBN((conv_filters[3][0], 1, 1)),
+            ConvReluBN((192, 1, 1)),
         ]],
         layers.Concatenate(),
     )
@@ -135,10 +135,8 @@ inception_v3 = layers.join(
     ]],
     layers.Concatenate(),
 
-    Inception_3([[320], [384, 384, 384], [448, 384, 384, 384], [192]],
-                pooling='average'),
-    Inception_3([[320], [384, 384, 384], [448, 384, 384, 384], [192]],
-                pooling='max'),
+    Inception_3(pooling='average'),
+    Inception_3(pooling='max'),
 
     layers.GlobalPooling(),
     layers.Softmax(1000),
