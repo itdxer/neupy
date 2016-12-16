@@ -53,7 +53,7 @@ squeezenet = layers.join(
     Fire(64, 256, 256, name='fire9'),
     layers.Dropout(0.5),
 
-    layers.Convolution((1000, 1, 1), padding='valid', name='conv10`'),
+    layers.Convolution((1000, 1, 1), padding='valid', name='conv10'),
     layers.GlobalPooling(function=T.mean),
     layers.Reshape(),
     layers.Softmax(),
