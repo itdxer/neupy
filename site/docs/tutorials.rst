@@ -32,9 +32,10 @@ Convolutional Neural Networks
 Autoencoders
 ~~~~~~~~~~~~
 
-* `MNIST, Denoising Autoencoder <https://github.com/itdxer/neupy/tree/master/examples/autoencoder/denoising_autoencoder.py>`_
+* `MNIST, Denoising Autoencoder (DAE) <https://github.com/itdxer/neupy/tree/master/examples/autoencoder/denoising_autoencoder.py>`_
 * `MNIST, Convolutional Autoencoder <https://github.com/itdxer/neupy/tree/master/examples/autoencoder/conv_autoencoder.py>`_
 * `MNIST, Stacked Convolutional Autoencoders <https://github.com/itdxer/neupy/tree/master/examples/autoencoder/stacked_conv_autoencoders.py>`_
+* `MNIST, Variational Autoencoder (VAE) <https://github.com/itdxer/neupy/tree/master/examples/autoencoder/variational_autoencoder.py>`_
 
 Boltzmann Machine
 ~~~~~~~~~~~~~~~~~

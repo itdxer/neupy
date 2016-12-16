@@ -75,6 +75,7 @@ Autoencoders
 * `MNIST, Denoising Autoencoder <examples/autoencoder/denoising_autoencoder.py>`_
 * `MNIST, Convolutional Autoencoder <examples/autoencoder/conv_autoencoder.py>`_
 * `MNIST, Stacked Convolutional Autoencoders <examples/autoencoder/stacked_conv_autoencoders.py>`_
+* `MNIST, Variational Autoencoder <examples/autoencoder/variational_autoencoder.py>`_
 
 Boltzmann Machine
 ~~~~~~~~~~~~~~~~~
