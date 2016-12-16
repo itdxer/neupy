@@ -61,10 +61,10 @@ Convolutional Neural Networks
 
 * `MNIST CNN <examples/cnn/mnist_cnn.py>`_
 * `CIFAR10 CNN <examples/cnn/cifar10_cnn.py>`_
-* `Pretrained AlexNet CNN <examples/cnn/alexnet.py>`_
-* `Pretrained VGG16 CNN <examples/cnn/vgg16.py>`_
-* `Pretrained VGG19 CNN <examples/cnn/vgg19.py>`_
-* `SqueezeNet <examples/cnn/squeezenet.py>`_
+* `Pre-trained AlexNet CNN <examples/cnn/alexnet.py>`_
+* `Pre-trained VGG16 CNN <examples/cnn/vgg16.py>`_
+* `Pre-trained VGG19 CNN <examples/cnn/vgg19.py>`_
+* `Pre-trained SqueezeNet <examples/cnn/squeezenet.py>`_
 * `GoogleNet <examples/cnn/googlenet.py>`_
 * `Inception v3 <examples/cnn/inception_v3.py>`_
 * `ResNet 50 <examples/cnn/resnet50.py>`_
