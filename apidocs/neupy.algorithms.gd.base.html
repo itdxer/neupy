@@ -305,7 +305,7 @@ addon algorithms: weight update and step update.</p>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.base.GradientDescent.options">
-<span class="descname">options</span><em class="property"> = {'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'error': Option(class_name='ConstructibleNetwork', value=ErrorFunctionProperty(name=&quot;error&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'addons': Option(class_name='GradientDescent', value=Property(name=&quot;addons&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.base.GradientDescent.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'addons': Option(class_name='GradientDescent', value=Property(name=&quot;addons&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'error': Option(class_name='ConstructibleNetwork', value=ErrorFunctionProperty(name=&quot;error&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.base.GradientDescent.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -481,7 +481,7 @@ addon algorithms: weight update and step update.</p>
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.base.MinibatchGradientDescent.options">
-<span class="descname">options</span><em class="property"> = {'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'error': Option(class_name='ConstructibleNetwork', value=ErrorFunctionProperty(name=&quot;error&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'batch_size': Option(class_name='MinibatchTrainingMixin', value=BatchSizeProperty(name=&quot;batch_size&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'addons': Option(class_name='GradientDescent', value=Property(name=&quot;addons&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.base.MinibatchGradientDescent.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'addons': Option(class_name='GradientDescent', value=Property(name=&quot;addons&quot;)), 'batch_size': Option(class_name='MinibatchTrainingMixin', value=BatchSizeProperty(name=&quot;batch_size&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'error': Option(class_name='ConstructibleNetwork', value=ErrorFunctionProperty(name=&quot;error&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.base.MinibatchGradientDescent.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -562,11 +562,11 @@ and their targets.</p>
         </div></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
+        </li><li>
             <a href="../2016/11/12/mnist_classification.html">MNIST Classification</a>
         </li><li>
             <a href="../2015/09/21/password_recovery.html">Password recovery</a>
-        </li><li>
-            <a href="../2015/09/20/discrete_hopfield_network.html">Discrete Hopfiel Network</a>
         </li></ul>
 </div></section><section><div class="widget">
     <h1>Install NeuPy</h1>

@@ -582,8 +582,7 @@ Let&#8217;s define a few images that we are going to teach the network.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dhnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>That&#8217;s all.
-Now to make sure that network has memorized patterns right we can define the broken patterns and check how the network will recover them.</p>
+<p>That&#8217;s all. Now to make sure that network has memorized patterns right we can define the broken patterns and check how the network will recover them.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">half_zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span>
 <span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
@@ -637,10 +636,8 @@ Now to make sure that network has memorized patterns right we can define the bro
 <span class="go">| * * * * *</span>
 </pre></div>
 </div>
-<p>Cool!
-Network catches the pattern right.</p>
-<p>But not always we will get the correct answer.
-Let&#8217;s define another broken pattern and check network output.</p>
+<p>Cool! Network catches the pattern right.</p>
+<p>But not always we will get the correct answer. Let&#8217;s define another broken pattern and check network output.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">half_two</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span>
 <span class="gp">... </span>    <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
@@ -660,10 +657,8 @@ Let&#8217;s define another broken pattern and check network output.</p>
 <span class="go">| * * * * *</span>
 </pre></div>
 </div>
-<p>We hasn&#8217;t clearly taught the network to deal with such pattern.
-But if we look closer, it looks like mixed pattern of numbers 1 and 2.</p>
-<p>This problem we can solve using the asynchronous network approach.
-We don&#8217;t necessary need to create a new network, we can just simply switch its mode.</p>
+<p>We hasn&#8217;t clearly taught the network to deal with such pattern. But if we look closer, it looks like mixed pattern of numbers 1 and 2.</p>
+<p>This problem we can solve using the asynchronous network approach. We don&#8217;t necessary need to create a new network, we can just simply switch its mode.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -688,14 +683,9 @@ We don&#8217;t necessary need to create a new network, we can just simply switch
 <span class="go">| * * * *</span>
 </pre></div>
 </div>
-<p>Our broken pattern is really close to the minimum of 1 and 2 patterns.
-Randomization helps us choose direction but it&#8217;s not nessesary the right one, especialy when the broken pattern is close to 1 and 2 at the same time.</p>
-<p>Check last output with number two again.
-Is that a realy valid pattern for number 2?
-Final symbol in output is wrong.
-We are not able to recover patter 2 from this network, because input vector is always much closer to the minimum that looks very similar to pattern 2.</p>
-<p>In plot below you can see first 200 iterations of the recovery procedure.
-Energy value was decreasing after each iteration until it reached the local minimum where pattern is equal to 2.</p>
+<p>Our broken pattern is really close to the minimum of 1 and 2 patterns. Randomization helps us choose direction but it&#8217;s not nessesary the right one, especialy when the broken pattern is close to 1 and 2 at the same time.</p>
+<p>Check last output with number two again. Is that a realy valid pattern for number 2? Final symbol in output is wrong. We are not able to recover patter 2 from this network, because input vector is always much closer to the minimum that looks very similar to pattern 2.</p>
+<p>In plot below you can see first 200 iterations of the recovery procedure. Energy value was decreasing after each iteration until it reached the local minimum where pattern is equal to 2.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/hopfield-energy-vis.png"><img alt="Asynchronous Discrete Hopfield Network energy update after each iteration" src="../../../_images/hopfield-energy-vis.png" style="width: 80%;" /></a>
 </div>
@@ -712,34 +702,8 @@ Energy value was decreasing after each iteration until it reached the local mini
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/hinton-diagram.png"><img alt="Asynchronous Discrete Hopfield Network energy update after each iteration" src="../../../_images/hinton-diagram.png" style="width: 80%;" /></a>
 </div>
-<p>This graph above shows the network weight matrix and all information stored inside of it.
-Hinton diagram is a very simple technique for the weight visualization in neural networks.
-Each value encoded in square where its size is an absolute value from the weight matrix and color shows the sign of this value.
-White is a positive and black is a negative.
-Usualy Hinton diagram helps identify some patterns in the weight matrix.</p>
-<p>Let&#8217;s go back to the graph.
-What can you say about the network just by looking at this picture?
-First of all you can see that there is no squares on the diagonal.
-That is because they are equal to zero.
-The second important thing you can notice is that the plot is symmetrical.
-But that is not all that you can withdraw from the graph.
-Can you see different patterns?
-You can find rows or columns with exacly the same values, like the second and third columns.
-Fifth column is also the same but its sign is reversed.
-Now look closer to the antidiagonal.
-What can you say about it?
-If you are thinking that all squares are white - you are right.
-But why is that true?
-Is there always the same patterns for each memory matrix?
-No, it is a special property of patterns that we stored inside of it.
-If you draw a horizontal line in the middle of each image and look at it you will see that values are opposite symmetric.
-For instance, <span class="math">\(x_1\)</span> opposite symmetric to <span class="math">\(x_{30}\)</span>, <span class="math">\(x_2\)</span> to <span class="math">\(x_{29}\)</span>, <span class="math">\(x_3\)</span> to <span class="math">\(x_{28}\)</span> and so on.
-Zero pattern is a perfect example where each value have exacly the same opposite symmetric pair.
-One is almost perfect except one value on the <span class="math">\(x_2\)</span> position.
-Two is not clearly opposite symmetric.
-But if you check each value you will find that more than half of values are symmetrical.
-Combination of those patterns gives us a diagonal with all positive values.
-If we have all perfectly opposite symmetric patterns then squares on the antidiagonal will have the same length, but in this case pattern for number 2 gives a little bit of noise and squares have different sizes.</p>
+<p>This graph above shows the network weight matrix and all information stored inside of it. Hinton diagram is a very simple technique for the weight visualization in neural networks. Each value encoded in square where its size is an absolute value from the weight matrix and color shows the sign of this value. White is a positive and black is a negative. Usualy Hinton diagram helps identify some patterns in the weight matrix.</p>
+<p>Let&#8217;s go back to the graph. What can you say about the network just by looking at this picture? First of all you can see that there is no squares on the diagonal. That is because they are equal to zero. The second important thing you can notice is that the plot is symmetrical. But that is not all that you can withdraw from the graph. Can you see different patterns? You can find rows or columns with exacly the same values, like the second and third columns. Fifth column is also the same but its sign is reversed. Now look closer to the antidiagonal. What can you say about it? If you are thinking that all squares are white - you are right. But why is that true? Is there always the same patterns for each memory matrix? No, it is a special property of patterns that we stored inside of it. If you draw a horizontal line in the middle of each image and look at it you will see that values are opposite symmetric. For instance, <span class="math">\(x_1\)</span> opposite symmetric to <span class="math">\(x_{30}\)</span>, <span class="math">\(x_2\)</span> to <span class="math">\(x_{29}\)</span>, <span class="math">\(x_3\)</span> to <span class="math">\(x_{28}\)</span> and so on. Zero pattern is a perfect example where each value have exacly the same opposite symmetric pair. One is almost perfect except one value on the <span class="math">\(x_2\)</span> position. Two is not clearly opposite symmetric. But if you check each value you will find that more than half of values are symmetrical. Combination of those patterns gives us a diagonal with all positive values. If we have all perfectly opposite symmetric patterns then squares on the antidiagonal will have the same length, but in this case pattern for number 2 gives a little bit of noise and squares have different sizes.</p>
 <p>Properties that we&#8217;ve reviewed so far are just the most interesting and maybe other patterns you can encounter on your own.</p>
 </div>
 <div class="section" id="more-reading">
@@ -786,11 +750,11 @@ from <a class="reference external" href="https://www.youtube.com/watch?v=gfPUWwB
         </ul><div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "neupy";    var disqus_identifier = "2015/09/20/discrete_hopfield_network";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../../../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
+        </li><li>
             <a href="../../../2016/11/12/mnist_classification.html">MNIST Classification</a>
         </li><li>
             <a href="../21/password_recovery.html">Password recovery</a>
-        </li><li>
-            <a href="#">Discrete Hopfiel Network</a>
         </li></ul>
 </div></section><section><div class="widget">
     <h1>Install NeuPy</h1>
