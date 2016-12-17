@@ -1,14 +1,12 @@
-import theano
-import theano.tensor as T
 import numpy as np
-from sklearn import model_selection, datasets
-from scipy.stats import norm
+import theano.tensor as T
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+from sklearn import model_selection, datasets
 
 from neupy import layers, environment, algorithms
-from neupy.algorithms.gd import errors
-from neupy.utils import as_tuple, theano_random_stream
+from neupy.exceptions import LayerConnectionError
+from neupy.utils import theano_random_stream
 
 
 environment.reproducible()
@@ -58,7 +56,7 @@ class GaussianSample(layers.BaseLayer):
                                        "".format(classname))
 
         if len(input_shapes) != 2:
-            n_inputs = len(input_values)
+            n_inputs = len(input_shapes)
             raise LayerConnectionError("{} layer expected 2 inputs, got {}"
                                        "".format(classname, n_inputs))
 
