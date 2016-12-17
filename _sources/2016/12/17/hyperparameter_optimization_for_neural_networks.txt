@@ -691,7 +691,7 @@ For unique problems that don’t have pre-trained networks the classic and simpl
 Source Code
 -----------
 
-All source code is available on GitHub in the iPython notebook. It includes all visualizations and hyperparameter selection algorithms.
+All source code is available on GitHub in the `iPython notebook <https://github.com/itdxer/neupy/blob/master/notebooks/Hyperparameter%20optimization%20for%20Neural%20Networks.ipynb>`_. It includes all visualizations and hyperparameter selection algorithms.
 
 References
 ----------
