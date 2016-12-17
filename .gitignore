@@ -13,10 +13,13 @@ build/
 .coverage
 
 # Other
-*.dill
 .tox/*
 .DS_Store
 .python-version
+notebooks/.ipynb_checkpoints/*
+
+# Storage files
+*.dill
 *.h5
 *.pickle
 

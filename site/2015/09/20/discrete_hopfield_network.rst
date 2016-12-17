@@ -553,8 +553,7 @@ We have 3 images, so now we can train network with these patterns.
     >>> dhnet = algorithms.DiscreteHopfieldNetwork(mode='sync')
     >>> dhnet.train(data)
 
-That's all.
-Now to make sure that network has memorized patterns right we can define the broken patterns and check how the network will recover them.
+That's all. Now to make sure that network has memorized patterns right we can define the broken patterns and check how the network will recover them.
 
 .. code-block:: python
 
@@ -612,11 +611,9 @@ Now we can reconstruct pattern from the memory.
     | *
     | * * * * *
 
-Cool!
-Network catches the pattern right.
+Cool! Network catches the pattern right.
 
-But not always we will get the correct answer.
-Let's define another broken pattern and check network output.
+But not always we will get the correct answer. Let's define another broken pattern and check network output.
 
 .. code-block:: python
 
@@ -638,11 +635,9 @@ Let's define another broken pattern and check network output.
     | *   *
     | * * * * *
 
-We hasn't clearly taught the network to deal with such pattern.
-But if we look closer, it looks like mixed pattern of numbers 1 and 2.
+We hasn't clearly taught the network to deal with such pattern. But if we look closer, it looks like mixed pattern of numbers 1 and 2.
 
-This problem we can solve using the asynchronous network approach.
-We don't necessary need to create a new network, we can just simply switch its mode.
+This problem we can solve using the asynchronous network approach. We don't necessary need to create a new network, we can just simply switch its mode.
 
 .. code-block:: python
 
@@ -669,16 +664,11 @@ We don't necessary need to create a new network, we can just simply switch its m
     | *
     | * * * *
 
-Our broken pattern is really close to the minimum of 1 and 2 patterns.
-Randomization helps us choose direction but it's not nessesary the right one, especialy when the broken pattern is close to 1 and 2 at the same time.
+Our broken pattern is really close to the minimum of 1 and 2 patterns. Randomization helps us choose direction but it's not nessesary the right one, especialy when the broken pattern is close to 1 and 2 at the same time.
 
-Check last output with number two again.
-Is that a realy valid pattern for number 2?
-Final symbol in output is wrong.
-We are not able to recover patter 2 from this network, because input vector is always much closer to the minimum that looks very similar to pattern 2.
+Check last output with number two again. Is that a realy valid pattern for number 2? Final symbol in output is wrong. We are not able to recover patter 2 from this network, because input vector is always much closer to the minimum that looks very similar to pattern 2.
 
-In plot below you can see first 200 iterations of the recovery procedure.
-Energy value was decreasing after each iteration until it reached the local minimum where pattern is equal to 2.
+In plot below you can see first 200 iterations of the recovery procedure. Energy value was decreasing after each iteration until it reached the local minimum where pattern is equal to 2.
 
 .. figure:: images/hopfield-energy-vis.png
     :width: 80%
@@ -702,35 +692,9 @@ And finally we can look closer to the network memory using Hinton diagram.
     :align: center
     :alt: Asynchronous Discrete Hopfield Network energy update after each iteration
 
-This graph above shows the network weight matrix and all information stored inside of it.
-Hinton diagram is a very simple technique for the weight visualization in neural networks.
-Each value encoded in square where its size is an absolute value from the weight matrix and color shows the sign of this value.
-White is a positive and black is a negative.
-Usualy Hinton diagram helps identify some patterns in the weight matrix.
+This graph above shows the network weight matrix and all information stored inside of it. Hinton diagram is a very simple technique for the weight visualization in neural networks. Each value encoded in square where its size is an absolute value from the weight matrix and color shows the sign of this value. White is a positive and black is a negative. Usualy Hinton diagram helps identify some patterns in the weight matrix.
 
-Let's go back to the graph.
-What can you say about the network just by looking at this picture?
-First of all you can see that there is no squares on the diagonal.
-That is because they are equal to zero.
-The second important thing you can notice is that the plot is symmetrical.
-But that is not all that you can withdraw from the graph.
-Can you see different patterns?
-You can find rows or columns with exacly the same values, like the second and third columns.
-Fifth column is also the same but its sign is reversed.
-Now look closer to the antidiagonal.
-What can you say about it?
-If you are thinking that all squares are white - you are right.
-But why is that true?
-Is there always the same patterns for each memory matrix?
-No, it is a special property of patterns that we stored inside of it.
-If you draw a horizontal line in the middle of each image and look at it you will see that values are opposite symmetric.
-For instance, :math:`x_1` opposite symmetric to :math:`x_{30}`, :math:`x_2` to :math:`x_{29}`, :math:`x_3` to :math:`x_{28}` and so on.
-Zero pattern is a perfect example where each value have exacly the same opposite symmetric pair.
-One is almost perfect except one value on the :math:`x_2` position.
-Two is not clearly opposite symmetric.
-But if you check each value you will find that more than half of values are symmetrical.
-Combination of those patterns gives us a diagonal with all positive values.
-If we have all perfectly opposite symmetric patterns then squares on the antidiagonal will have the same length, but in this case pattern for number 2 gives a little bit of noise and squares have different sizes.
+Let's go back to the graph. What can you say about the network just by looking at this picture? First of all you can see that there is no squares on the diagonal. That is because they are equal to zero. The second important thing you can notice is that the plot is symmetrical. But that is not all that you can withdraw from the graph. Can you see different patterns? You can find rows or columns with exacly the same values, like the second and third columns. Fifth column is also the same but its sign is reversed. Now look closer to the antidiagonal. What can you say about it? If you are thinking that all squares are white - you are right. But why is that true? Is there always the same patterns for each memory matrix? No, it is a special property of patterns that we stored inside of it. If you draw a horizontal line in the middle of each image and look at it you will see that values are opposite symmetric. For instance, :math:`x_1` opposite symmetric to :math:`x_{30}`, :math:`x_2` to :math:`x_{29}`, :math:`x_3` to :math:`x_{28}` and so on. Zero pattern is a perfect example where each value have exacly the same opposite symmetric pair. One is almost perfect except one value on the :math:`x_2` position. Two is not clearly opposite symmetric. But if you check each value you will find that more than half of values are symmetrical. Combination of those patterns gives us a diagonal with all positive values. If we have all perfectly opposite symmetric patterns then squares on the antidiagonal will have the same length, but in this case pattern for number 2 gives a little bit of noise and squares have different sizes.
 
 Properties that we've reviewed so far are just the most interesting and maybe other patterns you can encounter on your own.
 
