@@ -1,0 +1,58 @@
+{#-
+    boilerplate/search.html
+    ~~~~~~~~~~~~~~~~~~~~~~~
+
+    Template for the search page.
+
+    :copyright: Copyright 2007-2012 by the Sphinx team.
+    :license: BSD, see LICENSE file
+-#}
+
+{%- extends "layout.html" -%}
+{%- set title = _('Search') -%}
+{%- set script_files = script_files + ['_static/searchtools.js'] -%}
+{%- block extrahead -%}
+  <script type="text/javascript">
+    jQuery(function() { Search.loadIndex("{{ pathto('searchindex.js', 1) }}"); });
+  </script>
+  {{ super() }}
+  {# this is used when loading the search index using $.ajax fails,
+     such as on Chrome for documents on localhost #}
+  <script type="text/javascript" id="searchindexloader"></script>
+{%- endblock -%}
+{%- block body -%}
+  <h1 id="search-documentation">{{ _('Search') }}</h1>
+  <div id="fallback" class="admonition warning">
+  <script type="text/javascript">$('#fallback').hide();</script>
+  <p>
+    {%- trans -%}Please activate JavaScript to enable the search
+    functionality.{%- endtrans -%}
+  </p>
+  </div>
+  <form action="" method="get">
+    <div class="box">
+      <div class="container-1">
+          <span class="icon"><i class="fa fa-search"></i></span>
+          <input type="search" name="q" id="search" placeholder="Search..." />
+      </div>
+    </div>
+  </form>
+  <br>
+  {%- if search_performed -%}
+    <h2>{{ _('Search Results') }}</h2>
+    {%- if not search_results -%}
+      <p>{{ _('Your search did not match any results.') }}</p>
+    {%- endif -%}
+  {%- endif -%}
+  <div id="search-results">
+  {%- if search_results -%}
+    <ul>
+    {%- for href, caption, context in search_results -%}
+      <li><a href="{{ pathto(item.href) }}">{{ caption }}</a>
+        <div class="context">{{ context|e }}</div>
+      </li>
+    {%- endfor -%}
+    </ul>
+  {%- endif -%}
+  </div>
+{%- endblock -%}

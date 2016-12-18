@@ -7,6 +7,7 @@ $(document).ready(function() {
      * Note: This JS snippet was taken from the official python.org
      * documentation site.*/
     var div = $('.highlight-python .highlight,' +
+                '.highlight-default .highlight,' +
                 '.highlight-python3 .highlight,' +
                 '.highlight-pycon .highlight')
     var pre = div.find('pre');
