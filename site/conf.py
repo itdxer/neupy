@@ -101,9 +101,9 @@ html_sidebars = {
     '**': [
         'recent.html',
         'installation.html',
+        'searchbox.html',
         'issues.html',
         'old-versions.html',
-        'searchbox.html',
     ],
 }
 
