@@ -503,7 +503,7 @@
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/tpe-observation-groups.png"><img alt="Observation groups for TPE" src="_images/tpe-observation-groups.png" style="width: 100%;"/></a>
 </div>
-<p>As you can see we are no longer rely on the best observation. Instead, we use a distribution of the best observations. The more As you can see we are no longer rely on the best observation. Instead, we use a distribution of the best observations. The more iterations we use during the Random Search the better distribution we have at the beginning.</p>
+<p>As you can see we are no longer rely on the best observation. Instead, we use a distribution of the best observations. Instead, we use a distribution of the best observations. The more iterations we use during the Random Search the better distribution we have at the beginning.</p>
 <p>The next part of the TPE is to model likelihood probability for each of the two groups. This is the next big difference between Gaussian Process and TPE. For Gaussian Process we’ve modeled posterior probability instead of likelihood probability. Using the likelihood probability from the first group (the one that contains best observations) we sample the bunch of candidates. From the sampled candidates we try to find a candidate that more likely to be in the first group and less likely to be in the second one. The following formula defines Expected Improvement per each candidate.</p>
 <div class="math">
 \[EI(x) = \frac{l(x)}{g(x)}\]</div>
@@ -515,7 +515,7 @@
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/tpe-expected-improvement.png"><img alt="Expected improvement for TPE" src="_images/tpe-expected-improvement.png" style="width: 100%;"/></a>
 </div>
-<p>In the example, I’ve used t-distributions, but in TPE distribution models using <a class="reference external" href="https://www.cs.utah.edu/~suyash/Dissertation_html/node11.html">parzen-window density estimators</a>. The main idea is that each sample defines gaussian distribution with defined mean (value of the hyperparameter) and specified standard deviation. Then all these points stacks together and normalized to assure that  Probability Density Function (PDF). That’s why <cite>Parzen estimators</cite> appears in the name of the algorithm.</p>
+<p>In the example, I’ve used t-distributions, but in TPE distribution models using <a class="reference external" href="https://www.cs.utah.edu/~suyash/Dissertation_html/node11.html">parzen-window density estimators</a>. The main idea is that each sample defines gaussian distribution with defined mean (value of the hyperparameter) and specified standard deviation. Then all these points stacks together and normalized to assure that output is Probability Density Function (PDF). That’s why <cite>Parzen estimators</cite> appears in the name of the algorithm.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/parzen-estimators.png"><img alt="Parzen estimators" src="_images/parzen-estimators.png" style="width: 100%;"/></a>
 </div>
