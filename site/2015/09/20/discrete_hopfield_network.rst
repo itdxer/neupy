@@ -77,6 +77,8 @@ It includes just an outer product between input vector and transposed input vect
     \end{align*}
     =
 
+.. math::
+
     \begin{align*}
         =
         \left[
@@ -187,9 +189,7 @@ To make weight from the :math:`U` matrix, we need to remove ones from the diagon
 
 .. math::
 
-    W = U - I =
-
-    = \left[
+    W = U - I = \left[
         \begin{array}{cccc}
             1 & -1 & 1 & -1\\
             -1 & 1 & -1 & 1\\
@@ -205,6 +205,8 @@ To make weight from the :math:`U` matrix, we need to remove ones from the diagon
             0 & 0 & 0 & 1
         \end{array}
     \right] =
+
+.. math::
 
     = \left[
         \begin{array}{cccc}
@@ -257,6 +259,8 @@ To recover your pattern from memory you just need to multiply the weight matrix 
         \right]
         =
     \end{align*}
+
+.. math::
 
     \begin{align*}
         =
@@ -332,6 +336,8 @@ Consider that we already have a weight matrix :math:`W` with one pattern :math:`
         \end{array}
         \right]
     \end{align*}
+
+.. math::
 
     \begin{align*}
         x =
