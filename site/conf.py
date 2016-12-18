@@ -250,5 +250,7 @@ source_suffix = tinkerer.source_suffix
 master_doc = tinkerer.master_doc
 version = tinkerer.__version__
 release = tinkerer.__version__
+
 html_title = project
 html_show_sourcelink = False
+html_add_permalinks = None
