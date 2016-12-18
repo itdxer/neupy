@@ -157,10 +157,10 @@
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.gd.hessian">
-<span id="neupy-algorithms-gd-hessian-module"></span><h1>neupy.algorithms.gd.hessian module<a class="headerlink" href="#module-neupy.algorithms.gd.hessian" title="Permalink to this headline">¶</a></h1>
+<span id="neupy-algorithms-gd-hessian-module"></span><h1>neupy.algorithms.gd.hessian module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.gd.hessian.Hessian">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.gd.hessian.</span><span class="descname">Hessian</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/hessian.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.hessian.Hessian" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.gd.hessian.</span><span class="descname">Hessian</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/hessian.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Hessian gradient decent optimization. This GD algorithm
 variation using second derivative information helps choose better
 gradient direction and as a consequence better weight update
@@ -320,24 +320,24 @@ addon algorithms: weight update and step update.</p>
 </table>
 <dl class="method">
 <dt id="neupy.algorithms.gd.hessian.Hessian.init_train_updates">
-<span class="descname">init_train_updates</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/hessian.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.hessian.Hessian.init_train_updates" title="Permalink to this definition">¶</a></dt>
+<span class="descname">init_train_updates</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/hessian.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Initialize train function update in Theano format that
 would be trigger after each training epoch.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.hessian.Hessian.options">
-<span class="descname">options</span><em class="property"> = {'penalty_const': Option(class_name='Hessian', value=BoundedProperty(name=&quot;penalty_const&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'error': Option(class_name='ConstructibleNetwork', value=ErrorFunctionProperty(name=&quot;error&quot;)), 'addons': Option(class_name='GradientDescent', value=Property(name=&quot;addons&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/hessian.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.hessian.Hessian.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'addons': Option(class_name='GradientDescent', value=Property(name=&quot;addons&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'error': Option(class_name='ConstructibleNetwork', value=ErrorFunctionProperty(name=&quot;error&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'penalty_const': Option(class_name='Hessian', value=BoundedProperty(name=&quot;penalty_const&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/hessian.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.hessian.Hessian.penalty_const">
-<span class="descname">penalty_const</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/hessian.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.hessian.Hessian.penalty_const" title="Permalink to this definition">¶</a></dt>
+<span class="descname">penalty_const</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/hessian.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.hessian.Hessian.step">
-<span class="descname">step</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/hessian.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.hessian.Hessian.step" title="Permalink to this definition">¶</a></dt>
+<span class="descname">step</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/hessian.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

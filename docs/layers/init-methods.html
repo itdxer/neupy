@@ -157,7 +157,7 @@
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="parameter-initialization-methods">
-<h1>Parameter Initialization Methods<a class="headerlink" href="#parameter-initialization-methods" title="Permalink to this headline">¶</a></h1>
+<h1>Parameter Initialization Methods</h1>
 <p>We can set up different initialization method for layer parameters.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">init</span>
 
@@ -186,7 +186,7 @@
 </div>
 <p>More initialization methods you can find <a class="reference internal" href="../../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.</p>
 <div class="section" id="share-parameters-between-layers">
-<h2>Share parameters between layers<a class="headerlink" href="#share-parameters-between-layers" title="Permalink to this headline">¶</a></h2>
+<h2>Share parameters between layers</h2>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hidden_layer_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
@@ -202,7 +202,7 @@
 </div>
 </div>
 <div class="section" id="create-custom-initialization-methods">
-<h2>Create custom initialization methods<a class="headerlink" href="#create-custom-initialization-methods" title="Permalink to this headline">¶</a></h2>
+<h2>Create custom initialization methods</h2>
 <p>It&#8217;s very easy to create our own initialization method. All we need is just to inherit from the <span class="docutils literal"><span class="pre">init.Initializer</span></span> class and define <span class="docutils literal"><span class="pre">sample</span></span> method that accepts two arguments (including the <span class="docutils literal"><span class="pre">self</span></span> argument).</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">init</span>

@@ -157,10 +157,10 @@
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.layers.pooling">
-<span id="neupy-layers-pooling-module"></span><h1>neupy.layers.pooling module<a class="headerlink" href="#module-neupy.layers.pooling" title="Permalink to this headline">¶</a></h1>
+<span id="neupy-layers-pooling-module"></span><h1>neupy.layers.pooling module</h1>
 <dl class="class">
 <dt id="neupy.layers.pooling.MaxPooling">
-<em class="property">class </em><span class="descclassname">neupy.layers.pooling.</span><span class="descname">MaxPooling</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.MaxPooling" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><span class="descclassname">neupy.layers.pooling.</span><span class="descname">MaxPooling</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Maximum pooling layer.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -264,12 +264,12 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </table>
 <dl class="attribute">
 <dt id="neupy.layers.pooling.MaxPooling.options">
-<span class="descname">options</span><em class="property"> = {'padding': Option(class_name='BasePooling', value=PaddingProperty(name=&quot;padding&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'ignore_border': Option(class_name='BasePooling', value=Property(name=&quot;ignore_border&quot;)), 'size': Option(class_name='BasePooling', value=TypedListProperty(name=&quot;size&quot;)), 'stride': Option(class_name='BasePooling', value=StrideProperty(name=&quot;stride&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.MaxPooling.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='BasePooling', value=TypedListProperty(name=&quot;size&quot;)), 'ignore_border': Option(class_name='BasePooling', value=Property(name=&quot;ignore_border&quot;)), 'padding': Option(class_name='BasePooling', value=PaddingProperty(name=&quot;padding&quot;)), 'stride': Option(class_name='BasePooling', value=StrideProperty(name=&quot;stride&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.pooling.MaxPooling.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.MaxPooling.output" title="Permalink to this definition">¶</a></dt>
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Return output base on the input value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -285,7 +285,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="class">
 <dt id="neupy.layers.pooling.AveragePooling">
-<em class="property">class </em><span class="descclassname">neupy.layers.pooling.</span><span class="descname">AveragePooling</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.AveragePooling" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><span class="descclassname">neupy.layers.pooling.</span><span class="descname">AveragePooling</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Average pooling layer.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -394,17 +394,17 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </table>
 <dl class="attribute">
 <dt id="neupy.layers.pooling.AveragePooling.mode">
-<span class="descname">mode</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.AveragePooling.mode" title="Permalink to this definition">¶</a></dt>
+<span class="descname">mode</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.pooling.AveragePooling.options">
-<span class="descname">options</span><em class="property"> = {'padding': Option(class_name='BasePooling', value=PaddingProperty(name=&quot;padding&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'ignore_border': Option(class_name='BasePooling', value=Property(name=&quot;ignore_border&quot;)), 'size': Option(class_name='BasePooling', value=TypedListProperty(name=&quot;size&quot;)), 'stride': Option(class_name='BasePooling', value=StrideProperty(name=&quot;stride&quot;)), 'mode': Option(class_name='AveragePooling', value=ChoiceProperty(name=&quot;mode&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.AveragePooling.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'size': Option(class_name='BasePooling', value=TypedListProperty(name=&quot;size&quot;)), 'ignore_border': Option(class_name='BasePooling', value=Property(name=&quot;ignore_border&quot;)), 'padding': Option(class_name='BasePooling', value=PaddingProperty(name=&quot;padding&quot;)), 'stride': Option(class_name='BasePooling', value=StrideProperty(name=&quot;stride&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'mode': Option(class_name='AveragePooling', value=ChoiceProperty(name=&quot;mode&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.pooling.AveragePooling.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.AveragePooling.output" title="Permalink to this definition">¶</a></dt>
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Return output base on the input value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -420,7 +420,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="class">
 <dt id="neupy.layers.pooling.Upscale">
-<em class="property">class </em><span class="descclassname">neupy.layers.pooling.</span><span class="descname">Upscale</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.Upscale" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><span class="descclassname">neupy.layers.pooling.</span><span class="descname">Upscale</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Upscales input over two axis (height and width).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -493,12 +493,12 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </table>
 <dl class="attribute">
 <dt id="neupy.layers.pooling.Upscale.options">
-<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'scale': Option(class_name='Upscale', value=ScaleFactorProperty(name=&quot;scale&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.Upscale.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'scale': Option(class_name='Upscale', value=ScaleFactorProperty(name=&quot;scale&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.pooling.Upscale.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.Upscale.output" title="Permalink to this definition">¶</a></dt>
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Return output base on the input value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -512,17 +512,17 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.pooling.Upscale.output_shape">
-<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.Upscale.output_shape" title="Permalink to this definition">¶</a></dt>
+<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.pooling.Upscale.scale">
-<span class="descname">scale</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.Upscale.scale" title="Permalink to this definition">¶</a></dt>
+<span class="descname">scale</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.pooling.Upscale.validate">
-<span class="descname">validate</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.Upscale.validate" title="Permalink to this definition">¶</a></dt>
+<span class="descname">validate</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Validate input shape value before assigning it.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -538,7 +538,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="class">
 <dt id="neupy.layers.pooling.GlobalPooling">
-<em class="property">class </em><span class="descclassname">neupy.layers.pooling.</span><span class="descname">GlobalPooling</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.GlobalPooling" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><span class="descclassname">neupy.layers.pooling.</span><span class="descname">GlobalPooling</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Global pooling layer.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -614,17 +614,17 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </table>
 <dl class="attribute">
 <dt id="neupy.layers.pooling.GlobalPooling.function">
-<span class="descname">function</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.GlobalPooling.function" title="Permalink to this definition">¶</a></dt>
+<span class="descname">function</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.pooling.GlobalPooling.options">
-<span class="descname">options</span><em class="property"> = {'function': Option(class_name='GlobalPooling', value=Property(name=&quot;function&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.GlobalPooling.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'function': Option(class_name='GlobalPooling', value=Property(name=&quot;function&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.pooling.GlobalPooling.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.GlobalPooling.output" title="Permalink to this definition">¶</a></dt>
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Return output base on the input value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -638,7 +638,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.pooling.GlobalPooling.output_shape">
-<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.pooling.GlobalPooling.output_shape" title="Permalink to this definition">¶</a></dt>
+<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

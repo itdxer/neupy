@@ -157,10 +157,10 @@
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.rbfn.pnn">
-<span id="neupy-algorithms-rbfn-pnn-module"></span><h1>neupy.algorithms.rbfn.pnn module<a class="headerlink" href="#module-neupy.algorithms.rbfn.pnn" title="Permalink to this headline">¶</a></h1>
+<span id="neupy-algorithms-rbfn-pnn-module"></span><h1>neupy.algorithms.rbfn.pnn module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.rbfn.pnn.PNN">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.rbfn.pnn.</span><span class="descname">PNN</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/pnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.pnn.PNN" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.rbfn.pnn.</span><span class="descname">PNN</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/pnn.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Probabilistic Neural Network (PNN). Network applies only to
 the classification problems.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -252,12 +252,12 @@ and use them to make a predictions.</li>
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.rbfn.pnn.PNN.options">
-<span class="descname">options</span><em class="property"> = {'std': Option(class_name='PNN', value=BoundedProperty(name=&quot;std&quot;)), 'batch_size': Option(class_name='MinibatchTrainingMixin', value=BatchSizeProperty(name=&quot;batch_size&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/pnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.pnn.PNN.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'std': Option(class_name='PNN', value=BoundedProperty(name=&quot;std&quot;)), 'batch_size': Option(class_name='MinibatchTrainingMixin', value=BatchSizeProperty(name=&quot;batch_size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/pnn.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbfn.pnn.PNN.predict">
-<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/pnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.pnn.PNN.predict" title="Permalink to this definition">¶</a></dt>
+<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/pnn.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Predicts class from the input data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -273,7 +273,7 @@ and use them to make a predictions.</li>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbfn.pnn.PNN.predict_proba">
-<span class="descname">predict_proba</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/pnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.pnn.PNN.predict_proba" title="Permalink to this definition">¶</a></dt>
+<span class="descname">predict_proba</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/pnn.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Predict probabilities for each class.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -289,7 +289,7 @@ and use them to make a predictions.</li>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbfn.pnn.PNN.predict_raw">
-<span class="descname">predict_raw</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/pnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.pnn.PNN.predict_raw" title="Permalink to this definition">¶</a></dt>
+<span class="descname">predict_raw</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/pnn.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Raw prediction.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -317,12 +317,12 @@ and use them to make a predictions.</li>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.rbfn.pnn.PNN.std">
-<span class="descname">std</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/pnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.pnn.PNN.std" title="Permalink to this definition">¶</a></dt>
+<span class="descname">std</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/pnn.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbfn.pnn.PNN.train">
-<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em>, <em>copy=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/pnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.pnn.PNN.train" title="Permalink to this definition">¶</a></dt>
+<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em>, <em>copy=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/pnn.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Trains network. PNN doesn&#8217;t actually train, it just stores
 input data and use it for prediction.</p>
 <table class="docutils field-list" frame="void" rules="none">

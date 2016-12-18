@@ -157,10 +157,10 @@
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.rbm">
-<span id="neupy-algorithms-rbm-module"></span><h1>neupy.algorithms.rbm module<a class="headerlink" href="#module-neupy.algorithms.rbm" title="Permalink to this headline">¶</a></h1>
+<span id="neupy-algorithms-rbm-module"></span><h1>neupy.algorithms.rbm module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.rbm.RBM">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.rbm.</span><span class="descname">RBM</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.rbm.</span><span class="descname">RBM</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Boolean/Bernoulli Restricted Boltzmann Machine (RBM).
 Algorithm assumes that inputs are either binary
 values or values between 0 and 1.</p>
@@ -314,7 +314,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </table>
 <dl class="method">
 <dt id="neupy.algorithms.rbm.RBM.gibbs_sampling">
-<span class="descname">gibbs_sampling</span><span class="sig-paren">(</span><em>visible_input</em>, <em>n_iter=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM.gibbs_sampling" title="Permalink to this definition">¶</a></dt>
+<span class="descname">gibbs_sampling</span><span class="sig-paren">(</span><em>visible_input</em>, <em>n_iter=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Makes Gibbs sampling n times using visible input.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -341,12 +341,12 @@ units (0 and 1).</p>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.rbm.RBM.hidden_bias">
-<span class="descname">hidden_bias</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM.hidden_bias" title="Permalink to this definition">¶</a></dt>
+<span class="descname">hidden_bias</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbm.RBM.hidden_to_visible">
-<span class="descname">hidden_to_visible</span><span class="sig-paren">(</span><em>hidden_input</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM.hidden_to_visible" title="Permalink to this definition">¶</a></dt>
+<span class="descname">hidden_to_visible</span><span class="sig-paren">(</span><em>hidden_input</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Propagates output from the hidden layer backward
 to the visible.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -363,40 +363,40 @@ to the visible.</p>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbm.RBM.init_input_output_variables">
-<span class="descname">init_input_output_variables</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM.init_input_output_variables" title="Permalink to this definition">¶</a></dt>
+<span class="descname">init_input_output_variables</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Initialize input and output Theano variables.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbm.RBM.init_methods">
-<span class="descname">init_methods</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM.init_methods" title="Permalink to this definition">¶</a></dt>
+<span class="descname">init_methods</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Initialize Theano functions.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbm.RBM.init_variables">
-<span class="descname">init_variables</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM.init_variables" title="Permalink to this definition">¶</a></dt>
+<span class="descname">init_variables</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Initialize Theano variables.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.rbm.RBM.n_hidden">
-<span class="descname">n_hidden</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM.n_hidden" title="Permalink to this definition">¶</a></dt>
+<span class="descname">n_hidden</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.rbm.RBM.n_visible">
-<span class="descname">n_visible</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM.n_visible" title="Permalink to this definition">¶</a></dt>
+<span class="descname">n_visible</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.rbm.RBM.options">
-<span class="descname">options</span><em class="property"> = {'visible_bias': Option(class_name='RBM', value=ParameterProperty(name=&quot;visible_bias&quot;)), 'weight': Option(class_name='RBM', value=ParameterProperty(name=&quot;weight&quot;)), 'n_hidden': Option(class_name='RBM', value=IntProperty(name=&quot;n_hidden&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'batch_size': Option(class_name='MinibatchTrainingMixin', value=BatchSizeProperty(name=&quot;batch_size&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'n_visible': Option(class_name='RBM', value=IntProperty(name=&quot;n_visible&quot;)), 'hidden_bias': Option(class_name='RBM', value=ParameterProperty(name=&quot;hidden_bias&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'visible_bias': Option(class_name='RBM', value=ParameterProperty(name=&quot;visible_bias&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'batch_size': Option(class_name='MinibatchTrainingMixin', value=BatchSizeProperty(name=&quot;batch_size&quot;)), 'n_visible': Option(class_name='RBM', value=IntProperty(name=&quot;n_visible&quot;)), 'n_hidden': Option(class_name='RBM', value=IntProperty(name=&quot;n_hidden&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'hidden_bias': Option(class_name='RBM', value=ParameterProperty(name=&quot;hidden_bias&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'weight': Option(class_name='RBM', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbm.RBM.prediction_error">
-<span class="descname">prediction_error</span><span class="sig-paren">(</span><em>input_data</em>, <em>target_data=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM.prediction_error" title="Permalink to this definition">¶</a></dt>
+<span class="descname">prediction_error</span><span class="sig-paren">(</span><em>input_data</em>, <em>target_data=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Compute the pseudo-likelihood of input samples.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -420,7 +420,7 @@ to the visible.</p>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbm.RBM.train">
-<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>input_test=None</em>, <em>epochs=100</em>, <em>summary='table'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM.train" title="Permalink to this definition">¶</a></dt>
+<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>input_test=None</em>, <em>epochs=100</em>, <em>summary='table'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Train RBM.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -447,7 +447,7 @@ to the visible.</p>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbm.RBM.train_epoch">
-<span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM.train_epoch" title="Permalink to this definition">¶</a></dt>
+<span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Train one epoch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -463,12 +463,12 @@ to the visible.</p>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.rbm.RBM.visible_bias">
-<span class="descname">visible_bias</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM.visible_bias" title="Permalink to this definition">¶</a></dt>
+<span class="descname">visible_bias</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbm.RBM.visible_to_hidden">
-<span class="descname">visible_to_hidden</span><span class="sig-paren">(</span><em>visible_input</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM.visible_to_hidden" title="Permalink to this definition">¶</a></dt>
+<span class="descname">visible_to_hidden</span><span class="sig-paren">(</span><em>visible_input</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Populates data throught the network and returns output
 from the hidden layer.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -485,7 +485,7 @@ from the hidden layer.</p>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.rbm.RBM.weight">
-<span class="descname">weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbm.RBM.weight" title="Permalink to this definition">¶</a></dt>
+<span class="descname">weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

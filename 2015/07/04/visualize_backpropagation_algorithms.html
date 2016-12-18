@@ -159,7 +159,7 @@
             <span>July 04, 2015</span>
         </div>
     <div class="section" id="visualize-algorithms-based-on-the-backpropagation">
-<h1><a class="toc-backref" href="#id3">Visualize Algorithms based on the Backpropagation</a><a class="headerlink" href="#visualize-algorithms-based-on-the-backpropagation" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id3">Visualize Algorithms based on the Backpropagation</a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
@@ -182,7 +182,7 @@
 </div>
 <p>In this article we will be testing different algorithms based on the backpropagation method, visualizing them and trying to figure out some important features from a blog that we will get.</p>
 <div class="section" id="checking-data">
-<h2><a class="toc-backref" href="#id4">Checking data</a><a class="headerlink" href="#checking-data" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id4">Checking data</a></h2>
 <p>First of all we need to define simple dataset which contains 6 points with two features.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
@@ -218,7 +218,7 @@
 <p>So, since the problem is linear separable we can solve it without hidden layers in network. There are two features and two classes, so we can build network which will take 2 input values and will produce 1 output. We need just two weights, so we can visualize them in contour plot.</p>
 </div>
 <div class="section" id="initialize-contour">
-<h2><a class="toc-backref" href="#id5">Initialize contour</a><a class="headerlink" href="#initialize-contour" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id5">Initialize contour</a></h2>
 <p>I won&#8217;t  add all code related to the plots building in the article. In case if you are interested you can check the main script <a class="reference external" href="https://github.com/itdxer/neupy/blob/master/examples/mlp/gd_algorithms_visualization.py">here</a>.</p>
 <a class="reference internal image-reference" href="../../../_images/raw-contour-plot.png"><img alt="Approximation function contour plot" class="align-center" src="../../../_images/raw-contour-plot.png" style="width: 80%;" /></a>
 <p>The plot above shows error rate that depends on the network&#8217;s weights. The best result corresponds to the smallest error value. The best weights combination for this problem should be near the bottom right corner in the white area.</p>
@@ -234,9 +234,9 @@
 <p>This function will train the network until the error will be smaller than <cite>0.125</cite>. Every network starts at place with coordinates <cite>(-4, -4)</cite> and finishes near the point with the error value lower than <cite>0.125</cite>.</p>
 </div>
 <div class="section" id="id1">
-<h2><a class="toc-backref" href="#id6">Visualize algorithms based on the Backpropagation</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id6">Visualize algorithms based on the Backpropagation</a></h2>
 <div class="section" id="gradient-descent">
-<h3><a class="toc-backref" href="#id7">Gradient Descent</a><a class="headerlink" href="#gradient-descent" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id7">Gradient Descent</a></h3>
 <p>Let&#8217;s primarily check <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">Gradient</span> <span class="pre">Descent</span></span></a>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/bp-steps.png"><img alt="Weight update steps for the Gradient Descent" src="../../../_images/bp-steps.png" style="width: 80%;" /></a>
@@ -249,7 +249,7 @@
 <p>The problem is that the step size is a very sensitive parameter for the gradient descent. In typical problem we won&#8217;t be able to visualize the learning progress and we won&#8217;t have an ability to see that our updates over the epochs are inefficient. For this result I&#8217;ve used step size equal to <span class="docutils literal"><span class="pre">0.3</span></span>, but if we increased it to <span class="docutils literal"><span class="pre">10</span></span> we would reach our goal in <span class="docutils literal"><span class="pre">25</span></span> steps. I haven&#8217;t added any improvements to make a fair comparison to other algorithms in the summary chapter.</p>
 </div>
 <div class="section" id="momentum">
-<h3><a class="toc-backref" href="#id8">Momentum</a><a class="headerlink" href="#momentum" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id8">Momentum</a></h3>
 <p>Now let&#8217;s look at another very popular algorithm - <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/momentum-steps.png"><img alt="Momentum steps" src="../../../_images/momentum-steps.png" style="width: 80%;" /></a>
@@ -270,7 +270,7 @@
 </div>
 </div>
 <div class="section" id="rprop">
-<h3><a class="toc-backref" href="#id9">RPROP</a><a class="headerlink" href="#rprop" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id9">RPROP</a></h3>
 <p><a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> makes fewer steps to reach the specified minimum point, but we still can do better. Next algorithm that we are going to check is <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/rprop-steps.png"><img alt="RPROP steps" src="../../../_images/rprop-steps.png" style="width: 80%;" /></a>
@@ -291,7 +291,7 @@
 <p>To train your intuition you can check the other epochs updates and try to figure out how steps depend on the direction.</p>
 </div>
 <div class="section" id="irprop">
-<h3><a class="toc-backref" href="#id10">iRPROP+</a><a class="headerlink" href="#irprop" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id10">iRPROP+</a></h3>
 <p><a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.IRPROPPlus" title="neupy.algorithms.gd.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> is almost the same algorithm as <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> except a small alteration.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/irprop-plus-steps.png"><img alt="iRPROP+ steps" src="../../../_images/irprop-plus-steps.png" style="width: 80%;" /></a>
@@ -306,7 +306,7 @@
 <p>The nice thing about this algorithm is that it tries to move in a new direction instead of going back and force and trying to redo updates from the previous epochs.</p>
 </div>
 <div class="section" id="gradient-descent-and-golden-search">
-<h3><a class="toc-backref" href="#id11">Gradient Descent and Golden Search</a><a class="headerlink" href="#gradient-descent-and-golden-search" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id11">Gradient Descent and Golden Search</a></h3>
 <p>The last algorithm that I want to show is a <a class="reference internal" href="../../../apidocs/neupy.algorithms.step_update.linear_search.html#neupy.algorithms.step_update.linear_search.LinearSearch" title="neupy.algorithms.step_update.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a>. This algorithm is not able to train a network by itself, but it can help other algorithms to do it better. I will use Gradient Descent to show the huge improvement that gives <a class="reference internal" href="../../../apidocs/neupy.algorithms.step_update.linear_search.html#neupy.algorithms.step_update.linear_search.LinearSearch" title="neupy.algorithms.step_update.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/grad-descent-and-gold-search-steps.png"><img alt="Gradient Descent with Golden Search steps" src="../../../_images/grad-descent-and-gold-search-steps.png" style="width: 80%;" /></a>
@@ -316,15 +316,15 @@
 </div>
 </div>
 <div class="section" id="bring-them-all-together">
-<h2><a class="toc-backref" href="#id12">Bring them all together</a><a class="headerlink" href="#bring-them-all-together" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id12">Bring them all together</a></h2>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/all-algorithms-steps.png"><img alt="All algorithms steps" src="../../../_images/all-algorithms-steps.png" style="width: 80%;" /></a>
 </div>
 </div>
 <div class="section" id="summary">
-<h2><a class="toc-backref" href="#id13">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id13">Summary</a></h2>
 <table border="1" class="docutils" id="id2">
-<caption><span class="caption-text">Summary table</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<caption><span class="caption-text">Summary table</caption>
 <colgroup>
 <col width="50%" />
 <col width="50%" />

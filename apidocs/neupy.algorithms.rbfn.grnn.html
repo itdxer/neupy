@@ -157,10 +157,10 @@
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.algorithms.rbfn.grnn">
-<span id="neupy-algorithms-rbfn-grnn-module"></span><h1>neupy.algorithms.rbfn.grnn module<a class="headerlink" href="#module-neupy.algorithms.rbfn.grnn" title="Permalink to this headline">¶</a></h1>
+<span id="neupy-algorithms-rbfn-grnn-module"></span><h1>neupy.algorithms.rbfn.grnn module</h1>
 <dl class="class">
 <dt id="neupy.algorithms.rbfn.grnn.GRNN">
-<em class="property">class </em><span class="descclassname">neupy.algorithms.rbfn.grnn.</span><span class="descname">GRNN</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.grnn.GRNN" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><span class="descclassname">neupy.algorithms.rbfn.grnn.</span><span class="descname">GRNN</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Generalized Regression Neural Network (GRNN). Network applies
 only to the regression problems.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -242,12 +242,12 @@ and use them to make a predictions.</li>
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.rbfn.grnn.GRNN.options">
-<span class="descname">options</span><em class="property"> = {'std': Option(class_name='GRNN', value=BoundedProperty(name=&quot;std&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.grnn.GRNN.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'std': Option(class_name='GRNN', value=BoundedProperty(name=&quot;std&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbfn.grnn.GRNN.predict">
-<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.grnn.GRNN.predict" title="Permalink to this definition">¶</a></dt>
+<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Make a prediction from the input data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -271,12 +271,12 @@ and use them to make a predictions.</li>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.rbfn.grnn.GRNN.std">
-<span class="descname">std</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.grnn.GRNN.std" title="Permalink to this definition">¶</a></dt>
+<span class="descname">std</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.rbfn.grnn.GRNN.train">
-<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em>, <em>copy=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.rbfn.grnn.GRNN.train" title="Permalink to this definition">¶</a></dt>
+<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em>, <em>copy=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Trains network. PNN doesn&#8217;t actually train, it just stores
 input data and use it for prediction.</p>
 <table class="docutils field-list" frame="void" rules="none">

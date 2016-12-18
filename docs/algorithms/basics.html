@@ -157,7 +157,7 @@
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="basics">
-<h1>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h1>
+<h1>Basics</h1>
 <p>NeuPy supports many different neural network types. These networks we can divide into two major categories.</p>
 <ol class="arabic simple">
 <li>Neural Networks with constructible architecture.</li>
@@ -166,7 +166,7 @@
 <p>Networks with constructible architecture is basically a field related to the deep learning. These algorithms allow us to construct different neural network architectures. Another type is networks with fixed architecture. There are many different classes like <a class="reference internal" href="../../apidocs/neupy.algorithms.rbm.html#neupy.algorithms.rbm.RBM" title="neupy.algorithms.rbm.RBM"><span class="xref py py-class docutils literal"><span class="pre">RBM</span></span></a>, <a class="reference internal" href="../../apidocs/neupy.algorithms.rbfn.pnn.html#neupy.algorithms.rbfn.pnn.PNN" title="neupy.algorithms.rbfn.pnn.PNN"><span class="xref py py-class docutils literal"><span class="pre">PNN</span></span></a>, <a class="reference internal" href="../../apidocs/neupy.algorithms.memory.cmac.html#neupy.algorithms.memory.cmac.CMAC" title="neupy.algorithms.memory.cmac.CMAC"><span class="xref py py-class docutils literal"><span class="pre">CMAC</span></span></a> and so on. These networks have pre-defined architecture and there is no way to add or remove layers from it, but they have parameters that allow us to control them.</p>
 <p>Despite the major differences between neural network algorithms the API for them looks very similar.</p>
 <div class="section" id="initialization">
-<h2>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h2>
+<h2>Initialization</h2>
 <p>This is a first step to initialize the neural network. Each algorithm has its own set of parameters. Let&#8217;s check <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.MinibatchGradientDescent" title="neupy.algorithms.gd.base.MinibatchGradientDescent"><span class="xref py py-class docutils literal"><span class="pre">MinibatchGradientDescent</span></span></a> algorithm as an example. Since most of the algorithms have lots of different parameters, NeuPy doesn&#8217;t support ordered arguments.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 
@@ -183,7 +183,7 @@
 </div>
 </div>
 <div class="section" id="training">
-<h2>Training<a class="headerlink" href="#training" title="Permalink to this headline">¶</a></h2>
+<h2>Training</h2>
 <p>To train neural network we need to use <span class="docutils literal"><span class="pre">train</span></span> method.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 
@@ -214,7 +214,7 @@
 </div>
 </div>
 <div class="section" id="prediction">
-<h2>Prediction<a class="headerlink" href="#prediction" title="Permalink to this headline">¶</a></h2>
+<h2>Prediction</h2>
 <p>To make a prediction we need to pass a dataset to the <span class="docutils literal"><span class="pre">predict</span></span> method.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">y_predicted</span> <span class="o">=</span> <span class="n">nnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
 </pre></div>

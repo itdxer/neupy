@@ -157,9 +157,9 @@
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="debug-layer-connections">
-<h1>Debug layer connections<a class="headerlink" href="#debug-layer-connections" title="Permalink to this headline">¶</a></h1>
+<h1>Debug layer connections</h1>
 <div class="section" id="explore-connection-shapes">
-<h2>Explore connection shapes<a class="headerlink" href="#explore-connection-shapes" title="Permalink to this headline">¶</a></h2>
+<h2>Explore connection shapes</h2>
 <p>The simplest way to debug network is just to explore input and output shapes.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -195,7 +195,7 @@
 <p>The more complex connection that is not suitable for sequential iteration will be topologically sorted at first and then presented one by one during the iteration.</p>
 </div>
 <div class="section" id="visualize-connections">
-<h2>Visualize connections<a class="headerlink" href="#visualize-connections" title="Permalink to this headline">¶</a></h2>
+<h2>Visualize connections</h2>
 <p>For the debugging, it&#8217;s useful to explore network architecture. It&#8217;s possible to create visualize layer graph in NeuPy. Let&#8217;s say we have this network.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 
@@ -240,7 +240,7 @@
 <br><a class="reference internal image-reference" href="../../_images/network-structure-debug.png"><img alt="Debug network structure" class="align-center" src="../../_images/network-structure-debug.png" style="width: 60%;" /></a>
 </div>
 <div class="section" id="count-number-of-parameters">
-<h2>Count number of parameters<a class="headerlink" href="#count-number-of-parameters" title="Permalink to this headline">¶</a></h2>
+<h2>Count number of parameters</h2>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
@@ -254,7 +254,7 @@
 </div>
 </div>
 <div class="section" id="exploring-graph-connections">
-<h2>Exploring graph connections<a class="headerlink" href="#exploring-graph-connections" title="Permalink to this headline">¶</a></h2>
+<h2>Exploring graph connections</h2>
 <p>Any relation between layers stores in the specific graph. To be able to debug connections we can check network graph to make sure that all connections defined correctly.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>

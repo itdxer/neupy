@@ -159,7 +159,7 @@
             <span>December 17, 2016</span>
         </div>
     <div class="section" id="hyperparameter-optimization-for-neural-networks">
-<h1><a class="toc-backref" href="#id13">Hyperparameter optimization for Neural Networks</a><a class="headerlink" href="#hyperparameter-optimization-for-neural-networks" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id13">Hyperparameter optimization for Neural Networks</a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
@@ -190,7 +190,7 @@
 </ul>
 </div>
 <div class="section" id="introduction">
-<h2><a class="toc-backref" href="#id14">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id14">Introduction</a></h2>
 <p>Sometimes it can be difficult to choose a correct architecture for Neural Networks. Usually, this process requires a lot of experience because networks include many parameters. Let&#8217;s check some of the most important parameters that we can optimize for the neural network:</p>
 <ul class="simple">
 <li>Number of layers</li>
@@ -203,7 +203,7 @@
 <p>Even though the list of parameters in not even close to being complete, it&#8217;s still impressive how many parameters influences network&#8217;s accuracy.</p>
 </div>
 <div class="section" id="hyperparameter-optimization">
-<h2><a class="toc-backref" href="#id15">Hyperparameter optimization</a><a class="headerlink" href="#hyperparameter-optimization" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id15">Hyperparameter optimization</a></h2>
 <p>In this article, I would like to show a few different hyperparameter selection methods.</p>
 <ul class="simple">
 <li>Grid Search</li>
@@ -214,12 +214,12 @@
 </ul>
 </div>
 <div class="section" id="grid-search">
-<h2><a class="toc-backref" href="#id16">Grid Search</a><a class="headerlink" href="#grid-search" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id16">Grid Search</a></h2>
 <p>The simplest algorithms that you can use for hyperparameter optimization is a Grid Search. The idea is simple and straightforward. You just need to define a set of parameter values, train model for all possible parameter combinations and select the best one. This method is a good choice only when model can train quickly, which is not the case for typical neural networks.</p>
 <p>Imagine that we need to optimize 5 parameters. Let&#8217;s assume, for simplicity, that we want to try 10 different values per each parameter. Therefore, we need to make 100,000 (<span class="math">\(10 ^ 5\)</span>) evaluations. Assuming that network trains 10 minutes on average we will have finished hyperparameter tuning in almost 2 years. Seems crazy, right? Typically, network trains much longer and we need to tune more hyperparameters, which means that it can take forever to run grid search for typical neural network. The better solution is random search.</p>
 </div>
 <div class="section" id="random-search">
-<h2><a class="toc-backref" href="#id17">Random Search</a><a class="headerlink" href="#random-search" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id17">Random Search</a></h2>
 <p>The idea is similar to Grid Search, but instead of trying all possible combinations we will just use randomly selected subset of the parameters. Instead of trying to check 100,000 samples we can check only 1,000 of parameters. Now it should take a week to run hyperparameter optimization instead of 2 years.</p>
 <p>Let&#8217;s sample 100 two-dimensional data points from a uniform distribution.</p>
 <div class="figure align-center">
@@ -242,7 +242,7 @@
 <p>But Before we move on to more complicated methods I want to focus on parameter hand-tuning.</p>
 </div>
 <div class="section" id="hand-tuning">
-<h2><a class="toc-backref" href="#id18">Hand-tuning</a><a class="headerlink" href="#hand-tuning" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id18">Hand-tuning</a></h2>
 <p>Let&#8217;s start with an example. Imagine that we want to select the best number of units in the hidden layer (we set up just one hyperparameter for simplicity). The simplest thing is to try different values and select the best one. Let&#8217;s say we set up 10 units for the hidden layer and train the network. After the training, we check the accuracy for the validation dataset and it turns out that we classified 65% of the samples correctly.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/hid-units-vs-accuracy-iter1.png"><img alt="Hidden units vs Accuracy, Iteration #1" src="../../../_images/hid-units-vs-accuracy-iter1.png" style="width: 100%;" /></a>
@@ -260,10 +260,10 @@
 <p>Nevertheless, let&#8217;s get back to our optimization problem. How can we automate the process described above? One way of doing this is to apply a Bayesian Optimization.</p>
 </div>
 <div class="section" id="bayesian-optimization">
-<h2><a class="toc-backref" href="#id19">Bayesian Optimization</a><a class="headerlink" href="#bayesian-optimization" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id19">Bayesian Optimization</a></h2>
 <p>Bayesian optimization is a derivative-free optimization method. There are a few different algorithm for this type of optimization, but I was specifically interested in Gaussian Process with Acquisition Function. For some people it can resemble the method that we&#8217;ve described above in the Hand-tuning section. Gaussian Process uses a set of previously evaluated parameters and resulting accuracy to make an assumption about unobserved parameters. Acquisition Function using this information suggest the next set of parameters.</p>
 <div class="section" id="gaussian-process">
-<h3><a class="toc-backref" href="#id20">Gaussian Process</a><a class="headerlink" href="#gaussian-process" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id20">Gaussian Process</a></h3>
 <p>The idea behind Gaussian Process is that for every input <span class="math">\(x\)</span> we have output <span class="math">\(y = f(x)\)</span>, where <span class="math">\(f\)</span> is a stochastic function. This function samples output from a gaussian distribution. Also, we can say that each input <span class="math">\(x\)</span> has associated gaussian distribution. Which means that for each input <span class="math">\(x\)</span> gaussian process has defined mean  <span class="math">\(\mu\)</span> and standard deviation <span class="math">\(\sigma\)</span> for some gaussian distribution.</p>
 <p>Gaussian Process is a generalization of <a class="reference external" href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution">Multivariate Gaussian Distribution</a>. Multivariate Gaussian Distribution is defined by mean vector and covariance matrix, while Gaussian Process is defined by mean function and covariance function. Basically, a function is an infinite vector. Also, we can say that Multivariate Gaussian Distribution is a Gaussian Process for the functions with a discrete number of possible inputs.</p>
 <p>I always like to have some picture that shows me a visual description of an algorithm. One of such visualizations of the Gaussian Process I found in the Introduction to Gaussian Process slides <a class="footnote-reference" href="#id7" id="id2">[3]</a>.</p>
@@ -318,7 +318,7 @@
 </div>
 </div>
 <div class="section" id="acquisition-function">
-<h3><a class="toc-backref" href="#id21">Acquisition Function</a><a class="headerlink" href="#acquisition-function" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id21">Acquisition Function</a></h3>
 <p>Acquisition Function defines the set of parameter for our next step. There are many different functions <a class="footnote-reference" href="#id5" id="id3">[1]</a> that can help us calculate the best value for the next step. One of the most common is Expected Improvement. There are two ways to compute it. In case if we are trying to find minimum we can use this formula.</p>
 <div class="math">
 \[g_{min}(x) = max(0, y_{min} - y_{lowest_expected})\]</div>
@@ -333,7 +333,7 @@
 </div>
 </div>
 <div class="section" id="find-number-of-hidden-units">
-<h3><a class="toc-backref" href="#id22">Find number of hidden units</a><a class="headerlink" href="#find-number-of-hidden-units" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id22">Find number of hidden units</a></h3>
 <p>Let&#8217;s try to build a hyperparameter optimizer based on Gaussian Process regression and Expected Improvement function. We will continue work with the previous problem where we tried to find the best number of hidden units. But for this time we will try to create a network for digit classification tasks.</p>
 <p>Let&#8217;s define a function that trains the neural network and return prediction error.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
@@ -482,7 +482,7 @@
 <p>With small modifications, it&#8217;s possible to add an additional functionality to the function that allows optimizing more hyperparameters at once.</p>
 </div>
 <div class="section" id="disadvantages-of-gp-with-ei">
-<h3><a class="toc-backref" href="#id23">Disadvantages of GP with EI</a><a class="headerlink" href="#disadvantages-of-gp-with-ei" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id23">Disadvantages of GP with EI</a></h3>
 <p>There are a few disadvantages related to the Gaussian Process with Expected Improvement.</p>
 <ol class="arabic simple">
 <li>Do not work well for categorical variables. In case if neural networks it&#8217;s can be a type of activation function.</li>
@@ -493,9 +493,9 @@
 </div>
 </div>
 <div class="section" id="tree-structured-parzen-estimators-tpe">
-<h2><a class="toc-backref" href="#id24">Tree-structured Parzen Estimators (TPE)</a><a class="headerlink" href="#tree-structured-parzen-estimators-tpe" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id24">Tree-structured Parzen Estimators (TPE)</a></h2>
 <div class="section" id="overview">
-<h3><a class="toc-backref" href="#id25">Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id25">Overview</a></h3>
 <p>Tree-structured Parzen Estimators (TPE) fixes disadvantages of the Gaussian Process. Each iteration TPE collects new observation and at the end of the iteration, the algorithm decides which set of parameters it should try next. The main idea is similar, but an algorithm is completely different</p>
 <p>At the very beginning, we need to define a prior distribution for out hyperparameters. By default, they can be all uniformly distributed, but it&#8217;s possible to associate any hyperparameter with some random unimodal distribution.</p>
 <p>For the first few iterations, we need to warn up TPE algorithm. It means that we need to collect some data at first before we can apply TPE. The best and simplest way to do it is just to perform a few iterations of Random Search. A number of iterations for Random Search is a parameter defined by the user for the TPE algorithm.</p>
@@ -522,7 +522,7 @@
 <p>And the <cite>tree-structured</cite> means that parameter space defines in a form of a tree. Later we will try to find the best number of layers for the network. In our case, we will try to decide whether it&#8217;s better to use one or two hidden layers. In case if we use two hidden layers we should define the number of hidden units for the first and second layer independently. If we use one hidden layer we don&#8217;t need to define the number of hidden units for the second hidden layer, because it doesn&#8217;t exist for the specified set of parameter. Basically, it means that a number of hidden units in the second hidden layer depends on the number of hidden layers. Which means that parameters have tree-structured dependencies.</p>
 </div>
 <div class="section" id="hyperparameter-optimization-for-mnist-dataset">
-<h3><a class="toc-backref" href="#id26">Hyperparameter optimization for MNIST dataset</a><a class="headerlink" href="#hyperparameter-optimization-for-mnist-dataset" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id26">Hyperparameter optimization for MNIST dataset</a></h3>
 <p>Let&#8217;s make an example. We&#8217;re going to use MNIST dataset.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
@@ -741,7 +741,7 @@
 <p>And after all trials, we can check the best one in the <span class="docutils literal"><span class="pre">trials.best_trial</span></span> attribute.</p>
 </div>
 <div class="section" id="disadvantages-of-tpe">
-<h3><a class="toc-backref" href="#id27">Disadvantages of TPE</a><a class="headerlink" href="#disadvantages-of-tpe" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id27">Disadvantages of TPE</a></h3>
 <p>On of the biggest disadvantages of this algorithm is that it selects parameters independently from each other. For instance, there is a clear relation between regularization and number of training epoch parameters. With regularization, we usually can train network for more epochs and with more epochs we can achieve better results. On the other hand without regularization, many epochs can be a bad choice because network starts overfitting and validation error increases. Without taking into account the state of the regularization variable each next choice for the number of epochs can look arbitrary.</p>
 <p>It&#8217;s good in case if you now that some variables have relations. To overcome problem from the previous example you can construct two different choices for epochs. The first one will enable regularization and selects a number of epochs from the <span class="math">\([500, 1000]\)</span> range. And the second one without regularization and selects number of epochs from the <span class="math">\([10, 200]\)</span> range.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">hp</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="s1">&#39;training_parameters&#39;</span><span class="p">,</span> <span class="p">[</span>
@@ -758,16 +758,16 @@
 </div>
 </div>
 <div class="section" id="summary">
-<h2><a class="toc-backref" href="#id28">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id28">Summary</a></h2>
 <p>The Bayesian Optimization and TPE algorithms show great improvement over the classic hyperoptimization methods. They allow to learn from the training history and give better and better estimations for the next set of parameters. But it still takes lots of time to apply these algorithms. It’s great if you have an access to multiple machines and you can parallel parameter tuning procedure <a class="footnote-reference" href="#id8" id="id4">[4]</a>, but usually, it’s not an option. Sometimes it’s better just to avoid hyperparameter optimization. In case if you just try to build a network for trivial problems like image classification it’s better to use existed architectures with pre-trained parameters like <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/alexnet.py">AlexNet</a>, <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/vgg19.py">VGG19</a> or <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/resnet50.py">ResNet</a>.</p>
 <p>For unique problems that don’t have pre-trained networks the classic and simple hand-tuning is a great way to start. A few iterations can give you a good architecture which won’t be the state-of-the-art but should give you satisfying result with a minimum of problems. In case if accuracy does not suffice your needs you can always boost your performance getting more data or developing ensembles with different models.</p>
 </div>
 <div class="section" id="source-code">
-<h2><a class="toc-backref" href="#id29">Source Code</a><a class="headerlink" href="#source-code" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id29">Source Code</a></h2>
 <p>All source code is available on GitHub in the <a class="reference external" href="https://github.com/itdxer/neupy/blob/master/notebooks/Hyperparameter%20optimization%20for%20Neural%20Networks.ipynb">iPython notebook</a>. It includes all visualizations and hyperparameter selection algorithms.</p>
 </div>
 <div class="section" id="references">
-<h2><a class="toc-backref" href="#id30">References</a><a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id30">References</a></h2>
 <table class="docutils footnote" frame="void" id="id5" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">

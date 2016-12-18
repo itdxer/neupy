@@ -157,10 +157,10 @@
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.layers.connections.graph">
-<span id="neupy-layers-connections-graph-module"></span><h1>neupy.layers.connections.graph module<a class="headerlink" href="#module-neupy.layers.connections.graph" title="Permalink to this headline">¶</a></h1>
+<span id="neupy-layers-connections-graph-module"></span><h1>neupy.layers.connections.graph module</h1>
 <dl class="class">
 <dt id="neupy.layers.connections.graph.LayerGraph">
-<em class="property">class </em><span class="descclassname">neupy.layers.connections.graph.</span><span class="descname">LayerGraph</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.connections.graph.LayerGraph" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><span class="descclassname">neupy.layers.connections.graph.</span><span class="descname">LayerGraph</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Direct Acyclic Graph (DAG) for layer connections.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -180,7 +180,7 @@
 </table>
 <dl class="method">
 <dt id="neupy.layers.connections.graph.LayerGraph.add_connection">
-<span class="descname">add_connection</span><span class="sig-paren">(</span><em>from_layer</em>, <em>to_layer</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.connections.graph.LayerGraph.add_connection" title="Permalink to this definition">¶</a></dt>
+<span class="descname">add_connection</span><span class="sig-paren">(</span><em>from_layer</em>, <em>to_layer</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Add new directional connection between two layers.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -210,7 +210,7 @@ new connection creates cycles in graph.</p>
 
 <dl class="method">
 <dt id="neupy.layers.connections.graph.LayerGraph.add_layer">
-<span class="descname">add_layer</span><span class="sig-paren">(</span><em>layer</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.connections.graph.LayerGraph.add_layer" title="Permalink to this definition">¶</a></dt>
+<span class="descname">add_layer</span><span class="sig-paren">(</span><em>layer</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Add new layer into the graph.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -233,7 +233,7 @@ graph and there is no need to add it again, and
 
 <dl class="method">
 <dt id="neupy.layers.connections.graph.LayerGraph.connect_layers">
-<span class="descname">connect_layers</span><span class="sig-paren">(</span><em>from_layers</em>, <em>to_layers</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.connections.graph.LayerGraph.connect_layers" title="Permalink to this definition">¶</a></dt>
+<span class="descname">connect_layers</span><span class="sig-paren">(</span><em>from_layers</em>, <em>to_layers</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Connect two layers together and update other layers
 in the graph.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -263,7 +263,7 @@ the graph, and <span class="docutils literal"><span class="pre">True</span></spa
 
 <dl class="attribute">
 <dt id="neupy.layers.connections.graph.LayerGraph.input_layers">
-<span class="descname">input_layers</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.connections.graph.LayerGraph.input_layers" title="Permalink to this definition">¶</a></dt>
+<span class="descname">input_layers</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>List of input layers.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -287,7 +287,7 @@ the graph, and <span class="docutils literal"><span class="pre">True</span></spa
 
 <dl class="classmethod">
 <dt id="neupy.layers.connections.graph.LayerGraph.merge">
-<em class="property">classmethod </em><span class="descname">merge</span><span class="sig-paren">(</span><em>left_graph</em>, <em>right_graph</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.connections.graph.LayerGraph.merge" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><span class="descname">merge</span><span class="sig-paren">(</span><em>left_graph</em>, <em>right_graph</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Combine two separated graphs into one.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -310,7 +310,7 @@ from input graphs.</p>
 
 <dl class="attribute">
 <dt id="neupy.layers.connections.graph.LayerGraph.output_layers">
-<span class="descname">output_layers</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.connections.graph.LayerGraph.output_layers" title="Permalink to this definition">¶</a></dt>
+<span class="descname">output_layers</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>List of output layers.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -334,7 +334,7 @@ from input graphs.</p>
 
 <dl class="method">
 <dt id="neupy.layers.connections.graph.LayerGraph.propagate_forward">
-<span class="descname">propagate_forward</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.connections.graph.LayerGraph.propagate_forward" title="Permalink to this definition">¶</a></dt>
+<span class="descname">propagate_forward</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Propagates input variable through the directed acyclic
 graph and returns output from the final layers.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -368,13 +368,13 @@ any layer from the graph.</li>
 
 <dl class="method">
 <dt id="neupy.layers.connections.graph.LayerGraph.reverse">
-<span class="descname">reverse</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.connections.graph.LayerGraph.reverse" title="Permalink to this definition">¶</a></dt>
+<span class="descname">reverse</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Returns graph with reversed connections.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.connections.graph.LayerGraph.subgraph">
-<span class="descname">subgraph</span><span class="sig-paren">(</span><em>input_layers</em>, <em>output_layers</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.connections.graph.LayerGraph.subgraph" title="Permalink to this definition">¶</a></dt>
+<span class="descname">subgraph</span><span class="sig-paren">(</span><em>input_layers</em>, <em>output_layers</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Create subgraph that contains only layers that
 has relations between specified input and output
 layers.</p>
@@ -395,7 +395,7 @@ layers.</p>
 
 <dl class="method">
 <dt id="neupy.layers.connections.graph.LayerGraph.subgraph_for_output">
-<span class="descname">subgraph_for_output</span><span class="sig-paren">(</span><em>output_layers</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.connections.graph.LayerGraph.subgraph_for_output" title="Permalink to this definition">¶</a></dt>
+<span class="descname">subgraph_for_output</span><span class="sig-paren">(</span><em>output_layers</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Extract subgraph with specified set
 of output layers.</p>
 <table class="docutils field-list" frame="void" rules="none">

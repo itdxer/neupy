@@ -157,10 +157,10 @@
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.layers.transformations">
-<span id="neupy-layers-transformations-module"></span><h1>neupy.layers.transformations module<a class="headerlink" href="#module-neupy.layers.transformations" title="Permalink to this headline">¶</a></h1>
+<span id="neupy-layers-transformations-module"></span><h1>neupy.layers.transformations module</h1>
 <dl class="class">
 <dt id="neupy.layers.transformations.Reshape">
-<em class="property">class </em><span class="descclassname">neupy.layers.transformations.</span><span class="descname">Reshape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Reshape" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><span class="descclassname">neupy.layers.transformations.</span><span class="descname">Reshape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Gives a new shape to an input value without changing
 its data.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -255,12 +255,12 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </table>
 <dl class="attribute">
 <dt id="neupy.layers.transformations.Reshape.options">
-<span class="descname">options</span><em class="property"> = {'shape': Option(class_name='Reshape', value=TypedListProperty(name=&quot;shape&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Reshape.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'shape': Option(class_name='Reshape', value=TypedListProperty(name=&quot;shape&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.transformations.Reshape.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Reshape.output" title="Permalink to this definition">¶</a></dt>
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Reshape the feature space for the input value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -274,19 +274,19 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.transformations.Reshape.output_shape">
-<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Reshape.output_shape" title="Permalink to this definition">¶</a></dt>
+<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.transformations.Reshape.shape">
-<span class="descname">shape</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Reshape.shape" title="Permalink to this definition">¶</a></dt>
+<span class="descname">shape</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="neupy.layers.transformations.Embedding">
-<em class="property">class </em><span class="descclassname">neupy.layers.transformations.</span><span class="descname">Embedding</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Embedding" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><span class="descclassname">neupy.layers.transformations.</span><span class="descname">Embedding</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Embedding layer accepts indeces as an input and returns
 rows from the weight matrix associated with these indeces.
 Useful in case of categorical features or for the word
@@ -396,23 +396,23 @@ variables into format that suitable for Embedding layer.</p>
 </table>
 <dl class="method">
 <dt id="neupy.layers.transformations.Embedding.initialize">
-<span class="descname">initialize</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Embedding.initialize" title="Permalink to this definition">¶</a></dt>
+<span class="descname">initialize</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Initialize connection</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.transformations.Embedding.input_size">
-<span class="descname">input_size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Embedding.input_size" title="Permalink to this definition">¶</a></dt>
+<span class="descname">input_size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.transformations.Embedding.options">
-<span class="descname">options</span><em class="property"> = {'input_size': Option(class_name='Embedding', value=IntProperty(name=&quot;input_size&quot;)), 'output_size': Option(class_name='Embedding', value=IntProperty(name=&quot;output_size&quot;)), 'weight': Option(class_name='Embedding', value=ParameterProperty(name=&quot;weight&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Embedding.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'input_size': Option(class_name='Embedding', value=IntProperty(name=&quot;input_size&quot;)), 'weight': Option(class_name='Embedding', value=ParameterProperty(name=&quot;weight&quot;)), 'output_size': Option(class_name='Embedding', value=IntProperty(name=&quot;output_size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.transformations.Embedding.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Embedding.output" title="Permalink to this definition">¶</a></dt>
+<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Return output base on the input value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -426,17 +426,17 @@ variables into format that suitable for Embedding layer.</p>
 
 <dl class="attribute">
 <dt id="neupy.layers.transformations.Embedding.output_shape">
-<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Embedding.output_shape" title="Permalink to this definition">¶</a></dt>
+<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.transformations.Embedding.output_size">
-<span class="descname">output_size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Embedding.output_size" title="Permalink to this definition">¶</a></dt>
+<span class="descname">output_size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.transformations.Embedding.weight">
-<span class="descname">weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Embedding.weight" title="Permalink to this definition">¶</a></dt>
+<span class="descname">weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
