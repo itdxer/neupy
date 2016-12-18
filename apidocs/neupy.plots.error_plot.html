@@ -47,40 +47,84 @@
             }
         });
     </script>
-<style media="screen" type="text/css">
-    .docutils { width: 100%; }
-    .docutils td { padding: 10px; }
-    .section { word-wrap:break-word; }
-    .descname { font-weight: bold; }
-    .highlight-python + .figure { margin-top: 20px; }
-    .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
-    .dataframe td { padding: 5px; }
+    <style media="screen" type="text/css">
+        .docutils { width: 100%; }
+        .docutils td { padding: 10px; }
+        .section { word-wrap:break-word; }
+        .descname { font-weight: bold; }
+        .highlight-python + .figure { margin-top: 20px; }
+        .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+        .dataframe td { padding: 5px; }
 
-    .math .gd { color: #000 !important; } /* Generic.Deleted */
-    .math .m { color: #000 !important; } /* Literal.Number */
-    .math .s { color: #000 !important; } /* Literal.String */
-    .math .mf { color: #000 !important; } /* Literal.Number.Float */
-    .math .mh { color: #000 !important; } /* Literal.Number.Hex */
-    .math .mi { color: #000 !important; } /* Literal.Number.Integer */
-    .math .mo { color: #000 !important; } /* Literal.Number.Oct */
-    .math .sc { color: #000 !important; } /* Literal.String.Char */
-    .math .s2 { color: #000 !important; } /* Literal.String.Double */
-    .math .si { color: #000 !important; } /* Literal.String.Interpol */
-    .math .sx { color: #000 !important; } /* Literal.String.Other */
-    .math .s1 { color: #000 !important; } /* Literal.String.Single */
-    .math .ss { color: #000 !important; } /* Literal.String.Symbol */
-    .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+        .math .gd { color: #000 !important; } /* Generic.Deleted */
+        .math .m { color: #000 !important; } /* Literal.Number */
+        .math .s { color: #000 !important; } /* Literal.String */
+        .math .mf { color: #000 !important; } /* Literal.Number.Float */
+        .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+        .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+        .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+        .math .sc { color: #000 !important; } /* Literal.String.Char */
+        .math .s2 { color: #000 !important; } /* Literal.String.Double */
+        .math .si { color: #000 !important; } /* Literal.String.Interpol */
+        .math .sx { color: #000 !important; } /* Literal.String.Other */
+        .math .s1 { color: #000 !important; } /* Literal.String.Single */
+        .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+        .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
 
-    dt[id^="neupy."] {
-        background-color: #e6edf2;
-        border: 1px solid #f8fafb;
-        border-radius: 8px;
-        padding: 10px 20px;
-    }
-    div[id^="module-neupy."] h1 {
-        display: none;
-    }
-</style></head>
+        /* Background for class and function names */
+        dt[id^="neupy."] {
+            background-color: #e6edf2;
+            border: 1px solid #f8fafb;
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+        div[id^="module-neupy."] h1 {
+            display: none;
+        }
+
+        /* Search input field */
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            display: block;
+        }
+        .box {
+          padding-bottom: 50px;
+        }
+        .container-1{
+          width: 100%;
+          vertical-align: middle;
+          white-space: nowrap;
+          position: relative;
+        }
+        .container-1 input#search{
+          width: 100%;
+          height: 50px;
+          padding-left: 45px;
+
+          float: left;
+          border: 1px solid #ddd;
+
+          box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          border-radius: 5px;
+
+          font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+          font-size: 12pt;
+        }
+        .container-1 .icon{
+          position: absolute;
+          top: 50%;
+          margin-left: 17px;
+          margin-top: 13px;
+          z-index: 1;
+          color: #93a4ad;
+        }
+    </style></head>
     <body role="document">
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
@@ -197,8 +241,12 @@ the plot. Defaults to <span class="docutils literal"><span class="pre">True</spa
 </div></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
-        <input type="text" name="q" />
-        <button type="submit"><span class="fa fa-search"></span></button>
+          <div class="box">
+            <div class="container-1">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" name="q" id="search" placeholder="Search..." />
+            </div>
+          </div>
     </form>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
