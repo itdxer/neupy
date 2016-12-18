@@ -91,13 +91,13 @@
         .box {
           padding-bottom: 50px;
         }
-        .container-1{
+        .search-input-container {
           width: 100%;
           vertical-align: middle;
           white-space: nowrap;
           position: relative;
         }
-        .container-1 input#search{
+        .search-input-container input#search {
           width: 100%;
           height: 50px;
           padding-left: 45px;
@@ -117,8 +117,9 @@
           font-family: 'PT Sans', Helvetica, Arial, sans-serif;
           font-size: 12pt;
         }
-        .container-1 .icon{
+        .search-input-container .icon {
           position: absolute;
+          left: 0;
           top: 50%;
           margin-left: 17px;
           margin-top: 13px;
@@ -243,7 +244,7 @@ the plot. Defaults to <span class="docutils literal"><span class="pre">True</spa
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
           <div class="box">
-            <div class="container-1">
+            <div class="search-input-container">
                 <span class="icon"><i class="fa fa-search"></i></span>
                 <input type="search" name="q" id="search" placeholder="Search..." />
             </div>

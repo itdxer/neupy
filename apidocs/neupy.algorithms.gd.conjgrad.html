@@ -91,13 +91,13 @@
         .box {
           padding-bottom: 50px;
         }
-        .container-1{
+        .search-input-container {
           width: 100%;
           vertical-align: middle;
           white-space: nowrap;
           position: relative;
         }
-        .container-1 input#search{
+        .search-input-container input#search {
           width: 100%;
           height: 50px;
           padding-left: 45px;
@@ -117,8 +117,9 @@
           font-family: 'PT Sans', Helvetica, Arial, sans-serif;
           font-size: 12pt;
         }
-        .container-1 .icon{
+        .search-input-container .icon {
           position: absolute;
+          left: 0;
           top: 50%;
           margin-left: 17px;
           margin-top: 13px;
@@ -364,7 +365,7 @@ would be trigger after each training epoch.</p>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.conjgrad.ConjugateGradient.options">
-<span class="descname">options</span><em class="property"> = {'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'addons': Option(class_name='GradientDescent', value=Property(name=&quot;addons&quot;)), 'error': Option(class_name='ConstructibleNetwork', value=ErrorFunctionProperty(name=&quot;error&quot;)), 'update_function': Option(class_name='ConjugateGradient', value=ChoiceProperty(name=&quot;update_function&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.conjgrad.ConjugateGradient.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'addons': Option(class_name='GradientDescent', value=Property(name=&quot;addons&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'update_function': Option(class_name='ConjugateGradient', value=ChoiceProperty(name=&quot;update_function&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'error': Option(class_name='ConstructibleNetwork', value=ErrorFunctionProperty(name=&quot;error&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.gd.conjgrad.ConjugateGradient.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -414,7 +415,7 @@ would be trigger after each training epoch.</p>
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
           <div class="box">
-            <div class="container-1">
+            <div class="search-input-container">
                 <span class="icon"><i class="fa fa-search"></i></span>
                 <input type="search" name="q" id="search" placeholder="Search..." />
             </div>

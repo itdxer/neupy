@@ -91,13 +91,13 @@
         .box {
           padding-bottom: 50px;
         }
-        .container-1{
+        .search-input-container {
           width: 100%;
           vertical-align: middle;
           white-space: nowrap;
           position: relative;
         }
-        .container-1 input#search{
+        .search-input-container input#search {
           width: 100%;
           height: 50px;
           padding-left: 45px;
@@ -117,8 +117,9 @@
           font-family: 'PT Sans', Helvetica, Arial, sans-serif;
           font-size: 12pt;
         }
-        .container-1 .icon{
+        .search-input-container .icon {
           position: absolute;
+          left: 0;
           top: 50%;
           margin-left: 17px;
           margin-top: 13px;
@@ -243,7 +244,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.ActivationLayer.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.ActivationLayer.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.ActivationLayer.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -356,7 +357,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Linear.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Linear.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Linear.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -445,7 +446,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Sigmoid.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Sigmoid.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Sigmoid.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -534,7 +535,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.HardSigmoid.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.HardSigmoid.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.HardSigmoid.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -623,7 +624,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Step.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Step.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Step.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -712,7 +713,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Tanh.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Tanh.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Tanh.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -813,7 +814,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Relu.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='Relu', value=ParameterProperty(name=&quot;weight&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'alpha': Option(class_name='Relu', value=NumberProperty(name=&quot;alpha&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Relu.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'alpha': Option(class_name='Relu', value=NumberProperty(name=&quot;alpha&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='Relu', value=ParameterProperty(name=&quot;weight&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Relu.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -907,7 +908,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Softplus.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Softplus.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Softplus.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -996,7 +997,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Softmax.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Softmax.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Softmax.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1103,7 +1104,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Elu.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'alpha': Option(class_name='Elu', value=NumberProperty(name=&quot;alpha&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Elu.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'alpha': Option(class_name='Elu', value=NumberProperty(name=&quot;alpha&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.Elu.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1231,7 +1232,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.PRelu.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'alpha_axes': Option(class_name='PRelu', value=AxesProperty(name=&quot;alpha_axes&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'alpha': Option(class_name='PRelu', value=ParameterProperty(name=&quot;alpha&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.PRelu.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'alpha': Option(class_name='PRelu', value=ParameterProperty(name=&quot;alpha&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'alpha_axes': Option(class_name='PRelu', value=AxesProperty(name=&quot;alpha_axes&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.activations.PRelu.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1290,7 +1291,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
           <div class="box">
-            <div class="container-1">
+            <div class="search-input-container">
                 <span class="icon"><i class="fa fa-search"></i></span>
                 <input type="search" name="q" id="search" placeholder="Search..." />
             </div>

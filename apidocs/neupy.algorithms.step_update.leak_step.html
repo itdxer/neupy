@@ -91,13 +91,13 @@
         .box {
           padding-bottom: 50px;
         }
-        .container-1{
+        .search-input-container {
           width: 100%;
           vertical-align: middle;
           white-space: nowrap;
           position: relative;
         }
-        .container-1 input#search{
+        .search-input-container input#search {
           width: 100%;
           height: 50px;
           padding-left: 45px;
@@ -117,8 +117,9 @@
           font-family: 'PT Sans', Helvetica, Arial, sans-serif;
           font-size: 12pt;
         }
-        .container-1 .icon{
+        .search-input-container .icon {
           position: absolute;
+          left: 0;
           top: 50%;
           margin-left: 17px;
           margin-top: 13px;
@@ -231,7 +232,7 @@ Typically this value is bigger than <span class="docutils literal"><span class="
 
 <dl class="attribute">
 <dt id="neupy.algorithms.step_update.leak_step.LeakStepAdaptation.options">
-<span class="descname">options</span><em class="property"> = {'leak_size': Option(class_name='LeakStepAdaptation', value=ProperFractionProperty(name=&quot;leak_size&quot;)), 'beta': Option(class_name='LeakStepAdaptation', value=BoundedProperty(name=&quot;beta&quot;)), 'alpha': Option(class_name='LeakStepAdaptation', value=BoundedProperty(name=&quot;alpha&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/leak_step.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.step_update.leak_step.LeakStepAdaptation.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'beta': Option(class_name='LeakStepAdaptation', value=BoundedProperty(name=&quot;beta&quot;)), 'alpha': Option(class_name='LeakStepAdaptation', value=BoundedProperty(name=&quot;alpha&quot;)), 'leak_size': Option(class_name='LeakStepAdaptation', value=ProperFractionProperty(name=&quot;leak_size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/leak_step.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.step_update.leak_step.LeakStepAdaptation.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -276,7 +277,7 @@ Typically this value is bigger than <span class="docutils literal"><span class="
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
           <div class="box">
-            <div class="container-1">
+            <div class="search-input-container">
                 <span class="icon"><i class="fa fa-search"></i></span>
                 <input type="search" name="q" id="search" placeholder="Search..." />
             </div>

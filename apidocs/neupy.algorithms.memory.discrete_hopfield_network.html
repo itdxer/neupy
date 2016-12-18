@@ -91,13 +91,13 @@
         .box {
           padding-bottom: 50px;
         }
-        .container-1{
+        .search-input-container {
           width: 100%;
           vertical-align: middle;
           white-space: nowrap;
           position: relative;
         }
-        .container-1 input#search{
+        .search-input-container input#search {
           width: 100%;
           height: 50px;
           padding-left: 45px;
@@ -117,8 +117,9 @@
           font-family: 'PT Sans', Helvetica, Arial, sans-serif;
           font-size: 12pt;
         }
-        .container-1 .icon{
+        .search-input-container .icon {
           position: absolute;
+          left: 0;
           top: 50%;
           margin-left: 17px;
           margin-top: 13px;
@@ -313,7 +314,7 @@ contain only zeros and ones.</li>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'n_times': Option(class_name='DiscreteMemory', value=IntProperty(name=&quot;n_times&quot;)), 'check_limit': Option(class_name='DiscreteHopfieldNetwork', value=Property(name=&quot;check_limit&quot;)), 'mode': Option(class_name='DiscreteMemory', value=ChoiceProperty(name=&quot;mode&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/discrete_hopfield_network.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'n_times': Option(class_name='DiscreteMemory', value=IntProperty(name=&quot;n_times&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'check_limit': Option(class_name='DiscreteHopfieldNetwork', value=Property(name=&quot;check_limit&quot;)), 'mode': Option(class_name='DiscreteMemory', value=ChoiceProperty(name=&quot;mode&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/discrete_hopfield_network.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -368,7 +369,7 @@ contain only zeros and ones.</li>
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
           <div class="box">
-            <div class="container-1">
+            <div class="search-input-container">
                 <span class="icon"><i class="fa fa-search"></i></span>
                 <input type="search" name="q" id="search" placeholder="Search..." />
             </div>

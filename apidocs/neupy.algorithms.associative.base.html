@@ -91,13 +91,13 @@
         .box {
           padding-bottom: 50px;
         }
-        .container-1{
+        .search-input-container {
           width: 100%;
           vertical-align: middle;
           white-space: nowrap;
           position: relative;
         }
-        .container-1 input#search{
+        .search-input-container input#search {
           width: 100%;
           height: 50px;
           padding-left: 45px;
@@ -117,8 +117,9 @@
           font-family: 'PT Sans', Helvetica, Arial, sans-serif;
           font-size: 12pt;
         }
-        .container-1 .icon{
+        .search-input-container .icon {
           position: absolute;
+          left: 0;
           top: 50%;
           margin-left: 17px;
           margin-top: 13px;
@@ -278,7 +279,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 
 <dl class="attribute">
 <dt id="neupy.algorithms.associative.base.BaseStepAssociative.options">
-<span class="descname">options</span><em class="property"> = {'n_inputs': Option(class_name='BaseStepAssociative', value=IntProperty(name=&quot;n_inputs&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'bias': Option(class_name='BaseStepAssociative', value=ParameterProperty(name=&quot;bias&quot;)), 'weight': Option(class_name='BaseStepAssociative', value=ArrayProperty(name=&quot;weight&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'n_outputs': Option(class_name='BaseAssociative', value=IntProperty(name=&quot;n_outputs&quot;)), 'n_unconditioned': Option(class_name='BaseStepAssociative', value=IntProperty(name=&quot;n_unconditioned&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.base.BaseStepAssociative.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'bias': Option(class_name='BaseStepAssociative', value=ParameterProperty(name=&quot;bias&quot;)), 'n_inputs': Option(class_name='BaseStepAssociative', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_outputs': Option(class_name='BaseAssociative', value=IntProperty(name=&quot;n_outputs&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'n_unconditioned': Option(class_name='BaseStepAssociative', value=IntProperty(name=&quot;n_unconditioned&quot;)), 'weight': Option(class_name='BaseStepAssociative', value=ArrayProperty(name=&quot;weight&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.associative.base.BaseStepAssociative.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -375,7 +376,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
           <div class="box">
-            <div class="container-1">
+            <div class="search-input-container">
                 <span class="icon"><i class="fa fa-search"></i></span>
                 <input type="search" name="q" id="search" placeholder="Search..." />
             </div>

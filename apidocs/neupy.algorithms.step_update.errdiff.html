@@ -91,13 +91,13 @@
         .box {
           padding-bottom: 50px;
         }
-        .container-1{
+        .search-input-container {
           width: 100%;
           vertical-align: middle;
           white-space: nowrap;
           position: relative;
         }
-        .container-1 input#search{
+        .search-input-container input#search {
           width: 100%;
           height: 50px;
           padding-left: 45px;
@@ -117,8 +117,9 @@
           font-family: 'PT Sans', Helvetica, Arial, sans-serif;
           font-size: 12pt;
         }
-        .container-1 .icon{
+        .search-input-container .icon {
           position: absolute;
+          left: 0;
           top: 50%;
           margin-left: 17px;
           margin-top: 13px;
@@ -224,7 +225,7 @@ Value can&#8217;t be less than <span class="docutils literal"><span class="pre">
 
 <dl class="attribute">
 <dt id="neupy.algorithms.step_update.errdiff.ErrDiffStepUpdate.options">
-<span class="descname">options</span><em class="property"> = {'update_for_bigger_error': Option(class_name='ErrDiffStepUpdate', value=ProperFractionProperty(name=&quot;update_for_bigger_error&quot;)), 'error_difference': Option(class_name='ErrDiffStepUpdate', value=BoundedProperty(name=&quot;error_difference&quot;)), 'update_for_smaller_error': Option(class_name='ErrDiffStepUpdate', value=BoundedProperty(name=&quot;update_for_smaller_error&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/errdiff.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.step_update.errdiff.ErrDiffStepUpdate.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'error_difference': Option(class_name='ErrDiffStepUpdate', value=BoundedProperty(name=&quot;error_difference&quot;)), 'update_for_smaller_error': Option(class_name='ErrDiffStepUpdate', value=BoundedProperty(name=&quot;update_for_smaller_error&quot;)), 'update_for_bigger_error': Option(class_name='ErrDiffStepUpdate', value=ProperFractionProperty(name=&quot;update_for_bigger_error&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/errdiff.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.algorithms.step_update.errdiff.ErrDiffStepUpdate.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -279,7 +280,7 @@ Value can&#8217;t be less than <span class="docutils literal"><span class="pre">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
           <div class="box">
-            <div class="container-1">
+            <div class="search-input-container">
                 <span class="icon"><i class="fa fa-search"></i></span>
                 <input type="search" name="q" id="search" placeholder="Search..." />
             </div>

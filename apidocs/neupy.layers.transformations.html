@@ -91,13 +91,13 @@
         .box {
           padding-bottom: 50px;
         }
-        .container-1{
+        .search-input-container {
           width: 100%;
           vertical-align: middle;
           white-space: nowrap;
           position: relative;
         }
-        .container-1 input#search{
+        .search-input-container input#search {
           width: 100%;
           height: 50px;
           padding-left: 45px;
@@ -117,8 +117,9 @@
           font-family: 'PT Sans', Helvetica, Arial, sans-serif;
           font-size: 12pt;
         }
-        .container-1 .icon{
+        .search-input-container .icon {
           position: absolute;
+          left: 0;
           top: 50%;
           margin-left: 17px;
           margin-top: 13px;
@@ -406,7 +407,7 @@ variables into format that suitable for Embedding layer.</p>
 
 <dl class="attribute">
 <dt id="neupy.layers.transformations.Embedding.options">
-<span class="descname">options</span><em class="property"> = {'input_size': Option(class_name='Embedding', value=IntProperty(name=&quot;input_size&quot;)), 'weight': Option(class_name='Embedding', value=ParameterProperty(name=&quot;weight&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'output_size': Option(class_name='Embedding', value=IntProperty(name=&quot;output_size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Embedding.options" title="Permalink to this definition">¶</a></dt>
+<span class="descname">options</span><em class="property"> = {'weight': Option(class_name='Embedding', value=ParameterProperty(name=&quot;weight&quot;)), 'output_size': Option(class_name='Embedding', value=IntProperty(name=&quot;output_size&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'input_size': Option(class_name='Embedding', value=IntProperty(name=&quot;input_size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/transformations.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neupy.layers.transformations.Embedding.options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -480,7 +481,7 @@ variables into format that suitable for Embedding layer.</p>
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
           <div class="box">
-            <div class="container-1">
+            <div class="search-input-container">
                 <span class="icon"><i class="fa fa-search"></i></span>
                 <input type="search" name="q" id="search" placeholder="Search..." />
             </div>
