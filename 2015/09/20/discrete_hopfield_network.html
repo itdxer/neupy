@@ -225,7 +225,7 @@ So first of all we are going to learn how to train the network.
 For the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> train procedure doesn&#8217;t require any iterations.
 It includes just an outer product between input vector and transposed input vector.</p>
 <div class="math">
-\[ \begin{align}\begin{aligned}\begin{split}\begin{align*}
+\[\begin{split}\begin{align*}
     W = x \cdot x^T =
     \left[
     \begin{array}{c}
@@ -242,7 +242,9 @@ It includes just an outer product between input vector and transposed input vect
     \end{array}
     \right]
 \end{align*}
-=\end{split}\\\begin{split}\begin{align*}
+=\end{split}\]</div>
+<div class="math">
+\[\begin{split}\begin{align*}
     =
     \left[
     \begin{array}{c}
@@ -252,7 +254,7 @@ It includes just an outer product between input vector and transposed input vect
       x_n x_1 &amp; x_n x_2 &amp; \cdots &amp; x_n^2 \\
     \end{array}
     \right]
-\end{align*}\end{split}\end{aligned}\end{align} \]</div>
+\end{align*}\end{split}\]</div>
 <p><span class="math">\(W\)</span> is a weight matrix and <span class="math">\(x\)</span> is an input vector.
 Each value <span class="math">\(x_i\)</span> in the input vector can only be -1 or 1.
 So on the matrix diagonal we only have squared values and it means we will always see 1s at those places.
@@ -329,7 +331,7 @@ The second and fourth are also the same, but with an opposite sign.
 That&#8217;s because in the vector <span class="math">\(u\)</span> we have 1 on the first and third places and -1 on the other.</p>
 <p>To make weight from the <span class="math">\(U\)</span> matrix, we need to remove ones from the diagonal.</p>
 <div class="math">
-\[ \begin{align}\begin{aligned}W = U - I =\\\begin{split}= \left[
+\[\begin{split}W = U - I = \left[
     \begin{array}{cccc}
         1 &amp; -1 &amp; 1 &amp; -1\\
         -1 &amp; 1 &amp; -1 &amp; 1\\
@@ -344,14 +346,16 @@ That&#8217;s because in the vector <span class="math">\(u\)</span> we have 1 on 
         0 &amp; 0 &amp; 1 &amp; 0\\
         0 &amp; 0 &amp; 0 &amp; 1
     \end{array}
-\right] =\end{split}\\\begin{split}= \left[
+\right] =\end{split}\]</div>
+<div class="math">
+\[\begin{split}= \left[
     \begin{array}{cccc}
         0 &amp; -1 &amp; 1 &amp; -1\\
         -1 &amp; 0 &amp; -1 &amp; 1\\
         1 &amp; -1 &amp; 0 &amp; -1\\
         -1 &amp; 1 &amp; -1 &amp; 0
     \end{array}
-\right]\end{split}\end{aligned}\end{align} \]</div>
+\right]\end{split}\]</div>
 <p><span class="math">\(I\)</span> is the identity matrix and <span class="math">\(I \in \Bbb R^{n \times n}\)</span>, where <span class="math">\(n\)</span> is a number of features in the input vector.</p>
 <p>When we have one stored vector inside the weights we don&#8217;t really need to remove 1s from the diagonal.
 The main problem would appear when we have more than one vector stored in the weights.
@@ -367,7 +371,7 @@ We are going to master both of them.</p>
 <p>Synchronous approach is much more easier for understanding, so we are going to look at it firstly.
 To recover your pattern from memory you just need to multiply the weight matrix by the input vector.</p>
 <div class="math">
-\[ \begin{align}\begin{aligned}\begin{split}\begin{align*}
+\[\begin{split}\begin{align*}
     s = {W}\cdot{x}=
     \left[
     \begin{array}{cccc}
@@ -386,7 +390,9 @@ To recover your pattern from memory you just need to multiply the weight matrix 
     \end{array}
     \right]
     =
-\end{align*}\end{split}\\\begin{split}\begin{align*}
+\end{align*}\end{split}\]</div>
+<div class="math">
+\[\begin{split}\begin{align*}
     =
     \left[
         \begin{array}{c}
@@ -396,7 +402,7 @@ To recover your pattern from memory you just need to multiply the weight matrix 
           w_{n1}x_1+w_{n2}x_2 + \cdots + w_{nn} x_n\\
         \end{array}
     \right]
-\end{align*}\end{split}\end{aligned}\end{align} \]</div>
+\end{align*}\end{split}\]</div>
 <p>Let&#8217;s analyze the result.
 We summed up all information from the weights where each value can be any integer with an absolute value equal to or smaller than the number of patterns inside the network.
 It&#8217;s clear that total sum value for <span class="math">\(s_i\)</span> is not necessary equal to -1 or 1, so we have to make additional operations that will make bipolar vector from the vector <span class="math">\(s\)</span>.</p>
@@ -437,7 +443,7 @@ We iteratively repeat this operation multiple times and after some point network
 <p>Let&#8217;s look at this example:
 Consider that we already have a weight matrix <span class="math">\(W\)</span> with one pattern <span class="math">\(x\)</span>  inside of it.</p>
 <div class="math">
-\[ \begin{align}\begin{aligned}\begin{split}\begin{align*}
+\[\begin{split}\begin{align*}
     W =
     \left[
     \begin{array}{cccc}
@@ -446,7 +452,9 @@ Consider that we already have a weight matrix <span class="math">\(W\)</span> wi
       -1 &amp; -1 &amp; 0
     \end{array}
     \right]
-\end{align*}\end{split}\\\begin{split}\begin{align*}
+\end{align*}\end{split}\]</div>
+<div class="math">
+\[\begin{split}\begin{align*}
     x =
     \left[
         \begin{array}{c}
@@ -455,7 +463,7 @@ Consider that we already have a weight matrix <span class="math">\(W\)</span> wi
           -1
         \end{array}
     \right]
-\end{align*}\end{split}\end{aligned}\end{align} \]</div>
+\end{align*}\end{split}\]</div>
 <p>Let&#8217;s assume that we have a vector <span class="math">\(x^{'}\)</span> from which we want to recover the pattern.</p>
 <div class="math">
 \[\begin{split}\begin{align*}
