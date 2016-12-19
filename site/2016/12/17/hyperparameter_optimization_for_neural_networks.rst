@@ -418,7 +418,7 @@ When we collected some data we can finally apply TPE. The next step is to divide
     :align: center
     :alt: Observation groups for TPE
 
-As you can see we are no longer rely on the best observation. Instead, we use a distribution of the best observations. Instead, we use a distribution of the best observations. The more iterations we use during the Random Search the better distribution we have at the beginning.
+As you can see we are no longer rely on the best observation. Instead, we use a distribution of the best observations. The more iterations we use during the Random Search the better distribution we have at the beginning.
 
 The next part of the TPE is to model likelihood probability for each of the two groups. This is the next big difference between Gaussian Process and TPE. For Gaussian Process we've modeled posterior probability instead of likelihood probability. Using the likelihood probability from the first group (the one that contains best observations) we sample the bunch of candidates. From the sampled candidates we try to find a candidate that more likely to be in the first group and less likely to be in the second one. The following formula defines Expected Improvement per each candidate.
 
