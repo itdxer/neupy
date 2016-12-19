@@ -32,7 +32,7 @@ def Fire(s_1x1, e_1x1, e_3x3, name):
 
 # Networks weight ~4.8 Mb
 squeezenet = layers.join(
-    layers.Input((3, 224, 224)),
+    layers.Input((3, 227, 227)),
 
     layers.Convolution((96, 3, 3), stride=(2, 2),
                        padding='valid', name='conv1'),
@@ -74,7 +74,7 @@ storage.load(squeezenet, SQUEEZENET_WEIGHTS_FILE)
 monkey_image = load_image(
     os.path.join(CURRENT_DIR, 'images', 'titi-monkey.jpg'),
     image_size=(256, 256),
-    crop_size=(224, 224))
+    crop_size=(227, 227))
 
 # Disables dropout layer
 with squeezenet.disable_training_state():
