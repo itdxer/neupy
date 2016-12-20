@@ -337,10 +337,10 @@
 <h3><a class="toc-backref" href="#id23">Disadvantages of GP with EI</a></h3>
 <p>There are a few disadvantages related to the Gaussian Process with Expected Improvement.</p>
 <ol class="arabic simple">
-<li>Do not work well for categorical variables. In case if neural networks it’s can be a type of activation function.</li>
-<li>Searches new step based on the best observation. Neural Networks usually involve randomization (like weight initialization and dropout) during the training process which influences a final score. Running neural network with the same parameters can lead to different outputs. Which means that our best score can be just lucky output for the specific set of parameters.</li>
-<li>Can be difficult to select right hyperparameters for Gaussian Process. Gaussian Process has lots of different kernel types and you also can construct more complicated kernels using simple kernels as a building block.</li>
-<li>Works slower when the number of hyperparameters increases. That’s typical an issue when you deal with a huge number of parameters.</li>
+<li>It doesn’t work well for categorical variables. In case if neural networks it can be a type of activation function.</li>
+<li>GP with EI selects new set of parameters based on the best observation. Neural Network usually involves randomization (like weight initialization and dropout) during the training process which influences a final score. Running neural network with the same parameters can lead to different scores. Which means that our best score can be just lucky output for the specific set of parameters.</li>
+<li>It can be difficult to select right hyperparameters for Gaussian Process. Gaussian Process has lots of different kernel types. In addition you can construct more complicated kernels using simple kernels as a building block.</li>
+<li>It works slower when number of hyperparameters increases. That’s an issue when you deal with a huge number of parameters.</li>
 </ol>
 </div>
 </div>
@@ -585,7 +585,7 @@
     <span class="n">algo</span><span class="o">=</span><span class="n">tpe</span><span class="p">,</span>
 
     <span class="c1"># Maximum number of iterations. Basically it trains at</span>
-    <span class="c1"># most 200 networks before choose the best one.</span>
+    <span class="c1"># most 200 networks before selecting the best one.</span>
     <span class="n">max_evals</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
@@ -611,7 +611,7 @@
 </div>
 <div class="section" id="summary">
 <h2><a class="toc-backref" href="#id28">Summary</a></h2>
-<p>The Bayesian Optimization and TPE algorithms show great improvement over the classic hyperoptimization methods. They allow to learn from the training history and give better and better estimations for the next set of parameters. But it still takes lots of time to apply these algorithms. It’s great if you have an access to multiple machines and you can parallel parameter tuning procedure <a class="footnote-reference" href="#id8" id="id4">[4]</a>, but usually, it’s not an option. Sometimes it’s better just to avoid hyperparameter optimization. In case if you just try to build a network for trivial problems like image classification it’s better to use existed architectures with pre-trained parameters like <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/alexnet.py">AlexNet</a>, <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/vgg19.py">VGG19</a> or <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/resnet50.py">ResNet</a>.</p>
+<p>The Bayesian Optimization and TPE algorithms show great improvement over the classic hyperparameter optimization methods. They allow to learn from the training history and give better and better estimations for the next set of parameters. But it still takes lots of time to apply these algorithms. It’s great if you have an access to multiple machines and you can parallel parameter tuning procedure <a class="footnote-reference" href="#id8" id="id4">[4]</a>, but usually, it’s not an option. Sometimes it’s better just to avoid hyperparameter optimization. In case if you just try to build a network for trivial problems like image classification it’s better to use existed architectures with pre-trained parameters like <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/alexnet.py">AlexNet</a>, <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/vgg19.py">VGG19</a> or <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/resnet50.py">ResNet</a>.</p>
 <p>For unique problems that don’t have pre-trained networks the classic and simple hand-tuning is a great way to start. A few iterations can give you a good architecture which won’t be the state-of-the-art but should give you satisfying result with a minimum of problems. In case if accuracy does not suffice your needs you can always boost your performance getting more data or developing ensembles with different models.</p>
 </div>
 <div class="section" id="source-code">

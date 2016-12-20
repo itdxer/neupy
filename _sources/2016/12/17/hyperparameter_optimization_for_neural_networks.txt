@@ -391,13 +391,13 @@ Disadvantages of GP with EI
 
 There are a few disadvantages related to the Gaussian Process with Expected Improvement.
 
-1. Do not work well for categorical variables. In case if neural networks it's can be a type of activation function.
+1. It doesn't work well for categorical variables. In case if neural networks it can be a type of activation function.
 
-2. Searches new step based on the best observation. Neural Networks usually involve randomization (like weight initialization and dropout) during the training process which influences a final score. Running neural network with the same parameters can lead to different outputs. Which means that our best score can be just lucky output for the specific set of parameters.
+2. GP with EI selects new set of parameters based on the best observation. Neural Network usually involves randomization (like weight initialization and dropout) during the training process which influences a final score. Running neural network with the same parameters can lead to different scores. Which means that our best score can be just lucky output for the specific set of parameters.
 
-3. Can be difficult to select right hyperparameters for Gaussian Process. Gaussian Process has lots of different kernel types and you also can construct more complicated kernels using simple kernels as a building block.
+3. It can be difficult to select right hyperparameters for Gaussian Process. Gaussian Process has lots of different kernel types. In addition you can construct more complicated kernels using simple kernels as a building block.
 
-4. Works slower when the number of hyperparameters increases. That's typical an issue when you deal with a huge number of parameters.
+4. It works slower when number of hyperparameters increases. That's an issue when you deal with a huge number of parameters.
 
 Tree-structured Parzen Estimators (TPE)
 ---------------------------------------
@@ -656,7 +656,7 @@ And finally, we run hyperparameter optimization.
         algo=tpe,
 
         # Maximum number of iterations. Basically it trains at
-        # most 200 networks before choose the best one.
+        # most 200 networks before selecting the best one.
         max_evals=200,
     )
 
@@ -684,7 +684,7 @@ It's good in case if you now that some variables have relations. To overcome pro
 Summary
 -------
 
-The Bayesian Optimization and TPE algorithms show great improvement over the classic hyperoptimization methods. They allow to learn from the training history and give better and better estimations for the next set of parameters. But it still takes lots of time to apply these algorithms. It’s great if you have an access to multiple machines and you can parallel parameter tuning procedure [4]_, but usually, it’s not an option. Sometimes it’s better just to avoid hyperparameter optimization. In case if you just try to build a network for trivial problems like image classification it’s better to use existed architectures with pre-trained parameters like `AlexNet <https://github.com/itdxer/neupy/tree/master/examples/cnn/alexnet.py>`_, `VGG19 <https://github.com/itdxer/neupy/tree/master/examples/cnn/vgg19.py>`_ or `ResNet <https://github.com/itdxer/neupy/tree/master/examples/cnn/resnet50.py>`_.
+The Bayesian Optimization and TPE algorithms show great improvement over the classic hyperparameter optimization methods. They allow to learn from the training history and give better and better estimations for the next set of parameters. But it still takes lots of time to apply these algorithms. It’s great if you have an access to multiple machines and you can parallel parameter tuning procedure [4]_, but usually, it’s not an option. Sometimes it’s better just to avoid hyperparameter optimization. In case if you just try to build a network for trivial problems like image classification it’s better to use existed architectures with pre-trained parameters like `AlexNet <https://github.com/itdxer/neupy/tree/master/examples/cnn/alexnet.py>`_, `VGG19 <https://github.com/itdxer/neupy/tree/master/examples/cnn/vgg19.py>`_ or `ResNet <https://github.com/itdxer/neupy/tree/master/examples/cnn/resnet50.py>`_.
 
 For unique problems that don’t have pre-trained networks the classic and simple hand-tuning is a great way to start. A few iterations can give you a good architecture which won’t be the state-of-the-art but should give you satisfying result with a minimum of problems. In case if accuracy does not suffice your needs you can always boost your performance getting more data or developing ensembles with different models.
 
