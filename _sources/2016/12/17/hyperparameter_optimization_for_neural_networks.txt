@@ -67,11 +67,11 @@ Let's compare some of the mentioned methods with previously random sampled data 
     :alt: Randomly generated 100 data points
 
 
-As we can see now sampled points spread out through the parameter space more uniformly. One disadvantage of these methods is that not all of them can provide you good results for the higher dimensions. For instance, Halton sequence and Hammersley set do not work well for dimension equal to 10 [7]_.
+As we can see now sampled points spread out through the parameter space more uniformly. One disadvantage of these methods is that not all of them can provide you good results for the higher dimensions. For instance, Halton sequence and Hammersley set do not work well for dimension bigger than 10 [7]_.
 
 Even though we improved hyperparameter optimization algorithm it still is not suitable for large neural networks.
 
-But Before we move on to more complicated methods I want to focus on parameter hand-tuning.
+But before we move on to more complicated methods I want to focus on parameter hand-tuning.
 
 
 Hand-tuning
@@ -202,17 +202,17 @@ Acquisition Function defines the set of parameter for our next step. There are m
 
 .. math::
 
-    g_{min}(x) = max(0, y_{min} - y_{lowest_expected})
+    g_{min}(x) = max(0, y_{min} - y_{lowest\ expected})
 
-where :math:`y_{min}` is the minimum observed value :math:`y` and :math:`y_{lowest_expected}` lowest possible value from the confidence interval associated with each possible value :math:`x`.
+where :math:`y_{min}` is the minimum observed value :math:`y` and :math:`y_{lowest\ expected}` lowest possible value from the confidence interval associated with each possible value :math:`x`.
 
 In our case, we are trying to find the maximum value. With the small modifications, we can change last formula in the way that will identify Expected Improvement for the maximum value.
 
 .. math::
 
-    g_{max}(x) = max(0, y_{highest_expected} - y_{max})
+    g_{max}(x) = max(0, y_{highest\ expected} - y_{max})
 
-where :math:`y_{max}` is the maximum observed value and :math:`y_{highest_expected}` highest possible value from the confidence interval associated with each possible value :math:`x`.
+where :math:`y_{max}` is the maximum observed value and :math:`y_{highest\ expected}` highest possible value from the confidence interval associated with each possible value :math:`x`.
 
 Here is an output for each point :math:`x` for the Expected Improvement function.
 
@@ -440,7 +440,7 @@ Here is an example. Let's say we have predefined distribution for both groups. F
     :align: center
     :alt: Expected improvement for TPE
 
-In the example, I've used t-distributions, but in TPE distribution models using `parzen-window density estimators <https://www.cs.utah.edu/~suyash/Dissertation_html/node11.html>`_. The main idea is that each sample defines gaussian distribution with defined mean (value of the hyperparameter) and specified standard deviation. Then all these points stacks together and normalized to assure that output is Probability Density Function (PDF). That's why `Parzen estimators` appears in the name of the algorithm.
+In the example, I've used t-distributions, but in TPE distribution models using `parzen-window density estimators <https://www.cs.utah.edu/~suyash/Dissertation_html/node11.html>`_. The main idea is that each sample defines gaussian distribution with specified mean (value of the hyperparameter) and standard deviation. Then all these points stacks together and normalized to assure that output is Probability Density Function (PDF). That's why `Parzen estimators` appears in the name of the algorithm.
 
 .. figure:: images/parzen-estimators.png
     :width: 100%

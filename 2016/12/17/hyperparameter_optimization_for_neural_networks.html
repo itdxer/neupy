@@ -237,9 +237,9 @@
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/100-random-points.png"><img alt="Randomly generated 100 data points" src="../../../_images/100-random-points.png" style="width: 100%;" /></a>
 </div>
-<p>As we can see now sampled points spread out through the parameter space more uniformly. One disadvantage of these methods is that not all of them can provide you good results for the higher dimensions. For instance, Halton sequence and Hammersley set do not work well for dimension equal to 10 <a class="footnote-reference" href="#id11" id="id1">[7]</a>.</p>
+<p>As we can see now sampled points spread out through the parameter space more uniformly. One disadvantage of these methods is that not all of them can provide you good results for the higher dimensions. For instance, Halton sequence and Hammersley set do not work well for dimension bigger than 10 <a class="footnote-reference" href="#id11" id="id1">[7]</a>.</p>
 <p>Even though we improved hyperparameter optimization algorithm it still is not suitable for large neural networks.</p>
-<p>But Before we move on to more complicated methods I want to focus on parameter hand-tuning.</p>
+<p>But before we move on to more complicated methods I want to focus on parameter hand-tuning.</p>
 </div>
 <div class="section" id="hand-tuning">
 <h2><a class="toc-backref" href="#id18">Hand-tuning</a></h2>
@@ -321,12 +321,12 @@
 <h3><a class="toc-backref" href="#id21">Acquisition Function</a></h3>
 <p>Acquisition Function defines the set of parameter for our next step. There are many different functions <a class="footnote-reference" href="#id5" id="id3">[1]</a> that can help us calculate the best value for the next step. One of the most common is Expected Improvement. There are two ways to compute it. In case if we are trying to find minimum we can use this formula.</p>
 <div class="math">
-\[g_{min}(x) = max(0, y_{min} - y_{lowest_expected})\]</div>
-<p>where <span class="math">\(y_{min}\)</span> is the minimum observed value <span class="math">\(y\)</span> and <span class="math">\(y_{lowest_expected}\)</span> lowest possible value from the confidence interval associated with each possible value <span class="math">\(x\)</span>.</p>
+\[g_{min}(x) = max(0, y_{min} - y_{lowest\ expected})\]</div>
+<p>where <span class="math">\(y_{min}\)</span> is the minimum observed value <span class="math">\(y\)</span> and <span class="math">\(y_{lowest\ expected}\)</span> lowest possible value from the confidence interval associated with each possible value <span class="math">\(x\)</span>.</p>
 <p>In our case, we are trying to find the maximum value. With the small modifications, we can change last formula in the way that will identify Expected Improvement for the maximum value.</p>
 <div class="math">
-\[g_{max}(x) = max(0, y_{highest_expected} - y_{max})\]</div>
-<p>where <span class="math">\(y_{max}\)</span> is the maximum observed value and <span class="math">\(y_{highest_expected}\)</span> highest possible value from the confidence interval associated with each possible value <span class="math">\(x\)</span>.</p>
+\[g_{max}(x) = max(0, y_{highest\ expected} - y_{max})\]</div>
+<p>where <span class="math">\(y_{max}\)</span> is the maximum observed value and <span class="math">\(y_{highest\ expected}\)</span> highest possible value from the confidence interval associated with each possible value <span class="math">\(x\)</span>.</p>
 <p>Here is an output for each point <span class="math">\(x\)</span> for the Expected Improvement function.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/expected-improvement-example.png"><img alt="Expected Improvement example" src="../../../_images/expected-improvement-example.png" style="width: 100%;" /></a>
@@ -515,7 +515,7 @@
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/tpe-expected-improvement.png"><img alt="Expected improvement for TPE" src="../../../_images/tpe-expected-improvement.png" style="width: 100%;" /></a>
 </div>
-<p>In the example, I&#8217;ve used t-distributions, but in TPE distribution models using <a class="reference external" href="https://www.cs.utah.edu/~suyash/Dissertation_html/node11.html">parzen-window density estimators</a>. The main idea is that each sample defines gaussian distribution with defined mean (value of the hyperparameter) and specified standard deviation. Then all these points stacks together and normalized to assure that output is Probability Density Function (PDF). That&#8217;s why <cite>Parzen estimators</cite> appears in the name of the algorithm.</p>
+<p>In the example, I&#8217;ve used t-distributions, but in TPE distribution models using <a class="reference external" href="https://www.cs.utah.edu/~suyash/Dissertation_html/node11.html">parzen-window density estimators</a>. The main idea is that each sample defines gaussian distribution with specified mean (value of the hyperparameter) and standard deviation. Then all these points stacks together and normalized to assure that output is Probability Density Function (PDF). That&#8217;s why <cite>Parzen estimators</cite> appears in the name of the algorithm.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/parzen-estimators.png"><img alt="Parzen estimators" src="../../../_images/parzen-estimators.png" style="width: 100%;" /></a>
 </div>
