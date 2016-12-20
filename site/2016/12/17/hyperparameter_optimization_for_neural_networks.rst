@@ -202,17 +202,17 @@ Acquisition Function defines the set of parameter for our next step. There are m
 
 .. math::
 
-    g_{min}(x) = max(0, y_{min} - y_{lowest_expected})
+    g_{min}(x) = max(0, y_{min} - y_{lowest\ expected})
 
-where :math:`y_{min}` is the minimum observed value :math:`y` and :math:`y_{lowest_expected}` lowest possible value from the confidence interval associated with each possible value :math:`x`.
+where :math:`y_{min}` is the minimum observed value :math:`y` and :math:`y_{lowest\ expected}` lowest possible value from the confidence interval associated with each possible value :math:`x`.
 
 In our case, we are trying to find the maximum value. With the small modifications, we can change last formula in the way that will identify Expected Improvement for the maximum value.
 
 .. math::
 
-    g_{max}(x) = max(0, y_{highest_expected} - y_{max})
+    g_{max}(x) = max(0, y_{highest\ expected} - y_{max})
 
-where :math:`y_{max}` is the maximum observed value and :math:`y_{highest_expected}` highest possible value from the confidence interval associated with each possible value :math:`x`.
+where :math:`y_{max}` is the maximum observed value and :math:`y_{highest\ expected}` highest possible value from the confidence interval associated with each possible value :math:`x`.
 
 Here is an output for each point :math:`x` for the Expected Improvement function.
 
