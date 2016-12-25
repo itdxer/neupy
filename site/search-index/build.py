@@ -46,6 +46,11 @@ def url_filter(links):
             yield link
 
 
+class FeatureExtraction(object):
+    def __init__(self, documents):
+        pass
+
+
 if __name__ == '__main__':
     documents = defaultdict()
 
@@ -58,8 +63,9 @@ if __name__ == '__main__':
     indeces = []
     data = []
     index_pointers = [0]
+    docid = 0
 
-    for docid, html_filepath in enumerate(iter_html_files(SITE_DIR)):
+    for html_filepath in iter_html_files(SITE_DIR):
         current_page_url = url_from_file(html_filepath)
         html_filename = os.path.basename(html_filepath)
 
@@ -94,9 +100,19 @@ if __name__ == '__main__':
                 'html': html,
                 'text': text,
             }
+            docid += 1
 
     n_documents = len(documents)
     n_terms = len(vocabulary)
 
     logging.info("Found {} HTML files".format(n_documents))
     logging.info("Found {} terms".format(n_terms))
+
+    frequencies = sp.csr_matrix((data, indeces, index_pointers),
+                                shape=(n_documents, n_terms))
+    df = (frequencies >= 1).sum(axis=0)
+    idf = np.log((n_documents + 1) / (df + 1))
+    idf = sp.spdiags(idf, diags=0, m=n_terms, n=n_terms)
+
+    tf = np.log1p(frequencies)
+    tf.data += 1
