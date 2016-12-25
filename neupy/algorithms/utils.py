@@ -4,14 +4,13 @@ import theano.tensor as T
 from neupy.layers.utils import iter_parameters
 
 
-__all__ = ('shuffle', 'parameters2vector', 'iter_until_converge',
-           'parameter_values', 'setup_parameter_updates',
-           'normalize_error')
+__all__ = ('shuffle', 'parameter_values', 'iter_until_converge',
+           'setup_parameter_updates')
 
 
 def parameter_values(connection):
     """
-    Iterate over all network's trainable parameters.
+    List of all trainable parameters in the network.
 
     Parameters
     ----------
@@ -28,23 +27,6 @@ def parameter_values(connection):
         parameters.append(parameter)
 
     return parameters
-
-
-def parameters2vector(network):
-    """
-    Concatenate all network parameters in one big vector.
-
-    Parameters
-    ----------
-    network : ConstructibleNetwork instance
-
-    Returns
-    -------
-    object
-        Returns all parameters concatenated in one big vector.
-    """
-    params = parameter_values(network.connection)
-    return T.concatenate([param.flatten() for param in params])
 
 
 def setup_parameter_updates(parameters, parameter_update_vector):
@@ -84,6 +66,22 @@ def setup_parameter_updates(parameters, parameter_update_vector):
 
 
 def iter_until_converge(network, epsilon, max_epochs):
+    """
+    Train network until error converged or maximum number of
+    epochs has been reached.
+
+    Parameters
+    ----------
+    network : BaseNetwork instance
+
+    epsilon : float
+        Interrupt training in case if different absolute
+        between two previous errors is less than specified
+        epsilon value.
+
+    max_epochs : int
+        Maximum number of epochs to train.
+    """
     logs = network.logs
 
     # Trigger first iteration and store first error term
@@ -118,33 +116,30 @@ def iter_until_converge(network, epsilon, max_epochs):
 
 def shuffle(*arrays):
     """
-    Make a random shuffle for all arrays.
+    Randomly shuffle rows in the arrays qithout breaking
+    associations between rows in different arrays.
 
     Parameters
     ----------
     *arrays
-        List of arrays that should be shuffled.
+        Arrays that should be shuffled.
 
     Returns
     -------
     list
         List of arrays that contain shuffeled input data.
     """
+    arrays = tuple(array for array in arrays if array is not None)
+
     if not arrays:
-        return tuple()
-
-    arrays_without_none = [array for array in arrays if array is not None]
-
-    if not arrays_without_none:
         return arrays
 
-    first = arrays_without_none[0]
+    first = arrays[0]
     n_samples = first.shape[0]
 
-    for array in arrays_without_none:
-        if n_samples != array.shape[0]:
-            raise ValueError("Cannot shuffle matrices. All matrices should "
-                             "have the same number of rows")
+    if any(n_samples != array.shape[0] for array in arrays):
+        raise ValueError("Cannot shuffle matrices. All matrices should "
+                         "have the same number of rows")
 
     indices = np.arange(n_samples)
     np.random.shuffle(indices)
@@ -157,21 +152,3 @@ def shuffle(*arrays):
         return arrays[0]
 
     return arrays
-
-
-def normalize_error(output):
-    """
-    Normalize error output when result is non-scalar.
-
-    Parameters
-    ----------
-    output : array-like
-        Input can be any numpy array or matrix.
-
-    Returns
-    -------
-    int, float, None
-        Return sum of all absolute values.
-    """
-    if output is not None:
-        return np.sum(output)

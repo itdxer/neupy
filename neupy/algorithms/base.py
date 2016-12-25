@@ -5,6 +5,7 @@ import types
 from itertools import groupby
 
 import six
+import numpy as np
 
 from neupy.utils import preformat_value, AttributeKeyDict
 from neupy.helpers import table
@@ -13,7 +14,7 @@ from neupy.core.base import BaseSkeleton
 from neupy.core.properties import (BoundedProperty, NumberProperty,
                                    Property)
 from .summary_info import SummaryTable, InlineSummary
-from .utils import iter_until_converge, shuffle, normalize_error
+from .utils import iter_until_converge, shuffle
 
 
 __all__ = ('BaseNetwork',)
@@ -183,7 +184,7 @@ class ErrorHistoryList(list):
         ``None`` otherwise.
         """
         if self and self[-1] is not None:
-            return normalize_error(self[-1])
+            return np.sum(self[-1])
 
     def previous(self):
         """
@@ -191,7 +192,7 @@ class ErrorHistoryList(list):
         ``None`` otherwise.
         """
         if len(self) >= 2 and self[-2] is not None:
-            return normalize_error(self[-2])
+            return np.sum(self[-2])
 
     def normalized(self):
         """
@@ -206,7 +207,7 @@ class ErrorHistoryList(list):
         if not self:
             return self
 
-        normalized_errors = map(normalize_error, self)
+        normalized_errors = map(np.sum, self)
         return ErrorHistoryList(normalized_errors)
 
 

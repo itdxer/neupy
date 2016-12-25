@@ -6,8 +6,7 @@ from theano.tensor import slinalg
 from neupy.core.properties import BoundedProperty, WithdrawProperty
 from neupy.utils import asfloat
 from neupy.algorithms.gd import StepSelectionBuiltIn
-from neupy.algorithms.utils import (parameters2vector, parameter_values,
-                                    setup_parameter_updates)
+from neupy.algorithms.utils import parameter_values, setup_parameter_updates
 from neupy.layers.utils import count_parameters
 from .base import GradientDescent
 
@@ -108,7 +107,7 @@ class Hessian(StepSelectionBuiltIn, GradientDescent):
     def init_train_updates(self):
         n_parameters = count_parameters(self.connection)
         parameters = parameter_values(self.connection)
-        param_vector = parameters2vector(self)
+        param_vector = T.concatenate([param.flatten() for param in parameters])
         penalty_const = asfloat(self.penalty_const)
 
         hessian_matrix, full_gradient = find_hessian_and_gradient(
