@@ -9,8 +9,7 @@ from neupy.core.properties import (BoundedProperty, ChoiceProperty,
                                    WithdrawProperty)
 from neupy.algorithms import GradientDescent
 from neupy.algorithms.gd import StepSelectionBuiltIn, errors
-from neupy.algorithms.utils import (parameters2vector, parameter_values,
-                                    setup_parameter_updates)
+from neupy.algorithms.utils import parameter_values, setup_parameter_updates
 
 
 __all__ = ('LevenbergMarquardt',)
@@ -135,7 +134,7 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
         ).ravel()
 
         params = parameter_values(self.connection)
-        param_vector = parameters2vector(self)
+        param_vector = T.concatenate([param.flatten() for param in params])
 
         J = compute_jacobian(se_for_each_sample, params)
         n_params = J.shape[1]
