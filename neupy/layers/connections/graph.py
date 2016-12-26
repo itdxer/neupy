@@ -249,6 +249,12 @@ class LayerGraph(object):
         if layer in self.forward_graph:
             return False
 
+        for existed_layer in self.forward_graph:
+            if existed_layer.name == layer.name:
+                raise LayerConnectionError(
+                    "Cannot connect {} layer. Layer with name {!r} has been "
+                    "already defined in the graph.".format(layer, layer.name))
+
         self.forward_graph[layer] = []
         self.backward_graph[layer] = []
 
