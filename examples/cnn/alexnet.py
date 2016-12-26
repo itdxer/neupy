@@ -104,15 +104,13 @@ if not os.path.exists(ALEXNET_WEIGHTS_FILE):
 
 storage.load(alexnet, ALEXNET_WEIGHTS_FILE)
 
-dog_image = load_image(os.path.join(CURRENT_DIR, 'images', 'dog.jpg'),
-                       image_size=(256, 256),
-                       crop_size=(227, 227),
-                       use_bgr=False)
+dog_image = load_image(
+    os.path.join(CURRENT_DIR, 'images', 'dog.jpg'),
+    image_size=(256, 256),
+    crop_size=(227, 227),
+    use_bgr=False)
 
-# Disables dropout layer
-with alexnet.disable_training_state():
-    x = T.tensor4()
-    predict = theano.function([x], alexnet.output(x))
-
+predict = alexnet.compile()
 output = predict(dog_image)
+
 print_top_n(output[0], n=5)

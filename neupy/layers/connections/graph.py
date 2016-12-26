@@ -548,6 +548,18 @@ class LayerGraph(object):
 
                 outputs[layer] = layer.output(input_variable)
 
+        elif isinstance(input_value, (list, tuple)):
+            n_input_layers = len(self.input_layers)
+            n_input_vars = len(input_value)
+
+            if n_input_vars != n_input_layers:
+                raise ValueError("Connection has {} input layer(s), but "
+                                 "{} inputs was provided"
+                                 "".format(n_input_layers, n_input_vars))
+
+            for input_var, input_layer in zip(input_value, self.input_layers):
+                outputs[input_layer] = input_layer.output(input_var)
+
         else:
             for input_layer in self.input_layers:
                 outputs[input_layer] = input_layer.output(input_value)

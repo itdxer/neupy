@@ -1,4 +1,5 @@
 from neupy import layers
+from neupy.layers.utils import create_input_variable
 
 from base import BaseTestCase
 
@@ -27,3 +28,7 @@ class CountParametersTestCase(BaseTestCase):
 
     def test_join_empty_connection(self):
         self.assertEqual(layers.join(), None)
+
+    def test_create_input_variable_exception(self):
+        with self.assertRaises(ValueError):
+            create_input_variable((1, 2, 3, 4), name='test')

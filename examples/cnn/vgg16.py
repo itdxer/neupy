@@ -56,14 +56,12 @@ if not os.path.exists(VGG16_WEIGHTS_FILE):
 
 storage.load(vgg16, VGG16_WEIGHTS_FILE)
 
-dog_image = load_image(os.path.join(CURRENT_DIR, 'images', 'dog.jpg'),
-                       image_size=(256, 256),
-                       crop_size=(224, 224))
+dog_image = load_image(
+    os.path.join(CURRENT_DIR, 'images', 'dog.jpg'),
+    image_size=(256, 256),
+    crop_size=(224, 224))
 
-# Disables dropout layer
-with vgg16.disable_training_state():
-    x = T.tensor4()
-    predict = theano.function([x], vgg16.output(x))
-
+predict = vgg16.compile()
 output = predict(dog_image)
+
 print_top_n(output[0], n=5)

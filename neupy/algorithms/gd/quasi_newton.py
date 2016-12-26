@@ -210,7 +210,7 @@ class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
 
             output = self.connection.output(network_input)
 
-            # We need to replace back parameter to shared variable
+            # Restore previous parameters
             for layer, attrname, param in layers_and_parameters:
                 setattr(layer, attrname, param)
 
