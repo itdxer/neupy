@@ -553,8 +553,8 @@ class LayerGraph(object):
             n_input_vars = len(input_value)
 
             if n_input_vars != n_input_layers:
-                raise ValueError("Connection has {} input layer(s), but "
-                                 "{} inputs was provided"
+                raise ValueError("Connection has {} input layer(s), "
+                                 "but {} inputs was provided"
                                  "".format(n_input_layers, n_input_vars))
 
             for input_var, input_layer in zip(input_value, self.input_layers):
