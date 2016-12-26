@@ -487,6 +487,43 @@ class LayerConnection(BaseConnection):
 
         return self.graph.propagate_forward(input_values)
 
+    def start(self, first_layer, *other_layers):
+        """
+        Create new LayerConnection instance that point to
+        different input layers.
+
+        Parameters
+        ----------
+        first_layer : layer, str
+            Layer instance or layer name.
+
+        *other_layers
+            Layer instances or layer names.
+
+        Returns
+        -------
+        connection
+        """
+        input_layers = as_tuple(first_layer, other_layers)
+        input_layers = clean_layer_references(self.graph, input_layers)
+
+        subgraph = self.graph.subgraph_for_input(input_layers)
+
+        new_connection = copy.copy(self)
+        new_connection.graph = subgraph
+        new_connection.input_layers = subgraph.input_layers
+
+        # don't care about self.left and self.right attributes.
+        # remove them to make sure that another function
+        # won't use invalid references
+        if hasattr(new_connection, 'left'):
+            del new_connection.left
+
+        if hasattr(new_connection, 'right'):
+            del new_connection.right
+
+        return new_connection
+
     def end(self, first_layer, *other_layers):
         """
         Create new LayerConnection instance that point to
@@ -514,8 +551,8 @@ class LayerConnection(BaseConnection):
         new_connection.output_layers = subgraph.output_layers
 
         # don't care about self.left and self.right attributes.
-        # remove them to make sure that in case some other function
-        # won't get invalid references
+        # remove them to make sure that another function
+        # won't use invalid references
         if hasattr(new_connection, 'left'):
             del new_connection.left
 

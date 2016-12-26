@@ -452,6 +452,27 @@ class LayerGraph(object):
 
         return LayerGraph(forward_subgraph, backward_subgraph)
 
+    def subgraph_for_input(self, input_layers):
+        """
+        Extract subgraph with specified set
+        of input layers.
+
+        Parameters
+        ----------
+        layers : layer, list of layers
+
+        Returns
+        -------
+        LayerGraph instance
+        """
+        # Output layers for the reversed graph are
+        # input layers for normal graph
+        graph_reversed = self.reverse()
+        subgraph_reversed = graph_reversed.subgraph_for_output(input_layers)
+
+        # Reverse it to make normal graph
+        return subgraph_reversed.reverse()
+
     def subgraph(self, input_layers, output_layers):
         """
         Create subgraph that contains only layers that
@@ -467,15 +488,8 @@ class LayerGraph(object):
         -------
         LayerGraph
         """
-        subgraph = self.subgraph_for_output(output_layers)
-
-        # Output layers for the reversed graph are
-        # input layers for normal graph
-        subgraph_reversed = subgraph.reverse()
-        subgraph_reversed = subgraph_reversed.subgraph_for_output(input_layers)
-
-        # Reverse it to make normal graph
-        return subgraph_reversed.reverse()
+        subgraph = self.subgraph_for_input(input_layers)
+        return subgraph.subgraph_for_output(output_layers)
 
     @property
     def input_layers(self):
