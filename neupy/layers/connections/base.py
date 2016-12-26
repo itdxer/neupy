@@ -1,7 +1,10 @@
 from itertools import product
 from contextlib import contextmanager
 
-from neupy.layers.utils import preformat_layer_shape
+import theano
+
+from neupy.layers.utils import preformat_layer_shape, create_input_variable
+from neupy.utils import as_tuple
 from .utils import join, is_sequential
 from .graph import LayerGraph
 
@@ -107,6 +110,29 @@ class BaseConnection(object):
         self.training_state = False
         yield
         self.training_state = True
+
+    def compile(self, *inputs):
+        """
+        Compile Theano function with disabled training state.
+
+        Returns
+        -------
+        callable object
+        """
+        input_layers = self.graph.input_layers
+
+        if not inputs:
+            inputs = []
+
+            for input_layer in input_layers:
+                variable = create_input_variable(
+                    input_layer.input_shape,
+                    name="layer:{}/var:input".format(input_layer.name)
+                )
+                inputs.append(variable)
+
+        with self.disable_training_state():
+            return theano.function(inputs, self.output(*inputs))
 
 
 def make_common_graph(left_layer, right_layer):
@@ -246,33 +272,37 @@ class ParallelConnection(BaseConnection):
         for connection in self.connections:
             connection.initialize()
 
-    def output(self, *input_values):
+    def output(self, first_input, *other_inputs):
         """
         Compute outputs per each network in parallel
         connection.
 
         Parameters
         ----------
-        *input_values
+        first_input : Theano variable, array-like, dict
+        *other_inputs
 
         Returns
         -------
         list
         """
-        n_inputs = len(input_values)
+        n_inputs = len(other_inputs) + 1  # +1 for first input
         n_connections = len(self.connections)
 
-        if n_inputs == 1:
-            input_values = list(input_values) * n_connections
+        if not other_inputs:
+            input_values = [first_input] * n_connections
 
-        elif n_inputs != n_connections:
+        elif n_inputs == n_connections:
+            input_values = as_tuple(first_input, other_inputs)
+
+        else:
             raise ValueError("Expected {} input values for parallel "
-                             "connection, got {}".format(n_connections,
-                                                         n_inputs))
+                             "connection, got {}"
+                             "".format(n_connections, n_inputs))
 
         outputs = []
         for input_value, connection in zip(input_values, self.connections):
-            connection_output = connection.output(input_values)
+            connection_output = connection.output(input_value)
             outputs.append(connection_output)
 
         return outputs
@@ -394,14 +424,14 @@ class LayerConnection(BaseConnection):
         for layer in self:
             layer.initialize()
 
-    def output(self, *input_values):
+    def output(self, first_input, *other_inputs):
         """
         Propagate input values through all layers in the
         connections and returns output from the final layers.
 
         Parameters
         ----------
-        *input_values
+        first_input : Theano variable, array-like, dict
             - Input values can be Theano variables or
               array-like objects
 
@@ -409,23 +439,20 @@ class LayerConnection(BaseConnection):
               define input layer and value is a variables
               that needs to be propagated through all layers.
 
+        *other_inputs
+            Suitable in case if we need to set up multiple
+            input variables in a sequence.
+
         Returns
         -------
         Theano expression
         """
-        subgraph = self.graph
-        n_inputs = len(input_values)
+        if other_inputs:
+            input_values = as_tuple(first_input, other_inputs)
+        else:
+            input_values = first_input
 
-        if n_inputs == 1 and not isinstance(input_values[0], dict):
-            input_value = input_values[0]
-            new_input_values = {}
-
-            for input_layer in self.input_layers:
-                new_input_values[input_layer] = input_value
-
-            input_values = [new_input_values]
-
-        return subgraph.propagate_forward(*input_values)
+        return self.graph.propagate_forward(input_values)
 
     @contextmanager
     def disable_training_state(self):

@@ -76,10 +76,7 @@ monkey_image = load_image(
     image_size=(256, 256),
     crop_size=(227, 227))
 
-# Disables dropout layer
-with squeezenet.disable_training_state():
-    x = T.tensor4()
-    predict = theano.function([x], squeezenet.output(x))
-
+predict = squeezenet.compile()
 output = predict(monkey_image)
+
 print_top_n(output[0], n=5)

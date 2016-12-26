@@ -35,8 +35,8 @@ def join(*connections):
 
         if isinstance(connection, (list, tuple)):
             return ParallelConnection(connection)
-        else:
-            return connection
+
+        return connection
 
     merged_connections = reduce(LayerConnection, connections)
     return merged_connections

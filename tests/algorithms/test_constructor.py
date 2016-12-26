@@ -2,8 +2,7 @@ import theano.tensor as T
 
 from neupy import layers
 from neupy.exceptions import InvalidConnection
-from neupy.algorithms.constructor import (create_input_variable,
-                                          create_output_variable,
+from neupy.algorithms.constructor import (create_output_variable,
                                           ConstructibleNetwork,
                                           generate_layers)
 
@@ -11,13 +10,21 @@ from base import BaseTestCase
 
 
 class NetworkConstructorTestCase(BaseTestCase):
+    def test_generate_layers(self):
+        network = generate_layers([1, 2, 3])
+
+        layer_types = (layers.Input, layers.Sigmoid, layers.Sigmoid)
+        output_shapes = [(1,), (2,), (3,)]
+
+        for layer, layer_type in zip(network, layer_types):
+            self.assertIsInstance(layer, layer_type)
+
+        for layer, output_shape in zip(network, output_shapes):
+            self.assertEqual(layer.output_shape, output_shape)
+
     def test_generate_layers_expcetion(self):
         with self.assertRaises(ValueError):
             generate_layers((5,))
-
-    def test_invalid_dim_for_input_layer(self):
-        with self.assertRaises(ValueError):
-            create_input_variable(layers.Input((1, 2, 3, 4)), name='test')
 
     def test_custom_output_variable(self):
         def error_func(expected, predicted):

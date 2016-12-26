@@ -9,7 +9,7 @@ import theano.tensor as T
 
 from neupy import layers
 from neupy.utils import AttributeKeyDict, asfloat, format_data
-from neupy.layers.utils import preformat_layer_shape
+from neupy.layers.utils import preformat_layer_shape, create_input_variable
 from neupy.layers.connections import LayerConnection, is_sequential
 from neupy.exceptions import InvalidConnection
 from neupy.helpers import table
@@ -52,6 +52,7 @@ def generate_layers(layers_sizes):
     LayerConnection
         Constructed connection.
     """
+    layers_sizes = list(layers_sizes)
     n_layers = len(layers_sizes)
 
     if n_layers <= 1:
@@ -83,51 +84,13 @@ def clean_layers(connection):
     object
         Cleaned layers connection.
     """
-
-    if isinstance(connection, tuple):
-        connection = list(connection)
-
     if all(isinstance(element, int) for element in connection):
         connection = generate_layers(connection)
 
-    islist = isinstance(connection, list)
-    layer_types = (layers.BaseLayer, LayerConnection)
-
-    if islist and isinstance(connection[0], layer_types):
+    if isinstance(connection, (list, tuple)):
         connection = layers.join(*connection)
 
     return connection
-
-
-def create_input_variable(input_layer, name):
-    """
-    Create input variable based on input layer information.
-
-    Parameters
-    ----------
-    input_layer : object
-    name : str
-
-    Returns
-    -------
-    Theano variable
-    """
-    dim_to_variable_type = {
-        2: T.matrix,
-        3: T.tensor3,
-        4: T.tensor4,
-    }
-
-    # Shape doesn't include batch size dimension,
-    # that's why we need to add one
-    ndim = len(input_layer.input_shape) + 1
-
-    if ndim not in dim_to_variable_type:
-        raise ValueError("Layer's input needs to be 2, 3 or 4 dimensional. "
-                         "Found {} dimensions".format(ndim))
-
-    variable_type = dim_to_variable_type[ndim]
-    return variable_type(name)
 
 
 def create_output_variable(error_function, name):
@@ -333,7 +296,7 @@ class ConstructibleNetwork(SupervisedLearningMixin, BaseAlgorithm,
     def init_input_output_variables(self):
         self.variables.update(
             network_input=create_input_variable(
-                self.input_layer,
+                self.input_layer.input_shape,
                 name='algo:network/var:network-input',
             ),
             network_output=create_output_variable(
@@ -392,8 +355,8 @@ class ConstructibleNetwork(SupervisedLearningMixin, BaseAlgorithm,
 
     def init_train_updates(self):
         """
-        Initialize train function update in Theano format that
-        would be trigger after each training epoch.
+        Initialize updates that would be applied after
+        each training epoch.
         """
         updates = []
         for layer in self.layers:
@@ -457,9 +420,11 @@ class ConstructibleNetwork(SupervisedLearningMixin, BaseAlgorithm,
         array-like or None
             Function returns formatted array.
         """
-        if input_data is not None:
-            is_feature1d = does_layer_accept_1d_feature(self.input_layer)
-            return format_data(input_data, is_feature1d)
+        if input_data is None:
+            return
+
+        is_feature1d = does_layer_accept_1d_feature(self.input_layer)
+        return format_data(input_data, is_feature1d)
 
     def format_target_data(self, target_data):
         """
@@ -515,8 +480,7 @@ class ConstructibleNetwork(SupervisedLearningMixin, BaseAlgorithm,
 
     def on_epoch_start_update(self, epoch):
         """
-        Function would be trigger before run all training procedure
-        related to the current epoch.
+        Function will be triggered before the training epoch procedure.
 
         Parameters
         ----------
