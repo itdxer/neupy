@@ -598,3 +598,89 @@ class ConnectionCompilationTestCase(BaseTestCase):
 
         np.testing.assert_array_almost_equal(
             actual_output_2, expected_output_2)
+
+
+class SliceLayerConnectionsTestCase(BaseTestCase):
+    def test_change_output_layer(self):
+        network = layers.join(
+            layers.Input(10, name='input-1'),
+            layers.Relu(5, name='relu-1'),
+            layers.Relu(1, name='relu-2'),
+        )
+
+        self.assertEqual(network.input_shape, (10,))
+        self.assertEqual(network.output_shape, (1,))
+
+        relu_1_network = network.end('relu-1')
+        self.assertEqual(relu_1_network.input_shape, (10,))
+        self.assertEqual(relu_1_network.output_shape, (5,))
+
+        predict = relu_1_network.compile()
+        x_test = asfloat(np.ones((7, 10)))
+        y_predicted = predict(x_test)
+        self.assertEqual(y_predicted.shape, (7, 5))
+
+    def test_select_network_branch(self):
+        network = layers.join(
+            layers.Input(10, name='input-1'),
+            [[
+                layers.Relu(1, name='relu-1'),
+            ], [
+                layers.Relu(2, name='relu-2'),
+            ]]
+        )
+
+        self.assertEqual(network.input_shape, (10,))
+        self.assertEqual(network.output_shape, [(1,), (2,)])
+
+        relu_1_network = network.end('relu-1')
+        self.assertEqual(relu_1_network.input_shape, (10,))
+        self.assertEqual(relu_1_network.output_shape, (1,))
+
+        predict = relu_1_network.compile()
+        x_test = asfloat(np.ones((7, 10)))
+        y_predicted = predict(x_test)
+        self.assertEqual(y_predicted.shape, (7, 1))
+
+        relu_2_network = network.end('relu-2')
+        self.assertEqual(relu_2_network.input_shape, (10,))
+        self.assertEqual(relu_2_network.output_shape, (2,))
+
+    def test_output_layers_in_sequence(self):
+        network = layers.join(
+            layers.Input(10, name='input-1'),
+            layers.Relu(5, name='relu-1'),
+            layers.Relu(1, name='relu-2'),
+        )
+
+        self.assertEqual(network.input_shape, (10,))
+        self.assertEqual(network.output_shape, (1,))
+
+        cutted_network = network.end('relu-1').end('input-1')
+        self.assertEqual(cutted_network.input_shape, (10,))
+        self.assertEqual(cutted_network.output_shape, (10,))
+
+        predict = cutted_network.compile()
+        x_test = asfloat(np.ones((7, 10)))
+        y_predicted = predict(x_test)
+        self.assertEqual(y_predicted.shape, (7, 10))
+
+    def test_cut_using_layer_object(self):
+        relu = layers.Relu(2)
+        network = layers.Input(10) > relu > layers.Sigmoid(1)
+
+        self.assertEqual(network.input_shape, (10,))
+        self.assertEqual(network.output_shape, (1,))
+
+        cutted_network = network.end(relu)
+        self.assertEqual(cutted_network.input_shape, (10,))
+        self.assertEqual(cutted_network.output_shape, (2,))
+
+    def test_unknown_layer_name_exception(self):
+        network = layers.join(
+            layers.Input(10, name='input-1'),
+            layers.Relu(5, name='relu-1'),
+            layers.Relu(1, name='relu-2'),
+        )
+        with self.assertRaises(ValueError):
+            network.end('abc')
