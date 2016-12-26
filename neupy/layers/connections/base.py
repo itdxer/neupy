@@ -1,6 +1,8 @@
+import copy
 from itertools import product
 from contextlib import contextmanager
 
+import six
 import theano
 
 from neupy.layers.utils import preformat_layer_shape, create_input_variable
@@ -10,6 +12,44 @@ from .graph import LayerGraph
 
 
 __all__ = ('LayerConnection', 'BaseConnection', 'ParallelConnection')
+
+
+def clean_layer_references(graph, layer_references):
+    """
+    Using list of layers and layer names convert it to
+    complete list of layer objects. Function try to find
+    layer by specified name in the graph and replate it in the
+    layer list to the related object.
+
+    Parameters
+    ----------
+    graph : LayerGraph instance
+        Graph that has information about all layers from
+        the ``layer_references`` list.
+
+    layer_references : list, tuple
+        List of layer instancens and layer names.
+
+    Returns
+    -------
+    list of layers
+    """
+    layers = []
+
+    for layer_reference in layer_references:
+        if not isinstance(layer_reference, six.string_types):
+            layers.append(layer_reference)
+            continue
+
+        for layer in graph.forward_graph:
+            if layer.name == layer_reference:
+                layers.append(layer)
+                break
+        else:
+            raise ValueError("Cannot find layer with name {}"
+                             "".format(layer_reference))
+
+    return layers
 
 
 class GlobalConnectionState(dict):
@@ -454,6 +494,43 @@ class LayerConnection(BaseConnection):
 
         return self.graph.propagate_forward(input_values)
 
+    def end(self, first_layer, *other_layers):
+        """
+        Create new LayerConnection instance that point to
+        different output layers.
+
+        Parameters
+        ----------
+        first_layer : layer, str
+            Layer instance or layer name.
+
+        *other_layers
+            Layer instances or layer names.
+
+        Returns
+        -------
+        connection
+        """
+        output_layers = as_tuple(first_layer, other_layers)
+        output_layers = clean_layer_references(self.graph, output_layers)
+
+        subgraph = self.graph.subgraph_for_output(output_layers)
+
+        new_connection = copy.copy(self)
+        new_connection.graph = subgraph
+        new_connection.output_layers = subgraph.output_layers
+
+        # don't care about self.left and self.right attributes.
+        # remove them to make sure that in case some other function
+        # won't get invalid references
+        if hasattr(new_connection, 'left'):
+            del new_connection.left
+
+        if hasattr(new_connection, 'right'):
+            del new_connection.right
+
+        return new_connection
+
     @contextmanager
     def disable_training_state(self):
         """
@@ -480,12 +557,9 @@ class LayerConnection(BaseConnection):
         n_layers = len(self)
 
         if n_layers > 5 or not is_sequential(self):
-            conn = '{} -> [... {} layers ...] -> {}'.format(
+            return '{} -> [... {} layers ...] -> {}'.format(
                 preformat_layer_shape(self.input_shape),
                 n_layers,
-                preformat_layer_shape(self.output_shape)
-            )
-        else:
-            conn = ' > '.join([repr(layer) for layer in self])
+                preformat_layer_shape(self.output_shape))
 
-        return conn
+        return ' > '.join([repr(layer) for layer in self])
