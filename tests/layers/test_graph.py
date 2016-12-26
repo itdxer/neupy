@@ -310,3 +310,12 @@ class LayerGraphTestCase(BaseTestCase):
         """).strip()
 
         self.assertEqual(expected_output, repr(graph).strip())
+
+    def test_graph_with_duplicated_layer_names_exception(self):
+        graph = LayerGraph()
+
+        layer_1 = layers.Sigmoid(1, name='sigmoid-1')
+        layer_2 = layers.Sigmoid(1, name='sigmoid-1')
+
+        with self.assertRaises(LayerConnectionError):
+            graph.connect_layers(layer_1, layer_2)
