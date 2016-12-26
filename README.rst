@@ -10,7 +10,7 @@
 .. _License: https://github.com/itdxer/neupy/blob/master/LICENSE
 
 
-NeuPy v0.4.0
+NeuPy v0.4.1
 ============
 
 NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.
