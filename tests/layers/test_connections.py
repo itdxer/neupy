@@ -165,6 +165,20 @@ class ConnectionTypesTestCase(BaseTestCase):
         classifier_output = y_classifier(x_matrix)
         self.assertEqual((3, 20), classifier_output.shape)
 
+    def test_dict_based_inputs_into_connection_with_layer_names(self):
+        encoder = layers.Input(10) > layers.Sigmoid(5, name='sigmoid-1')
+        decoder = layers.Sigmoid(2, name='sigmoid-2') > layers.Sigmoid(10)
+
+        network = encoder > decoder
+
+        x = T.matrix()
+        predict = theano.function([x], network.output({'sigmoid-2': x}))
+
+        x_test = asfloat(np.ones((7, 5)))
+        y_predicted = predict(x_test)
+
+        self.assertEqual(y_predicted.shape, (7, 10))
+
     def test_dict_based_inputs_into_connection(self):
         # Tree structure:
         #
@@ -682,5 +696,5 @@ class SliceLayerConnectionsTestCase(BaseTestCase):
             layers.Relu(5, name='relu-1'),
             layers.Relu(1, name='relu-2'),
         )
-        with self.assertRaises(ValueError):
+        with self.assertRaises(NameError):
             network.end('abc')

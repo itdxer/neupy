@@ -37,17 +37,10 @@ def clean_layer_references(graph, layer_references):
     layers = []
 
     for layer_reference in layer_references:
-        if not isinstance(layer_reference, six.string_types):
-            layers.append(layer_reference)
-            continue
+        if isinstance(layer_reference, six.string_types):
+            layer_reference = graph.find_layer_by_name(layer_reference)
 
-        for layer in graph.forward_graph:
-            if layer.name == layer_reference:
-                layers.append(layer)
-                break
-        else:
-            raise ValueError("Cannot find layer with name {}"
-                             "".format(layer_reference))
+        layers.append(layer_reference)
 
     return layers
 

@@ -3,6 +3,8 @@ import pprint
 import inspect
 from collections import OrderedDict
 
+import six
+
 from neupy.exceptions import LayerConnectionError
 
 
@@ -515,6 +517,32 @@ class LayerGraph(object):
 
         return output_layers
 
+    def find_layer_by_name(self, layer_name):
+        """
+        Find layer instance in the graph based on the
+        specified layer name.
+
+        Parameters
+        ----------
+        layer_name : str
+            Name of the layer that presented in this graph.
+
+        Raises
+        ------
+        NameError
+            In case if there is no layer with specified
+            name in the graph.
+
+        Returns
+        -------
+        layer
+        """
+        for layer in self.forward_graph:
+            if layer.name == layer_name:
+                return layer
+
+        raise NameError("Cannot find layer with name {!r}".format(layer_name))
+
     def propagate_forward(self, input_value):
         """
         Propagates input variable through the directed acyclic
@@ -542,6 +570,9 @@ class LayerGraph(object):
 
         if isinstance(input_value, dict):
             for layer, input_variable in input_value.items():
+                if isinstance(layer, six.string_types):
+                    layer = self.find_layer_by_name(layer)
+
                 if layer not in self.forward_graph:
                     raise ValueError("The `{}` layer doesn't appear "
                                      "in the graph".format(layer))
