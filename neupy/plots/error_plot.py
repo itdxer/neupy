@@ -22,8 +22,8 @@ def error_plot(network, logx=False, ax=None, show=True):
         Defaults to ``None``.
 
     show : bool
-        If parameter is equal to ``True`` plot will instantly shows
-        the plot. Defaults to ``True``.
+        If parameter is equal to ``True`` then plot will be
+        displayed. Defaults to ``True``.
 
     Returns
     -------
