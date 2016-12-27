@@ -514,7 +514,7 @@ class LayerConnection(BaseConnection):
         new_connection.input_layers = subgraph.input_layers
 
         # don't care about self.left and self.right attributes.
-        # remove them to make sure that another function
+        # remove them to make sure that other function
         # won't use invalid references
         if hasattr(new_connection, 'left'):
             del new_connection.left
@@ -551,7 +551,7 @@ class LayerConnection(BaseConnection):
         new_connection.output_layers = subgraph.output_layers
 
         # don't care about self.left and self.right attributes.
-        # remove them to make sure that another function
+        # remove them to make sure that other function
         # won't use invalid references
         if hasattr(new_connection, 'left'):
             del new_connection.left
