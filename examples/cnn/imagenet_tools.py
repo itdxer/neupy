@@ -88,3 +88,5 @@ def print_top_n(probs, n=5):
 
     for top_class, class_prob in zip(top_classes, class_probs):
         print("{:<80s}: {:.2%}".format(top_class, class_prob))
+
+    print('-----------------------')

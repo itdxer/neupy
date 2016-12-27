@@ -21,7 +21,7 @@ class ErrorPlotTestCase(BaseTestCase):
         super(ErrorPlotTestCase, self).setUp()
         # It's better to use one float type all the time,
         # because different type can change plots images a
-        # little bit, but this change can cause test failers
+        # little bit and this change can cause test failers
         theano.config.floatX = 'float64'
 
     @skip_image_comparison_if_specified

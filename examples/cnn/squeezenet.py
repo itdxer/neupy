@@ -14,16 +14,19 @@ SQUEEZENET_WEIGHTS_FILE = os.path.join(FILES_DIR, 'squeezenet.pickle')
 
 def Fire(s_1x1, e_1x1, e_3x3, name):
     return layers.join(
-        layers.Convolution((s_1x1, 1, 1), padding='half',
-                           name=name + '/squeeze1x1'),
+        layers.Convolution((s_1x1, 1, 1),
+            padding='half',
+            name=name + '/squeeze1x1'),
         layers.Relu(),
         [[
-            layers.Convolution((e_1x1, 1, 1), padding='half',
-                               name=name + '/expand1x1'),
+            layers.Convolution((e_1x1, 1, 1),
+                padding='half',
+                name=name + '/expand1x1'),
             layers.Relu(),
         ], [
-            layers.Convolution((e_3x3, 3, 3), padding='half',
-                               name=name + '/expand3x3'),
+            layers.Convolution((e_3x3, 3, 3),
+                padding='half',
+                name=name + '/expand3x3'),
             layers.Relu(),
         ]],
         layers.Concatenate(),
@@ -32,7 +35,7 @@ def Fire(s_1x1, e_1x1, e_3x3, name):
 
 # Networks weight ~4.8 Mb
 squeezenet = layers.join(
-    layers.Input((3, 227, 227)),
+    layers.Input((3, 224, 224)),
 
     layers.Convolution((96, 3, 3), stride=(2, 2),
                        padding='valid', name='conv1'),
@@ -73,8 +76,7 @@ storage.load(squeezenet, SQUEEZENET_WEIGHTS_FILE)
 
 monkey_image = load_image(
     os.path.join(CURRENT_DIR, 'images', 'titi-monkey.jpg'),
-    image_size=(256, 256),
-    crop_size=(227, 227))
+    image_size=(224, 224))
 
 predict = squeezenet.compile()
 output = predict(monkey_image)
