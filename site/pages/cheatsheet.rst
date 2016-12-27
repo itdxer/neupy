@@ -139,6 +139,7 @@ Layers with activation function
     ":layer:`Step`", "Layer with step activation function."
     ":layer:`Tanh`", "Layer with tanh activation function."
     ":layer:`Relu`", "Layer with ReLu activation function."
+    ":layer:`LeakyRelu`", "Layer with Leaky ReLu activation function."
     ":layer:`Elu`", "Layer with ELU activation function."
     ":layer:`PRelu`", "Layer with Parametric ReLu activation function."
     ":layer:`Softplus`", "Layer with softplus activation function."

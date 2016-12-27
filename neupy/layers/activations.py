@@ -9,7 +9,7 @@ from .base import ParameterBasedLayer
 
 
 __all__ = ('ActivationLayer', 'Linear', 'Sigmoid', 'HardSigmoid', 'Step',
-           'Tanh', 'Relu', 'Softplus', 'Softmax', 'Elu', 'PRelu')
+           'Tanh', 'Relu', 'Softplus', 'Softmax', 'Elu', 'PRelu', 'LeakyRelu')
 
 
 class ActivationLayer(ParameterBasedLayer):
@@ -198,6 +198,31 @@ class Relu(ActivationLayer):
         return T.nnet.relu(input_value, alpha)
 
 
+class LeakyRelu(ActivationLayer):
+    """
+    The layer with the leaky rectifier (Leaky ReLu)
+    activation function.
+
+    Parameters
+    ----------
+    {ActivationLayer.Parameters}
+
+    Methods
+    -------
+    {ActivationLayer.Methods}
+
+    Attributes
+    ----------
+    {ActivationLayer.Attributes}
+
+    Notes
+    -----
+    Do the same as ``layers.Relu(input_size, alpha=0.01)``.
+    """
+    def activation_function(self, input_value):
+        return T.nnet.relu(input_value, alpha=0.01)
+
+
 class Softplus(ActivationLayer):
     """
     The layer with the softplus activation function.
@@ -214,7 +239,6 @@ class Softplus(ActivationLayer):
     ----------
     {ActivationLayer.Attributes}
     """
-
     def activation_function(self, input_value):
         return T.nnet.softplus(input_value)
 
@@ -235,7 +259,6 @@ class Softmax(ActivationLayer):
     ----------
     {ActivationLayer.Attributes}
     """
-
     def activation_function(self, input_value):
         return T.nnet.softmax(input_value)
 
