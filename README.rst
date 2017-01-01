@@ -47,11 +47,12 @@ Links
 Articles
 --------
 
-* `Password recovery <http://neupy.com/2015/09/21/password_recovery.html>`_
-* `Discrete Hopfield Network <http://neupy.com/2015/09/20/discrete_hopfield_network.html>`_
-* `Predict prices for houses in the area of Boston <http://neupy.com/2015/07/04/boston_house_prices_dataset.html>`_
+* `Hyperparameter optimization for Neural Networks  <http://neupy.com/2016/12/17/hyperparameter_optimization_for_neural_networks.html>`_
 * `Visualize Backpropagation Algorithms <http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html>`_
 * `MNIST classification <http://neupy.com/2016/11/12/mnist_classification.html>`_
+* `Predict prices for houses in the area of Boston <http://neupy.com/2015/07/04/boston_house_prices_dataset.html>`_
+* `Password recovery <http://neupy.com/2015/09/21/password_recovery.html>`_
+* `Discrete Hopfield Network <http://neupy.com/2015/09/20/discrete_hopfield_network.html>`_
 
 Examples
 --------

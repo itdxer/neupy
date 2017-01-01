@@ -4,9 +4,8 @@ from neupy.utils import format_data
 from neupy.exceptions import NotTrained
 from neupy.core.properties import BoundedProperty
 from neupy.algorithms.base import BaseNetwork
-from neupy.algorithms.learning import LazyLearningMixin
 from neupy.algorithms.gd.base import MinibatchTrainingMixin
-
+from .learning import LazyLearningMixin
 from .utils import pdf_between_data
 
 

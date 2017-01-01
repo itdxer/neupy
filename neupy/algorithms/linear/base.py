@@ -40,7 +40,7 @@ class BaseLinearNetwork(ConstructibleNetwork):
     -------
     {BaseSkeleton.predict}
 
-    {SupervisedLearningMixin.train}
+    {ConstructibleNetwork.train}
 
     {BaseSkeleton.fit}
     """

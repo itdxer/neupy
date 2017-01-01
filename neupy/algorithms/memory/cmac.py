@@ -2,14 +2,13 @@ from numpy import concatenate, array
 
 from neupy.utils import format_data
 from neupy.core.properties import IntProperty
-from neupy.algorithms.learning import SupervisedLearningMixin
 from neupy.algorithms.base import BaseNetwork
 
 
 __all__ = ('CMAC',)
 
 
-class CMAC(SupervisedLearningMixin, BaseNetwork):
+class CMAC(BaseNetwork):
     """
     CMAC Network based on memory.
 
@@ -39,7 +38,13 @@ class CMAC(SupervisedLearningMixin, BaseNetwork):
     -------
     {BaseSkeleton.predict}
 
-    {SupervisedLearningMixin.train}
+    train(input_train, target_train, input_test=None, target_test=None,\
+    epochs=100, epsilon=None)
+        Train network. You can control network's training procedure
+        with ``epochs`` and ``epsilon`` parameters.
+        The ``input_test`` and ``target_test`` should be presented
+        both in case of you need to validate network's training
+        after each iteration.
 
     {BaseSkeleton.fit}
 
@@ -125,3 +130,32 @@ class CMAC(SupervisedLearningMixin, BaseNetwork):
             errors += abs(error)
 
         return errors / n_samples
+
+    def train(self, input_train, target_train, input_test=None,
+              target_test=None, epochs=100, epsilon=None,
+              summary='table'):
+
+        is_test_data_partialy_missed = (
+            (input_test is None and target_test is not None) or
+            (input_test is not None and target_test is None)
+        )
+
+        if is_test_data_partialy_missed:
+            raise ValueError("Input and target test samples are missed. "
+                             "They must be defined together or none of them.")
+
+        input_train = format_data(input_train)
+        target_train = format_data(target_train)
+
+        if input_test is not None:
+            input_test = format_data(input_test)
+
+        if target_test is not None:
+            target_test = format_data(target_test)
+
+        return super(CMAC, self).train(
+            input_train=input_train, target_train=target_train,
+            input_test=input_test, target_test=target_test,
+            epochs=epochs, epsilon=epsilon,
+            summary=summary
+        )

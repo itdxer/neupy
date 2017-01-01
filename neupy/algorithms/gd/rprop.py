@@ -156,7 +156,7 @@ class IRPROPPlus(RPROP):
     -------
     {BaseSkeleton.predict}
 
-    {SupervisedLearningMixin.train}
+    {ConstructibleNetwork.train}
 
     {BaseSkeleton.fit}
 
