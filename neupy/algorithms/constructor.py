@@ -9,14 +9,14 @@ import theano.tensor as T
 
 from neupy import layers
 from neupy.utils import AttributeKeyDict, asfloat, format_data
-from neupy.layers.utils import preformat_layer_shape, create_input_variable
+from neupy.layers.utils import preformat_layer_shape
 from neupy.layers.connections import LayerConnection, is_sequential
+from neupy.layers.connections.base import create_input_variables
 from neupy.exceptions import InvalidConnection
 from neupy.helpers import table
 from neupy.core.properties import ChoiceProperty
 from neupy.algorithms.base import BaseNetwork
 from neupy.algorithms.utils import parameter_values
-from neupy.algorithms.learning import SupervisedLearningMixin
 from .gd import errors
 
 
@@ -191,8 +191,7 @@ class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
         raise NotImplementedError
 
 
-class ConstructibleNetwork(SupervisedLearningMixin, BaseAlgorithm,
-                           BaseNetwork):
+class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
     """
     Class contains functionality that helps work with network that have
     constructible layers architecture.
@@ -254,7 +253,13 @@ class ConstructibleNetwork(SupervisedLearningMixin, BaseAlgorithm,
     -------
     {BaseSkeleton.predict}
 
-    {SupervisedLearningMixin.train}
+    train(input_train, target_train, input_test=None, target_test=None,\
+    epochs=100, epsilon=None)
+        Train network. You can control network's training procedure
+        with ``epochs`` and ``epsilon`` parameters.
+        The ``input_test`` and ``target_test`` should be presented
+        both in case of you need to validate network's training
+        after each iteration.
 
     {BaseSkeleton.fit}
     """
@@ -278,27 +283,18 @@ class ConstructibleNetwork(SupervisedLearningMixin, BaseAlgorithm,
         self.layers = list(self.connection)
         graph = self.connection.graph
 
-        if len(self.connection.input_layers) != 1:
-            n_inputs = len(graph.input_layers)
-            raise InvalidConnection("Connection should have one input "
-                                    "layer, got {}".format(n_inputs))
-
         if len(self.connection.output_layers) != 1:
             n_outputs = len(graph.output_layers)
             raise InvalidConnection("Connection should have one output "
                                     "layer, got {}".format(n_outputs))
 
-        self.input_layer = graph.input_layers[0]
         self.output_layer = graph.output_layers[0]
 
         super(ConstructibleNetwork, self).__init__(*args, **kwargs)
 
     def init_input_output_variables(self):
         self.variables.update(
-            network_input=create_input_variable(
-                self.input_layer.input_shape,
-                name='algo:network/var:network-input',
-            ),
+            network_inputs=create_input_variables(self.connection.graph),
             network_output=create_output_variable(
                 self.error,
                 name='algo:network/var:network-output',
@@ -306,12 +302,12 @@ class ConstructibleNetwork(SupervisedLearningMixin, BaseAlgorithm,
         )
 
     def init_variables(self):
-        network_input = self.variables.network_input
+        network_inputs = self.variables.network_inputs
         network_output = self.variables.network_output
 
-        train_prediction = self.connection.output(network_input)
+        train_prediction = self.connection.output(*network_inputs)
         with self.connection.disable_training_state():
-            prediction = self.connection.output(network_input)
+            prediction = self.connection.output(*network_inputs)
 
         self.variables.update(
             step=theano.shared(
@@ -331,23 +327,23 @@ class ConstructibleNetwork(SupervisedLearningMixin, BaseAlgorithm,
         )
 
     def init_methods(self):
-        network_input = self.variables.network_input
+        network_inputs = self.variables.network_inputs
         network_output = self.variables.network_output
 
         self.methods.update(
             predict=theano.function(
-                inputs=[network_input],
+                inputs=network_inputs,
                 outputs=self.variables.prediction_func,
                 name='algo:network/func:predict'
             ),
             train_epoch=theano.function(
-                inputs=[network_input, network_output],
+                inputs=network_inputs + [network_output],
                 outputs=self.variables.error_func,
                 updates=self.init_train_updates(),
                 name='algo:network/func:train-epoch'
             ),
             prediction_error=theano.function(
-                inputs=[network_input, network_output],
+                inputs=network_inputs + [network_output],
                 outputs=self.variables.validation_error_func,
                 name='algo:network/func:prediction-error'
             )
@@ -423,8 +419,18 @@ class ConstructibleNetwork(SupervisedLearningMixin, BaseAlgorithm,
         if input_data is None:
             return
 
-        is_feature1d = does_layer_accept_1d_feature(self.input_layer)
-        return format_data(input_data, is_feature1d)
+        if not isinstance(input_data, (tuple, list)):
+            return format_data(input_data)
+
+        formated_data = []
+        input_layers = self.connection.input_layers
+
+        for input_to_layer, input_layer in zip(input_data, input_layers):
+            is_feature1d = does_layer_accept_1d_feature(input_layer)
+            data = format_data(input_to_layer, is_feature1d)
+            formated_data.append(data)
+
+        return tuple(formated_data)
 
     def format_target_data(self, target_data):
         """
@@ -493,13 +499,29 @@ class ConstructibleNetwork(SupervisedLearningMixin, BaseAlgorithm,
     def train(self, input_train, target_train, input_test=None,
               target_test=None, *args, **kwargs):
         """
-        Trains neural network.
+        Train neural network.
         """
+        is_test_data_partialy_missed = (
+            (input_test is None and target_test is not None) or
+            (input_test is not None and target_test is None)
+        )
+
+        if is_test_data_partialy_missed:
+            raise ValueError("Input or target test samples are missed. They "
+                             "must be defined together or none of them.")
+
+        input_train = self.format_input_data(input_train)
+        target_train = self.format_target_data(target_train)
+
+        if input_test is not None:
+            input_test = self.format_input_data(input_test)
+
+        if target_test is not None:
+            target_test = self.format_target_data(target_test)
+
         return super(ConstructibleNetwork, self).train(
-            self.format_input_data(input_train),
-            self.format_target_data(target_train),
-            self.format_input_data(input_test),
-            self.format_target_data(target_test),
+            input_train=input_train, target_train=target_train,
+            input_test=input_test, target_test=target_test,
             *args, **kwargs
         )
 

@@ -14,6 +14,30 @@ from .graph import LayerGraph
 __all__ = ('LayerConnection', 'BaseConnection', 'ParallelConnection')
 
 
+def create_input_variables(graph):
+    """
+    Create input variables for each input layer
+    in the graph.
+
+    Parameters
+    ----------
+    graph : LayerGraph instance
+
+    Returns
+    -------
+    list of Theano variables
+    """
+    inputs = []
+
+    for input_layer in graph.input_layers:
+        variable = create_input_variable(
+            input_layer.input_shape,
+            name="layer:{}/var:input".format(input_layer.name))
+        inputs.append(variable)
+
+    return inputs
+
+
 def clean_layer_references(graph, layer_references):
     """
     Using list of layers and layer names convert it to
@@ -152,17 +176,8 @@ class BaseConnection(object):
         -------
         callable object
         """
-        input_layers = self.graph.input_layers
-
         if not inputs:
-            inputs = []
-
-            for input_layer in input_layers:
-                variable = create_input_variable(
-                    input_layer.input_shape,
-                    name="layer:{}/var:input".format(input_layer.name)
-                )
-                inputs.append(variable)
+            inputs = create_input_variables(self.graph)
 
         with self.disable_training_state():
             return theano.function(inputs, self.output(*inputs))

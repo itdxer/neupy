@@ -33,7 +33,7 @@ class Perceptron(BaseLinearNetwork):
     -------
     {BaseSkeleton.predict}
 
-    {SupervisedLearningMixin.train}
+    {ConstructibleNetwork.train}
 
     {BaseSkeleton.fit}
 

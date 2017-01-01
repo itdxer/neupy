@@ -71,25 +71,27 @@ def show_network_options(network, highlight_options=None):
 
 def logging_info_about_the_data(network, input_train, input_test):
     logs = network.logs
-    n_train_samples = input_train.shape[0]
-    train_feature_shape = input_train.shape[1:]
+    training_shapes = preformat_value(input_train)
 
     logs.title("Start training")
-    logs.message("TRAIN DATA",
-                 "{} samples, feature shape: {}"
-                 "".format(n_train_samples, train_feature_shape))
+    logs.message("TRAIN DATA", "shapes: {}".format(training_shapes))
+
+    if isinstance(training_shapes[0], int):
+        training_shapes = [training_shapes]
 
     if input_test is not None:
-        n_test_samples = input_test.shape[0]
-        test_feature_shape = input_test.shape[1:]
+        test_shapes = preformat_value(input_test)
+        logs.message("TEST DATA", "shapes: {}".format(test_shapes))
 
-        logs.message("TEST DATA",
-                     "{} samples, feature shape: {}"
-                     "".format(n_test_samples, test_feature_shape))
+        if isinstance(test_shapes[0], int):
+            test_shapes = [test_shapes]
 
-        if train_feature_shape != test_feature_shape:
-            raise ValueError("Train and test samples should have the "
-                             "same feature shape.")
+        for training_shape, test_shape in zip(training_shapes, test_shapes):
+            if training_shape[1:] != test_shape[1:]:
+                raise ValueError(
+                    "Train and test samples should have the same feature "
+                    "shapes. Got training input with shape {} and test "
+                    "input with shape {}".format(training_shape, test_shape))
 
 
 def logging_info_about_training(network, epochs, epsilon):
@@ -353,11 +355,11 @@ class BaseNetwork(BaseSkeleton):
             raise ValueError("Network should train at teast 3 epochs before "
                              "check the difference between errors")
 
-        if summary == 'table':
-            logging_info_about_the_data(self, input_train, input_test)
-            logging_info_about_training(self, epochs, epsilon)
-            logs.newline()
+        logging_info_about_the_data(self, input_train, input_test)
+        logging_info_about_training(self, epochs, epsilon)
+        logs.newline()
 
+        if summary == 'table':
             summary = SummaryTable(
                 table_builder=table.TableBuilder(
                     table.Column(name="Epoch #"),
