@@ -461,6 +461,55 @@ Network in NeuPy can be in two different states: training and non-training. Some
 
     <br>
 
+Set up inputs to the network
+============================
+
+There are a few ways to define inputs for the network. The simples one is just to pass an argument to the ``output`` method.
+
+.. code-block:: python
+
+    import theano
+    import theano.tensor as T
+    from neupy import layers
+
+    network = layers.join(
+        layers.Input(10),
+        layers.Relu(20),
+        layers.Softmax(4),
+    )
+
+    x = T.matrix()
+    predict = theano.function([x], network.output(x))
+
+In case if you pass only one argument and you have more than one input layer then the same input will be passed to each of the input layers. In case if you need to use different inputs to different layers you can specify them in order.
+
+.. code-block:: python
+
+    import theano
+    import theano.tensor as T
+    from neupy import layers
+
+    input_10 = layers.Input(10, name='input-1')
+    input_20 = layers.Input(20, name='input-2')
+    network = [input_10, input_20] > layers.Concatenate()
+
+    x1 = T.matrix('x1')
+    x2 = T.matrix('x2')
+
+    # Note that variables passed in specific order. Since
+    # input_10 was created first then x1 will be first argument.
+    predict = theano.function([x], network.output(x1, x2))
+
+    # Also we can specify inputs as a dictionary
+    y = network.output({'input-1': x1, 'input-2': x2})
+    predict = theano.function([x], y)
+
+    # Also we can specify inputs as a dictionary
+    y = network.output({input_10: x1, input_20: x2})
+    predict = theano.function([x], y)
+
+All three ``predict`` functions in the previous examples are exactly the same. They just was defined in three different ways.
+
 Use different input and output layers
 =====================================
 

@@ -7,6 +7,7 @@ Submodules
 .. toctree::
 
    neupy.algorithms.rbfn.grnn
+   neupy.algorithms.rbfn.learning
    neupy.algorithms.rbfn.pnn
    neupy.algorithms.rbfn.rbf_kmeans
    neupy.algorithms.rbfn.utils
