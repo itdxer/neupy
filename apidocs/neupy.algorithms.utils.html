@@ -161,14 +161,15 @@
 <dl class="function">
 <dt id="neupy.algorithms.utils.shuffle">
 <span class="descclassname">neupy.algorithms.utils.</span><span class="descname">shuffle</span><span class="sig-paren">(</span><em>*arrays</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/utils.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Make a random shuffle for all arrays.</p>
+<dd><p>Randomly shuffle rows in the arrays qithout breaking
+associations between rows in different arrays.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>*arrays</strong></p>
 <blockquote>
-<div><p>List of arrays that should be shuffled.</p>
+<div><p>Arrays that should be shuffled.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -183,21 +184,14 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="neupy.algorithms.utils.parameters2vector">
-<span class="descclassname">neupy.algorithms.utils.</span><span class="descname">parameters2vector</span><span class="sig-paren">(</span><em>network</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/utils.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Concatenate all network parameters in one big vector.</p>
+<dt id="neupy.algorithms.utils.parameter_values">
+<span class="descclassname">neupy.algorithms.utils.</span><span class="descname">parameter_values</span><span class="sig-paren">(</span><em>connection</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>List of all trainable parameters in the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>network</strong> : ConstructibleNetwork instance</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">object</p>
-<blockquote class="last">
-<div><p>Returns all parameters concatenated in one big vector.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>connection</strong> : layer, connection</td>
 </tr>
 </tbody>
 </table>
@@ -206,17 +200,24 @@
 <dl class="function">
 <dt id="neupy.algorithms.utils.iter_until_converge">
 <span class="descclassname">neupy.algorithms.utils.</span><span class="descname">iter_until_converge</span><span class="sig-paren">(</span><em>network</em>, <em>epsilon</em>, <em>max_epochs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/utils.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="neupy.algorithms.utils.parameter_values">
-<span class="descclassname">neupy.algorithms.utils.</span><span class="descname">parameter_values</span><span class="sig-paren">(</span><em>connection</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/utils.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Iterate over all network&#8217;s trainable parameters.</p>
+<dd><p>Train network until error converged or maximum number of
+epochs has been reached.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>connection</strong> : layer, connection</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>network</strong> : BaseNetwork instance</p>
+<p><strong>epsilon</strong> : float</p>
+<blockquote>
+<div><p>Interrupt training in case if different absolute
+between two previous errors is less than specified
+epsilon value.</p>
+</div></blockquote>
+<p><strong>max_epochs</strong> : int</p>
+<blockquote class="last">
+<div><p>Maximum number of epochs to train.</p>
+</div></blockquote>
+</td>
 </tr>
 </tbody>
 </table>
@@ -245,30 +246,6 @@ Levenberg-Marquardt optimization algorithms</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list</p>
 <blockquote class="last">
 <div><p>List of updates separeted for each parameter.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="neupy.algorithms.utils.normalize_error">
-<span class="descclassname">neupy.algorithms.utils.</span><span class="descname">normalize_error</span><span class="sig-paren">(</span><em>output</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/utils.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Normalize error output when result is non-scalar.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>output</strong> : array-like</p>
-<blockquote>
-<div><p>Input can be any numpy array or matrix.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int, float, None</p>
-<blockquote class="last">
-<div><p>Return sum of all absolute values.</p>
 </div></blockquote>
 </td>
 </tr>

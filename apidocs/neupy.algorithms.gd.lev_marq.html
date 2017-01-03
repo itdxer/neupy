@@ -254,7 +254,7 @@ addon algorithms: weight update and step update.</p>
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li>Network minimizes only Mean Squared Error function.</li>
-<li>Efficient for small training datasets, becuase it
+<li>Efficient for small training datasets, because it
 computes gradient per each sample separately.</li>
 <li>Efficient for small-sized networks.</li>
 </ul>
@@ -316,8 +316,8 @@ computes gradient per each sample separately.</li>
 <dl class="method">
 <dt id="neupy.algorithms.gd.lev_marq.LevenbergMarquardt.init_train_updates">
 <span class="descname">init_train_updates</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/lev_marq.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Initialize train function update in Theano format that
-would be trigger after each training epoch.</p>
+<dd><p>Initialize updates that would be applied after
+each training epoch.</p>
 </dd></dl>
 
 <dl class="method">
@@ -339,8 +339,7 @@ would be trigger after each training epoch.</p>
 <dl class="method">
 <dt id="neupy.algorithms.gd.lev_marq.LevenbergMarquardt.on_epoch_start_update">
 <span class="descname">on_epoch_start_update</span><span class="sig-paren">(</span><em>epoch</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/lev_marq.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Function would be trigger before run all training procedure
-related to the current epoch.</p>
+<dd><p>Function will be triggered before the training epoch procedure.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -357,7 +356,7 @@ related to the current epoch.</p>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.lev_marq.LevenbergMarquardt.options">
-<span class="descname">options</span><em class="property"> = {'addons': Option(class_name='GradientDescent', value=Property(name=&quot;addons&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'error': Option(class_name='LevenbergMarquardt', value=ChoiceProperty(name=&quot;error&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'mu': Option(class_name='LevenbergMarquardt', value=BoundedProperty(name=&quot;mu&quot;)), 'mu_update_factor': Option(class_name='LevenbergMarquardt', value=BoundedProperty(name=&quot;mu_update_factor&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/lev_marq.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'addons': Option(class_name='GradientDescent', value=Property(name=&quot;addons&quot;)), 'error': Option(class_name='LevenbergMarquardt', value=ChoiceProperty(name=&quot;error&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'mu_update_factor': Option(class_name='LevenbergMarquardt', value=BoundedProperty(name=&quot;mu_update_factor&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'mu': Option(class_name='LevenbergMarquardt', value=BoundedProperty(name=&quot;mu&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/lev_marq.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

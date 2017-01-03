@@ -180,6 +180,32 @@ connection.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="neupy.layers.connections.base.LayerConnection.end">
+<span class="descname">end</span><span class="sig-paren">(</span><em>first_layer</em>, <em>*other_layers</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Create new LayerConnection instance that point to
+different output layers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>first_layer</strong> : layer, str</p>
+<blockquote>
+<div><p>Layer instance or layer name.</p>
+</div></blockquote>
+<p><strong>*other_layers</strong></p>
+<blockquote>
+<div><p>Layer instances or layer names.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">connection</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="neupy.layers.connections.base.LayerConnection.initialize">
 <span class="descname">initialize</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Initialize all layers in the connection.</p>
@@ -211,14 +237,14 @@ Tuple object defines input layer&#8217;s shape.</li>
 
 <dl class="method">
 <dt id="neupy.layers.connections.base.LayerConnection.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>*input_values</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">output</span><span class="sig-paren">(</span><em>first_input</em>, <em>*other_inputs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Propagate input values through all layers in the
 connections and returns output from the final layers.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>*input_values</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>first_input</strong> : Theano variable, array-like, dict</p>
 <blockquote>
 <div><ul class="simple">
 <li>Input values can be Theano variables or
@@ -227,6 +253,11 @@ array-like objects</li>
 define input layer and value is a variables
 that needs to be propagated through all layers.</li>
 </ul>
+</div></blockquote>
+<p><strong>*other_inputs</strong></p>
+<blockquote>
+<div><p>Suitable in case if we need to set up multiple
+input variables in a sequence.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -261,6 +292,32 @@ Tuple object defines input layer&#8217;s shape.</li>
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="neupy.layers.connections.base.LayerConnection.start">
+<span class="descname">start</span><span class="sig-paren">(</span><em>first_layer</em>, <em>*other_layers</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Create new LayerConnection instance that point to
+different input layers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>first_layer</strong> : layer, str</p>
+<blockquote>
+<div><p>Layer instance or layer name.</p>
+</div></blockquote>
+<p><strong>*other_layers</strong></p>
+<blockquote>
+<div><p>Layer instances or layer names.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">connection</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -288,6 +345,20 @@ Tuple object defines input layer&#8217;s shape.</li>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="neupy.layers.connections.base.BaseConnection.compile">
+<span class="descname">compile</span><span class="sig-paren">(</span><em>*inputs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Compile Theano function with disabled training state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">callable object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="classmethod">
 <dt id="neupy.layers.connections.base.BaseConnection.connect">
 <em class="property">classmethod </em><span class="descname">connect</span><span class="sig-paren">(</span><em>left</em>, <em>right</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -389,16 +460,19 @@ connection.</p>
 
 <dl class="method">
 <dt id="neupy.layers.connections.base.ParallelConnection.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>*input_values</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">output</span><span class="sig-paren">(</span><em>first_input</em>, <em>*other_inputs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Compute outputs per each network in parallel
 connection.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>*input_values</strong></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>first_input</strong> : Theano variable, array-like, dict</p>
+<p><strong>*other_inputs</strong></p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list</p>
+</td>
 </tr>
 </tbody>
 </table>

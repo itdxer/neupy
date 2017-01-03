@@ -300,7 +300,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 
 <dl class="attribute">
 <dt id="neupy.algorithms.memory.cmac.CMAC.options">
-<span class="descname">options</span><em class="property"> = {'quantization': Option(class_name='CMAC', value=IntProperty(name=&quot;quantization&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'associative_unit_size': Option(class_name='CMAC', value=IntProperty(name=&quot;associative_unit_size&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'associative_unit_size': Option(class_name='CMAC', value=IntProperty(name=&quot;associative_unit_size&quot;)), 'quantization': Option(class_name='CMAC', value=IntProperty(name=&quot;quantization&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -319,6 +319,11 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="neupy.algorithms.memory.cmac.CMAC.prediction_error">
+<span class="descname">prediction_error</span><span class="sig-paren">(</span><em>input_data</em>, <em>target_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="neupy.algorithms.memory.cmac.CMAC.quantization">
 <span class="descname">quantization</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -328,6 +333,32 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <dt id="neupy.algorithms.memory.cmac.CMAC.quantize">
 <span class="descname">quantize</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.memory.cmac.CMAC.train">
+<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em>, <em>input_test=None</em>, <em>target_test=None</em>, <em>epochs=100</em>, <em>epsilon=None</em>, <em>summary='table'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Method train neural network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_train</strong> : array-like</p>
+<p><strong>target_train</strong> : array-like or None</p>
+<p><strong>input_test</strong> : array-like or None</p>
+<p><strong>target_test</strong> : array-like or None</p>
+<p><strong>epochs</strong> : int</p>
+<blockquote>
+<div><p>Defaults to <cite>100</cite>.</p>
+</div></blockquote>
+<p><strong>epsilon</strong> : float or None</p>
+<blockquote class="last">
+<div><p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.memory.cmac.CMAC.train_epoch">

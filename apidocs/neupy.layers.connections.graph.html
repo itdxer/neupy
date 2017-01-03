@@ -261,6 +261,35 @@ the graph, and <span class="docutils literal"><span class="pre">True</span></spa
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="neupy.layers.connections.graph.LayerGraph.find_layer_by_name">
+<span class="descname">find_layer_by_name</span><span class="sig-paren">(</span><em>layer_name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Find layer instance in the graph based on the
+specified layer name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>layer_name</strong> : str</p>
+<blockquote>
+<div><p>Name of the layer that presented in this graph.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">layer</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>NameError</strong></p>
+<blockquote class="last">
+<div><p>In case if there is no layer with specified
+name in the graph.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="neupy.layers.connections.graph.LayerGraph.input_layers">
 <span class="descname">input_layers</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -388,6 +417,23 @@ layers.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">LayerGraph</p>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.connections.graph.LayerGraph.subgraph_for_input">
+<span class="descname">subgraph_for_input</span><span class="sig-paren">(</span><em>input_layers</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/graph.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Extract subgraph with specified set
+of input layers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>layers</strong> : layer, list of layers</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">LayerGraph instance</td>
 </tr>
 </tbody>
 </table>

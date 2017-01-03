@@ -367,7 +367,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.base.ParameterBasedLayer.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='ParameterBasedLayer', value=IntProperty(name=&quot;size&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'size': Option(class_name='ParameterBasedLayer', value=IntProperty(name=&quot;size&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -383,85 +383,6 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <dl class="attribute">
 <dt id="neupy.layers.base.ParameterBasedLayer.weight_shape">
 <span class="descname">weight_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="neupy.layers.base.Input">
-<em class="property">class </em><span class="descclassname">neupy.layers.base.</span><span class="descname">Input</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Input layer defines input&#8217;s feature shape.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : int, tuple or None</p>
-<blockquote>
-<div><p>Identifies input&#8217;s feature shape.</p>
-</div></blockquote>
-<p><strong>name</strong> : str or None</p>
-<blockquote class="last">
-<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
-will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">input_layer</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">input_layer</span>
-<span class="go">Input(10)</span>
-</pre></div>
-</div>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="17%" />
-<col width="83%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>input_shape</td>
-<td>(tuple) Layer&#8217;s input shape.</td>
-</tr>
-<tr class="row-even"><td>output_shape</td>
-<td>(tuple) Layer&#8217;s output shape.</td>
-</tr>
-<tr class="row-odd"><td>training_state</td>
-<td>(bool) Defines whether layer in training state or not.</td>
-</tr>
-<tr class="row-even"><td>parameters</td>
-<td>(dict) Trainable parameters.</td>
-</tr>
-<tr class="row-odd"><td>graph</td>
-<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="31%" />
-<col width="69%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>disable_training_state()</td>
-<td>Swith off trainig state.</td>
-</tr>
-<tr class="row-even"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
-</tr>
-</tbody>
-</table>
-<dl class="attribute">
-<dt id="neupy.layers.base.Input.options">
-<span class="descname">options</span><em class="property"> = {'size': Option(class_name='Input', value=ArrayShapeProperty(name=&quot;size&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.base.Input.size">
-<span class="descname">size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

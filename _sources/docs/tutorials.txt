@@ -51,6 +51,7 @@ MLP Neural Networks
 * `Boston House Price prediction, Hessian algorithm <https://github.com/itdxer/neupy/tree/master/examples/mlp/boston_price_prediction.py>`_
 * `Learning Algorithms Visualization, Gradient Descent, Momentum, RPROP and Conjugate Gradient <https://github.com/itdxer/neupy/tree/master/examples/mlp/gd_algorithms_visualization.py>`_
 * `IMDB review classification using CBOW and RPROP MLP <https://github.com/itdxer/neupy/tree/master/examples/mlp/imdb_review_classification>`_
+* `MLP with categorical and numerical features <https://github.com/itdxer/neupy/tree/master/examples/mlp/mix_categorical_numerical_inputs.py>`_
 
 Competitive Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

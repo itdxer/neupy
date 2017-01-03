@@ -330,8 +330,8 @@ addon algorithms: weight update and step update.</p>
 <dl class="method">
 <dt id="neupy.algorithms.gd.quasi_newton.QuasiNewton.init_train_updates">
 <span class="descname">init_train_updates</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Initialize train function update in Theano format that
-would be trigger after each training epoch.</p>
+<dd><p>Initialize updates that would be applied after
+each training epoch.</p>
 </dd></dl>
 
 <dl class="method">
@@ -342,7 +342,7 @@ would be trigger after each training epoch.</p>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.quasi_newton.QuasiNewton.options">
-<span class="descname">options</span><em class="property"> = {'addons': Option(class_name='GradientDescent', value=Property(name=&quot;addons&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'h0_scale': Option(class_name='QuasiNewton', value=NumberProperty(name=&quot;h0_scale&quot;)), 'update_function': Option(class_name='QuasiNewton', value=ChoiceProperty(name=&quot;update_function&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'error': Option(class_name='ConstructibleNetwork', value=ErrorFunctionProperty(name=&quot;error&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'addons': Option(class_name='GradientDescent', value=Property(name=&quot;addons&quot;)), 'error': Option(class_name='ConstructibleNetwork', value=ErrorFunctionProperty(name=&quot;error&quot;)), 'update_function': Option(class_name='QuasiNewton', value=ChoiceProperty(name=&quot;update_function&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'h0_scale': Option(class_name='QuasiNewton', value=NumberProperty(name=&quot;h0_scale&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

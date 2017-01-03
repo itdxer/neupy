@@ -375,48 +375,91 @@ and many to one
 Compile Networks
 ================
 
-NeuPy allows using Theano interface to compile network into function.
+Layers in NeuPy are build on top of a Theano library. It means that all operations construct computational graph that we need to compile. NeuPy provides a simple function that allow to compile network into Python funciton.
 
 .. code-block:: python
 
-    >>> import theano
-    >>> import theano.tensor as T
-    >>> from neupy import layers
-    >>>
-    >>> network = layers.join(
-    ...     layers.Input(10),
-    ...     layers.Relu(20),
-    ...     layers.Softmax(4),
-    ... )
-    >>>
-    >>> x = T.matrix()
-    >>> # Compile prediction function
-    >>> predict = theano.function([x], network.output(x))
-    >>>
-    >>> import numpy as np
-    >>> from neupy import asfloat
-    >>>
-    >>> # Convert matrix to float. Type of the
-    ... # float depencds on theano.config.floatX variable
-    ... x_test = asfloat(np.random.random((12, 10)))
-    >>>
-    >>> predict(x_test).shape
-    (12, 4)
-
-Training algorithms are able to compile networks automaticaly.
-
-.. code-block:: python
-
-    from neupy import algorithms, layers
+    from neupy import layers
 
     network = layers.join(
         layers.Input(10),
-        layers.Sigmoid(40),
-        layers.Sigmoid(2),
+        layers.Relu(20),
+        layers.Relu(4),
     )
-    bpnet = algorithms.GradientDescent(network)
+    predict = network.compile()
 
-More information about training algorithms you can find :ref:`here <constructible-architecture>`.
+Now we have function that propagates input through the network and returns obtained output from the network.
+
+.. code-block:: python
+
+    import numpy as np
+    from neupy import asfloat
+
+    # Convert matrix to float. Type of the
+    # float depencds on theano.config.floatX variable
+    x_test = asfloat(np.random.random((12, 10)))
+    y_predicted = predict(x_test)
+
+The ``compile`` method creates input variables automatically, but we are able to specify different input variables.
+
+.. code-block:: python
+
+    import theano.tensor as T
+
+    x = T.matrix()
+    predict = network.compile(x)
+
+If network has more than one input we will be able to set up multiple inputs.
+
+.. code-block:: python
+
+    import theano.tensor as T
+    from neupy import layers
+
+    input_1 = layers.Input(10)
+    input_2 = layers.Input(20)
+
+    network = [input_1, input_2] > layers.Concatenate()
+
+    x1 = T.matrix('x1')
+    x2 = T.matrix('x2')
+
+    predict = network.compile(x1, x2)
+
+Also NeuPy provides flexibility to compile networks with Theano API
+
+.. code-block:: python
+
+    import theano
+    import theano.tensor as T
+    from neupy import layers
+
+    network = layers.join(
+        layers.Input(10),
+        layers.Relu(20),
+        layers.Softmax(4),
+    )
+
+    x = T.matrix()
+    # Compile prediction function
+    predict = theano.function([x], network.output(x))
+
+Network in NeuPy can be in two different states: training and non-training. Some functions like :layer:`Dropout` or :layer:`GaussianNoise` behave differently in different states. For instance, the :layer:`Dropout` layer in the training state disables some of the input values with certain probability, but do not apply this operation in non-training state. To be able to disable training state for the network we can use the ``disable_training_state`` method.
+
+.. code-block:: python
+
+    x = T.matrix()
+
+    # Use Dropout during the prediction
+    training_predict = theano.function([x], network.output(x))
+
+    with network.disable_training_state():
+        # Ignore Dropout during the prediction
+        predict = theano.function([x], network.output(x))
+
+.. raw:: html
+
+    <br>
 
 .. _subnetworks:
 
