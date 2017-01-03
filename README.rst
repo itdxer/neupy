@@ -15,7 +15,7 @@ NeuPy v0.4.1
 
 NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.
 
-.. image:: site/_static/img/mnist-solution-code.png
+.. image:: https://github.com/itdxer/neupy/raw/master/site/_static/img/mnist-solution-code.png
     :width: 80%
     :align: center
 
@@ -60,58 +60,58 @@ Examples
 Convolutional Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* `MNIST CNN <examples/cnn/mnist_cnn.py>`_
-* `CIFAR10 CNN <examples/cnn/cifar10_cnn.py>`_
-* `Pre-trained AlexNet CNN <examples/cnn/alexnet.py>`_
-* `Pre-trained VGG16 CNN <examples/cnn/vgg16.py>`_
-* `Pre-trained VGG19 CNN <examples/cnn/vgg19.py>`_
-* `Pre-trained SqueezeNet <examples/cnn/squeezenet.py>`_
-* `GoogleNet <examples/cnn/googlenet.py>`_
-* `Inception v3 <examples/cnn/inception_v3.py>`_
-* `ResNet 50 <examples/cnn/resnet50.py>`_
+* `MNIST CNN <https://github.com/itdxer/neupy/tree/master/examples/cnn/mnist_cnn.py>`_
+* `CIFAR10 CNN <https://github.com/itdxer/neupy/tree/master/examples/cnn/cifar10_cnn.py>`_
+* `Pre-trained AlexNet CNN <https://github.com/itdxer/neupy/tree/master/examples/cnn/alexnet.py>`_
+* `Pre-trained VGG16 CNN <https://github.com/itdxer/neupy/tree/master/examples/cnn/vgg16.py>`_
+* `Pre-trained VGG19 CNN <https://github.com/itdxer/neupy/tree/master/examples/cnn/vgg19.py>`_
+* `Pre-trained SqueezeNet <https://github.com/itdxer/neupy/tree/master/examples/cnn/squeezenet.py>`_
+* `GoogleNet <https://github.com/itdxer/neupy/tree/master/examples/cnn/googlenet.py>`_
+* `Inception v3 <https://github.com/itdxer/neupy/tree/master/examples/cnn/inception_v3.py>`_
+* `ResNet 50 <https://github.com/itdxer/neupy/tree/master/examples/cnn/resnet50.py>`_
 
 Autoencoders
 ~~~~~~~~~~~~
 
-* `MNIST, Denoising Autoencoder <examples/autoencoder/denoising_autoencoder.py>`_
-* `MNIST, Convolutional Autoencoder <examples/autoencoder/conv_autoencoder.py>`_
-* `MNIST, Stacked Convolutional Autoencoders <examples/autoencoder/stacked_conv_autoencoders.py>`_
-* `MNIST, Variational Autoencoder <examples/autoencoder/variational_autoencoder.py>`_
+* `MNIST, Denoising Autoencoder <https://github.com/itdxer/neupy/tree/master/examples/autoencoder/denoising_autoencoder.py>`_
+* `MNIST, Convolutional Autoencoder <https://github.com/itdxer/neupy/tree/master/examples/autoencoder/conv_autoencoder.py>`_
+* `MNIST, Stacked Convolutional Autoencoders <https://github.com/itdxer/neupy/tree/master/examples/autoencoder/stacked_conv_autoencoders.py>`_
+* `MNIST, Variational Autoencoder <https://github.com/itdxer/neupy/tree/master/examples/autoencoder/variational_autoencoder.py>`_
 
 Boltzmann Machine
 ~~~~~~~~~~~~~~~~~
 
-* `Feature Learning from the MNIST Images, Restricted Boltzmann Machine (RBM) <examples/boltzmann_machine/rbm_mnist.py>`_
-* `Gibbs sampling using face images, Restricted Boltzmann Machine (RBM) <examples/boltzmann_machine/rbm_faces_sampling.py>`_
+* `Feature Learning from the MNIST Images, Restricted Boltzmann Machine (RBM) <https://github.com/itdxer/neupy/tree/master/examples/boltzmann_machine/rbm_mnist.py>`_
+* `Gibbs sampling using face images, Restricted Boltzmann Machine (RBM) <https://github.com/itdxer/neupy/tree/master/examples/boltzmann_machine/rbm_faces_sampling.py>`_
 
 MLP Neural Networks
 ~~~~~~~~~~~~~~~~~~~
 
-* `MNIST, Multilayer perceptron <examples/mlp/mnist_mlp.py>`_
-* `Rectangle images, Multilayer perceptron <examples/mlp/rectangles_mlp.py>`_
-* `Boston House Price prediction, Hessian algorithm <examples/mlp/boston_price_prediction.py>`_
-* `Learning Algorithms Visualization, Gradient Descent, Momentum, RPROP and Conjugate Gradient <examples/mlp/gd_algorithms_visualization.py>`_
-* `IMDB review classification using CBOW and RPROP MLP <examples/mlp/imdb_review_classification>`_
-* `MLP with categorical and numerical features <examples/mlp/mix_categorical_numerical_inputs.py>`_
+* `MNIST, Multilayer perceptron <https://github.com/itdxer/neupy/tree/master/examples/mlp/mnist_mlp.py>`_
+* `Rectangle images, Multilayer perceptron <https://github.com/itdxer/neupy/tree/master/examples/mlp/rectangles_mlp.py>`_
+* `Boston House Price prediction, Hessian algorithm <https://github.com/itdxer/neupy/tree/master/examples/mlp/boston_price_prediction.py>`_
+* `Learning Algorithms Visualization, Gradient Descent, Momentum, RPROP and Conjugate Gradient <https://github.com/itdxer/neupy/tree/master/examples/mlp/gd_algorithms_visualization.py>`_
+* `IMDB review classification using CBOW and RPROP MLP <https://github.com/itdxer/neupy/tree/master/examples/mlp/imdb_review_classification>`_
+* `MLP with categorical and numerical features <https://github.com/itdxer/neupy/tree/master/examples/mlp/mix_categorical_numerical_inputs.py>`_
 
 Competitive Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* `Simple SOFM example <examples/competitive/sofm_basic.py>`_
+* `Simple SOFM example <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_basic.py>`_
 
 Neural Networks with Radial Basis Functions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* `Classify iris dataset, Probabilistic Neural Network (PNN) <examples/rbfn/pnn_iris.py>`_
-* `Regression using Diabetes dataset, Generilized Neural Nerwork (GRNN) <examples/rbfn/grnn_params_selection.py>`_
-* `Music-Speech audio classification, Probabilistic Neural Network (PNN) <examples/rbfn/music_speech>`_
+* `Classify iris dataset, Probabilistic Neural Network (PNN) <https://github.com/itdxer/neupy/tree/master/examples/rbfn/pnn_iris.py>`_
+* `Regression using Diabetes dataset, Generilized Neural Nerwork (GRNN) <https://github.com/itdxer/neupy/tree/master/examples/rbfn/grnn_params_selection.py>`_
+* `Music-Speech audio classification, Probabilistic Neural Network (PNN) <https://github.com/itdxer/neupy/tree/master/examples/rbfn/music_speech>`_
 
 Memory based Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* `Sinus function approximation, CMAC <examples/memory/cmac_basic.py>`_
-* `Visualize Discrete Hopfield Neural Network energy function <examples/memory/dhn_energy_func.py>`_
-* `Password recovery, Discrete Hopfield Neural Network <examples/memory/password_recovery.py>`_
+* `Sinus function approximation, CMAC <https://github.com/itdxer/neupy/tree/master/examples/memory/cmac_basic.py>`_
+* `Visualize Discrete Hopfield Neural Network energy function <https://github.com/itdxer/neupy/tree/master/examples/memory/dhn_energy_func.py>`_
+* `Password recovery, Discrete Hopfield Neural Network <https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py>`_
 
 Dependencies
 ------------
