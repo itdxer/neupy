@@ -163,9 +163,10 @@
 <ul class="simple">
 <li><a class="reference internal" href="#algorithms-with-constructible-network-architecture" id="id1">Algorithms with Constructible Network Architecture</a><ul>
 <li><a class="reference internal" href="#set-up-connections" id="id2">Set up connections</a></li>
-<li><a class="reference internal" href="#algorithms" id="id3">Algorithms</a></li>
-<li><a class="reference internal" href="#error-functions" id="id4">Error functions</a></li>
-<li><a class="reference internal" href="#add-ons" id="id5">Add-ons</a></li>
+<li><a class="reference internal" href="#train-networks-with-multiple-inputs" id="id3">Train networks with multiple inputs</a></li>
+<li><a class="reference internal" href="#algorithms" id="id4">Algorithms</a></li>
+<li><a class="reference internal" href="#error-functions" id="id5">Error functions</a></li>
+<li><a class="reference internal" href="#add-ons" id="id6">Add-ons</a></li>
 </ul>
 </li>
 </ul>
@@ -222,13 +223,53 @@
 </div>
 <p>It&#8217;s obvious that during initialization we didn&#8217;t actually set up any layer types. By default NeuPy constructs from the tuple simple MLP network that contains dense layers with sigmoid activation function. This type of initialization typically suitable for tests or model benchmarks.</p>
 </div>
+<div class="section" id="train-networks-with-multiple-inputs">
+<h2><a class="toc-backref" href="#id3">Train networks with multiple inputs</a></h2>
+<p>NeuPy allows to train networks with multiple inputs.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+
+<span class="n">gdnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">[[</span>
+            <span class="c1"># 3 categorical inputs</span>
+            <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+            <span class="n">layers</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">n_unique_categories</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+            <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">(),</span>
+        <span class="p">],</span> <span class="p">[</span>
+            <span class="c1"># 17 numerical inputs</span>
+            <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">17</span><span class="p">),</span>
+        <span class="p">]],</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Concatenate</span><span class="p">(),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">16</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">],</span>
+
+    <span class="n">step</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+    <span class="n">nesterov</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">error</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">x_train_cat</span><span class="p">,</span> <span class="n">x_train_num</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">load_train_data</span><span class="p">()</span>
+<span class="n">x_test_cat</span><span class="p">,</span> <span class="n">x_test_num</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">load_test_data</span><span class="p">()</span>
+
+<span class="c1"># Categorical variable should be the first, becuase</span>
+<span class="c1"># categorical input layer was defined first in the network</span>
+<span class="n">network</span><span class="o">.</span><span class="n">train</span><span class="p">([</span><span class="n">x_train_cat</span><span class="p">,</span> <span class="n">x_train_num</span><span class="p">],</span> <span class="n">y_train</span><span class="p">,</span>
+              <span class="p">[</span><span class="n">x_test_cat</span><span class="p">,</span> <span class="n">x_test_num</span><span class="p">],</span> <span class="n">y_test</span><span class="p">,</span>
+              <span class="n">epochs</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">y_predicted</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">x_test_cat</span><span class="p">,</span> <span class="n">x_test_num</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="algorithms">
-<h2><a class="toc-backref" href="#id3">Algorithms</a></h2>
+<h2><a class="toc-backref" href="#id4">Algorithms</a></h2>
 <p>NeuPy supports lots of different training algorithms based on the backpropagation. You can check <a class="reference internal" href="../../pages/cheatsheet.html#cheatsheet-backprop-algorithms"><span>Cheat sheet</span></a> if you want to learn more about them.</p>
 <p>Before using these algorithms you must understand that not all of them are suitable for all problems. Some of the methods like <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">Levenberg-Marquardt</span></span></a> or <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> work better for small networks and they would be extremely slow for networks with millions of parameters. In addition, it&#8217;s important to note that not all algorithms are possible to train with mini-batches. Algorithms like <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> are not able to train properly with mini-batch.</p>
 </div>
 <div class="section" id="error-functions">
-<h2><a class="toc-backref" href="#id4">Error functions</a></h2>
+<h2><a class="toc-backref" href="#id5">Error functions</a></h2>
 <p>NeuPy has many different <a class="reference internal" href="../../pages/cheatsheet.html#cheatsheet-error-function"><span>error functions</span></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
@@ -264,7 +305,7 @@
 <p>Error function should return a scalar because during the training output from the error function will be used as a variable with respect to which we are differentiating</p>
 </div>
 <div class="section" id="add-ons">
-<h2><a class="toc-backref" href="#id5">Add-ons</a></h2>
+<h2><a class="toc-backref" href="#id6">Add-ons</a></h2>
 <p>Algorithms with constructible architectures allow to use additional update rules for parameter regularization and step update. For instance, we want to add <a class="reference internal" href="../../apidocs/neupy.algorithms.regularization.weight_decay.html#neupy.algorithms.regularization.weight_decay.WeightDecay" title="neupy.algorithms.regularization.weight_decay.WeightDecay"><span class="xref py py-class docutils literal"><span class="pre">Weight</span> <span class="pre">Decay</span></span></a> regularization and we want to minimize step monotonically after each epoch.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 

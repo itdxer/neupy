@@ -67,6 +67,48 @@ And the last way to define connections is just to set up value equal to a list o
 
 It's obvious that during initialization we didn't actually set up any layer types. By default NeuPy constructs from the tuple simple MLP network that contains dense layers with sigmoid activation function. This type of initialization typically suitable for tests or model benchmarks.
 
+Train networks with multiple inputs
+-----------------------------------
+
+NeuPy allows to train networks with multiple inputs.
+
+.. code-block:: python
+
+    from neupy import algorithms, layers
+
+    gdnet = algorithms.GradientDescent(
+        [
+            [[
+                # 3 categorical inputs
+                layers.Input(3),
+                layers.Embedding(n_unique_categories, 4),
+                layers.Reshape(),
+            ], [
+                # 17 numerical inputs
+                layers.Input(17),
+            ]],
+            layers.Concatenate(),
+            layers.Relu(16),
+            layers.Sigmoid(1)
+        ],
+
+        step=0.5,
+        verbose=True,
+        momentum=0.9,
+        nesterov=True,
+        error='binary_crossentropy',
+    )
+
+    x_train_cat, x_train_num, y_train = load_train_data()
+    x_test_cat, x_test_num, y_test = load_test_data()
+
+    # Categorical variable should be the first, becuase
+    # categorical input layer was defined first in the network
+    network.train([x_train_cat, x_train_num], y_train,
+                  [x_test_cat, x_test_num], y_test,
+                  epochs=180)
+    y_predicted = network.predict([x_test_cat, x_test_num])
+
 Algorithms
 ----------
 

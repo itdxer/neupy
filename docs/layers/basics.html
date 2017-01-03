@@ -178,8 +178,9 @@
 </li>
 <li><a class="reference internal" href="#graph-connections" id="id13">Graph connections</a></li>
 <li><a class="reference internal" href="#compile-networks" id="id14">Compile Networks</a></li>
-<li><a class="reference internal" href="#use-different-input-and-output-layers" id="id15">Use different input and output layers</a></li>
-<li><a class="reference internal" href="#subnetworks" id="id16">Subnetworks</a></li>
+<li><a class="reference internal" href="#set-up-inputs-to-the-network" id="id15">Set up inputs to the network</a></li>
+<li><a class="reference internal" href="#use-different-input-and-output-layers" id="id16">Use different input and output layers</a></li>
+<li><a class="reference internal" href="#subnetworks" id="id17">Subnetworks</a></li>
 </ul>
 </div>
 <p>Layer is a building block for constructible neural networks. NeuPy has a simple and flexible framework that allows to construct complex neural networks.</p>
@@ -559,8 +560,52 @@
 </pre></div>
 </div>
 <br></div>
+<div class="section" id="set-up-inputs-to-the-network">
+<h1><a class="toc-backref" href="#id15">Set up inputs to the network</a></h1>
+<p>There are a few ways to define inputs for the network. The simples one is just to pass an argument to the <span class="docutils literal"><span class="pre">output</span></span> method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">theano</span>
+<span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">matrix</span><span class="p">()</span>
+<span class="n">predict</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">network</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>In case if you pass only one argument and you have more than one input layer then the same input will be passed to each of the input layers. In case if you need to use different inputs to different layers you can specify them in order.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">theano</span>
+<span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="n">input_10</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;input-1&#39;</span><span class="p">)</span>
+<span class="n">input_20</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;input-2&#39;</span><span class="p">)</span>
+<span class="n">network</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_10</span><span class="p">,</span> <span class="n">input_20</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Concatenate</span><span class="p">()</span>
+
+<span class="n">x1</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="s1">&#39;x1&#39;</span><span class="p">)</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="s1">&#39;x2&#39;</span><span class="p">)</span>
+
+<span class="c1"># Note that variables passed in specific order. Since</span>
+<span class="c1"># input_10 was created first then x1 will be first argument.</span>
+<span class="n">predict</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">network</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">))</span>
+
+<span class="c1"># Also we can specify inputs as a dictionary</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">output</span><span class="p">({</span><span class="s1">&#39;input-1&#39;</span><span class="p">:</span> <span class="n">x1</span><span class="p">,</span> <span class="s1">&#39;input-2&#39;</span><span class="p">:</span> <span class="n">x2</span><span class="p">})</span>
+<span class="n">predict</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Also we can specify inputs as a dictionary</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">output</span><span class="p">({</span><span class="n">input_10</span><span class="p">:</span> <span class="n">x1</span><span class="p">,</span> <span class="n">input_20</span><span class="p">:</span> <span class="n">x2</span><span class="p">})</span>
+<span class="n">predict</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>All three <span class="docutils literal"><span class="pre">predict</span></span> functions in the previous examples are exactly the same. They just was defined in three different ways.</p>
+</div>
 <div class="section" id="use-different-input-and-output-layers">
-<h1><a class="toc-backref" href="#id15">Use different input and output layers</a></h1>
+<h1><a class="toc-backref" href="#id16">Use different input and output layers</a></h1>
 <p>To be able to use different input and output layers you need to use <span class="docutils literal"><span class="pre">start</span></span> and <span class="docutils literal"><span class="pre">end</span></span> methods. Here is an example.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -618,7 +663,7 @@
 </div>
 <br></div>
 <div class="section" id="subnetworks">
-<span id="id1"></span><h1><a class="toc-backref" href="#id16">Subnetworks</a></h1>
+<span id="id1"></span><h1><a class="toc-backref" href="#id17">Subnetworks</a></h1>
 <p><strong>Subnetworks</strong> is a method that improves readability of the networks architecture. Instead of explaining it&#8217;s much easier to show the main advantage of this method. Here is an example of the simpe convolutional network.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 
