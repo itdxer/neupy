@@ -71,3 +71,30 @@ Visualize relations between layers in the network.
     :width: 70%
     :align: center
     :alt: Layer structure plot example
+
+Saliency Map
+------------
+
+Read more in the :plot:`Saliency Map <saliency_map>` function documentation.
+
+.. code-block:: python
+
+    from neupy import plots
+
+    vgg19 = ...  # define pretrained VGG19 network
+    dog_image = ...  # load image of dog
+
+    # apply preprocessing step to dog image
+    processed_dog_image = process(dog_image)
+
+    plt.imshow(dog_image)
+    plots.saliency_map(vgg19, processed_dog_image, alpha=0.6, sigma=10)
+
+.. raw:: html
+
+    <br>
+
+.. image:: images/saliency-map-plot.png
+    :width: 50%
+    :align: center
+    :alt: Saliency Map
