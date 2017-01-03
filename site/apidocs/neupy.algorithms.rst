@@ -23,7 +23,6 @@ Submodules
 
    neupy.algorithms.base
    neupy.algorithms.constructor
-   neupy.algorithms.learning
    neupy.algorithms.rbm
    neupy.algorithms.summary_info
    neupy.algorithms.utils
