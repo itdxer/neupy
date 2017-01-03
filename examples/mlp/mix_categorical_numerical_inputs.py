@@ -74,23 +74,25 @@ network = algorithms.Momentum(
         # into one matrix with shape (batch_size, 29)
         layers.Concatenate(),
 
-        layers.Relu(128),  # > layers.Dropout(0.2),
+        layers.Relu(128),
         layers.Relu(32) > layers.Dropout(0.5),
 
         layers.Sigmoid(1)
     ],
 
-    step=0.2,
+    step=0.5,
     verbose=True,
     momentum=0.9,
     nesterov=True,
     error='binary_crossentropy',
 )
 
-network.train([x_train_num, x_train_cat], y_train,
-              [x_test_num, x_test_cat], y_test,
-              epochs=300)
-y_predicted = network.predict([x_test_num, x_test_cat])
+# Categorical input should be first, because input layer
+# for categorical matrices was defined first.
+network.train([x_train_cat, x_train_num], y_train,
+              [x_test_cat, x_test_num], y_test,
+              epochs=180)
+y_predicted = network.predict([x_test_cat, x_test_num])
 
 accuracy = accuracy_score(y_test, y_predicted.round())
 print("Accuracy: {:.2%}".format(accuracy))

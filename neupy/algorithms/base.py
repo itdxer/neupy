@@ -74,7 +74,7 @@ def logging_info_about_the_data(network, input_train, input_test):
     training_shapes = preformat_value(input_train)
 
     logs.title("Start training")
-    logs.message("TRAIN DATA", "shapes: {}".format(training_shapes))
+    logs.message("TRAINING DATA", "shapes: {}".format(training_shapes))
 
     if isinstance(training_shapes[0], int):
         training_shapes = [training_shapes]

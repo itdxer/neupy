@@ -8,7 +8,7 @@ import theano.sparse
 import theano.tensor as T
 
 from neupy import layers
-from neupy.utils import AttributeKeyDict, asfloat, format_data
+from neupy.utils import AttributeKeyDict, asfloat, format_data, as_tuple
 from neupy.layers.utils import preformat_layer_shape
 from neupy.layers.connections import LayerConnection, is_sequential
 from neupy.layers.connections.base import create_input_variables
@@ -416,15 +416,14 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         array-like or None
             Function returns formatted array.
         """
-        if input_data is None:
-            return
-
-        if not isinstance(input_data, (tuple, list)):
-            return format_data(input_data)
-
-        formated_data = []
         input_layers = self.connection.input_layers
 
+        if not isinstance(input_data, (tuple, list)):
+            input_layer = input_layers[0]
+            is_feature1d = does_layer_accept_1d_feature(input_layer)
+            return format_data(input_data, is_feature1d)
+
+        formated_data = []
         for input_to_layer, input_layer in zip(input_data, input_layers):
             is_feature1d = does_layer_accept_1d_feature(input_layer)
             data = format_data(input_to_layer, is_feature1d)
@@ -446,9 +445,8 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         array-like or None
             Function returns formatted array.
         """
-        if target_data is not None:
-            is_feature1d = does_layer_accept_1d_feature(self.output_layer)
-            return format_data(target_data, is_feature1d)
+        is_feature1d = does_layer_accept_1d_feature(self.output_layer)
+        return format_data(target_data, is_feature1d)
 
     def prediction_error(self, input_data, target_data):
         """
@@ -464,10 +462,10 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         float
             Prediction error.
         """
-        return self.methods.prediction_error(
+        return self.methods.prediction_error(*as_tuple(
             self.format_input_data(input_data),
             self.format_target_data(target_data)
-        )
+        ))
 
     def predict(self, input_data):
         """
@@ -482,7 +480,7 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         array-like
         """
         input_data = self.format_input_data(input_data)
-        return self.methods.predict(input_data)
+        return self.methods.predict(*as_tuple(input_data))
 
     def on_epoch_start_update(self, epoch):
         """
@@ -539,7 +537,7 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         float
             Prediction error.
         """
-        return self.methods.train_epoch(input_train, target_train)
+        return self.methods.train_epoch(*as_tuple(input_train, target_train))
 
     def architecture(self):
         """

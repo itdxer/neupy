@@ -64,3 +64,7 @@ class BaseLinearNetwork(ConstructibleNetwork):
             )
 
         super(BaseLinearNetwork, self).__init__(connection, **options)
+
+    def init_variables(self):
+        super(BaseLinearNetwork, self).init_variables()
+        self.variables.network_input = self.variables.network_inputs[0]

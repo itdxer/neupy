@@ -135,14 +135,14 @@ class MixtureOfExperts(BaseEnsemble):
         x = T.matrix('x')
         y = T.matrix('y')
 
-        gating_network.variables.network_input = x
+        gating_network.variables.network_inputs = [x]
         gating_network.init_variables()
         gating_network.init_methods()
 
         probs = gating_network.variables.prediction_func
         train_outputs, outputs = [], []
         for i, network in enumerate(self.networks):
-            network.variables.network_input = x
+            network.variables.network_inputs = [x]
             network.variables.network_output = y
 
             network.init_variables()
@@ -180,9 +180,9 @@ class MixtureOfExperts(BaseEnsemble):
                              "{0}".format(output_size))
 
         input_size = input_data.shape[1]
-
         gating_network = self.gating_network
-        gating_network_input_size = gating_network.input_layer.size
+        input_layer = gating_network.connection.input_layers[0]
+        gating_network_input_size = input_layer.size
 
         if gating_network_input_size != input_size:
             raise ValueError(

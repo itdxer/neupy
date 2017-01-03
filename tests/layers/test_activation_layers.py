@@ -62,10 +62,21 @@ class ActivationLayersTestCase(BaseTestCase):
         self.assertEqual(0, layer.activation_function(0))
         self.assertEqual(10, layer.activation_function(10))
 
-    def test_leaky_relu(self):
+        # Test alpha parameter
         input_data = np.array([[10, 1, 0.1, 0, -0.1, -1]]).T
         expected_output = np.array([[10, 1, 0.1, 0, -0.01, -0.1]]).T
         layer = layers.Relu(1, alpha=0.1)
+
+        actual_output = layer.activation_function(input_data)
+        np.testing.assert_array_almost_equal(
+            expected_output,
+            actual_output
+        )
+
+    def test_leaky_relu(self):
+        input_data = np.array([[10, 1, 0.1, 0, -0.1, -1]]).T
+        expected_output = np.array([[10, 1, 0.1, 0, -0.001, -0.01]]).T
+        layer = layers.LeakyRelu(1)
 
         actual_output = layer.activation_function(input_data)
         np.testing.assert_array_almost_equal(

@@ -119,8 +119,10 @@ def image_comparison(original_image_path, figsize=(10, 10), tol=1e-3):
     ----------
     original_image_path : str
         Path to original image that will use for comparison.
+
     figsize : tuple
         Figure size. Defaults to ``(10, 10)``.
+
     tol : float
         Comparison tolerance. Defaults to ``1e-3``.
 

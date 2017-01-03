@@ -71,8 +71,20 @@ class CMACTestCase(BaseTestCase):
             associative_unit_size=32,
             step=0.2,
         )
-        cmac.train(input_train, target_train, epochs=100)
+        cmac.train(input_train, target_train,
+                   input_test, target_test, epochs=100)
         predicted_test = cmac.predict(input_test)
         error = metrics.mean_absolute_error(target_test, predicted_test)
 
         self.assertAlmostEqual(error, 0, places=6)
+
+    def test_cmac_training_exceptions(self):
+        cmac = algorithms.CMAC(
+            quantization=100,
+            associative_unit_size=32,
+            step=0.2,
+        )
+
+        with self.assertRaises(ValueError):
+            cmac.train(input_train=True, target_train=True,
+                       input_test=None, target_test=True)
