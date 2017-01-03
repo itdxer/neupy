@@ -12,7 +12,13 @@ environment.speedup()
 def make_dataset():
     data, target = make_classification(n_samples=10000, n_features=20)
 
+    # number of categorical columns
     n_categorical = 3
+
+    # if value x in [0, 0.2) then category 0
+    # if value x in [0.2, 0.5) then category 1
+    # if value x in [0.5, 0.8) then category 2
+    # if value x in [0.8, 0.1] then category 3
     bins = np.array([0, 0.2, 0.5, 0.8, 1])
 
     # Create categorical features
