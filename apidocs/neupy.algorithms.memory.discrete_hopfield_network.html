@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -200,9 +200,9 @@ Defaults to <span class="docutils literal"><span class="pre">True</span></span>.
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference internal" href="../2015/09/21/password_recovery.html#password-recovery"><span class="std std-ref">Password recovery</span></a></dt>
+<dt><a class="reference internal" href="../2015/09/21/password_recovery.html#password-recovery"><span>Password recovery</span></a></dt>
 <dd>Password recovery with Discrete Hopfield Network.</dd>
-<dt><a class="reference internal" href="../2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span class="std std-ref">Discrete Hopfiel Network</span></a></dt>
+<dt><a class="reference internal" href="../2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>Discrete Hopfiel Network</span></a></dt>
 <dd>Discrete Hopfield Network article.</dd>
 </dl>
 </div>
@@ -212,12 +212,12 @@ Defaults to <span class="docutils literal"><span class="pre">True</span></span>.
 contain only zeros and ones.</li>
 </ul>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">draw_bin_image</span><span class="p">(</span><span class="n">image_matrix</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">image_matrix</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;| &#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; *&#39;</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">row</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;| &#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; *&#39;</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">row</span><span class="p">))</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span>
 <span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
@@ -314,7 +314,7 @@ contain only zeros and ones.</li>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork.options">
-<span class="descname">options</span><em class="property"> = {'n_times': Option(class_name='DiscreteMemory', value=IntProperty(name=&quot;n_times&quot;)), 'mode': Option(class_name='DiscreteMemory', value=ChoiceProperty(name=&quot;mode&quot;)), 'check_limit': Option(class_name='DiscreteHopfieldNetwork', value=Property(name=&quot;check_limit&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/discrete_hopfield_network.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'mode': Option(class_name='DiscreteMemory', value=ChoiceProperty(name=&quot;mode&quot;)), 'n_times': Option(class_name='DiscreteMemory', value=IntProperty(name=&quot;n_times&quot;)), 'check_limit': Option(class_name='DiscreteHopfieldNetwork', value=Property(name=&quot;check_limit&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/discrete_hopfield_network.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">

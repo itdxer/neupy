@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Cheat sheet" href="../../pages/cheatsheet.html" /><link rel="prev" title="Environments" href="environments.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Installation" href="../../pages/installation.html" /><link rel="prev" title="Environments" href="environments.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
         VERSION:     '1.5',
@@ -207,6 +207,23 @@
 </div>
 <br><a class="reference internal image-reference" href="../../_images/layer-structure-plot.png"><img alt="Layer structure plot example" class="align-center" src="../../_images/layer-structure-plot.png" style="width: 70%;" /></a>
 </div>
+<div class="section" id="saliency-map">
+<h2>Saliency Map</h2>
+<p>Read more in the <a class="reference internal" href="../../apidocs/neupy.plots.saliency_map.html#neupy.plots.saliency_map.saliency_map" title="neupy.plots.saliency_map.saliency_map"><span class="xref py py-class docutils literal"><span class="pre">Saliency</span> <span class="pre">Map</span></span></a> function documentation.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
+
+<span class="n">vgg19</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># define pretrained VGG19 network</span>
+<span class="n">dog_image</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># load image of dog</span>
+
+<span class="c1"># apply preprocessing step to dog image</span>
+<span class="n">processed_dog_image</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="n">dog_image</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">dog_image</span><span class="p">)</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">saliency_map</span><span class="p">(</span><span class="n">vgg19</span><span class="p">,</span> <span class="n">processed_dog_image</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<br><a class="reference internal image-reference" href="../../_images/saliency-map-plot.png"><img alt="Saliency Map" class="align-center" src="../../_images/saliency-map-plot.png" style="width: 50%;" /></a>
+</div>
 </div>
 
     <div class="postmeta">
@@ -215,7 +232,7 @@
         
         </div><ul class="related clearfix">
             <li class="left"> &laquo; <a href="environments.html">Environments</a></li>
-            <li class="right"><a href="../../pages/cheatsheet.html">Cheat sheet</a> &raquo; </li>
+            <li class="right"><a href="../../pages/installation.html">Installation</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Articles</h1>
     <ul><li>

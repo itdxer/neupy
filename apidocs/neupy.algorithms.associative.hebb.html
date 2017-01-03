@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -254,8 +254,8 @@ Such initialization helps to controll your default state
 for the feature learning.</li>
 </ul>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">... </span><span class="n">pavlov_dog_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
 <span class="gp">... </span>    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>  <span class="c1"># food, no bell</span>
@@ -274,7 +274,7 @@ for the feature learning.</li>
 <span class="gp">... </span>    <span class="n">n_unconditioned</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">decay_rate</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hebbnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">pavlov_dog_data</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hebbnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">dog_test_cases</span><span class="p">)</span>
@@ -309,7 +309,7 @@ for the feature learning.</li>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.associative.hebb.HebbRule.options">
-<span class="descname">options</span><em class="property"> = {'decay_rate': Option(class_name='HebbRule', value=BoundedProperty(name=&quot;decay_rate&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'bias': Option(class_name='BaseStepAssociative', value=ParameterProperty(name=&quot;bias&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'n_unconditioned': Option(class_name='BaseStepAssociative', value=IntProperty(name=&quot;n_unconditioned&quot;)), 'weight': Option(class_name='BaseStepAssociative', value=ArrayProperty(name=&quot;weight&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'n_outputs': Option(class_name='BaseAssociative', value=IntProperty(name=&quot;n_outputs&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'n_inputs': Option(class_name='BaseStepAssociative', value=IntProperty(name=&quot;n_inputs&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/hebb.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'n_inputs': Option(class_name='BaseStepAssociative', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_outputs': Option(class_name='BaseAssociative', value=IntProperty(name=&quot;n_outputs&quot;)), 'weight': Option(class_name='BaseStepAssociative', value=ArrayProperty(name=&quot;weight&quot;)), 'n_unconditioned': Option(class_name='BaseStepAssociative', value=IntProperty(name=&quot;n_unconditioned&quot;)), 'bias': Option(class_name='BaseStepAssociative', value=ParameterProperty(name=&quot;bias&quot;)), 'decay_rate': Option(class_name='HebbRule', value=BoundedProperty(name=&quot;decay_rate&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/hebb.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">

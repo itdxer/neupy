@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Create custom layers" href="create-custom-layers.html" /><link rel="prev" title="Layers" href="../layers.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Create custom layers" href="create-custom-layers.html" /><link rel="prev" title="Layers" href="../layers.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
         VERSION:     '1.5',
@@ -178,7 +178,8 @@
 </li>
 <li><a class="reference internal" href="#graph-connections" id="id13">Graph connections</a></li>
 <li><a class="reference internal" href="#compile-networks" id="id14">Compile Networks</a></li>
-<li><a class="reference internal" href="#subnetworks" id="id15">Subnetworks</a></li>
+<li><a class="reference internal" href="#use-different-input-and-output-layers" id="id15">Use different input and output layers</a></li>
+<li><a class="reference internal" href="#subnetworks" id="id16">Subnetworks</a></li>
 </ul>
 </div>
 <p>Layer is a building block for constructible neural networks. NeuPy has a simple and flexible framework that allows to construct complex neural networks.</p>
@@ -558,8 +559,66 @@
 </pre></div>
 </div>
 <br></div>
+<div class="section" id="use-different-input-and-output-layers">
+<h1><a class="toc-backref" href="#id15">Use different input and output layers</a></h1>
+<p>To be able to use different input and output layers you need to use <span class="docutils literal"><span class="pre">start</span></span> and <span class="docutils literal"><span class="pre">end</span></span> methods. Here is an example.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-2&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-4&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
+<span class="go">Input(10) &gt; Relu(20) &gt; Relu(30) &gt; Relu(40) &gt; Relu(50)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="s1">&#39;relu-4&#39;</span><span class="p">)</span>
+<span class="go">Input(10) &gt; Relu(20) &gt; Relu(30) &gt; Relu(40)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="s1">&#39;relu-2&#39;</span><span class="p">)</span>
+<span class="go">Relu(20) &gt; Relu(30) &gt; Relu(40) &gt; Relu(50)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="s1">&#39;relu-2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="s1">&#39;relu-4&#39;</span><span class="p">)</span>
+<span class="go">Relu(20) &gt; Relu(30) &gt; Relu(40)</span>
+</pre></div>
+</div>
+<p>In addition, it&#8217;s possible to point into multiple input and output layers</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-2&#39;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-3&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output_2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-4&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">network</span> <span class="o">&gt;</span> <span class="p">[</span><span class="n">output_1</span><span class="p">,</span> <span class="n">output_2</span><span class="p">]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
+<span class="go">10 -&gt; [... 6 layers ...] -&gt; [(1,), (2,)]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="s1">&#39;relu-3&#39;</span><span class="p">,</span> <span class="s1">&#39;relu-4&#39;</span><span class="p">)</span>
+<span class="go">10 -&gt; [... 4 layers ...] -&gt; [(30,), (40,)]</span>
+</pre></div>
+</div>
+<p>Also instead of using names we can specify layer instance</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input_layer</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">relu_2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">relu_3</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">input_layer</span> <span class="o">&gt;</span> <span class="n">relu_2</span> <span class="o">&gt;</span> <span class="n">relu_3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
+<span class="go">Input(10) &gt; Relu(20) &gt; Relu(30)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="n">relu_2</span><span class="p">)</span>
+<span class="go">Input(10) &gt; Relu(20)</span>
+</pre></div>
+</div>
+<br></div>
 <div class="section" id="subnetworks">
-<span id="id1"></span><h1><a class="toc-backref" href="#id15">Subnetworks</a></h1>
+<span id="id1"></span><h1><a class="toc-backref" href="#id16">Subnetworks</a></h1>
 <p><strong>Subnetworks</strong> is a method that improves readability of the networks architecture. Instead of explaining it&#8217;s much easier to show the main advantage of this method. Here is an example of the simpe convolutional network.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 
