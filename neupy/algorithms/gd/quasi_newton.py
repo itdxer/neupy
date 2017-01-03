@@ -171,7 +171,7 @@ class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
         )
 
     def init_train_updates(self):
-        network_input = self.variables.network_input
+        network_inputs = self.variables.network_inputs
         network_output = self.variables.network_output
         inv_hessian = self.variables.inv_hessian
         prev_params = self.variables.prev_params
@@ -208,7 +208,7 @@ class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
                 setattr(layer, attrname, updated_param_value)
                 start_pos = end_pos
 
-            output = self.connection.output(network_input)
+            output = self.connection.output(*network_inputs)
 
             # Restore previous parameters
             for layer, attrname, param in layers_and_parameters:

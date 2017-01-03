@@ -1,4 +1,4 @@
-from numpy import concatenate, array
+import numpy as np
 
 from neupy.utils import format_data
 from neupy.core.properties import IntProperty
@@ -92,7 +92,7 @@ class CMAC(BaseNetwork):
             coords = get_memory_coords(input_sample)
             predicted.append(get_result_by_coords(coords))
 
-        return array(predicted)
+        return np.array(predicted)
 
     def get_result_by_coords(self, coords):
         return sum(
@@ -104,7 +104,7 @@ class CMAC(BaseNetwork):
 
         for i in range(assoc_unit_size):
             point = ((quantized_value + i) / assoc_unit_size).astype(int)
-            yield tuple(concatenate([point, [i]]))
+            yield tuple(np.concatenate([point, [i]]))
 
     def quantize(self, input_data):
         return (input_data * self.quantization).astype(int)
@@ -130,6 +130,10 @@ class CMAC(BaseNetwork):
             errors += abs(error)
 
         return errors / n_samples
+
+    def prediction_error(self, input_data, target_data):
+        predicted = self.predict(input_data)
+        return np.mean(np.abs(predicted - target_data))
 
     def train(self, input_train, target_train, input_test=None,
               target_test=None, epochs=100, epsilon=None,

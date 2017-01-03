@@ -49,7 +49,7 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
     Notes
     -----
     - Network minimizes only Mean Squared Error function.
-    - Efficient for small training datasets, becuase it
+    - Efficient for small training datasets, because it
       computes gradient per each sample separately.
     - Efficient for small-sized networks.
 

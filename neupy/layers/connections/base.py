@@ -500,6 +500,25 @@ class LayerConnection(BaseConnection):
         else:
             input_values = first_input
 
+        if isinstance(input_values, (list, tuple)):
+            n_input_layers = len(self.input_layers)
+            n_input_vars = len(input_values)
+
+            if n_input_vars != n_input_layers:
+                raise ValueError("Connection has {} input layer(s), "
+                                 "but {} inputs was provided"
+                                 "".format(n_input_layers, n_input_vars))
+
+            # Layers in the self.graph.input_layers and
+            # self.input_layers variables can have a different order.
+            # Order in the self.input_layers is defined by user
+            input_values_as_dict = {}
+
+            for layer, value in zip(self.input_layers, input_values):
+                input_values_as_dict[layer] = value
+
+            input_values = input_values_as_dict
+
         return self.graph.propagate_forward(input_values)
 
     def start(self, first_layer, *other_layers):

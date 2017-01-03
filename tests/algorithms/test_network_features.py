@@ -62,7 +62,6 @@ class NetworkMainTestCase(BaseTestCase):
         self.assertEqual(network.last_epoch, 5)
 
     def test_show_network_options_function(self):
-        # Suppose not to fail
         with catch_stdout() as out:
             # Disable verbose and than enable it again just
             # to make sure that `show_network_options` won't
@@ -79,10 +78,19 @@ class NetworkMainTestCase(BaseTestCase):
         network = algorithms.GradientDescent((2, 3, 1))
 
         x = np.zeros((5, 2))
+        x_test = np.zeros((3, 2))
         y = np.zeros((4, 1))
 
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegexp(ValueError, "feature shape"):
             logging_info_about_the_data(network, x, y)
+
+        with catch_stdout() as out:
+            network = algorithms.GradientDescent((2, 3, 1), verbose=True)
+            logging_info_about_the_data(network, [x, x], [x_test, x_test])
+            terminal_output = out.getvalue()
+
+        self.assertIn("[(5, 2), (5, 2)]", terminal_output)
+        self.assertIn("[(3, 2), (3, 2)]", terminal_output)
 
     def test_parse_show_epoch_property(self):
         with catch_stdout() as out:
@@ -136,9 +144,10 @@ class NetworkMainTestCase(BaseTestCase):
 
             terminal_output = out.getvalue().strip()
 
-        # `n_epochs - 1` becuase \n appears only between
-        # inline summary lines
-        self.assertEqual(terminal_output.count('\n'), n_epochs - 1)
+        # `n_epochs - 1` because \n appears only between
+        # inline summary lines.
+        # Also network prints 5 additional lines at the beggining
+        self.assertEqual(terminal_output.count('\n'), 5 + n_epochs - 1)
 
 
 class NetworkPropertiesTestCase(BaseTestCase):
