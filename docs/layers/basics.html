@@ -1,0 +1,776 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
+        <meta name="viewport" content="width=device-width">
+        <title>Basics &mdash; NeuPy</title>
+            <link rel="stylesheet" href="../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../_static/plugins.js"></script>
+        <script src="../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Create custom layers" href="create-custom-layers.html" /><link rel="prev" title="Layers" href="../layers.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+    <style media="screen" type="text/css">
+        .docutils { width: 100%; }
+        .docutils td { padding: 10px; }
+        .section { word-wrap:break-word; }
+        .descname { font-weight: bold; }
+        .highlight-python + .figure { margin-top: 20px; }
+        .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+        .dataframe td { padding: 5px; }
+
+        .math .gd { color: #000 !important; } /* Generic.Deleted */
+        .math .m { color: #000 !important; } /* Literal.Number */
+        .math .s { color: #000 !important; } /* Literal.String */
+        .math .mf { color: #000 !important; } /* Literal.Number.Float */
+        .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+        .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+        .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+        .math .sc { color: #000 !important; } /* Literal.String.Char */
+        .math .s2 { color: #000 !important; } /* Literal.String.Double */
+        .math .si { color: #000 !important; } /* Literal.String.Interpol */
+        .math .sx { color: #000 !important; } /* Literal.String.Other */
+        .math .s1 { color: #000 !important; } /* Literal.String.Single */
+        .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+        .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+        /* Background for class and function names */
+        dt[id^="neupy."] {
+            background-color: #e6edf2;
+            border: 1px solid #f8fafb;
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+        div[id^="module-neupy."] h1 {
+            display: none;
+        }
+
+        /* Search input field */
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            display: block;
+        }
+        .box {
+          padding-bottom: 50px;
+        }
+        .search-input-container {
+          width: 100%;
+          vertical-align: middle;
+          white-space: nowrap;
+          position: relative;
+        }
+        .search-input-container input#search {
+          width: 100%;
+          height: 50px;
+          padding-left: 45px;
+
+          float: left;
+          outline: none;
+          border: 1px solid #ddd;
+
+          box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          border-radius: 5px;
+
+          font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+          font-size: 12pt;
+        }
+        .search-input-container .icon {
+          position: absolute;
+          left: 0;
+          top: 50%;
+          margin-left: 17px;
+          margin-top: 13px;
+          z-index: 1;
+          color: #93a4ad;
+        }
+    </style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+        <div>
+          <h1><a href="../../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+    <div class="section" id="basics">
+<span id="layers-basics"></span><h1><a class="toc-backref" href="#id2">Basics</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#basics" id="id2">Basics</a><ul>
+<li><a class="reference internal" href="#join-layers" id="id3">Join layers</a></li>
+<li><a class="reference internal" href="#inline-operator" id="id4">Inline operator</a></li>
+<li><a class="reference internal" href="#input-and-output-shapes" id="id5">Input and output shapes</a></li>
+<li><a class="reference internal" href="#input-layer" id="id6">Input layer</a></li>
+<li><a class="reference internal" href="#build-networks-from-the-code" id="id7">Build networks from the code</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mutlilayer-perceptron-mlp" id="id8">Mutlilayer Perceptron (MLP)</a></li>
+<li><a class="reference internal" href="#convolutional-neural-networks-cnn" id="id9">Convolutional Neural Networks (CNN)</a><ul>
+<li><a class="reference internal" href="#reshape" id="id10">Reshape</a></li>
+<li><a class="reference internal" href="#convolution" id="id11">Convolution</a></li>
+<li><a class="reference internal" href="#pooling" id="id12">Pooling</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#graph-connections" id="id13">Graph connections</a></li>
+<li><a class="reference internal" href="#compile-networks" id="id14">Compile Networks</a></li>
+<li><a class="reference internal" href="#set-up-inputs-to-the-network" id="id15">Set up inputs to the network</a></li>
+<li><a class="reference internal" href="#use-different-input-and-output-layers" id="id16">Use different input and output layers</a></li>
+<li><a class="reference internal" href="#subnetworks" id="id17">Subnetworks</a></li>
+</ul>
+</div>
+<p>Layer is a building block for constructible neural networks. NeuPy has a simple and flexible framework that allows to construct complex neural networks.</p>
+<div class="section" id="join-layers">
+<h2><a class="toc-backref" href="#id3">Join layers</a></h2>
+<p>Let&#8217;s start with basics. The most useful function to define relations between layers is <span class="docutils literal"><span class="pre">layers.join</span></span>. It accepts sequence of layers and join them into the network.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">Sigmoid(1) &gt; Sigmoid(2)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">Sigmoid(2) &gt; Sigmoid(1)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="inline-operator">
+<h2><a class="toc-backref" href="#id4">Inline operator</a></h2>
+<p>Also, NeuPy provides a special <strong>inline</strong> operator that helps to define sequential relations between layers.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
+<span class="go">Sigmoid(2) &gt; Sigmoid(1)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="input-and-output-shapes">
+<h2><a class="toc-backref" href="#id5">Input and output shapes</a></h2>
+<p>In the previous examples each layer accepted one argument that defines it&#8217;s output shape, but there is no information about network&#8217;s input shape.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
+<span class="go">Sigmoid(2) &gt; Sigmoid(1)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">input_shape</span><span class="p">)</span>
+<span class="go">None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
+<span class="go">(1,)</span>
+</pre></div>
+</div>
+<p>Network has two properties that provide information about network&#8217;s input and output shape. In addition we can iterate through each layer in the network and check their input and output shapes.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">network</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;----------&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Input shape: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">input_shape</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Output shape: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">output_shape</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">()</span>
+<span class="gp">...</span>
+<span class="go">Sigmoid(2)</span>
+<span class="go">----------</span>
+<span class="go">Input shape: None</span>
+<span class="go">Output shape: (2,)</span>
+
+<span class="go">Sigmoid(1)</span>
+<span class="go">----------</span>
+<span class="go">Input shape: (2,)</span>
+<span class="go">Output shape: (1,)</span>
+</pre></div>
+</div>
+<p>From the output we can clearly see that <span class="docutils literal"><span class="pre">Sigmoid(1)</span></span> layer has defined input and output shape. Input shape for the <span class="docutils literal"><span class="pre">Sigmoid(1)</span></span> layer has been provided by the <span class="docutils literal"><span class="pre">Sigmoid(2)</span></span>, but <span class="docutils literal"><span class="pre">Sigmoid(2)</span></span> layer doesn&#8217;t have any input connections and we know nothing about it&#8217;s input shape. To be able to fix it we need to add the <a class="reference internal" href="../../apidocs/neupy.layers.input.html#neupy.layers.input.Input" title="neupy.layers.input.Input"><span class="xref py py-class docutils literal"><span class="pre">Input</span></span></a> layer.</p>
+</div>
+<div class="section" id="input-layer">
+<h2><a class="toc-backref" href="#id6">Input layer</a></h2>
+<p>The <a class="reference internal" href="../../apidocs/neupy.layers.input.html#neupy.layers.input.Input" title="neupy.layers.input.Input"><span class="xref py py-class docutils literal"><span class="pre">Input</span></span></a> layer defines input shape for the network.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">network</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">network</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;----------&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Input shape: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">input_shape</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Output shape: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">output_shape</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">()</span>
+<span class="gp">...</span>
+<span class="go">Input(3)</span>
+<span class="go">----------</span>
+<span class="go">Input shape: (3,)</span>
+<span class="go">Output shape: (3,)</span>
+
+<span class="go">Sigmoid(2)</span>
+<span class="go">----------</span>
+<span class="go">Input shape: (3,)</span>
+<span class="go">Output shape: (2,)</span>
+
+<span class="go">Sigmoid(1)</span>
+<span class="go">----------</span>
+<span class="go">Input shape: (2,)</span>
+<span class="go">Output shape: (1,)</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="../../apidocs/neupy.layers.input.html#neupy.layers.input.Input" title="neupy.layers.input.Input"><span class="xref py py-class docutils literal"><span class="pre">Input</span></span></a> layer accepts one parameter that defines network&#8217;s input shape. When we connected this layer to our previous network we defined input shape for the whole network.</p>
+</div>
+<div class="section" id="build-networks-from-the-code">
+<h2><a class="toc-backref" href="#id7">Build networks from the code</a></h2>
+<p>You could have noticed that in the previous examples we was able to re-use previously defined network. In fact, we can simply construct network from the code.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">size</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">network</span> <span class="o">=</span> <span class="n">network</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
+<span class="go">Input(10) &gt; Sigmoid(8) &gt; Sigmoid(6) &gt; Sigmoid(4) &gt; Sigmoid(2)</span>
+</pre></div>
+</div>
+<p>Code above is equivalent to the following code</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
+<span class="go">Input(10) &gt; Sigmoid(8) &gt; Sigmoid(6) &gt; Sigmoid(4) &gt; Sigmoid(2)</span>
+</pre></div>
+</div>
+<br></div>
+</div>
+<div class="section" id="mutlilayer-perceptron-mlp">
+<h1><a class="toc-backref" href="#id8">Mutlilayer Perceptron (MLP)</a></h1>
+<p>In this section we are going to learn more about layers with activation function which are the most important building blocks for the MLP networks. Let&#8217;s consider the following example.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<img alt="Feedforward connections in NeuPy" src="../../_images/feedforward-graph-connection.png" />
+</div>
+<p>You can see from the figure above that each layer with activation function defines dense connection. In NeuPy you can define dense connections between layers within activation function for simplicity. We can separate layer into to other layers that apply simplier operations.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Network defined above has exactly the same architecture as the one in previous example. We just split each layer with activation function into simple operations. Operation in the <span class="docutils literal"><span class="pre">layers.Relu(500)</span></span> is equivalent to <span class="docutils literal"><span class="pre">layers.Linear(500)</span> <span class="pre">&gt;</span> <span class="pre">layers.Relu()</span></span>.</p>
+</div>
+<div class="section" id="convolutional-neural-networks-cnn">
+<h1><a class="toc-backref" href="#id9">Convolutional Neural Networks (CNN)</a></h1>
+<p>NeuPy supports Convolutional Neural Networks. Let&#8217;s consider the following example.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="n">convnet</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)),</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">48</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">(),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<img alt="Convolutional Neural Network in NeuPy" src="../../_images/conv-graph-connection.png" />
+</div>
+<p>There are a few new layers that we are going to explore in more details.</p>
+<div class="section" id="reshape">
+<h2><a class="toc-backref" href="#id10">Reshape</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This layer basically do the same as <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.reshape.html">numpy.reshape</a> function. The main different is that it has an optional argument that defines output shape. When shape is not defined <a class="reference internal" href="../../apidocs/neupy.layers.reshape.html#neupy.layers.reshape.Reshape" title="neupy.layers.reshape.Reshape"><span class="xref py py-class docutils literal"><span class="pre">Reshape</span></span></a> layer converts input to 2D matrix.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span><span class="o">.</span><span class="n">input_shape</span>
+<span class="go">(3, 10, 10)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span><span class="o">.</span><span class="n">output_shape</span>
+<span class="go">(300,)</span>
+</pre></div>
+</div>
+<p>Also we can specify expected output shape as a parameters for the <a class="reference internal" href="../../apidocs/neupy.layers.reshape.html#neupy.layers.reshape.Reshape" title="neupy.layers.reshape.Reshape"><span class="xref py py-class docutils literal"><span class="pre">Reshape</span></span></a> layer.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span><span class="o">.</span><span class="n">input_shape</span>
+<span class="go">(3, 10, 10)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span><span class="o">.</span><span class="n">output_shape</span>
+<span class="go">(3, 100)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="convolution">
+<h2><a class="toc-backref" href="#id11">Convolution</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Each of the convolutional layers takes one mandatory argument that defines convolutional filter. Input argument contains three integers <span class="docutils literal"><span class="pre">(number</span> <span class="pre">of</span> <span class="pre">filters,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">rows,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">columns)</span></span>. Information about the stack size takes from the previous layer.</p>
+<p>NeuPy supports only 2D convolution, but it&#8217;s trivial to make a 1D convoltion. We can for instance set up width eqaul to <span class="docutils literal"><span class="pre">1</span></span> like in the following example.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">16</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Convolutional layer has a few other attributes that you can modify. You can check the <a class="reference internal" href="../../apidocs/neupy.layers.convolutions.html#neupy.layers.convolutions.Convolution" title="neupy.layers.convolutions.Convolution"><span class="xref py py-class docutils literal"><span class="pre">Convolutional</span></span></a> layer&#8217;s documentation and find more information about its arguments.</p>
+</div>
+<div class="section" id="pooling">
+<h2><a class="toc-backref" href="#id12">Pooling</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Pooling layer has also one mandatory argument that defines a factor by which to downscale <span class="docutils literal"><span class="pre">(vertical,</span> <span class="pre">horizontal)</span></span>. The <span class="docutils literal"><span class="pre">(2,</span> <span class="pre">2)</span></span> value will halve the image in each dimension.</p>
+<p>Pooling works only with 4D inputs, but you can use in case of 3D if you apply the same trick as we did it with convolutional layer. You need to define one of the downscale factors equal to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<br></div>
+</div>
+<div class="section" id="graph-connections">
+<h1><a class="toc-backref" href="#id13">Graph connections</a></h1>
+<p>Any connection between layers in NeuPy is a <a class="reference external" href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">Directional Acyclic Graph (DAG)</a>. So far we&#8217;ve encountered only sequential connections which is just a simple case of DAG. In NeuPy we are allowed to build much more complex relations between layers.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
+    <span class="p">[[</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+    <span class="p">],</span> <span class="p">[</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">16</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">)),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
+    <span class="p">]],</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Concatenate</span><span class="p">()</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">(),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<img alt="Graph connections in NeuPy" src="../../_images/conv-parallel-connection.png" />
+</div>
+<p>You can see that we defined a list inside of the</p>
+<p>You can see two new layers. The first one is the Parallel layer. This layer accepts two parameters. First one is an array of multiple connections. As you can see from the figure above each of the connections above accepts the same input, but each of the do different transformation to this input. The second parameter is an layer that accepts multiple inputs and combine then into single output. From our example we can see that from the left branch we got output shape equal to <span class="docutils literal"><span class="pre">(32,</span> <span class="pre">4,</span> <span class="pre">4)</span></span> and from the right branch - <span class="docutils literal"><span class="pre">(16,</span> <span class="pre">4,</span> <span class="pre">4)</span></span>. The <a class="reference internal" href="../../apidocs/neupy.layers.merge.html#neupy.layers.merge.Concatenate" title="neupy.layers.merge.Concatenate"><span class="xref py py-class docutils literal"><span class="pre">Concatenate</span></span></a> layer joins layers over the firts dimension and as output returns tensor with shape <span class="docutils literal"><span class="pre">(48,</span> <span class="pre">4,</span> <span class="pre">4)</span></span>.</p>
+<p>Also its possible to define the same graph relations between layers with inline operator.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">left_branch</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">right_branch</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">16</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input_layer</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">input_layer</span> <span class="o">&gt;</span> <span class="p">[</span><span class="n">left_branch</span><span class="p">,</span> <span class="n">right_branch</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Concatenate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">network</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Notice that we&#8217;ve used Python&#8217;s list with NeuPy&#8217;s inline operator. List helps us to define one to many relations</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">input_layer</span> <span class="o">&gt;</span> <span class="p">[</span><span class="n">left_branch</span><span class="p">,</span> <span class="n">right_branch</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>and many to one</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">left_branch</span><span class="p">,</span> <span class="n">right_branch</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Concatenate</span><span class="p">()</span>
+</pre></div>
+</div>
+<br></div>
+<div class="section" id="compile-networks">
+<h1><a class="toc-backref" href="#id14">Compile Networks</a></h1>
+<p>Layers in NeuPy are build on top of a Theano library. It means that all operations construct computational graph that we need to compile. NeuPy provides a simple function that allow to compile network into Python funciton.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">predict</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Now we have function that propagates input through the network and returns obtained output from the network.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">asfloat</span>
+
+<span class="c1"># Convert matrix to float. Type of the</span>
+<span class="c1"># float depencds on theano.config.floatX variable</span>
+<span class="n">x_test</span> <span class="o">=</span> <span class="n">asfloat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="n">y_predicted</span> <span class="o">=</span> <span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <span class="docutils literal"><span class="pre">compile</span></span> method creates input variables automatically, but we are able to specify different input variables.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">matrix</span><span class="p">()</span>
+<span class="n">predict</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If network has more than one input we will be able to set up multiple inputs.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="n">input_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">input_2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_1</span><span class="p">,</span> <span class="n">input_2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Concatenate</span><span class="p">()</span>
+
+<span class="n">x1</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="s1">&#39;x1&#39;</span><span class="p">)</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="s1">&#39;x2&#39;</span><span class="p">)</span>
+
+<span class="n">predict</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Also NeuPy provides flexibility to compile networks with Theano API</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">theano</span>
+<span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">matrix</span><span class="p">()</span>
+<span class="c1"># Compile prediction function</span>
+<span class="n">predict</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">network</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Network in NeuPy can be in two different states: training and non-training. Some functions like <a class="reference internal" href="../../apidocs/neupy.layers.stochastic.html#neupy.layers.stochastic.Dropout" title="neupy.layers.stochastic.Dropout"><span class="xref py py-class docutils literal"><span class="pre">Dropout</span></span></a> or <a class="reference internal" href="../../apidocs/neupy.layers.stochastic.html#neupy.layers.stochastic.GaussianNoise" title="neupy.layers.stochastic.GaussianNoise"><span class="xref py py-class docutils literal"><span class="pre">GaussianNoise</span></span></a> behave differently in different states. For instance, the <a class="reference internal" href="../../apidocs/neupy.layers.stochastic.html#neupy.layers.stochastic.Dropout" title="neupy.layers.stochastic.Dropout"><span class="xref py py-class docutils literal"><span class="pre">Dropout</span></span></a> layer in the training state disables some of the input values with certain probability, but do not apply this operation in non-training state. To be able to disable training state for the network we can use the <span class="docutils literal"><span class="pre">disable_training_state</span></span> method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">matrix</span><span class="p">()</span>
+
+<span class="c1"># Use Dropout during the prediction</span>
+<span class="n">training_predict</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">network</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="k">with</span> <span class="n">network</span><span class="o">.</span><span class="n">disable_training_state</span><span class="p">():</span>
+    <span class="c1"># Ignore Dropout during the prediction</span>
+    <span class="n">predict</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">network</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</pre></div>
+</div>
+<br></div>
+<div class="section" id="set-up-inputs-to-the-network">
+<h1><a class="toc-backref" href="#id15">Set up inputs to the network</a></h1>
+<p>There are a few ways to define inputs for the network. The simples one is just to pass an argument to the <span class="docutils literal"><span class="pre">output</span></span> method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">theano</span>
+<span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">matrix</span><span class="p">()</span>
+<span class="n">predict</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">network</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>In case if you pass only one argument and you have more than one input layer then the same input will be passed to each of the input layers. In case if you need to use different inputs to different layers you can specify them in order.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">theano</span>
+<span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="n">input_10</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;input-1&#39;</span><span class="p">)</span>
+<span class="n">input_20</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;input-2&#39;</span><span class="p">)</span>
+<span class="n">network</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_10</span><span class="p">,</span> <span class="n">input_20</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Concatenate</span><span class="p">()</span>
+
+<span class="n">x1</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="s1">&#39;x1&#39;</span><span class="p">)</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="s1">&#39;x2&#39;</span><span class="p">)</span>
+
+<span class="c1"># Note that variables passed in specific order. Since</span>
+<span class="c1"># input_10 was created first then x1 will be first argument.</span>
+<span class="n">predict</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">network</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">))</span>
+
+<span class="c1"># Also we can specify inputs as a dictionary</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">output</span><span class="p">({</span><span class="s1">&#39;input-1&#39;</span><span class="p">:</span> <span class="n">x1</span><span class="p">,</span> <span class="s1">&#39;input-2&#39;</span><span class="p">:</span> <span class="n">x2</span><span class="p">})</span>
+<span class="n">predict</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Also we can specify inputs as a dictionary</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">output</span><span class="p">({</span><span class="n">input_10</span><span class="p">:</span> <span class="n">x1</span><span class="p">,</span> <span class="n">input_20</span><span class="p">:</span> <span class="n">x2</span><span class="p">})</span>
+<span class="n">predict</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>All three <span class="docutils literal"><span class="pre">predict</span></span> functions in the previous examples are exactly the same. They just was defined in three different ways.</p>
+</div>
+<div class="section" id="use-different-input-and-output-layers">
+<h1><a class="toc-backref" href="#id16">Use different input and output layers</a></h1>
+<p>To be able to use different input and output layers you need to use <span class="docutils literal"><span class="pre">start</span></span> and <span class="docutils literal"><span class="pre">end</span></span> methods. Here is an example.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-2&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-4&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
+<span class="go">Input(10) &gt; Relu(20) &gt; Relu(30) &gt; Relu(40) &gt; Relu(50)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="s1">&#39;relu-4&#39;</span><span class="p">)</span>
+<span class="go">Input(10) &gt; Relu(20) &gt; Relu(30) &gt; Relu(40)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="s1">&#39;relu-2&#39;</span><span class="p">)</span>
+<span class="go">Relu(20) &gt; Relu(30) &gt; Relu(40) &gt; Relu(50)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="s1">&#39;relu-2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="s1">&#39;relu-4&#39;</span><span class="p">)</span>
+<span class="go">Relu(20) &gt; Relu(30) &gt; Relu(40)</span>
+</pre></div>
+</div>
+<p>In addition, it&#8217;s possible to point into multiple input and output layers</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-2&#39;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-3&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output_2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-4&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">network</span> <span class="o">&gt;</span> <span class="p">[</span><span class="n">output_1</span><span class="p">,</span> <span class="n">output_2</span><span class="p">]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
+<span class="go">10 -&gt; [... 6 layers ...] -&gt; [(1,), (2,)]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="s1">&#39;relu-3&#39;</span><span class="p">,</span> <span class="s1">&#39;relu-4&#39;</span><span class="p">)</span>
+<span class="go">10 -&gt; [... 4 layers ...] -&gt; [(30,), (40,)]</span>
+</pre></div>
+</div>
+<p>Also instead of using names we can specify layer instance</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input_layer</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">relu_2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">relu_3</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">input_layer</span> <span class="o">&gt;</span> <span class="n">relu_2</span> <span class="o">&gt;</span> <span class="n">relu_3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
+<span class="go">Input(10) &gt; Relu(20) &gt; Relu(30)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="n">relu_2</span><span class="p">)</span>
+<span class="go">Input(10) &gt; Relu(20)</span>
+</pre></div>
+</div>
+<br></div>
+<div class="section" id="subnetworks">
+<span id="id1"></span><h1><a class="toc-backref" href="#id17">Subnetworks</a></h1>
+<p><strong>Subnetworks</strong> is a method that improves readability of the networks architecture. Instead of explaining it&#8217;s much easier to show the main advantage of this method. Here is an example of the simpe convolutional network.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)),</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">48</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">(),</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">1024</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Does it look simple to you? Not at all. However, this is a really simple network. It looks a bit complecated because it contains a lot of simple layers that usually combined in one. For instance, non-linearity like <a class="reference internal" href="../../apidocs/neupy.layers.activations.html#neupy.layers.activations.Relu" title="neupy.layers.activations.Relu"><span class="xref py py-class docutils literal"><span class="pre">Relu</span></span></a> is usually built-in inside the <a class="reference internal" href="../../apidocs/neupy.layers.convolutions.html#neupy.layers.convolutions.Convolution" title="neupy.layers.convolutions.Convolution"><span class="xref py py-class docutils literal"><span class="pre">Convolution</span></span></a> layer. So instead of combining simple layers in one complecated in NeuPy it&#8217;s better to use subnetworks. Here is an example on how to re-write network&#8217;s structure from the previous example in terms of subnetworks.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)),</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">48</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">(),</span>
+
+    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>As you can see we use an ability to organize sequence of simple layer in one small network. Each subnetwork defines a sequence of simple operations. You can think about subnetworks as a simple way to define more complecated layers. But instead of creating redundant classes that define complex layers you can define everything in place. In addition it improves the readability, because now you can see order of these simple operations inside the subnetwork.</p>
+</div>
+
+    <div class="postmeta">
+        
+        
+        
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="../layers.html">Layers</a></li>
+            <li class="right"><a href="create-custom-layers.html">Create custom layers</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Articles</h1>
+    <ul><li>
+            <a href="../../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
+        </li><li>
+            <a href="../../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
+            <a href="../../2015/09/21/password_recovery.html">Password recovery</a>
+        </li></ul>
+</div></section><section><div class="widget">
+    <h1>Install NeuPy</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neupy</pre>
+        </div>
+    </div>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../tutorials.html">tutorials</a> and <a href="../../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../search.html" method="get">
+          <div class="box">
+            <div class="search-input-container">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" name="q" id="search" placeholder="Search..." />
+            </div>
+          </div>
+    </form>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature feel free to
+        <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
+        on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../../pages/versions.html">here</a>.</div>
+    </p>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

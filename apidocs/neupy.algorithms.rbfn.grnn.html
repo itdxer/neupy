@@ -1,0 +1,367 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
+        <meta name="viewport" content="width=device-width">
+        <title>neupy.algorithms.rbfn.grnn module &mdash; NeuPy</title>
+            <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../_static/plugins.js"></script>
+        <script src="../_static/main.js"></script>
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+    <style media="screen" type="text/css">
+        .docutils { width: 100%; }
+        .docutils td { padding: 10px; }
+        .section { word-wrap:break-word; }
+        .descname { font-weight: bold; }
+        .highlight-python + .figure { margin-top: 20px; }
+        .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+        .dataframe td { padding: 5px; }
+
+        .math .gd { color: #000 !important; } /* Generic.Deleted */
+        .math .m { color: #000 !important; } /* Literal.Number */
+        .math .s { color: #000 !important; } /* Literal.String */
+        .math .mf { color: #000 !important; } /* Literal.Number.Float */
+        .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+        .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+        .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+        .math .sc { color: #000 !important; } /* Literal.String.Char */
+        .math .s2 { color: #000 !important; } /* Literal.String.Double */
+        .math .si { color: #000 !important; } /* Literal.String.Interpol */
+        .math .sx { color: #000 !important; } /* Literal.String.Other */
+        .math .s1 { color: #000 !important; } /* Literal.String.Single */
+        .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+        .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+        /* Background for class and function names */
+        dt[id^="neupy."] {
+            background-color: #e6edf2;
+            border: 1px solid #f8fafb;
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+        div[id^="module-neupy."] h1 {
+            display: none;
+        }
+
+        /* Search input field */
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            display: block;
+        }
+        .box {
+          padding-bottom: 50px;
+        }
+        .search-input-container {
+          width: 100%;
+          vertical-align: middle;
+          white-space: nowrap;
+          position: relative;
+        }
+        .search-input-container input#search {
+          width: 100%;
+          height: 50px;
+          padding-left: 45px;
+
+          float: left;
+          outline: none;
+          border: 1px solid #ddd;
+
+          box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          border-radius: 5px;
+
+          font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+          font-size: 12pt;
+        }
+        .search-input-container .icon {
+          position: absolute;
+          left: 0;
+          top: 50%;
+          margin-left: 17px;
+          margin-top: 13px;
+          z-index: 1;
+          color: #93a4ad;
+        }
+    </style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+        <div>
+          <h1><a href="../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../docs/tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+    <div class="section" id="module-neupy.algorithms.rbfn.grnn">
+<span id="neupy-algorithms-rbfn-grnn-module"></span><h1>neupy.algorithms.rbfn.grnn module</h1>
+<dl class="class">
+<dt id="neupy.algorithms.rbfn.grnn.GRNN">
+<em class="property">class </em><span class="descclassname">neupy.algorithms.rbfn.grnn.</span><span class="descname">GRNN</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Generalized Regression Neural Network (GRNN). Network applies
+only to the regression problems.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>std</strong> : float</p>
+<blockquote>
+<div><p>Standard deviation for PDF function, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.
+If your input features have high values than standard
+deviation should also be high. For instance, if input features
+from range <span class="docutils literal"><span class="pre">[0,</span> <span class="pre">20]</span></span> that standard deviation should be
+also a big value like <span class="docutils literal"><span class="pre">10</span></span> or <span class="docutils literal"><span class="pre">15</span></span>. Small values will
+lead to bad prediction.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool</p>
+<blockquote class="last">
+<div><p>Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
+informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> -
+disable it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>GRNN Network is sensitive for cases when one input feature has
+higher values than the other one. Before use it make sure that
+input values are normalized and have similar scales.</li>
+<li>Make sure that standard deviation in the same range as
+input features. Check <span class="docutils literal"><span class="pre">std</span></span> parameter description for
+more information.</li>
+<li>The bigger training dataset the slower prediction.
+It&#8217;s much more efficient for small datasets.</li>
+<li>Network uses lazy learning which mean that network doesn&#8217;t
+need iterative training. It just stores parameters
+and use them to make a predictions.</li>
+</ul>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">estimators</span><span class="p">,</span> <span class="n">environment</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_diabetes</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">preprocessing</span><span class="o">.</span><span class="n">minmax_scale</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">preprocessing</span><span class="o">.</span><span class="n">minmax_scale</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))),</span>
+<span class="gp">... </span>    <span class="n">train_size</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nw</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GRNN</span><span class="p">(</span><span class="n">std</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nw</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_predicted</span> <span class="o">=</span> <span class="n">nw</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimators</span><span class="o">.</span><span class="n">rmse</span><span class="p">(</span><span class="n">y_predicted</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+<span class="go">0.2381013391408185</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>train(input_train, target_train, copy=True)</td>
+<td>Network just stores all the information about the data and use it for the prediction. Parameter <span class="docutils literal"><span class="pre">copy</span></span> copies input data before saving it inside the network.</td>
+</tr>
+<tr class="row-even"><td>predict(input_data)</td>
+<td>Predicts output for the specified input.</td>
+</tr>
+<tr class="row-odd"><td>fit(*args, **kwargs)</td>
+<td>Alias to the <span class="docutils literal"><span class="pre">train</span></span> method.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.algorithms.rbfn.grnn.GRNN.options">
+<span class="descname">options</span><em class="property"> = {'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'std': Option(class_name='GRNN', value=BoundedProperty(name=&quot;std&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.rbfn.grnn.GRNN.predict">
+<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Make a prediction from the input data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_data</strong> : array-like (n_samples, n_features)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">array-like (n_samples,)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>In case if something is wrong with input data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.rbfn.grnn.GRNN.std">
+<span class="descname">std</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.rbfn.grnn.GRNN.train">
+<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em>, <em>copy=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Trains network. PNN doesn&#8217;t actually train, it just stores
+input data and use it for prediction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_train</strong> : array-like (n_samples, n_features)</p>
+<p><strong>target_train</strong> : array-like (n_samples,)</p>
+<blockquote>
+<div><p>Target variable should be vector or matrix
+with one feature column.</p>
+</div></blockquote>
+<p><strong>copy</strong> : bool</p>
+<blockquote>
+<div><p>If value equal to <span class="docutils literal"><span class="pre">True</span></span> than input matrices will
+be copied. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>In case if something is wrong with input data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+    <div class="postmeta">
+        
+        
+        
+        </div></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Articles</h1>
+    <ul><li>
+            <a href="../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
+        </li><li>
+            <a href="../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
+            <a href="../2015/09/21/password_recovery.html">Password recovery</a>
+        </li></ul>
+</div></section><section><div class="widget">
+    <h1>Install NeuPy</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neupy</pre>
+        </div>
+    </div>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../docs/tutorials.html">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../search.html" method="get">
+          <div class="box">
+            <div class="search-input-container">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" name="q" id="search" placeholder="Search..." />
+            </div>
+          </div>
+    </form>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature feel free to
+        <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
+        on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
+    </p>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

@@ -1,0 +1,433 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
+        <meta name="viewport" content="width=device-width">
+        <title>Algorithms with Constructible Network Architecture &mdash; NeuPy</title>
+            <link rel="stylesheet" href="../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../_static/plugins.js"></script>
+        <script src="../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Signals and Early stopping" href="signals.html" /><link rel="prev" title="Basics" href="basics.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+    <style media="screen" type="text/css">
+        .docutils { width: 100%; }
+        .docutils td { padding: 10px; }
+        .section { word-wrap:break-word; }
+        .descname { font-weight: bold; }
+        .highlight-python + .figure { margin-top: 20px; }
+        .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+        .dataframe td { padding: 5px; }
+
+        .math .gd { color: #000 !important; } /* Generic.Deleted */
+        .math .m { color: #000 !important; } /* Literal.Number */
+        .math .s { color: #000 !important; } /* Literal.String */
+        .math .mf { color: #000 !important; } /* Literal.Number.Float */
+        .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+        .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+        .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+        .math .sc { color: #000 !important; } /* Literal.String.Char */
+        .math .s2 { color: #000 !important; } /* Literal.String.Double */
+        .math .si { color: #000 !important; } /* Literal.String.Interpol */
+        .math .sx { color: #000 !important; } /* Literal.String.Other */
+        .math .s1 { color: #000 !important; } /* Literal.String.Single */
+        .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+        .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+        /* Background for class and function names */
+        dt[id^="neupy."] {
+            background-color: #e6edf2;
+            border: 1px solid #f8fafb;
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+        div[id^="module-neupy."] h1 {
+            display: none;
+        }
+
+        /* Search input field */
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            display: block;
+        }
+        .box {
+          padding-bottom: 50px;
+        }
+        .search-input-container {
+          width: 100%;
+          vertical-align: middle;
+          white-space: nowrap;
+          position: relative;
+        }
+        .search-input-container input#search {
+          width: 100%;
+          height: 50px;
+          padding-left: 45px;
+
+          float: left;
+          outline: none;
+          border: 1px solid #ddd;
+
+          box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          border-radius: 5px;
+
+          font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+          font-size: 12pt;
+        }
+        .search-input-container .icon {
+          position: absolute;
+          left: 0;
+          top: 50%;
+          margin-left: 17px;
+          margin-top: 13px;
+          z-index: 1;
+          color: #93a4ad;
+        }
+    </style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+        <div>
+          <h1><a href="../../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+    <div class="section" id="algorithms-with-constructible-network-architecture">
+<span id="constructible-architecture"></span><h1><a class="toc-backref" href="#id1">Algorithms with Constructible Network Architecture</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#algorithms-with-constructible-network-architecture" id="id1">Algorithms with Constructible Network Architecture</a><ul>
+<li><a class="reference internal" href="#set-up-connections" id="id2">Set up connections</a></li>
+<li><a class="reference internal" href="#train-networks-with-multiple-inputs" id="id3">Train networks with multiple inputs</a></li>
+<li><a class="reference internal" href="#algorithms" id="id4">Algorithms</a></li>
+<li><a class="reference internal" href="#error-functions" id="id5">Error functions</a></li>
+<li><a class="reference internal" href="#add-ons" id="id6">Add-ons</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="set-up-connections">
+<h2><a class="toc-backref" href="#id2">Set up connections</a></h2>
+<p>There are three ways to define relations between layers inside the algorithm. We can use predefined networks as a first argument</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
+    <span class="n">network</span><span class="p">,</span>
+    <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Or we can set up a list of layers that define sequential relations between layers.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+
+<span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This is just a syntax simplification that allows avoiding <span class="docutils literal"><span class="pre">layer.join</span></span> function usage.</p>
+<p>Small networks can be defined with a help of inline operator.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
+    <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>And the last way to define connections is just to set up value equal to a list or a tuple of integers.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>It&#8217;s obvious that during initialization we didn&#8217;t actually set up any layer types. By default NeuPy constructs from the tuple simple MLP network that contains dense layers with sigmoid activation function. This type of initialization typically suitable for tests or model benchmarks.</p>
+</div>
+<div class="section" id="train-networks-with-multiple-inputs">
+<h2><a class="toc-backref" href="#id3">Train networks with multiple inputs</a></h2>
+<p>NeuPy allows to train networks with multiple inputs.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+
+<span class="n">gdnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">[[</span>
+            <span class="c1"># 3 categorical inputs</span>
+            <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+            <span class="n">layers</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">n_unique_categories</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+            <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">(),</span>
+        <span class="p">],</span> <span class="p">[</span>
+            <span class="c1"># 17 numerical inputs</span>
+            <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">17</span><span class="p">),</span>
+        <span class="p">]],</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Concatenate</span><span class="p">(),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">16</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">],</span>
+
+    <span class="n">step</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+    <span class="n">nesterov</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">error</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">x_train_cat</span><span class="p">,</span> <span class="n">x_train_num</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">load_train_data</span><span class="p">()</span>
+<span class="n">x_test_cat</span><span class="p">,</span> <span class="n">x_test_num</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">load_test_data</span><span class="p">()</span>
+
+<span class="c1"># Categorical variable should be the first, becuase</span>
+<span class="c1"># categorical input layer was defined first in the network</span>
+<span class="n">network</span><span class="o">.</span><span class="n">train</span><span class="p">([</span><span class="n">x_train_cat</span><span class="p">,</span> <span class="n">x_train_num</span><span class="p">],</span> <span class="n">y_train</span><span class="p">,</span>
+              <span class="p">[</span><span class="n">x_test_cat</span><span class="p">,</span> <span class="n">x_test_num</span><span class="p">],</span> <span class="n">y_test</span><span class="p">,</span>
+              <span class="n">epochs</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">y_predicted</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">x_test_cat</span><span class="p">,</span> <span class="n">x_test_num</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="algorithms">
+<h2><a class="toc-backref" href="#id4">Algorithms</a></h2>
+<p>NeuPy supports lots of different training algorithms based on the backpropagation. You can check <a class="reference internal" href="../../pages/cheatsheet.html#cheatsheet-backprop-algorithms"><span class="std std-ref">Cheat sheet</span></a> if you want to learn more about them.</p>
+<p>Before using these algorithms you must understand that not all of them are suitable for all problems. Some of the methods like <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">Levenberg-Marquardt</span></span></a> or <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> work better for small networks and they would be extremely slow for networks with millions of parameters. In addition, it&#8217;s important to note that not all algorithms are possible to train with mini-batches. Algorithms like <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> are not able to train properly with mini-batch.</p>
+</div>
+<div class="section" id="error-functions">
+<h2><a class="toc-backref" href="#id5">Error functions</a></h2>
+<p>NeuPy has many different <a class="reference internal" href="../../pages/cheatsheet.html#cheatsheet-error-function"><span class="std std-ref">error functions</span></a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+
+<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">MinibatchGradientDescent</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">error</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Also, it&#8217;s possible to create custom error functions. Error function should have two mandatory arguments.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+
+<span class="k">def</span> <span class="nf">mean_absolute_error</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">predicted</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">T</span><span class="o">.</span><span class="n">abs_</span><span class="p">(</span><span class="n">expected</span> <span class="o">-</span> <span class="n">predicted</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">MinibatchGradientDescent</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">error</span><span class="o">=</span><span class="n">mean_absolute_error</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Error function should return a scalar because during the training output from the error function will be used as a variable with respect to which we are differentiating</p>
+</div>
+<div class="section" id="add-ons">
+<h2><a class="toc-backref" href="#id6">Add-ons</a></h2>
+<p>Algorithms with constructible architectures allow to use additional update rules for parameter regularization and step update. For instance, we want to add <a class="reference internal" href="../../apidocs/neupy.algorithms.regularization.weight_decay.html#neupy.algorithms.regularization.weight_decay.WeightDecay" title="neupy.algorithms.regularization.weight_decay.WeightDecay"><span class="xref py py-class docutils literal"><span class="pre">Weight</span> <span class="pre">Decay</span></span></a> regularization and we want to minimize step monotonically after each epoch.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+
+<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">MinibatchGradientDescent</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+
+    <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">WeightDecay</span><span class="p">,</span>
+            <span class="n">algorithms</span><span class="o">.</span><span class="n">StepDecay</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Both <a class="reference internal" href="../../apidocs/neupy.algorithms.regularization.weight_decay.html#neupy.algorithms.regularization.weight_decay.WeightDecay" title="neupy.algorithms.regularization.weight_decay.WeightDecay"><span class="xref py py-class docutils literal"><span class="pre">WeightDecay</span></span></a> and <a class="reference internal" href="../../apidocs/neupy.algorithms.step_update.step_decay.html#neupy.algorithms.step_update.step_decay.StepDecay" title="neupy.algorithms.step_update.step_decay.StepDecay"><span class="xref py py-class docutils literal"><span class="pre">StepDecay</span></span></a> algorithms have additional parameters. In case if we need to modify them we can add them to the training algorithm.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+
+<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">MinibatchGradientDescent</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="p">],</span>
+
+    <span class="c1"># Parameters from MinibatchGradientDescent</span>
+    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+
+    <span class="c1"># Parameters from StepDecay</span>
+    <span class="n">reduction_freq</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+
+    <span class="c1"># Parameters from WeightDecay</span>
+    <span class="n">decay_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+
+    <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">WeightDecay</span><span class="p">,</span>
+            <span class="n">algorithms</span><span class="o">.</span><span class="n">StepDecay</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>NeuPy doesn&#8217;t allow to use multiple regularizations and step update add-ons for training algorithm.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">MinibatchGradientDescent</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="p">],</span>
+<span class="gp">... </span>    <span class="n">addons</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">... </span>        <span class="n">algorithms</span><span class="o">.</span><span class="n">WeightDecay</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">algorithms</span><span class="o">.</span><span class="n">WeightElimination</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+
+<span class="go">ValueError: There can be only one add-on class with type &#39;Regularization&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+    <div class="postmeta">
+        
+        
+        
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="basics.html">Basics</a></li>
+            <li class="right"><a href="signals.html">Signals and Early stopping</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Articles</h1>
+    <ul><li>
+            <a href="../../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
+        </li><li>
+            <a href="../../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
+            <a href="../../2015/09/21/password_recovery.html">Password recovery</a>
+        </li></ul>
+</div></section><section><div class="widget">
+    <h1>Install NeuPy</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neupy</pre>
+        </div>
+    </div>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../tutorials.html">tutorials</a> and <a href="../../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../search.html" method="get">
+          <div class="box">
+            <div class="search-input-container">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" name="q" id="search" placeholder="Search..." />
+            </div>
+          </div>
+    </form>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature feel free to
+        <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
+        on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../../pages/versions.html">here</a>.</div>
+    </p>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>
