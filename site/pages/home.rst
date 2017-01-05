@@ -19,6 +19,7 @@ Supported Features
 ------------------
 
 * Deep Learning
+* Reinforcement Learning (RL)
 * Convolutional Neural Networks (CNN)
 * Restricted Boltzmann Machine (RBM)
 * Multilayer Perceptron (MLP)

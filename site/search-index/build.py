@@ -1,5 +1,6 @@
 import os
 import re
+import pickle
 import logging
 from collections import defaultdict
 from urllib.parse import urljoin, urlparse
@@ -9,12 +10,15 @@ import numpy as np
 import scipy.sparse as sp
 
 from graph import DirectedGraph
+from pagerank import pagerank
 from htmltools import iter_html_files, ParseHTML
 
 
 logging.basicConfig(level=logging.DEBUG)
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
+INDEX_DIR = os.path.join(CURRENT_DIR, 'index-files')
+INDEX_FILE = os.path.join(INDEX_DIR, 'index.pickle')
 SITE_DIR = os.path.join(CURRENT_DIR, '..', 'blog', 'html')
 SITE_ROOT = 'http://neupy.com'
 
@@ -28,6 +32,8 @@ def ignore_link(link):
     patterns = [
         '/pages/versions.html',
         '/index.html',
+        '/page\d{1,}.html',
+        r'.*cheatsheet.html',
         r'.+(css|js|jpg|png)$',
         r'/_images/.+',
     ]
@@ -46,16 +52,17 @@ def url_filter(links):
             yield link
 
 
-class FeatureExtraction(object):
-    def __init__(self, documents):
-        pass
+def save_index(data):
+    if not os.path.exists(INDEX_DIR):
+        os.mkdir(INDEX_DIR)
+
+    with open(INDEX_FILE, 'wb') as f:
+        pickle.dump(data, f)
 
 
 if __name__ == '__main__':
-    documents = defaultdict()
-
-    vocabulary = defaultdict()
-    vocabulary.default_factory = vocabulary.__len__
+    documents = {}
+    vocabulary = {}
 
     term_frequency = defaultdict(int)
     link_graph = DirectedGraph()
@@ -72,12 +79,13 @@ if __name__ == '__main__':
         if ignore_link(current_page_url):
             continue
 
+        link_graph.add_node(current_page_url)
         logging.debug('Processing "{}"'.format(html_filename))
 
         with open(html_filepath) as html_file:
             html = html_file.read()
             html = ParseHTML(html, url=current_page_url)
-            text = html.text()
+            text = html.text().lower()
 
             for link in url_filter(html.links()):
                 link_graph.add_edge(current_page_url, link)
@@ -85,7 +93,12 @@ if __name__ == '__main__':
             if text is None:
                 continue
 
+            text = text.replace('.', ' ').replace('=', ' ')
+
             for term in nltk.word_tokenize(text):
+                if term not in vocabulary:
+                    vocabulary[term] = len(vocabulary)
+
                 termid = vocabulary[term]
                 term_frequency[termid] += 1
 
@@ -95,9 +108,9 @@ if __name__ == '__main__':
             index_pointers.append(len(indeces))
 
             documents[docid] = {
+                'url': current_page_url,
                 'filepath': html_filepath,
                 'filename': html_filename,
-                'html': html,
                 'text': text,
             }
             docid += 1
@@ -111,8 +124,12 @@ if __name__ == '__main__':
     frequencies = sp.csr_matrix((data, indeces, index_pointers),
                                 shape=(n_documents, n_terms))
     df = (frequencies >= 1).sum(axis=0)
-    idf = np.log((n_documents + 1) / (df + 1))
-    idf = sp.spdiags(idf, diags=0, m=n_terms, n=n_terms)
+    idf = np.log((n_documents / df) + 1)
+    idf = np.asarray(idf)
+    # idf = sp.spdiags(idf, diags=0, m=n_terms, n=n_terms)
 
     tf = np.log1p(frequencies)
     tf.data += 1
+
+    rank = pagerank(link_graph)
+    save_index([documents, vocabulary, tf, idf, rank])

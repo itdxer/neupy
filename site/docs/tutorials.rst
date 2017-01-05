@@ -29,6 +29,11 @@ Convolutional Neural Networks
 * `Inception v3 <https://github.com/itdxer/neupy/tree/master/examples/cnn/inception_v3.py>`_
 * `ResNet 50 <https://github.com/itdxer/neupy/tree/master/examples/cnn/resnet50.py>`_
 
+Reinforcement Learning
+~~~~~~~~~~~~~~~~~~~~~~
+
+* `Playing CartPole game <https://github.com/itdxer/neupy/tree/master/examples/reinforcement_learning/rl_cartpole.py>`_
+
 Autoencoders
 ~~~~~~~~~~~~
 

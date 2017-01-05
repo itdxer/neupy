@@ -14,19 +14,16 @@ SQUEEZENET_WEIGHTS_FILE = os.path.join(FILES_DIR, 'squeezenet.pickle')
 
 def Fire(s_1x1, e_1x1, e_3x3, name):
     return layers.join(
-        layers.Convolution((s_1x1, 1, 1),
-            padding='half',
-            name=name + '/squeeze1x1'),
+        layers.Convolution((s_1x1, 1, 1), padding='half',
+                           name=name + '/squeeze1x1'),
         layers.Relu(),
         [[
-            layers.Convolution((e_1x1, 1, 1),
-                padding='half',
-                name=name + '/expand1x1'),
+            layers.Convolution((e_1x1, 1, 1), padding='half',
+                               name=name + '/expand1x1'),
             layers.Relu(),
         ], [
-            layers.Convolution((e_3x3, 3, 3),
-                padding='half',
-                name=name + '/expand3x3'),
+            layers.Convolution((e_3x3, 3, 3), padding='half',
+                               name=name + '/expand3x3'),
             layers.Relu(),
         ]],
         layers.Concatenate(),
