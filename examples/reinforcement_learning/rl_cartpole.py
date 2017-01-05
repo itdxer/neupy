@@ -16,31 +16,40 @@ CARTPOLE_WEIGHTS = os.path.join(FILES_DIR, 'cartpole-weights.pickle')
 
 
 def sample_minibatch(network, memory, gamma=0.9):
-    x_train, y_train = [], []
+    data = np.array(memory, dtype=[
+        ('state', np.ndarray),
+        ('action', np.int),
+        ('reward', np.int),
+        ('done', np.bool),
+        ('new_state', np.ndarray),
+    ])
 
-    for data in memory:
-        state, action, reward, done, new_state = data
+    state = np.array(data['state'].tolist())
+    new_state = np.array(data['new_state'].tolist())
 
-        Q = network.predict(state)
+    # Note: Calculating Q for all states at once is much faster
+    # that do it per each sample separately
+    Q = network.predict(state)
+    new_Q = network.predict(new_state)
+    max_Q = np.max(new_Q, axis=1)
 
-        if not done:
-            new_Q = network.predict(new_state)
-            max_Q = np.max(new_Q)
-            reward = reward + gamma * max_Q
+    n_samples = len(memory)
+    row_index = np.arange(n_samples)
+    column_index = data['action']
 
-        y = Q[0].copy()
-        y[action] = reward
+    Q[(row_index, column_index)] = np.where(
+        data['done'],
+        data['reward'],
+        data['reward'] + gamma * max_Q
+    )
 
-        x_train.append(state)
-        y_train.append(y)
-
-    return np.array(x_train), np.array(y_train)
+    return state, Q
 
 
 def play_game(env, network, n_steps=1000):
     state = env.reset()
 
-    for t in range(n_steps):
+    for _ in range(n_steps):
         env.render()
 
         q = network.predict(state)
@@ -54,7 +63,7 @@ def play_game(env, network, n_steps=1000):
 
 def train_network(env, network, memory, n_games=200, max_score=200,
                   epsilon=0.1, gamma=0.9):
-    for episode in range(n_games):
+    for episode in range(1, n_games + 1):
         state = env.reset()
 
         for t in range(max_score):
@@ -68,7 +77,7 @@ def train_network(env, network, memory, n_games=200, max_score=200,
                 action = int(np.argmax(q[0]))
 
             new_state, reward, done, info = env.step(action)
-            memory.append([state, action, reward, done, new_state])
+            memory.append((state, action, reward, done, new_state))
 
             if done:
                 # We done when network lost the game.
