@@ -13,7 +13,8 @@ __all__ = ('RPROP', 'IRPROPPlus')
 
 class RPROP(StepSelectionBuiltIn, GradientDescent):
     """
-    RPROP :network:`GradientDescent` algorithm optimization.
+    Resilient backpropagation (RPROP) is an optimization
+    algorithm for supervised learning.
 
     Parameters
     ----------
@@ -124,7 +125,8 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
 
 class IRPROPPlus(RPROP):
     """
-    iRPROP+ :network:`GradientDescent` algorithm optimization.
+    iRPROP+ is an optimization algorithm for supervised learning.
+    This is a variation of the :network:`RPROP` algorithm.
 
     Parameters
     ----------
