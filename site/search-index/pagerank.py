@@ -35,8 +35,11 @@ def pagerank(graph, n_iter=100, alpha=0.9, tol=1e-6):
     n_edges_per_node = graph_matrix.sum(axis=1)
     n_edges_per_node = np.array(n_edges_per_node).flatten()
 
-    normilize_vector = np.where(n_edges_per_node != 0,
+    np.seterr(divide='ignore')
+    normilize_vector = np.where((n_edges_per_node != 0),
                                 1. / n_edges_per_node, 0)
+    np.seterr(divide='warn')
+
     normilize_matrix = sp.spdiags(normilize_vector, 0,
                                   *graph_matrix.shape, format='csr')
 

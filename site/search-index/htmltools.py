@@ -13,6 +13,7 @@ def iter_html_files(directory):
 
 class ParseHTML(object):
     def __init__(self, html, url):
+        self.raw_html = html
         self.html = BeautifulSoup(html, "html.parser")
         self.current_page_url = url
 
@@ -35,3 +36,10 @@ class ParseHTML(object):
 
             if uri.netloc in ('neupy.com', ''):
                 yield urljoin(self.current_page_url, uri.path)
+
+    def subdocuments(self):
+        pass
+
+    def __reduce__(self):
+        arguments = (self.raw_html, self.current_page_url)
+        return (self.__class__, arguments)
