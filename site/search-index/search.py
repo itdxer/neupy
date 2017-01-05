@@ -45,7 +45,10 @@ if __name__ == '__main__':
 
     while True:
         print('\n' + '-' * 60)
+
         # query = input('Query: ')
+        query = 'rprop'
+        print('Query: {}'.format(query))
 
         query_tokens = nltk.word_tokenize(query.lower())
         indeces = [vocabulary[t] for t in query_tokens if t in vocabulary]
@@ -60,22 +63,20 @@ if __name__ == '__main__':
         similarity_score = rank[document_ids].T
         pagerank_score = pagerank[document_ids]
         rank = similarity_score + 2 * pagerank_score
-        # rank = np.expand_dims(pagerank[document_ids], axis=0)
-        order = np.asarray(rank.argsort())[0][::-1]
+        order = np.asarray(rank.argsort())[0]
 
-        print("Found {} results".format(len(document_ids)))
-        print('')
+        print("Found {} relevant documents".format(len(document_ids)))
 
-        for i, index in enumerate(order, start=1):
+        for i, index in enumerate(reversed(order), start=1):
             document_id = document_ids[index]
             document = documents[document_id]
             score = rank[0, index]
 
+            print("")
             print("{}) {}".format(i, document['url']))
             print("   Total Score: {}".format(score))
             print("   PageRank Score: {}".format(pagerank_score[index]))
             print("   Similarity Score: {}".format(similarity_score[0, index]))
-            print("")
 
             if i == 5:
                 break

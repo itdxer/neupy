@@ -6,14 +6,12 @@ class DirectedGraph(object):
         self.graph = OrderedDict()
 
     def add_node(self, node):
-        self.graph[node] = []
+        if node not in self.graph:
+            self.graph[node] = []
 
     def add_edge(self, node_1, node_2):
-        if node_1 not in self.graph:
-            self.add_node(node_1)
-
-        if node_2 not in self.graph:
-            self.add_node(node_2)
+        self.add_node(node_1)
+        self.add_node(node_2)
 
         self.graph[node_1].append(node_2)
 
