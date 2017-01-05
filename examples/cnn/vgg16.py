@@ -1,7 +1,6 @@
 import os
 
 import theano
-import theano.tensor as T
 from neupy import layers, storage
 
 from imagenet_tools import (CURRENT_DIR, FILES_DIR, load_image,
