@@ -288,8 +288,14 @@ class ParallelConnection(BaseConnection):
                 connection = join(*layers)
 
             self.connections.append(connection)
-            self.input_layers.extend(connection.input_layers)
-            self.output_layers.extend(connection.output_layers)
+
+            for input_layer in connection.input_layers:
+                if input_layer not in self.input_layers:
+                    self.input_layers.append(input_layer)
+
+            for output_layer in connection.output_layers:
+                if output_layer not in self.output_layers:
+                    self.output_layers.append(output_layer)
 
     @property
     def input_shape(self):

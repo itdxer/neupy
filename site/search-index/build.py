@@ -31,10 +31,22 @@ def url_from_file(filepath):
 
 def ignore_link(link):
     patterns = [
-        '/pages/versions.html',
+        # Base pages
+        '/rss.html',
         '/index.html',
-        '/page\d{1,}.html',
-        r'.*cheatsheet.html',
+        '/master.html',
+        '/py-modindex.html',
+
+        # Other pages
+        '/pages/home.html',
+        '/apidocs/modules.html',
+
+        # Pages that has collected information
+        r'/page\d{1,}.html',
+        r'.*tags/.+\.html',
+        r'.*cheatsheet\.html',
+
+        # Static files
         r'.+(css|js|jpg|png)$',
         r'/_images/.+',
     ]
@@ -63,7 +75,8 @@ def save_index(data):
 
 def iter_documents(directory):
     logging.info("Collecting documents from the directory (%s)", directory)
-    Document = namedtuple("Document", "filename filepath url links html text")
+    Document = namedtuple(
+        "Document", "filename filepath url url_fragment links html text")
 
     for filepath in iter_html_files(directory):
         current_page_url = url_from_file(filepath)
@@ -84,12 +97,21 @@ def iter_documents(directory):
                 links.append(link)
 
             if text is None:
-                logging.debug('Skip "%s", because text is missed',
-                              filename)
+                logging.debug('Skip "%s", because text is missed', filename)
                 continue
 
-            yield Document(filename, filepath, current_page_url,
-                           links, html, text)
+            subdocuments = html.subdocuments()
+
+            if len(subdocuments) in (0, 1):
+                # No point to seperate it into subdocuments
+                url_fragment = ''
+                yield Document(filename, filepath, current_page_url,
+                               url_fragment, links, html, text)
+
+            for subdocument in subdocuments:
+                yield Document(filename, filepath, current_page_url,
+                               subdocument.url_fragment, subdocument.links,
+                               subdocument.html, subdocument.text)
 
 
 if __name__ == '__main__':
@@ -106,7 +128,12 @@ if __name__ == '__main__':
     data = []
 
     for document in iter_documents(SITE_DIR):
-        logging.debug('Processing "%s"', document.filename)
+        if document.url_fragment:
+            url = document.url + "#" + document.url_fragment
+        else:
+            url = document.url
+
+        logging.debug('Processing "%s"', url)
 
         link_graph.add_node(document.url)
         for link in document.links:
@@ -135,7 +162,7 @@ if __name__ == '__main__':
         raise OSError("Cannot find site documents. Probably site "
                       "hasn't been build yet.")
 
-    logging.info("Found {} HTML files".format(n_documents))
+    logging.info("Found {} documents".format(n_documents))
     logging.info("Found {} terms".format(n_terms))
 
     logging.info("Calculation TF and IDF")

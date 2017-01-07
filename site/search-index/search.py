@@ -61,8 +61,8 @@ if __name__ == '__main__':
         document_ids, _ = rank.nonzero()
 
         similarity_score = rank[document_ids].T
-        pagerank_score = pagerank[document_ids]
-        rank = similarity_score + 2 * pagerank_score
+        # pagerank_score = pagerank[document_ids]
+        rank = similarity_score# + 2 * pagerank_score
         order = np.asarray(rank.argsort())[0]
 
         print("Found {} relevant documents".format(len(document_ids)))
@@ -72,13 +72,19 @@ if __name__ == '__main__':
             document = documents[document_id]
             score = rank[0, index]
 
+
+            if document['url_fragment']:
+                url = document['url'] + "#" + document['url_fragment']
+            else:
+                url = document['url']
+
             print("")
-            print("{}) {}".format(i, document['url']))
+            print("{}) {}".format(i, url))
             print("   Total Score: {}".format(score))
-            print("   PageRank Score: {}".format(pagerank_score[index]))
+            # print("   PageRank Score: {}".format(pagerank_score[index]))
             print("   Similarity Score: {}".format(similarity_score[0, index]))
 
-            if i == 5:
-                break
+            # if i == 5:
+            #     break
 
         break
