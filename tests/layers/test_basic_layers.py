@@ -1,4 +1,6 @@
-from neupy import layers
+import numpy as np
+
+from neupy import layers, algorithms
 
 from base import BaseTestCase
 
@@ -14,6 +16,20 @@ class LayersBasicsTestCase(BaseTestCase):
 
         self.assertIs(hidden_layer_1.weight, hidden_layer_2.weight)
         self.assertIs(hidden_layer_1.bias, hidden_layer_2.bias)
+
+        # Check that it is able to train network without errors
+        x_train = y_train = np.random.random((15, 10))
+        gdnet = algorithms.GradientDescent(network)
+        gdnet.train(x_train, y_train, epochs=5)
+
+        np.testing.assert_array_almost_equal(
+            hidden_layer_1.weight.get_value(),
+            hidden_layer_2.weight.get_value(),
+        )
+        np.testing.assert_array_almost_equal(
+            hidden_layer_1.bias.get_value(),
+            hidden_layer_2.bias.get_value(),
+        )
 
 
 class LayerNameTestCase(BaseTestCase):

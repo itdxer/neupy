@@ -356,7 +356,10 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         """
         updates = []
         for layer in self.layers:
-            updates.extend(self.init_layer_updates(layer))
+            for param, update in self.init_layer_updates(layer):
+                if all(param != p for p, u in updates):
+                    updates.append((param, update))
+
         return updates
 
     def init_layer_updates(self, layer):
