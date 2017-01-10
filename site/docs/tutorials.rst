@@ -33,6 +33,7 @@ Reinforcement Learning
 ~~~~~~~~~~~~~~~~~~~~~~
 
 * `Neural Network plays CartPole game <https://github.com/itdxer/neupy/tree/master/examples/reinforcement_learning/rl_cartpole.py>`_
+* `Value Iteration Network (VIN) <https://github.com/itdxer/neupy/tree/master/examples/reinforcement_learning/vin>`_
 
 Autoencoders
 ~~~~~~~~~~~~

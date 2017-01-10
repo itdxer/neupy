@@ -23,6 +23,9 @@ notebooks/.ipynb_checkpoints/*
 *.h5
 *.pickle
 
+# Pickle files important for VIN example
+!examples/reinforcement_learning/vin/data/*.pickle
+
 # Vim
 *.swp
 *.swo
