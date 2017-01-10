@@ -16,7 +16,6 @@ from neupy.exceptions import InvalidConnection
 from neupy.helpers import table
 from neupy.core.properties import ChoiceProperty
 from neupy.algorithms.base import BaseNetwork
-from neupy.algorithms.utils import parameter_values
 from .gd import errors
 
 

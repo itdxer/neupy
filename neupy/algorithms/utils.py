@@ -151,4 +151,4 @@ def shuffle(*arrays):
     if len(arrays) == 1:
         return arrays[0]
 
-    return arrays
+    return tuple(arrays)
