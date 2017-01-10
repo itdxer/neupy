@@ -7,12 +7,11 @@ from itertools import groupby
 import six
 import numpy as np
 
-from neupy.utils import preformat_value, AttributeKeyDict
+from neupy.utils import preformat_value, AttributeKeyDict, as_tuple
 from neupy.helpers import table
 from neupy.exceptions import StopTraining
 from neupy.core.base import BaseSkeleton
-from neupy.core.properties import (BoundedProperty, NumberProperty,
-                                   Property)
+from neupy.core.properties import BoundedProperty, NumberProperty, Property
 from .summary_info import SummaryTable, InlineSummary
 from .utils import iter_until_converge, shuffle
 
@@ -408,8 +407,9 @@ class BaseNetwork(BaseSkeleton):
                 on_epoch_start_update(epoch)
 
                 if shuffle_data:
-                    input_train, target_train = shuffle(input_train,
-                                                        target_train)
+                    data = shuffle(*as_tuple(input_train, target_train))
+                    input_train, target_train = data[:-1], data[-1]
+
                 try:
                     train_error = train_epoch(input_train, target_train)
 
