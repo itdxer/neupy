@@ -52,9 +52,8 @@ class Perceptron(BaseLinearNetwork):
     array([[-1],
            [ 1]])
     """
-    def init_layer_updates(self, layer):
-        if not layer.parameters:
-            return []
+    def init_train_updates(self):
+        layer = self.connection.output_layers[0]
 
         prediction_func = self.variables.prediction_func
         network_output = self.variables.network_output

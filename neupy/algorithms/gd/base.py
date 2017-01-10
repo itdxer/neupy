@@ -208,6 +208,10 @@ def cannot_divide_into_batches(data, batch_size):
     -------
     bool
     """
+    if isinstance(data, (list, tuple)):
+        # In case if network has more than one input
+        data = data[0]
+
     n_samples = len(data)
     return batch_size is None or n_samples <= batch_size
 
@@ -304,6 +308,7 @@ def apply_batches(function, arguments, batch_size, logger, description='',
     outputs = []
     for batch in batch_iterator:
         sliced_arguments = [argument[batch] for argument in arguments]
+
         output = function(*sliced_arguments)
         outputs.append(output)
 
@@ -430,6 +435,25 @@ class MinibatchTrainingMixin(Configurable):
         )
 
 
+def count_samples(input_data):
+    """
+    Count number of samples in the input data
+
+    Parameters
+    ----------
+    input_data : array-like or list/tuple of array-like objects
+        Input data to the network
+
+    Returns
+    -------
+    int
+        Number of samples in the input data.
+    """
+    if isinstance(input_data, (list, tuple)):
+        return len(input_data[0])
+    return len(input_data)
+
+
 class MinibatchGradientDescent(GradientDescent, MinibatchTrainingMixin):
     """
     Mini-batch Gradient Descent algorithm.
@@ -493,7 +517,7 @@ class MinibatchGradientDescent(GradientDescent, MinibatchTrainingMixin):
         )
         return average_batch_errors(
             errors,
-            n_samples=len(input_train),
+            n_samples=count_samples(input_train),
             batch_size=self.batch_size,
         )
 
@@ -525,7 +549,7 @@ class MinibatchGradientDescent(GradientDescent, MinibatchTrainingMixin):
         )
         return average_batch_errors(
             errors,
-            n_samples=len(input_data),
+            n_samples=count_samples(input_data),
             batch_size=self.batch_size,
         )
 

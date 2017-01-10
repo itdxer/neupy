@@ -62,12 +62,10 @@ class ModifiedRelaxation(BaseLinearNetwork):
     --------
     :network:`LMS` : LMS Neural Network.
     """
-
     dead_zone_radius = BoundedProperty(default=0.1, minval=0)
 
-    def init_layer_updates(self, layer):
-        if not layer.parameters:
-            return []
+    def init_train_updates(self):
+        layer = self.connection.output_layers[0]
 
         prediction_func = self.variables.train_prediction_func
         network_output = self.variables.network_output
