@@ -14,14 +14,14 @@ from .graph import LayerGraph
 __all__ = ('LayerConnection', 'BaseConnection', 'ParallelConnection')
 
 
-def create_input_variables(graph):
+def create_input_variables(input_layers):
     """
     Create input variables for each input layer
     in the graph.
 
     Parameters
     ----------
-    graph : LayerGraph instance
+    input_layers : list of layers
 
     Returns
     -------
@@ -29,7 +29,7 @@ def create_input_variables(graph):
     """
     inputs = []
 
-    for input_layer in graph.input_layers:
+    for input_layer in input_layers:
         variable = create_input_variable(
             input_layer.input_shape,
             name="layer:{}/var:input".format(input_layer.name))
@@ -177,7 +177,7 @@ class BaseConnection(object):
         callable object
         """
         if not inputs:
-            inputs = create_input_variables(self.graph)
+            inputs = create_input_variables(self.input_layers)
 
         with self.disable_training_state():
             return theano.function(inputs, self.output(*inputs))

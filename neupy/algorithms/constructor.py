@@ -9,7 +9,7 @@ import theano.tensor as T
 
 from neupy import layers
 from neupy.utils import AttributeKeyDict, asfloat, format_data, as_tuple
-from neupy.layers.utils import preformat_layer_shape
+from neupy.layers.utils import preformat_layer_shape, iter_parameters
 from neupy.layers.connections import LayerConnection, is_sequential
 from neupy.layers.connections.base import create_input_variables
 from neupy.exceptions import InvalidConnection
@@ -294,7 +294,8 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
 
     def init_input_output_variables(self):
         self.variables.update(
-            network_inputs=create_input_variables(self.connection.graph),
+            network_inputs=create_input_variables(
+                self.connection.input_layers),
             network_output=create_output_variable(
                 self.error,
                 name='algo:network/var:network-output',
@@ -355,36 +356,12 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         each training epoch.
         """
         updates = []
-        for layer in self.layers:
-            for param, update in self.init_layer_updates(layer):
-                if all(param != p for p, u in updates):
-                    updates.append((param, update))
-
-        return updates
-
-    def init_layer_updates(self, layer):
-        """
-        Initialize train function update in Theano format that
-        would be trigger after each training epoch for each layer.
-
-        Parameters
-        ----------
-        layer : object
-            Any layer that inherit from layers.BaseLayer class.
-
-        Returns
-        -------
-        list
-            Update that excaptable by ``theano.function``. There should be
-            a lits that contains tuples with 2 elements. First one should
-            be parameter that would be updated after epoch and the second one
-            should update rules for this parameter. For example parameter
-            could be a layer's weight and bias.
-        """
-        updates = []
-        for parameter in parameter_values(layer):
+        for layer, _, parameter in iter_parameters(self.layers):
             updates.extend(self.init_param_updates(layer, parameter))
-        updates.extend(layer.updates)
+
+        for layer in self.layers:
+            updates.extend(layer.updates)
+
         return updates
 
     def init_param_updates(self, layer, parameter):
@@ -448,8 +425,7 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         array-like or None
             Function returns formatted array.
         """
-        is_feature1d = does_layer_accept_1d_feature(self.output_layer)
-        return format_data(target_data, is_feature1d)
+        return format_data(target_data)
 
     def prediction_error(self, input_data, target_data):
         """

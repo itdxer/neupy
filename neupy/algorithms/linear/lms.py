@@ -52,10 +52,8 @@ class LMS(BaseLinearNetwork):
     --------
     :network:`Perceptron` : Perceptron Neural Network.
     """
-
-    def init_layer_updates(self, layer):
-        if not layer.parameters:
-            return []
+    def init_train_updates(self):
+        layer = self.connection.output_layers[0]
 
         network_output = self.variables.network_output
         network_input = self.variables.network_input

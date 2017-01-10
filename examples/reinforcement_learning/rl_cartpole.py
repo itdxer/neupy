@@ -15,7 +15,7 @@ FILES_DIR = os.path.join(CURRENT_DIR, 'files')
 CARTPOLE_WEIGHTS = os.path.join(FILES_DIR, 'cartpole-weights.pickle')
 
 
-def sample_minibatch(network, memory, gamma=0.9):
+def training_samples(network, memory, gamma=0.9):
     data = np.array(memory, dtype=[
         ('state', np.ndarray),
         ('action', np.int),
@@ -86,7 +86,7 @@ def train_network(env, network, memory, n_games=200, max_score=200,
 
             if len(memory) == memory_size:
                 # Train only when we collected enough samples
-                x_train, y_train = sample_minibatch(network, memory, gamma)
+                x_train, y_train = training_samples(network, memory, gamma)
                 network.train(x_train, y_train, epochs=1)
                 loss = network.errors.last()
 

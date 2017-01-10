@@ -4,7 +4,7 @@ import numpy as np
 
 from neupy import algorithms
 from neupy.algorithms.gd.base import (BatchSizeProperty, iter_batches,
-                                      average_batch_errors,
+                                      average_batch_errors, count_samples,
                                       cannot_divide_into_batches)
 
 from data import simple_classification
@@ -77,3 +77,10 @@ class MinibatchGDTestCase(BaseTestCase):
         self.assertFalse(cannot_divide_into_batches(x, batch_size=2))
         self.assertFalse(cannot_divide_into_batches(x, batch_size=3))
         self.assertFalse(cannot_divide_into_batches(x, batch_size=9))
+        self.assertFalse(cannot_divide_into_batches((x, x), batch_size=9))
+
+    def test_count_samples_function(self):
+        x = np.random.random((10, 5))
+
+        self.assertEqual(count_samples(x), 10)
+        self.assertEqual(count_samples([x, x]), 10)
