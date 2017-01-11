@@ -1,5 +1,7 @@
 import os
 import pickle
+import argparse
+from collections import namedtuple
 
 import theano
 import scipy.io
@@ -7,12 +9,7 @@ import numpy as np
 from sklearn.utils import shuffle
 from neupy.utils import asfloat
 
-
-CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
-DATA_DIR = os.path.join(CURRENT_DIR, 'data')
-MAT_DATA = os.path.join(DATA_DIR, 'gridworld_8.mat')
-TRAIN_DATA = os.path.join(DATA_DIR, 'gridworld-8-train.pickle')
-TEST_DATA = os.path.join(DATA_DIR, 'gridworld-8-test.pickle')
+from settings import environments
 
 
 def save_data(data, filepath):
@@ -25,12 +22,18 @@ def load_data(filepath):
         return pickle.load(f)
 
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--seed', '-s', type=int, default=0)
+parser.add_argument('--imsize', '-i', choices=[8, 16, 28],
+                    type=int, required=True)
+
 if __name__ == '__main__':
-    np.random.seed(0)
+    args = parser.parse_args()
 
-    im_size = (8, 8)
+    env = environments[args.imsize]
+    np.random.seed(args.seed)
 
-    matlab_data = scipy.io.loadmat(MAT_DATA)
+    matlab_data = scipy.io.loadmat(env['mat_file'])
     image_data = matlab_data["batch_im_data"]
     image_data = (image_data - 1) / 255.  # obstacles = 1, free zone = 0
 
@@ -39,8 +42,9 @@ if __name__ == '__main__':
     s2_data = matlab_data["state_y_data"].astype('int8')
     y_data = matlab_data["batch_label_data"].astype('int8')
 
-    image_data = asfloat(image_data.reshape(-1, 1, *im_size))
-    value_data = asfloat(value_data.reshape(-1, 1, *im_size))
+    image_data = asfloat(image_data.reshape(-1, 1, *env['image_size']))
+    value_data = asfloat(value_data.reshape(-1, 1, *env['image_size']))
+
     x_data = np.append(image_data, value_data, axis=1)
     n_samples = x_data.shape[0]
 
@@ -54,5 +58,5 @@ if __name__ == '__main__':
     x_train, s1_train, s2_train, y_train = shuffle(
         x_train, s1_train, s2_train, y_train)
 
-    save_data((x_train, s1_train, s2_train, y_train), TRAIN_DATA)
-    save_data((x_test, s1_test, s2_test, y_test), TEST_DATA)
+    save_data((x_train, s1_train, s2_train, y_train), env['train_data_file'])
+    save_data((x_test, s1_test, s2_test, y_test), env['test_data_file'])

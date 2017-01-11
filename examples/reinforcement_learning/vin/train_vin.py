@@ -1,4 +1,5 @@
 import os
+import argparse
 from functools import partial
 
 import theano
@@ -8,11 +9,13 @@ import numpy as np
 from neupy.utils import as_tuple, asfloat, asint
 from neupy import layers, init, algorithms, environment, storage
 
-from loaddata import CURRENT_DIR, TRAIN_DATA, TEST_DATA, load_data
+from loaddata import load_data
+from settings import MODELS_DIR, environments
 
 
-FILES_DIR = os.path.join(CURRENT_DIR, 'files')
-PRETRAINED_NETWORK = os.path.join(FILES_DIR, 'pretrained-VIN.pickle')
+parser = argparse.ArgumentParser()
+parser.add_argument('--imsize', '-i', choices=[8, 16, 28],
+                    type=int, required=True)
 
 
 def random_weight(shape):
@@ -118,32 +121,51 @@ def loss_function(expected, predicted):
     return -T.mean(errors)
 
 
+def on_epoch_end(network):
+    steps = {
+        30: 0.005,
+        60: 0.002,
+        90: 0.001,
+    }
+
+    storage.save(network,
+                 'models/vin-28-epoch-{}.pickle'.format(network.last_epoch))
+
+    if network.last_epoch in steps:
+        new_step = steps[network.last_epoch]
+        network.variables.step.set_value(new_step)
+
+
 if __name__ == '__main__':
     environment.speedup()
-    environment.reproducible()
+    # environment.reproducible()
 
-    x_train, s1_train, s2_train, y_train = load_data(TRAIN_DATA)
-    x_test, s1_test, s2_test, y_test = load_data(TEST_DATA)
+    args = parser.parse_args()
+    env = environments[args.imsize]
+
+    x_train, s1_train, s2_train, y_train = load_data(env['train_data_file'])
+    x_test, s1_test, s2_test, y_test = load_data(env['train_data_file'])
 
     network = algorithms.RMSProp(
         create_VIN(
-            input_image_shape=(2, 8, 8),
+            env['input_image_shape'],
             n_hidden_filters=150,
             n_state_filters=10,
-            k=10,
+            k=env['k'],
         ),
 
         step=0.01,
         verbose=True,
         batch_size=12,
         error=loss_function,
+        epoch_end_signal=on_epoch_end,
 
         decay=0.9,
         epsilon=1e-6,
     )
     network.train((x_train, s1_train, s2_train), y_train,
                   (x_test, s1_test, s2_test), y_test,
-                  epochs=30)
+                  epochs=120)
 
     y_predicted = network.predict((x_test, s1_test, s2_test))
     y_predicted = np.argmax(y_predicted, axis=1)
@@ -151,7 +173,7 @@ if __name__ == '__main__':
     accuracy = (y_predicted == y_test.flatten()).mean()
     print("Test accuracy: {:.2%}".format(accuracy))
 
-    if not os.path.exists(FILES_DIR):
-        os.mkdir(FILES_DIR)
+    if not os.path.exists(MODELS_DIR):
+        os.mkdir(MODELS_DIR)
 
-    storage.save(network, PRETRAINED_NETWORK)
+    storage.save(network, env['pretrained_network_file'])

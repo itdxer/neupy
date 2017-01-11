@@ -8,8 +8,9 @@ import matplotlib.patches as mpatches
 from neupy.utils import asfloat
 from neupy import environment, storage
 
-from loaddata import CURRENT_DIR, TRAIN_DATA, TEST_DATA, load_data
-from vin import PRETRAINED_NETWORK, create_VIN
+from loaddata import load_data
+from train_vin import parser, create_VIN
+from settings import environments
 
 
 actions = [
@@ -33,7 +34,7 @@ def int_as_2d_array(number):
     return asfloat(np.array([[number]]))
 
 
-def detect_trajectory(f_next_step, grid, coords, max_iter=20):
+def detect_trajectory(f_next_step, grid, coords, max_iter=200):
     trajectory = [coords]
     coord_x, coord_y = coords
     target_coords = get_target_coords(grid[0])
@@ -65,13 +66,13 @@ def plot_grid_and_trajectory(f_next_step, grid, coords):
     start_position[coords[0], coords[1]] = 1
 
     # Grid world map
-    plt.imshow(grid[0, 0], interpolation='nearest', cmap='binary')
+    plt.imshow(grid[0, 0], interpolation='none', cmap='binary')
 
     # Trajectory
-    cmap = plt.cm.jet
+    cmap = plt.cm.Reds
     cmap.set_under(alpha=0)
     plt.imshow(trajectory_grid, interpolation='none',
-               cmap=cmap, clim=[0.1, 1.1])
+               cmap=cmap, clim=[0.1, 1.6])
 
     # Start position
     cmap = plt.cm.Reds
@@ -85,6 +86,7 @@ def plot_grid_and_trajectory(f_next_step, grid, coords):
     plt.imshow(grid[0, 1] / 10., interpolation='none',
                cmap=cmap, clim=[0.1, 1.1])
 
+
 def sample_random_position(grid):
     obstacles_grid = grid[0, 0]
     x_coords, y_coords = np.argwhere(obstacles_grid == 0).T
@@ -94,28 +96,32 @@ def sample_random_position(grid):
 
 if __name__ == '__main__':
     environment.speedup()
-    x_test, _, _, _ = load_data(TRAIN_DATA)
+
+    args = parser.parse_args()
+    env = environments[args.imsize]
+
+    x_test, _, _, _ = load_data(env['test_data_file'])
 
     VIN = create_VIN(
-        input_image_shape=(2, 8, 8),
+        env['input_image_shape'],
         n_hidden_filters=150,
         n_state_filters=10,
-        k=10,
+        k=env['k'],
     )
-    storage.load(VIN, PRETRAINED_NETWORK)
+    storage.load(VIN, env['pretrained_network_file'])
     predict = VIN.compile()
 
     plt.figure(figsize=(8, 8))
     gridspec = gridspec.GridSpec(5, 4, height_ratios=[0, 2, 2, 2, 2])
     gridspec.update(wspace=0.1, hspace=0.1)
 
-    plt.suptitle('Predicted by VIN trajectories between two points')
+    plt.suptitle('Trajectories between two points predicted by VIN ')
 
     plt.subplot(gridspec[0, :])
     plt.legend(
         handles=[
             mpatches.Patch(color='#A71C1B', label='Start'),
-            mpatches.Patch(color='#F32919', label='Trajectory'),
+            mpatches.Patch(color='#F35D47', label='Trajectory'),
             mpatches.Patch(color='#007035', label='Goal'),
         ],
         loc=3,
