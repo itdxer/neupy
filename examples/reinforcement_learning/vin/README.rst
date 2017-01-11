@@ -13,8 +13,8 @@ Code description
     "train_vin.py","Train VIN and validate its accuracy"
     "visualize.py","Sample a few grids from test dataset and visualize trajectories predicted by the pretrained network"
 
-Data
-----
+Data preprocessing
+------------------
 
 To be able to convert .mat files to format suitable for network training you need to run ``loaddata.py`` file. Files for the 8x8 grid have been already generated and stored in the ``data`` directory. Other files you need to generate with the following command.
 
@@ -26,8 +26,8 @@ To be able to convert .mat files to format suitable for network training you nee
     $ # For grid world with 28x28 images
     $ python loaddata.py --imsize=28
 
-Usage
------
+Network training
+----------------
 
 In the ``models`` folder you can find pretrained weights for VIN network. Some you can run ``visualize.py`` script and play with the final results. In case if you are interested in trying network with different parameters then you can train network from scratch.
 
