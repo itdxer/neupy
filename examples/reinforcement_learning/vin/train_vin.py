@@ -128,9 +128,6 @@ def on_epoch_end(network):
         90: 0.001,
     }
 
-    storage.save(network,
-                 'models/vin-28-epoch-{}.pickle'.format(network.last_epoch))
-
     if network.last_epoch in steps:
         new_step = steps[network.last_epoch]
         network.variables.step.set_value(new_step)
