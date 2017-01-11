@@ -66,3 +66,15 @@ Visualizations
 .. image:: images/16x16-gridworld-trajectories.png
     :width: 50%
     :align: center
+
+
+28x28 Grid world
+~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+    $ python visualize.py --imsize=28
+
+.. image:: images/28x28-gridworld-trajectories.png
+    :width: 50%
+    :align: center
