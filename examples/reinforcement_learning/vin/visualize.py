@@ -86,6 +86,12 @@ def plot_grid_and_trajectory(f_next_step, grid, coords):
     plt.imshow(grid[0, 1] / 10., interpolation='none',
                cmap=cmap, clim=[0.1, 1.1])
 
+    # Intercections between trajectories and obstacles
+    cmap = plt.cm.Blues
+    cmap.set_under(alpha=0)
+    plt.imshow(np.bitwise_and(trajectory_grid == 1, grid[0, 0] == 1),
+               interpolation='none', cmap=cmap, clim=[0.1, 1.1])
+
 
 def sample_random_position(grid):
     obstacles_grid = grid[0, 0]

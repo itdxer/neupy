@@ -140,7 +140,7 @@ if __name__ == '__main__':
     env = environments[args.imsize]
 
     x_train, s1_train, s2_train, y_train = load_data(env['train_data_file'])
-    x_test, s1_test, s2_test, y_test = load_data(env['train_data_file'])
+    x_test, s1_test, s2_test, y_test = load_data(env['test_data_file'])
 
     network = algorithms.RMSProp(
         create_VIN(
