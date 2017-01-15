@@ -17,7 +17,7 @@ def save_data(data, filepath):
 
 def load_data(filepath):
     with open(filepath, 'rb') as f:
-        return pickle.load(f, encoding='latin1')
+        return pickle.load(f)
 
 
 parser = argparse.ArgumentParser()
