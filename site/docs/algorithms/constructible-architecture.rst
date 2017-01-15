@@ -94,8 +94,6 @@ NeuPy allows to train networks with multiple inputs.
 
         step=0.5,
         verbose=True,
-        momentum=0.9,
-        nesterov=True,
         error='binary_crossentropy',
     )
 
