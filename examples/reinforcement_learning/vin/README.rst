@@ -1,7 +1,7 @@
 Value Iteration Network (VIN)
 =============================
 
-Implementation of Value Iteration Network (VIN) in NeuPy. Original code for the paper you can find `here <https://github.com/avivt/VIN>`_.
+Implementation of Value Iteration Network (VIN) in NeuPy. Original code for the `paper <https://arxiv.org/abs/1602.02867>`_ you can find `here <https://github.com/avivt/VIN>`_.
 
 Code description
 ----------------
@@ -12,6 +12,23 @@ Code description
     "loaddata.py","Read data from MAT file, split it into train and test samples and store everything in pickle files"
     "train_vin.py","Train VIN and validate its accuracy"
     "visualize.py","Sample a few grids from test dataset and visualize trajectories predicted by the pretrained network"
+    "evaluations.py","Functions that help to evaluate network's prediction quality"
+
+Perfomance
+----------
+
+.. csv-table::
+    :header: "Problem", "Prediction loss", "Success rate"
+
+    "Grid world 8x8","0.0049","99.89%"
+    "Grid world 16x16","0.0427","99.46%"
+    "Grid world 28x28","0.0954","98.03%"
+
+For each grid we select 10 start positions and using VIN we generate trajectory between two points. In addition we calculate shortest path between two points with `Lee algorithm <https://en.wikipedia.org/wiki/Lee_algorithm>`_. Using this information we are calculating two metrics:
+
+1. **Success rate**. We compare length of the predicted trajectory with the length of the shortest possible path. We assume that prediction is correct in case if they have equal length. Success rate measures percentage of trajectories with shortets possible length.
+
+2. **Prediction loss**. This measurment defines average difference between shortest and predicted trajectories. Prediction loss is not the one that we are trying to minimize in the ``train_vin.py`` script. In the ``train_vin.py`` file we are minimizing negative log-likelihood function.
 
 Data preprocessing
 ------------------
