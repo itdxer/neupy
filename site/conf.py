@@ -25,7 +25,7 @@ description = ('NeuPy is a Python library for Artificial Neural Networks. '
 author = 'Yurii Shevchuk'
 
 # Change this to your copyright string
-copyright = '2015 - 2016, ' + author
+copyright = '2015 - 2017, ' + author
 
 # Change this to your blog root URL (required for RSS feed)
 website = 'http://neupy.com'
