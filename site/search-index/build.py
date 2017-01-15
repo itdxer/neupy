@@ -9,7 +9,7 @@ import nltk
 import numpy as np
 import scipy.sparse as sp
 
-from graph import DirectedGraph
+from webgraph import WebPageGraph, Link
 from pagerank import pagerank
 from htmltools import iter_html_files, ParseHTML
 
@@ -20,11 +20,11 @@ logging.basicConfig(format='[%(levelname)-5s] %(message)s',
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 INDEX_DIR = os.path.join(CURRENT_DIR, 'index-files')
 INDEX_FILE = os.path.join(INDEX_DIR, 'index.pickle')
-SITE_DIR = os.path.join(CURRENT_DIR, '..', 'blog', 'html')
+SITE_DIR = os.path.abspath(os.path.join(CURRENT_DIR, '..', 'blog', 'html'))
 SITE_ROOT = 'http://neupy.com'
 
 
-def url_from_file(filepath):
+def make_url_from_file(filepath):
     _, url = filepath.split(SITE_DIR)
     return urljoin(SITE_ROOT, url)
 
@@ -35,6 +35,8 @@ def ignore_link(link):
         '/rss.html',
         '/index.html',
         '/master.html',
+        '/search.html',
+        '/archive.html',
         '/py-modindex.html',
 
         # Other pages
@@ -49,6 +51,7 @@ def ignore_link(link):
         # Static files
         r'.+(css|js|jpg|png)$',
         r'/_images/.+',
+        r'.*\.tar\.gz',
     ]
     uri = urlparse(link)
 
@@ -56,13 +59,20 @@ def ignore_link(link):
         if re.match(pattern, uri.path):
             return True
 
+        if uri.fragment in ('subpackages', 'submodules'):
+            return True
+
     return False
 
 
 def url_filter(links):
+    filtered_links = []
+
     for link in links:
-        if not ignore_link(link):
-            yield link
+        if not ignore_link(link.uri):
+            filtered_links.append(link)
+
+    return filtered_links
 
 
 def save_index(data):
@@ -73,13 +83,13 @@ def save_index(data):
         pickle.dump(data, f)
 
 
-def iter_documents(directory):
+def collect_documents(directory):
     logging.info("Collecting documents from the directory (%s)", directory)
-    Document = namedtuple(
-        "Document", "filename filepath url url_fragment links html text")
+    Document = namedtuple("Document", "filename filepath uri links html text")
 
+    documents = []
     for filepath in iter_html_files(directory):
-        current_page_url = url_from_file(filepath)
+        current_page_url = make_url_from_file(filepath)
         filename = os.path.basename(filepath)
 
         if ignore_link(current_page_url):
@@ -87,31 +97,25 @@ def iter_documents(directory):
                           'ignore list', filename)
             continue
 
-        with open(filepath) as html_file:
-            html = html_file.read()
-            html = ParseHTML(html, url=current_page_url)
-            text = html.text()
+        html = ParseHTML.fromfile(filepath, current_page_url)
+        text = html.text()
 
-            links = []
-            for link in url_filter(html.links()):
-                links.append(link)
+        if not text:
+            logging.debug('Skip "%s", because text is missed', filename)
+            continue
 
-            if text is None:
-                logging.debug('Skip "%s", because text is missed', filename)
-                continue
+        for subdocument in html.subdocuments():
+            if ignore_link(subdocument.uri):
+                logging.debug('Skip "%s", because URL is defined in the '
+                              'ignore list', subdocument.uri)
 
-            subdocuments = html.subdocuments()
-
-            if len(subdocuments) in (0, 1):
-                # No point to seperate it into subdocuments
-                url_fragment = ''
-                yield Document(filename, filepath, current_page_url,
-                               url_fragment, links, html, text)
-
-            for subdocument in subdocuments:
-                yield Document(filename, filepath, current_page_url,
-                               subdocument.url_fragment, subdocument.links,
+            else:
+                doc = Document(filename, filepath, subdocument.uri,
+                               url_filter(subdocument.links),
                                subdocument.html, subdocument.text)
+                documents.append(doc)
+
+    return documents
 
 
 if __name__ == '__main__':
@@ -119,28 +123,30 @@ if __name__ == '__main__':
 
     documents = []
     vocabulary = {}
-
     term_frequency = defaultdict(int)
-    link_graph = DirectedGraph()
 
     index_pointers = [0]
     indeces = []
     data = []
 
-    for document in iter_documents(SITE_DIR):
-        if document.url_fragment:
-            url = document.url + "#" + document.url_fragment
-        else:
-            url = document.url
+    logging.info("Collecting documents")
+    all_documents = collect_documents(SITE_DIR)
 
-        logging.debug('Processing "%s"', url)
+    logging.info("Define relations between documents")
+    webgraph = WebPageGraph.create_from_documents(all_documents)
 
-        link_graph.add_node(document.url)
-        for link in document.links:
-            link_graph.add_edge(document.url, link)
+    for document in all_documents:
+        logging.debug('Processing "%s"', document.uri)
 
         text = document.text
         text = text.lower().replace('.', ' ').replace('=', ' ')
+
+        anchor_texts = []
+        for _, link in webgraph.page_linked_by(Link(document.uri)):
+            if link.text:
+                anchor_texts.append(link.text)
+
+        text = ' '.join([text] + anchor_texts)
 
         for term in nltk.word_tokenize(text):
             if term not in vocabulary:
@@ -170,13 +176,13 @@ if __name__ == '__main__':
                                 shape=(n_documents, n_terms))
     df = (frequencies >= 1).sum(axis=0)
     idf = np.log((n_documents / df) + 1)
-    idf = np.asarray(idf)
+    idf = np.asarray(idf)[0]
 
     tf = np.log1p(frequencies)
     tf.data += 1
 
     logging.info("Applying PageRank")
-    rank = pagerank(link_graph)
+    rank = webgraph.pagerank()
 
     logging.info("Saving index")
     save_index([documents, vocabulary, tf, idf, rank])
