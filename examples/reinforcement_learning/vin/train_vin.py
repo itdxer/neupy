@@ -11,6 +11,7 @@ from neupy import layers, init, algorithms, environment, storage
 
 from loaddata import load_data
 from settings import MODELS_DIR, environments
+from evaluation import evaluate_accuracy
 
 
 parser = argparse.ArgumentParser()
@@ -92,8 +93,8 @@ def create_VIN(input_image_shape=(2, 8, 8), n_hidden_filters=150,
             # outputs together with the Elementwise layer
             [[
                 R,
-                HalfPaddingConv((n_state_filters, 3, 3), weight=q_weight)],
-            [
+                HalfPaddingConv((n_state_filters, 3, 3), weight=q_weight)
+            ], [
                 V,
                 HalfPaddingConv((n_state_filters, 3, 3), weight=fb_weight)
             ]],
@@ -163,13 +164,8 @@ if __name__ == '__main__':
                   (x_test, s1_test, s2_test), y_test,
                   epochs=120)
 
-    y_predicted = network.predict((x_test, s1_test, s2_test))
-    y_predicted = np.argmax(y_predicted, axis=1)
-
-    accuracy = (y_predicted == y_test.flatten()).mean()
-    print("Test accuracy: {:.2%}".format(accuracy))
-
     if not os.path.exists(MODELS_DIR):
         os.mkdir(MODELS_DIR)
 
     storage.save(network, env['pretrained_network_file'])
+    evaluate_accuracy(network.connection.compile(), x_test, s1_test, s2_test)

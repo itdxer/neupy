@@ -1,9 +1,6 @@
-import os
 import pickle
 import argparse
-from collections import namedtuple
 
-import theano
 import scipy.io
 import numpy as np
 from sklearn.utils import shuffle
@@ -14,12 +11,13 @@ from settings import environments
 
 def save_data(data, filepath):
     with open(filepath, 'wb') as f:
-        return pickle.dump(data, f)
+        # Use protocol 2, for python 2 and 3 compatibility
+        return pickle.dump(data, f, protocol=2)
 
 
 def load_data(filepath):
     with open(filepath, 'rb') as f:
-        return pickle.load(f)
+        return pickle.load(f, encoding='latin1')
 
 
 parser = argparse.ArgumentParser()

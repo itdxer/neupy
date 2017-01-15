@@ -5,59 +5,17 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.patches as mpatches
 
-from neupy.utils import asfloat
 from neupy import environment, storage
 
 from loaddata import load_data
 from train_vin import parser, create_VIN
 from settings import environments
-
-
-actions = [
-    lambda x, y: (x - 1, y),  # north
-    lambda x, y: (x + 1, y),  # south
-    lambda x, y: (x, y + 1),  # east
-    lambda x, y: (x, y - 1),  # west
-    lambda x, y: (x - 1, y + 1),  # north-east
-    lambda x, y: (x - 1, y - 1),  # north-west
-    lambda x, y: (x + 1, y + 1),  # south-east
-    lambda x, y: (x + 1, y - 1),  # south-west
-]
-
-
-def get_target_coords(gridworld_image):
-    goal_channel = gridworld_image[1]
-    return np.unravel_index(goal_channel.argmax(), goal_channel.shape)
-
-
-def int_as_2d_array(number):
-    return asfloat(np.array([[number]]))
-
-
-def detect_trajectory(f_next_step, grid, coords, max_iter=200):
-    trajectory = [coords]
-    coord_x, coord_y = coords
-    target_coords = get_target_coords(grid[0])
-
-    for i in range(max_iter):
-        if target_coords == (coord_x, coord_y):
-            break
-
-        step = f_next_step(asfloat(grid),
-                           int_as_2d_array(coord_x),
-                           int_as_2d_array(coord_y))
-        step = np.argmax(step, axis=1)
-        action = actions[step[0]]
-
-        coord_x, coord_y = action(coord_x, coord_y)
-        trajectory.append((coord_x, coord_y))
-
-    return np.array(trajectory)
+from evaluation import detect_trajectory
 
 
 def plot_grid_and_trajectory(f_next_step, grid, coords):
     image_shape = grid[0, 0].shape
-    trajectory = detect_trajectory(f_next_step, grid, coords)
+    trajectory = detect_trajectory(f_next_step, grid[0], coords)
 
     trajectory_grid = np.zeros(image_shape)
     trajectory_grid[trajectory[:, 0], trajectory[:, 1]] = 1
