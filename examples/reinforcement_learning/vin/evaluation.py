@@ -1,3 +1,5 @@
+from __future__ import division
+
 import numpy as np
 from tqdm import tqdm
 from neupy.utils import asfloat
