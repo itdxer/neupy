@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Signals and Early stopping" href="signals.html" /><link rel="prev" title="Basics" href="basics.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Signals and Early stopping" href="signals.html" /><link rel="prev" title="Basics" href="basics.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
         VERSION:     '1.5',
@@ -246,8 +246,6 @@
 
     <span class="n">step</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-    <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
-    <span class="n">nesterov</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
     <span class="n">error</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -265,12 +263,12 @@
 </div>
 <div class="section" id="algorithms">
 <h2><a class="toc-backref" href="#id4">Algorithms</a></h2>
-<p>NeuPy supports lots of different training algorithms based on the backpropagation. You can check <a class="reference internal" href="../../pages/cheatsheet.html#cheatsheet-backprop-algorithms"><span class="std std-ref">Cheat sheet</span></a> if you want to learn more about them.</p>
+<p>NeuPy supports lots of different training algorithms based on the backpropagation. You can check <a class="reference internal" href="../../pages/cheatsheet.html#cheatsheet-backprop-algorithms"><span>Cheat sheet</span></a> if you want to learn more about them.</p>
 <p>Before using these algorithms you must understand that not all of them are suitable for all problems. Some of the methods like <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">Levenberg-Marquardt</span></span></a> or <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> work better for small networks and they would be extremely slow for networks with millions of parameters. In addition, it&#8217;s important to note that not all algorithms are possible to train with mini-batches. Algorithms like <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> are not able to train properly with mini-batch.</p>
 </div>
 <div class="section" id="error-functions">
 <h2><a class="toc-backref" href="#id5">Error functions</a></h2>
-<p>NeuPy has many different <a class="reference internal" href="../../pages/cheatsheet.html#cheatsheet-error-function"><span class="std std-ref">error functions</span></a>.</p>
+<p>NeuPy has many different <a class="reference internal" href="../../pages/cheatsheet.html#cheatsheet-error-function"><span>error functions</span></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
 <span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">MinibatchGradientDescent</span><span class="p">(</span>
@@ -423,7 +421,7 @@
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -176,14 +176,14 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
 <p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
 <blockquote>
 <div><p>Defines layer&#8217;s bias.
 Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
 <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
 The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
 do not add it into parameters list.</p>
@@ -244,7 +244,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.ActivationLayer.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -290,14 +290,14 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
 <p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
 <blockquote>
 <div><p>Defines layer&#8217;s bias.
 Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
 <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
 The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
 do not add it into parameters list.</p>
@@ -357,7 +357,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Linear.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -379,14 +379,14 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
 <p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
 <blockquote>
 <div><p>Defines layer&#8217;s bias.
 Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
 <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
 The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
 do not add it into parameters list.</p>
@@ -446,7 +446,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Sigmoid.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -468,14 +468,14 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
 <p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
 <blockquote>
 <div><p>Defines layer&#8217;s bias.
 Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
 <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
 The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
 do not add it into parameters list.</p>
@@ -535,7 +535,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.HardSigmoid.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -557,14 +557,14 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
 <p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
 <blockquote>
 <div><p>Defines layer&#8217;s bias.
 Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
 <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
 The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
 do not add it into parameters list.</p>
@@ -624,7 +624,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Step.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -646,14 +646,14 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
 <p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
 <blockquote>
 <div><p>Defines layer&#8217;s bias.
 Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
 <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
 The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
 do not add it into parameters list.</p>
@@ -713,7 +713,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Tanh.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -742,14 +742,14 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
 <p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
 <blockquote>
 <div><p>Defines layer&#8217;s bias.
 Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
 <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
 The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
 do not add it into parameters list.</p>
@@ -814,7 +814,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Relu.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'alpha': Option(class_name='Relu', value=NumberProperty(name=&quot;alpha&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='Relu', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='Relu', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'alpha': Option(class_name='Relu', value=NumberProperty(name=&quot;alpha&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -841,14 +841,14 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
 <p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
 <blockquote>
 <div><p>Defines layer&#8217;s bias.
 Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
 <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
 The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
 do not add it into parameters list.</p>
@@ -908,7 +908,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Softplus.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -930,14 +930,14 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
 <p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
 <blockquote>
 <div><p>Defines layer&#8217;s bias.
 Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
 <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
 The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
 do not add it into parameters list.</p>
@@ -997,7 +997,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Softmax.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1025,14 +1025,14 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
 <p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
 <blockquote>
 <div><p>Defines layer&#8217;s bias.
 Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
 <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
 The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
 do not add it into parameters list.</p>
@@ -1104,7 +1104,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.Elu.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'alpha': Option(class_name='Elu', value=NumberProperty(name=&quot;alpha&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'alpha': Option(class_name='Elu', value=NumberProperty(name=&quot;alpha&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1130,7 +1130,7 @@ Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p
 Scalar value means that each element in the tensor will be
 equal to the specified value.
 Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <span class="docutils literal"><span class="pre">Constant(value=0.25)</span></span>.</p>
 </div></blockquote>
 <p><strong>size</strong> : int or None</p>
@@ -1142,14 +1142,14 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
 <p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
 <blockquote>
 <div><p>Defines layer&#8217;s bias.
 Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
 <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
 The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
 do not add it into parameters list.</p>
@@ -1232,7 +1232,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.PRelu.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'alpha': Option(class_name='PRelu', value=ParameterProperty(name=&quot;alpha&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'alpha_axes': Option(class_name='PRelu', value=AxesProperty(name=&quot;alpha_axes&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'alpha_axes': Option(class_name='PRelu', value=AxesProperty(name=&quot;alpha_axes&quot;)), 'alpha': Option(class_name='PRelu', value=ParameterProperty(name=&quot;alpha&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1269,14 +1269,14 @@ output for the specified input value.</p>
 <p><strong>weight</strong> : array-like, Theano variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
 </div></blockquote>
 <p><strong>bias</strong> : 1D array-like, Theano variable, scalar, Initializer or None</p>
 <blockquote>
 <div><p>Defines layer&#8217;s bias.
 Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
 <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
 The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
 do not add it into parameters list.</p>
@@ -1338,7 +1338,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.activations.LeakyRelu.options">
-<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ActivationLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1392,7 +1392,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

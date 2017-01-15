@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="_static/plugins.js"></script>
         <script src="_static/main.js"></script>
-        <link rel="search" title="Search" href="search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '1.5',
@@ -660,7 +660,7 @@
 <span class="n">network</span> <span class="o">=</span> <span class="n">network</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">proba</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>To learn more about layers in NeuPy you should check <a class="reference internal" href="docs/layers/basics.html#layers-basics"><span class="std std-ref">documentation</span></a>.</p>
+<p>To learn more about layers in NeuPy you should check <a class="reference internal" href="docs/layers/basics.html#layers-basics"><span>documentation</span></a>.</p>
 <p>After that, we can define training algorithm for the network.</p>
 <div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="kn">from</span> <span class="nn">neupy.exceptions</span> <span class="kn">import</span> <span class="n">StopTraining</span>
@@ -1002,7 +1002,7 @@ able to create the neural network that will classify digits for us.</p>
 </ul>
 </div>
 <p>In this article we are going to build a simple neural network that will recover password from a broken one.
-If you aren’t familiar with a <a class="reference internal" href="apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> algorithm, you can read <a class="reference internal" href="2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span class="std std-ref">this article</span></a>.</p>
+If you aren’t familiar with a <a class="reference internal" href="apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> algorithm, you can read <a class="reference internal" href="2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>this article</span></a>.</p>
 <p>Before running all experiments, we need to set up <span class="docutils literal"><span class="pre">seed</span></span> parameter to make all results reproducible.
 But you can test code without it.</p>
 <div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
@@ -1112,7 +1112,7 @@ Let’s define this function and later we will look at it step by step.</p>
     <span class="k">return</span> <span class="n">dhnet</span>
 </pre></div>
 </div>
-<p>If you have already read <a class="reference internal" href="2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span class="std std-ref">Discrete Hopfield Network article</span></a>, you should know that if we add only one vector into the network we will get it dublicated or with reversed signs through the whole matrix.
+<p>If you have already read <a class="reference internal" href="2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>Discrete Hopfield Network article</span></a>, you should know that if we add only one vector into the network we will get it dublicated or with reversed signs through the whole matrix.
 To make it a little bit secure we can add some noise into the network.
 For this reason we introduce one additional parameter <span class="docutils literal"><span class="pre">noise_level</span></span> into the function.
 This parameter controls number of randomly generated binary vectors.
@@ -1207,7 +1207,7 @@ Network can produce a string which wasn’t taught.
 This string can look almost like a password with a few different symbols.
 The problem appears when network creates additional local minimum somewhere between input patterns.
 We can’t prevent it from running into the local minimum.
-For more information about this problem you can check <a class="reference internal" href="2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span class="std std-ref">article about Discrete Hopfield Network</span></a>.</p>
+For more information about this problem you can check <a class="reference internal" href="2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>article about Discrete Hopfield Network</span></a>.</p>
 </div>
 <div class="section" id="test-it-using-monte-carlo">
 <h2><a class="toc-backref" href="#id6">Test it using Monte Carlo</a></h2>
@@ -1252,12 +1252,12 @@ At each step we create random password and try to recover it from a broken passw
 </pre></div>
 </div>
 <p>After sumbmission your output should look the same as the one below (if you followed everything step by step):</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">Number</span> <span class="n">of</span> <span class="n">fails</span> <span class="k">for</span> <span class="n">each</span> <span class="n">test</span> <span class="n">case</span><span class="p">:</span>
-<span class="p">{</span><span class="s1">'exclude-one'</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
- <span class="s1">'exclude-quarter'</span><span class="p">:</span> <span class="mi">729</span><span class="p">,</span>
- <span class="s1">'exclude-half'</span><span class="p">:</span> <span class="mi">5823</span><span class="p">,</span>
- <span class="s1">'just-one-symbol'</span><span class="p">:</span> <span class="mi">9998</span><span class="p">,</span>
- <span class="s1">'empty-string'</span><span class="p">:</span> <span class="mi">10000</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span/>Number of fails for each test case:
+{'exclude-one': 11,
+ 'exclude-quarter': 729,
+ 'exclude-half': 5823,
+ 'just-one-symbol': 9998,
+ 'empty-string': 10000}
 </pre></div>
 </div>
 <p>At this test we catch two situations when the network recovers the password from one symbol, which is not very good.
@@ -1267,33 +1267,33 @@ Sometimes it can recover a password from an empty string, but such situation is 
 <p>In the last test, on each iteration we cut password from the left side and filled other parts with spaces.
 Let’s test another approach.
 Let’s cut a password from the right side and see what we’ll get:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">Number</span> <span class="n">of</span> <span class="n">fails</span> <span class="k">for</span> <span class="n">each</span> <span class="n">test</span> <span class="n">case</span><span class="p">:</span>
-<span class="p">{</span><span class="s1">'exclude-one'</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span>
- <span class="s1">'exclude-quarter'</span><span class="p">:</span> <span class="mi">705</span><span class="p">,</span>
- <span class="s1">'exclude-half'</span><span class="p">:</span> <span class="mi">5815</span><span class="p">,</span>
- <span class="s1">'just-one-symbol'</span><span class="p">:</span> <span class="mi">9995</span><span class="p">,</span>
- <span class="s1">'empty-string'</span><span class="p">:</span> <span class="mi">10000</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span/>Number of fails for each test case:
+{'exclude-one': 17,
+ 'exclude-quarter': 705,
+ 'exclude-half': 5815,
+ 'just-one-symbol': 9995,
+ 'empty-string': 10000}
 </pre></div>
 </div>
 <p>Results look similar to the previous test.</p>
 <p>Another interesting test can take place if you randomly replace some symbols with spaces:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">Number</span> <span class="n">of</span> <span class="n">fails</span> <span class="k">for</span> <span class="n">each</span> <span class="n">test</span> <span class="n">case</span><span class="p">:</span>
-<span class="p">{</span><span class="s1">'exclude-one'</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
- <span class="s1">'exclude-quarter'</span><span class="p">:</span> <span class="mi">749</span><span class="p">,</span>
- <span class="s1">'exclude-half'</span><span class="p">:</span> <span class="mi">5760</span><span class="p">,</span>
- <span class="s1">'just-one-symbol'</span><span class="p">:</span> <span class="mi">9998</span><span class="p">,</span>
- <span class="s1">'empty-string'</span><span class="p">:</span> <span class="mi">10000</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span/>Number of fails for each test case:
+{'exclude-one': 14,
+ 'exclude-quarter': 749,
+ 'exclude-half': 5760,
+ 'just-one-symbol': 9998,
+ 'empty-string': 10000}
 </pre></div>
 </div>
 <p>The result is very similar to the previous two.</p>
 <p>And finally, instead of replacing symbols with spaces we can remove symbols without any replacements.
 Results do not look good:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">Number</span> <span class="n">of</span> <span class="n">fails</span> <span class="k">for</span> <span class="n">each</span> <span class="n">test</span> <span class="n">case</span><span class="p">:</span>
-<span class="p">{</span><span class="s1">'exclude-one'</span><span class="p">:</span> <span class="mi">3897</span><span class="p">,</span>
- <span class="s1">'exclude-quarter'</span><span class="p">:</span> <span class="mi">9464</span><span class="p">,</span>
- <span class="s1">'exclude-half'</span><span class="p">:</span> <span class="mi">9943</span><span class="p">,</span>
- <span class="s1">'just-one-symbol'</span><span class="p">:</span> <span class="mi">9998</span><span class="p">,</span>
- <span class="s1">'empty-string'</span><span class="p">:</span> <span class="mi">9998</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span/>Number of fails for each test case:
+{'exclude-one': 3897,
+ 'exclude-quarter': 9464,
+ 'exclude-half': 9943,
+ 'just-one-symbol': 9998,
+ 'empty-string': 9998}
 </pre></div>
 </div>
 <p>I guess in first case (<span class="docutils literal"><span class="pre">exclude-one</span></span>) we just got lucky and after eliminating one symbol from the end didn’t shift most of the symbols.
@@ -1598,12 +1598,12 @@ If the first two vectors have 1 in the first position and the third one has -1 a
 We can perform the same procedure with <span class="math">\(sign\)</span> function.
 So the output value should be 1 if total value is greater then zero and -1 otherwise.</p>
 <div class="math">
-\[ \begin{align}\begin{aligned}\begin{split}sign(x) = \left\{
+\[\begin{split}sign(x) = \left\{
     \begin{array}{lr}
         &amp;1 &amp;&amp; : x \ge 0\\
         &amp;-1 &amp;&amp; : x &lt; 0
     \end{array}
-\right.\\\end{split}\\y = sign(s)\end{aligned}\end{align} \]</div>
+\right.\\\end{split}\]\[y = sign(s)\]</div>
 <p>That’s it.
 Now <span class="math">\(y\)</span> store the recovered pattern from the input vector <span class="math">\(x\)</span>.</p>
 <p>Maybe now you can see why we can’t use zeros in the input vectors.
@@ -1941,7 +1941,7 @@ Let’s define a few images that we are going to teach the network.</p>
 </div>
 <div class="section" id="more-reading">
 <h2><a class="toc-backref" href="#id14">More reading</a></h2>
-<p>In addition you can read another article about a ‘<a class="reference internal" href="2015/09/21/password_recovery.html#password-recovery"><span class="std std-ref">Password recovery</span></a>‘ from the memory using the <a class="reference internal" href="apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
+<p>In addition you can read another article about a ‘<a class="reference internal" href="2015/09/21/password_recovery.html#password-recovery"><span>Password recovery</span></a>‘ from the memory using the <a class="reference internal" href="apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
 </div>
 <div class="section" id="references">
 <h2><a class="toc-backref" href="#id15">References</a></h2>
@@ -2542,7 +2542,7 @@ There are a lot of things which we can do to improve network results, but we wil
 <a class="reference internal image-reference" href="_images/compare-number-of-epochs.png"><img alt="Compare number of epochs" src="_images/compare-number-of-epochs.png" style="width: 80%;"/></a>
 </div>
 <p>There is no perfect algorithm for neural network that can solve all problems. All of them have their own pros and cons. Some of the algorithms can be memory or computationally overwhelming and you have to choose an algorithm depending on the task you want to solve.</p>
-<p>All code is available at <a class="reference external" href="https://github.com/itdxer/neupy/blob/master/examples/mlp/gd_algorithms_visualization.py">GitHub</a>. You can play around with the script and set up different learning algorithms and hyperparameters. More algorithms you can find at NeuPy’s <a class="reference internal" href="pages/cheatsheet.html#cheat-sheet"><span class="std std-ref">Cheat sheet</span></a>.</p>
+<p>All code is available at <a class="reference external" href="https://github.com/itdxer/neupy/blob/master/examples/mlp/gd_algorithms_visualization.py">GitHub</a>. You can play around with the script and set up different learning algorithms and hyperparameters. More algorithms you can find at NeuPy’s <a class="reference internal" href="pages/cheatsheet.html#cheat-sheet"><span>Cheat sheet</span></a>.</p>
 </div>
 
         </div>
@@ -2603,7 +2603,7 @@ There are a lot of things which we can do to improve network results, but we wil
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

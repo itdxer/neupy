@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -201,9 +201,9 @@ need iterative training. It just stores parameters
 and use them to make a predictions.</li>
 </ul>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">estimators</span><span class="p">,</span> <span class="n">environment</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">estimators</span><span class="p">,</span> <span class="n">environment</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -214,7 +214,7 @@ and use them to make a predictions.</li>
 <span class="gp">... </span>    <span class="n">train_size</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">nw</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GRNN</span><span class="p">(</span><span class="n">std</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nw</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GRNN</span><span class="p">(</span><span class="n">std</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nw</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y_predicted</span> <span class="o">=</span> <span class="n">nw</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
@@ -242,7 +242,7 @@ and use them to make a predictions.</li>
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.rbfn.grnn.GRNN.options">
-<span class="descname">options</span><em class="property"> = {'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'std': Option(class_name='GRNN', value=BoundedProperty(name=&quot;std&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'std': Option(class_name='GRNN', value=BoundedProperty(name=&quot;std&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -357,7 +357,7 @@ be copied. Defaults to <span class="docutils literal"><span class="pre">True</sp
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -185,32 +185,32 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </table>
 <p class="rubric">Examples</p>
 <p>Covert 4D input to 2D</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span>
 <span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">()</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Input shape: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">input_shape</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;Input shape: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">input_shape</span><span class="p">))</span>
 <span class="go">Input shape: (2, 5, 5)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output shape: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">output_shape</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;Output shape: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">output_shape</span><span class="p">))</span>
 <span class="go">Output shape: (50,)</span>
 </pre></div>
 </div>
 <p>Convert 3D to 4D</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
 <span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Input shape: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">input_shape</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;Input shape: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">input_shape</span><span class="p">))</span>
 <span class="go">Input shape: (5, 4)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output shape: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">output_shape</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;Output shape: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">output_shape</span><span class="p">))</span>
 <span class="go">Output shape: (5, 2, 2)</span>
 </pre></div>
 </div>
@@ -333,7 +333,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

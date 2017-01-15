@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -270,9 +270,9 @@ addon algorithms: weight update and step update.</p>
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">estimators</span><span class="p">,</span> <span class="n">environment</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">estimators</span><span class="p">,</span> <span class="n">environment</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -297,7 +297,7 @@ addon algorithms: weight update and step update.</p>
 <span class="gp">... </span>    <span class="n">search_method</span><span class="o">=</span><span class="s1">&#39;golden&#39;</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">update_function</span><span class="o">=</span><span class="s1">&#39;fletcher_reeves&#39;</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LinearSearch</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cgnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -365,7 +365,7 @@ each training epoch.</p>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.conjgrad.ConjugateGradient.options">
-<span class="descname">options</span><em class="property"> = {'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'error': Option(class_name='ConstructibleNetwork', value=ErrorFunctionProperty(name=&quot;error&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'addons': Option(class_name='GradientDescent', value=Property(name=&quot;addons&quot;)), 'update_function': Option(class_name='ConjugateGradient', value=ChoiceProperty(name=&quot;update_function&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'error': Option(class_name='ConstructibleNetwork', value=ErrorFunctionProperty(name=&quot;error&quot;)), 'addons': Option(class_name='GradientDescent', value=Property(name=&quot;addons&quot;)), 'update_function': Option(class_name='ConjugateGradient', value=ChoiceProperty(name=&quot;update_function&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/conjgrad.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -424,7 +424,7 @@ each training epoch.</p>
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -227,8 +227,8 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">environment</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">environment</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -245,7 +245,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <span class="gp">... </span>    <span class="n">n_inputs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">n_outputs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">kohonet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">kohonet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
@@ -277,7 +277,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.associative.kohonen.Kohonen.options">
-<span class="descname">options</span><em class="property"> = {'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'n_inputs': Option(class_name='BaseAssociative', value=IntProperty(name=&quot;n_inputs&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'weight': Option(class_name='BaseAssociative', value=ParameterProperty(name=&quot;weight&quot;)), 'n_outputs': Option(class_name='BaseAssociative', value=IntProperty(name=&quot;n_outputs&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/kohonen.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'n_inputs': Option(class_name='BaseAssociative', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_outputs': Option(class_name='BaseAssociative', value=IntProperty(name=&quot;n_outputs&quot;)), 'weight': Option(class_name='BaseAssociative', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/kohonen.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -362,7 +362,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2016, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
