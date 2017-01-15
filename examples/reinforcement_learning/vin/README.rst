@@ -13,6 +13,7 @@ Code description
     "train_vin.py","Train VIN and validate its accuracy"
     "visualize.py","Sample a few grids from test dataset and visualize trajectories predicted by the pretrained network"
     "evaluations.py","Functions that help to evaluate network's prediction quality"
+    "settings.py","Different configurations for different image sizes"
 
 Perfomance
 ----------
@@ -27,7 +28,7 @@ Perfomance
 For each grid we select 10 start positions and using VIN we generate trajectory between two points. In addition we calculate shortest path between two points with `Lee algorithm <https://en.wikipedia.org/wiki/Lee_algorithm>`_. Using this information we are calculating two metrics:
 
 1. **Success rate**. We compare length of the predicted trajectory with the length of the shortest possible path. We assume that prediction is correct in case if they have equal length. Success rate measures percentage of trajectories with shortets possible length. We compare trajectory length, because there can be multiple way to define shortest path between two points on the grid.
-  
+
 .. image:: https://monosnap.com/image/5JnDsgTimA5rIjoSYnk2nFsDNL2fDI.png
 
 2. **Prediction loss**. This measurment defines average difference between shortest and predicted trajectories. Prediction loss is not the one that we are trying to minimize in the ``train_vin.py`` script. In the ``train_vin.py`` file we are minimizing negative log-likelihood function.
