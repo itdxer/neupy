@@ -32,7 +32,8 @@ def is_valid_by_reber(word):
     Returns
     -------
     bool
-        `True` if word valid by Reber grammar, `False` otherwise.
+        ``True`` if word valid by Reber grammar and
+        ``False`` otherwise.
 
     Examples
     --------
@@ -68,7 +69,7 @@ def make_reber(n_words=100):
     Parameters
     ----------
     n_words : int
-        Number of reber words, defaults to `100`.
+        Number of reber words, defaults to ``100``.
 
     Returns
     -------
@@ -78,7 +79,6 @@ def make_reber(n_words=100):
     Examples
     --------
     >>> from neupy.datasets import make_reber
-    >>>
     >>> make_reber(4)
     ['TPTXVS', 'VXXVS', 'TPPTS', 'TTXVPXXVS']
     """
@@ -99,7 +99,31 @@ def make_reber(n_words=100):
     return words
 
 
-def make_reber_classification(n_samples, invalid_size=0.5):
+def convert_letters_to_indeces(samples):
+    """
+    Convert Reber Grammar words to the list of indeces where
+    each index referes to specific letter.
+
+    Parameters
+    ----------
+    samples : list of str
+        List of words.
+
+    Examples
+    --------
+    >>> convert_letters_to_indeces(['XXXXVTTSSV', 'VXXVS'])
+    array([array([3, 3, 3, 3, 1, 0, 0, 4, 4, 1]),
+           array([1, 3, 3, 1, 4])], dtype=object)
+    """
+    index_samples = []
+    for sample in samples:
+        word = [avaliable_letters.index(letter) for letter in sample]
+        index_samples.append(np.array(word))
+    return np.array(index_samples)
+
+
+def make_reber_classification(n_samples, invalid_size=0.5,
+                              return_indeces=False):
     """
     Generate random dataset for Reber grammar classification.
     Invalid words contains the same letters as at Reber grammar, but
@@ -111,8 +135,12 @@ def make_reber_classification(n_samples, invalid_size=0.5):
         Number of samples in dataset.
 
     invalid_size : float
-        Proportion of invalid words in dataset, defaults to `0.5`. Value
-        must be between 0 and 1.
+        Proportion of invalid words in dataset, defaults to ``0.5``.
+        Value must be between ``0`` and ``1``.
+
+    return_indeces : bool
+        If ``True``, each word will be converted to array where each
+        letter converted to the index. Defaults to ``False``.
 
     Returns
     -------
@@ -130,13 +158,21 @@ def make_reber_classification(n_samples, invalid_size=0.5):
           dtype='<U12')
     >>> labels
     array([0, 1, 0, 1, 1, 1, 0, 0, 0, 1])
+    >>>
+    >>> data, labels = make_reber_classification(
+    ...     4, invalid_size=0.5, return_indeces=True)
+    >>> data
+    array([array([1, 3, 1, 4]),
+           array([0, 3, 0, 3, 0, 4, 3, 0, 4, 4]),
+           array([1, 3, 1, 2, 3, 1, 2, 4]),
+           array([0, 3, 0, 0, 3, 0, 4, 2, 4, 1, 0, 4, 0])], dtype=object)
     """
     if n_samples < 2:
         raise ValueError("There are must be at least 2 samples")
 
-    if invalid_size <= 0 or invalid_size >= 1:
-        raise ValueError("`invalid_size` property must be "
-                         "between zero and one")
+    if not 0 < invalid_size < 1:
+        raise ValueError("`invalid_size` argument value must be between "
+                         "zero and one, got {}".format(invalid_size))
 
     n_valid_words = int(math.ceil(n_samples * invalid_size))
     n_invalid_words = n_samples - n_valid_words
@@ -152,7 +188,10 @@ def make_reber_classification(n_samples, invalid_size=0.5):
         word = [choice(avaliable_letters) for _ in range(word_length)]
         invalid_words.append(''.join(word))
 
-    return shuffle(
-        np.array(valid_words + invalid_words),
-        np.array(valid_labels + invalid_labels)
-    )
+    samples, labels = shuffle(np.array(valid_words + invalid_words),
+                              np.array(valid_labels + invalid_labels))
+
+    if return_indeces:
+        samples = convert_letters_to_indeces(samples)
+
+    return samples, labels

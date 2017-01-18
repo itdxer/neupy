@@ -155,13 +155,14 @@ class LSTM(BaseLayer):
     cell_init = ParameterProperty(default=init.Constant(0))
     hid_init = ParameterProperty(default=init.Constant(0))
 
+    only_return_final = Property(default=True, expected_type=bool)
+    unroll_scan = Property(default=False, expected_type=bool)
     backwards = Property(default=False, expected_type=bool)
     precompute_input = Property(default=True, expected_type=bool)
-    only_return_final = Property(default=True, expected_type=bool)
     peepholes = Property(default=False, expected_type=bool)
+
     n_gradient_steps = IntProperty(default=-1)
     grad_clipping = NumberProperty(default=0, minval=0)
-    unroll_scan = Property(default=False, expected_type=bool)
 
     def __init__(self, size, **kwargs):
         super(LSTM, self).__init__(size=size, **kwargs)
@@ -175,7 +176,11 @@ class LSTM(BaseLayer):
 
     @property
     def output_shape(self):
-        return as_tuple(self.size)
+        if self.only_return_final:
+            return as_tuple(self.size)
+
+        n_time_steps = self.input_shape[0]
+        return as_tuple(n_time_steps, self.size)
 
     def initialize(self):
         super(LSTM, self).initialize()

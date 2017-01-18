@@ -1,5 +1,8 @@
 import math
 
+import numpy as np
+
+from neupy.datasets.reber import avaliable_letters
 from neupy.datasets import (make_reber, is_valid_by_reber,
                             make_reber_classification)
 
@@ -44,3 +47,12 @@ class ReberTestCase(BaseTestCase):
 
         with self.assertRaises(ValueError):
             make_reber_classification(n_samples=10, invalid_size=2)
+
+    def test_return_indeces_for_reber_classification(self):
+        words, _ = make_reber_classification(100, return_indeces=True)
+
+        min_index = np.min([np.min(word) for word in words])
+        max_index = np.max([np.max(word) for word in words])
+
+        self.assertEqual(min_index, 0)
+        self.assertEqual(max_index, len(avaliable_letters) - 1)
