@@ -4,6 +4,7 @@ import numpy as np
 
 from neupy import init
 from neupy.utils import as_tuple
+from neupy.exceptions import LayerConnectionError
 from neupy.core.properties import (IntProperty, Property, NumberProperty,
                                    ParameterProperty)
 from .base import BaseLayer
@@ -271,12 +272,13 @@ class LSTM(BaseLayer):
             # (n_time_steps, n_batch, 4 * num_units).
             input_value = T.dot(input_value, weight_in_stacked) + bias_stacked
 
-        # When theano.scan calls step, input_n will be (n_batch, 4 * num_units).
-        # We define a slicing function that extract the input to each LSTM gate
+        # When theano.scan calls step, input_n will be
+        # (n_batch, 4 * num_units). We define a slicing function
+        # that extract the input to each LSTM gate
         def slice_w(x, n):
             return x[:, n * self.size:(n + 1) * self.size]
 
-        def one_lstm_step(input_n, cell_previous, hid_previous, weight_hid_stacked):
+        def one_lstm_step(input_n, cell_previous, hid_previous, *args):
             if not self.precompute_input:
                 input_n = T.dot(input_n, weight_in_stacked) + bias_stacked
 
@@ -320,7 +322,7 @@ class LSTM(BaseLayer):
         hid_init = T.dot(ones, self.hid_init)
 
         non_sequences = [weight_hid_stacked]
-         # When we aren't precomputing the input outside of scan, we need to
+        # When we aren't precomputing the input outside of scan, we need to
         # provide the input weights and biases to the step function
         if not self.precompute_input:
             non_sequences += [weight_in_stacked, bias_stacked]
@@ -331,7 +333,7 @@ class LSTM(BaseLayer):
 
             # Explicitly unroll the recurrence instead of using scan
             _, hid_out = unroll_scan(
-                fn=step_fun,
+                fn=one_lstm_step,
                 sequences=input_value,
                 outputs_info=[cell_init, hid_init],
                 go_backwards=self.backwards,
