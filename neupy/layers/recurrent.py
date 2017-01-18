@@ -42,17 +42,14 @@ def unroll_scan(fn, sequences, outputs_info, non_sequences, n_steps,
         Number of steps to unroll.
 
     go_backwards: bool
-        If true the recursion starts at sequences[-1] and iterates
-        backwards.
+        If ``True`` the recursion starts at sequences[-1] and
+        iterates backwards.
 
     Returns
     -------
-    List of TensorVariables. Each element in the list gives the recurrent
-    values at each time step.
+    List of TensorVariables. Each element in the list gives
+    the recurrent values at each time step.
     """
-    if not isinstance(sequences, (list, tuple)):
-        sequences = [sequences]
-
     # When backwards reverse the recursion direction
     counter = range(n_steps)
     if go_backwards:
@@ -62,19 +59,8 @@ def unroll_scan(fn, sequences, outputs_info, non_sequences, n_steps,
     prev_vals = outputs_info
     for i in counter:
         step_input = [s[i] for s in sequences] + prev_vals + non_sequences
-        out_ = fn(*step_input)
-
-        # The returned values from step can be either a TensorVariable,
-        # a list, or a tuple.  Below, we force it to always be a list.
-        if isinstance(out_, T.TensorVariable):
-            out_ = [out_]
-
-        if isinstance(out_, tuple):
-            out_ = list(out_)
-
+        prev_vals = out_ = fn(*step_input)
         output.append(out_)
-
-        prev_vals = output[-1]
 
     # iterate over each scan output and convert it to same format as scan:
     # [[output11, output12,...output1n],
@@ -115,7 +101,10 @@ class LSTM(BaseLayer):
         from :math:`x_1` to :math:`x_n`.
 
     only_return_final : bool
-        Defaults to ``True``.
+        If ``True``, only return the final sequential output
+        (e.g. for tasks where a single target value for the entire
+        sequence is desired). In this case, Theano makes an
+        optimization which saves memory. Defaults to ``True``.
 
     precompute_input : bool
         Defaults to ``True``.
@@ -132,7 +121,8 @@ class LSTM(BaseLayer):
         be given as None).
 
     grad_clipping : flaot or int
-        Defaults to ``0``.
+        If nonzero, the gradient messages are clipped to the
+        given value during the backward pass. Defaults to ``0``.
 
     n_gradient_steps : int
         Number of timesteps to include in the backpropagated gradient.
@@ -162,7 +152,7 @@ class LSTM(BaseLayer):
     peepholes = Property(default=False, expected_type=bool)
 
     n_gradient_steps = IntProperty(default=-1)
-    grad_clipping = NumberProperty(default=0, minval=0)
+    gradient_clipping = NumberProperty(default=0, minval=0)
 
     def __init__(self, size, **kwargs):
         super(LSTM, self).__init__(size=size, **kwargs)
@@ -219,6 +209,20 @@ class LSTM(BaseLayer):
         self.bias_cell = self.add_parameter(
             value=init.Normal(0.1), name='bias_cell',
             shape=(self.size,))
+
+        # If peephole (cell to gate) connections were enabled, initialize
+        # peephole connections.  These are elementwise products with the cell
+        # state, so they are represented as vectors.
+        if self.peepholes:
+            self.weight_cell_to_ingate = self.add_parameter(
+                value=init.Normal(0.1), name='weight_cell_to_ingate',
+                shape=(self.size,))
+            self.weight_cell_to_forgetgate = self.add_parameter(
+                value=init.Normal(0.1), name='weight_cell_to_forgetgate',
+                shape=(self.size,))
+            self.weight_cell_to_outgate = self.add_parameter(
+                value=init.Normal(0.1), name='weight_cell_to_outgate',
+                shape=(self.size,))
 
         # Output gate parameters
         self.weight_in_to_outgate = self.add_parameter(
@@ -291,9 +295,9 @@ class LSTM(BaseLayer):
             gates = input_n + T.dot(hid_previous, weight_hid_stacked)
 
             # Clip gradients
-            if self.grad_clipping:
+            if self.gradient_clipping:
                 gates = theano.gradient.grad_clip(
-                    gates, -self.grad_clipping, self.grad_clipping)
+                    gates, -self.gradient_clipping, self.gradient_clipping)
 
             # Extract the pre-activation gate values
             ingate = slice_w(gates, 0)
@@ -332,6 +336,14 @@ class LSTM(BaseLayer):
         if not self.precompute_input:
             non_sequences += [weight_in_stacked, bias_stacked]
 
+        # The "peephole" weight matrices are only used
+        # when self.peepholes=True
+        if self.peepholes:
+            non_sequences += [self.weight_cell_to_ingate,
+                              self.weight_cell_to_forgetgate,
+                              self.weight_cell_to_outgate]
+
+
         if self.unroll_scan:
             # Retrieve the dimensionality of the incoming layer
             n_time_steps = self.input_shape[0]
@@ -339,7 +351,7 @@ class LSTM(BaseLayer):
             # Explicitly unroll the recurrence instead of using scan
             _, hid_out = unroll_scan(
                 fn=one_lstm_step,
-                sequences=input_value,
+                sequences=[input_value],
                 outputs_info=[cell_init, hid_init],
                 go_backwards=self.backwards,
                 non_sequences=non_sequences,
