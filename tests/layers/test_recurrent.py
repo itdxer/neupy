@@ -146,7 +146,7 @@ class LSTMTestCase(BaseTestCase):
         y_predicted = network.predict(x_test).round()
         accuracy = (y_predicted.T == y_test).mean()
 
-        self.assertGreaterEqual(accuracy, 0.95)
+        self.assertGreaterEqual(accuracy, 0.9)
 
     def test_lstm_with_4d_input(self):
         x_train, x_test, y_train, y_test = self.data
