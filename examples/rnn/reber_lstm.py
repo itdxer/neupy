@@ -20,26 +20,48 @@ def add_padding(data):
     return data_matrix
 
 
-data, labels = reber.make_reber_classification(n_samples=10000)
+# An example of possible values for the `data` and `labels`
+# variables
+#
+# >>> data
+# array([array([1, 3, 1, 4]),
+#        array([0, 3, 0, 3, 0, 4, 3, 0, 4, 4]),
+#        array([0, 3, 0, 0, 3, 0, 4, 2, 4, 1, 0, 4, 0])], dtype=object)
+# >>>
+# >>> labels
+# array([1, 0, 0])
+data, labels = reber.make_reber_classification(
+    n_samples=10000, return_indeces=True)
 
-index_data = []
-for sample in data:
-    word = [reber.avaliable_letters.index(letter) + 1 for letter in sample]
-    index_data.append(word)
+# Shift all indeces by 1. In the next row we will add zero
+# paddings, so we need to make sure that we will not confuse
+# paddings with zero indeces.
+data = data + 1
 
-index_data = add_padding(index_data)
+# Add paddings at the beggining of each vector to make sure
+# that all samples has the same length. This trick allows to
+# train network with multiple independent samples.
+data = add_padding(data)
 
 x_train, x_test, y_train, y_test = train_test_split(
-    index_data, labels, train_size=0.8)
+    data, labels, train_size=0.8)
 
-n_categories = len(reber.avaliable_letters) + 1
+n_categories = len(reber.avaliable_letters) + 1  # +1 for zero paddings
+n_time_steps = x_train.shape[1]
 
 network = algorithms.RMSProp(
     [
-        layers.Input(1),
+        layers.Input(n_time_steps),
+        # shape: (n_samples, n_time_steps)
+
         layers.Embedding(n_categories, 10),
+        # shape: (n_samples, n_time_steps, 10)
+
         layers.LSTM(20),
+        # shape: (n_samples, 20)
+
         layers.Sigmoid(1),
+        # shape: (n_samples, 1)
     ],
 
     step=0.05,
@@ -50,6 +72,5 @@ network = algorithms.RMSProp(
 network.train(x_train, y_train, x_test, y_test, epochs=20)
 
 y_predicted = network.predict(x_test).round()
-y_predicted = y_predicted[:, 0]
-accuracy = (y_predicted == y_test).mean()
+accuracy = (y_predicted.T == y_test).mean()
 print("Test accuracy: {:.2%}".format(accuracy))
