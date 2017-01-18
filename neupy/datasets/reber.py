@@ -109,6 +109,7 @@ def make_reber_classification(n_samples, invalid_size=0.5):
     ----------
     n_samples : int
         Number of samples in dataset.
+
     invalid_size : float
         Proportion of invalid words in dataset, defaults to `0.5`. Value
         must be between 0 and 1.

@@ -159,6 +159,7 @@ class BaseLayer(BaseConnection, Configurable):
         self.parameters[name] = parameter
 
         setattr(self, name, parameter)
+        return parameter
 
     def __repr__(self):
         classname = self.__class__.__name__
