@@ -343,7 +343,6 @@ class LSTM(BaseLayer):
                               self.weight_cell_to_forgetgate,
                               self.weight_cell_to_outgate]
 
-
         if self.unroll_scan:
             # Retrieve the dimensionality of the incoming layer
             n_time_steps = self.input_shape[0]
