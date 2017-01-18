@@ -122,29 +122,6 @@ class LSTMTestCase(BaseTestCase):
 
         self.assertGreaterEqual(accuracy, 0.95)
 
-    def test_stacked_lstm(self):
-        x_train, x_test, y_train, y_test = self.data
-        network = algorithms.RMSProp(
-            [
-                layers.Input(self.n_time_steps),
-                layers.Embedding(self.n_categories, 10),
-                layers.LSTM(10, only_return_final=False),
-                layers.LSTM(2),
-                layers.Sigmoid(1),
-            ],
-
-            step=0.1,
-            verbose=False,
-            batch_size=1,
-            error='binary_crossentropy',
-        )
-        network.train(x_train, y_train, x_test, y_test, epochs=20)
-
-        y_predicted = network.predict(x_test).round()
-        accuracy = (y_predicted.T == y_test).mean()
-
-        self.assertGreaterEqual(accuracy, 0.95)
-
     def test_stacked_lstm_with_enabled_backwards_option(self):
         x_train, x_test, y_train, y_test = self.data
         x_train = x_train[:, ::-1]
