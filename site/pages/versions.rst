@@ -3,10 +3,14 @@ Old versions
 
 .. raw:: html
 
+    <h3>Version 0.5</h3>
+
+    <li>0.5.0 (January 2017) - <a href="/index.html">documentation [html]</a></li>
+
     <h3>Version 0.4</h3>
 
-    <li>0.4.2 (January 2017) - <a href="/index.html">documentation [html]</a></li>
-    <li>0.4.1 (January 2017) - <a href="/index.html">documentation [html]</a></li>
+    <li>0.4.2 (January 2017) - <a href="/versions/docs-neupy-v0.4.2.tar.gz">documentation [gzip]</a></li>
+    <li>0.4.1 (January 2017) - <a href="/versions/docs-neupy-v0.4.2.tar.gz">documentation [gzip]</a></li>
     <li>0.4.0 (October 2016) - <a href="/versions/docs-neupy-v0.4.0.tar.gz">documentation [gzip]</a></li>
 
     <h3>Version 0.3</h3>

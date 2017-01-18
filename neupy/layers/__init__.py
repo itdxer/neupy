@@ -8,6 +8,7 @@ from .normalization import *
 from .merge import *
 from .reshape import *
 from .embedding import *
+from .recurrent import *
 
 from .connections import join
 from .utils import count_parameters
