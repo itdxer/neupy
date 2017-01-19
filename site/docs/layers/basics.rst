@@ -559,6 +559,8 @@ In addition, it's possible to point into multiple input and output layers
 
 Also instead of using names we can specify layer instance
 
+.. code-block:: python
+
     >>> from neupy import layers
     >>>
     >>> input_layer = layers.Input(10)
@@ -571,6 +573,34 @@ Also instead of using names we can specify layer instance
     >>>
     >>> network.end(relu_2)
     Input(10) > Relu(20)
+
+.. raw:: html
+
+    <br>
+
+Find specific layer by name in the network
+==========================================
+
+.. code-block:: python
+
+    >>> from neupy import layers
+    >>>
+    >>> network = layers.join(
+    ...     layers.Input(10, name='input-1'),
+    ...     layers.Relu(8, name='relu-0'),
+    ...     layers.Relu(5, name='relu-1'),
+    ... )
+    >>>
+    >>> network.layer('relu-0')
+    Relu(8)
+    >>>
+    >>> network.layer('relu-1')
+    Relu(5)
+    >>>
+    >>> network.layer('test')
+    Traceback (most recent call last):
+      ...
+    NameError: Cannot find layer with name 'test'
 
 .. raw:: html
 

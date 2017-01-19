@@ -830,3 +830,19 @@ class SliceLayerConnectionsTestCase(BaseTestCase):
         x_test = asfloat(np.ones((7, 8)))
         y_predicted = predict(x_test)
         self.assertEqual(y_predicted.shape, (7, 11))
+
+    def test_get_layer_by_name_from_connection(self):
+        network = layers.join(
+            layers.Input(10, name='input-1'),
+            layers.Relu(8, name='relu-0'),
+            layers.Relu(5, name='relu-1'),
+        )
+
+        reul0 = network.layer('relu-0')
+        self.assertEqual(reul0.output_shape, (8,))
+
+        reul1 = network.layer('relu-1')
+        self.assertEqual(reul1.output_shape, (5,))
+
+        with self.assertRaises(NameError):
+            network.layer('some-layer-name')
