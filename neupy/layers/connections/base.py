@@ -628,6 +628,22 @@ class LayerConnection(BaseConnection):
 
         return new_connection
 
+    def layer(self, layer_name):
+        """
+        Find layer instance in the network based on the
+        specified layer name.
+
+        Parameters
+        ----------
+        layer_name : str
+            Name of the layer.
+
+        Returns
+        -------
+        layer
+        """
+        return self.graph.find_layer_by_name(layer_name)
+
     @contextmanager
     def disable_training_state(self):
         """

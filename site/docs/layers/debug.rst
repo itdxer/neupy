@@ -127,6 +127,46 @@ Count number of parameters
     >>> layers.count_parameters(connection)
     67
 
+Iterate through all network parameters
+--------------------------------------
+
+.. code-block:: python
+
+    >>> from neupy.layers.utils import iter_parameters
+    >>>
+    >>> network = layers.join(
+    ...     layers.Input(1),
+    ...     layers.Sigmoid(2),
+    ...     layers.Sigmoid(3),
+    ... )
+    >>>
+    >>> print(network)
+    Input(1) > Sigmoid(2) > Sigmoid(3)
+    >>>
+    >>> for layer, attrname, parameter in iter_parameters(network):
+    ...     # parameter is shared Theano variable
+    ...     parameter_value = parameter.get_value()
+    ...     print("Layer: {}".format(layer))
+    ...     print("Parameter name: {}".format(attrname))
+    ...     print("Parameter shape: {}".format(parameter_value.shape))
+    ...     print()
+    ...
+    Layer: Sigmoid(2)
+    Parameter name: weight
+    Parameter shape: (1, 2)
+
+    Layer: Sigmoid(2)
+    Parameter name: bias
+    Parameter shape: (2,)
+
+    Layer: Sigmoid(3)
+    Parameter name: weight
+    Parameter shape: (2, 3)
+
+    Layer: Sigmoid(3)
+    Parameter name: bias
+    Parameter shape: (3,)
+
 Exploring graph connections
 ---------------------------
 
