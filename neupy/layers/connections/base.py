@@ -390,6 +390,29 @@ class LayerConnection(BaseConnection):
     ----------
     left : layer, connection or list of connections
     right : layer, connection or list of connections
+
+    Attributes
+    ----------
+    input_layers : list
+        List of input layers.
+
+    input_shape : tuple or list of tuples
+        Returns input shape as a tuple in case if network
+        has only one input layer and list of tuples otherwise.
+
+    output_layers : list
+        List of output layers.
+
+    output_shape : tuple or list of tuples
+        Returns output shape as a tuple in case if network
+        has only one output layer and list of tuples otherwise.
+
+    layers : list
+        Topologicaly sorted list of all layers.
+
+    graph : LayerGraph instance
+        Graph that stores relations between layer
+        in the network.
     """
     def __init__(self, left, right):
         super(LayerConnection, self).__init__()
@@ -416,6 +439,10 @@ class LayerConnection(BaseConnection):
         # between specified input and output layers
         self.graph = self.full_graph.subgraph(self.input_layers,
                                               self.output_layers)
+
+        self.layers = []
+        for layer in topological_sort(self.graph.backward_graph):
+            self.layers.append(layer)
 
     @property
     def input_shape(self):
@@ -619,8 +646,7 @@ class LayerConnection(BaseConnection):
         return len(self.graph.forward_graph)
 
     def __iter__(self):
-        backward_graph = self.graph.backward_graph
-        for layer in topological_sort(backward_graph):
+        for layer in self.layers:
             yield layer
 
     def __repr__(self):
