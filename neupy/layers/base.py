@@ -37,7 +37,7 @@ def generate_layer_name(layer):
     if classname.isupper():
         layer_name = classname.lower()
     else:
-        layer_name = re.sub(r'(?<!^)(?=[A-Z])', '-', classname)
+        layer_name = re.sub(r'(?<!^)(?=[A-Z][a-z_])', '-', classname)
 
     return "{}-{}".format(layer_name.lower(), layer_id)
 
