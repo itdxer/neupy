@@ -179,35 +179,35 @@ class LSTM(BaseLayer):
 
         # Input gate parameters
         self.weight_in_to_ingate = self.add_parameter(
-            value=init.Normal(0.1), name='weight_in_to_ingate',
+            value=init.HeUniform(), name='weight_in_to_ingate',
             shape=(n_inputs, self.size))
         self.weight_hid_to_ingate = self.add_parameter(
-            value=init.Normal(0.1), name='weight_hid_to_ingate',
+            value=init.HeUniform(), name='weight_hid_to_ingate',
             shape=(self.size, self.size))
         self.bias_ingate = self.add_parameter(
-            value=init.Normal(0.1), name='bias_ingate',
+            value=init.Constant(0), name='bias_ingate',
             shape=(self.size,))
 
         # Forget gate parameters
         self.weight_in_to_forgetgate = self.add_parameter(
-            value=init.Normal(0.1), name='weight_in_to_forgetgate',
+            value=init.HeUniform(), name='weight_in_to_forgetgate',
             shape=(n_inputs, self.size))
         self.weight_hid_to_forgetgate = self.add_parameter(
-            value=init.Normal(0.1), name='weight_hid_to_forgetgate',
+            value=init.HeUniform(), name='weight_hid_to_forgetgate',
             shape=(self.size, self.size))
         self.bias_forgetgate = self.add_parameter(
-            value=init.Normal(0.1), name='bias_forgetgate',
+            value=init.Constant(0), name='bias_forgetgate',
             shape=(self.size,))
 
         # Cell parameters
         self.weight_in_to_cell = self.add_parameter(
-            value=init.Normal(0.1), name='weight_in_to_cell',
+            value=init.HeUniform(), name='weight_in_to_cell',
             shape=(n_inputs, self.size))
         self.weight_hid_to_cell = self.add_parameter(
-            value=init.Normal(0.1), name='weight_hid_to_cell',
+            value=init.HeUniform(), name='weight_hid_to_cell',
             shape=(self.size, self.size))
         self.bias_cell = self.add_parameter(
-            value=init.Normal(0.1), name='bias_cell',
+            value=init.Constant(0), name='bias_cell',
             shape=(self.size,))
 
         # If peephole (cell to gate) connections were enabled, initialize
@@ -215,24 +215,24 @@ class LSTM(BaseLayer):
         # state, so they are represented as vectors.
         if self.peepholes:
             self.weight_cell_to_ingate = self.add_parameter(
-                value=init.Normal(0.1), name='weight_cell_to_ingate',
+                value=init.HeUniform(), name='weight_cell_to_ingate',
                 shape=(self.size,))
             self.weight_cell_to_forgetgate = self.add_parameter(
-                value=init.Normal(0.1), name='weight_cell_to_forgetgate',
+                value=init.HeUniform(), name='weight_cell_to_forgetgate',
                 shape=(self.size,))
             self.weight_cell_to_outgate = self.add_parameter(
-                value=init.Normal(0.1), name='weight_cell_to_outgate',
+                value=init.HeUniform(), name='weight_cell_to_outgate',
                 shape=(self.size,))
 
         # Output gate parameters
         self.weight_in_to_outgate = self.add_parameter(
-            value=init.Normal(0.1), name='weight_in_to_outgate',
+            value=init.HeUniform(), name='weight_in_to_outgate',
             shape=(n_inputs, self.size))
         self.weight_hid_to_outgate = self.add_parameter(
-            value=init.Normal(0.1), name='weight_hid_to_outgate',
+            value=init.HeUniform(), name='weight_hid_to_outgate',
             shape=(self.size, self.size))
         self.bias_outgate = self.add_parameter(
-            value=init.Normal(0.1), name='bias_outgate',
+            value=init.Constant(0), name='bias_outgate',
             shape=(self.size,))
 
         # Initialization parameters

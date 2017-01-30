@@ -649,7 +649,7 @@ class SliceLayerConnectionsTestCase(BaseTestCase):
         relu_1_network = network.end('relu-1')
         self.assertEqual(relu_1_network.input_shape, (10,))
         self.assertEqual(relu_1_network.output_shape, (5,))
-        self.assertEqual(len(relu_1_network), 2)
+        self.assertEqual(len(relu_1_network.layers), 2)
 
         predict = relu_1_network.compile()
         x_test = asfloat(np.ones((7, 10)))

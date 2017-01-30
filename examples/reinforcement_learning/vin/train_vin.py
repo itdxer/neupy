@@ -24,7 +24,7 @@ def random_weight(shape):
     return theano.shared(asfloat(weight))
 
 
-class Maximum(layers.BaseLayer):
+class GlobalMaxPooling(layers.BaseLayer):
     @property
     def output_shape(self):
         shape = self.input_shape
@@ -87,7 +87,7 @@ def create_VIN(input_image_shape=(2, 8, 8), n_hidden_filters=150,
     Q = R > HalfPaddingConv((n_state_filters, 3, 3), weight=q_weight)
 
     for i in range(k):
-        V = Q > Maximum()
+        V = Q > GlobalMaxPooling()
         Q = layers.join(
             # Convolve R and V separately and then add
             # outputs together with the Elementwise layer

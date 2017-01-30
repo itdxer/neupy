@@ -1,3 +1,5 @@
+import numbers
+
 import numpy as np
 import theano.tensor as T
 
@@ -299,7 +301,7 @@ class IntProperty(BoundedProperty):
     ----------
     {BoundedProperty.Parameters}
     """
-    expected_type = (int, np.integer)
+    expected_type = (numbers.Integral, np.integer)
 
 
 class ParameterProperty(ArrayProperty):

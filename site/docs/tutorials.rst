@@ -38,7 +38,8 @@ Reinforcement Learning
 Recurrent Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* `Reber Grammar Classification, LSTM <https://github.com/itdxer/neupy/tree/master/examples/rnn/reber_lstm.py>`_
+* `Reber Grammar Classification, sequence input and fixed-size output with LSTM <https://github.com/itdxer/neupy/tree/master/examples/rnn/reber_lstm.py>`_
+* `Generate Shakespeare text, sequence input and sequence output with LSTM <https://github.com/itdxer/neupy/tree/master/examples/rnn/shakespeare_lstm.py>`_
 
 Autoencoders
 ~~~~~~~~~~~~
