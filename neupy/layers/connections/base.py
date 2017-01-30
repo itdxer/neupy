@@ -440,10 +440,6 @@ class LayerConnection(BaseConnection):
         self.graph = self.full_graph.subgraph(self.input_layers,
                                               self.output_layers)
 
-        self.layers = []
-        for layer in topological_sort(self.graph.backward_graph):
-            self.layers.append(layer)
-
     @property
     def input_shape(self):
         """
@@ -628,6 +624,10 @@ class LayerConnection(BaseConnection):
 
         return new_connection
 
+    @property
+    def layers(self):
+        return list(self)
+
     def layer(self, layer_name):
         """
         Find layer instance in the network based on the
@@ -662,7 +662,7 @@ class LayerConnection(BaseConnection):
         return len(self.graph.forward_graph)
 
     def __iter__(self):
-        for layer in self.layers:
+        for layer in topological_sort(self.graph.backward_graph):
             yield layer
 
     def __repr__(self):

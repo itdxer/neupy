@@ -2,6 +2,7 @@ from __future__ import division, absolute_import
 
 import time
 import types
+import numbers
 from itertools import groupby
 
 import six
@@ -75,14 +76,14 @@ def logging_info_about_the_data(network, input_train, input_test):
     logs.title("Start training")
     logs.message("TRAINING DATA", "shapes: {}".format(training_shapes))
 
-    if isinstance(training_shapes[0], int):
+    if isinstance(training_shapes[0], numbers.Integral):
         training_shapes = [training_shapes]
 
     if input_test is not None:
         test_shapes = preformat_value(input_test)
         logs.message("TEST DATA", "shapes: {}".format(test_shapes))
 
-        if isinstance(test_shapes[0], int):
+        if isinstance(test_shapes[0], numbers.Integral):
             test_shapes = [test_shapes]
 
         for training_shape, test_shape in zip(training_shapes, test_shapes):
