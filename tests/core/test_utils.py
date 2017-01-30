@@ -187,7 +187,7 @@ class ShuffleTestCase(BaseTestCase):
 
     def test_shuffle_invalid_shapes_exception(self):
         input_data = np.arange(10)
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegexp(ValueError, r'\(10,\), \(9,\)'):
             shuffle(input_data, input_data[:len(input_data) - 1])
 
     def test_shuffle_with_nones(self):

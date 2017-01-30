@@ -138,8 +138,10 @@ def shuffle(*arrays):
     n_samples = first.shape[0]
 
     if any(n_samples != array.shape[0] for array in arrays):
+        array_shapes = [array.shape for array in arrays]
         raise ValueError("Cannot shuffle matrices. All matrices should "
-                         "have the same number of rows")
+                         "have the same number of rows. Input shapes are: {}"
+                         "".format(array_shapes))
 
     indices = np.arange(n_samples)
     np.random.shuffle(indices)
