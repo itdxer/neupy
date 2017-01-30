@@ -70,6 +70,32 @@ class LayerNameTestCase(BaseTestCase):
         self.assertEqual(hidden2_layer.name, 'relu-2')
         self.assertEqual(output_layer.name, 'relu-3')
 
+    def test_layer_name_with_capital_letters(self):
+        class ABCD(layers.BaseLayer):
+            pass
+
+        layer = ABCD()
+        self.assertEqual(layer.name, 'abcd-1')
+
+    def test_layer_name_with_first_few_capital_letters(self):
+        class ABCDef(layers.BaseLayer):
+            pass
+
+        layer_1 = ABCDef()
+        self.assertEqual(layer_1.name, 'abc-def-1')
+
+        class abcDEF(layers.BaseLayer):
+            pass
+
+        layer_2 = abcDEF()
+        self.assertEqual(layer_2.name, 'abcdef-1')
+
+        class abcDef(layers.BaseLayer):
+            pass
+
+        layer_3 = abcDef()
+        self.assertEqual(layer_3.name, 'abc-def-1')
+
 
 class InputLayerTestCase(BaseTestCase):
     def test_input_layer_exceptions(self):
