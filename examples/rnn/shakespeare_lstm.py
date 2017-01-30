@@ -38,7 +38,7 @@ def load_data(window_size=50, stride=5):
         target_char = text[i + window_size]
         targets[sample_id, characters.index(target_char)] = 1
 
-    return train_test_split(samples, targets, train_size=0.9)s
+    return train_test_split(samples, targets, train_size=0.9)
 
 
 if __name__ == '__main__':
