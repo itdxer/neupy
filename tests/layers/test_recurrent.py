@@ -68,7 +68,7 @@ class LSTMTestCase(BaseTestCase):
 
     def test_lstm_with_enabled_peepholes_option(self):
         accuracy = self.train_lstm(self.data, peepholes=True)
-        self.assertGreaterEqual(accuracy, 0.95)
+        self.assertGreaterEqual(accuracy, 0.9)
 
     def test_lstm_with_enabled_unroll_scan_option(self):
         accuracy = self.train_lstm(self.data, unroll_scan=True)
