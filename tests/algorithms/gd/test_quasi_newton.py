@@ -155,13 +155,12 @@ class QuasiNewtonTestCase(BaseTestCase):
                 layers.Sigmoid(1, weight=init.Orthogonal()),
             ],
             shuffle_data=True,
-            show_epoch=20,
             verbose=False,
 
             update_function='psb',
             h0_scale=2,
         )
-        qnnet.train(x_train, y_train, x_test, y_test, epochs=10)
+        qnnet.train(x_train, y_train, x_test, y_test, epochs=3)
         result = qnnet.predict(x_test).round()
 
         roc_curve_score = metrics.roc_auc_score(result, y_test)
