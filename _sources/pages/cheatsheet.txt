@@ -153,6 +153,16 @@ Convolutional layers
 
     ":layer:`Convolution`", "Convolutional layer"
 
+
+Recurrent layers
+~~~~~~~~~~~~~~~~
+
+.. csv-table::
+    :header: "Class name", "Description"
+
+    ":layer:`LSTM`", "Long-Short Term Memory (LSTM) layer"
+    ":layer:`GRU`", "Gated Recurrent Unit (GRU) layer"
+
 Pooling layers
 ~~~~~~~~~~~~~~
 

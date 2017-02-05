@@ -497,6 +497,69 @@ be withdrawed.</p>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="neupy.core.properties.ParameterProperty">
+<span class="descclassname">neupy.core.properties.</span><span class="descname">ParameterProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>In addition to Numpy arrays and matrix property support also
+Theano shared variables and NeuPy Initializers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>default</strong> : object</p>
+<blockquote>
+<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+<p><strong>required</strong> : bool</p>
+<blockquote>
+<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
+after initialization then exception will be triggered.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+<p><strong>allow_none</strong> : bool</p>
+<blockquote class="last">
+<div><p>When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
+value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.core.properties.CallableProperty">
+<span class="descclassname">neupy.core.properties.</span><span class="descname">CallableProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Property for callable objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>expected_type</strong> : object</p>
+<blockquote>
+<div><p>Valid data types.</p>
+</div></blockquote>
+<p><strong>default</strong> : object</p>
+<blockquote>
+<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+<p><strong>required</strong> : bool</p>
+<blockquote>
+<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
+after initialization then exception will be triggered.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+<p><strong>allow_none</strong> : bool</p>
+<blockquote class="last">
+<div><p>When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
+value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
     <div class="postmeta">

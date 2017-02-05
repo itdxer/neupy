@@ -172,6 +172,27 @@
 </tr>
 </tbody>
 </table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="86%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>input_layers</td>
+<td>(list) List of input layers.</td>
+</tr>
+<tr class="row-even"><td>output_layers</td>
+<td>(list) List of output layers.</td>
+</tr>
+<tr class="row-odd"><td>layers</td>
+<td>(list) Topologicaly sorted list of all layers.</td>
+</tr>
+<tr class="row-even"><td>graph</td>
+<td>(LayerGraph instance) Graph that stores relations between layer in the network.</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="neupy.layers.connections.base.LayerConnection.disable_training_state">
 <span class="descname">disable_training_state</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -234,6 +255,33 @@ Tuple object defines input layer&#8217;s shape.</li>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.connections.base.LayerConnection.layer">
+<span class="descname">layer</span><span class="sig-paren">(</span><em>layer_name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Find layer instance in the network based on the
+specified layer name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>layer_name</strong> : str</p>
+<blockquote>
+<div><p>Name of the layer.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">layer</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.connections.base.LayerConnection.layers">
+<span class="descname">layers</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.connections.base.LayerConnection.output">

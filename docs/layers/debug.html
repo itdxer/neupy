@@ -253,6 +253,45 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="iterate-through-all-network-parameters">
+<h2>Iterate through all network parameters</h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers.utils</span> <span class="kn">import</span> <span class="n">iter_parameters</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">network</span><span class="p">)</span>
+<span class="go">Input(1) &gt; Sigmoid(2) &gt; Sigmoid(3)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">layer</span><span class="p">,</span> <span class="n">attrname</span><span class="p">,</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">iter_parameters</span><span class="p">(</span><span class="n">network</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="c1"># parameter is shared Theano variable</span>
+<span class="gp">... </span>    <span class="n">parameter_value</span> <span class="o">=</span> <span class="n">parameter</span><span class="o">.</span><span class="n">get_value</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Layer: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Parameter name: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">attrname</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Parameter shape: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">parameter_value</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">()</span>
+<span class="gp">...</span>
+<span class="go">Layer: Sigmoid(2)</span>
+<span class="go">Parameter name: weight</span>
+<span class="go">Parameter shape: (1, 2)</span>
+
+<span class="go">Layer: Sigmoid(2)</span>
+<span class="go">Parameter name: bias</span>
+<span class="go">Parameter shape: (2,)</span>
+
+<span class="go">Layer: Sigmoid(3)</span>
+<span class="go">Parameter name: weight</span>
+<span class="go">Parameter shape: (2, 3)</span>
+
+<span class="go">Layer: Sigmoid(3)</span>
+<span class="go">Parameter name: bias</span>
+<span class="go">Parameter shape: (3,)</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="exploring-graph-connections">
 <h2>Exploring graph connections</h2>
 <p>Any relation between layers stores in the specific graph. To be able to debug connections we can check network graph to make sure that all connections defined correctly.</p>
