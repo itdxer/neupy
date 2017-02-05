@@ -26,6 +26,7 @@ def smallest_positive_number():
     """
     float_type = theano.config.floatX
     epsilon_values = {
+        'float16': 1e-3,
         'float32': 1e-7,
         'float64': 1e-16,
     }

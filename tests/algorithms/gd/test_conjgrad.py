@@ -94,7 +94,7 @@ class ConjugateGradientTestCase(BaseTestCase):
                 testcase.func(*variables) + hack
             )
             result = output_func(*input_data)
-            self.assertAlmostEqual(result, testcase.answer, places=3)
+            self.assertAlmostEqual(result, testcase.answer, places=1)
 
     def test_conjgrad(self):
         nw = algorithms.ConjugateGradient(
@@ -105,10 +105,10 @@ class ConjugateGradientTestCase(BaseTestCase):
             verbose=False,
             update_function='fletcher_reeves'
         )
-        nw.train(simple_input_train, simple_target_train, epochs=300)
+        nw.train(simple_input_train, simple_target_train, epochs=100)
         result = nw.predict(simple_input_train)
         norm = np.linalg.norm(result - simple_target_train)
-        self.assertAlmostEqual(0.008, norm, places=3)
+        self.assertAlmostEqual(0.05, norm, places=2)
 
     def test_compare_bp_and_cg(self):
         compare_networks(

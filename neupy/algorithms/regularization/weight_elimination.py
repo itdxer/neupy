@@ -1,4 +1,5 @@
 from neupy.core.properties import BoundedProperty
+from neupy.utils import asfloat
 from .base import WeightUpdateConfigurable
 
 
@@ -69,8 +70,8 @@ class WeightElimination(WeightUpdateConfigurable):
         )
 
         step = self.variables.step
-        decay_koef = self.decay_rate * step
-        zero_weight_square = self.zero_weight ** 2
+        decay_koef = asfloat(self.decay_rate * step)
+        zero_weight_square = asfloat(self.zero_weight ** 2)
 
         updates_mapper = dict(updates)
         updates_mapper[parameter] -= decay_koef * (

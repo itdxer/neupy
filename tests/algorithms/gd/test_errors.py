@@ -26,7 +26,8 @@ class ErrorFuncTestCase(BaseTestCase):
         ])
         self.assertAlmostEqual(
             asfloat(70 / 6.),
-            estimators.mse(actual, predicted)
+            estimators.mse(actual, predicted),
+            places=3
         )
 
     def test_binary_crossentropy(self):
@@ -58,7 +59,7 @@ class ErrorFuncTestCase(BaseTestCase):
         target = np.array([3, 2, 1])
 
         actual = estimators.mae(target, predicted)
-        self.assertAlmostEqual(actual, 4 / 3.)
+        self.assertAlmostEqual(actual, 4 / 3., places=3)
 
     def test_rmse(self):
         actual = np.array([0, 1, 2, 3])
@@ -96,7 +97,7 @@ class ErrorFuncTestCase(BaseTestCase):
         ]).mean()
 
         actual = estimators.binary_hinge(targets, predictions)
-        self.assertAlmostEqual(expected, actual)
+        self.assertAlmostEqual(expected, actual, places=3)
 
     def test_categorical_hinge(self):
         targets = np.array([
@@ -110,7 +111,7 @@ class ErrorFuncTestCase(BaseTestCase):
         expected = np.array([0.5, 1.9]).mean()
 
         actual = estimators.categorical_hinge(targets, predictions)
-        self.assertAlmostEqual(expected, actual)
+        self.assertAlmostEqual(expected, actual, places=3)
 
     def test_categorical_hinge_without_one_hot_encoding(self):
         targets = asfloat(np.array([2, 0]))
@@ -126,7 +127,7 @@ class ErrorFuncTestCase(BaseTestCase):
         error_output = errors.categorical_hinge(target_var, prediction_var)
         actual = error_output.eval({prediction_var: predictions,
                                     target_var: targets})
-        self.assertAlmostEqual(expected, actual)
+        self.assertAlmostEqual(expected, actual, places=3)
 
     def test_categorical_hinge_invalid_dimension(self):
         with self.assertRaises(TypeError):
