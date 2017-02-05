@@ -171,6 +171,15 @@ class LSTM(BaseLayer):
         Other parameters like ``weight_cell_to_outgate`` will be
         equal to their default values.
 
+        In case if application requires the same initialization method
+        for all weights, then it's possible to specify only initialization
+        method that would be automaticaly applied to all weight
+        parameters in the LSTM layer.
+
+        .. code-block:: python
+
+            layers.LSTM(2, weights=init.Normal(0.1))
+
     biases : dict or Initializer
         Bias parameters for different gates.
         Defaults to :class:`Constant(0) <neupy.init.Constant>`.
@@ -198,6 +207,15 @@ class LSTM(BaseLayer):
 
         Other parameters like ``bias_cell`` will be
         equal to their default values.
+
+        In case if application requires the same initialization method
+        for all biases, then it's possible to specify only initialization
+        method that would be automaticaly applied to all bias parameters
+        in the LSTM layer.
+
+        .. code-block:: python
+
+            layers.LSTM(2, biases=init.Constant(1))
 
     activation_functions : dict, callable
         Activation functions for different gates. Defaults to:
@@ -273,6 +291,28 @@ class LSTM(BaseLayer):
     -----
     Code was adapted from the
     `Lasagne <https://github.com/Lasagne/Lasagne>`_ library.
+
+    Examples
+    --------
+
+    Sequence classification
+
+    .. code-block:: python
+
+        from neupy import layers, algorithms
+
+        n_time_steps = 40
+        n_categories = 20
+        embedded_size = 10
+
+        network = algorithms.RMSProp(
+            [
+                layers.Input(n_time_steps),
+                layers.Embedding(n_categories, embedded_size),
+                layers.LSTM(20),
+                layers.Sigmoid(1),
+            ]
+        )
     """
     size = IntProperty(minval=1)
 
