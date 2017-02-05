@@ -68,6 +68,11 @@ class ActivationLayersTestCase(BaseTestCase):
         layer = layers.Relu(1, alpha=0.1)
 
         actual_output = layer.activation_function(input_data)
+
+        if not isinstance(actual_output, np.ndarray):
+            # For Theano >= 0.9.0
+            actual_output = actual_output.eval()
+
         np.testing.assert_array_almost_equal(
             expected_output,
             actual_output
@@ -79,6 +84,11 @@ class ActivationLayersTestCase(BaseTestCase):
         layer = layers.LeakyRelu(1)
 
         actual_output = layer.activation_function(input_data)
+
+        if not isinstance(actual_output, np.ndarray):
+            # For Theano >= 0.9.0
+            actual_output = actual_output.eval()
+
         np.testing.assert_array_almost_equal(
             expected_output,
             actual_output

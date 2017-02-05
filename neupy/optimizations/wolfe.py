@@ -3,7 +3,6 @@ Main source code from Pylearn2 library:
 https://github.com/lisa-lab/pylearn2/blob/master/pylearn2/\
 optimization/linesearch.py
 """
-
 import theano
 import theano.tensor as T
 from theano.ifelse import ifelse
@@ -14,8 +13,8 @@ from neupy.utils import asfloat
 one = T.constant(asfloat(1))
 zero = T.constant(asfloat(0))
 
-theano_true = T.constant(1)
-theano_false = T.constant(0)
+theano_true = T.constant(1, dtype='bool')
+theano_false = T.constant(0, dtype='bool')
 
 
 def sequential_or(*conditions):
