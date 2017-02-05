@@ -3,10 +3,10 @@ import theano.tensor as T
 import numpy as np
 
 from neupy import init
-from neupy.utils import as_tuple
+from neupy.utils import AttributeKeyDict, as_tuple
 from neupy.exceptions import LayerConnectionError
 from neupy.core.properties import (IntProperty, Property, NumberProperty,
-                                   ParameterProperty)
+                                   ParameterProperty, CallableProperty)
 from .base import BaseLayer
 
 
@@ -62,9 +62,10 @@ def unroll_scan(fn, sequences, outputs_info, non_sequences, n_steps,
         prev_vals = out_ = fn(*step_input)
         output.append(out_)
 
-    # iterate over each scan output and convert it to same format as scan:
-    # [[output11, output12,...output1n],
-    #  [output21, output22,...output2n],
+    # iterate over each scan output and convert it to
+    # same format as scan:
+    # [[output11, output12, ..., output1n],
+    #  [output21, output22, ..., output2n],
     #  ...]
     output_scan = []
     for i in range(len(output[0])):
@@ -72,6 +73,55 @@ def unroll_scan(fn, sequences, outputs_info, non_sequences, n_steps,
         output_scan.append(T.stack(*l))
 
     return output_scan
+
+
+class MultiParameterProperty(ParameterProperty):
+    expected_type = as_tuple(init.Initializer, dict)
+
+    def validate(self, value):
+        super(MultiParameterProperty, self).validate(value)
+
+        if isinstance(value, dict):
+            for key in value:
+                if key not in self.default:
+                    valid_keys = ', '.join(self.default.keys())
+                    raise ValueError("Parameter `{}` has invalid key: `{}`. "
+                                     "Valid keys are: {}"
+                                     "".format(self.name, key, valid_keys))
+
+    def __set__(self, instance, value):
+        self.validate(value)
+
+        if isinstance(value, init.Initializer):
+            # All keys will have the same initializer
+            dict_value = dict.fromkeys(self.default.keys())
+
+            for key in dict_value:
+                dict_value[key] = value
+
+            value = dict_value
+
+        default_value = self.default.copy()
+        default_value.update(value)
+        value = default_value
+
+        value = AttributeKeyDict(value)
+        instance.__dict__[self.name] = value
+
+
+class MultiCallableProperty(MultiParameterProperty):
+    expected_type = as_tuple(dict)
+
+    def validate(self, value):
+        if not isinstance(value, self.expected_type):
+            raise TypeError("Parameter `{}` should be a dictionary, "
+                            "got `{!r}`".format(self.name, type(value)))
+
+        for key, func in value.items():
+            if not callable(func):
+                raise ValueError("Values for the `{}` parameter should be "
+                                 "callable objects, got value `{!r}` for the "
+                                 "`{}` key".format(self.name, func, key))
 
 
 class LSTM(BaseLayer):
@@ -82,6 +132,17 @@ class LSTM(BaseLayer):
     ----------
     size : int
         Number of hidden units in the network.
+
+    weights : dict or Initializer
+        Weight parameters for different gates.
+        Defaults to :class:`Normal(0.1) <neupy.init.HeUniform>`.
+
+    biases : dict or Initializer
+        Bias parameters for different gates.
+        Defaults to :class:`Constant(0) <neupy.init.Constant>`.
+
+    activation_functions : dict, callable
+        Activation functions for different gates.
 
     learn_init : bool
         If ``True``, make ``cell_init`` and ``hid_init`` trainable
@@ -136,10 +197,37 @@ class LSTM(BaseLayer):
     """
     size = IntProperty(minval=1)
 
-    ingate = Property()
-    forgetgate = Property()
-    outgate = Property()
-    cell = Property()
+    weights = MultiParameterProperty(
+        default=dict(
+            weight_in_to_ingate=init.XavierUniform(),
+            weight_hid_to_ingate=init.XavierUniform(),
+
+            weight_in_to_forgetgate=init.XavierUniform(),
+            weight_hid_to_forgetgate=init.XavierUniform(),
+
+            weight_in_to_cell=init.XavierUniform(),
+            weight_hid_to_cell=init.XavierUniform(),
+            weight_cell_to_ingate=init.XavierUniform(),
+            weight_cell_to_forgetgate=init.XavierUniform(),
+
+            weight_cell_to_outgate=init.XavierUniform(),
+            weight_in_to_outgate=init.XavierUniform(),
+            weight_hid_to_outgate=init.XavierUniform(),
+        ))
+    biases = MultiParameterProperty(
+        default=dict(
+            bias_ingate=init.Constant(0),
+            bias_forgetgate=init.Constant(0),
+            bias_cell=init.Constant(0),
+            bias_outgate=init.Constant(0),
+        ))
+    activation_functions = MultiCallableProperty(
+        default=dict(
+            ingate=T.nnet.sigmoid,
+            forgetgate=T.nnet.sigmoid,
+            outgate=T.nnet.sigmoid,
+            cell=T.tanh,
+        ))
 
     learn_init = Property(default=False, expected_type=bool)
     cell_init = ParameterProperty(default=init.Constant(0))
@@ -176,38 +264,46 @@ class LSTM(BaseLayer):
         super(LSTM, self).initialize()
 
         n_inputs = np.prod(self.input_shape[1:])
+        weights = self.weights
+        biases = self.biases
 
         # Input gate parameters
         self.weight_in_to_ingate = self.add_parameter(
-            value=init.HeUniform(), name='weight_in_to_ingate',
+            value=weights.weight_in_to_ingate,
+            name='weight_in_to_ingate',
             shape=(n_inputs, self.size))
         self.weight_hid_to_ingate = self.add_parameter(
-            value=init.HeUniform(), name='weight_hid_to_ingate',
+            value=weights.weight_hid_to_ingate,
+            name='weight_hid_to_ingate',
             shape=(self.size, self.size))
         self.bias_ingate = self.add_parameter(
-            value=init.Constant(0), name='bias_ingate',
+            value=biases.bias_ingate, name='bias_ingate',
             shape=(self.size,))
 
         # Forget gate parameters
         self.weight_in_to_forgetgate = self.add_parameter(
-            value=init.HeUniform(), name='weight_in_to_forgetgate',
+            value=weights.weight_in_to_forgetgate,
+            name='weight_in_to_forgetgate',
             shape=(n_inputs, self.size))
         self.weight_hid_to_forgetgate = self.add_parameter(
-            value=init.HeUniform(), name='weight_hid_to_forgetgate',
+            value=weights.weight_hid_to_forgetgate,
+            name='weight_hid_to_forgetgate',
             shape=(self.size, self.size))
         self.bias_forgetgate = self.add_parameter(
-            value=init.Constant(0), name='bias_forgetgate',
+            value=biases.bias_forgetgate, name='bias_forgetgate',
             shape=(self.size,))
 
         # Cell parameters
         self.weight_in_to_cell = self.add_parameter(
-            value=init.HeUniform(), name='weight_in_to_cell',
+            value=weights.weight_in_to_cell,
+            name='weight_in_to_cell',
             shape=(n_inputs, self.size))
         self.weight_hid_to_cell = self.add_parameter(
-            value=init.HeUniform(), name='weight_hid_to_cell',
+            value=weights.weight_hid_to_cell,
+            name='weight_hid_to_cell',
             shape=(self.size, self.size))
         self.bias_cell = self.add_parameter(
-            value=init.Constant(0), name='bias_cell',
+            value=biases.bias_cell, name='bias_cell',
             shape=(self.size,))
 
         # If peephole (cell to gate) connections were enabled, initialize
@@ -215,24 +311,29 @@ class LSTM(BaseLayer):
         # state, so they are represented as vectors.
         if self.peepholes:
             self.weight_cell_to_ingate = self.add_parameter(
-                value=init.HeUniform(), name='weight_cell_to_ingate',
+                value=weights.weight_cell_to_ingate,
+                name='weight_cell_to_ingate',
                 shape=(self.size,))
             self.weight_cell_to_forgetgate = self.add_parameter(
-                value=init.HeUniform(), name='weight_cell_to_forgetgate',
+                value=weights.weight_cell_to_forgetgate,
+                name='weight_cell_to_forgetgate',
                 shape=(self.size,))
             self.weight_cell_to_outgate = self.add_parameter(
-                value=init.HeUniform(), name='weight_cell_to_outgate',
+                value=weights.weight_cell_to_outgate,
+                name='weight_cell_to_outgate',
                 shape=(self.size,))
 
         # Output gate parameters
         self.weight_in_to_outgate = self.add_parameter(
-            value=init.HeUniform(), name='weight_in_to_outgate',
+            value=weights.weight_in_to_outgate,
+            name='weight_in_to_outgate',
             shape=(n_inputs, self.size))
         self.weight_hid_to_outgate = self.add_parameter(
-            value=init.HeUniform(), name='weight_hid_to_outgate',
+            value=weights.weight_hid_to_outgate,
+            name='weight_hid_to_outgate',
             shape=(self.size, self.size))
         self.bias_outgate = self.add_parameter(
-            value=init.Constant(0), name='bias_outgate',
+            value=biases.bias_outgate, name='bias_outgate',
             shape=(self.size,))
 
         # Initialization parameters
@@ -311,16 +412,16 @@ class LSTM(BaseLayer):
                 forgetgate += cell_previous * self.weight_cell_to_forgetgate
 
             # Apply nonlinearities
-            ingate = T.nnet.sigmoid(ingate)
-            forgetgate = T.nnet.sigmoid(forgetgate)
-            cell_input = T.tanh(cell_input)
+            ingate = self.activation_functions.ingate(ingate)
+            forgetgate = self.activation_functions.forgetgate(forgetgate)
+            cell_input = self.activation_functions.cell(cell_input)
 
             # Compute new cell value
             cell = forgetgate * cell_previous + ingate * cell_input
 
             if self.peepholes:
                 outgate += cell * self.weight_cell_to_outgate
-            outgate = T.nnet.sigmoid(outgate)
+            outgate = self.activation_functions.outgate(outgate)
 
             # Compute new hidden unit activation
             hid = outgate * T.tanh(cell)
