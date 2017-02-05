@@ -30,7 +30,7 @@ setup(
     version=neupy.__version__,
     license='MIT',
     url='http://neupy.com',
-    description=neupy.__doc__,
+    description=neupy.__doc__.strip(),
 
     # Author
     author='Yurii Shevhcuk',
