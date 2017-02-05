@@ -137,85 +137,85 @@ class LSTM(BaseLayer):
         Weight parameters for different gates.
         Defaults to :class:`XavierUniform() <neupy.init.XavierUniform>`.
 
-        In case if application requires different initialization
-        values for different weights then it's possible to specify
-        an exact weight by name.
+        - In case if application requires the same initialization method
+          for all weights, then it's possible to specify initialization
+          method that would be automaticaly applied to all weight
+          parameters in the LSTM layer.
 
-        .. code-block:: python
+          .. code-block:: python
 
-            dict(
-                weight_in_to_ingate=init.XavierUniform(),
-                weight_hid_to_ingate=init.XavierUniform(),
+              layers.LSTM(2, weights=init.Normal(0.1))
 
-                weight_in_to_forgetgate=init.XavierUniform(),
-                weight_hid_to_forgetgate=init.XavierUniform(),
+        - In case if application requires different initialization
+          values for different weights then it's possible to specify
+          an exact weight by name.
 
-                weight_in_to_cell=init.XavierUniform(),
-                weight_hid_to_cell=init.XavierUniform(),
-                weight_cell_to_ingate=init.XavierUniform(),
-                weight_cell_to_forgetgate=init.XavierUniform(),
+          .. code-block:: python
 
-                weight_cell_to_outgate=init.XavierUniform(),
-                weight_in_to_outgate=init.XavierUniform(),
-                weight_hid_to_outgate=init.XavierUniform(),
-            )
+              dict(
+                  weight_in_to_ingate=init.XavierUniform(),
+                  weight_hid_to_ingate=init.XavierUniform(),
+                  weight_cell_to_ingate=init.XavierUniform(),
 
-        If application requires modification to only one (or multiple)
-        parameter then it's better to specify the one that you need to
-        modify and ignore other parameters
+                  weight_in_to_forgetgate=init.XavierUniform(),
+                  weight_hid_to_forgetgate=init.XavierUniform(),
+                  weight_cell_to_forgetgate=init.XavierUniform(),
 
-        .. code-block:: python
+                  weight_in_to_outgate=init.XavierUniform(),
+                  weight_hid_to_outgate=init.XavierUniform(),
+                  weight_cell_to_outgate=init.XavierUniform(),
 
-            dict(weight_in_to_ingate=init.Normal(0.1))
+                  weight_in_to_cell=init.XavierUniform(),
+                  weight_hid_to_cell=init.XavierUniform(),
+              )
 
-        Other parameters like ``weight_cell_to_outgate`` will be
-        equal to their default values.
+          If application requires modification to only one (or multiple)
+          parameter then it's better to specify the one that you need to
+          modify and ignore other parameters
 
-        In case if application requires the same initialization method
-        for all weights, then it's possible to specify only initialization
-        method that would be automaticaly applied to all weight
-        parameters in the LSTM layer.
+          .. code-block:: python
 
-        .. code-block:: python
+              dict(weight_in_to_ingate=init.Normal(0.1))
 
-            layers.LSTM(2, weights=init.Normal(0.1))
+          Other parameters like ``weight_cell_to_outgate`` will be
+          equal to their default values.
 
     biases : dict or Initializer
         Bias parameters for different gates.
         Defaults to :class:`Constant(0) <neupy.init.Constant>`.
 
-        In case if application requires different initialization
-        values for different weights then it's possible to specify
-        an exact weight by name.
+        - In case if application requires the same initialization method
+          for all biases, then it's possible to specify initialization
+          method that would be automaticaly applied to all bias parameters
+          in the LSTM layer.
 
-        .. code-block:: python
+          .. code-block:: python
 
-            dict(
-                bias_ingate=init.Constant(0),
-                bias_forgetgate=init.Constant(0),
-                bias_cell=init.Constant(0),
-                bias_outgate=init.Constant(0),
-            )
+              layers.LSTM(2, biases=init.Constant(1))
 
-        If application requires modification to only one (or multiple)
-        parameter then it's better to specify the one that you need to
-        modify and ignore other parameters
+        - In case if application requires different initialization
+          values for different weights then it's possible to specify
+          an exact weight by name.
 
-        .. code-block:: python
+          .. code-block:: python
 
-            dict(bias_ingate=init.Constant(1))
+              dict(
+                  bias_ingate=init.Constant(0),
+                  bias_forgetgate=init.Constant(0),
+                  bias_cell=init.Constant(0),
+                  bias_outgate=init.Constant(0),
+              )
 
-        Other parameters like ``bias_cell`` will be
-        equal to their default values.
+          If application requires modification to only one (or multiple)
+          parameter then it's better to specify the one that you need to
+          modify and ignore other parameters
 
-        In case if application requires the same initialization method
-        for all biases, then it's possible to specify only initialization
-        method that would be automaticaly applied to all bias parameters
-        in the LSTM layer.
+          .. code-block:: python
 
-        .. code-block:: python
+              dict(bias_ingate=init.Constant(1))
 
-            layers.LSTM(2, biases=init.Constant(1))
+          Other parameters like ``bias_cell`` will be
+          equal to their default values.
 
     activation_functions : dict, callable
         Activation functions for different gates. Defaults to:
@@ -320,18 +320,18 @@ class LSTM(BaseLayer):
         default=dict(
             weight_in_to_ingate=init.XavierUniform(),
             weight_hid_to_ingate=init.XavierUniform(),
+            weight_cell_to_ingate=init.XavierUniform(),
 
             weight_in_to_forgetgate=init.XavierUniform(),
             weight_hid_to_forgetgate=init.XavierUniform(),
+            weight_cell_to_forgetgate=init.XavierUniform(),
+
+            weight_in_to_outgate=init.XavierUniform(),
+            weight_hid_to_outgate=init.XavierUniform(),
+            weight_cell_to_outgate=init.XavierUniform(),
 
             weight_in_to_cell=init.XavierUniform(),
             weight_hid_to_cell=init.XavierUniform(),
-            weight_cell_to_ingate=init.XavierUniform(),
-            weight_cell_to_forgetgate=init.XavierUniform(),
-
-            weight_cell_to_outgate=init.XavierUniform(),
-            weight_in_to_outgate=init.XavierUniform(),
-            weight_hid_to_outgate=init.XavierUniform(),
         ))
     biases = MultiParameterProperty(
         default=dict(
