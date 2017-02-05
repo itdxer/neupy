@@ -6,7 +6,7 @@ from neupy import init
 from neupy.utils import AttributeKeyDict, as_tuple
 from neupy.exceptions import LayerConnectionError
 from neupy.core.properties import (IntProperty, Property, NumberProperty,
-                                   ParameterProperty, CallableProperty)
+                                   ParameterProperty)
 from .base import BaseLayer
 
 
