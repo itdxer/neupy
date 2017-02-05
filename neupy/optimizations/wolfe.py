@@ -13,8 +13,8 @@ from neupy.utils import asfloat
 one = T.constant(asfloat(1))
 zero = T.constant(asfloat(0))
 
-theano_true = T.constant(1, dtype='bool')
-theano_false = T.constant(0, dtype='bool')
+theano_true = T.constant(1)
+theano_false = T.constant(0)
 
 
 def sequential_or(*conditions):
@@ -49,6 +49,17 @@ def sequential_and(*conditions):
     if not other_conditions:
         return first_condition
     return T.and_(first_condition, sequential_and(*other_conditions))
+
+
+def bitwise_not(condition):
+    """
+    Bitwise not compatible with Theano version 0.8.* and 0.9.*
+
+    Parameters
+    ----------
+    condition : bool, int
+    """
+    return T.neq(condition, 1)
 
 
 def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
@@ -109,7 +120,7 @@ def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
             y_current > (y0 + c1 * x_current * y_deriv_0),
             T.and_(
                 y_current >= y_previous,
-                T.bitwise_not(is_first_iteration)
+                bitwise_not(is_first_iteration),
             )
         )
         condition2 = T.abs_(y_deriv_current) <= -c2 * y_deriv_0

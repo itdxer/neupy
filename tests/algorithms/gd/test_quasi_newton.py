@@ -34,6 +34,7 @@ class QuasiNewtonTestCase(BaseTestCase):
         qnnet = algorithms.QuasiNewton(
             connection=[
                 layers.Input(10),
+                layers.Dropout(0.1),
                 layers.Sigmoid(30, weight=init.Orthogonal()),
                 layers.Sigmoid(1, weight=init.Orthogonal()),
             ],
