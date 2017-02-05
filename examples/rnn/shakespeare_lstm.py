@@ -57,6 +57,7 @@ class TextPreprocessing(object):
         log_predictions = np.log(predictions) / temperature
         predictions = np.exp(log_predictions)
 
+        predictions = predictions.astype('float64')
         normalized_predictions = predictions / np.sum(predictions)
         probabilities = np.random.multinomial(
             n=1, pvals=normalized_predictions, size=1)
@@ -69,14 +70,14 @@ class TextPreprocessing(object):
 
 
 if __name__ == '__main__':
-    window_size = 50
+    window_size = 40
 
     print("Loading Shakespeare's text ...")
     preprocessor = TextPreprocessing(filepath=TEXT_FILE)
     n_characters = preprocessor.n_characters
 
     x_train, x_test, y_train, y_test = preprocessor.load_samples(
-        window_size, stride=4)
+        window_size, stride=10)
 
     network = algorithms.RMSProp(
         [
@@ -88,7 +89,6 @@ if __name__ == '__main__':
         step=0.01,
         verbose=True,
         batch_size=128,
-        shuffle_data=True,
         error='categorical_crossentropy',
     )
     network.train(x_train, y_train, x_test, y_test, epochs=10)
@@ -106,7 +106,7 @@ if __name__ == '__main__':
         last_characters = int_sequence[-window_size:]
         data = preprocessor.encode(last_characters)
         output = network.predict(data)
-        output = preprocessor.sample(output[0], temperature=0.6)
+        output = preprocessor.sample(output[0], temperature=0.5)
         int_sequence.append(output)
 
     print(preprocessor.int_to_string(int_sequence))
