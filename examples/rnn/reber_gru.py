@@ -57,8 +57,8 @@ network = algorithms.RMSProp(
         layers.Embedding(n_categories, 10),
         # shape: (n_samples, n_time_steps, 10)
 
-        # unroll_scan - speed up, since sequences are two short
-        layers.LSTM(20, unroll_scan=True),
+        # unroll_scan - speed up calculation for short sequences
+        layers.GRU(20, unroll_scan=True),
         # shape: (n_samples, 20)
 
         layers.Sigmoid(1),

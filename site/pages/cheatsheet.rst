@@ -160,7 +160,8 @@ Recurrent layers
 .. csv-table::
     :header: "Class name", "Description"
 
-    ":layer:`LSTM`", "Lont-short term memory (LSTM) layer"
+    ":layer:`LSTM`", "Long-Short Term Memory (LSTM) layer"
+    ":layer:`GRU`", "Gated Recurrent Unit (GRU) layer"
 
 Pooling layers
 ~~~~~~~~~~~~~~
