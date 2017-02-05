@@ -3,28 +3,13 @@ from functools import reduce
 
 import theano.tensor as T
 
-from neupy.core.properties import IntProperty, Property
+from neupy.core.properties import IntProperty, CallableProperty
 from neupy.exceptions import LayerConnectionError
 from neupy.utils import as_tuple
 from .base import BaseLayer
 
 
 __all__ = ('Elementwise', 'Concatenate')
-
-
-class CallableProperty(Property):
-    """
-    Property for callable objects.
-
-    Parameters
-    ----------
-    {Property.Parameters}
-    """
-    def validate(self, value):
-        if not callable(value):
-            raise ValueError("The `{}` property expected to be "
-                             "callable object.".format(self.name))
-        super(CallableProperty, self).validate(value)
 
 
 class Elementwise(BaseLayer):

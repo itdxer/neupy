@@ -10,7 +10,8 @@ from neupy.core.docs import SharedDocs
 
 __all__ = ('BaseProperty', 'Property', 'ArrayProperty', 'BoundedProperty',
            'ProperFractionProperty', 'NumberProperty', 'IntProperty',
-           'TypedListProperty', 'ChoiceProperty', 'WithdrawProperty')
+           'TypedListProperty', 'ChoiceProperty', 'WithdrawProperty',
+           'ParameterProperty', 'CallableProperty')
 
 
 class BaseProperty(SharedDocs):
@@ -52,20 +53,6 @@ class BaseProperty(SharedDocs):
             self.expected_type = as_tuple(self.expected_type, type(None))
 
     def __set__(self, instance, value):
-        if not isinstance(value, self.expected_type):
-            availabe_types = self.expected_type
-
-            if isinstance(availabe_types, (list, tuple)):
-                availabe_types = ', '.join(t.__name__ for t in availabe_types)
-            else:
-                availabe_types = availabe_types.__name__
-
-            raise TypeError("Invalid data type `{0}` for `{1}` property. "
-                            "Expected types: {2}".format(
-                                value.__class__.__name__, self.name,
-                                availabe_types
-                            ))
-
         if not self.allow_none or value is not None:
             self.validate(value)
 
@@ -88,6 +75,19 @@ class BaseProperty(SharedDocs):
         ----------
         value : object
         """
+        if not isinstance(value, self.expected_type):
+            availabe_types = self.expected_type
+
+            if isinstance(availabe_types, (list, tuple)):
+                availabe_types = ', '.join(t.__name__ for t in availabe_types)
+            else:
+                availabe_types = availabe_types.__name__
+
+            raise TypeError("Invalid data type `{0}` for `{1}` property. "
+                            "Expected types: {2}".format(
+                                value.__class__.__name__, self.name,
+                                availabe_types
+                            ))
 
     def __repr__(self):
         classname = self.__class__.__name__
@@ -320,3 +320,18 @@ class ParameterProperty(ArrayProperty):
         if isinstance(value, number_type):
             value = init.Constant(value)
         super(ParameterProperty, self).__set__(instance, value)
+
+
+class CallableProperty(Property):
+    """
+    Property for callable objects.
+
+    Parameters
+    ----------
+    {Property.Parameters}
+    """
+    def validate(self, value):
+        if not callable(value):
+            raise ValueError("The `{}` property expected to be "
+                             "callable object.".format(self.name))
+        super(CallableProperty, self).validate(value)
