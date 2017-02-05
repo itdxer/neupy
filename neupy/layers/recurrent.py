@@ -135,14 +135,93 @@ class LSTM(BaseLayer):
 
     weights : dict or Initializer
         Weight parameters for different gates.
-        Defaults to :class:`Normal(0.1) <neupy.init.HeUniform>`.
+        Defaults to :class:`XavierUniform() <neupy.init.XavierUniform>`.
+
+        In case if application requires different initialization
+        values for different weights then it's possible to specify
+        an exact weight by name.
+
+        .. code-block:: python
+
+            dict(
+                weight_in_to_ingate=init.XavierUniform(),
+                weight_hid_to_ingate=init.XavierUniform(),
+
+                weight_in_to_forgetgate=init.XavierUniform(),
+                weight_hid_to_forgetgate=init.XavierUniform(),
+
+                weight_in_to_cell=init.XavierUniform(),
+                weight_hid_to_cell=init.XavierUniform(),
+                weight_cell_to_ingate=init.XavierUniform(),
+                weight_cell_to_forgetgate=init.XavierUniform(),
+
+                weight_cell_to_outgate=init.XavierUniform(),
+                weight_in_to_outgate=init.XavierUniform(),
+                weight_hid_to_outgate=init.XavierUniform(),
+            )
+
+        If application requires modification to only one (or multiple)
+        parameter then it's better to specify the one that you need to
+        modify and ignore other parameters
+
+        .. code-block:: python
+
+            dict(weight_in_to_ingate=init.Normal(0.1))
+
+        Other parameters like ``weight_cell_to_outgate`` will be
+        equal to their default values.
 
     biases : dict or Initializer
         Bias parameters for different gates.
         Defaults to :class:`Constant(0) <neupy.init.Constant>`.
 
+        In case if application requires different initialization
+        values for different weights then it's possible to specify
+        an exact weight by name.
+
+        .. code-block:: python
+
+            dict(
+                bias_ingate=init.Constant(0),
+                bias_forgetgate=init.Constant(0),
+                bias_cell=init.Constant(0),
+                bias_outgate=init.Constant(0),
+            )
+
+        If application requires modification to only one (or multiple)
+        parameter then it's better to specify the one that you need to
+        modify and ignore other parameters
+
+        .. code-block:: python
+
+            dict(bias_ingate=init.Constant(1))
+
+        Other parameters like ``bias_cell`` will be
+        equal to their default values.
+
     activation_functions : dict, callable
-        Activation functions for different gates.
+        Activation functions for different gates. Defaults to:
+
+        .. code-block:: python
+
+            # import theano.tensor as T
+            dict(
+                ingate=T.nnet.sigmoid,
+                forgetgate=T.nnet.sigmoid,
+                outgate=T.nnet.sigmoid,
+                cell=T.tanh,
+            )
+
+        If application requires modification to only one parameter
+        then it's better to specify the one that you need to modify
+        and ignore other parameters
+
+        .. code-block:: python
+
+            dict(ingate=T.tanh)
+
+        Other parameters like ``forgetgate`` or ``outgate`` will be
+        equal to their default values.
 
     learn_init : bool
         If ``True``, make ``cell_init`` and ``hid_init`` trainable
