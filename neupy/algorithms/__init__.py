@@ -37,6 +37,7 @@ from .associative.kohonen import *
 
 from .competitive.sofm import *
 from .competitive.art import *
+from .competitive.lvq import *
 
 from .rbfn.pnn import *
 from .rbfn.rbf_kmeans import *
