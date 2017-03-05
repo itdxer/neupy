@@ -1,6 +1,6 @@
 import numpy as np
 
-from neupy import algorithms
+from neupy import algorithms, init
 from neupy.exceptions import NotTrained
 
 from base import BaseTestCase
@@ -74,6 +74,11 @@ class LVQTestCase(BaseTestCase):
         lvqnet = algorithms.LVQ(n_inputs=2, n_classes=3,
                                 weight=np.random.random((2, 3)))
         self.assertTrue(lvqnet.initialized)
+
+        lvqnet = algorithms.LVQ(n_inputs=2, n_classes=3,
+                                weight=init.Normal())
+        self.assertTrue(lvqnet.initialized)
+        self.assertEqual(lvqnet.weight.shape, (2, 3))
 
     def test_simple_lvq(self):
         lvqnet = algorithms.LVQ(
