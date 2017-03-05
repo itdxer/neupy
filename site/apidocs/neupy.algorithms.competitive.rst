@@ -7,6 +7,7 @@ Submodules
 .. toctree::
 
    neupy.algorithms.competitive.art
+   neupy.algorithms.competitive.lvq
    neupy.algorithms.competitive.sofm
 
 Module contents
