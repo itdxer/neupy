@@ -210,7 +210,6 @@ class LVQ(BaseNetwork):
     def train_epoch(self, input_train, target_train):
         step = self.step
         weight = self.weight
-        predict = self.predict
         prototypes_per_class = self.prototypes_per_class
 
         for input_row, target in zip(input_train, target_train):
