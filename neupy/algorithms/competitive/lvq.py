@@ -97,11 +97,15 @@ class LVQ(BaseNetwork):
         self.initialized = False
         super(LVQ, self).__init__(**options)
 
-        if self.weight is not None:
-            self.initialized = True
-
         if self.n_subclasses is None:
             self.n_subclasses = self.n_classes
+
+        if isinstance(self.weight, init.Initializer):
+            weight_shape = (self.n_inputs, self.n_subclasses)
+            self.weight = self.weight.sample(weight_shape)
+
+        if self.weight is not None:
+            self.initialized = True
 
         if self.n_subclasses < self.n_classes:
             raise ValueError("Number of subclasses should be greater "
