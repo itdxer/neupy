@@ -6,10 +6,31 @@ from neupy.exceptions import NotTrained
 from neupy.algorithms.base import BaseNetwork
 from neupy.core.properties import (IntProperty, NumberProperty, Property,
                                    TypedListProperty)
-from .sofm import neg_euclid_distance
 
 
 __all__ = ('LVQ',)
+
+
+def neg_euclid_distance(input_data, weight):
+    """
+    Negative Euclidian distance between input
+    data and weight.
+
+    Parameters
+    ----------
+    input_data : array-like
+        Input data.
+
+    weight : array-like
+        Neural network's weights.
+
+    Returns
+    -------
+    array-like
+    """
+    input_data = np.expand_dims(input_data, axis=0)
+    euclid_dist = np.linalg.norm(input_data - weight, axis=1)
+    return -np.expand_dims(euclid_dist, axis=0)
 
 
 class LVQ(BaseNetwork):
@@ -54,14 +75,6 @@ class LVQ(BaseNetwork):
 
     {BaseNetwork.step}
 
-    step_decrease_rate : float
-        Value defines decrease rate of the step after each epoch.
-        Step decreasing procedure would be applied until ``step`` would
-        be equal to value specified  for the ``minstep`` parameter.
-
-    minstep : float
-        Defaults to ``1e-5``.
-
     {BaseNetwork.show_epoch}
 
     {BaseNetwork.shuffle_data}
@@ -82,6 +95,7 @@ class LVQ(BaseNetwork):
     -----
     - Input data needs to be normalized, because LVQ uses Euclidian
       distance to find clusters
+    - Training error is just a ratio of miscassified samples
     """
     n_inputs = IntProperty(minval=1)
     n_subclasses = IntProperty(minval=2, default=None, allow_none=True)
@@ -90,8 +104,6 @@ class LVQ(BaseNetwork):
     prototypes_per_class = TypedListProperty(allow_none=True, default=None)
     weight = Property(expected_type=(np.ndarray, init.Initializer),
                       allow_none=True, default=None)
-
-    minstep = NumberProperty(default=1e-5)
 
     def __init__(self, **options):
         self.initialized = False
@@ -142,12 +154,16 @@ class LVQ(BaseNetwork):
                                        self.prototypes_per_class,
                                        self.n_subclasses))
 
+        self.subclass_to_class = []
+        for class_id, n_prototypes in enumerate(self.prototypes_per_class):
+            self.subclass_to_class.extend([class_id] * n_prototypes)
+
     def predict(self, input_data):
         if not self.initialized:
             raise NotTrained("LVQ network hasn't been trained yet")
 
         input_data = format_data(input_data)
-        prototypes_per_class = self.prototypes_per_class
+        subclass_to_class = self.subclass_to_class
         weight = self.weight
 
         predictions = []
@@ -155,7 +171,7 @@ class LVQ(BaseNetwork):
             output = neg_euclid_distance(input_row, weight)
             winner_subclass = int(output.argmax(axis=1))
 
-            predicted_class = prototypes_per_class[winner_subclass]
+            predicted_class = subclass_to_class[winner_subclass]
             predictions.append(predicted_class)
 
         return np.array(predictions)
@@ -210,20 +226,23 @@ class LVQ(BaseNetwork):
     def train_epoch(self, input_train, target_train):
         step = self.step
         weight = self.weight
-        prototypes_per_class = self.prototypes_per_class
+        subclass_to_class = self.subclass_to_class
 
+        n_correct_predictions = 0
         for input_row, target in zip(input_train, target_train):
-            input_row = np.expand_dims(input_row, axis=0)
-
             output = neg_euclid_distance(input_row, weight)
-            winner_subclass = int(output.argmax(axis=1))
-            predicted_class = prototypes_per_class[winner_subclass]
+            winner_subclass = int(output.argmax())
+            predicted_class = subclass_to_class[winner_subclass]
 
-            if predicted_class == target:
-                weight[:, winner_subclass] += step * (
-                    input_row[0] - weight[:, winner_subclass])
+            weight_update = input_row - weight[winner_subclass, :]
+            is_correct_prediction = (predicted_class == target)
+
+            if is_correct_prediction:
+                weight[winner_subclass, :] += step * weight_update
             else:
-                weight[:, winner_subclass] -= step * (
-                    input_row[0] - weight[:, winner_subclass])
+                weight[winner_subclass, :] -= step * weight_update
 
-        # TODO: decrease training step
+            n_correct_predictions += is_correct_prediction
+
+        n_samples = len(input_train)
+        return 1 - n_correct_predictions / n_samples

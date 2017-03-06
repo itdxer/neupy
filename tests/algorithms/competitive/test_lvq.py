@@ -4,9 +4,33 @@ from neupy import algorithms, init
 from neupy.exceptions import NotTrained
 
 from base import BaseTestCase
+from data import xor_input_train, xor_target_train
 
 
 class LVQTestCase(BaseTestCase):
+    def setUp(self):
+        self.data = np.concatenate(
+            [
+                xor_input_train,
+                xor_input_train + 0.1,
+                xor_input_train + np.array([[0.1, -0.1]]),
+                xor_input_train - 0.1,
+                xor_input_train - np.array([[0.1, -0.1]]),
+            ],
+            axis=0
+        )
+        target = np.concatenate(
+            [
+                xor_target_train,
+                xor_target_train,
+                xor_target_train,
+                xor_target_train,
+                xor_target_train,
+            ],
+            axis=0
+        )
+        self.target = np.where(target == -1, 0, target)
+
     def test_lvq_initialization_exceptions(self):
         with self.assertRaises(ValueError):
             # n_sublcasses < n_classes
@@ -80,9 +104,38 @@ class LVQTestCase(BaseTestCase):
         self.assertTrue(lvqnet.initialized)
         self.assertEqual(lvqnet.weight.shape, (2, 3))
 
+    def test_lvq_with_odd_number_of_subclasses(self):
+        lvqnet = algorithms.LVQ(
+            n_inputs=2,
+            n_subclasses=3,
+            n_classes=2,
+        )
+        self.assertIn(lvqnet.prototypes_per_class, ([2, 1], [1, 2]))
+
     def test_simple_lvq(self):
         lvqnet = algorithms.LVQ(
             n_inputs=2,
             n_subclasses=4,
             n_classes=2,
         )
+
+        lvqnet.train(self.data, self.target, epochs=5)
+        predicted_target = lvqnet.predict(self.data)
+
+        self.assertEqual(lvqnet.errors.last(), 0)
+        np.testing.assert_array_equal(predicted_target, self.target[:, 0])
+
+    def test_lvq_with_custom_set_of_prototypes(self):
+        lvqnet = algorithms.LVQ(
+            n_inputs=2,
+            n_subclasses=4,
+            n_classes=2,
+
+            prototypes_per_class=[3, 1],
+        )
+
+        lvqnet.train(self.data, self.target, epochs=3)
+        self.assertEqual(lvqnet.errors.last(), 0.25)
+
+        lvqnet.train(self.data, self.target, epochs=5)
+        self.assertEqual(lvqnet.errors.last(), 0)
