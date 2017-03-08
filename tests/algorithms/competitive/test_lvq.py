@@ -119,7 +119,7 @@ class LVQTestCase(BaseTestCase):
             n_classes=2,
         )
 
-        lvqnet.train(self.data, self.target, epochs=5)
+        lvqnet.train(self.data, self.target, epochs=20)
         predicted_target = lvqnet.predict(self.data)
 
         self.assertEqual(lvqnet.errors.last(), 0)
@@ -137,5 +137,5 @@ class LVQTestCase(BaseTestCase):
         lvqnet.train(self.data, self.target, epochs=3)
         self.assertEqual(lvqnet.errors.last(), 0.25)
 
-        lvqnet.train(self.data, self.target, epochs=5)
+        lvqnet.train(self.data, self.target, epochs=10)
         self.assertEqual(lvqnet.errors.last(), 0)

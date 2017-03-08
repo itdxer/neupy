@@ -201,8 +201,10 @@ class LVQ(BaseNetwork):
             weights = []
             iterator = zip(target_classes, self.prototypes_per_class)
             for target_class, n_prototypes in iterator:
-                is_valid_class = target_train[:, 0] == target_class
+                is_valid_class = (target_train[:, 0] == target_class)
+                is_valid_class = is_valid_class.astype('float64')
                 n_samples_per_class = sum(is_valid_class)
+                is_valid_class /= n_samples_per_class
 
                 if n_samples_per_class <= n_prototypes:
                     raise ValueError("Input data has {0} samples for class-{1}"
@@ -212,8 +214,8 @@ class LVQ(BaseNetwork):
                                                target_class, n_prototypes))
 
                 class_weight_indeces = np.random.choice(
-                    np.arange(n_input_samples), n_prototypes, replace=False,
-                    p=is_valid_class / is_valid_class.sum())
+                    np.arange(n_input_samples), n_prototypes,
+                    replace=False, p=is_valid_class)
 
                 class_weight = input_train[class_weight_indeces]
                 weights.extend(class_weight)
