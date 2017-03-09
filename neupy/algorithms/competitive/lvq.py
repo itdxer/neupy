@@ -4,8 +4,7 @@ from neupy import init
 from neupy.utils import format_data
 from neupy.exceptions import NotTrained
 from neupy.algorithms.base import BaseNetwork
-from neupy.core.properties import (IntProperty, NumberProperty, Property,
-                                   TypedListProperty)
+from neupy.core.properties import IntProperty, Property, TypedListProperty
 
 
 __all__ = ('LVQ',)
