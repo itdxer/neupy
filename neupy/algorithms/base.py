@@ -411,6 +411,9 @@ class BaseNetwork(BaseSkeleton):
                     data = shuffle(*as_tuple(input_train, target_train))
                     input_train, target_train = data[:-1], data[-1]
 
+                    if len(input_train) == 1:
+                        input_train = input_train[0]
+
                 try:
                     train_error = train_epoch(input_train, target_train)
 

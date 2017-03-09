@@ -117,7 +117,7 @@ class LVQTestCase(BaseTestCase):
             n_inputs=2,
             n_subclasses=4,
             n_classes=2,
-            verbose=True
+            shuffle_data=True,
         )
 
         lvqnet.train(self.data, self.target, epochs=100)
