@@ -49,7 +49,8 @@ class ConstructibleNetworkTestCase(BaseTestCase):
                 layers.Sigmoid(1),
             ],
             step=0.1,
-            verbose=False
+            verbose=False,
+            shuffle_data=True,
         )
 
         x_train, x_test, y_train, y_test = simple_classification(
