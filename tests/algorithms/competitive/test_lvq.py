@@ -1,9 +1,13 @@
+from functools import partial
+
 import numpy as np
+from sklearn import datasets
 
 from neupy import algorithms, init
 from neupy.exceptions import NotTrained
 
 from base import BaseTestCase
+from utils import compare_networks
 from data import xor_input_train, xor_target_train
 
 
@@ -30,6 +34,7 @@ class LVQTestCase(BaseTestCase):
             axis=0
         )
         self.target = np.where(target == -1, 0, target)
+        super(LVQTestCase, self).setUp()
 
     def test_lvq_initialization_exceptions(self):
         with self.assertRaises(ValueError):
@@ -140,3 +145,27 @@ class LVQTestCase(BaseTestCase):
 
         lvqnet.train(self.data, self.target, epochs=30)
         self.assertEqual(lvqnet.errors.last(), 0)
+
+    def test_compare_lvq_and_lvq2(self):
+
+        dataset = datasets.load_iris()
+        data, target = dataset.data, dataset.target
+
+        # Prepare the same weights for the fair comparison
+        lvq = algorithms.LVQ(n_inputs=4, n_subclasses=6, n_classes=3)
+        lvq.train(data, target, epochs=1)
+        prepared_lvq_weights = lvq.weight
+
+        compare_networks(
+            algorithms.LVQ,
+            partial(algorithms.LVQ2, epsilon=0.4),
+
+            data=[data, target],
+            epochs=10,
+            show_comparison_plot=False,
+
+            n_inputs=4,
+            n_subclasses=6,
+            n_classes=3,
+            weight=prepared_lvq_weights,
+        )

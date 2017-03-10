@@ -95,6 +95,9 @@ Competitive Networks
     :network:`ART1`, Adaptive Resonance Theory (ART1) Network
     :network:`SOFM`, Self-Organizing Feature Map (SOFM or SOM)
     :network:`LVQ`, Learning Vector Quantization (LVQ)
+    :network:`LVQ2`, Learning Vector Quantization 2 (LVQ2)
+    :network:`LVQ21`, Learning Vector Quantization 2.1 (LVQ2.1)
+    :network:`LVQ3`, Learning Vector Quantization 3 (LVQ3)
 
 Linear networks
 ~~~~~~~~~~~~~~~

@@ -4,13 +4,14 @@ from neupy import init
 from neupy.utils import format_data
 from neupy.exceptions import NotTrained
 from neupy.algorithms.base import BaseNetwork
-from neupy.core.properties import IntProperty, Property, TypedListProperty
+from neupy.core.properties import (IntProperty, Property, TypedListProperty,
+                                   NumberProperty)
 
 
-__all__ = ('LVQ',)
+__all__ = ('LVQ', 'LVQ2', 'LVQ21', 'LVQ3')
 
 
-def neg_euclid_distance(input_data, weight):
+def euclid_distance(input_data, weight):
     """
     Negative Euclidian distance between input
     data and weight.
@@ -29,7 +30,30 @@ def neg_euclid_distance(input_data, weight):
     """
     input_data = np.expand_dims(input_data, axis=0)
     euclid_dist = np.linalg.norm(input_data - weight, axis=1)
-    return -np.expand_dims(euclid_dist, axis=0)
+    return np.expand_dims(euclid_dist, axis=0)
+
+
+def n_argmin(array, n, axis=0):
+    """
+    Returns indeces of n minimum values.
+
+    Parameters
+    ----------
+    array : array-like
+
+    n : int
+        Number of minimum indeces.
+
+    axis : int
+        Axis along which to search minimum values.
+        Defaults to ``0``.
+
+    Returns
+    -------
+    array-like
+    """
+    sorted_argumets = array.argsort(axis=axis).ravel()
+    return sorted_argumets[:n]
 
 
 class LVQ(BaseNetwork):
@@ -167,8 +191,8 @@ class LVQ(BaseNetwork):
 
         predictions = []
         for input_row in input_data:
-            output = neg_euclid_distance(input_row, weight)
-            winner_subclass = int(output.argmax(axis=1))
+            output = euclid_distance(input_row, weight)
+            winner_subclass = int(output.argmin(axis=1))
 
             predicted_class = subclass_to_class[winner_subclass]
             predictions.append(predicted_class)
@@ -231,8 +255,8 @@ class LVQ(BaseNetwork):
 
         n_correct_predictions = 0
         for input_row, target in zip(input_train, target_train):
-            output = neg_euclid_distance(input_row, weight)
-            winner_subclass = int(output.argmax())
+            output = euclid_distance(input_row, weight)
+            winner_subclass = output.argmin()
             predicted_class = subclass_to_class[winner_subclass]
 
             weight_update = input_row - weight[winner_subclass, :]
@@ -247,3 +271,95 @@ class LVQ(BaseNetwork):
 
         n_samples = len(input_train)
         return 1 - n_correct_predictions / n_samples
+
+
+class LVQ2(LVQ):
+    """
+    Learning Vector Quantization 2 (LVQ2) algorithm.
+    Improved version for the LVQ algorithm.
+
+    Parameters
+    ----------
+    epsilon : float
+        Ration between to closest subclasses that
+        triggers double weight update. Defaults to ``0.1``.
+
+    {LVQ.Parameters}
+
+    Notes
+    -----
+    {LVQ.Notes}
+    """
+    epsilon = NumberProperty(default=0.1)
+
+    def train_epoch(self, input_train, target_train):
+        step = self.step
+        weight = self.weight
+        epsilon = self.epsilon
+        subclass_to_class = self.subclass_to_class
+
+        n_correct_predictions = 0
+        for input_row, target in zip(input_train, target_train):
+            output = euclid_distance(input_row, weight)
+            winner_subclasses = n_argmin(output, n=2, axis=1)
+
+            top1_subclass, top2_subclass = winner_subclasses
+            top1_class = subclass_to_class[top1_subclass]
+            top2_class = subclass_to_class[top2_subclass]
+
+            top1_weight_update = input_row - weight[top1_subclass, :]
+            is_correct_prediction = (top1_class == target)
+
+            closest_dist, runner_up_dist = output[0, winner_subclasses]
+            double_update_condition_satisfied = (
+                not is_correct_prediction and
+                (top2_class == target) and
+                closest_dist > ((1 - epsilon) * runner_up_dist) and
+                runner_up_dist < ((1 + epsilon) * closest_dist)
+            )
+
+            if double_update_condition_satisfied:
+                top2_weight_update = input_row - weight[top2_class, :]
+                weight[top1_subclass, :] -= step * top1_weight_update
+                weight[top2_subclass, :] += step * top2_weight_update
+
+            if is_correct_prediction:
+                weight[top1_subclass, :] += step * top1_weight_update
+
+            else:
+                weight[top1_subclass, :] -= step * top1_weight_update
+
+            n_correct_predictions += is_correct_prediction
+
+        n_samples = len(input_train)
+        return 1 - n_correct_predictions / n_samples
+
+
+class LVQ21(LVQ2):
+    """
+    Learning Vector Quantization 2.1 (LVQ2.1) algorithm.
+    Improved version for the LVQ2 algorithm.
+
+    Parameters
+    ----------
+    {LVQ2.Parameters}
+
+    Notes
+    -----
+    {LVQ2.Notes}
+    """
+
+
+class LVQ3(LVQ2):
+    """
+    Learning Vector Quantization 3 (LVQ3) algorithm.
+    Improved version for the LVQ algorithm.
+
+    Parameters
+    ----------
+    {LVQ2.Parameters}
+
+    Notes
+    -----
+    {LVQ2.Notes}
+    """

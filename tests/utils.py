@@ -66,7 +66,8 @@ def compare_networks(default_class, tested_class, data, **kwargs):
     # Compute result for default network (which must be slower)
     network = default_class(**kwargs)
 
-    default_connections = copy.deepcopy(network.connection)
+    if hasattr(network, 'connection'):
+        default_connections = copy.deepcopy(network.connection)
 
     network.train(*data, epochs=epochs)
 
@@ -74,7 +75,9 @@ def compare_networks(default_class, tested_class, data, **kwargs):
     errors1 = network.errors
 
     # Compute result for test network (which must be faster)
-    kwargs['connection'] = default_connections
+    if hasattr(network, 'connection'):
+        kwargs['connection'] = default_connections
+
     network = tested_class(**kwargs)
 
     network.train(*data, epochs=epochs)
