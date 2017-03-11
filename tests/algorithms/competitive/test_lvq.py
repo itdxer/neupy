@@ -184,7 +184,30 @@ class LVQTestCase(BaseTestCase):
 
             data=[data, target],
             epochs=10,
-            show_comparison_plot=True,
+            show_comparison_plot=False,
+
+            n_inputs=4,
+            n_subclasses=3,
+            n_classes=3,
+            weight=prepared_lvq_weights,
+        )
+
+    def test_compare_lvq_and_lvq3(self):
+        dataset = datasets.load_iris()
+        data, target = dataset.data, dataset.target
+
+        # Prepare the same weights for the fair comparison
+        lvq = algorithms.LVQ(n_inputs=4, n_subclasses=3, n_classes=3)
+        lvq.train(data, target, epochs=1)
+        prepared_lvq_weights = lvq.weight
+
+        compare_networks(
+            algorithms.LVQ,
+            partial(algorithms.LVQ3, epsilon=0.1),
+
+            data=[data, target],
+            epochs=10,
+            show_comparison_plot=False,
 
             n_inputs=4,
             n_subclasses=3,

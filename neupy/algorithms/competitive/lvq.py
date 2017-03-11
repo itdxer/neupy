@@ -400,16 +400,79 @@ class LVQ21(LVQ2):
         return 1 - n_correct_predictions / n_samples
 
 
-class LVQ3(LVQ2):
+class LVQ3(LVQ21):
     """
     Learning Vector Quantization 3 (LVQ3) algorithm.
     Improved version for the LVQ algorithm.
 
     Parameters
     ----------
-    {LVQ2.Parameters}
+    slowdown_rate : float
+        Paremeter scales learning step in order to decrease it
+        in case if the two closest subclasses predict target
+        value correctly. Defaults to ``0.4``.
+
+    {LVQ21.Parameters}
 
     Notes
     -----
-    {LVQ2.Notes}
+    {LVQ21.Notes}
     """
+    slowdown_rate = NumberProperty(minval=0, default=0.4)
+
+    def train_epoch(self, input_train, target_train):
+        step = self.step
+        weight = self.weight
+        epsilon = self.epsilon
+        slowdown_rate = self.slowdown_rate
+        subclass_to_class = self.subclass_to_class
+
+        n_correct_predictions = 0
+        for input_row, target in zip(input_train, target_train):
+            output = euclid_distance(input_row, weight)
+            winner_subclasses = n_argmin(output, n=2, axis=1)
+
+            top1_subclass, top2_subclass = winner_subclasses
+            top1_class = subclass_to_class[top1_subclass]
+            top2_class = subclass_to_class[top2_subclass]
+
+            top1_weight_update = input_row - weight[top1_subclass, :]
+            is_first_correct = (top1_class == target)
+            is_second_correct = (top2_class == target)
+
+            closest_dist, runner_up_dist = output[0, winner_subclasses]
+            double_update_condition_satisfied = (
+                (
+                    (is_first_correct and not is_second_correct) or
+                    (is_second_correct and not is_first_correct)
+                ) and
+                closest_dist > ((1 - epsilon) * runner_up_dist) and
+                runner_up_dist < ((1 + epsilon) * closest_dist)
+            )
+            two_closest_correct_condition_satisfied = (
+                is_first_correct and is_second_correct and
+                closest_dist > ((1 - epsilon) * (1 + epsilon) * runner_up_dist)
+            )
+
+            if double_update_condition_satisfied:
+                top2_weight_update = input_row - weight[top2_class, :]
+
+                if is_first_correct:
+                    weight[top2_subclass, :] -= step * top2_weight_update
+                    weight[top1_subclass, :] += step * top1_weight_update
+                else:
+                    weight[top1_subclass, :] -= step * top1_weight_update
+                    weight[top2_subclass, :] += step * top2_weight_update
+
+            elif two_closest_correct_condition_satisfied:
+                beta = step * slowdown_rate
+                weight[top1_subclass, :] += beta * top1_weight_update
+                weight[top2_subclass, :] += beta * top2_weight_update
+
+            else:
+                weight[top1_subclass, :] -= step * top1_weight_update
+
+            n_correct_predictions += is_first_correct
+
+        n_samples = len(input_train)
+        return 1 - n_correct_predictions / n_samples
