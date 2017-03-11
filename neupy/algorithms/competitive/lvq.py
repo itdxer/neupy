@@ -194,7 +194,7 @@ class LVQ(BaseNetwork):
         predictions = []
         for input_row in input_data:
             output = euclid_distance(input_row, weight)
-            winner_subclass = output.argmin(axis=1)
+            winner_subclass = int(output.argmin(axis=1))
 
             predicted_class = subclass_to_class[winner_subclass]
             predictions.append(predicted_class)
@@ -258,7 +258,7 @@ class LVQ(BaseNetwork):
         n_correct_predictions = 0
         for input_row, target in zip(input_train, target_train):
             output = euclid_distance(input_row, weight)
-            winner_subclass = output.argmin()
+            winner_subclass = int(output.argmin())
             predicted_class = subclass_to_class[winner_subclass]
 
             weight_update = input_row - weight[winner_subclass, :]
