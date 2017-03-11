@@ -325,7 +325,7 @@ class LVQ2(LVQ):
                 weight[top1_subclass, :] -= step * top1_weight_update
                 weight[top2_subclass, :] += step * top2_weight_update
 
-            if is_correct_prediction:
+            elif is_correct_prediction:
                 weight[top1_subclass, :] += step * top1_weight_update
 
             else:
@@ -350,6 +350,54 @@ class LVQ21(LVQ2):
     -----
     {LVQ2.Notes}
     """
+    def train_epoch(self, input_train, target_train):
+        step = self.step
+        weight = self.weight
+        epsilon = self.epsilon
+        subclass_to_class = self.subclass_to_class
+
+        n_correct_predictions = 0
+        for input_row, target in zip(input_train, target_train):
+            output = euclid_distance(input_row, weight)
+            winner_subclasses = n_argmin(output, n=2, axis=1)
+
+            top1_subclass, top2_subclass = winner_subclasses
+            top1_class = subclass_to_class[top1_subclass]
+            top2_class = subclass_to_class[top2_subclass]
+
+            top1_weight_update = input_row - weight[top1_subclass, :]
+            is_correct_prediction = (top1_class == target)
+
+            closest_dist, runner_up_dist = output[0, winner_subclasses]
+            double_update_condition_satisfied = (
+                (
+                    (top1_class == target and top2_class != target) or
+                    (top1_class != target and top2_class == target)
+                ) and
+                closest_dist > ((1 - epsilon) * runner_up_dist) and
+                runner_up_dist < ((1 + epsilon) * closest_dist)
+            )
+
+            if double_update_condition_satisfied:
+                top2_weight_update = input_row - weight[top2_class, :]
+
+                if is_correct_prediction:
+                    weight[top2_subclass, :] -= step * top2_weight_update
+                    weight[top1_subclass, :] += step * top1_weight_update
+                else:
+                    weight[top1_subclass, :] -= step * top1_weight_update
+                    weight[top2_subclass, :] += step * top2_weight_update
+
+            elif is_correct_prediction:
+                weight[top1_subclass, :] += step * top1_weight_update
+
+            else:
+                weight[top1_subclass, :] -= step * top1_weight_update
+
+            n_correct_predictions += is_correct_prediction
+
+        n_samples = len(input_train)
+        return 1 - n_correct_predictions / n_samples
 
 
 class LVQ3(LVQ2):
