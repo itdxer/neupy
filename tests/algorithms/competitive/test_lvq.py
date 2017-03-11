@@ -147,7 +147,6 @@ class LVQTestCase(BaseTestCase):
         self.assertEqual(lvqnet.errors.last(), 0)
 
     def test_compare_lvq_and_lvq2(self):
-
         dataset = datasets.load_iris()
         data, target = dataset.data, dataset.target
 

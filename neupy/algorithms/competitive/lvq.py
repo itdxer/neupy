@@ -1,3 +1,5 @@
+from __future__ import division
+
 import numpy as np
 
 from neupy import init
@@ -192,7 +194,7 @@ class LVQ(BaseNetwork):
         predictions = []
         for input_row in input_data:
             output = euclid_distance(input_row, weight)
-            winner_subclass = int(output.argmin(axis=1))
+            winner_subclass = output.argmin(axis=1)
 
             predicted_class = subclass_to_class[winner_subclass]
             predictions.append(predicted_class)
