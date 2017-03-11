@@ -151,20 +151,43 @@ class LVQTestCase(BaseTestCase):
         data, target = dataset.data, dataset.target
 
         # Prepare the same weights for the fair comparison
-        lvq = algorithms.LVQ(n_inputs=4, n_subclasses=6, n_classes=3)
+        lvq = algorithms.LVQ(n_inputs=4, n_subclasses=3, n_classes=3)
         lvq.train(data, target, epochs=1)
         prepared_lvq_weights = lvq.weight
 
         compare_networks(
             algorithms.LVQ,
-            partial(algorithms.LVQ2, epsilon=0.4),
+            partial(algorithms.LVQ2, epsilon=0.1),
 
             data=[data, target],
             epochs=10,
             show_comparison_plot=False,
 
             n_inputs=4,
-            n_subclasses=6,
+            n_subclasses=3,
+            n_classes=3,
+            weight=prepared_lvq_weights,
+        )
+
+    def test_compare_lvq_and_lvq21(self):
+        dataset = datasets.load_iris()
+        data, target = dataset.data, dataset.target
+
+        # Prepare the same weights for the fair comparison
+        lvq = algorithms.LVQ(n_inputs=4, n_subclasses=3, n_classes=3)
+        lvq.train(data, target, epochs=1)
+        prepared_lvq_weights = lvq.weight
+
+        compare_networks(
+            algorithms.LVQ,
+            partial(algorithms.LVQ21, epsilon=0.1),
+
+            data=[data, target],
+            epochs=10,
+            show_comparison_plot=True,
+
+            n_inputs=4,
+            n_subclasses=3,
             n_classes=3,
             weight=prepared_lvq_weights,
         )
