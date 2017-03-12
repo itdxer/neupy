@@ -118,8 +118,8 @@ class LVQ(BaseNetwork):
 
     Notes
     -----
-    - Input data needs to be normalized, because LVQ uses Euclidian
-      distance to find clusters
+    - Input data needs to be normalized, because LVQ uses
+      Euclidian distance to find clusters
     - Training error is just a ratio of miscassified samples
     """
     n_inputs = IntProperty(minval=1)
@@ -407,17 +407,41 @@ class LVQ3(LVQ21):
 
     Parameters
     ----------
+    {LVQ.n_inputs}
+
+    {LVQ.n_subclasses}
+
+    {LVQ.n_classes}
+
+    {LVQ.prototypes_per_class}
+
+    {LVQ2.epsilon}
+
     slowdown_rate : float
         Paremeter scales learning step in order to decrease it
         in case if the two closest subclasses predict target
         value correctly. Defaults to ``0.4``.
 
-    {LVQ21.Parameters}
+    step : float
+        Learning rate, defaults to ``0.01``.
+
+    {BaseNetwork.show_epoch}
+
+    {BaseNetwork.shuffle_data}
+
+    {BaseNetwork.epoch_end_signal}
+
+    {BaseNetwork.train_end_signal}
+
+    {Verbose.verbose}
 
     Notes
     -----
     {LVQ21.Notes}
+    - Decreasing step and increasing number of training epochs
+      can improve the performance.
     """
+    step = NumberProperty(minval=0, default=0.01)
     slowdown_rate = NumberProperty(minval=0, default=0.4)
 
     def train_epoch(self, input_train, target_train):
@@ -458,14 +482,16 @@ class LVQ3(LVQ21):
                 top2_weight_update = input_row - weight[top2_class, :]
 
                 if is_first_correct:
-                    weight[top2_subclass, :] -= step * top2_weight_update
                     weight[top1_subclass, :] += step * top1_weight_update
+                    weight[top2_subclass, :] -= step * top2_weight_update
                 else:
                     weight[top1_subclass, :] -= step * top1_weight_update
                     weight[top2_subclass, :] += step * top2_weight_update
 
             elif two_closest_correct_condition_satisfied:
                 beta = step * slowdown_rate
+                top2_weight_update = input_row - weight[top2_class, :]
+
                 weight[top1_subclass, :] += beta * top1_weight_update
                 weight[top2_subclass, :] += beta * top2_weight_update
 
