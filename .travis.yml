@@ -22,7 +22,7 @@ install:
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy>=1.8.0 scipy>=0.14.0
   - source activate test-environment
   - pip install -r requirements/travis.txt
-  - python setup.py install
+  - python setup.py install --no-dependencies
 
 before_script:
   - sudo apt-get -qq update > /dev/null
