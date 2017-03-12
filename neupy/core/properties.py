@@ -303,6 +303,11 @@ class IntProperty(BoundedProperty):
     """
     expected_type = (numbers.Integral, np.integer)
 
+    def __set__(self, instance, value):
+        if isinstance(value, float) and value.is_integer():
+            value = int(value)
+        super(IntProperty, self).__set__(instance, value)
+
 
 class ParameterProperty(ArrayProperty):
     """

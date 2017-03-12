@@ -62,6 +62,14 @@ class LVQ(BaseNetwork):
     """
     Learning Vector Quantization (LVQ) algorithm.
 
+    Notes
+    -----
+    - Input data needs to be normalized, because LVQ uses
+      Euclidian distance to find clusters.
+
+    - Training error is just a ratio of miscassified
+      samples
+
     Parameters
     ----------
     n_inputs : int
@@ -100,6 +108,32 @@ class LVQ(BaseNetwork):
 
     {BaseNetwork.step}
 
+    n_updates_to_stepdrop : int or None
+        If this options is not equal to ``None`` then after every
+        update LVQ reduces step size and do it until number of
+        applied updates would reach the ``n_updates_to_stepdrop``
+        value. The minimum possible step size defined in the
+        ``minstep`` parameter.
+
+        Be aware that number of updates is not the same as number
+        of epochs. LVQ applies update after each propagated sample
+        through the network. Relations between this parameter and
+        maximum number of epochs is following
+
+        .. code-block:: python
+
+            n_updates_to_stepdrop = n_samples * n_max_epochs
+
+        If parameter equal to ``None`` then step size wouldn't be
+        reduced after each update.
+
+        Defaults to ``None``.
+
+    minstep : float
+        Step size would never be lower than this value. This
+        property useful only in case if ``n_updates_to_stepdrop``
+        is not ``None``. Defaults to ``1e-5``.
+
     {BaseNetwork.show_epoch}
 
     {BaseNetwork.shuffle_data}
@@ -115,12 +149,6 @@ class LVQ(BaseNetwork):
     {BaseSkeleton.predict}
 
     {BaseSkeleton.fit}
-
-    Notes
-    -----
-    - Input data needs to be normalized, because LVQ uses
-      Euclidian distance to find clusters
-    - Training error is just a ratio of miscassified samples
     """
     n_inputs = IntProperty(minval=1)
     n_subclasses = IntProperty(minval=2, default=None, allow_none=True)
@@ -130,9 +158,15 @@ class LVQ(BaseNetwork):
     weight = Property(expected_type=(np.ndarray, init.Initializer),
                       allow_none=True, default=None)
 
+    n_updates_to_stepdrop = IntProperty(default=None, allow_none=True,
+                                        minval=1)
+    minstep = NumberProperty(minval=0, default=1e-5)
+
     def __init__(self, **options):
         self.initialized = False
         super(LVQ, self).__init__(**options)
+
+        self.n_updates = 0
 
         if self.n_subclasses is None:
             self.n_subclasses = self.n_classes
@@ -182,6 +216,14 @@ class LVQ(BaseNetwork):
         self.subclass_to_class = []
         for class_id, n_prototypes in enumerate(self.prototypes_per_class):
             self.subclass_to_class.extend([class_id] * n_prototypes)
+
+    @property
+    def training_step(self):
+        if self.n_updates_to_stepdrop is None:
+            return self.step
+
+        updates_ratio = (1 - self.n_updates / self.n_updates_to_stepdrop)
+        return self.minstep + (self.step - self.minstep) * updates_ratio
 
     def predict(self, input_data):
         if not self.initialized:
@@ -251,12 +293,12 @@ class LVQ(BaseNetwork):
         super(LVQ, self).train(input_train, target_train, *args, **kwargs)
 
     def train_epoch(self, input_train, target_train):
-        step = self.step
         weight = self.weight
         subclass_to_class = self.subclass_to_class
 
         n_correct_predictions = 0
         for input_row, target in zip(input_train, target_train):
+            step = self.training_step
             output = euclid_distance(input_row, weight)
             winner_subclass = int(output.argmin())
             predicted_class = subclass_to_class[winner_subclass]
@@ -270,6 +312,7 @@ class LVQ(BaseNetwork):
                 weight[winner_subclass, :] -= step * weight_update
 
             n_correct_predictions += is_correct_prediction
+            self.n_updates += 1
 
         n_samples = len(input_train)
         return 1 - n_correct_predictions / n_samples
@@ -295,13 +338,13 @@ class LVQ2(LVQ):
     epsilon = NumberProperty(default=0.1)
 
     def train_epoch(self, input_train, target_train):
-        step = self.step
         weight = self.weight
         epsilon = self.epsilon
         subclass_to_class = self.subclass_to_class
 
         n_correct_predictions = 0
         for input_row, target in zip(input_train, target_train):
+            step = self.training_step
             output = euclid_distance(input_row, weight)
             winner_subclasses = n_argmin(output, n=2, axis=1)
 
@@ -351,13 +394,13 @@ class LVQ21(LVQ2):
     {LVQ2.Notes}
     """
     def train_epoch(self, input_train, target_train):
-        step = self.step
         weight = self.weight
         epsilon = self.epsilon
         subclass_to_class = self.subclass_to_class
 
         n_correct_predictions = 0
         for input_row, target in zip(input_train, target_train):
+            step = self.training_step
             output = euclid_distance(input_row, weight)
             winner_subclasses = n_argmin(output, n=2, axis=1)
 
@@ -395,6 +438,7 @@ class LVQ21(LVQ2):
                 weight[top1_subclass, :] -= step * top1_weight_update
 
             n_correct_predictions += is_correct_prediction
+            self.n_updates += 1
 
         n_samples = len(input_train)
         return 1 - n_correct_predictions / n_samples
@@ -445,7 +489,6 @@ class LVQ3(LVQ21):
     slowdown_rate = NumberProperty(minval=0, default=0.4)
 
     def train_epoch(self, input_train, target_train):
-        step = self.step
         weight = self.weight
         epsilon = self.epsilon
         slowdown_rate = self.slowdown_rate
@@ -453,6 +496,7 @@ class LVQ3(LVQ21):
 
         n_correct_predictions = 0
         for input_row, target in zip(input_train, target_train):
+            step = self.training_step
             output = euclid_distance(input_row, weight)
             winner_subclasses = n_argmin(output, n=2, axis=1)
 
@@ -499,6 +543,7 @@ class LVQ3(LVQ21):
                 weight[top1_subclass, :] -= step * top1_weight_update
 
             n_correct_predictions += is_first_correct
+            self.n_updates += 1
 
         n_samples = len(input_train)
         return 1 - n_correct_predictions / n_samples

@@ -129,7 +129,46 @@ class LVQTestCase(BaseTestCase):
         predicted_target = lvqnet.predict(self.data)
 
         self.assertEqual(lvqnet.errors.last(), 0)
-        np.testing.assert_array_equal(predicted_target, self.target[:, 0])
+        np.testing.assert_array_equal(
+            predicted_target,
+            self.target[:, 0])
+
+    def test_lvq_step_reduction(self):
+        lvqnet = algorithms.LVQ(
+            n_inputs=2,
+            n_subclasses=4,
+            n_classes=2,
+
+            minstep=0.1,
+            step=1.1,
+            n_updates_to_stepdrop=200,
+        )
+
+        n_expected_updates = 0
+        for i in range(10):
+            n_expected_updates += len(self.data)
+            lvqnet.train(self.data, self.target, epochs=1)
+            expected_step = 1.1 - (i + 1) * 0.1
+            self.assertAlmostEqual(lvqnet.training_step, expected_step)
+
+        self.assertEqual(n_expected_updates, lvqnet.n_updates)
+        self.assertEqual(lvqnet.training_step, lvqnet.minstep)
+
+    def test_lvq_with_disabled_step_reduction(self):
+        lvqnet = algorithms.LVQ(
+            n_inputs=2,
+            n_subclasses=4,
+            n_classes=2,
+            n_updates_to_stepdrop=None,
+        )
+
+        n_expected_updates = 0
+        for i in range(10):
+            n_expected_updates += len(self.data)
+            lvqnet.train(self.data, self.target, epochs=1)
+            self.assertAlmostEqual(lvqnet.training_step, lvqnet.step)
+
+        self.assertEqual(n_expected_updates, lvqnet.n_updates)
 
     def test_lvq_with_custom_set_of_prototypes(self):
         lvqnet = algorithms.LVQ(
