@@ -128,7 +128,7 @@ function search(query) {
         }
 
         link.appendTo(documentElement);
-        snippet.appendTo(documentElement);
+        // snippet.appendTo(documentElement);
 
         documentElement.appendTo(resultsList);
     });
