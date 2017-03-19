@@ -1,11 +1,18 @@
 import os
 import pickle
+import argparse
 
 import nltk
 import numpy as np
 import scipy.sparse as sp
 
 from build import INDEX_FILE
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-q", "--query", help="search query", default=None)
+parser.add_argument("-n", "--number-of-results", default=10, type=int,
+                    dest="n_results", help="maximum number of top results")
 
 
 def load_index():
@@ -17,43 +24,54 @@ def load_index():
         return pickle.load(f)
 
 
-if __name__ == '__main__':
-    print("Search on NeuPy website")
-    documents, vocabulary, tf, idf, pagerank = load_index()
+def answer_query(query, index, n_results=10):
+    documents, vocabulary, tf, idf, pagerank = index
     # document_norm = sp.linalg.norm(tf, axis=1)
 
-    while True:
-        print('\n' + '-' * 60)
+    query_tokens = nltk.word_tokenize(query.lower())
+    indeces = [vocabulary[t] for t in query_tokens if t in vocabulary]
 
-        query = input('Query: ')
+    if not indeces:
+        print('\nCannot find documents relevant to the specified query')
+        return
 
-        query_tokens = nltk.word_tokenize(query.lower())
-        indeces = [vocabulary[t] for t in query_tokens if t in vocabulary]
+    document_vector = tf[:, indeces]
+    query_vector = idf[indeces]
+    rank = document_vector.dot(query_vector)  # / document_norm
 
-        if not indeces:
-            print('\nYour search did not match any documents')
-            break
+    document_ids, = rank.nonzero()
 
-        document_vector = tf[:, indeces]
-        query_vector = idf[indeces]
-        rank = document_vector.dot(query_vector)  # / document_norm
+    similarity_score = rank[document_ids].T
+    pagerank_score = pagerank[document_ids]
+    rank = similarity_score + pagerank_score
+    order = np.asarray(rank.argsort())
 
-        document_ids, = rank.nonzero()
+    print("Found {} relevant documents".format(len(document_ids)))
 
-        similarity_score = rank[document_ids].T
-        pagerank_score = pagerank[document_ids]
-        rank = similarity_score + pagerank_score
-        order = np.asarray(rank.argsort())
+    order = order[:n_results]
+    for i, index in enumerate(reversed(order), start=1):
+        document_id = document_ids[index]
+        document = documents[document_id]
+        score = rank[index]
 
-        print("Found {} relevant documents".format(len(document_ids)))
+        print("")
+        print("{}) {}".format(i, document['uri']))
+        print("   Total Score: {}".format(score))
+        print("   PageRank Score: {}".format(pagerank_score[index]))
+        print("   Similarity Score: {}".format(similarity_score[index]))
 
-        for i, index in enumerate(reversed(order), start=1):
-            document_id = document_ids[index]
-            document = documents[document_id]
-            score = rank[index]
 
-            print("")
-            print("{}) {}".format(i, document['uri']))
-            print("   Total Score: {}".format(score))
-            print("   PageRank Score: {}".format(pagerank_score[index]))
-            print("   Similarity Score: {}".format(similarity_score[index]))
+if __name__ == '__main__':
+    print("Search results on NeuPy website")
+
+    index = load_index()
+    args = parser.parse_args()
+
+    if args.query is not None:
+        answer_query(args.query, index, args.n_results)
+
+    else:
+        while True:
+            print('\n' + '-' * 60)
+            query = input('Query: ')
+            answer_query(query, index, args.n_results)

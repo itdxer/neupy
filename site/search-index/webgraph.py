@@ -14,6 +14,9 @@ class Link(object):
         self.uri = uri
         self.text = text
 
+    def to_json(self):
+        return {'uri': self.uri, 'text': self.text}
+
     def __eq__(self, link):
         if isinstance(link, six.string_types):
             return self.uri == link
@@ -61,7 +64,6 @@ class WebPageGraph(object):
                             Link(document.uri),
                             Link(existed_link.uri, link.text))
         return webgraph
-
 
     def add_page(self, page):
         if page not in self.graph:
