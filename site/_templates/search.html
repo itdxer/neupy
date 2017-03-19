@@ -10,16 +10,7 @@
 
 {%- extends "layout.html" -%}
 {%- set title = _('Search') -%}
-{%- set script_files = script_files + ['_static/searchtools.js'] -%}
-{%- block extrahead -%}
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("{{ pathto('searchindex.js', 1) }}"); });
-  </script>
-  {{ super() }}
-  {# this is used when loading the search index using $.ajax fails,
-     such as on Chrome for documents on localhost #}
-  <script type="text/javascript" id="searchindexloader"></script>
-{%- endblock -%}
+{%- set script_files = script_files + ['_static/js/searchindex.js', '_static/js/search.js'] -%}
 {%- block body -%}
   <h1 id="search-documentation">{{ _('Search') }}</h1>
   <div id="fallback" class="admonition warning">
@@ -38,21 +29,17 @@
     </div>
   </form>
   <br>
-  {%- if search_performed -%}
-    <h2>{{ _('Search Results') }}</h2>
-    {%- if not search_results -%}
-      <p>{{ _('Your search did not match any results.') }}</p>
-    {%- endif -%}
-  {%- endif -%}
   <div id="search-results">
-  {%- if search_results -%}
-    <ul>
-    {%- for href, caption, context in search_results -%}
-      <li><a href="{{ pathto(item.href) }}">{{ caption }}</a>
-        <div class="context">{{ context|e }}</div>
-      </li>
-    {%- endfor -%}
-    </ul>
-  {%- endif -%}
+      <h2>{{ _('Search Results') }}</h2>
+      <span id="searching-in-progress">
+          <p>Searching...</p>
+      </span>
+      <span id="results" style="display: none;">
+          <p id="number-of-results"></p>
+          <ul class="search"></ul>
+      </span>
+      <span id="nothing-found" style="display: none;">
+          <p>Your search did not match any documents. Please make sure that all words are spelled correctly.</p>
+      </span>
   </div>
 {%- endblock -%}

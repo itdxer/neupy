@@ -1,25 +1,38 @@
 import os
 import re
+import json
 import pickle
 import logging
-from collections import defaultdict, namedtuple
+import argparse
+from textwrap import dedent
 from urllib.parse import urljoin, urlparse
+from collections import defaultdict, namedtuple
 
 import nltk
 import numpy as np
 import scipy.sparse as sp
 
-from webgraph import WebPageGraph, Link
 from pagerank import pagerank
+from webgraph import WebPageGraph, Link
 from htmltools import iter_html_files, ParseHTML
 
 
 logging.basicConfig(format='[%(levelname)-5s] %(message)s',
                     level=logging.DEBUG)
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-d", "--for-deploy", action="store_true",
+                    help=("save output in a javascript file that will "
+                          "be used for deployment"))
+
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
-INDEX_DIR = os.path.join(CURRENT_DIR, 'index-files')
-INDEX_FILE = os.path.join(INDEX_DIR, 'index.pickle')
+
+PYTHON_INDEX_DIR = os.path.join(CURRENT_DIR, 'index-files')
+PYTHON_INDEX_FILE = os.path.join(PYTHON_INDEX_DIR, 'index.pickle')
+
+JS_INDEX_DIR = os.path.join(CURRENT_DIR, '..', 'blog', 'html', '_static', 'js')
+JS_INDEX_FILE = os.path.join(JS_INDEX_DIR, 'searchindex.js')
+
 SITE_DIR = os.path.abspath(os.path.join(CURRENT_DIR, '..', 'blog', 'html'))
 SITE_ROOT = 'http://neupy.com'
 
@@ -42,6 +55,7 @@ def ignore_link(link):
         # Other pages
         '/pages/home.html',
         '/apidocs/modules.html',
+        '/apidocs/neupy.html',
 
         # Pages that has collected information
         r'/page\d{1,}.html',
@@ -62,6 +76,9 @@ def ignore_link(link):
         if uri.fragment in ('subpackages', 'submodules'):
             return True
 
+        if uri.fragment.endswith('-package'):
+            return True
+
     return False
 
 
@@ -75,17 +92,82 @@ def url_filter(links):
     return filtered_links
 
 
-def save_index(data):
-    if not os.path.exists(INDEX_DIR):
-        os.mkdir(INDEX_DIR)
+def save_python_index(data):
+    if not os.path.exists(PYTHON_INDEX_DIR):
+        os.mkdir(PYTHON_INDEX_DIR)
 
-    with open(INDEX_FILE, 'wb') as f:
+    with open(PYTHON_INDEX_FILE, 'wb') as f:
         pickle.dump(data, f)
+
+
+def remove_useless_keys(documents):
+    useless_keys = ('filepath', 'filename', 'links', 'html', 'text')
+
+    for document in documents:
+        for useless_key in useless_keys:
+            if useless_key in document:
+                del document[useless_key]
+
+
+def save_js_index(documents, vocabulary, tf, idf, rank):
+    if not os.path.exists(JS_INDEX_DIR):
+        os.mkdir(JS_INDEX_DIR)
+
+    output_template = dedent("""
+    var searchIndex = {{
+        documents: {documents},
+        idf: {idf},
+        tf: {{
+            col: {tf_col},
+            row: {tf_row},
+            data: {tf_value}
+        }},
+        vocabulary: {vocabulary},
+        rank: {rank}
+    }}
+    """)
+
+    remove_useless_keys(documents)
+    tf = tf.tocoo()
+
+    with open(JS_INDEX_FILE, 'w') as f:
+        f.write(
+            output_template.format(
+                documents=json.dumps(documents, indent=4),
+                idf=idf.tolist(),
+                tf_col=tf.col.tolist(),
+                tf_row=tf.row.tolist(),
+                tf_value=tf.data.tolist(),
+                vocabulary=vocabulary,
+                rank=rank.tolist(),
+            ))
+
+
+def page_tagging(url):
+    parsed_uri = urlparse(url)
+
+    tagging_rules = {
+        'algorithm': r'^/apidocs/neupy.algorithms',
+        'layer': r'^/apidocs/neupy.layers',
+        'plot': r'^/apidocs/neupy.plots',
+        'documentation': r'^/docs/',
+        'article': r'^/\d{4}/\d{2}/\d{2}/',
+        'tutorial': r'^/\d{4}/\d{2}/\d{2}/',
+    }
+
+    for tag, tagging_rule in tagging_rules.items():
+        tagging_rule_regex = re.compile(tagging_rule)
+
+        if tagging_rule_regex.match(parsed_uri.path):
+            return tag
+
+    return None
 
 
 def collect_documents(directory):
     logging.info("Collecting documents from the directory (%s)", directory)
-    Document = namedtuple("Document", "filename filepath uri links html text")
+    Document = namedtuple("Document", "filename filepath uri links "
+                                      "html text title tag")
 
     documents = []
     for filepath in iter_html_files(directory):
@@ -98,6 +180,7 @@ def collect_documents(directory):
             continue
 
         html = ParseHTML.fromfile(filepath, current_page_url)
+        tag = page_tagging(current_page_url)
         text = html.text()
 
         if not text:
@@ -112,7 +195,8 @@ def collect_documents(directory):
             else:
                 doc = Document(filename, filepath, subdocument.uri,
                                url_filter(subdocument.links),
-                               subdocument.html, subdocument.text)
+                               subdocument.html, subdocument.text,
+                               subdocument.title, tag)
                 documents.append(doc)
 
     return documents
@@ -120,6 +204,7 @@ def collect_documents(directory):
 
 if __name__ == '__main__':
     logging.info("Started building index")
+    args = parser.parse_args()
 
     documents = []
     vocabulary = {}
@@ -185,6 +270,11 @@ if __name__ == '__main__':
     rank = webgraph.pagerank()
 
     logging.info("Saving index")
-    save_index([documents, vocabulary, tf, idf, rank])
+    # import pdb; pdb.set_trace()
+
+    if args.for_deploy:
+        save_js_index(documents, vocabulary, tf, idf, rank)
+    else:
+        save_python_index([documents, vocabulary, tf, idf, rank])
 
     logging.info("Index build was finished succesfuly")

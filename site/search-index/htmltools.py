@@ -14,6 +14,12 @@ def iter_html_files(directory):
                 yield os.path.join(path, filename)
 
 
+def extract_title(html):
+    headers = html.select("h1,h2,h3,h4,h5")
+    first_header = headers[0]
+    return first_header.text
+
+
 class ParseHTML(object):
     def __init__(self, html, url):
         self.raw_html = html
@@ -54,7 +60,7 @@ class ParseHTML(object):
         return self.extract_links(self.html)
 
     def subdocuments(self):
-        Subdocument = namedtuple("Subdocument", "uri links html text")
+        Subdocument = namedtuple("Subdocument", "uri links html text title")
 
         subdocuments = []
         apidocs = self.html.select('dl.function,dl.class')
@@ -62,32 +68,44 @@ class ParseHTML(object):
         if apidocs:
             for subdoc in apidocs:
                 first_child = subdoc.findChild()
-                subdocuments.append(Subdocument(
-                    uri=self.url + "#" + first_child['id'],
-                    links=list(self.extract_links(subdoc)),
-                    html=str(subdoc),
-                    text=subdoc.text,
-                ))
+                object_name = first_child.select('.descname')
+                title = object_name[0].text
+
+                subdocuments.append(
+                    Subdocument(
+                        uri=self.url + "#" + first_child['id'],
+                        links=list(self.extract_links(subdoc)),
+                        html=str(subdoc),
+                        text=subdoc.text,
+                        title=title))
 
         else:
+            suptitle = extract_title(self.html.select('.main-container')[0])
             for subdoc in self.html.select('div.section'):
                 for section in subdoc.select('div.section,div#contents'):
                     section.extract()
 
-                subdocuments.append(Subdocument(
-                    uri=self.url + "#" + subdoc['id'],
-                    links=list(self.extract_links(subdoc)),
-                    html=str(subdoc),
-                    text=subdoc.text,
-                ))
+                title = extract_title(subdoc)
+
+                if suptitle and suptitle != title:
+                    title = suptitle + " / " + title
+
+                subdocuments.append(
+                    Subdocument(
+                        uri=self.url + "#" + subdoc['id'],
+                        links=list(self.extract_links(subdoc)),
+                        html=str(subdoc),
+                        text=subdoc.text,
+                        title=title))
 
         if not subdocuments or (len(subdocuments) == 1 and not apidocs):
-            subdocumets = [Subdocument(
-                uri=self.url,
-                links=self.links(),
-                html=self.raw_html,
-                text=self.text()
-            )]
+            subdocumets = [
+                Subdocument(
+                    uri=self.url,
+                    links=self.links(),
+                    html=self.raw_html,
+                    text=self.text(),
+                    title=extract_title(subdoc))]
 
         return subdocuments
 
