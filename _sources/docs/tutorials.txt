@@ -69,6 +69,7 @@ Competitive Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * `Simple SOFM example <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_basic.py>`_
+* `Reduce number of training samples in iris dataset with LVQ3 <https://github.com/itdxer/neupy/tree/master/examples/competitive/reduce_iris_sample_size_lvq.py>`_
 
 Neural Networks with Radial Basis Functions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
