@@ -447,7 +447,7 @@ class LVQ21(LVQ2):
 class LVQ3(LVQ21):
     """
     Learning Vector Quantization 3 (LVQ3) algorithm.
-    Improved version for the LVQ algorithm.
+    Improved version for the LVQ2.1 algorithm.
 
     Parameters
     ----------
