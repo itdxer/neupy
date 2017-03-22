@@ -1,6 +1,6 @@
 // List of contractions adapted from Robert MacIntyre's tokenizer.
 CONTRACTIONS2 = [
-	/(.)('ll|'re|'ve|n't|'s|'m|'d)\b/ig,
+    /(.)('ll|'re|'ve|n't|'s|'m|'d)\b/ig,
     /\b(can)(not)\b/ig,
     /\b(D)('ye)\b/ig,
     /\b(Gim)(me)\b/ig,
@@ -13,37 +13,37 @@ CONTRACTIONS2 = [
     /\b(Wan)(na)\b/ig
 ];
 CONTRACTIONS3 = [
-	/\b(Whad)(dd)(ya)\b/ig,
-	/\b(Wha)(t)(cha)\b/ig
+    /\b(Whad)(dd)(ya)\b/ig,
+    /\b(Wha)(t)(cha)\b/ig
 ];
 
 tokenize = function(text) {
-	$.each(CONTRACTIONS2, function(i, regexp) {
-		text = text.replace(regexp,"$1 $2");
-	})
-	$.each(CONTRACTIONS3, function(i, regexp) {
-		text = text.replace(regexp,"$1 $2 $3");
-	})
+    $.each(CONTRACTIONS2, function(i, regexp) {
+        text = text.replace(regexp,"$1 $2");
+    })
+    $.each(CONTRACTIONS3, function(i, regexp) {
+        text = text.replace(regexp,"$1 $2 $3");
+    })
 
     // Separate most punctuation
     text = text.replace(/([&-]|[\.\!\?])/g, " $1 ");
 
     // Separate commas if they're followed by space.
-	text = text.replace(/(,\s)/," $1");
+    text = text.replace(/(,\s)/," $1");
 
-	// Space out front single quotes if followed by 3 characters
+    // Space out front single quotes if followed by 3 characters
     text = text.replace(/([\'])(\w{3})/g, " $1 $2 ");
 
     // Separate single quotes if they're followed by a space.
-	text = text.replace(/('\s)/," $1");
+    text = text.replace(/('\s)/," $1");
 
     // Separate periods that come before newline or end of string.
-	text = text.replace(/\. *(\n|$)/," . ");
+    text = text.replace(/\. *(\n|$)/," . ");
 
     // Clean spaces
     text = text.replace(/\s{2,}/, " ").trim()
 
-	return text.split(' ');
+    return text.split(' ');
 }
 
 function sort(object) {
@@ -119,8 +119,7 @@ function search(query) {
     $.each(documents, function (i, document) {
         var documentElement = $('<li style="display: list-item;"></li>'),
             link = $('<a />', {text: document.title, href: document.uri}),
-            snippet = $('<p/>', {text: 'Learning Vector Quantization (LVQ) algorithm.'}),
-            tag;
+            snippet, tag;
 
         if (document.tag) {
             tag = $('<span />', {text: document.tag, class: "tag"});
@@ -128,7 +127,11 @@ function search(query) {
         }
 
         link.appendTo(documentElement);
-        // snippet.appendTo(documentElement);
+
+        if (document.snippet != '') {
+            snippet = $('<p/>', {text: document.snippet});
+            snippet.appendTo(documentElement);
+        }
 
         documentElement.appendTo(resultsList);
     });

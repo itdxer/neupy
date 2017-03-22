@@ -7,7 +7,6 @@ Submodules
 .. toctree::
 
    neupy.algorithms.step_update.base
-   neupy.algorithms.step_update.delta_bar_delta
    neupy.algorithms.step_update.errdiff
    neupy.algorithms.step_update.leak_step
    neupy.algorithms.step_update.linear_search
