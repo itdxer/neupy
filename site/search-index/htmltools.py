@@ -20,6 +20,18 @@ def extract_title(html):
     return first_header.text
 
 
+def extrat_object_snippet(html):
+    # We take only first paragraph from the description and ignore other
+    # even if they continue class'/function's description.
+    paragraphs = html.select('dd:nth-of-type(1) > p:nth-of-type(1)')
+
+    if not paragraphs:
+        return ''
+
+    snippet = paragraphs[0]
+    return snippet.text
+
+
 class ParseHTML(object):
     def __init__(self, html, url):
         self.raw_html = html
@@ -60,10 +72,11 @@ class ParseHTML(object):
         return self.extract_links(self.html)
 
     def subdocuments(self):
-        Subdocument = namedtuple("Subdocument", "uri links html text title")
+        Subdocument = namedtuple("Subdocument",
+                                 "uri links html text title snippet")
 
         subdocuments = []
-        apidocs = self.html.select('dl.function,dl.class')
+        apidocs = self.html.select('dl.function,dl.class,dl.exception')
 
         if apidocs:
             for subdoc in apidocs:
@@ -77,10 +90,13 @@ class ParseHTML(object):
                         links=list(self.extract_links(subdoc)),
                         html=str(subdoc),
                         text=subdoc.text,
-                        title=title))
+                        title=title,
+                        snippet=extrat_object_snippet(subdoc)))
 
         else:
-            suptitle = extract_title(self.html.select('.main-container')[0])
+            main_container = self.html.select('.main-container')
+            suptitle = extract_title(main_container[0])
+
             for subdoc in self.html.select('div.section'):
                 for section in subdoc.select('div.section,div#contents'):
                     section.extract()
@@ -96,7 +112,8 @@ class ParseHTML(object):
                         links=list(self.extract_links(subdoc)),
                         html=str(subdoc),
                         text=subdoc.text,
-                        title=title))
+                        title=title,
+                        snippet=''))
 
         if not subdocuments or (len(subdocuments) == 1 and not apidocs):
             subdocumets = [
@@ -105,7 +122,8 @@ class ParseHTML(object):
                     links=self.links(),
                     html=self.raw_html,
                     text=self.text(),
-                    title=extract_title(subdoc))]
+                    title=extract_title(subdoc),
+                    snippet='')]
 
         return subdocuments
 

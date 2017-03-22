@@ -167,7 +167,7 @@ def page_tagging(url):
 def collect_documents(directory):
     logging.info("Collecting documents from the directory (%s)", directory)
     Document = namedtuple("Document", "filename filepath uri links "
-                                      "html text title tag")
+                                      "html text title tag snippet")
 
     documents = []
     for filepath in iter_html_files(directory):
@@ -196,7 +196,7 @@ def collect_documents(directory):
                 doc = Document(filename, filepath, subdocument.uri,
                                url_filter(subdocument.links),
                                subdocument.html, subdocument.text,
-                               subdocument.title, tag)
+                               subdocument.title, tag, subdocument.snippet)
                 documents.append(doc)
 
     return documents
