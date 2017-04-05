@@ -19,6 +19,7 @@ from .ensemble.mixture_of_experts import *
 
 from .regularization.weight_decay import *
 from .regularization.weight_elimination import *
+from .regularization.max_norm import *
 
 from .step_update.step_decay import *
 from .step_update.search_then_converge import *

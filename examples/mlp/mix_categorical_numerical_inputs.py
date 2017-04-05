@@ -86,18 +86,24 @@ network = algorithms.Momentum(
         layers.Sigmoid(1)
     ],
 
-    step=0.5,
+    step=0.2,
     verbose=True,
     momentum=0.9,
     nesterov=True,
     error='binary_crossentropy',
+
+    # Applied max-norm regularizer to prevent overfitting.
+    # Maximum possible norm for any weight is specified by
+    # the `max_norm` parameter.
+    addons=[algorithms.MaxNormRegularization],
+    max_norm=10,
 )
 
 # Categorical input should be first, because input layer
 # for categorical matrices was defined first.
 network.train([x_train_cat, x_train_num], y_train,
               [x_test_cat, x_test_num], y_test,
-              epochs=180)
+              epochs=40)
 y_predicted = network.predict([x_test_cat, x_test_num])
 
 accuracy = accuracy_score(y_test, y_predicted.round())

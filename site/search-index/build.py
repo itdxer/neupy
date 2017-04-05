@@ -270,7 +270,6 @@ if __name__ == '__main__':
     rank = webgraph.pagerank()
 
     logging.info("Saving index")
-    # import pdb; pdb.set_trace()
 
     if args.for_deploy:
         save_js_index(documents, vocabulary, tf, idf, rank)

@@ -40,9 +40,10 @@ class WeightDecay(WeightUpdateConfigurable):
 
     def init_param_updates(self, layer, parameter):
         updates = super(WeightDecay, self).init_param_updates(
-            layer, parameter
-        )
+            layer, parameter)
+
         step = self.variables.step
         updates_mapper = dict(updates)
         updates_mapper[parameter] -= step * self.decay_rate * parameter
+
         return list(updates_mapper.items())

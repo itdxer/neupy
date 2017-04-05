@@ -42,8 +42,9 @@ Regularization methods
 .. csv-table::
     :header: "Class name", "Name"
 
-    :network:`WeightDecay`, Weight Decay
-    :network:`WeightElimination`, Weight Elimination
+    :network:`WeightDecay`, Weight decay
+    :network:`WeightElimination`, Weight elimination
+    :network:`MaxNormRegularization`, Max-norm regularization
 
 Learning rate update rules
 ++++++++++++++++++++++++++
