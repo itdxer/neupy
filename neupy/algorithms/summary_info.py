@@ -108,14 +108,12 @@ class InlineSummary(object):
             logs.write(
                 "epoch #{}, train err: {:.6f}, valid err: {:.6f}, time: {}"
                 "".format(network.last_epoch, train_error, validation_error,
-                          epoch_training_time)
-            )
+                          epoch_training_time))
         else:
             logs.write(
                 "epoch #{}, train err: {:.6f}, time: {}"
                 "".format(network.last_epoch, train_error,
-                          epoch_training_time)
-            )
+                          epoch_training_time))
 
     def finish(self):
         pass
