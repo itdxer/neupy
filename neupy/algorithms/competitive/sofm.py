@@ -1,12 +1,10 @@
-from operator import mul
-
 import numpy as np
 from numpy.linalg import norm
 
-from neupy.core.properties import (IntProperty, TypedListProperty,
-                                   ChoiceProperty)
 from neupy.utils import format_data
 from neupy.algorithms import Kohonen
+from neupy.core.properties import (IntProperty, TypedListProperty,
+                                   ChoiceProperty)
 
 
 __all__ = ('SOFM',)
@@ -14,7 +12,8 @@ __all__ = ('SOFM',)
 
 def neuron_neighbours(neurons, center, radius):
     """
-    Function find all neighbours neurons by radius and coords.
+    Function find all neighbours neurons around specified
+    center within a certain radius.
 
     Parameters
     ----------
@@ -53,11 +52,18 @@ def neuron_neighbours(neurons, center, radius):
            [ 0.,  1.,  1.,  1.,  0.],
            [ 0.,  0.,  1.,  0.,  0.]])
     """
-    center_x, center_y = center
-    nx, ny = neurons.shape
+    if len(center) != neurons.ndim:
+        raise ValueError(
+            "Cannot find center, because grid of neurons has {} dimensions "
+            "and center has specified coordinates for {} dimensional grid"
+            "".format(neurons.ndim, len(center)))
 
-    y, x = np.ogrid[-center_x:nx - center_x, -center_y:ny - center_y]
-    mask = (x * x + y * y) <= radius ** 2
+    slices = []
+    for dim_length, center_coord in zip(neurons.shape, center):
+        slices.append(slice(-center_coord, dim_length - center_coord))
+
+    distances = np.ogrid[slices]
+    mask = sum(dist ** 2 for dist in distances) <= radius ** 2
     neurons[mask] = 1
 
     return neurons
@@ -122,13 +128,20 @@ class SOFM(Kohonen):
     features_grid : list, tuple, None
         Feature grid defines shape of the output neurons.
         The new shape should be compatible with the number
-        of outputs. Defaults to ``(n_outputs, 1)``.
+        of outputs. It means that the following condition
+        should be true:
 
-    transform : {{``linear``, ``euclid``, ``cos``}}
+        .. code-block:: python
+
+            np.prod(features_grid) == n_outputs
+
+        Defaults to ``(n_outputs, 1)``.
+
+    transform : {{``dot_product``, ``euclid``, ``cos``}}
         Indicate transformation operation related to the
         input layer.
 
-        - The ``linear`` value mean that input data would be
+        - The ``dot_product`` value mean that input data would be
           multiplied by weights in typical way.
 
         - The ``euclid`` method will identify the closest
@@ -138,7 +151,7 @@ class SOFM(Kohonen):
           similarity between input dataset and
           network's weights.
 
-        Defaults to ``linear``.
+        Defaults to ``dot_product``.
 
     {BaseAssociative.weight}
 
@@ -192,30 +205,30 @@ class SOFM(Kohonen):
     """
     learning_radius = IntProperty(default=0, minval=0)
     features_grid = TypedListProperty(allow_none=True, default=None)
-    transform = ChoiceProperty(default='linear', choices={
-        'linear': np.dot,
-        'euclid': neg_euclid_distance,
-        'cos': cosine_similarity,
-    })
+    transform = ChoiceProperty(
+        default='dot_product',
+        choices={
+            'dot_product': np.dot,
+            'euclid': neg_euclid_distance,
+            'cos': cosine_similarity,
+        })
 
     def __init__(self, **options):
         super(SOFM, self).__init__(**options)
 
+        n_grid_elements = np.prod(self.features_grid)
         invalid_feature_grid = (
             self.features_grid is not None and
-            mul(*self.features_grid) != self.n_outputs
-        )
+            n_grid_elements != self.n_outputs)
+
         if invalid_feature_grid:
             raise ValueError(
-                "Feature grid should contain the same number of elements as "
-                "in the output layer: {0}, but found: {1} ({2}x{3})"
+                "Feature grid should contain the same number of elements "
+                "as in the output layer: {0}, but found: {1} (shape: {2})"
                 "".format(
                     self.n_outputs,
-                    mul(*self.features_grid),
-                    self.features_grid[0],
-                    self.features_grid[1]
-                )
-            )
+                    n_grid_elements,
+                    self.features_grid))
 
         if self.features_grid is None:
             self.features_grid = (self.n_outputs, 1)
@@ -233,20 +246,15 @@ class SOFM(Kohonen):
 
     def update_indexes(self, layer_output):
         neuron_winner = layer_output.argmax(axis=1)
-        feature_bound = self.features_grid[1]
+        winner_neuron_coords = np.unravel_index(neuron_winner,
+                                                self.features_grid)
 
         output_with_neightbours = neuron_neighbours(
-            np.reshape(layer_output, self.features_grid),
-            (
-                neuron_winner // feature_bound,
-                neuron_winner % feature_bound
-            ),
-            self.learning_radius
-        )
-        index_y, _ = np.nonzero(
-            np.reshape(
-                output_with_neightbours,
-                (self.n_outputs, 1)
-            )
-        )
+            neurons=np.reshape(layer_output, self.features_grid),
+            center=winner_neuron_coords,
+            radius=self.learning_radius)
+
+        index_y, = np.nonzero(
+            np.reshape(output_with_neightbours, self.n_outputs))
+
         return index_y

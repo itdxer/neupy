@@ -70,12 +70,12 @@ class BaseAssociative(BaseNetwork):
 
     def train(self, input_train, epochs=100):
         input_train = format_data(input_train, is_feature1d=True)
+
         return super(BaseAssociative, self).train(
             input_train=input_train, target_train=None,
             input_test=None, target_test=None,
             epochs=epochs, epsilon=None,
-            summary='table'
-        )
+            summary='table')
 
 
 class BaseStepAssociative(BaseAssociative):

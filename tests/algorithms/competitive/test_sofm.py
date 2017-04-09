@@ -32,8 +32,7 @@ class SOFMTransformationsTestCase(BaseTestCase):
         np.testing.assert_array_almost_equal(
             func(vector, weight),
             expected,
-            decimal=decimal
-        )
+            decimal=decimal)
 
     def test_euclid_transform(self):
         self.assert_invalid_transformation(
@@ -59,8 +58,98 @@ class SOFMTransformationsTestCase(BaseTestCase):
                 [0, 1, 2],
             ]).T,
             np.array([[1,  0.926, 0.802, 0.956]]),
-            decimal=3
-        )
+            decimal=3)
+
+
+class SOFMNeigboursTestCase(BaseTestCase):
+    def test_sofm_neightbours_exceptions(self):
+        with self.assertRaisesRegexp(ValueError, "Cannot find center"):
+            sofm.neuron_neighbours(
+                neurons=np.zeros((3, 3)),
+                center=(0, 0, 0),
+                radius=1)
+
+    def test_neightbours_in_10d(self):
+        actual_result = sofm.neuron_neighbours(
+            np.zeros([3] * 10),
+            center=[1] * 10,
+            radius=0)
+        self.assertEqual(np.sum(actual_result), 1)
+
+    def test_neightbours_in_3d(self):
+        actual_result = sofm.neuron_neighbours(
+            np.zeros((5, 5, 3)),
+            center=(2, 2, 1),
+            radius=2)
+
+        expected_result = np.array([[
+            [0., 0., 0., 0., 0.],
+            [0., 1., 1., 1., 0.],
+            [0., 1., 1., 1., 0.],
+            [0., 1., 1., 1., 0.],
+            [0., 0., 0., 0., 0.]
+        ], [
+            [0., 0., 1., 0., 0.],
+            [0., 1., 1., 1., 0.],
+            [1., 1., 1., 1., 1.],
+            [0., 1., 1., 1., 0.],
+            [0., 0., 1., 0., 0.]
+        ], [
+            [0., 0., 0., 0., 0.],
+            [0., 1., 1., 1., 0.],
+            [0., 1., 1., 1., 0.],
+            [0., 1., 1., 1., 0.],
+            [0., 0., 0., 0., 0.]
+        ]])
+        expected_result = np.transpose(expected_result, (1, 2, 0))
+        np.testing.assert_array_equal(actual_result, expected_result)
+
+    def test_neightbours_in_2d(self):
+        actual_result = sofm.neuron_neighbours(
+            np.zeros((3, 3)),
+            center=(0, 0),
+            radius=1)
+
+        expected_result = np.array([
+            [1., 1., 0.],
+            [1., 0., 0.],
+            [0., 0., 0.]
+        ])
+        np.testing.assert_array_equal(actual_result, expected_result)
+
+        actual_result = sofm.neuron_neighbours(
+            np.zeros((5, 5)),
+            center=(2, 2),
+            radius=2)
+
+        expected_result = np.array([
+            [0., 0., 1., 0., 0.],
+            [0., 1., 1., 1., 0.],
+            [1., 1., 1., 1., 1.],
+            [0., 1., 1., 1., 0.],
+            [0., 0., 1., 0., 0.]
+        ])
+        np.testing.assert_array_equal(actual_result, expected_result)
+
+        actual_result = sofm.neuron_neighbours(
+            np.zeros((3, 3)),
+            center=(1, 1),
+            radius=0)
+
+        expected_result = np.array([
+            [0., 0., 0.],
+            [0., 1., 0.],
+            [0., 0., 0.]
+        ])
+        np.testing.assert_array_equal(actual_result, expected_result)
+
+    def test_neightbours_in_1d(self):
+        actual_result = sofm.neuron_neighbours(
+            np.zeros(5),
+            center=(2,),
+            radius=1)
+        expected_result = np.array([0, 1, 1, 1, 0])
+        np.testing.assert_array_equal(actual_result, expected_result)
 
 
 class SOFMTestCase(BaseTestCase):
@@ -70,33 +159,6 @@ class SOFMTestCase(BaseTestCase):
             [0.65091234, -0.52271686, 0.56344712],
             [-0.13191953, 2.43582716, -0.19703619]
         ])
-
-    def test_neightbours(self):
-        result = sofm.neuron_neighbours(np.zeros((3, 3)), (0, 0), 1)
-        answer = np.array([
-            [1., 1., 0.],
-            [1., 0., 0.],
-            [0., 0., 0.]
-        ])
-        self.assertTrue(np.all(result == answer))
-
-        result = sofm.neuron_neighbours(np.zeros((5, 5)), (2, 2), 2)
-        answer = np.array([
-            [0., 0., 1., 0., 0.],
-            [0., 1., 1., 1., 0.],
-            [1., 1., 1., 1., 1.],
-            [0., 1., 1., 1., 0.],
-            [0., 0., 1., 0., 0.]
-        ])
-        self.assertTrue(np.all(result == answer))
-
-        result = sofm.neuron_neighbours(np.zeros((3, 3)), (1, 1), 0)
-        answer = np.array([
-            [0., 0., 0.],
-            [0., 1., 0.],
-            [0., 0., 0.]
-        ])
-        self.assertTrue(np.all(result == answer))
 
     def test_invalid_attrs(self):
         with self.assertRaises(ValueError):
@@ -160,6 +222,22 @@ class SOFMTestCase(BaseTestCase):
             answers
         )
 
+    def test_sofm_training_with_4d_grid(self):
+        sofm = algorithms.SOFM(
+            n_inputs=4,
+            n_outputs=8,
+            features_grid=(2, 2, 2),
+            verbose=False,
+        )
+
+        data = np.concatenate([input_data, input_data], axis=1)
+
+        sofm.train(data, epochs=1)
+        error_after_first_epoch = sofm.errors.last()
+
+        sofm.train(data, epochs=9)
+        self.assertLess(sofm.errors.last(), error_after_first_epoch)
+
     def test_sofm_angle_distance(self):
         sn = algorithms.SOFM(
             n_inputs=2,
@@ -170,7 +248,6 @@ class SOFMTestCase(BaseTestCase):
             weight=init.Normal(mean=0, std=1),
             verbose=False
         )
-
         sn.train(input_data, epochs=6)
 
         answers = np.array([
@@ -181,17 +258,14 @@ class SOFMTestCase(BaseTestCase):
             [0., 0., 1.],
             [0., 0., 1.],
         ])
-
         np.testing.assert_array_almost_equal(
             sn.predict(input_data),
-            answers
-        )
+            answers)
 
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(
             algorithms.SOFM(n_inputs=1, n_outputs=1, verbose=False),
-            input_data.ravel()
-        )
+            input_data.ravel())
 
     def test_predict_different_inputs(self):
         sofmnet = algorithms.SOFM(n_inputs=1, n_outputs=2, verbose=False)

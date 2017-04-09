@@ -90,11 +90,15 @@ class Kohonen(BaseAssociative):
         predict = self.predict
         update_indexes = self.update_indexes
 
+        error = 0
         for input_row in input_train:
             input_row = np.reshape(input_row, (1, input_row.size))
             layer_output = predict(input_row)
 
             index_y = update_indexes(layer_output)
-            self.weight[:, index_y] += self.step * (
-                input_row.T - weight[:, index_y]
-            )
+            distance = input_row.T - weight[:, index_y]
+            self.weight[:, index_y] += self.step * distance
+
+            error += np.abs(distance).mean()
+
+        return error / len(input_train)
