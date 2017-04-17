@@ -129,16 +129,16 @@ def shuffle(*arrays):
     list
         List of arrays that contain shuffeled input data.
     """
-    arrays = tuple(array for array in arrays if array is not None)
+    filtered_arrays = tuple(array for array in arrays if array is not None)
 
-    if not arrays:
+    if not filtered_arrays:
         return arrays
 
-    first = arrays[0]
+    first = filtered_arrays[0]
     n_samples = first.shape[0]
 
-    if any(n_samples != array.shape[0] for array in arrays):
-        array_shapes = [array.shape for array in arrays]
+    if any(n_samples != array.shape[0] for array in filtered_arrays):
+        array_shapes = [array.shape for array in filtered_arrays]
         raise ValueError("Cannot shuffle matrices. All matrices should "
                          "have the same number of rows. Input shapes are: {}"
                          "".format(array_shapes))
@@ -148,7 +148,8 @@ def shuffle(*arrays):
 
     arrays = list(arrays)
     for i, array in enumerate(arrays):
-        arrays[i] = array[indices] if array is not None else None
+        if array is not None:
+            arrays[i] = array[indices]
 
     if len(arrays) == 1:
         return arrays[0]
