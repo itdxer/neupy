@@ -193,4 +193,4 @@ class ShuffleTestCase(BaseTestCase):
     def test_shuffle_with_nones(self):
         input_with_nones = (None, None)
         actual_output = shuffle(*input_with_nones)
-        self.assertEqual(tuple(), actual_output)
+        self.assertEqual(input_with_nones, actual_output)
