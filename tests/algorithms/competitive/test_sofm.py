@@ -180,6 +180,9 @@ class SOFMTestCase(BaseTestCase):
             features_grid=(3,),
             shuffle_data=True,
             verbose=False,
+            reduce_radius_after=None,
+            reduce_step_after=None,
+            reduce_std_after=None,
         )
         sn.train(input_data, epochs=100)
 
