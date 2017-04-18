@@ -1,5 +1,3 @@
-from operator import itemgetter
-
 import matplotlib.pyplot as plt
 from sklearn import datasets
 from neupy import algorithms, environment
@@ -56,10 +54,7 @@ if __name__ == '__main__':
     )
     sofm.train(data, epochs=20)
 
-    colors = plt.rcParams['axes.prop_cycle']
-    # We do it, because colors[:2] has the following format:
-    # [{'color': '#ABCDEF'}, {'color': '#FEDCBA'}]
-    red, blue = map(itemgetter('color'), colors[:2])
+    red, blue = ('#E24A33', '#348ABD')
 
     plt.scatter(*data.T, color=blue)
     plt.scatter(*sofm.weight, color=red)

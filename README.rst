@@ -111,7 +111,8 @@ Competitive Neural Networks
 
 * `Simple SOFM example <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_basic.py>`_
 * `Learning half-circle topology with SOFM <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_moon_topology.py>`_
-* `Visualize digits in 2D space with SOFM <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_digits.py>`_
+* `Visualize digit images in 2D space with SOFM <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_digits.py>`_
+* `Embedding 30-dimensional dataset into 2D and building heatmap visualization for SOFM <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_heatmap_visualization.py>`_
 * `Reduce number of training samples in iris dataset with LVQ3 <https://github.com/itdxer/neupy/tree/master/examples/competitive/reduce_iris_sample_size_lvq.py>`_
 
 Neural Networks with Radial Basis Functions

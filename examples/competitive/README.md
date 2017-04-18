@@ -4,6 +4,10 @@
 
 ![](images/sofm-digits.png)
 
+## Output from sofm_heatmap_visualization.py
+
+![](images/sofm-heatmap.png)
+
 ## Output from sofm_moon_topology.py
 
 ![](images/sofm-moon-topology.png)

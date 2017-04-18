@@ -19,7 +19,11 @@ sofm = algorithms.SOFM(
     n_inputs=64,
     features_grid=(GRID_HEIGHT, GRID_WIDTH),
 
+    # Learning radius defines area within which we find
+    # winning neuron neighbours. The higher the value
+    # the more values we will be updated after each iteration.
     learning_radius=5,
+    # Every 20 epochs learning radius will be reduced by 1.
     reduce_radius_after=20,
 
     step=0.5,
