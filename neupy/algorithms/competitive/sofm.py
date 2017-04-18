@@ -15,8 +15,8 @@ __all__ = ('SOFM',)
 
 def gaussian_df(data, mean=0, std=1):
     """
-    Calculated gaussian density for each data samples. Gaussian
-    specified by the mean and standard deviation.
+    Returns gaussian density for each data sample.
+    Gaussian specified by the mean and standard deviation.
 
     Parameters
     ----------
@@ -40,11 +40,11 @@ def find_neighbour_distance(neurons, center):
     Parameters
     ----------
     neurons : array-like
-        Array element with neurons.
+       Array that contains grid of n-dimensional vectors.
 
     center : tuple
-        Index of the main neuron for which function must
-        find neighbours.
+        Index of the main neuron for which function returns
+        distance to neuron's neighbours.
 
     Returns
     -------
@@ -208,7 +208,7 @@ class SOFM(Kohonen):
         to the value specified in the ``step`` parameter and for
         neighbour neurons it's always lower.
 
-        The bigger the values for this parameter that bigger
+        The bigger the value for this parameter the bigger
         learning rate for the neighbour neurons.
 
         Defaults to ``1``.
