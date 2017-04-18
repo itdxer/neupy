@@ -20,7 +20,6 @@ if __name__ == '__main__':
 
     sofm = algorithms.SOFM(
         n_inputs=2,
-        n_outputs=(GRID_WIDTH * GRID_HEIGHT),
         features_grid=(GRID_HEIGHT, GRID_WIDTH),
 
         verbose=True,
