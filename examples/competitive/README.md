@@ -1,4 +1,4 @@
-# Examples of competitice neural networks
+# Examples of competitive neural networks
 
 ## Output from sofm_digits.py
 
