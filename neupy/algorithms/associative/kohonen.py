@@ -1,6 +1,5 @@
 import numpy as np
 
-from neupy.utils import format_data
 from .base import BaseAssociative
 
 
@@ -71,7 +70,7 @@ class Kohonen(BaseAssociative):
            [ 0.,  0.,  1.]])
     """
     def predict_raw(self, input_data):
-        input_data = format_data(input_data)
+        input_data = self.format_input_data(input_data)
         return input_data.dot(self.weight)
 
     def predict(self, input_data):
