@@ -39,17 +39,16 @@ def load_data():
 def compute_heatmap(weight):
     heatmap = np.zeros((GRID_HEIGHT, GRID_WIDTH))
     for (neuron_x, neuron_y), neighbours in iter_neighbours(weight):
-        total_distance = []
+        total_distance = 0
 
         for (neigbour_x, neigbour_y) in neighbours:
             neuron_vec = weight[:, neuron_x, neuron_y]
             neigbour_vec = weight[:, neigbour_x, neigbour_y]
 
             distance = np.linalg.norm(neuron_vec - neigbour_vec)
-            total_distance.append(distance)
+            total_distance += distance
 
-        # avg_distance = total_distance / len(neighbours)
-        avg_distance = max(total_distance)
+        avg_distance = total_distance / len(neighbours)
         heatmap[neuron_x, neuron_y] = avg_distance
 
     return heatmap
@@ -75,15 +74,13 @@ if __name__ == '__main__':
 
     data, target = load_data()
     sofm.train(data, epochs=300)
+    clusters = sofm.predict(data).argmax(axis=1)
 
     plt.figure(figsize=(10, 10))
 
-    for input_vector, actual_class in zip(data, target):
-        cluster_index = sofm.predict(input_vector).argmax(axis=1)
-        cluster_coord_x, cluster_coord_y = divmod(cluster_index, GRID_HEIGHT)
-
-        plt.plot(cluster_coord_x, cluster_coord_y,
-                 **class_parameters[actual_class])
+    for actual_class, cluster_index in zip(target, clusters):
+        cluster_coords = divmod(cluster_index, GRID_HEIGHT)
+        plt.plot(*cluster_coords, **class_parameters[actual_class])
 
     weight = sofm.weight.reshape((sofm.n_inputs, GRID_HEIGHT, GRID_WIDTH))
     heatmap = compute_heatmap(weight)
