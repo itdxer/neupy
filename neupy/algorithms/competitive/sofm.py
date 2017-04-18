@@ -5,6 +5,7 @@ from numpy.linalg import norm
 
 from neupy.utils import format_data
 from neupy.algorithms import Kohonen
+from neupy.algorithms.associative.base import BaseAssociative
 from neupy.core.docs import shared_docs
 from neupy.core.properties import (IntProperty, TypedListProperty,
                                    ChoiceProperty, NumberProperty)
@@ -28,6 +29,9 @@ def gaussian_df(data, mean=0, std=1):
     std : float
         Gaussian standard deviation.
     """
+    if std == 0:
+        return np.where(data == mean, 1, 0)
+
     normalizer = 2 * np.pi * std ** 2
     return np.exp(-np.square(data - mean) / normalizer)
 
@@ -173,6 +177,23 @@ def cosine_similarity(input_data, weight):
 
 
 def decay_function(value, epoch, reduction_rate):
+    """
+    Applies to the input value monothonical decay.
+
+    Parameters
+    ----------
+    value : int, float
+
+    epoch : int
+        Current training iteration (epoch).
+
+    reduction_rate : int
+        The larger the value the slower decay
+
+    Returns
+    -------
+    float
+    """
     return value / (1 + epoch / reduction_rate)
 
 
@@ -184,7 +205,14 @@ class SOFM(Kohonen):
     ----------
     {BaseAssociative.n_inputs}
 
-    {BaseAssociative.n_outputs}
+    n_outputs : int or None
+        Number of outputs. Parameter is optional in case if
+        ``feature_grid`` was specified.
+
+        .. code-block::
+
+            if n_outputs is None:
+                n_outputs = np.prod(feature_grid)
 
     learning_radius : int
         Parameter defines radius within which we consider all
@@ -232,7 +260,6 @@ class SOFM(Kohonen):
 
             SOFM(
                 ...
-                n_outputs=5 * 5 * 5,
                 features_grid=(5, 5, 5),
                 ...
             )
@@ -340,6 +367,8 @@ class SOFM(Kohonen):
            [1, 0],
            [1, 0]])
     """
+    n_outputs = IntProperty(minval=1, allow_none=True, default=None)
+
     features_grid = TypedListProperty(allow_none=True, default=None)
     distance = ChoiceProperty(
         default='euclid',
@@ -357,7 +386,14 @@ class SOFM(Kohonen):
     reduce_step_after = IntProperty(default=100, minval=1, allow_none=True)
 
     def __init__(self, **options):
-        super(SOFM, self).__init__(**options)
+        super(BaseAssociative, self).__init__(**options)
+
+        if self.n_outputs is None and self.features_grid is None:
+            raise ValueError("One of the following parameters has to be "
+                             "specified: n_outputs, features_grid")
+
+        elif self.n_outputs is None:
+            self.n_outputs = np.prod(self.features_grid)
 
         n_grid_elements = np.prod(self.features_grid)
         invalid_feature_grid = (
@@ -375,6 +411,8 @@ class SOFM(Kohonen):
 
         if self.features_grid is None:
             self.features_grid = (self.n_outputs, 1)
+
+        self.init_layers()
 
     def predict_raw(self, input_data):
         input_data = format_data(input_data)

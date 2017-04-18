@@ -2,7 +2,7 @@ import math
 
 import numpy as np
 
-from neupy import algorithms, init
+from neupy import algorithms
 from neupy.algorithms.competitive import sofm
 
 from base import BaseTestCase
@@ -24,6 +24,31 @@ answers = np.array([
     [0., 0., 1.],
     [0., 0., 1.],
 ])
+
+
+class SOFMUtilsFunctionTestsCase(BaseTestCase):
+    def test_sofm_gaussian_df_zero_std(self):
+        actual_output = sofm.gaussian_df(np.arange(-3, 4), mean=0, std=0)
+        expected_output = np.array([0, 0, 0, 1, 0, 0, 0])
+        np.testing.assert_array_almost_equal(expected_output, actual_output)
+
+    def test_sofm_gaussian_df(self):
+        actual_output = sofm.gaussian_df(np.arange(-3, 4), mean=0, std=1)
+        expected_output = np.array([
+            0.23873659, 0.52907781, 0.8528642,
+            1., 0.8528642, 0.52907781, 0.23873659
+        ])
+        np.testing.assert_array_almost_equal(expected_output, actual_output)
+
+    def test_sofm_decay_function(self):
+        actual_output = sofm.decay_function(12, 10, reduction_rate=10)
+        self.assertEqual(6, actual_output)
+
+        actual_output = sofm.decay_function(12, 20, reduction_rate=10)
+        self.assertEqual(4, actual_output)
+
+        actual_output = sofm.decay_function(12, 30, reduction_rate=10)
+        self.assertEqual(3, actual_output)
 
 
 class SOFMDistanceFunctionsTestCase(BaseTestCase):
@@ -57,7 +82,7 @@ class SOFMDistanceFunctionsTestCase(BaseTestCase):
                 [0, 0, 1],
                 [0, 1, 2],
             ]).T,
-            np.array([[1,  0.926, 0.802, 0.956]]),
+            np.array([[1, 0.926, 0.802, 0.956]]),
             decimal=3)
 
 
@@ -68,6 +93,12 @@ class SOFMNeigboursTestCase(BaseTestCase):
                 neurons=np.zeros((3, 3)),
                 center=(0, 0, 0),
                 radius=1)
+
+        with self.assertRaisesRegexp(ValueError, "Cannot find center"):
+            sofm.gaussian_neighbours(
+                neurons=np.zeros((3, 3)),
+                center=(0, 0, 0),
+                std=1)
 
     def test_neightbours_in_10d(self):
         actual_result = sofm.neuron_neighbours(
@@ -148,8 +179,50 @@ class SOFMNeigboursTestCase(BaseTestCase):
             np.zeros(5),
             center=(2,),
             radius=1)
+
         expected_result = np.array([0, 1, 1, 1, 0])
         np.testing.assert_array_equal(actual_result, expected_result)
+
+    def test_sofm_gaussian_neighbour_2d(self):
+        expected_result = np.array([
+            [0.52907781, 0.69097101, 0.7645389, 0.69097101, 0.52907781],
+            [0.69097101, 0.85286420, 0.9264321, 0.85286420, 0.69097101],
+            [0.76453890, 0.92643210, 1.0000000, 0.92643210, 0.76453890],
+            [0.69097101, 0.85286420, 0.9264321, 0.85286420, 0.69097101],
+            [0.52907781, 0.69097101, 0.7645389, 0.69097101, 0.52907781],
+        ])
+
+        actual_result = sofm.gaussian_neighbours(
+            neurons=np.zeros((5, 5)),
+            center=(2, 2),
+            std=1)
+
+        np.testing.assert_array_almost_equal(
+            expected_result, actual_result)
+
+    def test_sofm_gaussian_neighbour_3d(self):
+        expected_result = np.array([
+            [
+                [0.85286420, 0.90190947, 0.85286420],
+                [0.90190947, 0.95095473, 0.90190947],
+                [0.85286420, 0.90190947, 0.85286420],
+            ], [
+                [0.90190947, 0.95095473, 0.90190947],
+                [0.95095473, 1.00000000, 0.95095473],
+                [0.90190947, 0.95095473, 0.90190947],
+            ], [
+                [0.85286420, 0.90190947, 0.85286420],
+                [0.90190947, 0.95095473, 0.90190947],
+                [0.85286420, 0.90190947, 0.85286420],
+            ]
+        ])
+        actual_result = sofm.gaussian_neighbours(
+            neurons=np.zeros((3, 3, 3)),
+            center=(1, 1, 1),
+            std=1)
+
+        np.testing.assert_array_almost_equal(
+            expected_result, actual_result)
 
 
 class SOFMTestCase(BaseTestCase):
@@ -161,15 +234,16 @@ class SOFMTestCase(BaseTestCase):
         ])
 
     def test_invalid_attrs(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegexp(ValueError, "Feature grid"):
             # Invalid feature grid shape
             algorithms.SOFM(
                 n_inputs=2,
                 n_outputs=4,
-                learning_radius=0,
                 features_grid=(2, 3),
-                verbose=False
             )
+
+        with self.assertRaisesRegexp(ValueError, "n_outputs, features_grid"):
+            algorithms.SOFM(n_inputs=2)
 
     def test_sofm(self):
         sn = algorithms.SOFM(
@@ -287,5 +361,170 @@ class SOFMTestCase(BaseTestCase):
         ])
 
         sofmnet.train(input_data.ravel())
-        self.assertInvalidVectorPred(sofmnet, input_data.ravel(), target,
-                                     decimal=2)
+        self.assertInvalidVectorPred(sofmnet, input_data.ravel(),
+                                     target, decimal=2)
+
+    def test_sofm_std_parameter(self):
+        default_params = dict(
+            n_inputs=2,
+            n_outputs=3,
+            learning_radius=1,
+            weight=self.weight)
+
+        sofm_1 = algorithms.SOFM(std=1, **default_params)
+        sofm_1.train(input_data[:1], epochs=1)
+        dist_1 = np.linalg.norm(sofm_1.weight[0, :] - sofm_1.weight[1, :])
+
+        sofm_0 = algorithms.SOFM(std=0.1, **default_params)
+        sofm_0.train(input_data[:1], epochs=1)
+        dist_0 = np.linalg.norm(sofm_0.weight[0, :] - sofm_0.weight[1, :])
+
+        # Since SOFM-1 has bigger std than SOFM-0, two updated
+        # neurons should be closer to each other for SOFM-1 than
+        # for SOFM-0
+        self.assertLess(dist_1, dist_0)
+
+    def test_sofm_n_outputs_as_optional_parameter(self):
+        sofm = algorithms.SOFM(
+            n_inputs=2,
+            features_grid=(10, 2, 3),
+        )
+        self.assertEqual(60, sofm.n_outputs)
+
+
+class SOFMParameterReductionTestCase(BaseTestCase):
+    def test_sofm_step_reduction(self):
+        input_data = 4 * np.ones((1, 2))
+        default_params = dict(
+            n_inputs=2,
+            n_outputs=1,
+            step=0.1,
+            weight=np.ones((2, 1)))
+
+        sofm_1 = algorithms.SOFM(reduce_step_after=1, **default_params)
+        sofm_1.train(input_data, epochs=4)
+        dist_1 = np.linalg.norm(sofm_1.weight.T - input_data)
+
+        sofm_2 = algorithms.SOFM(reduce_step_after=10, **default_params)
+        sofm_2.train(input_data, epochs=4)
+        dist_2 = np.linalg.norm(sofm_2.weight.T - input_data)
+
+        # SOFM-2 suppose to be closer, becase learning rate decreases
+        # lower with bigger reduction factor
+        self.assertLess(dist_2, dist_1)
+
+        sofm_3 = algorithms.SOFM(reduce_step_after=None, **default_params)
+        sofm_3.train(input_data, epochs=4)
+        dist_3 = np.linalg.norm(sofm_3.weight.T - input_data)
+
+        # SOFM-3 doesn't have any step reduction, so it
+        # converges even faster than SOFM-2
+        self.assertLess(dist_3, dist_2)
+
+    def test_sofm_std_reduction(self):
+        input_data = 4 * np.ones((1, 2))
+        default_params = dict(
+            n_inputs=2,
+            n_outputs=3,
+            weight=np.ones((2, 3)),
+
+            std=1,
+
+            learning_radius=1,
+            reduce_radius_after=None)
+
+        sofm_1 = algorithms.SOFM(reduce_std_after=1, **default_params)
+        sofm_1.train(input_data, epochs=4)
+        dist_1 = np.linalg.norm(sofm_1.weight.T - input_data)
+
+        sofm_2 = algorithms.SOFM(reduce_std_after=10, **default_params)
+        sofm_2.train(input_data, epochs=4)
+        dist_2 = np.linalg.norm(sofm_2.weight.T - input_data)
+
+        # SOFM-2 suppose to be closer, becase std decreases
+        # slower with bigger reduction factor
+        self.assertLess(dist_2, dist_1)
+
+        sofm_3 = algorithms.SOFM(reduce_std_after=None, **default_params)
+        sofm_3.train(input_data, epochs=4)
+        dist_3 = np.linalg.norm(sofm_3.weight.T - input_data)
+
+        # SOFM-3 doesn't have any std reduction, so it
+        # converges even faster than SOFM-2
+        self.assertLess(dist_3, dist_2)
+
+    def test_sofm_learning_radius_reduction(self):
+        input_data = 4 * np.ones((1, 2))
+        default_params = dict(
+            n_inputs=2,
+            n_outputs=3,
+            weight=np.ones((2, 3)),
+            learning_radius=1)
+
+        sofm_1 = algorithms.SOFM(reduce_radius_after=1, **default_params)
+        sofm_1.train(input_data, epochs=4)
+        dist_1 = np.linalg.norm(sofm_1.weight.T - input_data)
+
+        sofm_2 = algorithms.SOFM(reduce_radius_after=3, **default_params)
+        sofm_2.train(input_data, epochs=4)
+        dist_2 = np.linalg.norm(sofm_2.weight.T - input_data)
+
+        # SOFM-2 suppose to be closer, becase learning radius
+        # decreases slower with bigger reduction factor
+        self.assertLess(dist_2, dist_1)
+
+        sofm_3 = algorithms.SOFM(reduce_radius_after=None, **default_params)
+        sofm_3.train(input_data, epochs=4)
+        dist_3 = np.linalg.norm(sofm_3.weight.T - input_data)
+
+        # SOFM-3 doesn't have any learning radius reduction, so it
+        # converges even faster than SOFM-2
+        self.assertLess(dist_3, dist_2)
+
+    def test_sofm_custom_parameter_reduction(self):
+        input_data = 4 * np.ones((1, 2))
+        default_params = dict(
+            n_inputs=2,
+            n_outputs=3,
+            weight=np.ones((2, 3)),
+
+            std=1,
+            step=0.1,
+            learning_radius=1,
+
+            reduce_radius_after=None,
+            reduce_step_after=None,
+            reduce_std_after=None)
+
+        sofm_1 = algorithms.SOFM(**default_params)
+        sofm_1.train(input_data, epochs=4)
+        dist_1 = np.linalg.norm(sofm_1.weight.T - input_data)
+
+        def on_epoch_end_update_radius(network):
+            if network.last_epoch % 2 == 0:
+                network.learning_radius = 0
+            else:
+                network.learning_radius = 1
+
+        def on_epoch_end_update_step(network):
+            network.step = 0.1 / network.last_epoch
+
+        def on_epoch_end_update_std(network):
+            network.std = 1. / network.last_epoch
+
+        testcases = {
+            'learning_radius': on_epoch_end_update_radius,
+            'step': on_epoch_end_update_step,
+            'std': on_epoch_end_update_std,
+        }
+
+        for testcase_name, on_epoch_end in testcases.items():
+            sofm_2 = algorithms.SOFM(
+                epoch_end_signal=on_epoch_end,
+                **default_params
+            )
+            sofm_2.train(input_data, epochs=4)
+            dist_2 = np.linalg.norm(sofm_2.weight.T - input_data)
+
+            self.assertLess(dist_1, dist_2,
+                            msg="Test case name: {}".format(testcase_name))
