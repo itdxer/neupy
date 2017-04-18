@@ -245,6 +245,31 @@ class SOFMTestCase(BaseTestCase):
         with self.assertRaisesRegexp(ValueError, "n_outputs, features_grid"):
             algorithms.SOFM(n_inputs=2)
 
+        with self.assertRaisesRegexp(ValueError, "more than 2 dimensions"):
+            sofm = algorithms.SOFM(n_inputs=2, n_outputs=3, weight=self.weight)
+            sofm.train(np.zeros((10, 2, 1)))
+
+        with self.assertRaisesRegexp(ValueError, "more than 2 dimensions"):
+            sofm = algorithms.SOFM(n_inputs=2, n_outputs=3, weight=self.weight)
+            sofm.predict(np.zeros((10, 2, 1)))
+
+        with self.assertRaisesRegexp(ValueError, "Input data expected"):
+            sofm = algorithms.SOFM(n_inputs=2, n_outputs=3, weight=self.weight)
+            sofm.train(np.zeros((10, 10)))
+
+        with self.assertRaisesRegexp(ValueError, "Input data expected"):
+            sofm = algorithms.SOFM(n_inputs=2, n_outputs=3, weight=self.weight)
+            sofm.predict(np.zeros((10, 10)))
+
+    def test_sofm_1d_vector_input(self):
+        sofm = algorithms.SOFM(
+            n_inputs=2,
+            n_outputs=3,
+            weight=self.weight,
+        )
+        output = sofm.predict(input_data[0])
+        self.assertEqual(output.shape, (1, 3))
+
     def test_sofm(self):
         sn = algorithms.SOFM(
             n_inputs=2,

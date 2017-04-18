@@ -68,8 +68,24 @@ class BaseAssociative(BaseNetwork):
 
         self.weight = self.weight.astype(float)
 
+    def format_input_data(self, input_data):
+        is_feature1d = self.n_inputs == 1
+        input_data = format_data(input_data, is_feature1d)
+
+        if input_data.ndim != 2:
+            raise ValueError("Cannot make prediction, because input "
+                             "data has more than 2 dimensions")
+
+        n_samples, n_features = input_data.shape
+
+        if n_features != self.n_inputs:
+            raise ValueError("Input data expected to have {} features, "
+                             "but got {}".format(self.n_inputs, n_features))
+
+        return input_data
+
     def train(self, input_train, epochs=100):
-        input_train = format_data(input_train, is_feature1d=True)
+        input_train = self.format_input_data(input_train)
 
         return super(BaseAssociative, self).train(
             input_train=input_train, target_train=None,
@@ -167,8 +183,8 @@ class BaseStepAssociative(BaseAssociative):
 
     def train(self, input_train, *args, **kwargs):
         input_train = format_data(input_train, is_feature1d=False)
-        return super(BaseStepAssociative, self).train(input_train, *args,
-                                                      **kwargs)
+        return super(BaseStepAssociative, self).train(
+            input_train, *args, **kwargs)
 
     def train_epoch(self, input_train, target_train):
         weight = self.weight

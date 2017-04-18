@@ -3,7 +3,6 @@ from __future__ import division
 import numpy as np
 from numpy.linalg import norm
 
-from neupy.utils import format_data
 from neupy.algorithms import Kohonen
 from neupy.algorithms.associative.base import BaseAssociative
 from neupy.core.docs import shared_docs
@@ -415,7 +414,8 @@ class SOFM(Kohonen):
         self.init_layers()
 
     def predict_raw(self, input_data):
-        input_data = format_data(input_data)
+        input_data = self.format_input_data(input_data)
+
         n_samples = input_data.shape[0]
         output = np.zeros((n_samples, self.n_outputs))
 
