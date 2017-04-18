@@ -1,28 +1,99 @@
+from __future__ import division
+
 import numpy as np
 from numpy.linalg import norm
 
 from neupy.utils import format_data
 from neupy.algorithms import Kohonen
+from neupy.core.docs import shared_docs
 from neupy.core.properties import (IntProperty, TypedListProperty,
-                                   ChoiceProperty)
+                                   ChoiceProperty, NumberProperty)
 
 
 __all__ = ('SOFM',)
 
 
-def neuron_neighbours(neurons, center, radius):
+def gaussian_df(data, mean=0, std=1):
     """
-    Function find all neighbours neurons around specified
-    center within a certain radius.
+    Calculated gaussian density for each data samples. Gaussian
+    specified by the mean and standard deviation.
 
     Parameters
     ----------
-    neurons : arary-like
+    data : array-like
+
+    mean : float
+        Gaussian mean.
+
+    std : float
+        Gaussian standard deviation.
+    """
+    normalizer = 2 * np.pi * std ** 2
+    return np.exp(-np.square(data - mean) / normalizer)
+
+
+def find_neighbour_distance(neurons, center):
+    """
+    Returns distance from the center into different directions
+    per each dimension separately.
+
+    Parameters
+    ----------
+    neurons : array-like
         Array element with neurons.
 
     center : tuple
         Index of the main neuron for which function must
         find neighbours.
+
+    Returns
+    -------
+    list of n-dimensional vectors
+    """
+    if len(center) != neurons.ndim:
+        raise ValueError(
+            "Cannot find center, because grid of neurons has {} dimensions "
+            "and center has specified coordinates for {} dimensional grid"
+            "".format(neurons.ndim, len(center)))
+
+    slices = []
+    for dim_length, center_coord in zip(neurons.shape, center):
+        slices.append(slice(-center_coord, dim_length - center_coord))
+
+    return np.ogrid[slices]
+
+
+@shared_docs(find_neighbour_distance)
+def gaussian_neighbours(neurons, center, std=1):
+    """
+    Function returns multivariate gaussian around the center
+    with specified standard deviation.
+
+    Parameters
+    ----------
+    {find_neighbour_distance.neurons}
+
+    {find_neighbour_distance.center}
+
+    std : int, float
+        Gaussian standard deviation. Defaults to ``1``.
+    """
+    distances = find_neighbour_distance(neurons, center)
+    gaussian_array = sum(gaussian_df(dist, std=std) for dist in distances)
+    return gaussian_array / neurons.ndim
+
+
+@shared_docs(find_neighbour_distance)
+def neuron_neighbours(neurons, center, radius):
+    """
+    Function find all neuron's neighbours around specified
+    center within a certain radius.
+
+    Parameters
+    ----------
+    {find_neighbour_distance.neurons}
+
+    {find_neighbour_distance.center}
 
     radius : int
         Radius indetify which neurons hear the main
@@ -52,20 +123,9 @@ def neuron_neighbours(neurons, center, radius):
            [ 0.,  1.,  1.,  1.,  0.],
            [ 0.,  0.,  1.,  0.,  0.]])
     """
-    if len(center) != neurons.ndim:
-        raise ValueError(
-            "Cannot find center, because grid of neurons has {} dimensions "
-            "and center has specified coordinates for {} dimensional grid"
-            "".format(neurons.ndim, len(center)))
-
-    slices = []
-    for dim_length, center_coord in zip(neurons.shape, center):
-        slices.append(slice(-center_coord, dim_length - center_coord))
-
-    distances = np.ogrid[slices]
+    distances = find_neighbour_distance(neurons, center)
     mask = sum(dist ** 2 for dist in distances) <= radius ** 2
     neurons[mask] = 1
-
     return neurons
 
 
@@ -112,9 +172,13 @@ def cosine_similarity(input_data, weight):
     return np.reshape(cosine_dist, (1, weight.shape[1]))
 
 
+def decay_function(value, epoch, reduction_rate):
+    return value / (1 + epoch / reduction_rate)
+
+
 class SOFM(Kohonen):
     """
-    Self-Organizing Feature Map (SOFM).
+    Self-Organizing Feature Map (SOFM or SOM).
 
     Parameters
     ----------
@@ -123,7 +187,31 @@ class SOFM(Kohonen):
     {BaseAssociative.n_outputs}
 
     learning_radius : int
-        Learning radius.
+        Parameter defines radius within which we consider all
+        neurons as neighbours to the winning neuron. The bigger
+        the value the more neurons will be updated after each
+        iteration.
+
+        The ``0`` values means that we don't update
+        neighbour neurons.
+
+        Defaults to ``0``.
+
+    std : int, float
+        Parameters controls learning rate for each neighbour.
+        The further neigbour neuron from the winning neuron
+        the smaller that learning rate for it. Learning rate
+        scales based on the factors produced by the normal
+        distribution with center in the place of a winning
+        neuron and stanard deviation specified as a parameter.
+        The learning rate for the winning neuron is always equal
+        to the value specified in the ``step`` parameter and for
+        neighbour neurons it's always lower.
+
+        The bigger the values for this parameter that bigger
+        learning rate for the neighbour neurons.
+
+        Defaults to ``1``.
 
     features_grid : list, tuple, None
         Feature grid defines shape of the output neurons.
@@ -135,23 +223,72 @@ class SOFM(Kohonen):
 
             np.prod(features_grid) == n_outputs
 
+        SOFM implementation supports n-dimensional grids.
+        For instance, in order to specify grid as cube instead of
+        the regular rectangular shape we can set up options as
+        the following:
+
+        .. code-block:: python
+
+            SOFM(
+                ...
+                n_outputs=5 * 5 * 5,
+                features_grid=(5, 5, 5),
+                ...
+            )
+
         Defaults to ``(n_outputs, 1)``.
 
-    transform : {{``dot_product``, ``euclid``, ``cos``}}
-        Indicate transformation operation related to the
-        input layer.
+    distance : {{``euclid``, ``dot_product``, ``cos``}}
+        Defines function that will be used to compute
+        closest weight to the input sample.
 
-        - The ``dot_product`` value mean that input data would be
-          multiplied by weights in typical way.
+        - ``dot_product``: Just a regular dot product between
+          data sample and network's weights
 
-        - The ``euclid`` method will identify the closest
-          weight vector to the input one.
+        - ``euclid``: Euclidian distance between data sample
+          and network's weights
 
-        - The ``cos`` transformation identifies cosine
-          similarity between input dataset and
-          network's weights.
+        - ``cos``: Cosine distance between data sample and
+          network's weights
 
-        Defaults to ``dot_product``.
+        Defaults to ``euclid``.
+
+    reduce_radius_after : int or None
+        Every specified number of epochs ``learning_radius``
+        parameter will be reduced by ``1``. Process continues
+        until ``learning_radius`` equal to ``0``.
+
+        The ``None`` value disables parameter reduction
+        during the training.
+
+        Defaults to ``100``.
+
+    reduce_step_after : int or None
+        Defines reduction rate at which parameter ``step`` will
+        be reduced using the following formula:
+
+        .. code-block:: python
+
+            step = step / (1 + current_epoch / reduce_step_after)
+
+        The ``None`` value disables parameter reduction
+        during the training.
+
+        Defaults to ``100``.
+
+    reduce_std_after : int or None
+        Defines reduction rate at which parameter ``std`` will
+        be reduced using the following formula:
+
+        .. code-block:: python
+
+            std = std / (1 + current_epoch / reduce_std_after)
+
+        The ``None`` value disables parameter reduction
+        during the training.
+
+        Defaults to ``100``.
 
     {BaseAssociative.weight}
 
@@ -189,29 +326,35 @@ class SOFM(Kohonen):
     ...     [-0.8137, -0.5812],
     ... ])
     >>>
-    >>> sofmnet = algorithms.SOFM(
+    >>> sofm = algorithms.SOFM(
     ...     n_inputs=2,
     ...     n_outputs=2,
     ...     step=0.1,
     ...     learning_radius=0,
     ...     features_grid=(2, 1),
     ... )
-    >>> sofmnet.train(data, epochs=100)
-    >>> sofmnet.predict(data)
+    >>> sofm.train(data, epochs=100)
+    >>> sofm.predict(data)
     array([[0, 1],
            [0, 1],
            [1, 0],
            [1, 0]])
     """
-    learning_radius = IntProperty(default=0, minval=0)
     features_grid = TypedListProperty(allow_none=True, default=None)
-    transform = ChoiceProperty(
-        default='dot_product',
+    distance = ChoiceProperty(
+        default='euclid',
         choices={
             'dot_product': np.dot,
             'euclid': neg_euclid_distance,
             'cos': cosine_similarity,
         })
+
+    learning_radius = IntProperty(default=0, minval=0)
+    std = NumberProperty(minval=0, default=1)
+
+    reduce_radius_after = IntProperty(default=100, minval=1, allow_none=True)
+    reduce_std_after = IntProperty(default=100, minval=1, allow_none=True)
+    reduce_step_after = IntProperty(default=100, minval=1, allow_none=True)
 
     def __init__(self, **options):
         super(SOFM, self).__init__(**options)
@@ -239,22 +382,45 @@ class SOFM(Kohonen):
         output = np.zeros((n_samples, self.n_outputs))
 
         for i, input_row in enumerate(input_data):
-            output[i, :] = self.transform(input_row.reshape(1, -1),
-                                          self.weight)
+            output[i, :] = self.distance(
+                input_row.reshape(1, -1), self.weight)
 
         return output
 
     def update_indexes(self, layer_output):
         neuron_winner = layer_output.argmax(axis=1)
-        winner_neuron_coords = np.unravel_index(neuron_winner,
-                                                self.features_grid)
+        winner_neuron_coords = np.unravel_index(
+            neuron_winner, self.features_grid)
+
+        learning_radius = self.learning_radius
+        step = self.step
+        std = self.std
+
+        if self.reduce_radius_after is not None:
+            learning_radius -= (self.last_epoch // self.reduce_radius_after)
+            learning_radius = max(0, learning_radius)
+
+        if self.reduce_step_after is not None:
+            step = decay_function(step, self.last_epoch,
+                                  self.reduce_step_after)
+
+        if self.reduce_std_after is not None:
+            std = decay_function(std, self.last_epoch,
+                                 self.reduce_std_after)
 
         output_with_neightbours = neuron_neighbours(
             neurons=np.reshape(layer_output, self.features_grid),
             center=winner_neuron_coords,
-            radius=self.learning_radius)
+            radius=learning_radius)
+
+        step_scaler = gaussian_neighbours(
+            np.reshape(layer_output, self.features_grid),
+            winner_neuron_coords,
+            std=std)
+
+        step_scaler = step_scaler.reshape(self.n_outputs)
 
         index_y, = np.nonzero(
-            np.reshape(output_with_neightbours, self.n_outputs))
+            output_with_neightbours.reshape(self.n_outputs))
 
-        return index_y
+        return index_y, step * step_scaler[index_y]

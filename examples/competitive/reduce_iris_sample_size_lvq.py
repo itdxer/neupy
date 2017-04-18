@@ -1,9 +1,7 @@
-from sklearn import datasets
-import matplotlib.pyplot as plt
 import seaborn as sns
-import numpy as np
 import pandas as pd
-from pandas.tools.plotting import scatter_matrix
+import matplotlib.pyplot as plt
+from sklearn import datasets
 from neupy import algorithms, environment
 
 

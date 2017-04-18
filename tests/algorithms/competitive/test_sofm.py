@@ -26,16 +26,16 @@ answers = np.array([
 ])
 
 
-class SOFMTransformationsTestCase(BaseTestCase):
-    def assert_invalid_transformation(self, func, vector, weight, expected,
-                                      decimal=6):
+class SOFMDistanceFunctionsTestCase(BaseTestCase):
+    def assert_invalid_distance_function(self, func, vector, weight,
+                                         expected, decimal=6):
         np.testing.assert_array_almost_equal(
             func(vector, weight),
             expected,
             decimal=decimal)
 
     def test_euclid_transform(self):
-        self.assert_invalid_transformation(
+        self.assert_invalid_distance_function(
             sofm.neg_euclid_distance,
             np.array([[1, 2, 3]]),
             np.array([
@@ -48,7 +48,7 @@ class SOFMTransformationsTestCase(BaseTestCase):
         )
 
     def test_cosine_transform(self):
-        self.assert_invalid_transformation(
+        self.assert_invalid_distance_function(
             sofm.cosine_similarity,
             np.array([[1, 2, 3]]),
             np.array([
@@ -175,17 +175,16 @@ class SOFMTestCase(BaseTestCase):
         sn = algorithms.SOFM(
             n_inputs=2,
             n_outputs=3,
-            weight=self.weight,
+            weight=input_data[(2, 0, 4), :].T,
             learning_radius=0,
-            features_grid=(3, 1),
-            verbose=False
+            features_grid=(3,),
+            shuffle_data=True,
+            verbose=False,
         )
-
         sn.train(input_data, epochs=100)
+
         np.testing.assert_array_almost_equal(
-            sn.predict(input_data),
-            answers
-        )
+            sn.predict(input_data), answers)
 
     def test_sofm_euclide_norm_distance(self):
         weight = np.array([
@@ -200,7 +199,7 @@ class SOFMTestCase(BaseTestCase):
             n_inputs=2,
             n_outputs=6,
             weight=weight,
-            transform='euclid',
+            distance='euclid',
             learning_radius=1,
             features_grid=(3, 2),
             verbose=False
@@ -242,10 +241,10 @@ class SOFMTestCase(BaseTestCase):
         sn = algorithms.SOFM(
             n_inputs=2,
             n_outputs=3,
-            transform='cos',
+            distance='cos',
             learning_radius=1,
             features_grid=(3, 1),
-            weight=init.Normal(mean=0, std=1),
+            weight=input_data[(0, 2, 4), :].T,
             verbose=False
         )
         sn.train(input_data, epochs=6)
