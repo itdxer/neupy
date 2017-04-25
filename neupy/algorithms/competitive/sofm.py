@@ -1,13 +1,17 @@
 from __future__ import division
 
+import six
 import numpy as np
 from numpy.linalg import norm
 
+from neupy import init
+from neupy.utils import as_tuple
 from neupy.algorithms import Kohonen
 from neupy.algorithms.associative.base import BaseAssociative
 from neupy.core.docs import shared_docs
 from neupy.core.properties import (IntProperty, TypedListProperty,
-                                   ChoiceProperty, NumberProperty)
+                                   ChoiceProperty, NumberProperty,
+                                   ParameterProperty)
 
 
 __all__ = ('SOFM',)
@@ -196,9 +200,36 @@ def decay_function(value, epoch, reduction_rate):
     return value / (1 + epoch / reduction_rate)
 
 
+class SOFMWeightParameter(ParameterProperty, ChoiceProperty):
+    expected_type = as_tuple(ParameterProperty.expected_type, six.string_types)
+
+    def __set__(self, instance, value):
+        if isinstance(value, six.string_types):
+            ChoiceProperty.__init__(self, instance, value)
+        else:
+            ParameterProperty.__init__(self, instance, value)
+
+
+def sample_data(data, n_outputs):
+    n_samples, n_features = data.shape
+
+    with_replacement = n_samples > n_outputs
+    indeces = np.random.choice(n_samples, n_outputs, replace=with_replacement)
+
+    return data[indeces].T
+
+
+def linear_initialization(data, n_outputs):
+    n_samples, n_features = data.shape
+
+
 class SOFM(Kohonen):
     """
     Self-Organizing Feature Map (SOFM or SOM).
+
+    Notes
+    -----
+    - Training data samples should have normalized features.
 
     Parameters
     ----------
@@ -316,7 +347,23 @@ class SOFM(Kohonen):
 
         Defaults to ``100``.
 
-    {BaseAssociative.weight}
+    weight : array-like, Initializer or {{``init_pca``, ``sample_from_data``}}
+        Neural network weights.
+        Value defined manualy should have shape ``(n_inputs, n_outputs)``.
+
+        Also it's possible to initialized weights base on the
+        training data. There are two options:
+
+        - ``sample_from_data`` - Before starting the training will
+          randomly take number of training samples equal to number
+          of expected outputs.
+
+        - ``init_pca`` - Before training starts SOFM will applies PCA
+          on a covariance matrix build from the training samples.
+          Weights will be generated based on the two eigenvectors
+          associated with the largest eigenvalues.
+
+        Defaults to :class:`Normal() <neupy.init.Normal>`.
 
     {BaseNetwork.step}
 
@@ -356,8 +403,7 @@ class SOFM(Kohonen):
     ...     n_inputs=2,
     ...     n_outputs=2,
     ...     step=0.1,
-    ...     learning_radius=0,
-    ...     features_grid=(2, 1),
+    ...     learning_radius=0
     ... )
     >>> sofm.train(data, epochs=100)
     >>> sofm.predict(data)
@@ -367,6 +413,12 @@ class SOFM(Kohonen):
            [1, 0]])
     """
     n_outputs = IntProperty(minval=1, allow_none=True, default=None)
+    weight = SOFMWeightParameter(
+        default=init.Normal(),
+        choices={
+            'init_pca': linear_initialization,
+            'sample_from_data': sample_data,
+        })
 
     features_grid = TypedListProperty(allow_none=True, default=None)
     distance = ChoiceProperty(
@@ -411,7 +463,8 @@ class SOFM(Kohonen):
         if self.features_grid is None:
             self.features_grid = (self.n_outputs, 1)
 
-        self.init_layers()
+        if not callable(self.weight):
+            self.init_layers()
 
     def predict_raw(self, input_data):
         input_data = self.format_input_data(input_data)
@@ -462,3 +515,11 @@ class SOFM(Kohonen):
             output_with_neightbours.reshape(self.n_outputs))
 
         return index_y, step * step_scaler[index_y]
+
+    def train(self, input_train, summary='table', epochs=100):
+        if not self.initialized and callable(self.weight):
+            weight_initializer = self.weight
+            self.weight = weight_initializer(input_train)
+
+        self.initialized = True
+        super(SOFM, self).train(input_train, summary=summary, epochs=epochs)

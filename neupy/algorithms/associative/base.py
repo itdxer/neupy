@@ -84,14 +84,14 @@ class BaseAssociative(BaseNetwork):
 
         return input_data
 
-    def train(self, input_train, epochs=100):
+    def train(self, input_train, summary='table', epochs=100):
         input_train = self.format_input_data(input_train)
 
         return super(BaseAssociative, self).train(
             input_train=input_train, target_train=None,
             input_test=None, target_test=None,
             epochs=epochs, epsilon=None,
-            summary='table')
+            summary=summary)
 
 
 class BaseStepAssociative(BaseAssociative):
