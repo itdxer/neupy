@@ -109,8 +109,8 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
         Boltzmann Machines, 2010.
         http://www.cs.toronto.edu/~hinton/absps/guideTR.pdf
     """
-    n_visible = IntProperty(required=True, minval=1)
-    n_hidden = IntProperty(required=True, minval=1)
+    n_visible = IntProperty(minval=1)
+    n_hidden = IntProperty(minval=1)
 
     weight = ParameterProperty(default=init.XavierNormal())
     hidden_bias = ParameterProperty(default=init.Constant(value=0))
@@ -119,8 +119,8 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
     def __init__(self, n_visible, n_hidden, **options):
         self.theano_random = theano_random_stream()
 
-        super(ConfigurableABC, self).__init__(n_hidden=n_hidden,
-                                              n_visible=n_visible, **options)
+        super(ConfigurableABC, self).__init__(
+            n_hidden=n_hidden, n_visible=n_visible, **options)
 
         self.weight = create_shared_parameter(
             value=self.weight,

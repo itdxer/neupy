@@ -232,10 +232,12 @@ class ChoiceProperty(BaseProperty):
             "{2}".format(value, self.name, possible_choices)
         )
 
-    def __get__(self, instance, value):
-        if instance is not None:
-            choice_key = super(ChoiceProperty, self).__get__(instance, value)
-            return self.choices[choice_key]
+    def __get__(self, instance, owner):
+        if instance is None:
+            return
+
+        choice_key = super(ChoiceProperty, self).__get__(instance, owner)
+        return self.choices[choice_key]
 
 
 class BoundedProperty(BaseProperty):
