@@ -553,3 +553,28 @@ class SOFMParameterReductionTestCase(BaseTestCase):
 
             self.assertLess(dist_1, dist_2,
                             msg="Test case name: {}".format(testcase_name))
+
+
+class SOFMWeightInitializationTestCase(BaseTestCase):
+    def test_sample_data_function(self):
+        input_data = np.random.random((10, 4))
+        sampled_weights = sofm.sample_data(input_data, n_outputs=7)
+        self.assertEqual(sampled_weights.shape, (4, 7))
+
+        input_data = np.random.random((3, 4))
+        sampled_weights = sofm.sample_data(input_data, n_outputs=7)
+        self.assertEqual(sampled_weights.shape, (4, 7))
+
+    def test_sample_data_weight_init_in_sofm(self):
+        sofm = algorithms.SOFM(
+            n_inputs=4,
+            n_outputs=7,
+            weight='sample_from_data',
+        )
+
+        input_data = np.random.random((10, 4))
+        self.assertTrue(callable(sofm.weight))
+
+        sofm.train(input_data, epochs=1)
+        self.assertFalse(callable(sofm.weight))
+        self.assertEqual(sofm.weight.shape, (4, 7))

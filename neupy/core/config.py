@@ -66,7 +66,7 @@ class BaseConfigurable(object):
             setattr(self, key, value)
 
         for option_name, option in self.options.items():
-            if option.value.required and not getattr(self, option_name):
+            if option.value.required and option_name not in options:
                 raise ValueError("Option `{}` is required."
                                  "".format(option_name))
 

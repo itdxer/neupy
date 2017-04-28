@@ -11,7 +11,7 @@ from neupy.algorithms.associative.base import BaseAssociative
 from neupy.core.docs import shared_docs
 from neupy.core.properties import (IntProperty, TypedListProperty,
                                    ChoiceProperty, NumberProperty,
-                                   ParameterProperty)
+                                   ParameterProperty, BaseProperty)
 
 
 __all__ = ('SOFM',)
@@ -200,21 +200,46 @@ def decay_function(value, epoch, reduction_rate):
     return value / (1 + epoch / reduction_rate)
 
 
-class SOFMWeightParameter(ParameterProperty, ChoiceProperty):
+class SOFMWeightParameter(ChoiceProperty):
     expected_type = as_tuple(ParameterProperty.expected_type, six.string_types)
 
     def __set__(self, instance, value):
         if isinstance(value, six.string_types):
-            ChoiceProperty.__init__(self, instance, value)
-        else:
-            ParameterProperty.__init__(self, instance, value)
+            return super(ChoiceProperty, self).__set__(instance, value)
+        return BaseProperty.__set__(self, instance, value)
+
+    def __get__(self, instance, owner):
+        choice_key = super(ChoiceProperty, self).__get__(instance, owner)
+
+        if isinstance(choice_key, six.string_types):
+            return self.choices[choice_key]
+
+        return choice_key
 
 
 def sample_data(data, n_outputs):
+    """
+    Samples from the data number of rows specified in
+    the ``n_outputs`` argument. In case if ``n_outputs > n_samples``
+    then sample will be with replacement.
+
+    Parameters
+    ----------
+    data : matrix ``(n_samples, n_features)``
+        Matrix where each row is a data sample.
+
+    n_outputs : int
+        Number of samples in the output.
+
+    Returns
+    -------
+    matrix ``(n_features, n_outputs)``
+    """
     n_samples, n_features = data.shape
 
-    with_replacement = n_samples > n_outputs
-    indeces = np.random.choice(n_samples, n_outputs, replace=with_replacement)
+    with_replacement = n_samples < n_outputs
+    indeces = np.random.choice(n_samples, n_outputs,
+                               replace=with_replacement)
 
     return data[indeces].T
 
@@ -463,8 +488,10 @@ class SOFM(Kohonen):
         if self.features_grid is None:
             self.features_grid = (self.n_outputs, 1)
 
+        self.initialized = False
         if not callable(self.weight):
             self.init_layers()
+            self.initialized = True
 
     def predict_raw(self, input_data):
         input_data = self.format_input_data(input_data)
@@ -517,9 +544,9 @@ class SOFM(Kohonen):
         return index_y, step * step_scaler[index_y]
 
     def train(self, input_train, summary='table', epochs=100):
-        if not self.initialized and callable(self.weight):
+        if not self.initialized:
             weight_initializer = self.weight
-            self.weight = weight_initializer(input_train)
+            self.weight = weight_initializer(input_train, self.n_outputs)
+            self.initialized = True
 
-        self.initialized = True
         super(SOFM, self).train(input_train, summary=summary, epochs=epochs)
