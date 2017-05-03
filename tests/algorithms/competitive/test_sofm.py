@@ -89,26 +89,26 @@ class SOFMDistanceFunctionsTestCase(BaseTestCase):
 class SOFMNeigboursTestCase(BaseTestCase):
     def test_sofm_neightbours_exceptions(self):
         with self.assertRaisesRegexp(ValueError, "Cannot find center"):
-            sofm.neuron_neighbours(
-                neurons=np.zeros((3, 3)),
+            sofm.find_neighbours_on_grid(
+                grid=np.zeros((3, 3)),
                 center=(0, 0, 0),
                 radius=1)
 
         with self.assertRaisesRegexp(ValueError, "Cannot find center"):
             sofm.gaussian_neighbours(
-                neurons=np.zeros((3, 3)),
+                grid=np.zeros((3, 3)),
                 center=(0, 0, 0),
                 std=1)
 
     def test_neightbours_in_10d(self):
-        actual_result = sofm.neuron_neighbours(
+        actual_result = sofm.find_neighbours_on_grid(
             np.zeros([3] * 10),
             center=[1] * 10,
             radius=0)
         self.assertEqual(np.sum(actual_result), 1)
 
     def test_neightbours_in_3d(self):
-        actual_result = sofm.neuron_neighbours(
+        actual_result = sofm.find_neighbours_on_grid(
             np.zeros((5, 5, 3)),
             center=(2, 2, 1),
             radius=2)
@@ -136,7 +136,7 @@ class SOFMNeigboursTestCase(BaseTestCase):
         np.testing.assert_array_equal(actual_result, expected_result)
 
     def test_neightbours_in_2d(self):
-        actual_result = sofm.neuron_neighbours(
+        actual_result = sofm.find_neighbours_on_grid(
             np.zeros((3, 3)),
             center=(0, 0),
             radius=1)
@@ -148,7 +148,7 @@ class SOFMNeigboursTestCase(BaseTestCase):
         ])
         np.testing.assert_array_equal(actual_result, expected_result)
 
-        actual_result = sofm.neuron_neighbours(
+        actual_result = sofm.find_neighbours_on_grid(
             np.zeros((5, 5)),
             center=(2, 2),
             radius=2)
@@ -162,7 +162,7 @@ class SOFMNeigboursTestCase(BaseTestCase):
         ])
         np.testing.assert_array_equal(actual_result, expected_result)
 
-        actual_result = sofm.neuron_neighbours(
+        actual_result = sofm.find_neighbours_on_grid(
             np.zeros((3, 3)),
             center=(1, 1),
             radius=0)
@@ -175,7 +175,7 @@ class SOFMNeigboursTestCase(BaseTestCase):
         np.testing.assert_array_equal(actual_result, expected_result)
 
     def test_neightbours_in_1d(self):
-        actual_result = sofm.neuron_neighbours(
+        actual_result = sofm.find_neighbours_on_grid(
             np.zeros(5),
             center=(2,),
             radius=1)
@@ -193,7 +193,7 @@ class SOFMNeigboursTestCase(BaseTestCase):
         ])
 
         actual_result = sofm.gaussian_neighbours(
-            neurons=np.zeros((5, 5)),
+            grid=np.zeros((5, 5)),
             center=(2, 2),
             std=1)
 
@@ -217,9 +217,108 @@ class SOFMNeigboursTestCase(BaseTestCase):
             ]
         ])
         actual_result = sofm.gaussian_neighbours(
-            neurons=np.zeros((3, 3, 3)),
+            grid=np.zeros((3, 3, 3)),
             center=(1, 1, 1),
             std=1)
+
+        np.testing.assert_array_almost_equal(
+            expected_result, actual_result)
+
+    def test_sofm_hexagon_grid_neighbours(self):
+        # radius 1 (odd row index)
+        expected_result = np.array([
+            [0, 0, 0, 0, 0],
+            [0, 1, 1, 0, 0],
+            [0, 1, 1, 1, 0],
+            [0, 1, 1, 0, 0],
+            [0, 0, 0, 0, 0],
+        ])
+        actual_result = sofm.find_neighbours_on_hexagon_grid(
+            grid=np.zeros((5, 5)),
+            center=(2, 2),
+            radius=1)
+
+        np.testing.assert_array_almost_equal(
+            expected_result, actual_result)
+
+        # radius 1 (even row index)
+        expected_result = np.array([
+            [0, 0, 1, 1, 0],
+            [0, 1, 1, 1, 0],
+            [0, 0, 1, 1, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+        ])
+        actual_result = sofm.find_neighbours_on_hexagon_grid(
+            grid=np.zeros((5, 5)),
+            center=(1, 2),
+            radius=1)
+
+        np.testing.assert_array_almost_equal(
+            expected_result, actual_result)
+
+        # radius 1 (partialy broken)
+        expected_result = np.array([
+            [1, 1, 0, 0, 0],
+            [1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+        ])
+        actual_result = sofm.find_neighbours_on_hexagon_grid(
+            grid=np.zeros((5, 5)),
+            center=(0, 0),
+            radius=1)
+
+        np.testing.assert_array_almost_equal(
+            expected_result, actual_result)
+
+        # radius 2 (partialy broken)
+        expected_result = np.array([
+            [0, 0, 0, 1, 1],
+            [0, 0, 1, 1, 1],
+            [0, 0, 0, 1, 1],
+            [0, 0, 0, 1, 1],
+            [0, 0, 0, 0, 0],
+        ])
+        actual_result = sofm.find_neighbours_on_hexagon_grid(
+            grid=np.zeros((5, 5)),
+            center=(1, 4),
+            radius=2)
+
+        np.testing.assert_array_almost_equal(
+            expected_result, actual_result)
+
+        # radius 2
+        expected_result = np.array([
+            [0, 1, 1, 1, 0],
+            [1, 1, 1, 1, 0],
+            [1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 0],
+            [0, 1, 1, 1, 0],
+        ])
+        actual_result = sofm.find_neighbours_on_hexagon_grid(
+            grid=np.zeros((5, 5)),
+            center=(2, 2),
+            radius=2)
+
+        np.testing.assert_array_almost_equal(
+            expected_result, actual_result)
+
+        # radius 3
+        expected_result = np.array([
+            [0, 0, 1, 1, 1, 1, 0],
+            [0, 1, 1, 1, 1, 1, 0],
+            [0, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1],
+            [0, 1, 1, 1, 1, 1, 1],
+            [0, 1, 1, 1, 1, 1, 0],
+            [0, 0, 1, 1, 1, 1, 0],
+        ])
+        actual_result = sofm.find_neighbours_on_hexagon_grid(
+            grid=np.zeros((7, 7)),
+            center=(3, 3),
+            radius=3)
 
         np.testing.assert_array_almost_equal(
             expected_result, actual_result)

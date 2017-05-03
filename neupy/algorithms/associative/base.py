@@ -42,7 +42,7 @@ class BaseAssociative(BaseNetwork):
     -------
     {BaseSkeleton.predict}
 
-    train(input_train, epochs=100)
+    train(input_train, summary='table', epochs=100)
         Train neural network.
 
     {BaseSkeleton.fit}
