@@ -4,6 +4,7 @@ import numpy as np
 
 from neupy import algorithms
 from neupy.algorithms.competitive import sofm
+from neupy.algorithms.competitive.neighbours import gaussian_df
 
 from base import BaseTestCase
 
@@ -28,12 +29,12 @@ answers = np.array([
 
 class SOFMUtilsFunctionTestsCase(BaseTestCase):
     def test_sofm_gaussian_df_zero_std(self):
-        actual_output = sofm.gaussian_df(np.arange(-3, 4), mean=0, std=0)
+        actual_output = gaussian_df(np.arange(-3, 4), mean=0, std=0)
         expected_output = np.array([0, 0, 0, 1, 0, 0, 0])
         np.testing.assert_array_almost_equal(expected_output, actual_output)
 
     def test_sofm_gaussian_df(self):
-        actual_output = sofm.gaussian_df(np.arange(-3, 4), mean=0, std=1)
+        actual_output = gaussian_df(np.arange(-3, 4), mean=0, std=1)
         expected_output = np.array([
             0.23873659, 0.52907781, 0.8528642,
             1., 0.8528642, 0.52907781, 0.23873659
