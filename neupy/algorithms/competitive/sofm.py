@@ -410,7 +410,12 @@ class SOFM(Kohonen):
             std = decay_function(std, self.last_epoch,
                                  self.reduce_std_after)
 
-        output_with_neightbours = find_neighbours_on_grid(
+        if self.use_hexagon_grid:
+            find_neighbours = find_neighbours_on_hexagon_grid
+        else:
+            find_neighbours = find_neighbours_on_grid
+
+        output_with_neightbours = find_neighbours(
             grid=np.reshape(layer_output, self.features_grid),
             center=winner_neuron_coords,
             radius=learning_radius)
