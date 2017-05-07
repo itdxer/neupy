@@ -3,12 +3,22 @@ from itertools import product
 import matplotlib.pyplot as plt
 
 
-def iter_neighbours(weights):
+def iter_neighbours(weights, hexagon=False):
     _, grid_height, grid_width = weights.shape
-    actions = ((-1, 0), (0, -1), (1, 0), (0, 1))
+
+    hexagon_even_actions = ((-1, 0), (0, -1), (1, 0), (0, 1), (1, 1), (-1, 1))
+    hexagon_odd_actions = ((-1, 0), (0, -1), (1, 0), (0, 1), (-1, -1), (1, -1))
+    rectangle_actions = ((-1, 0), (0, -1), (1, 0), (0, 1))
 
     for neuron_x, neuron_y in product(range(grid_height), range(grid_width)):
         neighbours = []
+
+        if hexagon and neuron_x % 2 == 1:
+            actions = hexagon_even_actions
+        elif hexagon:
+            actions = hexagon_odd_actions
+        else:
+            actions = rectangle_actions
 
         for shift_x, shift_y in actions:
             neigbour_x = neuron_x + shift_x
@@ -20,7 +30,7 @@ def iter_neighbours(weights):
         yield (neuron_x, neuron_y), neighbours
 
 
-def plot_2d_grid(weights, ax=None, color='green'):
+def plot_2d_grid(weights, ax=None, color='green', hexagon=False):
     if weights.ndim != 3:
         raise ValueError("Number of dimensions should be equal to 3 "
                          "(shape: (2, height, width)), got {} instead"
@@ -34,7 +44,7 @@ def plot_2d_grid(weights, ax=None, color='green'):
     if ax is None:
         ax = plt.gca()
 
-    for (neuron_x, neuron_y), neighbours in iter_neighbours(weights):
+    for (neuron_x, neuron_y), neighbours in iter_neighbours(weights, hexagon):
         for (neigbour_x, neigbour_y) in neighbours:
             neurons_x_coords = (neuron_x, neigbour_x)
             neurons_y_coords = (neuron_y, neigbour_y)

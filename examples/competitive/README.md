@@ -11,3 +11,7 @@
 ## Output from sofm_moon_topology.py
 
 ![](images/sofm-moon-topology.png)
+
+## Output from sofm_compare_grid_types.py
+
+![](images/sofm-hexagon-vs-rectangular-grid.png)

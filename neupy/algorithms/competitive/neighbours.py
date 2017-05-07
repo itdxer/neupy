@@ -59,7 +59,7 @@ def find_neighbour_distance(grid, center):
 
 
 @shared_docs(find_neighbour_distance)
-def gaussian_neighbours(grid, center, std=1):
+def find_step_scaler_on_rect_grid(grid, center, std=1):
     """
     Function returns multivariate gaussian around the center
     with specified standard deviation.
@@ -79,7 +79,7 @@ def gaussian_neighbours(grid, center, std=1):
 
 
 @shared_docs(find_neighbour_distance)
-def find_neighbours_on_grid(grid, center, radius):
+def find_neighbours_on_rect_grid(grid, center, radius):
     """
     Function find all neuron's neighbours around specified
     center within a certain radius.
@@ -91,8 +91,8 @@ def find_neighbours_on_grid(grid, center, radius):
     {find_neighbour_distance.center}
 
     radius : int
-        Radius indetify which neurons hear the main
-        one are neighbours.
+        Radius indetify which neurons around the center
+        are neighbours.
 
     Returns
     -------
@@ -106,7 +106,7 @@ def find_neighbours_on_grid(grid, center, radius):
     >>> import numpy as np
     >>> from neupy.algorithms.competitive import sofm
     >>>
-    >>> sofm.find_neighbours_on_grid(
+    >>> sofm.find_neighbours_on_rect_grid(
     ...     grid=np.zeros((3, 3)),
     ...     center=(0, 0),
     ...     radius=1)
@@ -115,7 +115,7 @@ def find_neighbours_on_grid(grid, center, radius):
            [ 1.,  0.,  0.],
            [ 0.,  0.,  0.]])
     >>>
-    >>> sofm.find_neighbours_on_grid(
+    >>> sofm.find_neighbours_on_rect_grid(
     ...     grid=np.zeros((5, 5)),
     ...     center=(2, 2),
     ...     radius=2)
@@ -133,22 +133,42 @@ def find_neighbours_on_grid(grid, center, radius):
 
 
 def generate_neighbours_pattern(radius):
+    """
+    Generates pattern that defines neighbours
+    within specified radius on the hexagon grid.
+
+    Parameters
+    ----------
+    radius : int
+
+    Returns
+    -------
+    array-like
+        2d-array that has number of rows equal to number
+        of columns equal to ``2 * radius + 1``
+    """
     cache = generate_neighbours_pattern.cache
 
     if radius in cache:
         return cache[radius]
 
     size = 2 * radius + 1
+    max_distance = radius + 1
     pattern = np.zeros((size, size))
-    pattern[radius, :] = 1
 
-    for i, width in enumerate(range(size - radius, size)):
+    for i, width in enumerate(range(size - radius, size + 1)):
         start_point = radius - int(np.floor(width / 2))
         neighbour_range = slice(start_point, start_point + width)
 
-        pattern[i, neighbour_range] = 1
+        neighbour_distance = np.pad(
+            array=(max_distance - i) * [max_distance - i],
+            pad_width=i,
+            mode='linear_ramp',
+            end_values=max_distance)
+
+        pattern[i, neighbour_range] = neighbour_distance
         # every row in the pattern is mirror symmetric
-        pattern[size - i - 1, neighbour_range] = 1
+        pattern[size - i - 1, neighbour_range] = neighbour_distance
 
     cache[radius] = pattern
     return pattern
@@ -158,6 +178,31 @@ generate_neighbours_pattern.cache = {}
 
 
 def find_neighbours_on_hexagon_grid(grid, center, radius):
+    """
+    Marks neighbors on the hexagon grid around specified
+    center within specified radius.
+
+    Parameters
+    ----------
+    grid : 2d-arry
+        Hexagon grid.
+
+    center : tuple
+        Coordinates of the center neuron on the grid.
+        Should be a tuple with two integers: ``(x, y)``.
+
+    radius : int
+        Radius indetify which neurons around the center
+        are neighbours.
+
+    Returns
+    -------
+    2d-array
+    """
+    if radius == 0:
+        grid[center] = 1
+        return grid
+
     center_x, center_y = center
     pattern = generate_neighbours_pattern(radius)
 
@@ -186,3 +231,28 @@ def find_neighbours_on_hexagon_grid(grid, center, radius):
 
     # removing paddings
     return grid[radius:-radius, radius:-radius]
+
+
+@shared_docs(find_step_scaler_on_rect_grid)
+def find_step_scaler_on_hexagon_grid(grid, center=None, std=1):
+    """
+    Find step scaler for neighbouring neurons. The further
+    neuron from the center the lower step scaler it has.
+
+    Notes
+    -----
+    Non-neighbor neurons will have high step size
+    We do not set up it to zero, since later we will
+    ignore these values anyway
+
+    Parameters
+    ----------
+    grid : array-like
+
+    center : object
+        Variable is going to be ignored. It's defined
+        only for compatibility with other functions
+
+    {find_step_scaler_on_rect_grid.std}
+    """
+    return gaussian_df(grid, mean=1, std=std)

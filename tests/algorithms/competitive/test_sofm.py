@@ -27,6 +27,14 @@ answers = np.array([
 ])
 
 
+def make_circle(max_samples=100):
+    data = np.random.random((max_samples, 2))
+    x, y = data[:, 0], data[:, 1]
+
+    distance_from_center = ((x - 0.5) ** 2 + (y - 0.5) ** 2)
+    return data[distance_from_center <= 0.5 ** 2]
+
+
 class SOFMUtilsFunctionTestsCase(BaseTestCase):
     def test_sofm_gaussian_df_zero_std(self):
         actual_output = gaussian_df(np.arange(-3, 4), mean=0, std=0)
@@ -90,26 +98,26 @@ class SOFMDistanceFunctionsTestCase(BaseTestCase):
 class SOFMNeigboursTestCase(BaseTestCase):
     def test_sofm_neightbours_exceptions(self):
         with self.assertRaisesRegexp(ValueError, "Cannot find center"):
-            sofm.find_neighbours_on_grid(
+            sofm.find_neighbours_on_rect_grid(
                 grid=np.zeros((3, 3)),
                 center=(0, 0, 0),
                 radius=1)
 
         with self.assertRaisesRegexp(ValueError, "Cannot find center"):
-            sofm.gaussian_neighbours(
+            sofm.find_step_scaler_on_rect_grid(
                 grid=np.zeros((3, 3)),
                 center=(0, 0, 0),
                 std=1)
 
     def test_neightbours_in_10d(self):
-        actual_result = sofm.find_neighbours_on_grid(
+        actual_result = sofm.find_neighbours_on_rect_grid(
             np.zeros([3] * 10),
             center=[1] * 10,
             radius=0)
         self.assertEqual(np.sum(actual_result), 1)
 
     def test_neightbours_in_3d(self):
-        actual_result = sofm.find_neighbours_on_grid(
+        actual_result = sofm.find_neighbours_on_rect_grid(
             np.zeros((5, 5, 3)),
             center=(2, 2, 1),
             radius=2)
@@ -137,7 +145,7 @@ class SOFMNeigboursTestCase(BaseTestCase):
         np.testing.assert_array_equal(actual_result, expected_result)
 
     def test_neightbours_in_2d(self):
-        actual_result = sofm.find_neighbours_on_grid(
+        actual_result = sofm.find_neighbours_on_rect_grid(
             np.zeros((3, 3)),
             center=(0, 0),
             radius=1)
@@ -149,7 +157,7 @@ class SOFMNeigboursTestCase(BaseTestCase):
         ])
         np.testing.assert_array_equal(actual_result, expected_result)
 
-        actual_result = sofm.find_neighbours_on_grid(
+        actual_result = sofm.find_neighbours_on_rect_grid(
             np.zeros((5, 5)),
             center=(2, 2),
             radius=2)
@@ -163,7 +171,7 @@ class SOFMNeigboursTestCase(BaseTestCase):
         ])
         np.testing.assert_array_equal(actual_result, expected_result)
 
-        actual_result = sofm.find_neighbours_on_grid(
+        actual_result = sofm.find_neighbours_on_rect_grid(
             np.zeros((3, 3)),
             center=(1, 1),
             radius=0)
@@ -176,7 +184,7 @@ class SOFMNeigboursTestCase(BaseTestCase):
         np.testing.assert_array_equal(actual_result, expected_result)
 
     def test_neightbours_in_1d(self):
-        actual_result = sofm.find_neighbours_on_grid(
+        actual_result = sofm.find_neighbours_on_rect_grid(
             np.zeros(5),
             center=(2,),
             radius=1)
@@ -193,7 +201,7 @@ class SOFMNeigboursTestCase(BaseTestCase):
             [0.52907781, 0.69097101, 0.7645389, 0.69097101, 0.52907781],
         ])
 
-        actual_result = sofm.gaussian_neighbours(
+        actual_result = sofm.find_step_scaler_on_rect_grid(
             grid=np.zeros((5, 5)),
             center=(2, 2),
             std=1)
@@ -217,7 +225,7 @@ class SOFMNeigboursTestCase(BaseTestCase):
                 [0.85286420, 0.90190947, 0.85286420],
             ]
         ])
-        actual_result = sofm.gaussian_neighbours(
+        actual_result = sofm.find_step_scaler_on_rect_grid(
             grid=np.zeros((3, 3, 3)),
             center=(1, 1, 1),
             std=1)
@@ -229,9 +237,9 @@ class SOFMNeigboursTestCase(BaseTestCase):
         # radius 1 (odd row index)
         expected_result = np.array([
             [0, 0, 0, 0, 0],
-            [0, 1, 1, 0, 0],
-            [0, 1, 1, 1, 0],
-            [0, 1, 1, 0, 0],
+            [0, 2, 2, 0, 0],
+            [0, 2, 1, 2, 0],
+            [0, 2, 2, 0, 0],
             [0, 0, 0, 0, 0],
         ])
         actual_result = sofm.find_neighbours_on_hexagon_grid(
@@ -244,9 +252,9 @@ class SOFMNeigboursTestCase(BaseTestCase):
 
         # radius 1 (even row index)
         expected_result = np.array([
-            [0, 0, 1, 1, 0],
-            [0, 1, 1, 1, 0],
-            [0, 0, 1, 1, 0],
+            [0, 0, 2, 2, 0],
+            [0, 2, 1, 2, 0],
+            [0, 0, 2, 2, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
         ])
@@ -260,8 +268,8 @@ class SOFMNeigboursTestCase(BaseTestCase):
 
         # radius 1 (partialy broken)
         expected_result = np.array([
-            [1, 1, 0, 0, 0],
-            [1, 0, 0, 0, 0],
+            [1, 2, 0, 0, 0],
+            [2, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
@@ -276,10 +284,10 @@ class SOFMNeigboursTestCase(BaseTestCase):
 
         # radius 2 (partialy broken)
         expected_result = np.array([
-            [0, 0, 0, 1, 1],
-            [0, 0, 1, 1, 1],
-            [0, 0, 0, 1, 1],
-            [0, 0, 0, 1, 1],
+            [0, 0, 0, 3, 2],
+            [0, 0, 3, 2, 1],
+            [0, 0, 0, 3, 2],
+            [0, 0, 0, 3, 3],
             [0, 0, 0, 0, 0],
         ])
         actual_result = sofm.find_neighbours_on_hexagon_grid(
@@ -292,11 +300,11 @@ class SOFMNeigboursTestCase(BaseTestCase):
 
         # radius 2
         expected_result = np.array([
-            [0, 1, 1, 1, 0],
-            [1, 1, 1, 1, 0],
-            [1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 0],
-            [0, 1, 1, 1, 0],
+            [0, 3, 3, 3, 0],
+            [3, 2, 2, 3, 0],
+            [3, 2, 1, 2, 3],
+            [3, 2, 2, 3, 0],
+            [0, 3, 3, 3, 0],
         ])
         actual_result = sofm.find_neighbours_on_hexagon_grid(
             grid=np.zeros((5, 5)),
@@ -308,13 +316,13 @@ class SOFMNeigboursTestCase(BaseTestCase):
 
         # radius 3
         expected_result = np.array([
-            [0, 0, 1, 1, 1, 1, 0],
-            [0, 1, 1, 1, 1, 1, 0],
-            [0, 1, 1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1, 1, 1],
-            [0, 1, 1, 1, 1, 1, 1],
-            [0, 1, 1, 1, 1, 1, 0],
-            [0, 0, 1, 1, 1, 1, 0],
+            [0, 0, 4, 4, 4, 4, 0],
+            [0, 4, 3, 3, 3, 4, 0],
+            [0, 4, 3, 2, 2, 3, 4],
+            [4, 3, 2, 1, 2, 3, 4],
+            [0, 4, 3, 2, 2, 3, 4],
+            [0, 4, 3, 3, 3, 4, 0],
+            [0, 0, 4, 4, 4, 4, 0],
         ])
         actual_result = sofm.find_neighbours_on_hexagon_grid(
             grid=np.zeros((7, 7)),
@@ -336,11 +344,7 @@ class SOFMTestCase(BaseTestCase):
     def test_invalid_attrs(self):
         with self.assertRaisesRegexp(ValueError, "Feature grid"):
             # Invalid feature grid shape
-            algorithms.SOFM(
-                n_inputs=2,
-                n_outputs=4,
-                features_grid=(2, 3),
-            )
+            algorithms.SOFM(n_inputs=2, n_outputs=4, features_grid=(2, 3))
 
         with self.assertRaisesRegexp(ValueError, "n_outputs, features_grid"):
             algorithms.SOFM(n_inputs=2)
@@ -360,6 +364,10 @@ class SOFMTestCase(BaseTestCase):
         with self.assertRaisesRegexp(ValueError, "Input data expected"):
             sofm = algorithms.SOFM(n_inputs=2, n_outputs=3, weight=self.weight)
             sofm.predict(np.zeros((10, 10)))
+
+        with self.assertRaisesRegexp(ValueError, "one or two dimensional"):
+            algorithms.SOFM(n_inputs=2, features_grid=(3, 1, 1),
+                            grid_type='hexagon')
 
     def test_sofm_1d_vector_input(self):
         sofm = algorithms.SOFM(
@@ -515,6 +523,37 @@ class SOFMTestCase(BaseTestCase):
             features_grid=(10, 2, 3),
         )
         self.assertEqual(60, sofm.n_outputs)
+
+    def test_sofm_hexagon_grid(self):
+        data = make_circle(max_samples=100)
+        sofm = algorithms.SOFM(
+            n_inputs=2,
+            n_outputs=9,
+            learning_radius=1,
+            reduce_radius_after=4,
+            features_grid=(3, 3),
+            verbose=True,
+            grid_type='hexagon',
+        )
+        sofm.train(data, epochs=10)
+        grid = sofm.weight.reshape((2, 3, 3))
+
+        center = grid[:, 1, 1]
+        top_left = grid[:, 0, 0]
+        top_right = grid[:, 0, 2]
+
+        distance_top_left = np.linalg.norm(center - top_left)
+        distance_top_right = np.linalg.norm(center - top_right)
+
+        self.assertLess(distance_top_right, distance_top_left)
+
+        bottom_left = grid[:, 2, 0]
+        bottom_right = grid[:, 2, 2]
+
+        distance_bottom_left = np.linalg.norm(center - bottom_left)
+        distance_bottom_right = np.linalg.norm(center - bottom_right)
+
+        self.assertLess(distance_bottom_right, distance_bottom_left)
 
 
 class SOFMParameterReductionTestCase(BaseTestCase):
