@@ -1,5 +1,7 @@
 from __future__ import division
 
+from collections import namedtuple
+
 import six
 import numpy as np
 from numpy.linalg import norm
@@ -8,12 +10,13 @@ from neupy import init
 from neupy.utils import as_tuple
 from neupy.algorithms import Kohonen
 from neupy.algorithms.associative.base import BaseAssociative
-from neupy.core.properties import (IntProperty, TypedListProperty,
+from neupy.core.properties import (BaseProperty, TypedListProperty,
                                    ChoiceProperty, NumberProperty,
-                                   ParameterProperty, BaseProperty,
-                                   Property)
-from .neighbours import (gaussian_neighbours, find_neighbours_on_grid,
-                         find_neighbours_on_hexagon_grid)
+                                   ParameterProperty, IntProperty)
+from .neighbours import (find_step_scaler_on_rect_grid,
+                         find_neighbours_on_rect_grid,
+                         find_neighbours_on_hexagon_grid,
+                         find_step_scaler_on_hexagon_grid)
 
 
 __all__ = ('SOFM',)
@@ -37,7 +40,7 @@ def neg_euclid_distance(input_data, weight):
     array-like
     """
     euclid_dist = norm(input_data.T - weight, axis=0)
-    return -np.reshape(euclid_dist, (1, weight.shape[1]))
+    return -np.expand_dims(euclid_dist, axis=0)
 
 
 def cosine_similarity(input_data, weight):
@@ -204,6 +207,19 @@ class SOFM(Kohonen):
 
         Defaults to ``(n_outputs, 1)``.
 
+    grid_type : {{`rect`, `hexagon`}}
+        Defines connection type in feature grid. Type defines
+        which neurons we will consider as closest to the winning
+        neuron during the training.
+
+        - `rect` - Connections between neurons will be organized
+          in hexagonal grid.
+
+        - `hexagon` - Connections between neurons will be organized
+          in hexagonal grid. It works only for 1d or 2d grids.
+
+        Defaults to `rect`.
+
     distance : {{``euclid``, ``dot_product``, ``cos``}}
         Defines function that will be used to compute
         closest weight to the input sample.
@@ -329,13 +345,28 @@ class SOFM(Kohonen):
         })
 
     features_grid = TypedListProperty(allow_none=True, default=None)
-    use_hexagon_grid = Property(expected_type=bool, default=False)
     distance = ChoiceProperty(
         default='euclid',
         choices={
             'dot_product': np.dot,
             'euclid': neg_euclid_distance,
             'cos': cosine_similarity,
+        })
+
+    GridTypeMethods = namedtuple(
+        'GridTypeMethods', 'name find_neighbours find_step_scaler')
+
+    grid_type = ChoiceProperty(
+        default='rect',
+        choices={
+            'rect': GridTypeMethods(
+                name='rectangle',
+                find_neighbours=find_neighbours_on_rect_grid,
+                find_step_scaler=find_step_scaler_on_rect_grid),
+            'hexagon': GridTypeMethods(
+                name='hexagon',
+                find_neighbours=find_neighbours_on_hexagon_grid,
+                find_step_scaler=find_step_scaler_on_hexagon_grid)
         })
 
     learning_radius = IntProperty(default=0, minval=0)
@@ -372,6 +403,13 @@ class SOFM(Kohonen):
         if self.features_grid is None:
             self.features_grid = (self.n_outputs, 1)
 
+        if len(self.features_grid) > 2 and self.grid_type.name == 'hexagon':
+            raise ValueError("SOFM with hexagon grid type should have "
+                             "one or two dimensional feature grid, but got "
+                             "{}d instead (shape: {!r})".format(
+                                len(self.features_grid),
+                                self.features_grid))
+
         self.initialized = False
         if not callable(self.weight):
             self.init_layers()
@@ -390,7 +428,7 @@ class SOFM(Kohonen):
         return output
 
     def update_indexes(self, layer_output):
-        neuron_winner = layer_output.argmax(axis=1)
+        neuron_winner = layer_output.argmax(axis=1).item(0)
         winner_neuron_coords = np.unravel_index(
             neuron_winner, self.features_grid)
 
@@ -410,26 +448,23 @@ class SOFM(Kohonen):
             std = decay_function(std, self.last_epoch,
                                  self.reduce_std_after)
 
-        if self.use_hexagon_grid:
-            find_neighbours = find_neighbours_on_hexagon_grid
-        else:
-            find_neighbours = find_neighbours_on_grid
+        methods = self.grid_type
+        output_grid = np.reshape(layer_output, self.features_grid)
 
-        output_with_neightbours = find_neighbours(
-            grid=np.reshape(layer_output, self.features_grid),
+        output_with_neightbours = methods.find_neighbours(
+            grid=output_grid,
             center=winner_neuron_coords,
             radius=learning_radius)
 
-        step_scaler = gaussian_neighbours(
-            grid=np.reshape(layer_output, self.features_grid),
+        step_scaler = methods.find_step_scaler(
+            grid=output_grid,
             center=winner_neuron_coords,
             std=std)
-
-        step_scaler = step_scaler.reshape(self.n_outputs)
 
         index_y, = np.nonzero(
             output_with_neightbours.reshape(self.n_outputs))
 
+        step_scaler = step_scaler.reshape(self.n_outputs)
         return index_y, step * step_scaler[index_y]
 
     def train(self, input_train, summary='table', epochs=100):
