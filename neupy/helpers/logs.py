@@ -76,8 +76,8 @@ class TerminalLogger(object):
         'white': terminal.white,
     }
 
-    def __init__(self):
-        self.enable = True
+    def __init__(self, enable=True):
+        self.enable = enable
         self.template = "[{tag}] {text}"
         self.stdout = sys.stdout
 
@@ -192,6 +192,9 @@ class TerminalLogger(object):
                 terminal_echo(enabled=True)
         else:
             yield
+
+    def __reduce__(self):
+        return (self.__class__, (self.enable,))
 
 
 class VerboseProperty(BaseProperty):
