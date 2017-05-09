@@ -161,6 +161,9 @@ class AttributeKeyDict(dict):
     def __delattr__(self, attrname):
         del self[attrname]
 
+    def __reduce__(self):
+        return (self.__class__, (dict(self),))
+
 
 def preformat_value(value):
     """
