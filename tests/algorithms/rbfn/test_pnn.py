@@ -73,14 +73,13 @@ class PNNTestCase(BaseTestCase):
         nw.train(x_train, y_train)
         result = nw.predict(x_test)
 
-        self.assertAlmostEqual(metrics.accuracy_score(y_test, result),
-                               0.9889, places=4)
+        accuracy = metrics.accuracy_score(y_test, result)
+        self.assertAlmostEqual(accuracy, 0.9889, places=4)
 
     def test_predict_probability(self):
         dataset = datasets.load_digits()
         x_train, x_test, y_train, y_test = train_test_split(
-            dataset.data, dataset.target, train_size=0.7
-        )
+            dataset.data, dataset.target, train_size=0.7)
 
         x_train_before = x_train.copy()
         x_test_before = x_test.copy()
@@ -98,8 +97,8 @@ class PNNTestCase(BaseTestCase):
         total_classes_prob = np.round(result.sum(axis=1), 10)
         np.testing.assert_array_equal(
             total_classes_prob,
-            np.ones(n_test_inputs)
-        )
+            np.ones(n_test_inputs))
+
         old_result = result.copy()
 
         # Test problem with variable links
@@ -116,8 +115,7 @@ class PNNTestCase(BaseTestCase):
         self.assertInvalidVectorTrain(
             algorithms.PNN(verbose=False),
             np.array([1, 2, 3]),
-            np.array([1, 0, 1])
-        )
+            np.array([1, 0, 1]))
 
     def test_predict_different_inputs(self):
         pnnet = algorithms.PNN(verbose=False)
@@ -126,15 +124,15 @@ class PNNTestCase(BaseTestCase):
         target = np.array([[1, 0, 1]]).T
 
         pnnet.train(data, target)
-        self.assertInvalidVectorPred(pnnet, data.ravel(), target.ravel(),
-                                     decimal=2)
+        self.assertInvalidVectorPred(
+            pnnet, data.ravel(), target.ravel(), decimal=2)
 
     def test_pnn_mini_batches(self):
         dataset = datasets.load_digits()
         n_classes = len(np.unique(dataset.target))
+
         x_train, x_test, y_train, y_test = train_test_split(
-            dataset.data, dataset.target, train_size=0.7
-        )
+            dataset.data, dataset.target, train_size=0.7)
 
         pnnet = algorithms.PNN(verbose=False, batch_size=100)
         pnnet.train(x_train, y_train)

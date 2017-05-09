@@ -12,6 +12,7 @@ from neupy.exceptions import StopTraining
 
 from base import BaseTestCase
 from data import simple_classification
+from utils import catch_stdout
 
 
 class StorageTestCase(BaseTestCase):
@@ -132,10 +133,33 @@ class StorageTestCase(BaseTestCase):
 
             theano.config.floatX = 'float64'
             restored_bpnet = dill.load(temp)
+
             np.testing.assert_array_equal(
                 test_layer_weights,
-                restored_bpnet.layers[1].weight.get_value()
-            )
+                restored_bpnet.layers[1].weight.get_value())
+
+    def test_basic_storage(self):
+        pnn = algorithms.PNN(std=0.123, verbose=True)
+
+        stored_pnn = pickle.dumps(pnn)
+        loaded_pnn = pickle.loads(stored_pnn)
+
+        testcases = {
+            ('pnn', pnn),
+            ('loaded_pnn', loaded_pnn),
+        }
+
+        for name, network in testcases:
+            print("Test case name: {}".format(name))
+
+            self.assertAlmostEqual(network.std, 0.123)
+            self.assertAlmostEqual(network.verbose, True)
+
+            with catch_stdout() as out:
+                network.logs.stdout = out
+                network.logs.write("Test message")
+                terminal_output = out.getvalue()
+                self.assertIn("Test message", terminal_output)
 
 
 class LayerStorageTestCase(BaseTestCase):
