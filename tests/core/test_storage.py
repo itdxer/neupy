@@ -139,7 +139,11 @@ class StorageTestCase(BaseTestCase):
                 restored_bpnet.layers[1].weight.get_value())
 
     def test_basic_storage(self):
+        input_data = np.random.random((100, 2))
+        target_data = np.random.random(100) > 0.5
+
         pnn = algorithms.PNN(std=0.123, verbose=True)
+        pnn.train(input_data, target_data)
 
         stored_pnn = pickle.dumps(pnn)
         loaded_pnn = pickle.loads(stored_pnn)
@@ -160,6 +164,12 @@ class StorageTestCase(BaseTestCase):
                 network.logs.write("Test message")
                 terminal_output = out.getvalue()
                 self.assertIn("Test message", terminal_output)
+
+        pnn_prediction = pnn.predict(input_data)
+        loaded_pnn_prediction = loaded_pnn.predict(input_data)
+
+        np.testing.assert_array_almost_equal(
+            loaded_pnn_prediction, pnn_prediction)
 
 
 class LayerStorageTestCase(BaseTestCase):
