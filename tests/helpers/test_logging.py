@@ -99,9 +99,6 @@ class TerminalTestCase(BaseTestCase):
 
         terminal.is_color_supported = real_is_color_supported
 
-    def test_terminal_echo(self):
-        pass
-
 
 class NeuralNetworkLoggingTestCase(BaseTestCase):
     def test_nn_init_logging(self):
