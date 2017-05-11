@@ -1,3 +1,4 @@
+import pickle
 import inspect
 import logging
 import unittest
@@ -66,3 +67,13 @@ class BaseTestCase(unittest.TestCase):
             predicted_vector = network.predict(test_vector)
             np.testing.assert_array_almost_equal(predicted_vector, target,
                                                  decimal=decimal)
+
+    def assertPickledNetwork(self, network, input_data):
+        stored_network = pickle.dumps(network)
+        loaded_network = pickle.loads(stored_network)
+
+        network_prediction = network.predict(input_data)
+        loaded_network_prediction = loaded_network.predict(input_data)
+
+        np.testing.assert_array_almost_equal(
+            loaded_network_prediction, network_prediction)

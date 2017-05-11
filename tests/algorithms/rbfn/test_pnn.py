@@ -62,6 +62,7 @@ class PNNTestCase(BaseTestCase):
             avarage_result += sum(y_test == result)
 
         self.assertEqual(avarage_result / test_data_size, 14.4)
+        self.assertPickledNetwork(nw, x_test)
 
     def test_digit_prediction(self):
         dataset = datasets.load_digits()

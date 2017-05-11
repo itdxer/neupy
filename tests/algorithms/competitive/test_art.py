@@ -42,6 +42,8 @@ class ARTTestCase(BaseTestCase):
         for answer, result in zip([0, 1, 1], classes):
             self.assertEqual(result, answer)
 
+        self.assertPickledNetwork(ann, data)
+
     def test_art1_on_real_problem(self):
         data = pd.DataFrame(lenses)
 

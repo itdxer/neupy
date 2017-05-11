@@ -66,6 +66,7 @@ class GRNNTestCase(BaseTestCase):
         result = grnnet.predict(x_test)
 
         np.testing.assert_array_almost_equal(result, old_result)
+        self.assertPickledNetwork(grnnet, x_test)
 
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(

@@ -1,3 +1,5 @@
+import pickle
+
 import numpy as np
 
 from neupy import algorithms
@@ -58,9 +60,26 @@ class BAMTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             dbnet.predict(np.array([-1, 1]))
 
+    def test_discrete_bam_storage(self):
+        network = algorithms.DiscreteBAM(mode='sync')
+        network.train(self.data, self.hints)
+
+        stored_network = pickle.dumps(network)
+        loaded_network = pickle.loads(stored_network)
+
+        network_prediction = network.predict(self.data)
+        loaded_network_prediction = loaded_network.predict(self.data)
+
+        np.testing.assert_array_almost_equal(
+            loaded_network_prediction[0], network_prediction[0])
+
+        np.testing.assert_array_almost_equal(
+            loaded_network_prediction[1], network_prediction[1])
+
     def test_discrete_bam_sync(self):
         bamnet = algorithms.DiscreteBAM(mode='sync')
         bamnet.train(self.data, self.hints)
+
         data_before = self.data.copy()
         hints_before = self.hints.copy()
 

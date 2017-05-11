@@ -70,6 +70,8 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
         np.testing.assert_array_equal(data_before, data)
         np.testing.assert_array_equal(half_zero, half_zero_before)
 
+        self.assertPickledNetwork(dhnet, data)
+
     def test_discrete_hopfield_async(self):
         data = np.concatenate([zero, one, two], axis=0)
         data_before = data.copy()

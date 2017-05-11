@@ -46,8 +46,11 @@ class RBFKMeansTestCase(BaseTestCase):
 
         nw = algorithms.RBFKMeans(n_clusters=2, verbose=False)
         nw.train(data, epsilon=1e-5)
-        np.testing.assert_array_almost_equal(expected_centers, nw.centers,
-                                             decimal=3)
+
+        np.testing.assert_array_almost_equal(
+            expected_centers, nw.centers, decimal=3)
+
+        self.assertPickledNetwork(nw, data)
 
     def test_rbfk_train_different_inputs(self):
         self.assertInvalidVectorTrain(
