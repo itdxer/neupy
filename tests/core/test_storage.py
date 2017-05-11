@@ -148,10 +148,10 @@ class StorageTestCase(BaseTestCase):
         stored_pnn = pickle.dumps(pnn)
         loaded_pnn = pickle.loads(stored_pnn)
 
-        testcases = {
+        testcases = [
             ('pnn', pnn),
             ('loaded_pnn', loaded_pnn),
-        }
+        ]
 
         for name, network in testcases:
             print("Test case name: {}".format(name))

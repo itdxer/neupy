@@ -35,6 +35,8 @@ class CMACTestCase(BaseTestCase):
         np.testing.assert_array_equal(input_train, input_train_before)
         np.testing.assert_array_equal(target_train, target_train_before)
 
+        self.assertPickledNetwork(cmac, input_train)
+
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(
             network=algorithms.CMAC(),

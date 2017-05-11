@@ -29,8 +29,6 @@ class BaseSkeleton(ConfigurableABC, Verbose):
             property_ = option.value
             is_numpy_array = isinstance(value, np.ndarray)
 
-            # Options that have choices contains values that would
-            # be invalid after parameter initialization
             if hasattr(option.value, 'choices'):
                 choices = property_.choices
 

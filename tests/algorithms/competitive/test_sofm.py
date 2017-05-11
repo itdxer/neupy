@@ -555,6 +555,24 @@ class SOFMTestCase(BaseTestCase):
 
         self.assertLess(distance_bottom_right, distance_bottom_left)
 
+    def test_sofm_storage(self):
+        input_data = np.random.random((100, 10))
+        sofm = algorithms.SOFM(
+            n_inputs=10,
+            features_grid=(10, 10),
+            std=1,
+            step=0.5,
+            learning_radius=2,
+            weight=np.random.random((10, 100))
+        )
+
+        sofm.train(input_data, epochs=10)
+        self.assertPickledNetwork(sofm, input_data)
+
+        parameters = sofm.get_params()
+        self.assertIn('weight', parameters)
+        self.assertIsInstance(parameters['weight'], np.ndarray)
+
 
 class SOFMParameterReductionTestCase(BaseTestCase):
     def test_sofm_step_reduction(self):
@@ -574,7 +592,7 @@ class SOFMParameterReductionTestCase(BaseTestCase):
         dist_2 = np.linalg.norm(sofm_2.weight.T - input_data)
 
         # SOFM-2 suppose to be closer, becase learning rate decreases
-        # lower with bigger reduction factor
+        # slower with bigger reduction factor
         self.assertLess(dist_2, dist_1)
 
         sofm_3 = algorithms.SOFM(reduce_step_after=None, **default_params)

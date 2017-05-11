@@ -96,7 +96,8 @@ class LVQTestCase(BaseTestCase):
         lvqnet = algorithms.LVQ(n_inputs=2, n_classes=2)
         self.assertFalse(lvqnet.initialized)
 
-        lvqnet.train(np.random.random((10, 2)), np.random.random(10).round(),
+        lvqnet.train(np.random.random((10, 2)),
+                     np.random.random(10).round(),
                      epochs=1)
         self.assertTrue(lvqnet.initialized)
 
@@ -132,6 +133,8 @@ class LVQTestCase(BaseTestCase):
         np.testing.assert_array_equal(
             predicted_target,
             self.target[:, 0])
+
+        self.assertPickledNetwork(lvqnet, self.data)
 
     def test_lvq_step_reduction(self):
         lvqnet = algorithms.LVQ(

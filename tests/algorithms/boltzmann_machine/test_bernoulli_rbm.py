@@ -1,3 +1,5 @@
+import pickle
+
 import theano
 import numpy as np
 
@@ -57,6 +59,32 @@ class BernoulliRBMTestCase(BaseTestCase):
         incomplete_class2_sample = output[5]
         # Same as before but for class 1.
         self.assertGreater(typical_class2_sample, incomplete_class2_sample)
+
+    def test_rbm_storage(self):
+        data = self.data
+        network = algorithms.RBM(
+            n_visible=4,
+            n_hidden=1,
+            step=0.1,
+            batch_size=10)
+
+        network.train(data, epochs=500)
+
+        stored_network = pickle.dumps(network)
+        loaded_network = pickle.loads(stored_network)
+
+        network_hidden = network.visible_to_hidden(data)
+        loaded_network_hidden = loaded_network.visible_to_hidden(data)
+
+        np.testing.assert_array_almost_equal(
+            loaded_network_hidden, network_hidden)
+
+        network_visible = network.hidden_to_visible(network_hidden)
+        loaded_network_visible = loaded_network.hidden_to_visible(
+            loaded_network_hidden)
+
+        np.testing.assert_array_almost_equal(
+            loaded_network_visible, network_visible)
 
     def test_rbm_batch_size(self):
         data = self.data
