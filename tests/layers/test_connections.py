@@ -30,9 +30,10 @@ class ConnectionsTestCase(BaseTestCase):
             layers.Tanh(1) << layers.Relu(10) << layers.Input(2),
         )
 
-        for connection in possible_connections:
+        for i, connection in enumerate(possible_connections, start=1):
             network = algorithms.GradientDescent(connection)
-            self.assertEqual(len(network.layers), 3, msg=connection)
+            message = "[Test #{}] Connection: {}".format(i, connection)
+            self.assertEqual(len(network.layers), 3, msg=message)
 
     def test_connection_inside_connection_mlp(self):
         connection = layers.join(
@@ -306,7 +307,6 @@ class InlineConnectionsTestCase(BaseTestCase):
         self.assertIn(relu_2, connection_2.input_layers)
         self.assertIn(relu_2, connection_3.output_layers)
 
-    @unittest.skip("Bug has't been fixed yet")
     def test_inline_connection_order(self):
         input_layer_1 = layers.Input(1)
         relu_2 = layers.Relu(2)
@@ -342,6 +342,94 @@ class InlineConnectionsTestCase(BaseTestCase):
         expected_shapes = [1, 2, 3]
         for layer, expected_shape in zip(network, expected_shapes):
             self.assertEqual(layer.output_shape[0], expected_shape)
+
+    def test_repeated_inline_connections(self):
+        input_layer_1 = layers.Input(1)
+        input_layer_2 = layers.Input(1)
+        hidden_layer = layers.Relu(4)
+        output_layer = layers.Softmax(5)
+
+        connection_1 = input_layer_1 > hidden_layer > output_layer
+        connection_2 = input_layer_2 > hidden_layer > output_layer
+
+        self.assertListEqual(
+            list(connection_1),
+            [input_layer_1, hidden_layer, output_layer])
+
+        self.assertListEqual(
+            list(connection_2),
+            [input_layer_2, hidden_layer, output_layer])
+
+    def test_repeated_inline_connections_with_list(self):
+        input_layer_1 = layers.Input(1)
+        input_layer_2 = layers.Input(1)
+        hd1 = layers.Relu(4)
+        hd2 = layers.Sigmoid(4)
+        output_layer = layers.Softmax(5)
+
+        connection_1 = input_layer_1 > [hd1, hd2] > output_layer
+        connection_2 = input_layer_2 > [hd1, hd2] > output_layer
+
+        self.assertListEqual(
+            list(connection_1),
+            [input_layer_1, hd1, hd2, output_layer])
+
+        self.assertListEqual(
+            list(connection_2),
+            [input_layer_2, hd1, hd2, output_layer])
+
+    def test_repeated_reverse_inline_connection(self):
+        input_layer_1 = layers.Input(1)
+        input_layer_2 = layers.Input(1)
+        hidden_layer = layers.Relu(4)
+        output_layer = layers.Softmax(5)
+
+        connection_1 = output_layer < hidden_layer < input_layer_1
+        connection_2 = output_layer < hidden_layer < input_layer_2
+
+        self.assertListEqual(
+            list(connection_1),
+            [input_layer_1, hidden_layer, output_layer])
+
+        self.assertListEqual(
+            list(connection_2),
+            [input_layer_2, hidden_layer, output_layer])
+
+    def test_mixed_inline_connections_many_in_one_out(self):
+        input_layer_1 = layers.Input(1)
+        input_layer_2 = layers.Input(1)
+        output_layer = layers.Sigmoid(5)
+
+        connection = input_layer_1 > output_layer < input_layer_2
+
+        self.assertEqual(len(connection), 3)
+        self.assertEqual(connection.input_shape, [(1,), (1,)])
+        self.assertEqual(connection.output_shape, (5,))
+
+    def test_mixed_inline_connections_one_in_many_out(self):
+        input_layer = layers.Input(2)
+        output_layer_1 = layers.Sigmoid(10)
+        output_layer_2 = layers.Sigmoid(20)
+
+        connection = output_layer_1 < input_layer > output_layer_2
+
+        self.assertEqual(len(connection), 3)
+        self.assertEqual(connection.input_shape, (2,))
+        self.assertEqual(connection.output_shape, [(10,), (20,)])
+
+    @unittest.skip("Not working right now")
+    def test_mixed_inline_connections_many_in_many_out(self):
+        in1 = layers.Input(1)
+        in2 = layers.Input(1)
+        hd = layers.Relu(5)
+        out1 = layers.Sigmoid(10)
+        out2 = layers.Sigmoid(20)
+
+        connection = in1 > out1 < in2 > hd > out2
+
+        self.assertEqual(len(connection), 5)
+        self.assertEqual(connection.input_shape, [(1,), (1,)])
+        self.assertEqual(connection.output_shape, [(10,), (20,)])
 
 
 class ConnectionSecondaryFunctionsTestCase(BaseTestCase):
