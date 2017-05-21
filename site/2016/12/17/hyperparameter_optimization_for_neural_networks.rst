@@ -66,7 +66,6 @@ Let's compare some of the mentioned methods with previously random sampled data 
     :align: center
     :alt: Randomly generated 100 data points
 
-
 As we can see now sampled points spread out through the parameter space more uniformly. One disadvantage of these methods is that not all of them can provide you good results for the higher dimensions. For instance, Halton sequence and Hammersley set do not work well for dimension bigger than 10 [7]_.
 
 Even though we improved hyperparameter optimization algorithm it still is not suitable for large neural networks.

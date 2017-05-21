@@ -7,5 +7,6 @@ Training Algorithms
 
     algorithms/basics
     algorithms/constructible-architecture
+    algorithms/train-on-gpu
     algorithms/signals
     algorithms/sklearn-compatibility
