@@ -1,20 +1,11 @@
-import numpy as np
 import matplotlib.pyplot as plt
 from neupy import algorithms, environment
 
-from utils import plot_2d_grid
+from utils import plot_2d_grid, make_circle
 
 
 plt.style.use('ggplot')
 environment.reproducible()
-
-
-def make_circle():
-    data = np.random.random((10000, 2))
-    x, y = data[:, 0], data[:, 1]
-
-    distance_from_center = ((x - 0.5) ** 2 + (y - 0.5) ** 2)
-    return data[distance_from_center <= 0.5 ** 2]
 
 
 if __name__ == '__main__':
@@ -32,6 +23,10 @@ if __name__ == '__main__':
     }]
 
     data = make_circle()
+
+    red, blue = ('#E24A33', '#348ABD')
+    n_columns = len(configurations)
+
     plt.figure(figsize=(12, 5))
 
     for index, conf in enumerate(configurations, start=1):
@@ -53,9 +48,6 @@ if __name__ == '__main__':
             reduce_step_after=5,
         )
         sofm.train(data, epochs=40)
-
-        red, blue = ('#E24A33', '#348ABD')
-        n_columns = len(configurations)
 
         plt.subplot(1, n_columns, index)
 

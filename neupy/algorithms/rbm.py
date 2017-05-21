@@ -331,8 +331,7 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
 
             description='Hidden from visible batches',
             show_progressbar=True,
-            show_error_output=False,
-        )
+            show_error_output=False)
 
         return np.concatenate(outputs, axis=0)
 
@@ -358,8 +357,7 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
 
             description='Visible from hidden batches',
             show_progressbar=True,
-            show_error_output=False,
-        )
+            show_error_output=False)
 
         return np.concatenate(outputs, axis=0)
 
@@ -390,8 +388,7 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
         return average_batch_errors(
             errors,
             n_samples=len(input_data),
-            batch_size=self.batch_size,
-        )
+            batch_size=self.batch_size)
 
     def gibbs_sampling(self, visible_input, n_iter=1):
         """

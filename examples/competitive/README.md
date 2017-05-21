@@ -15,3 +15,7 @@
 ## Output from sofm_compare_grid_types.py
 
 ![](images/sofm-hexagon-vs-rectangular-grid.png)
+
+## Output from sofm_compare_weight_init.py
+
+![](images/compare-weight-init-methods.png)

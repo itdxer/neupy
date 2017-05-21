@@ -1,5 +1,6 @@
 from itertools import product
 
+import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -51,3 +52,24 @@ def plot_2d_grid(weights, ax=None, color='green', hexagon=False):
 
             neurons = weights[:, neurons_x_coords, neurons_y_coords]
             ax.plot(*neurons, color=color)
+
+
+def make_square():
+    return np.random.random((10000, 2))
+
+
+def make_circle():
+    data = make_square()
+    x, y = data[:, 0], data[:, 1]
+
+    distance_from_center = ((x - 0.5) ** 2 + (y - 0.5) ** 2)
+    return data[distance_from_center <= 0.5 ** 2]
+
+
+def make_elipse(corr=0.8):
+    projection = np.array([
+        [corr, 1 - corr],
+        [1 - corr, corr]])
+
+    data = make_circle()
+    return data.dot(projection)
