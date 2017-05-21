@@ -5,7 +5,8 @@ Old versions
 
     <h3>Version 0.5</h3>
 
-    <li>0.5.1 (March 2017) - <a href="/index.html">documentation [html]</a></li>
+    <li>0.5.2 (May 2017) - <a href="/index.html">documentation [html]</a></li>
+    <li>0.5.1 (March 2017) - <a href="/versions/docs-neupy-v0.5.1.tar.gz">documentation [html]</a></li>
     <li>0.5.0 (February 2017) - <a href="/versions/docs-neupy-v0.5.0.tar.gz">documentation [gzip]</a></li>
 
     <h3>Version 0.4</h3>
