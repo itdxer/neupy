@@ -9,6 +9,7 @@ from neupy.layers.utils import preformat_layer_shape, create_input_variable
 from neupy.utils import as_tuple
 from .utils import join, is_sequential
 from .graph import LayerGraph
+from .inline import InlineConnection
 
 
 __all__ = ('LayerConnection', 'BaseConnection', 'ParallelConnection')
@@ -69,51 +70,7 @@ def clean_layer_references(graph, layer_references):
     return layers
 
 
-class GlobalConnectionState(dict):
-    def key_to_id(self, key):
-        return "[{}] {!r}".format(id(key), key)
-
-    def __setitem__(self, key, value):
-        key_id = self.key_to_id(key)
-        return super(GlobalConnectionState, self).__setitem__(key_id, value)
-
-    def __getitem__(self, key):
-        key_id = self.key_to_id(key)
-        return super(GlobalConnectionState, self).__getitem__(key_id)
-
-    def __contains__(self, key):
-        key_id = self.key_to_id(key)
-        return super(GlobalConnectionState, self).__contains__(key_id)
-
-
-class InlineConnectionTracker(GlobalConnectionState):
-    def __getitem__(self, key):
-        if key not in self:
-            self[key] = []
-        return super(InlineConnectionTracker, self).__getitem__(key)
-
-    def add(self, key, event):
-        self[key].append(event)
-
-    def activate_on(self, key, events):
-        n_events = len(events)
-        last_n_events = self[key][-n_events:]
-        return last_n_events == events
-
-    def is_left_inline(self, key):
-        return self.activate_on(key, ['right', 'bool', 'left'])
-
-    def is_right_inline(self, key):
-        return self.activate_on(key, ['left', 'bool', 'right'])
-
-    def is_right_to_left_inline(self, key):
-        return self.activate_on(key, ['right', 'bool', 'right'])
-
-    def is_left_to_right_inline(self, key):
-        return self.activate_on(key, ['left', 'bool', 'left'])
-
-
-class BaseConnection(object):
+class BaseConnection(InlineConnection):
     """
     Base class from chain connections.
 
@@ -132,10 +89,6 @@ class BaseConnection(object):
     output_layers : list of layers
         List of connection's output layers.
     """
-    left_states = GlobalConnectionState()
-    right_states = GlobalConnectionState()
-    events = InlineConnectionTracker()
-
     def __init__(self):
         self.training_state = True
         self.look_inside = 0
@@ -144,74 +97,20 @@ class BaseConnection(object):
         self.input_layers = [self]
         self.output_layers = [self]
 
-    @classmethod
-    def connect(cls, left, right):
+    def connect(self, left, right):
         """
         Make connection between two objects.
         """
-        main_left, main_right = left, right
-
-        look_inside = 0
-        if cls.events.is_left_inline(left):
-            left = cls.right_states[left]
-
-        if cls.events.is_left_to_right_inline(left):
-            previous_state = cls.left_states[left]
-            right = [previous_state.right, right]
-            look_inside = 2
-
-        if cls.events.is_right_to_left_inline(right):
-            previous_state = cls.right_states[right]
-            left = [previous_state.left, left]
-            look_inside = 1
-
-        if cls.events.is_right_inline(right):
-            right = cls.left_states[right]
-
-        connection = LayerConnection(left, right)
-        connection.look_inside = look_inside
-
-        cls.left_states[main_left] = connection
-        cls.right_states[main_right] = connection
-
-        return connection
-
-    def __gt__(self, other):
-        cls = self.__class__
-        cls.events.add(self, 'left')
-        cls.events.add(other, 'right')
-        return cls.connect(self, other)
-
-    def __lt__(self, other):
-        cls = self.__class__
-        cls.events.add(self, 'right')
-        cls.events.add(other, 'left')
-        return cls.connect(other, self)
+        return LayerConnection(left, right)
 
     def __rshift__(self, other):
-        return self.__class__.connect(self, other)
+        return super(BaseConnection, self).__gt__(other)
 
     def __lshift__(self, other):
-        return self.__class__.connect(other, self)
+        return super(BaseConnection, self).__lt__(other)
 
     def __iter__(self):
         yield self
-
-    def __nonzero__(self):
-        return self.__bool__()
-
-    def __bool__(self):
-        left_raw = self.left_raw
-        if self.look_inside == 1:
-            left_raw = left_raw[1]
-
-        right_raw = self.right_raw
-        if self.look_inside == 2:
-            right_raw = right_raw[1]
-
-        self.events.add(left_raw, 'bool')
-        self.events.add(right_raw, 'bool')
-        return True
 
     def output(self, input_value):
         """
@@ -483,7 +382,7 @@ class LayerConnection(BaseConnection):
         Graph that stores relations between layer
         in the network.
     """
-    def __init__(self, left, right, ):
+    def __init__(self, left, right):
         super(LayerConnection, self).__init__()
 
         self.left_raw = left

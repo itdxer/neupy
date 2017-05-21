@@ -16,6 +16,10 @@ def svd_flip(u, v):
         `sklearn.utils.extmath.randomized_svd`, with matching inner
         dimensions so one can compute `np.dot(u * s, v)`.
 
+    Notes
+    -----
+    scikit-learn implementation
+
     Returns
     -------
     u_adjusted, v_adjusted : arrays with the same dimensions
@@ -31,7 +35,8 @@ def svd_flip(u, v):
 
 
 def randomized_range_finder(A, size, n_iter):
-    """Computes an orthonormal matrix whose range
+    """
+    Computes an orthonormal matrix whose range
     approximates the range of A.
 
     Parameters
@@ -72,7 +77,7 @@ def randomized_range_finder(A, size, n_iter):
 
 def randomized_svd(M, n_components, n_oversamples=10):
     """
-    Computes a truncated randomized SVD
+    Computes a truncated randomized SVD.
 
     Parameters
     ----------
@@ -114,7 +119,8 @@ def randomized_svd(M, n_components, n_oversamples=10):
 
 def randomized_pca(data, n_componets):
     """
-    Randomized PCA based on the scikit-learn implementation.
+    Randomized PCA based on the scikit-learn
+    implementation.
 
     Parameters
     ----------

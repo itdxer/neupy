@@ -486,7 +486,7 @@ class SOFM(Kohonen):
         std = self.std
 
         if self.reduce_radius_after is not None:
-            learning_radius -= (self.last_epoch // self.reduce_radius_after)
+            learning_radius -= self.last_epoch // self.reduce_radius_after
             learning_radius = max(0, learning_radius)
 
         if self.reduce_step_after is not None:
