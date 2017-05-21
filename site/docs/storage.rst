@@ -113,3 +113,25 @@ And then you can load it from the ``network-storage.dill`` file and try to repro
 
 The interface for ``dill`` library is the same as for ``pickle``, so functions
 like ``dumps`` or ``loads`` are available.
+
+Save and load networks with fixed architectures
+-----------------------------------------------
+
+For the neural networks with fixed architecures it's possible to save and load your algorithms using ``pickle`` library.
+
+.. code-block:: python
+
+    import pickle
+    from neupy import algorithms
+
+    # Initialize and train SOFM network
+    sofm = algorithms.SOFM(n_inputs=2, n_outputs=4)
+    sofm.train(data)
+
+    # Save pre-trained SOFM network
+    with open('/path/to/sofm.pickle', 'wb') as f:
+        pickle.dump(sofm, f)
+
+    # Load SOFM network from the pickled file
+    with open('/path/to/sofm.pickle', 'rb') as f:
+        loaded_sofm = pickle.load(f)
