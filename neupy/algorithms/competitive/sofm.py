@@ -258,7 +258,7 @@ class SOFM(Kohonen):
         - ``hexagon`` - Connections between neurons will be organized
           in hexagonal grid. It works only for 1d or 2d grids.
 
-        Defaults to `rect`.
+        Defaults to ``rect``.
 
     distance : {{``euclid``, ``dot_product``, ``cos``}}
         Defines function that will be used to compute
