@@ -6,14 +6,10 @@ from neupy.algorithms import PNN
 
 
 dataset = datasets.load_iris()
-data = dataset.data
-target = dataset.target
-
-test_data_size = 10
-skfold = StratifiedKFold(n_splits=test_data_size)
-avarage_result = 0
+data, target = dataset.data, dataset.target
 
 print("> Start classify iris dataset")
+skfold = StratifiedKFold(n_splits=10)
 
 for i, (train, test) in enumerate(skfold.split(data, target), start=1):
     x_train, x_test = data[train], data[test]
@@ -23,6 +19,8 @@ for i, (train, test) in enumerate(skfold.split(data, target), start=1):
     pnn_network.train(x_train, y_train)
     result = pnn_network.predict(x_test)
 
+    n_predicted_correctly = np.sum(result == y_test)
+    n_test_samples = test.size
+
     print("Test #{:<2}: Guessed {} out of {}".format(
-        i, np.sum(result == y_test), test.size
-    ))
+        i, n_predicted_correctly, n_test_samples))

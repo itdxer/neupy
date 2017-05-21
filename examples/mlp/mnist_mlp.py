@@ -31,12 +31,21 @@ network = algorithms.Momentum(
         layers.Softmax(10),
     ],
 
+    # Using categorical cross-entropy as a loss function
     error='categorical_crossentropy',
+
+    # Learning rate
     step=0.01,
+
+    # Shows information about algorithm and
+    # training progress in terminal
     verbose=True,
+
+    # Randomly shuffles training dataset before every epoch
     shuffle_data=True,
 
     momentum=0.99,
+    # Activates Nesterov momentum
     nesterov=True,
 )
 network.architecture()
