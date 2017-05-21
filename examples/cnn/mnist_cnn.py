@@ -52,17 +52,37 @@ network = algorithms.Adadelta(
         layers.Softmax(10),
     ],
 
+    # Using categorical cross-entropy as a loss function
     error='categorical_crossentropy',
+
+    # Min-batch size
+    batch_size=128,
+
+    # Learning rate. We can allow high values
+    # since we are using Batch Normalization
     step=1.0,
+
+    # Shows information about algorithm and
+    # training progress in terminal
     verbose=True,
+
+    # Randomly shuffles training dataset before every epoch
     shuffle_data=True,
 
-    reduction_freq=8,
+    # Step decay algorithm minimizes learning step
+    # monotonically after each iteration.
     addons=[algorithms.StepDecay],
+    # Parameter controls step redution frequency. The higher
+    # the value the slower step parameter decreases.
+    reduction_freq=8,
 )
+
+# Shows networks architecture in terminal's output
 network.architecture()
 
 x_train, x_test, y_train, y_test = load_data()
+
+# Train for only two epochs
 network.train(x_train, y_train, x_test, y_test, epochs=2)
 
 y_predicted = network.predict(x_test).argmax(axis=1)
