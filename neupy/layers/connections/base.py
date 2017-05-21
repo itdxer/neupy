@@ -197,6 +197,9 @@ class BaseConnection(object):
     def __iter__(self):
         yield self
 
+    def __nonzero__(self):
+        return self.__bool__()
+
     def __bool__(self):
         left_raw = self.left_raw
         if self.look_inside == 1:
