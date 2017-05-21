@@ -13,6 +13,7 @@ from neupy.algorithms.associative.base import BaseAssociative
 from neupy.core.properties import (BaseProperty, TypedListProperty,
                                    ChoiceProperty, NumberProperty,
                                    ParameterProperty, IntProperty)
+from .randomized_pca import randomized_pca
 from .neighbours import (find_step_scaler_on_rect_grid,
                          find_neighbours_on_rect_grid,
                          find_neighbours_on_hexagon_grid,
@@ -103,7 +104,7 @@ class SOFMWeightParameter(ChoiceProperty):
         return choice_key
 
 
-def sample_data(data, n_outputs):
+def sample_data(data, features_grid):
     """
     Samples from the data number of rows specified in
     the ``n_outputs`` argument. In case if ``n_outputs > n_samples``
@@ -121,6 +122,7 @@ def sample_data(data, n_outputs):
     -------
     matrix ``(n_features, n_outputs)``
     """
+    n_outputs = np.prod(features_grid)
     n_samples, n_features = data.shape
 
     with_replacement = n_samples < n_outputs
@@ -130,8 +132,46 @@ def sample_data(data, n_outputs):
     return data[indeces].T
 
 
-def linear_initialization(data, n_outputs):
-    n_samples, n_features = data.shape
+def linear_initialization(data, features_grid):
+    """
+    Linear weight initialization base on the randomized PCA.
+
+    Parameters
+    ----------
+    data : 2d array-like
+
+    features_grid : tuple
+        Tuple that defines shape of the feature grid.
+
+    Returns
+    -------
+    2d array-like
+        Initialized weights
+    """
+    cols = features_grid[1]
+    n_nodes = np.prod(features_grid)
+
+    n_pca_components = 2
+    coord = np.zeros((n_nodes, n_pca_components))
+
+    for i in range(n_nodes):
+        coord[i, 0] = int(i / cols)
+        coord[i, 1] = int(i % cols)
+
+    maximum = np.max(coord, axis=0)
+    coord = 2 * (coord / maximum - 0.5)
+
+    data_mean = np.mean(data, axis=0)
+    data_std = np.std(data, axis=0)
+    data = (data - data_mean) / data_std
+
+    eigenvectors, eigenvalues = randomized_pca(data, n_pca_components)
+
+    norms = np.sqrt(np.einsum('ij,ij->i', eigenvectors, eigenvectors))
+    eigenvectors = ((eigenvectors.T / norms) * eigenvalues).T
+    weight = data_mean + coord.dot(eigenvectors) * data_std
+
+    return weight.T
 
 
 class SOFM(Kohonen):
@@ -410,10 +450,19 @@ class SOFM(Kohonen):
                                 len(self.features_grid),
                                 self.features_grid))
 
+        is_pca_init = (
+            isinstance(options.get('weight'), six.string_types) and
+            options.get('weight') == 'init_pca')
+
         self.initialized = False
         if not callable(self.weight):
             self.init_layers()
             self.initialized = True
+
+        elif is_pca_init and self.grid_type.name != 'rectangle':
+            raise ValueError("Cannot apply PCA weight initialization "
+                             "for non-rectangular grid. Grid type: {}"
+                             "".format(self.grid_type.name))
 
     def predict_raw(self, input_data):
         input_data = self.format_input_data(input_data)
@@ -470,7 +519,9 @@ class SOFM(Kohonen):
     def train(self, input_train, summary='table', epochs=100):
         if not self.initialized:
             weight_initializer = self.weight
-            self.weight = weight_initializer(input_train, self.n_outputs)
+            self.weight = weight_initializer(input_train, self.features_grid)
             self.initialized = True
 
-        super(SOFM, self).train(input_train, summary=summary, epochs=epochs)
+        if epochs > 0:
+            super(SOFM, self).train(
+                input_train, summary=summary, epochs=epochs)

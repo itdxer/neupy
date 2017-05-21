@@ -713,13 +713,22 @@ class SOFMParameterReductionTestCase(BaseTestCase):
 
 
 class SOFMWeightInitializationTestCase(BaseTestCase):
+    def test_sofm_weight_init_exceptions(self):
+        with self.assertRaisesRegexp(ValueError, "Cannot apply PCA"):
+            algorithms.SOFM(
+                n_inputs=4,
+                n_outputs=7,
+                weight='init_pca',
+                grid_type='hexagon'
+            )
+
     def test_sample_data_function(self):
         input_data = np.random.random((10, 4))
-        sampled_weights = sofm.sample_data(input_data, n_outputs=7)
+        sampled_weights = sofm.sample_data(input_data, features_grid=(7, 1))
         self.assertEqual(sampled_weights.shape, (4, 7))
 
         input_data = np.random.random((3, 4))
-        sampled_weights = sofm.sample_data(input_data, n_outputs=7)
+        sampled_weights = sofm.sample_data(input_data, features_grid=(7, 1))
         self.assertEqual(sampled_weights.shape, (4, 7))
 
     def test_sample_data_weight_init_in_sofm(self):
@@ -732,6 +741,38 @@ class SOFMWeightInitializationTestCase(BaseTestCase):
         input_data = np.random.random((10, 4))
         self.assertTrue(callable(sofm.weight))
 
-        sofm.train(input_data, epochs=1)
+        sofm.train(input_data, epochs=0)
         self.assertFalse(callable(sofm.weight))
         self.assertEqual(sofm.weight.shape, (4, 7))
+
+    def test_linear_weight_init_in_sofm(self):
+        sofm = algorithms.SOFM(
+            n_inputs=4,
+            features_grid=(3, 3),
+            weight='init_pca',
+        )
+
+        input_data = np.random.random((100, 4))
+        self.assertTrue(callable(sofm.weight))
+
+        sofm.train(input_data, epochs=0)
+        self.assertFalse(callable(sofm.weight))
+        self.assertEqual(sofm.weight.shape, (4, 9))
+
+        for row in (0, 3, 6):
+            left = sofm.weight[:, row]
+            center = sofm.weight[:, row + 1]
+            right = sofm.weight[:, row + 2]
+
+            self.assertLess(
+                np.linalg.norm((left - center) ** 2),
+                np.linalg.norm((left - right) ** 2))
+
+        for i in range(3):
+            top = sofm.weight[:, i]
+            center = sofm.weight[:, i + 3]
+            bottom = sofm.weight[:, i + 6]
+
+            self.assertLess(
+                np.linalg.norm((top - center) ** 2),
+                np.linalg.norm((top - bottom) ** 2))
