@@ -247,15 +247,15 @@ class SOFM(Kohonen):
 
         Defaults to ``(n_outputs, 1)``.
 
-    grid_type : {{`rect`, `hexagon`}}
+    grid_type : {{``rect``, ``hexagon``}}
         Defines connection type in feature grid. Type defines
         which neurons we will consider as closest to the winning
         neuron during the training.
 
-        - `rect` - Connections between neurons will be organized
+        - ``rect`` - Connections between neurons will be organized
           in hexagonal grid.
 
-        - `hexagon` - Connections between neurons will be organized
+        - ``hexagon`` - Connections between neurons will be organized
           in hexagonal grid. It works only for 1d or 2d grids.
 
         Defaults to `rect`.
