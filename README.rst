@@ -135,7 +135,7 @@ Dependencies
 ------------
 
 * Python 2.7, 3.4, 3.5, 3.6
-* Theano == 0.8.2
+* Theano == 0.9.0
 * NumPy >= 1.9.0
 * SciPy >= 0.19.0
 * Matplotlib >= 1.4.0
