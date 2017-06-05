@@ -16,6 +16,14 @@ Code Examples
 
 NeuPy is very intuitive and it's easy to read and understand the code. To learn more about different Neural Network types you can check these code examples.
 
+Jupyter Notebooks
+-----------------
+
+* `Hyperparameter optimization for Neural Networks <https://github.com/itdxer/neupy/blob/master/notebooks/Hyperparameter%20optimization%20for%20Neural%20Networks.ipynb>`_
+* `Playing with MLP visualizations <https://github.com/itdxer/neupy/blob/master/notebooks/Playing%20with%20MLP%20visualizations.ipynb>`_
+* `Visualizing CNN based on Pre-trained VGG19 <https://github.com/itdxer/neupy/blob/master/notebooks/Visualizing%20CNN%20based%20on%20Pre-trained%20VGG19.ipynb>`_
+* `Looking inside of the VGG19 using SOFM  <https://github.com/itdxer/neupy/blob/master/notebooks/Looking%20inside%20of%20the%20VGG19%20using%20SOFM.ipynb>`_
+
 Convolutional Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
