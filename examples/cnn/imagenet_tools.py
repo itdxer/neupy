@@ -30,23 +30,21 @@ def download_file(url, filepath, description=''):
 
 
 def load_image(image_name, image_size=None, crop_size=None, use_bgr=True):
-    image = imread(image_name)
+    image = imread(image_name, mode='RGB')
 
     if image_size is not None:
         image = imresize(image, image_size)
 
     if crop_size is not None:
-        image = image[
-            slice(
-                (image_size[0] - crop_size[0]) // 2,
-                (image_size[0] + crop_size[0]) // 2,
-            ),
-            slice(
-                (image_size[1] - crop_size[1]) // 2,
-                (image_size[1] + crop_size[1]) // 2,
-            ),
-            :,
-        ]
+        height_slice = slice(
+            (image_size[0] - crop_size[0]) // 2,
+            (image_size[0] + crop_size[0]) // 2)
+
+        width_slice = slice(
+            (image_size[1] - crop_size[1]) // 2,
+            (image_size[1] + crop_size[1]) // 2)
+
+        image = image[height_slice, width_slice, :]
 
     if use_bgr:
         # RGB -> BGR
@@ -65,6 +63,19 @@ def load_image(image_name, image_size=None, crop_size=None, use_bgr=True):
     image = np.expand_dims(image, axis=0)
 
     return image
+
+
+def deprocess(image):
+    image = image.copy()
+    image = image.transpose((1, 2, 0))
+
+    image[:, :, 0] += 123.68
+    image[:, :, 1] += 116.779
+    image[:, :, 2] += 103.939
+
+    image[:, :, (0, 1, 2)] = image[:, :, (2, 1, 0)]
+
+    return image.astype(np.int8)
 
 
 def top_n(probs, n=5):
