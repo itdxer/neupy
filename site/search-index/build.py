@@ -5,12 +5,12 @@ import pickle
 import logging
 import argparse
 from textwrap import dedent
-from urllib.parse import urljoin, urlparse
 from collections import defaultdict, namedtuple
 
 import nltk
 import numpy as np
 import scipy.sparse as sp
+from six.moves.urllib.parse import urljoin, urlparse
 
 from pagerank import pagerank
 from webgraph import WebPageGraph, Link

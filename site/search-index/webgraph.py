@@ -1,10 +1,10 @@
 import pprint
 from collections import OrderedDict, namedtuple
-from urllib.parse import urlparse
 
 import six
 import numpy as np
 import scipy.sparse as sp
+from six.moves.urllib.parse import urlparse
 
 from pagerank import pagerank
 
