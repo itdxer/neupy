@@ -532,7 +532,7 @@ class SOFMTestCase(BaseTestCase):
             learning_radius=1,
             reduce_radius_after=4,
             features_grid=(3, 3),
-            verbose=True,
+            verbose=False,
             grid_type='hexagon',
         )
         sofm.train(data, epochs=10)

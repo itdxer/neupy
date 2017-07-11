@@ -1,8 +1,8 @@
 import os
 from collections import namedtuple
-from urllib.parse import urlparse, urljoin
 
 from bs4 import BeautifulSoup
+from six.moves.urllib.parse import urljoin, urlparse
 
 from webgraph import Link
 
