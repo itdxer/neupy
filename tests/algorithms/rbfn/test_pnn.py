@@ -162,7 +162,7 @@ class PNNTestCase(BaseTestCase):
         y_predicted = pnn.predict(x)
 
         np.testing.assert_array_almost_equal(y, y_predicted)
-        self.assertItemsEqual(pnn.classes, [1, 2, 3])
+        self.assertEqual(sorted(pnn.classes), [1, 2, 3])
 
     def test_pnn_non_trivial_class_names_as_strings(self):
         # Issue #177: https://github.com/itdxer/neupy/issues/177
@@ -174,4 +174,4 @@ class PNNTestCase(BaseTestCase):
         y_predicted = pnn.predict(x)
 
         np.testing.assert_array_equal(y, y_predicted)
-        self.assertItemsEqual(pnn.classes, ['cat', 'dog', 'horse'])
+        self.assertEqual(sorted(pnn.classes), ['cat', 'dog', 'horse'])
