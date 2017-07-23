@@ -77,7 +77,7 @@ class UtilsTestCase(BaseTestCase):
         # Sparse data
         sparse_matrix = csr_matrix((3, 4), dtype=np.int8)
         formated_sparce_matrix = format_data(sparse_matrix)
-        np.testing.assert_array_equal(formated_sparce_matrix, sparse_matrix)
+        self.assertIs(formated_sparce_matrix, sparse_matrix)
         self.assertEqual(formated_sparce_matrix.dtype, sparse_matrix.dtype)
 
         # Vector input
