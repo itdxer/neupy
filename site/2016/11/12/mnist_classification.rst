@@ -185,5 +185,5 @@ The 98.37% accuracy is pretty good for such a quick solution. Additional modific
 
 .. author:: default
 .. categories:: none
-.. tags:: classification, tutorials, supervised, backpropagation
+.. tags:: classification, tutorials, supervised, backpropagation, image recognition, deep learning
 .. comments::

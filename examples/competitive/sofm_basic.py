@@ -21,8 +21,8 @@ sofmnet = algorithms.SOFM(
     n_inputs=2,
     n_outputs=3,
 
-    step=0.1,
-    show_epoch=100,
+    step=0.5,
+    show_epoch=20,
     shuffle_data=True,
     verbose=True,
 
