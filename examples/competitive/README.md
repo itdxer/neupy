@@ -1,21 +1,49 @@
 # Examples of competitive neural networks
 
-## Output from sofm_digits.py
+## Visualizing MNIST dataset
+
+```bash
+$ python sofm_digits.py
+```
 
 ![](images/sofm-digits.png)
 
-## Output from sofm_heatmap_visualization.py
+## Visualizing high-dimensional datasets
+
+```bash
+$ python sofm_heatmap_visualization.py
+```
 
 ![](images/sofm-heatmap.png)
 
-## Output from sofm_moon_topology.py
+## Learning topology of the moon shaped cluster
+
+```bash
+$ python sofm_moon_topology.py
+```
 
 ![](images/sofm-moon-topology.png)
 
-## Output from sofm_compare_grid_types.py
+## Compare different SOFM's grid types
+
+```bash
+$ python sofm_compare_grid_types.py
+```
 
 ![](images/sofm-hexagon-vs-rectangular-grid.png)
 
-## Output from sofm_compare_weight_init.py
+## Compare different SOFM's weight initializations
+
+```bash
+$ python sofm_compare_weight_init.py
+```
 
 ![](images/compare-weight-init-methods.png)
+
+## Cluster iris dataset using SOFM
+
+```bash
+$ python sofm_iris_clustering.py
+```
+
+![](images/sofm-iris-clustering.png)

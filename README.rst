@@ -68,6 +68,9 @@ Examples
 Convolutional Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Image classification
+++++++++++++++++++++
+
 * `MNIST CNN <https://github.com/itdxer/neupy/tree/master/examples/cnn/mnist_cnn.py>`_
 * `CIFAR10 CNN <https://github.com/itdxer/neupy/tree/master/examples/cnn/cifar10_cnn.py>`_
 * `Pre-trained AlexNet CNN <https://github.com/itdxer/neupy/tree/master/examples/cnn/alexnet.py>`_
@@ -107,22 +110,57 @@ Boltzmann Machine
 MLP Neural Networks
 ~~~~~~~~~~~~~~~~~~~
 
+Regression
+++++++++++
+
+* `Boston House Price prediction, Hessian algorithm <https://github.com/itdxer/neupy/tree/master/examples/mlp/boston_price_prediction.py>`_
+
+Image classification
+++++++++++++++++++++
+
 * `MNIST, Multilayer perceptron <https://github.com/itdxer/neupy/tree/master/examples/mlp/mnist_mlp.py>`_
 * `Rectangle images, Multilayer perceptron <https://github.com/itdxer/neupy/tree/master/examples/mlp/rectangles_mlp.py>`_
-* `Boston House Price prediction, Hessian algorithm <https://github.com/itdxer/neupy/tree/master/examples/mlp/boston_price_prediction.py>`_
+
+Visualizations
+++++++++++++++
+
 * `Learning Algorithms Visualization, Gradient Descent, Momentum, RPROP and Conjugate Gradient <https://github.com/itdxer/neupy/tree/master/examples/mlp/gd_algorithms_visualization.py>`_
+
+Classification
+++++++++++++++
+
 * `IMDB review classification using CBOW and RPROP MLP <https://github.com/itdxer/neupy/tree/master/examples/mlp/imdb_review_classification>`_
 * `MLP with categorical and numerical features <https://github.com/itdxer/neupy/tree/master/examples/mlp/mix_categorical_numerical_inputs.py>`_
 
 Competitive Neural Networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+SOFM Clustering
++++++++++++++++
+
 * `Simple SOFM example <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_basic.py>`_
+* `Clustering iris dataset using SOFM <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_iris_clustering.py>`_
+
+SOFM Data topology learning
++++++++++++++++++++++++++++
+
 * `Learning half-circle topology with SOFM <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_moon_topology.py>`_
+
+Explore SOFM features
++++++++++++++++++++++
+
 * `Compare feature grid types for SOFM <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_compare_grid_types.py>`_
 * `Compare weight initialization methods for SOFM <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_compare_weight_init.py>`_
+
+SOFM Visualizations
++++++++++++++++++++
+
 * `Visualize digit images in 2D space with SOFM <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_digits.py>`_
 * `Embedding 30-dimensional dataset into 2D and building heatmap visualization for SOFM <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_heatmap_visualization.py>`_
+
+LVQ
++++
+
 * `Reduce number of training samples in iris dataset with LVQ3 <https://github.com/itdxer/neupy/tree/master/examples/competitive/reduce_iris_sample_size_lvq.py>`_
 
 Neural Networks with Radial Basis Functions

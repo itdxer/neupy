@@ -1,3 +1,5 @@
+import argparse
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets, preprocessing
@@ -8,6 +10,9 @@ from utils import iter_neighbours
 
 plt.style.use('ggplot')
 environment.reproducible()
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--expanded-heatmap', action='store_true')
 
 class_parameters = [
     dict(
@@ -54,9 +59,31 @@ def compute_heatmap(weight):
     return heatmap
 
 
+def compute_heatmap_expanded(weight):
+    heatmap = np.zeros((2 * GRID_HEIGHT - 1, 2 * GRID_WIDTH - 1))
+    for (neuron_x, neuron_y), neighbours in iter_neighbours(weight):
+        total_distance = 0
+
+        for (neigbour_x, neigbour_y) in neighbours:
+            neuron_vec = weight[:, neuron_x, neuron_y]
+            neigbour_vec = weight[:, neigbour_x, neigbour_y]
+
+            distance = np.linalg.norm(neuron_vec - neigbour_vec)
+
+            if neuron_x == neigbour_x and (neigbour_y - neuron_y) == 1:
+                heatmap[2 * neuron_x, 2 * neuron_y + 1] = distance
+
+            elif (neigbour_x - neuron_x) == 1 and neigbour_y == neuron_y:
+                heatmap[2 * neuron_x + 1, 2 * neuron_y] = distance
+
+    return heatmap
+
+
 if __name__ == '__main__':
-    GRID_HEIGHT = 15
-    GRID_WIDTH = 15
+    args = parser.parse_args()
+
+    GRID_HEIGHT = 20
+    GRID_WIDTH = 20
 
     sofm = algorithms.SOFM(
         n_inputs=30,
@@ -76,14 +103,25 @@ if __name__ == '__main__':
     sofm.train(data, epochs=300)
     clusters = sofm.predict(data).argmax(axis=1)
 
-    plt.figure(figsize=(10, 10))
+    plt.figure(figsize=(13, 13))
+    plt.title("Embedded 30-dimensional dataset using SOFM")
 
     for actual_class, cluster_index in zip(target, clusters):
-        cluster_coords = divmod(cluster_index, GRID_HEIGHT)
-        plt.plot(*cluster_coords, **class_parameters[actual_class])
+        cluster_x, cluster_y = divmod(cluster_index, GRID_HEIGHT)
+        parameters = class_parameters[actual_class]
+
+        if args.expanded_heatmap:
+            plt.plot(2 * cluster_x, 2 * cluster_y, **parameters)
+        else:
+            plt.plot(cluster_x, cluster_y, **parameters)
 
     weight = sofm.weight.reshape((sofm.n_inputs, GRID_HEIGHT, GRID_WIDTH))
-    heatmap = compute_heatmap(weight)
+
+    if args.expanded_heatmap:
+        heatmap = compute_heatmap_expanded(weight)
+    else:
+        heatmap = compute_heatmap(weight)
+
     plt.imshow(heatmap, cmap='Greys_r', interpolation='nearest')
 
     plt.axis('off')
