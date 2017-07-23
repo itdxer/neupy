@@ -111,7 +111,7 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
             In case if something is wrong with input data.
         """
         input_train = format_data(input_train, copy=copy)
-        target_train = format_data(target_train, copy=copy)
+        target_train = format_data(target_train, copy=copy, make_float=False)
 
         LazyLearningMixin.train(self, input_train, target_train)
 
@@ -124,13 +124,13 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
         n_classes = classes.size
         n_samples = input_train.shape[0]
 
-        row_comb_matrix = self.row_comb_matrix = np.zeros(
-            (n_classes, n_samples)
-        )
         class_ratios = self.class_ratios = np.zeros(n_classes)
+        row_comb_matrix = self.row_comb_matrix = np.zeros(
+            (n_classes, n_samples))
 
         for i, class_name in enumerate(classes):
-            class_val_positions = (target_train == i)
+            class_name = classes[i]
+            class_val_positions = (target_train == class_name)
             row_comb_matrix[i, class_val_positions.ravel()] = 1
             class_ratios[i] = np.sum(class_val_positions)
 
