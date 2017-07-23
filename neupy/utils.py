@@ -15,7 +15,7 @@ __all__ = ('format_data', 'asfloat', 'AttributeKeyDict', 'preformat_value',
 number_type = (int, float, np.floating, np.integer)
 
 
-def format_data(data, is_feature1d=True, copy=False):
+def format_data(data, is_feature1d=True, copy=False, make_float=True):
     """
     Transform data in a standardized format.
 
@@ -37,6 +37,10 @@ def format_data(data, is_feature1d=True, copy=False):
     copy : bool
         Defaults to ``False``.
 
+    make_float : bool
+        If `True` then input will be converted to float.
+        Defaults to ``False``.
+
     Returns
     -------
     ndarray
@@ -46,7 +50,8 @@ def format_data(data, is_feature1d=True, copy=False):
     if data is None or issparse(data):
         return data
 
-    data = asfloat(data)
+    if make_float:
+        data = asfloat(data)
 
     if not isinstance(data, np.ndarray) or copy:
         data = np.array(data, copy=copy)
