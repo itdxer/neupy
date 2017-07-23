@@ -151,3 +151,27 @@ class PNNTestCase(BaseTestCase):
         self.assertIn('PNN', str(pnn))
         self.assertIn('std', str(pnn))
         self.assertIn('batch_size', str(pnn))
+
+    def test_pnn_non_trivial_class_names(self):
+        # Issue #177: https://github.com/itdxer/neupy/issues/177
+        x = np.array([10] * 10 + [20] * 10 + [30] * 10)
+        y = np.array([1] * 10 + [2] * 10 + [3] * 10)
+
+        pnn = algorithms.PNN(std=1)
+        pnn.train(x, y)
+        y_predicted = pnn.predict(x)
+
+        np.testing.assert_array_almost_equal(y, y_predicted)
+        self.assertItemsEqual(pnn.classes, [1, 2, 3])
+
+    def test_pnn_non_trivial_class_names_as_strings(self):
+        # Issue #177: https://github.com/itdxer/neupy/issues/177
+        x = np.array([10] * 10 + [20] * 10 + [30] * 10)
+        y = np.array(['cat'] * 10 + ['dog'] * 10 + ['horse'] * 10)
+
+        pnn = algorithms.PNN(std=1)
+        pnn.train(x, y)
+        y_predicted = pnn.predict(x)
+
+        np.testing.assert_array_equal(y, y_predicted)
+        self.assertItemsEqual(pnn.classes, ['cat', 'dog', 'horse'])
