@@ -3,6 +3,7 @@ import math
 import numpy as np
 
 from neupy import algorithms
+from neupy.exceptions import WeightInitializationError
 from neupy.algorithms.competitive import sofm
 from neupy.algorithms.competitive.neighbours import gaussian_df
 
@@ -457,7 +458,7 @@ class SOFMTestCase(BaseTestCase):
             weight=input_data[(0, 2, 4), :].T,
             verbose=False
         )
-        sn.train(input_data, epochs=6)
+        sn.train(input_data, epochs=3)
 
         answers = np.array([
             [1., 0., 0.],
@@ -470,6 +471,40 @@ class SOFMTestCase(BaseTestCase):
         np.testing.assert_array_almost_equal(
             sn.predict(input_data),
             answers)
+
+    def test_sofm_weight_norm_after_training_with_custom_weights(self):
+        sofm = algorithms.SOFM(
+            n_inputs=2,
+            n_outputs=3,
+            distance='cos',
+            learning_radius=1,
+            features_grid=(3, 1),
+            weight=input_data[(0, 2, 4), :].T,
+            verbose=False
+        )
+
+        actual_norms = np.linalg.norm(sofm.weight, axis=0)
+        expected_norms = np.array([1, 1, 1])
+        np.testing.assert_array_almost_equal(expected_norms, actual_norms)
+
+        sofm.train(input_data, epochs=6)
+
+        actual_norms = np.linalg.norm(sofm.weight, axis=0)
+        expected_norms = np.array([1, 1, 1])
+        np.testing.assert_array_almost_equal(expected_norms, actual_norms)
+
+    def test_sofm_weight_norm_before_training(self):
+        sofm = algorithms.SOFM(
+            n_inputs=2,
+            n_outputs=3,
+            verbose=False,
+            distance='cos',
+        )
+
+        actual_norms = np.linalg.norm(sofm.weight, axis=0)
+        expected_norms = np.array([1, 1, 1])
+
+        np.testing.assert_array_almost_equal(expected_norms, actual_norms)
 
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(
@@ -714,7 +749,8 @@ class SOFMParameterReductionTestCase(BaseTestCase):
 
 class SOFMWeightInitializationTestCase(BaseTestCase):
     def test_sofm_weight_init_exceptions(self):
-        with self.assertRaisesRegexp(ValueError, "Cannot apply PCA"):
+        msg = "Cannot apply PCA"
+        with self.assertRaisesRegexp(WeightInitializationError, msg):
             algorithms.SOFM(
                 n_inputs=4,
                 n_outputs=7,
@@ -731,6 +767,19 @@ class SOFMWeightInitializationTestCase(BaseTestCase):
         sampled_weights = sofm.sample_data(input_data, features_grid=(7, 1))
         self.assertEqual(sampled_weights.shape, (4, 7))
 
+    def test_sofm_init_during_the_training(self):
+        sofm = algorithms.SOFM(
+            n_inputs=4,
+            n_outputs=7,
+            weight='sample_from_data',
+        )
+
+        input_data = np.random.random((10, 4))
+        self.assertTrue(callable(sofm.weight))
+
+        sofm.train(input_data, epochs=1)
+        self.assertFalse(callable(sofm.weight))
+
     def test_sample_data_weight_init_in_sofm(self):
         sofm = algorithms.SOFM(
             n_inputs=4,
@@ -741,7 +790,7 @@ class SOFMWeightInitializationTestCase(BaseTestCase):
         input_data = np.random.random((10, 4))
         self.assertTrue(callable(sofm.weight))
 
-        sofm.train(input_data, epochs=0)
+        sofm.init_weights(input_data)
         self.assertFalse(callable(sofm.weight))
         self.assertEqual(sofm.weight.shape, (4, 7))
 
@@ -755,7 +804,7 @@ class SOFMWeightInitializationTestCase(BaseTestCase):
         input_data = np.random.random((100, 4))
         self.assertTrue(callable(sofm.weight))
 
-        sofm.train(input_data, epochs=0)
+        sofm.init_weights(input_data)
         self.assertFalse(callable(sofm.weight))
         self.assertEqual(sofm.weight.shape, (4, 9))
 
@@ -776,3 +825,28 @@ class SOFMWeightInitializationTestCase(BaseTestCase):
             self.assertLess(
                 np.linalg.norm((top - center) ** 2),
                 np.linalg.norm((top - bottom) ** 2))
+
+    def test_sofm_double_initialization_exception_cos_distance(self):
+        sofm = algorithms.SOFM(
+            n_inputs=2,
+            n_outputs=3,
+            verbose=False,
+            distance='cos',
+            weight='sample_from_data'
+        )
+        sofm.init_weights(input_data)
+
+        with self.assertRaises(WeightInitializationError):
+            sofm.init_weights(input_data)
+
+    def test_sofm_double_initialization_exception(self):
+        sofm = algorithms.SOFM(
+            n_inputs=2,
+            n_outputs=3,
+            verbose=False,
+            weight='sample_from_data'
+        )
+        sofm.init_weights(input_data)
+
+        with self.assertRaises(WeightInitializationError):
+            sofm.init_weights(input_data)
