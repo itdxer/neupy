@@ -35,6 +35,7 @@ site/build/*
 
 # Examples
 examples/rbfn/music_speech/data/*
+notebooks/caltech_101_images/*
 
 # Pickle files important for VIN example
 !examples/reinforcement_learning/vin/data/*.pickle
