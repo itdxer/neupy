@@ -1,222 +1,143 @@
-import sys
-
-import theano
-import theano.tensor as T
-import numpy as np
-
-from neupy.utils import format_data
-from neupy.layers import Softmax
-from .base import BaseEnsemble
+from neupy.utils import all_equal
+from neupy import layers
+from neupy.layers.utils import extract_connection
 
 
-__all__ = ('MixtureOfExperts',)
+__all__ = ('mixture_of_experts',)
 
 
-class MixtureOfExperts(BaseEnsemble):
+def check_if_connection_is_valid(connection, index):
+    if len(connection.input_layers) > 1:
+        raise ValueError(
+            "Network #{} (0-based indeces) has more than one input "
+            "layer. Input layers: {!r}"
+            "".format(index, connection.input_layers))
+
+    if len(connection.output_layers) > 1:
+        raise ValueError(
+            "Network #{} (0-based indeces) has more than one output "
+            "layer. Output layers: {!r}"
+            "".format(index, connection.output_layers))
+
+    if len(connection.input_shape) != 1:
+        raise ValueError(
+            "Network #{} (0-based indeces) should receive vector as "
+            "an input. Input layer shape: {!r}"
+            "".format(index, connection.input_shape))
+
+
+def check_if_connections_compatible(connections):
+    input_shapes = []
+    output_shapes = []
+
+    for i, connection in enumerate(connections):
+        input_shapes.append(connection.input_shape)
+        output_shapes.append(connection.output_shape)
+
+    if not all_equal(input_shapes):
+        raise ValueError("Networks have different input shapes: {}"
+                         "".format(input_shapes))
+
+    if not all_equal(output_shapes):
+        raise ValueError("Networks have different output shapes: {}"
+                         "".format(output_shapes))
+
+
+def check_if_gating_layer_valid(gating_layer, n_layers_to_combine):
+    if not isinstance(gating_layer, layers.BaseLayer):
+        raise ValueError(
+            "Invalid type for gating layer. Type: {}"
+            "".format(type(gating_layer)))
+
+    output_shape = gating_layer.output_shape[0]
+    if output_shape != n_layers_to_combine:
+        raise ValueError(
+            "Gating layer has invalid number of outputs. Expected {}, got {}"
+            "".format(output_shape, n_layers_to_combine))
+
+
+def mixture_of_experts(networks, gating_layer=None):
     """
-    Mixture of Experts ensemble algorithm for GradientDescent
-    based Neural Networks.
+    Generates mixture of experts architecture from the set of
+    networks that has the same input and output shapes.
 
     Parameters
     ----------
-    networks : list
-        List of networks based on :network:`GradientDescent`
-        algorithm. Each network should have the same input size.
+    networks : list of connections or networks
+        These networks will be combine into mixture of experts.
+        Every network should have single 1D input layer and
+        single output layer. Another restriction is that all networks
+        should expect the same input and output layers.
 
-    gating_network : object
-        :network:`GradientDescent` based neural network that
-        has 2 layers and final layer is a :layer:`Softmax`.
-        Network's output size must be equal to number of
-        networks in the mixture model.
+    gating_layer : None or layer
+        In case if value equal to `None` that the following layer
+        will be created.
 
-    Methods
+        .. code-block:: python
+            gating_layer = layers.Softmax(len(networks))
+
+        Output from the gating layer should be 1D and equal to
+        the number of networks.
+
+    Raises
+    ------
+    ValueError
+        In case if there is some problem with input networks
+        or custom gating layer.
+
+    Returns
     -------
-    train(self, input_data, target_data, epochs=100):
-        Train neural network.
+    connection
+        Mixture of expertds network that combine all networks into
+        single one and adds gating layer to it.
 
     Examples
     --------
-    >>> import numpy as np
-    >>> from sklearn import datasets, preprocessing
-    >>> from sklearn.model_selection import train_test_split
-    >>> from neupy import algorithms, layers
-    >>> from neupy.estimators import rmsle
+    >>> from neupy import layers, algorithms
     >>>
-    >>> np.random.seed(100)
-    >>>
-    >>> dataset = datasets.load_diabetes()
-    >>> data, target = dataset.data, dataset.target
-    >>> input_scaler = preprocessing.MinMaxScaler((-1 ,1))
-    >>> output_scaler = preprocessing.MinMaxScaler()
-    >>>
-    >>> x_train, x_test, y_train, y_test = train_test_split(
-    ...     input_scaler.fit_transform(data),
-    ...     output_scaler.fit_transform(target),
-    ...     train_size=0.8
-    ... )
-    ...
-    >>>
-    >>> insize, outsize = (10, 1)
-    >>> networks = [
-    ...     algorithms.GradientDescent((insize, 20, outsize), step=0.1),
-    ...     algorithms.GradientDescent((insize, 20, outsize), step=0.1),
-    ... ]
-    >>> n_networks = len(networks)
-    >>>
-    >>> moe = algorithms.MixtureOfExperts(
-    ...     networks=networks,
-    ...     gating_network=algorithms.GradientDescent(
-    ...         layers.Input(insize) > layers.Softmax(n_networks),
-    ...         step=0.1,
-    ...         verbose=False,
-    ...     )
-    ... )
-    ...
-    >>> moe.train(x_train, y_train, epochs=300)
-    >>> y_predicted = moe.predict(x_test)
-    >>>
-    >>> rmsle(output_scaler.inverse_transform(y_test),
-    ...       output_scaler.inverse_transform(y_predicted).round())
-    0.44680253132714459
+    >>> network = algorithms.mixture_of_experts([
+    ...     layers.join(
+    ...         layers.Input(10),
+    ...         layers.Relu(5),
+    ...     ),
+    ...     layers.join(
+    ...         layers.Input(10),
+    ...         layers.Relu(33),
+    ...         layers.Relu(5),
+    ...     ),
+    ...     layers.join(
+    ...         layers.Input(10),
+    ...         layers.Relu(12),
+    ...         layers.Relu(25),
+    ...         layers.Relu(5),
+    ...     ),
+    ... ])
+    >>> network
+    10 -> [... 12 layers ...] -> 5
     """
-    def __init__(self, networks, gating_network=None):
-        super(MixtureOfExperts, self).__init__(networks)
-        algorithms = sys.modules['neupy.algorithms']
+    if not isinstance(networks, (list, tuple)):
+        raise ValueError("Networks should be specified as a list")
 
-        if not isinstance(gating_network, algorithms.GradientDescent):
-            raise ValueError("Gating network should be an instance of "
-                             "`GradientDescent` algorithm")
+    connections = []
+    for index, network in enumerate(networks):
+        connection = extract_connection(network)
+        check_if_connection_is_valid(connection, index)
+        connections.append(connection)
 
-        for network in self.networks:
-            if not isinstance(network, algorithms.GradientDescent):
-                raise ValueError(
-                    "Network should be an isntance of `GradientDescent` "
-                    "algorithm, got {0}".format(network.__class__.__name__)
-                )
+    check_if_connections_compatible(connections)
 
-            if network.output_layer.size != 1:
-                raise ValueError("Network should contains one output unit, "
-                                 "got {0}".format(network.output_layer.size))
+    first_connection = connections[0]
+    n_features = first_connection.input_shape[0]
+    n_layers_to_combine = len(connections)
 
-            if network.error.__name__ != 'mse':
-                raise ValueError(
-                    "Use only Mean Square Error (MSE) function in network, "
-                    "got {0}".format(network.error.__name__)
-                )
+    if gating_layer is None:
+        gating_layer = layers.Softmax(n_layers_to_combine)
 
-            network.verbose = False
+    check_if_gating_layer_valid(gating_layer, n_layers_to_combine)
 
-        if not isinstance(gating_network.output_layer, Softmax):
-            class_name = gating_network.output_layer.__class__.__name__
-            raise ValueError("Final layer must be Softmax, got `{0}`"
-                             "".format(class_name))
-
-        gating_network.verbose = False
-        gating_network_output_size = gating_network.output_layer.size
-        n_networks = len(self.networks)
-
-        if gating_network_output_size != n_networks:
-            raise ValueError(
-                "Invalid Gating network output size. Expected "
-                "{0}, got {1}".format(
-                    n_networks,
-                    gating_network_output_size
-                )
-            )
-
-        if gating_network.error.__name__ != 'mse':
-            raise ValueError(
-                "Only Mean Square Error (MSE) function is available, "
-                "got {0}".format(gating_network.error.__name__)
-            )
-
-        self.gating_network = gating_network
-
-        x = T.matrix('x')
-        y = T.matrix('y')
-
-        gating_network.variables.network_inputs = [x]
-        gating_network.init_variables()
-        gating_network.init_methods()
-
-        probs = gating_network.variables.prediction_func
-        train_outputs, outputs = [], []
-        for i, network in enumerate(self.networks):
-            network.variables.network_inputs = [x]
-            network.variables.network_output = y
-
-            network.init_variables()
-            network.init_methods()
-
-            output = network.variables.prediction_func
-            outputs.append(output * probs[:, i:i + 1])
-
-            train_output = network.variables.train_prediction_func
-            train_outputs.append(train_output * probs[:, i:i + 1])
-
-        outputs_concat = T.concatenate(outputs, axis=1)
-        self.prediction_func = sum(outputs)
-        self.train_prediction_func = sum(train_outputs)
-
-        for net in self.networks:
-            net.methods.error_func = net.error(y, self.train_prediction_func)
-
-        gating_network.methods.error_func = gating_network.error(
-            gating_network.variables.network_output,
-            outputs_concat
-        )
-
-        self.prediction = theano.function(
-            [x], self.prediction_func,
-            name='algo:mixture-of-experts/func:prediction'
-        )
-
-    def train(self, input_data, target_data, epochs=100):
-        target_data = format_data(target_data, is_feature1d=True)
-
-        output_size = target_data.shape[1]
-        if output_size != 1:
-            raise ValueError("Target data must contains only 1 column, got "
-                             "{0}".format(output_size))
-
-        input_size = input_data.shape[1]
-        gating_network = self.gating_network
-        input_layer = gating_network.connection.input_layers[0]
-        gating_network_input_size = input_layer.size
-
-        if gating_network_input_size != input_size:
-            raise ValueError(
-                "Gating Network expected get {0} input features, got "
-                "{1}".format(gating_network_input_size, input_size)
-            )
-
-        networks = self.networks
-
-        for epoch in range(epochs):
-            predictions = []
-            for i, network in enumerate(networks):
-                predictions.append(network.predict(input_data))
-                network.train_epoch(input_data, target_data)
-
-            predictions = np.concatenate(predictions, axis=1)
-            gating_network.train_epoch(input_data, predictions)
-
-    def predict(self, input_data):
-        input_data = format_data(input_data)
-        return self.prediction(input_data)
-
-    def __repr__(self):
-        indent = ' ' * 4
-        return (
-            "{classname}(networks=[\n"
-            "{double_indent}{networks}\n"
-            "{indent}],\n"
-            "{indent}gating_network={gating_network}\n"
-            ")"
-        ).format(
-            classname=self.__class__.__name__,
-            networks=',\n        '.join(map(repr, self.networks)),
-            gating_network=repr(self.gating_network),
-            indent=indent,
-            double_indent=(2 * indent)
-        )
+    return layers.join(
+        layers.Input(n_features),
+        # Note: Gating network should be specified
+        # as a first parameter.
+        [gating_layer] + connections,
+        layers.GatedAverage())
