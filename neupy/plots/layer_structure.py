@@ -5,7 +5,7 @@ from collections import OrderedDict
 import graphviz
 
 from neupy.layers.base import ResidualConnection
-from neupy.algorithms.base import BaseNetwork
+from neupy.layers.utils import extract_connection
 
 
 __all__ = ('layer_structure',)
@@ -121,8 +121,7 @@ def layer_structure(connection, ignore_layers=None, filepath=None, show=True):
     >>> connection = layers.Input(10) > layers.Sigmoid(1)
     >>> plots.layer_structure(connection)
     """
-    if isinstance(connection, BaseNetwork):
-        connection = connection.connection
+    connection = extract_connection(connection)
 
     if ignore_layers is None:
         ignore_layers = []

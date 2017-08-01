@@ -5,9 +5,8 @@ import numpy as np
 from scipy.sparse import csr_matrix
 
 from neupy.utils import (preformat_value, as_tuple, AttributeKeyDict, asint,
-                         asfloat, format_data)
+                         asfloat, format_data, all_equal)
 from neupy.algorithms.utils import shuffle, iter_until_converge
-from neupy.layers.utils import preformat_layer_shape
 from neupy import algorithms
 
 from base import BaseTestCase
@@ -46,10 +45,6 @@ class UtilsTestCase(BaseTestCase):
         expected = (1, 2)
         actual = preformat_value(np.matrix([[1, 1]]))
         np.testing.assert_array_equal(expected, actual)
-
-    def test_preformat_layer_shape(self):
-        self.assertEqual((2, 3, 1), preformat_layer_shape((2, 3, 1)))
-        self.assertEqual(10, preformat_layer_shape((10,)))
 
     def test_attribute_key_dict(self):
         attrdict = AttributeKeyDict(val1='hello', val2='world')
@@ -194,3 +189,19 @@ class ShuffleTestCase(BaseTestCase):
         input_with_nones = (None, None)
         actual_output = shuffle(*input_with_nones)
         self.assertEqual(input_with_nones, actual_output)
+
+
+class AllValuesEqualTestCase(BaseTestCase):
+    def test_all_equal(self):
+        self.assertTrue(all_equal([1] * 10))
+        self.assertTrue(all_equal([(1, 5)] * 10))
+        self.assertTrue(all_equal([0.1] * 2))
+        self.assertTrue(all_equal([5]))
+
+        self.assertFalse(all_equal([1, 2, 3, 4, 5]))
+        self.assertFalse(all_equal([2, 2, 2, 2, 1]))
+        self.assertFalse(all_equal([5, 5 - 1e-8]))
+
+    def test_all_equal_exception(self):
+        with self.assertRaises(ValueError):
+            all_equal([])
