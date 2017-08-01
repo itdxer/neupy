@@ -5,11 +5,11 @@ import theano.tensor as T
 
 from neupy.core.properties import IntProperty, CallableProperty
 from neupy.exceptions import LayerConnectionError
-from neupy.utils import as_tuple
+from neupy.utils import as_tuple, all_equal
 from .base import BaseLayer
 
 
-__all__ = ('Elementwise', 'Concatenate')
+__all__ = ('Elementwise', 'Concatenate', 'GatedAverage')
 
 
 class Elementwise(BaseLayer):
@@ -56,8 +56,7 @@ class Elementwise(BaseLayer):
             raise LayerConnectionError(
                 "The `{}` layer expects all input values with the "
                 "same shapes. Input shapes: {}"
-                "".format(self, input_shapes)
-            )
+                "".format(self, input_shapes))
 
     @property
     def output_shape(self):
@@ -116,8 +115,7 @@ class Concatenate(BaseLayer):
                     raise LayerConnectionError(
                         "Cannot concatenate layers. Some of them don't "
                         "match over dimension #{} (0-based indeces)."
-                        "".format(axis)
-                    )
+                        "".format(axis))
 
     @property
     def output_shape(self):
@@ -135,3 +133,125 @@ class Concatenate(BaseLayer):
 
     def output(self, *input_values):
         return T.concatenate(input_values, axis=self.axis)
+
+
+def exclude_index(array, index):
+    """
+    Copies array and exclude single element in specific
+    index position.
+
+    Parameters
+    ----------
+    array : list or tuple
+
+    index : int
+        Index of the value that has to be excluded from the arrray
+
+    Returns
+    -------
+    list
+    """
+    array = list(array)
+    copied_array = copy.copy(array)
+    copied_array.pop(index)
+    return copied_array
+
+
+class GatedAverage(BaseLayer):
+    """
+    Using output from the gated layer weights outputs from the
+    other layers and sum them.
+
+    Parameters
+    ----------
+    gating_layer_index : int
+        Input layers passed as a list and current variable specifies
+        index in which it can find gating network. Defaults to `0`,
+        which means that it expects to see gating layer in zeros position.
+
+    {BaseLayer.Parameters}
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
+
+    Examples
+    --------
+    >>> from neupy.layers import *
+    >>>
+    >>> gating_network = Input(10) > Softmax(2)
+    >>> network_1 = Input(20) > Relu(10)
+    >>> network_2 = Input(20) > Relu(20) > Relu(10)
+    >>>
+    >>> network = [gating_network, network_1, network_2] > GatedAverage()
+    >>> network
+    [(10,), (20,), (20,)] -> [... 8 layers ...] -> 10
+    """
+    gating_layer_index = IntProperty(default=0)
+
+    def validate(self, input_shapes):
+        n_input_layers = len(input_shapes)
+        gating_layer_index = self.gating_layer_index
+
+        try:
+            gating_layer_shape = input_shapes[gating_layer_index]
+        except IndexError:
+            raise LayerConnectionError(
+                "Invalid index for gating layer. Number of input "
+                "layers: {}. Gating layer index: {}"
+                "".format(n_input_layers, gating_layer_index))
+
+        other_layers_shape = exclude_index(input_shapes, gating_layer_index)
+
+        if len(gating_layer_shape) != 1:
+            raise LayerConnectionError(
+                "Output from the gating network should be vector. Output "
+                "shape from gating layer: {!r}".format(gating_layer_shape))
+
+        n_gating_weights = gating_layer_shape[0]
+        # Note: -1 from all layers in order to exclude gating layer
+        if n_gating_weights != (n_input_layers - 1):
+            raise LayerConnectionError(
+                "Gating layer can work only for combining only {} networks, "
+                "got {} networks instead."
+                "".format(n_gating_weights, (n_input_layers - 1)))
+
+        if not all_equal(other_layers_shape):
+            raise LayerConnectionError(
+                "Output layer that has to be merged expect to have the "
+                "same shapes. Shapes: {!r}".format(other_layers_shape))
+
+    @property
+    def output_shape(self):
+        if not self.input_shape:
+            return
+
+        if self.gating_layer_index >= 0:
+            # Take layer from the left side from the gating layer.
+            # In case if gating layer at th zeros position then
+            # it will take the last layer (-1 index).
+            return self.input_shape[self.gating_layer_index - 1]
+
+        # In case if it negative index, we take layer from the right side
+        return self.input_shape[self.gating_layer_index + 1]
+
+    def output(self, *input_values):
+        gating_value = input_values[self.gating_layer_index]
+        other_values = exclude_index(input_values, self.gating_layer_index)
+
+        # Input shape is exactly the same as output shape
+        n_output_dim = len(self.output_shape)
+
+        output_values = []
+        for i, other_value in enumerate(other_values):
+            gate = gating_value[:, i]
+            new_shape = [0] + ['x'] * n_output_dim
+
+            output_value = T.mul(other_value, gate.dimshuffle(*new_shape))
+            output_values.append(output_value)
+
+        return sum(output_values)
