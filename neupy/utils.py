@@ -9,7 +9,8 @@ from scipy.sparse import issparse
 
 
 __all__ = ('format_data', 'asfloat', 'AttributeKeyDict', 'preformat_value',
-           'as_tuple', 'asint', 'number_type', 'theano_random_stream')
+           'as_tuple', 'asint', 'number_type', 'theano_random_stream',
+           'all_equal')
 
 
 number_type = (int, float, np.floating, np.integer)
@@ -237,3 +238,33 @@ def theano_random_stream():
     seed = np.random.randint(max_possible_seed)
     theano_random = T.shared_randomstreams.RandomStreams(seed)
     return theano_random
+
+
+def all_equal(array):
+    """
+    Checks if all elements in the array are equal.
+
+    Parameters
+    ----------
+    array : list, tuple
+
+    Raises
+    ------
+    ValueError
+        If input array is empty
+
+    Returns
+    -------
+    bool
+        `True` in case if all elements are equal and
+        `False` otherwise.
+    """
+    if not array:
+        raise ValueError("Array is empty")
+
+    first_item = array[0]
+
+    if any(item != first_item for item in array):
+        return False
+
+    return True
