@@ -563,7 +563,7 @@ class SOFM(Kohonen):
             input_row = np.reshape(input_row, (1, input_row.size))
             layer_output = predict(input_row)
 
-            index_y, step = self.update_indexes(layer_output)
+            index_y, step = update_indexes(layer_output)
             distance = input_row.T - self.weight[:, index_y]
             updated_weights = (self.weight[:, index_y] + step * distance)
 

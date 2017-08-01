@@ -26,8 +26,7 @@ def max_norm_clip(array, max_norm):
     return T.switch(
         T.ge(array_norm, max_norm),
         T.mul(max_norm, array) / array_norm,
-        array,
-    )
+        array)
 
 
 class MaxNormRegularization(WeightUpdateConfigurable):
