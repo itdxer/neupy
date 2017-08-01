@@ -44,7 +44,6 @@ msle = override_theano_function(errors.msle)
 rmsle = override_theano_function(errors.rmsle)
 binary_crossentropy = override_theano_function(errors.binary_crossentropy)
 categorical_crossentropy = override_theano_function(
-    errors.categorical_crossentropy
-)
+    errors.categorical_crossentropy)
 binary_hinge = override_theano_function(errors.binary_hinge)
 categorical_hinge = override_theano_function(errors.categorical_hinge)

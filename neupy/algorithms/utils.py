@@ -1,6 +1,7 @@
 import numpy as np
 import theano.tensor as T
 
+
 from neupy.layers.utils import iter_parameters
 
 
