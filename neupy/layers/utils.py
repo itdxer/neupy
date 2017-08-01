@@ -2,7 +2,7 @@ import theano.tensor as T
 
 
 __all__ = ('preformat_layer_shape', 'dimshuffle', 'iter_parameters',
-           'count_parameters', 'create_input_variable')
+           'count_parameters', 'create_input_variable', 'extract_connection')
 
 
 def preformat_layer_shape(shape):
@@ -119,3 +119,38 @@ def create_input_variable(input_shape, name):
 
     variable_type = dim_to_variable_type[ndim]
     return variable_type(name)
+
+
+def extract_connection(instance):
+    """
+    Extract connection from different types of object.
+
+    Parameters
+    ----------
+    instance : network, connection, list or tuple
+
+    Returns
+    -------
+    connection
+
+    Raises
+    ------
+    ValueError
+        In case if input object doesn't have connection of layers.
+    """
+    # Note: Import it here in order to prevent loops
+    from neupy.algorithms.base import BaseNetwork
+    from neupy.layers.base import BaseConnection
+    from neupy import layers
+
+    if isinstance(instance, (list, tuple)):
+        return layers.join(*instance)
+
+    if isinstance(instance, BaseNetwork):
+        return instance.connection
+
+    if isinstance(instance, BaseConnection):
+        return instance
+
+    raise TypeError("Invalid input type. Input should be network, connection "
+                    "or list of layers, got {}".format(type(instance)))

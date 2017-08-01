@@ -5,8 +5,7 @@ import six
 from six.moves import cPickle as pickle
 
 from neupy.utils import asfloat
-from neupy.algorithms.base import BaseNetwork
-from neupy.layers.utils import iter_parameters
+from neupy.layers.utils import iter_parameters, extract_connection
 
 
 __all__ = ('save', 'load')
@@ -28,9 +27,7 @@ def save(connection, filepath):
         Path to the pickle file that will store
         network's parameters.
     """
-    if isinstance(connection, BaseNetwork):
-        connection = connection.connection
-
+    connection = extract_connection(connection)
     data = defaultdict(dict)
 
     for layer, attrname, parameter in iter_parameters(connection):
@@ -65,8 +62,7 @@ def load(connection, source, ignore_missed=False):
     TypeError
         In case if source has invalid data type.
     """
-    if isinstance(connection, BaseNetwork):
-        connection = connection.connection
+    connection = extract_connection(connection)
 
     if isinstance(source, six.string_types):
         with open(source, 'rb') as f:
@@ -84,10 +80,10 @@ def load(connection, source, ignore_missed=False):
             if ignore_missed:
                 continue
 
-            raise ValueError("Cannot load parameters from the specified "
-                             "data source. Layer `{}` doesn't have "
-                             "stored parameter `{}`."
-                             "".format(layer.name, attrname))
+            raise ValueError(
+                "Cannot load parameters from the specified data source. "
+                "Layer `{}` doesn't have stored parameter `{}`."
+                "".format(layer.name, attrname))
 
         loaded_parameter = data[layer.name][attrname]
 
