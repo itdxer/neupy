@@ -141,9 +141,9 @@ class BaseLayer(BaseConnection, Configurable):
         return self.input_shape_
 
     @input_shape.setter
-    def input_shape(self, value):
-        self.validate(value)
-        self.input_shape_ = value
+    def input_shape(self, shape):
+        self.validate(shape)
+        self.input_shape_ = shape
 
     @property
     def output_shape(self):

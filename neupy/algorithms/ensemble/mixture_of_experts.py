@@ -114,6 +114,8 @@ def mixture_of_experts(networks, gating_layer=None):
     ... ])
     >>> network
     10 -> [... 12 layers ...] -> 5
+    >>>
+    >>> gdnet = algorithms.Momentum(network, step=0.1)
     """
     if not isinstance(networks, (list, tuple)):
         raise ValueError("Networks should be specified as a list")
