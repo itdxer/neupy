@@ -64,7 +64,7 @@ Ensembles
 .. csv-table::
     :header: "Class name", "Name"
 
-    :network:`MixtureOfExperts`, Mixture of Experts
+    :class:`mixture_of_experts <neupy.algorithms.ensemble.mixture_of_experts>`, Mixture of Experts
     :network:`DynamicallyAveragedNetwork`, Dynamically Averaged Network (DAN)
 
 Neural Networks with Radial Basis Functions (RBFN)
@@ -205,6 +205,7 @@ Merge layers
 
     ":layer:`Elementwise`", "Merge multiple input layers in one with elementwise function"
     ":layer:`Concatenate`", "Concatenate multiple input layers in one based on the specified axes."
+    ":layer:`GatedAverage`", "Average multiple layers based on the output from the gate layer."
 
 Other layers
 ~~~~~~~~~~~~
