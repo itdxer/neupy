@@ -2,6 +2,7 @@ import numpy as np
 from sklearn import datasets, preprocessing, model_selection
 
 from neupy import algorithms, layers
+from neupy.utils import asfloat
 from neupy.estimators import categorical_crossentropy
 
 from base import BaseTestCase
@@ -150,7 +151,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         self.assertEqual(network.output_shape, (5,))
 
         predict = network.compile()
-        random_input = np.random.random((3, 10))
+        random_input = asfloat(np.random.random((3, 10)))
         prediction = predict(random_input)
 
         self.assertEqual(prediction.shape, (3, 5))
