@@ -62,8 +62,6 @@ def compute_heatmap(weight):
 def compute_heatmap_expanded(weight):
     heatmap = np.zeros((2 * GRID_HEIGHT - 1, 2 * GRID_WIDTH - 1))
     for (neuron_x, neuron_y), neighbours in iter_neighbours(weight):
-        total_distance = 0
-
         for (neigbour_x, neigbour_y) in neighbours:
             neuron_vec = weight[:, neuron_x, neuron_y]
             neigbour_vec = weight[:, neigbour_x, neigbour_y]
