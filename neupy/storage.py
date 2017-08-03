@@ -401,14 +401,14 @@ def load_hdf5(connection, filepath, ignore_missed=False):
             layer_group = f[layer_name]
             layer = {'name': layer_name}
 
-            for attrname, attrvalue in layer_group.attrs.iteritems():
+            for attrname, attrvalue in layer_group.attrs.items():
                 try:
                     layer[attrname] = json.loads(attrvalue)
                 except ValueError:
                     layer[attrname] = attrvalue
 
             layer['parameters'] = {}
-            for param_name, parameter in layer_group.iteritems():
+            for param_name, parameter in layer_group.items():
                 layer['parameters'][param_name] = {
                     'value': parameter.value,
                     'trainable': parameter.attrs['trainable'],
