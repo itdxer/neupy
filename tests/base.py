@@ -29,6 +29,9 @@ class BaseTestCase(unittest.TestCase):
         # Clean identifiers map for each test
         layers.BaseLayer.global_identifiers_map = {}
 
+    def assertItemsEqual(self, list1, list2):
+        self.assertEqual(sorted(list1), sorted(list2))
+
     def assertInvalidVectorTrain(self, network, input_vector, target=None,
                                  decimal=5, is_feature1d=True, **train_kwargs):
         """

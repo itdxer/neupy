@@ -190,7 +190,7 @@ class MaxPooling(BasePooling):
     def output(self, input_value):
         return pool.pool_2d(input_value, ws=self.size, mode='max',
                             ignore_border=self.ignore_border,
-                            st=self.stride, pad=self.padding)
+                            stride=self.stride, pad=self.padding)
 
 
 class AveragePooling(BasePooling):
@@ -249,7 +249,7 @@ class AveragePooling(BasePooling):
     def output(self, input_value):
         return pool.pool_2d(input_value, ws=self.size, mode=self.mode,
                             ignore_border=self.ignore_border,
-                            st=self.stride, pad=self.padding)
+                            stride=self.stride, pad=self.padding)
 
 
 class ScaleFactorProperty(TypedListProperty):

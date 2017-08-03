@@ -1,56 +1,196 @@
-from functools import partial
-from collections import defaultdict
+import json
+import pkgutil
+import importlib
+from time import gmtime, strftime
 
-import six
+import theano
 from six.moves import cPickle as pickle
 
+import neupy
 from neupy.utils import asfloat
-from neupy.layers.utils import iter_parameters, extract_connection
+from neupy.core.docs import shared_docs
+from neupy.layers.utils import extract_connection
 
 
-__all__ = ('save', 'load')
+__all__ = (
+    'save', 'load',  # aliases to pickle
+    'save_pickle', 'load_pickle',
+    'save_hdf5', 'load_hdf5',
+    'load_dict', 'save_dict')
 
 
-iter_parameters = partial(iter_parameters, only_trainable=False)
-
-
-def save(connection, filepath):
+class ParameterLoaderError(Exception):
     """
-    Save layer parameters in pickle file.
+    Exception triggers in case if there are some issues
+    during the parameter loading procedure.
+    """
+
+
+class InvalidFormat(Exception):
+    """
+    Exception triggers when there are some issue with
+    data format that stores connection data.
+    """
+
+
+def load_hdf5_module():
+    """
+    Loads `h5py` module. THis module used for manipulations
+    with HDF5 files.
+
+    Raises
+    ------
+    ImportError
+        In case if module `h5py` wasn't installed
+
+    Returns
+    -------
+    module
+    """
+    if not pkgutil.find_loader('h5py'):
+        raise ImportError(
+            "The `h5py` library wasn't installed. Try to "
+            "install it with pip: \n    pip install h5py")
+
+    return importlib.import_module('h5py')
+
+
+def validate_layer_compatibility(layer, layer_data):
+    """
+    Checkes if it's possible to load stored data in the
+    specified layer.
+
+    Raises
+    ------
+    ParameterLoaderError
+        When there are some problems with stored data.
+    """
+    expected_input_shape = layer_data['input_shape']
+    expected_output_shape = layer_data['output_shape']
+
+    if list(expected_input_shape) != list(layer.input_shape):
+        raise ParameterLoaderError(
+            "Layer `{}` expected to have input shape equal to {}, got {}"
+            "".format(layer.name, expected_input_shape, layer.input_shape))
+
+    if list(expected_output_shape) != list(layer.output_shape):
+        raise ParameterLoaderError(
+            "Layer `{}` expected to have output shape equal to {}, got {}"
+            "".format(layer.name, expected_output_shape,
+                      layer.output_shape))
+
+
+def load_layer_parameter(layer, layer_data):
+    """
+    Set layer parameters to the values specified in the
+    stored data
+    """
+    for param_name, param_data in layer_data['parameters'].items():
+        parameter = getattr(layer, param_name)
+        parameter.set_value(asfloat(param_data['value']))
+
+
+def load_dict_by_names(connection, data, ignore_missed=False):
+    """"
+    Load parameters in to layer using layer names as the reference.
+
+    Raises
+    ------
+    ParameterLoaderError
+        In case if it's impossible to load parameters from data
+
+    Returns
+    -------
+    bool
+        Returns `True` in case if data was loaded successfully
+        and `False` when parameters wasn't loaded
+    """
+    layers = data['layers']
+    layers_from_data = {l['name']: l for l in layers if l['parameters']}
+    layers_from_connection = {l.name: l for l in connection if l.parameters}
+
+    if len(layers_from_data) != len(layers_from_connection):
+        raise ParameterLoaderError(
+            "Couldn't load parameters from the dictionary. Connection "
+            "has {} layers with parameters whether data has {}"
+            "".format(len(layers_from_data), len(layers_from_connection)))
+
+    if layers_from_data.keys() != layers_from_connection.keys():
+        return False  # cannot match all layers by names
+
+    for layer_name, layer in layers_from_connection.items():
+        validate_layer_compatibility(layer, layers_from_data[layer_name])
+
+    for layer_name, layer in layers_from_connection.items():
+        load_layer_parameter(layer, layers_from_data[layer_name])
+
+    return True  # procedure finished successfully
+
+
+def load_dict_sequentially(connection, data, ignore_missed=False):
+    """"
+    Load parameters in to layer using sequential order of
+    layer in connection and stored data
+    """
+    layers = data['layers']
+    layers_from_data = [l for l in layers if l['parameters']]
+    layers_from_connection = [l for l in connection if l.parameters]
+
+    for layer, layer_data in zip(layers_from_connection, layers_from_data):
+        validate_layer_compatibility(layer, layer_data)
+
+    for layer, layer_data in zip(layers_from_connection, layers_from_data):
+        load_layer_parameter(layer, layer_data)
+
+
+def validate_data_structure(data):
+    """
+    Validates structure of the stored data
+
+    Parameters
+    ----------
+    data : dict
+
+    Raises
+    ------
+    InvalidFormat
+        When format is invalid
+    """
+    if not isinstance(data, dict):
+        raise InvalidFormat("Stored data should be in dictionary format")
+
+    if 'layers' not in data:
+        raise InvalidFormat("Stored data has no key `layers`")
+
+    if not isinstance(data['layers'], list):
+        raise InvalidFormat("Layers stored not in the list format")
+
+    if not data['layers']:
+        raise InvalidFormat("Stored data don't have any layer stored")
+
+    for layer_index, layer in enumerate(data['layers']):
+        if not isinstance(layer, dict):
+            raise InvalidFormat(
+                "Layer in the {} position (0-based indeces) is not a "
+                "dictionary (it is {})".format(layer_index, type(layer)))
+
+        for attr in ('parameters', 'input_shape', 'output_shape', 'name'):
+            if attr not in layer:
+                raise InvalidFormat(
+                    "Layer in the {} position (0-based indeces) don't "
+                    "have parameter `{}`".format(layer_index, attr))
+
+
+def load_dict(connection, data, ignore_missed=False):
+    """
+    Load network connections from dictionary.
 
     Parameters
     ----------
     connection : network, list of layer or connection
-        Connection that needs to be saved.
 
-    filepath : str
-        Path to the pickle file that will store
-        network's parameters.
-    """
-    connection = extract_connection(connection)
-    data = defaultdict(dict)
-
-    for layer, attrname, parameter in iter_parameters(connection):
-        data[layer.name][attrname] = parameter.get_value()
-
-    with open(filepath, 'wb+') as f:
-        pickle.dump(data, f)
-
-
-def load(connection, source, ignore_missed=False):
-    """
-    Load and set parameters for layers from the
-    specified source.
-
-    Parameters
-    ----------
-    connection : list of layers or connection
-
-    source : str or dict
-        It can be path to the pickle file that stores
-        parameters or dictionary that has key values that
-        store layer name and values is a dictionary that
-        stores parameter names and their values.
+    data : dict
+        Dictionary that stores network parameters.
 
     ignore_missed : bool
         ``False`` means that error will be triggered in case
@@ -59,38 +199,226 @@ def load(connection, source, ignore_missed=False):
 
     Raises
     ------
-    TypeError
-        In case if source has invalid data type.
+    ValueError
+        Happens in case if `ignore_missed=False` and there is no
+        parameters for some of the layers.
     """
+    validate_data_structure(data)
     connection = extract_connection(connection)
 
-    if isinstance(source, six.string_types):
-        with open(source, 'rb') as f:
-            data = pickle.load(f)
+    # First we try to load parameters using there names as identifiers
+    loaded_by_layer_names = load_dict_by_names(connection, data, ignore_missed)
 
-    elif isinstance(source, dict):
-        data = source
-
-    else:
-        raise TypeError("Source type is unknown. Got {}, expected dict "
-                        "or str".format(type(source)))
-
-    for layer, attrname, _ in iter_parameters(connection):
-        if layer.name not in data or attrname not in data[layer.name]:
-            if ignore_missed:
-                continue
-
-            raise ValueError(
-                "Cannot load parameters from the specified data source. "
-                "Layer `{}` doesn't have stored parameter `{}`."
-                "".format(layer.name, attrname))
-
-        loaded_parameter = data[layer.name][attrname]
-
-        attrvalue = getattr(layer, attrname)
-        attrvalue.set_value(asfloat(loaded_parameter))
+    if not loaded_by_layer_names:
+        # If we couldn't load data using layer names we will try to
+        # compare layers in sequence one by one. Even if names are
+        # different graphs can be the same
+        load_dict_sequentially(connection, data, ignore_missed)
 
     # We need to initalize connection, to make sure
     # that each layer will generate shared variables
     # and validate connections
     connection.initialize()
+
+
+def save_dict(connection):
+    """
+    Save network into the dictionary.
+
+    Parameters
+    ----------
+    connection : network, list of layer or connection
+
+    Returns
+    -------
+    dict
+    """
+    connection = extract_connection(connection)
+    data = {
+        'metadata': {
+            'language': 'python',
+            'library': 'neupy',
+            'version': neupy.__version__,
+            'created': strftime("%a, %d %b %Y %H:%M:%S %Z", gmtime()),
+            'theano_float': theano.config.floatX,
+        },
+        'graph': connection.graph.layer_names_only(),
+        'layers': [],
+    }
+
+    for layer in connection:
+        parameters = {}
+        configs = {}
+
+        for attrname, parameter in layer.parameters.items():
+            parameters[attrname] = {
+                'value': parameter.get_value(),
+                'trainable': parameter.trainable,
+            }
+
+        for option_name in layer.options:
+            if option_name not in parameters:
+                configs[option_name] = getattr(layer, option_name)
+
+        data['layers'].append({
+            'class_name': layer.__class__.__name__,
+            'input_shape': layer.input_shape,
+            'output_shape': layer.output_shape,
+            'name': layer.name,
+            'parameters': parameters,
+            'configs': configs,
+        })
+
+    return data
+
+
+@shared_docs(save_dict)
+def save_pickle(connection, filepath, python_compatible=True):
+    """
+    Save layer parameters in pickle file.
+
+    Parameters
+    ----------
+    {save_dict.connection}
+
+    filepath : str
+        Path to the pickle file that stores network parameters.
+
+    python_compatible : bool
+        If `True` pickled object would be compatible with
+        Python 2 and 3 (pickle protocol equalt to `2`).
+        If `False` then value would be pickled as highest
+        protocol (`pickle.HIGHEST_PROTOCOL`).
+        Defaults to `True`.
+    """
+    connection = extract_connection(connection)
+    data = save_dict(connection)
+
+    with open(filepath, 'wb+') as f:
+        # Protocol 2 is compatible for both python versions
+        protocol = pickle.HIGHEST_PROTOCOL if python_compatible else 2
+        pickle.dump(data, f, protocol)
+
+
+@shared_docs(load_dict)
+def load_pickle(connection, filepath, ignore_missed=False):
+    """
+    Load and set parameters for layers from the
+    specified filepath.
+
+    Parameters
+    ----------
+    {load_dict.connection}
+
+    filepath : str
+        Path to pickle file that will store network parameters.
+
+    {load_dict.ignore_missed}
+
+    Raises
+    ------
+    {load_dict.Raises}
+    """
+    connection = extract_connection(connection)
+
+    with open(filepath, 'rb') as f:
+        data = pickle.load(f)
+
+    load_dict(connection, data, ignore_missed)
+
+
+@shared_docs(save_dict)
+def save_hdf5(connection, filepath):
+    """
+    Save network parameters in HDF5 format.
+
+    Parameters
+    ----------
+    {save_dict.connection}
+
+    filepath : str
+        Path to the HDF5 file that stores network parameters.
+    """
+    hdf5 = load_hdf5_module()
+    connection = extract_connection(connection)
+    data = save_dict(connection)
+
+    with hdf5.File(filepath, mode='w') as f:
+        layer_names = []
+
+        for layer in data['layers']:
+            layer_name = layer['name']
+            layer_group = f.create_group(layer_name)
+
+            for attrname, attrvalue in layer.items():
+                if attrname != 'parameters':
+                    layer_group.attrs[attrname] = json.dumps(
+                        attrvalue, default=repr)
+
+            for param_name, param in layer['parameters'].items():
+                dataset = layer_group.create_dataset(
+                    param_name, data=param['value'])
+
+                dataset.attrs['trainable'] = param['trainable']
+
+            layer_names.append(layer_name)
+
+        f.attrs['metadata'] = json.dumps(data['metadata'])
+        f.attrs['graph'] = json.dumps(data['graph'])
+        f.attrs['layer_names'] = json.dumps(layer_names)
+
+
+@shared_docs(load_dict)
+def load_hdf5(connection, filepath, ignore_missed=False):
+    """
+    Load network parameters from HDF5 file.
+
+    Parameters
+    ----------
+    {load_dict.connection}
+
+    filepath : str
+        Path to HDF5 file that will store network parameters.
+
+    {load_dict.ignore_missed}
+
+    Raises
+    ------
+    {load_dict.Raises}
+    """
+    hdf5 = load_hdf5_module()
+    connection = extract_connection(connection)
+    data = {}
+
+    with hdf5.File(filepath, mode='r') as f:
+        data['metadata'] = json.loads(f.attrs['metadata'])
+        data['graph'] = json.loads(f.attrs['graph'])
+        data['layers'] = []
+
+        layer_names = json.loads(f.attrs['layer_names'])
+
+        for layer_name in layer_names:
+            layer_group = f[layer_name]
+            layer = {'name': layer_name}
+
+            for attrname, attrvalue in layer_group.attrs.iteritems():
+                try:
+                    layer[attrname] = json.loads(attrvalue)
+                except ValueError:
+                    layer[attrname] = attrvalue
+
+            layer['parameters'] = {}
+            for param_name, parameter in layer_group.iteritems():
+                layer['parameters'][param_name] = {
+                    'value': parameter.value,
+                    'trainable': parameter.attrs['trainable'],
+                }
+
+            data['layers'].append(layer)
+
+    load_dict(connection, data, ignore_missed)
+
+
+# Convenient aliases
+save = save_pickle
+load = load_pickle

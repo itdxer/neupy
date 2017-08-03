@@ -53,15 +53,21 @@ def iter_parameters(layers, only_trainable=True):
     ----------
     layers : list of layers or connection
 
+    only_trainable : bool
+        If `True` returns only trainable parameters.
+        Defaults to `True`.
+
     Yields
     ------
     tuple
         Tuple with three ariables: (layer, attribute_name, parameter)
     """
     observed_parameters = []
+
     for layer in layers:
         for attrname, parameter in layer.parameters.items():
             new_parameter = parameter not in observed_parameters
+
             if new_parameter and (parameter.trainable or not only_trainable):
                 observed_parameters.append(parameter)
                 yield layer, attrname, parameter
