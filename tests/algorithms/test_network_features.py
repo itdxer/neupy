@@ -110,6 +110,17 @@ class NetworkMainTestCase(BaseTestCase):
         norm_errlist = errlist.normalized()
         self.assertIs(norm_errlist, errlist)
 
+    def test_non_empty_error_history_list(self):
+        errlist = ErrorHistoryList()
+        errlist.append([1, 2, 1])
+        errlist.append([1, 1, 1])
+        errlist.append([2, 10])
+
+        norm_errlist = errlist.normalized()
+        expected_errorlsit = ErrorHistoryList([4, 3, 12])
+
+        self.assertEqual(norm_errlist, expected_errorlsit)
+
     def test_network_train_epsilon_exception(self):
         network = algorithms.GradientDescent((2, 3, 1))
 

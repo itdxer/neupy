@@ -225,20 +225,20 @@ def load_dict(connection, data, ignore_missed=False, load_by='names_or_order'):
         if some of the layers doesn't have storage parameters
         in the specified source. Defaults to ``False``.
 
-    load_by : {{'names', 'order', 'names_or_order'}}
+    load_by : {{``names``, ``order``, ``names_or_order``}}
         Defines strategy that will be used during parameter loading
 
-        - `names` - Matches layers in the network with stored layer
+        - ``names`` - Matches layers in the network with stored layer
           using their names.
 
-        - `order` - Matches layers in the network with stored layer
+        - ``order`` - Matches layers in the network with stored layer
           using exect order of layers.
 
-        - `names_or_order` - Matches layers in the network with stored
+        - ``names_or_order`` - Matches layers in the network with stored
           layer trying to do it first using the same names and then
           matching them sequentialy.
 
-        Defaults to `names_or_order`.
+        Defaults to ``names_or_order``.
 
     Raises
     ------
