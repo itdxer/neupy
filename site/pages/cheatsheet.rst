@@ -217,6 +217,18 @@ Other layers
     ":layer:`Reshape`", "Reshape tensor input"
     ":layer:`Embedding`", "Embedding layer accepts indeces as an input and returns rows from the weight matrix associated with these indeces."
 
+Architectures
+*************
+
+.. csv-table::
+    :header: "Class name", "Description"
+
+    ":class:`vgg19 <neupy.architectures.vgg19>`", "VGG19 network",
+    ":class:`vgg16 <neupy.architectures.vgg16>`", "VGG16 network",
+    ":class:`squeezenet <neupy.architectures.squeezenet>`", "SqueezeNet network",
+    ":class:`alexnet <neupy.architectures.alexnet>`", "AlexNet network",
+
+
 .. _init-methods:
 
 Parameter Initialization Methods

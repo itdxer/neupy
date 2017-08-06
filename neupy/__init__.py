@@ -3,4 +3,4 @@ NeuPy is a Python library for Artificial Neural Networks and Deep Learning.
 """
 
 
-__version__ = '0.5.3.dev'
+__version__ = '0.6.0.dev'

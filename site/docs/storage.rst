@@ -33,21 +33,40 @@ Since parameters are stored in a regular pickle files it's possible to load them
     with open('/path/to/file.pickle', 'rb') as f:
         parameters = pickle.load(f)
 
-The stored object in the pickle file has the following format.
+Data in the `parameters` variable is easely accesible.
 
 .. code-block:: python
 
-    {
-        'layer-name-1': {
-            'weight': np.array([...]),
-            'bias': np.array([...]),
-        },
-        'layer-name-2': {
-            'weight': np.array([...]),
-            'bias': np.array([...]),
-        },
-        ...
-    }
+    >>> parameters.keys()
+    ['layers', 'graph', 'metadata']
+    >>> len(parameters['layers'])
+    4
+    >>> for layer_data in parameters['layers']:
+    ...     print("Name: {}".format(layer_data['name']))
+    ...     print("Available keys: {}".format(layer_data.keys()))
+    ...     if layer_data['parameters']:
+    ...         print("Parameters: {}".format(layer_data['parameters'].keys()))
+    ...         print("Weight shape: {}".format(layer_data['parameters']['weight']['value'].shape))
+    ...     print('-' * 20)
+    ...
+    Name: input-1
+    Available keys: ['name', 'parameters', 'class_name', 'input_shape', 'configs', 'output_shape']
+    --------------------
+    Name: relu-1
+    Available keys: ['name', 'parameters', 'class_name', 'input_shape', 'configs', 'output_shape']
+    Parameters: ['bias', 'weight']
+    Weight shape: (10, 20)
+    --------------------
+    Name: relu-2
+    Available keys: ['name', 'parameters', 'class_name', 'input_shape', 'configs', 'output_shape']
+    Parameters: ['bias', 'weight']
+    Weight shape: (20, 30)
+    --------------------
+    Name: softmax-1
+    Available keys: ['name', 'parameters', 'class_name', 'input_shape', 'configs', 'output_shape']
+    Parameters: ['bias', 'weight']
+    Weight shape: (30, 10)
+    --------------------
 
 
 Save and load algorithms

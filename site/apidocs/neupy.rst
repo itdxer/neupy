@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
 
     neupy.algorithms
+    neupy.architectures
     neupy.core
     neupy.datasets
     neupy.helpers
