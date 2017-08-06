@@ -2,6 +2,7 @@ import copy
 
 import numpy as np
 
+from neupy.utils import asfloat
 from neupy import layers, storage
 from neupy.storage import (validate_data_structure, InvalidFormat,
                            ParameterLoaderError, validate_layer_compatibility)
@@ -163,7 +164,7 @@ class DictStorageTestCase(BaseTestCase):
                     'bias': {'trainable': True, 'value': np.ones((6,))},
                 }
             }]
-        })
+        }, load_by='order')
 
         relu = connection.layer('relu')
         self.assertEqual(12, np.sum(relu.weight.get_value()))
@@ -206,6 +207,12 @@ class DictStorageTestCase(BaseTestCase):
                 }]
             }, ignore_missed=False)
 
+    def test_failed_loading_mode_for_storage(self):
+        connection = layers.Input(2) > layers.Sigmoid(1)
+
+        with self.assertRaisesRegexp(ValueError, "Invalid value"):
+            storage.load_dict(connection, {}, load_by='unknown')
+
 
 class StoredDataValidationTestCase(BaseTestCase):
     def test_stored_data_dict_format_basics(self):
@@ -243,6 +250,26 @@ class StoredDataValidationTestCase(BaseTestCase):
                 'output_shape': (3,),
             }]})
 
+        with self.assertRaises(InvalidFormat):
+            validate_data_structure({
+                'layers': [{
+                    'parameters': {},
+                    'input_shape': 2,  # wrong type
+                    'output_shape': (3,),
+                    'name': 'name',
+                }]
+            })
+
+        with self.assertRaises(InvalidFormat):
+            validate_data_structure({
+                'layers': [{
+                    'parameters': [],  # wrong type
+                    'input_shape': (2,),
+                    'output_shape': (3,),
+                    'name': 'name',
+                }]
+            })
+
         result = validate_data_structure({
             'layers': [{
                 'parameters': {},
@@ -251,6 +278,42 @@ class StoredDataValidationTestCase(BaseTestCase):
                 'name': 'name',
             }]
         })
+        self.assertIsNone(result)
+
+    def test_stored_data_parameters_format(self):
+        with self.assertRaises(InvalidFormat):
+            validate_data_structure({'layers': [{
+                'name': 'name',
+                'input_shape': (2,),
+                'output_shape': (3,),
+                'parameters': {
+                    'weight': np.ones((2, 3)),
+                }
+            }]})
+
+        with self.assertRaises(InvalidFormat):
+            validate_data_structure({'layers': [{
+                'name': 'name',
+                'input_shape': (2,),
+                'output_shape': (3,),
+                'parameters': {
+                    'weight': {
+                        'data': np.ones((2, 3)),
+                    },
+                }
+            }]})
+
+        result = validate_data_structure({'layers': [{
+            'name': 'name',
+            'input_shape': (2,),
+            'output_shape': (3,),
+            'parameters': {
+                'weight': {
+                    'value': np.ones((2, 3)),
+                    'trainable': True,
+                },
+            }
+        }]})
         self.assertIsNone(result)
 
     def test_storage_data_layer_compatibility(self):
@@ -295,3 +358,79 @@ class StoredDataValidationTestCase(BaseTestCase):
             }
         })
         self.assertIsNone(result)
+
+
+class TransferLearningTestCase(BaseTestCase):
+    def test_transfer_learning_using_position(self):
+        network_pretrained = layers.join(
+            layers.Input(10),
+            layers.Relu(5),
+            layers.Relu(2, name='relu-2'),
+            layers.Sigmoid(1),
+        )
+        network_new = layers.join(
+            layers.Input(10),
+            layers.Relu(5),
+            layers.Relu(2),
+        )
+        pretrained_layers_stored = storage.save_dict(network_pretrained)
+
+        with self.assertRaises(ParameterLoaderError):
+            storage.load_dict(
+                network_new,
+                pretrained_layers_stored,
+                load_by='names_or_order',
+                ignore_missed=False)
+
+        storage.load_dict(
+            network_new,
+            pretrained_layers_stored,
+            load_by='names_or_order',
+            ignore_missed=True)
+
+        pretrained_predictor = network_pretrained.end('relu-2').compile()
+        new_network_predictor = network_new.compile()
+
+        random_input = asfloat(np.random.random((12, 10)))
+
+        pretrained_output = pretrained_predictor(random_input)
+        new_network_output = new_network_predictor(random_input)
+
+        np.testing.assert_array_almost_equal(
+            pretrained_output, new_network_output)
+
+    def test_transfer_learning_using_names(self):
+        network_pretrained = layers.join(
+            layers.Input(10),
+            layers.Relu(5, name='relu-1'),
+            layers.Relu(2, name='relu-2'),
+            layers.Sigmoid(1),
+        )
+        network_new = layers.join(
+            layers.Input(10),
+            layers.Relu(5, name='relu-1'),
+            layers.Relu(2, name='relu-2'),
+            layers.Relu(8, name='relu-3'),  # new layer
+        )
+        pretrained_layers_stored = storage.save_dict(network_pretrained)
+
+        storage.load_dict(
+            network_new,
+            pretrained_layers_stored,
+            load_by='names',
+            ignore_missed=True)
+
+        pretrained_predictor = network_pretrained.end('relu-2').compile()
+        new_network_predictor = network_new.end('relu-2').compile()
+
+        random_input = asfloat(np.random.random((12, 10)))
+
+        pretrained_output = pretrained_predictor(random_input)
+        new_network_output = new_network_predictor(random_input)
+
+        np.testing.assert_array_almost_equal(
+            pretrained_output, new_network_output)
+
+        new_full_network_predictor = network_new.compile()
+        pred = new_full_network_predictor(random_input)
+        self.assertEqual(pred.shape, (12, 8))
