@@ -74,6 +74,7 @@ def mixture_of_experts(networks, gating_layer=None):
         will be created.
 
         .. code-block:: python
+
             gating_layer = layers.Softmax(len(networks))
 
         Output from the gating layer should be 1D and equal to

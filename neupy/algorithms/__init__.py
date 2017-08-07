@@ -1,4 +1,3 @@
-# Algorithms
 from .gd.base import *
 from .gd.lev_marq import *
 from .gd.quasi_newton import *

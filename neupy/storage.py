@@ -530,7 +530,7 @@ def dump_with_fastest_json_module(data, f, indent=None):
     # Without extra data processor we won't be able to dump
     # numpy array into json without raising an error.
     # `json` will have issues with numpy array encoding
-    # `ujson` will have issue with numpy float or int enncoding
+    # `ujson` will have issue with numpy float or int encoding
     convert_numpy_array_to_list_recursively(data)
 
     if pkgutil.find_loader('ujson'):
