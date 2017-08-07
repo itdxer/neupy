@@ -5,6 +5,20 @@ __all__ = ('alexnet',)
 
 
 class SliceChannels(layers.BaseLayer):
+    """
+    Layer expects image as an input with second dimension
+    sepcified as a channel. Image will be sliced over the channel.
+    The ``from`` and ``to`` indeces can be specified as the parameters.
+
+    Parameters
+    ----------
+    from_channel : int
+        From which channel we will start slicing.
+
+    to_channel : int
+        To which channel we will be slicing. This layer won't be
+        included in the output.
+    """
     def __init__(self, from_channel, to_channel):
         self.from_channel = from_channel
         self.to_channel = to_channel
@@ -31,6 +45,25 @@ class SliceChannels(layers.BaseLayer):
 
 
 def alexnet():
+    """
+    AlexNet network architecture.
+
+    Examples
+    --------
+    >>> from neupy import architectures
+    >>> alexnet = architectures.alexnet()
+    >>> alexnet
+    (3, 227, 227) -> [... 37 layers ...] -> 1000
+    >>>
+    >>> from neupy import algorithms
+    >>> network = algorithms.Momentum(alexnet)
+
+    See Also
+    --------
+    :architecture:`vgg16` : VGG16 network
+    :architecture:`vgg19` : VGG19 network
+    :architecture:`squeezenet` : SqueezeNet network
+    """
     return layers.join(
         layers.Input((3, 227, 227)),
 

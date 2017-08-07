@@ -29,6 +29,22 @@ def squeezenet():
     SqueezeNet architecture. This network has small number of
     parameters that can be stored as 5Mb file. The accuracy achived
     on ImageNet comparable to the AlexNet.
+
+    Examples
+    --------
+    >>> from neupy import architectures
+    >>> squeezenet = architectures.squeezenet()
+    >>> squeezenet
+    (3, 224, 224) -> [... 67 layers ...] -> 1000
+    >>>
+    >>> from neupy import algorithms
+    >>> network = algorithms.Momentum(squeezenet)
+
+    See Also
+    --------
+    :architecture:`vgg16` : VGG16 network
+    :architecture:`vgg19` : VGG19 network
+    :architecture:`alexnet` : AlexNet network
     """
     return layers.join(
         layers.Input((3, 224, 224)),
