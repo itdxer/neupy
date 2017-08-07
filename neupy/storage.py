@@ -545,7 +545,7 @@ def dump_with_fastest_json_module(data, f, indent=None):
             indent = 0
 
         return ujson.dump(data, f, indent=indent)
-    return json.dump(data, f, indent=indent)
+    return json.dump(data, f, indent=indent, default=repr)
 
 
 def load_with_fastest_json_module(f):

@@ -68,15 +68,21 @@ class JSONStorageTestCase(BaseTestCase):
 
             connection_1 = layers.join(
                 layers.Input(10),
-                layers.Sigmoid(5),
-                layers.Sigmoid(1),
+                [
+                    layers.Sigmoid(5),
+                    layers.Relu(5),
+                ],
+                layers.Elementwise(),
             )
             predict_1 = connection_1.compile()
 
             connection_2 = layers.join(
                 layers.Input(10),
-                layers.Sigmoid(5),
-                layers.Sigmoid(1),
+                [
+                    layers.Sigmoid(5),
+                    layers.Relu(5),
+                ],
+                layers.Elementwise(),
             )
             predict_2 = connection_2.compile()
 
