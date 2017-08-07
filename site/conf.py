@@ -149,6 +149,7 @@ def get_module_for_class(classname, moduletype):
     Return model for class just using its name and module type.
     """
     available_module_types = {
+        'architecture': 'neupy.architectures',
         'network': 'neupy.algorithms',
         'layer': 'neupy.layers',
         'plot': 'neupy.plots',
@@ -176,8 +177,9 @@ def process_docstring(app, what, name, obj, options, lines):
     - :network:`NetworkClassName`
     - :layer:`LayerClassName`
     - :plot:`function_name`
+    - :architecture:`function_name`
     """
-    labels = ['network', 'layer', 'plot']
+    labels = ['network', 'layer', 'plot', 'architecture']
     labels_regexp = '|'.join(labels)
 
     regexp = re.compile(
@@ -207,8 +209,8 @@ def process_docstring(app, what, name, obj, options, lines):
             if not classname:
                 newline_pattern = r':class:`\2 <{}\.\2>`'.format(module)
             else:
-                newline_pattern = r':class:`\2 <{}\.{}>`'.format(module,
-                                                                 classname)
+                newline_pattern = r':class:`\2 <{}\.{}>`'.format(
+                    module, classname)
 
             line = regexp.sub(newline_pattern, line, count=1)
             line = line.replace('\.', '.')

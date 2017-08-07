@@ -223,10 +223,10 @@ Architectures
 .. csv-table::
     :header: "Class name", "Description"
 
-    ":class:`vgg19 <neupy.architectures.vgg19>`", "VGG19 network",
-    ":class:`vgg16 <neupy.architectures.vgg16>`", "VGG16 network",
-    ":class:`squeezenet <neupy.architectures.squeezenet>`", "SqueezeNet network",
-    ":class:`alexnet <neupy.architectures.alexnet>`", "AlexNet network",
+    ":architecture:`vgg16`", "VGG16 network"
+    ":architecture:`vgg19`", "VGG19 network"
+    ":architecture:`squeezenet`", "SqueezeNet network"
+    ":architecture:`alexnet`", "AlexNet network"
 
 
 .. _init-methods:
