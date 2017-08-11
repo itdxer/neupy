@@ -11,10 +11,10 @@ def vgg19():
     VGG19 network architecture with random parameters. Parameters
     can be loaded using ``neupy.storage`` module.
 
-    Originally VGG19 was build in order to solve image classification
+    Originally VGG19 was built in order to solve image classification
     problem. It was used in the ImageNet competition. The goal of the
-    competition is to build a model that classfies image into one of
-    the 1,000 categories. Categories include animals, objecs, transports
+    competition is to build a model that classifies image into one of
+    the 1,000 categories. Categories include animals, objects, transports
     and so on.
 
     VGG19 has roughly 143 million parameters.
