@@ -209,11 +209,11 @@ class SOFM(Kohonen):
 
     std : int, float
         Parameters controls learning rate for each neighbour.
-        The further neigbour neuron from the winning neuron
+        The further neighbour  neuron from the winning neuron
         the smaller that learning rate for it. Learning rate
         scales based on the factors produced by the normal
         distribution with center in the place of a winning
-        neuron and stanard deviation specified as a parameter.
+        neuron and standard deviation specified as a parameter.
         The learning rate for the winning neuron is always equal
         to the value specified in the ``step`` parameter and for
         neighbour neurons it's always lower.
@@ -316,7 +316,7 @@ class SOFM(Kohonen):
         Neural network weights.
         Value defined manualy should have shape ``(n_inputs, n_outputs)``.
 
-        Also it's possible to initialized weights base on the
+        Also, it's possible to initialized weights base on the
         training data. There are two options:
 
         - ``sample_from_data`` - Before starting the training will

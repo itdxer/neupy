@@ -66,7 +66,7 @@ def mixture_of_experts(networks, gating_layer=None):
     that using input data tries to figure out which of the networks
     will make better contribution to the final result. The final result
     mixes from all networks using different weights. The higher the weight
-    the larger contribution from the individial layer.
+    the larger contribution from the individual layer.
 
     Parameters
     ----------
