@@ -1,5 +1,5 @@
-from neupy.utils import all_equal
 from neupy import layers
+from neupy.utils import all_equal
 from neupy.layers.utils import extract_connection
 
 
@@ -61,6 +61,13 @@ def mixture_of_experts(networks, gating_layer=None):
     Generates mixture of experts architecture from the set of
     networks that has the same input and output shapes.
 
+    Mixture of experts learns to how to mix results from different
+    networks in order to get better performances. It adds gating layer
+    that using input data tries to figure out which of the networks
+    will make better contribution to the final result. The final result
+    mixes from all networks using different weights. The higher the weight
+    the larger contribution from the individial layer.
+
     Parameters
     ----------
     networks : list of connections or networks
@@ -89,14 +96,14 @@ def mixture_of_experts(networks, gating_layer=None):
     Returns
     -------
     connection
-        Mixture of expertds network that combine all networks into
+        Mixture of experts network that combine all networks into
         single one and adds gating layer to it.
 
     Examples
     --------
-    >>> from neupy import layers, algorithms
+    >>> from neupy import layers, algorithms, architectures
     >>>
-    >>> network = algorithms.mixture_of_experts([
+    >>> network = architectures.mixture_of_experts([
     ...     layers.join(
     ...         layers.Input(10),
     ...         layers.Relu(5),

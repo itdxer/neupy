@@ -46,7 +46,16 @@ class SliceChannels(layers.BaseLayer):
 
 def alexnet():
     """
-    AlexNet network architecture.
+    AlexNet network architecture with random parameters. Parameters
+    can be loaded using ``neupy.storage`` module.
+
+    Originally AlexNet was build in order to solve image classification
+    problem. It was used in the ImageNet competition. The goal of the
+    competition is to build a model that classfies image into one of
+    the 1,000 categories. Categories include animals, objecs, transports
+    and so on.
+
+    AlexNet has roughly 61 million parameters.
 
     Examples
     --------
@@ -63,6 +72,11 @@ def alexnet():
     :architecture:`vgg16` : VGG16 network
     :architecture:`vgg19` : VGG19 network
     :architecture:`squeezenet` : SqueezeNet network
+
+    References
+    ----------
+    ImageNet Classification with Deep Convolutional Neural Networks
+    https://goo.gl/479oZZ
     """
     return layers.join(
         layers.Input((3, 227, 227)),

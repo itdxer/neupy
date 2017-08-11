@@ -1,9 +1,9 @@
 import numpy as np
 from sklearn import datasets, preprocessing, model_selection
 
-from neupy import algorithms, layers
 from neupy.utils import asfloat
 from neupy.estimators import categorical_crossentropy
+from neupy import algorithms, layers, architectures
 
 from base import BaseTestCase
 
@@ -26,43 +26,43 @@ class MixtureOfExpertsTestCase(BaseTestCase):
 
     def test_mixture_of_experts_problem_with_specific_network(self):
         with self.assertRaisesRegexp(ValueError, "specified as a list"):
-            algorithms.mixture_of_experts(*self.networks)
+            architectures.mixture_of_experts(*self.networks)
 
         with self.assertRaisesRegexp(ValueError, "has more than one input"):
-            algorithms.mixture_of_experts(
+            architectures.mixture_of_experts(
                 networks=self.networks + [
                     [layers.Input(1), layers.Input(1)] > layers.Softmax(1),
                 ])
 
         with self.assertRaisesRegexp(ValueError, "has more than one output"):
-            algorithms.mixture_of_experts(
+            architectures.mixture_of_experts(
                 networks=self.networks + [
                     layers.Input(1) > [layers.Softmax(1), layers.Softmax(1)],
                 ])
 
         with self.assertRaisesRegexp(ValueError, "should receive vector"):
-            algorithms.mixture_of_experts(
+            architectures.mixture_of_experts(
                 networks=self.networks + [layers.Input((1, 1, 1))])
 
     def test_mixture_of_experts_problem_with_incompatible_networks(self):
         with self.assertRaisesRegexp(ValueError, "different input shapes"):
-            algorithms.mixture_of_experts(
+            architectures.mixture_of_experts(
                 networks=self.networks + [layers.Input(10)])
 
         with self.assertRaisesRegexp(ValueError, "different output shapes"):
-            algorithms.mixture_of_experts(
+            architectures.mixture_of_experts(
                 networks=self.networks + [
                     layers.Input(1) > layers.Relu(10)
                 ])
 
     def test_mixture_of_experts_init_gating_network_exceptions(self):
         with self.assertRaisesRegexp(ValueError, "Invalid type"):
-            algorithms.mixture_of_experts(
+            architectures.mixture_of_experts(
                 networks=self.networks,
                 gating_layer=(layers.Input(1) > layers.Softmax(2)))
 
         with self.assertRaisesRegexp(ValueError, "invalid number of outputs"):
-            algorithms.mixture_of_experts(
+            architectures.mixture_of_experts(
                 networks=self.networks,
                 gating_layer=layers.Softmax(10))
 
@@ -114,7 +114,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         # -------------- Train ensemlbe -------------- #
 
         moe = algorithms.Momentum(
-            algorithms.mixture_of_experts([
+            architectures.mixture_of_experts([
                 copy.deepcopy(architecture),
                 copy.deepcopy(architecture),
                 copy.deepcopy(architecture),
@@ -128,7 +128,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         self.assertGreater(network_error, ensemlbe_error)
 
     def test_mixture_of_experts_architecture(self):
-        network = algorithms.mixture_of_experts([
+        network = architectures.mixture_of_experts([
             layers.join(
                 layers.Input(10),
                 layers.Relu(5),
