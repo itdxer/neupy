@@ -15,8 +15,8 @@ At this point VGG16 network has randomly generated parameter that will make unif
 
 .. code-block:: python
 
-    >>> from neupy import storage
-    >>> storage.load_pickle(vgg16, '/path/to/vgg16.pickle')
+    from neupy import storage
+    storage.load_pickle(vgg16, '/path/to/vgg16.pickle')
 
 We can check some basic information about network architecture before modifying it.
 
