@@ -14,7 +14,6 @@ from .gd.adam import *
 from .gd.adamax import *
 
 from .ensemble.dan import *
-from .ensemble.mixture_of_experts import *
 
 from .regularization.weight_decay import *
 from .regularization.weight_elimination import *

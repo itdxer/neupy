@@ -64,7 +64,7 @@ Ensembles
 .. csv-table::
     :header: "Class name", "Name"
 
-    :class:`mixture_of_experts <neupy.algorithms.ensemble.mixture_of_experts>`, Mixture of Experts
+    :architecture:`mixture_of_experts`, Mixture of Experts
     :network:`DynamicallyAveragedNetwork`, Dynamically Averaged Network (DAN)
 
 Neural Networks with Radial Basis Functions (RBFN)
@@ -227,6 +227,7 @@ Architectures
     ":architecture:`vgg19`", "VGG19 network"
     ":architecture:`squeezenet`", "SqueezeNet network"
     ":architecture:`alexnet`", "AlexNet network"
+    ":architecture:`mixture_of_experts`", Mixture of Experts
 
 
 .. _init-methods:

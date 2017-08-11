@@ -8,7 +8,16 @@ __all__ = ('vgg16',)
 
 def vgg16():
     """
-    VGG16 network architecture.
+    VGG16 network architecture with random parameters. Parameters
+    can be loaded using ``neupy.storage`` module.
+
+    Originally VGG16 was build in order to solve image classification
+    problem. It was used in the ImageNet competition. The goal of the
+    competition is to build a model that classfies image into one of
+    the 1,000 categories. Categories include animals, objecs, transports
+    and so on.
+
+    VGG16 has roughly 138 million parameters.
 
     Examples
     --------
@@ -25,6 +34,11 @@ def vgg16():
     :architecture:`vgg19` : VGG19 network
     :architecture:`squeezenet` : SqueezeNet network
     :architecture:`alexnet` : AlexNet network
+
+    References
+    ----------
+    Very Deep Convolutional Networks for Large-Scale Image Recognition.
+    https://arxiv.org/abs/1409.1556
     """
     HalfPadConvolution = partial(layers.Convolution, padding='half')
 

@@ -8,7 +8,6 @@ Submodules
 
    neupy.algorithms.ensemble.base
    neupy.algorithms.ensemble.dan
-   neupy.algorithms.ensemble.mixture_of_experts
 
 Module contents
 ---------------
