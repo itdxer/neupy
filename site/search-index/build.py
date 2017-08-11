@@ -10,6 +10,7 @@ from collections import defaultdict, namedtuple
 import nltk
 import numpy as np
 import scipy.sparse as sp
+import ujson as json
 from six.moves.urllib.parse import urljoin, urlparse
 
 from pagerank import pagerank
@@ -138,7 +139,7 @@ def save_js_index(documents, vocabulary, tf, idf, rank):
                 tf_col=tf.col.tolist(),
                 tf_row=tf.row.tolist(),
                 tf_value=tf.data.tolist(),
-                vocabulary=vocabulary,
+                vocabulary=json.dumps(vocabulary),
                 rank=rank.tolist(),
             ))
 
