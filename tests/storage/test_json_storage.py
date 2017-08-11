@@ -13,7 +13,9 @@ from base import BaseTestCase
 
 class JSONStorageTestCase(BaseTestCase):
     def test_ujson_custom_indentation_during_dump(self):
-        with tempfile.NamedTemporaryFile() as temp:
+        # Changing the mode, because in Python 3 in would
+        # be opened as binary file
+        with tempfile.NamedTemporaryFile(mode='w+') as temp:
             dump_with_fastest_json_module(
                 {'test': 'json'}, temp.file, indent=2)
 
