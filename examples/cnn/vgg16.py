@@ -14,13 +14,9 @@ vgg16 = architectures.vgg16()
 
 if not os.path.exists(VGG16_WEIGHTS_FILE):
     download_file(
-        url=(
-            "http://srv70.putdrive.com/putstorage/DownloadFileHash/"
-            "5B7DCBF43A5A4A5QQWE2301430EWQS/vgg16.pickle"
-        ),
+        url="http://neupy.s3.amazonaws.com/imagenet-models/vgg16.pickle",
         filepath=VGG16_WEIGHTS_FILE,
-        description='Downloading weights'
-    )
+        description='Downloading weights')
 
 storage.load(vgg16, VGG16_WEIGHTS_FILE)
 
@@ -31,5 +27,4 @@ dog_image = load_image(
 
 predict = vgg16.compile()
 output = predict(dog_image)
-
-print_top_n(output[0], n=5)
+print_top_n(output, n=5)

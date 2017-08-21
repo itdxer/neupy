@@ -14,22 +14,17 @@ vgg19 = architectures.vgg19()
 
 if not os.path.exists(VGG19_WEIGHTS_FILE):
     download_file(
-        url=(
-            "http://srv70.putdrive.com/putstorage/DownloadFileHash/"
-            "F9A70DEA3A5A4A5QQWE2301487EWQS/vgg19.pickle"
-        ),
+        url="http://neupy.s3.amazonaws.com/imagenet-models/vgg19.pickle",
         filepath=VGG19_WEIGHTS_FILE,
-        description='Downloading weights'
-    )
+        description='Downloading weights')
 
 storage.load(vgg19, VGG19_WEIGHTS_FILE)
 
 dog_image = load_image(
-    os.path.join(CURRENT_DIR, 'images', 'dog.jpg'),
+    os.path.join(CURRENT_DIR, 'images', 'dog2.jpg'),
     image_size=(256, 256),
     crop_size=(224, 224))
 
 predict = vgg19.compile()
 output = predict(dog_image)
-
-print_top_n(output[0], n=5)
+print_top_n(output, n=5)
