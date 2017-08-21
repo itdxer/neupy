@@ -7,12 +7,13 @@ Pillow==3.0.0
 # Other versions can brake tests related to plots
 matplotlib==1.5.3
 
-dill==0.2.3
 nose==1.3.6
 flake8==2.2.5
 coverage==4.0.1
 mock==2.0.0
+nose-timer==0.7.0
 
 # Storage module
+dill==0.2.3
 h5py==2.7.0
 ujson==1.35
