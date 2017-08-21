@@ -205,8 +205,7 @@ class Convolution(ParameterBasedLayer):
             raise LayerConnectionError(
                 "Convolutional layer expects an input with 3 "
                 "dimensions, got {} with shape {}"
-                "".format(len(input_shape), input_shape)
-            )
+                "".format(len(input_shape), input_shape))
 
     @property
     def output_shape(self):
@@ -241,11 +240,12 @@ class Convolution(ParameterBasedLayer):
         return as_tuple(self.size[0])
 
     def output(self, input_value):
-        output = T.nnet.conv2d(input_value, self.weight,
-                               input_shape=as_tuple(None, self.input_shape),
-                               filter_shape=self.weight_shape,
-                               border_mode=self.padding,
-                               subsample=self.stride)
+        output = T.nnet.conv2d(
+            input_value, self.weight,
+           input_shape=as_tuple(None, self.input_shape),
+           filter_shape=self.weight_shape,
+           border_mode=self.padding,
+           subsample=self.stride)
 
         if self.bias is not None:
             bias = T.reshape(self.bias, (1, -1, 1, 1))
