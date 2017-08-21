@@ -1,65 +1,43 @@
-from neupy import layers, plots
+import os
+
+import theano
+from six.moves import cPickle as pickle
+from neupy.utils import asfloat
+from neupy import layers, storage, architectures, environment
+
+from imagenet_tools import (CURRENT_DIR, FILES_DIR, load_image,
+                            print_top_n, download_file, read_image)
 
 
-def ResidualUnit(n_in_filters, n_out_filters, stride, has_branch=False):
-    main_branch = layers.join(
-        layers.Convolution((n_in_filters, 1, 1), stride=stride, bias=None),
-        layers.BatchNorm(),
-        layers.Relu(),
-
-        layers.Convolution((n_in_filters, 3, 3), padding=1, bias=None),
-        layers.BatchNorm(),
-        layers.Relu(),
-
-        layers.Convolution((n_out_filters, 1, 1), bias=None),
-        layers.BatchNorm(),
-    )
-
-    residual_branch = []
-    if has_branch:
-        residual_branch = layers.join(
-            layers.Convolution((n_out_filters, 1, 1),
-                               stride=stride, bias=None),
-            layers.BatchNorm(),
-        )
-
-    return layers.join(
-        [main_branch, residual_branch],
-        layers.Elementwise() > layers.Relu(),
-    )
+RESNET50_WEIGHTS_FILE = os.path.join(FILES_DIR, 'resnet50.pickle')
+IMAGENET_MEAN_FILE = os.path.join(FILES_DIR, 'resnet50-imagenet-means.pickle')
 
 
-resnet50 = layers.join(
-    layers.Input((3, 224, 224)),
+def prepare_image(fname):
+    with open(IMAGENET_MEAN_FILE, 'rb') as f:
+        # Mean values is the average image accros all training dataset.
+        # if dataset (1000, 3, 224, 224) then mean image shape
+        # is (3, 224, 224) and computes as data.mean(axis=0)
+        mean_values = pickle.load(f)
 
-    layers.Convolution((64, 7, 7), stride=2, padding=3),
-    layers.BatchNorm(),
-    layers.Relu(),
+    image = read_image(fname, image_size=(256, 256), crop_size=(224, 224))
+    # Convert RGB to BGR
+    image[:, (0, 1, 2), :, :] = image[:, (2, 1, 0), :, :]
+    return asfloat(image - mean_values)
 
-    layers.MaxPooling((3, 3), stride=(2, 2), ignore_border=False),
 
-    ResidualUnit(64, 256, stride=1, has_branch=True),
-    ResidualUnit(64, 256, stride=1),
-    ResidualUnit(64, 256, stride=1),
+environment.speedup()
+resnet50 = architectures.resnet50()
 
-    ResidualUnit(128, 512, stride=2, has_branch=True),
-    ResidualUnit(128, 512, stride=1),
-    ResidualUnit(128, 512, stride=1),
-    ResidualUnit(128, 512, stride=1),
+if not os.path.exists(RESNET50_WEIGHTS_FILE):
+    download_file(
+        url="http://neupy.s3.amazonaws.com/imagenet-models/resnet50.pickle",
+        filepath=RESNET50_WEIGHTS_FILE,
+        description='Downloading weights')
 
-    ResidualUnit(256, 1024, stride=2, has_branch=True),
-    ResidualUnit(256, 1024, stride=1),
-    ResidualUnit(256, 1024, stride=1),
-    ResidualUnit(256, 1024, stride=1),
-    ResidualUnit(256, 1024, stride=1),
-    ResidualUnit(256, 1024, stride=1),
+storage.load(resnet50, RESNET50_WEIGHTS_FILE)
+predict = resnet50.compile()
 
-    ResidualUnit(512, 2048, stride=2, has_branch=True),
-    ResidualUnit(512, 2048, stride=1),
-    ResidualUnit(512, 2048, stride=1),
-
-    layers.GlobalPooling(),
-    layers.Reshape(),
-    layers.Softmax(1000),
-)
-plots.layer_structure(resnet50)
+dog_image = prepare_image(os.path.join(CURRENT_DIR, 'images', 'dog2.jpg'))
+output = predict(dog_image)
+print_top_n(output, n=5)
