@@ -76,6 +76,41 @@ def ResidualUnit(n_input_filters, n_output_filters, stride,
 
 
 def resnet50():
+    """
+    ResNet50 network architecture with random parameters. Parameters
+    can be loaded using ``neupy.storage`` module.
+
+    ResNet50 has roughly 25.5 million parameters.
+
+    Notes
+    -----
+    Because of the global pooling layer, ResNet50 can be applied to
+    the images with variable sizes. The only limitation is that image
+    size should be bigger than 32x32, otherwise network wont be able
+    to apply all transformations to the image.
+
+    Examples
+    --------
+    >>> from neupy import architectures
+    >>> resnet50 = architectures.resnet50()
+    >>> resnet50
+    (3, 224, 224) -> [... 187 layers ...] -> 1000
+    >>>
+    >>> from neupy import algorithms
+    >>> network = algorithms.Momentum(resnet50)
+
+    See Also
+    --------
+    :architecture:`vgg16` : VGG16 network
+    :architecture:`squeezenet` : SqueezeNet network
+    :architecture:`alexnet` : AlexNet network
+    :architecture:`squeezenet` : SqueezeNet network
+
+    References
+    ----------
+    Deep Residual Learning for Image Recognition.
+    https://arxiv.org/abs/1512.03385
+    """
     return layers.join(
         layers.Input((3, 224, 224)),
 
