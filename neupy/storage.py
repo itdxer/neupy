@@ -3,6 +3,7 @@ import pkgutil
 import importlib
 from time import gmtime, strftime
 
+import six
 import theano
 import numpy as np
 from six.moves import cPickle as pickle
@@ -315,7 +316,7 @@ def save_dict(connection):
         },
         # Make it as a list in order to save the right order
         # of paramters, otherwise it can be convert to the dictionary.
-        'graph': list(connection.graph.layer_names_only()),
+        'graph': connection.graph.layer_names_only(),
         'layers': [],
     }
 
@@ -325,7 +326,7 @@ def save_dict(connection):
 
         for attrname, parameter in layer.parameters.items():
             parameters[attrname] = {
-                'value': parameter.get_value(),
+                'value': asfloat(parameter.get_value()),
                 'trainable': parameter.trainable,
             }
 
@@ -369,7 +370,7 @@ def save_pickle(connection, filepath, python_compatible=True):
 
     with open(filepath, 'wb+') as f:
         # Protocol 2 is compatible for both python versions
-        protocol = pickle.HIGHEST_PROTOCOL if python_compatible else 2
+        protocol = pickle.HIGHEST_PROTOCOL if python_compatible else -1
         pickle.dump(data, f, protocol)
 
 
@@ -398,7 +399,12 @@ def load_pickle(connection, filepath, ignore_missed=False,
     connection = extract_connection(connection)
 
     with open(filepath, 'rb') as f:
-        data = pickle.load(f)
+        if six.PY3:
+            # Specify encoding for python 3 in order to be able to
+            # read files that has been created in python 2
+            data = pickle.load(f, encoding='latin1')
+        else:
+            data = pickle.load(f)
 
     load_dict(connection, data, ignore_missed, load_by)
 
