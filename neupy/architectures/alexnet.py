@@ -18,11 +18,13 @@ class SliceChannels(layers.BaseLayer):
     to_channel : int
         To which channel we will be slicing. This layer won't be
         included in the output.
+
+    {BaseLayer.Parameters}
     """
-    def __init__(self, from_channel, to_channel):
+    def __init__(self, from_channel, to_channel, **kwargs):
         self.from_channel = from_channel
         self.to_channel = to_channel
-        super(SliceChannels, self).__init__()
+        super(SliceChannels, self).__init__(**kwargs)
 
     @property
     def output_shape(self):
