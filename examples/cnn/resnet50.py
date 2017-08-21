@@ -11,6 +11,7 @@ from imagenet_tools import (CURRENT_DIR, FILES_DIR, load_image,
 
 RESNET50_WEIGHTS_FILE = os.path.join(FILES_DIR, 'resnet50.pickle')
 IMAGENET_MEAN_FILE = os.path.join(FILES_DIR, 'resnet50-imagenet-means.pickle')
+DOG_IMAGE_PATH = os.path.join(CURRENT_DIR, 'images', 'german-shepherd.jpg')
 
 
 def prepare_image(fname):
@@ -38,6 +39,6 @@ if not os.path.exists(RESNET50_WEIGHTS_FILE):
 storage.load(resnet50, RESNET50_WEIGHTS_FILE)
 predict = resnet50.compile()
 
-dog_image = prepare_image(os.path.join(CURRENT_DIR, 'images', 'dog2.jpg'))
+dog_image = prepare_image(DOG_IMAGE_PATH)
 output = predict(dog_image)
 print_top_n(output, n=5)

@@ -7,9 +7,10 @@ from imagenet_tools import (CURRENT_DIR, FILES_DIR, load_image,
                             print_top_n, download_file)
 
 
-theano.config.floatX = 'float32'
 VGG19_WEIGHTS_FILE = os.path.join(FILES_DIR, 'vgg19.pickle')
+DOG_IMAGE_PATH = os.path.join(CURRENT_DIR, 'images', 'german-shepherd.jpg')
 
+theano.config.floatX = 'float32'
 vgg19 = architectures.vgg19()
 
 if not os.path.exists(VGG19_WEIGHTS_FILE):
@@ -21,7 +22,7 @@ if not os.path.exists(VGG19_WEIGHTS_FILE):
 storage.load(vgg19, VGG19_WEIGHTS_FILE)
 
 dog_image = load_image(
-    os.path.join(CURRENT_DIR, 'images', 'dog2.jpg'),
+    DOG_IMAGE_PATH,
     image_size=(256, 256),
     crop_size=(224, 224))
 
