@@ -47,7 +47,7 @@ def squeezenet():
     >>> from neupy import architectures
     >>> squeezenet = architectures.squeezenet()
     >>> squeezenet
-    (3, 224, 224) -> [... 67 layers ...] -> 1000
+    (3, 227, 227) -> [... 67 layers ...] -> 1000
     >>>
     >>> from neupy import algorithms
     >>> network = algorithms.Momentum(squeezenet)
@@ -65,7 +65,7 @@ def squeezenet():
     https://arxiv.org/abs/1602.07360
     """
     return layers.join(
-        layers.Input((3, 224, 224)),
+        layers.Input((3, 227, 227)),
 
         layers.Convolution((96, 3, 3), stride=(2, 2),
                            padding='valid', name='conv1'),

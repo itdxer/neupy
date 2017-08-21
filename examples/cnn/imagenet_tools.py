@@ -1,9 +1,13 @@
+from __future__ import division
+
 import os
 
 import requests
 from tqdm import tqdm
 import numpy as np
 from scipy.misc import imread, imresize
+from skimage import transform
+from neupy.utils import asfloat
 
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -29,38 +33,62 @@ def download_file(url, filepath, description=''):
     print('Downloaded sucessfully')
 
 
-def load_image(image_name, image_size=None, crop_size=None, use_bgr=True):
+def read_image(image_name, image_size=None, crop_size=None):
     image = imread(image_name, mode='RGB')
 
     if image_size is not None:
-        image = imresize(image, image_size)
+        height, width, _ = image.shape
+        new_height, new_width = image_size
+
+        if height < width:
+            # Since width is bigger than height, this scaler
+            # factor will say by how much it bigger
+            # New width dimension will be scaled in the way
+            # that output image will have proportional width and
+            # height compae to it's original size
+            proportion_scaler = width / height
+            image_size = (new_height, int(new_width * proportion_scaler))
+        else:
+            proportion_scaler = height / width
+            image_size = (int(new_height * proportion_scaler), new_width)
+
+        image = transform.resize(
+            image, image_size,
+            preserve_range=True,
+            mode='constant')
 
     if crop_size is not None:
+        height, width, _ = image.shape
         height_slice = slice(
-            (image_size[0] - crop_size[0]) // 2,
-            (image_size[0] + crop_size[0]) // 2)
+            (height - crop_size[0]) // 2,
+            (height + crop_size[0]) // 2)
 
         width_slice = slice(
-            (image_size[1] - crop_size[1]) // 2,
-            (image_size[1] + crop_size[1]) // 2)
+            (width - crop_size[1]) // 2,
+            (width + crop_size[1]) // 2)
 
         image = image[height_slice, width_slice, :]
 
-    if use_bgr:
-        # RGB -> BGR
-        image[:, :, (0, 1, 2)] = image[:, :, (2, 1, 0)]
-
-    image = image.astype('float32')
-
-    # Normalize channels (based on the pretrained VGG16 configurations)
-    image[:, :, 0] -= 123.68
-    image[:, :, 1] -= 116.779
-    image[:, :, 2] -= 103.939
-
     # (height, width, channel) -> (channel, height, width)
     image = image.transpose((2, 0, 1))
+
     # (channel, height, width) -> (1, channel, height, width)
     image = np.expand_dims(image, axis=0)
+
+    return asfloat(image)
+
+
+def load_image(image_name, image_size=None, crop_size=None, use_bgr=True):
+    image = read_image(image_name, image_size, crop_size)
+
+    # Per channell normalization
+    image[:, 0, :, :] -= 124
+    image[:, 1, :, :] -= 117
+    image[:, 2, :, :] -= 104
+
+    if use_bgr:
+        # RGB -> BGR
+        image[:, (0, 1, 2), :, :] = image[:, (2, 1, 0), :, :]
 
     return image
 
@@ -69,16 +97,20 @@ def deprocess(image):
     image = image.copy()
     image = image.transpose((1, 2, 0))
 
-    image[:, :, 0] += 123.68
-    image[:, :, 1] += 116.779
-    image[:, :, 2] += 103.939
+    image[:, :, 0] += 124
+    image[:, :, 1] += 117
+    image[:, :, 2] += 104
 
+    # RGB -> BGR
     image[:, :, (0, 1, 2)] = image[:, :, (2, 1, 0)]
 
     return image.astype(np.int8)
 
 
 def top_n(probs, n=5):
+    if probs.ndim == 2:
+        probs = probs[0]  # take probabilities for first image
+
     with open(IMAGENET_CLASSES_FILE, 'r') as f:
         class_names = f.read().splitlines()
         class_names = np.array(class_names)
@@ -91,10 +123,10 @@ def top_n(probs, n=5):
 
 
 def print_top_n(probs, n=5):
-    top_classes, class_probs = top_n(probs, n=5)
+    top_classes, class_probs = top_n(probs, n)
 
     print('-----------------------')
-    print('Top-5 predicted classes')
+    print('Top-{} predicted classes'.format(n))
     print('-----------------------')
 
     for top_class, class_prob in zip(top_classes, class_probs):

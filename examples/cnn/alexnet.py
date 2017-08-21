@@ -14,13 +14,9 @@ alexnet = architectures.alexnet()
 
 if not os.path.exists(ALEXNET_WEIGHTS_FILE):
     download_file(
-        url=(
-            "http://srv70.putdrive.com/putstorage/DownloadFileHash/"
-            "F497B1D43A5A4A5QQWE2295998EWQS/alexnet.pickle"
-        ),
+        url="http://neupy.s3.amazonaws.com/imagenet-models/alexnet.pickle",
         filepath=ALEXNET_WEIGHTS_FILE,
-        description='Downloading weights'
-    )
+        description='Downloading weights')
 
 storage.load(alexnet, ALEXNET_WEIGHTS_FILE)
 
@@ -32,5 +28,4 @@ dog_image = load_image(
 
 predict = alexnet.compile()
 output = predict(dog_image)
-
-print_top_n(output[0], n=5)
+print_top_n(output, n=5)

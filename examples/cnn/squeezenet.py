@@ -16,21 +16,18 @@ squeezenet = architectures.squeezenet()
 
 if not os.path.exists(SQUEEZENET_WEIGHTS_FILE):
     download_file(
-        url=(
-            "http://srv70.putdrive.com/putstorage/DownloadFileHash/"
-            "6B0A15B43A5A4A5QQWE2304100EWQS/squeezenet.pickle"
-        ),
+        url="http://neupy.s3.amazonaws.com/imagenet-models/squeezenet.pickle",
         filepath=SQUEEZENET_WEIGHTS_FILE,
-        description='Downloading weights'
-    )
+        description='Downloading weights')
 
 storage.load(squeezenet, SQUEEZENET_WEIGHTS_FILE)
 
 monkey_image = load_image(
     os.path.join(CURRENT_DIR, 'images', 'titi-monkey.jpg'),
-    image_size=(224, 224))
+    image_size=(227, 227),
+    crop_size=(227, 227),
+    use_bgr=True)
 
 predict = squeezenet.compile()
 output = predict(monkey_image)
-
-print_top_n(output[0], n=5)
+print_top_n(output, n=5)
