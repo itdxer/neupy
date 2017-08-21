@@ -34,6 +34,7 @@ def vgg19():
     :architecture:`vgg16` : VGG16 network
     :architecture:`squeezenet` : SqueezeNet network
     :architecture:`alexnet` : AlexNet network
+    :architecture:`resnet50` : ResNet50 network
 
     References
     ----------

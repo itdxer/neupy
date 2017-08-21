@@ -57,6 +57,7 @@ def squeezenet():
     :architecture:`vgg16` : VGG16 network
     :architecture:`vgg19` : VGG19 network
     :architecture:`alexnet` : AlexNet network
+    :architecture:`resnet50` : ResNet50 network
 
     References
     ----------
