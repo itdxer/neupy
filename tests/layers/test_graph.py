@@ -336,7 +336,7 @@ class LayerGraphTestCase(BaseTestCase):
         graph.connect_layers(l2, lc)
         graph.connect_layers(l3, lc)
 
-        actual_graph = list(graph.layer_names_only().items())
+        actual_graph = graph.layer_names_only()
         expected_graph = [
             ('input', ['sigmoid-2']),
             ('sigmoid-2', ['sigmoid-3', 'concat']),

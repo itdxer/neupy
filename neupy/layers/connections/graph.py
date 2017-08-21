@@ -645,7 +645,7 @@ class LayerGraph(object):
         for from_layer, to_layers in self.forward_graph.items():
             prepared_graph[from_layer.name] = [l.name for l in to_layers]
 
-        return prepared_graph
+        return list(prepared_graph.items())
 
     def __len__(self):
         return len(self.forward_graph)
