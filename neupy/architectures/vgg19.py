@@ -74,7 +74,11 @@ def vgg19():
 
         layers.Reshape(),
 
-        layers.Relu(4096, name='dense_1') > layers.Dropout(0.5),
-        layers.Relu(4096, name='dense_2') > layers.Dropout(0.5),
-        layers.Softmax(1000, name='dense_3'),
+        layers.Linear(4096, name='dense_1') > layers.Relu(),
+        layers.Dropout(0.5),
+
+        layers.Linear(4096, name='dense_2') > layers.Relu(),
+        layers.Dropout(0.5),
+
+        layers.Linear(1000, name='dense_3') > layers.Softmax(),
     )

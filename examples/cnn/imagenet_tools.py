@@ -97,12 +97,12 @@ def deprocess(image):
     image = image.copy()
     image = image.transpose((1, 2, 0))
 
+    # BGR -> RGB
+    image[:, :, (0, 1, 2)] = image[:, :, (2, 1, 0)]
+
     image[:, :, 0] += 124
     image[:, :, 1] += 117
     image[:, :, 2] += 104
-
-    # RGB -> BGR
-    image[:, :, (0, 1, 2)] = image[:, :, (2, 1, 0)]
 
     return image.astype(np.int8)
 

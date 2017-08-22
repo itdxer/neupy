@@ -396,7 +396,7 @@ Now we have function that propagates input through the network and returns obtai
     from neupy import asfloat
 
     # Convert matrix to float. Type of the
-    # float depencds on theano.config.floatX variable
+    # float depends on theano.config.floatX variable
     x_test = asfloat(np.random.random((12, 10)))
     y_predicted = predict(x_test)
 

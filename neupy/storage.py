@@ -370,7 +370,7 @@ def save_pickle(connection, filepath, python_compatible=True):
 
     with open(filepath, 'wb+') as f:
         # Protocol 2 is compatible for both python versions
-        protocol = pickle.HIGHEST_PROTOCOL if python_compatible else -1
+        protocol = pickle.HIGHEST_PROTOCOL if python_compatible else 2
         pickle.dump(data, f, protocol)
 
 
