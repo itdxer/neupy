@@ -339,13 +339,13 @@ And finally, we can override all procedure in one function.
 
         # To be able to perform gaussian process we need to
         # have at least 2 samples.
-        n_hidden = random.ranint(min_n_hidden, max_n_hidden)
+        n_hidden = random.randint(min_n_hidden, max_n_hidden)
         score = func(n_hidden, *func_args)
 
         parameters.append(n_hidden)
         scores.append(score)
 
-        n_hidden = random.ranint(min_n_hidden, max_n_hidden)
+        n_hidden = random.randint(min_n_hidden, max_n_hidden)
 
         for iteration in range(2, n_iter + 1):
             score = func(n_hidden, *func_args)
