@@ -68,6 +68,16 @@ Data in the `parameters` variable is easely accesible.
     Weight shape: (30, 10)
     --------------------
 
+NeuPy supports other storage formats
+
+.. csv-table::
+    :header: "Format", "Save function", "Load function"
+
+    "pickle file", ":class:`save_pickle <neupy.storage.save_pickle>` (or :class:`save <neupy.storage.save>`)", ":class:`load_pickle <neupy.storage.load_pickle>` (or :class:`load <neupy.storage.load>`)"
+    "hdf5 file", ":class:`save_hdf5 <neupy.storage.save_hdf5>`", ":class:`load_hdf5 <neupy.storage.load_hdf5>`"
+    "json file", ":class:`save_json <neupy.storage.save_json>`", ":class:`load_json <neupy.storage.load_json>`"
+    "python dict", ":class:`save_dict <neupy.storage.save_dict>`", ":class:`load_dict <neupy.storage.load_dict>`"
+
 
 Save and load algorithms
 ------------------------
