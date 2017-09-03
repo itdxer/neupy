@@ -1,7 +1,7 @@
 Transfer Learning
 =================
 
-The main goal of the transfer learning is the ability to re-use parameters of the network that was trained on one task in order to solve similar problem. For instance, using classifier build on the 1,000 categories from ImageNet we can build similar network that predicts 10 different bird species even if they weren't introduced in the ImageNet dataset. It works because network learn low level features that can be re-used for other problems. Transferring parameters can significantly simplify training procedure of the large networks, since most of the parameters have been already pre-trained.
+The main goal of the transfer learning is to re-use parameters of the network that was trained on one task in order to solve similar problem. For instance, using classifier build on the 1,000 categories from ImageNet we can build similar network that predicts 10 bird species even if they weren't introduced in the ImageNet dataset. It works because network learn low level features that can be re-used for other problems. Transferring parameters can significantly simplify training procedure of the large networks, since most of the parameters have been already pre-trained.
 
 Transfer learning can be easily implemented in NeuPy. For example, we can build classifier that using images predicts 10 different bird species. For this task, we can re-use VGG16 network.
 

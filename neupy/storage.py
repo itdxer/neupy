@@ -304,6 +304,19 @@ def save_dict(connection):
     Returns
     -------
     dict
+        Saved parameters and information about network in dictionary
+        using specific format. Learn more about the NeuPy's storage
+        format in the official documentation.
+
+    Examples
+    --------
+    >>> from neupy import layers, storage
+    >>>
+    >>> connection = layers.Input(10) > layers.Softmax(3)
+    >>> layers_data = storage.save_dict(connection)
+    >>>
+    >>> layers_data.keys()
+    ['layers', 'graph', 'metadata']
     """
     connection = extract_connection(connection)
     data = {
@@ -364,6 +377,13 @@ def save_pickle(connection, filepath, python_compatible=True):
         If `False` then value would be pickled as highest
         protocol (`pickle.HIGHEST_PROTOCOL`).
         Defaults to `True`.
+
+    Examples
+    --------
+    >>> from neupy import layers, storage
+    >>>
+    >>> connection = layers.Input(10) > layers.Softmax(3)
+    >>> storage.save_pickle(connection, '/path/to/parameters.pickle')
     """
     connection = extract_connection(connection)
     data = save_dict(connection)
@@ -395,6 +415,13 @@ def load_pickle(connection, filepath, ignore_missed=False,
     Raises
     ------
     {load_dict.Raises}
+
+    Examples
+    --------
+    >>> from neupy import layers, storage
+    >>>
+    >>> connection = layers.Input(10) > layers.Softmax(3)
+    >>> storage.load_pickle(connection, '/path/to/parameters.pickle')
     """
     connection = extract_connection(connection)
 
@@ -420,6 +447,13 @@ def save_hdf5(connection, filepath):
 
     filepath : str
         Path to the HDF5 file that stores network parameters.
+
+    Examples
+    --------
+    >>> from neupy import layers, storage
+    >>>
+    >>> connection = layers.Input(10) > layers.Softmax(3)
+    >>> storage.save_hdf5(connection, '/path/to/parameters.hdf5')
     """
     hdf5 = load_hdf5_module()
     connection = extract_connection(connection)
@@ -470,6 +504,13 @@ def load_hdf5(connection, filepath, ignore_missed=False,
     Raises
     ------
     {load_dict.Raises}
+
+    Examples
+    --------
+    >>> from neupy import layers, storage
+    >>>
+    >>> connection = layers.Input(10) > layers.Softmax(3)
+    >>> storage.load_hdf5(connection, '/path/to/parameters.hdf5')
     """
     hdf5 = load_hdf5_module()
     connection = extract_connection(connection)
@@ -592,6 +633,13 @@ def save_json(connection, filepath, indent=None):
     -----
     Install `ujson` library in order to speed up saving and
     loading procedure.
+
+    Examples
+    --------
+    >>> from neupy import layers, storage
+    >>>
+    >>> connection = layers.Input(10) > layers.Softmax(3)
+    >>> storage.save_json(connection, '/path/to/parameters.json')
     """
     connection = extract_connection(connection)
     data = save_dict(connection)
@@ -625,6 +673,13 @@ def load_json(connection, filepath, ignore_missed=False,
     -----
     Install `ujson` library in order to speed up saving and
     loading procedure.
+
+    Examples
+    --------
+    >>> from neupy import layers, storage
+    >>>
+    >>> connection = layers.Input(10) > layers.Softmax(3)
+    >>> storage.load_json(connection, '/path/to/parameters.json')
     """
     connection = extract_connection(connection)
     data = save_dict(connection)
