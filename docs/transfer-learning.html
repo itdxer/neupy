@@ -1,0 +1,329 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
+        <meta name="viewport" content="width=device-width">
+        <title>Transfer Learning &mdash; NeuPy</title>
+            <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../_static/plugins.js"></script>
+        <script src="../_static/main.js"></script>
+        <link rel="next" title="Storage for Neural Networks" href="storage.html" /><link rel="prev" title="Scikit-learn compatibility" href="algorithms/sklearn-compatibility.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+    <style media="screen" type="text/css">
+        .docutils { width: 100%; }
+        .docutils td { padding: 10px; }
+        .section { word-wrap:break-word; }
+        .descname { font-weight: bold; }
+        .highlight-python + .figure { margin-top: 20px; }
+        .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+        .dataframe td { padding: 5px; }
+
+        .math .gd { color: #000 !important; } /* Generic.Deleted */
+        .math .m { color: #000 !important; } /* Literal.Number */
+        .math .s { color: #000 !important; } /* Literal.String */
+        .math .mf { color: #000 !important; } /* Literal.Number.Float */
+        .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+        .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+        .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+        .math .sc { color: #000 !important; } /* Literal.String.Char */
+        .math .s2 { color: #000 !important; } /* Literal.String.Double */
+        .math .si { color: #000 !important; } /* Literal.String.Interpol */
+        .math .sx { color: #000 !important; } /* Literal.String.Other */
+        .math .s1 { color: #000 !important; } /* Literal.String.Single */
+        .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+        .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+        /* Background for class and function names */
+        dt[id^="neupy."] {
+            background-color: #e6edf2;
+            border: 1px solid #f8fafb;
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+        div[id^="module-neupy."] h1 {
+            display: none;
+        }
+
+        /* Search input field */
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            display: block;
+        }
+        .box {
+          padding-bottom: 50px;
+        }
+        .search-input-container {
+          width: 100%;
+          vertical-align: middle;
+          white-space: nowrap;
+          position: relative;
+        }
+        .search-input-container input#search {
+          width: 100%;
+          height: 50px;
+          padding-left: 45px;
+
+          float: left;
+          outline: none;
+          border: 1px solid #ddd;
+
+          box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          border-radius: 5px;
+
+          font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+          font-size: 12pt;
+        }
+        .search-input-container .icon {
+          position: absolute;
+          left: 0;
+          top: 50%;
+          margin-left: 17px;
+          margin-top: 13px;
+          z-index: 1;
+          color: #93a4ad;
+        }
+
+        #search-results ul.search {
+            padding: 0;
+        }
+        #search-results li p {
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        #search-results li {
+            background-color: #fff !important;
+            margin-bottom: 10px;
+            display: block !important;
+            padding: 15px;
+            border-bottom: 2px solid #ddd;
+        }
+        #search-results span.tag {
+            display: inline-block;
+            padding: 3px 4px;
+            margin-right: 8px;
+            position: relative;
+            top: -2px;
+
+            background: #888;
+            color: #fff;
+
+            font-size: 0.75em;
+            font-weight: 600;
+            line-height: 1;
+            text-transform: uppercase;
+
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            border-radius: 2px;
+        }
+    </style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+        <div>
+          <h1><a href="../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/model_zoo.html">Model Zoo</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+    <div class="section" id="transfer-learning">
+<h1>Transfer Learning</h1>
+<p>The main goal of the transfer learning is to re-use parameters of the network that was trained on one task in order to solve similar problem. For instance, using classifier build on the 1,000 categories from ImageNet we can build similar network that predicts 10 bird species even if they weren&#8217;t introduced in the ImageNet dataset. It works because network learn low level features that can be re-used for other problems. Transferring parameters can significantly simplify training procedure of the large networks, since most of the parameters have been already pre-trained.</p>
+<p>Transfer learning can be easily implemented in NeuPy. For example, we can build classifier that using images predicts 10 different bird species. For this task, we can re-use VGG16 network.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">architectures</span><span class="p">,</span> <span class="n">layers</span>
+<span class="c1"># At this point vgg16 has only random parameters</span>
+<span class="n">vgg16</span> <span class="o">=</span> <span class="n">architectures</span><span class="o">.</span><span class="n">vgg16</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>At this point VGG16 network has randomly generated parameter that will make uniform predictions for all classes. We can load pre-trained parameters using <span class="docutils literal"><span class="pre">neupy.storage</span></span> module.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">storage</span>
+<span class="n">storage</span><span class="o">.</span><span class="n">load_pickle</span><span class="p">(</span><span class="n">vgg16</span><span class="p">,</span> <span class="s1">&#39;/path/to/vgg16.pickle&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can check some basic information about network architecture before modifying it.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16</span><span class="o">.</span><span class="n">input_shape</span>
+<span class="go">(3, 224, 224)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16</span><span class="o">.</span><span class="n">output_shape</span>
+<span class="go">(1000,)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span>  <span class="c1"># check last 3 layers</span>
+<span class="go">[Relu(4096), Dropout(proba=0.5), Softmax(1000)]</span>
+</pre></div>
+</div>
+<p>As you can see the last layer makes prediction for 1,000 classes and for our problem we need only 10. For this reason, we can replace last layer with layer that specific for our classification problem.</p>
+<p>We can use dropout layer as the last layer that we will re-use from VGG16 network.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dropout</span> <span class="o">=</span> <span class="n">vgg16</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="n">dropout</span><span class="p">)</span>
+<span class="go">(3, 224, 224) -&gt; [... 37 layers ...] -&gt; 4096</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16_modified</span> <span class="o">=</span> <span class="n">vgg16</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="n">dropout</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16_modified</span>
+<span class="go">(3, 224, 224) -&gt; [... 38 layers ...] -&gt; 10</span>
+</pre></div>
+</div>
+<p>Now network in the <span class="docutils literal"><span class="pre">vgg16_modified</span></span> variables has replaced last layer with new layer.</p>
+<p>In case of transfer learning, often, we need to train last layer first before training whole network. In order to do it, we need to separate network into two parts. First part will have only pre-trained parameters from VGG16 and another one will have only parameters that we want to train specifically for our problem.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pretrained_vgg16_part</span> <span class="o">=</span> <span class="n">vgg16</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="n">dropout</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pretrained_vgg16_part</span>
+<span class="go">(3, 224, 224) -&gt; [... 37 layers ...] -&gt; 4096</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pretrained_vgg16_part</span><span class="o">.</span><span class="n">output_shape</span>
+<span class="go">(4096,)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_vgg16_part</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">Input(4096) &gt; Softmax(10)</span>
+</pre></div>
+</div>
+<p>Using pre-trained part of the network we can prepare input image for the training of the final layer</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Loading 10,000 image that would be pre-processed in the</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># same way as it was done during training on ImageNet data.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Labels also was encoded with one hot encoder.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">images</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">load_prepared_image_and_labels</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Initialize it using training algorithm in order to</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># get some basic information and a nice progressbar</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># during prediction</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gdnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">MinibatchGradientDescent</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">pretrained_vgg16_part</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedded_images</span> <span class="o">=</span> <span class="n">gdnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedded_images</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(10000, 4096)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">momentum</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span><span class="n">new_vgg16_part</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">momentum</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">embedded_images</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After pre-training of the final layer, we can combine two networks into the new one that we can use as a modified version of VGG16 network that would be used for new application.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pretrained_vgg16_part</span> <span class="o">&gt;</span> <span class="n">new_vgg16_part</span>
+<span class="go">(3, 224, 224) -&gt; [... 39 layers ...] -&gt; 10</span>
+</pre></div>
+</div>
+</div>
+
+    <div class="postmeta">
+        
+        
+        
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="algorithms/sklearn-compatibility.html">Scikit-learn compatibility</a></li>
+            <li class="right"><a href="storage.html">Storage for Neural Networks</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Articles</h1>
+    <ul><li>
+            <a href="../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
+        </li><li>
+            <a href="../2016/11/12/mnist_classification.html">MNIST Classification</a>
+        </li><li>
+            <a href="../2015/09/21/password_recovery.html">Password recovery</a>
+        </li></ul>
+</div></section><section><div class="widget">
+    <h1>Install NeuPy</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neupy</pre>
+        </div>
+    </div>
+    <p>
+        <div>Learn more about NeuPy reading <a href="tutorials.html">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../search.html" method="get">
+          <div class="box">
+            <div class="search-input-container">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" name="q" id="search" placeholder="Search..." />
+            </div>
+          </div>
+    </form>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature feel free to
+        <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
+        on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
+    </p>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

@@ -186,6 +186,9 @@
         <li class="main-nav">
           <a href="../pages/cheatsheet.html">Cheat sheet</a>
         </li>
+        <li class="main-nav">
+          <a href="../pages/model_zoo.html">Model Zoo</a>
+        </li>
       </ul>
     </nav>
 
@@ -194,20 +197,390 @@
 <span id="neupy-storage-module"></span><h1>neupy.storage module</h1>
 <dl class="function">
 <dt id="neupy.storage.save">
-<span class="descclassname">neupy.storage.</span><span class="descname">save</span><span class="sig-paren">(</span><em>connection</em>, <em>filepath</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/storage.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.storage.</span><span class="descname">save</span><span class="sig-paren">(</span><em>connection</em>, <em>filepath</em>, <em>python_compatible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/storage.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Save layer parameters in pickle file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>connection</strong> : network, list of layer or connection</p>
+<p><strong>filepath</strong> : str</p>
 <blockquote>
-<div><p>Connection that needs to be saved.</p>
+<div><p>Path to the pickle file that stores network parameters.</p>
 </div></blockquote>
+<p><strong>python_compatible</strong> : bool</p>
+<blockquote class="last">
+<div><p>If <cite>True</cite> pickled object would be compatible with
+Python 2 and 3 (pickle protocol equalt to <cite>2</cite>).
+If <cite>False</cite> then value would be pickled as highest
+protocol (<cite>pickle.HIGHEST_PROTOCOL</cite>).
+Defaults to <cite>True</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">storage</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">storage</span><span class="o">.</span><span class="n">save_pickle</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s1">&#39;/path/to/parameters.pickle&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.storage.load">
+<span class="descclassname">neupy.storage.</span><span class="descname">load</span><span class="sig-paren">(</span><em>connection</em>, <em>filepath</em>, <em>ignore_missed=False</em>, <em>load_by='names_or_order'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/storage.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Load and set parameters for layers from the
+specified filepath.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>connection</strong> : network, list of layer or connection</p>
+<p><strong>filepath</strong> : str</p>
+<blockquote>
+<div><p>Path to pickle file that will store network parameters.</p>
+</div></blockquote>
+<p><strong>ignore_missed</strong> : bool</p>
+<blockquote>
+<div><p><span class="docutils literal"><span class="pre">False</span></span> means that error will be triggered in case
+if some of the layers doesn&#8217;t have storage parameters
+in the specified source. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+<p><strong>load_by</strong> : {{<span class="docutils literal"><span class="pre">names</span></span>, <span class="docutils literal"><span class="pre">order</span></span>, <span class="docutils literal"><span class="pre">names_or_order</span></span>}}</p>
+<blockquote>
+<div><p>Defines strategy that will be used during parameter loading</p>
+<ul class="simple">
+<li><span class="docutils literal"><span class="pre">names</span></span> - Matches layers in the network with stored layer
+using their names.</li>
+<li><span class="docutils literal"><span class="pre">order</span></span> - Matches layers in the network with stored layer
+using exect order of layers.</li>
+<li><span class="docutils literal"><span class="pre">names_or_order</span></span> - Matches layers in the network with stored
+layer trying to do it first using the same names and then
+matching them sequentialy.</li>
+</ul>
+<p>Defaults to <span class="docutils literal"><span class="pre">names_or_order</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>Happens in case if <cite>ignore_missed=False</cite> and there is no
+parameters for some of the layers.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">storage</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">storage</span><span class="o">.</span><span class="n">load_pickle</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s1">&#39;/path/to/parameters.pickle&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.storage.save_pickle">
+<span class="descclassname">neupy.storage.</span><span class="descname">save_pickle</span><span class="sig-paren">(</span><em>connection</em>, <em>filepath</em>, <em>python_compatible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/storage.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Save layer parameters in pickle file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>connection</strong> : network, list of layer or connection</p>
+<p><strong>filepath</strong> : str</p>
+<blockquote>
+<div><p>Path to the pickle file that stores network parameters.</p>
+</div></blockquote>
+<p><strong>python_compatible</strong> : bool</p>
+<blockquote class="last">
+<div><p>If <cite>True</cite> pickled object would be compatible with
+Python 2 and 3 (pickle protocol equalt to <cite>2</cite>).
+If <cite>False</cite> then value would be pickled as highest
+protocol (<cite>pickle.HIGHEST_PROTOCOL</cite>).
+Defaults to <cite>True</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">storage</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">storage</span><span class="o">.</span><span class="n">save_pickle</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s1">&#39;/path/to/parameters.pickle&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.storage.load_pickle">
+<span class="descclassname">neupy.storage.</span><span class="descname">load_pickle</span><span class="sig-paren">(</span><em>connection</em>, <em>filepath</em>, <em>ignore_missed=False</em>, <em>load_by='names_or_order'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/storage.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Load and set parameters for layers from the
+specified filepath.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>connection</strong> : network, list of layer or connection</p>
+<p><strong>filepath</strong> : str</p>
+<blockquote>
+<div><p>Path to pickle file that will store network parameters.</p>
+</div></blockquote>
+<p><strong>ignore_missed</strong> : bool</p>
+<blockquote>
+<div><p><span class="docutils literal"><span class="pre">False</span></span> means that error will be triggered in case
+if some of the layers doesn&#8217;t have storage parameters
+in the specified source. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+<p><strong>load_by</strong> : {{<span class="docutils literal"><span class="pre">names</span></span>, <span class="docutils literal"><span class="pre">order</span></span>, <span class="docutils literal"><span class="pre">names_or_order</span></span>}}</p>
+<blockquote>
+<div><p>Defines strategy that will be used during parameter loading</p>
+<ul class="simple">
+<li><span class="docutils literal"><span class="pre">names</span></span> - Matches layers in the network with stored layer
+using their names.</li>
+<li><span class="docutils literal"><span class="pre">order</span></span> - Matches layers in the network with stored layer
+using exect order of layers.</li>
+<li><span class="docutils literal"><span class="pre">names_or_order</span></span> - Matches layers in the network with stored
+layer trying to do it first using the same names and then
+matching them sequentialy.</li>
+</ul>
+<p>Defaults to <span class="docutils literal"><span class="pre">names_or_order</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>Happens in case if <cite>ignore_missed=False</cite> and there is no
+parameters for some of the layers.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">storage</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">storage</span><span class="o">.</span><span class="n">load_pickle</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s1">&#39;/path/to/parameters.pickle&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.storage.save_json">
+<span class="descclassname">neupy.storage.</span><span class="descname">save_json</span><span class="sig-paren">(</span><em>connection</em>, <em>filepath</em>, <em>indent=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/storage.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Save network parameters in JSON format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>connection</strong> : network, list of layer or connection</p>
+<p><strong>filepath</strong> : str</p>
+<blockquote>
+<div><p>Path to the JSON file that stores network parameters.</p>
+</div></blockquote>
+<p><strong>indent</strong> : int or None</p>
+<blockquote class="last">
+<div><p>Indentation that would be specified for the output JSON.
+Intentation equal to <cite>2</cite> or <cite>4</cite> makes it easy to read raw
+text files. The <cite>None</cite> value disables indentation which means
+that everything will be stored compactly. Defaults to <cite>None</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Install <cite>ujson</cite> library in order to speed up saving and
+loading procedure.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">storage</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">storage</span><span class="o">.</span><span class="n">save_json</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s1">&#39;/path/to/parameters.json&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.storage.load_json">
+<span class="descclassname">neupy.storage.</span><span class="descname">load_json</span><span class="sig-paren">(</span><em>connection</em>, <em>filepath</em>, <em>ignore_missed=False</em>, <em>load_by='names_or_order'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/storage.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Load network parameters from JSON file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>connection</strong> : network, list of layer or connection</p>
+<p><strong>filepath</strong> : str</p>
+<blockquote>
+<div><p>Path to JSON file that will store network parameters.</p>
+</div></blockquote>
+<p><strong>ignore_missed</strong> : bool</p>
+<blockquote>
+<div><p><span class="docutils literal"><span class="pre">False</span></span> means that error will be triggered in case
+if some of the layers doesn&#8217;t have storage parameters
+in the specified source. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+<p><strong>load_by</strong> : {{<span class="docutils literal"><span class="pre">names</span></span>, <span class="docutils literal"><span class="pre">order</span></span>, <span class="docutils literal"><span class="pre">names_or_order</span></span>}}</p>
+<blockquote>
+<div><p>Defines strategy that will be used during parameter loading</p>
+<ul class="simple">
+<li><span class="docutils literal"><span class="pre">names</span></span> - Matches layers in the network with stored layer
+using their names.</li>
+<li><span class="docutils literal"><span class="pre">order</span></span> - Matches layers in the network with stored layer
+using exect order of layers.</li>
+<li><span class="docutils literal"><span class="pre">names_or_order</span></span> - Matches layers in the network with stored
+layer trying to do it first using the same names and then
+matching them sequentialy.</li>
+</ul>
+<p>Defaults to <span class="docutils literal"><span class="pre">names_or_order</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>Happens in case if <cite>ignore_missed=False</cite> and there is no
+parameters for some of the layers.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Install <cite>ujson</cite> library in order to speed up saving and
+loading procedure.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">storage</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">storage</span><span class="o">.</span><span class="n">load_json</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s1">&#39;/path/to/parameters.json&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.storage.save_hdf5">
+<span class="descclassname">neupy.storage.</span><span class="descname">save_hdf5</span><span class="sig-paren">(</span><em>connection</em>, <em>filepath</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/storage.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Save network parameters in HDF5 format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>connection</strong> : network, list of layer or connection</p>
 <p><strong>filepath</strong> : str</p>
 <blockquote class="last">
-<div><p>Path to the pickle file that will store
-network&#8217;s parameters.</p>
+<div><p>Path to the HDF5 file that stores network parameters.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">storage</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">storage</span><span class="o">.</span><span class="n">save_hdf5</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s1">&#39;/path/to/parameters.hdf5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.storage.load_hdf5">
+<span class="descclassname">neupy.storage.</span><span class="descname">load_hdf5</span><span class="sig-paren">(</span><em>connection</em>, <em>filepath</em>, <em>ignore_missed=False</em>, <em>load_by='names_or_order'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/storage.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Load network parameters from HDF5 file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>connection</strong> : network, list of layer or connection</p>
+<p><strong>filepath</strong> : str</p>
+<blockquote>
+<div><p>Path to HDF5 file that will store network parameters.</p>
+</div></blockquote>
+<p><strong>ignore_missed</strong> : bool</p>
+<blockquote>
+<div><p><span class="docutils literal"><span class="pre">False</span></span> means that error will be triggered in case
+if some of the layers doesn&#8217;t have storage parameters
+in the specified source. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+<p><strong>load_by</strong> : {{<span class="docutils literal"><span class="pre">names</span></span>, <span class="docutils literal"><span class="pre">order</span></span>, <span class="docutils literal"><span class="pre">names_or_order</span></span>}}</p>
+<blockquote>
+<div><p>Defines strategy that will be used during parameter loading</p>
+<ul class="simple">
+<li><span class="docutils literal"><span class="pre">names</span></span> - Matches layers in the network with stored layer
+using their names.</li>
+<li><span class="docutils literal"><span class="pre">order</span></span> - Matches layers in the network with stored layer
+using exect order of layers.</li>
+<li><span class="docutils literal"><span class="pre">names_or_order</span></span> - Matches layers in the network with stored
+layer trying to do it first using the same names and then
+matching them sequentialy.</li>
+</ul>
+<p>Defaults to <span class="docutils literal"><span class="pre">names_or_order</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>Happens in case if <cite>ignore_missed=False</cite> and there is no
+parameters for some of the layers.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">storage</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">storage</span><span class="o">.</span><span class="n">load_hdf5</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s1">&#39;/path/to/parameters.hdf5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.storage.load_dict">
+<span class="descclassname">neupy.storage.</span><span class="descname">load_dict</span><span class="sig-paren">(</span><em>connection</em>, <em>data</em>, <em>ignore_missed=False</em>, <em>load_by='names_or_order'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/storage.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Load network connections from dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>connection</strong> : network, list of layer or connection</p>
+<p><strong>data</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary that stores network parameters.</p>
+</div></blockquote>
+<p><strong>ignore_missed</strong> : bool</p>
+<blockquote>
+<div><p><span class="docutils literal"><span class="pre">False</span></span> means that error will be triggered in case
+if some of the layers doesn&#8217;t have storage parameters
+in the specified source. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+<p><strong>load_by</strong> : {{<span class="docutils literal"><span class="pre">names</span></span>, <span class="docutils literal"><span class="pre">order</span></span>, <span class="docutils literal"><span class="pre">names_or_order</span></span>}}</p>
+<blockquote>
+<div><p>Defines strategy that will be used during parameter loading</p>
+<ul class="simple">
+<li><span class="docutils literal"><span class="pre">names</span></span> - Matches layers in the network with stored layer
+using their names.</li>
+<li><span class="docutils literal"><span class="pre">order</span></span> - Matches layers in the network with stored layer
+using exect order of layers.</li>
+<li><span class="docutils literal"><span class="pre">names_or_order</span></span> - Matches layers in the network with stored
+layer trying to do it first using the same names and then
+matching them sequentialy.</li>
+</ul>
+<p>Defaults to <span class="docutils literal"><span class="pre">names_or_order</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>Happens in case if <cite>ignore_missed=False</cite> and there is no
+parameters for some of the layers.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -216,38 +589,36 @@ network&#8217;s parameters.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="neupy.storage.load">
-<span class="descclassname">neupy.storage.</span><span class="descname">load</span><span class="sig-paren">(</span><em>connection</em>, <em>source</em>, <em>ignore_missed=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/storage.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Load and set parameters for layers from the
-specified source.</p>
+<dt id="neupy.storage.save_dict">
+<span class="descclassname">neupy.storage.</span><span class="descname">save_dict</span><span class="sig-paren">(</span><em>connection</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/storage.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Save network into the dictionary.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>connection</strong> : list of layers or connection</p>
-<p><strong>source</strong> : str or dict</p>
-<blockquote>
-<div><p>It can be path to the pickle file that stores
-parameters or dictionary that has key values that
-store layer name and values is a dictionary that
-stores parameter names and their values.</p>
-</div></blockquote>
-<p><strong>ignore_missed</strong> : bool</p>
-<blockquote>
-<div><p><span class="docutils literal"><span class="pre">False</span></span> means that error will be triggered in case
-if some of the layers doesn&#8217;t have storage parameters
-in the specified source. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>connection</strong> : network, list of layer or connection</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>TypeError</strong></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dict</p>
 <blockquote class="last">
-<div><p>In case if source has invalid data type.</p>
+<div><p>Saved parameters and information about network in dictionary
+using specific format. Learn more about the NeuPy&#8217;s storage
+format in the official documentation.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">storage</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layers_data</span> <span class="o">=</span> <span class="n">storage</span><span class="o">.</span><span class="n">save_dict</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layers_data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[&#39;layers&#39;, &#39;graph&#39;, &#39;metadata&#39;]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

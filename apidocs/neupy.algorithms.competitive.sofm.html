@@ -186,6 +186,9 @@
         <li class="main-nav">
           <a href="../pages/cheatsheet.html">Cheat sheet</a>
         </li>
+        <li class="main-nav">
+          <a href="../pages/model_zoo.html">Model Zoo</a>
+        </li>
       </ul>
     </nav>
 
@@ -195,7 +198,7 @@
 <dl class="class">
 <dt id="neupy.algorithms.competitive.sofm.SOFM">
 <em class="property">class </em><span class="descclassname">neupy.algorithms.competitive.sofm.</span><span class="descname">SOFM</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Self-Organizing Feature Map (SOFM).</p>
+<dd><p>Self-Organizing Feature Map (SOFM or SOM).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -204,40 +207,132 @@
 <blockquote>
 <div><p>Number of input units.</p>
 </div></blockquote>
-<p><strong>n_outputs</strong> : int</p>
+<p><strong>n_outputs</strong> : int or None</p>
 <blockquote>
-<div><p>Number of output units.</p>
+<div><p>Number of outputs. Parameter is optional in case if
+<span class="docutils literal"><span class="pre">feature_grid</span></span> was specified.</p>
 </div></blockquote>
 <p><strong>learning_radius</strong> : int</p>
 <blockquote>
-<div><p>Learning radius.</p>
+<div><p>Parameter defines radius within which we consider all
+neurons as neighbours to the winning neuron. The bigger
+the value the more neurons will be updated after each
+iteration.</p>
+<p>The <span class="docutils literal"><span class="pre">0</span></span> values means that we don&#8217;t update
+neighbour neurons.</p>
+<p>Defaults to <span class="docutils literal"><span class="pre">0</span></span>.</p>
+</div></blockquote>
+<p><strong>std</strong> : int, float</p>
+<blockquote>
+<div><p>Parameters controls learning rate for each neighbour.
+The further neighbour  neuron from the winning neuron
+the smaller that learning rate for it. Learning rate
+scales based on the factors produced by the normal
+distribution with center in the place of a winning
+neuron and standard deviation specified as a parameter.
+The learning rate for the winning neuron is always equal
+to the value specified in the <span class="docutils literal"><span class="pre">step</span></span> parameter and for
+neighbour neurons it&#8217;s always lower.</p>
+<p>The bigger the value for this parameter the bigger
+learning rate for the neighbour neurons.</p>
+<p>Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
 </div></blockquote>
 <p><strong>features_grid</strong> : list, tuple, None</p>
 <blockquote>
 <div><p>Feature grid defines shape of the output neurons.
 The new shape should be compatible with the number
-of outputs. Defaults to <span class="docutils literal"><span class="pre">(n_outputs,</span> <span class="pre">1)</span></span>.</p>
+of outputs. It means that the following condition
+should be true:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">features_grid</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_outputs</span>
+</pre></div>
+</div>
+<p>SOFM implementation supports n-dimensional grids.
+For instance, in order to specify grid as cube instead of
+the regular rectangular shape we can set up options as
+the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">SOFM</span><span class="p">(</span>
+    <span class="o">...</span>
+    <span class="n">features_grid</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Defaults to <span class="docutils literal"><span class="pre">(n_outputs,</span> <span class="pre">1)</span></span>.</p>
 </div></blockquote>
-<p><strong>transform</strong> : {<span class="docutils literal"><span class="pre">linear</span></span>, <span class="docutils literal"><span class="pre">euclid</span></span>, <span class="docutils literal"><span class="pre">cos</span></span>}</p>
+<p><strong>grid_type</strong> : {<span class="docutils literal"><span class="pre">rect</span></span>, <span class="docutils literal"><span class="pre">hexagon</span></span>}</p>
 <blockquote>
-<div><p>Indicate transformation operation related to the
-input layer.</p>
+<div><p>Defines connection type in feature grid. Type defines
+which neurons we will consider as closest to the winning
+neuron during the training.</p>
 <ul class="simple">
-<li>The <span class="docutils literal"><span class="pre">linear</span></span> value mean that input data would be
-multiplied by weights in typical way.</li>
-<li>The <span class="docutils literal"><span class="pre">euclid</span></span> method will identify the closest
-weight vector to the input one.</li>
-<li>The <span class="docutils literal"><span class="pre">cos</span></span> transformation identifies cosine
-similarity between input dataset and
-network&#8217;s weights.</li>
+<li><span class="docutils literal"><span class="pre">rect</span></span> - Connections between neurons will be organized
+in hexagonal grid.</li>
+<li><span class="docutils literal"><span class="pre">hexagon</span></span> - Connections between neurons will be organized
+in hexagonal grid. It works only for 1d or 2d grids.</li>
 </ul>
-<p>Defaults to <span class="docutils literal"><span class="pre">linear</span></span>.</p>
+<p>Defaults to <span class="docutils literal"><span class="pre">rect</span></span>.</p>
 </div></blockquote>
-<p><strong>weight</strong> : array-like, Initializer</p>
+<p><strong>distance</strong> : {<span class="docutils literal"><span class="pre">euclid</span></span>, <span class="docutils literal"><span class="pre">dot_product</span></span>, <span class="docutils literal"><span class="pre">cos</span></span>}</p>
+<blockquote>
+<div><p>Defines function that will be used to compute
+closest weight to the input sample.</p>
+<ul class="simple">
+<li><span class="docutils literal"><span class="pre">dot_product</span></span>: Just a regular dot product between
+data sample and network&#8217;s weights</li>
+<li><span class="docutils literal"><span class="pre">euclid</span></span>: Euclidian distance between data sample
+and network&#8217;s weights</li>
+<li><span class="docutils literal"><span class="pre">cos</span></span>: Cosine distance between data sample and
+network&#8217;s weights</li>
+</ul>
+<p>Defaults to <span class="docutils literal"><span class="pre">euclid</span></span>.</p>
+</div></blockquote>
+<p><strong>reduce_radius_after</strong> : int or None</p>
+<blockquote>
+<div><p>Every specified number of epochs <span class="docutils literal"><span class="pre">learning_radius</span></span>
+parameter will be reduced by <span class="docutils literal"><span class="pre">1</span></span>. Process continues
+until <span class="docutils literal"><span class="pre">learning_radius</span></span> equal to <span class="docutils literal"><span class="pre">0</span></span>.</p>
+<p>The <span class="docutils literal"><span class="pre">None</span></span> value disables parameter reduction
+during the training.</p>
+<p>Defaults to <span class="docutils literal"><span class="pre">100</span></span>.</p>
+</div></blockquote>
+<p><strong>reduce_step_after</strong> : int or None</p>
+<blockquote>
+<div><p>Defines reduction rate at which parameter <span class="docutils literal"><span class="pre">step</span></span> will
+be reduced using the following formula:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">current_epoch</span> <span class="o">/</span> <span class="n">reduce_step_after</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <span class="docutils literal"><span class="pre">None</span></span> value disables parameter reduction
+during the training.</p>
+<p>Defaults to <span class="docutils literal"><span class="pre">100</span></span>.</p>
+</div></blockquote>
+<p><strong>reduce_std_after</strong> : int or None</p>
+<blockquote>
+<div><p>Defines reduction rate at which parameter <span class="docutils literal"><span class="pre">std</span></span> will
+be reduced using the following formula:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">std</span> <span class="o">=</span> <span class="n">std</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">current_epoch</span> <span class="o">/</span> <span class="n">reduce_std_after</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <span class="docutils literal"><span class="pre">None</span></span> value disables parameter reduction
+during the training.</p>
+<p>Defaults to <span class="docutils literal"><span class="pre">100</span></span>.</p>
+</div></blockquote>
+<p><strong>weight</strong> : array-like, Initializer or {<span class="docutils literal"><span class="pre">init_pca</span></span>, <span class="docutils literal"><span class="pre">sample_from_data</span></span>}</p>
 <blockquote>
 <div><p>Neural network weights.
-Value defined manualy should have shape <span class="docutils literal"><span class="pre">(n_inputs,</span> <span class="pre">n_outputs)</span></span>.
-Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Normal" title="neupy.init.Normal"><span class="xref py py-class docutils literal"><span class="pre">Normal()</span></span></a>.</p>
+Value defined manualy should have shape <span class="docutils literal"><span class="pre">(n_inputs,</span> <span class="pre">n_outputs)</span></span>.</p>
+<p>Also, it&#8217;s possible to initialized weights base on the
+training data. There are two options:</p>
+<ul class="simple">
+<li><span class="docutils literal"><span class="pre">sample_from_data</span></span> - Before starting the training will
+randomly take number of training samples equal to number
+of expected outputs.</li>
+<li><span class="docutils literal"><span class="pre">init_pca</span></span> - Before training starts SOFM will applies PCA
+on a covariance matrix build from the training samples.
+Weights will be generated based on the two eigenvectors
+associated with the largest eigenvalues.</li>
+</ul>
+<p>Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Normal" title="neupy.init.Normal"><span class="xref py py-class docutils literal"><span class="pre">Normal()</span></span></a>.</p>
 </div></blockquote>
 <p><strong>step</strong> : float</p>
 <blockquote>
@@ -285,6 +380,10 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>Training data samples should have normalized features.</li>
+</ul>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">environment</span>
@@ -298,15 +397,14 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <span class="gp">... </span>    <span class="p">[</span><span class="o">-</span><span class="mf">0.8137</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5812</span><span class="p">],</span>
 <span class="gp">... </span><span class="p">])</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sofmnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">SOFM</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sofm</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">SOFM</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">n_inputs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">n_outputs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">learning_radius</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">features_grid</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">learning_radius</span><span class="o">=</span><span class="mi">0</span>
 <span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sofmnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sofmnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sofm</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sofm</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="go">array([[0, 1],</span>
 <span class="go">       [0, 1],</span>
 <span class="go">       [1, 0],</span>
@@ -316,49 +414,163 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="43%" />
-<col width="57%" />
+<col width="24%" />
+<col width="76%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>predict(input_data)</td>
+<tr class="row-odd"><td>init_weights(train_data)</td>
+<td>Initialized weights besed on the input data. It works only for the <cite>init_pca</cite> and <cite>sample_from_data</cite> options. For other cases it will throw an error.</td>
+</tr>
+<tr class="row-even"><td>predict(input_data)</td>
 <td>Predicts output for the specified input.</td>
 </tr>
-<tr class="row-even"><td>train(input_train, epochs=100)</td>
+<tr class="row-odd"><td>train(input_train, summary=&#8217;table&#8217;, epochs=100)</td>
 <td>Train neural network.</td>
 </tr>
-<tr class="row-odd"><td>fit(*args, **kwargs)</td>
+<tr class="row-even"><td>fit(*args, **kwargs)</td>
 <td>Alias to the <span class="docutils literal"><span class="pre">train</span></span> method.</td>
 </tr>
 </tbody>
 </table>
+<dl class="class">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.DistanceParameter">
+<em class="property">class </em><span class="descname">DistanceParameter</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><dl class="attribute">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.DistanceParameter.func">
+<span class="descname">func</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.DistanceParameter.name">
+<span class="descname">name</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.GridTypeMethods">
+<em class="property">class </em><span class="descclassname">SOFM.</span><span class="descname">GridTypeMethods</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><dl class="attribute">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.GridTypeMethods.find_neighbours">
+<span class="descname">find_neighbours</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.GridTypeMethods.find_step_scaler">
+<span class="descname">find_step_scaler</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.GridTypeMethods.name">
+<span class="descname">name</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.distance">
+<span class="descclassname">SOFM.</span><span class="descname">distance</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.sofm.SOFM.features_grid">
-<span class="descname">features_grid</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">SOFM.</span><span class="descname">features_grid</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.grid_type">
+<span class="descclassname">SOFM.</span><span class="descname">grid_type</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.init_weights">
+<span class="descclassname">SOFM.</span><span class="descname">init_weights</span><span class="sig-paren">(</span><em>input_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.sofm.SOFM.learning_radius">
-<span class="descname">learning_radius</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">SOFM.</span><span class="descname">learning_radius</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.n_outputs">
+<span class="descclassname">SOFM.</span><span class="descname">n_outputs</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.sofm.SOFM.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'n_inputs': Option(class_name='BaseAssociative', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_outputs': Option(class_name='BaseAssociative', value=IntProperty(name=&quot;n_outputs&quot;)), 'weight': Option(class_name='BaseAssociative', value=ParameterProperty(name=&quot;weight&quot;)), 'learning_radius': Option(class_name='SOFM', value=IntProperty(name=&quot;learning_radius&quot;)), 'features_grid': Option(class_name='SOFM', value=TypedListProperty(name=&quot;features_grid&quot;)), 'transform': Option(class_name='SOFM', value=ChoiceProperty(name=&quot;transform&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">SOFM.</span><span class="descname">options</span><em class="property"> = {'std': Option(class_name='SOFM', value=NumberProperty(name=&quot;std&quot;)), 'distance': Option(class_name='SOFM', value=ChoiceProperty(name=&quot;distance&quot;)), 'reduce_radius_after': Option(class_name='SOFM', value=IntProperty(name=&quot;reduce_radius_after&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'weight': Option(class_name='SOFM', value=SOFMWeightParameter(name=&quot;weight&quot;)), 'reduce_step_after': Option(class_name='SOFM', value=IntProperty(name=&quot;reduce_step_after&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'learning_radius': Option(class_name='SOFM', value=IntProperty(name=&quot;learning_radius&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'reduce_std_after': Option(class_name='SOFM', value=IntProperty(name=&quot;reduce_std_after&quot;)), 'features_grid': Option(class_name='SOFM', value=TypedListProperty(name=&quot;features_grid&quot;)), 'n_inputs': Option(class_name='BaseAssociative', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_outputs': Option(class_name='SOFM', value=IntProperty(name=&quot;n_outputs&quot;)), 'grid_type': Option(class_name='SOFM', value=ChoiceProperty(name=&quot;grid_type&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.competitive.sofm.SOFM.predict_raw">
-<span class="descname">predict_raw</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">SOFM.</span><span class="descname">predict_raw</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.algorithms.competitive.sofm.SOFM.transform">
-<span class="descname">transform</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.algorithms.competitive.sofm.SOFM.reduce_radius_after">
+<span class="descclassname">SOFM.</span><span class="descname">reduce_radius_after</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.reduce_std_after">
+<span class="descclassname">SOFM.</span><span class="descname">reduce_std_after</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.reduce_step_after">
+<span class="descclassname">SOFM.</span><span class="descname">reduce_step_after</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.std">
+<span class="descclassname">SOFM.</span><span class="descname">std</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.train">
+<span class="descclassname">SOFM.</span><span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>summary='table'</em>, <em>epochs=100</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Method train neural network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_train</strong> : array-like</p>
+<p><strong>target_train</strong> : array-like or None</p>
+<p><strong>input_test</strong> : array-like or None</p>
+<p><strong>target_test</strong> : array-like or None</p>
+<p><strong>epochs</strong> : int</p>
+<blockquote>
+<div><p>Defaults to <cite>100</cite>.</p>
+</div></blockquote>
+<p><strong>epsilon</strong> : float or None</p>
+<blockquote class="last">
+<div><p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.train_epoch">
+<span class="descclassname">SOFM.</span><span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.algorithms.competitive.sofm.SOFM.update_indexes">
-<span class="descname">update_indexes</span><span class="sig-paren">(</span><em>layer_output</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">SOFM.</span><span class="descname">update_indexes</span><span class="sig-paren">(</span><em>layer_output</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.competitive.sofm.SOFM.weight">
+<span class="descclassname">SOFM.</span><span class="descname">weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/sofm.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

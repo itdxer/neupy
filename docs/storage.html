@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="next" title="Secondary" href="secondary.html" /><link rel="prev" title="Scikit-learn compatibility" href="algorithms/sklearn-compatibility.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Secondary" href="secondary.html" /><link rel="prev" title="Transfer Learning" href="transfer-learning.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.5',
@@ -186,6 +186,9 @@
         <li class="main-nav">
           <a href="../pages/cheatsheet.html">Cheat sheet</a>
         </li>
+        <li class="main-nav">
+          <a href="../pages/model_zoo.html">Model Zoo</a>
+        </li>
       </ul>
     </nav>
 
@@ -217,26 +220,77 @@
     <span class="n">parameters</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The stored object in the pickle file has the following format.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s1">&#39;layer-name-1&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">...</span><span class="p">]),</span>
-        <span class="s1">&#39;bias&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">...</span><span class="p">]),</span>
-    <span class="p">},</span>
-    <span class="s1">&#39;layer-name-2&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">...</span><span class="p">]),</span>
-        <span class="s1">&#39;bias&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">...</span><span class="p">]),</span>
-    <span class="p">},</span>
-    <span class="o">...</span>
-<span class="p">}</span>
+<p>Data in the <cite>parameters</cite> variable is easely accesible.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[&#39;layers&#39;, &#39;graph&#39;, &#39;metadata&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">])</span>
+<span class="go">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">layer_data</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">]:</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Name: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]))</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Available keys: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer_data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">layer_data</span><span class="p">[</span><span class="s1">&#39;parameters&#39;</span><span class="p">]:</span>
+<span class="gp">... </span>        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Parameters: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer_data</span><span class="p">[</span><span class="s1">&#39;parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="gp">... </span>        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Weight shape: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer_data</span><span class="p">[</span><span class="s1">&#39;parameters&#39;</span><span class="p">][</span><span class="s1">&#39;weight&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">Name: input-1</span>
+<span class="go">Available keys: [&#39;name&#39;, &#39;parameters&#39;, &#39;class_name&#39;, &#39;input_shape&#39;, &#39;configs&#39;, &#39;output_shape&#39;]</span>
+<span class="go">--------------------</span>
+<span class="go">Name: relu-1</span>
+<span class="go">Available keys: [&#39;name&#39;, &#39;parameters&#39;, &#39;class_name&#39;, &#39;input_shape&#39;, &#39;configs&#39;, &#39;output_shape&#39;]</span>
+<span class="go">Parameters: [&#39;bias&#39;, &#39;weight&#39;]</span>
+<span class="go">Weight shape: (10, 20)</span>
+<span class="go">--------------------</span>
+<span class="go">Name: relu-2</span>
+<span class="go">Available keys: [&#39;name&#39;, &#39;parameters&#39;, &#39;class_name&#39;, &#39;input_shape&#39;, &#39;configs&#39;, &#39;output_shape&#39;]</span>
+<span class="go">Parameters: [&#39;bias&#39;, &#39;weight&#39;]</span>
+<span class="go">Weight shape: (20, 30)</span>
+<span class="go">--------------------</span>
+<span class="go">Name: softmax-1</span>
+<span class="go">Available keys: [&#39;name&#39;, &#39;parameters&#39;, &#39;class_name&#39;, &#39;input_shape&#39;, &#39;configs&#39;, &#39;output_shape&#39;]</span>
+<span class="go">Parameters: [&#39;bias&#39;, &#39;weight&#39;]</span>
+<span class="go">Weight shape: (30, 10)</span>
+<span class="go">--------------------</span>
 </pre></div>
 </div>
+<p>NeuPy supports other storage formats</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Format</th>
+<th class="head">Save function</th>
+<th class="head">Load function</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>pickle file</td>
+<td><a class="reference internal" href="../apidocs/neupy.storage.html#neupy.storage.save_pickle" title="neupy.storage.save_pickle"><span class="xref py py-class docutils literal"><span class="pre">save_pickle</span></span></a> (or <a class="reference internal" href="../apidocs/neupy.storage.html#neupy.storage.save" title="neupy.storage.save"><span class="xref py py-class docutils literal"><span class="pre">save</span></span></a>)</td>
+<td><a class="reference internal" href="../apidocs/neupy.storage.html#neupy.storage.load_pickle" title="neupy.storage.load_pickle"><span class="xref py py-class docutils literal"><span class="pre">load_pickle</span></span></a> (or <a class="reference internal" href="../apidocs/neupy.storage.html#neupy.storage.load" title="neupy.storage.load"><span class="xref py py-class docutils literal"><span class="pre">load</span></span></a>)</td>
+</tr>
+<tr class="row-odd"><td>hdf5 file</td>
+<td><a class="reference internal" href="../apidocs/neupy.storage.html#neupy.storage.save_hdf5" title="neupy.storage.save_hdf5"><span class="xref py py-class docutils literal"><span class="pre">save_hdf5</span></span></a></td>
+<td><a class="reference internal" href="../apidocs/neupy.storage.html#neupy.storage.load_hdf5" title="neupy.storage.load_hdf5"><span class="xref py py-class docutils literal"><span class="pre">load_hdf5</span></span></a></td>
+</tr>
+<tr class="row-even"><td>json file</td>
+<td><a class="reference internal" href="../apidocs/neupy.storage.html#neupy.storage.save_json" title="neupy.storage.save_json"><span class="xref py py-class docutils literal"><span class="pre">save_json</span></span></a></td>
+<td><a class="reference internal" href="../apidocs/neupy.storage.html#neupy.storage.load_json" title="neupy.storage.load_json"><span class="xref py py-class docutils literal"><span class="pre">load_json</span></span></a></td>
+</tr>
+<tr class="row-odd"><td>python dict</td>
+<td><a class="reference internal" href="../apidocs/neupy.storage.html#neupy.storage.save_dict" title="neupy.storage.save_dict"><span class="xref py py-class docutils literal"><span class="pre">save_dict</span></span></a></td>
+<td><a class="reference internal" href="../apidocs/neupy.storage.html#neupy.storage.load_dict" title="neupy.storage.load_dict"><span class="xref py py-class docutils literal"><span class="pre">load_dict</span></span></a></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="save-and-load-algorithms">
 <h2>Save and load algorithms</h2>
 <p>After succesful learning you can save network and later use it for prediction tasks. There already exists awesome library - <a class="reference external" href="https://github.com/uqfoundation/dill">dill</a>. As a <span class="docutils literal"><span class="pre">pickle</span></span> library <span class="docutils literal"><span class="pre">dill</span></span> provides similar interface to serialize and de-serialize built-in python objects. The main advantage of this is a functionality that can store a network class and attributes without additional functionality.</p>
 <p>First of all you need to install <span class="docutils literal"><span class="pre">dill</span></span> library</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ pip install dill&gt;<span class="o">=</span>0.2.3
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ pip install dill&gt;<span class="o">=</span><span class="m">0</span>.2.3
 </pre></div>
 </div>
 <p>There is a simple example for network serialization.</p>
@@ -288,6 +342,26 @@
 <p>The interface for <span class="docutils literal"><span class="pre">dill</span></span> library is the same as for <span class="docutils literal"><span class="pre">pickle</span></span>, so functions
 like <span class="docutils literal"><span class="pre">dumps</span></span> or <span class="docutils literal"><span class="pre">loads</span></span> are available.</p>
 </div>
+<div class="section" id="save-and-load-networks-with-fixed-architectures">
+<h2>Save and load networks with fixed architectures</h2>
+<p>For the neural networks with fixed architecures it&#8217;s possible to save and load your algorithms using <span class="docutils literal"><span class="pre">pickle</span></span> library.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+
+<span class="c1"># Initialize and train SOFM network</span>
+<span class="n">sofm</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">SOFM</span><span class="p">(</span><span class="n">n_inputs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_outputs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">sofm</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Save pre-trained SOFM network</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/path/to/sofm.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">sofm</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+<span class="c1"># Load SOFM network from the pickled file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/path/to/sofm.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">loaded_sofm</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </div>
 
     <div class="postmeta">
@@ -295,7 +369,7 @@ like <span class="docutils literal"><span class="pre">dumps</span></span> or <sp
         
         
         </div><ul class="related clearfix">
-            <li class="left"> &laquo; <a href="algorithms/sklearn-compatibility.html">Scikit-learn compatibility</a></li>
+            <li class="left"> &laquo; <a href="transfer-learning.html">Transfer Learning</a></li>
             <li class="right"><a href="secondary.html">Secondary</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Articles</h1>

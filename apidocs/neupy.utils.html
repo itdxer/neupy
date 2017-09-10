@@ -186,6 +186,9 @@
         <li class="main-nav">
           <a href="../pages/cheatsheet.html">Cheat sheet</a>
         </li>
+        <li class="main-nav">
+          <a href="../pages/model_zoo.html">Model Zoo</a>
+        </li>
       </ul>
     </nav>
 
@@ -194,7 +197,7 @@
 <span id="neupy-utils-module"></span><h1>neupy.utils module</h1>
 <dl class="function">
 <dt id="neupy.utils.format_data">
-<span class="descclassname">neupy.utils.</span><span class="descname">format_data</span><span class="sig-paren">(</span><em>data</em>, <em>is_feature1d=True</em>, <em>copy=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.utils.</span><span class="descname">format_data</span><span class="sig-paren">(</span><em>data</em>, <em>is_feature1d=True</em>, <em>copy=False</em>, <em>make_float=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/utils.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Transform data in a standardized format.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -213,6 +216,11 @@ contains N samples with 1 feature each. Defaults to <span class="docutils litera
 <p><strong>copy</strong> : bool</p>
 <blockquote>
 <div><p>Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</div></blockquote>
+<p><strong>make_float</strong> : bool</p>
+<blockquote>
+<div><p>If <cite>True</cite> then input will be converted to float.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -351,6 +359,34 @@ integer depend on floatX Theano variable.</p>
 <dt id="neupy.utils.theano_random_stream">
 <span class="descclassname">neupy.utils.</span><span class="descname">theano_random_stream</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/utils.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Create Theano random stream instance.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.utils.all_equal">
+<span class="descclassname">neupy.utils.</span><span class="descname">all_equal</span><span class="sig-paren">(</span><em>array</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Checks if all elements in the array are equal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>array</strong> : list, tuple</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">bool</p>
+<blockquote>
+<div><p><cite>True</cite> in case if all elements are equal and
+<cite>False</cite> otherwise.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>If input array is empty</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

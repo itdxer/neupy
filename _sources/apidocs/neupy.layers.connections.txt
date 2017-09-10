@@ -8,6 +8,7 @@ Submodules
 
    neupy.layers.connections.base
    neupy.layers.connections.graph
+   neupy.layers.connections.inline
    neupy.layers.connections.utils
 
 Module contents

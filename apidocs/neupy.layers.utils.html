@@ -186,6 +186,9 @@
         <li class="main-nav">
           <a href="../pages/cheatsheet.html">Cheat sheet</a>
         </li>
+        <li class="main-nav">
+          <a href="../pages/model_zoo.html">Model Zoo</a>
+        </li>
       </ul>
     </nav>
 
@@ -237,7 +240,13 @@ dimensions and axes.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>layers</strong> : list of layers or connection</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>layers</strong> : list of layers or connection</p>
+<p><strong>only_trainable</strong> : bool</p>
+<blockquote class="last">
+<div><p>If <cite>True</cite> returns only trainable parameters.
+Defaults to <cite>True</cite>.</p>
+</div></blockquote>
+</td>
 </tr>
 </tbody>
 </table>
@@ -278,6 +287,30 @@ input shape.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Theano variable</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.layers.utils.extract_connection">
+<span class="descclassname">neupy.layers.utils.</span><span class="descname">extract_connection</span><span class="sig-paren">(</span><em>instance</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/utils.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Extract connection from different types of object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>instance</strong> : network, connection, list or tuple</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">connection</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>In case if input object doesn&#8217;t have connection of layers.</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>

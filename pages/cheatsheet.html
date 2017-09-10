@@ -186,6 +186,9 @@
         <li class="main-nav">
           <a href="#">Cheat sheet</a>
         </li>
+        <li class="main-nav">
+          <a href="model_zoo.html">Model Zoo</a>
+        </li>
       </ul>
     </nav>
 
@@ -223,9 +226,10 @@
 <li><a class="reference internal" href="#other-layers" id="id23">Other layers</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#parameter-initialization-methods" id="id24">Parameter Initialization Methods</a></li>
-<li><a class="reference internal" href="#error-functions" id="id25">Error functions</a></li>
-<li><a class="reference internal" href="#datasets" id="id26">Datasets</a></li>
+<li><a class="reference internal" href="#architectures" id="id24">Architectures</a></li>
+<li><a class="reference internal" href="#parameter-initialization-methods" id="id25">Parameter Initialization Methods</a></li>
+<li><a class="reference internal" href="#error-functions" id="id26">Error functions</a></li>
+<li><a class="reference internal" href="#datasets" id="id27">Datasets</a></li>
 </ul>
 </li>
 </ul>
@@ -312,10 +316,13 @@
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.regularization.weight_decay.html#neupy.algorithms.regularization.weight_decay.WeightDecay" title="neupy.algorithms.regularization.weight_decay.WeightDecay"><span class="xref py py-class docutils literal"><span class="pre">WeightDecay</span></span></a></td>
-<td>Weight Decay</td>
+<td>Weight decay</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.regularization.weight_elimination.html#neupy.algorithms.regularization.weight_elimination.WeightElimination" title="neupy.algorithms.regularization.weight_elimination.WeightElimination"><span class="xref py py-class docutils literal"><span class="pre">WeightElimination</span></span></a></td>
-<td>Weight Elimination</td>
+<td>Weight elimination</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.regularization.max_norm.html#neupy.algorithms.regularization.max_norm.MaxNormRegularization" title="neupy.algorithms.regularization.max_norm.MaxNormRegularization"><span class="xref py py-class docutils literal"><span class="pre">MaxNormRegularization</span></span></a></td>
+<td>Max-norm regularization</td>
 </tr>
 </tbody>
 </table>
@@ -365,7 +372,7 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.ensemble.mixture_of_experts.html#neupy.algorithms.ensemble.mixture_of_experts.MixtureOfExperts" title="neupy.algorithms.ensemble.mixture_of_experts.MixtureOfExperts"><span class="xref py py-class docutils literal"><span class="pre">MixtureOfExperts</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.architectures.mixture_of_experts.html#neupy.architectures.mixture_of_experts.mixture_of_experts" title="neupy.architectures.mixture_of_experts.mixture_of_experts"><span class="xref py py-class docutils literal"><span class="pre">mixture_of_experts</span></span></a></td>
 <td>Mixture of Experts</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.ensemble.dan.html#neupy.algorithms.ensemble.dan.DynamicallyAveragedNetwork" title="neupy.algorithms.ensemble.dan.DynamicallyAveragedNetwork"><span class="xref py py-class docutils literal"><span class="pre">DynamicallyAveragedNetwork</span></span></a></td>
@@ -714,6 +721,9 @@
 <tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.merge.html#neupy.layers.merge.Concatenate" title="neupy.layers.merge.Concatenate"><span class="xref py py-class docutils literal"><span class="pre">Concatenate</span></span></a></td>
 <td>Concatenate multiple input layers in one based on the specified axes.</td>
 </tr>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.merge.html#neupy.layers.merge.GatedAverage" title="neupy.layers.merge.GatedAverage"><span class="xref py py-class docutils literal"><span class="pre">GatedAverage</span></span></a></td>
+<td>Average multiple layers based on the output from the gate layer.</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -743,8 +753,39 @@
 </table>
 </div>
 </div>
+<div class="section" id="architectures">
+<h2><a class="toc-backref" href="#id24">Architectures</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Class name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.architectures.vgg16.html#neupy.architectures.vgg16.vgg16" title="neupy.architectures.vgg16.vgg16"><span class="xref py py-class docutils literal"><span class="pre">vgg16</span></span></a></td>
+<td>VGG16 network</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.architectures.vgg19.html#neupy.architectures.vgg19.vgg19" title="neupy.architectures.vgg19.vgg19"><span class="xref py py-class docutils literal"><span class="pre">vgg19</span></span></a></td>
+<td>VGG19 network</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.architectures.squeezenet.html#neupy.architectures.squeezenet.squeezenet" title="neupy.architectures.squeezenet.squeezenet"><span class="xref py py-class docutils literal"><span class="pre">squeezenet</span></span></a></td>
+<td>SqueezeNet network</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.architectures.alexnet.html#neupy.architectures.alexnet.alexnet" title="neupy.architectures.alexnet.alexnet"><span class="xref py py-class docutils literal"><span class="pre">alexnet</span></span></a></td>
+<td>AlexNet network</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.architectures.mixture_of_experts.html#neupy.architectures.mixture_of_experts.mixture_of_experts" title="neupy.architectures.mixture_of_experts.mixture_of_experts"><span class="xref py py-class docutils literal"><span class="pre">mixture_of_experts</span></span></a></td>
+<td>Mixture of Experts</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="parameter-initialization-methods">
-<span id="init-methods"></span><h2><a class="toc-backref" href="#id24">Parameter Initialization Methods</a></h2>
+<span id="init-methods"></span><h2><a class="toc-backref" href="#id25">Parameter Initialization Methods</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">init</span>
 
 <span class="n">gdnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
@@ -795,7 +836,7 @@
 </table>
 </div>
 <div class="section" id="error-functions">
-<span id="cheatsheet-error-function"></span><h2><a class="toc-backref" href="#id25">Error functions</a></h2>
+<span id="cheatsheet-error-function"></span><h2><a class="toc-backref" href="#id26">Error functions</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="50%" />
@@ -838,7 +879,7 @@
 </table>
 </div>
 <div class="section" id="datasets">
-<h2><a class="toc-backref" href="#id26">Datasets</a></h2>
+<h2><a class="toc-backref" href="#id27">Datasets</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="50%" />

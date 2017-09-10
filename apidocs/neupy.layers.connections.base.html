@@ -186,6 +186,9 @@
         <li class="main-nav">
           <a href="../pages/cheatsheet.html">Cheat sheet</a>
         </li>
+        <li class="main-nav">
+          <a href="../pages/model_zoo.html">Model Zoo</a>
+        </li>
       </ul>
     </nav>
 
@@ -229,7 +232,7 @@
 </table>
 <dl class="method">
 <dt id="neupy.layers.connections.base.LayerConnection.disable_training_state">
-<span class="descname">disable_training_state</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">disable_training_state</span><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Disable training state for all layers in the
 connection.</p>
 </dd></dl>
@@ -441,15 +444,15 @@ different input layers.</p>
 </table>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="method">
 <dt id="neupy.layers.connections.base.BaseConnection.connect">
-<em class="property">classmethod </em><span class="descname">connect</span><span class="sig-paren">(</span><em>left</em>, <em>right</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">connect</span><span class="sig-paren">(</span><em>left</em>, <em>right</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Make connection between two objects.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.connections.base.BaseConnection.disable_training_state">
-<span class="descname">disable_training_state</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">disable_training_state</span><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Disable connection&#8217;s training state</p>
 </dd></dl>
 
@@ -458,11 +461,6 @@ different input layers.</p>
 <span class="descname">initialize</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Initialize connection</p>
 </dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.connections.base.BaseConnection.left_states">
-<span class="descname">left_states</span><em class="property"> = {}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.connections.base.BaseConnection.output">
@@ -477,11 +475,6 @@ different input layers.</p>
 </tbody>
 </table>
 </dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.connections.base.BaseConnection.right_states">
-<span class="descname">right_states</span><em class="property"> = {}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
@@ -522,7 +515,7 @@ Each network has it&#8217;s own input and out layers.</p>
 </table>
 <dl class="method">
 <dt id="neupy.layers.connections.base.ParallelConnection.disable_training_state">
-<span class="descname">disable_training_state</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">disable_training_state</span><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/connections/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Disable training state for all layers in all
 connections.</p>
 </dd></dl>
