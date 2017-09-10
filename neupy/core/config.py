@@ -58,17 +58,18 @@ class BaseConfigurable(object):
         invalid_options = set(options) - available_options
 
         if invalid_options:
-            raise ValueError("The `{}` object contains invalid properties: "
-                             "{}".format(self.__class__.__name__,
-                                         ', '.join(invalid_options)))
+            clsname = self.__class__.__name__
+            raise ValueError(
+                "The `{}` object contains invalid properties: {}"
+                "".format(clsname, ', '.join(invalid_options)))
 
         for key, value in options.items():
             setattr(self, key, value)
 
         for option_name, option in self.options.items():
             if option.value.required and option_name not in options:
-                raise ValueError("Option `{}` is required."
-                                 "".format(option_name))
+                raise ValueError(
+                    "Option `{}` is required.".format(option_name))
 
 
 class Configurable(with_metaclass(ConfigMeta, BaseConfigurable)):

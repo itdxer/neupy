@@ -226,8 +226,9 @@ def vectors_for_testing(vector, is_feature1d=True):
     if vector.ndim == 1:
         vectors_list.extend([vector, pd.Series(vector)])
 
-    vectors_list.extend([vector.reshape(shape2d),
-                         pd.DataFrame(vector.reshape(shape2d))])
+    vectors_list.extend([
+        vector.reshape(shape2d),
+        pd.DataFrame(vector.reshape(shape2d))])
 
     return vectors_list
 

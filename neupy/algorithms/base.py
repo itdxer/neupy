@@ -46,8 +46,7 @@ def show_network_options(network, highlight_options=None):
 
     grouped_options = groupby(
         sorted(network.options.items(), key=group_by_class_name),
-        group_by_class_name,
-    )
+        group_by_class_name)
 
     logs.title("Main information")
     logs.message("ALGORITHM", network.class_name())

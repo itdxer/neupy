@@ -64,7 +64,7 @@ Ensembles
 .. csv-table::
     :header: "Class name", "Name"
 
-    :network:`MixtureOfExperts`, Mixture of Experts
+    :architecture:`mixture_of_experts`, Mixture of Experts
     :network:`DynamicallyAveragedNetwork`, Dynamically Averaged Network (DAN)
 
 Neural Networks with Radial Basis Functions (RBFN)
@@ -205,6 +205,7 @@ Merge layers
 
     ":layer:`Elementwise`", "Merge multiple input layers in one with elementwise function"
     ":layer:`Concatenate`", "Concatenate multiple input layers in one based on the specified axes."
+    ":layer:`GatedAverage`", "Average multiple layers based on the output from the gate layer."
 
 Other layers
 ~~~~~~~~~~~~
@@ -215,6 +216,19 @@ Other layers
     ":layer:`Input`", "Layer defines input value's feature shape"
     ":layer:`Reshape`", "Reshape tensor input"
     ":layer:`Embedding`", "Embedding layer accepts indeces as an input and returns rows from the weight matrix associated with these indeces."
+
+Architectures
+*************
+
+.. csv-table::
+    :header: "Class name", "Description"
+
+    ":architecture:`vgg16`", "VGG16 network"
+    ":architecture:`vgg19`", "VGG19 network"
+    ":architecture:`squeezenet`", "SqueezeNet network"
+    ":architecture:`alexnet`", "AlexNet network"
+    ":architecture:`mixture_of_experts`", Mixture of Experts
+
 
 .. _init-methods:
 

@@ -11,5 +11,6 @@ Documentation
     ../docs/tutorials
     ../docs/layers
     ../docs/algorithms
+    ../docs/transfer-learning
     ../docs/storage
     ../docs/secondary

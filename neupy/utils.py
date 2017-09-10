@@ -9,13 +9,14 @@ from scipy.sparse import issparse
 
 
 __all__ = ('format_data', 'asfloat', 'AttributeKeyDict', 'preformat_value',
-           'as_tuple', 'asint', 'number_type', 'theano_random_stream')
+           'as_tuple', 'asint', 'number_type', 'theano_random_stream',
+           'all_equal')
 
 
 number_type = (int, float, np.floating, np.integer)
 
 
-def format_data(data, is_feature1d=True, copy=False):
+def format_data(data, is_feature1d=True, copy=False, make_float=True):
     """
     Transform data in a standardized format.
 
@@ -37,6 +38,10 @@ def format_data(data, is_feature1d=True, copy=False):
     copy : bool
         Defaults to ``False``.
 
+    make_float : bool
+        If `True` then input will be converted to float.
+        Defaults to ``False``.
+
     Returns
     -------
     ndarray
@@ -46,7 +51,8 @@ def format_data(data, is_feature1d=True, copy=False):
     if data is None or issparse(data):
         return data
 
-    data = asfloat(data)
+    if make_float:
+        data = asfloat(data)
 
     if not isinstance(data, np.ndarray) or copy:
         data = np.array(data, copy=copy)
@@ -232,3 +238,33 @@ def theano_random_stream():
     seed = np.random.randint(max_possible_seed)
     theano_random = T.shared_randomstreams.RandomStreams(seed)
     return theano_random
+
+
+def all_equal(array):
+    """
+    Checks if all elements in the array are equal.
+
+    Parameters
+    ----------
+    array : list, tuple
+
+    Raises
+    ------
+    ValueError
+        If input array is empty
+
+    Returns
+    -------
+    bool
+        `True` in case if all elements are equal and
+        `False` otherwise.
+    """
+    if not array:
+        raise ValueError("Array is empty")
+
+    first_item = array[0]
+
+    if any(item != first_item for item in array):
+        return False
+
+    return True

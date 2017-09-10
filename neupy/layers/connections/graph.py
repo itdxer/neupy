@@ -628,6 +628,25 @@ class LayerGraph(object):
 
         return results
 
+    def layer_names_only(self):
+        """
+        Replaces in the graph layers with their names.
+
+        Parameters
+        ----------
+        graph : LayerGraph
+
+        Returns
+        -------
+        OrderedDict
+        """
+        prepared_graph = OrderedDict()
+
+        for from_layer, to_layers in self.forward_graph.items():
+            prepared_graph[from_layer.name] = [l.name for l in to_layers]
+
+        return list(prepared_graph.items())
+
     def __len__(self):
         return len(self.forward_graph)
 

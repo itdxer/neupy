@@ -1,5 +1,5 @@
 __all__ = ('LayerConnectionError', 'InvalidConnection', 'NotTrained',
-           'StopTraining')
+           'StopTraining', 'WeightInitializationError')
 
 
 class LayerConnectionError(Exception):
@@ -24,4 +24,10 @@ class NotTrained(Exception):
 class StopTraining(Exception):
     """
     Interrupt training procedure.
+    """
+
+
+class WeightInitializationError(Exception):
+    """
+    In case if there is some problem with weight initialization
     """

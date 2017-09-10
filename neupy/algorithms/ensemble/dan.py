@@ -8,7 +8,7 @@ __all__ = ('DynamicallyAveragedNetwork',)
 
 class DynamicallyAveragedNetwork(BaseEnsemble):
     """
-    Dynamically Averaged Network (DAN) weighted ensamble
+    Dynamically Averaged Network (DAN) weighted ensemble
     for binary classification problems.
 
     Parameters
@@ -70,8 +70,7 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
             if output_layer_size != 1:
                 raise ValueError(
                     "Final layer at network `{}` must has 1 output, got "
-                    "{}".format(self.__class__.__name__, output_layer_size)
-                )
+                    "{}".format(self.__class__.__name__, output_layer_size))
 
     def train(self, input_data, target_data, *args, **kwargs):
         for network in self.networks:
@@ -90,16 +89,16 @@ class DynamicallyAveragedNetwork(BaseEnsemble):
             if not (0 <= minval <= 1 and 0 <= maxval <= 1):
                 raise ValueError(
                     "Netwrok output must be in range [0, 1]. Network output "
-                    "was in range [{}, {}]".format(minval, maxval)
-                )
+                    "was in range [{}, {}]".format(minval, maxval))
 
             certainty = np.where(output > 0.5, output, 1 - output)
 
             network_certainties[:, i:i + 1] = certainty
             network_outputs[:, i:i + 1] = output
 
-        total_output_sum = np.reshape(network_certainties.sum(axis=1),
-                                      (n_inputs, 1))
+        total_output_sum = np.reshape(
+            network_certainties.sum(axis=1), (n_inputs, 1))
+
         self.weight = network_certainties / total_output_sum
         return (self.weight * network_outputs).sum(axis=1)
 
