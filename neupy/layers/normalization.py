@@ -249,14 +249,15 @@ class LocalResponseNorm(BaseLayer):
         ndim = len(input_shape)
 
         if ndim != 3:
-            raise LayerConnectionError("Layer `{}` expected input with 3 "
-                                       "dimensions, got {}".format(self, ndim))
+            raise LayerConnectionError(
+                "Layer `{}` expected input with 3 dimensions, got {}"
+                "".format(self, ndim))
 
     def output(self, input_value):
         if not self.input_shape:
-            raise LayerConnectionError("Layer `{}` doesn't have defined "
-                                       "input shape. Probably it doesn't "
-                                       "have an input layer.".format(self))
+            raise LayerConnectionError(
+                "Layer `{}` doesn't have defined input shape. Probably "
+                "it doesn't have an input layer.".format(self))
 
         half = self.n // 2
         squared_value = input_value ** 2

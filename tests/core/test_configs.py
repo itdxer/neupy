@@ -49,8 +49,6 @@ class ConfigsTestCase(BaseTestCase):
             InheritA()
 
     def test_config_with_parent_without_options(self):
-        print('------------------')
-
         class A(object):
             # Doesn't have Configurable as a parent class
             property_a = Property()

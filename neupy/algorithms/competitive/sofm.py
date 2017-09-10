@@ -9,6 +9,7 @@ from numpy.linalg import norm
 from neupy import init
 from neupy.utils import as_tuple
 from neupy.algorithms import Kohonen
+from neupy.exceptions import WeightInitializationError
 from neupy.algorithms.associative.base import BaseAssociative
 from neupy.core.properties import (BaseProperty, TypedListProperty,
                                    ChoiceProperty, NumberProperty,
@@ -208,11 +209,11 @@ class SOFM(Kohonen):
 
     std : int, float
         Parameters controls learning rate for each neighbour.
-        The further neigbour neuron from the winning neuron
+        The further neighbour  neuron from the winning neuron
         the smaller that learning rate for it. Learning rate
         scales based on the factors produced by the normal
         distribution with center in the place of a winning
-        neuron and stanard deviation specified as a parameter.
+        neuron and standard deviation specified as a parameter.
         The learning rate for the winning neuron is always equal
         to the value specified in the ``step`` parameter and for
         neighbour neurons it's always lower.
@@ -315,7 +316,7 @@ class SOFM(Kohonen):
         Neural network weights.
         Value defined manualy should have shape ``(n_inputs, n_outputs)``.
 
-        Also it's possible to initialized weights base on the
+        Also, it's possible to initialized weights base on the
         training data. There are two options:
 
         - ``sample_from_data`` - Before starting the training will
@@ -343,6 +344,11 @@ class SOFM(Kohonen):
 
     Methods
     -------
+    init_weights(train_data)
+        Initialized weights besed on the input data. It works only
+        for the `init_pca` and `sample_from_data` options. For other
+        cases it will throw an error.
+
     {BaseSkeleton.predict}
 
     {BaseAssociative.train}
@@ -382,15 +388,24 @@ class SOFM(Kohonen):
         choices={
             'init_pca': linear_initialization,
             'sample_from_data': sample_data,
-        })
+        }
+    )
 
     features_grid = TypedListProperty(allow_none=True, default=None)
+
+    DistanceParameter = namedtuple('DistanceParameter', 'name func')
     distance = ChoiceProperty(
         default='euclid',
         choices={
-            'dot_product': np.dot,
-            'euclid': neg_euclid_distance,
-            'cos': cosine_similarity,
+            'dot_product': DistanceParameter(
+                name='dot_product',
+                func=np.dot),
+            'euclid': DistanceParameter(
+                name='euclid',
+                func=neg_euclid_distance),
+            'cos': DistanceParameter(
+                name='cosine',
+                func=cosine_similarity),
         })
 
     GridTypeMethods = namedtuple(
@@ -407,7 +422,8 @@ class SOFM(Kohonen):
                 name='hexagon',
                 find_neighbours=find_neighbours_on_hexagon_grid,
                 find_step_scaler=find_step_scaler_on_hexagon_grid)
-        })
+        }
+    )
 
     learning_radius = IntProperty(default=0, minval=0)
     std = NumberProperty(minval=0, default=1)
@@ -459,10 +475,13 @@ class SOFM(Kohonen):
             self.init_layers()
             self.initialized = True
 
+            if self.distance.name == 'cosine':
+                self.weight /= np.linalg.norm(self.weight, axis=0)
+
         elif is_pca_init and self.grid_type.name != 'rectangle':
-            raise ValueError("Cannot apply PCA weight initialization "
-                             "for non-rectangular grid. Grid type: {}"
-                             "".format(self.grid_type.name))
+            raise WeightInitializationError(
+                "Cannot apply PCA weight initialization for non-rectangular "
+                "grid. Grid type: {}".format(self.grid_type.name))
 
     def predict_raw(self, input_data):
         input_data = self.format_input_data(input_data)
@@ -471,7 +490,7 @@ class SOFM(Kohonen):
         output = np.zeros((n_samples, self.n_outputs))
 
         for i, input_row in enumerate(input_data):
-            output[i, :] = self.distance(
+            output[i, :] = self.distance.func(
                 input_row.reshape(1, -1), self.weight)
 
         return output
@@ -516,12 +535,42 @@ class SOFM(Kohonen):
         step_scaler = step_scaler.reshape(self.n_outputs)
         return index_y, step * step_scaler[index_y]
 
+    def init_weights(self, input_train):
+        if self.initialized:
+            raise WeightInitializationError(
+                "Weights have been already initialized")
+
+        weight_initializer = self.weight
+        self.weight = weight_initializer(input_train, self.features_grid)
+        self.initialized = True
+
+        if self.distance.name == 'cosine':
+            self.weight /= np.linalg.norm(self.weight, axis=0)
+
     def train(self, input_train, summary='table', epochs=100):
         if not self.initialized:
-            weight_initializer = self.weight
-            self.weight = weight_initializer(input_train, self.features_grid)
-            self.initialized = True
+            self.init_weights(input_train)
 
-        if epochs > 0:
-            super(SOFM, self).train(
-                input_train, summary=summary, epochs=epochs)
+        super(SOFM, self).train(input_train, summary=summary, epochs=epochs)
+
+    def train_epoch(self, input_train, target_train):
+        step = self.step
+        predict = self.predict
+        update_indexes = self.update_indexes
+
+        error = 0
+        for input_row in input_train:
+            input_row = np.reshape(input_row, (1, input_row.size))
+            layer_output = predict(input_row)
+
+            index_y, step = update_indexes(layer_output)
+            distance = input_row.T - self.weight[:, index_y]
+            updated_weights = (self.weight[:, index_y] + step * distance)
+
+            if self.distance.name == 'cosine':
+                updated_weights /= np.linalg.norm(updated_weights, axis=0)
+
+            self.weight[:, index_y] = updated_weights
+            error += np.abs(distance).mean()
+
+        return error / len(input_train)

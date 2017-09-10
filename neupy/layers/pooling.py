@@ -188,9 +188,9 @@ class MaxPooling(BasePooling):
     (10, 15, 1)
     """
     def output(self, input_value):
-        return pool.pool_2d(input_value, ds=self.size, mode='max',
+        return pool.pool_2d(input_value, ws=self.size, mode='max',
                             ignore_border=self.ignore_border,
-                            st=self.stride, padding=self.padding)
+                            stride=self.stride, pad=self.padding)
 
 
 class AveragePooling(BasePooling):
@@ -247,9 +247,9 @@ class AveragePooling(BasePooling):
     )
 
     def output(self, input_value):
-        return pool.pool_2d(input_value, ds=self.size, mode=self.mode,
+        return pool.pool_2d(input_value, ws=self.size, mode=self.mode,
                             ignore_border=self.ignore_border,
-                            st=self.stride, padding=self.padding)
+                            stride=self.stride, pad=self.padding)
 
 
 class ScaleFactorProperty(TypedListProperty):
@@ -315,8 +315,7 @@ class Upscale(BaseLayer):
         if len(input_shape) != 3:
             raise LayerConnectionError(
                 "Upscale layer should have an input value with "
-                "3 feature dimensions (channel, height, width)"
-            )
+                "3 feature dimensions (channel, height, width)")
 
     @property
     def output_shape(self):

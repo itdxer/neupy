@@ -80,20 +80,16 @@ class Kohonen(BaseAssociative):
         output[range(raw_output.shape[0]), max_args] = 1
         return output
 
-    def update_indexes(self, layer_output):
-        _, index_y = np.nonzero(layer_output)
-        return index_y, self.step
-
     def train_epoch(self, input_train, target_train):
+        step = self.step
         predict = self.predict
-        update_indexes = self.update_indexes
 
         error = 0
         for input_row in input_train:
             input_row = np.reshape(input_row, (1, input_row.size))
             layer_output = predict(input_row)
 
-            index_y, step = update_indexes(layer_output)
+            _, index_y = np.nonzero(layer_output)
             distance = input_row.T - self.weight[:, index_y]
             self.weight[:, index_y] += step * distance
 
