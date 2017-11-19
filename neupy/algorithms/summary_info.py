@@ -69,6 +69,10 @@ class SummaryTable(object):
 
             if average_delay < self.delay_limit:
                 show_epoch = network.training.show_epoch
+
+                if average_delay == 0:
+                    average_delay = 1e-4
+
                 scale = math.ceil(self.delay_limit / average_delay)
 
                 show_epoch = int(show_epoch * scale)

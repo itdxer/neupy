@@ -145,7 +145,8 @@ class Step(ActivationLayer):
     {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
-        return T.gt(input_value, 0)
+        # Without cast function output will be boolean
+        return T.cast(T.gt(input_value, 0), 'int8')
 
 
 class Tanh(ActivationLayer):
