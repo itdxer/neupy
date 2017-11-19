@@ -24,7 +24,7 @@ class JSONStorageTestCase(BaseTestCase):
             actual_output = temp.read()
             expected_output = dedent("""
             {
-              "test":"json"
+              "test": "json"
             }
             """).strip()  # remove final '\n' symbol
 

@@ -36,3 +36,14 @@ class PerceptronTestCase(BaseTestCase):
         lmsnet.train(data, target)
         self.assertInvalidVectorPred(lmsnet, data.ravel(), target,
                                      decimal=2)
+
+    def test_lms_output_data_type(self):
+        input_data = np.array([[1, 0], [2, 2], [3, 3], [0, 0]])
+        target_data = np.array([[1], [0], [0], [1]])
+
+        lmsnet = algorithms.LMS((2, 1), step=0.1)
+
+        lmsnet.train(input_data, target_data, epochs=200)
+        predicted = lmsnet.predict(np.array([[4, 4], [0, 0]]))
+
+        self.assertTrue(np.issubdtype(predicted.dtype, np.integer))
