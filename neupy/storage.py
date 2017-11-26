@@ -429,9 +429,9 @@ def load_pickle(connection, filepath, ignore_missed=False,
         if six.PY3:
             # Specify encoding for python 3 in order to be able to
             # read files that has been created in python 2
-            data = pickle.load(f, encoding='latin1')
+            data = pickle.load(f, encoding='latin1')  # skip coverage
         else:
-            data = pickle.load(f)
+            data = pickle.load(f)  # skip coverage
 
     load_dict(connection, data, ignore_missed, load_by)
 
