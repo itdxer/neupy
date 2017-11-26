@@ -19,6 +19,7 @@ install:
   - conda update -q conda
   - conda info -a
 
+  - export MKL_THREADING_LAYER=GNU
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy>=1.8.0 scipy>=0.14.0 mkl-service>=1.1.2
   - source activate test-environment
   - pip install -r requirements/travis.txt
