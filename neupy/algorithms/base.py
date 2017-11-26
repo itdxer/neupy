@@ -368,8 +368,6 @@ class BaseNetwork(BaseSkeleton):
                     stdout=logs.write
                 ),
                 network=self,
-                delay_limit=1.,
-                delay_history_length=10,
             )
 
         elif summary == 'inline':

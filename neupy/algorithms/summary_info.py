@@ -1,9 +1,3 @@
-import math
-import time
-from collections import deque
-
-import numpy as np
-
 from neupy.helpers.table import format_time
 
 
@@ -29,59 +23,21 @@ class SummaryTable(object):
     delay_history_length : int
         Defaults to ``10``.
     """
-    def __init__(self, network, table_builder, delay_limit=1.,
-                 delay_history_length=10):
+    def __init__(self, network, table_builder):
         self.network = network
         self.table_builder = table_builder
-        self.delay_limit = delay_limit
-        self.delay_history_length = delay_history_length
-
-        self.prev_summary_time = None
-        self.terminal_output_delays = deque(maxlen=delay_history_length)
-
         table_builder.start()
 
     def show_last(self):
-        network = self.network
-        table_builder = self.table_builder
-        terminal_output_delays = self.terminal_output_delays
+        training_error = self.network.errors.last()
+        validation_error = self.network.validation_errors.last()
 
-        now = time.time()
-
-        if self.prev_summary_time is not None:
-            time_delta = now - self.prev_summary_time
-            terminal_output_delays.append(time_delta)
-
-        training_error = network.errors.last()
-        validation_error = network.validation_errors.last()
-
-        table_builder.row([
-            network.last_epoch,
+        self.table_builder.row([
+            self.network.last_epoch,
             training_error if training_error is not None else '-',
             validation_error if validation_error is not None else '-',
-            network.training.epoch_time,
+            self.network.training.epoch_time,
         ])
-        self.prev_summary_time = now
-
-        if len(terminal_output_delays) == self.delay_history_length:
-            self.prev_summary_time = None
-            average_delay = np.mean(terminal_output_delays)
-
-            if average_delay < self.delay_limit:
-                show_epoch = network.training.show_epoch
-
-                if average_delay == 0:
-                    average_delay = 1e-4
-
-                scale = math.ceil(self.delay_limit / average_delay)
-
-                show_epoch = int(show_epoch * scale)
-                table_builder.message("Too many outputs in the terminal. "
-                                      "Set up logging after each {} epochs"
-                                      "".format(show_epoch))
-
-                terminal_output_delays.clear()
-                network.training.show_epoch = show_epoch
 
     def finish(self):
         self.table_builder.finish()

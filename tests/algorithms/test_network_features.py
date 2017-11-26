@@ -232,20 +232,6 @@ class NetworkPropertiesTestCase(BaseTestCase):
 
         self.assertEqual(1, terminal_output.count("Network converged"))
 
-    def test_terminal_output_frequency(self):
-        with catch_stdout() as out:
-            data = np.random.random((1000, 2))
-            target = np.random.random((1000, 1))
-            bpnet = algorithms.GradientDescent(
-                (2, 1, 1),
-                verbose=True,
-                show_epoch=1
-            )
-            bpnet.train(data, target, epochs=100)
-            terminal_output = out.getvalue()
-
-        self.assertEqual(1, terminal_output.count("Too many outputs"))
-
     def test_network_architecture_output(self):
         expected_architecture = textwrap.dedent("""
         -----------------------------------------------
