@@ -1,7 +1,41 @@
-import tableprint
-
-
 __all__ = ('SummaryTable', 'InlineSummary')
+
+
+def format_time(time):
+    """
+    Format seconds into human readable format.
+
+    Parameters
+    ----------
+    time : float
+        Time specified in seconds
+
+    Returns
+    -------
+    str
+        Formated time.
+    """
+    mins, seconds = divmod(int(time), 60)
+    hours, minutes = divmod(mins, 60)
+
+    if hours > 0:
+        return '{:0>2d}:{:0>2d}:{:0>2d}'.format(hours, minutes, seconds)
+
+    elif minutes > 0:
+        return '{:0>2d}:{:0>2d}'.format(minutes, seconds)
+
+    elif seconds > 0:
+        return '{:.0f} sec'.format(seconds)
+
+    elif time >= 1e-3:
+        return  "{:.0f} ms".format(time * 1e3)
+
+    elif time >= 1e-6:
+        # microseconds
+        timestr = "{:.0f} \u03BCs".format(time * 1e6)
+
+    # nanoseconds or smaller
+    return "{:.0f} ns".format(time * 1e9)
 
 
 class SummaryTable(object):
@@ -37,7 +71,7 @@ class SummaryTable(object):
             self.network.last_epoch,
             training_error if training_error is not None else '-',
             validation_error if validation_error is not None else '-',
-            tableprint.humantime(self.network.training.epoch_time),
+            format_time(self.network.training.epoch_time),
         ])
 
     def finish(self):
@@ -63,7 +97,7 @@ class InlineSummary(object):
 
         train_error = network.errors.last()
         validation_error = network.validation_errors.last()
-        epoch_training_time = tableprint.humantime(network.training.epoch_time)
+        epoch_training_time = format_time(network.training.epoch_time)
 
         if validation_error is not None:
             logs.write(
