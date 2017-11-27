@@ -28,14 +28,14 @@ def format_time(time):
         return '{:.0f} sec'.format(seconds)
 
     elif time >= 1e-3:
-        return  "{:.0f} ms".format(time * 1e3)
+        return '{:.0f} ms'.format(time * 1e3)
 
     elif time >= 1e-6:
         # microseconds
-        timestr = "{:.0f} \u03BCs".format(time * 1e6)
+        return '{:.0f} \u03BCs'.format(time * 1e6)
 
     # nanoseconds or smaller
-    return "{:.0f} ns".format(time * 1e9)
+    return '{:.0f} ns'.format(time * 1e9)
 
 
 class SummaryTable(object):
