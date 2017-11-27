@@ -11,7 +11,6 @@ from tableprint.style import STYLES, TableStyle, LineStyle
 
 from neupy.core.config import Configurable
 from neupy.core.properties import BaseProperty
-from neupy.helpers import Progressbar
 from . import terminal
 
 
