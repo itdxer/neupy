@@ -5,7 +5,6 @@ import sys
 import importlib
 from contextlib import contextmanager
 
-import progressbar
 import tableprint
 from tableprint.style import STYLES, TableStyle, LineStyle
 
