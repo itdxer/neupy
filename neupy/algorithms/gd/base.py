@@ -7,6 +7,7 @@ import six
 import theano
 import theano.tensor as T
 import numpy as np
+import progressbar
 
 from neupy.core.config import Configurable
 from neupy.core.properties import Property, BoundedProperty
@@ -298,25 +299,34 @@ def apply_batches(function, arguments, batch_size, logger, description='',
 
     samples = arguments[0]
     n_samples = len(samples)
-    batch_iterator = iter_batches(n_samples, batch_size)
+    batch_iterator = list(iter_batches(n_samples, batch_size))
 
     if show_progressbar:
-        batch_iterator = logger.progressbar(list(batch_iterator),
-                                            description=description,
-                                            file=logger.stdout)
+        bar = progressbar.ProgressBar(
+            widgets=[
+                progressbar.Timer(format='Time: %(elapsed)s'), ' |',
+                progressbar.Percentage(),
+                progressbar.Bar(),
+                ' ', progressbar.ETA(), ' | ',
+                progressbar.DynamicMessage('loss'),
+            ],
+            max_value=len(batch_iterator),
+            poll_interval=0.1,
+        )
+        bar.update(0)
+    else:
+        bar = progressbar.NullBar()
 
     outputs = []
-    for batch in batch_iterator:
+    for i, batch in enumerate(batch_iterator):
         sliced_arguments = [argument[batch] for argument in arguments]
 
         output = function(*sliced_arguments)
         outputs.append(output)
 
-        if show_progressbar and logger.enable and show_error_output:
-            batch_iterator.show_in_next_iteration = {
-                'error': format_error(output)
-            }
+        bar.update(i, loss=output.item(0))
 
+    bar.finish('\r' + ' ' * bar.term_width + '\r')
     return outputs
 
 
