@@ -9,7 +9,6 @@ import six
 import numpy as np
 
 from neupy.utils import preformat_value, AttributeKeyDict, as_tuple
-from neupy.helpers import table
 from neupy.exceptions import StopTraining
 from neupy.core.base import BaseSkeleton
 from neupy.core.properties import BoundedProperty, NumberProperty, Property
@@ -360,13 +359,7 @@ class BaseNetwork(BaseSkeleton):
 
         if summary == 'table':
             summary = SummaryTable(
-                table_builder=table.TableBuilder(
-                    table.Column(name="Epoch #"),
-                    table.NumberColumn(name="Train err", places=4),
-                    table.NumberColumn(name="Valid err", places=4),
-                    table.TimeColumn(name="Time", width=10),
-                    stdout=logs.write
-                ),
+                columns=['Epoch', 'Train err', 'Valid err', 'Time'],
                 network=self,
             )
 
@@ -434,8 +427,7 @@ class BaseNetwork(BaseSkeleton):
                     is_first_iteration = False
 
                 except StopTraining as err:
-                    # TODO: This notification breaks table view in terminal.
-                    # I need to show it in a different way.
+                    self.write.table_bottom(4)
                     logs.message("TRAIN", "Epoch #{} stopped. {}"
                                           "".format(epoch, str(err)))
                     break
@@ -446,7 +438,7 @@ class BaseNetwork(BaseSkeleton):
             if train_end_signal is not None:
                 train_end_signal(self)
 
-            summary.finish()
+            # summary.finish()
             logs.newline()
 
     def __getstate__(self):
