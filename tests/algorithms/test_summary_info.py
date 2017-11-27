@@ -1,5 +1,4 @@
 from neupy import algorithms
-from neupy.helpers import table
 from neupy.algorithms.summary_info import InlineSummary, SummaryTable
 
 from base import BaseTestCase

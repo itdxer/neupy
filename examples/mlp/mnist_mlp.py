@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 from sklearn import model_selection, metrics, datasets
 from neupy import algorithms, layers, environment
+from neupy.exceptions import StopTraining
 
 
 environment.reproducible()
@@ -23,6 +24,10 @@ x_train, x_test, y_train, y_test = model_selection.train_test_split(
     train_size=(6 / 7.)
 )
 
+def epoch_end_signal(network):
+    if network.last_epoch == 3:
+        raise StopTraining("Too many iterations")
+
 network = algorithms.Momentum(
     [
         layers.Input(784),
@@ -30,8 +35,10 @@ network = algorithms.Momentum(
         layers.Relu(300),
         layers.Softmax(10),
     ],
+    epoch_end_signal=epoch_end_signal,
 
-    # Using categorical cross-entropy as a loss function
+    # Using categorical cross-entropy as a loss function.
+    # It's suitable for classification with 3 and more classes.
     error='categorical_crossentropy',
 
     # Learning rate

@@ -13,7 +13,6 @@ from neupy.layers.utils import preformat_layer_shape, iter_parameters
 from neupy.layers.connections import LayerConnection, is_sequential
 from neupy.layers.connections.base import create_input_variables
 from neupy.exceptions import InvalidConnection
-from neupy.helpers import table
 from neupy.core.properties import ChoiceProperty
 from neupy.algorithms.base import BaseNetwork
 from .gd import errors
@@ -538,16 +537,9 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
 
             values.append((index, input_shape, classname, output_shape))
 
-        table.TableBuilder.show_full_table(
-            columns=[
-                table.Column(name="#"),
-                table.Column(name="Input shape"),
-                table.Column(name="Layer Type"),
-                table.Column(name="Output shape"),
-            ],
-            values=values,
-            stdout=self.logs.write,
-        )
+        self.logs.table(values, headers=[
+            '#', 'Input shape', 'Layer type', 'Output shape'
+        ])
         self.logs.newline()
 
     def __repr__(self):

@@ -5,6 +5,9 @@ import sys
 import importlib
 from contextlib import contextmanager
 
+import tableprint
+from tableprint.style import STYLES, TableStyle, LineStyle
+
 from neupy.core.config import Configurable
 from neupy.core.properties import BaseProperty
 from neupy.helpers import Progressbar
@@ -12,6 +15,16 @@ from . import terminal
 
 
 __all__ = ('Verbose',)
+
+
+# Modified default round style in order
+# to add small paddings in each column
+STYLES['round'] = TableStyle(
+    top=LineStyle('╭─', '─', '─┬─', '─╮'),
+    below_header=LineStyle('├─', '─', '─┼─', '─┤'),
+    bottom=LineStyle('╰─', '─', '─┴─', '─╯'),
+    row=LineStyle('│ ', '', ' │ ', ' │'),
+)
 
 
 def terminal_echo(enabled, file_descriptor=sys.stdin):
@@ -195,6 +208,31 @@ class TerminalLogger(object):
 
     def __reduce__(self):
         return (self.__class__, (self.enable,))
+
+    def table_header(self, header, *args, **kwargs):
+        self.write(tableprint.header(header, *args, **kwargs))
+
+    def table_row(self, row, *args, **kwargs):
+        self.write(tableprint.row(row, *args, **kwargs))
+
+    def table_bottom(self, n_columns, *args, **kwargs):
+        self.write(tableprint.bottom(n_columns, *args, **kwargs))
+
+    def table_top(self, n_columns, *args, **kwargs):
+        self.write(tableprint.top(n_columns, *args, **kwargs))
+
+    def table(self, data, headers, **kwargs):
+        widths = [len(value) for value in headers]
+        stringified_data = []
+
+        for row_values in data:
+            stringified_data.append([str(v) for v in row_values])
+
+            for i, cell_value in enumerate(row_values):
+                widths[i] = max(len(str(cell_value)), widths[i])
+
+        kwargs['width'] = widths
+        self.write(tableprint.table(stringified_data, headers, **kwargs))
 
 
 class VerboseProperty(BaseProperty):

@@ -1,4 +1,4 @@
-from neupy.helpers.table import format_time
+import tableprint
 
 
 __all__ = ('SummaryTable', 'InlineSummary')
@@ -23,24 +23,25 @@ class SummaryTable(object):
     delay_history_length : int
         Defaults to ``10``.
     """
-    def __init__(self, network, table_builder):
+    def __init__(self, network, columns):
         self.network = network
-        self.table_builder = table_builder
-        table_builder.start()
+        self.columns = columns
+        self.logs = self.network.logs
+        self.logs.table_header(columns)
 
     def show_last(self):
         training_error = self.network.errors.last()
         validation_error = self.network.validation_errors.last()
 
-        self.table_builder.row([
+        self.logs.table_row([
             self.network.last_epoch,
             training_error if training_error is not None else '-',
             validation_error if validation_error is not None else '-',
-            self.network.training.epoch_time,
+            tableprint.humantime(self.network.training.epoch_time),
         ])
 
     def finish(self):
-        self.table_builder.finish()
+        self.logs.table_bottom(len(self.columns))
 
 
 class InlineSummary(object):
@@ -62,7 +63,7 @@ class InlineSummary(object):
 
         train_error = network.errors.last()
         validation_error = network.validation_errors.last()
-        epoch_training_time = format_time(network.training.epoch_time)
+        epoch_training_time = tableprint.humantime(network.training.epoch_time)
 
         if validation_error is not None:
             logs.write(
