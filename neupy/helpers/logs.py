@@ -5,6 +5,7 @@ import sys
 import importlib
 from contextlib import contextmanager
 
+import progressbar
 import tableprint
 from tableprint.style import STYLES, TableStyle, LineStyle
 
@@ -173,30 +174,12 @@ class TerminalLogger(object):
         """
         self.message('WARN', text, color='red')
 
-    def progressbar(self, iterator, *args, **kwargs):
-        """
-        Make progressbar for specific iteration if logging
-        is enable.
-
-        Parameters
-        ----------
-        iterator : iterable object
-        *args
-            Arguments for ``Progressbar`` class.
-        **kwargs
-            Key defined arguments for ``Progressbar`` class.
-        """
-        if self.enable:
-            return Progressbar(iterator, *args, **kwargs)
-        return iterator
-
     @contextmanager
     def disable_user_input(self):
         """
         Context manager helps ignore user input in
         terminal for UNIX.
         """
-
         if self.enable:
             try:
                 terminal_echo(enabled=False)
@@ -222,6 +205,9 @@ class TerminalLogger(object):
         self.write(tableprint.top(n_columns, *args, **kwargs))
 
     def table(self, data, headers, **kwargs):
+        if not self.enable:
+            return
+
         widths = [len(value) for value in headers]
         stringified_data = []
 
@@ -232,7 +218,7 @@ class TerminalLogger(object):
                 widths[i] = max(len(str(cell_value)), widths[i])
 
         kwargs['width'] = widths
-        self.write(tableprint.table(stringified_data, headers, **kwargs))
+        tableprint.table(stringified_data, headers, **kwargs)
 
 
 class VerboseProperty(BaseProperty):

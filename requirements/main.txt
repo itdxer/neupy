@@ -1,11 +1,12 @@
-# Library
+# Core
 numpy>=1.9.0
 scipy>=0.19.0
+Theano==1.0.0
+
+# Visualizations
 matplotlib>=1.5.1
 graphviz==0.5.1
 
-Theano==1.0.0
-# Important dependency for Theano 0.8.2
-nose-parameterized==0.5.0
-
+# Logging
 tableprint==0.7.0
+progressbar2==3.34.3
