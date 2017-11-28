@@ -3,7 +3,7 @@ from abc import abstractmethod
 import numpy as np
 
 from neupy.utils import preformat_value
-from neupy.helpers.logs import Verbose
+from neupy.core.logs import Verbose
 from .config import ConfigurableABC
 
 
