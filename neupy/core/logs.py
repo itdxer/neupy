@@ -8,16 +8,16 @@ from contextlib import contextmanager
 import tableprint
 from tableprint.style import STYLES, TableStyle, LineStyle
 
-from neupy.core.config import Configurable
-from neupy.core.properties import BaseProperty
+from .config import Configurable
+from .properties import BaseProperty
 from . import terminal
 
 
 __all__ = ('Verbose',)
 
 
-# Modified default round style in order
-# to add small paddings in each column
+# Modified default style in order to add small
+# paddings in each column
 STYLES['round'] = TableStyle(
     top=LineStyle('╭─', '─', '─┬─', '─╮'),
     below_header=LineStyle('├─', '─', '─┼─', '─┤'),
