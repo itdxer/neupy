@@ -4,8 +4,8 @@ from functools import partial
 import numpy as np
 
 from neupy import algorithms, layers
-from neupy.helpers.logs import TerminalLogger
-from neupy.algorithms.gd.base import format_error, apply_batches
+from neupy.core.logs import TerminalLogger
+from neupy.algorithms.gd.base import apply_batches
 
 from utils import compare_networks, catch_stdout
 from base import BaseTestCase
@@ -98,37 +98,6 @@ class GradientDescentTestCase(BaseTestCase):
 
 
 class GDAdditionalFunctionsTestCase(BaseTestCase):
-    def test_gd_format_error_function(self):
-        self.assertEqual('?', format_error(None))
-        self.assertEqual('1.00000', format_error(np.array([1])))
-
-        self.assertEqual('101', format_error(101))
-        self.assertEqual('101', format_error(101.01))
-
-        self.assertEqual('0.12000', format_error(0.12))
-        self.assertEqual('0.00000', format_error(0.00000001))
-
     def test_gd_apply_batches_exceptions(self):
         with self.assertRaisesRegexp(ValueError, "at least one element"):
-            apply_batches(function=lambda x: x, arguments=[],
-                          batch_size=12, logger=None)
-
-    def test_gd_apply_batches(self):
-        def function(x):
-            time.sleep(0.02)
-            print()
-            return 12345
-
-        with catch_stdout() as out:
-            apply_batches(
-                function=function,
-                arguments=[np.ones(100)],
-                batch_size=10,
-                logger=TerminalLogger(),
-                show_progressbar=True,
-                show_error_output=True
-            )
-            terminal_output = out.getvalue()
-
-        self.assertIn('12345', terminal_output)
-        self.assertIn('error', terminal_output)
+            apply_batches(function=lambda x: x, arguments=[], batch_size=12)

@@ -26,7 +26,7 @@ class PandasCompatibilityTestCase(BaseTestCase):
         x_train, x_test, y_train, y_test = train_test_split(
             pandas_data[input_columns],
             pandas_data['target'],
-            train_size=0.85
+            test_size=0.15
         )
 
         bpnet = algorithms.GradientDescent(

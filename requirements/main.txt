@@ -8,5 +8,5 @@ matplotlib>=1.5.1
 graphviz==0.5.1
 
 # Logging
-tableprint==0.7.0
+tableprint==0.7.1
 progressbar2==3.34.3

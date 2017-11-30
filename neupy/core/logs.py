@@ -1,4 +1,5 @@
-from __future__ import print_function
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals
 
 import os
 import sys
@@ -14,16 +15,6 @@ from . import terminal
 
 
 __all__ = ('Verbose',)
-
-
-# Modified default style in order to add small
-# paddings in each column
-STYLES['round'] = TableStyle(
-    top=LineStyle('╭─', '─', '─┬─', '─╮'),
-    below_header=LineStyle('├─', '─', '─┼─', '─┤'),
-    bottom=LineStyle('╰─', '─', '─┴─', '─╯'),
-    row=LineStyle('│ ', '', ' │ ', ' │'),
-)
 
 
 def terminal_echo(enabled, file_descriptor=sys.stdin):
@@ -199,9 +190,6 @@ class TerminalLogger(object):
     def table_bottom(self, n_columns, *args, **kwargs):
         self.write(tableprint.bottom(n_columns, *args, **kwargs))
 
-    def table_top(self, n_columns, *args, **kwargs):
-        self.write(tableprint.top(n_columns, *args, **kwargs))
-
     def table(self, data, headers, **kwargs):
         if not self.enable:
             return
@@ -216,6 +204,7 @@ class TerminalLogger(object):
                 widths[i] = max(len(str(cell_value)), widths[i])
 
         kwargs['width'] = widths
+        kwargs['out'] = self.stdout
         tableprint.table(stringified_data, headers, **kwargs)
 
 

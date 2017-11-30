@@ -97,7 +97,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         x_train, x_test, y_train, y_test = model_selection.train_test_split(
             input_scaler.fit_transform(data),
             np.asarray(encoded_target.todense()),
-            train_size=0.8)
+            test_size=0.2)
 
         # -------------- Train single GradientDescent -------------- #
 

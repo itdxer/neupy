@@ -72,7 +72,7 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
     >>>
     >>> dataset = datasets.load_digits()
     >>> x_train, x_test, y_train, y_test = train_test_split(
-    ...     dataset.data, dataset.target, train_size=0.7
+    ...     dataset.data, dataset.target, test_size=0.3
     ... )
     >>>
     >>> pnn = algorithms.PNN(std=10, verbose=False)

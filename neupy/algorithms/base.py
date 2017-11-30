@@ -438,7 +438,7 @@ class BaseNetwork(BaseSkeleton):
             if train_end_signal is not None:
                 train_end_signal(self)
 
-            # summary.finish()
+            summary.finish()
             logs.newline()
 
     def __getstate__(self):
