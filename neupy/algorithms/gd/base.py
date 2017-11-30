@@ -1,7 +1,6 @@
 from __future__ import division
 
 import math
-import collections
 
 import six
 import theano
@@ -264,14 +263,18 @@ def apply_batches(function, arguments, batch_size, description='',
     batch_iterator = list(iter_batches(n_samples, batch_size))
 
     if show_progressbar:
+        widgets = [
+            progressbar.Timer(format='Time: %(elapsed)s'), ' |',
+            progressbar.Percentage(),
+            progressbar.Bar(),
+            ' ', progressbar.ETA(),
+        ]
+
+        if show_error_output:
+            widgets.extend([' | ', progressbar.DynamicMessage('error')])
+
         bar = progressbar.ProgressBar(
-            widgets=[
-                progressbar.Timer(format='Time: %(elapsed)s'), ' |',
-                progressbar.Percentage(),
-                progressbar.Bar(),
-                ' ', progressbar.ETA(), ' | ',
-                progressbar.DynamicMessage('error') if show_error_output else '',
-            ],
+            widgets=widgets,
             max_value=len(batch_iterator),
             poll_interval=0.1,
         )
@@ -396,9 +399,9 @@ class MinibatchTrainingMixin(Configurable):
 
         if show_progressbar is None:
             show_progressbar = (
-                self.training
-                and self.training.show_epoch == 1
-                and self.logs.enable
+                self.training and
+                self.training.show_epoch == 1 and
+                self.logs.enable
             )
 
         return apply_batches(

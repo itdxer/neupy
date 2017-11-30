@@ -7,7 +7,6 @@ import importlib
 from contextlib import contextmanager
 
 import tableprint
-from tableprint.style import STYLES, TableStyle, LineStyle
 
 from .config import Configurable
 from .properties import BaseProperty
