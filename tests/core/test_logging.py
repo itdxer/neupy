@@ -1,8 +1,11 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import os
 from collections import namedtuple
 
-from neupy.helpers.logs import Verbose, TerminalLogger, terminal_echo
-from neupy.helpers import terminal
+from neupy.core.logs import Verbose, TerminalLogger, terminal_echo
+from neupy.core import terminal
 from neupy import algorithms
 
 from base import BaseTestCase
@@ -124,4 +127,14 @@ class NeuralNetworkLoggingTestCase(BaseTestCase):
             terminal_output = out.getvalue()
 
             self.assertIn("Start training", terminal_output)
-            self.assertIn("-----", terminal_output)
+            self.assertIn("──────", terminal_output)
+
+
+class TableLoggingTestCase(BaseTestCase):
+    def test_disabled_logging_table_print(self):
+        with catch_stdout() as out:
+            logs = TerminalLogger(enable=False)
+            logs.table([[1, 2], [3, 4]], headers=['A', 'B'])
+            terminal_output = out.getvalue()
+
+        self.assertEqual("", terminal_output)

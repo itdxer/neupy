@@ -10,7 +10,7 @@ class DANTestCase(BaseTestCase):
         data, target = datasets.make_classification(300, n_features=4,
                                                     n_classes=2)
         x_train, x_test, y_train, y_test = model_selection.train_test_split(
-            data, target, train_size=0.7
+            data, target, test_size=0.3
         )
 
         with self.assertRaises(ValueError):
@@ -47,7 +47,7 @@ class DANTestCase(BaseTestCase):
         data, target = datasets.make_classification(300, n_features=4,
                                                     n_classes=2)
         x_train, x_test, y_train, y_test = model_selection.train_test_split(
-            data, target, train_size=0.7
+            data, target, test_size=0.3
         )
 
         dan = algorithms.DynamicallyAveragedNetwork([

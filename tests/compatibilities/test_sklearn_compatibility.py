@@ -17,7 +17,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
         x_train, x_test, y_train, y_test = train_test_split(
             dataset.data,
             target_scaler.fit_transform(target),
-            train_size=0.85
+            test_size=0.15
         )
 
         network = algorithms.GradientDescent(
@@ -44,7 +44,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
         data, target = datasets.make_classification(300, n_features=4,
                                                     n_classes=2)
         x_train, x_test, y_train, y_test = train_test_split(
-            data, target, train_size=0.7
+            data, target, test_size=0.3
         )
 
         dan = algorithms.DynamicallyAveragedNetwork([
@@ -70,7 +70,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
 
         dataset = datasets.load_diabetes()
         x_train, x_test, y_train, y_test = train_test_split(
-            dataset.data, dataset.target, train_size=0.7
+            dataset.data, dataset.target, test_size=0.3
         )
 
         grnnet = algorithms.GRNN(std=0.5, verbose=False)

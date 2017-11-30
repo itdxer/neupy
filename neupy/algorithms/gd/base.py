@@ -217,43 +217,7 @@ def cannot_divide_into_batches(data, batch_size):
     return batch_size is None or n_samples <= batch_size
 
 
-def format_error(error):
-    """
-    Format the error value.
-
-    Parameters
-    ----------
-    error : float, list or None
-
-    Returns
-    -------
-    str
-        Formated error value.
-
-    Examples
-    --------
-    >>> format_error(None)
-    '?'
-    >>>
-    >>> format_error(0.43)
-    '0.43000'
-    >>>
-    >>> format_error(1 / 3.)
-    '0.33333'
-    """
-    if error is None:
-        return '?'
-
-    if isinstance(error, collections.Iterable):
-        error = np.atleast_1d(error).item(0)
-
-    if abs(error) > 100:
-        return "{:.0f}".format(error)
-
-    return '{:.5f}'.format(error)
-
-
-def apply_batches(function, arguments, batch_size, logger, description='',
+def apply_batches(function, arguments, batch_size, description='',
                   show_progressbar=False, show_error_output=True):
     """
     Apply batches to a specified function.
@@ -271,8 +235,6 @@ def apply_batches(function, arguments, batch_size, logger, description='',
 
     batch_size : int
         Mini-batch size.
-
-    logger : TerminalLogger instance
 
     description : str
         Short description that will be displayed near the progressbar
@@ -308,7 +270,7 @@ def apply_batches(function, arguments, batch_size, logger, description='',
                 progressbar.Percentage(),
                 progressbar.Bar(),
                 ' ', progressbar.ETA(), ' | ',
-                progressbar.DynamicMessage('loss'),
+                progressbar.DynamicMessage('error') if show_error_output else '',
             ],
             max_value=len(batch_iterator),
             poll_interval=0.1,
@@ -324,7 +286,10 @@ def apply_batches(function, arguments, batch_size, logger, description='',
         output = function(*sliced_arguments)
         outputs.append(output)
 
-        bar.update(i, loss=output.item(0))
+        if show_error_output:
+            bar.update(i, error=np.atleast_1d(output).item(0))
+        else:
+            bar.update(i)
 
     bar.finish('\r' + ' ' * bar.term_width + '\r')
     return outputs
@@ -430,8 +395,11 @@ class MinibatchTrainingMixin(Configurable):
             return [function(*arguments)]
 
         if show_progressbar is None:
-            show_progressbar = (self.training and
-                                self.training.show_epoch == 1)
+            show_progressbar = (
+                self.training
+                and self.training.show_epoch == 1
+                and self.logs.enable
+            )
 
         return apply_batches(
             function=function,
@@ -439,7 +407,6 @@ class MinibatchTrainingMixin(Configurable):
             batch_size=self.batch_size,
 
             description=description,
-            logger=self.logs,
             show_progressbar=show_progressbar,
             show_error_output=show_error_output,
         )
