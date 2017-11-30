@@ -92,7 +92,8 @@ class TerminalLogger(object):
         text : str
         """
         if self.enable:
-            self.stdout.write(str(text) + '\n')
+            self.stdout.write(text)
+            self.stdout.write('\n')
 
     def newline(self):
         """

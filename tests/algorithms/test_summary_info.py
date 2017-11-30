@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from neupy import algorithms
 from neupy.algorithms.summary_info import (InlineSummary, SummaryTable,
                                            format_time)
@@ -61,5 +64,5 @@ class InlineSummaryTestCase(BaseTestCase):
         self.assertEqual("02:05", format_time(125))
         self.assertEqual("45 sec", format_time(45))
         self.assertEqual("100 ms", format_time(0.1))
-        self.assertEqual("10 \u03BCs", format_time(1e-5))
+        self.assertEqual("10 μs", format_time(1e-5))
         self.assertEqual("200 ns", format_time(2e-7))

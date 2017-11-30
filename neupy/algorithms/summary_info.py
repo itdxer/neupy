@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+
 __all__ = ('SummaryTable', 'InlineSummary')
 
 
@@ -32,7 +36,7 @@ def format_time(time):
 
     elif time >= 1e-6:
         # microseconds
-        return '{:.0f} \u03BCs'.format(time * 1e6)
+        return '{:.0f} μs'.format(time * 1e6)
 
     # nanoseconds or smaller
     return '{:.0f} ns'.format(time * 1e9)
