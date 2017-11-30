@@ -26,7 +26,7 @@ n_unlabeled = n_samples - n_labeled
 x_labeled, x_unlabeled, y_labeled, y_unlabeled = train_test_split(
     data.astype(np.float32),
     target.astype(np.float32),
-    train_size=(n_labeled / n_samples)
+    test_size=(1 - n_labeled / n_samples)
 )
 
 x_labeled_4d = x_labeled.reshape((n_labeled, 1, 28, 28))

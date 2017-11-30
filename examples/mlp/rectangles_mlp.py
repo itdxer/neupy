@@ -10,7 +10,7 @@ rectangle_dataset.fetch(download_if_missing=True)
 
 data, target = rectangle_dataset.classification_task()
 x_train, x_test, y_train, y_test = model_selection.train_test_split(
-    data, target, train_size=0.5
+    data, target, test_size=0.5
 )
 
 network = algorithms.MinibatchGradientDescent(
