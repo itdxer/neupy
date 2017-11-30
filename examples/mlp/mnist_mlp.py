@@ -21,12 +21,8 @@ data = data - data.mean(axis=0)
 x_train, x_test, y_train, y_test = model_selection.train_test_split(
     data.astype(np.float32),
     target.astype(np.float32),
-    train_size=(6 / 7.)
+    test_size=(1 / 7.)
 )
-
-def epoch_end_signal(network):
-    if network.last_epoch == 3:
-        raise StopTraining("Too many iterations")
 
 network = algorithms.Momentum(
     [
@@ -35,7 +31,6 @@ network = algorithms.Momentum(
         layers.Relu(300),
         layers.Softmax(10),
     ],
-    epoch_end_signal=epoch_end_signal,
 
     # Using categorical cross-entropy as a loss function.
     # It's suitable for classification with 3 and more classes.

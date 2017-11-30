@@ -25,7 +25,7 @@ def make_dataset():
     for i in range(n_categorical):
         data[:, i] = np.digitize(data[:, i], bins=bins)
 
-    return train_test_split(data, target, train_size=0.9)
+    return train_test_split(data, target, test_size=0.1)
 
 
 def only_numerical(data):
