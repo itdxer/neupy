@@ -192,12 +192,12 @@ class NetworkPropertiesTestCase(BaseTestCase):
 
             # One of the choices has to be true whether other
             # choices should give count equal to zero.
-            time = (
-                terminal_output.count(u" \u03BCs ")
-                + terminal_output.count(u" ms ")
-                + terminal_output.count(u" ns ")
+            time_counts = (
+                terminal_output.count(" μs ")
+                + terminal_output.count(" ms ")
+                + terminal_output.count(" ns ")
             )
-            self.assertEqual(case.should_be_n_times, time)
+            self.assertEqual(case.should_be_n_times, time_counts)
 
     def test_show_epoch_invalid_cases(self):
         wrong_input_values = (
