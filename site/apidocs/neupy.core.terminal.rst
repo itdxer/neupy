@@ -1,7 +1,7 @@
-neupy.helpers.table module
+neupy.core.terminal module
 ==========================
 
-.. automodule:: neupy.helpers.table
+.. automodule:: neupy.core.terminal
     :members:
     :undoc-members:
     :show-inheritance:
