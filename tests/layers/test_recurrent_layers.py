@@ -27,7 +27,6 @@ class LSTMTestCase(BaseTestCase):
             n_samples=100, return_indeces=True)
         data = add_padding(data + 1)  # +1 to shift indeces
 
-        # self.data = x_train, x_test, y_train, y_test
         self.data = train_test_split(data, labels, test_size=0.2)
 
         self.n_categories = len(reber.avaliable_letters) + 1
@@ -322,9 +321,9 @@ class GRUTestCase(BaseTestCase):
                 layers.Sigmoid(1),
             ],
 
-            step=0.1,
+            step=0.02,
             verbose=False,
-            batch_size=1,
+            batch_size=10,
             error='binary_crossentropy',
         )
         network.train(x_train, y_train, x_test, y_test, epochs=20)
