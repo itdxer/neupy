@@ -26,7 +26,7 @@ Data doesn't have appropriate format for neural network, so we need to make simp
     >>> data = data - data.mean(axis=0)
     >>>
     >>> target_scaler = OneHotEncoder()
-    >>> target = target_scaler.fit_transform(target.reshape((-1, 1)))
+    >>> target = target_scaler.fit_transform(target.reshape(-1, 1))
     >>> target = target.todense()
 
 Next we need to divide dataset into two parts: train and test. Regarding `The
