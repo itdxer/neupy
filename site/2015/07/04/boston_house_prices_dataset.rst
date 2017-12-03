@@ -177,7 +177,7 @@ To fix this issue we should transfrom all columns to get similar ranges.
     target_scaler = preprocessing.MinMaxScaler()
 
     data = data_scaler.fit_transform(data)
-    target = target_scaler.fit_transform(target)
+    target = target_scaler.fit_transform(target.reshape(-1, 1))
 
 After transformation data looks like this.
 

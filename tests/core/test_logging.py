@@ -123,11 +123,13 @@ class NeuralNetworkLoggingTestCase(BaseTestCase):
         with catch_stdout() as out:
             gdnet = algorithms.GradientDescent((10, 20, 1), verbose=True)
             gdnet.train(x_train, y_train, x_test, y_test, epochs=4)
+            y_predicted = gdnet.predict(x_test)
 
             terminal_output = out.getvalue()
 
             self.assertIn("Start training", terminal_output)
             self.assertIn("──────", terminal_output)
+            self.assertEqual(y_predicted.size, y_test.size)
 
 
 class TableLoggingTestCase(BaseTestCase):

@@ -427,7 +427,7 @@ class BaseNetwork(BaseSkeleton):
                     is_first_iteration = False
 
                 except StopTraining as err:
-                    self.logs.table_bottom(4)
+                    summary.finish()
                     logs.message("TRAIN", "Epoch #{} stopped. {}"
                                           "".format(epoch, str(err)))
                     break

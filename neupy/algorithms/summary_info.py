@@ -66,6 +66,7 @@ class SummaryTable(object):
         self.columns = columns
         self.logs = self.network.logs
         self.logs.table_header(columns)
+        self.finished = False
 
     def show_last(self):
         training_error = self.network.errors.last()
@@ -79,7 +80,9 @@ class SummaryTable(object):
         ])
 
     def finish(self):
-        self.logs.table_bottom(len(self.columns))
+        if not self.finished:
+            self.logs.table_bottom(len(self.columns))
+            self.finished = True
 
 
 class InlineSummary(object):
