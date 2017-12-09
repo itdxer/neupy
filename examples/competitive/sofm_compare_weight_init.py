@@ -56,7 +56,9 @@ if __name__ == '__main__':
             step=0.3,
             reduce_step_after=5,
         )
-        sofm.init_weights(data)
+
+        if not sofm.initialized:
+            sofm.init_weights(data)
 
         plt.subplot(n_rows, n_columns, index)
 
