@@ -191,7 +191,7 @@ class SOFM(Kohonen):
         Number of outputs. Parameter is optional in case if
         ``feature_grid`` was specified.
 
-        .. code-block::
+        .. code-block:: python
 
             if n_outputs is None:
                 n_outputs = np.prod(feature_grid)
