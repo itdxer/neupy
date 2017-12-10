@@ -47,6 +47,7 @@ Links
 Articles
 --------
 
+* `Self-Organizing Maps and Applications <http://neupy.com/2017/12/09/sofm_applications.html>`_
 * `Hyperparameter optimization for Neural Networks  <http://neupy.com/2016/12/17/hyperparameter_optimization_for_neural_networks.html>`_
 * `Visualize Backpropagation Algorithms <http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html>`_
 * `MNIST classification <http://neupy.com/2016/11/12/mnist_classification.html>`_
