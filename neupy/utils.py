@@ -13,6 +13,8 @@ __all__ = ('format_data', 'asfloat', 'AttributeKeyDict', 'preformat_value',
            'all_equal')
 
 
+# Disable annoying warning from Theano
+theano.config.warn.round = False
 number_type = (int, float, np.floating, np.integer)
 
 
