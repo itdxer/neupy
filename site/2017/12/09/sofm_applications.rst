@@ -1,3 +1,5 @@
+.. _sofm-applications:
+
 Self-Organizing Maps and Applications
 =====================================
 
