@@ -120,7 +120,7 @@ If you want to learn more about SOFM, you can :ref:`check article <sofm-applicat
 Code
 ----
 
-All the code that was used to generate images in the article you can find in iPython notebook on github.
+All the code that was used to generate images in the article you can find in `iPython notebook on github <https://github.com/itdxer/neupy/blob/master/notebooks/sofm/The%20Art%20of%20SOFM.ipynb>`_.
 
 .. author:: default
 .. categories:: none
