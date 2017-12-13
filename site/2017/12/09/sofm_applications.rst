@@ -287,7 +287,6 @@ iPython notebook with code that explores VGG19 using SOFM available on `github <
 
 * `Simple SOFM example <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_basic.py>`_
 * `Clustering iris dataset using SOFM <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_iris_clustering.py>`_
-
 * `Learning half-circle topology with SOFM <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_moon_topology.py>`_
 * `Compare feature grid types for SOFM <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_compare_grid_types.py>`_
 * `Compare weight initialization methods for SOFM <https://github.com/itdxer/neupy/tree/master/examples/competitive/sofm_compare_weight_init.py>`_
