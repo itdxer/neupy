@@ -19,6 +19,7 @@ NeuPy is very intuitive and it's easy to read and understand the code. To learn 
 Jupyter Notebooks
 -----------------
 
+* `Generating NeuPy logo with SOFM <https://github.com/itdxer/neupy/blob/master/notebooks/sofm/Generating%20NeuPy%20logo%20with%20SOFM.ipynb>`_
 * `Generate interesting patterns with SOFM <https://github.com/itdxer/neupy/blob/master/notebooks/sofm/The%20Art%20of%20SOFM.ipynb>`_
 * `Looking inside of the VGG19 using SOFM <https://github.com/itdxer/neupy/blob/master/notebooks/Looking%20inside%20of%20the%20VGG19%20using%20SOFM.ipynb>`_
 * `Hyperparameter optimization for Neural Networks <https://github.com/itdxer/neupy/blob/master/notebooks/Hyperparameter%20optimization%20for%20Neural%20Networks.ipynb>`_
