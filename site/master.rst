@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2017/12/17/sofm_text_style
    2017/12/13/sofm_art
    2017/12/09/sofm_applications
    2016/12/17/hyperparameter_optimization_for_neural_networks

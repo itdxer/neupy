@@ -1,3 +1,5 @@
+.. _sofm-art:
+
 The Art of SOFM
 ===============
 
