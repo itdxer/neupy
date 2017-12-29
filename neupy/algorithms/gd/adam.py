@@ -85,10 +85,10 @@ class Adam(MinibatchGradientDescent):
             value=asfloat(np.zeros(parameter_shape)),
         )
 
-        step = asfloat(self.variables.step)
-        beta1 = asfloat(self.beta1)
-        beta2 = asfloat(self.beta2)
-        epsilon = asfloat(self.epsilon)
+        step = self.variables.step
+        beta1 = self.beta1
+        beta2 = self.beta2
+        epsilon = self.epsilon
 
         gradient = T.grad(self.variables.error_func, wrt=parameter)
 
