@@ -86,25 +86,21 @@ class Adam(MinibatchGradientDescent):
         )
 
         step = self.variables.step
-        beta1 = self.beta1
-        beta2 = self.beta2
-        epsilon = self.epsilon
-
         gradient = T.grad(self.variables.error_func, wrt=parameter)
 
         first_moment = (
-            beta1 * prev_first_moment +
-            asfloat(1. - beta1) * gradient)
+            self.beta1 * prev_first_moment +
+            (1. - self.beta1) * gradient)
         second_moment = (
-            beta2 * prev_second_moment +
-            asfloat(1. - beta2) * gradient ** 2
+            self.beta2 * prev_second_moment +
+            (1. - self.beta2) * gradient ** 2
         )
 
-        first_moment_bias_corrected = first_moment / (1. - beta1 ** epoch)
-        second_moment_bias_corrected = second_moment / (1. - beta2 ** epoch)
+        first_moment_bias_corrected = first_moment / (1. - self.beta1 ** epoch)
+        second_moment_bias_corrected = second_moment / (1. - self.beta2 ** epoch)
 
         parameter_delta = first_moment_bias_corrected * (
-            T.sqrt(second_moment_bias_corrected) + epsilon
+            T.sqrt(second_moment_bias_corrected) + self.epsilon
         )
 
         return [
