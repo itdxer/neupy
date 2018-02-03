@@ -243,13 +243,13 @@ class NetworkPropertiesTestCase(BaseTestCase):
 
     def test_network_architecture_output(self):
         expected_architecture = textwrap.dedent("""
-        ╭───┬─────────────┬────────────┬──────────────╮
-        │ # │ Input shape │ Layer type │ Output shape │
-        ├───┼─────────────┼────────────┼──────────────┤
-        │ 1 │           2 │      Input │            2 │
-        │ 2 │           2 │    Sigmoid │            3 │
-        │ 3 │           3 │    Sigmoid │            1 │
-        ╰───┴─────────────┴────────────┴──────────────╯
+        -----------------------------------------------
+        | # | Input shape | Layer type | Output shape |
+        -----------------------------------------------
+        | 1 |           2 |      Input |            2 |
+        | 2 |           2 |    Sigmoid |            3 |
+        | 3 |           3 |    Sigmoid |            1 |
+        -----------------------------------------------
         """).strip()
 
         with catch_stdout() as out:

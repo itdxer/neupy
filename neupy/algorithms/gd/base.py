@@ -294,7 +294,7 @@ def apply_batches(function, arguments, batch_size, description='',
         else:
             bar.update(i)
 
-    bar.finish('\r' + ' ' * bar.term_width + '\r')
+    bar.fd.write('\r' + ' ' * bar.term_width + '\r')
     return outputs
 
 
