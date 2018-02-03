@@ -7,6 +7,7 @@ import importlib
 from contextlib import contextmanager
 
 import tableprint
+from tableprint.style import STYLES, TableStyle, LineStyle
 
 from .config import Configurable
 from .properties import BaseProperty
@@ -14,6 +15,15 @@ from . import terminal
 
 
 __all__ = ('Verbose',)
+
+
+# Customized style
+STYLES['round'] = TableStyle(
+        top=LineStyle('--', '-', '---', '--'),
+        below_header=LineStyle('--', '-', '---', '--'),
+        bottom=LineStyle('--', '-', '---', '--'),
+        row=LineStyle('| ', '', ' | ', ' |'),
+)
 
 
 def terminal_echo(enabled, file_descriptor=sys.stdin):
