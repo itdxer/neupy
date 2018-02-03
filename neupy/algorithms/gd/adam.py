@@ -97,7 +97,8 @@ class Adam(MinibatchGradientDescent):
         )
 
         first_moment_bias_corrected = first_moment / (1. - self.beta1 ** epoch)
-        second_moment_bias_corrected = second_moment / (1. - self.beta2 ** epoch)
+        second_moment_bias_corrected = (
+            second_moment / (1. - self.beta2 ** epoch))
 
         parameter_delta = first_moment_bias_corrected * (
             T.sqrt(second_moment_bias_corrected) + self.epsilon
