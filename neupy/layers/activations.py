@@ -8,8 +8,8 @@ from .utils import dimshuffle
 from .base import ParameterBasedLayer
 
 
-__all__ = ('ActivationLayer', 'Linear', 'Sigmoid', 'HardSigmoid', 'Step',
-           'Tanh', 'Relu', 'Softplus', 'Softmax', 'Elu', 'PRelu', 'LeakyRelu')
+__all__ = ('ActivationLayer', 'Linear', 'Sigmoid', 'HardSigmoid', 'Tanh',
+           'Relu', 'Softplus', 'Softmax', 'Elu', 'PRelu', 'LeakyRelu')
 
 
 class ActivationLayer(ParameterBasedLayer):
@@ -128,27 +128,6 @@ class HardSigmoid(ActivationLayer):
     def activation_function(self, input_value):
         input_value = (0.2 * input_value) + 0.5
         return tf.clip_by_value(input_value, 0., 1.)
-
-
-class Step(ActivationLayer):
-    """
-    The layer with the the step activation function.
-
-    Parameters
-    ----------
-    {ActivationLayer.Parameters}
-
-    Methods
-    -------
-    {ActivationLayer.Methods}
-
-    Attributes
-    ----------
-    {ActivationLayer.Attributes}
-    """
-    def activation_function(self, input_value):
-        # Without cast function output will be boolean
-        return tf.cast(tf.greater(input_value, 0), tf.int8)
 
 
 class Tanh(ActivationLayer):

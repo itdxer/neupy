@@ -38,14 +38,6 @@ class ActivationLayersTestCase(BaseTestCase):
         output = self.eval(layer.activation_function(input_value))
         np.testing.assert_array_almost_equal(output, expected)
 
-    def test_step_layer(self):
-        layer1 = layers.Step(1)
-
-        input_vector = np.array([-10, -1, 0, 1, 10])
-        expected = np.array([0, 0, 0, 1, 1])
-        output = self.eval(layer1.activation_function(input_vector))
-        np.testing.assert_array_equal(output, expected)
-
     def test_linear_layer(self):
         layer = layers.Linear(1)
         self.assertEqual(layer.activation_function(1), 1)
