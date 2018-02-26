@@ -37,3 +37,8 @@ script:
   - export THEANO_FLAGS='floatX=float32,gcc.cxxflags="-march=core2"'  && export SKIP_PLOT_TEST='YES' && nosetests
   - export THEANO_FLAGS='floatX=float64,gcc.cxxflags="-march=core2"' && export SKIP_PLOT_TEST='YES' && nosetests
   - flake8 neupy
+
+branches:
+  except:
+    # Lots of movement in this branch
+    - release/v0.7.0

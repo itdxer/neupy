@@ -1,6 +1,5 @@
 from neupy import layers, algorithms
-from neupy.layers.utils import (create_input_variable, extract_connection,
-                                preformat_layer_shape)
+from neupy.layers.utils import extract_connection, preformat_layer_shape
 
 from base import BaseTestCase
 
@@ -29,10 +28,6 @@ class CountParametersTestCase(BaseTestCase):
 
     def test_join_empty_connection(self):
         self.assertEqual(layers.join(), None)
-
-    def test_create_input_variable_exception(self):
-        with self.assertRaises(ValueError):
-            create_input_variable((1, 2, 3, 4), name='test')
 
     def test_connection_extraction(self):
         connection = layers.Input(2) > layers.Sigmoid(3)

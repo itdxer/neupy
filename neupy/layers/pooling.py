@@ -1,5 +1,6 @@
-import theano.tensor as T
-from theano.tensor.signal import pool
+import math
+
+import tensorflow as tf
 
 from neupy.utils import as_tuple
 from neupy.core.properties import TypedListProperty, ChoiceProperty, Property
@@ -11,17 +12,7 @@ from .convolutions import StrideProperty
 __all__ = ('MaxPooling', 'AveragePooling', 'Upscale', 'GlobalPooling')
 
 
-class PaddingProperty(TypedListProperty):
-    expected_type = as_tuple(TypedListProperty.expected_type, int)
-
-    def __set__(self, instance, value):
-        if isinstance(value, int):
-            value = (value, value)
-        super(PaddingProperty, self).__set__(instance, value)
-
-
-def pooling_output_shape(dimension_size, pool_size, padding, stride,
-                         ignore_border=True):
+def pooling_output_shape(dimension_size, pool_size, padding, stride):
     """
     Computes output shape for pooling operation.
 
@@ -40,9 +31,6 @@ def pooling_output_shape(dimension_size, pool_size, padding, stride,
     stride : int
         Stride size.
 
-    ignore_border : bool
-        Defaults to ``True``.
-
     Returns
     -------
     int
@@ -50,18 +38,14 @@ def pooling_output_shape(dimension_size, pool_size, padding, stride,
     if dimension_size is None:
         return None
 
-    if ignore_border:
-        output_size = dimension_size + 2 * padding - pool_size + 1
-        output_size = (output_size + stride - 1) // stride
+    if padding == 'SAME':
+        return math.ceil(dimension_size / stride)
 
-    elif stride >= pool_size:
-        output_size = (dimension_size + stride - 1) // stride
+    elif padding == 'VALID':
+        return math.ceil((dimension_size - pool_size + 1) / stride)
 
-    else:
-        output_size = (dimension_size - pool_size + stride - 1) // stride
-        output_size = max(1, output_size + 1)
-
-    return output_size
+    raise ValueError("`{!r}` is unknown convolution's padding value"
+                     "".format(padding))
 
 
 class BasePooling(BaseLayer):
@@ -80,7 +64,7 @@ class BasePooling(BaseLayer):
         None, it is considered equal to ds (no overlap on
         pooling regions).
 
-    padding : tuple or int
+    padding : {{`VALID`, `SAME`}}
         (pad_h, pad_w), pad zeros to extend beyond four borders of
         the images, pad_h is the size of the top and bottom margins,
         and pad_w is the size of the left and right margins.
@@ -102,16 +86,11 @@ class BasePooling(BaseLayer):
     """
     size = TypedListProperty(required=True, element_type=int)
     stride = StrideProperty(default=None)
-    padding = PaddingProperty(default=0, element_type=int, n_elements=2)
-    ignore_border = Property(default=True, expected_type=bool)
+    padding = ChoiceProperty(default='VALID', choices=('SAME', 'VALID'))
+    pooling_type = None
 
     def __init__(self, size, **options):
         super(BasePooling, self).__init__(size=size, **options)
-
-        if not self.ignore_border and self.padding != (0, 0):
-            raise ValueError("Cannot set padding parameter equal to {} while "
-                             "``ignore_border`` is equal to ``False``"
-                             "".format(self.padding))
 
     def validate(self, input_shape):
         if len(input_shape) != 3:
@@ -130,20 +109,34 @@ class BasePooling(BaseLayer):
         row_filter_size, col_filter_size = self.size
 
         stride = self.size if self.stride is None else self.stride
-
         row_stride, col_stride = stride
-        row_padding, col_padding = self.padding
 
-        output_rows = pooling_output_shape(rows, row_filter_size, row_padding,
-                                           row_stride, self.ignore_border)
-        output_cols = pooling_output_shape(cols, col_filter_size, col_padding,
-                                           col_stride, self.ignore_border)
+        output_rows = pooling_output_shape(
+            rows, row_filter_size, self.padding, row_stride)
+
+        output_cols = pooling_output_shape(
+            cols, col_filter_size, self.padding, col_stride)
 
         return (n_kernels, output_rows, output_cols)
 
+    def output(self, input_value):
+        # TODO: transpose added only for convenient transition between
+        # tensroflow and theatno. I will remove it later.
+        input_value = tf.transpose(input_value, (0, 2, 3, 1))
+        output = tf.nn.pool(
+            input_value,
+            self.size,
+            pooling_type=self.pooling_type,
+            padding=self.padding,
+            strides=self.stride or self.size,
+        )
+        return tf.transpose(output, (0, 3, 1, 2))
+
     def __repr__(self):
-        return '{name}({size})'.format(name=self.__class__.__name__,
-                                       size=self.size)
+        return '{name}({size})'.format(
+            name=self.__class__.__name__,
+            size=self.size,
+        )
 
 
 class MaxPooling(BasePooling):
@@ -187,10 +180,7 @@ class MaxPooling(BasePooling):
     >>> network.output_shape
     (10, 15, 1)
     """
-    def output(self, input_value):
-        return pool.pool_2d(input_value, ws=self.size, mode='max',
-                            ignore_border=self.ignore_border,
-                            stride=self.stride, pad=self.padding)
+    pooling_type = 'MAX'
 
 
 class AveragePooling(BasePooling):
@@ -199,10 +189,6 @@ class AveragePooling(BasePooling):
 
     Parameters
     ----------
-    mode : {{``include_padding``, ``exclude_padding``}}
-        Give a choice to include or exclude padding.
-        Defaults to ``include_padding``.
-
     {BasePooling.Parameters}
 
     Methods
@@ -238,18 +224,7 @@ class AveragePooling(BasePooling):
     >>> network.output_shape
     (10, 15, 1)
     """
-    mode = ChoiceProperty(
-        default='include_padding',
-        choices={
-            'include_padding': 'average_inc_pad',
-            'exclude_padding': 'average_exc_pad'
-        }
-    )
-
-    def output(self, input_value):
-        return pool.pool_2d(input_value, ws=self.size, mode=self.mode,
-                            ignore_border=self.ignore_border,
-                            stride=self.stride, pad=self.padding)
+    pooling_type = 'AVG'
 
 
 class ScaleFactorProperty(TypedListProperty):
@@ -272,6 +247,31 @@ class ScaleFactorProperty(TypedListProperty):
             raise ValueError("Scale factor property accepts only positive "
                              "integer numbers.")
         super(ScaleFactorProperty, self).validate(value)
+
+
+def tf_repeat(tensor, repeats):
+    """
+    Repeat elements of an tensor. The same as ``numpy.repeat``.
+
+    Parameters
+    ----------
+    input : tensor
+    repeats: list, tuple
+        Number of repeat for each dimension, length must be the
+        same as the number of dimensions in input.
+
+    Returns
+    -------
+    tensor
+        Has the same type as input. Has the shape
+        of ``tensor.shape * repeats``.
+    """
+    with tf.variable_scope("repeat"):
+        expanded_tensor = tf.expand_dims(tensor, -1)
+        multiples = as_tuple(1, repeats)
+        tiled_tensor = tf.tile(expanded_tensor, multiples)
+        repeated_tesnor = tf.reshape(tiled_tensor, tf.shape(tensor) * repeats)
+    return repeated_tesnor
 
 
 class Upscale(BaseLayer):
@@ -328,16 +328,9 @@ class Upscale(BaseLayer):
         return (channel, height_scale * height, width_scale * width)
 
     def output(self, input_value):
-        height_scale, width_scale = self.scale
-        scaled_value = input_value
-
-        if height_scale != 1:
-            scaled_value = T.extra_ops.repeat(scaled_value, height_scale, 2)
-
-        if width_scale != 1:
-            scaled_value = T.extra_ops.repeat(scaled_value, width_scale, 3)
-
-        return scaled_value
+        if all(value == 1 for value in self.scale):
+            return input_value
+        return tf_repeat(input_value, as_tuple(1, 1, self.scale))
 
 
 class GlobalPooling(BaseLayer):
@@ -376,7 +369,7 @@ class GlobalPooling(BaseLayer):
     >>> network.output_shape
     (16,)
     """
-    function = Property(default=T.mean)
+    function = Property(default=tf.reduce_mean)
 
     @property
     def output_shape(self):

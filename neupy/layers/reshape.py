@@ -1,5 +1,5 @@
 import numpy as np
-import theano.tensor as T
+import tensorflow as tf
 
 from neupy.utils import as_tuple
 from neupy.core.properties import TypedListProperty
@@ -90,4 +90,4 @@ class Reshape(BaseLayer):
         """
         n_samples = input_value.shape[0]
         output_shape = as_tuple(n_samples, self.output_shape)
-        return T.reshape(input_value, output_shape)
+        return tf.reshape(input_value, output_shape)

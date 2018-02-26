@@ -49,14 +49,13 @@ class LayerGraphTestCase(BaseTestCase):
         self.assertEqual(1, len(subgraph.input_layers))
         self.assertIs(l0, subgraph.input_layers[0])
 
-        x = T.matrix()
-        outputs = graph.propagate_forward(x)
 
         text_input = asfloat(np.array([[1]]))
         expected_shapes = [(1, 30), (1, 40), (1, 60)]
+        outputs = graph.propagate_forward(text_input)
 
         for output, expected_shape in zip(outputs, expected_shapes):
-            output_value = output.eval({x: text_input})
+            output_value = self.eval(output)
             self.assertIn(output_value.shape, expected_shapes)
 
     def test_graph_cycles_error(self):
@@ -138,10 +137,8 @@ class LayerGraphTestCase(BaseTestCase):
         self.assertEqual(1, len(subgraph.output_layers))
         self.assertEqual([le], subgraph.output_layers)
 
-        x = T.matrix()
-        y = subgraph.propagate_forward(x)
         test_input = asfloat(np.array([[1]]))
-        output = y.eval({x: test_input})
+        output = self.eval(subgraph.propagate_forward(test_input))
 
         self.assertEqual((1, 40), output.shape)
 
@@ -252,9 +249,10 @@ class LayerGraphTestCase(BaseTestCase):
 
         graph = LayerGraph()
         graph.add_layer(layer_1)
+        input_value_2 = np.random.random((10, 2))
 
         with self.assertRaises(ValueError):
-            graph.propagate_forward({layer_2: T.matrix()})
+            graph.propagate_forward({layer_2: input_value_2})
 
     def test_graph_connect_layer_missed_input_shapes(self):
         # input_layer_1 -> concatenate

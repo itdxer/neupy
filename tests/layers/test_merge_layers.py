@@ -1,5 +1,4 @@
-import theano
-import theano.tensor as T
+import tensorflow as tf
 import numpy as np
 
 from neupy import layers, init
@@ -11,17 +10,13 @@ from base import BaseTestCase
 
 class ElementwiseTestCase(BaseTestCase):
     def test_elementwise_basic(self):
-        elem_layer = layers.Elementwise(merge_function=T.add)
-
-        x1 = T.matrix()
-        x2 = T.matrix()
-        y = theano.function([x1, x2], elem_layer.output(x1, x2))
+        elem_layer = layers.Elementwise(merge_function=tf.add)
 
         x1_matrix = asfloat(np.random.random((10, 2)))
         x2_matrix = asfloat(np.random.random((10, 2)))
 
         expected_output = x1_matrix + x2_matrix
-        actual_output = y(x1_matrix, x2_matrix)
+        actual_output = self.eval(elem_layer.output(x1_matrix, x2_matrix))
         np.testing.assert_array_almost_equal(expected_output, actual_output)
 
     def test_elementwise_initialize(self):
@@ -59,7 +54,7 @@ class ElementwiseTestCase(BaseTestCase):
                                      bias=init.Constant(0))
         hidden_layer_2 = layers.Relu(1, weight=init.Constant(2),
                                      bias=init.Constant(0))
-        elem_layer = layers.Elementwise(merge_function=T.add)
+        elem_layer = layers.Elementwise(merge_function=tf.add)
 
         connection = layers.join(input_layer, hidden_layer_1, elem_layer)
         connection = layers.join(input_layer, hidden_layer_2, elem_layer)
@@ -67,14 +62,11 @@ class ElementwiseTestCase(BaseTestCase):
 
         self.assertEqual(elem_layer.output_shape, (1,))
 
-        x = T.matrix()
-        y = theano.function([x], connection.output(x))
-
         test_input = asfloat(np.array([
             [0, 1],
             [-1, -1],
         ]))
-        actual_output = y(test_input)
+        actual_output = self.eval(connection.output(test_input))
         expected_output = np.array([
             [3],
             [0],
@@ -86,13 +78,9 @@ class ConcatenateTestCase(BaseTestCase):
     def test_concatenate_basic(self):
         concat_layer = layers.Concatenate(axis=1)
 
-        x1 = T.tensor4()
-        x2 = T.tensor4()
-        y = theano.function([x1, x2], concat_layer.output(x1, x2))
-
         x1_tensor4 = asfloat(np.random.random((1, 2, 3, 4)))
         x2_tensor4 = asfloat(np.random.random((1, 8, 3, 4)))
-        output = y(x1_tensor4, x2_tensor4)
+        output = self.eval(concat_layer.output(x1_tensor4, x2_tensor4))
 
         self.assertEqual((1, 10, 3, 4), output.shape)
 
@@ -119,12 +107,9 @@ class ConcatenateTestCase(BaseTestCase):
 
         self.assertEqual((11, 24, 24), concat_layer.output_shape)
 
-        x = T.tensor4()
-        y = theano.function([x], connection.output(x))
-
         x_tensor4 = asfloat(np.random.random((5, 3, 28, 28)))
+        actual_output = self.eval(connection.output(x_tensor4))
 
-        actual_output = y(x_tensor4)
         self.assertEqual((5, 11, 24, 24), actual_output.shape)
 
     def test_elementwise_concatenate(self):

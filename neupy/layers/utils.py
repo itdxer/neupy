@@ -1,3 +1,5 @@
+import numpy as np
+import tensorflow as tf
 import theano.tensor as T
 
 
@@ -37,12 +39,13 @@ def dimshuffle(value, ndim, axes):
     -------
     Theano variable
     """
-    pattern = ['x'] * ndim
+    dimensions_to_expand = []
 
-    for i, axis in enumerate(axes):
-        pattern[axis] = i
+    for dim in range(ndim):
+        if dim not in axes:
+            value = tf.expand_dims(value, dim)
 
-    return value.dimshuffle(pattern)
+    return value
 
 
 def iter_parameters(layers, only_trainable=True):
@@ -89,8 +92,8 @@ def count_parameters(connection):
     n_parameters = 0
 
     for _, _, parameter in iter_parameters(connection):
-        parameter = parameter.get_value()
-        n_parameters += parameter.size
+        shape = parameter.get_shape()
+        n_parameters += np.prod(shape.as_list())
 
     return n_parameters
 

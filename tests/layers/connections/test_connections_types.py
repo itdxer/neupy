@@ -1,6 +1,4 @@
 import numpy as np
-import theano
-import theano.tensor as T
 
 from neupy import layers
 from neupy.utils import asfloat, as_tuple
@@ -20,10 +18,13 @@ class ConnectionTypesTestCase(BaseTestCase):
         out_sizes = [784, 20, 10]
 
         for layer, in_size, out_size in zip(conn, in_sizes, out_sizes):
-            self.assertEqual(layer.input_shape, as_tuple(in_size),
-                             msg="Layer: {}".format(layer))
-            self.assertEqual(layer.output_shape, as_tuple(out_size),
-                             msg="Layer: {}".format(layer))
+            self.assertEqual(
+                layer.input_shape, as_tuple(in_size),
+                msg="Layer: {}".format(layer))
+
+            self.assertEqual(
+                layer.output_shape, as_tuple(out_size),
+                msg="Layer: {}".format(layer))
 
     def test_connection_shape_multiple_inputs(self):
         input_layer_1 = layers.Input(10)
@@ -75,19 +76,14 @@ class ConnectionTypesTestCase(BaseTestCase):
         reconstructed = minimized > layers.Sigmoid(10)
         classifier = minimized > layers.Softmax(20)
 
-        x = T.matrix()
-        y_minimized = theano.function([x], minimized.output(x))
-        y_reconstructed = theano.function([x], reconstructed.output(x))
-        y_classifier = theano.function([x], classifier.output(x))
-
         x_matrix = asfloat(np.random.random((3, 10)))
-        minimized_output = y_minimized(x_matrix)
+        minimized_output = self.eval(minimized.output(x_matrix))
         self.assertEqual((3, 5), minimized_output.shape)
 
-        reconstructed_output = y_reconstructed(x_matrix)
+        reconstructed_output = self.eval(reconstructed.output(x_matrix))
         self.assertEqual((3, 10), reconstructed_output.shape)
 
-        classifier_output = y_classifier(x_matrix)
+        classifier_output = self.eval(classifier.output(x_matrix))
         self.assertEqual((3, 20), classifier_output.shape)
 
     def test_dict_based_inputs_into_connection_with_layer_names(self):
@@ -96,11 +92,8 @@ class ConnectionTypesTestCase(BaseTestCase):
 
         network = encoder > decoder
 
-        x = T.matrix()
-        predict = theano.function([x], network.output({'sigmoid-2': x}))
-
         x_test = asfloat(np.ones((7, 5)))
-        y_predicted = predict(x_test)
+        y_predicted = self.eval(network.output({'sigmoid-2': x_test}))
 
         self.assertEqual(y_predicted.shape, (7, 10))
 
@@ -116,19 +109,13 @@ class ConnectionTypesTestCase(BaseTestCase):
         minimized = input_layer > hidden_layer
         reconstructed = minimized > output_layer
 
-        x = T.matrix()
-        y_minimized = theano.function([x], minimized.output(x))
-
         x_matrix = asfloat(np.random.random((3, 10)))
-        minimized_output = y_minimized(x_matrix)
+        minimized_output = self.eval(minimized.output(x_matrix))
         self.assertEqual((3, 5), minimized_output.shape)
 
-        h_output = T.matrix()
-        y_reconstructed = theano.function(
-            [h_output],
-            reconstructed.output({output_layer: h_output})
+        reconstructed_output = self.eval(
+            reconstructed.output({output_layer: minimized_output})
         )
-        reconstructed_output = y_reconstructed(minimized_output)
         self.assertEqual((3, 10), reconstructed_output.shape)
 
     def test_connections_with_complex_parallel_relations(self):
@@ -139,25 +126,24 @@ class ConnectionTypesTestCase(BaseTestCase):
             ], [
                 layers.Convolution((4, 1, 1)),
                 [[
-                    layers.Convolution((2, 1, 3), padding=(0, 1)),
+                    layers.Convolution((2, 1, 3), padding='SAME'),
                 ], [
-                    layers.Convolution((2, 3, 1), padding=(1, 0)),
+                    layers.Convolution((2, 3, 1), padding='SAME'),
                 ]],
             ], [
                 layers.Convolution((8, 1, 1)),
-                layers.Convolution((4, 3, 3), padding=1),
+                layers.Convolution((4, 3, 3), padding='SAME'),
                 [[
-                    layers.Convolution((2, 1, 3), padding=(0, 1)),
+                    layers.Convolution((2, 1, 3), padding='SAME'),
                 ], [
-                    layers.Convolution((2, 3, 1), padding=(1, 0)),
+                    layers.Convolution((2, 3, 1), padding='SAME'),
                 ]],
             ], [
-                layers.MaxPooling((3, 3), stride=(1, 1), padding=1),
+                layers.MaxPooling((3, 3), padding='SAME', stride=(1, 1)),
                 layers.Convolution((8, 1, 1)),
             ]],
             layers.Concatenate(),
         )
-
         self.assertEqual(connection.input_shape, [None, None, None, None])
 
         # Connect them at the end, because we need to make

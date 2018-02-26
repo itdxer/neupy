@@ -86,6 +86,7 @@ def asfloat(value):
         configured by theano floatX variable.
     """
     float_type = theano.config.floatX
+    float_type = 'float32'
 
     if isinstance(value, (np.matrix, np.ndarray)):
         if value.dtype != np.dtype(float_type):
@@ -224,7 +225,7 @@ def as_tuple(*values):
     """
     cleaned_values = []
     for value in values:
-        if isinstance(value, tuple):
+        if isinstance(value, (tuple, list)):
             cleaned_values.extend(value)
         else:
             cleaned_values.append(value)

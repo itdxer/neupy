@@ -2,8 +2,7 @@ import re
 from collections import OrderedDict
 
 import six
-import theano
-import theano.tensor as T
+import tensorflow as tf
 
 from neupy import init
 from neupy.utils import asfloat, as_tuple
@@ -61,13 +60,13 @@ def create_shared_parameter(value, name, shape):
     -------
     Theano shared variable.
     """
-    if isinstance(value, (T.sharedvar.SharedVariable, T.Variable)):
+    if isinstance(value, tf.Variable):
         return value
 
     if isinstance(value, init.Initializer):
         value = value.sample(shape)
 
-    return theano.shared(value=asfloat(value), name=name, borrow=True)
+    return tf.Variable(asfloat(value), name=name, dtype=tf.float32)
 
 
 class BaseLayer(BaseConnection, Configurable):
@@ -153,11 +152,11 @@ class BaseLayer(BaseConnection, Configurable):
         return input_value
 
     def add_parameter(self, value, name, shape=None, trainable=True):
-        theano_name = 'layer:{layer_name}/{parameter_name}'.format(
+        layer_name = 'layer/{layer_name}/{parameter_name}'.format(
             layer_name=self.name,
             parameter_name=name.replace('_', '-'))
 
-        parameter = create_shared_parameter(value, theano_name, shape)
+        parameter = create_shared_parameter(value, layer_name, shape)
         parameter.trainable = trainable
 
         self.parameters[name] = parameter

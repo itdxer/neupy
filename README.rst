@@ -15,7 +15,7 @@
     :align: center
 
 
-NeuPy v0.6.3
+NeuPy v0.7.0
 ============
 
 NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.

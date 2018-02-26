@@ -4,6 +4,7 @@ import logging
 import unittest
 
 import numpy as np
+import tensorflow as tf
 
 from neupy import environment, layers
 
@@ -14,6 +15,11 @@ class BaseTestCase(unittest.TestCase):
     verbose = False
     random_seed = 0
     use_sandbox_mode = True
+
+    def eval(self, value):
+        with tf.Session() as sess:
+            sess.run(tf.global_variables_initializer())
+            return value.eval()
 
     def setUp(self):
         environment.reproducible(seed=self.random_seed)

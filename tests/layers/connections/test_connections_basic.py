@@ -72,6 +72,6 @@ class ConnectionsTestCase(BaseTestCase):
         input_value = asfloat(np.random.random((10, 2)))
 
         connection = layers.Input(2) > layers.Relu(10) > layers.Relu(1)
-        output_value = connection.output(input_value).eval()
+        output_value = self.eval(connection.output(input_value))
 
         self.assertEqual(output_value.shape, (10, 1))

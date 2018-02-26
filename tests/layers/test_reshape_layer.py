@@ -13,7 +13,7 @@ class ReshapeLayerTestCase(BaseTestCase):
         reshape_layer = layers.Reshape()
         input_layer > reshape_layer
 
-        y = reshape_layer.output(x).eval()
+        y = self.eval(reshape_layer.output(x))
         self.assertEqual(y.shape, (5, 4 * 3 * 2 * 1))
 
     def test_reshape_layer_2d_shape(self):
@@ -23,5 +23,5 @@ class ReshapeLayerTestCase(BaseTestCase):
         reshape_layer = layers.Reshape((4, 5))
         input_layer > reshape_layer
 
-        y = reshape_layer.output(x).eval()
+        y = self.eval(reshape_layer.output(x))
         self.assertEqual(y.shape, (5, 4, 5))

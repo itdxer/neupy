@@ -1,7 +1,8 @@
 import copy
 from functools import reduce
 
-import theano.tensor as T
+import numpy as np
+import tensorflow as tf
 
 from neupy.core.properties import IntProperty, CallableProperty
 from neupy.exceptions import LayerConnectionError
@@ -48,7 +49,7 @@ class Elementwise(BaseLayer):
     >>> network.output_shape
     (10,)
     """
-    merge_function = CallableProperty(default=T.add)
+    merge_function = CallableProperty(default=tf.add)
 
     def validate(self, input_shapes):
         n_unique_shapes = len(set(input_shapes))
@@ -132,7 +133,7 @@ class Concatenate(BaseLayer):
         return tuple(output_shape)
 
     def output(self, *input_values):
-        return T.concatenate(input_values, axis=self.axis)
+        return tf.concat(input_values, axis=self.axis)
 
 
 def exclude_index(array, index):
@@ -248,10 +249,12 @@ class GatedAverage(BaseLayer):
 
         output_values = []
         for i, other_value in enumerate(other_values):
-            gate = gating_value[:, i]
-            new_shape = [0] + ['x'] * n_output_dim
-
-            output_value = T.mul(other_value, gate.dimshuffle(*new_shape))
+            output_value = tf.multiply(
+                other_value,
+                tf.reshape(
+                    gating_value[:, i],
+                    [-1] + [1] * n_output_dim
+                ),
+            )
             output_values.append(output_value)
-
         return sum(output_values)

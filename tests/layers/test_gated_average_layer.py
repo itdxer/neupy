@@ -108,9 +108,8 @@ class GatedAverageTestCase(BaseTestCase):
             layers.GatedAverage()
         )
 
-        predict = network.compile()
         random_input = asfloat(np.random.random((20, 10)))
-        actual_output = predict(random_input)
+        actual_output = self.eval(network.output(random_input))
 
         self.assertEqual(actual_output.shape, (20, 8))
 
@@ -128,8 +127,7 @@ class GatedAverageTestCase(BaseTestCase):
         self.assertEqual(network.input_shape, (1, 5, 5))
         self.assertEqual(network.output_shape, (3, 4, 4))
 
-        predict = network.compile()
         random_input = asfloat(np.random.random((8, 1, 5, 5)))
-        actual_output = predict(random_input)
+        actual_output = self.eval(network.output(random_input))
 
         self.assertEqual(actual_output.shape, (8, 3, 4, 4))

@@ -9,9 +9,9 @@ import theano.tensor as T
 
 from neupy import layers
 from neupy.utils import AttributeKeyDict, asfloat, format_data, as_tuple
-from neupy.layers.utils import preformat_layer_shape, iter_parameters
+from neupy.layers.utils import (preformat_layer_shape, iter_parameters,
+                                create_input_variable)
 from neupy.layers.connections import LayerConnection, is_sequential
-from neupy.layers.connections.base import create_input_variables
 from neupy.exceptions import InvalidConnection
 from neupy.core.properties import ChoiceProperty
 from neupy.algorithms.base import BaseNetwork
@@ -19,6 +19,30 @@ from .gd import errors
 
 
 __all__ = ('ConstructibleNetwork',)
+
+
+def create_input_variables(input_layers):
+    """
+    Create input variables for each input layer
+    in the graph.
+
+    Parameters
+    ----------
+    input_layers : list of layers
+
+    Returns
+    -------
+    list of Theano variables
+    """
+    inputs = []
+
+    for input_layer in input_layers:
+        variable = create_input_variable(
+            input_layer.input_shape,
+            name="layer:{}/var:input".format(input_layer.name))
+        inputs.append(variable)
+
+    return inputs
 
 
 def does_layer_accept_1d_feature(layer):

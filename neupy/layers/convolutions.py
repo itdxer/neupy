@@ -1,11 +1,12 @@
+import math
 import collections
 
 import six
-import theano.tensor as T
+import tensorflow as tf
 
 from neupy.utils import as_tuple
 from neupy.exceptions import LayerConnectionError
-from neupy.core.properties import TypedListProperty, Property
+from neupy.core.properties import TypedListProperty, Property, ChoiceProperty
 from .base import ParameterBasedLayer
 
 
@@ -47,47 +48,6 @@ class StrideProperty(TypedListProperty):
                              "than zero")
 
 
-class BorderModeProperty(Property):
-    """
-    Border mode property identifies border for the
-    convolution operation.
-
-    Parameters
-    ----------
-    {Property.Parameters}
-    """
-    expected_type = (six.string_types, int, tuple)
-    valid_string_choices = ('valid', 'full', 'half')
-
-    def validate(self, value):
-        super(BorderModeProperty, self).validate(value)
-
-        if isinstance(value, tuple) and len(value) != 2:
-            raise ValueError(
-                "Border mode property suppose to get a tuple that "
-                "contains two elements, got {} elements"
-                "".format(len(value))
-            )
-
-        is_invalid_string = (
-            isinstance(value, six.string_types) and
-            value not in self.valid_string_choices
-        )
-        if is_invalid_string:
-            valid_choices = ', '.join(self.valid_string_choices)
-            raise ValueError("`{}` is invalid string value. Available: {}"
-                             "".format(value, valid_choices))
-
-        if isinstance(value, int) and value < 0:
-            raise ValueError("Integer border mode value needs to be "
-                             "greater or equal to zero, got {}".format(value))
-
-        if isinstance(value, tuple) and any(element < 0 for element in value):
-            raise ValueError("Tuple border mode value needs to contain "
-                             "only elements that greater or equal to zero, "
-                             "got {}".format(value))
-
-
 def conv_output_shape(dimension_size, filter_size, padding, stride):
     """
     Computes convolution's output shape.
@@ -125,23 +85,14 @@ def conv_output_shape(dimension_size, filter_size, padding, stride):
                          "(value {!r})".format(type(filter_size),
                                                filter_size))
 
-    if padding == 'valid':
-        output_size = dimension_size - filter_size + 1
+    if padding == 'VALID':
+        return math.ceil((dimension_size - filter_size + 1) / stride)
 
-    elif padding == 'half':
-        output_size = dimension_size + 2 * (filter_size // 2) - filter_size + 1
+    elif padding == 'SAME':
+        return math.ceil(dimension_size / stride)
 
-    elif padding == 'full':
-        output_size = dimension_size + filter_size - 1
-
-    elif isinstance(padding, int):
-        output_size = dimension_size + 2 * padding - filter_size + 1
-
-    else:
-        raise ValueError("`{!r}` is unknown convolution's border mode value"
-                         "".format(padding))
-
-    return (output_size + stride - 1) // stride
+    raise ValueError("`{!r}` is unknown convolution's padding value"
+                     "".format(padding))
 
 
 class Convolution(ParameterBasedLayer):
@@ -197,7 +148,7 @@ class Convolution(ParameterBasedLayer):
     {ParameterBasedLayer.Attributes}
     """
     size = TypedListProperty(required=True, element_type=int)
-    padding = BorderModeProperty(default='valid')
+    padding = ChoiceProperty(default='VALID', choices=('VALID', 'SAME'))
     stride = StrideProperty(default=(1, 1))
 
     def validate(self, input_shape):
@@ -233,22 +184,24 @@ class Convolution(ParameterBasedLayer):
     def weight_shape(self):
         n_channels = self.input_shape[0]
         n_filters, n_rows, n_cols = self.size
-        return (n_filters, n_channels, n_rows, n_cols)
+        return (n_rows, n_cols, n_channels, n_filters)
 
     @property
     def bias_shape(self):
         return as_tuple(self.size[0])
 
     def output(self, input_value):
-        output = T.nnet.conv2d(
+        # TODO: transpose added only for convenient transition between
+        # tensroflow and theatno. I will remove it later.
+        input_value = tf.transpose(input_value, (0, 2, 3, 1))
+        output = tf.nn.convolution(
             input_value, self.weight,
-            input_shape=as_tuple(None, self.input_shape),
-            filter_shape=self.weight_shape,
-            border_mode=self.padding,
-            subsample=self.stride)
+            self.padding, self.stride,
+        )
+        output = tf.transpose(output, (0, 3, 1, 2))
 
         if self.bias is not None:
-            bias = T.reshape(self.bias, (1, -1, 1, 1))
+            bias = tf.reshape(self.bias, (1, -1, 1, 1))
             output += bias
 
         return output

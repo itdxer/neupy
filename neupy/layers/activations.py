@@ -1,4 +1,4 @@
-import theano.tensor as T
+import tensorflow as tf
 
 from neupy import init
 from neupy.utils import asfloat, as_tuple
@@ -55,7 +55,8 @@ class ActivationLayer(ParameterBasedLayer):
 
     def output(self, input_value):
         if self.size is not None:
-            input_value = T.dot(input_value, self.weight)
+            input_value = tf.matmul(input_value, self.weight)
+
 
             if self.bias is not None:
                 input_value += self.bias
@@ -105,7 +106,7 @@ class Sigmoid(ActivationLayer):
     {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
-        return T.nnet.sigmoid(input_value)
+        return tf.nn.sigmoid(input_value)
 
 
 class HardSigmoid(ActivationLayer):
@@ -125,7 +126,8 @@ class HardSigmoid(ActivationLayer):
     {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
-        return T.nnet.hard_sigmoid(input_value)
+        input_value = (0.2 * input_value) + 0.5
+        return tf.clip_by_value(input_value, 0., 1.)
 
 
 class Step(ActivationLayer):
@@ -146,7 +148,7 @@ class Step(ActivationLayer):
     """
     def activation_function(self, input_value):
         # Without cast function output will be boolean
-        return T.cast(T.gt(input_value, 0), 'int8')
+        return tf.cast(tf.greater(input_value, 0), tf.int8)
 
 
 class Tanh(ActivationLayer):
@@ -166,7 +168,7 @@ class Tanh(ActivationLayer):
     {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
-        return T.tanh(input_value)
+        return tf.nn.tanh(input_value)
 
 
 class Relu(ActivationLayer):
@@ -195,8 +197,9 @@ class Relu(ActivationLayer):
     weight = ParameterProperty(default=init.XavierNormal(gain='relu'))
 
     def activation_function(self, input_value):
-        alpha = asfloat(self.alpha)
-        return T.nnet.relu(input_value, alpha)
+        if self.alpha == 0:
+            return tf.nn.relu(input_value)
+        return tf.nn.leaky_relu(input_value, asfloat(self.alpha))
 
 
 class LeakyRelu(ActivationLayer):
@@ -221,7 +224,7 @@ class LeakyRelu(ActivationLayer):
     Do the same as ``layers.Relu(input_size, alpha=0.01)``.
     """
     def activation_function(self, input_value):
-        return T.nnet.relu(input_value, alpha=0.01)
+        return tf.nn.leaky_relu(input_value, alpha=asfloat(0.01))
 
 
 class Softplus(ActivationLayer):
@@ -241,7 +244,7 @@ class Softplus(ActivationLayer):
     {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
-        return T.nnet.softplus(input_value)
+        return tf.nn.softplus(input_value)
 
 
 class Softmax(ActivationLayer):
@@ -261,7 +264,7 @@ class Softmax(ActivationLayer):
     {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
-        return T.nnet.softmax(input_value)
+        return tf.nn.softmax(input_value)
 
 
 class Elu(ActivationLayer):
@@ -271,10 +274,6 @@ class Elu(ActivationLayer):
 
     Parameters
     ----------
-    alpha : float
-        Alpha parameter defines the decreasing exponensial
-        rate for the negative values. Defaults to ``1``.
-
     {ActivationLayer.Parameters}
 
     Methods
@@ -289,11 +288,8 @@ class Elu(ActivationLayer):
     ----------
     .. [1] http://arxiv.org/pdf/1511.07289v3.pdf
     """
-    alpha = NumberProperty(default=1, minval=0)
-
     def activation_function(self, input_value):
-        alpha = asfloat(self.alpha)
-        return T.nnet.elu(input_value, alpha)
+        return tf.nn.elu(input_value)
 
 
 class AxesProperty(TypedListProperty):
@@ -382,4 +378,4 @@ class PRelu(ActivationLayer):
 
     def activation_function(self, input_value):
         alpha = dimshuffle(self.alpha, input_value.ndim, self.alpha_axes)
-        return T.nnet.relu(input_value, alpha)
+        return tf.nn.leaky_relu(tf.to_float(input_value), tf.to_float(alpha))

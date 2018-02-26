@@ -1,6 +1,4 @@
 import numpy as np
-import theano
-import theano.tensor as T
 
 from neupy import layers
 from neupy.utils import asfloat
@@ -25,15 +23,11 @@ class TestParallelConnectionsTestCase(BaseTestCase):
         conn = layers.join(input_layer, parallel_layer)
         output_connection = layers.join(conn, output_layer)
 
-        x = T.tensor4()
-        y = theano.function([x], conn.output(x))
-
         x_tensor4 = asfloat(np.random.random((10, 3, 8, 8)))
-        output = y(x_tensor4)
+        output = self.eval(conn.output(x_tensor4))
         self.assertEqual(output.shape, (10, 11 + 5, 4, 4))
 
-        output_function = theano.function([x], output_connection.output(x))
-        final_output = output_function(x_tensor4)
+        final_output = self.eval(output_connection.output(x_tensor4))
         self.assertEqual(final_output.shape, (10, 11 + 5, 2, 2))
 
     def test_parallel_with_joined_connections(self):
@@ -68,10 +62,10 @@ class TestParallelConnectionsTestCase(BaseTestCase):
         self.assertEqual(connection.input_shape, [(10,), (20,)])
         self.assertEqual(connection.output_shape, [(1,), (2,)])
 
-        outputs = connection.output(T.matrix())
-        self.assertEqual(len(outputs), 2)
+        input_value_10 = asfloat(np.random.random((2, 10)))
+        input_value_20 = asfloat(np.random.random((2, 20)))
 
-        outputs = connection.output(T.matrix(), T.matrix())
+        outputs = connection.output(input_value_10, input_value_20)
         self.assertEqual(len(outputs), 2)
 
     def test_parallel_connection_initialize_method(self):
@@ -124,7 +118,10 @@ class TestParallelConnectionsTestCase(BaseTestCase):
 
         with self.assertRaises(ValueError):
             # Received only 2 inputs instead of 3
-            connection.output(T.matrix(), T.matrix())
+            connection.output(
+                np.random.random((2, 10)),
+                np.random.random((2, 20)),
+            )
 
     def test_parallel_many_to_many_connection(self):
         relu_layer_1 = layers.Relu(1)
