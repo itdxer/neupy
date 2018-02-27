@@ -4,12 +4,12 @@ import importlib
 from time import gmtime, strftime
 
 import six
-import theano
 import numpy as np
+import tensorflow as tf
 from six.moves import cPickle as pickle
 
 import neupy
-from neupy.utils import asfloat
+from neupy.utils import asfloat, get_variable_value
 from neupy.core.docs import shared_docs
 from neupy.layers.utils import extract_connection
 
@@ -90,7 +90,7 @@ def load_layer_parameter(layer, layer_data):
     """
     for param_name, param_data in layer_data['parameters'].items():
         parameter = getattr(layer, param_name)
-        parameter.set_value(asfloat(param_data['value']))
+        tf.assign(parameter, asfloat(param_data['value']))
 
 
 def load_dict_by_names(layers_conn, layers_data, ignore_missed=False):
@@ -325,7 +325,8 @@ def save_dict(connection):
             'library': 'neupy',
             'version': neupy.__version__,
             'created': strftime("%a, %d %b %Y %H:%M:%S %Z", gmtime()),
-            'theano_float': theano.config.floatX,
+            # TODO: Remove in case if we won't need this field
+            # 'theano_float': theano.config.floatX,
         },
         # Make it as a list in order to save the right order
         # of paramters, otherwise it can be convert to the dictionary.
@@ -339,7 +340,7 @@ def save_dict(connection):
 
         for attrname, parameter in layer.parameters.items():
             parameters[attrname] = {
-                'value': asfloat(parameter.get_value()),
+                'value': asfloat(get_variable_value(parameter)),
                 'trainable': parameter.trainable,
             }
 

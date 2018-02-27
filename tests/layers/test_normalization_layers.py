@@ -1,3 +1,4 @@
+import unittest
 import tempfile
 
 import numpy as np
@@ -146,12 +147,13 @@ class BatchNormTestCase(BaseTestCase):
                 layers.Sigmoid(1),
             ],
             batch_size=10,
+            verbose=True,
         )
-        gdnet.train(x_train, y_train)
+        gdnet.train(x_train, y_train, epochs=5)
 
         error_before_save = gdnet.prediction_error(x_test, y_test)
         mean_before_save = self.eval(batch_norm.running_mean)
-        inv_std_before_save = self.eval(batch_norm.running_inv_std)
+        variance_before_save = self.eval(batch_norm.running_variance)
 
         with tempfile.NamedTemporaryFile() as temp:
             storage.save(gdnet, temp.name)
@@ -159,14 +161,14 @@ class BatchNormTestCase(BaseTestCase):
 
             error_after_load = gdnet.prediction_error(x_test, y_test)
             mean_after_load = self.eval(batch_norm.running_mean)
-            inv_std_after_load = self.eval(batch_norm.running_inv_std)
+            variance_after_load = self.eval(batch_norm.running_variance)
 
             self.assertAlmostEqual(error_before_save, error_after_load)
             np.testing.assert_array_almost_equal(
                 mean_before_save, mean_after_load)
 
             np.testing.assert_array_almost_equal(
-                inv_std_before_save, inv_std_after_load)
+                variance_before_save, variance_after_load)
 
 
 class LocalResponseNormTestCase(BaseTestCase):

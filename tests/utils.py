@@ -13,6 +13,7 @@ from matplotlib import pyplot as plt
 from matplotlib.testing.compare import compare_images
 
 from neupy import algorithms, layers
+from neupy.storage import save_dict, load_dict
 
 from data import xor_input_train, xor_target_train
 
@@ -67,7 +68,7 @@ def compare_networks(default_class, tested_class, data, **kwargs):
     network = default_class(**kwargs)
 
     if hasattr(network, 'connection'):
-        default_connections = copy.deepcopy(network.connection)
+        initial_parameters = save_dict(network.connection)
 
     network.train(*data, epochs=epochs)
 
@@ -76,7 +77,7 @@ def compare_networks(default_class, tested_class, data, **kwargs):
 
     # Compute result for test network (which must be faster)
     if hasattr(network, 'connection'):
-        kwargs['connection'] = default_connections
+        load_dict(network.connection, initial_parameters)
 
     network = tested_class(**kwargs)
 

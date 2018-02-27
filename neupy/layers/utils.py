@@ -98,38 +98,6 @@ def count_parameters(connection):
     return n_parameters
 
 
-def create_input_variable(input_shape, name):
-    """
-    Create input variable based on the specified
-    input shape.
-
-    Parameters
-    ----------
-    input_shape : tuple
-    name : str
-
-    Returns
-    -------
-    Theano variable
-    """
-    dim_to_variable_type = {
-        2: T.matrix,
-        3: T.tensor3,
-        4: T.tensor4,
-    }
-
-    # Shape doesn't include batch size dimension,
-    # that's why we need to add one
-    ndim = len(input_shape) + 1
-
-    if ndim not in dim_to_variable_type:
-        raise ValueError("Layer's input needs to be 2, 3 or 4 "
-                         "dimensional. Found {} dimensions".format(ndim))
-
-    variable_type = dim_to_variable_type[ndim]
-    return variable_type(name)
-
-
 def extract_connection(instance):
     """
     Extract connection from different types of object.

@@ -1,16 +1,18 @@
 import inspect
+import multiprocessing
 
 import theano
 import theano.tensor as T
 from theano.tensor.var import TensorVariable
 from theano.tensor.sharedvar import TensorSharedVariable
+import tensorflow as tf
 import numpy as np
 from scipy.sparse import issparse
 
 
 __all__ = ('format_data', 'asfloat', 'AttributeKeyDict', 'preformat_value',
            'as_tuple', 'asint', 'number_type', 'theano_random_stream',
-           'all_equal')
+           'all_equal', 'tensorflow_session', 'get_variable_value')
 
 
 # Disable annoying warning from Theano
@@ -271,3 +273,26 @@ def all_equal(array):
         return False
 
     return True
+
+
+def tensorflow_session():
+    if hasattr(tensorflow_session, 'cache'):
+        return tensorflow_session.cache
+
+    # session = tf.get_default_session()
+
+    # if session is None:
+    config = tf.ConfigProto(
+        allow_soft_placement=True,
+        intra_op_parallelism_threads=1,
+        inter_op_parallelism_threads=1,
+    )
+    session = tf.Session(config=config)
+
+    tensorflow_session.cache = session
+    return session
+
+
+def get_variable_value(variable):
+    session = tensorflow_session()
+    return session.run(variable)

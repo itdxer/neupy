@@ -3,18 +3,16 @@ import time
 import types
 
 import six
-import theano
-import theano.sparse
-import theano.tensor as T
+import tensorflow as tf
 
 from neupy import layers
-from neupy.utils import AttributeKeyDict, asfloat, format_data, as_tuple
-from neupy.layers.utils import (preformat_layer_shape, iter_parameters,
-                                create_input_variable)
+from neupy.layers.utils import preformat_layer_shape, iter_parameters
 from neupy.layers.connections import LayerConnection, is_sequential
 from neupy.exceptions import InvalidConnection
 from neupy.core.properties import ChoiceProperty
 from neupy.algorithms.base import BaseNetwork
+from neupy.utils import (AttributeKeyDict, asfloat, format_data, as_tuple,
+                         tensorflow_session)
 from .gd import errors
 
 
@@ -37,9 +35,11 @@ def create_input_variables(input_layers):
     inputs = []
 
     for input_layer in input_layers:
-        variable = create_input_variable(
-            input_layer.input_shape,
-            name="layer:{}/var:input".format(input_layer.name))
+        variable = tf.placeholder(
+            tf.float32,
+            as_tuple(None, input_layer.input_shape),
+            name="layer/{}/var/input".format(input_layer.name),
+        )
         inputs.append(variable)
 
     return inputs
@@ -213,6 +213,37 @@ class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
         raise NotImplementedError
 
 
+def function(inputs, outputs, updates=None, name=None):
+    session = tensorflow_session()
+    tensorflow_updates = []
+
+    if updates is not None:
+        for old_value, new_value in updates:
+            tensorflow_updates.append(tf.assign(old_value, new_value))
+
+    def wrapper(*input_values):
+        feed_dict = dict(zip(inputs, input_values))
+        result, _ = session.run(
+            [outputs, tensorflow_updates],
+            feed_dict=feed_dict,
+        )
+        return result
+    return wrapper
+
+
+def initialize_uninitialized_variables():
+    session = tensorflow_session()
+    global_vars = tf.global_variables()
+    is_not_initialized = session.run([
+        tf.is_variable_initialized(var) for var in global_vars])
+
+    not_initialized_vars = [
+        v for (v, f) in zip(global_vars, is_not_initialized) if not f]
+
+    if len(not_initialized_vars):
+        session.run(tf.variables_initializer(not_initialized_vars))
+
+
 class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
     """
     Class contains functionality that helps work with network that have
@@ -317,10 +348,12 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
     def init_input_output_variables(self):
         self.variables.update(
             network_inputs=create_input_variables(
-                self.connection.input_layers),
-            network_output=create_output_variable(
-                self.error,
-                name='algo:network/var:network-output',
+                self.connection.input_layers
+            ),
+            network_output=tf.placeholder(
+                tf.float32,
+                as_tuple(None, self.connection.output_layers[0].output_shape),
+                name='algo-network/var-network-output',
             ),
         )
 
@@ -333,13 +366,15 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
             prediction = self.connection.output(*network_inputs)
 
         self.variables.update(
-            step=theano.shared(
-                name='algo:network/scalar:step',
-                value=asfloat(self.step)
+            step=tf.Variable(
+                asfloat(self.step),
+                name='algo-network/scalar-step',
+                dtype=tf.float32
             ),
-            epoch=theano.shared(
-                name='algo:network/scalar:epoch',
-                value=asfloat(self.last_epoch)
+            epoch=tf.Variable(
+                asfloat(self.last_epoch),
+                name='algo-network/scalar-epoch',
+                dtype=tf.float32
             ),
 
             prediction_func=prediction,
@@ -353,22 +388,23 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         network_inputs = self.variables.network_inputs
         network_output = self.variables.network_output
 
+        initialize_uninitialized_variables()
         self.methods.update(
-            predict=theano.function(
+            predict=function(
                 inputs=network_inputs,
                 outputs=self.variables.prediction_func,
-                name='algo:network/func:predict'
+                name='algo-network/func-predict'
             ),
-            train_epoch=theano.function(
+            train_epoch=function(
                 inputs=network_inputs + [network_output],
                 outputs=self.variables.error_func,
                 updates=self.init_train_updates(),
-                name='algo:network/func:train-epoch'
+                name='algo-network/func-train-epoch'
             ),
-            prediction_error=theano.function(
+            prediction_error=function(
                 inputs=network_inputs + [network_output],
                 outputs=self.variables.validation_error_func,
-                name='algo:network/func:prediction-error'
+                name='algo-network/func-prediction-error'
             )
         )
 
@@ -493,7 +529,7 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
             Current epoch number.
         """
         super(ConstructibleNetwork, self).on_epoch_start_update(epoch)
-        self.variables.epoch.set_value(epoch)
+        self.variables.epoch.assign(epoch)
 
     def train(self, input_train, target_train, input_test=None,
               target_test=None, *args, **kwargs):

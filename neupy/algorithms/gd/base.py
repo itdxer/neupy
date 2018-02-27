@@ -3,9 +3,8 @@ from __future__ import division
 import math
 
 import six
-import theano
-import theano.tensor as T
 import numpy as np
+import tensorflow as tf
 import progressbar
 
 from neupy.core.config import Configurable
@@ -68,8 +67,8 @@ class GradientDescent(ConstructibleNetwork):
         if options is None:
             options = kwargs
 
-        if floatX is not None:
-            theano.config.floatX = floatX
+        # if floatX is not None:
+        #     theano.config.floatX = floatX
 
         addons = options.get('addons')
 
@@ -114,7 +113,8 @@ class GradientDescent(ConstructibleNetwork):
 
     def init_param_updates(self, layer, parameter):
         step = self.variables.step
-        gradient = T.grad(self.variables.error_func, wrt=parameter)
+        gradient = tf.gradients(self.variables.error_func, parameter)
+        gradient = gradient[0]
         return [(parameter, parameter - step * gradient)]
 
     def class_name(self):
@@ -128,7 +128,8 @@ class GradientDescent(ConstructibleNetwork):
 
     def __reduce__(self):
         parameters = self.get_params(with_connection=False)
-        floatX = theano.config.floatX
+        # floatX = theano.config.floatX
+        floatX = 'float32'
         args = (self.connection, parameters, floatX)
         return (self.main_class, args)
 
@@ -287,10 +288,11 @@ def apply_batches(function, arguments, batch_size, description='',
         sliced_arguments = [argument[batch] for argument in arguments]
 
         output = function(*sliced_arguments)
+        output = np.atleast_1d(output).item(0)
         outputs.append(output)
 
         if show_error_output:
-            bar.update(i, error=np.atleast_1d(output).item(0))
+            bar.update(i, error=output)
         else:
             bar.update(i)
 
@@ -395,7 +397,9 @@ class MinibatchTrainingMixin(Configurable):
         arguments = as_tuple(input_data, arguments)
 
         if cannot_divide_into_batches(input_data, self.batch_size):
-            return [function(*arguments)]
+            output = function(*arguments)
+            output = np.atleast_1d(output).item(0)
+            return [output]
 
         if show_progressbar is None:
             show_progressbar = (

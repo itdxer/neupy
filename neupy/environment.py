@@ -1,6 +1,8 @@
+import os
 import random
 
 import theano
+import tensorflow as tf
 import numpy as np
 
 
@@ -26,8 +28,10 @@ def reproducible(seed=0):
     seed : int
         Defaults to ``0``.
     """
+    os.environ['PYTHONHASHSEED'] = str(seed)
     np.random.seed(seed)
     random.seed(seed)
+    tf.set_random_seed(seed)
 
 
 def speedup():

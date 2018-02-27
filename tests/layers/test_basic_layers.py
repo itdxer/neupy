@@ -1,6 +1,7 @@
 import numpy as np
 
 from neupy import layers, algorithms
+from neupy.utils import asfloat
 
 from base import BaseTestCase
 
@@ -20,19 +21,19 @@ class LayersBasicsTestCase(BaseTestCase):
         self.assertIs(hidden_layer_1.weight, hidden_layer_2.weight)
         self.assertIs(hidden_layer_1.bias, hidden_layer_2.bias)
 
-        # # Check that it is able to train network without errors
-        # x_train = y_train = np.random.random((15, 10))
-        # gdnet = algorithms.GradientDescent(network)
-        # gdnet.train(x_train, y_train, epochs=5)
-        #
-        # np.testing.assert_array_almost_equal(
-        #     hidden_layer_1.weight.get_value(),
-        #     hidden_layer_2.weight.get_value(),
-        # )
-        # np.testing.assert_array_almost_equal(
-        #     hidden_layer_1.bias.get_value(),
-        #     hidden_layer_2.bias.get_value(),
-        # )
+        # Check that it is able to train network without errors
+        x_train = y_train = asfloat(np.random.random((15, 10)))
+        gdnet = algorithms.GradientDescent(network)
+        gdnet.train(x_train, y_train, epochs=5)
+
+        np.testing.assert_array_almost_equal(
+            self.eval(hidden_layer_1.weight),
+            self.eval(hidden_layer_2.weight),
+        )
+        np.testing.assert_array_almost_equal(
+            self.eval(hidden_layer_1.bias),
+            self.eval(hidden_layer_2.bias),
+        )
 
 
 class LayerNameTestCase(BaseTestCase):
@@ -55,12 +56,12 @@ class LayerNameTestCase(BaseTestCase):
         layers.join(input_layer, hidden_layer, output_layer)
 
         self.assertEqual(hidden_layer.name, 'sigmoid-1')
-        self.assertEqual(hidden_layer.weight.name, 'layer/sigmoid-1/weight:0')
-        self.assertEqual(hidden_layer.bias.name, 'layer/sigmoid-1/bias:0')
+        self.assertIn('layer/sigmoid-1/weight', hidden_layer.weight.name)
+        self.assertIn('layer/sigmoid-1/bias', hidden_layer.bias.name)
 
         self.assertEqual(output_layer.name, 'sigmoid-2')
-        self.assertEqual(output_layer.weight.name, 'layer/sigmoid-2/weight:0')
-        self.assertEqual(output_layer.bias.name, 'layer/sigmoid-2/bias:0')
+        self.assertIn('layer/sigmoid-2/weight', output_layer.weight.name)
+        self.assertIn('layer/sigmoid-2/bias', output_layer.bias.name)
 
     def test_layer_name_with_repeated_layer_type(self):
         input_layer = layers.Input(1)
