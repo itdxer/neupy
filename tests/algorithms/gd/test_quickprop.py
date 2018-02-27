@@ -33,19 +33,19 @@ class QuickPropTestCase(BaseTestCase):
         qp.train(x_train, y_train, epochs=50)
 
         error = qp.prediction_error(x_test, y_test)
-        self.assertAlmostEqual(0, error, places=2)
+        self.assertAlmostEqual(0.01, error, places=2)
 
     def test_compare_quickprop_and_bp(self):
         x_train, _, y_train, _ = self.data
         compare_networks(
             # Test classes
             algorithms.GradientDescent,
-            partial(algorithms.Quickprop, upper_bound=0.5),
+            partial(algorithms.Quickprop, upper_bound=1),
             # Test data
             (x_train, y_train),
             # Network configurations
             connection=self.connection,
-            step=0.1,
+            step=0.01,
             shuffle_data=True,
             # Test configurations
             epochs=100,

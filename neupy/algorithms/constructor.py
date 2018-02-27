@@ -1,6 +1,7 @@
 import abc
 import time
 import types
+from functools import wraps
 
 import six
 import tensorflow as tf
@@ -221,6 +222,7 @@ def function(inputs, outputs, updates=None, name=None):
         for old_value, new_value in updates:
             tensorflow_updates.append(tf.assign(old_value, new_value))
 
+    @wraps(function)
     def wrapper(*input_values):
         feed_dict = dict(zip(inputs, input_values))
         result, _ = session.run(
@@ -388,7 +390,9 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         network_inputs = self.variables.network_inputs
         network_output = self.variables.network_output
 
+        training_updates = self.init_train_updates()
         initialize_uninitialized_variables()
+
         self.methods.update(
             predict=function(
                 inputs=network_inputs,
@@ -398,7 +402,7 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
             train_epoch=function(
                 inputs=network_inputs + [network_output],
                 outputs=self.variables.error_func,
-                updates=self.init_train_updates(),
+                updates=training_updates,
                 name='algo-network/func-train-epoch'
             ),
             prediction_error=function(

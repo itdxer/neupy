@@ -1,5 +1,4 @@
-import theano
-import theano.tensor as T
+import tensorflow as tf
 import numpy as np
 
 from neupy.utils import asfloat
@@ -51,26 +50,29 @@ class Adadelta(MinibatchGradientDescent):
     def init_param_updates(self, layer, parameter):
         step = self.variables.step
         epsilon = self.epsilon
-        parameter_shape = parameter.get_value().shape
 
-        prev_mean_squred_grad = theano.shared(
-            name="{}/prev-mean-squred-grad".format(parameter.name),
-            value=asfloat(np.zeros(parameter_shape)),
+        prev_mean_squred_grad = tf.get_variable(
+            "{}/prev-mean-squred-grad".format(parameter.op.name),
+            parameter.shape,
+            dtype=tf.float32,
+            initializer=tf.zeros_initializer,
         )
-        prev_mean_squred_dx = theano.shared(
-            name="{}/prev-mean-squred-dx".format(parameter.name),
-            value=asfloat(np.zeros(parameter_shape)),
+        prev_mean_squred_dx = tf.get_variable(
+            "{}/prev-mean-squred-dx".format(parameter.op.name),
+            parameter.shape,
+            dtype=tf.float32,
+            initializer=tf.zeros_initializer,
         )
 
-        gradient = T.grad(self.variables.error_func, wrt=parameter)
+        gradient, = tf.gradients(self.variables.error_func, parameter)
 
         mean_squred_grad = (
             self.decay * prev_mean_squred_grad +
             (1 - self.decay) * gradient ** 2
         )
         parameter_delta = gradient * (
-            T.sqrt(prev_mean_squred_dx + epsilon) /
-            T.sqrt(mean_squred_grad + epsilon)
+            tf.sqrt(prev_mean_squred_dx + epsilon) /
+            tf.sqrt(mean_squred_grad + epsilon)
         )
         mean_squred_dx = (
             self.decay * prev_mean_squred_dx +

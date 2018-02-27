@@ -78,9 +78,11 @@ class RPROPTestCase(BaseTestCase):
 
         for algorithm_class in test_algorithms:
             with self.assertRaises(ValueError):
-                algorithm_class(self.connection,
-                                addons=[algorithms.ErrDiffStepUpdate])
+                algorithm_class(
+                    (3, 10, 2),
+                    addons=[algorithms.ErrDiffStepUpdate])
 
             # But this code should work fine
-            algorithm_class(self.connection,
-                            addons=[algorithms.WeightDecay])
+            algorithm_class(
+                (3, 10, 2),
+                addons=[algorithms.WeightDecay])

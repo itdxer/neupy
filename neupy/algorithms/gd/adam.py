@@ -1,5 +1,4 @@
-import theano
-import theano.tensor as T
+import tensorflow as tf
 import numpy as np
 
 from neupy.utils import asfloat
@@ -74,19 +73,21 @@ class Adam(MinibatchGradientDescent):
 
     def init_param_updates(self, layer, parameter):
         epoch = self.variables.epoch
-
-        parameter_shape = T.shape(parameter).eval()
-        prev_first_moment = theano.shared(
-            name="{}/prev-first-moment".format(parameter.name),
-            value=asfloat(np.zeros(parameter_shape)),
+        prev_first_moment = tf.get_variable(
+            "{}/prev-first-moment".format(parameter.op.name),
+            parameter.shape,
+            dtype=tf.float32,
+            initializer=tf.zeros_initializer,
         )
-        prev_second_moment = theano.shared(
-            name="{}/prev-second-moment".format(parameter.name),
-            value=asfloat(np.zeros(parameter_shape)),
+        prev_second_moment = tf.get_variable(
+            "{}/prev-second-moment".format(parameter.op.name),
+            parameter.shape,
+            dtype=tf.float32,
+            initializer=tf.zeros_initializer,
         )
 
         step = self.variables.step
-        gradient = T.grad(self.variables.error_func, wrt=parameter)
+        gradient, = tf.gradients(self.variables.error_func, parameter)
 
         first_moment = (
             self.beta1 * prev_first_moment +
@@ -101,7 +102,7 @@ class Adam(MinibatchGradientDescent):
             second_moment / (1. - self.beta2 ** epoch))
 
         parameter_delta = first_moment_bias_corrected * (
-            T.sqrt(second_moment_bias_corrected) + self.epsilon
+            tf.sqrt(second_moment_bias_corrected + self.epsilon)
         )
 
         return [

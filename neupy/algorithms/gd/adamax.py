@@ -1,5 +1,4 @@
-import theano
-import theano.tensor as T
+import tensorflow as tf
 import numpy as np
 
 from neupy.utils import asfloat
@@ -70,7 +69,7 @@ class Adamax(MinibatchGradientDescent):
     step = NumberProperty(default=0.001, minval=0)
     beta1 = ProperFractionProperty(default=0.9)
     beta2 = ProperFractionProperty(default=0.999)
-    epsilon = NumberProperty(default=1e-8, minval=0)
+    epsilon = NumberProperty(default=1e-7, minval=0)
 
     def init_param_updates(self, layer, parameter):
         epoch = self.variables.epoch
@@ -78,29 +77,33 @@ class Adamax(MinibatchGradientDescent):
         beta1 = self.beta1
         beta2 = self.beta2
 
-        parameter_shape = T.shape(parameter).eval()
-        prev_first_moment = theano.shared(
-            name="{}/prev-first-moment".format(parameter.name),
-            value=asfloat(np.zeros(parameter_shape)),
+        prev_first_moment = tf.get_variable(
+            "{}/prev-first-moment".format(parameter.op.name),
+            parameter.shape,
+            dtype=tf.float32,
+            initializer=tf.zeros_initializer,
         )
-        prev_weighted_inf_norm = theano.shared(
-            name="{}/prev-weighted-inf-norm".format(parameter.name),
-            value=asfloat(np.zeros(parameter_shape)),
+        prev_weighted_inf_norm = tf.get_variable(
+            "{}/prev-weighted-inf-norm".format(parameter.op.name),
+            parameter.shape,
+            dtype=tf.float32,
+            initializer=tf.zeros_initializer,
         )
+        gradient, = tf.gradients(self.variables.error_func, parameter)
 
-        gradient = T.grad(self.variables.error_func, wrt=parameter)
-
-        first_moment = beta1 * prev_first_moment + (1 - beta1) * gradient
-        weighted_inf_norm = T.maximum(beta2 * prev_weighted_inf_norm,
-                                      T.abs_(gradient))
+        first_moment = beta1 * prev_first_moment + (1. - beta1) * gradient
+        weighted_inf_norm = tf.maximum(
+            beta2 * prev_weighted_inf_norm,
+            tf.abs(gradient),
+        )
 
         parameter_delta = (
-            (1 / (1 - beta1 ** epoch)) *
+            (step / (1. - tf.pow(beta1, epoch + 1))) *
             (first_moment / (weighted_inf_norm + self.epsilon))
         )
 
         return [
             (prev_first_moment, first_moment),
             (prev_weighted_inf_norm, weighted_inf_norm),
-            (parameter, parameter - step * parameter_delta),
+            (parameter, parameter - parameter_delta),
         ]

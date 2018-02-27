@@ -12,7 +12,7 @@ from scipy.sparse import issparse
 
 __all__ = ('format_data', 'asfloat', 'AttributeKeyDict', 'preformat_value',
            'as_tuple', 'asint', 'number_type', 'theano_random_stream',
-           'all_equal', 'tensorflow_session', 'get_variable_value')
+           'all_equal', 'tensorflow_session', 'tensorflow_eval')
 
 
 # Disable annoying warning from Theano
@@ -279,9 +279,6 @@ def tensorflow_session():
     if hasattr(tensorflow_session, 'cache'):
         return tensorflow_session.cache
 
-    # session = tf.get_default_session()
-
-    # if session is None:
     config = tf.ConfigProto(
         allow_soft_placement=True,
         intra_op_parallelism_threads=1,
@@ -293,6 +290,6 @@ def tensorflow_session():
     return session
 
 
-def get_variable_value(variable):
+def tensorflow_eval(value):
     session = tensorflow_session()
-    return session.run(variable)
+    return session.run(value)

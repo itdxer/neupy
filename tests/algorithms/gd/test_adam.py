@@ -9,7 +9,7 @@ class AdamTestCase(BaseTestCase):
         x_train, _, y_train, _ = simple_classification()
         mnet = algorithms.Adam(
             (10, 20, 1),
-            step=15.,
+            step=1.,
             batch_size='full',
             verbose=False,
             epsilon=1e-8,

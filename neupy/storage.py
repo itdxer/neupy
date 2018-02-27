@@ -9,7 +9,7 @@ import tensorflow as tf
 from six.moves import cPickle as pickle
 
 import neupy
-from neupy.utils import asfloat, get_variable_value
+from neupy.utils import asfloat, tensorflow_eval
 from neupy.core.docs import shared_docs
 from neupy.layers.utils import extract_connection
 
@@ -340,7 +340,7 @@ def save_dict(connection):
 
         for attrname, parameter in layer.parameters.items():
             parameters[attrname] = {
-                'value': asfloat(get_variable_value(parameter)),
+                'value': asfloat(tensorflow_eval(parameter)),
                 'trainable': parameter.trainable,
             }
 

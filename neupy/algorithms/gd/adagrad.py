@@ -1,5 +1,4 @@
-import theano
-import theano.tensor as T
+import tensorflow as tf
 import numpy as np
 
 from neupy.utils import asfloat
@@ -45,17 +44,17 @@ class Adagrad(MinibatchGradientDescent):
 
     def init_param_updates(self, layer, parameter):
         step = self.variables.step
-
-        parameter_shape = T.shape(parameter).eval()
-        prev_mean_squred_grad = theano.shared(
-            name="{}/prev-mean-squred-grad".format(parameter.name),
-            value=asfloat(np.zeros(parameter_shape)),
+        prev_mean_squred_grad = tf.get_variable(
+            "{}/prev-mean-squred-grad".format(parameter.op.name),
+            parameter.shape,
+            dtype=tf.float32,
+            initializer=tf.zeros_initializer,
         )
 
-        gradient = T.grad(self.variables.error_func, wrt=parameter)
+        gradient, = tf.gradients(self.variables.error_func, parameter)
 
         mean_squred_grad = prev_mean_squred_grad + gradient ** 2
-        parameter_delta = gradient * T.sqrt(mean_squred_grad + self.epsilon)
+        parameter_delta = gradient * tf.sqrt(mean_squred_grad + self.epsilon)
 
         return [
             (prev_mean_squred_grad, mean_squred_grad),

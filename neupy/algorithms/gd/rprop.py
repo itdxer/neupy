@@ -1,5 +1,4 @@
-import theano
-import theano.tensor as T
+import tensorflow as tf
 import numpy as np
 
 from neupy.utils import asfloat
@@ -69,36 +68,39 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
     decrease_factor = ProperFractionProperty(default=0.5)
 
     def init_prev_delta(self, parameter):
-        parameter_shape = T.shape(parameter).eval()
-        self.prev_delta = theano.shared(
-            name="{}/prev-delta".format(parameter.name),
-            value=asfloat(np.zeros(parameter_shape)),
+        self.prev_delta = tf.get_variable(
+            "{}/prev-delta".format(parameter.op.name),
+            parameter.shape,
+            dtype=tf.float32,
+            initializer=tf.zeros_initializer,
         )
         return self.prev_delta
 
     def init_param_updates(self, layer, parameter):
         prev_delta = self.init_prev_delta(parameter)
-
-        parameter_shape = T.shape(parameter).eval()
-        steps = theano.shared(
-            name="{}/steps".format(parameter.name),
-            value=asfloat(np.ones(parameter_shape) * self.step),
+        steps = tf.get_variable(
+            "{}/steps".format(parameter.op.name),
+            parameter.shape,
+            dtype=tf.float32,
+            initializer=tf.constant_initializer(self.step),
         )
-        prev_gradient = theano.shared(
-            name="{}/prev-grad".format(parameter.name),
-            value=asfloat(np.zeros(parameter_shape)),
+        prev_gradient = tf.get_variable(
+            "{}/prev-grad".format(parameter.op.name),
+            parameter.shape,
+            dtype=tf.float32,
+            initializer=tf.zeros_initializer,
         )
 
-        gradient = T.grad(self.variables.error_func, wrt=parameter)
+        gradient, = tf.gradients(self.variables.error_func, parameter)
 
         grad_product = prev_gradient * gradient
-        negative_gradients = T.lt(grad_product, 0)
+        negative_gradients = tf.less(grad_product, 0)
 
-        updated_steps = T.clip(
-            T.switch(
-                T.gt(grad_product, 0),
+        updated_steps = tf.clip_by_value(
+            tf.where(
+                tf.greater(grad_product, 0),
                 steps * self.increase_factor,
-                T.switch(
+                tf.where(
                     negative_gradients,
                     steps * self.decrease_factor,
                     steps
@@ -107,13 +109,20 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
             self.minstep,
             self.maxstep,
         )
-        gradient_signs = T.switch(T.lt(gradient, 0), -1, 1)
-        parameter_delta = T.switch(
+        parameter_delta = tf.where(
             negative_gradients,
             prev_delta,
-            gradient_signs * updated_steps
+            tf.where(
+                tf.less(gradient, 0),
+                -updated_steps,
+                updated_steps,
+            )
         )
-        updated_prev_gradient = T.switch(negative_gradients, 0, gradient)
+        updated_prev_gradient = tf.where(
+            negative_gradients,
+            tf.zeros_like(gradient),
+            gradient,
+        )
 
         return [
             (parameter, parameter - parameter_delta),
@@ -178,14 +187,11 @@ class IRPROPPlus(RPROP):
     :network:`RPROP` : RPROP algorithm.
     :network:`GradientDescent` : GradientDescent algorithm.
     """
-
     def init_variables(self):
         super(IRPROPPlus, self).init_variables()
         self.variables.update(
-            last_error=theano.shared(name='irprop-plus/last-error',
-                                     value=np.nan),
-            previous_error=theano.shared(name='irprop-plus/previous-error',
-                                         value=np.nan),
+            last_error=tf.Variable(np.nan, name='irprop-plus/last-error'),
+            previous_error=tf.Variable(np.nan, name='irprop-plus/previous-error'),
         )
 
     def on_epoch_start_update(self, epoch):
@@ -194,8 +200,8 @@ class IRPROPPlus(RPROP):
         previous_error = self.errors.previous()
         if previous_error:
             last_error = self.errors.last()
-            self.variables.last_error.set_value(last_error)
-            self.variables.previous_error.set_value(previous_error)
+            tf.assign(self.variables.last_error, last_error)
+            tf.assign(self.variables.previous_error, previous_error)
 
     def init_prev_delta(self, parameter):
         prev_delta = super(IRPROPPlus, self).init_prev_delta(parameter)
@@ -203,4 +209,8 @@ class IRPROPPlus(RPROP):
         last_error = self.variables.last_error
         prev_error = self.variables.previous_error
 
-        return T.switch(last_error > prev_error, prev_delta, 0)
+        return tf.where(
+            last_error > prev_error,
+            prev_delta,
+            tf.zeros_like(prev_delta),
+        )

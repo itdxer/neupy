@@ -16,5 +16,5 @@ class AdamaxTestCase(BaseTestCase):
             beta1=0.9,
             beta2=0.999,
         )
-        mnet.train(x_train, y_train, epochs=100)
-        self.assertAlmostEqual(0.038, mnet.errors.last(), places=3)
+        mnet.train(x_train, y_train, epochs=50)
+        self.assertAlmostEqual(0.018, mnet.errors.last(), places=3)

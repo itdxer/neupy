@@ -1,9 +1,7 @@
 from __future__ import division
 
-import theano
-import theano.tensor as T
-from theano.ifelse import ifelse
 import numpy as np
+import tensorflow as tf
 
 from neupy.core.properties import BoundedProperty
 from neupy.utils import asfloat
@@ -52,25 +50,27 @@ class Quickprop(GradientDescent):
 
     def init_param_updates(self, layer, parameter):
         step = self.variables.step
-
-        parameter_shape = T.shape(parameter).eval()
-        prev_delta = theano.shared(
-            name="{}/prev-delta".format(parameter.name),
-            value=asfloat(np.zeros(parameter_shape)),
+        prev_delta = tf.get_variable(
+            "{}/prev-delta".format(parameter.op.name),
+            parameter.shape,
+            dtype=tf.float32,
+            initializer=tf.zeros_initializer,
         )
-        prev_gradient = theano.shared(
-            name="{}/prev-grad".format(parameter.name),
-            value=asfloat(np.zeros(parameter_shape)),
+        prev_gradient = tf.get_variable(
+            "{}/prev-grad".format(parameter.op.name),
+            parameter.shape,
+            dtype=tf.float32,
+            initializer=tf.zeros_initializer,
         )
 
-        gradient = T.grad(self.variables.error_func, wrt=parameter)
-        grad_delta = T.abs_(prev_gradient - gradient)
+        gradient, = tf.gradients(self.variables.error_func, parameter)
+        grad_delta = tf.abs(prev_gradient - gradient)
 
-        parameter_delta = ifelse(
-            T.eq(self.variables.epoch, 1),
+        parameter_delta = tf.where(
+            tf.equal(self.variables.epoch, 0),
             gradient,
-            T.clip(
-                T.abs_(prev_delta) * gradient / grad_delta,
+            tf.clip_by_value(
+                tf.abs(prev_delta) * gradient / grad_delta,
                 -self.upper_bound,
                 self.upper_bound
             )

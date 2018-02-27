@@ -1,5 +1,4 @@
-import theano
-import theano.tensor as T
+import tensorflow as tf
 import numpy as np
 
 from neupy.utils import asfloat
@@ -53,14 +52,14 @@ class Momentum(MinibatchGradientDescent):
 
     def init_param_updates(self, layer, parameter):
         step = self.variables.step
-
-        parameter_shape = parameter.get_value().shape
-        previous_velocity = theano.shared(
-            name="{}/previous-velocity".format(parameter.name),
-            value=asfloat(np.zeros(parameter_shape)),
+        previous_velocity = tf.get_variable(
+            "{}/previous-velocity".format(parameter.op.name),
+            parameter.shape,
+            dtype=tf.float32,
+            initializer=tf.zeros_initializer,
         )
 
-        gradient = T.grad(self.variables.error_func, wrt=parameter)
+        gradient, = tf.gradients(self.variables.error_func, parameter)
         velocity = self.momentum * previous_velocity - step * gradient
 
         if self.nesterov:
