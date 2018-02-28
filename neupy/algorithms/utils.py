@@ -55,7 +55,7 @@ def setup_parameter_updates(parameters, parameter_update_vector):
     for parameter in parameters:
         end_position = start_position + parameter.size
 
-        new_parameter = T.reshape(
+        new_parameter = tf.reshape(
             parameter_update_vector[start_position:end_position],
             parameter.shape
         )

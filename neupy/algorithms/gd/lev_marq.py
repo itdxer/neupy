@@ -1,8 +1,5 @@
-import theano
-import theano.tensor as T
-from theano.ifelse import ifelse
-from theano.tensor import slinalg
 import numpy as np
+import tensorflow as tf
 
 from neupy.utils import asfloat
 from neupy.core.properties import (BoundedProperty, ChoiceProperty,
@@ -31,15 +28,26 @@ def compute_jacobian(errors, parameters):
     -------
     Theano variable
     """
-    n_samples = errors.shape[0]
-    J = T.jacobian(errors, wrt=parameters)
+    shape = tf.shape(errors)
+    J = tf.map_fn(
+        # Read: https://stackoverflow.com/q/13905741/2759088
+        fn=lambda x, params=parameters: tf.gradients(x, params),
+        elems=errors,
+        dtype=[x.dtype for x in parameters],
+        back_prop=False,
+        name='jacobian',
+        parallel_iterations=1)
 
     jacobians = []
     for jacobian, parameter in zip(J, parameters):
-        jacobian = jacobian.reshape((n_samples, parameter.size))
+        jacobian = tf.reshape(jacobian, [shape[0], tf.size(parameter)])
         jacobians.append(jacobian)
 
-    return T.concatenate(jacobians, axis=1)
+    return tf.concat(jacobians, axis=1)
+
+
+def flatten(parameter):
+    return tf.reshape(parameter, [tf.size(parameter)])
 
 
 class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
@@ -112,8 +120,8 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
     def init_variables(self):
         super(LevenbergMarquardt, self).init_variables()
         self.variables.update(
-            mu=theano.shared(name='lev-marq/mu', value=asfloat(self.mu)),
-            last_error=theano.shared(name='lev-marq/last-error', value=np.nan),
+            mu=tf.Variable(self.mu, name='lev-marq/mu'),
+            last_error=tf.Variable(np.nan, name='lev-marq/last-error'),
         )
 
     def init_train_updates(self):
@@ -123,25 +131,26 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
         error_func = self.variables.error_func
         mu = self.variables.mu
 
-        new_mu = ifelse(
-            T.lt(last_error, error_func),
+        new_mu = tf.where(
+            tf.less(last_error, error_func),
             mu * self.mu_update_factor,
             mu / self.mu_update_factor,
         )
 
-        se_for_each_sample = (
+        se_for_each_sample = tf.squeeze(
             (network_output - prediction_func) ** 2
-        ).ravel()
+        )
 
         params = parameter_values(self.connection)
-        param_vector = T.concatenate([param.flatten() for param in params])
+        param_vector = tf.concat([flatten(param) for param in params], axis=0)
 
         J = compute_jacobian(se_for_each_sample, params)
+        J_T = np.transpose(J)
         n_params = J.shape[1]
 
-        updated_params = param_vector - slinalg.solve(
-            J.T.dot(J) + new_mu * T.eye(n_params),
-            J.T.dot(se_for_each_sample)
+        updated_params = param_vector - tf.matrix_solve(
+            tf.matmul(J_T, J) + new_mu * tf.eye(n_params),
+            tf.matmul(J_T, se_for_each_sample)
         )
 
         updates = [(mu, new_mu)]
@@ -155,4 +164,4 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
 
         last_error = self.errors.last()
         if last_error is not None:
-            self.variables.last_error.set_value(last_error)
+            tf.assign(self.variables.last_error, last_error)

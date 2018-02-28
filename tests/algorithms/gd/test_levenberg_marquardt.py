@@ -1,6 +1,5 @@
 import numpy as np
-import theano
-import theano.tensor as T
+import tensorflow as tf
 from sklearn import datasets, preprocessing
 from sklearn.model_selection import train_test_split
 
@@ -13,22 +12,22 @@ from base import BaseTestCase
 
 class LevenbergMarquardtTestCase(BaseTestCase):
     def test_jacobian_for_levenberg_marquardt(self):
-        w1 = theano.shared(name='w1', value=asfloat(np.array([[1]])))
-        b1 = theano.shared(name='b1', value=asfloat(np.array([0])))
-        w2 = theano.shared(name='w2', value=asfloat(np.array([[2]])))
-        b2 = theano.shared(name='b2', value=asfloat(np.array([1])))
+        w1 = tf.Variable(asfloat(np.array([[1]])), name='w1')
+        b1 = tf.Variable(asfloat(np.array([0])), name='b1')
+        w2 = tf.Variable(asfloat(np.array([[2]])), name='w2')
+        b2 = tf.Variable(asfloat(np.array([1])), name='b2')
 
-        x = T.matrix('x')
-        y = T.matrix('y')
-        output = ((x.dot(w1.T) + b1) ** 2).dot(w2.T) + b2
-        error_func = T.mean((y - output), axis=1)
+        x = x_train = asfloat(np.array([[1, 2, 3]]).T)
+        y = y_train = asfloat(np.array([[1, 2, 3]]).T)
 
-        x_train = asfloat(np.array([[1, 2, 3]]).T)
-        y_train = asfloat(np.array([[1, 2, 3]]).T)
+        output_1 = tf.matmul(x, tf.transpose(w1)) + b1
+        output = b2 + tf.matmul(output_1 ** 2, w2)
+        error_func = tf.reduce_mean((y - output), axis=1)
+
         output_expected = asfloat(np.array([[3, 9, 19]]).T)
 
         np.testing.assert_array_almost_equal(
-            output.eval({x: x_train}),
+            self.eval(output),
             output_expected
         )
 
@@ -40,7 +39,7 @@ class LevenbergMarquardtTestCase(BaseTestCase):
         jacobian_actual = compute_jacobian(error_func, [w1, b1, w2, b2])
         np.testing.assert_array_almost_equal(
             jacobian_expected,
-            jacobian_actual.eval({x: x_train, y: y_train})
+            self.eval(jacobian_actual)
         )
 
     def test_levenberg_marquardt_invalid_error_exceptions(self):
