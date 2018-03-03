@@ -30,7 +30,8 @@ def compute_jacobian(errors, parameters):
     """
     shape = tf.shape(errors)
     J = tf.map_fn(
-        # Read: https://stackoverflow.com/q/13905741/2759088
+        # We have to re-initialize parameter value, otherwise
+        # it won't work. Read: https://stackoverflow.com/q/13905741/2759088
         fn=lambda x, params=parameters: tf.gradients(x, params),
         elems=errors,
         dtype=[x.dtype for x in parameters],
@@ -137,8 +138,8 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
             mu / self.mu_update_factor,
         )
 
-        se_for_each_sample = tf.squeeze(
-            (network_output - prediction_func) ** 2
+        se_for_each_sample = tf.reshape(
+            (network_output - prediction_func) ** 2, [-1]
         )
 
         params = parameter_values(self.connection)

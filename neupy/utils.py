@@ -293,3 +293,7 @@ def tensorflow_session():
 def tensorflow_eval(value):
     session = tensorflow_session()
     return session.run(value)
+
+
+def flatten(value):
+    return tf.reshape(value, [-1])

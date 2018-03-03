@@ -1,5 +1,5 @@
 import numpy as np
-import theano.tensor as T
+import tensorflow as tf
 
 
 from neupy.layers.utils import iter_parameters
@@ -53,7 +53,7 @@ def setup_parameter_updates(parameters, parameter_update_vector):
     start_position = 0
 
     for parameter in parameters:
-        end_position = start_position + parameter.size
+        end_position = start_position + tf.size(parameter)
 
         new_parameter = tf.reshape(
             parameter_update_vector[start_position:end_position],

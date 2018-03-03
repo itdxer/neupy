@@ -16,12 +16,16 @@ class HessianDiagonalTestCase(BaseTestCase):
         nw = algorithms.HessianDiagonal(
             connection=[
                 layers.Input(10),
-                layers.Sigmoid(20,
-                               weight=init.Uniform(-1, 1),
-                               bias=init.Uniform(-1, 1)),
-                layers.Sigmoid(1,
-                               weight=init.Uniform(-1, 1),
-                               bias=init.Uniform(-1, 1)),
+                layers.Sigmoid(
+                    size=20,
+                    weight=init.Uniform(-1, 1),
+                    bias=init.Uniform(-1, 1),
+                ),
+                layers.Sigmoid(
+                    size=1,
+                    weight=init.Uniform(-1, 1),
+                    bias=init.Uniform(-1, 1)
+                ),
             ],
             step=0.1,
             shuffle_data=False,

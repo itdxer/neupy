@@ -1,10 +1,11 @@
 from __future__ import division
 
-import theano.tensor as T
+import tensorflow as tf
 
 from neupy.core.properties import ProperFractionProperty
 from neupy.algorithms.utils import setup_parameter_updates, parameter_values
 from neupy.algorithms.gd import NoMultipleStepSelection
+from neupy.utils import flatten
 from .base import GradientDescent
 
 
@@ -98,23 +99,27 @@ class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
         step = self.variables.step
         min_eigval = self.min_eigval
         parameters = parameter_values(self.connection)
-        param_vector = T.concatenate([param.flatten() for param in parameters])
+        param_vector = tf.concat([flatten(param) for param in parameters],
+                                 axis=0)
 
-        gradients = T.grad(self.variables.error_func, wrt=parameters)
-        full_gradient = T.concatenate([grad.flatten() for grad in gradients])
+        gradients = tf.gradients(self.variables.error_func, parameters)
+        full_gradient = tf.concat([flatten(grad) for grad in gradients],
+                                  axis=0)
 
         second_derivatives = []
         for parameter, gradient in zip(parameters, gradients):
-            second_derivative = T.grad(gradient.sum(), wrt=parameter)
-            second_derivatives.append(second_derivative.flatten())
+            gradient_sum = tf.reduce_sum(gradient)
+            second_derivative, = tf.gradients(gradient_sum, parameter)
+            second_derivatives.append(flatten(second_derivative))
 
-        hessian_diag = T.concatenate(second_derivatives)
-        hessian_diag = T.switch(
-            T.abs_(hessian_diag) < min_eigval,
-            T.switch(
-                hessian_diag < 0,
-                -min_eigval,
-                min_eigval,
+        hessian_diag = tf.concat(second_derivatives, axis=0)
+        ones = tf.ones_like(hessian_diag)
+        hessian_diag = tf.where(
+            tf.less(tf.abs(hessian_diag), min_eigval),
+            tf.where(
+                tf.less(hessian_diag, 0),
+                -min_eigval * ones,
+                min_eigval * ones,
             ),
             hessian_diag
         )
