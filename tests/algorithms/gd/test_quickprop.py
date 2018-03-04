@@ -33,7 +33,7 @@ class QuickPropTestCase(BaseTestCase):
         qp.train(x_train, y_train, epochs=50)
 
         error = qp.prediction_error(x_test, y_test)
-        self.assertAlmostEqual(0.01, error, places=2)
+        self.assertAlmostEqual(0.0, error, places=3)
 
     def test_compare_quickprop_and_bp(self):
         x_train, _, y_train, _ = self.data

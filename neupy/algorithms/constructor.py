@@ -533,7 +533,7 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
             Current epoch number.
         """
         super(ConstructibleNetwork, self).on_epoch_start_update(epoch)
-        self.variables.epoch.assign(epoch)
+        self.variables.epoch.load(epoch, tensorflow_session())
 
     def train(self, input_train, target_train, input_test=None,
               target_test=None, *args, **kwargs):

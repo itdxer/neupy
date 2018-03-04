@@ -9,7 +9,7 @@ import tensorflow as tf
 from six.moves import cPickle as pickle
 
 import neupy
-from neupy.utils import asfloat, tensorflow_eval
+from neupy.utils import asfloat, tensorflow_eval, tensorflow_session
 from neupy.core.docs import shared_docs
 from neupy.layers.utils import extract_connection
 
@@ -88,9 +88,10 @@ def load_layer_parameter(layer, layer_data):
     Set layer parameters to the values specified in the
     stored data
     """
+    session = tensorflow_session()
     for param_name, param_data in layer_data['parameters'].items():
         parameter = getattr(layer, param_name)
-        tf.assign(parameter, asfloat(param_data['value']))
+        parameter.load(asfloat(param_data['value']), session)
 
 
 def load_dict_by_names(layers_conn, layers_data, ignore_missed=False):

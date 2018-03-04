@@ -73,17 +73,15 @@ class Adam(MinibatchGradientDescent):
 
     def init_param_updates(self, layer, parameter):
         epoch = self.variables.epoch
-        prev_first_moment = tf.get_variable(
-            "{}/prev-first-moment".format(parameter.op.name),
-            parameter.shape,
+        prev_first_moment = tf.Variable(
+            tf.zeros(parameter.shape),
+            name="{}/prev-first-moment".format(parameter.op.name),
             dtype=tf.float32,
-            initializer=tf.zeros_initializer,
         )
-        prev_second_moment = tf.get_variable(
-            "{}/prev-second-moment".format(parameter.op.name),
-            parameter.shape,
+        prev_second_moment = tf.Variable(
+            tf.zeros(parameter.shape),
+            name="{}/prev-second-moment".format(parameter.op.name),
             dtype=tf.float32,
-            initializer=tf.zeros_initializer,
         )
 
         step = self.variables.step

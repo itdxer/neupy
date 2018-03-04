@@ -96,8 +96,8 @@ def asfloat(value):
         else:
             return value
 
-    elif isinstance(value, (TensorVariable, TensorSharedVariable)):
-        return T.cast(value, float_type)
+    elif isinstance(value, (tf.Tensor, tf.SparseTensor)):
+        return tf.cast(value, tf.float32)
 
     elif issparse(value):
         return value

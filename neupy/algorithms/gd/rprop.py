@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 
-from neupy.utils import asfloat
+from neupy.utils import asfloat, tensorflow_session
 from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.core.properties import BoundedProperty, ProperFractionProperty
 from .base import GradientDescent
@@ -68,27 +68,24 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
     decrease_factor = ProperFractionProperty(default=0.5)
 
     def init_prev_delta(self, parameter):
-        self.prev_delta = tf.get_variable(
-            "{}/prev-delta".format(parameter.op.name),
-            parameter.shape,
+        self.prev_delta = tf.Variable(
+            tf.zeros(parameter.shape),
+            name="{}/prev-delta".format(parameter.op.name),
             dtype=tf.float32,
-            initializer=tf.zeros_initializer,
         )
         return self.prev_delta
 
     def init_param_updates(self, layer, parameter):
         prev_delta = self.init_prev_delta(parameter)
-        steps = tf.get_variable(
-            "{}/steps".format(parameter.op.name),
-            parameter.shape,
+        steps = tf.Variable(
+            tf.ones_like(parameter) * self.step,
+            name="{}/steps".format(parameter.op.name),
             dtype=tf.float32,
-            initializer=tf.constant_initializer(self.step),
         )
-        prev_gradient = tf.get_variable(
-            "{}/prev-grad".format(parameter.op.name),
-            parameter.shape,
+        prev_gradient = tf.Variable(
+            tf.zeros(parameter.shape),
+            name="{}/prev-grad".format(parameter.op.name),
             dtype=tf.float32,
-            initializer=tf.zeros_initializer,
         )
 
         gradient, = tf.gradients(self.variables.error_func, parameter)
@@ -200,8 +197,10 @@ class IRPROPPlus(RPROP):
         previous_error = self.errors.previous()
         if previous_error:
             last_error = self.errors.last()
-            tf.assign(self.variables.last_error, last_error)
-            tf.assign(self.variables.previous_error, previous_error)
+            session = tensorflow_session()
+
+            self.variables.last_error.load(last_error, session)
+            self.variables.previous_error.load(previous_error, session)
 
     def init_prev_delta(self, parameter):
         prev_delta = super(IRPROPPlus, self).init_prev_delta(parameter)

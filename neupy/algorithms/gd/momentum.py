@@ -52,11 +52,10 @@ class Momentum(MinibatchGradientDescent):
 
     def init_param_updates(self, layer, parameter):
         step = self.variables.step
-        previous_velocity = tf.get_variable(
-            "{}/previous-velocity".format(parameter.op.name),
-            parameter.shape,
+        previous_velocity = tf.Variable(
+            tf.zeros(parameter.shape),
+            name="{}/previous-velocity".format(parameter.op.name),
             dtype=tf.float32,
-            initializer=tf.zeros_initializer,
         )
 
         gradient, = tf.gradients(self.variables.error_func, parameter)

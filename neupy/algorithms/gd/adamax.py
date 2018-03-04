@@ -77,17 +77,15 @@ class Adamax(MinibatchGradientDescent):
         beta1 = self.beta1
         beta2 = self.beta2
 
-        prev_first_moment = tf.get_variable(
-            "{}/prev-first-moment".format(parameter.op.name),
-            parameter.shape,
+        prev_first_moment = tf.Variable(
+            tf.zeros(parameter.shape),
+            name="{}/prev-first-moment".format(parameter.op.name),
             dtype=tf.float32,
-            initializer=tf.zeros_initializer,
         )
-        prev_weighted_inf_norm = tf.get_variable(
-            "{}/prev-weighted-inf-norm".format(parameter.op.name),
-            parameter.shape,
+        prev_weighted_inf_norm = tf.Variable(
+            tf.zeros(parameter.shape),
+            name="{}/prev-weighted-inf-norm".format(parameter.op.name),
             dtype=tf.float32,
-            initializer=tf.zeros_initializer,
         )
         gradient, = tf.gradients(self.variables.error_func, parameter)
 

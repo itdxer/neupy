@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
-from neupy.utils import asfloat
+from neupy.utils import asfloat, tensorflow_session
 from neupy.core.properties import (BoundedProperty, ChoiceProperty,
                                    WithdrawProperty)
 from neupy.algorithms import GradientDescent
@@ -165,4 +165,4 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
 
         last_error = self.errors.last()
         if last_error is not None:
-            tf.assign(self.variables.last_error, last_error)
+            self.variables.last_error.load(last_error, tensorflow_session())

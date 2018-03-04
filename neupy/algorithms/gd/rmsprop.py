@@ -48,11 +48,10 @@ class RMSProp(MinibatchGradientDescent):
 
     def init_param_updates(self, layer, parameter):
         step = self.variables.step
-        prev_mean_squred_grad = tf.get_variable(
-            "{}/prev-mean-squared-grad".format(parameter.op.name),
-            parameter.shape,
+        prev_mean_squred_grad = tf.Variable(
+            tf.zeros(parameter.shape),
+            name="{}/prev-mean-squared-grad".format(parameter.op.name),
             dtype=tf.float32,
-            initializer=tf.zeros_initializer,
         )
 
         gradient, = tf.gradients(self.variables.error_func, parameter)

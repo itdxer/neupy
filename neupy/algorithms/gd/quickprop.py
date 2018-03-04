@@ -50,24 +50,22 @@ class Quickprop(GradientDescent):
 
     def init_param_updates(self, layer, parameter):
         step = self.variables.step
-        prev_delta = tf.get_variable(
-            "{}/prev-delta".format(parameter.op.name),
-            parameter.shape,
+        prev_delta = tf.Variable(
+            tf.zeros(parameter.shape),
+            name="{}/prev-delta".format(parameter.op.name),
             dtype=tf.float32,
-            initializer=tf.zeros_initializer,
         )
-        prev_gradient = tf.get_variable(
-            "{}/prev-grad".format(parameter.op.name),
-            parameter.shape,
+        prev_gradient = tf.Variable(
+            tf.zeros(parameter.shape),
+            name="{}/prev-grad".format(parameter.op.name),
             dtype=tf.float32,
-            initializer=tf.zeros_initializer,
         )
 
         gradient, = tf.gradients(self.variables.error_func, parameter)
         grad_delta = tf.abs(prev_gradient - gradient)
 
         parameter_delta = tf.where(
-            tf.equal(self.variables.epoch, 0),
+            tf.equal(self.variables.epoch, 1),
             gradient,
             tf.clip_by_value(
                 tf.abs(prev_delta) * gradient / grad_delta,

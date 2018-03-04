@@ -180,12 +180,15 @@ def binary_crossentropy(expected, predicted):
     {error_function.Returns}
     """
     epsilon = smallest_positive_number()
+    shape = asfloat(tf.shape(expected))
+    n_samples = shape[0]
+
     predicted = tf.clip_by_value(predicted, epsilon, 1.0 - epsilon)
     total_error = tf.reduce_sum(
         -expected * tf.log(predicted)
         - (1 - expected) * tf.log(1 - predicted)
     )
-    return total_error / expected.shape[0]
+    return total_error / n_samples
 
 
 @shared_docs(error_function)
@@ -203,7 +206,9 @@ def categorical_crossentropy(expected, predicted):
     {error_function.Returns}
     """
     epsilon = smallest_positive_number()
-    n_samples = expected.shape[0]
+    shape = tf.shape(expected)
+    n_samples = asfloat(shape[0])
+
     predicted = tf.clip_by_value(predicted, epsilon, 1.0 - epsilon)
     return -tf.reduce_sum(expected * tf.log(predicted)) / n_samples
 
@@ -278,7 +283,9 @@ def categorical_hinge(expected, predicted, delta=1):
     This is an alternative to the categorical cross-entropy
     loss for multi-class classification problems.
     """
-    n_samples = expected.shape[0]
+    shape = tf.shape(expected)
+    n_samples = asfloat(shape[0])
+
     positive = tf.reduce_sum(expected * predicted, axis=-1)
     negative = tf.reduce_max((asfloat(1) - expected) * predicted, axis=-1)
     errors = tf.nn.relu(negative - positive + asfloat(1))

@@ -1,9 +1,7 @@
 import numpy as np
-import theano
-from theano.ifelse import ifelse
-import theano.tensor as T
+import tensorflow as tf
 
-from neupy.utils import asfloat
+from neupy.utils import asfloat, flatten
 from neupy.core.properties import ChoiceProperty
 from neupy.algorithms.gd import NoMultipleStepSelection
 from neupy.algorithms.utils import parameter_values, setup_parameter_updates
@@ -16,44 +14,44 @@ __all__ = ('ConjugateGradient',)
 
 def fletcher_reeves(gradient_old, gradient_new, weight_old_delta):
     return (
-        T.dot(gradient_new, gradient_new) /
-        T.dot(gradient_old, gradient_old)
+        tf.tensordot(gradient_new, gradient_new, 1) /
+        tf.tensordot(gradient_old, gradient_old, 1)
     )
 
 
 def polak_ribiere(gradient_old, gradient_new, weight_old_delta):
     return (
-        T.dot(gradient_new, gradient_new - gradient_old) /
-        T.dot(gradient_old, gradient_old)
+        tf.tensordot(gradient_new, gradient_new - gradient_old, 1) /
+        tf.tensordot(gradient_old, gradient_old, 1)
     )
 
 
 def hentenes_stiefel(gradient_old, gradient_new, weight_old_delta):
     gradient_delta = gradient_new - gradient_old
     return (
-        T.dot(gradient_delta, gradient_new) /
-        T.dot(weight_old_delta, gradient_delta)
+        tf.tensordot(gradient_delta, gradient_new, 1) /
+        tf.tensordot(weight_old_delta, gradient_delta, 1)
     )
 
 
 def conjugate_descent(gradient_old, gradient_new, weight_old_delta):
     return (
-        -gradient_new.norm(L=2) /
-        T.dot(weight_old_delta, gradient_old)
+        -tf.norm(gradient_new) /
+        tf.tensordot(weight_old_delta, gradient_old, 1)
     )
 
 
 def liu_storey(gradient_old, gradient_new, weight_old_delta):
     return (
-        T.dot(gradient_new, gradient_new - gradient_old) /
-        T.dot(weight_old_delta, gradient_old)
+        tf.tensordot(gradient_new, gradient_new - gradient_old, 1) /
+        tf.tensordot(weight_old_delta, gradient_old, 1)
     )
 
 
 def dai_yuan(gradient_old, gradient_new, weight_old_delta):
     return (
-        T.dot(gradient_new, gradient_new) /
-        T.dot(gradient_new - gradient_old, weight_old_delta)
+        tf.tensordot(gradient_new, gradient_new, 1) /
+        tf.tensordot(gradient_new - gradient_old, weight_old_delta, 1)
     )
 
 
@@ -143,14 +141,16 @@ class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
         n_parameters = count_parameters(self.connection)
 
         self.variables.update(
-            prev_delta=theano.shared(
+            prev_delta=tf.Variable(
+                tf.zeros([n_parameters]),
                 name="conj-grad/prev-delta",
-                value=asfloat(np.zeros(n_parameters)),
+                dtype=tf.float32,
             ),
-            prev_gradient=theano.shared(
+            prev_gradient=tf.Variable(
+                tf.zeros([n_parameters]),
                 name="conj-grad/prev-gradient",
-                value=asfloat(np.zeros(n_parameters)),
-            )
+                dtype=tf.float32,
+            ),
         )
 
     def init_train_updates(self):
@@ -160,26 +160,27 @@ class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
 
         n_parameters = count_parameters(self.connection)
         parameters = parameter_values(self.connection)
-        param_vector = T.concatenate([param.flatten() for param in parameters])
+        param_vector = tf.concat([flatten(param) for param in parameters],
+                                 axis=0)
 
-        gradients = T.grad(self.variables.error_func, wrt=parameters)
-        full_gradient = T.concatenate([grad.flatten() for grad in gradients])
+        gradients = tf.gradients(self.variables.error_func, parameters)
+        full_gradient = tf.concat([flatten(grad) for grad in gradients],
+                                  axis=0)
 
-        beta = self.update_function(previous_gradient, full_gradient,
-                                    previous_delta)
-        parameter_delta = ifelse(
-            T.eq(T.mod(self.variables.epoch, n_parameters), 1),
+        beta = self.update_function(
+            previous_gradient, full_gradient, previous_delta)
+
+        parameter_delta = tf.where(
+            tf.equal(tf.mod(self.variables.epoch, n_parameters), 1),
             -full_gradient,
             -full_gradient + beta * previous_delta
         )
-        updated_parameters = param_vector + step * parameter_delta
 
-        updates = [
+        updated_parameters = param_vector + step * parameter_delta
+        parameter_updates = setup_parameter_updates(
+            parameters, updated_parameters)
+
+        return parameter_updates + [
             (previous_gradient, full_gradient),
             (previous_delta, parameter_delta),
         ]
-        parameter_updates = setup_parameter_updates(parameters,
-                                                    updated_parameters)
-        updates.extend(parameter_updates)
-
-        return updates

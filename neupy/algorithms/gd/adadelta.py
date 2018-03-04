@@ -51,17 +51,15 @@ class Adadelta(MinibatchGradientDescent):
         step = self.variables.step
         epsilon = self.epsilon
 
-        prev_mean_squred_grad = tf.get_variable(
-            "{}/prev-mean-squred-grad".format(parameter.op.name),
-            parameter.shape,
+        prev_mean_squred_grad = tf.Variable(
+            tf.zeros(parameter.shape),
+            name="{}/prev-mean-squred-grad".format(parameter.op.name),
             dtype=tf.float32,
-            initializer=tf.zeros_initializer,
         )
-        prev_mean_squred_dx = tf.get_variable(
-            "{}/prev-mean-squred-dx".format(parameter.op.name),
-            parameter.shape,
+        prev_mean_squred_dx = tf.Variable(
+            tf.zeros(parameter.shape),
+            name="{}/prev-mean-squred-dx".format(parameter.op.name),
             dtype=tf.float32,
-            initializer=tf.zeros_initializer,
         )
 
         gradient, = tf.gradients(self.variables.error_func, parameter)
