@@ -3,7 +3,7 @@ Visualize Algorithms based on the Backpropagation
 
 .. contents::
 
-In this article we will be testing different algorithms based on the backpropagation method, visualizing them and trying to figure out some important features from a blog that we will get.
+In this article we will be testing different algorithms based on the backpropagation method, visualizing them and trying to figure out some important features from the plots.
 
 Checking data
 -------------

@@ -39,7 +39,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     Methods
     -------
     energy(input_data)
-        Compute Discrete Hopfiel Energy.
+        Compute Discrete Hopfield Energy.
 
     train(input_data)
         Save input data pattern into the network memory.
