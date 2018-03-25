@@ -37,6 +37,7 @@ from .associative.kohonen import *
 from .competitive.sofm import *
 from .competitive.art import *
 from .competitive.lvq import *
+from .competitive.growing_neural_gas import *
 
 from .rbfn.pnn import *
 from .rbfn.rbf_kmeans import *

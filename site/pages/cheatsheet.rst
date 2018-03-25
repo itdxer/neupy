@@ -94,6 +94,7 @@ Competitive Networks
     :header: "Class name", "Name"
 
     :network:`ART1`, Adaptive Resonance Theory (ART1) Network
+    :network:`GrowingNeuralGas`, Growing Neural Gas (GNG) Network
     :network:`SOFM`, Self-Organizing Feature Map (SOFM or SOM)
     :network:`LVQ`, Learning Vector Quantization (LVQ)
     :network:`LVQ2`, Learning Vector Quantization 2 (LVQ2)
