@@ -1,6 +1,6 @@
 .. _discrete-hopfield-network:
 
-Discrete Hopfiel Network
+Discrete Hopfield Network
 ========================
 
 .. contents::

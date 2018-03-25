@@ -39,7 +39,7 @@ class DiscreteBAM(DiscreteMemory):
         First is input data, second is output data.
 
     energy(input_data, output_data)
-        Calculate Hopfiel Energy for the input and output data.
+        Calculate Hopfield Energy for the input and output data.
 
     Notes
     -----
