@@ -14,7 +14,7 @@ class GrowingNeuralGasTestCase(BaseTestCase):
         plt.figure(figsize=(5, 6))
         plt.scatter(*data.T, alpha=0.4)
 
-        for node_1, node_2 in network.graph.edge_ages:
+        for node_1, node_2 in network.graph.edges:
             weights = np.concatenate([node_1.weight, node_2.weight])
             line, = plt.plot(*weights.T, color='black')
             plt.setp(line, color='black')
@@ -50,8 +50,9 @@ class GrowingNeuralGasTestCase(BaseTestCase):
 
             error_decay_rate=0.995,
             after_split_error_decay_rate=0.5,
+            min_distance_for_update=0.1,
             max_nodes=100,
-            verbose=True
+            verbose=True,
         )
         gng.train(data, epochs=10)
 
@@ -81,3 +82,9 @@ class GrowingNeuralGasTestCase(BaseTestCase):
 
         with self.assertRaises(NotImplementedError):
             gng.predict(data)
+
+        # Check that we can stop training in case if we don't get any updates
+        before_epochs = gng.last_epoch
+        gng.min_distance_for_update = 10
+        gng.train(data, epochs=10)
+        self.assertEqual(before_epochs + 1, gng.last_epoch)

@@ -373,6 +373,7 @@ class BaseNetwork(BaseSkeleton):
         iterepochs = create_training_epochs_iterator(self, epochs, epsilon)
         show_epoch = parse_show_epoch_property(self, epochs, epsilon)
         training.show_epoch = show_epoch
+        training.epoch_time = 0
 
         # Storring attributes and methods in local variables we prevent
         # useless __getattr__ call a lot of times in each loop.

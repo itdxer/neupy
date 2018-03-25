@@ -3,6 +3,7 @@ from operator import attrgetter
 import numpy as np
 
 from neupy.utils import format_data
+from neupy.exceptions import StopTraining
 from neupy.algorithms.base import BaseNetwork
 from neupy.core.properties import (NumberProperty, ProperFractionProperty,
                                    IntProperty)
@@ -98,6 +99,18 @@ class GrowingNeuralGas(BaseNetwork):
     """
     Growing Neural Gas (GNG) algorithm.
 
+    Current algorithm has two modifications that hasn't been mentioned
+    in the paper, but they help to speed up training.
+
+    - The ``n_start_nodes`` parameter provides possibility to increase
+      number of nodes during initialization step. It's usefull when
+      algorithm takes a lot of time building up large amount of neurons.
+
+    - The ``min_distance_for_update`` parameter allows to speed up
+      training when some data samples has eurons very close to them. The
+      ``min_distance_for_update`` parameter controls threshold for the
+      minimum distance for which we will want to update weights.
+
     Parameters
     ----------
     n_inputs : int
@@ -140,6 +153,13 @@ class GrowingNeuralGas(BaseNetwork):
         This parameter won't stop training when maximum number of nodes
         will be exceeded. Defaults to ``1000``.
 
+    min_distance_for_update : float
+        Parameter controls for which neurons we want to apply updates.
+        In case if euclidian distance between data sample and closest
+        neurons will be less than the ``min_distance_for_update`` value than
+        update would be skipped for this data sample. Setting value to zero
+        will disable effect provided by this parameter. Defaults to ``0``.
+
     {BaseNetwork.show_epoch}
 
     {BaseNetwork.shuffle_data}
@@ -172,6 +192,15 @@ class GrowingNeuralGas(BaseNetwork):
 
     - In order to speed up training, it might be useful to increase
       the ``n_start_nodes`` parameter.
+
+    - During the training it happens that nodes learn topological
+      structure of one part of the data better than the other, mostly
+      because of the different data sample density in different places.
+      Increasing the ``min_distance_for_update`` can speed up training
+      ignoring updates for the neurons that very close to the data sample.
+      (below specified ``min_distance_for_update`` value). Training can be
+      stopped in case if none of the neurons has been updated during
+      the training epoch.
 
     Attributes
     ----------
@@ -228,6 +257,7 @@ class GrowingNeuralGas(BaseNetwork):
     n_iter_before_neuron_added = IntProperty(default=1000, minval=1)
     after_split_error_decay_rate = ProperFractionProperty(default=0.5)
     error_decay_rate = ProperFractionProperty(default=0.995)
+    min_distance_for_update = NumberProperty(default=0.0, minval=0)
 
     def __init__(self, *args, **kwargs):
         super(GrowingNeuralGas, self).__init__(*args, **kwargs)
@@ -270,8 +300,6 @@ class GrowingNeuralGas(BaseNetwork):
 
     def train_epoch(self, input_train, target_train=None):
         graph = self.graph
-        total_error = 0
-
         step = self.step
         neighbour_step = self.neighbour_step
 
@@ -282,9 +310,15 @@ class GrowingNeuralGas(BaseNetwork):
         after_split_error_decay_rate = self.after_split_error_decay_rate
         n_iter_before_neuron_added = self.n_iter_before_neuron_added
 
-        for sample in input_train:
-            self.n_updates += 1
+        # We square this value, because we deal with
+        # squared distances during the training.
+        min_distance_for_update = np.square(self.min_distance_for_update)
 
+        n_samples = len(input_train)
+        total_error = 0
+        did_update = False
+
+        for sample in input_train:
             nodes = graph.nodes
             weights = np.concatenate([node.weight for node in nodes])
 
@@ -294,8 +328,14 @@ class GrowingNeuralGas(BaseNetwork):
             closest_neuron_id, second_closest_id = neuron_ids[:2]
             closest_neuron = nodes[closest_neuron_id]
             second_closest = nodes[second_closest_id]
-
             total_error += distance[closest_neuron_id]
+
+            if distance[closest_neuron_id] < min_distance_for_update:
+                continue
+
+            self.n_updates += 1
+            did_update = True
+
             closest_neuron.error += distance[closest_neuron_id]
             closest_neuron.weight += step * (sample - closest_neuron.weight)
 
@@ -343,7 +383,12 @@ class GrowingNeuralGas(BaseNetwork):
             for node in graph.nodes:
                 node.error *= error_decay_rate
 
-        return total_error / len(input_train)
+        if not did_update and min_distance_for_update != 0 and n_samples > 1:
+            raise StopTraining(
+                "Distance between every data sample and neurons, closest "
+                "to them, is less then {}".format(min_distance_for_update))
+
+        return total_error / n_samples
 
     def predict(self, *args, **kwargs):
         raise NotImplementedError(
