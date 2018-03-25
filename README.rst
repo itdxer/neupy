@@ -44,15 +44,23 @@ Articles and Notebooks
 
     <table border="0">
         <tr>
-            <td border="0" width="30%"><img src="site/_static/img/gng-art-intro.png"></td>
+            <td border="0" width="30%">
+                <a href="https://github.com/itdxer/neupy/blob/master/notebooks/Making%20Art%20with%20Growing%20Neural%20Gas.ipynb">
+                <img src="site/_static/img/gng-art-intro.png">
+                </a>
+            </td>
             <td border="0" valign="top">
-                <h3><a>Making Art with Growing Neural Gas</a></h3>
+                <h3><a href="https://github.com/itdxer/neupy/blob/master/notebooks/Making%20Art%20with%20Growing%20Neural%20Gas.ipynb">Making Art with Growing Neural Gas</a></h3>
                 <p>Growing Neural Gas is another example of the algorithm that follows simple set of rules that on a large scale can generate complex patterns.</p>
                 <p>Image on the left is a great example of the complexity that can be generated with simple set fo rules.</p>
             </td>
         </tr>
         <tr>
-            <td border="0" width="30%"><img src="site/_static/img/sofm-dnn-intro.png"></td>
+            <td border="0" width="30%">
+                <a href="http://neupy.com/2017/12/09/sofm_applications.html">
+                <img src="site/_static/img/sofm-dnn-intro.png">
+                </a>
+            </td>
             <td border="0" valign="top">
                 <h3><a href="http://neupy.com/2017/12/09/sofm_applications.html">Self-Organizing Maps and Applications</a></h3>
                 <p>
@@ -68,7 +76,11 @@ Articles and Notebooks
             </td>
         </tr>
         <tr>
-            <td border="0" width="30%"><img src="site/_static/img/cnn-vis-intro.png"></td>
+            <td border="0" width="30%">
+                <a href="https://github.com/itdxer/neupy/blob/master/notebooks/Visualizing%20CNN%20based%20on%20Pre-trained%20VGG19.ipynb">
+                <img src="site/_static/img/cnn-vis-intro.png">
+                </a>
+            </td>
             <td border="0" valign="top">
                 <h3><a href="https://github.com/itdxer/neupy/blob/master/notebooks/Visualizing%20CNN%20based%20on%20Pre-trained%20VGG19.ipynb">Visualizing CNN based on Pre-trained VGG19</a></h3>
                 <p>This notebook shows how you can easely explore reasons behind convolutional network predictions and understand what type of features has been learned in different layers of the network.</p>
@@ -76,7 +88,11 @@ Articles and Notebooks
             </td>
         </tr>
         <tr>
-            <td border="0" width="30%"><img src="site/_static/img/vis-gd-intro.png"></td>
+            <td border="0" width="30%">
+                <a href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html">
+                <img src="site/_static/img/vis-gd-intro.png">
+                </a>
+            </td>
             <td border="0" valign="top">
                 <h3><a href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html">Visualize Algorithms based on the Backpropagation</a></h3>
                 <p>Image on the left shows comparison between paths that different algorithm take along the descent path. It's interesting to see how much information about the algorithm can be extracted from simple trajectory paths. All of this covered and explained in the article.</p>
@@ -84,8 +100,10 @@ Articles and Notebooks
         </tr>
         <tr>
             <td border="0" width="30%">
+                <a href="http://neupy.com/2016/12/17/hyperparameter_optimization_for_neural_networks.html">
                 <img src="site/_static/img/hyperopt-intro.png">
                 <img src="site/_static/img/hyperopt-2-intro.png">
+                </a>
             </td>
             <td border="0" valign="top">
                 <h3><a href="http://neupy.com/2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a></h3>
@@ -102,14 +120,22 @@ Articles and Notebooks
             </td>
         </tr>
         <tr>
-            <td border="0" width="30%"><img src="site/_static/img/sofm-art-intro.png"></td>
+            <td border="0" width="30%">
+                <a href="http://neupy.com/2017/12/13/sofm_art.html">
+                <img src="site/_static/img/sofm-art-intro.png">
+                </a>
+            </td>
             <td border="0" valign="top">
                 <h3><a href="http://neupy.com/2017/12/13/sofm_art.html">The Art of SOFM</a></h3>
                 <p>In this article, I just want to show how beautiful sometimes can be a neural network. I think, it’s quite rare that algorithm can not only extract knowledge from the data, but also produce something beautiful using exactly the same set of training rules without any modifications.</p>
             </td>
         </tr>
         <tr>
-            <td border="0" width="30%"><img src="site/_static/img/discrete-hn-intro.png"></td>
+            <td border="0" width="30%">
+                <a href="http://neupy.com/2015/09/20/discrete_hopfield_network.html">
+                <img src="site/_static/img/discrete-hn-intro.png">
+                </a>
+            </td>
             <td border="0" valign="top">
                 <h3><a href="http://neupy.com/2015/09/20/discrete_hopfield_network.html">Discrete Hopfield Network</a></h3>
                 <p>Article with extensive theoretical background about Discrete Hopfield Network. It also has example that show advantages and limitations of the algorithm.</p>
@@ -117,28 +143,44 @@ Articles and Notebooks
             </td>
         </tr>
         <tr>
-            <td border="0" width="30%"><img src="site/_static/img/sofm-neupy-logo-intro.png"></td>
+            <td border="0" width="30%">
+                <a href="http://neupy.com/2017/12/17/sofm_text_style.html">
+                <img src="site/_static/img/sofm-neupy-logo-intro.png">
+                </a>
+            </td>
             <td border="0" valign="top">
                 <h3><a href="http://neupy.com/2017/12/17/sofm_text_style.html">Create unique text-style with SOFM</a></h3>
                 <p>This article describes step-by-step solution that allow to generate unique styles with arbitrary text.</p>
             </td>
         </tr>
         <tr>
-            <td border="0" width="30%"><img src="site/_static/img/mlp-vis-intro.png"></td>
+            <td border="0" width="30%">
+                <a href="https://github.com/itdxer/neupy/blob/release/v0.6.4/notebooks/Playing%20with%20MLP%20visualizations.ipynb">
+                <img src="site/_static/img/mlp-vis-intro.png">
+                </a>
+            </td>
             <td border="0" valign="top">
                 <h3><a href="https://github.com/itdxer/neupy/blob/release/v0.6.4/notebooks/Playing%20with%20MLP%20visualizations.ipynb">Playing with MLP visualizations</a></h3>
                 <p>This notebook shows interesting ways to look inside of your MLP network.</p>
             </td>
         </tr>
         <tr>
-            <td border="0" width="30%"><img src="site/_static/img/vin-intro.png"></td>
+            <td border="0" width="30%">
+                <a href="https://github.com/itdxer/neupy/tree/release/v0.6.4/examples/reinforcement_learning/vin">
+                <img src="site/_static/img/vin-intro.png">
+                </a>
+            </td>
             <td border="0" valign="top">
-                <h3><a href="https://github.com/itdxer/neupy/blob/release/v0.6.4/notebooks/Playing%20with%20MLP%20visualizations.ipynb">Exploring world with Value Iteration Network (VIN)</a></h3>
+                <h3><a href="https://github.com/itdxer/neupy/tree/release/v0.6.4/examples/reinforcement_learning/vin">Exploring world with Value Iteration Network (VIN)</a></h3>
                 <p>One of the basic applications of the Value Iteration Network that learns how to find an optimal path between two points in the environment with obstacles.</p>
             </td>
         </tr>
         <tr>
-            <td border="0" width="30%"><img src="site/_static/img/boltzman-machine-intro.png"></td>
+            <td border="0" width="30%">
+                <a href="https://github.com/itdxer/neupy/tree/release/v0.6.4/examples/boltzmann_machine">
+                <img src="site/_static/img/boltzman-machine-intro.png">
+                </a>
+            </td>
             <td border="0" valign="top">
                 <h3><a href="https://github.com/itdxer/neupy/tree/release/v0.6.4/examples/boltzmann_machine">Features learned by Restricted Boltzmann Machine (RBM)</a></h3>
                 <p>Set of examples that use and explore knowledge extracted by Restricted Boltzmann Machine</p>
