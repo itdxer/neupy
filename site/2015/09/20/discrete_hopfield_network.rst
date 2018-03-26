@@ -1,7 +1,7 @@
 .. _discrete-hopfield-network:
 
 Discrete Hopfield Network
-========================
+=========================
 
 .. contents::
 

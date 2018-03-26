@@ -46,7 +46,7 @@ Articles and Notebooks
         <tr>
             <td border="0" width="30%">
                 <a href="https://github.com/itdxer/neupy/blob/master/notebooks/Making%20Art%20with%20Growing%20Neural%20Gas.ipynb">
-                <img src="site/_static/img/gng-art-intro.png">
+                <img src="site/_static/intro/gng-art-intro.png">
                 </a>
             </td>
             <td border="0" valign="top">
@@ -58,7 +58,7 @@ Articles and Notebooks
         <tr>
             <td border="0" width="30%">
                 <a href="http://neupy.com/2017/12/09/sofm_applications.html">
-                <img src="site/_static/img/sofm-dnn-intro.png">
+                <img src="site/_static/intro/sofm-dnn-intro.png">
                 </a>
             </td>
             <td border="0" valign="top">
@@ -78,7 +78,7 @@ Articles and Notebooks
         <tr>
             <td border="0" width="30%">
                 <a href="https://github.com/itdxer/neupy/blob/master/notebooks/Visualizing%20CNN%20based%20on%20Pre-trained%20VGG19.ipynb">
-                <img src="site/_static/img/cnn-vis-intro.png">
+                <img src="site/_static/intro/cnn-vis-intro.png">
                 </a>
             </td>
             <td border="0" valign="top">
@@ -90,7 +90,7 @@ Articles and Notebooks
         <tr>
             <td border="0" width="30%">
                 <a href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html">
-                <img src="site/_static/img/vis-gd-intro.png">
+                <img src="site/_static/intro/vis-gd-intro.png">
                 </a>
             </td>
             <td border="0" valign="top">
@@ -101,8 +101,8 @@ Articles and Notebooks
         <tr>
             <td border="0" width="30%">
                 <a href="http://neupy.com/2016/12/17/hyperparameter_optimization_for_neural_networks.html">
-                <img src="site/_static/img/hyperopt-intro.png">
-                <img src="site/_static/img/hyperopt-2-intro.png">
+                <img src="site/_static/intro/hyperopt-intro.png">
+                <img src="site/_static/intro/hyperopt-2-intro.png">
                 </a>
             </td>
             <td border="0" valign="top">
@@ -122,7 +122,7 @@ Articles and Notebooks
         <tr>
             <td border="0" width="30%">
                 <a href="http://neupy.com/2017/12/13/sofm_art.html">
-                <img src="site/_static/img/sofm-art-intro.png">
+                <img src="site/_static/intro/sofm-art-intro.png">
                 </a>
             </td>
             <td border="0" valign="top">
@@ -133,7 +133,7 @@ Articles and Notebooks
         <tr>
             <td border="0" width="30%">
                 <a href="http://neupy.com/2015/09/20/discrete_hopfield_network.html">
-                <img src="site/_static/img/discrete-hn-intro.png">
+                <img src="site/_static/intro/discrete-hn-intro.png">
                 </a>
             </td>
             <td border="0" valign="top">
@@ -145,7 +145,7 @@ Articles and Notebooks
         <tr>
             <td border="0" width="30%">
                 <a href="http://neupy.com/2017/12/17/sofm_text_style.html">
-                <img src="site/_static/img/sofm-neupy-logo-intro.png">
+                <img src="site/_static/intro/sofm-neupy-logo-intro.png">
                 </a>
             </td>
             <td border="0" valign="top">
@@ -156,7 +156,7 @@ Articles and Notebooks
         <tr>
             <td border="0" width="30%">
                 <a href="https://github.com/itdxer/neupy/blob/release/v0.6.4/notebooks/Playing%20with%20MLP%20visualizations.ipynb">
-                <img src="site/_static/img/mlp-vis-intro.png">
+                <img src="site/_static/intro/mlp-vis-intro.png">
                 </a>
             </td>
             <td border="0" valign="top">
@@ -167,7 +167,7 @@ Articles and Notebooks
         <tr>
             <td border="0" width="30%">
                 <a href="https://github.com/itdxer/neupy/tree/release/v0.6.4/examples/reinforcement_learning/vin">
-                <img src="site/_static/img/vin-intro.png">
+                <img src="site/_static/intro/vin-intro.png">
                 </a>
             </td>
             <td border="0" valign="top">
@@ -178,7 +178,7 @@ Articles and Notebooks
         <tr>
             <td border="0" width="30%">
                 <a href="https://github.com/itdxer/neupy/tree/release/v0.6.4/examples/boltzmann_machine">
-                <img src="site/_static/img/boltzman-machine-intro.png">
+                <img src="site/_static/intro/boltzman-machine-intro.png">
                 </a>
             </td>
             <td border="0" valign="top">
