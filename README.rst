@@ -10,9 +10,13 @@
 .. _License: https://github.com/itdxer/neupy/blob/master/LICENSE
 
 
-.. image:: https://github.com/itdxer/neupy/raw/master/site/neupy-logo.png
-    :width: 80%
-    :align: center
+.. raw:: html
+
+    <div align="center">
+        <a href="http://neupy.com/2017/12/17/sofm_text_style.html">
+        <img width="80%" src="https://github.com/itdxer/neupy/raw/master/site/neupy-logo.png">
+        </a>
+    </div>
 
 
 NeuPy v0.6.4
@@ -43,6 +47,17 @@ Articles and Notebooks
 .. raw:: html
 
     <table border="0">
+        <tr>
+            <td border="0" width="30%">
+                <a href="http://neupy.com/2018/03/26/making_art_with_growing_neural_gas.html">
+                <img src="site/_static/intro/gng-animation-intro.gif">
+                </a>
+            </td>
+            <td border="0" valign="top">
+                <h3><a href="https://github.com/itdxer/neupy/blob/master/notebooks/Making%20Art%20with%20Growing%20Neural%20Gas.ipynb">Growing Neural Gas</a></h3>
+                <p>Growing Neural Gas is an algorithm that learns topological structure of the data.</p>
+            </td>
+        </tr>
         <tr>
             <td border="0" width="30%">
                 <a href="https://github.com/itdxer/neupy/blob/master/notebooks/Making%20Art%20with%20Growing%20Neural%20Gas.ipynb">
