@@ -126,5 +126,5 @@ All the code that was used to generate images in the article you can find in `iP
 
 .. author:: default
 .. categories:: none
-.. tags:: sofm, unsupervised, visualization
+.. tags:: sofm, unsupervised, visualization, art
 .. comments::
