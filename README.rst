@@ -49,23 +49,23 @@ Articles and Notebooks
     <table border="0">
         <tr>
             <td border="0" width="30%">
-                <a href="http://neupy.com/2018/03/26/making_art_with_growing_neural_gas.html">
+                <a href="https://github.com/itdxer/neupy/blob/master/notebooks/growing-neural-gas/Growing%20Neural%20Gas%20animated.ipynb">
                 <img src="site/_static/intro/gng-animation-intro.gif">
                 </a>
             </td>
             <td border="0" valign="top">
-                <h3><a href="https://github.com/itdxer/neupy/blob/master/notebooks/Making%20Art%20with%20Growing%20Neural%20Gas.ipynb">Growing Neural Gas</a></h3>
+                <h3><a href="https://github.com/itdxer/neupy/blob/master/notebooks/growing-neural-gas/Growing%20Neural%20Gas%20animated.ipynb">Growing Neural Gas</a></h3>
                 <p>Growing Neural Gas is an algorithm that learns topological structure of the data.</p>
             </td>
         </tr>
         <tr>
             <td border="0" width="30%">
-                <a href="https://github.com/itdxer/neupy/blob/master/notebooks/Making%20Art%20with%20Growing%20Neural%20Gas.ipynb">
+                <a href="https://github.com/itdxer/neupy/blob/master/notebooks/growing-neural-gas/Making%20Art%20with%20Growing%20Neural%20Gas.ipynb">
                 <img src="site/_static/intro/gng-art-intro.png">
                 </a>
             </td>
             <td border="0" valign="top">
-                <h3><a href="https://github.com/itdxer/neupy/blob/master/notebooks/Making%20Art%20with%20Growing%20Neural%20Gas.ipynb">Making Art with Growing Neural Gas</a></h3>
+                <h3><a href="https://github.com/itdxer/neupy/blob/master/notebooks/growing-neural-gas/Making%20Art%20with%20Growing%20Neural%20Gas.ipynb">Making Art with Growing Neural Gas</a></h3>
                 <p>Growing Neural Gas is another example of the algorithm that follows simple set of rules that on a large scale can generate complex patterns.</p>
                 <p>Image on the left is a great example of the complexity that can be generated with simple set fo rules.</p>
             </td>
