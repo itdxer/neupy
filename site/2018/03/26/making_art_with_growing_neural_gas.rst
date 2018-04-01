@@ -7,7 +7,7 @@ Making Art with Growing Neural Gas
 Introduction
 ------------
 
-I've been trying to
+
 
 Image processing pipeline
 -------------------------
@@ -102,7 +102,7 @@ In the original paper [1]_, algorithm looks a bit compliated with all variables 
    .. figure:: images/gng-sampled-point-with-graph.png
        :align: center
 
-2. Find two closest neurons (blue data points) to the sampled data point and connected these neurons with an edge.
+2. Find two closest neurons (blue data points) to the sampled data point and connect these neurons with an edge.
 
    .. figure:: images/gng-added-edge.png
        :align: center
@@ -157,6 +157,10 @@ Code
 ----
 
 A few notebooks with code are available on github.
+
+- `Main notebook <https://github.com/itdxer/neupy/blob/master/notebooks/growing-neural-gas/Making%20Art%20with%20Growing%20Neural%20Gas.ipynb>`_ that generates image of the astronaut.
+- `Growing Neural Gas animation notebook <https://github.com/itdxer/neupy/blob/master/notebooks/growing-neural-gas/Growing%20Neural%20Gas%20animated.ipynb>`_
+- Notebook that generates `step by step visualizations for the Growing Neural Gas <https://github.com/itdxer/neupy/blob/master/notebooks/growing-neural-gas/Growing%20Neural%20Gas%20-%20step%20by%20step%20visualizations.ipynb>`_ algorithm
 
 References
 ----------
