@@ -183,6 +183,8 @@ class GrowingNeuralGas(BaseNetwork):
         from the data. It would be applied automatically before
         the training in case if graph is empty.
 
+        Note: Node re-initialization can reset network.
+
     Notes
     -----
     - Unlike other algorithms this network doesn't make predictions.
