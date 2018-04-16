@@ -180,8 +180,8 @@ def binary_crossentropy(expected, predicted):
     {error_function.Returns}
     """
     epsilon = smallest_positive_number()
-    shape = asfloat(tf.shape(expected))
-    n_samples = shape[0]
+    shape = tf.shape(expected)
+    n_samples = asfloat(shape[0])
 
     predicted = tf.clip_by_value(predicted, epsilon, 1.0 - epsilon)
     total_error = tf.reduce_sum(

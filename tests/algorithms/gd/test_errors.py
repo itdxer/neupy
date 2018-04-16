@@ -32,8 +32,8 @@ class ErrorFuncTestCase(BaseTestCase):
         )
 
     def test_binary_crossentropy(self):
-        predicted = np.array([0.1, 0.9, 0.2, 0.5])
-        actual = np.array([0, 1, 0, 1])
+        predicted = asfloat(np.array([0.1, 0.9, 0.2, 0.5]))
+        actual = asfloat(np.array([0, 1, 0, 1]))
 
         error = errors.binary_crossentropy(actual, predicted)
         self.assertAlmostEqual(0.28, self.eval(error), places=2)

@@ -553,7 +553,7 @@ class SOFM(Kohonen):
 
         super(SOFM, self).train(input_train, summary=summary, epochs=epochs)
 
-    def train_epoch(self, input_train, target_train):
+    def train_epoch(self, input_train, target_train=None):
         step = self.step
         predict = self.predict
         update_indexes = self.update_indexes
