@@ -51,36 +51,53 @@ class WolfeInterpolationTestCase(BaseTestCase):
                 wolfe.line_search(f=func, f_deriv=func, **testcase)
 
     def test_sequential_and(self):
-        for input_values in product([0, 1], repeat=4):
+        for input_values in product([False, True], repeat=4):
             expected_value = reduce(operator.and_, input_values)
-            actual_value = wolfe.sequential_and(*input_values).eval()
+            actual_value = self.eval(wolfe.sequential_and(*input_values))
             self.assertEqual(expected_value, actual_value)
 
     def test_sequential_or(self):
-        for input_values in product([0, 1], repeat=4):
+        for input_values in product([False, True], repeat=4):
             expected_value = reduce(operator.or_, input_values)
-            actual_value = wolfe.sequential_or(*input_values).eval()
+            actual_value = self.eval(wolfe.sequential_or(*input_values))
             self.assertEqual(expected_value, actual_value)
 
     def test_quadratic_minimizer_exceptions(self):
         with self.assertRaises(ValueError):
             # Invalid value for parameter ``bound_size_ratio``
-            wolfe.quadratic_minimizer(x_a=0, y_a=1, y_prime_a=-1,
-                                      x_b=1, y_b=2,
-                                      bound_size_ratio=2)
+            wolfe.quadratic_minimizer(
+                x_a=0, y_a=1,
+                x_b=1, y_b=2,
+                y_prime_a=-1,
+                bound_size_ratio=2,
+            )
 
     def test_quadratic_minimizer(self):
         testcases = (
-            Case(func_input=dict(x_a=0, y_a=1, y_prime_a=-1, x_b=1, y_b=2),
-                 func_expected=0.25),
-            Case(func_input=dict(x_a=1, y_a=1, y_prime_a=-1, x_b=2, y_b=2),
-                 func_expected=1.25),
+            Case(
+                func_input=dict(
+                    y_prime_a=-1,
+                    x_a=0, y_a=1,
+                    x_b=1, y_b=2,
+                ),
+                func_expected=0.25,
+            ),
+            Case(
+                func_input=dict(
+                    y_prime_a=-1,
+                    x_a=1, y_a=1,
+                    x_b=2, y_b=2,
+                ),
+                func_expected=1.25,
+            ),
         )
 
         for testcase in testcases:
             actual_output = wolfe.quadratic_minimizer(**testcase.func_input)
-            self.assertAlmostEqual(actual_output.eval(),
-                                   testcase.func_expected)
+            self.assertAlmostEqual(
+                self.eval(actual_output),
+                testcase.func_expected,
+            )
 
     def test_cubic_minimizer_exceptions(self):
         with self.assertRaisesRegexp(ValueError, "bound_size_ratio"):
@@ -93,13 +110,39 @@ class WolfeInterpolationTestCase(BaseTestCase):
 
     def test_cubic_minimizer(self):
         testcases = (
-            Case(func_input=dict(x_a=0., y_a=1., y_prime_a=-1.,
-                                 x_b=5., y_b=10., x_c=10., y_c=60.),
-                 func_expected=1.06),
+            Case(
+                func_input=dict(
+                    y_prime_a=-1.,
+                    x_a=0., y_a=1.,
+                    x_b=5., y_b=10.,
+                    x_c=10., y_c=60.,
+                    bound_size_ratio=0.2,
+                ),
+                func_expected=1.06,
+            ),
         )
 
         for testcase in testcases:
             actual_output = wolfe.cubic_minimizer(**testcase.func_input)
-            self.assertAlmostEqual(actual_output.eval(),
-                                   testcase.func_expected,
-                                   places=2)
+            self.assertAlmostEqual(
+                self.eval(actual_output),
+                testcase.func_expected,
+                places=2,
+            )
+
+    def test_wolfe_linear_search(self):
+        x_current = 3
+
+        def square(step):
+            x_new = x_current + step * square_deriv(x_current)
+            return (x_new - 5) ** 2
+
+        def square_deriv(step):
+            grad = 2 * (x_current - 5)
+            return grad ** 2 * (1 + step)
+
+        x_star = wolfe.line_search(square, square_deriv, maxiter=1)
+        x_star = self.eval(x_star)
+
+        self.assertEqual(square(0), 4)
+        self.assertAlmostEqual(square(x_star), 0, places=2)
