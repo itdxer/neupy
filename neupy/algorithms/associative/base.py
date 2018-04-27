@@ -16,10 +16,10 @@ class BaseAssociative(BaseNetwork):
     Parameters
     ----------
     n_inputs : int
-        Number of input units.
+        Number of features (columns) in the input data.
 
     n_outputs : int
-        Number of output units.
+        Number of outputs in the  network.
 
     weight : array-like, Initializer
         Neural network weights.
