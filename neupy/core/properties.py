@@ -321,7 +321,7 @@ class ParameterProperty(ArrayProperty):
     {ArrayProperty.Parameters}
     """
     expected_type = as_tuple(np.ndarray, tf.Variable, init.Initializer,
-                             number_type)
+                             number_type, tf.Tensor)
 
     def __set__(self, instance, value):
         if isinstance(value, number_type):

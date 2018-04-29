@@ -11,9 +11,6 @@ from neupy.utils import asfloat
 one = tf.constant(asfloat(1))
 zero = tf.constant(asfloat(0))
 
-theano_true = tf.constant(1)
-theano_false = tf.constant(0)
-
 
 def sequential_or(*conditions):
     """
@@ -100,7 +97,7 @@ def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
     c1, c2 = asfloat(c1), asfloat(c2)
 
     def search_iteration_step(condition, x_previous, x_current, y_previous,
-                              y_current, y_deriv_previous, first_iter, x_star):
+                              y_current, y_deriv_previous, iteration, x_star):
 
         y_deriv_current = f_deriv(x_current)
         x_new = x_current * asfloat(2)
@@ -110,11 +107,11 @@ def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
             y_current > (y0 + c1 * x_current * y_deriv_0),
             tf.logical_and(
                 y_current >= y_previous,
-                tf.logical_not(first_iter),
+                tf.not_equal(iteration, 1),
             )
         )
         condition2 = tf.abs(y_deriv_current) <= -c2 * y_deriv_0
-        condition3 = y_deriv_current >= 0
+        condition3 = y_deriv_current >= zero
 
         x_star = tf.where(
             condition1,
@@ -151,13 +148,15 @@ def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
             y_current,
             y_new
         )
+        continue_searching_condition = tf.logical_and(
+            tf.not_equal(x_new, 0),
+            tf.logical_not(is_any_condition_satisfied),
+        )
+
         return [
-            sequential_or(
-                tf.equal(x_new, 0),
-                is_any_condition_satisfied,
-            ),
+            continue_searching_condition,
             x_current, x_new, y_current, y_current_new,
-            y_deriv_previous_new, False, x_star
+            y_deriv_previous_new, iteration + 1, x_star
         ]
 
     x0, x1 = zero, one
@@ -167,7 +166,7 @@ def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
     outs = tf.while_loop(
         cond=lambda condition, *args: condition,
         body=search_iteration_step,
-        loop_vars=[True, x0, x1, y0, y1, y_deriv_0, True, zero],
+        loop_vars=[True, x0, x1, y0, y1, y_deriv_0, 1, zero],
         back_prop=False,
         maximum_iterations=maxiter,
     )
@@ -334,45 +333,56 @@ def zoom(x_low, x_high, y_low, y_high, y_deriv_low,
     ----------
     x_low : float
         Step size
+
     x_high : float
         Step size
+
     y_low : float
         Value of f at x_low
+
     y_high : float
         Value of f at x_high
+
     y_deriv_low : float
         Value of derivative at x_low
+
     f : callable f(x)
         Generates computational graph
+
     f_deriv : callable f'(x)
         Generates computational graph
+
     y0 : float
         Value of f for ``x = 0``
+
     y_deriv_0 : float
         Value of the derivative for ``x = 0``
+
     c1 : float
         Parameter for Armijo condition rule.
+
     c2 : float
         Parameter for curvature condition rule.
+
+    maxiter : int
+        Maximum number of iterations. Defaults to ``10``.
     """
 
-    def zoom_itertion_step(*variables):
-        (
-            _, x_low, y_low, y_deriv_low, x_high, y_high,
-            x_recent, y_recent, x_star
-        ) = variables
+    def zoom_itertion_step(_, x_low, y_low, y_deriv_low, x_high, y_high,
+                           x_recent, y_recent, x_star):
 
-        x_new = cubic_minimizer(x_low, y_low, y_deriv_low,
-                                x_high, y_high,
-                                x_recent, y_recent)
+        x_new = cubic_minimizer(
+            x_low, y_low, y_deriv_low,
+            x_high, y_high,
+            x_recent, y_recent)
 
         y_new = f(x_new)
         y_deriv_new = f_deriv(x_new)
 
-        stop_loop_rule = sequential_or(
+        continue_searching_condition = sequential_or(
             y_new > (y0 + c1 * x_new * y_deriv_0),
             y_new >= y_low,
-            tf.abs(y_deriv_new) < (-c2 * y_deriv_0),
+            tf.abs(y_deriv_new) > (-c2 * y_deriv_0),
         )
 
         condition1 = tf.logical_or(
@@ -393,7 +403,7 @@ def zoom(x_low, x_high, y_low, y_high, y_deriv_low,
         x_star = x_new
 
         return [
-            stop_loop_rule,
+            continue_searching_condition,
             x_low, y_low, y_deriv_low,
             x_high, y_high,
             y_recent, x_recent,

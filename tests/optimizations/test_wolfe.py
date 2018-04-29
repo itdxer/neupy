@@ -132,17 +132,19 @@ class WolfeInterpolationTestCase(BaseTestCase):
 
     def test_wolfe_linear_search(self):
         x_current = 3
+        grad = 2 * (x_current - 5.5)
 
         def square(step):
-            x_new = x_current + step * square_deriv(x_current)
-            return (x_new - 5) ** 2
+            x_new = x_current - step * grad
+            return (x_new - 5.5) ** 2
 
         def square_deriv(step):
-            grad = 2 * (x_current - 5)
-            return grad ** 2 * (1 + step)
+            # Derivative with respect to the step
+            return -grad * 2 * ((x_current - step * grad) - 5.5)
 
-        x_star = wolfe.line_search(square, square_deriv, maxiter=1)
+        x_star = wolfe.line_search(square, square_deriv)
         x_star = self.eval(x_star)
 
-        self.assertEqual(square(0), 4)
+        self.assertEqual(square(0), 6.25)
         self.assertAlmostEqual(square(x_star), 0, places=2)
+        self.assertAlmostEqual(x_star, 0.5, places=2)

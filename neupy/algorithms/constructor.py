@@ -222,6 +222,9 @@ def function(inputs, outputs, updates=None, name=None):
         for old_value, new_value in updates:
             tensorflow_updates.append(tf.assign(old_value, new_value))
 
+    # Group variables in order to make sure that we won't output updates
+    tensorflow_updates = tf.group(*tensorflow_updates)
+
     @wraps(function)
     def wrapper(*input_values):
         feed_dict = dict(zip(inputs, input_values))
