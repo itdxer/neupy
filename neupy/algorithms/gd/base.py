@@ -218,7 +218,8 @@ def cannot_divide_into_batches(data, batch_size):
 
 
 def apply_batches(function, arguments, batch_size, description='',
-                  show_progressbar=False, show_error_output=True):
+                  show_progressbar=False, show_error_output=True,
+                  scalar_output=True):
     """
     Apply batches to a specified function.
 
@@ -259,6 +260,9 @@ def apply_batches(function, arguments, batch_size, description='',
         raise ValueError("The argument parameter should be list or "
                          "tuple with at least one element.")
 
+    if not scalar_output and show_error_output:
+        raise ValueError("Cannot show error when output isn't scalar")
+
     samples = arguments[0]
     n_samples = len(samples)
     batch_iterator = list(iter_batches(n_samples, batch_size))
@@ -286,9 +290,17 @@ def apply_batches(function, arguments, batch_size, description='',
     outputs = []
     for i, batch in enumerate(batch_iterator):
         sliced_arguments = [argument[batch] for argument in arguments]
-
         output = function(*sliced_arguments)
-        output = np.atleast_1d(output).item(0)
+
+        if scalar_output:
+            output = np.atleast_1d(output)
+
+            if output.size > 1:
+                raise ValueError("Cannot convert output from the batch, "
+                                 "because it has more than one output value")
+
+            output = output.item(0)
+
         outputs.append(output)
 
         if show_error_output:
@@ -359,7 +371,8 @@ class MinibatchTrainingMixin(Configurable):
     batch_size = BatchSizeProperty(default=128)
 
     def apply_batches(self, function, input_data, arguments=(), description='',
-                      show_progressbar=None, show_error_output=False):
+                      show_progressbar=None, show_error_output=False,
+                      scalar_output=True):
         """
         Apply function per each mini-batch.
 
@@ -388,6 +401,9 @@ class MinibatchTrainingMixin(Configurable):
             ``True`` will show information in the progressbar.
             Error will be related to the last epoch.
 
+        scalar_output : bool
+            ``True`` means that we expect scalar value per each
+
         Returns
         -------
         list
@@ -398,7 +414,8 @@ class MinibatchTrainingMixin(Configurable):
 
         if cannot_divide_into_batches(input_data, self.batch_size):
             output = function(*arguments)
-            output = np.atleast_1d(output).item(0)
+            if scalar_output:
+                output = np.atleast_1d(output).item(0)
             return [output]
 
         if show_progressbar is None:
@@ -416,6 +433,7 @@ class MinibatchTrainingMixin(Configurable):
             description=description,
             show_progressbar=show_progressbar,
             show_error_output=show_error_output,
+            scalar_output=scalar_output,
         )
 
 

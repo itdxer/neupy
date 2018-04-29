@@ -153,6 +153,7 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
             description='Prediction batches',
             show_progressbar=True,
             show_error_output=False,
+            scalar_output=False,
         )
         raw_output = np.concatenate(outputs, axis=1)
 
@@ -214,6 +215,8 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
             description='Prediction batches',
             show_progressbar=True,
             show_error_output=False,
+            scalar_output=False,
         )
+
         raw_output = np.concatenate(outputs, axis=1)
         return self.classes[raw_output.argmax(axis=0)]
