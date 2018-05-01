@@ -4,7 +4,7 @@ import theano.tensor as T
 from theano.tensor import slinalg
 
 from neupy.core.properties import BoundedProperty, WithdrawProperty
-from neupy.utils import asfloat
+from neupy.utils import asfloat, flatten
 from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.algorithms.utils import parameter_values, setup_parameter_updates
 from neupy.layers.utils import count_parameters
@@ -29,12 +29,12 @@ def find_hessian_and_gradient(error_function, parameters):
     -------
     Theano function
     """
-    n_parameters = T.sum([parameter.size for parameter in parameters])
-    gradients = T.grad(error_function, wrt=parameters)
-    full_gradient = T.concatenate([grad.flatten() for grad in gradients])
+    n_parameters = sum(get_size(parameter) for parameter in parameters)
+    gradients = tf.gradients(error_function, parameters)
+    full_gradient = tf.concat([flatten(grad) for grad in gradients], axis=0)
 
     def find_hessian(i, full_gradient, *parameters):
-        second_derivatives = T.grad(full_gradient[i], wrt=parameters)
+        second_derivatives = tf.gradients(full_gradient[i], parameters)
         return T.concatenate([s.flatten() for s in second_derivatives])
 
     hessian, _ = theano.scan(

@@ -574,5 +574,6 @@ class MinibatchGradientDescent(GradientDescent, MinibatchTrainingMixin):
             description='Prediction batches',
             show_progressbar=True,
             show_error_output=False,
+            scalar_output=False,
         )
         return np.concatenate(outputs, axis=0)

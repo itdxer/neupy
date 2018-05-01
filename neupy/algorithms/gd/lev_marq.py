@@ -12,13 +12,13 @@ from neupy.algorithms.utils import parameter_values, setup_parameter_updates
 __all__ = ('LevenbergMarquardt',)
 
 
-def compute_jacobian(errors, parameters):
+def compute_jacobian(values, parameters):
     """
     Compute jacobian.
 
     Parameters
     ----------
-    errors : Theano variable
+    values : Theano variable
         Computed MSE for each sample separetly.
 
     parameters : list of Theano variable
@@ -28,23 +28,26 @@ def compute_jacobian(errors, parameters):
     -------
     Theano variable
     """
-    shape = tf.shape(errors)
-    J = tf.map_fn(
-        # We have to re-initialize parameter value, otherwise
-        # it won't work. Read: https://stackoverflow.com/q/13905741/2759088
-        fn=lambda x, params=parameters: tf.gradients(x, params),
-        elems=errors,
-        dtype=[x.dtype for x in parameters],
-        back_prop=False,
-        name='jacobian',
-        parallel_iterations=1)
+    values_shape = tf.shape(values)
+    n_samples = values_shape[0]
 
-    jacobians = []
-    for jacobian, parameter in zip(J, parameters):
-        jacobian = tf.reshape(jacobian, [shape[0], tf.size(parameter)])
-        jacobians.append(jacobian)
+    def compute_gradient_per_value(index, result):
+        gradients = tf.gradients(values[index], parameters)
+        full_gradient = tf.concat(
+            [flatten(gradient) for gradient in gradients], axis=0)
 
-    return tf.concat(jacobians, axis=1)
+        return (index + 1, result.write(index, full_gradient))
+
+    _, jacobian = tf.while_loop(
+        lambda index, _: index < n_samples,
+        compute_gradient_per_value,
+        [
+            tf.constant(0, tf.int32),
+            tf.TensorArray(tf.float32, size=n_samples),
+        ]
+    )
+
+    return jacobian.stack()
 
 
 class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
@@ -134,21 +137,20 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
             mu / self.mu_update_factor,
         )
 
-        se_for_each_sample = tf.reshape(
-            (network_output - prediction_func) ** 2, [-1]
-        )
+        err_for_each_sample = flatten((network_output - prediction_func) ** 2)
 
         params = parameter_values(self.connection)
         param_vector = tf.concat([flatten(param) for param in params], axis=0)
 
-        J = compute_jacobian(se_for_each_sample, params)
+        J = compute_jacobian(err_for_each_sample, params)
         J_T = tf.transpose(J)
         n_params = J.shape[1]
 
-        updated_params = param_vector - tf.matrix_solve(
+        solution = tf.matrix_solve(
             tf.matmul(J_T, J) + new_mu * tf.eye(n_params.value),
-            tf.matmul(J_T, tf.expand_dims(se_for_each_sample, 1))
+            tf.matmul(J_T, tf.expand_dims(err_for_each_sample, 1))
         )
+        updated_params = param_vector - flatten(solution)
 
         updates = [(mu, new_mu)]
         parameter_updates = setup_parameter_updates(params, updated_params)
