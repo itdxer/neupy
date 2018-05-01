@@ -25,7 +25,7 @@ class QuickPropTestCase(BaseTestCase):
 
         qp = algorithms.Quickprop(
             (5, 10, 1),
-            step=0.1,
+            step=0.01,
             upper_bound=1,
             shuffle_data=True,
             verbose=False,
