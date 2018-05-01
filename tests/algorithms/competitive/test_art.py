@@ -4,7 +4,6 @@ from sklearn import preprocessing
 from neupy import algorithms
 
 from base import BaseTestCase
-from data import lenses
 
 
 data = np.array([
