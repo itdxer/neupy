@@ -13,8 +13,6 @@ from .gd.rmsprop import *
 from .gd.adam import *
 from .gd.adamax import *
 
-from .ensemble.dan import *
-
 from .regularization.weight_decay import *
 from .regularization.weight_elimination import *
 from .regularization.max_norm import *

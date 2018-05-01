@@ -58,15 +58,6 @@ Learning rate update rules
     :network:`SearchThenConverge`, Search than converge
     :network:`StepDecay`, Minimize step monotonically after each epoch
 
-Ensembles
-~~~~~~~~~
-
-.. csv-table::
-    :header: "Class name", "Name"
-
-    :architecture:`mixture_of_experts`, Mixture of Experts
-    :network:`DynamicallyAveragedNetwork`, Dynamically Averaged Network (DAN)
-
 Neural Networks with Radial Basis Functions (RBFN)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -228,7 +219,6 @@ Architectures
     ":architecture:`squeezenet`", "SqueezeNet network"
     ":architecture:`alexnet`", "AlexNet network"
     ":architecture:`mixture_of_experts`", Mixture of Experts
-
 
 .. _init-methods:
 
