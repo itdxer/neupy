@@ -1,20 +1,36 @@
-import theano
-import theano.tensor as T
-from theano.ifelse import ifelse
 import numpy as np
+import tensorflow as tf
 
 from neupy.core.config import ConfigurableABC
 from neupy.core.properties import IntProperty, ParameterProperty
 from neupy.algorithms.base import BaseNetwork
-from neupy.algorithms.constructor import BaseAlgorithm
+from neupy.algorithms.constructor import (BaseAlgorithm, function,
+                                          initialize_uninitialized_variables)
 from neupy.algorithms.gd.base import (MinibatchTrainingMixin,
                                       average_batch_errors)
 from neupy.layers.base import create_shared_parameter
-from neupy.utils import theano_random_stream, asint, asfloat, format_data
+from neupy.utils import asfloat, format_data, dot
 from neupy import init
 
 
 __all__ = ('RBM',)
+
+
+def random_binomial(p):
+    with tf.name_scope('random-binomial'):
+        samples = tf.random_uniform(tf.shape(p), dtype=tf.float32) <= p
+        return tf.cast(samples, tf.float32)
+
+
+def random_sample(data, n_samples):
+    with tf.name_scope('random-sample'):
+        data_shape = tf.shape(data)
+        max_index = data_shape[0]
+        sample_indeces = tf.random_uniform(
+            (n_samples,), minval=0, maxval=max_index,
+            dtype=tf.int32
+        )
+        return tf.gather(data, sample_indeces)
 
 
 class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
@@ -26,17 +42,21 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
     Parameters
     ----------
     n_visible : int
-        Number of visible units.
+        Number of visible units. Number of features (columns)
+        in the input data.
 
     n_hidden : int
-        Number of hidden units.
+        Number of hidden units. The large the number the more
+        information network can capture from the data, but it
+        also mean that network is more likely to overfit.
 
-    {MinibatchTrainingMixin.batch_size}
+    batch_size : int
+        Size of the mini-batch. Defaults to ``10``.
 
     weight : array-like, Theano variable, Initializer or scalar
         Default initialization methods
         you can find :ref:`here <init-methods>`.
-        Defaults to :class:`XavierNormal <neupy.init.XavierNormal>`.
+        Defaults to :class:`Normal <neupy.init.Normal>`.
 
     hidden_bias : array-like, Theano variable, Initializer or scalar
         Default initialization methods
@@ -111,80 +131,95 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
     """
     n_visible = IntProperty(minval=1)
     n_hidden = IntProperty(minval=1)
+    batch_size = IntProperty(minval=1, default=10)
 
-    weight = ParameterProperty(default=init.XavierNormal())
+    weight = ParameterProperty(default=init.Normal())
     hidden_bias = ParameterProperty(default=init.Constant(value=0))
     visible_bias = ParameterProperty(default=init.Constant(value=0))
 
     def __init__(self, n_visible, n_hidden, **options):
-        self.theano_random = theano_random_stream()
-
-        super(ConfigurableABC, self).__init__(
-            n_hidden=n_hidden, n_visible=n_visible, **options)
-
-        self.weight = create_shared_parameter(
-            value=self.weight,
-            name='algo:rbm/matrix:weight',
-            shape=(n_visible, n_hidden)
-        )
-        self.hidden_bias = create_shared_parameter(
-            value=self.hidden_bias,
-            name='algo:rbm/vector:hidden-bias',
-            shape=(n_hidden,),
-        )
-        self.visible_bias = create_shared_parameter(
-            value=self.visible_bias,
-            name='algo:rbm/vector:visible-bias',
-            shape=(n_visible,),
-        )
-
+        options.update({'n_visible': n_visible, 'n_hidden': n_hidden})
         super(RBM, self).__init__(**options)
 
     def init_input_output_variables(self):
-        self.variables.update(
-            network_input=T.matrix(name='algo:rbm/var:network-input'),
-        )
+        with tf.variable_scope('rbm'):
+            self.weight = create_shared_parameter(
+                value=self.weight,
+                name='weight',
+                shape=(self.n_visible, self.n_hidden)
+            )
+            self.hidden_bias = create_shared_parameter(
+                value=self.hidden_bias,
+                name='hidden-bias',
+                shape=(self.n_hidden,),
+            )
+            self.visible_bias = create_shared_parameter(
+                value=self.visible_bias,
+                name='visible-bias',
+                shape=(self.n_visible,),
+            )
+
+            self.variables.update(
+                network_input=tf.placeholder(
+                    tf.float32,
+                    (None, self.n_visible),
+                    name="network-input",
+                ),
+                network_hidden_input=tf.placeholder(
+                    tf.float32,
+                    (None, self.n_hidden),
+                    name="network-hidden-input",
+                )
+            )
 
     def init_variables(self):
-        self.variables.update(
-            h_samples=theano.shared(
-                name='algo:rbm/matrix:hidden-samples',
-                value=asint(np.zeros((self.batch_size, self.n_hidden))),
-            ),
-        )
+        with tf.variable_scope('rbm'):
+            self.variables.update(
+                h_samples=tf.Variable(
+                    tf.zeros([self.batch_size, self.n_hidden]),
+                    name="hidden-samples",
+                    dtype=tf.float32,
+                ),
+            )
 
     def init_methods(self):
         def free_energy(visible_sample):
-            wx_b = T.dot(visible_sample, self.weight) + self.hidden_bias
-            visible_bias_term = T.dot(visible_sample, self.visible_bias)
-            hidden_term = T.log(asfloat(1) + T.exp(wx_b)).sum(axis=1)
-            return -visible_bias_term - hidden_term
+            with tf.name_scope('free-energy'):
+                wx_b = dot(visible_sample, self.weight) + self.hidden_bias
+                visible_bias_term = dot(visible_sample, self.visible_bias)
+                hidden_term = tf.reduce_sum(
+                    tf.log(asfloat(1) + tf.exp(wx_b)),
+                    axis=1
+                )
+                return -(visible_bias_term + hidden_term)
 
         def visible_to_hidden(visible_sample):
-            wx_b = T.dot(visible_sample, self.weight) + self.hidden_bias
-            return T.nnet.sigmoid(wx_b)
+            with tf.name_scope('visible-to-hidden'):
+                wx_b = dot(visible_sample, self.weight) + self.hidden_bias
+                return tf.nn.sigmoid(wx_b)
 
         def hidden_to_visible(hidden_sample):
-            wx_b = T.dot(hidden_sample, self.weight.T) + self.visible_bias
-            return T.nnet.sigmoid(wx_b)
+            with tf.name_scope('hidden-to-visible'):
+                W_T = tf.transpose(self.weight)
+                wx_b = dot(hidden_sample, W_T) + self.visible_bias
+                return tf.nn.sigmoid(wx_b)
 
         def sample_hidden_from_visible(visible_sample):
-            theano_random = self.theano_random
-            hidden_prob = visible_to_hidden(visible_sample)
-            hidden_sample = theano_random.binomial(n=1, p=hidden_prob,
-                                                   dtype=theano.config.floatX)
-            return hidden_sample
+            with tf.name_scope('sample-hidden-to-visible'):
+                hidden_prob = visible_to_hidden(visible_sample)
+                hidden_sample = random_binomial(hidden_prob)
+                return hidden_sample
 
         def sample_visible_from_hidden(hidden_sample):
-            theano_random = self.theano_random
-            visible_prob = hidden_to_visible(hidden_sample)
-            visible_sample = theano_random.binomial(n=1, p=visible_prob,
-                                                    dtype=theano.config.floatX)
-            return visible_sample
+            with tf.name_scope('sample-visible-to-hidden'):
+                visible_prob = hidden_to_visible(hidden_sample)
+                visible_sample = random_binomial(visible_prob)
+                return visible_sample
 
         network_input = self.variables.network_input
-        n_samples = asfloat(network_input.shape[0])
-        theano_random = self.theano_random
+        network_hidden_input = self.variables.network_hidden_input
+        input_shape = tf.shape(network_input)
+        n_samples = input_shape[0]
 
         weight = self.weight
         h_bias = self.hidden_bias
@@ -192,76 +227,102 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
         h_samples = self.variables.h_samples
         step = asfloat(self.step)
 
-        sample_indeces = theano_random.random_integers(
-            low=0, high=n_samples - 1,
-            size=(self.batch_size,)
-        )
-        v_pos = ifelse(
-            T.eq(n_samples, self.batch_size),
-            network_input,
-            # In case if final batch has less number of
-            # samples then expected
-            network_input[sample_indeces]
-        )
-        h_pos = visible_to_hidden(v_pos)
+        with tf.name_scope('positive-values'):
+            # We have to use `cond` instead of `where`, because
+            # different if-else cases might have different shapes
+            # and it triggers exception in tensorflow.
+            v_pos = tf.cond(
+                tf.equal(n_samples, self.batch_size),
+                lambda: network_input,
+                lambda: random_sample(network_input, self.batch_size)
+            )
+            h_pos = visible_to_hidden(v_pos)
 
-        v_neg = sample_visible_from_hidden(h_samples)
-        h_neg = visible_to_hidden(v_neg)
+        with tf.name_scope('negative-values'):
+            v_neg = sample_visible_from_hidden(h_samples)
+            h_neg = visible_to_hidden(v_neg)
 
-        weight_update = v_pos.T.dot(h_pos) - v_neg.T.dot(h_neg)
-        h_bias_update = (h_pos - h_neg).mean(axis=0)
-        v_bias_update = (v_pos - v_neg).mean(axis=0)
+        with tf.name_scope('weight-update'):
+            weight_update = (
+                dot(tf.transpose(v_pos), h_pos) -
+                dot(tf.transpose(v_neg), h_neg)
+            ) / asfloat(n_samples)
 
-        # Stochastic pseudo-likelihood
-        feature_index_to_flip = theano_random.random_integers(
-            low=0,
-            high=self.n_visible - 1,
-        )
-        rounded_input = T.round(network_input)
-        rounded_input = network_input
-        rounded_input_flip = T.set_subtensor(
-            rounded_input[:, feature_index_to_flip],
-            1 - rounded_input[:, feature_index_to_flip]
-        )
-        error = T.mean(
-            self.n_visible * T.log(T.nnet.sigmoid(
-                free_energy(rounded_input_flip) -
-                free_energy(rounded_input)
-            ))
-        )
+        with tf.name_scope('hidden-bias-update'):
+            h_bias_update = tf.reduce_mean(h_pos - h_neg, axis=0)
 
+        with tf.name_scope('visible-bias-update'):
+            v_bias_update = tf.reduce_mean(v_pos - v_neg, axis=0)
+
+        with tf.name_scope('flipped-input-features'):
+            # Each row will have random feature marked with number 1
+            # Other values will be equal to 0
+            possible_feature_corruptions = tf.eye(self.n_visible)
+            corrupted_features = random_sample(
+                possible_feature_corruptions, n_samples)
+
+            rounded_input = tf.round(network_input)
+            # If we scale input values from [0, 1] range to [-1, 1]
+            # than it will be easier to flip feature values with simple
+            # multiplication.
+            scaled_rounded_input = 2 * rounded_input - 1
+            scaled_flipped_rounded_input = (
+                -2 * corrupted_features * scaled_rounded_input
+            )
+            # Scale it back to the [0, 1] range
+            flipped_rounded_input = (scaled_flipped_rounded_input + 1) / 2
+
+        with tf.name_scope('pseudo-likelihood-loss'):
+            # Stochastic pseudo-likelihood
+            epsilon = asfloat(1e-8)
+            error = tf.reduce_mean(
+                self.n_visible * tf.log(
+                    tf.nn.sigmoid(
+                        free_energy(flipped_rounded_input) -
+                        free_energy(rounded_input)
+                    # we add small epsilon in order to prevent
+                    # 0 values for logarithm
+                    ) + epsilon
+                )
+            )
+
+        with tf.name_scope('gibbs-sampling'):
+            gibbs_sampling = sample_visible_from_hidden(
+                sample_hidden_from_visible(network_input)
+            )
+
+        initialize_uninitialized_variables()
         self.methods.update(
-            train_epoch=theano.function(
+            train_epoch=function(
                 [network_input],
                 error,
-                name='algo:rbm/func:train-epoch',
+                name='rbm/train-epoch',
                 updates=[
-                    (weight, weight + step * weight_update / n_samples),
+                    (weight, weight + step * weight_update),
                     (h_bias, h_bias + step * h_bias_update),
                     (v_bias, v_bias + step * v_bias_update),
-                    (h_samples, asint(theano_random.binomial(n=1, p=h_neg))),
+                    (h_samples, random_binomial(p=h_neg)),
                 ]
             ),
-            prediction_error=theano.function(
-                [network_input], error,
-                name='algo:rbm/func:prediction-error',
+            prediction_error=function(
+                [network_input],
+                error,
+                name='rbm/prediction-error',
             ),
-            visible_to_hidden=theano.function(
+            visible_to_hidden=function(
                 [network_input],
                 visible_to_hidden(network_input),
-                name='algo:rbm/func:visible-to-hidden',
+                name='rbm/visible-to-hidden',
             ),
-            hidden_to_visible=theano.function(
-                [network_input],
-                hidden_to_visible(network_input),
-                name='algo:rbm/func:hidden-to-visible',
+            hidden_to_visible=function(
+                [network_hidden_input],
+                hidden_to_visible(network_hidden_input),
+                name='rbm/hidden-to-visible',
             ),
-            gibbs_sampling=theano.function(
+            gibbs_sampling=function(
                 [network_input],
-                sample_visible_from_hidden(
-                    sample_hidden_from_visible(network_input)
-                ),
-                name='algo:rbm/func:gibbs-sampling',
+                gibbs_sampling,
+                name='rbm/gibbs-sampling',
             )
         )
 
@@ -331,8 +392,9 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
 
             description='Hidden from visible batches',
             show_progressbar=True,
-            show_error_output=False)
-
+            show_error_output=False,
+            scalar_output=False,
+        )
         return np.concatenate(outputs, axis=0)
 
     def hidden_to_visible(self, hidden_input):
@@ -357,8 +419,9 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
 
             description='Visible from hidden batches',
             show_progressbar=True,
-            show_error_output=False)
-
+            show_error_output=False,
+            scalar_output=False,
+        )
         return np.concatenate(outputs, axis=0)
 
     def prediction_error(self, input_data, target_data=None):
@@ -388,7 +451,8 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
         return average_batch_errors(
             errors,
             n_samples=len(input_data),
-            batch_size=self.batch_size)
+            batch_size=self.batch_size,
+        )
 
     def gibbs_sampling(self, visible_input, n_iter=1):
         """
