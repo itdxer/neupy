@@ -1,10 +1,7 @@
-import theano
-import theano.typed_list
-import theano.tensor as T
-from theano.tensor import slinalg
+import tensorflow as tf
 
 from neupy.core.properties import BoundedProperty, WithdrawProperty
-from neupy.utils import asfloat, flatten
+from neupy.utils import asfloat, flatten, get_variable_size
 from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.algorithms.utils import parameter_values, setup_parameter_updates
 from neupy.layers.utils import count_parameters
@@ -16,35 +13,46 @@ __all__ = ('Hessian',)
 
 def find_hessian_and_gradient(error_function, parameters):
     """
-    Find Hessian and gradient for the Neural Network cost function.
+    Compute jacobian.
 
     Parameters
     ----------
-    function : Theano function
+    values : Theano variable
+        Computed MSE for each sample separetly.
 
-    parameters : list
-        List of all Neural Network parameters.
+    parameters : list of Theano variable
+        Neural network parameters (e.g. weights, biases).
 
     Returns
     -------
-    Theano function
+    Theano variable
     """
-    n_parameters = sum(get_size(parameter) for parameter in parameters)
+    n_parameters = sum(get_variable_size(parameter) for parameter in parameters)
     gradients = tf.gradients(error_function, parameters)
     full_gradient = tf.concat([flatten(grad) for grad in gradients], axis=0)
 
-    def find_hessian(i, full_gradient, *parameters):
-        second_derivatives = tf.gradients(full_gradient[i], parameters)
-        return T.concatenate([s.flatten() for s in second_derivatives])
+    full_gradient_shape = tf.shape(full_gradient)
+    n_samples = full_gradient_shape[0]
 
-    hessian, _ = theano.scan(
-        find_hessian,
-        sequences=T.arange(n_parameters),
-        non_sequences=[full_gradient] + parameters,
+    def compute_gradient_per_value(index, result):
+        gradients = tf.gradients(full_gradient[index], parameters)
+        hessian = tf.concat(
+            [flatten(gradient) for gradient in gradients], axis=0)
+
+        return (index + 1, result.write(index, hessian))
+
+    # import ipdb; ipdb.set_trace()
+
+    _, jacobian = tf.while_loop(
+        lambda index, _: index < n_samples,
+        compute_gradient_per_value,
+        [
+            tf.constant(0, tf.int32),
+            tf.TensorArray(tf.float32, size=n_samples),
+        ]
     )
-    hessian_matrix = hessian.reshape((n_parameters, n_parameters))
 
-    return hessian_matrix, full_gradient
+    return jacobian.stack(), full_gradient
 
 
 class Hessian(StepSelectionBuiltIn, GradientDescent):
@@ -105,19 +113,25 @@ class Hessian(StepSelectionBuiltIn, GradientDescent):
     step = WithdrawProperty()
 
     def init_train_updates(self):
-        n_parameters = count_parameters(self.connection)
-        parameters = parameter_values(self.connection)
-        param_vector = T.concatenate([param.flatten() for param in parameters])
         penalty_const = asfloat(self.penalty_const)
 
+        n_parameters = count_parameters(self.connection)
+        parameters = parameter_values(self.connection)
+        param_vector = tf.concat(
+            [flatten(param) for param in parameters], axis=0)
+
+        # import ipdb; ipdb.set_trace()
         hessian_matrix, full_gradient = find_hessian_and_gradient(
             self.variables.error_func, parameters
         )
 
-        updated_parameters = param_vector - slinalg.solve(
-            hessian_matrix + penalty_const * T.eye(n_parameters),
-            full_gradient
+        # import ipdb; ipdb.set_trace()
+
+        solution = tf.matrix_solve(
+            hessian_matrix + penalty_const * tf.eye(n_parameters),
+            tf.reshape(full_gradient, [-1, 1])
         )
+        updated_parameters = param_vector - flatten(solution)
         updates = setup_parameter_updates(parameters, updated_parameters)
 
         return updates
