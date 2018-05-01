@@ -8,11 +8,12 @@ from contextlib import contextmanager
 import six
 import numpy as np
 import pandas as pd
-import theano.tensor as T
+import tensorflow as tf
 from matplotlib import pyplot as plt
 from matplotlib.testing.compare import compare_images
 
 from neupy import algorithms, layers
+from neupy.utils import asfloat
 from neupy.storage import save_dict, load_dict
 
 from data import xor_input_train, xor_target_train
@@ -155,7 +156,7 @@ def image_comparison(original_image_path, figsize=(10, 10), tol=1e-3):
 class StepOutput(layers.BaseLayer):
     def output(self, value):
         if not self.training_state:
-            return T.switch(value < 0, -1, 1)
+            return 2 * asfloat(value < 0) - 1
         return value
 
 
@@ -184,7 +185,7 @@ def reproducible_network_train(seed=0, epochs=500, **additional_params):
             layers.Input(2),
             layers.Tanh(5),
             layers.Tanh(1),
-            StepOutput(),
+            # StepOutput(),
         ],
         **additional_params
     )

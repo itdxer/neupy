@@ -7,6 +7,8 @@ import numpy as np
 import tensorflow as tf
 
 from neupy import environment, layers
+from neupy.utils import tensorflow_session
+from neupy.algorithms.constructor import initialize_uninitialized_variables
 
 from utils import vectors_for_testing
 
@@ -17,9 +19,9 @@ class BaseTestCase(unittest.TestCase):
     use_sandbox_mode = True
 
     def eval(self, value):
-        with tf.Session() as sess:
-            sess.run(tf.global_variables_initializer())
-            return value.eval()
+        sess = tensorflow_session()
+        initialize_uninitialized_variables()
+        return sess.run(value)
 
     def setUp(self):
         environment.reproducible(seed=self.random_seed)

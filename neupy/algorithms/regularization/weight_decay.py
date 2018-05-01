@@ -1,3 +1,4 @@
+from neupy.utils import asfloat
 from neupy.core.properties import BoundedProperty
 from .base import WeightUpdateConfigurable
 
@@ -43,7 +44,9 @@ class WeightDecay(WeightUpdateConfigurable):
             layer, parameter)
 
         step = self.variables.step
+        decay_rate = asfloat(self.decay_rate)
+
         updates_mapper = dict(updates)
-        updates_mapper[parameter] -= step * self.decay_rate * parameter
+        updates_mapper[parameter] -= step * decay_rate * parameter
 
         return list(updates_mapper.items())

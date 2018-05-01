@@ -1,3 +1,5 @@
+import tensorflow as tf
+
 from neupy.core.properties import BoundedProperty
 from neupy.utils import asfloat
 from .base import WeightUpdateConfigurable
@@ -75,9 +77,9 @@ class WeightElimination(WeightUpdateConfigurable):
 
         updates_mapper = dict(updates)
         updates_mapper[parameter] -= decay_koef * (
-            (2 * parameter / zero_weight_square) / (
-                1 + (parameter ** 2) / zero_weight_square
-            ) ** 2
+            (2 * parameter / zero_weight_square) / tf.square(
+                1 + tf.square(parameter) / zero_weight_square
+            )
         )
 
         return list(updates_mapper.items())

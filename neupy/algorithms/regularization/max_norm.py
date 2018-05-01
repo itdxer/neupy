@@ -1,5 +1,6 @@
-import theano.tensor as T
+import tensorflow as tf
 
+from neupy.utils import asfloat
 from neupy.core.properties import NumberProperty
 from .base import WeightUpdateConfigurable
 
@@ -22,11 +23,15 @@ def max_norm_clip(array, max_norm):
         be clipped in case if its norm will be greater than
         specified limit.
     """
-    array_norm = T.sqrt(T.sum(array ** 2))
-    return T.switch(
-        T.ge(array_norm, max_norm),
-        T.mul(max_norm, array) / array_norm,
-        array)
+    with tf.name_scope('max-norm-clip'):
+        array_norm = tf.norm(array)
+        max_norm = asfloat(max_norm)
+
+        return tf.where(
+            tf.greater_equal(array_norm, max_norm),
+            tf.multiply(max_norm, array) / array_norm,
+            array,
+        )
 
 
 class MaxNormRegularization(WeightUpdateConfigurable):
