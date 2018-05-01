@@ -1,8 +1,7 @@
 import numpy as np
-import theano
-import theano.tensor as T
+import tensorflow as tf
 
-from neupy.utils import asfloat
+from neupy.utils import asfloat, flatten
 from neupy.core.properties import ProperFractionProperty, BoundedProperty
 from neupy.algorithms.utils import parameter_values
 from neupy.layers.utils import count_parameters
@@ -58,31 +57,34 @@ class LeakStepAdaptation(SingleStepConfigurable):
 
     def init_variables(self):
         super(LeakStepAdaptation, self).init_variables()
+
         n_parameters = count_parameters(self.connection)
-        self.variables.leak_average = theano.shared(
-            name='leak-step-adapt/leak-average',
-            value=asfloat(np.zeros(n_parameters)),
+        self.variables.leak_average = tf.Variable(
+            tf.zeros(n_parameters),
+            name="leak-step-adapt/leak-average",
+            dtype=tf.float32,
         )
 
     def init_train_updates(self):
         updates = super(LeakStepAdaptation, self).init_train_updates()
 
-        alpha = self.alpha
-        beta = self.beta
-        leak_size = self.leak_size
+        alpha = asfloat(self.alpha)
+        beta = asfloat(self.beta)
+        leak_size = asfloat(self.leak_size)
 
         step = self.variables.step
         leak_average = self.variables.leak_average
 
         parameters = parameter_values(self.connection)
-        gradients = T.grad(self.variables.error_func, wrt=parameters)
-        full_gradient = T.concatenate([grad.flatten() for grad in gradients])
+        gradients = tf.gradients(self.variables.error_func, parameters)
+        full_gradient = tf.concat(
+            [flatten(grad) for grad in gradients], axis=0)
 
         leak_avarage_update = (
             (1 - leak_size) * leak_average + leak_size * full_gradient
         )
         new_step = step + alpha * step * (
-            beta * leak_avarage_update.norm(L=2) - step
+            beta * tf.norm(leak_avarage_update) - step
         )
 
         updates.extend([

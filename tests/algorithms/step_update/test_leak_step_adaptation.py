@@ -38,5 +38,4 @@ class LeakStepAdaptationTestCase(BaseTestCase):
             verbose=False,
             shuffle_data=True,
             epochs=30,
-            # show_comparison_plot=True,
         )

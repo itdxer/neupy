@@ -1,3 +1,4 @@
+from neupy.utils import asfloat
 from neupy.core.properties import IntProperty
 from .base import SingleStepConfigurable
 
@@ -61,7 +62,7 @@ class StepDecay(SingleStepConfigurable):
         step = self.variables.step
 
         step_update_condition = self.step / (
-            1 + epoch / self.reduction_freq
+            1 + epoch / asfloat(self.reduction_freq)
         )
         updates.extend([
             (step, step_update_condition),

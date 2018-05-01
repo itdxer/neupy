@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.optimize import minimize_scalar
 
-from neupy.utils import asfloat
+from neupy.utils import asfloat, tensorflow_session
 from neupy.core.properties import BoundedProperty, ChoiceProperty
 from .base import SingleStepConfigurable
 
@@ -86,14 +86,15 @@ class LinearSearch(SingleStepConfigurable):
         train_epoch = self.methods.train_epoch
         prediction_error = self.methods.prediction_error
 
+        session = tensorflow_session()
         params = [param for param, _ in self.init_train_updates()]
-        param_defaults = [param.get_value() for param in params]
+        param_defaults = [session.run(param) for param in params]
 
         def setup_new_step(new_step):
             for param_default, param in zip(param_defaults, params):
-                param.set_value(param_default)
+                param.load(param_default, session)
 
-            self.variables.step.set_value(asfloat(new_step))
+            self.variables.step.load(asfloat(new_step), session)
             train_epoch(input_train, target_train)
             # Train epoch returns neural network error that was before
             # training epoch step, that's why we need to compute

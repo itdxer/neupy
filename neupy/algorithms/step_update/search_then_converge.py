@@ -1,5 +1,6 @@
 from __future__ import division
 
+from neupy.utils import asfloat
 from neupy.core.properties import IntProperty, NumberProperty
 from .base import SingleStepConfigurable
 
@@ -49,8 +50,8 @@ class SearchThenConverge(SingleStepConfigurable):
     def init_train_updates(self):
         updates = super(SearchThenConverge, self).init_train_updates()
 
-        first_step = self.step
-        reduction_freq = self.reduction_freq
+        first_step = asfloat(self.step)
+        reduction_freq = asfloat(self.reduction_freq)
 
         step = self.variables.step
         epoch = self.variables.epoch
