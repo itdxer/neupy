@@ -6,28 +6,11 @@ from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.algorithms.utils import parameter_values, setup_parameter_updates
 from neupy.optimizations.wolfe import line_search
 from neupy.layers.utils import count_parameters, iter_parameters
-from neupy.utils import asfloat, flatten
+from neupy.utils import asfloat, flatten, dot, outer, get_variable_size
 from .base import GradientDescent
 
 
 __all__ = ('QuasiNewton',)
-
-
-def outer(a, b):
-    a = tf.expand_dims(a, 1)
-    b = tf.expand_dims(b, 0)
-    return tf.matmul(a, b)
-
-
-def dot(a, b):
-    return tf.tensordot(a, b, 1)
-
-
-def get_variable_size(variable):
-    size = 1
-    for dimension in variable.shape:
-        size *= int(dimension)
-    return size
 
 
 def bfgs(inverse_hessian, weight_delta, gradient_delta, maxrho=1e4):

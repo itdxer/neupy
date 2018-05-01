@@ -320,8 +320,13 @@ class ParameterProperty(ArrayProperty):
     ----------
     {ArrayProperty.Parameters}
     """
-    expected_type = as_tuple(np.ndarray, tf.Variable, init.Initializer,
-                             number_type, tf.Tensor)
+    expected_type = as_tuple(
+        np.ndarray,
+        number_type,
+        init.Initializer,
+        tf.Variable,
+        tf.Tensor,
+    )
 
     def __set__(self, instance, value):
         if isinstance(value, number_type):

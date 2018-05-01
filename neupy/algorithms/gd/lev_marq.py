@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
-from neupy.utils import asfloat, tensorflow_session
+from neupy.utils import asfloat, tensorflow_session, flatten
 from neupy.core.properties import (BoundedProperty, ChoiceProperty,
                                    WithdrawProperty)
 from neupy.algorithms import GradientDescent
@@ -45,10 +45,6 @@ def compute_jacobian(errors, parameters):
         jacobians.append(jacobian)
 
     return tf.concat(jacobians, axis=1)
-
-
-def flatten(parameter):
-    return tf.reshape(parameter, [tf.size(parameter)])
 
 
 class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
@@ -146,12 +142,12 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
         param_vector = tf.concat([flatten(param) for param in params], axis=0)
 
         J = compute_jacobian(se_for_each_sample, params)
-        J_T = np.transpose(J)
+        J_T = tf.transpose(J)
         n_params = J.shape[1]
 
         updated_params = param_vector - tf.matrix_solve(
-            tf.matmul(J_T, J) + new_mu * tf.eye(n_params),
-            tf.matmul(J_T, se_for_each_sample)
+            tf.matmul(J_T, J) + new_mu * tf.eye(n_params.value),
+            tf.matmul(J_T, tf.expand_dims(se_for_each_sample, 1))
         )
 
         updates = [(mu, new_mu)]

@@ -297,3 +297,20 @@ def tensorflow_eval(value):
 
 def flatten(value):
     return tf.reshape(value, [-1])
+
+
+def outer(a, b):
+    a = tf.expand_dims(a, 1)
+    b = tf.expand_dims(b, 0)
+    return tf.matmul(a, b)
+
+
+def dot(a, b):
+    return tf.tensordot(a, b, 1)
+
+
+def get_variable_size(variable):
+    size = 1
+    for dimension in variable.shape:
+        size *= int(dimension)
+    return size

@@ -147,8 +147,8 @@ class Normal(Initializer):
         return np.random.normal(loc=self.mean, scale=self.std, size=shape)
 
     def __repr__(self):
-        return '{}(mean={}, std={})'.format(classname(self),
-                                            self.mean, self.std)
+        return '{}(mean={}, std={})'.format(
+            classname(self), self.mean, self.std)
 
 
 class Uniform(Initializer):
