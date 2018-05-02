@@ -37,7 +37,7 @@ class RPROPTestCase(BaseTestCase):
             (simple_input_train, simple_target_train),
             # Network configurations
             connection=self.connection,
-            step=1,
+            step=0.1,
             shuffle_data=True,
             verbose=False,
             # Test configurations

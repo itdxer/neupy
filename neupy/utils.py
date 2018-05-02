@@ -277,7 +277,10 @@ def all_equal(array):
 
 def tensorflow_session():
     if hasattr(tensorflow_session, 'cache'):
-        return tensorflow_session.cache
+        session = tensorflow_session.cache
+
+        if not session._closed:
+            return session
 
     config = tf.ConfigProto(
         allow_soft_placement=True,

@@ -41,9 +41,7 @@ def find_hessian_and_gradient(error_function, parameters):
 
         return (index + 1, result.write(index, hessian))
 
-    # import ipdb; ipdb.set_trace()
-
-    _, jacobian = tf.while_loop(
+    _, hessian = tf.while_loop(
         lambda index, _: index < n_samples,
         compute_gradient_per_value,
         [
@@ -52,7 +50,7 @@ def find_hessian_and_gradient(error_function, parameters):
         ]
     )
 
-    return jacobian.stack(), full_gradient
+    return hessian.stack(), full_gradient
 
 
 class Hessian(StepSelectionBuiltIn, GradientDescent):
@@ -120,18 +118,14 @@ class Hessian(StepSelectionBuiltIn, GradientDescent):
         param_vector = tf.concat(
             [flatten(param) for param in parameters], axis=0)
 
-        # import ipdb; ipdb.set_trace()
         hessian_matrix, full_gradient = find_hessian_and_gradient(
             self.variables.error_func, parameters
         )
-
-        # import ipdb; ipdb.set_trace()
-
-        solution = tf.matrix_solve(
+        parameter_update = tf.matrix_solve(
             hessian_matrix + penalty_const * tf.eye(n_parameters),
             tf.reshape(full_gradient, [-1, 1])
         )
-        updated_parameters = param_vector - flatten(solution)
+        updated_parameters = param_vector - flatten(parameter_update)
         updates = setup_parameter_updates(parameters, updated_parameters)
 
         return updates

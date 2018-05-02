@@ -146,11 +146,11 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
         J_T = tf.transpose(J)
         n_params = J.shape[1]
 
-        solution = tf.matrix_solve(
+        parameter_update = tf.matrix_solve(
             tf.matmul(J_T, J) + new_mu * tf.eye(n_params.value),
             tf.matmul(J_T, tf.expand_dims(err_for_each_sample, 1))
         )
-        updated_params = param_vector - flatten(solution)
+        updated_params = param_vector - flatten(parameter_update)
 
         updates = [(mu, new_mu)]
         parameter_updates = setup_parameter_updates(params, updated_params)

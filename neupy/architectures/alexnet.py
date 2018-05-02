@@ -92,11 +92,11 @@ def alexnet():
 
         [[
             SliceChannels(0, 48),
-            layers.Convolution((128, 5, 5), padding=2, name='conv_2_1'),
+            layers.Convolution((128, 5, 5), padding='VALID', name='conv_2_1'),
             layers.Relu(),
         ], [
             SliceChannels(48, 96),
-            layers.Convolution((128, 5, 5), padding=2, name='conv_2_2'),
+            layers.Convolution((128, 5, 5), padding='VALID', name='conv_2_2'),
             layers.Relu(),
         ]],
         layers.Concatenate(),
@@ -104,27 +104,27 @@ def alexnet():
         layers.MaxPooling((3, 3), stride=(2, 2)),
         layers.LocalResponseNorm(),
 
-        layers.Convolution((384, 3, 3), padding=1, name='conv_3'),
+        layers.Convolution((384, 3, 3), padding='VALID', name='conv_3'),
         layers.Relu(),
 
         [[
             SliceChannels(0, 192),
-            layers.Convolution((192, 3, 3), padding=1, name='conv_4_1'),
+            layers.Convolution((192, 3, 3), padding='VALID', name='conv_4_1'),
             layers.Relu(),
         ], [
             SliceChannels(192, 384),
-            layers.Convolution((192, 3, 3), padding=1, name='conv_4_2'),
+            layers.Convolution((192, 3, 3), padding='VALID', name='conv_4_2'),
             layers.Relu(),
         ]],
         layers.Concatenate(),
 
         [[
             SliceChannels(0, 192),
-            layers.Convolution((128, 3, 3), padding=1, name='conv_5_1'),
+            layers.Convolution((128, 3, 3), padding='VALID', name='conv_5_1'),
             layers.Relu(),
         ], [
             SliceChannels(192, 384),
-            layers.Convolution((128, 3, 3), padding=1, name='conv_5_2'),
+            layers.Convolution((128, 3, 3), padding='VALID', name='conv_5_2'),
             layers.Relu(),
         ]],
         layers.Concatenate(),
