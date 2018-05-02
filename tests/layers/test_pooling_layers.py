@@ -12,8 +12,6 @@ from base import BaseTestCase
 
 
 class PoolingLayersTestCase(BaseTestCase):
-    use_sandbox_mode = False
-
     def test_pooling_output_shape(self):
         otuput_shape = pooling_output_shape(None, None, None, None)
         self.assertEqual(otuput_shape, None)

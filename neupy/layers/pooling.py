@@ -69,11 +69,6 @@ class BasePooling(BaseLayer):
         the images, pad_h is the size of the top and bottom margins,
         and pad_w is the size of the left and right margins.
 
-    ignore_border : bool
-        When ``True``, ``(5, 5)`` input with size ``(2, 2)``
-        will generate a `(2, 2)` output. ``(3, 3)`` otherwise.
-        Defaults to ``True``.
-
     {BaseLayer.Parameters}
 
     Methods

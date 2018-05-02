@@ -36,10 +36,6 @@ class MaxNormRegularizationTestCase(BaseTestCase):
 
     def test_max_norm_regularizer(self):
         def on_epoch_end(network):
-            if network.last_epoch % 10 != 0:
-                # Validate only every 10 iterations
-                return
-
             layer = network.layers[1]
 
             weight = self.eval(layer.weight)

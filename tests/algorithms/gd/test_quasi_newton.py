@@ -12,8 +12,6 @@ from base import BaseTestCase
 
 
 class QuasiNewtonTestCase(BaseTestCase):
-    use_sandbox_mode = True
-
     def test_exceptions(self):
         with self.assertRaises(ValueError):
             # Don't have learning rate

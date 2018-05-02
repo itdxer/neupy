@@ -16,7 +16,6 @@ from utils import vectors_for_testing
 class BaseTestCase(unittest.TestCase):
     verbose = False
     random_seed = 0
-    use_sandbox_mode = True
 
     def eval(self, value):
         sess = tensorflow_session()
@@ -24,18 +23,19 @@ class BaseTestCase(unittest.TestCase):
         return sess.run(value)
 
     def setUp(self):
+        tf.reset_default_graph()
+
         environment.reproducible(seed=self.random_seed)
 
         if not self.verbose:
             logging.disable(logging.CRITICAL)
 
-        if self.use_sandbox_mode:
-            # Optimize unit tests speed. In general all task very
-            # simple so some Theano optimizations can be redundant.
-            environment.sandbox()
-
         # Clean identifiers map for each test
         layers.BaseLayer.global_identifiers_map = {}
+
+    def tearDown(self):
+        sess = tensorflow_session()
+        sess.close()
 
     def assertItemsEqual(self, list1, list2):
         self.assertEqual(sorted(list1), sorted(list2))

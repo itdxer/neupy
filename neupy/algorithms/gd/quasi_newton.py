@@ -14,52 +14,55 @@ __all__ = ('QuasiNewton',)
 
 
 def bfgs(inverse_hessian, weight_delta, gradient_delta, maxrho=1e4):
-    ident_matrix = tf.eye(int(inverse_hessian.shape[0]))
-    rho = asfloat(1.) / dot(gradient_delta, weight_delta)
+    with tf.name_scope('bfgs'):
+        ident_matrix = tf.eye(int(inverse_hessian.shape[0]))
+        rho = asfloat(1.) / dot(gradient_delta, weight_delta)
 
-    rho = tf.where(
-        tf.is_inf(rho),
-        maxrho * tf.sign(rho),
-        rho,
-    )
+        rho = tf.where(
+            tf.is_inf(rho),
+            maxrho * tf.sign(rho),
+            rho,
+        )
 
-    param1 = ident_matrix - outer(weight_delta, gradient_delta) * rho
-    param2 = ident_matrix - outer(gradient_delta, weight_delta) * rho
-    param3 = rho * outer(weight_delta, weight_delta)
+        param1 = ident_matrix - outer(weight_delta, gradient_delta) * rho
+        param2 = ident_matrix - outer(gradient_delta, weight_delta) * rho
+        param3 = rho * outer(weight_delta, weight_delta)
 
-    return dot(param1, tf.matmul(inverse_hessian, param2)) + param3
+        return dot(param1, tf.matmul(inverse_hessian, param2)) + param3
 
 
 def dfp(inverse_hessian, weight_delta, gradient_delta, maxnum=1e5):
-    quasi_dot_gradient = dot(inverse_hessian, gradient_delta)
+    with tf.name_scope('dfp'):
+        quasi_dot_gradient = dot(inverse_hessian, gradient_delta)
 
-    param1 = (
-        outer(weight_delta, weight_delta)
-    ) / (
-        dot(gradient_delta, weight_delta)
-    )
-    param2_numerator = tf.clip_by_value(
-        outer(quasi_dot_gradient, gradient_delta) * inverse_hessian,
-        -maxnum, maxnum
-    )
-    param2_denominator = dot(gradient_delta, quasi_dot_gradient)
-    param2 = param2_numerator / param2_denominator
+        param1 = (
+            outer(weight_delta, weight_delta)
+        ) / (
+            dot(gradient_delta, weight_delta)
+        )
+        param2_numerator = tf.clip_by_value(
+            outer(quasi_dot_gradient, gradient_delta) * inverse_hessian,
+            -maxnum, maxnum
+        )
+        param2_denominator = dot(gradient_delta, quasi_dot_gradient)
+        param2 = param2_numerator / param2_denominator
 
-    return inverse_hessian + param1 - param2
+        return inverse_hessian + param1 - param2
 
 
 def psb(inverse_hessian, weight_delta, gradient_delta, **options):
-    gradient_delta_t = tf.transpose(gradient_delta)
-    param = weight_delta - dot(inverse_hessian, gradient_delta)
+    with tf.name_scope('psb'):
+        gradient_delta_t = tf.transpose(gradient_delta)
+        param = weight_delta - dot(inverse_hessian, gradient_delta)
 
-    devider = 1. / dot(gradient_delta, gradient_delta)
-    param1 = outer(param, gradient_delta) + outer(gradient_delta, param)
-    param2 = (
-        dot(gradient_delta, param) *
-        outer(gradient_delta, gradient_delta_t)
-    )
+        devider = 1. / dot(gradient_delta, gradient_delta)
+        param1 = outer(param, gradient_delta) + outer(gradient_delta, param)
+        param2 = (
+            dot(gradient_delta, param) *
+            outer(gradient_delta, gradient_delta_t)
+        )
 
-    return inverse_hessian + param1 * devider - param2 * devider ** 2
+        return inverse_hessian + param1 * devider - param2 * devider ** 2
 
 
 def sr1(inverse_hessian, weight_delta, gradient_delta, epsilon=1e-8):
@@ -69,18 +72,22 @@ def sr1(inverse_hessian, weight_delta, gradient_delta, epsilon=1e-8):
     rank 1 updates for the matrix and in this case update won't be applied
     and original inverse hessian will be returned.
     """
-    epsilon = asfloat(epsilon)
-    param = weight_delta - dot(inverse_hessian, gradient_delta)
-    denominator = dot(param, gradient_delta)
+    with tf.name_scope('sr1'):
+        epsilon = asfloat(epsilon)
+        param = weight_delta - dot(inverse_hessian, gradient_delta)
+        denominator = dot(param, gradient_delta)
 
-    return tf.where(
-        tf.less(
-            tf.abs(denominator),
-            epsilon * tf.norm(param) * tf.norm(gradient_delta)
-        ),
-        inverse_hessian,
-        inverse_hessian + outer(param, param) / denominator
-    )
+        return tf.where(
+            # This check protects from the cases when update
+            # doesn't exist. It's possible that during certain
+            # iteration there is no rank-1 update for the matrix.
+            tf.less(
+                tf.abs(denominator),
+                epsilon * tf.norm(param) * tf.norm(gradient_delta)
+            ),
+            inverse_hessian,
+            inverse_hessian + outer(param, param) / denominator
+        )
 
 
 class QuasiNewton(StepSelectionBuiltIn, GradientDescent):

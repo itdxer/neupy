@@ -12,8 +12,6 @@ class Resnet50TestCase(BaseTestCase):
         self.assertEqual(resnet50.input_shape, (3, 224, 224))
         self.assertEqual(resnet50.output_shape, (1000,))
 
-        resnet50_predict = resnet50.compile()
-
         random_input = asfloat(np.random.random((7, 3, 224, 224)))
-        prediction = resnet50_predict(random_input)
+        prediction = self.eval(resnet50.output(random_input))
         self.assertEqual(prediction.shape, (7, 1000))

@@ -9,8 +9,6 @@ from base import BaseTestCase
 
 
 class HessianDiagonalTestCase(BaseTestCase):
-    use_sandbox_mode = False
-
     def test_hessdiag(self):
         x_train, x_test, y_train, y_test = simple_classification()
         nw = algorithms.HessianDiagonal(

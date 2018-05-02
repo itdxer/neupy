@@ -8,24 +8,25 @@ from base import BaseTestCase
 
 
 class BackPropAlgsTestCase(BaseTestCase):
-    bp_algorithms = [
-        algorithms.GradientDescent,
-        algorithms.MinibatchGradientDescent,
-        algorithms.ConjugateGradient,
-        algorithms.HessianDiagonal,
-        algorithms.Hessian,
-        algorithms.LevenbergMarquardt,
-        algorithms.Momentum,
-        algorithms.Quickprop,
-        algorithms.QuasiNewton,
-        algorithms.RPROP,
-        algorithms.IRPROPPlus,
-        algorithms.Adadelta,
-        algorithms.Adagrad,
-        algorithms.Adam,
-        algorithms.Adamax,
-        algorithms.RMSProp,
-    ]
+    def setUp(self):
+        self.bp_algorithms = [
+            algorithms.GradientDescent,
+            algorithms.MinibatchGradientDescent,
+            algorithms.ConjugateGradient,
+            algorithms.HessianDiagonal,
+            algorithms.Hessian,
+            algorithms.LevenbergMarquardt,
+            algorithms.Momentum,
+            algorithms.Quickprop,
+            algorithms.QuasiNewton,
+            algorithms.RPROP,
+            algorithms.IRPROPPlus,
+            algorithms.Adadelta,
+            algorithms.Adagrad,
+            algorithms.Adam,
+            algorithms.Adamax,
+            algorithms.RMSProp,
+        ]
 
     def test_gd_train_data(self):
         for bp_algorithm_class in self.bp_algorithms:

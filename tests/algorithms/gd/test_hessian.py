@@ -13,10 +13,6 @@ from base import BaseTestCase
 
 
 class HessianTestCase(BaseTestCase):
-    # In case of Hessian this solution will give
-    # significant improvement.
-    use_sandbox_mode = False
-
     def test_hessian_exceptions(self):
         with self.assertRaises(ValueError):
             # Don't have step parameter

@@ -8,10 +8,6 @@ import tensorflow as tf
 from neupy.utils import asfloat
 
 
-one = tf.constant(asfloat(1))
-zero = tf.constant(asfloat(0))
-
-
 def sequential_or(*conditions):
     """
     Use ``or`` operator between all conditions. Function is just
@@ -111,7 +107,7 @@ def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
             )
         )
         condition2 = tf.abs(y_deriv_current) <= -c2 * y_deriv_0
-        condition3 = y_deriv_current >= zero
+        condition3 = y_deriv_current >= 0
 
         x_star = tf.where(
             condition1,
@@ -158,6 +154,9 @@ def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
             x_current, x_new, y_current, y_current_new,
             y_deriv_previous_new, iteration + 1, x_star
         ]
+
+    one = tf.constant(asfloat(1))
+    zero = tf.constant(asfloat(0))
 
     x0, x1 = zero, one
     y0, y1 = f(x0), f(x1)
@@ -221,7 +220,7 @@ def quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, bound_size_ratio=0.1):
         sequential_or(
             # Handle bad cases
             tf.equal(x_range, 0),
-            coef <= zero,
+            coef <= 0,
 
             tf.is_nan(minimizer),
             tf.greater(minimizer, x_b - bound_size_ratio * x_range),
@@ -306,7 +305,7 @@ def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c,
     return tf.where(
         sequential_or(
             # Handle bad cases
-            radical < zero,
+            radical < 0,
 
             tf.equal(x_a, x_b),
             tf.equal(x_a, x_c),
@@ -389,7 +388,7 @@ def zoom(x_low, x_high, y_low, y_high, y_deriv_low,
             y_new > (y0 + c1 * x_new * y_deriv_0),
             y_new >= y_low
         )
-        condition2 = y_deriv_new * (x_high - x_low) >= zero
+        condition2 = y_deriv_new * (x_high - x_low) >= 0
 
         x_recent = tf.where(tf.logical_or(condition1, condition2), x_high, x_low)
         y_recent = tf.where(tf.logical_or(condition1, condition2), y_high, y_low)
@@ -410,6 +409,7 @@ def zoom(x_low, x_high, y_low, y_high, y_deriv_low,
             x_star
         ]
 
+    zero = tf.constant(asfloat(0))
     x_recent = zero
     y_recent = y0
 
