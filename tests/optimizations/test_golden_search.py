@@ -1,4 +1,4 @@
-import theano.tensor as T
+import tensorflow as tf
 
 from neupy.optimizations.golden_search import fmin_golden_search
 
@@ -26,13 +26,13 @@ class GoldenSearchTestCase(BaseTestCase):
 
     def test_golden_search_function(self):
         def f(x):
-            return T.sin(x) * x ** -0.5
+            return tf.sin(x) * x ** -0.5
 
         def check_updates(step):
             return f(3 + step)
 
         best_step = fmin_golden_search(check_updates)
-        self.assertAlmostEqual(1.6, best_step.eval(), places=2)
+        self.assertAlmostEqual(1.6, self.eval(best_step), places=2)
 
         best_step = fmin_golden_search(check_updates, maxstep=1)
-        self.assertAlmostEqual(1, best_step.eval(), places=2)
+        self.assertAlmostEqual(1, self.eval(best_step), places=2)
