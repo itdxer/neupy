@@ -9,6 +9,7 @@ from base import BaseTestCase
 
 class BackPropAlgsTestCase(BaseTestCase):
     def setUp(self):
+        super(BackPropAlgsTestCase, self).setUp()
         self.bp_algorithms = [
             algorithms.GradientDescent,
             algorithms.MinibatchGradientDescent,

@@ -1,7 +1,10 @@
 import pandas as pd
 from sklearn import datasets, preprocessing
 from sklearn.model_selection import train_test_split
-from neupy import algorithms, layers, estimators
+
+from neupy import algorithms, layers
+from neupy.utils import asfloat
+from neupy.algorithms.gd import errors
 
 from base import BaseTestCase
 
@@ -24,8 +27,8 @@ class PandasCompatibilityTestCase(BaseTestCase):
         )
 
         x_train, x_test, y_train, y_test = train_test_split(
-            pandas_data[input_columns],
-            pandas_data['target'],
+            asfloat(pandas_data[input_columns]),
+            asfloat(pandas_data['target']),
             test_size=0.15
         )
 
@@ -41,8 +44,9 @@ class PandasCompatibilityTestCase(BaseTestCase):
         y_predict = bpnet.predict(x_test).reshape(-1, 1)
         y_test = y_test.reshape(-1, 1)
 
-        error = estimators.rmsle(
+        error = errors.rmsle(
             target_scaler.inverse_transform(y_test),
             target_scaler.inverse_transform(y_predict).round()
         )
+        error = self.eval(error)
         self.assertAlmostEqual(0.48, error, places=2)

@@ -2,8 +2,10 @@ import numpy as np
 from sklearn import datasets, preprocessing, metrics, model_selection
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
+
 from neupy import algorithms, layers
-from neupy.estimators import rmsle
+from neupy.utils import asfloat
+from neupy.algorithms.gd import errors
 
 from base import BaseTestCase
 
@@ -15,8 +17,8 @@ class SklearnCompatibilityTestCase(BaseTestCase):
         target = dataset.target.reshape(-1, 1)
 
         x_train, x_test, y_train, y_test = train_test_split(
-            dataset.data,
-            target_scaler.fit_transform(target),
+            asfloat(dataset.data),
+            asfloat(target_scaler.fit_transform(target)),
             test_size=0.15
         )
 
@@ -36,37 +38,18 @@ class SklearnCompatibilityTestCase(BaseTestCase):
         pipeline.fit(x_train, y_train, gd__epochs=50)
         y_predict = pipeline.predict(x_test)
 
-        error = rmsle(target_scaler.inverse_transform(y_test),
-                      target_scaler.inverse_transform(y_predict).round())
-        self.assertAlmostEqual(0.48, error, places=2)
-
-    def test_ensemble(self):
-        data, target = datasets.make_classification(300, n_features=4,
-                                                    n_classes=2)
-        x_train, x_test, y_train, y_test = train_test_split(
-            data, target, test_size=0.3
+        error = errors.rmsle(
+            target_scaler.inverse_transform(y_test),
+            target_scaler.inverse_transform(y_predict).round()
         )
-
-        dan = algorithms.DynamicallyAveragedNetwork([
-            algorithms.RPROP((4, 5, 1), step=0.1, maxstep=1),
-            algorithms.GradientDescent((4, 5, 1), step=0.1),
-            algorithms.ConjugateGradient((4, 5, 1), step=0.01),
-        ])
-
-        pipeline = Pipeline([
-            ('min_max_scaler', preprocessing.StandardScaler()),
-            ('dan', dan),
-        ])
-        pipeline.fit(x_train, y_train, dan__epochs=100)
-
-        result = pipeline.predict(x_test)
-        ensemble_result = metrics.accuracy_score(y_test, result)
-        self.assertAlmostEqual(0.9444, ensemble_result, places=4)
+        error = self.eval(error)
+        self.assertAlmostEqual(0.48, error, places=2)
 
     def test_grid_search(self):
         def scorer(network, X, y):
-            result = network.predict(X)
-            return rmsle(result[:, 0], y)
+            y = asfloat(y)
+            result = asfloat(network.predict(X))
+            return self.eval(errors.rmsle(result[:, 0], y))
 
         dataset = datasets.load_diabetes()
         x_train, x_test, y_train, y_test = train_test_split(

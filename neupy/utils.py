@@ -11,7 +11,7 @@ from scipy.sparse import issparse
 
 
 __all__ = ('format_data', 'asfloat', 'AttributeKeyDict', 'preformat_value',
-           'as_tuple', 'asint', 'number_type', 'theano_random_stream',
+           'as_tuple', 'number_type', 'theano_random_stream',
            'all_equal', 'tensorflow_session', 'tensorflow_eval')
 
 
@@ -104,46 +104,6 @@ def asfloat(value):
 
     float_x_type = np.cast[float_type]
     return float_x_type(value)
-
-
-def asint(value):
-    """
-    Convert variable to an integer type. Number of bits per
-    integer depend on floatX Theano variable.
-
-    Parameters
-    ----------
-    value : matrix, ndarray, Theano variable or scalar
-        Value that could be converted to the integer type.
-
-    Returns
-    -------
-    matrix, ndarray, Theano variable or scalar
-        Output would be input value converted to the integer type.
-    """
-    int2float_types = {
-        'float16': 'int16',
-        'float32': 'int32',
-        'float64': 'int64',
-    }
-
-    float_type = theano.config.floatX
-    int_type = int2float_types[float_type]
-
-    if isinstance(value, (np.matrix, np.ndarray)):
-        if value.dtype != np.dtype(int_type):
-            return value.astype(int_type)
-        else:
-            return value
-
-    elif isinstance(value, (TensorVariable, TensorSharedVariable)):
-        return T.cast(value, int_type)
-
-    elif issparse(value):
-        return value
-
-    int_x_type = np.cast[int_type]
-    return int_x_type(value)
 
 
 class AttributeKeyDict(dict):
