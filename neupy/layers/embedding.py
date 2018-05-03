@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 from neupy import init
-from neupy.utils import as_tuple, asint
+from neupy.utils import as_tuple
 from neupy.core.properties import IntProperty, ParameterProperty
 from .base import BaseLayer
 
@@ -99,7 +99,8 @@ class Embedding(BaseLayer):
             trainable=True)
 
     def output(self, input_value):
-        return tf.gather(self.weight, asint(input_value))
+        input_value = tf.cast(input_value, tf.int32)
+        return tf.gather(self.weight, input_value)
 
     def __repr__(self):
         classname = self.__class__.__name__
