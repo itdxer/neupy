@@ -12,8 +12,6 @@ class VGG19TestCase(BaseTestCase):
         self.assertEqual(vgg19.input_shape, (3, 224, 224))
         self.assertEqual(vgg19.output_shape, (1000,))
 
-        vgg19_predict = vgg19.compile()
-
         random_input = asfloat(np.random.random((7, 3, 224, 224)))
-        prediction = vgg19_predict(random_input)
+        prediction = self.eval(vgg19.output(random_input))
         self.assertEqual(prediction.shape, (7, 1000))

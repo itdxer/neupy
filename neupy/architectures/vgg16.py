@@ -41,7 +41,7 @@ def vgg16():
     Very Deep Convolutional Networks for Large-Scale Image Recognition.
     https://arxiv.org/abs/1409.1556
     """
-    HalfPadConvolution = partial(layers.Convolution, padding='half')
+    HalfPadConvolution = partial(layers.Convolution, padding='SAME')
 
     return layers.join(
         layers.Input((3, 224, 224)),

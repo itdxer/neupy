@@ -31,7 +31,7 @@ def ResidualUnit(n_input_filters, n_output_filters, stride,
         # extract features.
         layers.Convolution(
             (n_input_filters, 3, 3),
-            padding=1,
+            padding='SAME',
             bias=None,
             name=conv_name('2b'),
         ),
@@ -117,15 +117,17 @@ def resnet50():
         # Convolutional layer reduces image's height and width by a factor
         # of 2 (because of the stride)
         # from (3, 224, 224) to (64, 112, 112)
-        layers.Convolution((64, 7, 7), stride=2, padding=3, name='conv1'),
+        layers.Convolution((64, 7, 7), stride=2,
+                           padding='SAME', name='conv1'),
+
         layers.BatchNorm(name='bn_conv1'),
         layers.Relu(),
 
         # Stride equal two 2 reduces image size by a factor of two
         # from (64, 112, 112) to (64, 56, 56)
-        layers.MaxPooling((3, 3), stride=2, ignore_border=False),
+        layers.MaxPooling((3, 3), stride=2, padding="SAME"),
 
-        # The branch option applies extra convolution + batch
+        # The branch option applies extrax convolution x+ batch
         # normalization transforamtions to the residual
         ResidualUnit(64, 256, stride=1, name='2a', has_branch=True),
         ResidualUnit(64, 256, stride=1, name='2b'),
