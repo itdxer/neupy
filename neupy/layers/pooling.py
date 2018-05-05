@@ -372,8 +372,10 @@ class GlobalPooling(BaseLayer):
             return as_tuple(self.input_shape[0])
 
     def output(self, input_value):
-        if input_value.ndim in (1, 2):
+        ndims = len(input_value.shape)
+
+        if ndims in (1, 2):
             return input_value
 
-        agg_axis = range(2, input_value.ndim)
+        agg_axis = range(2, ndims)
         return self.function(input_value, axis=list(agg_axis))

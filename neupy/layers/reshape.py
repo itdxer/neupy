@@ -88,6 +88,7 @@ class Reshape(BaseLayer):
         ----------
         input_value : array-like or Theano variable
         """
-        n_samples = input_value.shape[0]
+        input_shape = tf.shape(input_value)
+        n_samples = input_shape[0]
         output_shape = as_tuple(n_samples, self.output_shape)
         return tf.reshape(input_value, output_shape)
