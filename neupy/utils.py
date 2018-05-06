@@ -255,6 +255,7 @@ def tensorflow_session():
 
 def tensorflow_eval(value):
     session = tensorflow_session()
+    initialize_uninitialized_variables()
     return session.run(value)
 
 
@@ -277,3 +278,16 @@ def get_variable_size(variable):
     for dimension in variable.shape:
         size *= int(dimension)
     return size
+
+
+def initialize_uninitialized_variables():
+    session = tensorflow_session()
+    global_vars = tf.global_variables()
+    is_not_initialized = session.run([
+        tf.is_variable_initialized(var) for var in global_vars])
+
+    not_initialized_vars = [
+        v for (v, f) in zip(global_vars, is_not_initialized) if not f]
+
+    if len(not_initialized_vars):
+        session.run(tf.variables_initializer(not_initialized_vars))

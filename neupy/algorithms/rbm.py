@@ -4,12 +4,16 @@ import tensorflow as tf
 from neupy.core.config import ConfigurableABC
 from neupy.core.properties import IntProperty, ParameterProperty
 from neupy.algorithms.base import BaseNetwork
-from neupy.algorithms.constructor import (BaseAlgorithm, function,
-                                          initialize_uninitialized_variables)
-from neupy.algorithms.gd.base import (MinibatchTrainingMixin,
-                                      average_batch_errors)
+from neupy.algorithms.constructor import BaseAlgorithm, function
+from neupy.algorithms.gd.base import (
+    MinibatchTrainingMixin,
+    average_batch_errors
+)
 from neupy.layers.base import create_shared_parameter
-from neupy.utils import asfloat, format_data, dot
+from neupy.utils import (
+    asfloat, format_data, dot,
+    initialize_uninitialized_variables
+)
 from neupy import init
 
 

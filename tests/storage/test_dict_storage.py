@@ -29,8 +29,7 @@ class DictStorageTestCase(BaseTestCase):
         expected_keys = ('metadata', 'layers', 'graph')
         self.assertItemsEqual(expected_keys, dict_connection.keys())
 
-        expected_metadata_keys = ('created', 'language', 'library',
-                                  'version', 'theano_float')
+        expected_metadata_keys = ('created', 'language', 'library', 'version')
         actual_metadata_keys = dict_connection['metadata'].keys()
         self.assertItemsEqual(expected_metadata_keys, actual_metadata_keys)
 
@@ -118,8 +117,8 @@ class DictStorageTestCase(BaseTestCase):
             }]
         })
 
-        np.testing.assert_array_almost_equal(weight, relu.weight.get_value())
-        np.testing.assert_array_almost_equal(bias, relu.bias.get_value())
+        np.testing.assert_array_almost_equal(weight, self.eval(relu.weight))
+        np.testing.assert_array_almost_equal(bias, self.eval(relu.bias))
 
     def test_storage_load_dict_using_wrong_names(self):
         connection = layers.join(
@@ -167,16 +166,16 @@ class DictStorageTestCase(BaseTestCase):
         }, load_by='order')
 
         relu = connection.layer('relu')
-        self.assertEqual(12, np.sum(relu.weight.get_value()))
-        self.assertEqual(4, np.sum(relu.bias.get_value()))
+        self.assertEqual(12, np.sum(self.eval(relu.weight)))
+        self.assertEqual(4, np.sum(self.eval(relu.bias)))
 
         linear = connection.layer('linear')
-        self.assertEqual(20, np.sum(linear.weight.get_value()))
-        self.assertEqual(5, np.sum(linear.bias.get_value()))
+        self.assertEqual(20, np.sum(self.eval(linear.weight)))
+        self.assertEqual(5, np.sum(self.eval(linear.bias)))
 
         softmax = connection.layer('softmax')
-        self.assertEqual(30, np.sum(softmax.weight.get_value()))
-        self.assertEqual(6, np.sum(softmax.bias.get_value()))
+        self.assertEqual(30, np.sum(self.eval(softmax.weight)))
+        self.assertEqual(6, np.sum(self.eval(softmax.bias)))
 
     def test_storage_load_dict_invalid_number_of_paramters(self):
         connection = layers.join(
@@ -388,13 +387,10 @@ class TransferLearningTestCase(BaseTestCase):
             load_by='names_or_order',
             ignore_missed=True)
 
-        pretrained_predictor = network_pretrained.end('relu-2').compile()
-        new_network_predictor = network_new.compile()
-
         random_input = asfloat(np.random.random((12, 10)))
-
-        pretrained_output = pretrained_predictor(random_input)
-        new_network_output = new_network_predictor(random_input)
+        new_network_output = self.eval(network_new.output(random_input))
+        pretrained_output = self.eval(
+            network_pretrained.end('relu-2').output(random_input))
 
         np.testing.assert_array_almost_equal(
             pretrained_output, new_network_output)
@@ -420,17 +416,15 @@ class TransferLearningTestCase(BaseTestCase):
             load_by='names',
             ignore_missed=True)
 
-        pretrained_predictor = network_pretrained.end('relu-2').compile()
-        new_network_predictor = network_new.end('relu-2').compile()
-
         random_input = asfloat(np.random.random((12, 10)))
 
-        pretrained_output = pretrained_predictor(random_input)
-        new_network_output = new_network_predictor(random_input)
+        pretrained_output = self.eval(
+            network_pretrained.end('relu-2').output(random_input))
+        new_network_output = self.eval(
+            network_new.end('relu-2').output(random_input))
 
         np.testing.assert_array_almost_equal(
             pretrained_output, new_network_output)
 
-        new_full_network_predictor = network_new.compile()
-        pred = new_full_network_predictor(random_input)
+        pred = self.eval(network_new.output(random_input))
         self.assertEqual(pred.shape, (12, 8))

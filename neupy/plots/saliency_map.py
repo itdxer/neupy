@@ -1,11 +1,9 @@
-import theano
-import theano.tensor as T
 import numpy as np
+import tensorflow as tf
 import matplotlib.pyplot as plt
 from scipy.ndimage.filters import gaussian_filter
 
 from neupy.exceptions import InvalidConnection
-from neupy.layers.utils import create_input_variable
 
 
 __all__ = ('saliency_map', 'compile_saliency_map')
@@ -19,8 +17,10 @@ def compile_saliency_map(connection):
     ----------
     connection : connection
     """
-    x = create_input_variable(connection.input_shape,
-                              name='plots:saliency-map/var:input')
+    x = tf.placeholder(
+        connection.input_shape,
+        name='plots:saliency-map/var:input',
+        dtype=tf.float32)
 
     with connection.disable_training_state():
         prediction = connection.output(x)

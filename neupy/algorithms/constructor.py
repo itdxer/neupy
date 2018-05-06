@@ -12,8 +12,10 @@ from neupy.layers.connections import LayerConnection, is_sequential
 from neupy.exceptions import InvalidConnection
 from neupy.core.properties import ChoiceProperty
 from neupy.algorithms.base import BaseNetwork
-from neupy.utils import (AttributeKeyDict, asfloat, format_data, as_tuple,
-                         tensorflow_session)
+from neupy.utils import (
+    AttributeKeyDict, asfloat, format_data, as_tuple,
+    tensorflow_session, initialize_uninitialized_variables
+)
 from .gd import errors
 
 
@@ -234,19 +236,6 @@ def function(inputs, outputs, updates=None, name=None):
         )
         return result
     return wrapper
-
-
-def initialize_uninitialized_variables():
-    session = tensorflow_session()
-    global_vars = tf.global_variables()
-    is_not_initialized = session.run([
-        tf.is_variable_initialized(var) for var in global_vars])
-
-    not_initialized_vars = [
-        v for (v, f) in zip(global_vars, is_not_initialized) if not f]
-
-    if len(not_initialized_vars):
-        session.run(tf.variables_initializer(not_initialized_vars))
 
 
 class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):

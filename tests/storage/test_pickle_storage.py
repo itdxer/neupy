@@ -32,25 +32,22 @@ class LayerStoragePickleTestCase(BaseTestCase):
             layers.Sigmoid(5),
             layers.Sigmoid(2),
         )
-        predict_1 = connection_1.compile()
-
         connection_2 = layers.join(
             layers.Input(10),
             layers.Sigmoid(5),
             layers.Sigmoid(2),
         )
-        predict_2 = connection_2.compile()
 
         random_input = asfloat(np.random.random((13, 10)))
-        random_output_1 = predict_1(random_input)
-        random_output_2_1 = predict_2(random_input)
+        random_output_1 = self.eval(connection_1.output(random_input))
+        random_output_2_1 = self.eval(connection_2.output(random_input))
 
         self.assertFalse(np.any(random_output_1 == random_output_2_1))
 
         with tempfile.NamedTemporaryFile() as temp:
             storage.save_pickle(connection_1, temp.name)
             storage.load_pickle(connection_2, temp.name)
-            random_output_2_2 = predict_2(random_input)
+            random_output_2_2 = self.eval(connection_2.output(random_input))
 
             np.testing.assert_array_almost_equal(
                 random_output_1, random_output_2_2)
