@@ -3,32 +3,36 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from scipy.ndimage.filters import gaussian_filter
 
+from neupy.utils import tensorflow_session
 from neupy.exceptions import InvalidConnection
 
 
 __all__ = ('saliency_map', 'compile_saliency_map')
 
 
-def compile_saliency_map(connection):
+def compile_saliency_map(connection, image):
     """
     Compile Theano function that returns saliency map.
 
     Parameters
     ----------
     connection : connection
+    image : ndarray
     """
     x = tf.placeholder(
         connection.input_shape,
         name='plots:saliency-map/var:input',
-        dtype=tf.float32)
+        dtype=tf.float32,
+    )
 
     with connection.disable_training_state():
         prediction = connection.output(x)
 
-    output_class = T.argmax(prediction)
-    saliency = T.grad(T.max(prediction), x)
+    output_class = tf.argmax(prediction)
+    saliency = tf.gradients(tf.reduce_max(prediction), x)
 
-    return theano.function([x], [saliency, output_class])
+    session = tensorflow_session()
+    return session.run([saliency, output_class], feed_dict={x: image})
 
 
 def saliency_map(connection, image, mode='heatmap', sigma=8,
@@ -122,9 +126,7 @@ def saliency_map(connection, image, mode='heatmap', sigma=8,
     if ax is None:
         ax = plt.gca()
 
-    saliency_and_output = compile_saliency_map(connection)
-    saliency, output = saliency_and_output(image)
-
+    saliency, output = compile_saliency_map(connection, image)
     saliency = saliency[0].transpose((1, 2, 0))
     saliency = saliency.max(axis=2)
 
