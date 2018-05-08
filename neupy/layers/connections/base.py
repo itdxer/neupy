@@ -1,4 +1,6 @@
 import copy
+import types
+from functools import wraps
 from itertools import product
 from contextlib import contextmanager
 
@@ -45,6 +47,16 @@ def clean_layer_references(graph, layer_references):
     return layers
 
 
+def check_initialization(method):
+    @wraps(method)
+    def wrapper(*args, **kwargs):
+        self, args = args[0], args[1:]
+        result = method(*args, **kwargs)
+        self.initialized = True
+        return result
+    return wrapper
+
+
 class BaseConnection(InlineConnection):
     """
     Base class from chain connections.
@@ -65,6 +77,12 @@ class BaseConnection(InlineConnection):
         List of connection's output layers.
     """
     def __init__(self):
+        self.initialized = False
+        # Make sure that we save information when connection was
+        # initialized. It will work even if method was reinitialized
+        self.initialize = types.MethodType(
+            check_initialization(self.initialize), self)
+
         self.training_state = True
         self.look_inside = 0
         self.graph = LayerGraph()

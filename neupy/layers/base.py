@@ -69,6 +69,20 @@ def create_shared_parameter(value, name, shape):
     return tf.Variable(asfloat(value), name=name, dtype=tf.float32)
 
 
+def initialize_layer(layer_class, kwargs, was_initialized):
+    """
+    We have a separate method for initialization, becase default
+    __reduce__ functionality requires variables to be specified
+    in order, which neupy doesn't support.
+    """
+    layer = layer_class(**kwargs)
+
+    if was_initialized:
+        layer.initialize()
+
+    return layer
+
+
 class BaseLayer(BaseConnection, Configurable):
     """
     Base class for all layers.
@@ -123,7 +137,6 @@ class BaseLayer(BaseConnection, Configurable):
         self.input_shape_ = None
 
         self.graph.add_layer(self)
-
         Configurable.__init__(self, **options)
 
     def validate(self, input_shape):
@@ -167,6 +180,11 @@ class BaseLayer(BaseConnection, Configurable):
     def __repr__(self):
         classname = self.__class__.__name__
         return '{name}()'.format(name=classname)
+
+    def __reduce__(self):
+        parameters = self.get_params()
+        return (initialize_layer, (
+            self.__class__, parameters, self.initialized))
 
 
 class ResidualConnection(BaseLayer):

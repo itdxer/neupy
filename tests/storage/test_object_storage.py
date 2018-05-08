@@ -6,14 +6,14 @@ import numpy as np
 from sklearn import datasets, preprocessing
 from six.moves import cPickle as pickle
 
-from neupy import algorithms
+from neupy import algorithms, layers, init
 
 from base import BaseTestCase
 from data import simple_classification
 from utils import catch_stdout
 
 
-class StorageTestCase(BaseTestCase):
+class BasicStorageTestCase(BaseTestCase):
     def test_simple_dill_storage(self):
         bpnet = algorithms.GradientDescent((2, 3, 1), step=0.25)
         data, target = datasets.make_regression(n_features=2, n_targets=1)
@@ -114,6 +114,28 @@ class StorageTestCase(BaseTestCase):
                 )
                 # Error must be big, because we didn't normalize data
                 self.assertEqual(real_bpnet_error, restored_bpnet_error)
+
+    def test_non_initialized_graph_storage(self):
+        network = layers.Relu(10) > layers.Relu(2)  # no input layer
+
+        with tempfile.NamedTemporaryFile() as temp:
+            dill.dump(network, temp)
+            temp.file.seek(0)
+
+            network_restored = dill.load(temp)
+
+            self.assertFalse(network_restored.layers[0].initialized)
+            self.assertIsInstance(
+                network_restored.layers[0].weight,
+                init.Initializer,
+            )
+
+            self.assertTrue(network_restored.layers[1].initialized)
+            np.testing.assert_array_equal(
+                self.eval(network.layers[1].weight),
+                self.eval(network_restored.layers[1].weight)
+            )
+
 
     def test_basic_storage(self):
         input_data = np.random.random((100, 2))
