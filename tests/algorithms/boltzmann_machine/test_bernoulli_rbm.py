@@ -65,7 +65,6 @@ class BernoulliRBMTestCase(BaseTestCase):
         # Same as before but for class 1.
         self.assertGreater(typical_class2_sample, incomplete_class2_sample)
 
-    @unittest.skip('Storage is broken now. WIll have to fix it later')
     def test_rbm_storage(self):
         data = self.data
         network = algorithms.RBM(

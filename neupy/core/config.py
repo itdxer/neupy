@@ -16,6 +16,10 @@ __all__ = ('ConfigMeta', 'ConfigABCMeta', 'Configurable', 'ConfigurableABC')
 Option = namedtuple('Option', 'class_name value')
 
 
+def initialize_with_kwargs(class_, kwargs):
+    return class_(**kwargs)
+
+
 class ConfigMeta(SharedDocsMeta):
     """
     Meta-class that configure initialized properties. Also it helps
@@ -103,6 +107,9 @@ class BaseConfigurable(object):
     def set_params(self, **params):
         self.__dict__.update(params)
         return self
+
+    def __reduce__(self):
+        return initialize_with_kwargs, (self.__class__, self.get_params())
 
 
 class Configurable(with_metaclass(ConfigMeta, BaseConfigurable)):
