@@ -119,10 +119,10 @@ class BasicStorageTestCase(BaseTestCase):
         network = layers.Relu(10) > layers.Relu(2)  # no input layer
 
         with tempfile.NamedTemporaryFile() as temp:
-            dill.dump(network, temp)
+            pickle.dump(network, temp)
             temp.file.seek(0)
 
-            network_restored = dill.load(temp)
+            network_restored = pickle.load(temp)
 
             self.assertFalse(network_restored.layers[0].initialized)
             self.assertIsInstance(
