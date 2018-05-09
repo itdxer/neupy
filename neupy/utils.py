@@ -242,11 +242,7 @@ def tensorflow_session():
         if not session._closed:
             return session
 
-    config = tf.ConfigProto(
-        allow_soft_placement=True,
-        intra_op_parallelism_threads=1,
-        inter_op_parallelism_threads=1,
-    )
+    config = tf.ConfigProto(allow_soft_placement=True)
     session = tf.Session(config=config)
 
     tensorflow_session.cache = session

@@ -57,7 +57,6 @@ class ActivationLayer(ParameterBasedLayer):
         if self.size is not None:
             input_value = tf.matmul(input_value, self.weight)
 
-
             if self.bias is not None:
                 input_value += self.bias
 

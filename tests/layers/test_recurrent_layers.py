@@ -60,9 +60,6 @@ class LSTMTestCase(BaseTestCase):
         self.n_time_steps = self.data[0].shape[1]
 
     def train_lstm(self, data, **lstm_options):
-        if 'unroll_scan' not in lstm_options:
-            lstm_options['unroll_scan'] = True
-
         x_train, x_test, y_train, y_test = data
         network = algorithms.RMSProp(
             [
@@ -91,15 +88,11 @@ class LSTMTestCase(BaseTestCase):
         accuracy = self.train_lstm(self.data)
         self.assertGreaterEqual(accuracy, 0.9)
 
-    def test_simple_lstm_without_precomputed_input(self):
-        accuracy = self.train_lstm(self.data, precompute_input=False)
-        self.assertGreaterEqual(accuracy, 0.9)
-
     def test_lstm_with_enabled_peepholes_option(self):
         accuracy = self.train_lstm(self.data, peepholes=True)
         self.assertGreaterEqual(accuracy, 0.9)
 
-    def test_lstm_with_enabled__do_not_unroll_scan_option(self):
+    def test_lstm_with_enabled_unroll_scan_option(self):
         accuracy = self.train_lstm(self.data, unroll_scan=True)
         self.assertGreaterEqual(accuracy, 0.9)
 
@@ -110,10 +103,10 @@ class LSTMTestCase(BaseTestCase):
 
         data = x_train, x_test, y_train, y_test
         accuracy = self.train_lstm(data, backwards=True, unroll_scan=False)
-        self.assertGreaterEqual(accuracy, 0.9)
+        self.assertGreaterEqual(accuracy, 0.8)
 
         accuracy = self.train_lstm(data, backwards=True, unroll_scan=True)
-        self.assertGreaterEqual(accuracy, 0.9)
+        self.assertGreaterEqual(accuracy, 0.8)
 
     def test_lstm_output_shapes(self):
         network_1 = layers.join(
@@ -137,13 +130,13 @@ class LSTMTestCase(BaseTestCase):
                 layers.LSTM(
                     size=10,
                     only_return_final=False,
-                    unroll_scan=True,
-                    weights=init.Normal(0.1),
+                    input_weights=init.Normal(0.1),
+                    hidden_weights=init.Normal(0.1),
                 ),
                 layers.LSTM(
                     size=2,
-                    weights=init.Normal(0.1),
-                    unroll_scan=True,
+                    input_weights=init.Normal(0.1),
+                    hidden_weights=init.Normal(0.1),
                 ),
                 layers.Sigmoid(1),
             ],
@@ -152,7 +145,7 @@ class LSTMTestCase(BaseTestCase):
             batch_size=1,
             error='binary_crossentropy',
         )
-        network.train(x_train, y_train, x_test, y_test, epochs=10)
+        network.train(x_train, y_train, x_test, y_test, epochs=20)
 
         y_predicted = network.predict(x_test).round()
         accuracy = (y_predicted.T == y_test).mean()
@@ -168,8 +161,8 @@ class LSTMTestCase(BaseTestCase):
             [
                 layers.Input(self.n_time_steps),
                 layers.Embedding(self.n_categories, 10),
-                layers.LSTM(10, only_return_final=False, unroll_scan=True),
-                layers.LSTM(2, unroll_scan=True),
+                layers.LSTM(10, only_return_final=False),
+                layers.LSTM(2),
                 layers.Sigmoid(1),
             ],
 
@@ -193,7 +186,7 @@ class LSTMTestCase(BaseTestCase):
                 layers.Embedding(self.n_categories, 10),
                 # Make 4D input
                 layers.Reshape((self.n_time_steps, 5, 2), name='reshape'),
-                layers.LSTM(10, unroll_scan=True),
+                layers.LSTM(10),
                 layers.Sigmoid(1),
             ],
             step=0.1,
@@ -212,23 +205,7 @@ class LSTMTestCase(BaseTestCase):
         with self.assertRaises(LayerConnectionError):
             layers.Input(1) > layers.LSTM(10)
 
-    def test_lstm_modify_only_one_weight_parameter(self):
-        lstm_layer = layers.LSTM(2, weights=dict(
-            weight_in_to_ingate=init.Constant(0)
-        ))
-
-        layers.join(layers.Input((5, 3)), lstm_layer,)
-
-        for key, value in lstm_layer.weights.items():
-            if key == 'weight_in_to_ingate':
-                self.assertIsInstance(value, init.Constant)
-            else:
-                self.assertIsInstance(value, init.XavierUniform)
-
     def test_lstm_initialization_exceptions(self):
-        with self.assertRaisesRegexp(ValueError, 'invalid key'):
-            layers.LSTM(1, weights=dict(unknown_parameter=10))
-
         with self.assertRaisesRegexp(ValueError, 'callable'):
             layers.LSTM(1, activation_functions=dict(ingate=10))
 
@@ -251,9 +228,6 @@ class GRUTestCase(BaseTestCase):
         self.n_time_steps = self.data[0].shape[1]
 
     def train_gru(self, data, **gru_options):
-        if 'unroll_scan' not in gru_options:
-            gru_options['unroll_scan'] = True
-
         x_train, x_test, y_train, y_test = data
         network = algorithms.RMSProp(
             [
@@ -278,7 +252,7 @@ class GRUTestCase(BaseTestCase):
         self.assertGreaterEqual(accuracy, 0.9)
 
     def test_simple_gru_without_precomputed_input(self):
-        accuracy = self.train_gru(self.data, precompute_input=False)
+        accuracy = self.train_gru(self.data)
         self.assertGreaterEqual(accuracy, 0.9)
 
     def test_gru_with_gradient_clipping(self):
@@ -295,7 +269,7 @@ class GRUTestCase(BaseTestCase):
         x_test = x_test[:, ::-1]
 
         data = x_train, x_test, y_train, y_test
-        accuracy = self.train_gru(data, backwards=True, unroll_scan=True)
+        accuracy = self.train_gru(data, backwards=True, unroll_scan=False)
         self.assertGreaterEqual(accuracy, 0.9)
 
         accuracy = self.train_gru(data, backwards=True, unroll_scan=True)
@@ -320,8 +294,8 @@ class GRUTestCase(BaseTestCase):
             [
                 layers.Input(self.n_time_steps),
                 layers.Embedding(self.n_categories, 10),
-                layers.GRU(10, only_return_final=False, unroll_scan=True),
-                layers.GRU(1, unroll_scan=True),
+                layers.GRU(10, only_return_final=False),
+                layers.GRU(1),
                 layers.Sigmoid(1),
             ],
 
@@ -346,8 +320,8 @@ class GRUTestCase(BaseTestCase):
             [
                 layers.Input(self.n_time_steps),
                 layers.Embedding(self.n_categories, 10),
-                layers.GRU(10, only_return_final=False, unroll_scan=True),
-                layers.GRU(2, unroll_scan=True),
+                layers.GRU(10, only_return_final=False),
+                layers.GRU(2),
                 layers.Sigmoid(1),
             ],
 
@@ -371,7 +345,7 @@ class GRUTestCase(BaseTestCase):
                 layers.Embedding(self.n_categories, 10),
                 # Make 4D input
                 layers.Reshape((self.n_time_steps, 5, 2), name='reshape'),
-                layers.GRU(10, unroll_scan=True),
+                layers.GRU(10),
                 layers.Sigmoid(1),
             ],
 
@@ -391,23 +365,7 @@ class GRUTestCase(BaseTestCase):
         with self.assertRaises(LayerConnectionError):
             layers.Input(1) > layers.GRU(10)
 
-    def test_gru_modify_only_one_weight_parameter(self):
-        gru_layer = layers.GRU(2, weights=dict(
-            weight_in_to_updategate=init.Constant(0)
-        ))
-
-        layers.join(layers.Input((5, 3)), gru_layer)
-
-        for key, value in gru_layer.weights.items():
-            if key == 'weight_in_to_updategate':
-                self.assertIsInstance(value, init.Constant)
-            else:
-                self.assertIsInstance(value, init.XavierUniform)
-
     def test_gru_initialization_exceptions(self):
-        with self.assertRaisesRegexp(ValueError, 'invalid key'):
-            layers.GRU(1, weights=dict(unknown_parameter=10))
-
         with self.assertRaisesRegexp(ValueError, 'callable'):
             layers.GRU(1, activation_functions=dict(ingate=10))
 
