@@ -130,7 +130,6 @@ class QuasiNewtonTestCase(BaseTestCase):
                 layers.Sigmoid(1, weight=init.Orthogonal()),
             ],
             shuffle_data=True,
-            show_epoch=20,
             verbose=False,
 
             update_function='dfp',

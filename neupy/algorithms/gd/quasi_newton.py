@@ -243,10 +243,19 @@ class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
         updated_params = param_vector + step * param_delta
         updates = setup_parameter_updates(params, updated_params)
 
-        updates.extend([
-            (inv_hessian, new_inv_hessian),
-            (prev_params, param_vector),
-            (prev_full_gradient, full_gradient),
-        ])
+        # We have to compute these values first, otherwise
+        # parallelization in tensorflow can mix update order
+        # and, for example, previous gradient can be equal to
+        # current gradient value. It happens becuase tensorflow
+        # try to execute operations in parallel.
+        # It addition, it's important that we wait for all values
+        # before making an update.
+        required_variables = [new_inv_hessian, param_vector, full_gradient]
+        with tf.control_dependencies(required_variables):
+            updates.extend([
+                inv_hessian.assign(new_inv_hessian),
+                prev_params.assign(param_vector),
+                prev_full_gradient.assign(full_gradient),
+            ])
 
         return updates

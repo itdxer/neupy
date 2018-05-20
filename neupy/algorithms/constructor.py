@@ -221,8 +221,12 @@ def function(inputs, outputs, updates=None, name=None):
     tensorflow_updates = []
 
     if updates is not None:
-        for old_value, new_value in updates:
-            tensorflow_updates.append(tf.assign(old_value, new_value))
+        for update in updates:
+            if isinstance(update, (list, tuple)):
+                old_value, new_value = update
+                update = old_value.assign(new_value)
+
+            tensorflow_updates.append(update)
 
     # Group variables in order to make sure that we won't output updates
     tensorflow_updates = tf.group(*tensorflow_updates)
