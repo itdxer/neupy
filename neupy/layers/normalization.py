@@ -88,7 +88,7 @@ class BatchNorm(BaseLayer):
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=0)``.
 
-    running_variance : array-like, Tensorfow variable, scalar or Initializer
+    running_inv_std : array-like, Tensorfow variable, scalar or Initializer
         Default initialization methods you can
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=1)``.
@@ -116,7 +116,7 @@ class BatchNorm(BaseLayer):
     gamma = ParameterProperty(default=init.Constant(value=1))
 
     running_mean = ParameterProperty(default=init.Constant(value=0))
-    running_variance = ParameterProperty(default=init.Constant(value=1))
+    running_inv_std = ParameterProperty(default=init.Constant(value=1))
 
     def initialize(self):
         super(BatchNorm, self).initialize()
@@ -134,7 +134,7 @@ class BatchNorm(BaseLayer):
                              "that doesn't exist.")
 
         opposite_axes = find_opposite_axes(self.axes, ndim)
-        parameter_shape = [input_shape[axis] for axis in opposite_axes]
+        parameter_shape = [input_shape[axis] if axis in opposite_axes else 1 for axis in range(ndim)]
 
         if any(parameter is None for parameter in parameter_shape):
             unknown_dim_index = parameter_shape.index(None)
@@ -144,8 +144,8 @@ class BatchNorm(BaseLayer):
 
         self.add_parameter(value=self.running_mean, shape=parameter_shape,
                            name='running_mean', trainable=False)
-        self.add_parameter(value=self.running_variance, shape=parameter_shape,
-                           name='running_variance', trainable=False)
+        self.add_parameter(value=self.running_inv_std, shape=parameter_shape,
+                           name='running_inv_std', trainable=False)
 
         self.add_parameter(value=self.gamma, name='gamma',
                            shape=parameter_shape, trainable=True)
@@ -155,29 +155,33 @@ class BatchNorm(BaseLayer):
     def output(self, input_value):
         alpha = asfloat(self.alpha)
         running_mean = self.running_mean
-        running_variance = self.running_variance
+        running_inv_std = self.running_inv_std
 
         if not self.training_state:
-            mean, variance = running_mean, running_variance
+            mean, inv_std = running_mean, running_inv_std
         else:
-            mean, variance = tf.nn.moments(input_value, axes=self.axes)
+            mean = tf.reduce_mean(
+                input_value, self.axes,
+                keepdims=True, name="mean",
+            )
+            variance = tf.reduce_mean(
+                tf.squared_difference(input_value, tf.stop_gradient(mean)),
+                self.axes,
+                keepdims=True,
+                name="variance",
+            )
+            inv_std = tf.rsqrt(variance + asfloat(self.epsilon))
 
         self.updates = [(
-            running_variance,
-            asfloat(1 - alpha) * running_variance + alpha * variance
+            running_inv_std,
+            asfloat(1 - alpha) * running_inv_std + alpha * inv_std
         ), (
             running_mean,
             asfloat(1 - alpha) * running_mean + alpha * mean
         )]
 
-        return tf.nn.batch_normalization(
-            input_value,
-            mean,
-            variance,
-            self.beta,
-            self.gamma,
-            asfloat(self.epsilon),
-        )
+        normalized_value = (input_value - mean) * inv_std
+        return self.gamma * normalized_value + self.beta
 
 
 class LocalResponseNorm(BaseLayer):

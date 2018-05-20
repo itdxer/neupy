@@ -153,7 +153,7 @@ class BatchNormTestCase(BaseTestCase):
 
         error_before_save = gdnet.prediction_error(x_test, y_test)
         mean_before_save = self.eval(batch_norm.running_mean)
-        variance_before_save = self.eval(batch_norm.running_variance)
+        variance_before_save = self.eval(batch_norm.running_inv_std)
 
         with tempfile.NamedTemporaryFile() as temp:
             storage.save(gdnet, temp.name)
@@ -161,7 +161,7 @@ class BatchNormTestCase(BaseTestCase):
 
             error_after_load = gdnet.prediction_error(x_test, y_test)
             mean_after_load = self.eval(batch_norm.running_mean)
-            variance_after_load = self.eval(batch_norm.running_variance)
+            variance_after_load = self.eval(batch_norm.running_inv_std)
 
             self.assertAlmostEqual(error_before_save, error_after_load)
             np.testing.assert_array_almost_equal(

@@ -150,4 +150,5 @@ def mixture_of_experts(networks, gating_layer=None):
         # Note: Gating network should be specified
         # as a first parameter.
         [gating_layer] + connections,
-        layers.GatedAverage())
+        layers.GatedAverage(),
+    )

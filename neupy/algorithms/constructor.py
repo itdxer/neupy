@@ -220,17 +220,17 @@ def function(inputs, outputs, updates=None, name=None):
     session = tensorflow_session()
     tensorflow_updates = []
 
-    if updates is not None:
-        with tf.control_dependencies(as_tuple(outputs)):
+    # Make sure that all outputs has been computed
+    with tf.control_dependencies(as_tuple(outputs)):
+        if updates is not None:
             for update in updates:
                 if isinstance(update, (list, tuple)):
                     old_value, new_value = update
                     update = old_value.assign(new_value)
-
                 tensorflow_updates.append(update)
 
-    # Group variables in order to make sure that we won't output updates
-    tensorflow_updates = tf.group(*tensorflow_updates)
+        # Group variables in order to avoid output for the updates
+        tensorflow_updates = tf.group(*tensorflow_updates)
 
     @wraps(function)
     def wrapper(*input_values):
