@@ -11,12 +11,6 @@ __all__ = ('Initializer', 'Constant', 'Normal', 'Uniform', 'Orthogonal',
            'HeNormal', 'HeUniform', 'XavierNormal', 'XavierUniform')
 
 
-class UninitializedException(Exception):
-    """
-    Exception for uninitialized parameters.
-    """
-
-
 def identify_fans(shape):
     """
     Identify fans from shape.
@@ -83,16 +77,6 @@ class Initializer(six.with_metaclass(SharedDocsABCMeta)):
         array-like
         """
         raise NotImplementedError
-
-    def get_value(self):
-        """
-        This method is the same as ``get_value`` for the Theano
-        shared variables. The main point is to be able to
-        generate understandable message when user try to get
-        value from the uninitialized parameter.
-        """
-        raise UninitializedException("Cannot get parameter value. "
-                                     "Parameter hasn't been initialized yet.")
 
     def __repr__(self):
         return '{}()'.format(classname(self))

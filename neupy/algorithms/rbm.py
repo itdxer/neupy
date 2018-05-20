@@ -57,17 +57,17 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
     batch_size : int
         Size of the mini-batch. Defaults to ``10``.
 
-    weight : array-like, Theano variable, Initializer or scalar
+    weight : array-like, Tensorfow variable, Initializer or scalar
         Default initialization methods
         you can find :ref:`here <init-methods>`.
         Defaults to :class:`Normal <neupy.init.Normal>`.
 
-    hidden_bias : array-like, Theano variable, Initializer or scalar
+    hidden_bias : array-like, Tensorfow variable, Initializer or scalar
         Default initialization methods
         you can find :ref:`here <init-methods>`.
         Defaults to :class:`Constant(value=0) <neupy.init.Constant>`.
 
-    visible_bias : array-like, Theano variable, Initializer or scalar
+    visible_bias : array-like, Tensorfow variable, Initializer or scalar
         Default initialization methods
         you can find :ref:`here <init-methods>`.
         Defaults to :class:`Constant(value=0) <neupy.init.Constant>`.

@@ -375,7 +375,7 @@ and many to one
 Compile Networks
 ================
 
-Layers in NeuPy are build on top of a Theano library. It means that all operations construct computational graph that we need to compile. NeuPy provides a simple function that allow to compile network into Python funciton.
+Layers in NeuPy are build on top of a Tensorflow library. It means that all operations construct computational graph that we need to compile. NeuPy provides a simple function that allow to compile network into Python funciton.
 
 .. code-block:: python
 
@@ -426,7 +426,7 @@ If network has more than one input we will be able to set up multiple inputs.
 
     predict = network.compile(x1, x2)
 
-Also NeuPy provides flexibility to compile networks with Theano API
+Also NeuPy provides flexibility to compile networks with Tensorflow API
 
 .. code-block:: python
 

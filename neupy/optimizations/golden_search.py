@@ -148,7 +148,7 @@ def fmin_golden_search(f, minstep=1e-5, maxstep=50., maxiter=1024, tol=1e-5):
     Returns
     -------
     object
-        Returns the Theano instance that finally should produce
+        Returns the Tensorfow instance that finally should produce
         best possbile step for specified function.
     """
     params = (

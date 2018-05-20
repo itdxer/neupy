@@ -141,7 +141,7 @@ class BaseRNNLayer(BaseLayer):
     only_return_final : bool
         If ``True``, only return the final sequential output
         (e.g. for tasks where a single target value for the entire
-        sequence is desired). In this case, Theano makes an
+        sequence is desired). In this case, Tensorfow makes an
         optimization which saves memory. Defaults to ``True``.
 
     {BaseLayer.Parameters}
@@ -224,11 +224,11 @@ class LSTM(BaseRNNLayer):
         If ``True``, make ``cell_init`` and ``hidden_init`` trainable
         variables. Defaults to ``False``.
 
-    cell_init : array-like, Theano variable, scalar or Initializer
+    cell_init : array-like, Tensorfow variable, scalar or Initializer
         Initializer for initial cell state (:math:`c_0`).
         Defaults to :class:`Constant(0) <neupy.init.Constant>`.
 
-    hidden_init : array-like, Theano variable, scalar or Initializer
+    hidden_init : array-like, Tensorfow variable, scalar or Initializer
         Initializer for initial hidden state (:math:`h_0`).
         Defaults to :class:`Constant(0) <neupy.init.Constant>`.
 
@@ -497,7 +497,7 @@ class GRU(BaseRNNLayer):
         If ``True``, make ``hidden_init`` trainable variable.
         Defaults to ``False``.
 
-    hidden_init : array-like, Theano variable, scalar or Initializer
+    hidden_init : array-like, Tensorfow variable, scalar or Initializer
         Initializer for initial hidden state (:math:`h_0`).
         Defaults to :class:`Constant(0) <neupy.init.Constant>`.
 

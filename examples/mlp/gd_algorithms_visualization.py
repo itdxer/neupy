@@ -55,14 +55,6 @@ def weight_quiver(weights, color='c'):
                color=color)
 
 
-class NoBiasSigmoid(layers.Sigmoid):
-    def output(self, input_value):
-        # Miltiply bias by zero to disable it. We need to include it in
-        # formula, because Theano use update rules for it.
-        summated = T.dot(input_value, self.weight) + (0 * self.bias)
-        return self.activation_function(summated)
-
-
 def copy_weight(weight):
     return weight.get_value().copy()
 
@@ -83,9 +75,10 @@ def get_connection():
     """
     Generate new connections every time when we call it.
     """
-    input_layer = layers.Input(2)
-    output_layer = NoBiasSigmoid(1, weight=default_weight.copy())
-    return input_layer > output_layer
+    return layers.join(
+        layers.Input(2),
+        layers.Sigmoid(1, weight=default_weight.copy(), bias=None)
+    )
 
 
 def draw_quiver(network_class, name, color='r'):

@@ -225,10 +225,10 @@ def binary_hinge(expected, predicted, delta=1):
 
     Parameters
     ----------
-    expected : Theano tensor
+    expected : Tensorfow tensor
         Targets in {-1, 1} such as ground truth labels.
 
-    predicted : Theano tensor
+    predicted : Tensorfow tensor
         Predictions in (-1, 1), such as hyprbolic tangent
         output of a neural network.
 
@@ -237,7 +237,7 @@ def binary_hinge(expected, predicted, delta=1):
 
     Returns
     -------
-    Theano tensor
+    Tensorfow tensor
         An expression for the average binary hinge loss.
 
     Notes
@@ -259,13 +259,13 @@ def categorical_hinge(expected, predicted, delta=1):
 
     Parameters
     ----------
-    expected : Theano 2D tensor or 1D tensor
+    expected : Tensorfow 2D tensor or 1D tensor
         Either a vector of int giving the correct class index
         per data point or a 2D tensor of one-hot encoding of
         the correct class in the same layout as predictions
         (non-binary targets in [0, 1] do not work!).
 
-    predicted : Theano 2D tensor
+    predicted : Tensorfow 2D tensor
         Predictions in (0, 1), such as softmax output of
         a neural network, with data points in rows and class
         probabilities in columns.
@@ -275,7 +275,7 @@ def categorical_hinge(expected, predicted, delta=1):
 
     Returns
     -------
-    Theano 1D tensor
+    Tensorfow 1D tensor
         An expression for the average multi-class hinge loss.
 
     Notes

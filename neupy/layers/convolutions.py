@@ -105,9 +105,8 @@ class Convolution(ParameterBasedLayer):
         Filter shape. In should be defined as a tuple with three integers
         ``(output channels, filter rows, filter columns)``.
 
-    padding : {{``valid``, ``full``, ``half``}} or int or tuple with 2 int
-        Convolution border mode. Check Theano's ``nnet.conv2d`` doc.
-        Defaults to ``valid``.
+    padding : {{``VALID``, ``SAME``}}
+        Defaults to ``VALID``.
 
     stride : tuple with 1 or 2 integers or integer.
         Stride size. Defaults to ``(1, 1)``

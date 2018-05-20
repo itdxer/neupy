@@ -36,11 +36,6 @@ class ConstantInitializationTestCase(BaseInitializerTestCase):
         const_initializer = init.Constant(value=3)
         self.assertEqual("Constant(3)", str(const_initializer))
 
-    def test_initializer_get_value_exception(self):
-        initializer = init.Constant()
-        with self.assertRaises(init.UninitializedException):
-            initializer.get_value()
-
 
 class NormalInitializeTestCase(BaseInitializerTestCase):
     def test_normal_initializer(self):

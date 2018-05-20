@@ -7,30 +7,43 @@ import numpy as np
 import tensorflow as tf
 
 from neupy import environment, layers
-from neupy.utils import tensorflow_session, initialize_uninitialized_variables
+from neupy.utils import (
+    tensorflow_eval,
+    tensorflow_session,
+    initialize_uninitialized_variables,
+)
 
 from utils import vectors_for_testing
 
 
 class BaseTestCase(unittest.TestCase):
+    single_thread = False
     verbose = False
     random_seed = 0
 
     def eval(self, value):
-        sess = tensorflow_session()
-        initialize_uninitialized_variables()
-        return sess.run(value)
+        return tensorflow_eval(value)
 
     def setUp(self):
         tf.reset_default_graph()
 
-        environment.reproducible(seed=self.random_seed)
+        if self.single_thread:
+            sess = tensorflow_session()
+            sess.close()
+
+            config = tf.ConfigProto(
+                allow_soft_placement=True,
+                intra_op_parallelism_threads=1,
+                inter_op_parallelism_threads=1,
+            )
+            tensorflow_session.cache = tf.Session(config=config)
 
         if not self.verbose:
             logging.disable(logging.CRITICAL)
 
         # Clean identifiers map for each test
         layers.BaseLayer.global_identifiers_map = {}
+        environment.reproducible(seed=self.random_seed)
 
     def tearDown(self):
         sess = tensorflow_session()

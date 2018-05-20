@@ -12,7 +12,7 @@ import tensorflow as tf
 from matplotlib import pyplot as plt
 from matplotlib.testing.compare import compare_images
 
-from neupy import algorithms, layers
+from neupy import algorithms, layers, environment
 from neupy.utils import asfloat
 from neupy.storage import save_dict, load_dict
 
@@ -179,7 +179,7 @@ def reproducible_network_train(seed=0, epochs=500, **additional_params):
     GradientDescent instance
         Returns trained network.
     """
-    np.random.seed(seed)
+    environment.reproducible(seed)
     network = algorithms.GradientDescent(
         connection=[
             layers.Input(2),

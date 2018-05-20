@@ -43,11 +43,11 @@ def generate_layer_name(layer):
 
 def create_shared_parameter(value, name, shape):
     """
-    Creates NN parameter as Theano shared variable.
+    Creates NN parameter as Tensorfow variable.
 
     Parameters
     ----------
-    value : array-like, Theano variable, scalar or Initializer
+    value : array-like, Tensorfow variable, scalar or Initializer
         Default value for the parameter.
 
     name : str
@@ -58,7 +58,7 @@ def create_shared_parameter(value, name, shape):
 
     Returns
     -------
-    Theano shared variable.
+    Tensorfow variable.
     """
     if isinstance(value, tf.Variable):
         return value
@@ -202,12 +202,12 @@ class ParameterBasedLayer(BaseLayer):
     size : int
         Layer's output size.
 
-    weight : array-like, Theano variable, scalar or Initializer
+    weight : array-like, Tensorfow variable, scalar or Initializer
         Defines layer's weights. Default initialization methods
         you can find :ref:`here <init-methods>`.
         Defaults to :class:`XavierNormal() <neupy.init.XavierNormal>`.
 
-    bias : 1D array-like, Theano variable, scalar, Initializer or None
+    bias : 1D array-like, Tensorfow variable, scalar, Initializer or None
         Defines layer's bias.
         Default initialization methods you can find
         :ref:`here <init-methods>`. Defaults to

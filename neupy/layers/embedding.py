@@ -25,7 +25,7 @@ class Embedding(BaseLayer):
     output_size : int
         Layer's output vector dimension.
 
-    weight : array-like, Theano variable, scalar or Initializer
+    weight : array-like, Tensorfow variable, scalar or Initializer
         Defines layer's weights. Default initialization methods
         you can find :ref:`here <init-methods>`.
         Defaults to :class:`XavierNormal() <neupy.init.XavierNormal>`.

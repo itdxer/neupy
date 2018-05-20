@@ -15,7 +15,7 @@ __all__ = ('format_data', 'asfloat', 'AttributeKeyDict', 'preformat_value',
            'all_equal', 'tensorflow_session', 'tensorflow_eval')
 
 
-# Disable annoying warning from Theano
+# Disable annoying warning from Tensorfow
 theano.config.warn.round = False
 number_type = (int, float, np.floating, np.integer)
 
@@ -78,12 +78,12 @@ def asfloat(value):
 
     Parameters
     ----------
-    value : matrix, ndarray, Theano variable or scalar
+    value : matrix, ndarray, Tensorfow variable or scalar
         Value that could be converted to float type.
 
     Returns
     -------
-    matrix, ndarray, Theano variable or scalar
+    matrix, ndarray, Tensorfow variable or scalar
         Output would be input value converted to float type
         configured by theano floatX variable.
     """
@@ -196,9 +196,9 @@ def as_tuple(*values):
 
 def theano_random_stream():
     """
-    Create Theano random stream instance.
+    Create Tensorfow random stream instance.
     """
-    # Use NumPy seed to make Theano code easely reproducible
+    # Use NumPy seed to make Tensorfow code easely reproducible
     max_possible_seed = 2147483647  # max 32-bit integer
     seed = np.random.randint(max_possible_seed)
     theano_random = T.shared_randomstreams.RandomStreams(seed)

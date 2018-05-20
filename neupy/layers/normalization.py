@@ -73,22 +73,22 @@ class BatchNorm(BaseLayer):
         the last batches seen. Value needs to be between ``0`` and ``1``.
         Defaults to ``0.1``.
 
-    gamma : array-like, Theano variable, scalar or Initializer
+    gamma : array-like, Tensorfow variable, scalar or Initializer
         Default initialization methods you can
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=1)``.
 
-    beta : array-like, Theano variable, scalar or Initializer
+    beta : array-like, Tensorfow variable, scalar or Initializer
         Default initialization methods you can
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=0)``.
 
-    running_mean : array-like, Theano variable, scalar or Initializer
+    running_mean : array-like, Tensorfow variable, scalar or Initializer
         Default initialization methods you can
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=0)``.
 
-    running_variance : array-like, Theano variable, scalar or Initializer
+    running_variance : array-like, Tensorfow variable, scalar or Initializer
         Default initialization methods you can
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=1)``.

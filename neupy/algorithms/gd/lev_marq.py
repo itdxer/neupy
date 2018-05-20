@@ -18,15 +18,15 @@ def compute_jacobian(values, parameters):
 
     Parameters
     ----------
-    values : Theano variable
+    values : Tensorfow variable
         Computed MSE for each sample separetly.
 
-    parameters : list of Theano variable
+    parameters : list of Tensorfow variable
         Neural network parameters (e.g. weights, biases).
 
     Returns
     -------
-    Theano variable
+    Tensorfow variable
     """
     values_shape = tf.shape(values)
     n_samples = values_shape[0]

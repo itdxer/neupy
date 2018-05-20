@@ -17,7 +17,7 @@ The simplest type of layers is the one that doesn't modify a shape of the input 
         def output(self, input_value):
             return asfloat(2) * input_value
 
-From the code, you can see that I've used ``asfloat`` function. This function converts any number to a float. Type of the float depends on the ``theano.config.floatX`` variable. This function gives flexibility to automatically convert input variable to the float type that Theano uses on the backend.
+From the code, you can see that I've used ``asfloat`` function. This function converts any number to a float. Type of the float depends on the ``theano.config.floatX`` variable. This function gives flexibility to automatically convert input variable to the float type that Tensorflow uses on the backend.
 
 Layers with activation function
 -------------------------------

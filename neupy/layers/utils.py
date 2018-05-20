@@ -31,13 +31,13 @@ def dimshuffle(value, ndim, axes):
 
     Parameters
     ----------
-    value : Theano variable
+    value : Tensorfow variable
     ndim : int
     axes : tuple, list
 
     Returns
     -------
-    Theano variable
+    Tensorfow variable
     """
     dimensions_to_expand = []
 

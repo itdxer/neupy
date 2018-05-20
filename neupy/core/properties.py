@@ -314,7 +314,7 @@ class IntProperty(BoundedProperty):
 class ParameterProperty(ArrayProperty):
     """
     In addition to Numpy arrays and matrix property support also
-    Theano shared variables and NeuPy Initializers.
+    Tensorfow variables and NeuPy Initializers.
 
     Parameters
     ----------

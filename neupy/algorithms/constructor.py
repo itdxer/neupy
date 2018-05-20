@@ -33,7 +33,7 @@ def create_input_variables(input_layers):
 
     Returns
     -------
-    list of Theano variables
+    list of Tensorflow variables
     """
     inputs = []
 
@@ -41,7 +41,7 @@ def create_input_variables(input_layers):
         variable = tf.placeholder(
             tf.float32,
             as_tuple(None, input_layer.input_shape),
-            name="layer/{}/var/input".format(input_layer.name),
+            name="network-input/to-layer-{}".format(input_layer.name),
         )
         inputs.append(variable)
 
@@ -129,7 +129,7 @@ def create_output_variable(error_function, name):
 
     Returns
     -------
-    Theano variable
+    Tensorflow variable
     """
     # TODO: Solution is not user friendly. I need to find
     # better solution later.
@@ -165,20 +165,20 @@ class ErrorFunctionProperty(ChoiceProperty):
 
 class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
     """
-    Base class for algorithms implemeted in Theano.
+    Base class for algorithms implemeted in Tensorflow.
 
     Attributes
     ----------
     variables : dict
-        Theano variables.
+        Tensorflow variables.
 
     methods : dict
-        Compiled Theano functions.
+        Compiled Tensorflow functions.
     """
     def __init__(self, *args, **kwargs):
         super(BaseAlgorithm, self).__init__(*args, **kwargs)
 
-        self.logs.message("THEANO", "Initializing Theano variables and "
+        self.logs.message("THEANO", "Initializing Tensorflow variables and "
                                     "functions.")
         start_init_time = time.time()
 
@@ -197,21 +197,21 @@ class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
     @abc.abstractmethod
     def init_input_output_variables(self):
         """
-        Initialize input and output Theano variables.
+        Initialize input and output Tensorflow variables.
         """
         raise NotImplementedError
 
     @abc.abstractmethod
     def init_variables(self):
         """
-        Initialize Theano variables.
+        Initialize Tensorflow variables.
         """
         raise NotImplementedError
 
     @abc.abstractmethod
     def init_methods(self):
         """
-        Initialize Theano functions.
+        Initialize Tensorflow functions.
         """
         raise NotImplementedError
 
@@ -340,14 +340,15 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         super(ConstructibleNetwork, self).__init__(*args, **kwargs)
 
     def init_input_output_variables(self):
+        output_layer = self.connection.output_layers[0]
         self.variables.update(
             network_inputs=create_input_variables(
                 self.connection.input_layers
             ),
             network_output=tf.placeholder(
                 tf.float32,
-                as_tuple(None, self.connection.output_layers[0].output_shape),
-                name='algo-network/var-network-output',
+                as_tuple(None, output_layer.output_shape),
+                name='network-output/from-layer-{}'.format(output_layer.name),
             ),
         )
 
@@ -362,12 +363,12 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         self.variables.update(
             step=tf.Variable(
                 asfloat(self.step),
-                name='algo-network/scalar-step',
+                name='network/scalar-step',
                 dtype=tf.float32
             ),
             epoch=tf.Variable(
                 asfloat(self.last_epoch),
-                name='algo-network/scalar-epoch',
+                name='network/scalar-epoch',
                 dtype=tf.float32
             ),
 
@@ -389,18 +390,18 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
             predict=function(
                 inputs=network_inputs,
                 outputs=self.variables.prediction_func,
-                name='algo-network/func-predict'
+                name='network/func-predict'
             ),
             train_epoch=function(
                 inputs=network_inputs + [network_output],
                 outputs=self.variables.error_func,
                 updates=training_updates,
-                name='algo-network/func-train-epoch'
+                name='network/func-train-epoch'
             ),
             prediction_error=function(
                 inputs=network_inputs + [network_output],
                 outputs=self.variables.validation_error_func,
-                name='algo-network/func-prediction-error'
+                name='network/func-prediction-error'
             )
         )
 

@@ -17,15 +17,15 @@ def find_hessian_and_gradient(error_function, parameters):
 
     Parameters
     ----------
-    values : Theano variable
+    values : Tensorfow variable
         Computed MSE for each sample separetly.
 
-    parameters : list of Theano variable
+    parameters : list of Tensorfow variable
         Neural network parameters (e.g. weights, biases).
 
     Returns
     -------
-    Theano variable
+    Tensorfow variable
     """
     n_parameters = sum(get_variable_size(parameter) for parameter in parameters)
     gradients = tf.gradients(error_function, parameters)

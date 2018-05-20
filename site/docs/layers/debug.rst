@@ -144,7 +144,7 @@ Iterate through all network parameters
     Input(1) > Sigmoid(2) > Sigmoid(3)
     >>>
     >>> for layer, attrname, parameter in iter_parameters(network):
-    ...     # parameter is shared Theano variable
+    ...     # parameter is shared Tensorflow variable
     ...     parameter_value = parameter.get_value()
     ...     print("Layer: {}".format(layer))
     ...     print("Parameter name: {}".format(attrname))

@@ -86,7 +86,7 @@ class Reshape(BaseLayer):
 
         Parameters
         ----------
-        input_value : array-like or Theano variable
+        input_value : array-like or Tensorfow variable
         """
         input_shape = tf.shape(input_value)
         n_samples = input_shape[0]

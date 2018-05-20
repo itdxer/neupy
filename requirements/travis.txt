@@ -4,8 +4,6 @@ matplotlib==1.5.1
 Pillow==3.0.0
 graphviz==0.5.1
 
-Theano==1.0.0
-
 tableprint==0.7.1
 progressbar2==3.34.3
 

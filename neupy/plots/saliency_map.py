@@ -7,12 +7,12 @@ from neupy.utils import tensorflow_session
 from neupy.exceptions import InvalidConnection
 
 
-__all__ = ('saliency_map', 'compile_saliency_map')
+__all__ = ('saliency_map', 'compute_saliency_map')
 
 
-def compile_saliency_map(connection, image):
+def compute_saliency_map(connection, image):
     """
-    Compile Theano function that returns saliency map.
+    Returns saliency map.
 
     Parameters
     ----------
@@ -29,7 +29,7 @@ def compile_saliency_map(connection, image):
         prediction = connection.output(x)
 
     output_class = tf.argmax(prediction)
-    saliency = tf.gradients(tf.reduce_max(prediction), x)
+    saliency, = tf.gradients(tf.reduce_max(prediction), x)
 
     session = tensorflow_session()
     return session.run([saliency, output_class], feed_dict={x: image})
@@ -126,9 +126,8 @@ def saliency_map(connection, image, mode='heatmap', sigma=8,
     if ax is None:
         ax = plt.gca()
 
-    saliency, output = compile_saliency_map(connection, image)
-    saliency = saliency[0].transpose((1, 2, 0))
-    saliency = saliency.max(axis=2)
+    saliency, output = compute_saliency_map(connection, image)
+    saliency = saliency.transpose((1, 2, 0)).max(axis=2)
 
     if mode == 'heatmap':
         saliency = gaussian_filter(saliency, sigma=sigma)

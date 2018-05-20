@@ -19,7 +19,7 @@ def parameter_values(connection):
 
     Yields
     ------
-    Theano shared variable
+    Tensorfow variable
         Network's trainable parameter.
     """
     parameters = []
@@ -41,7 +41,7 @@ def setup_parameter_updates(parameters, parameter_update_vector):
     parameters : list
         List of parameters.
 
-    parameter_update_vector : Theano varible
+    parameter_update_vector : Tensorfow varible
         Vector that contains updates for all parameters.
 
     Returns

@@ -32,9 +32,3 @@ class EnvironmentTestCase(BaseTestCase):
         x2 = np.random.random((10, 10))
 
         np.testing.assert_array_almost_equal(x1, x2)
-
-    def test_sandbox_environment(self):
-        environment.sandbox()
-
-        self.assertEqual(theano.config.optimizer, 'fast_compile')
-        self.assertEqual(theano.config.allow_gc, False)

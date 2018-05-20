@@ -154,8 +154,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         self.assertEqual(network.input_shape, (10,))
         self.assertEqual(network.output_shape, (5,))
 
-        predict = network.compile()
         random_input = asfloat(np.random.random((3, 10)))
-        prediction = predict(random_input)
+        prediction = self.eval(network.output(random_input))
 
         self.assertEqual(prediction.shape, (3, 5))

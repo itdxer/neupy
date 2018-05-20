@@ -570,13 +570,13 @@ class LayerGraph(object):
 
         Parameters
         ----------
-        input_value : array-like, Theano variable or dict
-            - If input is an array or Theano variable than it will
+        input_value : array-like, Tensorfow variable or dict
+            - If input is an array or Tensorfow variable than it will
               be used as a direct input to the input layer/layers.
 
             - The dict type input should has a specific structure.
               Each key of the dict is a layer and each value array or
-              Theano variable. Dict defines input values for specific
+              Tensorfow variable. Dict defines input values for specific
               layers. In the dict input layer is not necessary should
               be an instance of the ``layers.Input`` class. It can be
               any layer from the graph.

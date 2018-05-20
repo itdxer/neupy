@@ -102,7 +102,7 @@ class UtilsTestCase(BaseTestCase):
         x = [1, 2, 3]
         self.assertEqual(asfloat(x).shape, (3,))
 
-        # Theano variables
+        # Tensorfow variables
         x = tf.placeholder(dtype=tf.int32)
         self.assertNotEqual(x.dtype, tf.float32)
         self.assertEqual(asfloat(x).dtype, tf.float32)

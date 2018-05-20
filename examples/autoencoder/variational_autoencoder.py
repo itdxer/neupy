@@ -1,12 +1,12 @@
 import numpy as np
-import theano.tensor as T
+import tensorflow as tf
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from sklearn import model_selection, datasets
 
 from neupy import layers, environment, algorithms
+from neupy.algorithms.gd import errors
 from neupy.exceptions import LayerConnectionError
-from neupy.utils import theano_random_stream
 
 
 environment.reproducible()
@@ -52,20 +52,23 @@ class GaussianSample(layers.BaseLayer):
         classname = self.__class__.__name__
 
         if not isinstance(input_shapes, list):
-            raise LayerConnectionError("{} layer expected 2 inputs, got 1"
-                                       "".format(classname))
+            raise LayerConnectionError(
+                "{} layer expected 2 inputs, got 1"
+                "".format(classname))
 
         if len(input_shapes) != 2:
             n_inputs = len(input_shapes)
-            raise LayerConnectionError("{} layer expected 2 inputs, got {}"
-                                       "".format(classname, n_inputs))
+            raise LayerConnectionError(
+                "{} layer expected 2 inputs, got {}"
+                "".format(classname, n_inputs))
 
         for input_shape in input_shapes:
             ndim = len(input_shape)
 
             if ndim != 1:
-                raise LayerConnectionError("Input layer to {} should be 2D, "
-                                           "got {}D".format(classname, ndim))
+                raise LayerConnectionError(
+                    "Input layer to {} should be 2D, "
+                    "got {}D".format(classname, ndim))
 
     @property
     def output_shape(self):
@@ -74,44 +77,54 @@ class GaussianSample(layers.BaseLayer):
 
     def output(self, *input_values):
         mu, sigma = input_values
+        return mu + tf.exp(sigma) * tf.random_normal(tf.shape(mu))
 
-        random = theano_random_stream()
-        return mu + T.exp(sigma) * random.normal(mu.shape)
+
+def binary_crossentropy(expected, predicted):
+    epsilon = 1e-7
+    predicted = tf.clip_by_value(predicted, epsilon, 1.0 - epsilon)
+
+    return -tf.reduce_sum(
+        expected * tf.log(predicted) +
+        (1 - expected) * tf.log(1 - predicted),
+        axis=1
+    )
 
 
 def vae_loss(expected, predicted):
-    x = predicted.owner.inputs[0]
+    graph = tf.get_default_graph()
+    x = graph.get_tensor_by_name('network-input/to-layer-input:0')
 
     mean = (encoder > mu).output(x)
     log_var = (encoder > sigma).output(x)
 
     epsilon = 1e-7
-    predicted = T.clip(predicted, epsilon, 1.0 - epsilon)
+    predicted = tf.clip_by_value(predicted, epsilon, 1.0 - epsilon)
 
-    crossentropy_loss = T.sum(
-        T.nnet.binary_crossentropy(predicted, expected),
+    crossentropy_loss = binary_crossentropy(expected, predicted)
+    kl_loss = tf.reduce_sum(
+        1 + 2 * log_var - tf.square(mean) - tf.exp(2 * log_var),
         axis=1
     )
-    kl_loss = -0.5 * T.sum(
-        1 + 2 * log_var - T.square(mean) - T.exp(2 * log_var),
-        axis=1
-    )
-
-    return (crossentropy_loss + kl_loss).mean()
+    return tf.reduce_mean(crossentropy_loss - 0.5 * kl_loss)
 
 
 # Construct Variational Autoencoder
-encoder = layers.Input(784) > layers.Tanh(500)
+encoder = layers.Input(784, name='input') > layers.Tanh(256)
 
 mu = layers.Linear(2, name='mu')
 sigma = layers.Linear(2, name='sigma')
 sampler = [mu, sigma] > GaussianSample()
 
-decoder = layers.Tanh(500) > layers.Sigmoid(784)
+decoder = layers.Tanh(256) > layers.Sigmoid(784)
 
 # Train network
 network = algorithms.RMSProp(
-    encoder > sampler > decoder,
+    [
+        encoder,
+        sampler,
+        decoder,
+    ],
 
     error=vae_loss,
     batch_size=128,

@@ -280,7 +280,7 @@ class ParallelConnection(BaseConnection):
 
         Parameters
         ----------
-        first_input : Theano variable, array-like, dict
+        first_input : Tensorfow variable, array-like, dict
         *other_inputs
 
         Returns
@@ -458,8 +458,8 @@ class LayerConnection(BaseConnection):
 
         Parameters
         ----------
-        first_input : Theano variable, array-like, dict
-            - Input values can be Theano variables or
+        first_input : Tensorfow variable, array-like, dict
+            - Input values can be Tensorfow variables or
               array-like objects
 
             - Dictionary inputs should have key that
@@ -472,7 +472,7 @@ class LayerConnection(BaseConnection):
 
         Returns
         -------
-        Theano expression
+        Tensorfow expression
         """
         if other_inputs:
             input_values = as_tuple(first_input, other_inputs)

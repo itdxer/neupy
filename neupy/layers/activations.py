@@ -309,7 +309,7 @@ class PRelu(ActivationLayer):
         Single integer value defines the same as a tuple with one value.
         Defaults to ``1``.
 
-    alpha : array-like, Theano shared variable, scalar or Initializer
+    alpha : array-like, Tensorfow variable, scalar or Initializer
         Alpha parameter per each non-shared axis for the ReLu.
         Scalar value means that each element in the tensor will be
         equal to the specified value.

@@ -7,6 +7,8 @@ from base import BaseTestCase
 
 
 class SaliencyMapTestCase(BaseTestCase):
+    single_thread = True
+
     def test_invalid_arguments_exceptions(self):
         network = layers.join(
             layers.Input((3, 28, 28)),

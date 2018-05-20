@@ -11,7 +11,7 @@ from neupy.utils import asfloat
 def sequential_or(*conditions):
     """
     Use ``or`` operator between all conditions. Function is just
-    a syntax sugar that make long Theano logical conditions looks
+    a syntax sugar that make long Tensorfow logical conditions looks
     less ugly.
 
     Parameters
@@ -28,7 +28,7 @@ def sequential_or(*conditions):
 def sequential_and(*conditions):
     """
     Use ``and`` operator between all conditions. Function is just
-    a syntax sugar that make long Theano logical conditions looks
+    a syntax sugar that make long Tensorfow logical conditions looks
     less ugly.
 
     Parameters
@@ -200,7 +200,7 @@ def quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, bound_size_ratio=0.1):
     Returns
     -------
     object
-        Theano variable that after evaluation is equal to
+        Tensorfow variable that after evaluation is equal to
         point ``x`` which is minimizer for quadratic function.
     """
 
@@ -269,7 +269,7 @@ def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c,
     Returns
     -------
     object
-        Theano variable that after evaluation is equal to
+        Tensorfow variable that after evaluation is equal to
         the point ``x`` which is a minimizer for the cubic function.
     """
 

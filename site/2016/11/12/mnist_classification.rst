@@ -49,8 +49,8 @@ samples for training and 10,000 for test.
 
 In the previous procedure I converted all data to `float32` data type. This
 simple trick will help us use less memory and decrease computational time.
-Theano is a main backend for the Gradient Descent based algorithms in NeuPy.
-For the Theano we need to add additional configuration that will explain Theano that
+Tensorfow is a main backend for the Gradient Descent based algorithms in NeuPy.
+For the Tensorfow we need to add additional configuration that will explain Tensorfow that
 we are going to use 32bit float numbers.
 
 .. code-block:: python

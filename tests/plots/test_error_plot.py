@@ -17,12 +17,7 @@ IMGDIR = os.path.join("plots", "images", "error-plot")
 
 
 class ErrorPlotTestCase(BaseTestCase):
-    def setUp(self):
-        super(ErrorPlotTestCase, self).setUp()
-        # It's better to use one float type all the time,
-        # because different type can change plots images a
-        # little bit and this change can cause test failers
-        theano.config.floatX = 'float64'
+    single_thread = True
 
     @skip_image_comparison_if_specified
     def test_error_plot_and_validation_error_warnings(self):
@@ -47,12 +42,9 @@ class ErrorPlotTestCase(BaseTestCase):
 
     @skip_image_comparison_if_specified
     def test_error_plot_show_image(self):
-        def mock_plt_show():
-            pass
-
-        # Test suppose not to fail
+        # Just making sure that nothing will fail
         real_plt_show = plt.show
-        plt.show = mock_plt_show
+        plt.show = lambda: None
 
         network = reproducible_network_train(step=0.3)
         plots.error_plot(network, show=True)
