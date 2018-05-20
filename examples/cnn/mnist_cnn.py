@@ -52,7 +52,8 @@ network = algorithms.Adadelta(
         layers.Softmax(10),
     ],
 
-    # Using categorical cross-entropy as a loss function
+    # Using categorical cross-entropy as a loss function.
+    # It's suitable for classification with 3 and more classes.
     error='categorical_crossentropy',
 
     # Min-batch size

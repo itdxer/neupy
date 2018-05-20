@@ -3,7 +3,6 @@ import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 from sklearn import model_selection, metrics, datasets
 from neupy import algorithms, layers, environment
-from neupy.exceptions import StopTraining
 
 
 environment.reproducible()

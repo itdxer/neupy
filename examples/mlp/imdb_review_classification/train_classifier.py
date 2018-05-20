@@ -1,7 +1,6 @@
 import os
 
 import dill
-import theano
 import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn import metrics

@@ -324,11 +324,19 @@ To fix it, we are going to inverse our transformation for predicted and actual v
 
 .. code-block:: python
 
-    from neupy.estimators import rmsle
+    import numpy as np
+
+    def rmsle(expected, predicted):
+        log_expected = np.log1p(expected + 1)
+        log_predicted = np.log1p(predicted + 1)
+        squared_log_error = np.square(log_expected - log_predicted)
+        return np.sqrt(np.mean(squared_log_error))
 
     y_predict = cgnet.predict(x_test).round(1)
-    error = rmsle(target_scaler.inverse_transform(y_test),
-                  target_scaler.inverse_transform(y_predict))
+    error = rmsle(
+        target_scaler.inverse_transform(y_test),
+        target_scaler.inverse_transform(y_predict),
+    )
     print(error)
 
 Now we can see that our error approximately equals to `0.22` which is pretty small.

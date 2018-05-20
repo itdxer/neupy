@@ -81,7 +81,6 @@ Image classification
 ++++++++++++++++++++
 
 * `MNIST, Multilayer perceptron <https://github.com/itdxer/neupy/tree/master/examples/mlp/mnist_mlp.py>`_
-* `Rectangle images, Multilayer perceptron <https://github.com/itdxer/neupy/tree/master/examples/mlp/rectangles_mlp.py>`_
 
 Visualizations
 ++++++++++++++
