@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
         shutil.move(EXTRACTED_DIRECTORY, REVIEW_DATA_PATH)
     else:
-        logger.info("Files've already extracted.")
+        logger.info("Files have been already extracted.")
 
     dataset_types = ['train', 'test']
     sentiment_types = ['pos', 'neg']

@@ -1,7 +1,15 @@
+import numpy as np
+import matplotlib.pyplot as plt
 from sklearn import datasets, preprocessing
 from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
-from neupy import algorithms, layers, estimators, environment
+from neupy import algorithms, layers, environment
+
+
+def rmsle(expected, predicted):
+    log_expected = np.log1p(expected + 1)
+    log_predicted = np.log1p(predicted + 1)
+    squared_log_error = np.square(log_expected - log_predicted)
+    return np.sqrt(np.mean(squared_log_error))
 
 
 environment.reproducible()
@@ -36,5 +44,5 @@ y_predict = cgnet.predict(x_test)
 
 y_test = target_scaler.inverse_transform(y_test.reshape((-1, 1)))
 y_predict = target_scaler.inverse_transform(y_predict).T.round(1)
-error = estimators.rmsle(y_predict, y_test)
+error = rmsle(y_predict, y_test)
 print("RMSLE = {}".format(error))

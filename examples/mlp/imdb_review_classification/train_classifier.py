@@ -14,14 +14,13 @@ from src.utils import (WORD_EMBEDDING_NN, NN_CLASSIFIER_MODEL, REVIEWS_FILE,
 
 
 logger = create_logger(__name__)
-
 environment.reproducible()
-theano.config.floatX = 'float32'
 
 if not os.path.exists(WORD_EMBEDDING_NN):
-    raise EnvironmentError("Can't find NN model. File {} doesn't exist {}."
-                           "Probably you haven't train it yet. "
-                           "Run `train_word_embedding_nn.py` script.")
+    raise EnvironmentError(
+        "Can't find NN model. File {} doesn't exist. Probably you "
+        "haven't train it yet. Run `train_word_embedding_nn.py` script."
+        "".format(WORD_EMBEDDING_NN))
 
 logger.info("Reading data")
 data = pd.read_csv(REVIEWS_FILE, sep='\t')
@@ -62,14 +61,9 @@ texts = test_data.text.values
 x_test = prepare_data_pipeline.transform(texts)
 y_test = (test_data.sentiment.values == 'pos')
 
-classifier.train(x_train, y_train, x_test, y_test, epochs=100)
-
-y_train_predicted = classifier.predict(x_train).round()
+classifier.train(x_train, y_train, x_test, y_test, epochs=35)
 y_test_predicted = classifier.predict(x_test).round()
 
-print(metrics.classification_report(y_train_predicted, y_train))
-print(metrics.confusion_matrix(y_train_predicted, y_train))
-print()
 print(metrics.classification_report(y_test_predicted, y_test))
 print(metrics.confusion_matrix(y_test_predicted, y_test))
 

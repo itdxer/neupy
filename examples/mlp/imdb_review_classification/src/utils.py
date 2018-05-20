@@ -13,6 +13,10 @@ WORD_EMBEDDING_NN = os.path.join(MODELS_DIR, 'word_embedding.model')
 NN_CLASSIFIER_MODEL = os.path.join(MODELS_DIR, 'nn_classifier.model')
 
 
+if not os.path.exists(MODELS_DIR):
+    os.mkdir(MODELS_DIR)
+
+
 def create_logger(name, level=logging.INFO):
     formatter = logging.Formatter(
         fmt='%(asctime)-15s : %(levelname)s : %(message)s'
