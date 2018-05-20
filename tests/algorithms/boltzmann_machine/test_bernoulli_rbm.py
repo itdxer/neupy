@@ -71,8 +71,8 @@ class BernoulliRBMTestCase(BaseTestCase):
             n_visible=4,
             n_hidden=1,
             step=0.1,
-            batch_size=10)
-
+            batch_size=10,
+        )
         network.train(data, epochs=500)
 
         stored_network = pickle.dumps(network)

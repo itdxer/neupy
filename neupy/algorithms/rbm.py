@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
-from neupy.core.config import ConfigurableABC
+from neupy.core.config import ConfigurableABC, DumpableObject
 from neupy.core.properties import IntProperty, ParameterProperty
 from neupy.algorithms.base import BaseNetwork
 from neupy.algorithms.constructor import BaseAlgorithm, function
@@ -37,7 +37,7 @@ def random_sample(data, n_samples):
         return tf.gather(data, sample_indeces)
 
 
-class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin):
+class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
     """
     Boolean/Bernoulli Restricted Boltzmann Machine (RBM).
     Algorithm assumes that inputs are either binary
