@@ -291,3 +291,27 @@ def initialize_uninitialized_variables():
 
     if len(not_initialized_vars):
         session.run(tf.variables_initializer(not_initialized_vars))
+
+
+def tf_repeat(tensor, repeats):
+    """
+    Repeat elements of an tensor. The same as ``numpy.repeat``.
+
+    Parameters
+    ----------
+    input : tensor
+    repeats: list, tuple
+        Number of repeat for each dimension, length must be the
+        same as the number of dimensions in input.
+
+    Returns
+    -------
+    tensor
+        Has the same type as input. Has the shape
+        of ``tensor.shape * repeats``.
+    """
+    with tf.variable_scope("repeat"):
+        expanded_tensor = tf.expand_dims(tensor, -1)
+        multiples = as_tuple(1, repeats)
+        tiled_tensor = tf.tile(expanded_tensor, multiples)
+        return tf.reshape(tiled_tensor, tf.shape(tensor) * repeats)

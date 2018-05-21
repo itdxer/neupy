@@ -2,12 +2,12 @@ import os
 import argparse
 from functools import partial
 
-import theano
-import theano.tensor as T
 import numpy as np
+import tensorflow as tf
 
-from neupy.utils import as_tuple, asfloat, asint
 from neupy import layers, init, algorithms, environment, storage
+from neupy.utils import (as_tuple, asfloat, flatten, tf_repeat,
+                         tensorflow_session)
 
 from loaddata import load_data
 from settings import MODELS_DIR, environments
@@ -20,8 +20,13 @@ parser.add_argument('--imsize', '-i', choices=[8, 16, 28],
 
 
 def random_weight(shape):
-    weight = 0.01 * np.random.random(shape)
-    return theano.shared(asfloat(weight))
+    initializer = init.Uniform(0, 0.01)
+    weight = initializer.sample(shape)
+    return tf.Variable(
+        asfloat(weight),
+        name='network/scalar-step',
+        dtype=tf.float32
+    )
 
 
 class GlobalMaxPooling(layers.BaseLayer):
@@ -32,7 +37,7 @@ class GlobalMaxPooling(layers.BaseLayer):
         return as_tuple(1, shape[1:])
 
     def output(self, input_value):
-        return T.max(input_value, axis=1, keepdims=True)
+        return tf.reduce_max(input_value, axis=1, keepdims=True)
 
 
 class SelectValueAtStatePosition(layers.BaseLayer):
@@ -40,49 +45,55 @@ class SelectValueAtStatePosition(layers.BaseLayer):
     def output_shape(self):
         q_output_shape = self.input_shape[0]
         n_filters = q_output_shape[0]
-        # as_tuple(3) -> (3,)
-        return as_tuple(n_filters)
+        return as_tuple(n_filters)  # as_tuple(3) -> (3,)
 
     def output(self, Q, input_state_1, input_state_2):
-        # Number of samples dependce on the state batch size.
-        # Each iteration we can try to predict direction from
-        # multiple different starting points at the same time.
-        n_states = input_state_1.shape[1]
+        with tf.name_scope("Q-output"):
+            # Number of samples dependce on the state batch size.
+            # Each iteration we can try to predict direction from
+            # multiple different starting points at the same time.
+            input_shape = tf.shape(input_state_1)
+            n_states = input_shape[1]
+            Q_shape = tf.shape(Q)
 
-        # Output is a matrix that has n_samples * n_states rows
-        # and n_filters (which is Q.shape[1]) columns.
-        return Q[
-            # Numer of repetitions depends on the size of
-            # the state batch
-            T.extra_ops.repeat(T.arange(Q.shape[0]), n_states),
+            # We move channels at the end, because tensorflow's `gather_nd`
+            # function requires to have dimensions that we won't to slice
+            # in the beggining of the tensor.
+            Q = tf.transpose(Q, [0, 2, 3, 1])
+            indeces = tf.stack([
+                # Numer of repetitions depends on the size of
+                # the state batch
+                tf_repeat(tf.range(Q_shape[0]), n_states),
 
-            # Extract all channels
-            :,
+                # Each state is a coordinate (x and y)
+                # that point to some place on a grid.
+                tf.cast(flatten(input_state_1), tf.int32),
+                tf.cast(flatten(input_state_2), tf.int32),
+            ])
+            indeces = tf.transpose(indeces, [1, 0])
 
-            # Each state is a coordinate (x and y)
-            # that point to some place on a grid.
-            asint(input_state_1.flatten()),
-            asint(input_state_2.flatten()),
-        ]
+            # Output is a matrix that has n_samples * n_states rows
+            # and n_filters (which is Q.shape[1]) columns.
+            return tf.gather_nd(Q, indeces)
 
 
 def create_VIN(input_image_shape=(2, 8, 8), n_hidden_filters=150,
                n_state_filters=10, k=10):
 
-    HalfPaddingConv = partial(layers.Convolution, padding='half', bias=None)
+    HalfPaddingConv = partial(layers.Convolution, padding='SAME', bias=None)
 
     R = layers.join(
         layers.Input(input_image_shape, name='grid-input'),
         layers.Convolution((n_hidden_filters, 3, 3),
-                           padding='half',
+                           padding='SAME',
                            weight=init.Normal(),
                            bias=init.Normal()),
         HalfPaddingConv((1, 1, 1), weight=init.Normal()),
     )
 
     # Create shared weights
-    q_weight = random_weight((n_state_filters, 1, 3, 3))
-    fb_weight = random_weight((n_state_filters, 1, 3, 3))
+    q_weight = random_weight((3, 3, 1, n_state_filters))
+    fb_weight = random_weight((3, 3, 1, n_state_filters))
 
     Q = R > HalfPaddingConv((n_state_filters, 3, 3), weight=q_weight)
 
@@ -98,7 +109,7 @@ def create_VIN(input_image_shape=(2, 8, 8), n_hidden_filters=150,
                 V,
                 HalfPaddingConv((n_state_filters, 3, 3), weight=fb_weight)
             ]],
-            layers.Elementwise(merge_function=T.add),
+            layers.Elementwise(merge_function=tf.add),
         )
 
     input_state_1 = layers.Input(10, name='state-1-input')
@@ -117,9 +128,14 @@ def create_VIN(input_image_shape=(2, 8, 8), n_hidden_filters=150,
 
 def loss_function(expected, predicted):
     epsilon = 1e-7
-    log_predicted = T.log(T.clip(predicted, epsilon, 1.0 - epsilon))
-    errors = log_predicted[T.arange(expected.size), asint(expected.flatten())]
-    return -T.mean(errors)
+    predicted = tf.clip_by_value(predicted, epsilon, 1.0 - epsilon)
+    expected = tf.cast(flatten(expected), tf.int32)
+
+    log_predicted = tf.log(predicted)
+    indeces = tf.stack([tf.range(tf.size(expected)), expected])
+    indeces = tf.transpose(indeces, [1, 0])
+    errors = tf.gather_nd(log_predicted, indeces)
+    return -tf.reduce_mean(errors)
 
 
 def on_epoch_end(network):
@@ -131,7 +147,8 @@ def on_epoch_end(network):
 
     if network.last_epoch in steps:
         new_step = steps[network.last_epoch]
-        network.variables.step.set_value(new_step)
+        session = tensorflow_session()
+        network.variables.step.load(new_step, session)
 
 
 if __name__ == '__main__':
@@ -160,6 +177,7 @@ if __name__ == '__main__':
         decay=0.9,
         epsilon=1e-6,
     )
+
     network.train((x_train, s1_train, s2_train), y_train,
                   (x_test, s1_test, s2_test), y_test,
                   epochs=120)
@@ -168,4 +186,4 @@ if __name__ == '__main__':
         os.mkdir(MODELS_DIR)
 
     storage.save(network, env['pretrained_network_file'])
-    evaluate_accuracy(network.connection.compile(), x_test, s1_test, s2_test)
+    evaluate_accuracy(network.predict, x_test, s1_test, s2_test)

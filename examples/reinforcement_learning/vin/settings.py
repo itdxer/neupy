@@ -15,6 +15,7 @@ environments = {
         input_image_shape=(2, 8, 8),
         image_size=(8, 8),
         k=10,
+        epochs=30,
     ),
     16: dict(
         mat_file=os.path.join(DATA_DIR, 'gridworld_16.mat'),
@@ -25,6 +26,7 @@ environments = {
         input_image_shape=(2, 16, 16),
         image_size=(16, 16),
         k=20,
+        epochs=120,
     ),
     28: dict(
         mat_file=os.path.join(DATA_DIR, 'gridworld_28.mat'),
@@ -35,5 +37,6 @@ environments = {
         input_image_shape=(2, 28, 28),
         image_size=(28, 28),
         k=36,
+        epochs=120,
     ),
 }

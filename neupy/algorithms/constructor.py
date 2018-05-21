@@ -40,7 +40,6 @@ def create_input_variables(input_layers):
     for input_layer in input_layers:
         variable = tf.placeholder(
             tf.float32,
-            as_tuple(None, input_layer.input_shape),
             name="network-input/to-layer-{}".format(input_layer.name),
         )
         inputs.append(variable)
@@ -352,7 +351,6 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
             ),
             network_output=tf.placeholder(
                 tf.float32,
-                as_tuple(None, output_layer.output_shape),
                 name='network-output/from-layer-{}'.format(output_layer.name),
             ),
         )

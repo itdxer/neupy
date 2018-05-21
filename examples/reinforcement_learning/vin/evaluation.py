@@ -2,7 +2,7 @@ from __future__ import division
 
 import numpy as np
 from tqdm import tqdm
-from neupy.utils import asfloat
+from neupy.utils import asfloat, tensorflow_eval
 
 
 actions = [
@@ -74,9 +74,11 @@ def detect_trajectory(f_next_step, grid, coords, max_iter=200):
             # current position is located on the obstacle.
             return None
 
-        step = f_next_step(input_grid,
-                           int_as_2d_array(coord_x),
-                           int_as_2d_array(coord_y))
+        step = f_next_step([
+            input_grid,
+            int_as_2d_array(coord_x),
+            int_as_2d_array(coord_y),
+        ])
         step = np.argmax(step, axis=1)
         action = actions[step[0]]
 
