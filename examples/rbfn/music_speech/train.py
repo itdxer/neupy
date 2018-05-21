@@ -29,6 +29,8 @@ x_train, x_test, y_train, y_test = train_test_data()
 
 
 def extract_features(data, n_fft=2048):
+    data = data.astype(np.float32)
+
     res = []
     for row in data:
         centroid = mfcc(row, n_fft=n_fft, sr=22050)
