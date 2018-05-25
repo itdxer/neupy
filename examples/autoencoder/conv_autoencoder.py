@@ -15,6 +15,36 @@ np.random.shuffle(data)
 x_train, x_test = data[:60000], data[60000:]
 x_train_4d = x_train.reshape((60000, 1, 28, 28))
 x_test_4d = x_test.reshape((10000, 1, 28, 28))
+connection = layers.join(
+    layers.Input((1, 28, 28)),
+
+    layers.Convolution((16, 3, 3)) > layers.Relu(),
+    layers.Convolution((16, 3, 3)) > layers.Relu(),
+    layers.MaxPooling((2, 2)),
+
+    layers.Convolution((32, 3, 3)) > layers.Relu(),
+    layers.MaxPooling((2, 2)),
+
+    layers.Reshape(),
+
+    layers.Relu(128),
+    layers.Relu(16),
+    layers.Relu(128),
+    layers.Relu(800),
+
+    layers.Reshape((32, 5, 5)),
+
+    layers.Upscale((2, 2)),
+    layers.Convolution((16, 3, 3), padding=2) > layers.Relu(),
+
+    layers.Upscale((2, 2)),
+    layers.Convolution((16, 3, 3), padding=2) > layers.Relu(),
+    layers.Convolution((1, 3, 3), padding=2) > layers.Sigmoid(),
+
+    layers.Reshape(),
+)
+
+
 
 conv_autoencoder = algorithms.Momentum(
     [
@@ -37,11 +67,11 @@ conv_autoencoder = algorithms.Momentum(
         layers.Reshape((32, 5, 5)),
 
         layers.Upscale((2, 2)),
-        layers.Convolution((16, 3, 3), padding='full') > layers.Relu(),
+        layers.Convolution((16, 3, 3), padding=2) > layers.Relu(),
 
         layers.Upscale((2, 2)),
-        layers.Convolution((16, 3, 3), padding='full') > layers.Relu(),
-        layers.Convolution((1, 3, 3), padding='full') > layers.Sigmoid(),
+        layers.Convolution((16, 3, 3), padding=2) > layers.Relu(),
+        layers.Convolution((1, 3, 3), padding=2) > layers.Sigmoid(),
 
         layers.Reshape(),
     ],

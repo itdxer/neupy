@@ -91,8 +91,61 @@ def conv_output_shape(dimension_size, filter_size, padding, stride):
     elif padding == 'SAME':
         return math.ceil(dimension_size / stride)
 
+    elif isinstance(padding, int):
+        return math.ceil(
+            (dimension_size + 2 * padding - filter_size + 1) / stride)
+
     raise ValueError("`{!r}` is unknown convolution's padding value"
                      "".format(padding))
+
+
+class PaddingProperty(Property):
+    """
+    Border mode property identifies border for the
+    convolution operation.
+    Parameters
+    ----------
+    {Property.Parameters}
+    """
+    expected_type = (six.string_types, int, tuple)
+    valid_string_choices = ('VALID', 'SAME')
+
+    def __set__(self, instance, value):
+        if isinstance(value, int):
+            value = (value, value)
+
+        if isinstance(value, six.string_types):
+            value = value.upper()
+
+        super(PaddingProperty, self).__set__(instance, value)
+
+    def validate(self, value):
+        super(PaddingProperty, self).validate(value)
+
+        if isinstance(value, tuple) and len(value) != 2:
+            raise ValueError(
+                "Border mode property suppose to get a tuple that "
+                "contains two elements, got {} elements"
+                "".format(len(value))
+            )
+
+        is_invalid_string = (
+            isinstance(value, six.string_types) and
+            value not in self.valid_string_choices
+        )
+        if is_invalid_string:
+            valid_choices = ', '.join(self.valid_string_choices)
+            raise ValueError("`{}` is invalid string value. Available: {}"
+                             "".format(value, valid_choices))
+
+        if isinstance(value, int) and value < 0:
+            raise ValueError("Integer border mode value needs to be "
+                             "greater or equal to zero, got {}".format(value))
+
+        if isinstance(value, tuple) and any(element < 0 for element in value):
+            raise ValueError("Tuple border mode value needs to contain "
+                             "only elements that greater or equal to zero, "
+                             "got {}".format(value))
 
 
 class Convolution(ParameterBasedLayer):
@@ -147,7 +200,7 @@ class Convolution(ParameterBasedLayer):
     {ParameterBasedLayer.Attributes}
     """
     size = TypedListProperty(required=True, element_type=int)
-    padding = ChoiceProperty(default='VALID', choices=('VALID', 'SAME'))
+    padding = PaddingProperty(default='valid')
     stride = StrideProperty(default=(1, 1))
 
     def validate(self, input_shape):
@@ -190,12 +243,28 @@ class Convolution(ParameterBasedLayer):
         return as_tuple(self.size[0])
 
     def output(self, input_value):
+        padding = self.padding
+
+        if not isinstance(padding, six.string_types):
+            height_pad, weight_pad = padding
+            input_value = tf.pad(input_value, [
+                [0, 0],
+                [0, 0],
+                [height_pad, height_pad],
+                [weight_pad, weight_pad],
+            ])
+            # We will need to make sure that convolution operation
+            # won't add any paddings.
+            padding = 'VALID'
+
         # TODO: transpose added only for convenient transition between
         # tensroflow and theatno. I will remove it later.
         input_value = tf.transpose(input_value, (0, 2, 3, 1))
         output = tf.nn.convolution(
-            input_value, self.weight,
-            self.padding, self.stride,
+            input_value,
+            self.weight,
+            padding,
+            self.stride,
         )
         output = tf.transpose(output, (0, 3, 1, 2))
 

@@ -55,11 +55,11 @@ decoder = layers.join(
     layers.Reshape((32, 5, 5)),
 
     layers.Upscale((2, 2)),
-    layers.Convolution((16, 3, 3), padding='full') > layers.Relu(),
+    layers.Convolution((16, 3, 3), padding=2) > layers.Relu(),
 
     layers.Upscale((2, 2)),
-    layers.Convolution((16, 3, 3), padding='full') > layers.Relu(),
-    layers.Convolution((1, 3, 3), padding='full') > layers.Sigmoid(),
+    layers.Convolution((16, 3, 3), padding=2) > layers.Relu(),
+    layers.Convolution((1, 3, 3), padding=2) > layers.Sigmoid(),
 
     layers.Reshape(),
 )
