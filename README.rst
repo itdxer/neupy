@@ -9,7 +9,7 @@
 .. |License| image:: https://img.shields.io/badge/license-MIT-blue.svg
 .. _License: https://github.com/itdxer/neupy/blob/master/LICENSE
 
-.. |Coverage| image:: https://codecov.io/gh/itdexer/neupy/branch/master/graph/badge.svg
+.. |Coverage| image:: https://codecov.io/gh/itdxer/neupy/branch/master/graph/badge.svg
 .. _Coverage: https://codecov.io/gh/itdxer/neupy
 
 
