@@ -86,29 +86,38 @@ class ConvLayersTestCase(BaseTestCase):
             layers.Convolution((1, 2, 3), padding=padding)
 
     def test_invalid_padding(self):
-        invalid_paddings = ('invalid mode', -10, (10, -5), 1, (1, 1))
+        invalid_paddings = ('invalid mode', -10, (10, -5))
 
         for padding in invalid_paddings:
             msg = "Padding: {}".format(padding)
+
             with self.assertRaises(ValueError, msg=msg):
                 layers.Convolution((1, 2, 3), padding=padding)
 
     def test_conv_output_shape_func_exceptions(self):
         with self.assertRaises(ValueError):
-            conv_output_shape(dimension_size=5, filter_size=5, padding='VALID',
-                              stride='not int')
+            # Wrong stride value
+            conv_output_shape(
+                dimension_size=5, filter_size=5,
+                padding='VALID', stride='not int')
 
         with self.assertRaises(ValueError):
-            conv_output_shape(dimension_size=5, filter_size='not int',
-                              padding='SAME', stride=5)
+            # Wrong filter size value
+            conv_output_shape(
+                dimension_size=5, filter_size='not int',
+                padding='SAME', stride=5)
 
         with self.assertRaises(ValueError):
-            conv_output_shape(dimension_size=5, filter_size=5,
-                              padding=1, stride=5)
+            # Wrong padding value
+            conv_output_shape(
+                dimension_size=5, filter_size=5,
+                padding=1.5, stride=5)
 
     def test_conv_unknown_dim_size(self):
-        shape = conv_output_shape(dimension_size=None, filter_size=5,
-                                  padding='VALID', stride=5)
+        shape = conv_output_shape(
+            dimension_size=None, filter_size=5,
+            padding='VALID', stride=5,
+        )
         self.assertEqual(shape, None)
 
     def test_conv_invalid_padding_exception(self):
