@@ -17,5 +17,5 @@ flake8==2.2.5
 mock==2.0.0
 
 # Storage module
-h5py==2.7.0
+h5py==2.8.0
 ujson==1.35

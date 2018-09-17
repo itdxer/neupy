@@ -13,5 +13,5 @@ pytest-xdist==1.22.5
 
 # Storage module
 dill==0.2.3
-h5py==2.7.0
+h5py==2.8.0
 ujson==1.35
