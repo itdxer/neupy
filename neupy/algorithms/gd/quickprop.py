@@ -1,10 +1,8 @@
 from __future__ import division
 
-import numpy as np
 import tensorflow as tf
 
 from neupy.core.properties import BoundedProperty
-from neupy.utils import asfloat
 from .base import GradientDescent
 
 

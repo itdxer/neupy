@@ -1,7 +1,5 @@
 import os
 
-import theano
-
 import matplotlib.pyplot as plt
 from neupy import plots, algorithms
 from neupy.algorithms.base import ErrorHistoryList

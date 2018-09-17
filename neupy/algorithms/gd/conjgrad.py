@@ -1,7 +1,6 @@
-import numpy as np
 import tensorflow as tf
 
-from neupy.utils import asfloat, flatten
+from neupy.utils import flatten
 from neupy.core.properties import ChoiceProperty
 from neupy.algorithms.gd import NoMultipleStepSelection
 from neupy.algorithms.utils import parameter_values, setup_parameter_updates
@@ -93,7 +92,7 @@ class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
     >>> x_train, x_test, y_train, y_test = train_test_split(
     ...     data_scaler.fit_transform(data),
     ...     target_scaler.fit_transform(target),
-    ...     test_size=0.15
+    ...     train_size=0.85
     ... )
     >>>
     >>> cgnet = algorithms.ConjugateGradient(

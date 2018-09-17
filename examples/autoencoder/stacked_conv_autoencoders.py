@@ -1,6 +1,5 @@
 from __future__ import division
 
-import theano
 import numpy as np
 from sklearn import datasets, metrics
 from sklearn.model_selection import train_test_split
@@ -9,8 +8,6 @@ from neupy import algorithms, layers, environment
 
 
 environment.reproducible()
-theano.config.floatX = 'float32'
-theano.config.allow_gc = False
 
 mnist = datasets.fetch_mldata('MNIST original')
 data = mnist.data / 255.
@@ -26,7 +23,7 @@ n_unlabeled = n_samples - n_labeled
 x_labeled, x_unlabeled, y_labeled, y_unlabeled = train_test_split(
     data.astype(np.float32),
     target.astype(np.float32),
-    test_size=(1 - n_labeled / n_samples)
+    train_size=(n_labeled / n_samples)
 )
 
 x_labeled_4d = x_labeled.reshape((n_labeled, 1, 28, 28))

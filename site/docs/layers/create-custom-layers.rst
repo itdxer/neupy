@@ -15,9 +15,7 @@ The simplest type of layers is the one that doesn't modify a shape of the input 
 
     class DoubleInput(layers.BaseLayer):
         def output(self, input_value):
-            return asfloat(2) * input_value
-
-From the code, you can see that I've used ``asfloat`` function. This function converts any number to a float. Type of the float depends on the ``theano.config.floatX`` variable. This function gives flexibility to automatically convert input variable to the float type that Tensorflow uses on the backend.
+            return 2 * input_value
 
 Layers with activation function
 -------------------------------
@@ -33,12 +31,12 @@ To be able to construct your own layer with different activation function you ne
 
 .. code-block:: python
 
-    import theano.tensor as T
+    import tensorflow as tf
     from neupy import layers
 
     class Squared(layers.ActivationLayer):
         def activation_function(self, input_value):
-            return T.square(input_value)
+            return tf.square(input_value)
 
 Validate input shape
 --------------------
@@ -62,7 +60,7 @@ Layer that modify input shape
 
 .. code-block:: python
 
-    import theano.tensor as T
+    import tensorflow as tf
     from neupy import layers
 
     class Mean(layers.BaseLayer):
@@ -73,13 +71,14 @@ Layer that modify input shape
             return self.input_shape[1:] or (1,)
 
         def output(self, input_value)
-            return T.mean(input_value, axis=1)
+            return tf.reduce_mean(input_value, axis=1)
 
 Add parameters to the layer
 ---------------------------
 
 .. code-block:: python
 
+    import tensorflow as tf
     from neupy import layers
 
     class Wx(layers.BaseLayer):
@@ -89,7 +88,7 @@ Add parameters to the layer
                                value=init.Uniform(), trainable=True)
 
         def output(self, input_value):
-            return T.dot(self.weight, input_value)
+            return tf.matmul(self.weight, input_value)
 
 Initialization method triggers when the layer has defined input shape.
 

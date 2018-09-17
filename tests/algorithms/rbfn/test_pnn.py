@@ -67,7 +67,7 @@ class PNNTestCase(BaseTestCase):
     def test_digit_prediction(self):
         dataset = datasets.load_digits()
         x_train, x_test, y_train, y_test = train_test_split(
-            dataset.data, dataset.target, test_size=0.3
+            dataset.data, dataset.target, train_size=0.7
         )
 
         nw = algorithms.PNN(verbose=False, std=10)
@@ -80,7 +80,7 @@ class PNNTestCase(BaseTestCase):
     def test_predict_probability(self):
         dataset = datasets.load_digits()
         x_train, x_test, y_train, y_test = train_test_split(
-            dataset.data, dataset.target, test_size=0.3)
+            dataset.data, dataset.target, train_size=0.7)
 
         x_train_before = x_train.copy()
         x_test_before = x_test.copy()
@@ -133,7 +133,7 @@ class PNNTestCase(BaseTestCase):
         n_classes = len(np.unique(dataset.target))
 
         x_train, x_test, y_train, y_test = train_test_split(
-            dataset.data, dataset.target, test_size=0.3)
+            dataset.data, dataset.target, train_size=0.7)
 
         pnnet = algorithms.PNN(verbose=False, batch_size=100)
         pnnet.train(x_train, y_train)

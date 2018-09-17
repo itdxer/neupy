@@ -5,13 +5,13 @@ from time import gmtime, strftime
 
 import six
 import numpy as np
-import tensorflow as tf
 from six.moves import cPickle as pickle
 
 import neupy
-from neupy.utils import asfloat, tensorflow_eval, tensorflow_session
 from neupy.core.docs import shared_docs
 from neupy.layers.utils import extract_connection
+from neupy.utils import (asfloat, tensorflow_session,
+                         initialize_uninitialized_variables)
 
 
 __all__ = (
@@ -89,6 +89,8 @@ def load_layer_parameter(layer, layer_data):
     stored data
     """
     session = tensorflow_session()
+    initialize_uninitialized_variables()
+
     for param_name, param_data in layer_data['parameters'].items():
         parameter = getattr(layer, param_name)
         parameter.load(asfloat(param_data['value']), session)
@@ -320,6 +322,9 @@ def save_dict(connection):
     ['layers', 'graph', 'metadata']
     """
     connection = extract_connection(connection)
+    session = tensorflow_session()
+    initialize_uninitialized_variables()
+
     data = {
         'metadata': {
             'language': 'python',
@@ -341,7 +346,7 @@ def save_dict(connection):
 
         for attrname, parameter in layer.parameters.items():
             parameters[attrname] = {
-                'value': asfloat(tensorflow_eval(parameter)),
+                'value': asfloat(session.run(parameter)),
                 'trainable': parameter.is_trainable,
             }
 

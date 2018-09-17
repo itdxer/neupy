@@ -1,6 +1,5 @@
 import itertools
 
-import theano
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets
@@ -66,7 +65,6 @@ def binarize_images(data):
 
 
 environment.reproducible()
-theano.config.floatX = 'float32'
 
 people_dataset = datasets.fetch_lfw_people()
 data = people_dataset.data
@@ -75,7 +73,7 @@ np.random.shuffle(data)
 binarized_data = binarize_images(data)
 
 x_train, x_test, binarized_x_train, binarized_x_test = train_test_split(
-    data, binarized_data, test_size=0.1
+    data, binarized_data, train_size=0.9
 )
 
 rbm = algorithms.RBM(

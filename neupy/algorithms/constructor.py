@@ -118,29 +118,6 @@ def clean_layers(connection):
     return connection
 
 
-def create_output_variable(error_function, name):
-    """
-    Create output variable based on error function.
-
-    Parameters
-    ----------
-    error_function : function
-    name : str
-
-    Returns
-    -------
-    Tensorflow variable
-    """
-    # TODO: Solution is not user friendly. I need to find
-    # better solution later.
-    if hasattr(error_function, 'expected_dtype'):
-        network_output_dtype = error_function.expected_dtype
-    else:
-        network_output_dtype = T.matrix
-
-    return network_output_dtype(name)
-
-
 class ErrorFunctionProperty(ChoiceProperty):
     """
     Property that helps select error function from

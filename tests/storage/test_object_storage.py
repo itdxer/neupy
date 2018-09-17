@@ -1,7 +1,6 @@
 import tempfile
 
 import dill
-import theano
 import numpy as np
 from sklearn import datasets, preprocessing
 from six.moves import cPickle as pickle

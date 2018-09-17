@@ -1,4 +1,3 @@
-import theano
 import matplotlib.pyplot as plt
 from sklearn import datasets
 from neupy import algorithms, environment
@@ -22,7 +21,6 @@ def plot_rbm_components(rbm_network):
 
 
 environment.reproducible()
-theano.config.floatX = 'float32'
 
 mnist = datasets.fetch_mldata('MNIST original')
 data = asfloat(mnist.data > 130)

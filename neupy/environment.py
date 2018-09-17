@@ -1,12 +1,11 @@
 import os
 import random
 
-import theano
 import tensorflow as tf
 import numpy as np
 
 
-__all__ = ('reproducible', 'speedup')
+__all__ = ('reproducible',)
 
 
 def reproducible(seed=0):
@@ -23,11 +22,3 @@ def reproducible(seed=0):
     np.random.seed(seed)
     random.seed(seed)
     tf.set_random_seed(seed)
-
-
-def speedup():
-    """
-    Speed up Tensorfow's computation.
-    """
-    theano.config.floatX = 'float32'
-    theano.config.allow_gc = False

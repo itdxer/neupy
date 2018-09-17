@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
-from neupy.utils import asfloat, tensorflow_session, flatten
+from neupy.utils import tensorflow_session, flatten
 from neupy.core.properties import (BoundedProperty, ChoiceProperty,
                                    WithdrawProperty)
 from neupy.algorithms import GradientDescent

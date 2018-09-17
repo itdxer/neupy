@@ -1,22 +1,16 @@
 import inspect
-import multiprocessing
 
-import theano
-import theano.tensor as T
-from theano.tensor.var import TensorVariable
-from theano.tensor.sharedvar import TensorSharedVariable
 import tensorflow as tf
 import numpy as np
 from scipy.sparse import issparse
 
 
 __all__ = ('format_data', 'asfloat', 'AttributeKeyDict', 'preformat_value',
-           'as_tuple', 'number_type', 'theano_random_stream',
-           'all_equal', 'tensorflow_session', 'tensorflow_eval')
+           'as_tuple', 'number_type',
+           'all_equal', 'tensorflow_session', 'tensorflow_eval',
+           'initialize_uninitialized_variables', 'tf_repeat')
 
 
-# Disable annoying warning from Tensorfow
-theano.config.warn.round = False
 number_type = (int, float, np.floating, np.integer)
 
 
@@ -73,8 +67,7 @@ def format_data(data, is_feature1d=True, copy=False, make_float=True):
 
 def asfloat(value):
     """
-    Convert variable to float type configured by theano
-    floatX variable.
+    Convert variable to 32 bit float number.
 
     Parameters
     ----------
@@ -84,17 +77,15 @@ def asfloat(value):
     Returns
     -------
     matrix, ndarray, Tensorfow variable or scalar
-        Output would be input value converted to float type
-        configured by theano floatX variable.
+        Output would be input value converted to 32 bit float.
     """
-    float_type = theano.config.floatX
     float_type = 'float32'
 
     if isinstance(value, (np.matrix, np.ndarray)):
         if value.dtype != np.dtype(float_type):
             return value.astype(float_type)
-        else:
-            return value
+
+        return value
 
     elif isinstance(value, (tf.Tensor, tf.SparseTensor)):
         return tf.cast(value, tf.float32)
@@ -192,17 +183,6 @@ def as_tuple(*values):
         else:
             cleaned_values.append(value)
     return tuple(cleaned_values)
-
-
-def theano_random_stream():
-    """
-    Create Tensorfow random stream instance.
-    """
-    # Use NumPy seed to make Tensorfow code easely reproducible
-    max_possible_seed = 2147483647  # max 32-bit integer
-    seed = np.random.randint(max_possible_seed)
-    theano_random = T.shared_randomstreams.RandomStreams(seed)
-    return theano_random
 
 
 def all_equal(array):

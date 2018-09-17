@@ -42,7 +42,7 @@ class GRNNTestCase(BaseTestCase):
     def test_simple_grnn(self):
         dataset = datasets.load_diabetes()
         x_train, x_test, y_train, y_test = train_test_split(
-            dataset.data, dataset.target, test_size=0.3
+            dataset.data, dataset.target, train_size=0.7
         )
 
         x_train_before = x_train.copy()

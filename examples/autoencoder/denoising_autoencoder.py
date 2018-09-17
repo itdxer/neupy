@@ -1,4 +1,3 @@
-import theano
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets
@@ -6,7 +5,6 @@ from neupy import algorithms, layers, environment
 
 
 environment.reproducible()
-theano.config.floatX = 'float32'
 
 mnist = datasets.fetch_mldata('MNIST original')
 

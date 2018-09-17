@@ -1,14 +1,11 @@
 import os
 
-import theano
-import theano.tensor as T
 from neupy import layers, storage, architectures
 
 from imagenet_tools import (CURRENT_DIR, FILES_DIR, load_image,
                             print_top_n, download_file)
 
 
-theano.config.floatX = 'float32'
 SQUEEZENET_WEIGHTS_FILE = os.path.join(FILES_DIR, 'squeezenet.pickle')
 
 # Networks weight ~4.8 Mb

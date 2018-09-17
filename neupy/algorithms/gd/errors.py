@@ -10,39 +10,19 @@ __all__ = ('mse', 'rmse', 'mae', 'msle', 'rmsle', 'binary_crossentropy',
            'categorical_crossentropy', 'binary_hinge', 'categorical_hinge')
 
 
-def smallest_positive_number():
-    """
-    Function returns different nubmer for different
-    ``theano.config.floatX`` values.
-
-    * ``1e-7`` for 32-bit float
-    * ``1e-16`` for 64-bit float
-
-    Returns
-    -------
-    float
-        Smallest positive float number.
-    """
-    # float_type = theano.config.floatX
-    float_type = 'float32'
-    epsilon_values = {
-        'float16': 1e-3,
-        'float32': 1e-7,
-        'float64': 1e-16,
-    }
-    return epsilon_values[float_type]
+smallest_positive_number = 1e-7  # for 32-bit float nubmers
 
 
 def error_function(expected, predicted):
     """
     Parameters
     ----------
-    expected : array-like, theano variable
-    predicted : array-like, theano variable
+    expected : array-like, tensorflow variable
+    predicted : array-like, tensorflow variable
 
     Returns
     -------
-    array-like, theano variable
+    array-like, tensorflow variable
     """
     raise NotImplementedError
 
@@ -179,14 +159,14 @@ def binary_crossentropy(expected, predicted):
     -------
     {error_function.Returns}
     """
-    epsilon = smallest_positive_number()
+    epsilon = smallest_positive_number
     shape = tf.shape(expected)
     n_samples = asfloat(shape[0])
 
     predicted = tf.clip_by_value(predicted, epsilon, 1.0 - epsilon)
     total_error = tf.reduce_sum(
-        -expected * tf.log(predicted)
-        - (1 - expected) * tf.log(1 - predicted)
+        -expected * tf.log(predicted) -
+        (1 - expected) * tf.log(1 - predicted)
     )
     return total_error / n_samples
 
@@ -205,7 +185,7 @@ def categorical_crossentropy(expected, predicted):
     -------
     {error_function.Returns}
     """
-    epsilon = smallest_positive_number()
+    epsilon = smallest_positive_number
     shape = tf.shape(expected)
     n_samples = asfloat(shape[0])
 

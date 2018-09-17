@@ -20,7 +20,7 @@ def load_data():
     data = data - data.mean(axis=0)
 
     x_train, x_test = model_selection.train_test_split(
-        data.astype(np.float32), test_size=(1 / 7.)
+        data.astype(np.float32), train_size=(6 / 7.)
     )
     return x_train, x_test
 

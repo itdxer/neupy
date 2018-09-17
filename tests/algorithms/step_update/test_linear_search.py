@@ -28,7 +28,7 @@ class LinearSearchTestCase(BaseTestCase):
             x_train, x_test, y_train, y_test = train_test_split(
                 data_scaler.fit_transform(data),
                 target_scaler.fit_transform(target.reshape(-1, 1)),
-                test_size=0.15
+                train_size=0.85
             )
 
             cgnet = algorithms.ConjugateGradient(

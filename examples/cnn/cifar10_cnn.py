@@ -1,4 +1,3 @@
-import theano
 import numpy as np
 from skdata.cifar10 import dataset, view
 from sklearn.preprocessing import OneHotEncoder
@@ -7,8 +6,6 @@ from neupy import algorithms, layers, environment
 
 
 environment.reproducible()
-theano.config.floatX = 'float32'
-theano.config.allow_gc = False
 
 cifar10_dataset = dataset.CIFAR10()
 cifar10_dataset.fetch(download_if_missing=True)

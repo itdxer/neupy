@@ -1,10 +1,9 @@
 import numpy as np
 import tensorflow as tf
-import theano.tensor as T
 
 
 __all__ = ('preformat_layer_shape', 'dimshuffle', 'iter_parameters',
-           'count_parameters', 'create_input_variable', 'extract_connection')
+           'count_parameters', 'extract_connection')
 
 
 def preformat_layer_shape(shape):
@@ -39,8 +38,6 @@ def dimshuffle(value, ndim, axes):
     -------
     Tensorfow variable
     """
-    dimensions_to_expand = []
-
     for dim in range(ndim):
         if dim not in axes:
             value = tf.expand_dims(value, dim)
@@ -68,12 +65,12 @@ def iter_parameters(layers, only_trainable=True):
     observed_parameters = []
 
     for layer in layers:
-        for attrname, parameter in layer.parameters.items():
-            new_parameter = parameter not in observed_parameters
+        for attrname, param in layer.parameters.items():
+            new_param = param not in observed_parameters
 
-            if new_parameter and (parameter.is_trainable or not only_trainable):
-                observed_parameters.append(parameter)
-                yield layer, attrname, parameter
+            if new_param and (param.is_trainable or not only_trainable):
+                observed_parameters.append(param)
+                yield layer, attrname, param
 
 
 def count_parameters(connection):

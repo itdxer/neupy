@@ -47,17 +47,6 @@ samples for training and 10,000 for test.
     ...     train_size=(6. / 7)
     ... )
 
-In the previous procedure I converted all data to `float32` data type. This
-simple trick will help us use less memory and decrease computational time.
-Tensorfow is a main backend for the Gradient Descent based algorithms in NeuPy.
-For the Tensorfow we need to add additional configuration that will explain Tensorfow that
-we are going to use 32bit float numbers.
-
-.. code-block:: python
-
-    >>> import theano
-    >>> theano.config.floatX = 'float32'
-
 We prepared everything that we need for the neural network training. Now we are
 able to create the neural network that will classify digits for us.
 

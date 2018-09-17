@@ -34,11 +34,5 @@ before_script:
 #   - sleep 3 # give xvfb some time to start
 
 script:
-  - export THEANO_FLAGS='floatX=float32,gcc.cxxflags="-march=core2"'  && export SKIP_PLOT_TEST='YES' && nosetests
-  - export THEANO_FLAGS='floatX=float64,gcc.cxxflags="-march=core2"' && export SKIP_PLOT_TEST='YES' && nosetests
+  - export SKIP_PLOT_TEST='YES' && pytest
   - flake8 neupy
-
-branches:
-  except:
-    # Lots of movement in this branch
-    - release/v0.7.0

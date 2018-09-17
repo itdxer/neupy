@@ -98,8 +98,10 @@ def golden_search(f, maxstep=50, maxiter=1024, tol=1e-5):
 
             new_a = tf.where(is_c_smaller_than_d, a, c)
             new_b = tf.where(is_c_smaller_than_d, d, b)
-            new_c = tf.where(is_c_smaller_than_d, d - golden_ratio * (d - a), d)
-            new_d = tf.where(is_c_smaller_than_d, c, c + golden_ratio * (b - c))
+            new_c = tf.where(
+                is_c_smaller_than_d, d - golden_ratio * (d - a), d)
+            new_d = tf.where(
+                is_c_smaller_than_d, c, c + golden_ratio * (b - c))
 
             return [new_a, new_b, new_c, new_d]
 

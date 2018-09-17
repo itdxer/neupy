@@ -1,7 +1,6 @@
 import unittest
 
 import numpy as np
-import theano.tensor as T
 
 from neupy.utils import asfloat
 from neupy.algorithms.gd import errors
@@ -113,13 +112,3 @@ class ErrorFuncTestCase(BaseTestCase):
 
         actual = errors.categorical_hinge(targets, predictions)
         self.assertAlmostEqual(expected, self.eval(actual), places=3)
-
-    def test_categorical_hinge_invalid_dimension(self):
-        with self.assertRaises(TypeError):
-            errors.categorical_hinge(T.tensor3(), T.matrix())
-
-    @unittest.skip('Ignore for now')
-    def test_smallest_positive_number(self):
-        epsilon = errors.smallest_positive_number()
-        self.assertNotEqual(0, asfloat(1) - (asfloat(1) - asfloat(epsilon)))
-        self.assertEqual(0, asfloat(1) - (asfloat(1) - asfloat(epsilon / 10)))

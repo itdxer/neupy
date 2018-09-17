@@ -180,16 +180,16 @@ def quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, bound_size_ratio=0.1):
 
     Parameters
     ----------
-    x_a : float or theano variable
+    x_a : float or tensorflow variable
         Left point ``a`` in the ``x`` axis.
-    y_a : float or theano variable
+    y_a : float or tensorflow variable
         Output from function ``y`` at point ``a``.
-    y_prime_a : float or theano variable
+    y_prime_a : float or tensorflow variable
         Output from function ``y'`` (``y`` derivative) at
         point ``a``.
-    x_b : float or theano variable
+    x_b : float or tensorflow variable
         Right point ``a`` in the ``x`` axis.
-    y_b : float or theano variable
+    y_b : float or tensorflow variable
         Output from function ``y`` at point ``b``.
     bound_size_ratio : float
         Value control acceptable bounds for interpolation. If value
@@ -244,20 +244,20 @@ def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c,
 
     Parameters
     ----------
-    x_a : float or theano variable
+    x_a : float or tensorflow variable
         First point ``a`` in the ``x`` axis.
-    y_a : float or theano variable
+    y_a : float or tensorflow variable
         Output from function ``y`` at point ``a``.
-    y_prime_a : float or theano variable
+    y_prime_a : float or tensorflow variable
         Output from function ``y'`` (``y`` derivative) at
         point ``a``.
-    x_b : float or theano variable
+    x_b : float or tensorflow variable
         Second point ``b`` in the ``x`` axis.
-    y_b : float or theano variable
+    y_b : float or tensorflow variable
         Output from function ``y`` at point ``b``.
-    x_c : float or theano variable
+    x_c : float or tensorflow variable
         Third point ``c`` in the ``x`` axis.
-    y_c : float or theano variable
+    y_c : float or tensorflow variable
         Output from function ``y`` at point ``c``.
     bound_size_ratio : float
         Value control acceptable bounds for interpolation. If
@@ -390,10 +390,14 @@ def zoom(x_low, x_high, y_low, y_high, y_deriv_low,
         )
         condition2 = y_deriv_new * (x_high - x_low) >= 0
 
-        x_recent = tf.where(tf.logical_or(condition1, condition2), x_high, x_low)
-        y_recent = tf.where(tf.logical_or(condition1, condition2), y_high, y_low)
-        x_high = tf.where(condition1, x_new, tf.where(condition2, x_low, x_high))
-        y_high = tf.where(condition1, y_new, tf.where(condition2, y_low, y_high))
+        x_recent = tf.where(
+            tf.logical_or(condition1, condition2), x_high, x_low)
+        y_recent = tf.where(
+            tf.logical_or(condition1, condition2), y_high, y_low)
+        x_high = tf.where(
+            condition1, x_new, tf.where(condition2, x_low, x_high))
+        y_high = tf.where(
+            condition1, y_new, tf.where(condition2, y_low, y_high))
 
         x_low = tf.where(condition1, x_low, x_new)
         y_low = tf.where(condition1, y_low, y_new)

@@ -1,6 +1,5 @@
 import os
 
-import theano
 from six.moves import cPickle as pickle
 from neupy.utils import asfloat
 from neupy import layers, storage, architectures, environment

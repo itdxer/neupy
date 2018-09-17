@@ -24,6 +24,7 @@ def initialize_with_kwargs(class_, kwargs):
 class ExtractParameters(object):
     def get_params(self, deep=False):
         options = {}
+
         for property_name, option in self.options.items():
             value = getattr(self, property_name)
 

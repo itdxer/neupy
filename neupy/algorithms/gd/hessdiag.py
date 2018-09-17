@@ -66,7 +66,7 @@ class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
     >>> x_train, x_test, y_train, y_test = train_test_split(
     ...     input_scaler.fit_transform(data),
     ...     target_scaler.fit_transform(target),
-    ...     test_size=0.2
+    ...     train_size=0.8
     ... )
     >>>
     >>> nw = algorithms.HessianDiagonal(

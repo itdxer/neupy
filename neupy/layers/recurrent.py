@@ -1,5 +1,3 @@
-from operator import itemgetter
-
 import numpy as np
 import tensorflow as tf
 
@@ -37,11 +35,8 @@ def clip_gradient(value, clip_value):
 
 def unroll_scan(fn, sequence, outputs_info):
     """
-    Helper function to unroll for loops. Can be used to unroll theano.scan.
-    The parameter names are identical to theano.scan, please refer to here
-    for more information.
-    Note that this function does not support the truncate_gradient
-    setting from theano.scan.
+    Helper function to unroll for loops. Can be used to unroll
+    ``tensorflow.scan``.
 
     Parameters
     ----------
@@ -55,13 +50,6 @@ def unroll_scan(fn, sequence, outputs_info):
     outputs_info : list of TensorVariables
         List of tensors specifying the initial values for each recurrent
         value.
-
-    n_steps: int
-        Number of steps to unroll.
-
-    go_backwards: bool
-        If ``True`` the recursion starts at sequences[-1] and
-        iterates backwards.
 
     Returns
     -------
@@ -201,7 +189,7 @@ class LSTM(BaseRNNLayer):
 
         .. code-block:: python
 
-            # import theano.tensor as T
+            # import tensorflow as tf
             dict(
                 ingate=tf.nn.sigmoid,
                 forgetgate=tf.nn.sigmoid,
@@ -363,7 +351,6 @@ class LSTM(BaseRNNLayer):
         # dimshuffle to (n_time_steps, n_batch, n_features)
         input_value = tf.transpose(input_value, [1, 0, 2])
         input_shape = tf.shape(input_value)
-        seq_len = input_shape[0]
         n_batch = input_shape[1]
 
         def one_lstm_step(states, input_n):
@@ -467,7 +454,7 @@ class GRU(BaseRNNLayer):
 
         .. code-block:: python
 
-            # import theano.tensor as T
+            # import tensorflow as tf
             dict(
                 resetgate=tf.nn.sigmoid,
                 updategate=tf.nn.sigmoid,
@@ -588,10 +575,9 @@ class GRU(BaseRNNLayer):
         # dimshuffle to (n_time_steps, n_batch, n_features)
         input_value = tf.transpose(input_value, [1, 0, 2])
         input_shape = tf.shape(input_value)
-        seq_len = input_shape[0]
         n_batch = input_shape[1]
 
-        # When theano.scan calls step, input_n will be
+        # When tensorflow.scan calls step, input_n will be
         # (n_batch, 3 * num_units). We define a slicing function
         # that extract the input to each GRU gate
         def slice_w(x, n):

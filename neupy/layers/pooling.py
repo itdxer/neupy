@@ -311,7 +311,7 @@ class GlobalPooling(BaseLayer):
     ----------
     function : callable
         Function that aggregates over dimensions.
-        Defaults to ``theano.tensor.mean``.
+        Defaults to ``tensorflow.reduce_mean``.
 
         .. code-block:: python
 

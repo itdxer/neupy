@@ -1,8 +1,6 @@
 import math
 
 import numpy as np
-import theano
-import theano.tensor as T
 
 from neupy.utils import asfloat
 from neupy import layers, algorithms, init

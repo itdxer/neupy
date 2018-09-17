@@ -137,11 +137,11 @@ Also, it's possible to create custom error functions. Error function should have
 
 .. code-block:: python
 
-    import theano.tensor as T
+    import tensorflow as tf
     from neupy import algorithms, layers
 
     def mean_absolute_error(expected, predicted):
-        return T.abs_(expected - predicted).mean()
+        return tf.abs(expected - predicted).mean()
 
     nnet = algorithms.MinibatchGradientDescent(
         [

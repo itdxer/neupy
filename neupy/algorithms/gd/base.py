@@ -57,7 +57,7 @@ class GradientDescent(ConstructibleNetwork):
     # TODO: The arguments that have default value equal to `None`
     # are useful only in case if we need to save network in the
     # file. This solution looks bad and I need to redesign it later.
-    def __new__(cls, connection=None, options=None, floatX=None, **kwargs):
+    def __new__(cls, connection=None, options=None, **kwargs):
         # Argument `options` is a simple hack for the `__reduce__` method.
         # `__reduce__` can't retore class with keyword arguments and
         # it will put them as `dict` argument in the `options` and method
@@ -66,9 +66,6 @@ class GradientDescent(ConstructibleNetwork):
 
         if options is None:
             options = kwargs
-
-        # if floatX is not None:
-        #     theano.config.floatX = floatX
 
         addons = options.get('addons')
 
@@ -106,7 +103,7 @@ class GradientDescent(ConstructibleNetwork):
 
         return super(GradientDescent, new_class).__new__(new_class)
 
-    def __init__(self, connection, options=None, floatX=None, **kwargs):
+    def __init__(self, connection, options=None, **kwargs):
         if options is None:
             options = kwargs
         super(GradientDescent, self).__init__(connection, **options)
@@ -128,9 +125,7 @@ class GradientDescent(ConstructibleNetwork):
 
     def __reduce__(self):
         parameters = self.get_params(with_connection=False)
-        # floatX = theano.config.floatX
-        floatX = 'float32'
-        args = (self.connection, parameters, floatX)
+        args = (self.connection, parameters)
         return (self.main_class, args)
 
 

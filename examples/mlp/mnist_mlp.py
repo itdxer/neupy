@@ -1,4 +1,3 @@
-import theano
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 from sklearn import model_selection, metrics, datasets
@@ -6,7 +5,6 @@ from neupy import algorithms, layers, environment
 
 
 environment.reproducible()
-theano.config.floatX = 'float32'
 
 mnist = datasets.fetch_mldata('MNIST original')
 
@@ -20,7 +18,7 @@ data = data - data.mean(axis=0)
 x_train, x_test, y_train, y_test = model_selection.train_test_split(
     data.astype(np.float32),
     target.astype(np.float32),
-    test_size=(1 / 7.)
+    train_size=(6 / 7.)
 )
 
 network = algorithms.Momentum(

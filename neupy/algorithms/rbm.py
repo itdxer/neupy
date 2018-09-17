@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
-from neupy.core.config import ConfigurableABC, DumpableObject
+from neupy.core.config import DumpableObject
 from neupy.core.properties import IntProperty, ParameterProperty
 from neupy.algorithms.base import BaseNetwork
 from neupy.algorithms.constructor import BaseAlgorithm, function
@@ -281,11 +281,11 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
             epsilon = asfloat(1e-8)
             error = tf.reduce_mean(
                 self.n_visible * tf.log(
+                    # we add small epsilon in order to prevent
+                    # 0 values for logarithm
                     tf.nn.sigmoid(
                         free_energy(flipped_rounded_input) -
                         free_energy(rounded_input)
-                    # we add small epsilon in order to prevent
-                    # 0 values for logarithm
                     ) + epsilon
                 )
             )

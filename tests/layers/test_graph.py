@@ -1,7 +1,6 @@
 import textwrap
 
 import numpy as np
-import theano.tensor as T
 
 from neupy import layers
 from neupy.utils import asfloat

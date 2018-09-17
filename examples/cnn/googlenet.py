@@ -1,9 +1,6 @@
-import theano
-import theano.tensor as T
+import tensorflow as tf
+
 from neupy import layers, plots
-
-
-theano.config.floatX = 'float32'
 
 
 def Inception(nfilters):
@@ -56,7 +53,7 @@ googlenet = layers.join(
 
     Inception((128, 256, 160, 320, 32, 128)),
     Inception((128, 384, 192, 384, 48, 128)),
-    layers.GlobalPooling(function=T.mean),
+    layers.GlobalPooling(function=tf.reduce_mean),
 
     layers.Softmax(1000),
 )

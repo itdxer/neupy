@@ -134,7 +134,10 @@ class BatchNorm(BaseLayer):
                              "that doesn't exist.")
 
         opposite_axes = find_opposite_axes(self.axes, ndim)
-        parameter_shape = [input_shape[axis] if axis in opposite_axes else 1 for axis in range(ndim)]
+        parameter_shape = [
+            input_shape[axis] if axis in opposite_axes else 1
+            for axis in range(ndim)
+        ]
 
         if any(parameter is None for parameter in parameter_shape):
             unknown_dim_index = parameter_shape.index(None)

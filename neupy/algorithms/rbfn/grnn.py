@@ -63,7 +63,7 @@ class GRNN(LazyLearningMixin, BaseNetwork):
     >>> x_train, x_test, y_train, y_test = train_test_split(
     ...     preprocessing.minmax_scale(dataset.data),
     ...     preprocessing.minmax_scale(dataset.target.reshape((-1, 1))),
-    ...     test_size=0.3,
+    ...     train_size=0.7,
     ... )
     >>>
     >>> nw = algorithms.GRNN(std=0.1, verbose=False)

@@ -1,7 +1,6 @@
 import os
 
 import numpy as np
-import theano
 import matplotlib.pyplot as plt
 
 from neupy import plots

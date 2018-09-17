@@ -1,13 +1,11 @@
 import os
 
-import theano
 from neupy import layers, storage, architectures
 
 from imagenet_tools import (CURRENT_DIR, FILES_DIR, load_image, print_top_n,
                             download_file)
 
 
-theano.config.floatX = 'float32'
 ALEXNET_WEIGHTS_FILE = os.path.join(FILES_DIR, 'alexnet.pickle')
 
 alexnet = architectures.alexnet()

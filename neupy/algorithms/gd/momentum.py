@@ -1,7 +1,5 @@
 import tensorflow as tf
-import numpy as np
 
-from neupy.utils import asfloat
 from neupy.core.properties import ProperFractionProperty, Property
 from .base import MinibatchGradientDescent
 

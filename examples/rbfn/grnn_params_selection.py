@@ -34,7 +34,7 @@ def report(grid_scores, n_top=3):
 
 dataset = datasets.load_diabetes()
 x_train, x_test, y_train, y_test = train_test_split(
-    dataset.data, dataset.target, test_size=0.3
+    dataset.data, dataset.target, train_size=0.7
 )
 
 grnnet = algorithms.GRNN(std=0.5, verbose=True)

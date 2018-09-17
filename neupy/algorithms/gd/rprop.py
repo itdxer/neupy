@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 
-from neupy.utils import asfloat, tensorflow_session
+from neupy.utils import tensorflow_session
 from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.core.properties import BoundedProperty, ProperFractionProperty
 from .base import GradientDescent
@@ -188,7 +188,8 @@ class IRPROPPlus(RPROP):
         super(IRPROPPlus, self).init_variables()
         self.variables.update(
             last_error=tf.Variable(np.nan, name='irprop-plus/last-error'),
-            previous_error=tf.Variable(np.nan, name='irprop-plus/previous-error'),
+            previous_error=tf.Variable(
+                np.nan, name='irprop-plus/previous-error'),
         )
 
     def on_epoch_start_update(self, epoch):

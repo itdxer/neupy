@@ -2,7 +2,7 @@ from __future__ import division
 
 import numpy as np
 from tqdm import tqdm
-from neupy.utils import asfloat, tensorflow_eval
+from neupy.utils import asfloat
 
 
 actions = [

@@ -44,7 +44,7 @@ data = data + 1
 data = add_padding(data)
 
 x_train, x_test, y_train, y_test = train_test_split(
-    data, labels, test_size=0.2)
+    data, labels, train_size=0.8)
 
 n_categories = len(reber.avaliable_letters) + 1  # +1 for zero paddings
 n_time_steps = x_train.shape[1]

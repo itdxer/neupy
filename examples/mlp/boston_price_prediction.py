@@ -26,7 +26,7 @@ data = data_scaler.fit_transform(data)
 target = target_scaler.fit_transform(target)
 
 x_train, x_test, y_train, y_test = train_test_split(
-    data, target, test_size=0.15
+    data, target, train_size=0.85
 )
 
 cgnet = algorithms.Hessian(

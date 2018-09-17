@@ -1,7 +1,6 @@
 import copy
 from functools import reduce
 
-import numpy as np
 import tensorflow as tf
 
 from neupy.core.properties import IntProperty, CallableProperty
@@ -23,7 +22,7 @@ class Elementwise(BaseLayer):
     merge_function : callable
         Callable object that accepts multiple arguments and
         combine them in one with elementwise operation.
-        Defaults to ``theano.tensor.add``
+        Defaults to ``tensorflow.add``
 
     {BaseLayer.Parameters}
 

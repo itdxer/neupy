@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 from neupy.core.properties import BoundedProperty, WithdrawProperty
-from neupy.utils import asfloat, flatten, get_variable_size
+from neupy.utils import asfloat, flatten
 from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.algorithms.utils import parameter_values, setup_parameter_updates
 from neupy.layers.utils import count_parameters
@@ -27,7 +27,6 @@ def find_hessian_and_gradient(error_function, parameters):
     -------
     Tensorfow variable
     """
-    n_parameters = sum(get_variable_size(parameter) for parameter in parameters)
     gradients = tf.gradients(error_function, parameters)
     full_gradient = tf.concat([flatten(grad) for grad in gradients], axis=0)
 
