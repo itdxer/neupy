@@ -342,7 +342,7 @@ def save_dict(connection):
         for attrname, parameter in layer.parameters.items():
             parameters[attrname] = {
                 'value': asfloat(tensorflow_eval(parameter)),
-                'trainable': parameter.trainable,
+                'trainable': parameter.is_trainable,
             }
 
         for option_name in layer.options:

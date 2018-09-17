@@ -178,29 +178,6 @@ class LSTMTestCase(BaseTestCase):
 
         self.assertGreaterEqual(accuracy, 0.9)
 
-    def test_lstm_with_4d_input(self):
-        x_train, x_test, y_train, y_test = self.data
-        network = algorithms.RMSProp(
-            [
-                layers.Input(self.n_time_steps),
-                layers.Embedding(self.n_categories, 10),
-                # Make 4D input
-                layers.Reshape((self.n_time_steps, 5, 2), name='reshape'),
-                layers.LSTM(10),
-                layers.Sigmoid(1),
-            ],
-            step=0.1,
-            verbose=False,
-            batch_size=1,
-            error='binary_crossentropy',
-        )
-        network.train(x_train, y_train, x_test, y_test, epochs=2)
-
-        reshape = network.connection.end('reshape')
-        # +1 for batch size
-        output_dimension = len(reshape.output_shape) + 1
-        self.assertEqual(4, output_dimension)
-
     def test_lstm_connection_exceptions(self):
         with self.assertRaises(LayerConnectionError):
             layers.Input(1) > layers.LSTM(10)
@@ -336,30 +313,6 @@ class GRUTestCase(BaseTestCase):
         accuracy = (y_predicted.T == y_test).mean()
 
         self.assertGreaterEqual(accuracy, 0.9)
-
-    def test_gru_with_4d_input(self):
-        x_train, x_test, y_train, y_test = self.data
-        network = algorithms.RMSProp(
-            [
-                layers.Input(self.n_time_steps),
-                layers.Embedding(self.n_categories, 10),
-                # Make 4D input
-                layers.Reshape((self.n_time_steps, 5, 2), name='reshape'),
-                layers.GRU(10),
-                layers.Sigmoid(1),
-            ],
-
-            step=0.05,
-            verbose=False,
-            batch_size=1,
-            error='binary_crossentropy',
-        )
-        network.train(x_train, y_train, x_test, y_test, epochs=2)
-
-        reshape = network.connection.end('reshape')
-        # +1 for batch size
-        output_dimension = len(reshape.output_shape) + 1
-        self.assertEqual(4, output_dimension)
 
     def test_gru_connection_exceptions(self):
         with self.assertRaises(LayerConnectionError):

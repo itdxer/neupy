@@ -156,10 +156,10 @@ class BaseRNNLayer(BaseLayer):
         n_input_dims = len(input_shape) + 1  # +1 for batch dimension
         clsname = self.__class__.__name__
 
-        if n_input_dims < 3:
+        if n_input_dims != 3:
             raise LayerConnectionError(
-                "{} layer was expected input with at least three "
-                "dimensions, got input with {} dimensions instead"
+                "{} layer was expected input with three dimensions, "
+                "but got input with {} dimensions instead"
                 "".format(clsname, n_input_dims))
 
     @property
@@ -359,14 +359,6 @@ class LSTM(BaseRNNLayer):
         )
 
     def output(self, input_value):
-        # Treat all dimensions after the second as flattened
-        # feature dimensions
-        if len(input_value.shape) > 3:
-            n_time_steps = self.input_shape[0]
-            input_shape = tf.shape(input_value)
-            n_batch = input_shape[0]
-            input_value = tf.reshape(input_value, [n_batch, n_time_steps, -1])
-
         # Because scan iterates over the first dimension we
         # dimshuffle to (n_time_steps, n_batch, n_features)
         input_value = tf.transpose(input_value, [1, 0, 2])
@@ -592,14 +584,6 @@ class GRU(BaseRNNLayer):
         )
 
     def output(self, input_value):
-        # Treat all dimensions after the second as flattened
-        # feature dimensions
-        if len(input_value.shape) > 3:
-            n_time_steps = self.input_shape[0]
-            input_shape = tf.shape(input_value)
-            n_batch = input_shape[0]
-            input_value = tf.reshape(input_value, [n_batch, n_time_steps, -1])
-
         # Because scan iterates over the first dimension we
         # dimshuffle to (n_time_steps, n_batch, n_features)
         input_value = tf.transpose(input_value, [1, 0, 2])

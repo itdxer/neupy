@@ -71,7 +71,7 @@ def iter_parameters(layers, only_trainable=True):
         for attrname, parameter in layer.parameters.items():
             new_parameter = parameter not in observed_parameters
 
-            if new_parameter and (parameter.trainable or not only_trainable):
+            if new_parameter and (parameter.is_trainable or not only_trainable):
                 observed_parameters.append(parameter)
                 yield layer, attrname, parameter
 

@@ -83,8 +83,8 @@ class Embedding(BaseLayer):
     weight = ParameterProperty(default=init.XavierNormal())
 
     def __init__(self, input_size, output_size, **options):
-        super(Embedding, self).__init__(input_size=input_size,
-                                        output_size=output_size, **options)
+        super(Embedding, self).__init__(
+            input_size=input_size, output_size=output_size, **options)
 
     @property
     def output_shape(self):

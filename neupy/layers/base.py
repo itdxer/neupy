@@ -170,7 +170,7 @@ class BaseLayer(BaseConnection, Configurable):
             parameter_name=name.replace('_', '-'))
 
         parameter = create_shared_parameter(value, layer_name, shape)
-        parameter.trainable = trainable
+        parameter.is_trainable = trainable
 
         self.parameters[name] = parameter
 

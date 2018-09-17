@@ -40,6 +40,7 @@ def create_input_variables(input_layers):
     for input_layer in input_layers:
         variable = tf.placeholder(
             tf.float32,
+            shape=as_tuple(None, input_layer.output_shape),
             name="network-input/to-layer-{}".format(input_layer.name),
         )
         inputs.append(variable)
@@ -177,8 +178,10 @@ class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
     def __init__(self, *args, **kwargs):
         super(BaseAlgorithm, self).__init__(*args, **kwargs)
 
-        self.logs.message("THEANO", "Initializing Tensorflow variables and "
-                                    "functions.")
+        self.logs.message(
+            "TENSORFLOW",
+            "Initializing Tensorflow variables and functions."
+        )
         start_init_time = time.time()
 
         self.variables = AttributeKeyDict()
@@ -189,9 +192,10 @@ class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
         self.init_methods()
 
         finish_init_time = time.time()
-        self.logs.message("THEANO", "Initialization finished successfully. "
-                          "It took {:.2f} seconds"
-                          "".format(finish_init_time - start_init_time))
+        self.logs.message(
+            "TENSORFLOW",
+            "Initialization finished successfully. It took {:.2f} seconds"
+            "".format(finish_init_time - start_init_time))
 
     @abc.abstractmethod
     def init_input_output_variables(self):
