@@ -226,10 +226,12 @@ class Convolution(ParameterBasedLayer):
         else:
             row_padding, col_padding = padding, padding
 
-        output_rows = conv_output_shape(rows, row_filter_size,
-                                        row_padding, row_stride)
-        output_cols = conv_output_shape(cols, col_filter_size,
-                                        col_padding, col_stride)
+        output_rows = conv_output_shape(
+            rows, row_filter_size, row_padding, row_stride)
+
+        output_cols = conv_output_shape(
+            cols, col_filter_size, col_padding, col_stride)
+
         return (n_kernels, output_rows, output_cols)
 
     @property
