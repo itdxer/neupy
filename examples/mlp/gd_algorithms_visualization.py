@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-from neupy.utils import asfloat, tensorflow_session, tensorflow_eval
+from neupy.utils import asfloat, tensorflow_session
 from neupy import algorithms, layers, environment
 
 
@@ -62,7 +62,8 @@ def save_epoch_weight(net):
     global weights
     global current_epoch
 
-    input_layer_weight = tensorflow_eval(net.layers[1].weight)
+    session = tensorflow_session()
+    input_layer_weight = session.run(net.layers[1].weight)
     weights[:, current_epoch + 1:current_epoch + 2] = input_layer_weight
 
 
