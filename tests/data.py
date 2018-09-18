@@ -40,11 +40,17 @@ def simple_classification(n_samples=100, n_features=10, random_state=33):
         Returns tuple that contains 4 variables. There are input train,
         input test, target train, target test respectevly.
     """
-    X, y = datasets.make_classification(n_samples=n_samples,
-                                        n_features=n_features,
-                                        random_state=random_state)
-    shuffle_split = StratifiedShuffleSplit(n_splits=1, train_size=0.6,
-                                           random_state=random_state)
+    X, y = datasets.make_classification(
+        n_samples=n_samples,
+        n_features=n_features,
+        random_state=random_state,
+    )
+    shuffle_split = StratifiedShuffleSplit(
+        n_splits=1,
+        train_size=0.6,
+        test_size=0.1,
+        random_state=random_state,
+    )
 
     train_index, test_index = next(shuffle_split.split(X, y))
     x_train, x_test = X[train_index], X[test_index]

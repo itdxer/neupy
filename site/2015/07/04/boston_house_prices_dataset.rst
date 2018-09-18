@@ -251,7 +251,7 @@ We use 85% of data for train.
     environment.reproducible()
 
     x_train, x_test, y_train, y_test = train_test_split(
-        data, target, train_size=0.85
+        data, target, test_size=0.15
     )
 
 Now we are ready to build Neural Network which will predict house prices.

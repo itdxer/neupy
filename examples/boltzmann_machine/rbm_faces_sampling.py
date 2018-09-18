@@ -73,7 +73,7 @@ np.random.shuffle(data)
 binarized_data = binarize_images(data)
 
 x_train, x_test, binarized_x_train, binarized_x_test = train_test_split(
-    data, binarized_data, train_size=0.9
+    data, binarized_data, test_size=0.1
 )
 
 rbm = algorithms.RBM(

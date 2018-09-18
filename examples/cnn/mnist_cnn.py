@@ -22,7 +22,7 @@ def load_data():
     x_train, x_test, y_train, y_test = model_selection.train_test_split(
         data.astype(np.float32),
         target.astype(np.float32),
-        train_size=(6 / 7.)
+        test_size=(1 / 7.)
     )
 
     mean = x_train.mean(axis=(0, 2, 3))

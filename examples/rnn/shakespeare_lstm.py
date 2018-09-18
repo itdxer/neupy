@@ -43,7 +43,7 @@ class TextPreprocessing(object):
             target_char = text[i + window_size]
             targets[sample_id, characters.index(target_char)] = 1
 
-        return train_test_split(samples, targets, train_size=0.9)
+        return train_test_split(samples, targets, test_size=0.1)
 
     def encode(self, sequence):
         sequence_size = len(sequence)

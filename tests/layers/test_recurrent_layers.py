@@ -54,7 +54,7 @@ class LSTMTestCase(BaseTestCase):
         )
         data = add_padding(data + 1)  # +1 to shift indeces
 
-        self.data = train_test_split(data, labels, train_size=0.8)
+        self.data = train_test_split(data, labels, test_size=0.2)
 
         self.n_categories = len(reber.avaliable_letters) + 1
         self.n_time_steps = self.data[0].shape[1]
@@ -198,7 +198,7 @@ class GRUTestCase(BaseTestCase):
             n_samples=100, return_indeces=True)
         data = add_padding(data + 1)  # +1 to shift indeces
 
-        self.data = train_test_split(data, labels, train_size=0.8)
+        self.data = train_test_split(data, labels, test_size=0.2)
         self.n_categories = len(reber.avaliable_letters) + 1
         self.n_time_steps = self.data[0].shape[1]
 

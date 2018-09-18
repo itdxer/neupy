@@ -11,13 +11,16 @@ from base import BaseTestCase
 class QuickPropTestCase(BaseTestCase):
     def setUp(self):
         super(QuickPropTestCase, self).setUp()
-        data, target = datasets.make_regression(n_samples=1500, n_features=5,
-                                                n_informative=5, n_targets=1,
-                                                random_state=33)
+        data, target = datasets.make_regression(
+            n_samples=1500, n_features=5,
+            n_informative=5, n_targets=1,
+            random_state=33,
+        )
         target_scaler = preprocessing.MinMaxScaler()
         target = target_scaler.fit_transform(target.reshape(-1, 1))
         self.data = model_selection.train_test_split(
-            data, target, train_size=0.75)
+            data, target, test_size=0.25
+        )
         self.connection = (5, 10, 1)
 
     def test_quickprop(self):

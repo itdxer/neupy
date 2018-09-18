@@ -19,7 +19,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
         x_train, x_test, y_train, y_test = train_test_split(
             asfloat(dataset.data),
             asfloat(target_scaler.fit_transform(target)),
-            train_size=0.85
+            test_size=0.15
         )
 
         network = algorithms.GradientDescent(
@@ -53,7 +53,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
 
         dataset = datasets.load_diabetes()
         x_train, x_test, y_train, y_test = train_test_split(
-            dataset.data, dataset.target, train_size=0.7
+            dataset.data, dataset.target, test_size=0.3
         )
 
         grnnet = algorithms.GRNN(std=0.5, verbose=False)

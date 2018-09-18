@@ -44,7 +44,7 @@ samples for training and 10,000 for test.
     >>> x_train, x_test, y_train, y_test = train_test_split(
     ...     data.astype(np.float32),
     ...     target.astype(np.float32),
-    ...     train_size=(6. / 7)
+    ...     test_size=(1 / 7.)
     ... )
 
 We prepared everything that we need for the neural network training. Now we are

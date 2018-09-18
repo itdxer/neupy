@@ -276,7 +276,7 @@ Let's import digits dataset from scikit-learn.
     target[np.arange(n_samples), dataset.target] = 1
 
     x_train, x_test, y_train, y_test = train_test_split(
-        dataset.data, target, train_size=0.7
+        dataset.data, target, test_size=0.3
     )
 
 And for the last step, we need to define parameter selection procedure. First, we need to define a function that performs Gaussian Process regression and returns mean and standard deviation of the prediction for the specified input vector.
@@ -471,7 +471,7 @@ Let's make an example. We're going to use MNIST dataset.
     x_train, x_test, y_train, y_test = train_test_split(
         data.astype(np.float32),
         target.astype(np.float32),
-        train_size=(6 / 7.)
+        test_size=(1 / 7.)
     )
 
 For hyperparameter selection, I'm going to use `hyperopt <https://github.com/hyperopt/hyperopt>`_ library. It has implemented TPE algorithm.
