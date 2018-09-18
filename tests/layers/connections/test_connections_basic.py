@@ -92,7 +92,7 @@ class ConnectionsTestCase(BaseTestCase):
             layers.Linear(12),
             layers.Linear(13),
         )
-        connection = input_connection > parallel_connections
+        layers.join(input_connection, parallel_connections)
 
         input_value = asfloat(np.random.random((10, 4)))
         actual_output = self.eval(parallel_connections.output(input_value))

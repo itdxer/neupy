@@ -325,7 +325,11 @@ class GRUTestCase(BaseTestCase):
 
     def test_gru_activation_functions(self):
         gru = layers.GRU(1, activation_functions=dict(
-            resetgate=tf.nn.sigmoid,
-            updategate=tf.nn.sigmoid,
-            hidden_update=tf.tanh,
+            resetgate=tf.tanh,
+            updategate=tf.tanh,
+            hidden_update=tf.sin,
         ))
+
+        self.assertIs(gru.activation_functions.resetgate, tf.tanh)
+        self.assertIs(gru.activation_functions.updategate, tf.tanh)
+        self.assertIs(gru.activation_functions.hidden_update, tf.sin)
