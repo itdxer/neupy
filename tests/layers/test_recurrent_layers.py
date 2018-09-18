@@ -159,8 +159,8 @@ class LSTMTestCase(BaseTestCase):
             [
                 layers.Input(self.n_time_steps),
                 layers.Embedding(self.n_categories, 10),
-                layers.LSTM(10, only_return_final=False),
-                layers.LSTM(2),
+                layers.LSTM(10, only_return_final=False, backwards=True),
+                layers.LSTM(2, backwards=True),
                 layers.Sigmoid(1),
             ],
 
@@ -295,8 +295,8 @@ class GRUTestCase(BaseTestCase):
             [
                 layers.Input(self.n_time_steps),
                 layers.Embedding(self.n_categories, 10),
-                layers.GRU(10, only_return_final=False),
-                layers.GRU(2),
+                layers.GRU(10, only_return_final=False, backwards=True),
+                layers.GRU(2, backwards=True),
                 layers.Sigmoid(1),
             ],
 

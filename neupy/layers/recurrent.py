@@ -389,7 +389,6 @@ class LSTM(BaseRNNLayer):
                 fn=one_lstm_step,
                 elems=input_value,
                 initializer=[cell_init, hidden_init],
-                # truncate_gradient=self.n_gradient_steps,
             )
 
         # When it is requested that we only return the final sequence step,
@@ -397,12 +396,12 @@ class LSTM(BaseRNNLayer):
         if self.only_return_final:
             return hid_out[-1]
 
-        # dimshuffle back to (n_batch, n_time_steps, n_features))
-        hid_out = tf.transpose(hid_out, [1, 0, 2])
-
         # if scan is backward reverse the output
         if self.backwards:
             hid_out = tf.reverse(hid_out, axis=[0])
+
+        # dimshuffle back to (n_batch, n_time_steps, n_features))
+        hid_out = tf.transpose(hid_out, [1, 0, 2])
 
         return hid_out
 
@@ -623,11 +622,11 @@ class GRU(BaseRNNLayer):
         if self.only_return_final:
             return hid_out[-1]
 
-        # dimshuffle back to (n_batch, n_time_steps, n_features))
-        hid_out = tf.transpose(hid_out, [1, 0, 2])
-
         # if scan is backward reverse the output
         if self.backwards:
             hid_out = tf.reverse(hid_out, axis=[0])
+
+        # dimshuffle back to (n_batch, n_time_steps, n_features))
+        hid_out = tf.transpose(hid_out, [1, 0, 2])
 
         return hid_out
