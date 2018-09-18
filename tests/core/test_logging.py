@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import os
+import sys
 from collections import namedtuple
 
 from neupy.core.logs import Verbose, TerminalLogger, terminal_echo
@@ -28,7 +29,9 @@ class LoggingTestCase(BaseTestCase):
         finally:
             os.name = default_os_name
 
-        terminal_echo(enabled=True)
+        # Note that we have to pass it explicitly since pytes will overwrite
+        # it with some other custom class that will catch all stdin.
+        terminal_echo(enabled=True, file_descriptor=sys.stdin)
 
     def test_logging_switcher(self):
         class A(Verbose):

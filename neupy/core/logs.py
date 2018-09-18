@@ -59,6 +59,7 @@ def terminal_echo(enabled, file_descriptor=sys.stdin):
         termios.tcsetattr(file_descriptor, termios.TCSANOW, attributes)
 
     except Exception:
+        raise
         # This feature is not very important, but any error in
         # this function can crash program, so it's easier to
         # ignore it in case if something went wrong
