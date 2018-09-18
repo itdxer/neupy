@@ -108,12 +108,22 @@ class UtilsTestCase(BaseTestCase):
     def test_as_tuple(self):
         Case = namedtuple("Case", "input_args expected_output")
         testcases = (
-            Case(input_args=(1, 2, 3),
-                 expected_output=(1, 2, 3)),
-            Case(input_args=(None, (1, 2, 3), None),
-                 expected_output=(None, 1, 2, 3, None)),
-            Case(input_args=((1, 2, 3), (4, 5, 3)),
-                 expected_output=(1, 2, 3, 4, 5, 3)),
+            Case(
+                input_args=(1, 2, 3),
+                expected_output=(1, 2, 3),
+            ),
+            Case(
+                input_args=(None, (1, 2, 3), None),
+                expected_output=(None, 1, 2, 3, None),
+            ),
+            Case(
+                input_args=((1, 2, 3), tuple()),
+                expected_output=(1, 2, 3),
+            ),
+            Case(
+                input_args=((1, 2, 3), (4, 5, 3)),
+                expected_output=(1, 2, 3, 4, 5, 3),
+            ),
         )
 
         for testcase in testcases:

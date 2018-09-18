@@ -193,7 +193,9 @@ class GRUTestCase(BaseTestCase):
         super(GRUTestCase, self).setUp()
 
         data, labels = reber.make_reber_classification(
-            n_samples=100, return_indeces=True)
+            n_samples=100,
+            return_indeces=True,
+        )
         data = add_padding(data + 1)  # +1 to shift indeces
 
         self.data = train_test_split(data, labels, test_size=0.2)
@@ -320,3 +322,10 @@ class GRUTestCase(BaseTestCase):
 
         with self.assertRaises(TypeError):
             layers.GRU(1, activation_functions=lambda x: x)
+
+    def test_gru_activation_functions(self):
+        gru = layers.GRU(1, activation_functions=dict(
+            resetgate=tf.nn.sigmoid,
+            updategate=tf.nn.sigmoid,
+            hidden_update=tf.tanh,
+        ))

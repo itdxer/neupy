@@ -13,7 +13,8 @@ from .graph import LayerGraph
 from .inline import InlineConnection
 
 
-__all__ = ('LayerConnection', 'BaseConnection', 'ParallelConnection')
+__all__ = ('LayerConnection', 'BaseConnection', 'ParallelConnection',
+           'parallel')
 
 
 def clean_layer_references(graph, layer_references):
@@ -327,6 +328,10 @@ class ParallelConnection(BaseConnection):
     def __iter__(self):
         for connection in self.connections:
             yield connection
+
+
+def parallel(*connections):
+    return ParallelConnection(connections)
 
 
 class LayerConnection(BaseConnection):

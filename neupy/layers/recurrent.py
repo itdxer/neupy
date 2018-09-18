@@ -68,31 +68,11 @@ def unroll_scan(fn, sequence, outputs_info):
         return tf.stack(outputs)
 
 
-class MultiParameterProperty(ParameterProperty):
-    expected_type = as_tuple(init.Initializer, dict)
-
-    def validate(self, value):
-        super(MultiParameterProperty, self).validate(value)
-
-        if isinstance(value, dict):
-            for key in value:
-                if key not in self.default:
-                    valid_keys = ', '.join(self.default.keys())
-                    raise ValueError("Parameter `{}` has invalid key: `{}`. "
-                                     "Valid keys are: {}"
-                                     "".format(self.name, key, valid_keys))
+class MultiCallableProperty(ParameterProperty):
+    expected_type = as_tuple(dict)
 
     def __set__(self, instance, value):
         self.validate(value)
-
-        if isinstance(value, init.Initializer):
-            # All keys will have the same initializer
-            dict_value = dict.fromkeys(self.default.keys())
-
-            for key in dict_value:
-                dict_value[key] = value
-
-            value = dict_value
 
         default_value = self.default.copy()
         default_value.update(value)
@@ -101,20 +81,18 @@ class MultiParameterProperty(ParameterProperty):
         value = AttributeKeyDict(value)
         instance.__dict__[self.name] = value
 
-
-class MultiCallableProperty(MultiParameterProperty):
-    expected_type = as_tuple(dict)
-
     def validate(self, value):
         if not isinstance(value, self.expected_type):
-            raise TypeError("Parameter `{}` should be a dictionary, "
-                            "got `{!r}`".format(self.name, type(value)))
+            raise TypeError(
+                "Parameter `{}` should be a dictionary, "
+                "got `{!r}`".format(self.name, type(value)))
 
         for key, func in value.items():
             if not callable(func):
-                raise ValueError("Values for the `{}` parameter should be "
-                                 "callable objects, got value `{!r}` for the "
-                                 "`{}` key".format(self.name, func, key))
+                raise ValueError(
+                    "Values for the `{}` parameter should be "
+                    "callable objects, got value `{!r}` for the "
+                    "`{}` key".format(self.name, func, key))
 
 
 class BaseRNNLayer(BaseLayer):
