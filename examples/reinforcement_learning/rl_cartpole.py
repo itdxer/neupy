@@ -105,13 +105,14 @@ def train_network(env, network, memory, n_games=200, max_score=200,
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description='Trains network to play CartPole game')
+        description='Trains network to play CartPole game',
+    )
     parser.add_argument(
         '-p', '--pretrained', dest='use_pretrained', action='store_true',
-        help='load pretrained network from file and play without training')
+        help='load pretrained network from file and play without training',
+    )
     args = parser.parse_args()
-
-    network = algorithms.RMSProp(
+    network = algorithms.Adamax(
         [
             layers.Input(4),
 
@@ -126,12 +127,9 @@ if __name__ == '__main__':
             layers.Linear(2),
         ],
 
-        step=0.001,
+        step=0.0005,
         error='rmse',
         batch_size=100,
-
-        decay_rate=0.1,
-        addons=[algorithms.WeightDecay],
     )
 
     env = gym.make('CartPole-v0')
@@ -154,8 +152,9 @@ if __name__ == '__main__':
             env, network, memory,
             n_games=120,  # Number of games that networks is going to play,
             max_score=200,  # Maximum score that network can achive in the game
-            epsilon=0.1,  # Probability to select random action during the game
-            gamma=0.99)
+            epsilon=0.2,  # Probability to select random action during the game
+            gamma=0.99,
+        )
 
         if not os.path.exists(FILES_DIR):
             os.mkdir(FILES_DIR)
