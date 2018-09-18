@@ -48,7 +48,6 @@ class LayerGraphTestCase(BaseTestCase):
         self.assertEqual(1, len(subgraph.input_layers))
         self.assertIs(l0, subgraph.input_layers[0])
 
-
         text_input = asfloat(np.array([[1]]))
         expected_shapes = [(1, 30), (1, 40), (1, 60)]
         outputs = graph.propagate_forward(text_input)

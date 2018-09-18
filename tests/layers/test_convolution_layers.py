@@ -48,8 +48,10 @@ class ConvLayersTestCase(BaseTestCase):
 
             y = self.eval(conv_layer.output(x))
             actual_output_shape = as_tuple(y.shape[1:])
-            self.assertEqual(actual_output_shape, conv_layer.output_shape,
-                             msg='padding={} and stride={}'.format(padding, stride))
+            self.assertEqual(
+                actual_output_shape, conv_layer.output_shape,
+                msg='padding={} and stride={}'.format(padding, stride),
+            )
 
     def test_valid_strides(self):
         Case = namedtuple("Case", "stride expected_output")
@@ -131,16 +133,18 @@ class ConvLayersTestCase(BaseTestCase):
         self.assertEqual(shape, None)
 
     def test_conv_invalid_padding_exception(self):
-        with self.assertRaises(ValueError):
+        error_msg = "greater or equal to zero"
+        with self.assertRaisesRegexp(ValueError, error_msg):
             layers.Convolution((1, 3, 3), padding=-1)
 
-        with self.assertRaises(ValueError):
+        error_msg = "Tuple .+ greater or equal to zero"
+        with self.assertRaisesRegexp(ValueError, error_msg):
             layers.Convolution((1, 3, 3), padding=(2, -1))
 
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegexp(ValueError, "invalid string value"):
             layers.Convolution((1, 3, 3), padding='NOT_SAME')
 
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegexp(ValueError, "contains two elements"):
             layers.Convolution((1, 3, 3), padding=(3, 3, 3))
 
     def test_conv_invalid_input_shape(self):

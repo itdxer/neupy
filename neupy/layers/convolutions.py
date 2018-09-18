@@ -111,7 +111,14 @@ class PaddingProperty(Property):
     valid_string_choices = ('VALID', 'SAME')
 
     def __set__(self, instance, value):
+
         if isinstance(value, int):
+            if value < 0:
+                raise ValueError(
+                    "Integer border mode value needs to be "
+                    "greater or equal to zero, got {}".format(value)
+                )
+
             value = (value, value)
 
         if isinstance(value, six.string_types):
@@ -133,14 +140,11 @@ class PaddingProperty(Property):
             isinstance(value, six.string_types) and
             value not in self.valid_string_choices
         )
+
         if is_invalid_string:
             valid_choices = ', '.join(self.valid_string_choices)
             raise ValueError("`{}` is invalid string value. Available: {}"
                              "".format(value, valid_choices))
-
-        if isinstance(value, int) and value < 0:
-            raise ValueError("Integer border mode value needs to be "
-                             "greater or equal to zero, got {}".format(value))
 
         if isinstance(value, tuple) and any(element < 0 for element in value):
             raise ValueError("Tuple border mode value needs to contain "

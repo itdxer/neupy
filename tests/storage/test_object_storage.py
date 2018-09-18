@@ -8,7 +8,6 @@ from six.moves import cPickle as pickle
 from neupy import algorithms, layers, init
 
 from base import BaseTestCase
-from data import simple_classification
 from utils import catch_stdout
 
 
@@ -134,7 +133,6 @@ class BasicStorageTestCase(BaseTestCase):
                 self.eval(network.layers[1].weight),
                 self.eval(network_restored.layers[1].weight)
             )
-
 
     def test_basic_storage(self):
         input_data = np.random.random((100, 2))
