@@ -1,5 +1,3 @@
-import unittest
-
 import numpy as np
 
 from neupy.utils import asfloat

@@ -12,6 +12,14 @@ from base import BaseTestCase
 
 
 class PoolingLayersTestCase(BaseTestCase):
+    def test_pooling_output_shape_exception(self):
+        expected_msg = r"unknown \S+ padding value"
+        with self.assertRaisesRegexp(ValueError, expected_msg):
+            pooling_output_shape(
+                dimension_size=5, pool_size=2,
+                padding=1, stride=2
+            )
+
     def test_pooling_output_shape(self):
         otuput_shape = pooling_output_shape(None, None, None, None)
         self.assertEqual(otuput_shape, None)

@@ -17,8 +17,8 @@ class LevenbergMarquardtTestCase(BaseTestCase):
         w2 = tf.Variable(asfloat(np.array([[2]])), name='w2')
         b2 = tf.Variable(asfloat(np.array([1])), name='b2')
 
-        x = x_train = asfloat(np.array([[1, 2, 3]]).T)
-        y = y_train = asfloat(np.array([[1, 2, 3]]).T)
+        x = asfloat(np.array([[1, 2, 3]]).T)
+        y = asfloat(np.array([[1, 2, 3]]).T)
 
         output_1 = tf.matmul(x, tf.transpose(w1)) + b1
         output = b2 + tf.matmul(output_1 ** 2, w2)

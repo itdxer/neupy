@@ -351,9 +351,16 @@ class PRelu(ActivationLayer):
         super(PRelu, self).initialize()
 
         alpha_shape = [self.output_shape[axis - 1] for axis in self.alpha_axes]
-        self.add_parameter(value=self.alpha, name='alpha',
-                           shape=alpha_shape, trainable=True)
+        self.add_parameter(
+            value=self.alpha,
+            name='alpha',
+            shape=alpha_shape,
+            trainable=True,
+        )
 
     def activation_function(self, input_value):
-        alpha = dimshuffle(self.alpha, input_value.ndim, self.alpha_axes)
+        input_value = tf.convert_to_tensor(input_value, dtype=tf.float32)
+        ndim = len(input_value.get_shape())
+
+        alpha = dimshuffle(self.alpha, ndim, self.alpha_axes)
         return tf.nn.leaky_relu(tf.to_float(input_value), tf.to_float(alpha))

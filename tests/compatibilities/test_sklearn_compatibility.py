@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn import datasets, preprocessing, metrics, model_selection
+from sklearn import datasets, preprocessing, model_selection
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 

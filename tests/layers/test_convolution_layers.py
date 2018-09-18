@@ -107,11 +107,21 @@ class ConvLayersTestCase(BaseTestCase):
                 dimension_size=5, filter_size='not int',
                 padding='SAME', stride=5)
 
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegexp(ValueError, "unknown \S+ padding value"):
             # Wrong padding value
             conv_output_shape(
                 dimension_size=5, filter_size=5,
-                padding=1.5, stride=5)
+                padding=1.5, stride=5,
+            )
+
+    def test_conv_output_shape_int_padding(self):
+        output_shape = conv_output_shape(
+            dimension_size=10,
+            padding=3,
+            filter_size=5,
+            stride=5,
+        )
+        self.assertEqual(output_shape, 3)
 
     def test_conv_unknown_dim_size(self):
         shape = conv_output_shape(
@@ -122,12 +132,42 @@ class ConvLayersTestCase(BaseTestCase):
 
     def test_conv_invalid_padding_exception(self):
         with self.assertRaises(ValueError):
+            layers.Convolution((1, 3, 3), padding=-1)
+
+        with self.assertRaises(ValueError):
+            layers.Convolution((1, 3, 3), padding=(2, -1))
+
+        with self.assertRaises(ValueError):
+            layers.Convolution((1, 3, 3), padding='NOT_SAME')
+
+        with self.assertRaises(ValueError):
             layers.Convolution((1, 3, 3), padding=(3, 3, 3))
 
     def test_conv_invalid_input_shape(self):
         conv = layers.Convolution((1, 3, 3))
         with self.assertRaises(LayerConnectionError):
             layers.join(layers.Input(10), conv)
+
+    def test_conv_with_custom_padding(self):
+        input_layer = layers.Input((1, 5, 5))
+        conv = layers.Convolution((1, 3, 3), bias=0, weight=1, padding=2)
+
+        connection = input_layer > conv
+        connection.initialize()
+
+        x = asfloat(np.ones((1, 1, 5, 5)))
+        expected_output = np.array([
+            [1, 2, 3, 3, 3, 2, 1],
+            [2, 4, 6, 6, 6, 4, 2],
+            [3, 6, 9, 9, 9, 6, 3],
+            [3, 6, 9, 9, 9, 6, 3],
+            [3, 6, 9, 9, 9, 6, 3],
+            [2, 4, 6, 6, 6, 4, 2],
+            [1, 2, 3, 3, 3, 2, 1],
+        ]).reshape((1, 1, 7, 7))
+        actual_output = self.eval(connection.output(x))
+
+        np.testing.assert_array_almost_equal(expected_output, actual_output)
 
     def test_conv_without_bias(self):
         input_layer = layers.Input((1, 5, 5))

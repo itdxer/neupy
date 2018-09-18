@@ -173,8 +173,8 @@ class BatchNormTestCase(BaseTestCase):
 
 class LocalResponseNormTestCase(BaseTestCase):
     def test_local_response_norm_exceptions(self):
-        with self.assertRaises(ValueError):
-            layers.LocalResponseNorm(n=2)
+        with self.assertRaisesRegexp(ValueError, "Only works with odd"):
+            layers.LocalResponseNorm(depth_radius=2)
 
         with self.assertRaises(LayerConnectionError):
             layers.Input(10) > layers.LocalResponseNorm()

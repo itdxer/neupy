@@ -85,8 +85,6 @@ class UtilsTestCase(BaseTestCase):
         self.assertEqual(formated_x.shape, (1, 10))
 
     def test_asfloat(self):
-        float_type = tf.float32
-
         # Sparse matrix
         sparse_matrix = csr_matrix((3, 4), dtype=np.int8)
         self.assertIs(sparse_matrix, asfloat(sparse_matrix))

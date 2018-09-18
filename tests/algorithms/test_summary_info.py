@@ -2,12 +2,10 @@
 from __future__ import unicode_literals
 
 from neupy import algorithms
-from neupy.algorithms.summary_info import (InlineSummary, SummaryTable,
-                                           format_time)
+from neupy.algorithms.summary_info import InlineSummary, format_time
 
 from base import BaseTestCase
 from utils import catch_stdout
-from data import simple_input_train, simple_target_train
 
 
 class InlineSummaryTestCase(BaseTestCase):

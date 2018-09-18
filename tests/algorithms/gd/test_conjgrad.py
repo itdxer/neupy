@@ -6,7 +6,6 @@ from sklearn import metrics
 
 from neupy import algorithms, layers
 from neupy.utils import asfloat
-from neupy.algorithms.gd import errors
 from neupy.algorithms.gd import conjgrad as cg
 
 from data import simple_classification

@@ -28,6 +28,8 @@ class LoggingTestCase(BaseTestCase):
         finally:
             os.name = default_os_name
 
+        terminal_echo(enabled=True)
+
     def test_logging_switcher(self):
         class A(Verbose):
             def callme(self):

@@ -1,13 +1,11 @@
-import time
 from functools import partial
 
 import numpy as np
 
 from neupy import algorithms, layers, environment
-from neupy.core.logs import TerminalLogger
 from neupy.algorithms.gd.base import apply_batches
 
-from utils import compare_networks, catch_stdout
+from utils import compare_networks
 from base import BaseTestCase
 from data import simple_classification
 
@@ -76,7 +74,8 @@ class GradientDescentTestCase(BaseTestCase):
         compare_networks(
            # Test classes
            partial(algorithms.GradientDescent, verbose=True),
-           partial(algorithms.MinibatchGradientDescent, batch_size=1, verbose=True),
+           partial(algorithms.MinibatchGradientDescent,
+                   batch_size=1, verbose=True),
            # Test data
            (x_train, y_train),
            # Network configurations
@@ -94,10 +93,28 @@ class GradientDescentTestCase(BaseTestCase):
 
         self.assertIn('connection', network.get_params(with_connection=True))
         self.assertNotIn(
-            'connection', network.get_params(with_connection=False))
+            'connection',
+            network.get_params(with_connection=False),
+        )
 
 
 class GDAdditionalFunctionsTestCase(BaseTestCase):
     def test_gd_apply_batches_exceptions(self):
         with self.assertRaisesRegexp(ValueError, "at least one element"):
             apply_batches(function=lambda x: x, arguments=[], batch_size=12)
+
+        with self.assertRaisesRegexp(ValueError, "Cannot show error"):
+            apply_batches(
+                function=lambda x: x,
+                arguments=[np.random.random((36, 1))],
+                batch_size=12,
+                show_error_output=True,
+                scalar_output=False,
+            )
+
+        with self.assertRaisesRegexp(ValueError, "Cannot convert output"):
+            apply_batches(
+                function=lambda x: x,
+                arguments=[np.random.random((36, 1))],
+                batch_size=12,
+            )

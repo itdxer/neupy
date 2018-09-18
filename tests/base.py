@@ -7,11 +7,7 @@ import numpy as np
 import tensorflow as tf
 
 from neupy import environment, layers
-from neupy.utils import (
-    tensorflow_eval,
-    tensorflow_session,
-    initialize_uninitialized_variables,
-)
+from neupy.utils import tensorflow_eval, tensorflow_session
 
 from utils import vectors_for_testing
 

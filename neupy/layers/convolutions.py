@@ -219,12 +219,9 @@ class Convolution(ParameterBasedLayer):
         n_kernels = self.size[0]
         rows, cols = self.input_shape[-2:]
         row_filter_size, col_filter_size = self.size[-2:]
-        row_stride, col_stride = self.stride
 
-        if isinstance(padding, tuple):
-            row_padding, col_padding = padding[-2:]
-        else:
-            row_padding, col_padding = padding, padding
+        row_stride, col_stride = self.stride
+        row_padding, col_padding = padding, padding
 
         output_rows = conv_output_shape(
             rows, row_filter_size, row_padding, row_stride)

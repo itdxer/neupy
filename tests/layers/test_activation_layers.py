@@ -148,18 +148,18 @@ class PReluTestCase(BaseTestCase):
         self.assertEqual(alpha.shape, (10,))
         np.testing.assert_array_almost_equal(alpha, np.ones(10) * 0.25)
 
-    # def test_prelu_layer_param_conv(self):
-    #     input_layer = layers.Input((3, 10, 10))
-    #     conv_layer = layers.Convolution((5, 3, 3))
-    #     prelu_layer = layers.PRelu(alpha=0.25, alpha_axes=(1, 3))
-    #
-    #     input_layer > conv_layer > prelu_layer
-    #
-    #     alpha = prelu_layer.alpha.get_value()
-    #     expected_alpha = np.ones((5, 8)) * 0.25
-    #
-    #     self.assertEqual(alpha.shape, (5, 8))
-    #     np.testing.assert_array_almost_equal(alpha, expected_alpha)
+    def test_prelu_layer_param_conv(self):
+        input_layer = layers.Input((3, 10, 10))
+        conv_layer = layers.Convolution((5, 3, 3))
+        prelu_layer = layers.PRelu(alpha=0.25, alpha_axes=(1, 3))
+
+        input_layer > conv_layer > prelu_layer
+
+        alpha = self.eval(prelu_layer.alpha)
+        expected_alpha = np.ones((5, 8)) * 0.25
+
+        self.assertEqual(alpha.shape, (5, 8))
+        np.testing.assert_array_almost_equal(alpha, expected_alpha)
 
     def test_prelu_output_by_dense_input(self):
         prelu_layer = layers.PRelu(1, alpha=0.25)
@@ -171,51 +171,51 @@ class PReluTestCase(BaseTestCase):
 
         np.testing.assert_array_almost_equal(expected_output, actual_output)
 
-#     def test_prelu_output_by_spatial_input(self):
-#         input_data = asfloat(np.random.random((1, 3, 10, 10)))
-#
-#         input_layer = layers.Input((3, 10, 10))
-#         conv_layer = layers.Convolution((5, 3, 3))
-#         prelu_layer = layers.PRelu(alpha=0.25, alpha_axes=(1, 3))
-#
-#         connection = input_layer > conv_layer > prelu_layer
-#
-#         actual_output = input_data
-#         for layer in connection:
-#             actual_output = layer.output(actual_output)
-#
-#         actual_output = actual_output.eval()
-#         self.assertEqual(actual_output.shape, (1, 5, 8, 8))
-#
-#     def test_prelu_param_updates(self):
-#         x_train, _, y_train, _ = simple_classification()
-#         prelu_layer1 = layers.PRelu(20, alpha=0.25)
-#         prelu_layer2 = layers.PRelu(1, alpha=0.25)
-#
-#         gdnet = algorithms.GradientDescent(
-#             [
-#                 layers.Input(10),
-#                 prelu_layer1,
-#                 prelu_layer2,
-#             ]
-#         )
-#
-#         prelu1_alpha_before_training = prelu_layer1.alpha.get_value()
-#         prelu2_alpha_before_training = prelu_layer2.alpha.get_value()
-#
-#         gdnet.train(x_train, y_train, epochs=10)
-#
-#         prelu1_alpha_after_training = prelu_layer1.alpha.get_value()
-#         prelu2_alpha_after_training = prelu_layer2.alpha.get_value()
-#
-#         self.assertTrue(all(np.not_equal(
-#             prelu1_alpha_before_training,
-#             prelu1_alpha_after_training,
-#         )))
-#         self.assertTrue(all(np.not_equal(
-#             prelu2_alpha_before_training,
-#             prelu2_alpha_after_training,
-#         )))
+    def test_prelu_output_by_spatial_input(self):
+        input_data = asfloat(np.random.random((1, 3, 10, 10)))
+
+        input_layer = layers.Input((3, 10, 10))
+        conv_layer = layers.Convolution((5, 3, 3))
+        prelu_layer = layers.PRelu(alpha=0.25, alpha_axes=(1, 3))
+
+        connection = input_layer > conv_layer > prelu_layer
+
+        actual_output = input_data
+        for layer in connection:
+            actual_output = layer.output(actual_output)
+
+        actual_output = self.eval(actual_output)
+        self.assertEqual(actual_output.shape, (1, 5, 8, 8))
+
+    def test_prelu_param_updates(self):
+        x_train, _, y_train, _ = simple_classification()
+        prelu_layer1 = layers.PRelu(20, alpha=0.25)
+        prelu_layer2 = layers.PRelu(1, alpha=0.25)
+
+        gdnet = algorithms.GradientDescent(
+            [
+                layers.Input(10),
+                prelu_layer1,
+                prelu_layer2,
+            ]
+        )
+
+        prelu1_alpha_before_training = self.eval(prelu_layer1.alpha)
+        prelu2_alpha_before_training = self.eval(prelu_layer2.alpha)
+
+        gdnet.train(x_train, y_train, epochs=10)
+
+        prelu1_alpha_after_training = self.eval(prelu_layer1.alpha)
+        prelu2_alpha_after_training = self.eval(prelu_layer2.alpha)
+
+        self.assertTrue(all(np.not_equal(
+            prelu1_alpha_before_training,
+            prelu1_alpha_after_training,
+        )))
+        self.assertTrue(all(np.not_equal(
+            prelu2_alpha_before_training,
+            prelu2_alpha_after_training,
+        )))
 
     def test_prelu_axes_property_exceptions(self):
         with self.assertRaises(ValueError):

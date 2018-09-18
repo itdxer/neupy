@@ -291,8 +291,9 @@ def apply_batches(function, arguments, batch_size, description='',
             output = np.atleast_1d(output)
 
             if output.size > 1:
-                raise ValueError("Cannot convert output from the batch, "
-                                 "because it has more than one output value")
+                raise ValueError(
+                    "Cannot convert output from the batch, "
+                    "because it has more than one output value")
 
             output = output.item(0)
 
