@@ -155,7 +155,7 @@ class ConvLayersTestCase(BaseTestCase):
         with self.assertRaises(LayerConnectionError):
             layers.join(layers.Input(10), conv)
 
-    def test_conv_with_custom_padding(self):
+    def test_conv_with_custom_int_padding(self):
         input_layer = layers.Input((1, 5, 5))
         conv = layers.Convolution((1, 3, 3), bias=0, weight=1, padding=2)
 
@@ -175,6 +175,24 @@ class ConvLayersTestCase(BaseTestCase):
         actual_output = self.eval(connection.output(x))
 
         np.testing.assert_array_almost_equal(expected_output, actual_output)
+
+    def test_conv_with_custom_tuple_padding(self):
+        input_layer = layers.Input((1, 5, 5))
+        conv = layers.Convolution((1, 3, 3), bias=0, weight=1, padding=(0, 2))
+
+        connection = input_layer > conv
+        connection.initialize()
+
+        x = asfloat(np.ones((1, 1, 5, 5)))
+        expected_output = np.array([
+            [3, 6, 9, 9, 9, 6, 3],
+            [3, 6, 9, 9, 9, 6, 3],
+            [3, 6, 9, 9, 9, 6, 3],
+        ]).reshape((1, 1, 3, 7))
+        actual_output = self.eval(connection.output(x))
+
+        np.testing.assert_array_almost_equal(expected_output, actual_output)
+        self.assertEqual(conv.output_shape, (1, 3, 7))
 
     def test_conv_without_bias(self):
         input_layer = layers.Input((1, 5, 5))

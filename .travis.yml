@@ -34,5 +34,5 @@ before_script:
 #   - sleep 3 # give xvfb some time to start
 
 script:
-  - export SKIP_PLOT_TEST='YES' && pytest -s
+  - export SKIP_PLOT_TEST='YES' && pytest tests
   - flake8 neupy
