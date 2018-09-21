@@ -28,6 +28,10 @@ class LoggingTestCase(BaseTestCase):
         finally:
             os.name = default_os_name
 
+        fake_stdin = open('/dev/tty', 'r')
+        terminal_echo(enabled=True, file_descriptor=fake_stdin)
+        terminal_echo(enabled=False, file_descriptor=fake_stdin)
+
     def test_logging_switcher(self):
         class A(Verbose):
             def callme(self):
@@ -85,8 +89,8 @@ class LoggingTestCase(BaseTestCase):
             for test_case in test_cases:
                 test_case.method(*test_case.msg_args)
                 terminal_output = out.getvalue()
-                self.assertRegexpMatches(terminal_output,
-                                         test_case.expectation)
+                self.assertRegexpMatches(
+                    terminal_output, test_case.expectation)
 
 
 class TerminalTestCase(BaseTestCase):

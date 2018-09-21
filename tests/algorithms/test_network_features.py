@@ -35,8 +35,9 @@ class NetworkMainTestCase(BaseTestCase):
         self.assertEqual(network.last_epoch, 15)
 
     def test_train_and_test_dataset_training(self):
-        data, target = datasets.make_classification(30, n_features=10,
-                                                    n_classes=2)
+        data, target = datasets.make_classification(
+            30, n_features=10, n_classes=2,
+        )
         network = algorithms.GradientDescent((10, 3, 1))
 
         # Should work fine without exceptions
@@ -54,8 +55,9 @@ class NetworkMainTestCase(BaseTestCase):
             if network.last_epoch == 5:
                 raise StopTraining("Stopped training")
 
-        data, target = datasets.make_classification(30, n_features=10,
-                                                    n_classes=2)
+        data, target = datasets.make_classification(
+            30, n_features=10, n_classes=2)
+
         network = algorithms.GradientDescent(
             (10, 3, 1),
             epoch_end_signal=stop_training_after_the_5th_epoch,
@@ -161,7 +163,7 @@ class NetworkMainTestCase(BaseTestCase):
         # `n_epochs - 1` because \n appears only between
         # inline summary lines.
         # Also network prints 5 additional lines at the beggining
-        self.assertEqual(terminal_output.count('\n'), 5 + n_epochs - 1)
+        self.assertEqual(terminal_output.count('\n'), n_epochs - 1)
 
 
 class NetworkPropertiesTestCase(BaseTestCase):

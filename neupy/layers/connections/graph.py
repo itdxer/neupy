@@ -440,10 +440,8 @@ class LayerGraph(object):
 
             observed_layers.append(current_layer)
 
-        forward_subgraph = filter_dict(self.forward_graph,
-                                       observed_layers)
-        backward_subgraph = filter_dict(self.backward_graph,
-                                        observed_layers)
+        forward_subgraph = filter_dict(self.forward_graph, observed_layers)
+        backward_subgraph = filter_dict(self.backward_graph, observed_layers)
 
         # Remove old relations to the other layers.
         # Output layer cannot point to some other layers.

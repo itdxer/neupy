@@ -10,7 +10,6 @@ from neupy.exceptions import LayerConnectionError
 
 
 environment.reproducible()
-environment.speedup()
 
 
 def load_data():

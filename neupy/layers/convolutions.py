@@ -4,6 +4,7 @@ import collections
 import six
 import tensorflow as tf
 
+from neupy import utils
 from neupy.utils import as_tuple
 from neupy.exceptions import LayerConnectionError
 from neupy.core.properties import TypedListProperty, Property
@@ -44,8 +45,8 @@ class StrideProperty(TypedListProperty):
                              "in the list. Got {}".format(len(value)))
 
         if any(element <= 0 for element in value):
-            raise ValueError("Stride size should contain only values greater "
-                             "than zero")
+            raise ValueError(
+                "Stride size should contain only values greater than zero")
 
 
 def conv_output_shape(dimension_size, filter_size, padding, stride):
@@ -225,7 +226,11 @@ class Convolution(ParameterBasedLayer):
         row_filter_size, col_filter_size = self.size[-2:]
 
         row_stride, col_stride = self.stride
-        row_padding, col_padding = padding, padding
+
+        if isinstance(padding, tuple):
+            row_padding, col_padding = padding
+        else:
+            row_padding, col_padding = padding, padding
 
         output_rows = conv_output_shape(
             rows, row_filter_size, row_padding, row_stride)
@@ -245,6 +250,27 @@ class Convolution(ParameterBasedLayer):
     def bias_shape(self):
         return as_tuple(self.size[0])
 
+    def cpu_convolution(self, input_value, padding):
+        return tf.nn.convolution(
+            input_value,
+            self.weight,
+            padding,
+            self.stride,
+            data_format="NCHW"
+        )
+
+    def gpu_convolution(self, input_value, padding):
+        input_value = tf.transpose(input_value, (0, 2, 3, 1))
+        output = tf.nn.convolution(
+            input_value,
+            self.weight,
+            padding,
+            self.stride,
+            data_format="NHWC"
+        )
+        output = tf.transpose(output, (0, 3, 1, 2))
+        return output
+
     def output(self, input_value):
         padding = self.padding
 
@@ -260,16 +286,10 @@ class Convolution(ParameterBasedLayer):
             # won't add any paddings.
             padding = 'VALID'
 
-        # TODO: transpose added only for convenient transition between
-        # tensroflow and theatno. I will remove it later.
-        input_value = tf.transpose(input_value, (0, 2, 3, 1))
-        output = tf.nn.convolution(
-            input_value,
-            self.weight,
-            padding,
-            self.stride,
-        )
-        output = tf.transpose(output, (0, 3, 1, 2))
+        if utils.is_gpu_available():
+            output = self.gpu_convolution(input_value, padding)
+        else:
+            output = self.cpu_convolution(input_value, padding)
 
         if self.bias is not None:
             bias = tf.reshape(self.bias, (1, -1, 1, 1))

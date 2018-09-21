@@ -1,14 +1,15 @@
 import inspect
 
-import tensorflow as tf
 import numpy as np
 from scipy.sparse import issparse
+import tensorflow as tf
+from tensorflow.python.client import device_lib
 
 
 __all__ = ('format_data', 'asfloat', 'AttributeKeyDict', 'preformat_value',
-           'as_tuple', 'number_type',
-           'all_equal', 'tensorflow_session', 'tensorflow_eval',
-           'initialize_uninitialized_variables', 'tf_repeat')
+           'as_tuple', 'number_type', 'is_gpu_available', 'all_equal',
+           'tensorflow_session', 'tensorflow_eval', 'tf_repeat',
+           'initialize_uninitialized_variables')
 
 
 number_type = (int, float, np.floating, np.integer)
@@ -295,3 +296,8 @@ def tf_repeat(tensor, repeats):
         multiples = as_tuple(1, repeats)
         tiled_tensor = tf.tile(expanded_tensor, multiples)
         return tf.reshape(tiled_tensor, tf.shape(tensor) * repeats)
+
+
+def is_gpu_available():
+    devices = device_lib.list_local_devices()
+    return any(device.device_type == 'GPU' for device in devices)

@@ -84,6 +84,8 @@ class SummaryTable(object):
             self.logs.table_bottom(len(self.columns))
             self.finished = True
 
+        self.logs.newline()
+
 
 class InlineSummary(object):
     """

@@ -1,6 +1,7 @@
 from itertools import product
 from collections import namedtuple
 
+import mock
 import numpy as np
 import tensorflow as tf
 
@@ -39,15 +40,15 @@ class ConvLayersTestCase(BaseTestCase):
 
         for stride, padding in product(strides, paddings):
             input_layer = layers.Input((2, 12, 11))
-            conv_layer = layers.Convolution((5, 3, 4),
-                                            padding=padding,
-                                            stride=stride)
+            conv_layer = layers.Convolution(
+                (5, 3, 4), padding=padding, stride=stride)
 
             input_layer > conv_layer
             conv_layer.initialize()
 
             y = self.eval(conv_layer.output(x))
             actual_output_shape = as_tuple(y.shape[1:])
+
             self.assertEqual(
                 actual_output_shape, conv_layer.output_shape,
                 msg='padding={} and stride={}'.format(padding, stride),
@@ -62,11 +63,12 @@ class ConvLayersTestCase(BaseTestCase):
         )
 
         for testcase in testcases:
-            conv_layer = layers.Convolution((1, 2, 3),
-                                            stride=testcase.stride)
+            conv_layer = layers.Convolution(
+                (1, 2, 3), stride=testcase.stride)
+
             msg = "Input stride size: {}".format(testcase.stride)
-            self.assertEqual(testcase.expected_output, conv_layer.stride,
-                             msg=msg)
+            self.assertEqual(
+                testcase.expected_output, conv_layer.stride, msg=msg)
 
     def test_conv_invalid_strides(self):
         invalid_strides = (
@@ -149,6 +151,7 @@ class ConvLayersTestCase(BaseTestCase):
 
     def test_conv_invalid_input_shape(self):
         conv = layers.Convolution((1, 3, 3))
+
         with self.assertRaises(LayerConnectionError):
             layers.join(layers.Input(10), conv)
 
@@ -174,6 +177,20 @@ class ConvLayersTestCase(BaseTestCase):
         np.testing.assert_array_almost_equal(expected_output, actual_output)
 
     def test_conv_without_bias(self):
+        input_layer = layers.Input((1, 5, 5))
+        conv = layers.Convolution((1, 3, 3), bias=None, weight=1)
+
+        connection = input_layer > conv
+        connection.initialize()
+
+        x = asfloat(np.ones((1, 1, 5, 5)))
+        expected_output = 9 * np.ones((1, 1, 3, 3))
+        actual_output = self.eval(connection.output(x))
+
+        np.testing.assert_array_almost_equal(expected_output, actual_output)
+
+    @mock.patch('neupy.utils.is_gpu_available', return_value=True)
+    def test_gpu_convolution(self, is_gpu_available):
         input_layer = layers.Input((1, 5, 5))
         conv = layers.Convolution((1, 3, 3), bias=None, weight=1)
 
