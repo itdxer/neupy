@@ -1,7 +1,6 @@
 # Main
-# Install numpy and scipy from conda
+# Install numpy, scipy, tensorflow from conda
 matplotlib==1.5.1
-tensorflow==1.10.1
 Pillow==3.0.0
 graphviz==0.5.1
 
