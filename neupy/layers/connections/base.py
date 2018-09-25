@@ -50,8 +50,7 @@ def clean_layer_references(graph, layer_references):
 
 def check_initialization(method):
     @wraps(method)
-    def wrapper(*args, **kwargs):
-        self, args = args[0], args[1:]
+    def wrapper(self, *args, **kwargs):
         result = method(*args, **kwargs)
         self.initialized = True
         return result
@@ -79,6 +78,7 @@ class BaseConnection(InlineConnection):
     """
     def __init__(self):
         self.initialized = False
+
         # Make sure that we save information when connection was
         # initialized. It will work even if method was reinitialized
         self.initialize = types.MethodType(

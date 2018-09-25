@@ -169,9 +169,12 @@ def does_layer_expect_one_input(layer):
 
     if not inspect.ismethod(layer.output):
         raise ValueError("Layer has an `output` property, "
-                         "but it not a method")
+                         "but it's not a method")
 
-    arginfo = inspect.getargspec(layer.output)
+    # The main output method overwrapped with decoretor that destroys
+    # original properties of the method. The original method can be found
+    # in the `original_method` attribute
+    arginfo = inspect.getargspec(layer.output.original_method)
 
     if arginfo.varargs is not None:
         return False

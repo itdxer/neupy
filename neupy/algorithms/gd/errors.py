@@ -3,7 +3,7 @@ from __future__ import division
 import tensorflow as tf
 
 from neupy.core.docs import shared_docs
-from neupy.utils import asfloat
+from neupy.utils import asfloat, function_name_scope
 
 
 __all__ = ('mse', 'rmse', 'mae', 'msle', 'rmsle', 'binary_crossentropy',
@@ -26,7 +26,7 @@ def error_function(expected, predicted):
     """
     raise NotImplementedError
 
-
+@function_name_scope
 @shared_docs(error_function)
 def mse(expected, predicted):
     """
@@ -49,6 +49,7 @@ def mse(expected, predicted):
     return tf.reduce_mean(tf.square(predicted - expected))
 
 
+@function_name_scope
 @shared_docs(error_function)
 def rmse(expected, predicted):
     """
@@ -71,6 +72,7 @@ def rmse(expected, predicted):
     return tf.sqrt(mse(expected, predicted))
 
 
+@function_name_scope
 @shared_docs(error_function)
 def mae(expected, predicted):
     """
@@ -93,6 +95,7 @@ def mae(expected, predicted):
     return tf.reduce_mean(tf.abs(expected - predicted))
 
 
+@function_name_scope
 @shared_docs(error_function)
 def msle(expected, predicted):
     """
@@ -116,6 +119,7 @@ def msle(expected, predicted):
     return tf.reduce_mean(squared_log)
 
 
+@function_name_scope
 @shared_docs(error_function)
 def rmsle(expected, predicted):
     """
@@ -140,6 +144,7 @@ def rmsle(expected, predicted):
     return tf.sqrt(msle(expected, predicted))
 
 
+@function_name_scope
 @shared_docs(error_function)
 def binary_crossentropy(expected, predicted):
     """
@@ -171,6 +176,7 @@ def binary_crossentropy(expected, predicted):
     return total_error / n_samples
 
 
+@function_name_scope
 @shared_docs(error_function)
 def categorical_crossentropy(expected, predicted):
     """
@@ -193,6 +199,7 @@ def categorical_crossentropy(expected, predicted):
     return -tf.reduce_sum(expected * tf.log(predicted)) / n_samples
 
 
+@function_name_scope
 def binary_hinge(expected, predicted, delta=1):
     """
     Computes the binary hinge loss between predictions
@@ -229,6 +236,7 @@ def binary_hinge(expected, predicted, delta=1):
     return tf.reduce_mean(error)
 
 
+@function_name_scope
 def categorical_hinge(expected, predicted, delta=1):
     """
     Computes the multi-class hinge loss between

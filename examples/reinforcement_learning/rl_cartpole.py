@@ -87,7 +87,7 @@ def train_network(env, network, memory, n_games=200, max_score=200,
             if len(memory) == memory_size:
                 # Train only when we collected enough samples
                 x_train, y_train = training_samples(network, memory, gamma)
-                network.train(x_train, y_train, epochs=1)
+                network.train(x_train, y_train, epochs=1, summary='inline')
                 loss = network.errors.last()
 
             state = new_state
@@ -112,7 +112,7 @@ if __name__ == '__main__':
         help='load pretrained network from file and play without training',
     )
     args = parser.parse_args()
-    network = algorithms.Adamax(
+    network = algorithms.RMSProp(
         [
             layers.Input(4),
 
@@ -129,7 +129,8 @@ if __name__ == '__main__':
 
         step=0.0005,
         error='rmse',
-        batch_size=100,
+        batch_size='full',
+        verbose=False
     )
 
     env = gym.make('CartPole-v0')
@@ -150,7 +151,7 @@ if __name__ == '__main__':
         print("Start training")
         train_network(
             env, network, memory,
-            n_games=120,  # Number of games that networks is going to play,
+            n_games=150,  # Number of games that networks is going to play,
             max_score=200,  # Maximum score that network can achive in the game
             epsilon=0.2,  # Probability to select random action during the game
             gamma=0.99,
@@ -164,4 +165,4 @@ if __name__ == '__main__':
 
     # After the training we can check how network solves the problem
     print("Start playing game")
-    play_game(env, network, n_steps=1000)
+    play_game(env, network, n_steps=100000)

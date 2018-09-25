@@ -367,7 +367,9 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         network_inputs = self.variables.network_inputs
         network_output = self.variables.network_output
 
-        training_updates = self.init_train_updates()
+        with tf.name_scope('training-updates'):
+            training_updates = self.init_train_updates()
+
         initialize_uninitialized_variables()
 
         self.methods.update(

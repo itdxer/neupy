@@ -1,13 +1,14 @@
 import re
+import types
 from collections import OrderedDict
 
 import six
 import tensorflow as tf
 
 from neupy import init
-from neupy.utils import asfloat, as_tuple
 from neupy.core.config import Configurable
 from neupy.core.properties import ParameterProperty, IntProperty, Property
+from neupy.utils import asfloat, as_tuple, class_method_name_scope
 from neupy.layers.connections import BaseConnection
 
 
@@ -130,6 +131,9 @@ class BaseLayer(BaseConnection, Configurable):
 
     def __init__(self, *args, **options):
         super(BaseLayer, self).__init__(*args)
+
+        self.output = types.MethodType(
+            class_method_name_scope(self.output), self)
 
         self.updates = []
         self.parameters = OrderedDict()

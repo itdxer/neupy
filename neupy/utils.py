@@ -1,4 +1,5 @@
 import inspect
+from functools import wraps
 
 import numpy as np
 from scipy.sparse import issparse
@@ -9,10 +10,37 @@ from tensorflow.python.client import device_lib
 __all__ = ('format_data', 'asfloat', 'AttributeKeyDict', 'preformat_value',
            'as_tuple', 'number_type', 'is_gpu_available', 'all_equal',
            'tensorflow_session', 'tensorflow_eval', 'tf_repeat',
-           'initialize_uninitialized_variables')
+           'initialize_uninitialized_variables', 'function_name_scope',
+           'class_method_name_scope')
 
 
 number_type = (int, float, np.floating, np.integer)
+
+
+def function_name_scope(function):
+    """
+    Decorator that wraps any function with the name score that has the
+    same name as a function.
+    """
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        with tf.name_scope(function.__name__):
+            return function(*args, **kwargs)
+    return wrapper
+
+
+def class_method_name_scope(method):
+    """
+    Decorator that wraps any method with the name score that has the
+    same name as a method.
+    """
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        with tf.name_scope(self.__class__.__name__):
+            return method(*args, **kwargs)
+
+    wrapper.original_method = method
+    return wrapper
 
 
 def format_data(data, is_feature1d=True, copy=False, make_float=True):
@@ -240,16 +268,19 @@ def tensorflow_eval(value):
     return session.run(value)
 
 
+@function_name_scope
 def flatten(value):
     return tf.reshape(value, [-1])
 
 
+@function_name_scope
 def outer(a, b):
     a = tf.expand_dims(a, 1)
     b = tf.expand_dims(b, 0)
     return tf.matmul(a, b)
 
 
+@function_name_scope
 def dot(a, b):
     return tf.tensordot(a, b, 1)
 
@@ -299,5 +330,13 @@ def tf_repeat(tensor, repeats):
 
 
 def is_gpu_available():
+    """
+    Checks if the GPU device available.
+
+    Returns
+    -------
+    bool
+        ``True`` in case if machine has available GPU and ``False`` otherwise.
+    """
     devices = device_lib.list_local_devices()
     return any(device.device_type == 'GPU' for device in devices)
