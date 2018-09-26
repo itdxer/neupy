@@ -60,7 +60,7 @@ def binarize_images(data):
         image = image.reshape((62, 47))
         image_threshold = threshold_local(image, block_size=15)
         binary_adaptive_image = image > image_threshold
-        binarized_data.append(binary_adaptive.ravel())
+        binarized_data.append(binary_adaptive_image.ravel())
     return asfloat(binarized_data)
 
 
