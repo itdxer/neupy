@@ -189,7 +189,7 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
     def init_methods(self):
         def free_energy(visible_sample):
             with tf.name_scope('free-energy'):
-                wx_b = dot(visible_sample, self.weight) + self.hidden_bias
+                wx_b = tf.matmul(visible_sample, self.weight) + self.hidden_bias
                 visible_bias_term = dot(visible_sample, self.visible_bias)
                 hidden_term = tf.reduce_sum(
                     tf.log(asfloat(1) + tf.exp(wx_b)),
@@ -199,13 +199,13 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
 
         def visible_to_hidden(visible_sample):
             with tf.name_scope('visible-to-hidden'):
-                wx_b = dot(visible_sample, self.weight) + self.hidden_bias
+                wx_b = tf.matmul(visible_sample, self.weight) + self.hidden_bias
                 return tf.nn.sigmoid(wx_b)
 
         def hidden_to_visible(hidden_sample):
             with tf.name_scope('hidden-to-visible'):
-                W_T = tf.transpose(self.weight)
-                wx_b = dot(hidden_sample, W_T) + self.visible_bias
+                wx = tf.matmul(hidden_sample, self.weight, transpose_b=True)
+                wx_b = wx + self.visible_bias
                 return tf.nn.sigmoid(wx_b)
 
         def sample_hidden_from_visible(visible_sample):
@@ -248,8 +248,8 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
 
         with tf.name_scope('weight-update'):
             weight_update = (
-                dot(tf.transpose(v_pos), h_pos) -
-                dot(tf.transpose(v_neg), h_neg)
+                tf.matmul(v_pos, h_pos, transpose_a=True) -
+                tf.matmul(v_neg, h_neg, transpose_a=True)
             ) / asfloat(n_samples)
 
         with tf.name_scope('hidden-bias-update'):
@@ -271,14 +271,17 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
             # multiplication.
             scaled_rounded_input = 2 * rounded_input - 1
             scaled_flipped_rounded_input = (
-                -2 * corrupted_features * scaled_rounded_input
+                # for corrupted_features we convert 0 to 1 and 1 to -1
+                # in this way after multiplication we will flip all
+                # signs where -1 in the transformed corrupted_features
+                (-2 * corrupted_features + 1) * scaled_rounded_input
             )
             # Scale it back to the [0, 1] range
             flipped_rounded_input = (scaled_flipped_rounded_input + 1) / 2
 
         with tf.name_scope('pseudo-likelihood-loss'):
             # Stochastic pseudo-likelihood
-            epsilon = asfloat(1e-8)
+            epsilon = asfloat(1e-7)  # smallest 32-bit float
             error = tf.reduce_mean(
                 self.n_visible * tf.log(
                     # we add small epsilon in order to prevent
@@ -292,8 +295,7 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
 
         with tf.name_scope('gibbs-sampling'):
             gibbs_sampling = sample_visible_from_hidden(
-                sample_hidden_from_visible(network_input)
-            )
+                sample_hidden_from_visible(network_input))
 
         initialize_uninitialized_variables()
         self.methods.update(

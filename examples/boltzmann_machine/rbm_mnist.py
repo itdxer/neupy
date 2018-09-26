@@ -1,11 +1,12 @@
 import matplotlib.pyplot as plt
 from sklearn import datasets
 from neupy import algorithms, environment
-from neupy.utils import asfloat
+from neupy.utils import asfloat, tensorflow_session
 
 
 def plot_rbm_components(rbm_network):
-    weight = rbm_network.weight.get_value()
+    session = tensorflow_session()
+    weight = session.run(rbm_network.weight)
 
     plt.figure(figsize=(10, 10))
     plt.suptitle('RBM componenets', size=16)
@@ -34,6 +35,5 @@ rbm = algorithms.RBM(
     verbose=True,
     shuffle_data=True,
 )
-rbm.train(data, epochs=10)
-
+rbm.train(data, data, epochs=10)
 plot_rbm_components(rbm)
