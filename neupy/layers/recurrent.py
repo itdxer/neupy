@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 
 from neupy import init
-from neupy.utils import AttributeKeyDict, as_tuple, dot, tensorflow_session
+from neupy.utils import AttributeKeyDict, as_tuple, tensorflow_session
 from neupy.exceptions import LayerConnectionError
 from neupy.core.properties import (IntProperty, Property, NumberProperty,
                                    ParameterProperty)
@@ -263,7 +263,8 @@ class LSTM(BaseRNNLayer):
             forgetgate=tf.nn.sigmoid,
             outgate=tf.nn.sigmoid,
             cell=tf.tanh,
-        ))
+        )
+    )
 
     learn_init = Property(default=False, expected_type=bool)
     cell_init = ParameterProperty(default=init.Constant(0))
@@ -372,8 +373,8 @@ class LSTM(BaseRNNLayer):
 
         cell_init = tf.tile(self.cell_init, (n_batch, 1))
         hidden_init = tf.tile(self.hidden_init, (n_batch, 1))
-
         sequence = input_value
+
         if self.backwards:
             sequence = tf.reverse(sequence, axis=[0])
 
@@ -389,6 +390,7 @@ class LSTM(BaseRNNLayer):
                 fn=one_lstm_step,
                 elems=input_value,
                 initializer=[cell_init, hidden_init],
+                name='lstm-scan',
             )
 
         # When it is requested that we only return the final sequence step,
@@ -528,16 +530,16 @@ class GRU(BaseRNNLayer):
         self.input_weights = self.add_parameter(
             value=self.input_weights,
             name='input_weights',
-            shape=(n_inputs, 4 * self.size),
+            shape=(n_inputs, 3 * self.size),
         )
         self.hidden_weights = self.add_parameter(
             value=self.hidden_weights,
             name='hidden_weights',
-            shape=(self.size, 4 * self.size),
+            shape=(self.size, 3 * self.size),
         )
         self.biases = self.add_parameter(
             value=self.biases, name='biases',
-            shape=(4 * self.size,),
+            shape=(3 * self.size,),
         )
 
         self.add_parameter(
@@ -554,48 +556,49 @@ class GRU(BaseRNNLayer):
         input_shape = tf.shape(input_value)
         n_batch = input_shape[1]
 
-        # When tensorflow.scan calls step, input_n will be
-        # (n_batch, 3 * num_units). We define a slicing function
-        # that extract the input to each GRU gate
-        def slice_w(x, n):
-            return x[:, n * self.size:(n + 1) * self.size]
-
         # Create single recurrent computation step function
         # input_n is the n'th vector of the input
         def one_gru_step(states, input_n):
-            hid_previous, = states
-            input_n = dot(input_n, self.input_weights) + self.biases
+            with tf.name_scope('gru-cell'):
+                hid_previous, = states
+                input_n = tf.matmul(input_n, self.input_weights) + self.biases
 
-            # Compute W_{hr} h_{t - 1}, W_{hu} h_{t - 1},
-            # and W_{hc} h_{t - 1}
-            hid_input = dot(hid_previous, self.hidden_weights)
+                # Compute W_{hr} h_{t - 1}, W_{hu} h_{t - 1},
+                # and W_{hc} h_{t - 1}
+                hid_input = tf.matmul(hid_previous, self.hidden_weights)
 
-            if self.gradient_clipping:
-                input_n = clip_gradient(input_n, self.gradient_clipping)
-                hid_input = clip_gradient(hid_input, self.gradient_clipping)
+                if self.gradient_clipping != 0:
+                    input_n = clip_gradient(input_n, self.gradient_clipping)
+                    hid_input = clip_gradient(
+                        hid_input, self.gradient_clipping)
 
-            # Reset and update gates
-            resetgate = slice_w(hid_input, 0) + slice_w(input_n, 0)
-            resetgate = self.activation_functions.resetgate(resetgate)
+                hid_resetgate, hid_updategate, hid_hidden = tf.split(
+                    hid_input, 3, axis=1)
 
-            updategate = slice_w(hid_input, 1) + slice_w(input_n, 1)
-            updategate = self.activation_functions.updategate(updategate)
+                in_resetgate, in_updategate, in_hidden = tf.split(
+                    input_n, 3, axis=1)
 
-            # Compute W_{xc}x_t + r_t \odot (W_{hc} h_{t - 1})
-            hidden_update_in = slice_w(input_n, 2)
-            hidden_update_hid = slice_w(hid_input, 2)
-            hidden_update = hidden_update_in + resetgate * hidden_update_hid
+                # Reset and update gates
+                resetgate = self.activation_functions.resetgate(
+                    hid_resetgate + in_resetgate)
 
-            if self.gradient_clipping:
-                hidden_update = clip_gradient(
-                    hidden_update, self.gradient_clipping)
+                updategate = self.activation_functions.updategate(
+                    hid_updategate + in_updategate)
 
-            hidden_update = self.activation_functions.hidden_update(
-                hidden_update)
+                # Compute W_{xc}x_t + r_t \odot (W_{hc} h_{t - 1})
+                hidden_update = in_hidden + resetgate * hid_hidden
 
-            # Compute (1 - u_t)h_{t - 1} + u_t c_t
-            hid = (1 - updategate) * hid_previous + updategate * hidden_update
-            return [hid]
+                if self.gradient_clipping != 0:
+                    hidden_update = clip_gradient(
+                        hidden_update, self.gradient_clipping)
+
+                hidden_update = self.activation_functions.hidden_update(
+                    hidden_update)
+
+                # Compute (1 - u_t)h_{t - 1} + u_t c_t
+                return [
+                    hid_previous - updategate * (hid_previous - hidden_update)
+                ]
 
         hidden_init = tf.tile(self.hidden_init, (n_batch, 1))
         sequence = input_value
@@ -615,6 +618,7 @@ class GRU(BaseRNNLayer):
                 fn=one_gru_step,
                 elems=input_value,
                 initializer=[hidden_init],
+                name='gru-scan',
             )
 
         # When it is requested that we only return the final sequence step,
@@ -628,5 +632,4 @@ class GRU(BaseRNNLayer):
 
         # dimshuffle back to (n_batch, n_time_steps, n_features))
         hid_out = tf.transpose(hid_out, [1, 0, 2])
-
         return hid_out
