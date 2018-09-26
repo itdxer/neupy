@@ -51,8 +51,10 @@ class WeightDecayTestCase(BaseTestCase):
         )
         net3 = reproducible_network_train(
             step=default_step,
-            addons=[algorithms.WeightDecay,
-                    algorithms.StepDecay]
+            addons=[
+                algorithms.WeightDecay,
+                algorithms.StepDecay,
+            ]
         )
 
         # Check that step is valid for each network
@@ -63,10 +65,12 @@ class WeightDecayTestCase(BaseTestCase):
             StepCase(network=net3, expected_step=default_step / 6.),
         )
 
-        for case in step_test_cases:
+        for case_index, case in enumerate(step_test_cases, start=1):
             step = case.network.variables.step
+
             self.assertAlmostEqual(
-                self.eval(step), case.expected_step, places=5)
+                self.eval(step), case.expected_step, places=5,
+                msg="Test case #{}".format(case_index))
 
         # Compare weight norm between networks
         WeightNormCase = namedtuple(

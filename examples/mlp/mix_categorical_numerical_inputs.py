@@ -6,7 +6,6 @@ from neupy import layers, algorithms, environment
 
 
 environment.reproducible()
-environment.speedup()
 
 
 def make_dataset():

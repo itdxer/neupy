@@ -11,9 +11,9 @@ class AdamTestCase(BaseTestCase):
             (10, 20, 1),
             step=10.,
             verbose=False,
-            epsilon=1e-7,
+            epsilon=1e-4,
             beta1=0.9,
-            beta2=0.999,
+            beta2=0.99,
         )
-        mnet.train(x_train, y_train, x_test, y_test, epochs=100)
-        self.assertAlmostEqual(0.08, mnet.errors.last(), places=2)
+        mnet.train(x_train, y_train, x_test, y_test, epochs=200)
+        self.assertGreater(0.15, mnet.validation_errors.last())

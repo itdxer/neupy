@@ -1,6 +1,7 @@
 import tensorflow as tf
 
 from neupy.utils import asfloat
+from neupy.layers.utils import iter_parameters
 from neupy.core.properties import NumberProperty
 from .base import WeightUpdateConfigurable
 
@@ -77,12 +78,16 @@ class MaxNormRegularization(WeightUpdateConfigurable):
     """
     max_norm = NumberProperty(default=10, minval=0)
 
-    def init_param_updates(self, layer, parameter):
-        updates = super(MaxNormRegularization, self).init_param_updates(
-            layer, parameter)
+    def init_train_updates(self):
+        parameters = [param for _, _, param in iter_parameters(self.layers)]
+        original_updates = super(
+            MaxNormRegularization, self).init_train_updates()
 
-        updates_mapper = dict(updates)
-        updated_value = updates_mapper[parameter]
-        updates_mapper[parameter] = max_norm_clip(updated_value, self.max_norm)
+        modified_updates = []
 
-        return list(updates_mapper.items())
+        for parameter, updated in original_updates:
+            if parameter in parameters:
+                updated = max_norm_clip(updated, self.max_norm)
+            modified_updates.append((parameter, updated))
+
+        return modified_updates

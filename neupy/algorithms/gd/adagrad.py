@@ -40,20 +40,24 @@ class Adagrad(MinibatchGradientDescent):
     """
     epsilon = NumberProperty(default=1e-5, minval=0)
 
-    def init_param_updates(self, layer, parameter):
+    def init_train_updates(self):
+        updates = []
         step = self.variables.step
-        prev_mean_squred_grad = tf.Variable(
-            tf.zeros(parameter.shape),
-            name="{}/prev-mean-squred-grad".format(parameter.op.name),
-            dtype=tf.float32,
-        )
 
-        gradient, = tf.gradients(self.variables.error_func, parameter)
+        for layer, parameter, gradient in self.iter_params_and_grads():
+            prev_mean_squred_grad = tf.Variable(
+                tf.zeros(parameter.shape),
+                name="{}/prev-mean-squred-grad".format(parameter.op.name),
+                dtype=tf.float32,
+            )
 
-        mean_squred_grad = prev_mean_squred_grad + gradient ** 2
-        parameter_delta = gradient * tf.sqrt(mean_squred_grad + self.epsilon)
+            mean_squred_grad = prev_mean_squred_grad + gradient ** 2
+            parameter_delta = gradient * tf.sqrt(
+                mean_squred_grad + self.epsilon)
 
-        return [
-            (prev_mean_squred_grad, mean_squred_grad),
-            (parameter, parameter - step * parameter_delta),
-        ]
+            updates.extend([
+                (prev_mean_squred_grad, mean_squred_grad),
+                (parameter, parameter - step * parameter_delta),
+            ])
+
+        return updates

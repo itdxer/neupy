@@ -46,33 +46,36 @@ class Quickprop(GradientDescent):
     """
     upper_bound = BoundedProperty(default=1, minval=0)
 
-    def init_param_updates(self, layer, parameter):
+    def init_train_updates(self):
+        updates = []
         step = self.variables.step
-        prev_delta = tf.Variable(
-            tf.zeros(parameter.shape),
-            name="{}/prev-delta".format(parameter.op.name),
-            dtype=tf.float32,
-        )
-        prev_gradient = tf.Variable(
-            tf.zeros(parameter.shape),
-            name="{}/prev-grad".format(parameter.op.name),
-            dtype=tf.float32,
-        )
 
-        gradient, = tf.gradients(self.variables.error_func, parameter)
-        grad_delta = tf.abs(prev_gradient - gradient)
-
-        parameter_delta = tf.where(
-            tf.equal(self.variables.epoch, 1),
-            gradient,
-            tf.clip_by_value(
-                tf.abs(prev_delta) * gradient / grad_delta,
-                -self.upper_bound,
-                self.upper_bound
+        for layer, parameter, gradient in self.iter_params_and_grads():
+            prev_delta = tf.Variable(
+                tf.zeros(parameter.shape),
+                name="{}/prev-delta".format(parameter.op.name),
+                dtype=tf.float32,
             )
-        )
-        return [
-            (parameter, parameter - step * parameter_delta),
-            (prev_gradient, gradient),
-            (prev_delta, parameter_delta),
-        ]
+            prev_gradient = tf.Variable(
+                tf.zeros(parameter.shape),
+                name="{}/prev-grad".format(parameter.op.name),
+                dtype=tf.float32,
+            )
+            grad_delta = tf.abs(prev_gradient - gradient)
+
+            parameter_delta = tf.where(
+                tf.equal(self.variables.epoch, 1),
+                gradient,
+                tf.clip_by_value(
+                    tf.abs(prev_delta) * gradient / grad_delta,
+                    -self.upper_bound,
+                    self.upper_bound
+                )
+            )
+            updates.extend([
+                (parameter, parameter - step * parameter_delta),
+                (prev_gradient, gradient),
+                (prev_delta, parameter_delta),
+            ])
+
+        return updates

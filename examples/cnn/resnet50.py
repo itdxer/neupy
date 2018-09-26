@@ -26,7 +26,6 @@ def prepare_image(fname):
     return asfloat(image - mean_values)
 
 
-environment.speedup()
 resnet50 = architectures.resnet50()
 
 if not os.path.exists(RESNET50_WEIGHTS_FILE):

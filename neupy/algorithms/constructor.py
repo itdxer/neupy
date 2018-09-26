@@ -7,7 +7,7 @@ import six
 import tensorflow as tf
 
 from neupy import layers
-from neupy.layers.utils import preformat_layer_shape, iter_parameters
+from neupy.layers.utils import preformat_layer_shape
 from neupy.layers.connections import LayerConnection, is_sequential
 from neupy.exceptions import InvalidConnection
 from neupy.core.properties import ChoiceProperty
@@ -134,10 +134,12 @@ class ErrorFunctionProperty(ChoiceProperty):
 
     def __get__(self, instance, value):
         founded_value = super(ChoiceProperty, self).__get__(instance, value)
+
         if isinstance(founded_value, types.FunctionType):
             return founded_value
-        return super(ErrorFunctionProperty, self).__get__(instance,
-                                                          founded_value)
+
+        return super(ErrorFunctionProperty, self).__get__(
+            instance, founded_value)
 
 
 class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
@@ -370,6 +372,9 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         with tf.name_scope('training-updates'):
             training_updates = self.init_train_updates()
 
+            for layer in self.layers:
+                training_updates.extend(layer.updates)
+
         initialize_uninitialized_variables()
 
         self.methods.update(
@@ -396,32 +401,7 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         Initialize updates that would be applied after
         each training epoch.
         """
-        updates = []
-        for layer, _, parameter in iter_parameters(self.layers):
-            updates.extend(self.init_param_updates(layer, parameter))
-
-        for layer in self.layers:
-            updates.extend(layer.updates)
-
-        return updates
-
-    def init_param_updates(self, layer, parameter):
-        """
-        Initialize parameter updates.
-
-        Parameters
-        ----------
-        layer : object
-            Any layer that inherit from BaseLayer class.
-        parameter : object
-            Usualy it is a weight or bias.
-
-        Returns
-        -------
-        list
-            List of updates related to the specified parameter.
-        """
-        return []
+        raise NotImplementedError()
 
     def format_input_data(self, input_data):
         """

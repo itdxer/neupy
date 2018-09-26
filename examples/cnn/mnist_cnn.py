@@ -5,7 +5,6 @@ from neupy import algorithms, layers, environment
 
 
 environment.reproducible()
-environment.speedup()
 
 
 def load_data():

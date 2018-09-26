@@ -1,7 +1,8 @@
 from collections import namedtuple
 
-import tensorflow as tf
+import mock
 import numpy as np
+import tensorflow as tf
 
 from neupy import layers
 from neupy.utils import asfloat
@@ -76,6 +77,23 @@ class PoolingLayersTestCase(BaseTestCase):
         self.assertEqual("MaxPooling((2, 2))", str(layer))
 
     def test_max_pooling(self):
+        input_data = asfloat(np.array([
+            [1, 2, 3, -1],
+            [4, -6, 3, 1],
+            [0, 0, 1, 0],
+            [0, -1, 0, 0],
+        ])).reshape(1, 1, 4, 4)
+        expected_output = asfloat(np.array([
+            [4, 3],
+            [0, 1],
+        ])).reshape(1, 1, 2, 2)
+
+        max_pool_layer = layers.MaxPooling((2, 2))
+        actual_output = self.eval(max_pool_layer.output(input_data))
+        np.testing.assert_array_almost_equal(actual_output, expected_output)
+
+    @mock.patch('neupy.utils.is_gpu_available', return_value=True)
+    def test_gpu_max_pooling(self, is_gpu_available):
         input_data = asfloat(np.array([
             [1, 2, 3, -1],
             [4, -6, 3, 1],

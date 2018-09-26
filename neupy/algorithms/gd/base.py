@@ -10,6 +10,7 @@ import progressbar
 from neupy.core.config import Configurable
 from neupy.core.properties import Property, BoundedProperty
 from neupy.utils import as_tuple
+from neupy.layers.utils import iter_parameters
 from neupy.algorithms.constructor import ConstructibleNetwork
 from neupy.algorithms.gd import addon_types
 
@@ -108,11 +109,27 @@ class GradientDescent(ConstructibleNetwork):
             options = kwargs
         super(GradientDescent, self).__init__(connection, **options)
 
-    def init_param_updates(self, layer, parameter):
+    def iter_params_and_grads(self):
+        layers, parameters = [], []
+
+        for layer, _, parameter in iter_parameters(self.layers):
+            layers.append(layer)
+            parameters.append(parameter)
+
+        gradients = tf.gradients(self.variables.error_func, parameters)
+        iterator = zip(layers, parameters, gradients)
+
+        for layer, parameter, gradient in iterator:
+            yield layer, parameter, gradient
+
+    def init_train_updates(self):
+        updates = []
         step = self.variables.step
-        gradient = tf.gradients(self.variables.error_func, parameter)
-        gradient = gradient[0]
-        return [(parameter, parameter - step * gradient)]
+
+        for layer, parameter, gradient in self.iter_params_and_grads():
+            updates.append((parameter, parameter - step * gradient))
+
+        return updates
 
     def class_name(self):
         return self.main_class.__name__

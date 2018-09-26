@@ -152,8 +152,6 @@ def on_epoch_end(network):
 
 
 if __name__ == '__main__':
-    environment.speedup()
-
     args = parser.parse_args()
     env = environments[args.imsize]
 

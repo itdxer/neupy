@@ -69,40 +69,46 @@ class Adam(MinibatchGradientDescent):
     beta2 = ProperFractionProperty(default=0.999)
     epsilon = NumberProperty(default=1e-7, minval=0)
 
-    def init_param_updates(self, layer, parameter):
+    def init_train_updates(self):
+        updates = []
+
         epoch = self.variables.epoch
-        prev_first_moment = tf.Variable(
-            tf.zeros(parameter.shape),
-            name="{}/prev-first-moment".format(parameter.op.name),
-            dtype=tf.float32,
-        )
-        prev_second_moment = tf.Variable(
-            tf.zeros(parameter.shape),
-            name="{}/prev-second-moment".format(parameter.op.name),
-            dtype=tf.float32,
-        )
-
         step = self.variables.step
-        gradient, = tf.gradients(self.variables.error_func, parameter)
 
-        first_moment = (
-            self.beta1 * prev_first_moment +
-            (1. - self.beta1) * gradient)
-        second_moment = (
-            self.beta2 * prev_second_moment +
-            (1. - self.beta2) * gradient ** 2
-        )
+        for layer, parameter, gradient in self.iter_params_and_grads():
+            prev_first_moment = tf.Variable(
+                tf.zeros(parameter.shape),
+                name="{}/prev-first-moment".format(parameter.op.name),
+                dtype=tf.float32,
+            )
+            prev_second_moment = tf.Variable(
+                tf.zeros(parameter.shape),
+                name="{}/prev-second-moment".format(parameter.op.name),
+                dtype=tf.float32,
+            )
 
-        first_moment_bias_corrected = first_moment / (1. - self.beta1 ** epoch)
-        second_moment_bias_corrected = (
-            second_moment / (1. - self.beta2 ** epoch))
+            first_moment = (
+                self.beta1 * prev_first_moment +
+                (1. - self.beta1) * gradient)
+            second_moment = (
+                self.beta2 * prev_second_moment +
+                (1. - self.beta2) * gradient ** 2
+            )
 
-        parameter_delta = first_moment_bias_corrected * (
-            tf.sqrt(second_moment_bias_corrected + self.epsilon)
-        )
+            first_moment_bias_corrected = first_moment / (
+                1. - self.beta1 ** epoch)
 
-        return [
-            (prev_first_moment, first_moment),
-            (prev_second_moment, second_moment),
-            (parameter, parameter - step * parameter_delta),
-        ]
+            second_moment_bias_corrected = (
+                second_moment / (1. - self.beta2 ** epoch))
+
+            parameter_delta = first_moment_bias_corrected * (
+                tf.sqrt(second_moment_bias_corrected + self.epsilon)
+            )
+
+            updates.extend([
+                (prev_first_moment, first_moment),
+                (prev_second_moment, second_moment),
+                (parameter, parameter - step * parameter_delta),
+            ])
+
+        return updates

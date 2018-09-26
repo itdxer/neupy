@@ -2,6 +2,7 @@ import math
 
 import tensorflow as tf
 
+from neupy import utils
 from neupy.utils import as_tuple, tf_repeat
 from neupy.core.properties import TypedListProperty, ChoiceProperty, Property
 from neupy.exceptions import LayerConnectionError
@@ -115,17 +116,26 @@ class BasePooling(BaseLayer):
         return (n_kernels, output_rows, output_cols)
 
     def output(self, input_value):
-        # TODO: transpose added only for convenient transition between
-        # tensroflow and theatno. I will remove it later.
-        input_value = tf.transpose(input_value, (0, 2, 3, 1))
+        is_gpu_available = utils.is_gpu_available()
+
+        if is_gpu_available:
+            # TODO: transpose added only for convenient transition between
+            # tensroflow and theatno. I will remove it later.
+            input_value = tf.transpose(input_value, (0, 2, 3, 1))
+
         output = tf.nn.pool(
             input_value,
             self.size,
             pooling_type=self.pooling_type,
             padding=self.padding,
             strides=self.stride or self.size,
+            data_format="NHWC" if is_gpu_available else "NCHW",
         )
-        return tf.transpose(output, (0, 3, 1, 2))
+
+        if is_gpu_available:
+            output = tf.transpose(output, (0, 3, 1, 2))
+
+        return output
 
     def __repr__(self):
         return '{name}({size})'.format(

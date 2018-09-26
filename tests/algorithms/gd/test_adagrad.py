@@ -6,7 +6,7 @@ from base import BaseTestCase
 
 class AdagradTestCase(BaseTestCase):
     def test_simple_adagrad(self):
-        x_train, _, y_train, _ = simple_classification()
+        x_train, x_test, y_train, y_test = simple_classification()
         mnet = algorithms.Adagrad(
             (10, 20, 1),
             step=2.,
@@ -14,5 +14,5 @@ class AdagradTestCase(BaseTestCase):
             verbose=False,
             epsilon=1e-5,
         )
-        mnet.train(x_train, y_train, epochs=100)
-        self.assertAlmostEqual(0.068, mnet.errors.last(), places=3)
+        mnet.train(x_train, y_train, x_test, y_test, epochs=100)
+        self.assertGreater(0.15, mnet.validation_errors.last())

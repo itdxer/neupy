@@ -5,16 +5,15 @@ from neupy import algorithms, layers, environment
 
 
 environment.reproducible()
-environment.speedup()
 
 mnist = datasets.fetch_mldata('MNIST original')
-
 data = (mnist.data / 255.).astype(np.float32)
 
 np.random.shuffle(data)
 x_train, x_test = data[:60000], data[60000:]
 x_train_4d = x_train.reshape((60000, 1, 28, 28))
 x_test_4d = x_test.reshape((10000, 1, 28, 28))
+
 connection = layers.join(
     layers.Input((1, 28, 28)),
 
@@ -43,8 +42,6 @@ connection = layers.join(
 
     layers.Reshape(),
 )
-
-
 
 conv_autoencoder = algorithms.Momentum(
     [

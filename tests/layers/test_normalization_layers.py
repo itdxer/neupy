@@ -146,7 +146,7 @@ class BatchNormTestCase(BaseTestCase):
                 layers.Sigmoid(1),
             ],
             batch_size=10,
-            verbose=True,
+            verbose=True,  # keep it True
         )
         gdnet.train(x_train, y_train, epochs=5)
 

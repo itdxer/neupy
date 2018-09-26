@@ -48,21 +48,28 @@ class Momentum(MinibatchGradientDescent):
     momentum = ProperFractionProperty(default=0.9)
     nesterov = Property(default=False, expected_type=bool)
 
-    def init_param_updates(self, layer, parameter):
+    def init_train_updates(self):
+        """
+        Initialize updates that would be applied after
+        each training epoch.
+        """
+        updates = []
         step = self.variables.step
-        previous_velocity = tf.Variable(
-            tf.zeros(parameter.shape),
-            name="{}/previous-velocity".format(parameter.op.name),
-            dtype=tf.float32,
-        )
 
-        gradient, = tf.gradients(self.variables.error_func, parameter)
-        velocity = self.momentum * previous_velocity - step * gradient
+        for layer, parameter, gradient in self.iter_params_and_grads():
+            previous_velocity = tf.Variable(
+                tf.zeros(parameter.shape),
+                name="{}/previous-velocity".format(parameter.op.name),
+                dtype=tf.float32,
+            )
+            velocity = self.momentum * previous_velocity - step * gradient
 
-        if self.nesterov:
-            velocity = self.momentum * velocity - step * gradient
+            if self.nesterov:
+                velocity = self.momentum * velocity - step * gradient
 
-        return [
-            (parameter, parameter + velocity),
-            (previous_velocity, velocity),
-        ]
+            updates.extend([
+                (parameter, parameter + velocity),
+                (previous_velocity, velocity),
+            ])
+
+        return updates

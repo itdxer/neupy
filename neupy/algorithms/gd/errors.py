@@ -26,6 +26,7 @@ def error_function(expected, predicted):
     """
     raise NotImplementedError
 
+
 @function_name_scope
 @shared_docs(error_function)
 def mse(expected, predicted):

@@ -6,7 +6,6 @@ from neupy.datasets import reber
 
 
 environment.reproducible()
-environment.speedup()
 
 
 def add_padding(data):

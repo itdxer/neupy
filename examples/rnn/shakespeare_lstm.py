@@ -7,7 +7,6 @@ from neupy import layers, algorithms, environment
 
 
 environment.reproducible()
-environment.speedup()
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 FILES_DIR = os.path.join(CURRENT_DIR, 'files')

@@ -69,37 +69,41 @@ class Adamax(MinibatchGradientDescent):
     beta2 = ProperFractionProperty(default=0.999)
     epsilon = NumberProperty(default=1e-7, minval=0)
 
-    def init_param_updates(self, layer, parameter):
+    def init_train_updates(self):
+        updates = []
+
         epoch = self.variables.epoch
         step = self.variables.step
         beta1 = self.beta1
         beta2 = self.beta2
 
-        prev_first_moment = tf.Variable(
-            tf.zeros(parameter.shape),
-            name="{}/prev-first-moment".format(parameter.op.name),
-            dtype=tf.float32,
-        )
-        prev_weighted_inf_norm = tf.Variable(
-            tf.zeros(parameter.shape),
-            name="{}/prev-weighted-inf-norm".format(parameter.op.name),
-            dtype=tf.float32,
-        )
-        gradient, = tf.gradients(self.variables.error_func, parameter)
+        for layer, parameter, gradient in self.iter_params_and_grads():
+            prev_first_moment = tf.Variable(
+                tf.zeros(parameter.shape),
+                name="{}/prev-first-moment".format(parameter.op.name),
+                dtype=tf.float32,
+            )
+            prev_weighted_inf_norm = tf.Variable(
+                tf.zeros(parameter.shape),
+                name="{}/prev-weighted-inf-norm".format(parameter.op.name),
+                dtype=tf.float32,
+            )
 
-        first_moment = beta1 * prev_first_moment + (1. - beta1) * gradient
-        weighted_inf_norm = tf.maximum(
-            beta2 * prev_weighted_inf_norm,
-            tf.abs(gradient),
-        )
+            first_moment = beta1 * prev_first_moment + (1. - beta1) * gradient
+            weighted_inf_norm = tf.maximum(
+                beta2 * prev_weighted_inf_norm,
+                tf.abs(gradient),
+            )
 
-        parameter_delta = (
-            (step / (1. - tf.pow(beta1, epoch + 1))) *
-            (first_moment / (weighted_inf_norm + self.epsilon))
-        )
+            parameter_delta = (
+                (step / (1. - tf.pow(beta1, epoch + 1))) *
+                (first_moment / (weighted_inf_norm + self.epsilon))
+            )
 
-        return [
-            (prev_first_moment, first_moment),
-            (prev_weighted_inf_norm, weighted_inf_norm),
-            (parameter, parameter - parameter_delta),
-        ]
+            updates.extend([
+                (prev_first_moment, first_moment),
+                (prev_weighted_inf_norm, weighted_inf_norm),
+                (parameter, parameter - parameter_delta),
+            ])
+
+        return updates

@@ -75,58 +75,61 @@ class RPROP(StepSelectionBuiltIn, GradientDescent):
         )
         return self.prev_delta
 
-    def init_param_updates(self, layer, parameter):
-        prev_delta = self.init_prev_delta(parameter)
-        steps = tf.Variable(
-            tf.ones_like(parameter) * self.step,
-            name="{}/steps".format(parameter.op.name),
-            dtype=tf.float32,
-        )
-        prev_gradient = tf.Variable(
-            tf.zeros(parameter.shape),
-            name="{}/prev-grad".format(parameter.op.name),
-            dtype=tf.float32,
-        )
+    def init_train_updates(self):
+        updates = []
 
-        gradient, = tf.gradients(self.variables.error_func, parameter)
-
-        grad_product = prev_gradient * gradient
-        negative_gradients = tf.less(grad_product, 0)
-
-        updated_steps = tf.clip_by_value(
-            tf.where(
-                tf.greater(grad_product, 0),
-                steps * self.increase_factor,
-                tf.where(
-                    negative_gradients,
-                    steps * self.decrease_factor,
-                    steps
-                )
-            ),
-            self.minstep,
-            self.maxstep,
-        )
-        parameter_delta = tf.where(
-            negative_gradients,
-            prev_delta,
-            tf.where(
-                tf.less(gradient, 0),
-                -updated_steps,
-                updated_steps,
+        for layer, parameter, gradient in self.iter_params_and_grads():
+            prev_delta = self.init_prev_delta(parameter)
+            steps = tf.Variable(
+                tf.ones_like(parameter) * self.step,
+                name="{}/steps".format(parameter.op.name),
+                dtype=tf.float32,
             )
-        )
-        updated_prev_gradient = tf.where(
-            negative_gradients,
-            tf.zeros_like(gradient),
-            gradient,
-        )
+            prev_gradient = tf.Variable(
+                tf.zeros(parameter.shape),
+                name="{}/prev-grad".format(parameter.op.name),
+                dtype=tf.float32,
+            )
 
-        return [
-            (parameter, parameter - parameter_delta),
-            (steps, updated_steps),
-            (prev_gradient, updated_prev_gradient),
-            (self.prev_delta, -parameter_delta),
-        ]
+            grad_product = prev_gradient * gradient
+            negative_gradients = tf.less(grad_product, 0)
+
+            updated_steps = tf.clip_by_value(
+                tf.where(
+                    tf.greater(grad_product, 0),
+                    steps * self.increase_factor,
+                    tf.where(
+                        negative_gradients,
+                        steps * self.decrease_factor,
+                        steps
+                    )
+                ),
+                self.minstep,
+                self.maxstep,
+            )
+            parameter_delta = tf.where(
+                negative_gradients,
+                prev_delta,
+                tf.where(
+                    tf.less(gradient, 0),
+                    -updated_steps,
+                    updated_steps,
+                )
+            )
+            updated_prev_gradient = tf.where(
+                negative_gradients,
+                tf.zeros_like(gradient),
+                gradient,
+            )
+
+            updates.extend([
+                (parameter, parameter - parameter_delta),
+                (steps, updated_steps),
+                (prev_gradient, updated_prev_gradient),
+                (self.prev_delta, -parameter_delta),
+            ])
+
+        return updates
 
 
 class IRPROPPlus(RPROP):

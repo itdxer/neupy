@@ -62,8 +62,3 @@ class ConstructibleNetworkTestCase(BaseTestCase):
 
         with self.assertRaises(InvalidConnection):
             ConstructibleNetwork(connection)
-
-    def test_no_updates_by_default(self):
-        net = ConstructibleNetwork(layers.Input(10) > layers.Sigmoid(1))
-        updates = net.init_param_updates(layer=None, parameter=None)
-        self.assertEqual(updates, [])

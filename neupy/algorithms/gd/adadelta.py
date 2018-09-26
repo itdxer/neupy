@@ -45,38 +45,40 @@ class Adadelta(MinibatchGradientDescent):
     decay = ProperFractionProperty(default=0.95)
     epsilon = NumberProperty(default=1e-5, minval=0)
 
-    def init_param_updates(self, layer, parameter):
+    def init_train_updates(self):
+        updates = []
         step = self.variables.step
         epsilon = self.epsilon
 
-        prev_mean_squred_grad = tf.Variable(
-            tf.zeros(parameter.shape),
-            name="{}/prev-mean-squred-grad".format(parameter.op.name),
-            dtype=tf.float32,
-        )
-        prev_mean_squred_dx = tf.Variable(
-            tf.zeros(parameter.shape),
-            name="{}/prev-mean-squred-dx".format(parameter.op.name),
-            dtype=tf.float32,
-        )
+        for layer, parameter, gradient in self.iter_params_and_grads():
+            prev_mean_squred_grad = tf.Variable(
+                tf.zeros(parameter.shape),
+                name="{}/prev-mean-squred-grad".format(parameter.op.name),
+                dtype=tf.float32,
+            )
+            prev_mean_squred_dx = tf.Variable(
+                tf.zeros(parameter.shape),
+                name="{}/prev-mean-squred-dx".format(parameter.op.name),
+                dtype=tf.float32,
+            )
 
-        gradient, = tf.gradients(self.variables.error_func, parameter)
+            mean_squred_grad = (
+                self.decay * prev_mean_squred_grad +
+                (1 - self.decay) * gradient ** 2
+            )
+            parameter_delta = gradient * (
+                tf.sqrt(prev_mean_squred_dx + epsilon) /
+                tf.sqrt(mean_squred_grad + epsilon)
+            )
+            mean_squred_dx = (
+                self.decay * prev_mean_squred_dx +
+                (1 - self.decay) * parameter_delta ** 2
+            )
 
-        mean_squred_grad = (
-            self.decay * prev_mean_squred_grad +
-            (1 - self.decay) * gradient ** 2
-        )
-        parameter_delta = gradient * (
-            tf.sqrt(prev_mean_squred_dx + epsilon) /
-            tf.sqrt(mean_squred_grad + epsilon)
-        )
-        mean_squred_dx = (
-            self.decay * prev_mean_squred_dx +
-            (1 - self.decay) * parameter_delta ** 2
-        )
+            updates.extend([
+                (prev_mean_squred_grad, mean_squred_grad),
+                (prev_mean_squred_dx, mean_squred_dx),
+                (parameter, parameter - step * parameter_delta),
+            ])
 
-        return [
-            (prev_mean_squred_grad, mean_squred_grad),
-            (prev_mean_squred_dx, mean_squred_dx),
-            (parameter, parameter - step * parameter_delta),
-        ]
+        return updates
