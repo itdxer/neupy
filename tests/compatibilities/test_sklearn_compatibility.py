@@ -67,7 +67,8 @@ class SklearnCompatibilityTestCase(BaseTestCase):
             param_distributions={'std': np.arange(1e-2, 0.1, 1e-4)},
             n_iter=10,
             scoring=scorer,
-            random_state=self.random_seed
+            random_state=self.random_seed,
+            cv=3,
         )
         random_search.fit(dataset.data, dataset.target)
         scores = random_search.cv_results_

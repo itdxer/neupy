@@ -189,17 +189,32 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
     def init_methods(self):
         def free_energy(visible_sample):
             with tf.name_scope('free-energy'):
-                wx_b = tf.matmul(visible_sample, self.weight) + self.hidden_bias
+                wx = tf.matmul(visible_sample, self.weight)
+                wx_b = wx + self.hidden_bias
+
                 visible_bias_term = dot(visible_sample, self.visible_bias)
-                hidden_term = tf.reduce_sum(
-                    tf.log(asfloat(1) + tf.exp(wx_b)),
-                    axis=1
+
+                # We can get infinity when wx_b is a relatively large number
+                # (maybe 100). Taking exponent makes it even larger and
+                # for with float32 it can convert it to infinity. But because
+                # number is so large we don't care about +1 value before taking
+                # logarithms and therefore we can just pick value as it is
+                # since our operation won't change anything.
+                hidden_terms = tf.where(
+                    # exp(30) is such a big number that +1 won't
+                    # make any difference in the outcome.
+                    tf.greater(wx_b, 30),
+                    wx_b,
+                    tf.log1p(tf.exp(wx_b)),
                 )
+
+                hidden_term = tf.reduce_sum(hidden_terms, axis=1)
                 return -(visible_bias_term + hidden_term)
 
         def visible_to_hidden(visible_sample):
             with tf.name_scope('visible-to-hidden'):
-                wx_b = tf.matmul(visible_sample, self.weight) + self.hidden_bias
+                wx = tf.matmul(visible_sample, self.weight)
+                wx_b = wx + self.hidden_bias
                 return tf.nn.sigmoid(wx_b)
 
         def hidden_to_visible(hidden_sample):
@@ -281,15 +296,10 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
 
         with tf.name_scope('pseudo-likelihood-loss'):
             # Stochastic pseudo-likelihood
-            epsilon = asfloat(1e-7)  # smallest 32-bit float
             error = tf.reduce_mean(
-                self.n_visible * tf.log(
-                    # we add small epsilon in order to prevent
-                    # 0 values for logarithm
-                    tf.nn.sigmoid(
-                        free_energy(flipped_rounded_input) -
-                        free_energy(rounded_input)
-                    ) + epsilon
+                self.n_visible * tf.log_sigmoid(
+                    free_energy(flipped_rounded_input) -
+                    free_energy(rounded_input)
                 )
             )
 
@@ -314,6 +324,16 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
                 [network_input],
                 error,
                 name='rbm/prediction-error',
+            ),
+            diff1=function(
+                [network_input],
+                free_energy(flipped_rounded_input),
+                name='rbm/diff1-error',
+            ),
+            diff2=function(
+                [network_input],
+                free_energy(rounded_input),
+                name='rbm/diff2-error',
             ),
             visible_to_hidden=function(
                 [network_input],

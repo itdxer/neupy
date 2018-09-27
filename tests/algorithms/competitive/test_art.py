@@ -72,11 +72,15 @@ class ARTTestCase(BaseTestCase):
     def test_art1_on_real_problem(self):
         data = pd.DataFrame(lenses)
 
-        encoder = preprocessing.OneHotEncoder()
+        encoder = preprocessing.OneHotEncoder(categories='auto')
         enc_data = encoder.fit_transform(data.values[:, 1:]).toarray()
 
-        artnet = algorithms.ART1(step=1.5, rho=0.7, n_clusters=3,
-                                 verbose=False)
+        artnet = algorithms.ART1(
+            step=1.5,
+            rho=0.7,
+            n_clusters=3,
+            verbose=False,
+        )
         classes = artnet.predict(enc_data)
 
         unique_classes = list(np.sort(np.unique(classes)))
