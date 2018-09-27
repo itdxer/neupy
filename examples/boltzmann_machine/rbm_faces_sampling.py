@@ -66,10 +66,12 @@ def binarize_images(data):
 
 environment.reproducible()
 
+print("Reading images...")
 people_dataset = datasets.fetch_lfw_people()
 data = people_dataset.data
 np.random.shuffle(data)
 
+print("Binarizing images...")
 binarized_data = binarize_images(data)
 
 x_train, x_test, binarized_x_train, binarized_x_test = train_test_split(
@@ -85,7 +87,7 @@ rbm = algorithms.RBM(
     verbose=True,
     shuffle_data=True,
 )
-rbm.train(binarized_x_train, binarized_x_test, epochs=70)
+rbm.train(binarized_x_train, binarized_x_test, epochs=40)
 
 plot_rbm_sampled_images(rbm, x_test, binarized_x_test)
 plt.show()
