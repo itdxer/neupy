@@ -71,7 +71,6 @@ if __name__ == '__main__':
         k=env['k'],
     )
     storage.load(VIN, env['pretrained_network_file'])
-    predict = VIN.compile()
 
     plt.figure(figsize=(8, 8))
     gridspec = gridspec.GridSpec(5, 4, height_ratios=[0, 2, 2, 2, 2])
@@ -101,7 +100,7 @@ if __name__ == '__main__':
         coords = sample_random_position(grid)
 
         plt.subplot(gridspec[row, col])
-        plot_grid_and_trajectory(predict, grid, coords)
+        plot_grid_and_trajectory(VIN.predict, grid, coords)
         plt.axis('off')
 
     plt.show()

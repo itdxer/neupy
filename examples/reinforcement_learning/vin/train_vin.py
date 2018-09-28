@@ -14,6 +14,8 @@ from settings import MODELS_DIR, environments
 from evaluation import evaluate_accuracy
 
 
+UNKNOWN = None
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--imsize', '-i', choices=[8, 16, 28],
                     type=int, required=True)
@@ -112,8 +114,8 @@ def create_VIN(input_image_shape=(2, 8, 8), n_hidden_filters=150,
             layers.Elementwise(merge_function=tf.add),
         )
 
-    input_state_1 = layers.Input(10, name='state-1-input')
-    input_state_2 = layers.Input(10, name='state-2-input')
+    input_state_1 = layers.Input(UNKNOWN, name='state-1-input')
+    input_state_2 = layers.Input(UNKNOWN, name='state-2-input')
 
     # Select the conv-net channels at the state position (S1, S2)
     VIN = [Q, input_state_1, input_state_2] > SelectValueAtStatePosition()
@@ -128,6 +130,7 @@ def create_VIN(input_image_shape=(2, 8, 8), n_hidden_filters=150,
 
 def loss_function(expected, predicted):
     epsilon = 1e-7
+
     predicted = tf.clip_by_value(predicted, epsilon, 1.0 - epsilon)
     expected = tf.cast(flatten(expected), tf.int32)
 
@@ -166,7 +169,7 @@ if __name__ == '__main__':
             k=env['k'],
         ),
 
-        step=0.01,
+        step=0.005,
         verbose=True,
         batch_size=12,
         error=loss_function,
@@ -176,9 +179,11 @@ if __name__ == '__main__':
         epsilon=1e-6,
     )
 
-    network.train((x_train, s1_train, s2_train), y_train,
-                  (x_test, s1_test, s2_test), y_test,
-                  epochs=120)
+    network.train(
+        (x_train, s1_train, s2_train), y_train,
+        (x_test, s1_test, s2_test), y_test,
+        epochs=env['epochs'],
+    )
 
     if not os.path.exists(MODELS_DIR):
         os.mkdir(MODELS_DIR)
