@@ -7,7 +7,7 @@ from contextlib import contextmanager
 import six
 
 from neupy.layers.utils import preformat_layer_shape
-from neupy.utils import as_tuple
+from neupy.utils import as_tuple, tensorflow_session
 from .utils import join, is_sequential
 from .graph import LayerGraph
 from .inline import InlineConnection
@@ -129,6 +129,14 @@ class BaseConnection(InlineConnection):
         self.training_state = False
         yield
         self.training_state = True
+
+    def predict(self, *args, **kwargs):
+        """
+        Using current tensorflow session this method propagates
+        input throught the network and returns output from it.
+        """
+        session = tensorflow_session()
+        return session.run(self.output(*args, **kwargs))
 
 
 def make_common_graph(left_layer, right_layer):

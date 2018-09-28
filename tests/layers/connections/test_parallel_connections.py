@@ -27,7 +27,7 @@ class TestParallelConnectionsTestCase(BaseTestCase):
         output = self.eval(conn.output(x_tensor4))
         self.assertEqual(output.shape, (10, 11 + 5, 4, 4))
 
-        final_output = self.eval(output_connection.output(x_tensor4))
+        final_output = output_connection.predict(x_tensor4)
         self.assertEqual(final_output.shape, (10, 11 + 5, 2, 2))
 
     def test_parallel_with_joined_connections(self):

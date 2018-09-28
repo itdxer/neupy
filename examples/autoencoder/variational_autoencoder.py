@@ -80,7 +80,7 @@ class GaussianSample(layers.BaseLayer):
 
 
 def binary_crossentropy(expected, predicted):
-    epsilon = 1e-7
+    epsilon = 1e-7  # smallest positive 32-bit float number
     predicted = tf.clip_by_value(predicted, epsilon, 1.0 - epsilon)
 
     return -tf.reduce_sum(
@@ -111,6 +111,7 @@ def vae_loss(expected, predicted):
 # Construct Variational Autoencoder
 encoder = layers.Input(784, name='input') > layers.Tanh(256)
 
+# Two is the maximum number of dimensions that we can visualize
 mu = layers.Linear(2, name='mu')
 sigma = layers.Linear(2, name='sigma')
 sampler = [mu, sigma] > GaussianSample()
@@ -140,4 +141,4 @@ network.train(x_train, x_train, x_test, x_test, epochs=50)
 
 # Sample digits from the obtained distribution
 generator = algorithms.GradientDescent(layers.Input(2) > decoder)
-generate_and_plot_sampels(generator, 20, 20)
+generate_and_plot_sampels(generator, 25, 25)
