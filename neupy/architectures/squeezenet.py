@@ -1,11 +1,13 @@
 import tensorflow as tf
 
 from neupy import layers
+from neupy.utils import function_name_scope
 
 
 __all__ = ('squeezenet',)
 
 
+@function_name_scope
 def Fire(s_1x1, e_1x1, e_3x3, name):
     return layers.join(
         layers.Convolution(

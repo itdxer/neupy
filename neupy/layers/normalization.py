@@ -175,13 +175,13 @@ class BatchNorm(BaseLayer):
             )
             inv_std = tf.rsqrt(variance + asfloat(self.epsilon))
 
-        self.updates = [(
-            running_inv_std,
-            asfloat(1 - alpha) * running_inv_std + alpha * inv_std
-        ), (
-            running_mean,
-            asfloat(1 - alpha) * running_mean + alpha * mean
-        )]
+            self.updates = [(
+                running_inv_std,
+                asfloat(1 - alpha) * running_inv_std + alpha * inv_std
+            ), (
+                running_mean,
+                asfloat(1 - alpha) * running_mean + alpha * mean
+            )]
 
         normalized_value = (input_value - mean) * inv_std
         return self.gamma * normalized_value + self.beta

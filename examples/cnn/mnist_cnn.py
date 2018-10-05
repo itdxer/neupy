@@ -35,7 +35,7 @@ def load_data():
     return x_train, x_test, y_train, y_test
 
 
-network = algorithms.Adadelta(
+network = algorithms.Momentum(
     [
         layers.Input((1, 28, 28)),
 
@@ -60,7 +60,7 @@ network = algorithms.Adadelta(
 
     # Learning rate. We can allow high values
     # since we are using Batch Normalization
-    step=1.0,
+    step=0.01,
 
     # Shows information about algorithm and
     # training progress in terminal
@@ -83,7 +83,7 @@ network.architecture()
 x_train, x_test, y_train, y_test = load_data()
 
 # Train for only two epochs
-network.train(x_train, y_train, x_test, y_test, epochs=2)
+network.train(x_train, y_train, x_test, y_test, epochs=4)
 
 y_predicted = network.predict(x_test).argmax(axis=1)
 y_test_labels = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))

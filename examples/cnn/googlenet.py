@@ -6,7 +6,7 @@ from neupy import layers, plots
 def Inception(nfilters):
     return layers.join(
         [[
-            layers.MaxPooling((3, 3), stride=1, padding=(1, 1)),
+            layers.MaxPooling((3, 3), stride=1, padding='SAME'),
             layers.Convolution((nfilters[0], 1, 1)),
             layers.Relu(),
         ], [
@@ -15,12 +15,12 @@ def Inception(nfilters):
         ], [
             layers.Convolution((nfilters[2], 1, 1)),
             layers.Relu(),
-            layers.Convolution((nfilters[3], 3, 3), padding='half'),
+            layers.Convolution((nfilters[3], 3, 3), padding='SAME'),
             layers.Relu(),
         ], [
             layers.Convolution((nfilters[4], 1, 1)),
             layers.Relu(),
-            layers.Convolution((nfilters[5], 5, 5), padding='half'),
+            layers.Convolution((nfilters[5], 5, 5), padding='SAME'),
             layers.Relu(),
         ]],
         layers.Concatenate(),
@@ -30,13 +30,13 @@ def Inception(nfilters):
 googlenet = layers.join(
     layers.Input((3, None, None)),
 
-    layers.Convolution((64, 7, 7), padding='half', stride=2),
+    layers.Convolution((64, 7, 7), padding='SAME', stride=2),
     layers.Relu(),
     layers.MaxPooling((3, 3), stride=2),
     layers.LocalResponseNorm(alpha=0.00002, k=1),
 
     layers.Convolution((64, 1, 1)) > layers.Relu(),
-    layers.Convolution((192, 3, 3), padding='half') > layers.Relu(),
+    layers.Convolution((192, 3, 3), padding='SAME') > layers.Relu(),
     layers.LocalResponseNorm(alpha=0.00002, k=1),
     layers.MaxPooling((3, 3), stride=2),
 

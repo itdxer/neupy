@@ -1,9 +1,11 @@
 from neupy import layers
+from neupy.utils import function_name_scope
 
 
 __all__ = ('resnet50',)
 
 
+@function_name_scope
 def ResidualUnit(n_input_filters, n_output_filters, stride,
                  has_branch=False, name=None):
 

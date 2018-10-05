@@ -23,8 +23,7 @@ def Inception_1(conv_filters):
             ConvReluBN((conv_filters[2][1], 3, 3), padding=1),
             ConvReluBN((conv_filters[2][2], 3, 3), padding=1),
         ], [
-            layers.AveragePooling((3, 3), stride=(1, 1), padding=1,
-                                  mode='exclude_padding'),
+            layers.AveragePooling((3, 3), stride=(1, 1), padding='SAME'),
             ConvReluBN((conv_filters[3][0], 1, 1)),
         ]],
         layers.Concatenate(),
@@ -46,8 +45,7 @@ def Inception_2(conv_filters):
             ConvReluBN((conv_filters[2][3], 7, 1), padding=(3, 0)),
             ConvReluBN((conv_filters[2][4], 1, 7), padding=(0, 3)),
         ], [
-            layers.AveragePooling((3, 3), stride=(1, 1), padding=1,
-                                  mode='exclude_padding'),
+            layers.AveragePooling((3, 3), stride=(1, 1), padding='SAME'),
             ConvReluBN((conv_filters[3][0], 1, 1)),
         ]],
         layers.Concatenate(),
@@ -58,11 +56,11 @@ def Inception_3(pooling):
     if pooling not in ('max', 'average'):
         raise ValueError("Invalid pooling option: {}".format(pooling))
 
-    if pooling == 'max':
+    elif pooling == 'max':
         Pooling = layers.MaxPooling
 
     elif pooling == 'average':
-        Pooling = partial(layers.AveragePooling, mode='exclude_padding')
+        Pooling = layers.AveragePooling
 
     return layers.join(
         [[
@@ -83,7 +81,7 @@ def Inception_3(pooling):
                 ConvReluBN((384, 3, 1), padding=(1, 0)),
             ]],
         ], [
-            Pooling((3, 3), stride=(1, 1), padding=1),
+            Pooling((3, 3), stride=(1, 1), padding='SAME'),
             ConvReluBN((192, 1, 1)),
         ]],
         layers.Concatenate(),
