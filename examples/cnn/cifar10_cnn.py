@@ -25,7 +25,7 @@ def process_cifar10_data(x_train, x_test):
 def one_hot_encoder(y_train, y_test):
     y_train, y_test = asfloat(y_train), asfloat(y_test)
 
-    target_scaler = OneHotEncoder()
+    target_scaler = OneHotEncoder(categories='auto')
     y_train = target_scaler.fit_transform(y_train.reshape((-1, 1))).todense()
     y_test = target_scaler.transform(y_test.reshape((-1, 1))).todense()
 

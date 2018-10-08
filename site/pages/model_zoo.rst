@@ -1,10 +1,12 @@
+.. _model-zoo:
+
 Model Zoo
 =========
 
 ImageNet classification
 -----------------------
 
-These modes are trained to perform classification in the ImageNet ILSVRC challenge data. The goal of the competition is to build a model that classifies image into one of the 1,000 categories. Categories include animals, objects, transports and so on.
+These modes are trained to perform classification using ImageNet ILSVRC challenge data. The goal of the competition is to build a model that classifies image into one of the 1,000 categories. Categories include animals, objects, transports and so on.
 
 .. csv-table::
     :header: "Name", "Number of parameters", "Pre-trained model", "Code example"
@@ -18,7 +20,7 @@ These modes are trained to perform classification in the ImageNet ILSVRC challen
 Value Iteration Network (VIN)
 -----------------------------
 
-VINs can learn to plan, and are suitable for predicting outcomes that involve planning-based reasoning, such as policies for reinforcement learning. NeuPy has 3 models pre-trained for the path-searching task in arthificialy created environments with different grid sizes.
+VINs can learn to plan, and are suitable for predicting outcomes that involve planning-based reasoning, such as policies for reinforcement learning. NeuPy has 3 models pre-trained for the path-searching task in artificially created environments with different grid sizes.
 
 .. csv-table::
     :header: "Grid size", "Pre-trained parameters"
@@ -27,4 +29,4 @@ VINs can learn to plan, and are suitable for predicting outcomes that involve pl
     "16x16", `pretrained-VIN-16.pickle <https://github.com/itdxer/neupy/blob/master/examples/reinforcement_learning/vin/models/pretrained-VIN-16.pickle?raw=true>`_
     "28x28", `pretrained-VIN-28.pickle <https://github.com/itdxer/neupy/blob/master/examples/reinforcement_learning/vin/models/pretrained-VIN-28.pickle?raw=true>`_
 
-Project that include everything related to VIN is avaliable on Github: `examples/reinforcement_learning/vin <https://github.com/itdxer/neupy/tree/master/examples/reinforcement_learning/vin/>`_
+Project that include everything related to VIN is available on Github: `examples/reinforcement_learning/vin <https://github.com/itdxer/neupy/tree/master/examples/reinforcement_learning/vin/>`_

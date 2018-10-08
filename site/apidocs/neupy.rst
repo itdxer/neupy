@@ -20,7 +20,6 @@ Submodules
 .. toctree::
 
    neupy.environment
-   neupy.estimators
    neupy.exceptions
    neupy.init
    neupy.storage

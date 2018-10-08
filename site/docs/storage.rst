@@ -1,10 +1,12 @@
 Storage for Neural Networks
 ===========================
 
+
+
 Save and load layer parameters
 ------------------------------
 
-NeuPy allows storing network's parameters in a pickle file. Here is an example
+NeuPy allows to store network's parameters in a pickle file.
 
 .. code-block:: python
 
@@ -33,7 +35,7 @@ Since parameters are stored in a regular pickle files it's possible to load them
     with open('/path/to/file.pickle', 'rb') as f:
         parameters = pickle.load(f)
 
-Data in the `parameters` variable is easely accesible.
+Data in the `parameters` variable is easily accessible.
 
 .. code-block:: python
 
@@ -82,7 +84,7 @@ NeuPy supports other storage formats
 Save and load algorithms
 ------------------------
 
-After succesful learning you can save network and later use it for prediction tasks. There already exists awesome library - `dill <https://github.com/uqfoundation/dill>`_. As a ``pickle`` library ``dill`` provides similar interface to serialize and de-serialize built-in python objects. The main advantage of this is a functionality that can store a network class and attributes without additional functionality.
+After successful learning you can save network and later re-use it. You can do it with external library - `dill <https://github.com/uqfoundation/dill>`_. As a ``pickle`` library ``dill`` provides similar interface to serialize and de-serialize python objects. The main advantage of this is a functionality that can store a network class and attributes without additional modification to the classes.
 
 First of all you need to install ``dill`` library
 
@@ -90,7 +92,7 @@ First of all you need to install ``dill`` library
 
     $ pip install dill>=0.2.3
 
-There is a simple example for network serialization.
+There is a simple example for network serialisation.
 
 .. code-block:: python
 
@@ -146,7 +148,7 @@ like ``dumps`` or ``loads`` are available.
 Save and load networks with fixed architectures
 -----------------------------------------------
 
-For the neural networks with fixed architecures it's possible to save and load your algorithms using ``pickle`` library.
+For the neural networks with fixed architectures it's possible to save and load your algorithms using ``pickle`` library.
 
 .. code-block:: python
 
@@ -164,3 +166,14 @@ For the neural networks with fixed architecures it's possible to save and load y
     # Load SOFM network from the pickled file
     with open('/path/to/sofm.pickle', 'rb') as f:
         loaded_sofm = pickle.load(f)
+
+Also, you can access all the parameters using ``get_params`` method (as in the scikit-learn).
+
+.. code-block:: python
+
+    >>> sofm.get_params()
+    {'n_inputs': 2,
+     'n_outputs': 4,
+     'weight': array([[0.75264576, 0.26932708, 0.72538974, 0.25271294],
+                      [0.75495447, 0.26936587, 0.22114073, 0.75396885]]),
+     'features_grid': (4, 1)}

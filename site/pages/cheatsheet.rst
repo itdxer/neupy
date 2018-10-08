@@ -91,16 +91,6 @@ Competitive Networks
     :network:`LVQ21`, Learning Vector Quantization 2.1 (LVQ2.1)
     :network:`LVQ3`, Learning Vector Quantization 3 (LVQ3)
 
-Linear networks
-~~~~~~~~~~~~~~~
-
-.. csv-table::
-    :header: "Class name", "Name"
-
-    :network:`Perceptron`, Perceptron
-    :network:`LMS`, LMS Network
-    :network:`ModifiedRelaxation`, Modified Relaxation Network
-
 Associative
 ~~~~~~~~~~~
 
@@ -132,7 +122,6 @@ Layers with activation function
     ":layer:`Linear`", "Layer with linear activation function."
     ":layer:`Sigmoid`", "Layer with sigmoid activation function."
     ":layer:`HardSigmoid`", "Layer with hard sigmoid activation function."
-    ":layer:`Step`", "Layer with step activation function."
     ":layer:`Tanh`", "Layer with tanh activation function."
     ":layer:`Relu`", "Layer with ReLu activation function."
     ":layer:`LeakyRelu`", "Layer with Leaky ReLu activation function."
