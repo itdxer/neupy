@@ -10,7 +10,7 @@ tableprint==0.7.1
 progressbar2==3.34.3
 
 scikit-learn>=0.18.0
-pandas==0.16.0
+pandas==0.23.4
 
 # Test
 dill==0.2.3
