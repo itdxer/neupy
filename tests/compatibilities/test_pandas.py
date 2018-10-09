@@ -39,7 +39,7 @@ class PandasCompatibilityTestCase(BaseTestCase):
         )
         bpnet.train(x_train, y_train, epochs=50)
         y_predict = bpnet.predict(x_test).reshape(-1, 1)
-        y_test = y_test.reshape(-1, 1)
+        y_test = y_test.values.reshape(-1, 1)
 
         error = estimators.rmsle(
             target_scaler.inverse_transform(y_test),
