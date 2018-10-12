@@ -28,7 +28,7 @@
     <p><i>All the Theano based code has been fully migrated to Tenorflow and it can be tested from the <a href="https://github.com/itdxer/neupy/tree/release/v0.7.0">release/v0.7.0</a> branch.</i></p>
 
 
-NeuPy v0.6.4
+NeuPy v0.6.5
 ============
 
 NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.
