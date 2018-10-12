@@ -37,6 +37,13 @@ class Adagrad(MinibatchGradientDescent):
     >>>
     >>> mnet = algorithms.Adagrad((2, 3, 1))
     >>> mnet.train(x_train, y_train)
+
+    References
+    ----------
+    [1] John Duchi, Elad Hazan, Yoram Singer,
+        Adaptive Subgradient Methods for Online Learning and Stochastic
+        Optimization
+        http://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf
     """
     epsilon = NumberProperty(default=1e-5, minval=0)
 
@@ -52,8 +59,8 @@ class Adagrad(MinibatchGradientDescent):
             )
 
             mean_squred_grad = prev_mean_squred_grad + gradient ** 2
-            parameter_delta = gradient * tf.sqrt(
-                mean_squred_grad + self.epsilon)
+            parameter_delta = gradient / (
+                tf.sqrt(mean_squred_grad + self.epsilon))
 
             updates.extend([
                 (prev_mean_squred_grad, mean_squred_grad),

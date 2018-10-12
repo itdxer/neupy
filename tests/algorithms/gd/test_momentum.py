@@ -60,3 +60,9 @@ class MomentumTestCase(BaseTestCase):
            epochs=10,
            show_comparison_plot=False,
         )
+
+    def test_momentum_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(algorithms.Momentum, step=0.3, verbose=False),
+            epochs=1500,
+        )

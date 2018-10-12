@@ -1,3 +1,5 @@
+from functools import partial
+
 from neupy import algorithms
 
 from data import simple_classification
@@ -18,3 +20,9 @@ class AdamaxTestCase(BaseTestCase):
         )
         mnet.train(x_train, y_train, x_test, y_test, epochs=50)
         self.assertGreater(0.15, mnet.errors.last())
+
+    def test_adamax_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(algorithms.Adamax, verbose=False),
+            epochs=2500,
+        )
