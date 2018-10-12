@@ -91,6 +91,22 @@ class Adam(MinibatchGradientDescent):
         iteration = self.variables.iteration
         step = self.variables.step
 
+        # Since beta1 and beta2 are typically close to 1 and initial
+        # values for first and second moments are close to zero the
+        # initial estimates for these moments will be biased towards zero.
+        # In order to solve this problem we need to correct this bias
+        # by rescaling moments with large values during first updates
+        # and vanishing this scaling factor more and more after every
+        # update.
+        #
+        # Note that bias correction factor has been changed in order
+        # to improve computational speed (suggestion from the original
+        # paper).
+        bias_correction = (
+            tf.sqrt(1. - self.beta2 ** iteration) /
+            (1. - self.beta1 ** iteration)
+        )
+
         for layer, parameter, gradient in self.iter_params_and_grads():
             prev_first_moment = tf.Variable(
                 tf.zeros(parameter.shape),
@@ -110,22 +126,6 @@ class Adam(MinibatchGradientDescent):
             second_moment = (
                 self.beta2 * prev_second_moment +
                 (1. - self.beta2) * gradient ** 2
-            )
-
-            # Since beta1 and beta2 are typically close to 1 and initial
-            # values for first and second moments are close to zero the
-            # initial estimates for these moments will be biased towards zero.
-            # In order to solve this problem we need to correct this bias
-            # by rescaling moments with large values during first updates
-            # and vanishing this scaling factor more and more after every
-            # update.
-            #
-            # Note that bias correction factor has been changed in order
-            # to improve computational speed (suggestion from the original
-            # paper).
-            bias_correction = (
-                tf.sqrt(1. - self.beta2 ** iteration) /
-                (1. - self.beta1 ** iteration)
             )
 
             parameter_delta = bias_correction * first_moment / (

@@ -93,6 +93,8 @@ class Adamax(MinibatchGradientDescent):
         beta1 = self.beta1
         beta2 = self.beta2
 
+        scale = step / (1. - beta1 ** iteration)
+
         for layer, parameter, gradient in self.iter_params_and_grads():
             prev_first_moment = tf.Variable(
                 tf.zeros(parameter.shape),
@@ -112,9 +114,7 @@ class Adamax(MinibatchGradientDescent):
             )
 
             parameter_delta = (
-                (step / (1. - beta1 ** iteration)) *
-                (first_moment / (weighted_inf_norm + self.epsilon))
-            )
+                scale * (first_moment / (weighted_inf_norm + self.epsilon)))
 
             updates.extend([
                 (prev_first_moment, first_moment),
