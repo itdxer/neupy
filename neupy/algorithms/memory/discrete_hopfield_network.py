@@ -139,7 +139,8 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         self.discrete_validation(input_data)
 
         input_data = bin2sign(input_data)
-        input_data = format_data(input_data, is_feature1d=False)
+        input_data = format_data(
+            input_data, is_feature1d=False, make_float=False)
 
         n_rows, n_features = input_data.shape
         n_rows_after_update = self.n_memorized_samples + n_rows
@@ -162,13 +163,14 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
                              "Got {} features instead of {}."
                              "".format(n_features, n_features_expected))
 
-        self.weight = input_data.T.dot(input_data)
+        self.weight += input_data.T.dot(input_data)
         np.fill_diagonal(self.weight, np.zeros(len(self.weight)))
         self.n_memorized_samples = n_rows_after_update
 
     def predict(self, input_data, n_times=None):
         self.discrete_validation(input_data)
-        input_data = format_data(bin2sign(input_data), is_feature1d=False)
+        input_data = format_data(
+            bin2sign(input_data), is_feature1d=False, make_float=False)
 
         if self.mode == 'async':
             if n_times is None:
@@ -188,8 +190,11 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
     def energy(self, input_data):
         self.discrete_validation(input_data)
+
         input_data = bin2sign(input_data)
-        input_data = format_data(input_data, is_feature1d=False)
+        input_data = format_data(
+            input_data, is_feature1d=False, make_float=False)
+
         n_rows, n_features = input_data.shape
 
         if n_rows == 1:
