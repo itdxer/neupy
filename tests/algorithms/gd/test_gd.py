@@ -97,6 +97,23 @@ class GradientDescentTestCase(BaseTestCase):
             network.get_params(with_connection=False),
         )
 
+    def test_gd_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(algorithms.GradientDescent, step=2.0, verbose=False),
+            epochs=5000,
+        )
+
+    def test_gd_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(
+                algorithms.MinibatchGradientDescent,
+                step=0.5,
+                batch_size=5,
+                verbose=True,
+            ),
+            epochs=4000,
+        )
+
 
 class GDAdditionalFunctionsTestCase(BaseTestCase):
     def test_gd_apply_batches_exceptions(self):
