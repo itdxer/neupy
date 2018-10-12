@@ -9,6 +9,26 @@ from utils import catch_stdout
 
 
 class DiscreteHopfieldNetworkTestCase(BaseTestCase):
+    def test_check_limit_option_for_iterative_updates(self):
+        data = np.matrix([
+            [1, 1, 0, 1],
+            [1, 0, 1, 1],
+            [0, 0, 1, 1],
+        ])
+
+        dhnet = algorithms.DiscreteHopfieldNetwork(check_limit=True)
+        dhnet.train(data[0])
+        dhnet.train(data[1])
+
+        with self.assertRaises(ValueError):
+            dhnet.train(data[2])
+
+        # The same must be OK without validation
+        dhnet = algorithms.DiscreteHopfieldNetwork(check_limit=False)
+        dhnet.train(data[0])
+        dhnet.train(data[1])
+        dhnet.train(data[2])
+
     def test_check_limit_option(self):
         data = np.matrix([
             [1, 1, 0, 1],
@@ -24,13 +44,6 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
         # The same must be OK without validation
         dhnet = algorithms.DiscreteHopfieldNetwork(check_limit=False)
         dhnet.train(data)
-
-    def test_discrete_hopfield_network_exceptions(self):
-        dhnet = algorithms.DiscreteHopfieldNetwork()
-
-        dhnet.train(np.ones((1, 5)))
-        with self.assertRaises(ValueError):
-            dhnet.train(np.ones((1, 6)))
 
     def test_input_data_validation(self):
         dhnet = algorithms.DiscreteHopfieldNetwork()
@@ -150,3 +163,22 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
             terminal_output = out.getvalue()
 
         self.assertIn('only in `async` mode', terminal_output)
+
+    def test_iterative_updates(self):
+        data = np.concatenate([zero, one, two], axis=0)
+        dhnet_full = algorithms.DiscreteHopfieldNetwork(mode='sync')
+        dhnet_full.train(data)
+
+        dhnet_iterative = algorithms.DiscreteHopfieldNetwork(mode='sync')
+        for digit in [zero, one, two]:
+            dhnet_iterative.train(digit)
+
+        np.testing.assert_array_almost_equal(
+            dhnet_iterative.weight, dhnet_full.weight)
+
+    def test_iterative_updates_wrong_feature_shapes_exception(self):
+        dhnet = algorithms.DiscreteHopfieldNetwork()
+        dhnet.train(np.ones((1, 10)))
+
+        with self.assertRaisesRegexp(ValueError, "invalid number of features"):
+            dhnet.train(np.ones((1, 7)))
