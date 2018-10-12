@@ -50,18 +50,29 @@ if __name__ == '__main__':
             Convolution((128, 3, 3)) > BatchNorm() > PRelu(),
             MaxPooling((2, 2)),
 
+            Convolution((256, 3, 3)) > BatchNorm() > PRelu(),
             Reshape(),
 
-            Linear(1024) > BatchNorm() > PRelu(),
-            Linear(1024) > BatchNorm() > PRelu(),
+            Relu(512) > Dropout(0.5),
+            Relu(256) > Dropout(0.5),
             Softmax(10),
         ],
 
         error='categorical_crossentropy',
-        step=0.25,
+        step=0.2,
         shuffle_data=True,
-        batch_size=128,
+        batch_size=100,
         verbose=True,
+
+        # Parameter controls step redution frequency. The larger
+        # the value the slower step parameter decreases.
+        # Step will be reduced after every mini-batch update. In the
+        # training data we have 500 mini-batches.
+        reduction_freq=4 * 500,
+        # The larger the value the more impact regularization
+        # makes on the parameter training
+        # decay_rate=0.1,
+        addons=[algorithms.StepDecay],
     )
     network.architecture()
     network.train(x_train, y_train, x_test, y_test, epochs=20)

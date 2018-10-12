@@ -19,12 +19,15 @@ class StepDecay(SingleStepConfigurable):
     where :math:`\\alpha` is a step, :math:`t` is an epoch number
     and :math:`m` is a ``reduction_freq`` parameter.
 
+    Notes
+    -----
+    Step will be reduced faster when you have smaller training batches.
+
     Parameters
     ----------
     reduction_freq : int
-        Parameter controls step redution frequency.
-        The higher the value the slower step parameter
-        decreases.
+        Parameter controls step redution frequency. The larger the
+        value the slower step parameter decreases.
 
         For instance, if ``reduction_freq=100``
         and ``step=0.12`` then after ``100`` epochs ``step`` is
