@@ -58,3 +58,15 @@ class HessianDiagonalTestCase(BaseTestCase):
             epochs=50,
             show_comparison_plot=False
         )
+
+    def test_hessian_diagonal_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(
+                algorithms.HessianDiagonal,
+                verbose=False,
+                show_epoch=100,
+                step=0.25,
+                min_eigval=0.1,
+            ),
+            epochs=6000,
+        )

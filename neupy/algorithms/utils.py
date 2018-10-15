@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
-
+from neupy.utils import flatten
 from neupy.layers.utils import iter_parameters
 
 
@@ -156,3 +156,8 @@ def shuffle(*arrays):
         return arrays[0]
 
     return tuple(arrays)
+
+
+def make_single_vector(parameters):
+    with tf.name_scope('make-single-vector'):
+        return tf.concat([flatten(param) for param in parameters], axis=0)

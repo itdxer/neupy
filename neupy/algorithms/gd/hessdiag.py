@@ -3,9 +3,10 @@ from __future__ import division
 import tensorflow as tf
 
 from neupy.core.properties import ProperFractionProperty
-from neupy.algorithms.utils import setup_parameter_updates, parameter_values
-from neupy.algorithms.gd import NoMultipleStepSelection
 from neupy.utils import flatten
+from neupy.algorithms.gd import NoMultipleStepSelection
+from neupy.algorithms.utils import (setup_parameter_updates, parameter_values,
+                                    make_single_vector)
 from .base import GradientDescent
 
 
@@ -97,41 +98,30 @@ class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
 
     def init_train_updates(self):
         step = self.variables.step
-        min_eigval = self.min_eigval
+        inv_min_eigval = 1 / self.min_eigval
         parameters = parameter_values(self.connection)
-        param_vector = tf.concat([flatten(param) for param in parameters],
-                                 axis=0)
+        param_vector = make_single_vector(parameters)
 
         gradients = tf.gradients(self.variables.error_func, parameters)
-        full_gradient = tf.concat([flatten(grad) for grad in gradients],
-                                  axis=0)
+        full_gradient = make_single_vector(gradients)
 
         second_derivatives = []
         for parameter, gradient in zip(parameters, gradients):
-            gradient_sum = tf.reduce_sum(gradient)
-            second_derivative, = tf.gradients(gradient_sum, parameter)
+            second_derivative, = tf.gradients(gradient, parameter)
             second_derivatives.append(flatten(second_derivative))
 
         hessian_diag = tf.concat(second_derivatives, axis=0)
-        ones = tf.ones_like(hessian_diag)
-        hessian_diag = tf.where(
-            tf.less(tf.abs(hessian_diag), min_eigval),
-            tf.where(
-                tf.less(hessian_diag, 0),
-                -min_eigval * ones,
-                min_eigval * ones,
-            ),
-            hessian_diag
-        )
 
-        # We divide gradient by Hessian diagonal elementwise is the same
-        # as we just took diagonal Hessian inverse (which is
-        # reciprocal for each diagonal element) and mutliply
-        # by gradient. This operation is less clear, but works faster.
-        updated_parameters = (
-            param_vector -
-            step * full_gradient / hessian_diag
+        # it's easier to clip inverse hessian rather than the hessian,.
+        inv_hessian_diag = tf.clip_by_value(
+            # inverse for diagonal matrix easy to compute with
+            # elementwise inverse operation.
+            1 / hessian_diag,
+            -inv_min_eigval,
+            inv_min_eigval,
         )
-        updates = setup_parameter_updates(parameters, updated_parameters)
-
+        updates = setup_parameter_updates(
+            parameters,
+            param_vector - step * full_gradient * inv_hessian_diag
+        )
         return updates

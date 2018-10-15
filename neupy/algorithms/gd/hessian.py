@@ -2,18 +2,14 @@ import tensorflow as tf
 
 from neupy.core.properties import BoundedProperty, WithdrawProperty
 from neupy.utils import asfloat, flatten
-from neupy.algorithms.gd import StepSelectionBuiltIn
-from neupy.algorithms.utils import parameter_values, setup_parameter_updates
 from neupy.layers.utils import count_parameters
+from neupy.algorithms.gd import StepSelectionBuiltIn
+from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
+                                    make_single_vector)
 from .base import GradientDescent
 
 
 __all__ = ('Hessian',)
-
-
-def make_single_vector(gradients):
-    with tf.name_scope('make-single-vector'):
-        return tf.concat([flatten(grad) for grad in gradients], axis=0)
 
 
 def find_hessian_and_gradient(error_function, parameters):
