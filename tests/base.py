@@ -97,7 +97,9 @@ class BaseTestCase(unittest.TestCase):
         np.testing.assert_array_almost_equal(
             loaded_network_prediction, network_prediction)
 
-    def assertCanNetworkOverfit(self, network_class, epochs=100):
+    def assertCanNetworkOverfit(self, network_class, epochs=100,
+                                min_accepted_error=0.001):
+
         x_train = 2 * np.random.random((10, 2)) - 1  # zero centered
         y_train = np.random.random((10, 1))
 
@@ -108,4 +110,4 @@ class BaseTestCase(unittest.TestCase):
         ])
 
         network.train(x_train, y_train, epochs=epochs)
-        self.assertLess(network.errors.last(), 0.001)
+        self.assertLess(network.errors.last(), min_accepted_error)

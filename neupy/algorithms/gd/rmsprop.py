@@ -18,7 +18,7 @@ class RMSProp(MinibatchGradientDescent):
         Defaults to ``0.95``.
 
     epsilon : float
-        Value need to be greater than ``0``. Defaults to ``1e-5``.
+        Value need to be greater than ``0``. Defaults to ``1e-7``.
 
     {MinibatchGradientDescent.Parameters}
 
@@ -42,7 +42,7 @@ class RMSProp(MinibatchGradientDescent):
     >>> mnet.train(x_train, y_train)
     """
     decay = ProperFractionProperty(default=0.95)
-    epsilon = NumberProperty(default=1e-5, minval=0)
+    epsilon = NumberProperty(default=1e-7, minval=0)
 
     def init_train_updates(self):
         updates = []

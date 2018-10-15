@@ -1,3 +1,5 @@
+from functools import partial
+
 from neupy import algorithms
 
 from data import simple_classification
@@ -17,3 +19,9 @@ class RMSPropTestCase(BaseTestCase):
         )
         mnet.train(x_train, y_train, x_test, y_test, epochs=100)
         self.assertGreater(0.11, mnet.validation_errors.last())
+
+    def test_rmsprop_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(algorithms.RMSProp, step=0.01, verbose=True),
+            epochs=2000,
+        )
