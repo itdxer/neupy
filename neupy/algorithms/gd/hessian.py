@@ -11,6 +11,11 @@ from .base import GradientDescent
 __all__ = ('Hessian',)
 
 
+def make_single_vector(gradients):
+    with tf.name_scope('make-single-vector'):
+        return tf.concat([flatten(grad) for grad in gradients], axis=0)
+
+
 def find_hessian_and_gradient(error_function, parameters):
     """
     Compute jacobian.
@@ -28,16 +33,14 @@ def find_hessian_and_gradient(error_function, parameters):
     Tensorfow variable
     """
     gradients = tf.gradients(error_function, parameters)
-    full_gradient = tf.concat([flatten(grad) for grad in gradients], axis=0)
+    full_gradient = make_single_vector(gradients)
 
     full_gradient_shape = tf.shape(full_gradient)
     n_samples = full_gradient_shape[0]
 
     def compute_gradient_per_value(index, result):
         gradients = tf.gradients(full_gradient[index], parameters)
-        hessian = tf.concat(
-            [flatten(gradient) for gradient in gradients], axis=0)
-
+        hessian = make_single_vector(gradients)
         return (index + 1, result.write(index, hessian))
 
     _, hessian = tf.while_loop(
@@ -54,10 +57,10 @@ def find_hessian_and_gradient(error_function, parameters):
 
 class Hessian(StepSelectionBuiltIn, GradientDescent):
     """
-    Hessian gradient decent optimization. This GD algorithm
-    variation using second derivative information helps choose better
-    gradient direction and as a consequence better weight update
-    parameter after each epoch.
+    Hessian gradient decent optimization, also known as Newton's method. This
+    algorithm uses second-order derivative (hessian matrix) in order to
+    choose correct step during the training itration. Because of this,
+    method doesn't have ``step`` parameter.
 
     Parameters
     ----------
@@ -90,6 +93,15 @@ class Hessian(StepSelectionBuiltIn, GradientDescent):
     -------
     {GradientDescent.Methods}
 
+    Notes
+    -----
+    - Method requires all training data during propagation, which means
+      it's not allowed to use mini-batches.
+
+    - This method calculates full hessian matrix which means it will compute
+      matrix with NxN parameters, where N = number of parameters in the
+      network.
+
     Examples
     --------
     >>> import numpy as np
@@ -114,8 +126,7 @@ class Hessian(StepSelectionBuiltIn, GradientDescent):
 
         n_parameters = count_parameters(self.connection)
         parameters = parameter_values(self.connection)
-        param_vector = tf.concat(
-            [flatten(param) for param in parameters], axis=0)
+        param_vector = make_single_vector(parameters)
 
         hessian_matrix, full_gradient = find_hessian_and_gradient(
             self.variables.error_func, parameters

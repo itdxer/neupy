@@ -13,11 +13,6 @@ from base import BaseTestCase
 
 
 class HessianTestCase(BaseTestCase):
-    def test_hessian_exceptions(self):
-        with self.assertRaises(ValueError):
-            # Don't have step parameter
-            algorithms.Hessian((2, 3, 1), step=1)
-
     def test_compare_bp_and_hessian(self):
         x_train, x_test, y_train, y_test = simple_classification()
         compare_networks(
@@ -67,4 +62,11 @@ class HessianTestCase(BaseTestCase):
 
     def test_hessian_assign_step_exception(self):
         with self.assertRaises(ValueError):
+            # Don't have step parameter
             algorithms.Hessian((2, 3, 1), step=0.01)
+
+    def test_hessian_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(algorithms.Hessian, verbose=False, penalty_const=0.1),
+            epochs=300,
+        )
