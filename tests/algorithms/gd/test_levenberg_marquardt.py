@@ -1,3 +1,5 @@
+from functools import partial
+
 import numpy as np
 import tensorflow as tf
 from sklearn import datasets, preprocessing
@@ -78,4 +80,11 @@ class LevenbergMarquardtTestCase(BaseTestCase):
 
     def test_levenberg_marquardt_assign_step_exception(self):
         with self.assertRaises(ValueError):
+            # Doesn't have step parameter
             algorithms.LevenbergMarquardt((2, 3, 1), step=0.01)
+
+    def test_levenberg_marquardt_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(algorithms.LevenbergMarquardt, verbose=False),
+            epochs=50,
+        )

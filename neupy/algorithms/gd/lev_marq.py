@@ -1,17 +1,19 @@
 import numpy as np
 import tensorflow as tf
 
-from neupy.utils import tensorflow_session, flatten
+from neupy.utils import tensorflow_session, flatten, function_name_scope
 from neupy.core.properties import (BoundedProperty, ChoiceProperty,
                                    WithdrawProperty)
 from neupy.algorithms import GradientDescent
 from neupy.algorithms.gd import StepSelectionBuiltIn, errors
-from neupy.algorithms.utils import parameter_values, setup_parameter_updates
+from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
+                                    make_single_vector)
 
 
 __all__ = ('LevenbergMarquardt',)
 
 
+@function_name_scope
 def compute_jacobian(values, parameters):
     """
     Compute jacobian.
@@ -33,9 +35,7 @@ def compute_jacobian(values, parameters):
 
     def compute_gradient_per_value(index, result):
         gradients = tf.gradients(values[index], parameters)
-        full_gradient = tf.concat(
-            [flatten(gradient) for gradient in gradients], axis=0)
-
+        full_gradient = make_single_vector(gradients)
         return (index + 1, result.write(index, full_gradient))
 
     _, jacobian = tf.while_loop(
@@ -52,13 +52,20 @@ def compute_jacobian(values, parameters):
 
 class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
     """
-    Levenberg-Marquardt algorithm.
+    Levenberg-Marquardt algorithm is a variation of the Newton's method.
+    It minimizes MSE error. The algorithm approximates Hessian matrix using
+    dot product between two jacobian matrices.
 
     Notes
     -----
-    - Network minimizes only Mean Squared Error function.
+    - Method requires all training data during propagation, which means
+      it's not allowed to use mini-batches.
+
+    - Network minimizes only Mean Squared Error (MSE) loss function.
+
     - Efficient for small training datasets, because it
       computes gradient per each sample separately.
+
     - Efficient for small-sized networks.
 
     Parameters
@@ -66,7 +73,7 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
     {GradientDescent.connection}
 
     mu : float
-        Control invertion for J.T * J matrix, defaults to `0.1`.
+        Control invertion for J.T * J matrix, defaults to ``0.1``.
 
     mu_update_factor : float
         Factor to decrease the mu if update decrese the error, otherwise
@@ -140,7 +147,7 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
         err_for_each_sample = flatten((network_output - prediction_func) ** 2)
 
         params = parameter_values(self.connection)
-        param_vector = tf.concat([flatten(param) for param in params], axis=0)
+        param_vector = make_single_vector(params)
 
         J = compute_jacobian(err_for_each_sample, params)
         J_T = tf.transpose(J)

@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 from neupy.core.properties import BoundedProperty, WithdrawProperty
-from neupy.utils import asfloat, flatten
+from neupy.utils import asfloat, flatten, function_name_scope
 from neupy.layers.utils import count_parameters
 from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
@@ -12,6 +12,7 @@ from .base import GradientDescent
 __all__ = ('Hessian',)
 
 
+@function_name_scope
 def find_hessian_and_gradient(error_function, parameters):
     """
     Compute jacobian.

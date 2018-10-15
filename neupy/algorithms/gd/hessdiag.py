@@ -89,6 +89,11 @@ class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
     >>> error
     0.50315919814691346
 
+    Notes
+    -----
+    - Method requires all training data during propagation, which means
+      it's not allowed to use mini-batches.
+
     See Also
     --------
     :network:`GradientDescent` : GradientDescent algorithm.
