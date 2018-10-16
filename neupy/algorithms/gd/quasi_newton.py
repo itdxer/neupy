@@ -1,108 +1,159 @@
 import tensorflow as tf
 
 from neupy.core.properties import (ChoiceProperty, NumberProperty,
-                                   WithdrawProperty)
+                                   WithdrawProperty, IntProperty)
 from neupy.algorithms.gd import StepSelectionBuiltIn
-from neupy.algorithms.utils import parameter_values, setup_parameter_updates
+from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
+                                    make_single_vector)
 from neupy.optimizations.wolfe import line_search
 from neupy.layers.utils import count_parameters, iter_parameters
-from neupy.utils import asfloat, flatten, dot, outer, get_variable_size
+from neupy.utils import (asfloat, dot, outer, get_variable_size,
+                         function_name_scope)
 from .base import GradientDescent
 
 
 __all__ = ('QuasiNewton',)
 
 
-def bfgs(inverse_hessian, weight_delta, gradient_delta, maxrho=1e4):
-    with tf.name_scope('bfgs'):
-        ident_matrix = tf.eye(int(inverse_hessian.shape[0]))
-        rho = asfloat(1.) / dot(gradient_delta, weight_delta)
-
-        rho = tf.where(
-            tf.is_inf(rho),
-            maxrho * tf.sign(rho),
-            rho,
-        )
-
-        param1 = ident_matrix - outer(weight_delta, gradient_delta) * rho
-        param2 = ident_matrix - outer(gradient_delta, weight_delta) * rho
-        param3 = rho * outer(weight_delta, weight_delta)
-
-        return dot(param1, tf.matmul(inverse_hessian, param2)) + param3
+@function_name_scope
+def safe_reciprocal(value, epsilon):
+    """
+    The same as regular function in the tensorflow accept that it ensures
+    that non of the input values have magnutide smaller than epsilon.
+    Otherwise small values will be capped to the epsilon.
+    """
+    inv_epsilon = 1. / epsilon
+    return tf.clip_by_value(
+        tf.reciprocal(value),
+        -inv_epsilon,
+        inv_epsilon
+    )
 
 
-def dfp(inverse_hessian, weight_delta, gradient_delta, maxnum=1e5):
-    with tf.name_scope('dfp'):
-        quasi_dot_gradient = dot(inverse_hessian, gradient_delta)
-
-        param1 = (
-            outer(weight_delta, weight_delta)
-        ) / (
-            dot(gradient_delta, weight_delta)
-        )
-        param2_numerator = tf.clip_by_value(
-            outer(quasi_dot_gradient, gradient_delta) * inverse_hessian,
-            -maxnum, maxnum
-        )
-        param2_denominator = dot(gradient_delta, quasi_dot_gradient)
-        param2 = param2_numerator / param2_denominator
-
-        return inverse_hessian + param1 - param2
+@function_name_scope
+def safe_division(numerator, denominator, epsilon):
+    """
+    The same as regular function in the tensorflow accept that it ensures
+    that non of the denominator values have magnutide smaller than epsilon.
+    Otherwise small values will be capped to the epsilon.
+    """
+    inv_denominator = safe_reciprocal(denominator, epsilon)
+    return numerator * inv_denominator
 
 
-def psb(inverse_hessian, weight_delta, gradient_delta, **options):
-    with tf.name_scope('psb'):
-        gradient_delta_t = tf.transpose(gradient_delta)
-        param = weight_delta - dot(inverse_hessian, gradient_delta)
+@function_name_scope
+def bfgs(inv_H, delta_w, delta_grad, epsilon=1e-7):
+    """
+    It can suffer from round-off error and inaccurate line searches.
+    """
+    n_parameters = int(inv_H.shape[0])
 
-        devider = 1. / dot(gradient_delta, gradient_delta)
-        param1 = outer(param, gradient_delta) + outer(gradient_delta, param)
-        param2 = (
-            dot(gradient_delta, param) *
-            outer(gradient_delta, gradient_delta_t)
-        )
+    I = tf.eye(n_parameters)
+    rho = safe_reciprocal(dot(delta_grad, delta_w), epsilon)
 
-        return inverse_hessian + param1 * devider - param2 * devider ** 2
+    X = I - outer(delta_w, delta_grad) * rho
+    X_T = tf.transpose(X)
+    Z = rho * outer(delta_w, delta_w)
+
+    return tf.matmul(X, tf.matmul(inv_H, X_T)) + Z
 
 
-def sr1(inverse_hessian, weight_delta, gradient_delta, epsilon=1e-8):
+@function_name_scope
+def dfp(inv_H, delta_w, delta_grad, epsilon=1e-7):
+    """
+    DFP is a method very similar to BFGS. It's rank 2 formula update.
+    It can suffer from round-off error and inaccurate line searches.
+    """
+    inv_H_dot_grad = dot(inv_H, delta_grad)
+
+    x = safe_division(
+        outer(delta_w, delta_w),
+        dot(delta_grad, delta_w),
+        epsilon
+    )
+    y = safe_division(
+        tf.matmul(outer(inv_H_dot_grad, delta_grad), inv_H),
+        dot(delta_grad, inv_H_dot_grad),
+        epsilon
+    )
+
+    return inv_H - y + x
+
+
+@function_name_scope
+def sr1(inv_H, delta_w, delta_grad, epsilon=1e-7):
     """
     Symmetric rank 1 (SR1). Generates update for the inverse hessian
     matrix adding symmetric rank-1 matrix. It's possible that there is no
     rank 1 updates for the matrix and in this case update won't be applied
     and original inverse hessian will be returned.
     """
-    with tf.name_scope('sr1'):
-        epsilon = asfloat(epsilon)
-        param = weight_delta - dot(inverse_hessian, gradient_delta)
-        denominator = dot(param, gradient_delta)
+    param = delta_w - dot(inv_H, delta_grad)
+    denominator = dot(param, delta_grad)
 
-        return tf.where(
-            # This check protects from the cases when update
-            # doesn't exist. It's possible that during certain
-            # iteration there is no rank-1 update for the matrix.
-            tf.less(
-                tf.abs(denominator),
-                epsilon * tf.norm(param) * tf.norm(gradient_delta)
-            ),
-            inverse_hessian,
-            inverse_hessian + outer(param, param) / denominator
-        )
+    return tf.where(
+        # This check protects from the cases when update
+        # doesn't exist. It's possible that during certain
+        # iteration there is no rank-1 update for the matrix.
+        tf.less(
+            tf.abs(denominator),
+            epsilon * tf.norm(param) * tf.norm(delta_grad)
+        ),
+        inv_H,
+        inv_H + outer(param, param) / denominator
+    )
 
 
 class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
     """
-    Quasi-Newton algorithm optimization.
+    Quasi-Newton algorithm. Every iteration quasi-Network method approximates
+    inverse Hessian matrix with iterative updates. It doesn't have ``step``
+    parameter. Instead, algorithm applies line search for the step parameter
+    that satisfies strong Wolfe condition. Parameters that control wolfe
+    search start with the ``wolfe_`` prefix.
 
     Parameters
     ----------
-    update_function : {{'bfgs', 'dfp', 'psb', 'sr1'}}
-        Update function. Defaults to ``bfgs``.
+    update_function : {{``bfgs``, ``dfp``, ``sr1``}}
+        Update function for the iterative inverse hessian matrix
+        approximation. Defaults to ``bfgs``.
+
+        - ``bfgs`` -  It's rank 2 formula update. It can suffer from
+          round-off error and inaccurate line searches.
+
+        - ``dfp`` - DFP is a method very similar to BFGS. It's rank 2 formula
+          update. It can suffer from round-off error and inaccurate line
+          searches.
+
+        - ``sr1`` - Symmetric rank 1 (SR1). Generates update for the
+          inverse hessian matrix adding symmetric rank-1 matrix. It's
+          possible that there is no rank 1 updates for the matrix and in
+          this case update won't be applied and original inverse hessian
+          will be returned.
 
     h0_scale : float
         Default Hessian matrix is an identity matrix. The
         ``h0_scale`` parameter scales identity matrix.
         Defaults to ``1``.
+
+    epsilon : float
+        Controls numerical stability for the ``update_function`` parameter.
+        Defaults to ``1e-7``.
+
+    wolfe_maxiter : int
+        Controls maximun number of iteration during the line search that
+        identifies optimal step size during the weight update stage.
+        Defaults to ``20``.
+
+    wolfe_c1 : float
+        Parameter for Armijo condition rule. It's used during the line search
+        that identifies optimal step size during the weight update stage.
+        Defaults ``1e-4``.
+
+    wolfe_c2 : float
+        Parameter for curvature condition rule. It's used during the line
+        search that identifies optimal step size during the weight update
+        stage. Defaults ``0.9``.
 
     {GradientDescent.connection}
 
@@ -142,6 +193,15 @@ class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
     ... )
     >>> qnnet.train(x_train, y_train, epochs=10)
 
+    References
+    ----------
+    [1] Yang Ding, Enkeleida Lushi, Qingguo Li,
+        Investigation of quasi-Newton methods for unconstrained optimization.
+        http://people.math.sfu.ca/~elushi/project_833.pdf
+
+    [2] Jorge Nocedal, Stephen J. Wright, Numerical Optimization.
+        Chapter 6, Quasi-Newton Methods, p. 135-163
+
     See Also
     --------
     :network:`GradientDescent` : GradientDescent algorithm.
@@ -151,11 +211,15 @@ class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
         choices={
             'bfgs': bfgs,
             'dfp': dfp,
-            'psb': psb,
             'sr1': sr1,
         }
     )
+    epsilon = NumberProperty(default=1e-7, minval=0)
     h0_scale = NumberProperty(default=1, minval=0)
+
+    wolfe_maxiter = IntProperty(default=20, minval=0)
+    wolfe_c1 = NumberProperty(default=1e-4, minval=0)
+    wolfe_c2 = NumberProperty(default=0.9, minval=0)
 
     step = WithdrawProperty()
 
@@ -189,19 +253,19 @@ class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
         prev_full_gradient = self.variables.prev_full_gradient
 
         params = parameter_values(self.connection)
-        param_vector = tf.concat([flatten(param) for param in params], axis=0)
+        param_vector = make_single_vector(params)
 
         gradients = tf.gradients(self.variables.error_func, params)
-        full_gradient = tf.concat(
-            [flatten(grad) for grad in gradients], axis=0)
+        full_gradient = make_single_vector(gradients)
 
         new_inv_hessian = tf.where(
             tf.equal(self.variables.epoch, 1),
             inv_hessian,
             self.update_function(
-                inv_hessian,
-                param_vector - prev_params,
-                full_gradient - prev_full_gradient,
+                inv_H=inv_hessian,
+                delta_w=param_vector - prev_params,
+                delta_grad=full_gradient - prev_full_gradient,
+                epsilon=self.epsilon
             )
         )
         param_delta = -dot(new_inv_hessian, full_gradient)
@@ -239,17 +303,17 @@ class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
             gradient, = tf.gradients(error_func, step)
             return gradient
 
-        step = asfloat(line_search(phi, derphi))
+        step = line_search(
+            phi, derphi, self.wolfe_maxiter, self.wolfe_c1, self.wolfe_c2)
+
         updated_params = param_vector + step * param_delta
         updates = setup_parameter_updates(params, updated_params)
 
         # We have to compute these values first, otherwise
         # parallelization in tensorflow can mix update order
         # and, for example, previous gradient can be equal to
-        # current gradient value. It happens becuase tensorflow
+        # current gradient value. It happens because tensorflow
         # try to execute operations in parallel.
-        # It addition, it's important that we wait for all values
-        # before making an update.
         required_variables = [new_inv_hessian, param_vector, full_gradient]
         with tf.control_dependencies(required_variables):
             updates.extend([

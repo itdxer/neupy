@@ -1,3 +1,4 @@
+from functools import partial
 from collections import namedtuple
 
 import numpy as np
@@ -60,20 +61,6 @@ class QuasiNewtonTestCase(BaseTestCase):
                 is_symmetric=False
             ),
             UpdateFunction(
-                func=qn.psb,
-                input_values=[
-                    asfloat(np.eye(3)),
-                    asfloat(np.array([0.12, 0.29, 0.33])),
-                    asfloat(np.array([1.1, -2.01, -3.73]))
-                ],
-                output_value=[
-                    [0.95617560, 0.10931254, 0.19090481],
-                    [0.10931254, 0.74683874, -0.44796302],
-                    [0.19090481, -0.44796302, 0.20922278],
-                ],
-                is_symmetric=True
-            ),
-            UpdateFunction(
                 func=qn.dfp,
                 input_values=[
                     asfloat(np.eye(3)),
@@ -81,9 +68,9 @@ class QuasiNewtonTestCase(BaseTestCase):
                     asfloat(np.array([0.3, -0.3, -0.5]))
                 ],
                 output_value=np.array([
-                    [0.73514212, -0.11111111, -0.16666667],
-                    [-0.11111111, 0.56847545, -0.33333333],
-                    [-0.16666667, -0.33333333, -0.08139535],
+                    [0.73514212, 0.09819121, 0.18217053],
+                    [0.09819121, 0.56847545, -0.6821705],
+                    [0.18217053, -0.6821705, -0.08139535],
                 ]),
                 is_symmetric=True
             ),
@@ -100,7 +87,7 @@ class QuasiNewtonTestCase(BaseTestCase):
 
             np.testing.assert_array_almost_equal(result, case.output_value)
 
-    def test_bfgs(self):
+    def test_quasi_newton_bfgs(self):
         x_train, x_test, y_train, y_test = simple_classification()
 
         qnnet = algorithms.QuasiNewton(
@@ -141,27 +128,6 @@ class QuasiNewtonTestCase(BaseTestCase):
         roc_curve_score = metrics.roc_auc_score(result, y_test)
         self.assertAlmostEqual(0.92, roc_curve_score, places=2)
 
-    def test_quasi_newton_psb(self):
-        x_train, x_test, y_train, y_test = simple_classification()
-
-        qnnet = algorithms.QuasiNewton(
-            connection=[
-                layers.Input(10),
-                layers.Sigmoid(30, weight=init.Orthogonal()),
-                layers.Sigmoid(1, weight=init.Orthogonal()),
-            ],
-            shuffle_data=True,
-            verbose=False,
-
-            update_function='psb',
-            h0_scale=2,
-        )
-        qnnet.train(x_train, y_train, x_test, y_test, epochs=3)
-        result = qnnet.predict(x_test).round()
-
-        roc_curve_score = metrics.roc_auc_score(result, y_test)
-        self.assertAlmostEqual(0.92, roc_curve_score, places=2)
-
     def test_quasi_newton_sr1(self):
         x_train, x_test, y_train, y_test = simple_classification()
 
@@ -184,6 +150,46 @@ class QuasiNewtonTestCase(BaseTestCase):
         roc_curve_score = metrics.roc_auc_score(result, y_test)
         self.assertAlmostEqual(0.92, roc_curve_score, places=2)
 
-    def test_quasi_newton_assign_step_exception(self):
-        with self.assertRaises(ValueError):
-            algorithms.QuasiNewton((2, 3, 1), step=0.01)
+    def test_quasi_newton_bfgs_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(
+                algorithms.QuasiNewton,
+                h0_scale=2,
+                update_function='bfgs',
+                verbose=False,
+            ),
+            epochs=100,
+            min_accepted_error=0.002,
+        )
+
+    def test_quasi_newton_dfp_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(
+                algorithms.QuasiNewton,
+                update_function='dfp',
+                verbose=False,
+            ),
+            epochs=200,
+            min_accepted_error=0.002,
+        )
+
+    def test_quasi_newton_sr1_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(
+                algorithms.QuasiNewton,
+                update_function='sr1',
+                verbose=False,
+                epsilon=1e-5,
+            ),
+            epochs=150,
+            min_accepted_error=0.002,
+        )
+
+    def test_safe_division(self):
+        self.assertAlmostEqual(0.5, self.eval(qn.safe_division(2.0, 4.0, epsilon=1e-7)))
+        self.assertAlmostEqual(1e7, self.eval(qn.safe_division(1.0, 1e-8, epsilon=1e-7)))
+
+    def test_safe_reciprocal(self):
+        self.assertAlmostEqual(0.25, self.eval(qn.safe_reciprocal(4.0, epsilon=1e-7)))
+        self.assertAlmostEqual(1e7, self.eval(qn.safe_reciprocal(1e-8, epsilon=1e-7)))
+        self.assertAlmostEqual(100, self.eval(qn.safe_reciprocal(1e-8, epsilon=0.01)))

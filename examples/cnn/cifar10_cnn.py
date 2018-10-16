@@ -42,15 +42,15 @@ if __name__ == '__main__':
         [
             Input((3, 32, 32)),
 
-            Convolution((64, 3, 3)) > BatchNorm() > PRelu(),
-            Convolution((64, 3, 3)) > BatchNorm() > PRelu(),
+            Convolution((64, 3, 3)) > PRelu() > BatchNorm(),
+            Convolution((64, 3, 3)) > PRelu() > BatchNorm(),
             MaxPooling((2, 2)),
 
-            Convolution((128, 3, 3)) > BatchNorm() > PRelu(),
-            Convolution((128, 3, 3)) > BatchNorm() > PRelu(),
+            Convolution((128, 3, 3)) > PRelu() > BatchNorm(),
+            Convolution((128, 3, 3)) > PRelu() > BatchNorm(),
             MaxPooling((2, 2)),
 
-            Convolution((256, 3, 3)) > BatchNorm() > PRelu(),
+            Convolution((256, 3, 3)) > PRelu() > BatchNorm(),
             Reshape(),
 
             Relu(512) > Dropout(0.5),
