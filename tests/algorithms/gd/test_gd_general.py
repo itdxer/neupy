@@ -18,7 +18,6 @@ class BackPropAlgsTestCase(BaseTestCase):
             algorithms.Hessian,
             algorithms.LevenbergMarquardt,
             algorithms.Momentum,
-            algorithms.Quickprop,
             algorithms.QuasiNewton,
             algorithms.RPROP,
             algorithms.IRPROPPlus,

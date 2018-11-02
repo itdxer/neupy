@@ -5,7 +5,6 @@ from .gd.conjgrad import *
 from .gd.hessian import *
 from .gd.hessdiag import *
 from .gd.rprop import *
-from .gd.quickprop import *
 from .gd.momentum import *
 from .gd.adadelta import *
 from .gd.adagrad import *

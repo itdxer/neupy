@@ -29,7 +29,6 @@ Trainig algorithms
     :network:`Momentum`, Momentum
     :network:`RPROP`, RPROP
     :network:`IRPROPPlus`, iRPROP+
-    :network:`Quickprop`, Quickprop
     :network:`Adadelta`, Adadelta
     :network:`Adagrad`, Adagrad
     :network:`RMSProp`, RMSProp
