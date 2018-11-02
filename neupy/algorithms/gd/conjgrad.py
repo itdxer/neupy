@@ -1,10 +1,9 @@
 import tensorflow as tf
 
-from neupy.utils import flatten, dot, function_name_scope
+from neupy.utils import dot, function_name_scope
 from neupy.core.properties import (ChoiceProperty, NumberProperty,
                                    WithdrawProperty)
 from neupy.layers.utils import count_parameters
-from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
                                     make_single_vector)
 from .base import GradientDescent

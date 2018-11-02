@@ -323,8 +323,6 @@ class QuasiNewton(WolfeLineSearchForStep, GradientDescent):
             )
         )
         param_delta = -dot(new_inv_hessian, full_gradient)
-        layers_and_parameters = list(iter_parameters(self.layers))
-
         step = self.find_optimal_step(param_vector, param_delta)
         updated_params = param_vector + step * param_delta
         updates = setup_parameter_updates(params, updated_params)

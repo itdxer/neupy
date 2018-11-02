@@ -186,10 +186,18 @@ class QuasiNewtonTestCase(BaseTestCase):
         )
 
     def test_safe_division(self):
-        self.assertAlmostEqual(0.5, self.eval(qn.safe_division(2.0, 4.0, epsilon=1e-7)))
-        self.assertAlmostEqual(1e7, self.eval(qn.safe_division(1.0, 1e-8, epsilon=1e-7)))
+        value = self.eval(qn.safe_division(2.0, 4.0, epsilon=1e-7))
+        self.assertAlmostEqual(0.5, value)
+
+        value = self.eval(qn.safe_division(1.0, 1e-8, epsilon=1e-7))
+        self.assertAlmostEqual(1e7, value)
 
     def test_safe_reciprocal(self):
-        self.assertAlmostEqual(0.25, self.eval(qn.safe_reciprocal(4.0, epsilon=1e-7)))
-        self.assertAlmostEqual(1e7, self.eval(qn.safe_reciprocal(1e-8, epsilon=1e-7)))
-        self.assertAlmostEqual(100, self.eval(qn.safe_reciprocal(1e-8, epsilon=0.01)))
+        value = self.eval(qn.safe_reciprocal(4.0, epsilon=1e-7))
+        self.assertAlmostEqual(0.25, value)
+
+        value = self.eval(qn.safe_reciprocal(1e-8, epsilon=1e-7))
+        self.assertAlmostEqual(1e7, value)
+
+        value = self.eval(qn.safe_reciprocal(1e-8, epsilon=0.01))
+        self.assertAlmostEqual(100, value)

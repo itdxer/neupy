@@ -103,7 +103,7 @@ class GradientDescentTestCase(BaseTestCase):
             epochs=5000,
         )
 
-    def test_gd_overfit(self):
+    def test_gd_minibatch_overfit(self):
         self.assertCanNetworkOverfit(
             partial(
                 algorithms.MinibatchGradientDescent,

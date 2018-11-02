@@ -45,7 +45,7 @@ class RPROPTestCase(BaseTestCase):
             epochs=50,
             show_comparison_plot=False
         )
-    #
+
     def test_irpropplus(self):
         options = dict(
             minstep=0.001,
