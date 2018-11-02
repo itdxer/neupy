@@ -45,7 +45,7 @@ class ARTTestCase(BaseTestCase):
             # Invalid input data dimension
             artnet = algorithms.ART1(step=0.4, rho=0.1, n_clusters=3,
                                      verbose=False)
-            artnet.predict(np.array([[[0]]]))
+            artnet.predict(np.array([[[1]]]))
 
         with self.assertRaises(ValueError):
             # Non-binary input values
@@ -57,8 +57,8 @@ class ARTTestCase(BaseTestCase):
             # Invalid data size for second input
             artnet = algorithms.ART1(step=0.4, rho=0.1, n_clusters=3,
                                      verbose=False)
-            artnet.predict(np.array([[0]]))
-            artnet.predict(np.array([[0, 1]]))
+            artnet.predict(np.array([[1]]))
+            artnet.predict(np.array([[1, 1]]))
 
     def test_simple_art1(self):
         ann = algorithms.ART1(step=2, rho=0.7, n_clusters=2, verbose=False)
