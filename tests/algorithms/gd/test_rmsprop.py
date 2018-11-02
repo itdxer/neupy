@@ -22,6 +22,6 @@ class RMSPropTestCase(BaseTestCase):
 
     def test_rmsprop_overfit(self):
         self.assertCanNetworkOverfit(
-            partial(algorithms.RMSProp, step=0.01, verbose=True),
-            epochs=2000,
+            partial(algorithms.RMSProp, step=0.01, verbose=False),
+            epochs=2200,
         )

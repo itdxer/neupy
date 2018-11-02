@@ -10,10 +10,12 @@ from base import BaseTestCase
 
 
 class LinearSearchTestCase(BaseTestCase):
+    single_thread = 1
+
     def test_linear_search(self):
         methods = [
-            ('golden', 0.34276),
-            ('brent', 0.35192),
+            ('golden', 0.34839),
+            ('brent', 0.38637),
         ]
 
         for method_name, valid_error in methods:
@@ -31,7 +33,7 @@ class LinearSearchTestCase(BaseTestCase):
                 test_size=0.15
             )
 
-            cgnet = algorithms.ConjugateGradient(
+            cgnet = algorithms.GradientDescent(
                 connection=[
                     layers.Input(13),
                     layers.Sigmoid(50),

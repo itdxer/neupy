@@ -41,6 +41,7 @@ class MinibatchGDTestCase(BaseTestCase):
 
         for network_class in self.network_classes:
             errors = []
+
             for fullbatch_value in fullbatch_identifiers:
                 environment.reproducible(seed=self.random_seed)
 
@@ -50,7 +51,7 @@ class MinibatchGDTestCase(BaseTestCase):
                 errors.append(net.errors.last())
 
             self.assertTrue(
-                np.all(np.abs(errors - errors[0]) < 1e-4),
+                np.all(np.abs(errors - errors[0]) < 1e-3),
                 msg=errors,
             )
 

@@ -199,17 +199,23 @@ class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
 
 
 def function(inputs, outputs, updates=None, name=None):
+    if updates is None:
+        updates = []
+
     session = tensorflow_session()
     tensorflow_updates = []
 
+    # Ensure that all new values has been computed. Absence of these
+    # checks might lead to the non-deterministic update behaviour.
+    new_values = [val[1] for val in updates if isinstance(val, (list, tuple))]
+
     # Make sure that all outputs has been computed
-    with tf.control_dependencies(as_tuple(outputs)):
-        if updates is not None:
-            for update in updates:
-                if isinstance(update, (list, tuple)):
-                    old_value, new_value = update
-                    update = old_value.assign(new_value)
-                tensorflow_updates.append(update)
+    with tf.control_dependencies(as_tuple(outputs, new_values)):
+        for update in updates:
+            if isinstance(update, (list, tuple)):
+                old_value, new_value = update
+                update = old_value.assign(new_value)
+            tensorflow_updates.append(update)
 
         # Group variables in order to avoid output for the updates
         tensorflow_updates = tf.group(*tensorflow_updates)

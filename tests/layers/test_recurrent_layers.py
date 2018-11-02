@@ -43,6 +43,9 @@ class GradientClippingTestCase(BaseTestCase):
 
 
 class LSTMTestCase(BaseTestCase):
+    single_thread = True
+    random_seed = 33
+
     def setUp(self):
         super(LSTMTestCase, self).setUp()
 

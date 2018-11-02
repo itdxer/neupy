@@ -60,7 +60,8 @@ def dai_yuan(old_g, new_g, delta_w, epsilon=1e-7):
     )
 
 
-class ConjugateGradient(GradientDescent, WolfeLineSearchForStep):
+class ConjugateGradient(WolfeLineSearchForStep, GradientDescent):
+
     """
     Conjugate Gradient algorithm.
 

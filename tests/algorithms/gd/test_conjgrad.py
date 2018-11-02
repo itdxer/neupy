@@ -162,3 +162,13 @@ class ConjugateGradientTestCase(BaseTestCase):
             ),
             epochs=800,
         )
+
+    def test_conjgrad_assign_step_exception(self):
+        with self.assertRaises(ValueError):
+            # Don't have step parameter
+            algorithms.ConjugateGradient((2, 3, 1), step=0.01)
+
+        with self.assertRaises(ValueError):
+            # Don't have step parameter
+            algorithms.ConjugateGradient(
+                (2, 3, 1), addons=[algorithms.LinearSearch])
