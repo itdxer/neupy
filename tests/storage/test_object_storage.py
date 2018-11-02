@@ -138,6 +138,8 @@ class BasicStorageTestCase(BaseTestCase):
         input_data = np.random.random((100, 2))
         target_data = np.random.random(100) > 0.5
 
+        # We keep verbose=True in order to see if value will
+        # be True when we restore it from the pickle object.
         pnn = algorithms.PNN(std=0.123, verbose=True)
         pnn.train(input_data, target_data)
 

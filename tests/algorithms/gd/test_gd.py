@@ -73,9 +73,9 @@ class GradientDescentTestCase(BaseTestCase):
         x_train, _, y_train, _ = simple_classification()
         compare_networks(
            # Test classes
-           partial(algorithms.GradientDescent, verbose=True),
+           partial(algorithms.GradientDescent, verbose=False),
            partial(algorithms.MinibatchGradientDescent,
-                   batch_size=1, verbose=True),
+                   batch_size=1, verbose=False),
            # Test data
            (x_train, y_train),
            # Network configurations
@@ -99,8 +99,8 @@ class GradientDescentTestCase(BaseTestCase):
 
     def test_gd_overfit(self):
         self.assertCanNetworkOverfit(
-            partial(algorithms.GradientDescent, step=2.0, verbose=False),
-            epochs=5000,
+            partial(algorithms.GradientDescent, step=1.0, verbose=False),
+            epochs=4000,
         )
 
     def test_gd_minibatch_overfit(self):
@@ -109,7 +109,7 @@ class GradientDescentTestCase(BaseTestCase):
                 algorithms.MinibatchGradientDescent,
                 step=0.5,
                 batch_size=5,
-                verbose=True,
+                verbose=False,
             ),
             epochs=4000,
         )
