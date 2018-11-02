@@ -11,4 +11,4 @@ dill==0.2.3
 
 # Download data
 tqdm==3.7.1
-requests==2.8.1
+requests==2.20.0
