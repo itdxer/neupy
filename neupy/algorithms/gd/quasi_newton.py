@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+from neupy.core.config import Configurable
 from neupy.core.properties import (ChoiceProperty, NumberProperty,
                                    WithdrawProperty, IntProperty)
 from neupy.algorithms.gd import StepSelectionBuiltIn
@@ -13,6 +14,73 @@ from .base import GradientDescent
 
 
 __all__ = ('QuasiNewton',)
+
+
+class WolfeLineSearchForStep(StepSelectionBuiltIn, Configurable):
+    """
+    Class that has all functions required in order to apply line search over
+    step parameter that used during the network training.
+
+    Parameters
+    ----------
+    wolfe_maxiter : int
+        Controls maximun number of iteration during the line search that
+        identifies optimal step size during the weight update stage.
+        Defaults to ``20``.
+
+    wolfe_c1 : float
+        Parameter for Armijo condition rule. It's used during the line search
+        that identifies optimal step size during the weight update stage.
+        Defaults ``1e-4``.
+
+    wolfe_c2 : float
+        Parameter for curvature condition rule. It's used during the line
+        search that identifies optimal step size during the weight update
+        stage. Defaults ``0.9``.
+    """
+    wolfe_maxiter = IntProperty(default=20, minval=0)
+    wolfe_c1 = NumberProperty(default=1e-4, minval=0)
+    wolfe_c2 = NumberProperty(default=0.9, minval=0)
+
+    def find_optimal_step(self, parameter_vector, parameter_update):
+        network_inputs = self.variables.network_inputs
+        network_output = self.variables.network_output
+        layers_and_parameters = list(iter_parameters(self.layers))
+
+        def prediction(step):
+            step = asfloat(step)
+            updated_params = parameter_vector + step * parameter_update
+
+            # This trick allow us to replace shared variables
+            # with tensorflow variables and get output from the network
+            start_pos = 0
+            for layer, attrname, param in layers_and_parameters:
+                end_pos = start_pos + get_variable_size(param)
+                updated_param_value = tf.reshape(
+                    updated_params[start_pos:end_pos],
+                    param.shape
+                )
+                setattr(layer, attrname, updated_param_value)
+                start_pos = end_pos
+
+            output = self.connection.output(*network_inputs)
+
+            # Restore previous parameters
+            for layer, attrname, param in layers_and_parameters:
+                setattr(layer, attrname, param)
+
+            return output
+
+        def phi(step):
+            return self.error(network_output, prediction(step))
+
+        def derphi(step):
+            error_func = self.error(network_output, prediction(step))
+            gradient, = tf.gradients(error_func, step)
+            return gradient
+
+        return line_search(
+            phi, derphi, self.wolfe_maxiter, self.wolfe_c1, self.wolfe_c2)
 
 
 @function_name_scope
@@ -104,7 +172,7 @@ def sr1(inv_H, delta_w, delta_grad, epsilon=1e-7):
     )
 
 
-class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
+class QuasiNewton(WolfeLineSearchForStep, GradientDescent):
     """
     Quasi-Newton algorithm. Every iteration quasi-Network method approximates
     inverse Hessian matrix with iterative updates. It doesn't have ``step``
@@ -140,20 +208,7 @@ class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
         Controls numerical stability for the ``update_function`` parameter.
         Defaults to ``1e-7``.
 
-    wolfe_maxiter : int
-        Controls maximun number of iteration during the line search that
-        identifies optimal step size during the weight update stage.
-        Defaults to ``20``.
-
-    wolfe_c1 : float
-        Parameter for Armijo condition rule. It's used during the line search
-        that identifies optimal step size during the weight update stage.
-        Defaults ``1e-4``.
-
-    wolfe_c2 : float
-        Parameter for curvature condition rule. It's used during the line
-        search that identifies optimal step size during the weight update
-        stage. Defaults ``0.9``.
+    {WolfeLineSearchForStep.Parameters}
 
     {GradientDescent.connection}
 
@@ -170,6 +225,11 @@ class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
     {GradientDescent.verbose}
 
     {GradientDescent.addons}
+
+    Notes
+    -----
+    - Method requires all training data during propagation, which means
+      it's not allowed to use mini-batches.
 
     Attributes
     ----------
@@ -217,10 +277,6 @@ class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
     epsilon = NumberProperty(default=1e-7, minval=0)
     h0_scale = NumberProperty(default=1, minval=0)
 
-    wolfe_maxiter = IntProperty(default=20, minval=0)
-    wolfe_c1 = NumberProperty(default=1e-4, minval=0)
-    wolfe_c2 = NumberProperty(default=0.9, minval=0)
-
     step = WithdrawProperty()
 
     def init_variables(self):
@@ -246,8 +302,6 @@ class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
         )
 
     def init_train_updates(self):
-        network_inputs = self.variables.network_inputs
-        network_output = self.variables.network_output
         inv_hessian = self.variables.inv_hessian
         prev_params = self.variables.prev_params
         prev_full_gradient = self.variables.prev_full_gradient
@@ -271,41 +325,7 @@ class QuasiNewton(StepSelectionBuiltIn, GradientDescent):
         param_delta = -dot(new_inv_hessian, full_gradient)
         layers_and_parameters = list(iter_parameters(self.layers))
 
-        def prediction(step):
-            step = asfloat(step)
-            updated_params = param_vector + step * param_delta
-
-            # This trick allow us to replace shared variables
-            # with tensorflow variables and get output from the network
-            start_pos = 0
-            for layer, attrname, param in layers_and_parameters:
-                end_pos = start_pos + get_variable_size(param)
-                updated_param_value = tf.reshape(
-                    updated_params[start_pos:end_pos],
-                    param.shape
-                )
-                setattr(layer, attrname, updated_param_value)
-                start_pos = end_pos
-
-            output = self.connection.output(*network_inputs)
-
-            # Restore previous parameters
-            for layer, attrname, param in layers_and_parameters:
-                setattr(layer, attrname, param)
-
-            return output
-
-        def phi(step):
-            return self.error(network_output, prediction(step))
-
-        def derphi(step):
-            error_func = self.error(network_output, prediction(step))
-            gradient, = tf.gradients(error_func, step)
-            return gradient
-
-        step = line_search(
-            phi, derphi, self.wolfe_maxiter, self.wolfe_c1, self.wolfe_c2)
-
+        step = self.find_optimal_step(param_vector, param_delta)
         updated_params = param_vector + step * param_delta
         updates = setup_parameter_updates(params, updated_params)
 
