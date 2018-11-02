@@ -46,22 +46,13 @@ class ConjugateGradientTestCase(BaseTestCase):
                 answer=5.118
             ),
             Case(
-                func=cg.conjugate_descent,
-                input_data=(
-                    asfloat(np.array([1.,  -0.5])),
-                    asfloat(np.array([1.2, -0.45])),
-                    asfloat(np.array([0.2, 0.05])),
-                ),
-                answer=-7.323
-            ),
-            Case(
                 func=cg.liu_storey,
                 input_data=(
                     asfloat(np.array([1.,  -0.5])),
                     asfloat(np.array([1.2, -0.45])),
                     asfloat(np.array([0.2, 0.05])),
                 ),
-                answer=1.243
+                answer=-1.243
             ),
             Case(
                 func=cg.dai_yuan,
@@ -81,7 +72,6 @@ class ConjugateGradientTestCase(BaseTestCase):
     def test_conjgrad(self):
         cgnet = algorithms.ConjugateGradient(
             (10, 5, 1),
-            step=0.2,
             error='binary_crossentropy',
             shuffle_data=True,
             verbose=False,
@@ -100,7 +90,10 @@ class ConjugateGradientTestCase(BaseTestCase):
 
         compare_networks(
             # Test classes
-            algorithms.GradientDescent,
+            partial(
+                algorithms.GradientDescent,
+                step=1.0,
+            ),
             partial(
                 algorithms.ConjugateGradient,
                 update_function='fletcher_reeves'
@@ -113,10 +106,59 @@ class ConjugateGradientTestCase(BaseTestCase):
                 layers.Sigmoid(5),
                 layers.Sigmoid(1),
             ),
-            step=1,
             error='mse',
             shuffle_data=True,
             # Test configurations
             epochs=50,
             show_comparison_plot=False
+        )
+
+    def test_conjugate_gradient_fletcher_reeves_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(
+                algorithms.ConjugateGradient,
+                update_function='fletcher_reeves',
+                verbose=False,
+            ),
+            epochs=200,
+        )
+
+    def test_conjugate_gradient_dai_yuan_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(
+                algorithms.ConjugateGradient,
+                update_function='dai_yuan',
+                verbose=False,
+            ),
+            epochs=200,
+        )
+
+    def test_conjugate_gradient_hentenes_stiefel_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(
+                algorithms.ConjugateGradient,
+                update_function='hentenes_stiefel',
+                verbose=False,
+            ),
+            epochs=500,
+        )
+
+    def test_conjugate_gradient_polak_ribiere_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(
+                algorithms.ConjugateGradient,
+                update_function='polak_ribiere',
+                verbose=False,
+            ),
+            epochs=800,
+        )
+
+    def test_conjugate_gradient_liu_storey_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(
+                algorithms.ConjugateGradient,
+                update_function='liu_storey',
+                verbose=False,
+            ),
+            epochs=800,
         )

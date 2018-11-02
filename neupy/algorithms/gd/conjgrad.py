@@ -1,71 +1,97 @@
 import tensorflow as tf
 
-from neupy.utils import flatten
-from neupy.core.properties import ChoiceProperty
-from neupy.algorithms.gd import NoMultipleStepSelection
-from neupy.algorithms.utils import parameter_values, setup_parameter_updates
+from neupy.utils import flatten, dot, function_name_scope
+from neupy.core.properties import (ChoiceProperty, NumberProperty,
+                                   WithdrawProperty)
 from neupy.layers.utils import count_parameters
+from neupy.algorithms.gd import StepSelectionBuiltIn
+from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
+                                    make_single_vector)
 from .base import GradientDescent
+from .quasi_newton import safe_division, WolfeLineSearchForStep
 
 
 __all__ = ('ConjugateGradient',)
 
 
-def fletcher_reeves(gradient_old, gradient_new, weight_old_delta):
-    return (
-        tf.tensordot(gradient_new, gradient_new, 1) /
-        tf.tensordot(gradient_old, gradient_old, 1)
+@function_name_scope
+def fletcher_reeves(old_g, new_g, delta_w, epsilon=1e-7):
+    return safe_division(
+        dot(new_g, new_g),
+        dot(old_g, old_g),
+        epsilon,
     )
 
 
-def polak_ribiere(gradient_old, gradient_new, weight_old_delta):
-    return (
-        tf.tensordot(gradient_new, gradient_new - gradient_old, 1) /
-        tf.tensordot(gradient_old, gradient_old, 1)
+@function_name_scope
+def polak_ribiere(old_g, new_g, delta_w, epsilon=1e-7):
+    return safe_division(
+        dot(new_g, new_g - old_g),
+        dot(old_g, old_g),
+        epsilon,
     )
 
 
-def hentenes_stiefel(gradient_old, gradient_new, weight_old_delta):
-    gradient_delta = gradient_new - gradient_old
-    return (
-        tf.tensordot(gradient_delta, gradient_new, 1) /
-        tf.tensordot(weight_old_delta, gradient_delta, 1)
+@function_name_scope
+def hentenes_stiefel(old_g, new_g, delta_w, epsilon=1e-7):
+    gradient_delta = new_g - old_g
+    return safe_division(
+        dot(gradient_delta, new_g),
+        dot(delta_w, gradient_delta),
+        epsilon,
     )
 
 
-def conjugate_descent(gradient_old, gradient_new, weight_old_delta):
-    return (
-        -tf.norm(gradient_new) /
-        tf.tensordot(weight_old_delta, gradient_old, 1)
+@function_name_scope
+def liu_storey(old_g, new_g, delta_w, epsilon=1e-7):
+    return -safe_division(
+        dot(new_g, new_g - old_g),
+        dot(delta_w, old_g),
+        epsilon,
     )
 
 
-def liu_storey(gradient_old, gradient_new, weight_old_delta):
-    return (
-        tf.tensordot(gradient_new, gradient_new - gradient_old, 1) /
-        tf.tensordot(weight_old_delta, gradient_old, 1)
+@function_name_scope
+def dai_yuan(old_g, new_g, delta_w, epsilon=1e-7):
+    return safe_division(
+        dot(new_g, new_g),
+        dot(new_g - old_g, delta_w),
+        epsilon,
     )
 
 
-def dai_yuan(gradient_old, gradient_new, weight_old_delta):
-    return (
-        tf.tensordot(gradient_new, gradient_new, 1) /
-        tf.tensordot(gradient_new - gradient_old, weight_old_delta, 1)
-    )
-
-
-class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
+class ConjugateGradient(GradientDescent, WolfeLineSearchForStep):
     """
     Conjugate Gradient algorithm.
 
     Parameters
     ----------
     update_function : {{``fletcher_reeves``, ``polak_ribiere``,\
-    ``hentenes_stiefel``, ``conjugate_descent``, ``liu_storey``,\
-    ``dai_yuan``}}
+    ``hentenes_stiefel``, ``dai_yuan``, ``liu_storey``}}
         Update function. Defaults to ``fletcher_reeves``.
 
-    {GradientDescent.Parameters}
+    epsilon : float
+        Ensures computational stability during the devision in
+        ``update_function`` when denumerator is very small number.
+        Defaults to ``1e-7``.
+
+    {WolfeLineSearchForStep.Parameters}
+
+    {GradientDescent.connection}
+
+    {GradientDescent.error}
+
+    {GradientDescent.show_epoch}
+
+    {GradientDescent.shuffle_data}
+
+    {GradientDescent.epoch_end_signal}
+
+    {GradientDescent.train_end_signal}
+
+    {GradientDescent.verbose}
+
+    {GradientDescent.addons}
 
     Attributes
     ----------
@@ -117,23 +143,29 @@ class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
     >>> error
     0.2472330191179734
 
+    References
+    ----------
+    [1] Jorge Nocedal, Stephen J. Wright, Numerical Optimization.
+        Chapter 5, Conjugate Gradient Methods, p. 101-133
+
     See Also
     --------
     :network:`GradientDescent`: GradientDescent algorithm.
     :network:`LinearSearch`: Linear Search important algorithm for step \
     selection in Conjugate Gradient algorithm.
     """
+    epsilon = NumberProperty(default=1e-7, minval=0)
     update_function = ChoiceProperty(
         default='fletcher_reeves',
         choices={
             'fletcher_reeves': fletcher_reeves,
             'polak_ribiere': polak_ribiere,
             'hentenes_stiefel': hentenes_stiefel,
-            'conjugate_descent': conjugate_descent,
             'liu_storey': liu_storey,
             'dai_yuan': dai_yuan,
         }
     )
+    step = WithdrawProperty()
 
     def init_variables(self):
         super(ConjugateGradient, self).init_variables()
@@ -154,32 +186,39 @@ class ConjugateGradient(NoMultipleStepSelection, GradientDescent):
 
     def init_train_updates(self):
         step = self.variables.step
+        epoch = self.variables.epoch
         previous_delta = self.variables.prev_delta
         previous_gradient = self.variables.prev_gradient
 
         n_parameters = count_parameters(self.connection)
         parameters = parameter_values(self.connection)
-        param_vector = tf.concat([flatten(param) for param in parameters],
-                                 axis=0)
+        param_vector = make_single_vector(parameters)
 
         gradients = tf.gradients(self.variables.error_func, parameters)
-        full_gradient = tf.concat([flatten(grad) for grad in gradients],
-                                  axis=0)
+        full_gradient = make_single_vector(gradients)
 
         beta = self.update_function(
-            previous_gradient, full_gradient, previous_delta)
+            previous_gradient, full_gradient, previous_delta, self.epsilon)
 
         parameter_delta = tf.where(
-            tf.equal(tf.mod(self.variables.epoch, n_parameters), 1),
+            tf.equal(tf.mod(epoch, n_parameters), 1),
             -full_gradient,
             -full_gradient + beta * previous_delta
         )
 
+        step = self.find_optimal_step(param_vector, parameter_delta)
         updated_parameters = param_vector + step * parameter_delta
-        parameter_updates = setup_parameter_updates(
-            parameters, updated_parameters)
+        updates = setup_parameter_updates(parameters, updated_parameters)
 
-        return parameter_updates + [
-            (previous_gradient, full_gradient),
-            (previous_delta, parameter_delta),
-        ]
+        # We have to compute these values first, otherwise
+        # parallelization in tensorflow can mix update order
+        # and, for example, previous gradient can be equal to
+        # current gradient value. It happens because tensorflow
+        # try to execute operations in parallel.
+        with tf.control_dependencies([full_gradient, parameter_delta]):
+            updates.extend([
+                previous_gradient.assign(full_gradient),
+                previous_delta.assign(parameter_delta),
+            ])
+
+        return updates
