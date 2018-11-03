@@ -1,3 +1,4 @@
+import numpy as np
 import tensorflow as tf
 
 from neupy import init
@@ -285,16 +286,8 @@ class AxesProperty(TypedListProperty):
     {BaseProperty.required}
     """
     def __set__(self, instance, value):
-        if isinstance(value, int):
-            value = (value,)
+        value = (value,) if isinstance(value, int) else value
         super(AxesProperty, self).__set__(instance, value)
-
-    def validate(self, value):
-        super(AxesProperty, self).validate(value)
-
-        if any(element < 0 for element in value):
-            raise ValueError("Axes property is allowed only "
-                             "non-negative axis.")
 
 
 class PRelu(ActivationLayer):
@@ -307,7 +300,7 @@ class PRelu(ActivationLayer):
     alpha_axes : int or tuple
         Axes that will not include unique alpha parameter.
         Single integer value defines the same as a tuple with one value.
-        Defaults to ``1``.
+        Defaults to ``-1``.
 
     alpha : array-like, Tensorfow variable, scalar or Initializer
         Alpha parameter per each non-shared axis for the ReLu.
@@ -331,7 +324,7 @@ class PRelu(ActivationLayer):
     ----------
     .. [1] https://arxiv.org/pdf/1502.01852v1.pdf
     """
-    alpha_axes = AxesProperty(default=1)
+    alpha_axes = AxesProperty(default=-1)
     alpha = ParameterProperty(default=init.Constant(value=0.25))
 
     def __init__(self, *args, **options):
@@ -344,13 +337,14 @@ class PRelu(ActivationLayer):
         if max(self.alpha_axes) > len(input_shape):
             max_axis_index = len(input_shape) - 1
             raise ValueError("Cannot specify alpha for the axis #{}. "
-                             "Maximum available axis is #{} (0-based indeces)."
+                             "Maximum available axis is {} (0-based indeces)."
                              "".format(max(self.alpha_axes), max_axis_index))
 
     def initialize(self):
         super(PRelu, self).initialize()
+        output_shape = as_tuple(None, self.output_shape)
 
-        alpha_shape = [self.output_shape[axis - 1] for axis in self.alpha_axes]
+        alpha_shape = [output_shape[axis] for axis in self.alpha_axes]
         self.add_parameter(
             value=self.alpha,
             name='alpha',
@@ -362,5 +356,8 @@ class PRelu(ActivationLayer):
         input_value = tf.convert_to_tensor(input_value, dtype=tf.float32)
         ndim = len(input_value.get_shape())
 
-        alpha = dimshuffle(self.alpha, ndim, self.alpha_axes)
+        dimensions = np.arange(ndim)
+        alpha_axes = dimensions[list(self.alpha_axes)]
+
+        alpha = dimshuffle(self.alpha, ndim, alpha_axes)
         return tf.nn.leaky_relu(tf.to_float(input_value), tf.to_float(alpha))

@@ -156,9 +156,9 @@ class PReluTestCase(BaseTestCase):
         input_layer > conv_layer > prelu_layer
 
         alpha = self.eval(prelu_layer.alpha)
-        expected_alpha = np.ones((5, 8)) * 0.25
+        expected_alpha = np.ones((8, 5)) * 0.25
 
-        self.assertEqual(alpha.shape, (5, 8))
+        self.assertEqual(alpha.shape, (8, 5))
         np.testing.assert_array_almost_equal(alpha, expected_alpha)
 
     def test_prelu_output_by_dense_input(self):
@@ -172,7 +172,7 @@ class PReluTestCase(BaseTestCase):
         np.testing.assert_array_almost_equal(expected_output, actual_output)
 
     def test_prelu_output_by_spatial_input(self):
-        input_data = asfloat(np.random.random((1, 3, 10, 10)))
+        input_data = asfloat(np.random.random((1, 10, 10, 3)))
 
         input_layer = layers.Input((10, 10, 3))
         conv_layer = layers.Convolution((3, 3, 5))
@@ -185,7 +185,7 @@ class PReluTestCase(BaseTestCase):
             actual_output = layer.output(actual_output)
 
         actual_output = self.eval(actual_output)
-        self.assertEqual(actual_output.shape, (1, 5, 8, 8))
+        self.assertEqual(actual_output.shape, (1, 8, 8, 5))
 
     def test_prelu_param_updates(self):
         x_train, _, y_train, _ = simple_classification()
@@ -216,7 +216,3 @@ class PReluTestCase(BaseTestCase):
             prelu2_alpha_before_training,
             prelu2_alpha_after_training,
         )))
-
-    def test_prelu_axes_property_exceptions(self):
-        with self.assertRaises(ValueError):
-            layers.PRelu(20, alpha_axes=(-2, -1))

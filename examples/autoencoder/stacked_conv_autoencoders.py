@@ -29,20 +29,20 @@ x_labeled, x_unlabeled, y_labeled, y_unlabeled = train_test_split(
     test_size=(1 - n_labeled / n_samples)
 )
 
-x_labeled_4d = x_labeled.reshape((n_labeled, 1, 28, 28))
-x_unlabeled_4d = x_unlabeled.reshape((n_unlabeled, 1, 28, 28))
+x_labeled_4d = x_labeled.reshape((n_labeled, 28, 28, 1))
+x_unlabeled_4d = x_unlabeled.reshape((n_unlabeled, 28, 28, 1))
 
 # We will features trained in the encoder and the first part for the future
 # classifier. At first we pre-train them with unlabeled data, since we have
 # a lot of it and we hope to learn some common features from it.
 encoder = layers.join(
-    layers.Input((1, 28, 28)),
+    layers.Input((28, 28, 1)),
 
-    layers.Convolution((16, 3, 3)) > layers.Relu(),
-    layers.Convolution((16, 3, 3)) > layers.Relu(),
+    layers.Convolution((3, 3, 16)) > layers.Relu(),
+    layers.Convolution((3, 3, 16)) > layers.Relu(),
     layers.MaxPooling((2, 2)),
 
-    layers.Convolution((32, 3, 3)) > layers.Relu(),
+    layers.Convolution((3, 3, 32)) > layers.Relu(),
     layers.MaxPooling((2, 2)),
 
     layers.Reshape(),
@@ -58,14 +58,14 @@ decoder = layers.join(
     layers.Relu(256),
     layers.Relu(32 * 5 * 5),
 
-    layers.Reshape((32, 5, 5)),
+    layers.Reshape((5, 5, 32)),
 
     layers.Upscale((2, 2)),
-    layers.Convolution((16, 3, 3), padding=2) > layers.Relu(),
+    layers.Convolution((3, 3, 16), padding=2) > layers.Relu(),
 
     layers.Upscale((2, 2)),
-    layers.Convolution((16, 3, 3), padding=2) > layers.Relu(),
-    layers.Convolution((1, 3, 3), padding=2) > layers.Sigmoid(),
+    layers.Convolution((3, 3, 16), padding=2) > layers.Relu(),
+    layers.Convolution((3, 3, 1), padding=2) > layers.Sigmoid(),
 
     layers.Reshape(),
 )

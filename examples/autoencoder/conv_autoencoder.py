@@ -11,18 +11,18 @@ data = (mnist.data / 255.).astype(np.float32)
 
 np.random.shuffle(data)
 x_train, x_test = data[:60000], data[60000:]
-x_train_4d = x_train.reshape((60000, 1, 28, 28))
-x_test_4d = x_test.reshape((10000, 1, 28, 28))
+x_train_4d = x_train.reshape((60000, 28, 28, 1))
+x_test_4d = x_test.reshape((10000, 28, 28, 1))
 
 conv_autoencoder = algorithms.Momentum(
     [
-        layers.Input((1, 28, 28)),
+        layers.Input((28, 28, 1)),
 
-        layers.Convolution((16, 3, 3)) > layers.Relu(),
-        layers.Convolution((16, 3, 3)) > layers.Relu(),
+        layers.Convolution((3, 3, 16)) > layers.Relu(),
+        layers.Convolution((3, 3, 16)) > layers.Relu(),
         layers.MaxPooling((2, 2)),
 
-        layers.Convolution((32, 3, 3)) > layers.Relu(),
+        layers.Convolution((3, 3, 32)) > layers.Relu(),
         layers.MaxPooling((2, 2)),
 
         layers.Reshape(),
@@ -40,7 +40,7 @@ conv_autoencoder = algorithms.Momentum(
         # Reshape layer
         layers.Relu(800),
 
-        layers.Reshape((32, 5, 5)),
+        layers.Reshape((5, 5, 32)),
 
         # Upscaling layer reverts changes from the max pooling layer
         layers.Upscale((2, 2)),
@@ -48,11 +48,11 @@ conv_autoencoder = algorithms.Momentum(
         # If convolution operation in first layers with zero padding reduces
         # size of the image, then convolution with padding=2 increases size
         # of the image. It just does the opposite to the previous convolution
-        layers.Convolution((16, 3, 3), padding=2) > layers.Relu(),
+        layers.Convolution((3, 3, 16), padding=2) > layers.Relu(),
 
         layers.Upscale((2, 2)),
-        layers.Convolution((16, 3, 3), padding=2) > layers.Relu(),
-        layers.Convolution((1, 3, 3), padding=2) > layers.Sigmoid(),
+        layers.Convolution((3, 3, 16), padding=2) > layers.Relu(),
+        layers.Convolution((3, 3, 1), padding=2) > layers.Sigmoid(),
 
         # We have to convert 4d tensor to the 2d in order to be
         # able to compute RMSE.

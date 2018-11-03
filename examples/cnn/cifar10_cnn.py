@@ -40,17 +40,17 @@ if __name__ == '__main__':
 
     network = algorithms.Adadelta(
         [
-            Input((3, 32, 32)),
+            Input((32, 32, 3)),
 
-            Convolution((64, 3, 3)) > PRelu() > BatchNorm(),
-            Convolution((64, 3, 3)) > PRelu() > BatchNorm(),
+            Convolution((3, 3, 64)) > PRelu() > BatchNorm(),
+            Convolution((3, 3, 64)) > PRelu() > BatchNorm(),
             MaxPooling((2, 2)),
 
-            Convolution((128, 3, 3)) > PRelu() > BatchNorm(),
-            Convolution((128, 3, 3)) > PRelu() > BatchNorm(),
+            Convolution((3, 3, 128)) > PRelu() > BatchNorm(),
+            Convolution((3, 3, 128)) > PRelu() > BatchNorm(),
             MaxPooling((2, 2)),
 
-            Convolution((256, 3, 3)) > PRelu() > BatchNorm(),
+            Convolution((3, 3, 256)) > PRelu() > BatchNorm(),
             Reshape(),
 
             Relu(512) > Dropout(0.5),
