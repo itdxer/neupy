@@ -56,6 +56,6 @@ class DiscreteMemory(BaseSkeleton, Configurable):
         matrix : array-like
             Matrix for validation.
         """
-        if np.any((matrix != 0) & (matrix != 1)):
+        if np.any(~np.isin(matrix, [0, 1])):
             raise ValueError("This network is descrete. This mean that you "
                              "can use data which contains 0 and 1 values")
