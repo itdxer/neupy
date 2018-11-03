@@ -1,6 +1,5 @@
 from collections import namedtuple
 
-import mock
 import numpy as np
 import tensorflow as tf
 

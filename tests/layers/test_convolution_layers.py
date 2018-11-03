@@ -1,7 +1,6 @@
 from itertools import product
 from collections import namedtuple
 
-import mock
 import numpy as np
 import tensorflow as tf
 
@@ -87,7 +86,7 @@ class ConvLayersTestCase(BaseTestCase):
     def test_valid_padding(self):
         valid_paddings = ('VALID', 'SAME')
         for padding in valid_paddings:
-            layers.Convolution((2, 3,1 ), padding=padding)
+            layers.Convolution((2, 3, 1), padding=padding)
 
     def test_invalid_padding(self):
         invalid_paddings = ('invalid mode', -10, (10, -5))

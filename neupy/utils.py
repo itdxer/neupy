@@ -4,7 +4,6 @@ from functools import wraps
 import numpy as np
 from scipy.sparse import issparse
 import tensorflow as tf
-from tensorflow.python.client import device_lib
 
 
 __all__ = ('format_data', 'asfloat', 'AttributeKeyDict', 'preformat_value',
