@@ -119,28 +119,28 @@ class ConnectionTypesTestCase(BaseTestCase):
         self.assertEqual((3, 10), reconstructed_output.shape)
 
     def test_connections_with_complex_parallel_relations(self):
-        input_layer = layers.Input((3, 5, 5))
+        input_layer = layers.Input((5, 5, 3))
         connection = layers.join(
             [[
-                layers.Convolution((8, 1, 1)),
+                layers.Convolution((1, 1, 8)),
             ], [
-                layers.Convolution((4, 1, 1)),
+                layers.Convolution((1, 1, 4)),
                 [[
-                    layers.Convolution((2, 1, 3), padding='SAME'),
+                    layers.Convolution((1, 3, 2), padding='SAME'),
                 ], [
-                    layers.Convolution((2, 3, 1), padding='SAME'),
+                    layers.Convolution((3, 1, 2), padding='SAME'),
                 ]],
             ], [
-                layers.Convolution((8, 1, 1)),
-                layers.Convolution((4, 3, 3), padding='SAME'),
+                layers.Convolution((1, 1, 8)),
+                layers.Convolution((3, 3, 4), padding='SAME'),
                 [[
-                    layers.Convolution((2, 1, 3), padding='SAME'),
+                    layers.Convolution((1, 3, 2), padding='SAME'),
                 ], [
-                    layers.Convolution((2, 3, 1), padding='SAME'),
+                    layers.Convolution((3, 1, 2), padding='SAME'),
                 ]],
             ], [
                 layers.MaxPooling((3, 3), padding='SAME', stride=(1, 1)),
-                layers.Convolution((8, 1, 1)),
+                layers.Convolution((1, 1, 8)),
             ]],
             layers.Concatenate(),
         )
@@ -150,7 +150,7 @@ class ConnectionTypesTestCase(BaseTestCase):
         # sure tha parallel connections defined without
         # input shapes
         connection = input_layer > connection
-        self.assertEqual((24, 5, 5), connection.output_shape)
+        self.assertEqual((5, 5, 24), connection.output_shape)
 
     def test_single_input_for_parallel_layers(self):
         left = layers.Input(10, name='input') > layers.Sigmoid(5)

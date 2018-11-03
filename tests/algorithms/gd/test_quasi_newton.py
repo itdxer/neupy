@@ -169,7 +169,7 @@ class QuasiNewtonTestCase(BaseTestCase):
                 update_function='dfp',
                 verbose=False,
             ),
-            epochs=200,
+            epochs=350,
             min_accepted_error=0.002,
         )
 
@@ -181,7 +181,7 @@ class QuasiNewtonTestCase(BaseTestCase):
                 verbose=False,
                 epsilon=1e-5,
             ),
-            epochs=150,
+            epochs=250,
             min_accepted_error=0.002,
         )
 

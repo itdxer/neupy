@@ -14,15 +14,16 @@ __all__ = ('Elementwise', 'Concatenate', 'GatedAverage')
 
 class Elementwise(BaseLayer):
     """
-    Merge multiple input layers in one with elementwise
-    function.
+    Merge multiple input layers elementwise function and generate
+    single output. Each input to this layer should have exactly the
+    same shape.
 
     Parameters
     ----------
     merge_function : callable
         Callable object that accepts multiple arguments and
         combine them in one with elementwise operation.
-        Defaults to ``tensorflow.add``
+        Defaults to ``tensorflow.add``.
 
     {BaseLayer.Parameters}
 
@@ -52,10 +53,11 @@ class Elementwise(BaseLayer):
 
     def validate(self, input_shapes):
         n_unique_shapes = len(set(input_shapes))
+
         if n_unique_shapes != 1:
             raise LayerConnectionError(
-                "The `{}` layer expects all input values with the "
-                "same shapes. Input shapes: {}"
+                "The `{}` layer expects all input values with "
+                "exactly the same shapes. Input shapes: {}"
                 "".format(self, input_shapes))
 
     @property
@@ -64,8 +66,6 @@ class Elementwise(BaseLayer):
             return self.input_shape[0]
 
     def output(self, *input_values):
-        if len(input_values) == 1:
-            return input_values[0]
         return reduce(self.merge_function, input_values)
 
 
@@ -78,7 +78,7 @@ class Concatenate(BaseLayer):
     ----------
     axis : int
         The axis along which the inputs will be joined.
-        Default is ``1``.
+        Default is ``-1``.
 
     {BaseLayer.Parameters}
 
@@ -96,7 +96,6 @@ class Concatenate(BaseLayer):
     >>>
     >>> input_1 = layers.Input(10)
     >>> input_2 = layers.Input(20)
-    >>>
     >>> network = [input_1, input_2] > layers.Concatenate()
     >>>
     >>> network.input_shape
@@ -104,25 +103,40 @@ class Concatenate(BaseLayer):
     >>> network.output_shape
     (30,)
     """
-    axis = IntProperty(default=1)
+    axis = IntProperty(default=-1)
 
     def validate(self, input_shapes):
+        # The axis value has 0-based indeces where 0s index points
+        # to the batch dimension of the input. Shapes in the neupy
+        # do not store information about the batch and we need to
+        # put None value on the 0s position.
         valid_shape = as_tuple(None, input_shapes[0])
 
+        # Avoid using negative indeces
+        possible_axes = list(range(len(valid_shape)))
+        concat_axis = possible_axes[self.axis]
+
         for input_shape in input_shapes[1:]:
+            if len(input_shapes[0]) != len(input_shape):
+                raise LayerConnectionError(
+                    "Cannot concatenate layers, because inputs have "
+                    "different number of dimensions. Shapes: {} and {}"
+                    "".format(input_shapes[0], input_shape))
+
             for axis, axis_size in enumerate(input_shape, start=1):
-                if axis != self.axis and valid_shape[axis] != axis_size:
+                if axis != concat_axis and valid_shape[axis] != axis_size:
                     raise LayerConnectionError(
-                        "Cannot concatenate layers. Some of them don't "
-                        "match over dimension #{} (0-based indeces)."
-                        "".format(axis))
+                        "Cannot concatenate layers, because some of them "
+                        "don't match over dimension #{} (0-based indeces)."
+                        "Shapes: {} and {}"
+                        "".format(axis, input_shapes[0], input_shape))
 
     @property
     def output_shape(self):
         if not self.input_shape:
             return
 
-        axis = self.axis - 1  # because we do not include #0 dim
+        axis = self.axis
         input_shapes = copy.copy(self.input_shape)
         output_shape = list(input_shapes.pop(0))
 

@@ -2,7 +2,6 @@ import math
 
 import tensorflow as tf
 
-from neupy import utils
 from neupy.utils import as_tuple, tf_repeat
 from neupy.core.properties import TypedListProperty, ChoiceProperty, Property
 from neupy.exceptions import LayerConnectionError
@@ -101,7 +100,7 @@ class BasePooling(BaseLayer):
         if self.input_shape is None:
             return None
 
-        n_kernels, rows, cols = self.input_shape
+        rows, cols, n_kernels = self.input_shape
         row_filter_size, col_filter_size = self.size
 
         stride = self.size if self.stride is None else self.stride
@@ -113,29 +112,17 @@ class BasePooling(BaseLayer):
         output_cols = pooling_output_shape(
             cols, col_filter_size, self.padding, col_stride)
 
-        return (n_kernels, output_rows, output_cols)
+        return (output_rows, output_cols, n_kernels)
 
     def output(self, input_value):
-        is_gpu_available = utils.is_gpu_available()
-
-        if is_gpu_available:
-            # TODO: transpose added only for convenient transition between
-            # tensroflow and theatno. I will remove it later.
-            input_value = tf.transpose(input_value, (0, 2, 3, 1))
-
-        output = tf.nn.pool(
+        return tf.nn.pool(
             input_value,
             self.size,
             pooling_type=self.pooling_type,
             padding=self.padding,
             strides=self.stride or self.size,
-            data_format="NHWC" if is_gpu_available else "NCHW",
+            data_format="NHWC",
         )
-
-        if is_gpu_available:
-            output = tf.transpose(output, (0, 3, 1, 2))
-
-        return output
 
     def __repr__(self):
         return '{name}({size})'.format(
@@ -167,7 +154,7 @@ class MaxPooling(BasePooling):
     >>> from neupy import layers
     >>>
     >>> network = layers.join(
-    ...     layers.Input((3, 10, 10)),
+    ...     layers.Input((10, 10, 3)),
     ...     layers.MaxPooling((2, 2)),
     ... )
     >>> network.output_shape
@@ -178,8 +165,8 @@ class MaxPooling(BasePooling):
     >>> from neupy import layers
     >>>
     >>> network = layers.join(
-    ...     layers.Input((10, 30)),
-    ...     layers.Reshape((10, 30, 1)),
+    ...     layers.Input((30, 10)),
+    ...     layers.Reshape((10, 1, 30)),
     ...     layers.MaxPooling((2, 1)),
     ... )
     >>> network.output_shape
@@ -211,7 +198,7 @@ class AveragePooling(BasePooling):
     >>> from neupy import layers
     >>>
     >>> network = layers.join(
-    ...     layers.Input((3, 10, 10)),
+    ...     layers.Input((10, 10, 3)),
     ...     layers.AveragePooling((2, 2)),
     ... )
     >>> network.output_shape
@@ -222,8 +209,8 @@ class AveragePooling(BasePooling):
     >>> from neupy import layers
     >>>
     >>> network = layers.join(
-    ...     layers.Input((10, 30)),
-    ...     layers.Reshape((10, 30, 1)),
+    ...     layers.Input((30, 10)),
+    ...     layers.Reshape((10, 1, 30)),
     ...     layers.AveragePooling((2, 1)),
     ... )
     >>> network.output_shape
@@ -277,12 +264,8 @@ class Upscale(BaseLayer):
 
     Examples
     --------
-    >>> from neupy import layers
-    >>>
-    >>> network = layers.join(
-    ...     layers.Input((3, 10, 10)),
-    ...     layers.Upscale((2, 2)),
-    ... )
+    >>> from neupy.layers import *
+    >>> network = Input((10, 10, 3)) > Upscale((2, 2))
     >>> network.output_shape
     (3, 20, 20)
     """
@@ -302,15 +285,13 @@ class Upscale(BaseLayer):
         if self.input_shape is None:
             return None
 
-        channel, height, width = self.input_shape
+        height, width, channel = self.input_shape
         height_scale, width_scale = self.scale
 
-        return (channel, height_scale * height, width_scale * width)
+        return (height_scale * height, width_scale * width, channel)
 
     def output(self, input_value):
-        if all(value == 1 for value in self.scale):
-            return input_value
-        return tf_repeat(input_value, as_tuple(1, 1, self.scale))
+        return tf_repeat(input_value, as_tuple(1, self.scale, 1))
 
 
 class GlobalPooling(BaseLayer):
@@ -340,12 +321,8 @@ class GlobalPooling(BaseLayer):
 
     Examples
     --------
-    >>> from neupy import layers
-    >>>
-    >>> network = layers.join(
-    ...     layers.Input((16, 4, 4)),
-    ...     layers.GlobalPooling(),
-    ... )
+    >>> from neupy.layers import *
+    >>> network = Input((4, 4, 16)) > GlobalPooling()
     >>> network.output_shape
     (16,)
     """
@@ -354,7 +331,7 @@ class GlobalPooling(BaseLayer):
     @property
     def output_shape(self):
         if self.input_shape is not None:
-            return as_tuple(self.input_shape[0])
+            return as_tuple(self.input_shape[-1])
 
     def output(self, input_value):
         ndims = len(input_value.shape)
@@ -362,5 +339,6 @@ class GlobalPooling(BaseLayer):
         if ndims in (1, 2):
             return input_value
 
-        agg_axis = range(2, ndims)
+        # All dimensions except first and last
+        agg_axis = range(1, ndims - 1)
         return self.function(input_value, axis=list(agg_axis))

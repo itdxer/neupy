@@ -1,7 +1,7 @@
 import numpy as np
 
 from neupy import layers
-from neupy.exceptions import InvalidConnection
+from neupy.exceptions import LayerConnectionError
 
 from base import BaseTestCase
 
@@ -93,7 +93,7 @@ class TransposeTestCase(BaseTestCase):
                 layers.Transpose([2, 0]),  # cannot use 0 index (batch dim)
             )
 
-        with self.assertRaisesRegexp(InvalidConnection, "at least 3"):
+        with self.assertRaisesRegexp(LayerConnectionError, "at least 3"):
             layers.join(
                 layers.Input(20),
                 layers.Transpose([2, 1]),

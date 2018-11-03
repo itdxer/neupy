@@ -4,7 +4,6 @@ import collections
 import six
 import tensorflow as tf
 
-from neupy import utils
 from neupy.utils import as_tuple
 from neupy.exceptions import LayerConnectionError
 from neupy.core.properties import TypedListProperty, Property
@@ -112,7 +111,6 @@ class PaddingProperty(Property):
     valid_string_choices = ('VALID', 'SAME')
 
     def __set__(self, instance, value):
-
         if isinstance(value, int):
             if value < 0:
                 raise ValueError(
@@ -160,8 +158,8 @@ class Convolution(ParameterBasedLayer):
     Parameters
     ----------
     size : tuple of int
-        Filter shape. In should be defined as a tuple with three integers
-        ``(output channels, filter rows, filter columns)``.
+        Filter shape. In should be defined as a tuple with three
+        integers ``(filter rows, filter columns, output channels)``.
 
     padding : {{``VALID``, ``SAME``}}
         Defaults to ``VALID``.
@@ -182,8 +180,8 @@ class Convolution(ParameterBasedLayer):
     >>> from neupy import layers
     >>>
     >>> layers.join(
-    ...     layers.Input((3, 28, 28)),
-    ...     layers.Convolution((16, 3, 3)),
+    ...     layers.Input((28, 28, 3)),
+    ...     layers.Convolution((3, 3, 16)),
     ... )
 
     1D Convolution
@@ -191,9 +189,9 @@ class Convolution(ParameterBasedLayer):
     >>> from neupy import layers
     >>>
     >>> layers.join(
-    ...     layers.Input((10, 30)),
-    ...     layers.Reshape((10, 30, 1)),
-    ...     layers.Convolution((16, 3, 1)),
+    ...     layers.Input((30, 10)),
+    ...     layers.Reshape((30, 1, 10)),
+    ...     layers.Convolution((3, 1, 16)),
     ... )
 
     Methods
@@ -221,13 +219,12 @@ class Convolution(ParameterBasedLayer):
             return None
 
         padding = self.padding
-        n_kernels = self.size[0]
-        rows, cols = self.input_shape[-2:]
-        row_filter_size, col_filter_size = self.size[-2:]
+        rows, cols, _ = self.input_shape
+        row_filter_size, col_filter_size, n_kernels = self.size
 
         row_stride, col_stride = self.stride
 
-        if isinstance(padding, tuple):
+        if isinstance(padding, (list, tuple)):
             row_padding, col_padding = padding
         else:
             row_padding, col_padding = padding, padding
@@ -238,38 +235,17 @@ class Convolution(ParameterBasedLayer):
         output_cols = conv_output_shape(
             cols, col_filter_size, col_padding, col_stride)
 
-        return (n_kernels, output_rows, output_cols)
+        return (output_rows, output_cols, n_kernels)
 
     @property
     def weight_shape(self):
-        n_channels = self.input_shape[0]
-        n_filters, n_rows, n_cols = self.size
+        n_channels = self.input_shape[-1]
+        n_rows, n_cols, n_filters = self.size
         return (n_rows, n_cols, n_channels, n_filters)
 
     @property
     def bias_shape(self):
-        return as_tuple(self.size[0])
-
-    def cpu_convolution(self, input_value, padding):
-        return tf.nn.convolution(
-            input_value,
-            self.weight,
-            padding,
-            self.stride,
-            data_format="NCHW"
-        )
-
-    def gpu_convolution(self, input_value, padding):
-        input_value = tf.transpose(input_value, (0, 2, 3, 1))
-        output = tf.nn.convolution(
-            input_value,
-            self.weight,
-            padding,
-            self.stride,
-            data_format="NHWC"
-        )
-        output = tf.transpose(output, (0, 3, 1, 2))
-        return output
+        return as_tuple(self.size[-1])
 
     def output(self, input_value):
         padding = self.padding
@@ -278,21 +254,24 @@ class Convolution(ParameterBasedLayer):
             height_pad, weight_pad = padding
             input_value = tf.pad(input_value, [
                 [0, 0],
-                [0, 0],
                 [height_pad, height_pad],
                 [weight_pad, weight_pad],
+                [0, 0],
             ])
             # We will need to make sure that convolution operation
             # won't add any paddings.
             padding = 'VALID'
 
-        if utils.is_gpu_available():
-            output = self.gpu_convolution(input_value, padding)
-        else:
-            output = self.cpu_convolution(input_value, padding)
+        output = tf.nn.convolution(
+            input_value,
+            self.weight,
+            padding,
+            self.stride,
+            data_format="NHWC"
+        )
 
         if self.bias is not None:
-            bias = tf.reshape(self.bias, (1, -1, 1, 1))
+            bias = tf.reshape(self.bias, (1, 1, 1, -1))
             output += bias
 
         return output

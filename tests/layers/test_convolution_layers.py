@@ -22,12 +22,12 @@ class ConvLayersTestCase(BaseTestCase):
         weight_shape = (2, 2, 1, 6)
         bias_shape = (6,)
 
-        input_layer = layers.Input((1, 5, 5))
-        conv_layer = layers.Convolution((6, 2, 2))
+        input_layer = layers.Input((5, 5, 1))
+        conv_layer = layers.Convolution((2, 2, 6))
 
         self.assertEqual(conv_layer.output_shape, None)
 
-        input_layer > conv_layer
+        layers.join(input_layer, conv_layer)
         conv_layer.initialize()
 
         self.assertEqual(weight_shape, self.get_shape(conv_layer.weight))
@@ -36,14 +36,14 @@ class ConvLayersTestCase(BaseTestCase):
     def test_conv_shapes(self):
         paddings = ['VALID', 'SAME']
         strides = [(1, 1), (2, 1), (2, 2)]
-        x = asfloat(np.random.random((20, 2, 12, 11)))
+        x = asfloat(np.random.random((20, 12, 11, 2)))
 
         for stride, padding in product(strides, paddings):
-            input_layer = layers.Input((2, 12, 11))
+            input_layer = layers.Input((12, 11, 2))
             conv_layer = layers.Convolution(
-                (5, 3, 4), padding=padding, stride=stride)
+                (3, 4, 5), padding=padding, stride=stride)
 
-            input_layer > conv_layer
+            layers.join(input_layer, conv_layer)
             conv_layer.initialize()
 
             y = self.eval(conv_layer.output(x))
@@ -64,7 +64,7 @@ class ConvLayersTestCase(BaseTestCase):
 
         for testcase in testcases:
             conv_layer = layers.Convolution(
-                (1, 2, 3), stride=testcase.stride)
+                (2, 3, 1), stride=testcase.stride)
 
             msg = "Input stride size: {}".format(testcase.stride)
             self.assertEqual(
@@ -82,12 +82,12 @@ class ConvLayersTestCase(BaseTestCase):
         for stride in invalid_strides:
             msg = "Input stride size: {}".format(stride)
             with self.assertRaises(ValueError, msg=msg):
-                layers.Convolution((1, 2, 3), stride=stride)
+                layers.Convolution((2, 3, 1), stride=stride)
 
     def test_valid_padding(self):
         valid_paddings = ('VALID', 'SAME')
         for padding in valid_paddings:
-            layers.Convolution((1, 2, 3), padding=padding)
+            layers.Convolution((2, 3,1 ), padding=padding)
 
     def test_invalid_padding(self):
         invalid_paddings = ('invalid mode', -10, (10, -5))
@@ -96,7 +96,7 @@ class ConvLayersTestCase(BaseTestCase):
             msg = "Padding: {}".format(padding)
 
             with self.assertRaises(ValueError, msg=msg):
-                layers.Convolution((1, 2, 3), padding=padding)
+                layers.Convolution((2, 3, 1), padding=padding)
 
     def test_conv_output_shape_func_exceptions(self):
         with self.assertRaises(ValueError):
@@ -156,13 +156,13 @@ class ConvLayersTestCase(BaseTestCase):
             layers.join(layers.Input(10), conv)
 
     def test_conv_with_custom_int_padding(self):
-        input_layer = layers.Input((1, 5, 5))
-        conv = layers.Convolution((1, 3, 3), bias=0, weight=1, padding=2)
+        input_layer = layers.Input((5, 5, 1))
+        conv = layers.Convolution((3, 3, 1), bias=0, weight=1, padding=2)
 
         connection = input_layer > conv
         connection.initialize()
 
-        x = asfloat(np.ones((1, 1, 5, 5)))
+        x = asfloat(np.ones((1, 5, 5, 1)))
         expected_output = np.array([
             [1, 2, 3, 3, 3, 2, 1],
             [2, 4, 6, 6, 6, 4, 2],
@@ -171,52 +171,38 @@ class ConvLayersTestCase(BaseTestCase):
             [3, 6, 9, 9, 9, 6, 3],
             [2, 4, 6, 6, 6, 4, 2],
             [1, 2, 3, 3, 3, 2, 1],
-        ]).reshape((1, 1, 7, 7))
-        actual_output = self.eval(connection.output(x))
+        ]).reshape((1, 7, 7, 1))
 
+        actual_output = self.eval(connection.output(x))
         np.testing.assert_array_almost_equal(expected_output, actual_output)
 
     def test_conv_with_custom_tuple_padding(self):
-        input_layer = layers.Input((1, 5, 5))
-        conv = layers.Convolution((1, 3, 3), bias=0, weight=1, padding=(0, 2))
+        input_layer = layers.Input((5, 5, 1))
+        conv = layers.Convolution((3, 3, 1), bias=0, weight=1, padding=(0, 2))
 
         connection = input_layer > conv
         connection.initialize()
 
-        x = asfloat(np.ones((1, 1, 5, 5)))
+        x = asfloat(np.ones((1, 5, 5, 1)))
         expected_output = np.array([
             [3, 6, 9, 9, 9, 6, 3],
             [3, 6, 9, 9, 9, 6, 3],
             [3, 6, 9, 9, 9, 6, 3],
-        ]).reshape((1, 1, 3, 7))
+        ]).reshape((1, 3, 7, 1))
         actual_output = self.eval(connection.output(x))
 
         np.testing.assert_array_almost_equal(expected_output, actual_output)
-        self.assertEqual(conv.output_shape, (1, 3, 7))
+        self.assertEqual(conv.output_shape, (3, 7, 1))
 
     def test_conv_without_bias(self):
-        input_layer = layers.Input((1, 5, 5))
-        conv = layers.Convolution((1, 3, 3), bias=None, weight=1)
+        input_layer = layers.Input((5, 5, 1))
+        conv = layers.Convolution((3, 3, 1), bias=None, weight=1)
 
         connection = input_layer > conv
         connection.initialize()
 
-        x = asfloat(np.ones((1, 1, 5, 5)))
-        expected_output = 9 * np.ones((1, 1, 3, 3))
-        actual_output = self.eval(connection.output(x))
-
-        np.testing.assert_array_almost_equal(expected_output, actual_output)
-
-    @mock.patch('neupy.utils.is_gpu_available', return_value=True)
-    def test_gpu_convolution(self, is_gpu_available):
-        input_layer = layers.Input((1, 5, 5))
-        conv = layers.Convolution((1, 3, 3), bias=None, weight=1)
-
-        connection = input_layer > conv
-        connection.initialize()
-
-        x = asfloat(np.ones((1, 1, 5, 5)))
-        expected_output = 9 * np.ones((1, 1, 3, 3))
+        x = asfloat(np.ones((1, 5, 5, 1)))
+        expected_output = 9 * np.ones((1, 3, 3, 1))
         actual_output = self.eval(connection.output(x))
 
         np.testing.assert_array_almost_equal(expected_output, actual_output)

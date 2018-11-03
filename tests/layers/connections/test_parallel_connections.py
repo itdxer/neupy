@@ -8,13 +8,13 @@ from base import BaseTestCase
 
 class TestParallelConnectionsTestCase(BaseTestCase):
     def test_parallel_layer(self):
-        input_layer = layers.Input((3, 8, 8))
+        input_layer = layers.Input((8, 8, 3))
         parallel_layer = layers.join(
             [[
-                layers.Convolution((11, 5, 5)),
+                layers.Convolution((5, 5, 11)),
             ], [
-                layers.Convolution((10, 3, 3)),
-                layers.Convolution((5, 3, 3)),
+                layers.Convolution((3, 3, 10)),
+                layers.Convolution((3, 3, 5)),
             ]],
             layers.Concatenate(),
         )
@@ -23,35 +23,35 @@ class TestParallelConnectionsTestCase(BaseTestCase):
         conn = layers.join(input_layer, parallel_layer)
         output_connection = layers.join(conn, output_layer)
 
-        x_tensor4 = asfloat(np.random.random((10, 3, 8, 8)))
+        x_tensor4 = asfloat(np.random.random((10, 8, 8, 3)))
         output = self.eval(conn.output(x_tensor4))
-        self.assertEqual(output.shape, (10, 11 + 5, 4, 4))
+        self.assertEqual(output.shape, (10, 4, 4, 11 + 5))
 
         final_output = output_connection.predict(x_tensor4)
-        self.assertEqual(final_output.shape, (10, 11 + 5, 2, 2))
+        self.assertEqual(final_output.shape, (10, 2, 2, 11 + 5))
 
     def test_parallel_with_joined_connections(self):
         # Should work without errors
         layers.join(
             [
-                layers.Convolution((11, 5, 5)) > layers.Relu(),
-                layers.Convolution((10, 3, 3)) > layers.Relu(),
+                layers.Convolution((5, 5, 11)) > layers.Relu(),
+                layers.Convolution((3, 3, 10)) > layers.Relu(),
             ],
             layers.Concatenate() > layers.Relu(),
         )
 
     def test_parallel_layer_with_residual_connections(self):
         connection = layers.join(
-            layers.Input((3, 8, 8)),
+            layers.Input((8, 8, 3)),
             [[
-                layers.Convolution((7, 1, 1)),
+                layers.Convolution((1, 1, 7)),
                 layers.Relu()
             ], [
                 # Residual connection
             ]],
             layers.Concatenate(),
         )
-        self.assertEqual(connection.output_shape, (10, 8, 8))
+        self.assertEqual(connection.output_shape, (8, 8, 10))
 
     def test_standalone_parallel_connection(self):
         connection = layers.join([

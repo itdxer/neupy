@@ -9,26 +9,26 @@ from base import BaseTestCase
 class InlineConnectionsTestCase(BaseTestCase):
     def test_inline_connection_with_parallel_connection(self):
         left_branch = layers.join(
-            layers.Convolution((32, 3, 3)),
+            layers.Convolution((3, 3, 32)),
             layers.Relu(),
             layers.MaxPooling((2, 2)),
         )
 
         right_branch = layers.join(
-            layers.Convolution((16, 7, 7)),
+            layers.Convolution((7, 7, 16)),
             layers.Relu(),
         )
 
-        input_layer = layers.Input((3, 10, 10))
+        input_layer = layers.Input((10, 10, 3))
         concat = layers.Concatenate()
 
         network_concat = input_layer > [left_branch, right_branch] > concat
         network = network_concat > layers.Reshape() > layers.Softmax()
 
-        self.assertEqual(network_concat.input_shape, (3, 10, 10))
-        self.assertEqual(network_concat.output_shape, (48, 4, 4))
+        self.assertEqual(network_concat.input_shape, (10, 10, 3))
+        self.assertEqual(network_concat.output_shape, (4, 4, 48))
 
-        self.assertEqual(network.input_shape, (3, 10, 10))
+        self.assertEqual(network.input_shape, (10, 10, 3))
         self.assertEqual(network.output_shape, (768,))
 
     def test_inline_connection_wtih_different_pointers(self):

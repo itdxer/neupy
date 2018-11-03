@@ -149,8 +149,8 @@ class PReluTestCase(BaseTestCase):
         np.testing.assert_array_almost_equal(alpha, np.ones(10) * 0.25)
 
     def test_prelu_layer_param_conv(self):
-        input_layer = layers.Input((3, 10, 10))
-        conv_layer = layers.Convolution((5, 3, 3))
+        input_layer = layers.Input((10, 10, 3))
+        conv_layer = layers.Convolution((3, 3, 5))
         prelu_layer = layers.PRelu(alpha=0.25, alpha_axes=(1, 3))
 
         input_layer > conv_layer > prelu_layer
@@ -174,8 +174,8 @@ class PReluTestCase(BaseTestCase):
     def test_prelu_output_by_spatial_input(self):
         input_data = asfloat(np.random.random((1, 3, 10, 10)))
 
-        input_layer = layers.Input((3, 10, 10))
-        conv_layer = layers.Convolution((5, 3, 3))
+        input_layer = layers.Input((10, 10, 3))
+        conv_layer = layers.Convolution((3, 3, 5))
         prelu_layer = layers.PRelu(alpha=0.25, alpha_axes=(1, 3))
 
         connection = input_layer > conv_layer > prelu_layer

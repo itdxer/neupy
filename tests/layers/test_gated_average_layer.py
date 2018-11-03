@@ -114,20 +114,20 @@ class GatedAverageTestCase(BaseTestCase):
         self.assertEqual(actual_output.shape, (20, 8))
 
     def test_gated_average_layer_multi_dimensional_inputs(self):
-        input_layer = layers.Input((1, 5, 5))
+        input_layer = layers.Input((5, 5, 1))
         network = layers.join(
             [
                 input_layer > layers.Reshape() > layers.Softmax(2),
-                input_layer > layers.Convolution((3, 2, 2)),
-                input_layer > layers.Convolution((3, 2, 2)),
+                input_layer > layers.Convolution((2, 2, 3)),
+                input_layer > layers.Convolution((2, 2, 3)),
             ],
             layers.GatedAverage()
         )
 
-        self.assertEqual(network.input_shape, (1, 5, 5))
-        self.assertEqual(network.output_shape, (3, 4, 4))
+        self.assertEqual(network.input_shape, (5, 5, 1))
+        self.assertEqual(network.output_shape, (4, 4, 3))
 
-        random_input = asfloat(np.random.random((8, 1, 5, 5)))
+        random_input = asfloat(np.random.random((8, 5, 5, 1)))
         actual_output = self.eval(network.output(random_input))
 
-        self.assertEqual(actual_output.shape, (8, 3, 4, 4))
+        self.assertEqual(actual_output.shape, (8, 4, 4, 3))

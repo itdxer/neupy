@@ -31,13 +31,13 @@ class SliceChannels(layers.BaseLayer):
         if not self.input_shape:
             return
 
-        _, height, width = self.input_shape
+        height, width, _ = self.input_shape
         n_channels = self.to_channel - self.from_channel
 
-        return (n_channels, height, width)
+        return (height, width, n_channels)
 
     def output(self, input_value):
-        return input_value[:, self.from_channel:self.to_channel, :, :]
+        return input_value[:, :, :, self.from_channel:self.to_channel]
 
     def __repr__(self):
         return "{}({}, {})".format(
@@ -64,7 +64,7 @@ def alexnet():
     >>> from neupy import architectures
     >>> alexnet = architectures.alexnet()
     >>> alexnet
-    (3, 227, 227) -> [... 37 layers ...] -> 1000
+    (227, 227, 3) -> [... 37 layers ...] -> 1000
     >>>
     >>> from neupy import algorithms
     >>> network = algorithms.Momentum(alexnet)
@@ -82,9 +82,9 @@ def alexnet():
     https://goo.gl/479oZZ
     """
     return layers.join(
-        layers.Input((3, 227, 227)),
+        layers.Input((227, 227, 3)),
 
-        layers.Convolution((96, 11, 11), stride=(4, 4), name='conv_1'),
+        layers.Convolution((11, 11, 96), stride=(4, 4), name='conv_1'),
         layers.Relu(),
 
         layers.MaxPooling((3, 3), stride=(2, 2)),
@@ -92,11 +92,11 @@ def alexnet():
 
         [[
             SliceChannels(0, 48),
-            layers.Convolution((128, 5, 5), padding='VALID', name='conv_2_1'),
+            layers.Convolution((5, 5, 128), padding='VALID', name='conv_2_1'),
             layers.Relu(),
         ], [
             SliceChannels(48, 96),
-            layers.Convolution((128, 5, 5), padding='VALID', name='conv_2_2'),
+            layers.Convolution((5, 5, 128), padding='VALID', name='conv_2_2'),
             layers.Relu(),
         ]],
         layers.Concatenate(),
@@ -104,31 +104,30 @@ def alexnet():
         layers.MaxPooling((3, 3), stride=(2, 2)),
         layers.LocalResponseNorm(),
 
-        layers.Convolution((384, 3, 3), padding='VALID', name='conv_3'),
+        layers.Convolution((3, 3, 384), padding='VALID', name='conv_3'),
         layers.Relu(),
 
         [[
             SliceChannels(0, 192),
-            layers.Convolution((192, 3, 3), padding='VALID', name='conv_4_1'),
+            layers.Convolution((3, 3, 192), padding='VALID', name='conv_4_1'),
             layers.Relu(),
         ], [
             SliceChannels(192, 384),
-            layers.Convolution((192, 3, 3), padding='VALID', name='conv_4_2'),
+            layers.Convolution((3, 3, 192), padding='VALID', name='conv_4_2'),
             layers.Relu(),
         ]],
         layers.Concatenate(),
 
         [[
             SliceChannels(0, 192),
-            layers.Convolution((128, 3, 3), padding='VALID', name='conv_5_1'),
+            layers.Convolution((3, 3, 128), padding='VALID', name='conv_5_1'),
             layers.Relu(),
         ], [
             SliceChannels(192, 384),
-            layers.Convolution((128, 3, 3), padding='VALID', name='conv_5_2'),
+            layers.Convolution((3, 3, 128), padding='VALID', name='conv_5_2'),
             layers.Relu(),
         ]],
         layers.Concatenate(),
-
         layers.MaxPooling((3, 3), stride=(2, 2)),
 
         layers.Reshape(),

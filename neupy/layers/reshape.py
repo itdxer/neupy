@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 
 from neupy.utils import as_tuple
-from neupy.exceptions import InvalidConnection
+from neupy.exceptions import LayerConnectionError
 from neupy.core.properties import TypedListProperty, Property, IntProperty
 from .base import BaseLayer
 
@@ -145,7 +145,7 @@ class Transpose(BaseLayer):
 
     def validate(self, input_shape):
         if len(input_shape) < 2:
-            raise InvalidConnection(
+            raise LayerConnectionError(
                 "Transpose expects input with at least 3 dimensions.")
 
     @property

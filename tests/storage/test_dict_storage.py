@@ -11,6 +11,8 @@ from base import BaseTestCase
 
 
 class DictStorageTestCase(BaseTestCase):
+    maxDiff = 10000
+
     def test_storage_save_dict(self):
         connection = layers.join(
             [[
@@ -72,7 +74,7 @@ class DictStorageTestCase(BaseTestCase):
             'output_shape': (1,)
         }, {
             'class_name': 'Concatenate',
-            'configs': {'axis': 1, 'name': 'concatenate'},
+            'configs': {'axis': -1, 'name': 'concatenate'},
             'input_shape': [(1,), (4,)],
             'name': 'concatenate',
             'output_shape': (5,)

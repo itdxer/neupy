@@ -24,7 +24,7 @@ def vgg16():
     >>> from neupy import architectures
     >>> vgg16 = architectures.vgg16()
     >>> vgg16
-    (3, 224, 224) -> [... 38 layers ...] -> 1000
+    (224, 224, 3) -> [... 38 layers ...] -> 1000
     >>>
     >>> from neupy import algorithms
     >>> network = algorithms.Momentum(vgg16, verbose=True)
@@ -44,29 +44,29 @@ def vgg16():
     HalfPadConvolution = partial(layers.Convolution, padding='SAME')
 
     return layers.join(
-        layers.Input((3, 224, 224)),
+        layers.Input((224, 224, 3)),
 
-        HalfPadConvolution((64, 3, 3), name='conv1_1') > layers.Relu(),
-        HalfPadConvolution((64, 3, 3), name='conv1_2') > layers.Relu(),
+        HalfPadConvolution((3, 3, 64), name='conv1_1') > layers.Relu(),
+        HalfPadConvolution((3, 3, 64), name='conv1_2') > layers.Relu(),
         layers.MaxPooling((2, 2)),
 
-        HalfPadConvolution((128, 3, 3), name='conv2_1') > layers.Relu(),
-        HalfPadConvolution((128, 3, 3), name='conv2_2') > layers.Relu(),
+        HalfPadConvolution((3, 3, 128), name='conv2_1') > layers.Relu(),
+        HalfPadConvolution((3, 3, 128), name='conv2_2') > layers.Relu(),
         layers.MaxPooling((2, 2)),
 
-        HalfPadConvolution((256, 3, 3), name='conv3_1') > layers.Relu(),
-        HalfPadConvolution((256, 3, 3), name='conv3_2') > layers.Relu(),
-        HalfPadConvolution((256, 3, 3), name='conv3_3') > layers.Relu(),
+        HalfPadConvolution((3, 3, 256), name='conv3_1') > layers.Relu(),
+        HalfPadConvolution((3, 3, 256), name='conv3_2') > layers.Relu(),
+        HalfPadConvolution((3, 3, 256), name='conv3_3') > layers.Relu(),
         layers.MaxPooling((2, 2)),
 
-        HalfPadConvolution((512, 3, 3), name='conv4_1') > layers.Relu(),
-        HalfPadConvolution((512, 3, 3), name='conv4_2') > layers.Relu(),
-        HalfPadConvolution((512, 3, 3), name='conv4_3') > layers.Relu(),
+        HalfPadConvolution((3, 3, 512), name='conv4_1') > layers.Relu(),
+        HalfPadConvolution((3, 3, 512), name='conv4_2') > layers.Relu(),
+        HalfPadConvolution((3, 3, 512), name='conv4_3') > layers.Relu(),
         layers.MaxPooling((2, 2)),
 
-        HalfPadConvolution((512, 3, 3), name='conv5_1') > layers.Relu(),
-        HalfPadConvolution((512, 3, 3), name='conv5_2') > layers.Relu(),
-        HalfPadConvolution((512, 3, 3), name='conv5_3') > layers.Relu(),
+        HalfPadConvolution((3, 3, 512), name='conv5_1') > layers.Relu(),
+        HalfPadConvolution((3, 3, 512), name='conv5_2') > layers.Relu(),
+        HalfPadConvolution((3, 3, 512), name='conv5_3') > layers.Relu(),
         layers.MaxPooling((2, 2)),
 
         layers.Reshape(),

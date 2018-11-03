@@ -48,10 +48,10 @@ class PoolingLayersTestCase(BaseTestCase):
         self.assertEqual(max_pool_layer.output_shape, None)
 
     def test_pooling_defined_output_shape(self):
-        input_layer = layers.Input((3, 10, 10))
+        input_layer = layers.Input((10, 10, 3))
         max_pool_layer = layers.MaxPooling((2, 2))
-        input_layer > max_pool_layer
-        self.assertEqual(max_pool_layer.output_shape, (3, 5, 5))
+        layers.join(input_layer, max_pool_layer)
+        self.assertEqual(max_pool_layer.output_shape, (5, 5, 3))
 
     def test_pooling_stride_int(self):
         max_pool_layer = layers.MaxPooling((2, 2), stride=1)
@@ -82,28 +82,11 @@ class PoolingLayersTestCase(BaseTestCase):
             [4, -6, 3, 1],
             [0, 0, 1, 0],
             [0, -1, 0, 0],
-        ])).reshape(1, 1, 4, 4)
+        ])).reshape(1, 4, 4, 1)
         expected_output = asfloat(np.array([
             [4, 3],
             [0, 1],
-        ])).reshape(1, 1, 2, 2)
-
-        max_pool_layer = layers.MaxPooling((2, 2))
-        actual_output = self.eval(max_pool_layer.output(input_data))
-        np.testing.assert_array_almost_equal(actual_output, expected_output)
-
-    @mock.patch('neupy.utils.is_gpu_available', return_value=True)
-    def test_gpu_max_pooling(self, is_gpu_available):
-        input_data = asfloat(np.array([
-            [1, 2, 3, -1],
-            [4, -6, 3, 1],
-            [0, 0, 1, 0],
-            [0, -1, 0, 0],
-        ])).reshape(1, 1, 4, 4)
-        expected_output = asfloat(np.array([
-            [4, 3],
-            [0, 1],
-        ])).reshape(1, 1, 2, 2)
+        ])).reshape(1, 2, 2, 1)
 
         max_pool_layer = layers.MaxPooling((2, 2))
         actual_output = self.eval(max_pool_layer.output(input_data))
@@ -115,11 +98,11 @@ class PoolingLayersTestCase(BaseTestCase):
             [4, -6, 3, 1],
             [0, 0, 1, 0],
             [0, -1, 0, 0],
-        ])).reshape(1, 1, 4, 4)
+        ])).reshape(1, 4, 4, 1)
         expected_output = asfloat(np.array([
             [1 / 4., 6 / 4.],
             [-1 / 4., 1 / 4.],
-        ])).reshape(1, 1, 2, 2)
+        ])).reshape(1, 2, 2, 1)
 
         average_pool_layer = layers.AveragePooling((2, 2))
         actual_output = self.eval(average_pool_layer.output(input_data))
@@ -139,25 +122,19 @@ class UpscaleLayersTestCase(BaseTestCase):
             with self.assertRaises(ValueError):
                 layers.Upscale(invalid_scale)
 
-    def test_upscale_layer_with_one_by_one_scale(self):
-        upscale_layer = layers.Upscale((1, 1))
-
-        x = np.ones((2, 3))
-        self.assertIs(x, upscale_layer.output(x))
-
     def test_upscale_layer_shape(self):
         Case = namedtuple("Case", "scale expected_shape")
         testcases = (
-            Case(scale=(2, 2), expected_shape=(1, 28, 28)),
-            Case(scale=(2, 1), expected_shape=(1, 28, 14)),
-            Case(scale=(1, 2), expected_shape=(1, 14, 28)),
-            Case(scale=(1, 1), expected_shape=(1, 14, 14)),
-            Case(scale=(1, 10), expected_shape=(1, 14, 140)),
+            Case(scale=(2, 2), expected_shape=(28, 28, 1)),
+            Case(scale=(2, 1), expected_shape=(28, 14, 1)),
+            Case(scale=(1, 2), expected_shape=(14, 28, 1)),
+            Case(scale=(1, 1), expected_shape=(14, 14, 1)),
+            Case(scale=(1, 10), expected_shape=(14, 140, 1)),
         )
 
         for testcase in testcases:
             upscale_layer = layers.Upscale(testcase.scale)
-            layers.Input((1, 14, 14)) > upscale_layer
+            layers.Input((14, 14, 1)) > upscale_layer
 
             self.assertEqual(upscale_layer.output_shape,
                              testcase.expected_shape,
@@ -167,7 +144,7 @@ class UpscaleLayersTestCase(BaseTestCase):
         input_value = np.array([
             [1, 2, 3, 4],
             [5, 6, 7, 8],
-        ]).reshape((1, 1, 2, 4))
+        ]).reshape((1, 2, 4, 1))
         expected_output = np.array([
             [1, 1, 2, 2, 3, 3, 4, 4],
             [1, 1, 2, 2, 3, 3, 4, 4],
@@ -175,12 +152,12 @@ class UpscaleLayersTestCase(BaseTestCase):
             [5, 5, 6, 6, 7, 7, 8, 8],
             [5, 5, 6, 6, 7, 7, 8, 8],
             [5, 5, 6, 6, 7, 7, 8, 8],
-        ]).reshape((1, 1, 6, 8))
+        ]).reshape((1, 6, 8, 1))
 
         upscale_layer = layers.Upscale((3, 2))
         self.assertEqual(upscale_layer.output_shape, None)
 
-        layers.Input((1, 2, 4)) > upscale_layer
+        layers.Input((2, 4, 1)) > upscale_layer
 
         actual_output = self.eval(upscale_layer.output(asfloat(input_value)))
         np.testing.assert_array_almost_equal(
@@ -191,7 +168,7 @@ class UpscaleLayersTestCase(BaseTestCase):
 
 class GlobalPoolingLayersTestCase(BaseTestCase):
     def test_global_pooling_output_shape(self):
-        input_layer = layers.Input((3, 8, 8))
+        input_layer = layers.Input((8, 8, 3))
         global_pooling_layer = layers.GlobalPooling()
         self.assertEqual(global_pooling_layer.output_shape, None)
 
@@ -199,7 +176,7 @@ class GlobalPoolingLayersTestCase(BaseTestCase):
         self.assertEqual(global_pooling_layer.output_shape, (3,))
 
     def test_global_pooling(self):
-        x = asfloat(np.ones((2, 3, 4, 5)))
+        x = asfloat(np.ones((2, 4, 5, 3)))
         expected_outputs = np.ones((2, 3))
 
         global_mena_pooling_layer = layers.GlobalPooling()
@@ -209,7 +186,7 @@ class GlobalPoolingLayersTestCase(BaseTestCase):
         np.testing.assert_array_equal(expected_outputs, actual_output)
 
     def test_global_pooling_other_function(self):
-        x = asfloat(np.ones((2, 3, 4, 5)))
+        x = asfloat(np.ones((2, 4, 5, 3)))
         expected_outputs = 20 * np.ones((2, 3))
 
         global_sum_pooling_layer = layers.GlobalPooling(function=tf.reduce_sum)

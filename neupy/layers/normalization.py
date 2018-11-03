@@ -59,7 +59,7 @@ class BatchNorm(BaseLayer):
         The axis or axes along which normalization is applied.
         ``None`` means that normalization will be applied over
         all axes except the first one. In case of 4D tensor it will
-        be equal to ``(0, 2, 3)``. Defaults to ``None``.
+        be equal to ``(0, 1, 2)``. Defaults to ``None``.
 
     epsilon : float
         Epsilon is a positive constant that adds to the standard
@@ -125,9 +125,9 @@ class BatchNorm(BaseLayer):
         ndim = len(input_shape)
 
         if self.axes is None:
-            # If ndim == 4 then axes = (0, 2, 3)
+            # If ndim == 4 then axes = (0, 1, 2)
             # If ndim == 2 then axes = (0,)
-            self.axes = tuple(axis for axis in range(ndim) if axis != 1)
+            self.axes = tuple(range(ndim - 1))
 
         if any(axis >= ndim for axis in self.axes):
             raise ValueError("Cannot apply batch normalization on the axis "

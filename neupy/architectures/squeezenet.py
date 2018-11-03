@@ -11,21 +11,21 @@ __all__ = ('squeezenet',)
 def Fire(s_1x1, e_1x1, e_3x3, name):
     return layers.join(
         layers.Convolution(
-            (s_1x1, 1, 1),
+            (1, 1, s_1x1),
             padding='SAME',
             name=name + '/squeeze1x1'
         ),
         layers.Relu(),
         [[
             layers.Convolution(
-                (e_1x1, 1, 1),
+                (1, 1, e_1x1),
                 padding='SAME',
                 name=name + '/expand1x1'
             ),
             layers.Relu(),
         ], [
             layers.Convolution(
-                (e_3x3, 3, 3),
+                (3, 3, e_3x3),
                 padding='SAME',
                 name=name + '/expand3x3'
             ),
@@ -49,7 +49,7 @@ def squeezenet():
     >>> from neupy import architectures
     >>> squeezenet = architectures.squeezenet()
     >>> squeezenet
-    (3, 227, 227) -> [... 67 layers ...] -> 1000
+    (227, 227, 3) -> [... 67 layers ...] -> 1000
     >>>
     >>> from neupy import algorithms
     >>> network = algorithms.Momentum(squeezenet)
@@ -68,9 +68,9 @@ def squeezenet():
     https://arxiv.org/abs/1602.07360
     """
     return layers.join(
-        layers.Input((3, 227, 227)),
+        layers.Input((227, 227, 3)),
 
-        layers.Convolution((96, 3, 3), stride=(2, 2),
+        layers.Convolution((3, 3, 96), stride=(2, 2),
                            padding='VALID', name='conv1'),
         layers.Relu(),
         layers.MaxPooling((3, 3), stride=(2, 2)),
@@ -89,7 +89,7 @@ def squeezenet():
         Fire(64, 256, 256, name='fire9'),
         layers.Dropout(0.5),
 
-        layers.Convolution((1000, 1, 1), padding='VALID', name='conv10'),
+        layers.Convolution((1, 1, 1000), padding='VALID', name='conv10'),
         layers.GlobalPooling(function=tf.reduce_mean),
         layers.Reshape(),
         layers.Softmax(),

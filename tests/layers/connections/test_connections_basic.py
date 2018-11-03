@@ -42,10 +42,10 @@ class ConnectionsTestCase(BaseTestCase):
 
     def test_connection_inside_connection_conv(self):
         connection = layers.join(
-            layers.Input((1, 28, 28)),
+            layers.Input((28, 28, 1)),
 
-            layers.Convolution((8, 3, 3)) > layers.Relu(),
-            layers.Convolution((8, 3, 3)) > layers.Relu(),
+            layers.Convolution((3, 3, 8)) > layers.Relu(),
+            layers.Convolution((3, 3, 8)) > layers.Relu(),
             layers.MaxPooling((2, 2)),
 
             layers.Reshape(),

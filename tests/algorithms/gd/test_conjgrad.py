@@ -150,7 +150,7 @@ class ConjugateGradientTestCase(BaseTestCase):
                 update_function='polak_ribiere',
                 verbose=False,
             ),
-            epochs=800,
+            epochs=1200,
         )
 
     def test_conjugate_gradient_liu_storey_overfit(self):
@@ -160,7 +160,7 @@ class ConjugateGradientTestCase(BaseTestCase):
                 update_function='liu_storey',
                 verbose=False,
             ),
-            epochs=800,
+            epochs=1200,
         )
 
     def test_conjgrad_assign_step_exception(self):
