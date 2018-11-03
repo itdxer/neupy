@@ -27,7 +27,7 @@ class ReshapeLayerTestCase(BaseTestCase):
 
         y = self.eval(reshape_layer.output(x))
         self.assertEqual(y.shape, (5, 4, 5))
-        self.assertEqual(reshape_layer.shape, (4, 5))
+        self.assertEqual(reshape_layer.output_shape, (4, 5))
 
     def test_reshape_unknown_shape(self):
         conn = layers.join(
