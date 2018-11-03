@@ -16,7 +16,7 @@ def load_data():
     target = target_scaler.fit_transform(target).todense()
 
     n_samples = data.shape[0]
-    data = data.reshape((n_samples, 1, 28, 28))
+    data = data.reshape((n_samples, 28, 28, 1))
 
     x_train, x_test, y_train, y_test = model_selection.train_test_split(
         data.astype(np.float32),
@@ -24,8 +24,8 @@ def load_data():
         test_size=(1 / 7.)
     )
 
-    mean = x_train.mean(axis=(0, 2, 3))
-    std = x_train.std(axis=(0, 2, 3))
+    mean = x_train.mean(axis=(0, 1, 2))
+    std = x_train.std(axis=(0, 1, 2))
 
     x_train -= mean
     x_train /= std
@@ -37,13 +37,13 @@ def load_data():
 
 network = algorithms.Momentum(
     [
-        layers.Input((1, 28, 28)),
+        layers.Input((28, 28, 1)),
 
-        layers.Convolution((32, 3, 3)) > layers.BatchNorm() > layers.Relu(),
-        layers.Convolution((48, 3, 3)) > layers.BatchNorm() > layers.Relu(),
+        layers.Convolution((3, 3, 32)) > layers.BatchNorm() > layers.Relu(),
+        layers.Convolution((3, 3, 48)) > layers.BatchNorm() > layers.Relu(),
         layers.MaxPooling((2, 2)),
 
-        layers.Convolution((64, 3, 3)) > layers.BatchNorm() > layers.Relu(),
+        layers.Convolution((3, 3, 64)) > layers.BatchNorm() > layers.Relu(),
         layers.MaxPooling((2, 2)),
 
         layers.Reshape(),

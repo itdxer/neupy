@@ -11,8 +11,8 @@ from load_cifar10 import read_cifar10
 def process_cifar10_data(x_train, x_test):
     x_train, x_test = asfloat(x_train), asfloat(x_test)
 
-    mean = x_train.mean(axis=(0, 2, 3)).reshape((1, -1, 1, 1))
-    std = x_train.std(axis=(0, 2, 3)).reshape((1, -1, 1, 1))
+    mean = x_train.mean(axis=(0, 1, 2)).reshape((1, 1, 1, -1))
+    std = x_train.std(axis=(0, 1, 2)).reshape((1, 1, 1, -1))
 
     x_train -= mean
     x_train /= std

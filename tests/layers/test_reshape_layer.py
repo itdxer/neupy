@@ -1,6 +1,7 @@
 import numpy as np
 
 from neupy import layers
+from neupy.utils import asfloat
 from neupy.exceptions import LayerConnectionError
 
 from base import BaseTestCase
@@ -26,6 +27,7 @@ class ReshapeLayerTestCase(BaseTestCase):
 
         y = self.eval(reshape_layer.output(x))
         self.assertEqual(y.shape, (5, 4, 5))
+        self.assertEqual(reshape_layer.shape, (4, 5))
 
     def test_reshape_unknown_shape(self):
         conn = layers.join(
@@ -85,6 +87,14 @@ class TransposeTestCase(BaseTestCase):
             layers.Transpose([2, 1, 3]),
         )
         self.assertEqual(conn.output_shape, (10, None, 20))
+
+        value = asfloat(np.random.random((12, 100, 10, 20)))
+        output_value = self.eval(conn.output(value))
+        self.assertEqual(output_value.shape, (12, 10, 100, 20))
+
+        value = asfloat(np.random.random((12, 33, 10, 20)))
+        output_value = self.eval(conn.output(value))
+        self.assertEqual(output_value.shape, (12, 10, 33, 20))
 
     def test_transpose_exceptions(self):
         with self.assertRaisesRegexp(ValueError, "cannot be used"):

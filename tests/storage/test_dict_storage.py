@@ -68,7 +68,7 @@ class DictStorageTestCase(BaseTestCase):
             'output_shape': (2,)
         }, {
             'class_name': 'PRelu',
-            'configs': {'alpha_axes': (1,), 'name': 'prelu', 'size': 1},
+            'configs': {'alpha_axes': (-1,), 'name': 'prelu', 'size': 1},
             'input_shape': (2,),
             'name': 'prelu',
             'output_shape': (1,)

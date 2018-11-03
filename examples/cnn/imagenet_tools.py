@@ -69,12 +69,8 @@ def read_image(image_name, image_size=None, crop_size=None):
 
         image = image[height_slice, width_slice, :]
 
-    # (height, width, channel) -> (channel, height, width)
-    image = image.transpose((2, 0, 1))
-
-    # (channel, height, width) -> (1, channel, height, width)
+    # (height, width, channel) -> (1, height, width, channel)
     image = np.expand_dims(image, axis=0)
-
     return asfloat(image)
 
 
@@ -82,20 +78,19 @@ def load_image(image_name, image_size=None, crop_size=None, use_bgr=True):
     image = read_image(image_name, image_size, crop_size)
 
     # Per channell normalization
-    image[:, 0, :, :] -= 124
-    image[:, 1, :, :] -= 117
-    image[:, 2, :, :] -= 104
+    image[:, :, :, 0] -= 124
+    image[:, :, :, 1] -= 117
+    image[:, :, :, 2] -= 104
 
     if use_bgr:
         # RGB -> BGR
-        image[:, (0, 1, 2), :, :] = image[:, (2, 1, 0), :, :]
+        image[:, :, :, (0, 1, 2)] = image[:, :, :, (2, 1, 0)]
 
     return image
 
 
 def deprocess(image):
     image = image.copy()
-    image = image.transpose((1, 2, 0))
 
     # BGR -> RGB
     image[:, :, (0, 1, 2)] = image[:, :, (2, 1, 0)]

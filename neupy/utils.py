@@ -8,10 +8,9 @@ from tensorflow.python.client import device_lib
 
 
 __all__ = ('format_data', 'asfloat', 'AttributeKeyDict', 'preformat_value',
-           'as_tuple', 'number_type', 'is_gpu_available', 'all_equal',
+           'as_tuple', 'number_type', 'all_equal', 'class_method_name_scope',
            'tensorflow_session', 'tensorflow_eval', 'tf_repeat',
-           'initialize_uninitialized_variables', 'function_name_scope',
-           'class_method_name_scope')
+           'initialize_uninitialized_variables', 'function_name_scope')
 
 
 number_type = (int, float, np.floating, np.integer)
@@ -327,16 +326,3 @@ def tf_repeat(tensor, repeats):
         multiples = as_tuple(1, repeats)
         tiled_tensor = tf.tile(expanded_tensor, multiples)
         return tf.reshape(tiled_tensor, tf.shape(tensor) * repeats)
-
-
-def is_gpu_available():
-    """
-    Checks if the GPU device available.
-
-    Returns
-    -------
-    bool
-        ``True`` in case if machine has available GPU and ``False`` otherwise.
-    """
-    devices = device_lib.list_local_devices()
-    return any(device.device_type == 'GPU' for device in devices)
