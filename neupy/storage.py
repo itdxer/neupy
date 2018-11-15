@@ -566,58 +566,6 @@ def convert_numpy_array_to_list_recursively(data):
                     convert_numpy_array_to_list_recursively(entity)
 
 
-def dump_with_fastest_json_module(data, f, indent=None):
-    """
-    Data will be dumped using `ujson` module in case if it installed,
-    otherwise Python's built-in `json` module will be used.
-
-    Parameters
-    ----------
-    data : dict
-
-    f : file object
-        Opened file that available for writing
-
-    indent : int or None
-        JSON indentation.
-    """
-    # Without extra data processor we won't be able to dump
-    # numpy array into json without raising an error.
-    # `json` will have issues with numpy array encoding
-    # `ujson` will have issue with numpy float or int encoding
-    convert_numpy_array_to_list_recursively(data)
-
-    if pkgutil.find_loader('ujson'):
-        ujson = importlib.import_module('ujson')
-
-        if indent is None:
-            # Indentation functionality behaves differently compare
-            # to the one that Pytnon has in built-in json module.
-            #
-            # Note: indent=0 will give different output
-            # for ujson and json
-            indent = 0
-
-        return ujson.dump(data, f, indent=indent)
-    return json.dump(data, f, indent=indent, default=repr)
-
-
-def load_with_fastest_json_module(f):
-    """
-    Data will be loaded using `ujson` module in case if it installed,
-    otherwise Python's built-in `json` module will be used.
-
-    Parameters
-    ----------
-    f : file object
-        Opened file that available for reading
-    """
-    if pkgutil.find_loader('ujson'):
-        ujson = importlib.import_module('ujson')
-        return ujson.load(f)
-    return json.load(f)
-
-
 @shared_docs(save_dict)
 def save_json(connection, filepath, indent=None):
     """
@@ -636,11 +584,6 @@ def save_json(connection, filepath, indent=None):
         text files. The `None` value disables indentation which means
         that everything will be stored compactly. Defaults to `None`.
 
-    Notes
-    -----
-    Install `ujson` library in order to speed up saving and
-    loading procedure.
-
     Examples
     --------
     >>> from neupy import layers, storage
@@ -652,7 +595,11 @@ def save_json(connection, filepath, indent=None):
     data = save_dict(connection)
 
     with open(filepath, 'w') as f:
-        dump_with_fastest_json_module(data, f)
+        # Without extra data processor we won't be able to dump
+        # numpy array into json without raising an error.
+        # `json` will have issues with numpy array encoding
+        convert_numpy_array_to_list_recursively(data)
+        return json.dump(data, f, indent=indent, default=repr)
 
 
 @shared_docs(load_dict)
@@ -676,11 +623,6 @@ def load_json(connection, filepath, ignore_missed=False,
     ------
     {load_dict.Raises}
 
-    Notes
-    -----
-    Install `ujson` library in order to speed up saving and
-    loading procedure.
-
     Examples
     --------
     >>> from neupy import layers, storage
@@ -692,7 +634,7 @@ def load_json(connection, filepath, ignore_missed=False,
     data = save_dict(connection)
 
     with open(filepath, 'r') as f:
-        data = load_with_fastest_json_module(f)
+        data = json.load(f)
 
     load_dict(connection, data, ignore_missed, load_by)
 

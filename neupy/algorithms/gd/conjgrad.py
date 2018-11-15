@@ -66,8 +66,8 @@ class ConjugateGradient(WolfeLineSearchForStep, GradientDescent):
 
     Parameters
     ----------
-    update_function : {{``fletcher_reeves``, ``polak_ribiere``,\
-    ``hentenes_stiefel``, ``dai_yuan``, ``liu_storey``}}
+    update_function : ``fletcher_reeves``, ``polak_ribiere``,\
+    ``hentenes_stiefel``, ``dai_yuan``, ``liu_storey``
         Update function. Defaults to ``fletcher_reeves``.
 
     epsilon : float

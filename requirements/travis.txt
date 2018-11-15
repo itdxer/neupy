@@ -19,4 +19,3 @@ mock==2.0.0
 
 # Storage module
 h5py==2.8.0
-ujson==1.35

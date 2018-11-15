@@ -21,6 +21,7 @@ Initialization process is slightly different for networks with fixed and constru
 Notice, that we explicitly specified argument names during initialization. NeuPy doesn't have defined order for the arguments and it will raise exception when there is no names associated with each argument.
 
 .. code-block:: python
+
     # Invalid initialization, because every additional
     # argument require to have name specified explicitly
     sofm = algorithms.SOFM(2, 4)

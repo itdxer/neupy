@@ -182,7 +182,7 @@ class QuasiNewton(WolfeLineSearchForStep, GradientDescent):
 
     Parameters
     ----------
-    update_function : {{``bfgs``, ``dfp``, ``sr1``}}
+    update_function : ``bfgs``, ``dfp``, ``sr1``
         Update function for the iterative inverse hessian matrix
         approximation. Defaults to ``bfgs``.
 

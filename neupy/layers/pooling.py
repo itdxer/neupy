@@ -1,3 +1,5 @@
+from __future__ import division
+
 import math
 
 import tensorflow as tf
@@ -112,7 +114,9 @@ class BasePooling(BaseLayer):
         output_cols = pooling_output_shape(
             cols, col_filter_size, self.padding, col_stride)
 
-        return (output_rows, output_cols, n_kernels)
+        # In python 2, we can get float number after rounding procedure
+        # and it might break processing in the subsequent layers.
+        return (int(output_rows), int(output_cols), n_kernels)
 
     def output(self, input_value):
         return tf.nn.pool(

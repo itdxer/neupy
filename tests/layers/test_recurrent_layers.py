@@ -44,7 +44,7 @@ class GradientClippingTestCase(BaseTestCase):
 
 class LSTMTestCase(BaseTestCase):
     single_thread = True
-    random_seed = 33
+    random_seed = 44
 
     def setUp(self):
         super(LSTMTestCase, self).setUp()
@@ -60,7 +60,7 @@ class LSTMTestCase(BaseTestCase):
         self.n_categories = len(reber.avaliable_letters) + 1
         self.n_time_steps = self.data[0].shape[1]
 
-    def train_lstm(self, data, **lstm_options):
+    def train_lstm(self, data, verbose=False, **lstm_options):
         x_train, x_test, y_train, y_test = data
         network = algorithms.RMSProp(
             [
@@ -71,7 +71,7 @@ class LSTMTestCase(BaseTestCase):
             ],
 
             step=0.01,
-            verbose=False,
+            verbose=verbose,
             batch_size=16,
             error='binary_crossentropy',
         )

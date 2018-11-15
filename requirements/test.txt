@@ -1,4 +1,4 @@
-scikit-learn>=0.18.0
+scikit-learn==0.20.0
 pandas==0.16.0
 Pillow==3.0.0
 
@@ -14,4 +14,3 @@ pytest-xdist==1.22.5
 # Storage module
 dill==0.2.3
 h5py==2.8.0
-ujson==1.35

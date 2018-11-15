@@ -1,3 +1,5 @@
+from __future__ import division
+
 import math
 import collections
 
@@ -235,7 +237,9 @@ class Convolution(ParameterBasedLayer):
         output_cols = conv_output_shape(
             cols, col_filter_size, col_padding, col_stride)
 
-        return (output_rows, output_cols, n_kernels)
+        # In python 2, we can get float number after rounding procedure
+        # and it might break processing in the subsequent layers.
+        return (int(output_rows), int(output_cols), n_kernels)
 
     @property
     def weight_shape(self):
