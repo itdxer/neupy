@@ -261,10 +261,6 @@ class QuasiNewton(WolfeLineSearchForStep, GradientDescent):
 
     [2] Jorge Nocedal, Stephen J. Wright, Numerical Optimization.
         Chapter 6, Quasi-Newton Methods, p. 135-163
-
-    See Also
-    --------
-    :network:`GradientDescent` : GradientDescent algorithm.
     """
     update_function = ChoiceProperty(
         default='bfgs',
