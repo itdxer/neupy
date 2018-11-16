@@ -1,10 +1,9 @@
 nltk==3.1
-scikit-learn==0.17
+scikit-learn==0.20.0
 pandas==0.16.0
 
 # Neural networks
 gensim==0.12.4
-neupy==0.2.0b
 
 # For the neural network model storage
 dill==0.2.3

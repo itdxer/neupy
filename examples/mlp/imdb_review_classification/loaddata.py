@@ -15,7 +15,7 @@ logger = create_logger(__name__)
 
 ARCHIVE_URL = ('http://ai.stanford.edu/~amaas/data/'
                'sentiment/aclImdb_v1.tar.gz')
-EXTRACTED_DIRECTORY = os.path.join(PROJECT_DIR, 'aclImdb')
+EXTRACTED_DIRECTORY = os.path.join(DATA_DIR, 'aclImdb')
 REVIEW_DATA_PATH = os.path.join(DATA_DIR, 'reviews')
 
 
@@ -50,10 +50,7 @@ if __name__ == '__main__':
         logger.info("Extracting files from the archive")
 
         with tarfile.open(path_to_archive) as tar_archive_file:
-            tar_archive_file.extractall()
-
-        if not os.path.exists(EXTRACTED_DIRECTORY):
-            raise OSError("Something went wrong")
+            tar_archive_file.extractall(path=DATA_DIR)
 
         shutil.move(EXTRACTED_DIRECTORY, REVIEW_DATA_PATH)
     else:
