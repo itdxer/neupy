@@ -1,7 +1,9 @@
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 from sklearn import model_selection, metrics, datasets
-from neupy import algorithms, layers, environment
+
+from neupy.layers import *
+from neupy import algorithms, environment
 
 
 environment.reproducible()
@@ -37,18 +39,18 @@ def load_data():
 
 network = algorithms.Momentum(
     [
-        layers.Input((28, 28, 1)),
+        Input((28, 28, 1)),
 
-        layers.Convolution((3, 3, 32)) > layers.BatchNorm() > layers.Relu(),
-        layers.Convolution((3, 3, 48)) > layers.BatchNorm() > layers.Relu(),
-        layers.MaxPooling((2, 2)),
+        Convolution((3, 3, 32)) > BatchNorm() > Relu(),
+        Convolution((3, 3, 48)) > BatchNorm() > Relu(),
+        MaxPooling((2, 2)),
 
-        layers.Convolution((3, 3, 64)) > layers.BatchNorm() > layers.Relu(),
-        layers.MaxPooling((2, 2)),
+        Convolution((3, 3, 64)) > BatchNorm() > Relu(),
+        MaxPooling((2, 2)),
 
-        layers.Reshape(),
-        layers.Linear(1024) > layers.BatchNorm() > layers.Relu(),
-        layers.Softmax(10),
+        Reshape(),
+        Linear(1024) > BatchNorm() > Relu(),
+        Softmax(10),
     ],
 
     # Using categorical cross-entropy as a loss function.
@@ -58,8 +60,7 @@ network = algorithms.Momentum(
     # Min-batch size
     batch_size=128,
 
-    # Learning rate. We can allow high values
-    # since we are using Batch Normalization
+    # Learning rate
     step=0.01,
 
     # Shows information about algorithm and

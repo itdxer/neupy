@@ -25,7 +25,7 @@ description = ('NeuPy is a Python library for Artificial Neural Networks. '
 author = 'Yurii Shevchuk'
 
 # Change this to your copyright string
-copyright = '2015 - 2017, ' + author
+copyright = '2015 - 2019, ' + author
 
 # Change this to your blog root URL (required for RSS feed)
 website = 'http://neupy.com'
@@ -99,9 +99,9 @@ exclude_patterns = ['drafts/*', '_templates/*']
 # Add templates to be rendered in sidebar here
 html_sidebars = {
     '**': [
-        'recent.html',
-        'installation.html',
+        # 'recent.html',
         'searchbox.html',
+        'installation.html',
         'issues.html',
         'old-versions.html',
     ],

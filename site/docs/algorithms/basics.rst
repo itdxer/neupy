@@ -11,7 +11,7 @@ As the name suggests, constructible architectures can be build using layers as b
 Initialization
 --------------
 
-Initialization process is slightly different for networks with fixed and constructible architectures. It's simpler for networks with fixed architectures, because they have predefined structure and we need just to specify algorithm-specific parameters.
+Initialization process is slightly different for networks with fixed and constructible architectures. Networks with fixed architecture have predefined structure and we need just to specify algorithm-specific parameters.
 
 .. code-block:: python
 
@@ -66,7 +66,7 @@ Training
 
 Training looks the the same for all algorithms, with few exceptions for different algorithms, so you should refer to the documentation before training, in case you're not familiar with the API.
 
-To train neural network we need to use ``train`` method (or ``fit`` which was added for ``scikit-learn`` compatibility).
+To train neural network we need to use the ``train`` method (or ``fit`` which was added for ``scikit-learn`` compatibility).
 
 .. code-block:: python
 
@@ -78,7 +78,7 @@ If we need to validate our training results with validation dataset we can pass 
 
     network.train(x_train, y_train, x_test, y_test, epochs=1000)
 
-To be able to see the output after each epoch we can set up ``verbose=True`` in the network initialization step.
+To be able to see the output after each epoch we can set up ``verbose=True`` during network's initialization.
 
 .. code-block:: python
 
@@ -112,5 +112,3 @@ To make a prediction we need to pass networks input to the ``predict`` method.
 .. code-block:: python
 
     y_predicted = nnet.predict(x_test)
-
-For the networks with constructible architecture network can use ``batch_size`` in order to split input data into smaller pieces before making prediction.

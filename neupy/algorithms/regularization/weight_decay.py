@@ -14,11 +14,14 @@ class WeightDecay(WeightUpdateConfigurable):
     to solve one of the possible problems of network's
     overfitting.
 
+    Also known as L2-regularization.
+
     Parameters
     ----------
     decay_rate : float
-        Controls the effect of penalties on the update
-        network weights. Defaults to ``0.1``.
+        Controls training penalties during the parameter updates. The larger
+        the value the stronger effect regularization has during the training.
+        Defaults to ``0.1``.
 
     Warns
     -----

@@ -36,7 +36,7 @@ Another way to visualise structure of the network is to use ``neupy.plots`` api.
     >>> from neupy import plots
     >>> plots.layer_structure(vgg16)
 
-In both cases, we can see that final layer layer makes prediction for 1,000 classes, but for our problem we need only 10. In NeuPy you can easily slice over the network in order to cut layers that you don't need. If you visualised network using the ``plots.layer_structure`` function than you should have noticed that it has dropout layer before the final layer. We can use it as a reference point for slicing.
+In both cases, we can see that final layer layer makes prediction for 1,000 classes, but for our problem we need only 10. In NeuPy, you can easily slice over the network in order to cut layers that you don't need. If you visualized network using the ``plots.layer_structure`` function than you should have noticed that it has dropout layer before the final layer. We can use it as a reference point for slicing.
 
 .. code-block:: python
 
