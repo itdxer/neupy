@@ -1,5 +1,7 @@
+import unittest
 import tempfile
 
+import six
 import dill
 import numpy as np
 from sklearn import datasets, preprocessing
@@ -113,6 +115,7 @@ class BasicStorageTestCase(BaseTestCase):
                 # Error must be big, because we didn't normalize data
                 self.assertEqual(real_bpnet_error, restored_bpnet_error)
 
+    @unittest.skipIf(six.PY2, "doesn't work for python 2")
     def test_non_initialized_graph_storage(self):
         network = layers.Relu(10) > layers.Relu(2)  # no input layer
 

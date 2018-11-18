@@ -1,7 +1,7 @@
 language: python
+cache: pip
 python:
-  # - "2.7"
-  - "3.5"
+  - "2.7"
   - "3.6"
 
 install:
@@ -34,5 +34,5 @@ before_script:
 #   - sleep 3 # give xvfb some time to start
 
 script:
-  - export SKIP_PLOT_TEST='YES' && nosetests
+  - export SKIP_PLOT_TEST='YES' && pytest
   - flake8 neupy

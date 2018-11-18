@@ -147,12 +147,6 @@ class ConjugateGradient(WolfeLineSearchForStep, GradientDescent):
     ----------
     [1] Jorge Nocedal, Stephen J. Wright, Numerical Optimization.
         Chapter 5, Conjugate Gradient Methods, p. 101-133
-
-    See Also
-    --------
-    :network:`GradientDescent`: GradientDescent algorithm.
-    :network:`LinearSearch`: Linear Search important algorithm for step \
-    selection in Conjugate Gradient algorithm.
     """
     epsilon = NumberProperty(default=1e-7, minval=0)
     update_function = ChoiceProperty(
