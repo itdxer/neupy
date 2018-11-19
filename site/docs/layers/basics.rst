@@ -329,9 +329,7 @@ Any connection between layers in NeuPy is a `Directional Acyclic Graph (DAG) <ht
 
 .. figure:: images/conv-parallel-connection.png
     :align: center
-    :alt: Graph connections in NeuPy
-
-You can see that we defined a list inside of the
+    :alt: Parallel connections in NeuPy
 
 You can see two new layers. The first one is the Parallel layer. This layer accepts two parameters. First one is an array of multiple connections. As you can see from the figure above each of the connections above accepts the same input, but each of the do different transformation to this input. The second parameter is an layer that accepts multiple inputs and combine then into single output. From our example we can see that from the left branch we got output shape equal to ``(4, 4, 32)`` and from the right branch - ``(4, 4, 16)``. The :layer:`Concatenate` layer joins layers over the last dimension and as output returns tensor with shape ``(4, 4, 48)``.
 

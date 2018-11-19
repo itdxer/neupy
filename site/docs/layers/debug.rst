@@ -18,7 +18,9 @@ The simplest way to debug network is just to explore input and output shapes.
     >>> connection.output_shape
     (3,)
 
-Also, it's possible to iterate through layers and check shapes per each layer separately.
+The ``input_shape`` and ``output_shape`` properties store information about expected shape of the network's input and it's output shape after propagation. Notice that shapes do not store information about batch size. In our example, we might assume that we want to propagate 7 samples and network expects input matrix with shape ``(7, 10)`` and for this input it will output matrix with shape ``(7, 3)``.
+
+Every layer in the network also has information about input and output shapes. We can check each layer separately.
 
 .. code-block:: python
 
@@ -40,29 +42,29 @@ Also, it's possible to iterate through layers and check shapes per each layer se
     Input shape: (5,)
     Output shape: (3,)
 
-The more complex connection that is not suitable for sequential iteration will be topologically sorted at first and then presented one by one during the iteration.
+For the networks that have parallel connection NeuPy will topologically sort all layers first and then presented one by one during the iteration.
 
 Visualize connections
 ---------------------
 
-For the debugging, it's useful to explore network architecture. It's possible to create visualize layer graph in NeuPy. Let's say we have this network.
+For the debugging, it's useful to explore network's architecture. It's possible to visualize network in the form of a graph. Let's say we have this network.
 
 .. code-block:: python
 
     from neupy import layers
 
     network = layers.join(
-        layers.Input((3, 10, 10)),
+        layers.Input((10, 10, 3)),
 
         [[
-            layers.Convolution((32, 3, 3)),
+            layers.Convolution((3, 3, 32)),
             layers.Relu(),
             layers.MaxPooling((2, 2)),
         ], [
-            layers.Convolution((16, 7, 7)),
+            layers.Convolution((7, 7, 16)),
             layers.Relu(),
         ]],
-        layers.Concatenate()
+        layers.Concatenate(),
 
         layers.Reshape(),
         layers.Softmax(10),
@@ -91,10 +93,13 @@ Instead of showing pop-up preview we can simply save it in the separate file.
 .. code-block:: python
 
     from neupy import plots
-    plots.layer_structure(connection, filepath='connection.pdf',
-                          show=False)
+    plots.layer_structure(
+        connection,
+        filepath='connection.pdf',
+        show=False,
+    )
 
-The function also works for the training algorithms with constructible architectures. Basically, it automatically extracts architecture from the algorithm and visualizes it.
+Function also works for the training algorithms with constructible architectures. It just automatically extracts architecture from the algorithm and visualizes it.
 
 .. code-block:: python
 
@@ -114,6 +119,8 @@ The function also works for the training algorithms with constructible architect
 
 Count number of parameters
 --------------------------
+
+The ``count_parameters`` function allow to go through the network and count total number of parameters in it.
 
 .. code-block:: python
 
@@ -144,33 +151,32 @@ Iterate through all network parameters
     Input(1) > Sigmoid(2) > Sigmoid(3)
     >>>
     >>> for layer, attrname, parameter in iter_parameters(network):
-    ...     # parameter is shared Tensorflow variable
-    ...     parameter_value = parameter.get_value()
+    ...     # Each parameter is tensorflow variable
     ...     print("Layer: {}".format(layer))
-    ...     print("Parameter name: {}".format(attrname))
-    ...     print("Parameter shape: {}".format(parameter_value.shape))
+    ...     print("Name: {}".format(attrname))
+    ...     print("Parameter: {}".format(parameter))
     ...     print()
     ...
     Layer: Sigmoid(2)
-    Parameter name: weight
-    Parameter shape: (1, 2)
+    Name: weight
+    Parameter: <tf.Variable 'layer/sigmoid-3/weight:0' shape=(1, 2) dtype=float32_ref>
 
     Layer: Sigmoid(2)
-    Parameter name: bias
-    Parameter shape: (2,)
+    Name: bias
+    Parameter: <tf.Variable 'layer/sigmoid-3/bias:0' shape=(2,) dtype=float32_ref>
 
     Layer: Sigmoid(3)
-    Parameter name: weight
-    Parameter shape: (2, 3)
+    Name: weight
+    Parameter: <tf.Variable 'layer/sigmoid-4/weight:0' shape=(2, 3) dtype=float32_ref>
 
     Layer: Sigmoid(3)
-    Parameter name: bias
-    Parameter shape: (3,)
+    Name: bias
+    Parameter: <tf.Variable 'layer/sigmoid-4/bias:0' shape=(3,) dtype=float32_ref>
 
 Exploring graph connections
 ---------------------------
 
-Any relation between layers stores in the specific graph. To be able to debug connections we can check network graph to make sure that all connections defined correctly.
+Any relation between layers is stored in the graph. To be able to debug connections we can check network's graph to make sure that all connections defined correctly.
 
 .. code-block:: python
 
@@ -180,7 +186,7 @@ Any relation between layers stores in the specific graph. To be able to debug co
     >>> input_layer.graph
     [(Input(10), [])]
 
-Since layer doesn't have any relations its graph is empty. We can define new layers and create a new network.
+Since layer is not connected to any other layer the graph is empty. We can define network with more layers and check it's graph.
 
 .. code-block:: python
 
@@ -201,7 +207,7 @@ Since layer doesn't have any relations its graph is empty. We can define new lay
      (Relu(30), [Concatenate()]),
      (Concatenate(), [])]
 
-The graph has formatted representation in case if it was printed. But if we need to access it directly then we shold check the ``forward_graph`` attribute.
+The graph has formatted representation. If we need to access it directly then we should check the ``forward_graph`` attribute.
 
 .. code-block:: python
 
