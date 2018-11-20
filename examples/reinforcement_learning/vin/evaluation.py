@@ -58,7 +58,7 @@ def shortest_path_length(grid, start, finish):
 def detect_trajectory(f_next_step, grid, coords, max_iter=200):
     target_coords = get_target_coords(grid)
     input_grid = asfloat(np.expand_dims(grid, axis=0))
-    grid = grid[0]
+    grid = grid[:, :, 0]
 
     trajectory = [coords]
     coord_x, coord_y = coords
@@ -93,7 +93,7 @@ def int_as_2d_array(number):
 
 
 def get_target_coords(gridworld_image):
-    goal_channel = gridworld_image[1]
+    goal_channel = gridworld_image[:, :, 1]
     return np.unravel_index(goal_channel.argmax(), goal_channel.shape)
 
 
@@ -112,7 +112,7 @@ def evaluate_accuracy(predict, x_test, s1_test, s2_test):
         finish = get_target_coords(grid)
 
         for start in zip(x_coords, y_coords):
-            len_shortest = shortest_path_length(grid[0], start, finish)
+            len_shortest = shortest_path_length(grid[:, :, 0], start, finish)
 
             max_iter = 2 * len_shortest
             trajectory = detect_trajectory(predict, grid, start, max_iter)

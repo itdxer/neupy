@@ -14,7 +14,7 @@ from evaluation import detect_trajectory
 
 
 def plot_grid_and_trajectory(f_next_step, grid, coords):
-    image_shape = grid[0, 0].shape
+    image_shape = grid.shape[1:-1]
     trajectory = detect_trajectory(f_next_step, grid[0], coords)
 
     trajectory_grid = np.zeros(image_shape)
@@ -24,7 +24,7 @@ def plot_grid_and_trajectory(f_next_step, grid, coords):
     start_position[coords[0], coords[1]] = 1
 
     # Grid world map
-    plt.imshow(grid[0, 0], interpolation='none', cmap='binary')
+    plt.imshow(grid[0, :, :, 0], interpolation='none', cmap='binary')
 
     # Trajectory
     cmap = plt.cm.Reds
@@ -41,18 +41,18 @@ def plot_grid_and_trajectory(f_next_step, grid, coords):
     # Goal position
     cmap = plt.cm.Greens
     cmap.set_under(alpha=0)
-    plt.imshow(grid[0, 1] / 10., interpolation='none',
+    plt.imshow(grid[0, :, :, 1] / 10., interpolation='none',
                cmap=cmap, clim=[0.1, 1.1])
 
     # Intercections between trajectories and obstacles
     cmap = plt.cm.Blues
     cmap.set_under(alpha=0)
-    plt.imshow(np.bitwise_and(trajectory_grid == 1, grid[0, 0] == 1),
+    plt.imshow(np.bitwise_and(trajectory_grid == 1, grid[0, :, :, 0] == 1),
                interpolation='none', cmap=cmap, clim=[0.1, 1.1])
 
 
 def sample_random_position(grid):
-    obstacles_grid = grid[0, 0]
+    obstacles_grid = grid[0, :, :, 0]
     x_coords, y_coords = np.argwhere(obstacles_grid == 0).T
     position = np.random.randint(x_coords.size)
     return (x_coords[position], y_coords[position])
@@ -62,14 +62,17 @@ if __name__ == '__main__':
     args = parser.parse_args()
     env = environments[args.imsize]
 
+    print("Loading data...")
     x_test, _, _, _ = load_data(env['test_data_file'])
 
+    print("Initializing VIN...")
     VIN = create_VIN(
         env['input_image_shape'],
         n_hidden_filters=150,
         n_state_filters=10,
         k=env['k'],
     )
+    print("Loading pre-trained VIN parameterss...")
     storage.load(VIN, env['pretrained_network_file'])
 
     plt.figure(figsize=(8, 8))
@@ -93,6 +96,7 @@ if __name__ == '__main__':
     )
     plt.axis('off')
 
+    print("Visualizing random images...")
     for row, col in product(range(1, 5), range(4)):
         example_id = np.random.randint(x_test.shape[0])
 
@@ -103,4 +107,5 @@ if __name__ == '__main__':
         plot_grid_and_trajectory(VIN.predict, grid, coords)
         plt.axis('off')
 
+    print("Images showed")
     plt.show()

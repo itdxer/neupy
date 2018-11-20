@@ -35,33 +35,29 @@ class GlobalMaxPooling(layers.BaseLayer):
     @property
     def output_shape(self):
         shape = self.input_shape
-        # as_tuple(1, (8, 8)) -> (1, 8, 8)
-        return as_tuple(1, shape[1:])
+        # as_tuple((8, 8), 1) -> (8, 8, 1)
+        return as_tuple(shape[:-1], 1)
 
     def output(self, input_value):
-        return tf.reduce_max(input_value, axis=1, keepdims=True)
+        return tf.reduce_max(input_value, axis=-1, keepdims=True)
 
 
 class SelectValueAtStatePosition(layers.BaseLayer):
     @property
     def output_shape(self):
         q_output_shape = self.input_shape[0]
-        n_filters = q_output_shape[0]
+        n_filters = q_output_shape[-1]
         return as_tuple(n_filters)  # as_tuple(3) -> (3,)
 
     def output(self, Q, input_state_1, input_state_2):
         with tf.name_scope("Q-output"):
-            # Number of samples dependce on the state batch size.
+            # Number of samples depend on the state's batch size.
             # Each iteration we can try to predict direction from
             # multiple different starting points at the same time.
             input_shape = tf.shape(input_state_1)
             n_states = input_shape[1]
             Q_shape = tf.shape(Q)
 
-            # We move channels at the end, because tensorflow's `gather_nd`
-            # function requires to have dimensions that we won't to slice
-            # in the beggining of the tensor.
-            Q = tf.transpose(Q, [0, 2, 3, 1])
             indeces = tf.stack([
                 # Numer of repetitions depends on the size of
                 # the state batch
@@ -79,25 +75,25 @@ class SelectValueAtStatePosition(layers.BaseLayer):
             return tf.gather_nd(Q, indeces)
 
 
-def create_VIN(input_image_shape=(2, 8, 8), n_hidden_filters=150,
+def create_VIN(input_image_shape=(8, 8, 2), n_hidden_filters=150,
                n_state_filters=10, k=10):
 
-    HalfPaddingConv = partial(layers.Convolution, padding='SAME', bias=None)
+    SamePadConvolution = partial(layers.Convolution, padding='SAME', bias=None)
 
     R = layers.join(
         layers.Input(input_image_shape, name='grid-input'),
-        layers.Convolution((n_hidden_filters, 3, 3),
+        layers.Convolution((3, 3, n_hidden_filters),
                            padding='SAME',
                            weight=init.Normal(),
                            bias=init.Normal()),
-        HalfPaddingConv((1, 1, 1), weight=init.Normal()),
+        SamePadConvolution((1, 1, 1), weight=init.Normal()),
     )
 
     # Create shared weights
     q_weight = random_weight((3, 3, 1, n_state_filters))
     fb_weight = random_weight((3, 3, 1, n_state_filters))
 
-    Q = R > HalfPaddingConv((n_state_filters, 3, 3), weight=q_weight)
+    Q = R > SamePadConvolution((3, 3, n_state_filters), weight=q_weight)
 
     for i in range(k):
         V = Q > GlobalMaxPooling()
@@ -106,10 +102,10 @@ def create_VIN(input_image_shape=(2, 8, 8), n_hidden_filters=150,
             # outputs together with the Elementwise layer
             [[
                 R,
-                HalfPaddingConv((n_state_filters, 3, 3), weight=q_weight)
+                SamePadConvolution((3, 3, n_state_filters), weight=q_weight)
             ], [
                 V,
-                HalfPaddingConv((n_state_filters, 3, 3), weight=fb_weight)
+                SamePadConvolution((3, 3, n_state_filters), weight=fb_weight)
             ]],
             layers.Elementwise(merge_function=tf.add),
         )
@@ -158,10 +154,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
     env = environments[args.imsize]
 
+    print("Loading train and test data...")
     x_train, s1_train, s2_train, y_train = load_data(env['train_data_file'])
     x_test, s1_test, s2_test, y_test = load_data(env['test_data_file'])
 
-    network = algorithms.RMSProp(
+    print("Initializing VIN...")
+    network = algorithms.Momentum(
         create_VIN(
             env['input_image_shape'],
             n_hidden_filters=150,
@@ -174,11 +172,9 @@ if __name__ == '__main__':
         batch_size=12,
         error=loss_function,
         epoch_end_signal=on_epoch_end,
-
-        decay=0.9,
-        epsilon=1e-6,
     )
 
+    print("Training VIN...")
     network.train(
         (x_train, s1_train, s2_train), y_train,
         (x_test, s1_test, s2_test), y_test,
@@ -188,5 +184,8 @@ if __name__ == '__main__':
     if not os.path.exists(MODELS_DIR):
         os.mkdir(MODELS_DIR)
 
+    print("Saving pre-trained VIN model...")
     storage.save(network, env['pretrained_network_file'])
+
+    print("Evaluating accuracy on test set...")
     evaluate_accuracy(network.predict, x_test, s1_test, s2_test)

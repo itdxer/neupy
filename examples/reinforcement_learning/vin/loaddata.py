@@ -44,6 +44,7 @@ if __name__ == '__main__':
     value_data = asfloat(value_data.reshape(-1, 1, *env['image_size']))
 
     x_data = np.append(image_data, value_data, axis=1)
+    x_data = np.transpose(x_data, (0, 2, 3, 1))
     n_samples = x_data.shape[0]
 
     training_samples = int(6 / 7.0 * n_samples)
