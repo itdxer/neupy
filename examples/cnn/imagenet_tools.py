@@ -5,7 +5,7 @@ import os
 import requests
 from tqdm import tqdm
 import numpy as np
-from scipy.misc import imread, imresize
+from scipy.misc import imread
 from skimage import transform
 from neupy.utils import asfloat
 

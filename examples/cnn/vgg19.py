@@ -1,6 +1,6 @@
 import os
 
-from neupy import layers, storage, architectures
+from neupy import storage, architectures
 
 from imagenet_tools import (CURRENT_DIR, FILES_DIR, load_image,
                             print_top_n, download_file)

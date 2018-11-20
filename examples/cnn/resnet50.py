@@ -1,11 +1,9 @@
 import os
 
-from six.moves import cPickle as pickle
-from neupy.utils import asfloat
-from neupy import layers, storage, architectures, environment
+from neupy import storage, architectures
 
 from imagenet_tools import (CURRENT_DIR, FILES_DIR, load_image,
-                            print_top_n, download_file, read_image)
+                            print_top_n, download_file)
 
 
 RESNET50_WEIGHTS_FILE = os.path.join(FILES_DIR, 'resnet50.hdf5')

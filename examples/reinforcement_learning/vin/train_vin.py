@@ -2,10 +2,9 @@ import os
 import argparse
 from functools import partial
 
-import numpy as np
 import tensorflow as tf
 
-from neupy import layers, init, algorithms, environment, storage
+from neupy import layers, init, algorithms, storage
 from neupy.utils import (as_tuple, asfloat, flatten, tf_repeat,
                          tensorflow_session)
 
@@ -159,7 +158,7 @@ if __name__ == '__main__':
     x_test, s1_test, s2_test, y_test = load_data(env['test_data_file'])
 
     print("Initializing VIN...")
-    network = algorithms.Momentum(
+    network = algorithms.RMSProp(
         create_VIN(
             env['input_image_shape'],
             n_hidden_filters=150,

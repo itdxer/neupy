@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.patches as mpatches
 
-from neupy import environment, storage
+from neupy import storage
 
 from loaddata import load_data
 from train_vin import parser, create_VIN

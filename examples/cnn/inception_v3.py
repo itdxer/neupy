@@ -1,5 +1,3 @@
-from functools import partial
-
 from neupy import layers, plots
 
 

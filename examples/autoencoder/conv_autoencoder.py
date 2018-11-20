@@ -30,10 +30,10 @@ conv_autoencoder = algorithms.Momentum(
         layers.Relu(128),
         layers.Relu(16),
 
-        # Notice that in the decoder every operation reverts back changes from the
-        # encoder layer. Upscale replaces MaxPooling and Convolutional layer
-        # without padding replaced with large padding that increase size of
-        # the image.
+        # Notice that in the decoder every operation reverts back changes
+        # from the encoder layer. Upscale replaces MaxPooling and
+        # Convolutional layer without padding replaced with large padding
+        # that increase size of the image.
         layers.Relu(128),
 
         # 800 is a shape that we got after we reshaped our image in the

@@ -5,7 +5,6 @@ import matplotlib.gridspec as gridspec
 from sklearn import model_selection, datasets
 
 from neupy import layers, environment, algorithms
-from neupy.algorithms.gd import errors
 from neupy.exceptions import LayerConnectionError
 
 

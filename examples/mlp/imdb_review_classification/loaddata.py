@@ -8,7 +8,7 @@ import requests
 import pandas as pd
 from tqdm import tqdm
 
-from src.utils import create_logger, PROJECT_DIR, DATA_DIR, REVIEWS_FILE
+from src.utils import create_logger, DATA_DIR, REVIEWS_FILE
 
 
 logger = create_logger(__name__)
