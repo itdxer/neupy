@@ -4,8 +4,11 @@ import numpy as np
 
 from neupy.utils import asfloat
 from neupy import layers, storage
-from neupy.storage import (validate_data_structure, InvalidFormat,
-                           ParameterLoaderError, validate_layer_compatibility)
+from neupy.storage import (
+    validate_data_structure, InvalidFormat,
+    ParameterLoaderError, validate_layer_compatibility,
+    load_layer_parameter,
+)
 
 from base import BaseTestCase
 
@@ -213,6 +216,20 @@ class DictStorageTestCase(BaseTestCase):
 
         with self.assertRaisesRegexp(ValueError, "Invalid value"):
             storage.load_dict(connection, {}, load_by='unknown')
+
+    def test_failed_load_parameter_invalid_type(self):
+        sigmoid = layers.Sigmoid(1, bias=None)
+        connection = layers.Input(2) > sigmoid
+
+        with self.assertRaisesRegexp(ParameterLoaderError, "equal to None"):
+            load_layer_parameter(sigmoid, {
+                'parameters': {
+                    'bias': {
+                        'value': np.array([[0]]),
+                        'trainable': True,
+                    },
+                },
+            })
 
 
 class StoredDataValidationTestCase(BaseTestCase):
