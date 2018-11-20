@@ -136,7 +136,9 @@ class BaseConnection(InlineConnection):
         input throught the network and returns output from it.
         """
         session = tensorflow_session()
-        return session.run(self.output(*args, **kwargs))
+
+        with self.disable_training_state():
+            return session.run(self.output(*args, **kwargs))
 
 
 def make_common_graph(left_layer, right_layer):

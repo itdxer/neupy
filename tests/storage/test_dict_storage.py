@@ -206,7 +206,7 @@ class DictStorageTestCase(BaseTestCase):
                         'bias': {'trainable': True, 'value': np.ones((4,))},
                     }
                 }]
-            }, ignore_missed=False)
+            }, ignore_missing=False)
 
     def test_failed_loading_mode_for_storage(self):
         connection = layers.Input(2) > layers.Sigmoid(1)
@@ -381,13 +381,13 @@ class TransferLearningTestCase(BaseTestCase):
                 network_new,
                 pretrained_layers_stored,
                 load_by='names_or_order',
-                ignore_missed=False)
+                ignore_missing=False)
 
         storage.load_dict(
             network_new,
             pretrained_layers_stored,
             load_by='names_or_order',
-            ignore_missed=True)
+            ignore_missing=True)
 
         random_input = asfloat(np.random.random((12, 10)))
         new_network_output = self.eval(network_new.output(random_input))
@@ -416,7 +416,7 @@ class TransferLearningTestCase(BaseTestCase):
             network_new,
             pretrained_layers_stored,
             load_by='names',
-            ignore_missed=True)
+            ignore_missing=True)
 
         random_input = asfloat(np.random.random((12, 10)))
 

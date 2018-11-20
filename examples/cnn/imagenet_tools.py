@@ -77,7 +77,7 @@ def read_image(image_name, image_size=None, crop_size=None):
 def load_image(image_name, image_size=None, crop_size=None, use_bgr=True):
     image = read_image(image_name, image_size, crop_size)
 
-    # Per channell normalization
+    # Per channel normalization
     image[:, :, :, 0] -= 124
     image[:, :, :, 1] -= 117
     image[:, :, :, 2] -= 104

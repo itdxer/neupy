@@ -58,7 +58,6 @@ def squeezenet():
     --------
     :architecture:`vgg16` : VGG16 network
     :architecture:`vgg19` : VGG19 network
-    :architecture:`alexnet` : AlexNet network
     :architecture:`resnet50` : ResNet50 network
 
     References
@@ -70,7 +69,7 @@ def squeezenet():
     return layers.join(
         layers.Input((227, 227, 3)),
 
-        layers.Convolution((3, 3, 96), stride=(2, 2),
+        layers.Convolution((7, 7, 96), stride=(2, 2),
                            padding='VALID', name='conv1'),
         layers.Relu(),
         layers.MaxPooling((3, 3), stride=(2, 2)),

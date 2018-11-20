@@ -105,8 +105,7 @@ def resnet50():
     --------
     :architecture:`vgg16` : VGG16 network
     :architecture:`squeezenet` : SqueezeNet network
-    :architecture:`alexnet` : AlexNet network
-    :architecture:`squeezenet` : SqueezeNet network
+    :architecture:`resnet50` : ResNet-50 network
 
     References
     ----------
@@ -119,7 +118,7 @@ def resnet50():
         # Convolutional layer reduces image's height and width by a factor
         # of 2 (because of the stride)
         # from (3, 224, 224) to (64, 112, 112)
-        layers.Convolution((7, 7, 64), stride=2,
+        layers.Convolution((7, 7, 64), stride=2, bias=None,
                            padding='SAME', name='conv1'),
 
         layers.BatchNorm(name='bn_conv1'),

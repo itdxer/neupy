@@ -7,7 +7,6 @@ from imagenet_tools import (CURRENT_DIR, FILES_DIR, load_image,
 
 
 VGG16_WEIGHTS_FILE = os.path.join(FILES_DIR, 'vgg16.pickle')
-
 vgg16 = architectures.vgg16()
 
 if not os.path.exists(VGG16_WEIGHTS_FILE):
@@ -23,6 +22,5 @@ dog_image = load_image(
     image_size=(256, 256),
     crop_size=(224, 224))
 
-predict = vgg16.compile()
-output = predict(dog_image)
+output = vgg16.predict(dog_image)
 print_top_n(output, n=5)

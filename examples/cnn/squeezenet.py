@@ -25,6 +25,5 @@ monkey_image = load_image(
     crop_size=(227, 227),
     use_bgr=True)
 
-predict = squeezenet.compile()
-output = predict(monkey_image)
+output = squeezenet.predict(monkey_image)
 print_top_n(output, n=5)

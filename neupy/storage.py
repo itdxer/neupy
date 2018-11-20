@@ -5,6 +5,7 @@ from time import gmtime, strftime
 
 import six
 import numpy as np
+import tensorflow as tf
 from six.moves import cPickle as pickle
 
 import neupy
@@ -19,7 +20,8 @@ __all__ = (
     'save_pickle', 'load_pickle',
     'save_json', 'load_json',
     'save_hdf5', 'load_hdf5',
-    'load_dict', 'save_dict')
+    'load_dict', 'save_dict',
+)
 
 
 class ParameterLoaderError(Exception):
@@ -73,12 +75,14 @@ def validate_layer_compatibility(layer, layer_data):
 
     if list(expected_input_shape) != list(layer.input_shape):
         raise ParameterLoaderError(
-            "Layer `{}` expected to have input shape equal to {}, got {}"
+            "Layer `{}` from file has input shape equal to {}, "
+            "but specified shape is {}"
             "".format(layer.name, expected_input_shape, layer.input_shape))
 
     if list(expected_output_shape) != list(layer.output_shape):
         raise ParameterLoaderError(
-            "Layer `{}` expected to have output shape equal to {}, got {}"
+            "Layer `{}` from file has output shape equal to {}, "
+            "but specified shape is {}"
             "".format(layer.name, expected_output_shape,
                       layer.output_shape))
 
@@ -89,14 +93,20 @@ def load_layer_parameter(layer, layer_data):
     stored data
     """
     session = tensorflow_session()
-    initialize_uninitialized_variables()
 
     for param_name, param_data in layer_data['parameters'].items():
         parameter = getattr(layer, param_name)
+
+        if not isinstance(parameter, tf.Variable):
+            raise ParameterLoaderError(
+                "The `{}` parameter from the `{}` layer expected to be "
+                "instance of the tf.Variable, but current value equal to {}. "
+                "Layer: {}".format(param_name, layer.name, parameter, layer))
+
         parameter.load(asfloat(param_data['value']), session)
 
 
-def load_dict_by_names(layers_conn, layers_data, ignore_missed=False):
+def load_dict_by_names(layers_conn, layers_data, ignore_missing=False):
     """"
     Load parameters in to layer using layer names as the reference.
 
@@ -114,14 +124,14 @@ def load_dict_by_names(layers_conn, layers_data, ignore_missed=False):
     layers_data = {l['name']: l for l in layers_data}
     layers_conn = {l.name: l for l in layers_conn}
 
-    if not ignore_missed and layers_data.keys() != layers_conn.keys():
+    if not ignore_missing and layers_data.keys() != layers_conn.keys():
         raise ParameterLoaderError(
             "Cannot match layers by name. \n"
             "  Layer names in connection: {}\n"
             "  Layer names in stored data: {}"
             "".format(layers_conn.keys(), layers_data.keys()))
 
-    elif ignore_missed and all(l not in layers_data for l in layers_conn):
+    elif ignore_missing and all(l not in layers_data for l in layers_conn):
         raise ParameterLoaderError("Non of the layers can be matched by name")
 
     for layer_name, layer in layers_conn.items():
@@ -213,7 +223,7 @@ def validate_data_structure(data):
                     "".format(layer_index, param_name))
 
 
-def load_dict(connection, data, ignore_missed=False, load_by='names_or_order'):
+def load_dict(connection, data, ignore_missing=False, load_by='names_or_order'):
     """
     Load network connections from dictionary.
 
@@ -224,7 +234,7 @@ def load_dict(connection, data, ignore_missed=False, load_by='names_or_order'):
     data : dict
         Dictionary that stores network parameters.
 
-    ignore_missed : bool
+    ignore_missing : bool
         ``False`` means that error will be triggered in case
         if some of the layers doesn't have storage parameters
         in the specified source. Defaults to ``False``.
@@ -247,7 +257,7 @@ def load_dict(connection, data, ignore_missed=False, load_by='names_or_order'):
     Raises
     ------
     ValueError
-        Happens in case if `ignore_missed=False` and there is no
+        Happens in case if `ignore_missing=False` and there is no
         parameters for some of the layers.
     """
     if load_by not in ('names', 'order', 'names_or_order'):
@@ -257,6 +267,7 @@ def load_dict(connection, data, ignore_missed=False, load_by='names_or_order'):
             "".format(load_by))
 
     validate_data_structure(data)
+    initialize_uninitialized_variables()
     connection = extract_connection(connection)
 
     # We are only interested in layers that has parameters
@@ -264,14 +275,14 @@ def load_dict(connection, data, ignore_missed=False, load_by='names_or_order'):
     layers_data = [l for l in layers if l['parameters']]
     layers_conn = [l for l in connection if l.parameters]
 
-    if not ignore_missed and len(layers_data) != len(layers_conn):
+    if not ignore_missing and len(layers_data) != len(layers_conn):
         raise ParameterLoaderError(
             "Couldn't load parameters from the dictionary. Connection "
             "has {} layers with parameters whether stored data has {}"
             "".format(len(layers_data), len(layers_conn)))
 
     if load_by == 'names':
-        load_dict_by_names(layers_conn, layers_data, ignore_missed)
+        load_dict_by_names(layers_conn, layers_data, ignore_missing)
 
     elif load_by == 'order':
         load_dict_sequentially(layers_conn, layers_data)
@@ -281,7 +292,7 @@ def load_dict(connection, data, ignore_missed=False, load_by='names_or_order'):
             # First we try to load parameters using there names as
             # identifiers. Names are more reliable identifiers than
             # order of layers in the network
-            load_dict_by_names(layers_conn, layers_data, ignore_missed)
+            load_dict_by_names(layers_conn, layers_data, ignore_missing)
 
         except ParameterLoaderError:
             # If we couldn't load data using layer names we will try to
@@ -380,7 +391,7 @@ def save_pickle(connection, filepath, python_compatible=True):
 
     python_compatible : bool
         If `True` pickled object would be compatible with
-        Python 2 and 3 (pickle protocol equalt to `2`).
+        Python 2 and 3 (pickle protocol equal to `2`).
         If `False` then value would be pickled as highest
         protocol (`pickle.HIGHEST_PROTOCOL`).
         Defaults to `True`.
@@ -397,12 +408,12 @@ def save_pickle(connection, filepath, python_compatible=True):
 
     with open(filepath, 'wb+') as f:
         # Protocol 2 is compatible for both python versions
-        protocol = pickle.HIGHEST_PROTOCOL if python_compatible else 2
+        protocol = pickle.HIGHEST_PROTOCOL if not python_compatible else 2
         pickle.dump(data, f, protocol)
 
 
 @shared_docs(load_dict)
-def load_pickle(connection, filepath, ignore_missed=False,
+def load_pickle(connection, filepath, ignore_missing=False,
                 load_by='names_or_order'):
     """
     Load and set parameters for layers from the
@@ -415,7 +426,7 @@ def load_pickle(connection, filepath, ignore_missed=False,
     filepath : str
         Path to pickle file that will store network parameters.
 
-    {load_dict.ignore_missed}
+    {load_dict.ignore_missing}
 
     {load_dict.load_by}
 
@@ -433,14 +444,12 @@ def load_pickle(connection, filepath, ignore_missed=False,
     connection = extract_connection(connection)
 
     with open(filepath, 'rb') as f:
-        if six.PY3:
-            # Specify encoding for python 3 in order to be able to
-            # read files that has been created in python 2
-            data = pickle.load(f, encoding='latin1')  # skip coverage
-        else:
-            data = pickle.load(f)  # skip coverage
+        # Specify encoding for python 3 in order to be able to
+        # read files that has been created in python 2
+        options = {'encoding': 'latin1'} if six.PY3 else {}
+        data = pickle.load(f, **options)
 
-    load_dict(connection, data, ignore_missed, load_by)
+    load_dict(connection, data, ignore_missing, load_by)
 
 
 @shared_docs(save_dict)
@@ -492,7 +501,7 @@ def save_hdf5(connection, filepath):
 
 
 @shared_docs(load_dict)
-def load_hdf5(connection, filepath, ignore_missed=False,
+def load_hdf5(connection, filepath, ignore_missing=False,
               load_by='names_or_order'):
     """
     Load network parameters from HDF5 file.
@@ -504,7 +513,7 @@ def load_hdf5(connection, filepath, ignore_missed=False,
     filepath : str
         Path to HDF5 file that will store network parameters.
 
-    {load_dict.ignore_missed}
+    {load_dict.ignore_missing}
 
     {load_dict.load_by}
 
@@ -549,7 +558,7 @@ def load_hdf5(connection, filepath, ignore_missed=False,
 
             data['layers'].append(layer)
 
-    load_dict(connection, data, ignore_missed, load_by)
+    load_dict(connection, data, ignore_missing, load_by)
 
 
 def convert_numpy_array_to_list_recursively(data):
@@ -603,7 +612,7 @@ def save_json(connection, filepath, indent=None):
 
 
 @shared_docs(load_dict)
-def load_json(connection, filepath, ignore_missed=False,
+def load_json(connection, filepath, ignore_missing=False,
               load_by='names_or_order'):
     """
     Load network parameters from JSON file.
@@ -615,7 +624,7 @@ def load_json(connection, filepath, ignore_missed=False,
     filepath : str
         Path to JSON file that will store network parameters.
 
-    {load_dict.ignore_missed}
+    {load_dict.ignore_missing}
 
     {load_dict.load_by}
 
@@ -636,7 +645,7 @@ def load_json(connection, filepath, ignore_missed=False,
     with open(filepath, 'r') as f:
         data = json.load(f)
 
-    load_dict(connection, data, ignore_missed, load_by)
+    load_dict(connection, data, ignore_missing, load_by)
 
 
 # Convenient aliases
