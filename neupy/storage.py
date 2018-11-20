@@ -356,7 +356,7 @@ def save_dict(connection):
 
 
 @shared_docs(save_dict)
-def save_pickle(connection, filepath, python_compatible=True):
+def save_pickle(connection, filepath, python_compatible=False):
     """
     Save layer parameters in pickle file.
 
@@ -372,7 +372,7 @@ def save_pickle(connection, filepath, python_compatible=True):
         Python 2 and 3 (pickle protocol equal to `2`).
         If `False` then value would be pickled as highest
         protocol (`pickle.HIGHEST_PROTOCOL`).
-        Defaults to `True`.
+        Defaults to `False`.
 
     Examples
     --------
