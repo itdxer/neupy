@@ -16,7 +16,7 @@ resnet50 = architectures.resnet50()
 
 if not os.path.exists(RESNET50_WEIGHTS_FILE):
     download_file(
-        url="http://neupy.s3.amazonaws.com/imagenet-models/resnet50.pickle",
+        url="http://neupy.s3.amazonaws.com/tensorflow/imagenet-models/resnet50.pickle",
         filepath=RESNET50_WEIGHTS_FILE,
         description='Downloading weights')
 

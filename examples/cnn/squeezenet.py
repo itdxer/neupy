@@ -13,7 +13,7 @@ squeezenet = architectures.squeezenet()
 
 if not os.path.exists(SQUEEZENET_WEIGHTS_FILE):
     download_file(
-        url="http://neupy.s3.amazonaws.com/imagenet-models/squeezenet.pickle",
+        url="http://neupy.s3.amazonaws.com/tensorflow/imagenet-models/squeezenet.pickle",
         filepath=SQUEEZENET_WEIGHTS_FILE,
         description='Downloading weights')
 

@@ -11,7 +11,7 @@ vgg16 = architectures.vgg16()
 
 if not os.path.exists(VGG16_WEIGHTS_FILE):
     download_file(
-        url="http://neupy.s3.amazonaws.com/imagenet-models/vgg16.pickle",
+        url="http://neupy.s3.amazonaws.com/tensorflow/imagenet-models/vgg16.pickle",
         filepath=VGG16_WEIGHTS_FILE,
         description='Downloading weights')
 
