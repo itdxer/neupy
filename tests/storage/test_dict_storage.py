@@ -219,7 +219,7 @@ class DictStorageTestCase(BaseTestCase):
 
     def test_failed_load_parameter_invalid_type(self):
         sigmoid = layers.Sigmoid(1, bias=None)
-        connection = layers.Input(2) > sigmoid
+        layers.Input(2) > sigmoid
 
         with self.assertRaisesRegexp(ParameterLoaderError, "equal to None"):
             load_layer_parameter(sigmoid, {

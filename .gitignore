@@ -23,6 +23,7 @@ notebooks/.ipynb_checkpoints/*
 # Storage files
 *.dill
 *.h5
+*.hdf5
 *.pickle
 
 # Vim

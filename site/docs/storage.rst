@@ -6,7 +6,7 @@ Storage for Neural Networks
 Save and load layer parameters
 ------------------------------
 
-NeuPy allows to store network's parameters in a pickle file.
+NeuPy allows to store network's parameters in a hdf5 file.
 
 .. code-block:: python
 
@@ -18,65 +18,21 @@ NeuPy allows to store network's parameters in a pickle file.
         layers.Relu(30),
         layers.Softmax(10),
     )
-    storage.save(network, filepath='/path/to/file.pickle')
+    storage.save(network, filepath='/path/to/file.hdf5')
 
-To be able to load parameters you need to have predefined network structure. Using layer names NeuPy can restore parameters from the pickle file.
-
-.. code-block:: python
-
-    storage.load(network, filepath='/path/to/file.pickle')
-
-Since parameters are stored in a regular pickle files it's possible to load them without NeuPy.
+To be able to load parameters you need to have predefined network structure. Using layer names NeuPy can restore parameters from the hdf5 file.
 
 .. code-block:: python
 
-    import pickle
-
-    with open('/path/to/file.pickle', 'rb') as f:
-        parameters = pickle.load(f)
-
-Data in the `parameters` variable is easily accessible.
-
-.. code-block:: python
-
-    >>> parameters.keys()
-    ['layers', 'graph', 'metadata']
-    >>> len(parameters['layers'])
-    4
-    >>> for layer_data in parameters['layers']:
-    ...     print("Name: {}".format(layer_data['name']))
-    ...     print("Available keys: {}".format(layer_data.keys()))
-    ...     if layer_data['parameters']:
-    ...         print("Parameters: {}".format(layer_data['parameters'].keys()))
-    ...         print("Weight shape: {}".format(layer_data['parameters']['weight']['value'].shape))
-    ...     print('-' * 20)
-    ...
-    Name: input-1
-    Available keys: ['name', 'parameters', 'class_name', 'input_shape', 'configs', 'output_shape']
-    --------------------
-    Name: relu-1
-    Available keys: ['name', 'parameters', 'class_name', 'input_shape', 'configs', 'output_shape']
-    Parameters: ['bias', 'weight']
-    Weight shape: (10, 20)
-    --------------------
-    Name: relu-2
-    Available keys: ['name', 'parameters', 'class_name', 'input_shape', 'configs', 'output_shape']
-    Parameters: ['bias', 'weight']
-    Weight shape: (20, 30)
-    --------------------
-    Name: softmax-1
-    Available keys: ['name', 'parameters', 'class_name', 'input_shape', 'configs', 'output_shape']
-    Parameters: ['bias', 'weight']
-    Weight shape: (30, 10)
-    --------------------
+    storage.load(network, filepath='/path/to/file.hdf5')
 
 NeuPy supports other storage formats
 
 .. csv-table::
     :header: "Format", "Save function", "Load function"
 
-    "pickle file", ":class:`save_pickle <neupy.storage.save_pickle>` (or :class:`save <neupy.storage.save>`)", ":class:`load_pickle <neupy.storage.load_pickle>` (or :class:`load <neupy.storage.load>`)"
-    "hdf5 file", ":class:`save_hdf5 <neupy.storage.save_hdf5>`", ":class:`load_hdf5 <neupy.storage.load_hdf5>`"
+    "hdf5 file", ":class:`save_hdf5 <neupy.storage.save_hdf5>` (or :class:`save <neupy.storage.save>`)", ":class:`load_hdf5 <neupy.storage.load_hdf5>` (or :class:`load <neupy.storage.load>`)"
+    "pickle file", ":class:`save_pickle <neupy.storage.save_pickle>`", ":class:`load_pickle <neupy.storage.load_pickle>`"
     "json file", ":class:`save_json <neupy.storage.save_json>`", ":class:`load_json <neupy.storage.load_json>`"
     "python dict", ":class:`save_dict <neupy.storage.save_dict>`", ":class:`load_dict <neupy.storage.load_dict>`"
 

@@ -1,8 +1,6 @@
 import tempfile
-from textwrap import dedent
 
 import numpy as np
-from mock import patch
 
 from neupy import storage, layers
 from neupy.utils import asfloat

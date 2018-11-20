@@ -6,14 +6,14 @@ from imagenet_tools import (CURRENT_DIR, FILES_DIR, load_image,
                             print_top_n, download_file)
 
 
-SQUEEZENET_WEIGHTS_FILE = os.path.join(FILES_DIR, 'squeezenet.pickle')
+SQUEEZENET_WEIGHTS_FILE = os.path.join(FILES_DIR, 'squeezenet.hdf5')
 
 # Networks weight ~4.8 Mb
 squeezenet = architectures.squeezenet()
 
 if not os.path.exists(SQUEEZENET_WEIGHTS_FILE):
     download_file(
-        url="http://neupy.s3.amazonaws.com/tensorflow/imagenet-models/squeezenet.pickle",
+        url="http://neupy.s3.amazonaws.com/tensorflow/imagenet-models/squeezenet.hdf5",
         filepath=SQUEEZENET_WEIGHTS_FILE,
         description='Downloading weights')
 

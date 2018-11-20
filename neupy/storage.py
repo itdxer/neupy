@@ -1,9 +1,8 @@
 import json
-import pkgutil
-import importlib
 from time import gmtime, strftime
 
 import six
+import h5py
 import numpy as np
 import tensorflow as tf
 from six.moves import cPickle as pickle
@@ -16,7 +15,7 @@ from neupy.utils import (asfloat, tensorflow_session,
 
 
 __all__ = (
-    'save', 'load',  # aliases to pickle
+    'save', 'load',  # aliases to hdf5
     'save_pickle', 'load_pickle',
     'save_json', 'load_json',
     'save_hdf5', 'load_hdf5',
@@ -36,28 +35,6 @@ class InvalidFormat(Exception):
     Exception triggers when there are some issue with
     data format that stores connection data.
     """
-
-
-def load_hdf5_module():
-    """
-    Loads `h5py` module. THis module used for manipulations
-    with HDF5 files.
-
-    Raises
-    ------
-    ImportError
-        In case if module `h5py` wasn't installed
-
-    Returns
-    -------
-    module
-    """
-    if not pkgutil.find_loader('h5py'):
-        raise ImportError(
-            "The `h5py` library wasn't installed. Try to "
-            "install it with pip: \n    pip install h5py")
-
-    return importlib.import_module('h5py')
 
 
 def validate_layer_compatibility(layer, layer_data):
@@ -223,7 +200,8 @@ def validate_data_structure(data):
                     "".format(layer_index, param_name))
 
 
-def load_dict(connection, data, ignore_missing=False, load_by='names_or_order'):
+def load_dict(connection, data, ignore_missing=False,
+              load_by='names_or_order'):
     """
     Load network connections from dictionary.
 
@@ -471,11 +449,10 @@ def save_hdf5(connection, filepath):
     >>> connection = layers.Input(10) > layers.Softmax(3)
     >>> storage.save_hdf5(connection, '/path/to/parameters.hdf5')
     """
-    hdf5 = load_hdf5_module()
     connection = extract_connection(connection)
     data = save_dict(connection)
 
-    with hdf5.File(filepath, mode='w') as f:
+    with h5py.File(filepath, mode='w') as f:
         layer_names = []
 
         for layer in data['layers']:
@@ -528,11 +505,10 @@ def load_hdf5(connection, filepath, ignore_missing=False,
     >>> connection = layers.Input(10) > layers.Softmax(3)
     >>> storage.load_hdf5(connection, '/path/to/parameters.hdf5')
     """
-    hdf5 = load_hdf5_module()
     connection = extract_connection(connection)
     data = {}
 
-    with hdf5.File(filepath, mode='r') as f:
+    with h5py.File(filepath, mode='r') as f:
         data['metadata'] = json.loads(f.attrs['metadata'])
         data['graph'] = json.loads(f.attrs['graph'])
         data['layers'] = []
@@ -649,5 +625,5 @@ def load_json(connection, filepath, ignore_missing=False,
 
 
 # Convenient aliases
-save = save_pickle
-load = load_pickle
+save = save_hdf5
+load = load_hdf5

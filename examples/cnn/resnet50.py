@@ -8,15 +8,14 @@ from imagenet_tools import (CURRENT_DIR, FILES_DIR, load_image,
                             print_top_n, download_file, read_image)
 
 
-RESNET50_WEIGHTS_FILE = os.path.join(FILES_DIR, 'resnet50.pickle')
-IMAGENET_MEAN_FILE = os.path.join(FILES_DIR, 'resnet50-imagenet-means.pickle')
+RESNET50_WEIGHTS_FILE = os.path.join(FILES_DIR, 'resnet50.hdf5')
 DOG_IMAGE_PATH = os.path.join(CURRENT_DIR, 'images', 'german-shepherd.jpg')
 
 resnet50 = architectures.resnet50()
 
 if not os.path.exists(RESNET50_WEIGHTS_FILE):
     download_file(
-        url="http://neupy.s3.amazonaws.com/tensorflow/imagenet-models/resnet50.pickle",
+        url="http://neupy.s3.amazonaws.com/tensorflow/imagenet-models/resnet50.hdf5",
         filepath=RESNET50_WEIGHTS_FILE,
         description='Downloading weights')
 
