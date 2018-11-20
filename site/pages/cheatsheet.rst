@@ -206,7 +206,7 @@ Architectures
     ":architecture:`vgg16`", "VGG16 network"
     ":architecture:`vgg19`", "VGG19 network"
     ":architecture:`squeezenet`", "SqueezeNet network"
-    ":architecture:`alexnet`", "AlexNet network"
+    ":architecture:`resnet50`", "ResNet-50 network"
     ":architecture:`mixture_of_experts`", Mixture of Experts
 
 .. _init-methods:

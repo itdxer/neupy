@@ -15,7 +15,6 @@ These modes are trained to perform classification using ImageNet ILSVRC challeng
     "SqueezeNet", "~1.2 million", `squeezenet.pickle <http://neupy.s3.amazonaws.com/imagenet-models/squeezenet.pickle>`_, `squeezenet.py <https://github.com/itdxer/neupy/blob/master/examples/cnn/squeezenet.py>`_
     "VGG16", "~138 million", `vgg16.pickle <http://neupy.s3.amazonaws.com/imagenet-models/vgg16.pickle>`_, `vgg16.py <https://github.com/itdxer/neupy/blob/master/examples/cnn/vgg16.py>`_
     "VGG19", "~143 million", `vgg19.pickle <http://neupy.s3.amazonaws.com/imagenet-models/vgg19.pickle>`_, `vgg19.py <https://github.com/itdxer/neupy/blob/master/examples/cnn/vgg19.py>`_
-    "AlexNet", "~61 million", `alexnet.pickle <http://neupy.s3.amazonaws.com/imagenet-models/alexnet.pickle>`_, `alexnet.py <https://github.com/itdxer/neupy/blob/master/examples/cnn/alexnet.py>`_
 
 Value Iteration Network (VIN)
 -----------------------------
