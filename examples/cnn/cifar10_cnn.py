@@ -38,44 +38,41 @@ if __name__ == '__main__':
     x_train, x_test = process_cifar10_data(x_train, x_test)
     y_train, y_test = one_hot_encoder(y_train, y_test)
 
-    network = algorithms.Adadelta(
+    network = algorithms.Adam(
         [
             Input((32, 32, 3)),
 
-            Convolution((3, 3, 64)) > PRelu() > BatchNorm(),
-            Convolution((3, 3, 64)) > PRelu() > BatchNorm(),
+            Convolution((3, 3, 32)) > Relu(),
+            Convolution((3, 3, 32)) > Relu(),
             MaxPooling((2, 2)),
+            Dropout(0.2),
 
-            Convolution((3, 3, 128)) > PRelu() > BatchNorm(),
-            Convolution((3, 3, 128)) > PRelu() > BatchNorm(),
+            Convolution((3, 3, 64)) > Relu(),
+            Convolution((3, 3, 64)) > Relu(),
             MaxPooling((2, 2)),
+            Dropout(0.2),
 
-            Convolution((3, 3, 256)) > PRelu() > BatchNorm(),
             Reshape(),
-
             Relu(512) > Dropout(0.5),
-            Relu(256) > Dropout(0.5),
             Softmax(10),
         ],
 
-        error='categorical_crossentropy',
-        step=0.2,
-        shuffle_data=True,
+        step=0.001,
         batch_size=100,
+
+        error='categorical_crossentropy',
+        shuffle_data=True,
         verbose=True,
 
         # Parameter controls step redution frequency. The larger
         # the value the slower step parameter decreases.
         # Step will be reduced after every mini-batch update. In the
         # training data we have 500 mini-batches.
-        reduction_freq=4 * 500,
-        # The larger the value the more impact regularization
-        # makes on the parameter training
-        # decay_rate=0.1,
+        reduction_freq=5 * 500,
         addons=[algorithms.StepDecay],
     )
     network.architecture()
-    network.train(x_train, y_train, x_test, y_test, epochs=20)
+    network.train(x_train, y_train, x_test, y_test, epochs=30)
 
     y_predicted = network.predict(x_test).argmax(axis=1)
     y_test_labels = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))
