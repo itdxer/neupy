@@ -124,7 +124,7 @@ def create_VIN(input_image_shape=(8, 8, 2), n_hidden_filters=150,
 
 
 def loss_function(expected, predicted):
-    epsilon = 1e-7
+    epsilon = 1e-7  # for 32-bit float
 
     predicted = tf.clip_by_value(predicted, epsilon, 1.0 - epsilon)
     expected = tf.cast(flatten(expected), tf.int32)
@@ -166,10 +166,11 @@ if __name__ == '__main__':
             k=env['k'],
         ),
 
-        step=0.005,
-        verbose=True,
+        step=0.01,
         batch_size=12,
         error=loss_function,
+
+        verbose=True,
         epoch_end_signal=on_epoch_end,
     )
 

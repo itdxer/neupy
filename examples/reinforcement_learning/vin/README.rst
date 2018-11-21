@@ -21,8 +21,8 @@ Perfomance
 .. csv-table::
     :header: "Problem", "Prediction loss", "Success rate"
 
-    "Grid world 8x8","0.0049","99.89%"
-    "Grid world 16x16","0.0427","99.46%"
+    "Grid world 8x8","0.0009","99.95%"
+    "Grid world 16x16","0.017","99.62%"
     "Grid world 28x28","0.0954","98.03%"
 
 For each grid we select 10 start positions and using VIN we generate trajectory between two points. In addition we calculate shortest path between two points with `Lee algorithm <https://en.wikipedia.org/wiki/Lee_algorithm>`_. Using this information we are calculating two metrics:

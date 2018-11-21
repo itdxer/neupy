@@ -24,8 +24,8 @@ VINs can learn to plan, and are suitable for predicting outcomes that involve pl
 .. csv-table::
     :header: "Grid size", "Pre-trained parameters"
 
-    "8x8", `pretrained-VIN-8.pickle <https://github.com/itdxer/neupy/blob/master/examples/reinforcement_learning/vin/models/pretrained-VIN-8.pickle?raw=true>`_
-    "16x16", `pretrained-VIN-16.pickle <https://github.com/itdxer/neupy/blob/master/examples/reinforcement_learning/vin/models/pretrained-VIN-16.pickle?raw=true>`_
-    "28x28", `pretrained-VIN-28.pickle <https://github.com/itdxer/neupy/blob/master/examples/reinforcement_learning/vin/models/pretrained-VIN-28.pickle?raw=true>`_
+    "8x8", `pretrained-VIN-8.hdf5 <https://github.com/itdxer/neupy/blob/master/examples/reinforcement_learning/vin/models/pretrained-VIN-8.hdf5?raw=true>`_
+    "16x16", `pretrained-VIN-16.hdf5 <https://github.com/itdxer/neupy/blob/master/examples/reinforcement_learning/vin/models/pretrained-VIN-16.hdf5?raw=true>`_
+    "28x28", `pretrained-VIN-28.hdf5 <https://github.com/itdxer/neupy/blob/master/examples/reinforcement_learning/vin/models/pretrained-VIN-28.hdf5?raw=true>`_
 
 Project that include everything related to VIN is available on Github: `examples/reinforcement_learning/vin <https://github.com/itdxer/neupy/tree/master/examples/reinforcement_learning/vin/>`_

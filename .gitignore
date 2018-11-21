@@ -42,6 +42,6 @@ notebooks/caltech_101_images/*
 
 # Pickle files important for VIN example
 !examples/reinforcement_learning/vin/data/*.pickle
-!examples/reinforcement_learning/vin/models/*.pickle
+!examples/reinforcement_learning/vin/models/*.hdf5
 examples/reinforcement_learning/vin/data/gridworld-16-*.pickle
 examples/reinforcement_learning/vin/data/gridworld-28-*.pickle
