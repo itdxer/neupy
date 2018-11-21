@@ -1,5 +1,5 @@
-neupy.core.terminal module
-==========================
+neupy\.core\.terminal module
+============================
 
 .. automodule:: neupy.core.terminal
     :members:

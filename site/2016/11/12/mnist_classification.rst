@@ -3,8 +3,11 @@
 MNIST Classification
 ====================
 
+Data preparation
+----------------
+
 The MNIST problem is probably the most known for those who have already
-heared about neural networks. This short tutorial shows you how to build prediction models in NeuPy. Let's start developing model.
+heard about neural networks. This short tutorial shows you how to build prediction models in NeuPy. Let's start developing model.
 
 First of all we need to load data.
 
@@ -16,7 +19,7 @@ First of all we need to load data.
 
 I used scikit-learn to fetch the MNIST dataset, but you can load it in different way.
 
-Data doesn't have appropriate format for neural network, so we need to make simple transformation before use it.
+Data doesn't have appropriate format for neural network, so we need to make simple transformation before using it.
 
 .. code-block:: python
 
@@ -29,9 +32,7 @@ Data doesn't have appropriate format for neural network, so we need to make simp
     >>> target = target_scaler.fit_transform(target.reshape(-1, 1))
     >>> target = target.todense()
 
-Next we need to divide dataset into two parts: train and test. Regarding `The
-MNIST Database <http://yann.lecun.com/exdb/mnist/>`_ page we will use 60,000
-samples for training and 10,000 for test.
+Next, we need to divide dataset into two parts. First part will be used for training and second part for model validation. We will use 60,000 samples for training and 10,000 for test.
 
 .. code-block:: python
 
@@ -47,10 +48,12 @@ samples for training and 10,000 for test.
     ...     test_size=(1 / 7.)
     ... )
 
-We prepared everything that we need for the neural network training. Now we are
-able to create the neural network that will classify digits for us.
+We prepared everything that we need for the neural network training. Now we are able to create the neural network that will classify hand-written digits for us.
 
-Let's start with an architecture. I didn't reinvent the wheel and used one of the know architectures from `The Database <http://yann.lecun.com/exdb/mnist/>`_ page which is 784 > 500 > 300 > 10. As the main activation function I used Relu and Softmax for the final layer. The main algorithm is a Nesterov Momentum that uses 100 samples per batch iteration. Actually all this and other network configuration should be clear from the code shown below.
+Model initialization
+--------------------
+
+Let's start with an architecture. I didn't reinvent the wheel and used one of the know architectures from `The Database <http://yann.lecun.com/exdb/mnist/>`_ page. As the main activation function I used Relu and Softmax for the final layer. The main algorithm is a Nesterov Momentum that uses 100 samples per batch iteration. Actually all this and other network configuration should be clear from the code shown below.
 
 .. code-block:: python
 
@@ -93,6 +96,9 @@ In addition for feedforward neural networks it's possible to check architecture 
     :align: center
     :alt: Neural Network Architecture
 
+Training
+--------
+
 Now we are going to train network. Let set up 20 epochs for training procedure and check the result.
 
 .. code-block:: python
@@ -107,6 +113,9 @@ Output in terminal should look similar to this one:
     :alt: GradientDescent training procedure output
 
 Output show the most important information related to training procedure. Each epoch contains 4 columns. First one identified epoch. The second one show training error. The third one is optional. In case you have validation dataset, you can check learning perfomanse using dataset separated from the learning procedure. And the last column shows how many time network trains during this epoch.
+
+Evaluations
+-----------
 
 From the table is not clear network's training progress. We can check it very easy. Network instance contains built-in method that build line plot that show training progress. Let's check our progress.
 

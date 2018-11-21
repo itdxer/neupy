@@ -139,6 +139,9 @@ def loss_function(expected, predicted):
 def on_epoch_end_from_steps(steps):
     def on_epoch_end(network):
         if network.last_epoch in steps:
+            print("Saving pre-trained VIN model...")
+            storage.save(network, env['pretrained_network_file'])
+
             new_step = steps[network.last_epoch]
             session = tensorflow_session()
             network.variables.step.load(new_step, session)

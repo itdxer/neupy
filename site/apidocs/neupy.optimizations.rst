@@ -1,5 +1,5 @@
-neupy.optimizations package
-===========================
+neupy\.optimizations package
+============================
 
 Submodules
 ----------

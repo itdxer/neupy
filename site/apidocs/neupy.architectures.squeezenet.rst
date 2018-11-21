@@ -1,5 +1,5 @@
-neupy.architectures.squeezenet module
-=====================================
+neupy\.architectures\.squeezenet module
+=======================================
 
 .. automodule:: neupy.architectures.squeezenet
     :members:

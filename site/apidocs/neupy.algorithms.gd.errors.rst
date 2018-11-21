@@ -1,5 +1,5 @@
-neupy.algorithms.gd.errors module
-=================================
+neupy\.algorithms\.gd\.errors module
+====================================
 
 .. automodule:: neupy.algorithms.gd.errors
     :members:

@@ -1,5 +1,5 @@
-neupy.datasets package
-======================
+neupy\.datasets package
+=======================
 
 Submodules
 ----------

@@ -1,5 +1,5 @@
-neupy.algorithms.step_update.base module
-========================================
+neupy\.algorithms\.step\_update\.base module
+============================================
 
 .. automodule:: neupy.algorithms.step_update.base
     :members:

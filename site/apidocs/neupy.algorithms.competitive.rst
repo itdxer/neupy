@@ -1,5 +1,5 @@
-neupy.algorithms.competitive package
-====================================
+neupy\.algorithms\.competitive package
+======================================
 
 Submodules
 ----------

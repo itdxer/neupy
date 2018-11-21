@@ -1,5 +1,5 @@
-neupy.layers.connections.base module
-====================================
+neupy\.layers\.connections\.base module
+=======================================
 
 .. automodule:: neupy.layers.connections.base
     :members:

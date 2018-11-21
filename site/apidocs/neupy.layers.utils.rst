@@ -1,5 +1,5 @@
-neupy.layers.utils module
-=========================
+neupy\.layers\.utils module
+===========================
 
 .. automodule:: neupy.layers.utils
     :members:

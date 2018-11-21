@@ -1,5 +1,5 @@
-neupy.algorithms.rbfn.rbf_kmeans module
-=======================================
+neupy\.algorithms\.rbfn\.rbf\_kmeans module
+===========================================
 
 .. automodule:: neupy.algorithms.rbfn.rbf_kmeans
     :members:

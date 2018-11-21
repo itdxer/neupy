@@ -1,5 +1,5 @@
-neupy.algorithms.regularization.max_norm module
-===============================================
+neupy\.algorithms\.regularization\.max\_norm module
+===================================================
 
 .. automodule:: neupy.algorithms.regularization.max_norm
     :members:

@@ -1,5 +1,5 @@
-neupy.algorithms.utils module
-=============================
+neupy\.algorithms\.utils module
+===============================
 
 .. automodule:: neupy.algorithms.utils
     :members:
