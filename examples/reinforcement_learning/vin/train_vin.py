@@ -136,17 +136,13 @@ def loss_function(expected, predicted):
     return -tf.reduce_mean(errors)
 
 
-def on_epoch_end(network):
-    steps = {
-        30: 0.005,
-        60: 0.002,
-        90: 0.001,
-    }
-
-    if network.last_epoch in steps:
-        new_step = steps[network.last_epoch]
-        session = tensorflow_session()
-        network.variables.step.load(new_step, session)
+def on_epoch_end_from_steps(steps):
+    def on_epoch_end(network):
+        if network.last_epoch in steps:
+            new_step = steps[network.last_epoch]
+            session = tensorflow_session()
+            network.variables.step.load(new_step, session)
+    return on_epoch_end
 
 
 if __name__ == '__main__':
@@ -166,12 +162,11 @@ if __name__ == '__main__':
             k=env['k'],
         ),
 
-        step=0.01,
-        batch_size=12,
-        error=loss_function,
-
         verbose=True,
-        epoch_end_signal=on_epoch_end,
+        batch_size=36,
+        error=loss_function,
+        epoch_end_signal=on_epoch_end_from_steps(env['steps']),
+        **env['training_options']
     )
 
     print("Training VIN...")
