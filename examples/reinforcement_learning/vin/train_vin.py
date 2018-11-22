@@ -30,7 +30,7 @@ def random_weight(shape):
     )
 
 
-class GlobalMaxPooling(layers.BaseLayer):
+class ChannelGlobalMaxPooling(layers.BaseLayer):
     @property
     def output_shape(self):
         shape = self.input_shape
@@ -95,10 +95,18 @@ def create_VIN(input_image_shape=(8, 8, 2), n_hidden_filters=150,
     Q = R > SamePadConvolution((3, 3, n_state_filters), weight=q_weight)
 
     for i in range(k):
-        V = Q > GlobalMaxPooling()
+        V = Q > ChannelGlobalMaxPooling()
         Q = layers.join(
-            # Convolve R and V separately and then add
-            # outputs together with the Elementwise layer
+            # Convolve R and V separately and then add outputs together with
+            # the Elementwise layer. This part of the code looks different
+            # from the one that was used in the original VIN repo, but
+            # it does the same logic.
+            #
+            # conv(x, w) == (conv(x1, w1) + conv(x2, w2))
+            # where, x = concat(x1, x2)
+            #        w = concat(w1, w2)
+            #
+            # See code sample from Github Gist: https://bit.ly/2zm3ntN
             [[
                 R,
                 SamePadConvolution((3, 3, n_state_filters), weight=q_weight)
