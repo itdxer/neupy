@@ -6,10 +6,8 @@ Documentation
 Beginners guide
 ---------------
 
-These articles
-
 * :doc:`Installation <../pages/installation>`
-* :doc:`Quick start <../pages/installation>`
+* :doc:`Quick start <../docs/quickstart>`
 
 Layers
 ------
@@ -25,7 +23,7 @@ This part of the documentation helps to understand how to combine layers into ne
 Training algorithms
 -------------------
 
-Training is the essential part of neural networks. These documentation articles help to understand what types of algorithms NeuPy supports and how to train neural networks. More advanced topics cover some special cases that might be useful for experienced users.
+These documentation articles help to understand what types of algorithms NeuPy supports and how to train neural networks. More advanced topics cover some special cases that might be useful for experienced users.
 
 .. toctree::
     :glob:

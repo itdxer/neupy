@@ -24,6 +24,7 @@ environments = {
         },
         training_options=dict(
             step=0.01,
+            batch_size=36,
         ),
     ),
     16: dict(
@@ -44,6 +45,7 @@ environments = {
         },
         training_options=dict(
             step=0.01,
+            batch_size=36,
         ),
     ),
     28: dict(
@@ -58,14 +60,15 @@ environments = {
         k=36,
         epochs=120,
         steps={
-            30: 0.0005,
-            60: 0.0002,
-            90: 0.0001,
+            30: 0.002,
+            60: 0.001,
+            90: 0.0005,
         },
         training_options=dict(
             decay=0.9,
             epsilon=1e-6,
-            step=0.001,
+            step=0.005,
+            batch_size=256,
         )
     ),
 }

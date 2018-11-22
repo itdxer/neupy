@@ -55,7 +55,9 @@ def shortest_path_length(grid, start, finish):
     return None
 
 
-def detect_trajectory(f_next_step, grid, coords, max_iter=200):
+def detect_trajectory(f_next_step, grid, coords, max_iter=30,
+                      return_none_if_failed=False):
+
     target_coords = get_target_coords(grid)
     input_grid = asfloat(np.expand_dims(grid, axis=0))
     grid = grid[:, :, 0]
@@ -67,12 +69,13 @@ def detect_trajectory(f_next_step, grid, coords, max_iter=200):
         current_position = (coord_x, coord_y)
 
         if target_coords == current_position:
+            # Network successfully reached desired destination.
             break
 
         if grid[current_position] == 1:
             # Interrupt trajectory detection procedure, because
             # current position is located on the obstacle.
-            return None
+            break
 
         step = f_next_step([
             input_grid,
@@ -84,6 +87,9 @@ def detect_trajectory(f_next_step, grid, coords, max_iter=200):
 
         coord_x, coord_y = action(coord_x, coord_y)
         trajectory.append((coord_x, coord_y))
+
+    if return_none_if_failed and trajectory[-1] != target_coords:
+        return None
 
     return np.array(trajectory)
 
@@ -104,6 +110,7 @@ def evaluate_accuracy(predict, x_test, s1_test, s2_test):
     total = n_grids * state_batch_size
     correct = 0
     differences = 0
+    n_failed_cases = 0
 
     data = tqdm(zip(x_test, s1_test, s2_test),
                 total=n_grids, desc='Evaluating accuracy')
@@ -115,12 +122,19 @@ def evaluate_accuracy(predict, x_test, s1_test, s2_test):
             len_shortest = shortest_path_length(grid[:, :, 0], start, finish)
 
             max_iter = 2 * len_shortest
-            trajectory = detect_trajectory(predict, grid, start, max_iter)
+            trajectory = detect_trajectory(
+                predict, grid, start, max_iter,
+                return_none_if_failed=True,
+            )
 
             if trajectory is not None:
+                # Trajectory includes starting position and -1 will make
+                # sure that we do not count it when we measure length of
+                # the trajectory
                 len_predicted = len(trajectory) - 1
             else:
                 len_predicted = max_iter
+                n_failed_cases += 1
 
             differences += len_predicted - len_shortest
 
@@ -130,5 +144,6 @@ def evaluate_accuracy(predict, x_test, s1_test, s2_test):
     accuracy = correct / total
     loss = differences / total
 
+    print("Number of failed cases: {:,}".format(n_failed_cases))
     print("Success rate: {:.2%}".format(accuracy))
     print("Prediction loss: {:.4f}".format(loss))

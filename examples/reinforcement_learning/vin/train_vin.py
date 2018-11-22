@@ -166,7 +166,6 @@ if __name__ == '__main__':
         ),
 
         verbose=True,
-        batch_size=36,
         error=loss_function,
         epoch_end_signal=on_epoch_end_from_steps(env['steps']),
         **env['training_options']
