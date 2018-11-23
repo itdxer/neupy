@@ -1,5 +1,5 @@
-neupy\.algorithms\.rbfn package
-===============================
+neupy.algorithms.rbfn package
+=============================
 
 Submodules
 ----------

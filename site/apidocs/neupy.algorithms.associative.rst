@@ -1,5 +1,5 @@
-neupy\.algorithms\.associative package
-======================================
+neupy.algorithms.associative package
+====================================
 
 Submodules
 ----------

@@ -1,5 +1,5 @@
-neupy\.algorithms\.gd package
-=============================
+neupy.algorithms.gd package
+===========================
 
 Submodules
 ----------

@@ -1,5 +1,5 @@
-neupy\.plots package
-====================
+neupy.plots package
+===================
 
 Submodules
 ----------

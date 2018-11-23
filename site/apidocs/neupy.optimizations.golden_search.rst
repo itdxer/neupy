@@ -1,5 +1,5 @@
-neupy\.optimizations\.golden\_search module
-===========================================
+neupy.optimizations.golden_search module
+========================================
 
 .. automodule:: neupy.optimizations.golden_search
     :members:

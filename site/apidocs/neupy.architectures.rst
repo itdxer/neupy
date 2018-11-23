@@ -1,5 +1,5 @@
-neupy\.architectures package
-============================
+neupy.architectures package
+===========================
 
 Submodules
 ----------

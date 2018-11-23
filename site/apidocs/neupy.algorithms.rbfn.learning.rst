@@ -1,5 +1,5 @@
-neupy\.algorithms\.rbfn\.learning module
-========================================
+neupy.algorithms.rbfn.learning module
+=====================================
 
 .. automodule:: neupy.algorithms.rbfn.learning
     :members:

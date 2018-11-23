@@ -1,5 +1,5 @@
-neupy\.algorithms\.constructor module
-=====================================
+neupy.algorithms.constructor module
+===================================
 
 .. automodule:: neupy.algorithms.constructor
     :members:

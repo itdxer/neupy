@@ -16,6 +16,30 @@ Code Examples
 
 NeuPy is very intuitive and it's easy to read and understand the code. To learn more about different Neural Network types you can check these code examples.
 
+
+
+.. raw:: html
+
+    <table border="1" style="background-color: white;">
+        <tr>
+          <td colspan="2">
+              <h3>Competitive networks</h3>
+          </td>
+        </tr>
+        <tr>
+            <td border="0" width="30%">
+                <a href="http://neupy.com/2018/03/26/making_art_with_growing_neural_gas.html#id1">
+                <img src="https://raw.githubusercontent.com/itdxer/neupy/master/site/_static/intro/gng-animation-intro.gif" width="100%">
+                </a>
+            </td>
+            <td border="0" valign="top">
+                <h3><a href="http://neupy.com/2018/03/26/making_art_with_growing_neural_gas.html#id1">Growing Neural Gas</a></h3>
+                <p>Growing Neural Gas is an algorithm that learns topological structure of the data.</p>
+                <p>Code that generates animation can be found in <a href="https://github.com/itdxer/neupy/blob/master/notebooks/growing-neural-gas/Growing%20Neural%20Gas%20animated.ipynb">this ipython notebook</a></p>
+            </td>
+        </tr>
+    </table>
+
 Jupyter Notebooks
 -----------------
 

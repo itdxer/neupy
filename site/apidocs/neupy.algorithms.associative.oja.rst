@@ -1,5 +1,5 @@
-neupy\.algorithms\.associative\.oja module
-==========================================
+neupy.algorithms.associative.oja module
+=======================================
 
 .. automodule:: neupy.algorithms.associative.oja
     :members:

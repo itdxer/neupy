@@ -1,5 +1,5 @@
-neupy\.layers package
-=====================
+neupy.layers package
+====================
 
 Subpackages
 -----------

@@ -1,5 +1,5 @@
-neupy\.algorithms\.gd\.adagrad module
-=====================================
+neupy.algorithms.gd.adagrad module
+==================================
 
 .. automodule:: neupy.algorithms.gd.adagrad
     :members:

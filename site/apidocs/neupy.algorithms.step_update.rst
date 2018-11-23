@@ -1,5 +1,5 @@
-neupy\.algorithms\.step\_update package
-=======================================
+neupy.algorithms.step_update package
+====================================
 
 Submodules
 ----------

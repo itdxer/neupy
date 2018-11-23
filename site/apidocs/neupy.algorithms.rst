@@ -1,5 +1,5 @@
-neupy\.algorithms package
-=========================
+neupy.algorithms package
+========================
 
 Subpackages
 -----------

@@ -1,5 +1,5 @@
-neupy\.algorithms\.competitive\.sofm module
-===========================================
+neupy.algorithms.competitive.sofm module
+========================================
 
 .. automodule:: neupy.algorithms.competitive.sofm
     :members:

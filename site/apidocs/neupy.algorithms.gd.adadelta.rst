@@ -1,5 +1,5 @@
-neupy\.algorithms\.gd\.adadelta module
-======================================
+neupy.algorithms.gd.adadelta module
+===================================
 
 .. automodule:: neupy.algorithms.gd.adadelta
     :members:

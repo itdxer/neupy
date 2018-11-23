@@ -1,5 +1,5 @@
-neupy\.algorithms\.memory\.discrete\_hopfield\_network module
-=============================================================
+neupy.algorithms.memory.discrete_hopfield_network module
+========================================================
 
 .. automodule:: neupy.algorithms.memory.discrete_hopfield_network
     :members:

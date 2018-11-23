@@ -1,5 +1,5 @@
-neupy\.algorithms\.gd\.base module
-==================================
+neupy.algorithms.gd.base module
+===============================
 
 .. automodule:: neupy.algorithms.gd.base
     :members:

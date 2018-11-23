@@ -1,5 +1,5 @@
-neupy\.core\.config module
-==========================
+neupy.core.config module
+========================
 
 .. automodule:: neupy.core.config
     :members:

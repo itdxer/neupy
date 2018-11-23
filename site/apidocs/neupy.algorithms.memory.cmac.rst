@@ -1,5 +1,5 @@
-neupy\.algorithms\.memory\.cmac module
-======================================
+neupy.algorithms.memory.cmac module
+===================================
 
 .. automodule:: neupy.algorithms.memory.cmac
     :members:

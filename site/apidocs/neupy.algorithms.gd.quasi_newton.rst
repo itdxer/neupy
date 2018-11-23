@@ -1,5 +1,5 @@
-neupy\.algorithms\.gd\.quasi\_newton module
-===========================================
+neupy.algorithms.gd.quasi_newton module
+=======================================
 
 .. automodule:: neupy.algorithms.gd.quasi_newton
     :members:

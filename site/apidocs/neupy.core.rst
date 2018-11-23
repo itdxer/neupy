@@ -1,5 +1,5 @@
-neupy\.core package
-===================
+neupy.core package
+==================
 
 Submodules
 ----------

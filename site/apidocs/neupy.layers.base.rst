@@ -1,5 +1,5 @@
-neupy\.layers\.base module
-==========================
+neupy.layers.base module
+========================
 
 .. automodule:: neupy.layers.base
     :members:

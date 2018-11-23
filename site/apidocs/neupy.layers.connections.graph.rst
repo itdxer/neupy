@@ -1,5 +1,5 @@
-neupy\.layers\.connections\.graph module
-========================================
+neupy.layers.connections.graph module
+=====================================
 
 .. automodule:: neupy.layers.connections.graph
     :members:

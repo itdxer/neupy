@@ -1,5 +1,5 @@
-neupy\.algorithms\.regularization\.base module
-==============================================
+neupy.algorithms.regularization.base module
+===========================================
 
 .. automodule:: neupy.algorithms.regularization.base
     :members:

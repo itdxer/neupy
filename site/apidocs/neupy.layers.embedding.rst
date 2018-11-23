@@ -1,5 +1,5 @@
-neupy\.layers\.embedding module
-===============================
+neupy.layers.embedding module
+=============================
 
 .. automodule:: neupy.layers.embedding
     :members:

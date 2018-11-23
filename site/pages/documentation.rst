@@ -6,8 +6,8 @@ Documentation
 Beginners guide
 ---------------
 
-* :doc:`Installation <../pages/installation>`
-* :doc:`Quick start <../docs/quickstart>`
+* `Installation <../pages/installation.html>`_
+* `Quick start <../docs/quickstart.html>`_
 
 Layers
 ------

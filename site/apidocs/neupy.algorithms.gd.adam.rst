@@ -1,5 +1,5 @@
-neupy\.algorithms\.gd\.adam module
-==================================
+neupy.algorithms.gd.adam module
+===============================
 
 .. automodule:: neupy.algorithms.gd.adam
     :members:

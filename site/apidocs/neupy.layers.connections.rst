@@ -1,5 +1,5 @@
-neupy\.layers\.connections package
-==================================
+neupy.layers.connections package
+================================
 
 Submodules
 ----------
