@@ -11,6 +11,7 @@ build/
 # Tests
 *-failed-diff.png
 .coverage
+.pytest_cache
 
 # Other
 .tox/*
@@ -32,6 +33,10 @@ site/blog/*
 site/drafts/*
 site/source/docs/*
 site/build/*
+
+# NeuPy folders
+examples/*
+notebooks/*
 
 # Examples
 examples/rbfn/music_speech/data/*
