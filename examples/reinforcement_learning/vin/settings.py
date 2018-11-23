@@ -1,5 +1,5 @@
 import os
-
+from neupy import algorithms
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 DATA_DIR = os.path.join(CURRENT_DIR, 'data')
@@ -60,15 +60,15 @@ environments = {
         k=36,
         epochs=120,
         steps={
-            30: 0.002,
-            60: 0.001,
-            90: 0.0005,
+            30: 0.005,
+            60: 0.002,
+            90: 0.001,
         },
         training_options=dict(
             decay=0.9,
             epsilon=1e-6,
-            step=0.005,
-            batch_size=256,
+            step=0.01,
+            batch_size=36,
         )
     ),
 }

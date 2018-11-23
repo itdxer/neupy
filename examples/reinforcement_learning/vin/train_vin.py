@@ -21,7 +21,7 @@ parser.add_argument('--imsize', '-i', choices=[8, 16, 28],
 
 
 def random_weight(shape):
-    initializer = init.Uniform(0, 0.01)
+    initializer = init.Normal()
     weight = initializer.sample(shape)
     return tf.Variable(
         asfloat(weight),
@@ -100,7 +100,7 @@ def create_VIN(input_image_shape=(8, 8, 2), n_hidden_filters=150,
             # Convolve R and V separately and then add outputs together with
             # the Elementwise layer. This part of the code looks different
             # from the one that was used in the original VIN repo, but
-            # it does the same logic.
+            # it does the same operation.
             #
             # conv(x, w) == (conv(x1, w1) + conv(x2, w2))
             # where, x = concat(x1, x2)
