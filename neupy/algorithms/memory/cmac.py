@@ -10,7 +10,7 @@ __all__ = ('CMAC',)
 
 class CMAC(BaseNetwork):
     """
-    CMAC Network based on memory.
+    Cerebellar Model Articulation Controller (CMAC) Network based on memory.
 
     Notes
     -----
