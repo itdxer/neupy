@@ -129,6 +129,22 @@ NeuPy is very intuitive and it's easy to read and understand the code. To learn 
               </ul>
             </td>
         </tr>
+        <tr>
+            <td width="35%" valign="top" style="text-align: center; padding: 10px;">
+                <h3>Natural Language Processing (NLP)</h3>
+            </td>
+            <td valign="top" style="padding: 10px;">
+              <div><b>Classification:</b></div>
+              <ul>
+                <li><a href="https://github.com/itdxer/neupy/tree/master/examples/mlp/imdb_review_classification">IMDB review classification using CBOW and RPROP MLP</a></li>
+                <li><a href="https://github.com/itdxer/neupy/tree/master/examples/rnn/reber_gru.py">Reber Grammar Classification, GRU RNN</a></li>
+              </ul>
+              <div><b>Sequence to Sequence:</b></div>
+              <ul>
+                <li><a href="https://github.com/itdxer/neupy/tree/master/examples/rnn/shakespeare_lstm.py">Shakespear text generation, LSTM RNN</a></li>
+              </ul>
+            </td>
+        </tr>
     </table>
 
 .. raw:: html
