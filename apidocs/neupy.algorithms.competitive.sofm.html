@@ -205,12 +205,16 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_inputs</strong> : int</p>
 <blockquote>
-<div><p>Number of input units.</p>
+<div><p>Number of features (columns) in the input data.</p>
 </div></blockquote>
 <p><strong>n_outputs</strong> : int or None</p>
 <blockquote>
 <div><p>Number of outputs. Parameter is optional in case if
 <span class="docutils literal"><span class="pre">feature_grid</span></span> was specified.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">n_outputs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">n_outputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">feature_grid</span><span class="p">)</span>
+</pre></div>
+</div>
 </div></blockquote>
 <p><strong>learning_radius</strong> : int</p>
 <blockquote>
@@ -584,11 +588,15 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
         </div></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../2018/03/26/making_art_with_growing_neural_gas.html">Making Art with Growing Neural Gas</a>
+        </li><li>
+            <a href="../2017/12/17/sofm_text_style.html">Create unique text-style with SOFM</a>
+        </li><li>
+            <a href="../2017/12/13/sofm_art.html">The Art of SOFM</a>
+        </li><li>
+            <a href="../2017/12/09/sofm_applications.html">Self-Organizing Maps and Applications</a>
+        </li><li>
             <a href="../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
-        </li><li>
-            <a href="../2016/11/12/mnist_classification.html">MNIST Classification</a>
-        </li><li>
-            <a href="../2015/09/21/password_recovery.html">Password recovery</a>
         </li></ul>
 </div></section><section><div class="widget">
     <h1>Install NeuPy</h1>

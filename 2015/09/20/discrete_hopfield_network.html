@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
         <meta name="viewport" content="width=device-width">
-        <title>Discrete Hopfiel Network &mdash; NeuPy</title>
+        <title>Discrete Hopfield Network &mdash; NeuPy</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -195,26 +195,26 @@
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
             <span>September 20, 2015</span>
         </div>
-    <div class="section" id="discrete-hopfiel-network">
-<span id="discrete-hopfield-network"></span><h1><a class="toc-backref" href="#id5">Discrete Hopfiel Network</a></h1>
+    <div class="section" id="discrete-hopfield-network">
+<span id="id1"></span><h1><a class="toc-backref" href="#id6">Discrete Hopfield Network</a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#discrete-hopfiel-network" id="id5">Discrete Hopfiel Network</a><ul>
-<li><a class="reference internal" href="#architecture" id="id6">Architecture</a><ul>
-<li><a class="reference internal" href="#training-procedure" id="id7">Training procedure</a></li>
-<li><a class="reference internal" href="#recovery-from-memory" id="id8">Recovery from memory</a><ul>
-<li><a class="reference internal" href="#synchronous" id="id9">Synchronous</a></li>
-<li><a class="reference internal" href="#asynchronous" id="id10">Asynchronous</a></li>
+<li><a class="reference internal" href="#discrete-hopfield-network" id="id6">Discrete Hopfield Network</a><ul>
+<li><a class="reference internal" href="#architecture" id="id7">Architecture</a><ul>
+<li><a class="reference internal" href="#training-procedure" id="id8">Training procedure</a></li>
+<li><a class="reference internal" href="#recovery-from-memory" id="id9">Recovery from memory</a><ul>
+<li><a class="reference internal" href="#synchronous" id="id10">Synchronous</a></li>
+<li><a class="reference internal" href="#asynchronous" id="id11">Asynchronous</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#memory-limit" id="id11">Memory limit</a></li>
-<li><a class="reference internal" href="#hallucinations" id="id12">Hallucinations</a></li>
-<li><a class="reference internal" href="#example" id="id13">Example</a></li>
-<li><a class="reference internal" href="#more-reading" id="id14">More reading</a></li>
-<li><a class="reference internal" href="#references" id="id15">References</a></li>
+<li><a class="reference internal" href="#memory-limit" id="id12">Memory limit</a></li>
+<li><a class="reference internal" href="#hallucinations" id="id13">Hallucinations</a></li>
+<li><a class="reference internal" href="#example" id="id14">Example</a></li>
+<li><a class="reference internal" href="#more-reading" id="id15">More reading</a></li>
+<li><a class="reference internal" href="#references" id="id16">References</a></li>
 </ul>
 </li>
 </ul>
@@ -233,9 +233,9 @@ Though you don&#8217;t clearly see all objects in the picture, you start to reme
 That&#8217;s what it is all about.
 Autoassociative memory networks is a posibily to interprete functions of memory into neural network model.</p>
 <p>Don&#8217;t worry if you have only basic knowledge in Linear Algebra; in this article I&#8217;ll try to explain the idea as simple as possible.
-If you are interested in proofs of the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> you can check them at R. Rojas. Neural Networks <a class="footnote-reference" href="#id2" id="id1">[1]</a> book.</p>
+If you are interested in proofs of the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> you can check them at R. Rojas. Neural Networks <a class="footnote-reference" href="#id3" id="id2">[1]</a> book.</p>
 <div class="section" id="architecture">
-<h2><a class="toc-backref" href="#id6">Architecture</a></h2>
+<h2><a class="toc-backref" href="#id7">Architecture</a></h2>
 <p><a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> is an easy algorithm.
 It&#8217;s simple because you don&#8217;t need a lot of background knowledge in Maths for using it.
 Everything you need to know is how to make a basic Linear Algebra operations, like outer product or sum of two matrices.</p>
@@ -256,7 +256,7 @@ Basically they are more likely to be orthogonal to each other which is a critica
 But as I mentioned before we won&#8217;t talk about proofs or anything not related to basic understanding of Linear Algebra operations.</p>
 <p>So, let&#8217;s look at how we can train and use the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
 <div class="section" id="training-procedure">
-<h3><a class="toc-backref" href="#id7">Training procedure</a></h3>
+<h3><a class="toc-backref" href="#id8">Training procedure</a></h3>
 <p>We can&#8217;t use memory without any patterns stored in it.
 So first of all we are going to learn how to train the network.
 For the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> train procedure doesn&#8217;t require any iterations.
@@ -399,12 +399,12 @@ The main problem would appear when we have more than one vector stored in the we
 Each value on the diagonal would be equal to the number of stored vectors in it.</p>
 </div>
 <div class="section" id="recovery-from-memory">
-<h3><a class="toc-backref" href="#id8">Recovery from memory</a></h3>
+<h3><a class="toc-backref" href="#id9">Recovery from memory</a></h3>
 <p>The main advantage of Autoassociative network is that it is able to recover pattern from the memory using just a partial information about the pattern.
 There are already two main approaches to this situation, synchronous and asynchronous.
 We are going to master both of them.</p>
 <div class="section" id="synchronous">
-<h4><a class="toc-backref" href="#id9">Synchronous</a></h4>
+<h4><a class="toc-backref" href="#id10">Synchronous</a></h4>
 <p>Synchronous approach is much more easier for understanding, so we are going to look at it firstly.
 To recover your pattern from memory you just need to multiply the weight matrix by the input vector.</p>
 <div class="math">
@@ -469,7 +469,7 @@ In <cite>voting</cite> procedure we use each row that was multiplied by bipolar 
 <p>Of course you can use 0 and 1 values and sometime you will get the correct result, but this approach give you much worse results than explained above.</p>
 </div>
 <div class="section" id="asynchronous">
-<h4><a class="toc-backref" href="#id10">Asynchronous</a></h4>
+<h4><a class="toc-backref" href="#id11">Asynchronous</a></h4>
 <p>Previous approach is good, but it has some limitations.
 If you change one value in the input vector it can change your output result and value won&#8217;t converge to the known pattern.
 Another popular approach is an <strong>asynchronous</strong>.
@@ -567,7 +567,7 @@ We can repeat it as many times as we want, but we will be getting the same value
 </div>
 </div>
 <div class="section" id="memory-limit">
-<h2><a class="toc-backref" href="#id11">Memory limit</a></h2>
+<h2><a class="toc-backref" href="#id12">Memory limit</a></h2>
 <p>Obviously, you can&#8217;t store infinite number of vectors inside the network.
 There are two good rules of thumb.</p>
 <p>Concider that <span class="math">\(n\)</span> is the dimension (number of features) of your input vector and <span class="math">\(m\)</span> is the number of patterns that you want to store in the network.
@@ -589,7 +589,7 @@ Before use this rule you have to think about type of your input patterns.</p>
 Of course you can find situations when these rules will fail.</p>
 </div>
 <div class="section" id="hallucinations">
-<h2><a class="toc-backref" href="#id12">Hallucinations</a></h2>
+<h2><a class="toc-backref" href="#id13">Hallucinations</a></h2>
 <p>Hallucinations is one of the main problems in the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.
 Sometimes network output can be something that we hasn&#8217;t taught it.</p>
 <p>To understand this phenomena we should firstly define the Hopfield energy function.</p>
@@ -620,7 +620,7 @@ Unfortunately, we are very limited in terms of numbers of dimensions we could pl
 <p>Full source code for this plot you can find on <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/memory/dhn_energy_func.py">github</a></p>
 </div>
 <div class="section" id="example">
-<h2><a class="toc-backref" href="#id13">Example</a></h2>
+<h2><a class="toc-backref" href="#id14">Example</a></h2>
 <p>Now we are ready for a more practical example.
 Let&#8217;s define a few images that we are going to teach the network.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -798,25 +798,25 @@ Let&#8217;s define a few images that we are going to teach the network.</p>
 <p>Properties that we&#8217;ve reviewed so far are just the most interesting and maybe other patterns you can encounter on your own.</p>
 </div>
 <div class="section" id="more-reading">
-<h2><a class="toc-backref" href="#id14">More reading</a></h2>
+<h2><a class="toc-backref" href="#id15">More reading</a></h2>
 <p>In addition you can read another article about a &#8216;<a class="reference internal" href="../21/password_recovery.html#password-recovery"><span>Password recovery</span></a>&#8216; from the memory using the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a>.</p>
 </div>
 <div class="section" id="references">
-<h2><a class="toc-backref" href="#id15">References</a></h2>
-<table class="docutils footnote" frame="void" id="id2" rules="none">
+<h2><a class="toc-backref" href="#id16">References</a></h2>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>R. Rojas. Neural Networks. In Associative Networks. pp. 311 - 336, 1996.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>R. Rojas. Neural Networks. In Associative Networks. pp. 311 - 336, 1996.</td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id3" rules="none">
+<table class="docutils footnote" frame="void" id="id4" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label">[2]</td><td>Math4IQB. (2013, November 17). Hopfield Networks. Retrieved
 from <a class="reference external" href="https://www.youtube.com/watch?v=gfPUWwBkXZY">https://www.youtube.com/watch?v=gfPUWwBkXZY</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id4" rules="none">
+<table class="docutils footnote" frame="void" id="id5" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label">[3]</td><td>R. Callan. The Essence of Neural Networks. In Pattern Association. pp. 84 - 98, 1999.</td></tr>
@@ -841,11 +841,15 @@ from <a class="reference external" href="https://www.youtube.com/watch?v=gfPUWwB
         </ul><div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "neupy";    var disqus_identifier = "2015/09/20/discrete_hopfield_network";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../../../2018/03/26/making_art_with_growing_neural_gas.html">Making Art with Growing Neural Gas</a>
+        </li><li>
+            <a href="../../../2017/12/17/sofm_text_style.html">Create unique text-style with SOFM</a>
+        </li><li>
+            <a href="../../../2017/12/13/sofm_art.html">The Art of SOFM</a>
+        </li><li>
+            <a href="../../../2017/12/09/sofm_applications.html">Self-Organizing Maps and Applications</a>
+        </li><li>
             <a href="../../../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
-        </li><li>
-            <a href="../../../2016/11/12/mnist_classification.html">MNIST Classification</a>
-        </li><li>
-            <a href="../21/password_recovery.html">Password recovery</a>
         </li></ul>
 </div></section><section><div class="widget">
     <h1>Install NeuPy</h1>

@@ -270,7 +270,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <span class="gp">&gt;&gt;&gt; </span><span class="n">input_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">target_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lmsnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">LMS</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lmsnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">LMS</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lmsnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">target_data</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lmsnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]))</span>
@@ -319,11 +319,15 @@ each training epoch.</p>
         </div></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../2018/03/26/making_art_with_growing_neural_gas.html">Making Art with Growing Neural Gas</a>
+        </li><li>
+            <a href="../2017/12/17/sofm_text_style.html">Create unique text-style with SOFM</a>
+        </li><li>
+            <a href="../2017/12/13/sofm_art.html">The Art of SOFM</a>
+        </li><li>
+            <a href="../2017/12/09/sofm_applications.html">Self-Organizing Maps and Applications</a>
+        </li><li>
             <a href="../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
-        </li><li>
-            <a href="../2016/11/12/mnist_classification.html">MNIST Classification</a>
-        </li><li>
-            <a href="../2015/09/21/password_recovery.html">Password recovery</a>
         </li></ul>
 </div></section><section><div class="widget">
     <h1>Install NeuPy</h1>

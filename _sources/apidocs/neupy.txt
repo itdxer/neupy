@@ -10,7 +10,6 @@ Subpackages
     neupy.architectures
     neupy.core
     neupy.datasets
-    neupy.helpers
     neupy.layers
     neupy.optimizations
     neupy.plots

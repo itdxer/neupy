@@ -7,6 +7,7 @@ Submodules
 .. toctree::
 
    neupy.algorithms.competitive.art
+   neupy.algorithms.competitive.growing_neural_gas
    neupy.algorithms.competitive.lvq
    neupy.algorithms.competitive.neighbours
    neupy.algorithms.competitive.randomized_pca

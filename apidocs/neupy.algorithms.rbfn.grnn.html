@@ -248,7 +248,7 @@ and use them to make a predictions.</li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">preprocessing</span><span class="o">.</span><span class="n">minmax_scale</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="n">preprocessing</span><span class="o">.</span><span class="n">minmax_scale</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))),</span>
-<span class="gp">... </span>    <span class="n">train_size</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nw</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GRNN</span><span class="p">(</span><span class="n">std</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
@@ -354,11 +354,15 @@ be copied. Defaults to <span class="docutils literal"><span class="pre">True</sp
         </div></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Articles</h1>
     <ul><li>
+            <a href="../2018/03/26/making_art_with_growing_neural_gas.html">Making Art with Growing Neural Gas</a>
+        </li><li>
+            <a href="../2017/12/17/sofm_text_style.html">Create unique text-style with SOFM</a>
+        </li><li>
+            <a href="../2017/12/13/sofm_art.html">The Art of SOFM</a>
+        </li><li>
+            <a href="../2017/12/09/sofm_applications.html">Self-Organizing Maps and Applications</a>
+        </li><li>
             <a href="../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
-        </li><li>
-            <a href="../2016/11/12/mnist_classification.html">MNIST Classification</a>
-        </li><li>
-            <a href="../2015/09/21/password_recovery.html">Password recovery</a>
         </li></ul>
 </div></section><section><div class="widget">
     <h1>Install NeuPy</h1>

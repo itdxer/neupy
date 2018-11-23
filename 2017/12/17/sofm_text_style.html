@@ -1,0 +1,459 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
+        <meta name="viewport" content="width=device-width">
+        <title>Create unique text-style with SOFM &mdash; NeuPy</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="next" title="The Art of SOFM" href="../13/sofm_art.html" /><link rel="prev" title="Making Art with Growing Neural Gas" href="../../../2018/03/26/making_art_with_growing_neural_gas.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+    <style media="screen" type="text/css">
+        .docutils { width: 100%; }
+        .docutils td { padding: 10px; }
+        .section { word-wrap:break-word; }
+        .descname { font-weight: bold; }
+        .highlight-python + .figure { margin-top: 20px; }
+        .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+        .dataframe td { padding: 5px; }
+
+        .math .gd { color: #000 !important; } /* Generic.Deleted */
+        .math .m { color: #000 !important; } /* Literal.Number */
+        .math .s { color: #000 !important; } /* Literal.String */
+        .math .mf { color: #000 !important; } /* Literal.Number.Float */
+        .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+        .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+        .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+        .math .sc { color: #000 !important; } /* Literal.String.Char */
+        .math .s2 { color: #000 !important; } /* Literal.String.Double */
+        .math .si { color: #000 !important; } /* Literal.String.Interpol */
+        .math .sx { color: #000 !important; } /* Literal.String.Other */
+        .math .s1 { color: #000 !important; } /* Literal.String.Single */
+        .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+        .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+        /* Background for class and function names */
+        dt[id^="neupy."] {
+            background-color: #e6edf2;
+            border: 1px solid #f8fafb;
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+        div[id^="module-neupy."] h1 {
+            display: none;
+        }
+
+        /* Search input field */
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            display: block;
+        }
+        .box {
+          padding-bottom: 50px;
+        }
+        .search-input-container {
+          width: 100%;
+          vertical-align: middle;
+          white-space: nowrap;
+          position: relative;
+        }
+        .search-input-container input#search {
+          width: 100%;
+          height: 50px;
+          padding-left: 45px;
+
+          float: left;
+          outline: none;
+          border: 1px solid #ddd;
+
+          box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          border-radius: 5px;
+
+          font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+          font-size: 12pt;
+        }
+        .search-input-container .icon {
+          position: absolute;
+          left: 0;
+          top: 50%;
+          margin-left: 17px;
+          margin-top: 13px;
+          z-index: 1;
+          color: #93a4ad;
+        }
+
+        #search-results ul.search {
+            padding: 0;
+        }
+        #search-results li p {
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        #search-results li {
+            background-color: #fff !important;
+            margin-bottom: 10px;
+            display: block !important;
+            padding: 15px;
+            border-bottom: 2px solid #ddd;
+        }
+        #search-results span.tag {
+            display: inline-block;
+            padding: 3px 4px;
+            margin-right: 8px;
+            position: relative;
+            top: -2px;
+
+            background: #888;
+            color: #fff;
+
+            font-size: 0.75em;
+            font-weight: 600;
+            line-height: 1;
+            text-transform: uppercase;
+
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            border-radius: 2px;
+        }
+    </style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+        <div>
+          <h1><a href="../../../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../docs/tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../pages/model_zoo.html">Model Zoo</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
+            <span>December 17, 2017</span>
+        </div>
+    <div class="section" id="create-unique-text-style-with-sofm">
+<h1>Create unique text-style with SOFM</h1>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/neupy-logo.png"><img alt="NeuPy logo" src="../../../_images/neupy-logo.png" style="width: 100%;" /></a>
+</div>
+<div class="section" id="introduction">
+<h2>Introduction</h2>
+<p>In this article, I want to show how to generate unique text style using Self-Organizing Feature Maps (SOFM). I won&#8217;t explain how SOFM works in this article, but if you want to learn more about algorithm you can check these articles.</p>
+<ol class="arabic simple">
+<li><a class="reference internal" href="../09/sofm_applications.html#sofm-applications"><span>Self-Organizing Maps and Applications</span></a></li>
+<li><a class="reference internal" href="../13/sofm_art.html#sofm-art"><span>The Art of SOFM</span></a></li>
+</ol>
+</div>
+<div class="section" id="transforming-text-into-the-data">
+<h2>Transforming text into the data</h2>
+<p>In order to start, we need to have some text prepared. I generated image using matplotlib, but anything else that able to generate image from the text will work.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="n">red</span><span class="p">,</span> <span class="n">blue</span><span class="p">,</span> <span class="n">white</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;#E24A33&#39;</span><span class="p">,</span> <span class="s1">&#39;#348ABD&#39;</span><span class="p">,</span> <span class="s1">&#39;#FFFFFF&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="n">white</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="s1">&#39;NeuPy&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;neupy-text.png&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">white</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/neupy-text.png"><img alt="NeuPy raw text" src="../../../_images/neupy-text.png" style="width: 50%;" /></a>
+</div>
+<p>We cannot train SOFM using image, for this reason we will have to transform image into a set of data points. In order to do it we will encode every black pixel as data point and we will ignore white pixels. It&#8217;s hard to see from the picture, but not all pixels are black and white. If you zoom close enough you will see that there are some gray pixels near the edge of each letter. For this reason, we have to binarize our image first.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.misc</span> <span class="kn">import</span> <span class="n">imread</span>
+
+<span class="n">neupy_text</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="s1">&#39;neupy-text.png&#39;</span><span class="p">)</span>
+<span class="c1"># Encode black pixels as 1 and white pixels as 0</span>
+<span class="n">neupy_text</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">neupy_text</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After binarization we have to filter all pixels that have value 1 and use pixel coordinates as a data point coordinates.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">ndenumerate</span><span class="p">(</span><span class="n">neupy_text</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="n">x</span> <span class="o">+</span> <span class="mi">300</span><span class="p">])</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can use scatter plot to show that collected data points still resemble the shape of the main text.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">blue</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/neupy-text-data-points.png"><img alt="NeuPy text represented as set of data points" src="../../../_images/neupy-text-data-points.png" style="width: 80%;" /></a>
+</div>
+</div>
+<div class="section" id="weight-initialization">
+<h2>Weight initialization</h2>
+<p>Weight initialization is very important step. With default random initialization it can be difficult for the network to cover the text, since in many cases neurons will have to travel across all image in order to get closer to their neighbors. In order to avoid this issue we have to manually generate grid of neurons, so that it would be easier for the network to cover the text.</p>
+<p>I tried many different patterns and most of them work, but one-dimensional or <em>nearly</em> one-dimensional grids produced best patterns. It&#8217;s mostly because patterns generated using two-dimensional grid look very similar to each other. With one-dimensional grid it&#8217;s like covering the same text with long string. Network will be forced to stretch and rollup in order to cover the text. I mentioned term <em>nearly</em> one-dimensional, because that&#8217;s the shape that I used at the end. Term &#8220;nearly&#8221; means that grid is two-dimensional, but because number of neurons along one dimension much larger than along the other we can think of it as almost one-dimensional. In the final solution I used grid with shape 2x1000.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># This parameter will be also used in the SOFM</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="c1"># Generate weights and arange them along sine wave.</span>
+<span class="c1"># Because sine way goes up and down the final pattern</span>
+<span class="c1"># will look more interesting.</span>
+<span class="n">weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+
+<span class="c1"># Width of the weights were selected specifically for the NeuPy text</span>
+<span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+<span class="c1"># Amplitute of the sine function also was selected in order</span>
+<span class="c1"># to roughly match height of the text</span>
+<span class="n">weight</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">50</span> <span class="o">+</span> <span class="mi">50</span>
+<span class="n">weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">weight</span><span class="p">,</span> <span class="n">weight</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can notice from the code that I applied sine function on the y-axis coordinates of the grid. With two-dimensional grid it&#8217;s easy to cover the text. We just put large rectangular grid over the text. With nearly one-dimensional grid it&#8217;s a bit tricky. We need to have a way that will allow us to cover our text and sine is one of the simple functions that can provide such a property. From the image below you can see how nicely it cover our text.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">weight</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">blue</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">red</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/initialized-sofm-weights.png"><img alt="Initialized SOFM weights along sine wave" src="../../../_images/initialized-sofm-weights.png" style="width: 100%;" /></a>
+</div>
+</div>
+<div class="section" id="training-network">
+<h2>Training network</h2>
+<p>And the last step is to train the network. It took me some time to find right parameters for the network. Typically it was easy to see that there is something wrong with a training when all neurons start forming strange shapes that look nothing like the text. The main problem I found a bit latter. Because we have roughly 20,000 data points and 2000 neurons we make to many updates during one iteration without reducing parameter values. Reducing step size helped to solve this issue, because every update makes small change to the grid and making lots of these small changes make noticeable difference.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+
+<span class="n">sofm</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">SOFM</span><span class="p">(</span>
+    <span class="n">n_inputs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">features_grid</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span>
+    <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+
+    <span class="c1"># With large number of training samples it&#39;s safer</span>
+    <span class="c1"># to use small step (learning rate)</span>
+    <span class="n">step</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+
+    <span class="c1"># Learning radis large for first 10 iterations, after that we</span>
+    <span class="c1"># assume that neurons found good positions on the text and we just</span>
+    <span class="c1"># need to move them a bit independentl in order to cover text better</span>
+    <span class="n">learning_radius</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+
+    <span class="c1"># after 10 iteration learning radius would be 0</span>
+    <span class="n">reduce_radius_after</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+
+    <span class="c1"># slowly decrease step size</span>
+    <span class="n">reduce_step_after</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Because of the small step size we have to do more training iterations. It takes more time to converge, but final results are more stable to some changes in the input data. It&#8217;s possible to speed up the overall process tuning parameter more carefully, but I decided that it&#8217;s good enough.</p>
+<p>I run training procedure for 30 iterations.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">):</span>
+    <span class="n">sofm</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Training iteration #{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iteration</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">sofm</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">blue</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/sofm-training-iteration-1.png"><img alt="SOFM training iteration #1" src="../../../_images/sofm-training-iteration-1.png" style="width: 80%;" /></a>
+</div>
+<p>SOFM was trained for only one iteration and we already can vaguely see most of the latters. Let&#8217;s wait a few more iterations.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/sofm-training-iteration-3.png"><img alt="SOFM training iteration #3" src="../../../_images/sofm-training-iteration-3.png" style="width: 80%;" /></a>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/sofm-training-iteration-5.png"><img alt="SOFM training iteration #5" src="../../../_images/sofm-training-iteration-5.png" style="width: 80%;" /></a>
+</div>
+<p>Now it&#8217;s way more clear that network makes progress during the training. And after 5 more iterations it&#8217;s almost perfectly covers text.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/sofm-training-iteration-10.png"><img alt="SOFM training iteration #10" src="../../../_images/sofm-training-iteration-10.png" style="width: 80%;" /></a>
+</div>
+<p>But even after 10 iterations we still can see that some of the letters still require some polishing. For instance, left part of the letter N hasn&#8217;t been properly covered.</p>
+<p>In addition, it&#8217;s important to point out that we specified step reduction after every 10 iterations. It means that now we won&#8217;t move neurons as much as we did before. Also, learning radius was reduced to zero, which means that after 10th iteration each neuron will move independently. And these two changes are exactly what we need. We can see from the picture that network covers text pretty good, but small changes will make it look even better.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/sofm-training-iteration-15.png"><img alt="SOFM training iteration #15" src="../../../_images/sofm-training-iteration-15.png" style="width: 80%;" /></a>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/sofm-training-iteration-30.png"><img alt="SOFM training iteration #30" src="../../../_images/sofm-training-iteration-30.png" style="width: 80%;" /></a>
+</div>
+<p>You can notice that there is almost no difference between iteration #15 and #30. It doesn&#8217;t look like we made any progress after 15th iteration, but it&#8217;s not true. If you stop training after 15th iteration, you will notice that some parts of the letters look a bit odd. These 15 last iterations do small changes that won&#8217;t be noticeable from the scatter plot, but they are important.</p>
+<p>And finally after all training iterations we can use our weights to generate logo.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Function comes from the neupy&#39;s examples folder</span>
+<span class="kn">from</span> <span class="nn">examples.competitive.utils</span> <span class="kn">import</span> <span class="n">plot_2d_grid</span>
+
+<span class="n">background_color</span> <span class="o">=</span> <span class="s1">&#39;#22264b&#39;</span>
+<span class="n">text_color</span> <span class="o">=</span> <span class="s1">&#39;#e8edf3&#39;</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="n">background_color</span><span class="p">)</span>
+
+<span class="n">sofm_weights</span> <span class="o">=</span> <span class="n">sofm</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">plot_2d_grid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">sofm_weights</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">color</span><span class="o">=</span><span class="n">text_color</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+
+<span class="c1"># Coordinates were picked so that text</span>
+<span class="c1"># will be in the center of the image</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">220</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">560</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/neupy-logo.png"><img alt="NeuPy logo" src="../../../_images/neupy-logo.png" style="width: 100%;" /></a>
+</div>
+</div>
+<div class="section" id="generalized-approach-for-any-text">
+<h2>Generalized approach for any text</h2>
+<p>There are some challenges that you can face when you try to adopt this solution for different text. First of all, from the code you could have noticed that I &#8220;hard-coded&#8221; bounds of the text. In more general solution they can be identified from the image, but it will make solution more complex. For instance, the right bound of the text can be associated with data point that has largest x-coordinate. And the same can be done for the upper bound of the text. Second problem is related to the parameters of the SOFM. The main idea was to make lots of small updates for a long time, but it might fail for some other text that has more letters, because we will have more data points and more updates during each iterations. Problem can be solved if step size will be reduced.</p>
+</div>
+<div class="section" id="further-reading">
+<h2>Further reading</h2>
+<p>If you want to learn more about SOFM, you can read the <a class="reference internal" href="../09/sofm_applications.html#sofm-applications"><span>&#8220;Self-Organizing Maps and Applications&#8221;</span></a> article that covers basic ideas behind SOFM and some of the problems that can be solved with this algorithm.</p>
+</div>
+<div class="section" id="code">
+<h2>Code</h2>
+<p>All the code that was used to generate images in the article you can find in <a class="reference external" href="https://github.com/itdxer/neupy/blob/master/notebooks/sofm/Generating%20NeuPy%20logo%20with%20SOFM.ipynb">iPython notebook on github</a>.</p>
+</div>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Posted by Yurii Shevchuk</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="../../../tags/sofm.html">sofm</a>, <a href="../../../tags/unsupervised.html">unsupervised</a>, <a href="../../../tags/art.html">art</a></span>
+        </div>
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="../../../2018/03/26/making_art_with_growing_neural_gas.html">Making Art with Growing Neural Gas</a></li>
+            <li class="right"><a href="../13/sofm_art.html">The Art of SOFM</a> &raquo; </li>
+        </ul><div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "neupy";    var disqus_identifier = "2017/12/17/sofm_text_style";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Articles</h1>
+    <ul><li>
+            <a href="../../../2018/03/26/making_art_with_growing_neural_gas.html">Making Art with Growing Neural Gas</a>
+        </li><li>
+            <a href="#">Create unique text-style with SOFM</a>
+        </li><li>
+            <a href="../13/sofm_art.html">The Art of SOFM</a>
+        </li><li>
+            <a href="../09/sofm_applications.html">Self-Organizing Maps and Applications</a>
+        </li><li>
+            <a href="../../../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
+        </li></ul>
+</div></section><section><div class="widget">
+    <h1>Install NeuPy</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neupy</pre>
+        </div>
+    </div>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../../../docs/tutorials.html">tutorials</a> and <a href="../../../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../../search.html" method="get">
+          <div class="box">
+            <div class="search-input-container">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" name="q" id="search" placeholder="Search..." />
+            </div>
+          </div>
+    </form>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature feel free to
+        <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
+        on Github
+    </p>
+</div></section><section><div class="widget">
+    <h1>Old NeuPy versions</h1>
+    <p>
+        <div>Documentation for the old NeuPy versions you can find <a href="../../../pages/versions.html">here</a>.</div>
+    </p>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>
