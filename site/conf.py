@@ -7,6 +7,7 @@ import re
 import sys
 import importlib
 
+import bs4
 import tinkerer
 import tinkerer.paths
 
@@ -225,6 +226,31 @@ def preprocess_texts(app, docname, source):
     process_docstring(app, None, None, None, None, source)
 
 
+def extend_html_page_context(app, pagename, templatename, context, doctree):
+    env = app.builder.env
+
+    if pagename in env.blog_metadata:
+        metadata = env.blog_metadata[pagename]
+
+        if metadata.is_post:
+            body = bs4.BeautifulSoup(metadata.body)
+
+            short_description = body.select_one('.short-description')
+
+            if short_description is None:
+                print("Article {} doesn't have short description"
+                      "".format(pagename))
+
+                metadata.short_description = ""
+                return
+
+            short_description_html = str(short_description)
+            short_description.decompose()
+
+            metadata.short_description = short_description_html
+            metadata.body = str(body)
+
+
 def process_arguments(app, what, name, obj, options, signature,
                       return_annotation):
     """
@@ -242,6 +268,7 @@ def setup(app):
     app.connect('autodoc-process-docstring', process_docstring)
     app.connect('autodoc-process-signature', process_arguments)
     app.connect('source-read', preprocess_texts)
+    app.connect("html-page-context", extend_html_page_context)
 
 # **************************************************************
 # Do not modify below lines as the values are required by

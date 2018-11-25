@@ -1,6 +1,16 @@
 Hyperparameter optimization for Neural Networks
 ===============================================
 
+.. raw:: html
+
+    <div class="short-description">
+        <img src="https://raw.githubusercontent.com/itdxer/neupy/master/site/_static/intro/hyperopt-2-intro.png" align="right">
+        <p>
+        This article explains different hyperparameter algorithms that can be used for neural networks. It covers simple algorithms like Grid Search, Random Search and more complicated algorithms like Gaussian Process and Tree-structured Parzen Estimators (TPE).
+        </p>
+        <span clear="right"></span>
+    </div>
+
 .. contents::
 
 Introduction
@@ -15,8 +25,7 @@ Sometimes it can be difficult to choose a correct architecture for Neural Networ
 * Learning rate
 * Loss function
 
-Even though the list of parameters in not even close to being complete, it's still impressive how many parameters influences network's accuracy.
-
+Even though the list of parameters in not even close to being complete, it's still impressive how many parameters influences network's performance.
 
 Hyperparameter optimization
 ---------------------------

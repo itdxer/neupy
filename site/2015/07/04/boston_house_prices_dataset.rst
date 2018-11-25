@@ -3,6 +3,14 @@
 Predict prices for houses in the area of Boston
 ===============================================
 
+.. raw:: html
+
+    <div class="short-description">
+        <p>
+        Boston house prices is a classical dataset for regression. This article shows how to make a simple data processing and train neural network for house price prediction.
+        </p>
+    </div>
+
 For this article we are going to predict house prices using Conjugate Gradient algorithm.
 
 For the beginning we should load the data.

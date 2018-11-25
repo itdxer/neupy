@@ -1,0 +1,28 @@
+{#-
+    boilerplate/aggregated.html
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Front page and following pages aggregating multiple posts per page.
+
+    :copyright: Copyright 2011-2018 by Vlad Riscutia and contributors (see
+    CONTRIBUTORS file).
+    :license: FreeBSD, see LICENSE file
+-#}
+
+{%- extends "page.html" -%}
+
+{%- set archive_title = archive_title is not defined and ' Blog Archive ' or archive_title -%}
+
+{%- block body -%}
+    {%- for metadata in posts -%}
+        {{ timestamp(metadata.formatted_date) }}
+        <div class="section">
+            {{ metadata.body }}
+        </div>
+        {{ post_meta(metadata, metadata.comment_count) }}
+        {%- if not loop.last -%}<div class="separator post_separator"></div>{%- endif -%}
+    {%- endfor -%}
+    <div class="archive_link">
+        <a href="{{ pathto('archive') }}">{{ archivechar }}{{ archive_title }}{{ archivechar }}</a>
+    </div>
+{%- endblock -%}

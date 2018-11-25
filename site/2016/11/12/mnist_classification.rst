@@ -3,11 +3,20 @@
 MNIST Classification
 ====================
 
+.. raw:: html
+
+    <div class="short-description">
+        <p>
+        The MNIST problem is probably the most known for those who have already
+        heard about neural networks. This short tutorial shows how to build simple network for digit classification in NeuPy.
+        </p>
+    </div>
+
 Data preparation
 ----------------
 
 The MNIST problem is probably the most known for those who have already
-heard about neural networks. This short tutorial shows you how to build prediction models in NeuPy. Let's start developing model.
+heard about neural networks. This short tutorial shows how to build simple network for digit classification in NeuPy. Let's start developing model.
 
 First of all we need to load data.
 

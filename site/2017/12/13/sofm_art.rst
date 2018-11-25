@@ -3,6 +3,21 @@
 The Art of SOFM
 ===============
 
+.. raw:: html
+
+    <div class="short-description">
+        <img src="https://raw.githubusercontent.com/itdxer/neupy/master/site/_static/intro/sofm-art-intro.png" align="right">
+        <p>
+        It's quite rare that algorithm can not only extract knowledge from the data, but also produce something beautiful using exactly the same set of training rules without any modifications.
+        </p>
+
+        <p>
+        SOFM is a great example of the algorithm that can produce simple work of art when used in the right way.
+        </p>
+        <span clear="right"></span>
+    </div>
+
+
 Introduction
 ------------
 
