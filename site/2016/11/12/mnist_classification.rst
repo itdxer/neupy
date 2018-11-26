@@ -7,26 +7,22 @@ MNIST Classification
 
     <div class="short-description">
         <p>
-        The MNIST problem is probably the most known for those who have already
-        heard about neural networks. This short tutorial shows how to build simple network for digit classification in NeuPy.
+        This short tutorial shows how to design and train simple network for digit classification in NeuPy.
         </p>
     </div>
+
+This short tutorial shows how to build and train simple network for digit classification in NeuPy.
 
 Data preparation
 ----------------
 
-The MNIST problem is probably the most known for those who have already
-heard about neural networks. This short tutorial shows how to build simple network for digit classification in NeuPy. Let's start developing model.
-
-First of all we need to load data.
+First of all we need to load data. I used scikit-learn to fetch the MNIST dataset, but you can load it using some other library.
 
 .. code-block:: python
 
     >>> from sklearn import datasets, model_selection
     >>> mnist = datasets.fetch_mldata('MNIST original')
     >>> data, target = mnist.data, mnist.target
-
-I used scikit-learn to fetch the MNIST dataset, but you can load it in different way.
 
 Data doesn't have appropriate format for neural network, so we need to make simple transformation before using it.
 

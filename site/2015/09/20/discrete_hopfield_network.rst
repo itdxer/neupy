@@ -6,7 +6,7 @@ Discrete Hopfiel Network
 .. raw:: html
 
     <div class="short-description">
-        <img src="file:///Users/projects/neupy/site/blog/html/_static/docimg/hopfiled-weights.png" align="right">
+        <img src="_static/docimg/hopfiled-weights.png" align="right">
         <p>
         In this article, we describe core ideas behind discrete hopfield networks and try to understand how it works. In addition, we explore main problems related to this algorithm. And finally, we take a look into simple example that aims to memorize digit patterns and reconstruct them from corrupted samples.
         </p>
