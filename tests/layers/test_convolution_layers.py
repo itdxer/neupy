@@ -6,7 +6,7 @@ import tensorflow as tf
 
 from neupy import layers
 from neupy.utils import asfloat, as_tuple
-from neupy.layers.convolutions import conv_output_shape
+from neupy.layers.convolutions import conv_output_shape, deconv_output_shape
 from neupy.exceptions import LayerConnectionError
 
 from base import BaseTestCase
@@ -205,3 +205,76 @@ class ConvLayersTestCase(BaseTestCase):
         actual_output = self.eval(connection.output(x))
 
         np.testing.assert_array_almost_equal(expected_output, actual_output)
+
+
+class DeconvolutionTestCase(BaseTestCase):
+    def test_deconvolution(self):
+        network = layers.join(
+            layers.Input((10, 10, 3)),
+            layers.Convolution((3, 3, 7)),
+            layers.Deconvolution((3, 3, 4)),
+        )
+
+        shapes = [layer.output_shape for layer in network.layers]
+        self.assertSequenceEqual(
+            shapes, [(10, 10, 3), (8, 8, 7), (10, 10, 4)])
+
+        input_value = asfloat(np.random.random((1, 10, 10, 3)))
+        actual_output = self.eval(network.output(input_value))
+
+        self.assertEqual(actual_output.shape, (1, 10, 10, 4))
+
+    def test_deconvolution_same_padding(self):
+        network = layers.join(
+            layers.Input((10, 10, 3)),
+            layers.Convolution((3, 3, 7), padding='same'),
+            layers.Deconvolution((3, 3, 4), padding='same'),
+        )
+
+        shapes = [layer.output_shape for layer in network.layers]
+        self.assertSequenceEqual(
+            shapes, [(10, 10, 3), (10, 10, 7), (10, 10, 4)])
+
+        input_value = asfloat(np.random.random((1, 10, 10, 3)))
+        actual_output = self.eval(network.output(input_value))
+
+        self.assertEqual(actual_output.shape, (1, 10, 10, 4))
+
+    def test_deconvolution_int_padding(self):
+        network = layers.join(
+            layers.Input((10, 10, 3)),
+            layers.Convolution((3, 3, 7), padding=9),
+            layers.Deconvolution((3, 3, 4), padding=9),
+        )
+
+        shapes = [layer.output_shape for layer in network.layers]
+        self.assertSequenceEqual(
+            shapes, [(10, 10, 3), (26, 26, 7), (10, 10, 4)])
+
+        input_value = asfloat(np.random.random((1, 10, 10, 3)))
+        actual_output = self.eval(network.output(input_value))
+
+        self.assertEqual(actual_output.shape, (1, 10, 10, 4))
+
+    def test_deconvolution_tuple_padding(self):
+        network = layers.join(
+            layers.Input((10, 10, 3)),
+            layers.Convolution((3, 3, 7), padding=(9, 3)),
+            layers.Deconvolution((3, 3, 4), padding=(9, 3)),
+        )
+
+        shapes = [layer.output_shape for layer in network.layers]
+        self.assertSequenceEqual(
+            shapes, [(10, 10, 3), (26, 14, 7), (10, 10, 4)])
+
+        input_value = asfloat(np.random.random((1, 10, 10, 3)))
+        actual_output = self.eval(network.output(input_value))
+
+        self.assertEqual(actual_output.shape, (1, 10, 10, 4))
+
+    def test_deconv_output_shape(self):
+        self.assertEqual(None, deconv_output_shape(None, 3, 'same', 1))
+
+    def test_deconv_output_shape_exception(self):
+        with self.assertRaisesRegexp(ValueError, "unknown \S+ padding"):
+            deconv_output_shape(10, 3, padding='xxx', stride=1)
