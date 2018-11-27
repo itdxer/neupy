@@ -1,3 +1,4 @@
+import random
 from itertools import product
 from collections import namedtuple
 
@@ -206,6 +207,21 @@ class ConvLayersTestCase(BaseTestCase):
 
         np.testing.assert_array_almost_equal(expected_output, actual_output)
 
+    def test_conv_unknown_input_width_and_height(self):
+        network = layers.join(
+            layers.Input((None, None, 3)),
+            layers.Convolution((3, 3, 5)),
+        )
+        self.assertEqual(network.output_shape, (None, None, 5))
+
+        input_value = asfloat(np.ones((1, 12, 12, 3)))
+        actual_output = self.eval(network.output(input_value))
+        self.assertEqual(actual_output.shape, (1, 10, 10, 5))
+
+        input_value = asfloat(np.ones((1, 21, 21, 3)))
+        actual_output = self.eval(network.output(input_value))
+        self.assertEqual(actual_output.shape, (1, 19, 19, 5))
+
 
 class DeconvolutionTestCase(BaseTestCase):
     def test_deconvolution(self):
@@ -272,9 +288,74 @@ class DeconvolutionTestCase(BaseTestCase):
 
         self.assertEqual(actual_output.shape, (1, 10, 10, 4))
 
+    def test_deconv_unknown_input_width_and_height(self):
+        network = layers.join(
+            layers.Input((None, None, 3)),
+            layers.Convolution((3, 3, 7)),
+            layers.Deconvolution((3, 3, 4)),
+        )
+
+        shapes = [layer.output_shape for layer in network.layers]
+        self.assertSequenceEqual(
+            shapes, [(None, None, 3), (None, None, 7), (None, None, 4)])
+
+        input_value = asfloat(np.random.random((1, 10, 10, 3)))
+        actual_output = self.eval(network.output(input_value))
+        self.assertEqual(actual_output.shape, (1, 10, 10, 4))
+
+        input_value = asfloat(np.random.random((1, 7, 7, 3)))
+        actual_output = self.eval(network.output(input_value))
+        self.assertEqual(actual_output.shape, (1, 7, 7, 4))
+
     def test_deconv_output_shape(self):
         self.assertEqual(None, deconv_output_shape(None, 3, 'same', 1))
 
     def test_deconv_output_shape_exception(self):
         with self.assertRaisesRegexp(ValueError, "unknown \S+ padding"):
             deconv_output_shape(10, 3, padding='xxx', stride=1)
+
+    def test_deconvolution_for_random_cases(self):
+        # A few random cases will check if output shape computed from
+        # the network is the same as the shape that we get after we
+        # propagated input through the network.
+        for test_id in range(30):
+            width = random.randint(7, 20)
+            height = random.randint(7, 20)
+
+            fh = random.randint(1, 7)
+            fw = random.randint(1, 7)
+
+            pad = random.choice([
+                'valid',
+                'same',
+                random.randint(0, 10),
+                (
+                    random.randint(0, 10),
+                    random.randint(0, 10),
+                ),
+            ])
+            stride = random.choice([
+                random.randint(1, 4),
+                (
+                    random.randint(1, 4),
+                    random.randint(1, 4),
+                ),
+            ])
+
+            print('\n------------')
+            print("Test case #{}".format(test_id))
+            print('------------')
+            print("Image shape: {}x{}".format(height, width))
+            print("Filter shape: {}x{}".format(fh, fw))
+            print("Padding: {}".format(pad))
+            print("Stride: {}".format(stride))
+
+            network = layers.join(
+                layers.Input((height, width, 1)),
+                layers.Convolution((fh, fw, 2), padding=pad, stride=stride),
+                layers.Deconvolution((fh, fw, 1), padding=pad, stride=stride),
+            )
+
+            input_value = asfloat(np.random.random((1, height, width, 1)))
+            actual_output = self.eval(network.output(input_value))
+            self.assertEqual(actual_output.shape[1:], network.output_shape)

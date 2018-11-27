@@ -131,14 +131,14 @@ def conv_output_shape(dimension_size, filter_size, padding, stride):
                                                filter_size))
 
     if padding in ('VALID', 'valid'):
-        return math.ceil((dimension_size - filter_size + 1) / stride)
+        return int(math.ceil((dimension_size - filter_size + 1) / stride))
 
     elif padding in ('SAME', 'same'):
-        return math.ceil(dimension_size / stride)
+        return int(math.ceil(dimension_size / stride))
 
     elif isinstance(padding, int):
-        return math.ceil(
-            (dimension_size + 2 * padding - filter_size + 1) / stride)
+        return int(math.ceil(
+            (dimension_size + 2 * padding - filter_size + 1) / stride))
 
     raise ValueError("`{!r}` is unknown convolution's padding value"
                      "".format(padding))
@@ -206,8 +206,23 @@ class Convolution(ParameterBasedLayer):
         Filter shape. In should be defined as a tuple with three
         integers ``(filter rows, filter columns, output channels)``.
 
-    padding : {{``VALID``, ``SAME``}} or int
-        Defaults to ``VALID``.
+    padding : {{``same``, ``valid``}}, int, tuple
+        Zero padding for the input tensor.
+
+        - ``valid`` - Padding won't be added to the tensor. Result will be
+          the same as for ``padding=0``
+
+        - ``same`` - Padding will depend on the number of rows and columns
+          in the filter. This padding makes sure that image with the
+          ``stride=1`` won't change its width and height. It's the same as
+          ``padding=(filter rows // 2, filter columns // 2)``.
+
+        - Custom value for the padding can be specified as an integer, like
+          ``padding=1`` or it can be specified as a tuple when different
+          dimensions have different padding values, for example
+          ``padding=(2, 3)``.
+
+        Defaults to ``valid``.
 
     stride : tuple with ints, int.
         Stride size. Defaults to ``(1, 1)``
@@ -266,15 +281,10 @@ class Convolution(ParameterBasedLayer):
     def output_shape_per_dim(self, *args, **kwargs):
         return conv_output_shape(*args, **kwargs)
 
-    @property
-    def output_shape(self):
-        if self.input_shape is None:
-            return None
-
+    def find_output_from_input_shape(self, input_shape):
         padding = self.padding
-        rows, cols, _ = self.input_shape
+        rows, cols, _ = input_shape
         row_filter_size, col_filter_size, n_kernels = self.size
-
         row_stride, col_stride = self.stride
 
         if isinstance(padding, (list, tuple)):
@@ -288,9 +298,12 @@ class Convolution(ParameterBasedLayer):
         output_cols = self.output_shape_per_dim(
             cols, col_filter_size, col_padding, col_stride)
 
-        # In python 2, we can get float number after rounding procedure
-        # and it might break processing in the subsequent layers.
-        return (int(output_rows), int(output_cols), n_kernels)
+        return (output_rows, output_cols, n_kernels)
+
+    @property
+    def output_shape(self):
+        if self.input_shape is not None:
+            return self.find_output_from_input_shape(self.input_shape)
 
     @property
     def weight_shape(self):
@@ -313,8 +326,8 @@ class Convolution(ParameterBasedLayer):
                 [weight_pad, weight_pad],
                 [0, 0],
             ])
-            # We will need to make sure that convolution operation
-            # won't add any paddings.
+            # VALID option will make sure that
+            # convolution won't use any padding.
             padding = 'VALID'
 
         output = tf.nn.convolution(
@@ -339,7 +352,22 @@ class Deconvolution(Convolution):
 
     Parameters
     ----------
-    {Convolution.Parameters}
+    {Convolution.size}
+
+    {Convolution.padding}
+
+    {Convolution.stride}
+
+    weight : array-like, Tensorfow variable, scalar or Initializer
+        Defines layer's weights. Shape of the weight will be equal to
+        ``(filter rows, filter columns, output channels, input channels)``.
+        Default initialization methods you can find
+        :ref:`here <init-methods>`. Defaults to
+        :class:`XavierNormal() <neupy.init.XavierNormal>`.
+
+    {ParameterBasedLayer.bias}
+
+    {BaseLayer.Parameters}
 
     Methods
     -------
@@ -354,23 +382,33 @@ class Deconvolution(Convolution):
 
     @property
     def weight_shape(self):
+        # Compare to the regular convolution weights
+        # have switched input and output channels.
         return as_tuple(self.size, self.input_shape[-1])
 
     def output(self, input_value):
         input_shape = tf.shape(input_value)
-        output_shape = self.output_shape
+        # We need to get information about output shape from the input
+        # tensor's shape, because for some inputs we might have
+        # height and width specified as None and shape value won't be
+        # computed for these dimensions.
+        output_shape = self.find_output_from_input_shape(
+            tf.unstack(input_shape[1:]))
 
         batch_size = input_shape[0]
         padding = self.padding
 
         if isinstance(self.padding, (list, tuple)):
             height_pad, width_pad = self.padding
+
+            # VALID option will make sure that
+            # deconvolution won't use any padding.
             padding = 'VALID'
 
-            # conv2d transpose doesn't know about extra paddings that we added
+            # conv2d_transpose doesn't know about extra paddings that we added
             # in the convolution. For this reason we have to expand our
             # expected output shape and later we will remove these paddings
-            # manually
+            # manually after transpose convolution.
             output_shape = (
                 output_shape[0] + 2 * height_pad,
                 output_shape[1] + 2 * width_pad,
@@ -387,9 +425,13 @@ class Deconvolution(Convolution):
         )
 
         if isinstance(self.padding, (list, tuple)):
-            height_pad, width_pad = self.padding
-            output = output[
-                :, height_pad:-height_pad, width_pad:-width_pad, :]
+            h_pad, w_pad = self.padding
+
+            if h_pad > 0:
+                output = output[:, h_pad:-h_pad, :, :]
+
+            if w_pad > 0:
+                output = output[:, :, w_pad:-w_pad, :]
 
         if self.bias is not None:
             bias = tf.reshape(self.bias, (1, 1, 1, -1))
