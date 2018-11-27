@@ -136,6 +136,7 @@ Convolutional layers
     :header: "Class name", "Description"
 
     ":layer:`Convolution`", "Convolutional layer"
+    ":layer:`Deconvolution`", "Deconvolutional layer"
 
 
 Recurrent layers

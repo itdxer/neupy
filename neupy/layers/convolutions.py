@@ -12,7 +12,7 @@ from neupy.core.properties import TypedListProperty, Property
 from .base import ParameterBasedLayer
 
 
-__all__ = ('Convolution',)
+__all__ = ('Convolution', 'Deconvolution')
 
 
 class StrideProperty(TypedListProperty):
@@ -50,20 +50,63 @@ class StrideProperty(TypedListProperty):
                 "Stride size should contain only values greater than zero")
 
 
-def conv_output_shape(dimension_size, filter_size, padding, stride):
+def deconv_output_shape(dimension_size, filter_size, padding, stride):
     """
-    Computes convolution's output shape.
+    Computes deconvolution's output shape for one spatial dimension.
 
     Parameters
     ----------
-    dimension_size : int
-        Size of the dimension. Typically it's image's
-        weight or height.
+    dimension_size : int or None
+        Size of the dimension. Typically it's image's weight or height.
+        It might be equal to ``None`` when we input might have variable
+        dimension.
 
     filter_size : int
         Size of the convolution filter.
 
-    padding : {``valid``, ``full``, ``half``} or int
+    padding : {``valid``, ``same``} or int
+        Type or size of the zero-padding.
+
+    stride : int
+        Stride size.
+
+    Returns
+    -------
+    int
+        Dimension size after applying deconvolution
+        operation with specified configurations.
+    """
+    if dimension_size is None:
+        return None
+
+    if padding in ('VALID', 'valid'):
+        return dimension_size * stride + max(filter_size - stride, 0)
+
+    elif padding in ('SAME', 'same'):
+        return dimension_size * stride
+
+    elif isinstance(padding, int):
+        return dimension_size * stride - 2 * padding + filter_size - 1
+
+    raise ValueError("`{!r}` is unknown deconvolution's padding value"
+                     "".format(padding))
+
+
+def conv_output_shape(dimension_size, filter_size, padding, stride):
+    """
+    Computes convolution's output shape for one spatial dimension.
+
+    Parameters
+    ----------
+    dimension_size : int or None
+        Size of the dimension. Typically it's image's weight or height.
+        It might be equal to ``None`` when we input might have variable
+        dimension.
+
+    filter_size : int
+        Size of the convolution filter.
+
+    padding : {``valid``, ``same``} or int
         Type or size of the zero-padding.
 
     stride : int
@@ -87,10 +130,10 @@ def conv_output_shape(dimension_size, filter_size, padding, stride):
                          "(value {!r})".format(type(filter_size),
                                                filter_size))
 
-    if padding == 'VALID':
+    if padding in ('VALID', 'valid'):
         return math.ceil((dimension_size - filter_size + 1) / stride)
 
-    elif padding == 'SAME':
+    elif padding in ('SAME', 'same'):
         return math.ceil(dimension_size / stride)
 
     elif isinstance(padding, int):
@@ -110,7 +153,7 @@ class PaddingProperty(Property):
     {Property.Parameters}
     """
     expected_type = (six.string_types, int, tuple)
-    valid_string_choices = ('VALID', 'SAME')
+    valid_string_choices = ('VALID', 'SAME', 'same', 'valid')
 
     def __set__(self, instance, value):
         if isinstance(value, int):
@@ -163,13 +206,18 @@ class Convolution(ParameterBasedLayer):
         Filter shape. In should be defined as a tuple with three
         integers ``(filter rows, filter columns, output channels)``.
 
-    padding : {{``VALID``, ``SAME``}}
+    padding : {{``VALID``, ``SAME``}} or int
         Defaults to ``VALID``.
 
-    stride : tuple with 1 or 2 integers or integer.
+    stride : tuple with ints, int.
         Stride size. Defaults to ``(1, 1)``
 
-    {ParameterBasedLayer.weight}
+    weight : array-like, Tensorfow variable, scalar or Initializer
+        Defines layer's weights. Shape of the weight will be equal to
+        ``(filter rows, filter columns, input channels, output channels)``.
+        Default initialization methods you can find
+        :ref:`here <init-methods>`. Defaults to
+        :class:`XavierNormal() <neupy.init.XavierNormal>`.
 
     {ParameterBasedLayer.bias}
 
@@ -215,6 +263,9 @@ class Convolution(ParameterBasedLayer):
                 "dimensions, got {} with shape {}"
                 "".format(len(input_shape), input_shape))
 
+    def output_shape_per_dim(self, *args, **kwargs):
+        return conv_output_shape(*args, **kwargs)
+
     @property
     def output_shape(self):
         if self.input_shape is None:
@@ -231,10 +282,10 @@ class Convolution(ParameterBasedLayer):
         else:
             row_padding, col_padding = padding, padding
 
-        output_rows = conv_output_shape(
+        output_rows = self.output_shape_per_dim(
             rows, row_filter_size, row_padding, row_stride)
 
-        output_cols = conv_output_shape(
+        output_cols = self.output_shape_per_dim(
             cols, col_filter_size, col_padding, col_stride)
 
         # In python 2, we can get float number after rounding procedure
@@ -273,6 +324,72 @@ class Convolution(ParameterBasedLayer):
             self.stride,
             data_format="NHWC"
         )
+
+        if self.bias is not None:
+            bias = tf.reshape(self.bias, (1, 1, 1, -1))
+            output += bias
+
+        return output
+
+
+class Deconvolution(Convolution):
+    """
+    Deconvolution layer. It's commonly called like this in the literature,
+    but it's just gradient of the convolution and not actual deconvolution.
+
+    Parameters
+    ----------
+    {Convolution.Parameters}
+
+    Methods
+    -------
+    {ParameterBasedLayer.Methods}
+
+    Attributes
+    ----------
+    {ParameterBasedLayer.Attributes}
+    """
+    def output_shape_per_dim(self, *args, **kwargs):
+        return deconv_output_shape(*args, **kwargs)
+
+    @property
+    def weight_shape(self):
+        return as_tuple(self.size, self.input_shape[-1])
+
+    def output(self, input_value):
+        input_shape = tf.shape(input_value)
+        output_shape = self.output_shape
+
+        batch_size = input_shape[0]
+        padding = self.padding
+
+        if isinstance(self.padding, (list, tuple)):
+            height_pad, width_pad = self.padding
+            padding = 'VALID'
+
+            # conv2d transpose doesn't know about extra paddings that we added
+            # in the convolution. For this reason we have to expand our
+            # expected output shape and later we will remove these paddings
+            # manually
+            output_shape = (
+                output_shape[0] + 2 * height_pad,
+                output_shape[1] + 2 * width_pad,
+                output_shape[2],
+            )
+
+        output = tf.nn.conv2d_transpose(
+            input_value,
+            self.weight,
+            as_tuple(batch_size, output_shape),
+            as_tuple(1, self.stride, 1),
+            padding,
+            data_format="NHWC"
+        )
+
+        if isinstance(self.padding, (list, tuple)):
+            height_pad, width_pad = self.padding
+            output = output[
+                :, height_pad:-height_pad, width_pad:-width_pad, :]
 
         if self.bias is not None:
             bias = tf.reshape(self.bias, (1, 1, 1, -1))
