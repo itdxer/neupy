@@ -2,6 +2,7 @@ import random
 from itertools import product
 from collections import namedtuple
 
+import pytest
 import numpy as np
 import tensorflow as tf
 
@@ -309,6 +310,14 @@ class DeconvolutionTestCase(BaseTestCase):
 
     def test_deconv_output_shape(self):
         self.assertEqual(None, deconv_output_shape(None, 3, 'same', 1))
+
+        self.assertEqual(12, deconv_output_shape(10, 3, 'valid', 1))
+        self.assertEqual(16, deconv_output_shape(10, 7, 'valid', 1))
+        self.assertEqual(10, deconv_output_shape(10, 3, 'same', 1))
+
+        self.assertEqual(14, deconv_output_shape(4, 5, 'valid', 3))
+        self.assertEqual(12, deconv_output_shape(4, 3, 'same', 3))
+        self.assertEqual(12, deconv_output_shape(4, 7, 'same', 3))
 
     def test_deconv_output_shape_exception(self):
         with self.assertRaisesRegexp(ValueError, "unknown \S+ padding"):
