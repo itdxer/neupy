@@ -223,6 +223,25 @@ class ConvLayersTestCase(BaseTestCase):
         actual_output = self.eval(network.output(input_value))
         self.assertEqual(actual_output.shape, (1, 19, 19, 5))
 
+    def test_dilated_convolution(self):
+        network = layers.join(
+            layers.Input((6, 6, 1)),
+            layers.Convolution((3, 3, 1), dilation=2, weight=1, bias=None),
+        )
+
+        input_value = asfloat(np.arange(36).reshape(1, 6, 6, 1))
+        actual_output = self.eval(network.output(input_value))
+
+        self.assertEqual(actual_output.shape, (1, 2, 2, 1))
+        self.assertEqual(actual_output.shape[1:], network.output_shape)
+
+        actual_output = actual_output[0, :, :, 0]
+        expected_output = np.array([
+            [126, 135],  # every row value adds +1 per filter value (+9)
+            [180, 189],  # every col value adds +6 per filter value (+54)
+        ])
+        np.testing.assert_array_almost_equal(actual_output, expected_output)
+
 
 class DeconvolutionTestCase(BaseTestCase):
     def test_deconvolution(self):

@@ -8,14 +8,15 @@ import tensorflow as tf
 
 from neupy.utils import as_tuple
 from neupy.exceptions import LayerConnectionError
-from neupy.core.properties import TypedListProperty, Property
+from neupy.core.properties import (TypedListProperty, Property, IntProperty,
+                                   WithdrawProperty)
 from .base import ParameterBasedLayer
 
 
 __all__ = ('Convolution', 'Deconvolution')
 
 
-class StrideProperty(TypedListProperty):
+class Spatial2DProperty(TypedListProperty):
     """
     Stride property.
 
@@ -27,7 +28,7 @@ class StrideProperty(TypedListProperty):
 
     def __init__(self, *args, **kwargs):
         kwargs['element_type'] = int
-        super(StrideProperty, self).__init__(*args, **kwargs)
+        super(Spatial2DProperty, self).__init__(*args, **kwargs)
 
     def __set__(self, instance, value):
         if isinstance(value, collections.Iterable) and len(value) == 1:
@@ -36,10 +37,10 @@ class StrideProperty(TypedListProperty):
         if isinstance(value, int):
             value = (value, value)
 
-        super(StrideProperty, self).__set__(instance, value)
+        super(Spatial2DProperty, self).__set__(instance, value)
 
     def validate(self, value):
-        super(StrideProperty, self).validate(value)
+        super(Spatial2DProperty, self).validate(value)
 
         if len(value) > 2:
             raise ValueError("Stide can have only one or two elements "
@@ -50,7 +51,8 @@ class StrideProperty(TypedListProperty):
                 "Stride size should contain only values greater than zero")
 
 
-def deconv_output_shape(dimension_size, filter_size, padding, stride):
+def deconv_output_shape(dimension_size, filter_size, padding, stride,
+                        diation=1):
     """
     Computes deconvolution's output shape for one spatial dimension.
 
@@ -92,7 +94,8 @@ def deconv_output_shape(dimension_size, filter_size, padding, stride):
                      "".format(padding))
 
 
-def conv_output_shape(dimension_size, filter_size, padding, stride):
+def conv_output_shape(dimension_size, filter_size, padding, stride,
+                      dilation=1):
     """
     Computes convolution's output shape for one spatial dimension.
 
@@ -112,6 +115,9 @@ def conv_output_shape(dimension_size, filter_size, padding, stride):
     stride : int
         Stride size.
 
+    dilation : int
+        Dilation rate.
+
     Returns
     -------
     int
@@ -129,6 +135,10 @@ def conv_output_shape(dimension_size, filter_size, padding, stride):
         raise ValueError("Filter size needs to be an integer, got {} "
                          "(value {!r})".format(type(filter_size),
                                                filter_size))
+
+    # We can think of the dilation as very sparse convolutional fitler
+    # filter=3 and diation=2 the same as filter=5 and dilation=1
+    filter_size = filter_size + (filter_size - 1) * (dilation - 1)
 
     if padding in ('VALID', 'valid'):
         return int(math.ceil((dimension_size - filter_size + 1) / stride))
@@ -227,6 +237,10 @@ class Convolution(ParameterBasedLayer):
     stride : tuple with ints, int.
         Stride size. Defaults to ``(1, 1)``
 
+    dilation : int, tuple
+        Rate for the fiter upsampling. When ``dilation > 1`` layer will
+        become diated convolution (or atrous convolution). Defaults to ``1``.
+
     weight : array-like, Tensorfow variable, scalar or Initializer
         Defines layer's weights. Shape of the weight will be equal to
         ``(filter rows, filter columns, input channels, output channels)``.
@@ -269,7 +283,8 @@ class Convolution(ParameterBasedLayer):
     """
     size = TypedListProperty(required=True, element_type=int)
     padding = PaddingProperty(default='valid')
-    stride = StrideProperty(default=(1, 1))
+    stride = Spatial2DProperty(default=(1, 1))
+    dilation = Spatial2DProperty(default=1)
 
     def validate(self, input_shape):
         if len(input_shape) != 3:
@@ -284,8 +299,10 @@ class Convolution(ParameterBasedLayer):
     def find_output_from_input_shape(self, input_shape):
         padding = self.padding
         rows, cols, _ = input_shape
+
         row_filter_size, col_filter_size, n_kernels = self.size
         row_stride, col_stride = self.stride
+        row_dilation, col_dilation = self.dilation or (1, 1)
 
         if isinstance(padding, (list, tuple)):
             row_padding, col_padding = padding
@@ -293,10 +310,13 @@ class Convolution(ParameterBasedLayer):
             row_padding, col_padding = padding, padding
 
         output_rows = self.output_shape_per_dim(
-            rows, row_filter_size, row_padding, row_stride)
-
+            rows, row_filter_size,
+            row_padding, row_stride, row_dilation,
+        )
         output_cols = self.output_shape_per_dim(
-            cols, col_filter_size, col_padding, col_stride)
+            cols, col_filter_size,
+            col_padding, col_stride, col_dilation,
+        )
 
         return (output_rows, output_cols, n_kernels)
 
@@ -333,8 +353,9 @@ class Convolution(ParameterBasedLayer):
         output = tf.nn.convolution(
             input_value,
             self.weight,
-            padding,
-            self.stride,
+            padding=padding,
+            strides=self.stride,
+            dilation_rate=self.dilation,
             data_format="NHWC"
         )
 
@@ -373,10 +394,22 @@ class Deconvolution(Convolution):
     -------
     {ParameterBasedLayer.Methods}
 
+    Examples
+    --------
+    >>> from neupy import layers
+    >>>
+    >>> layers.join(
+    ...     layers.Input((28, 28, 3)),
+    ...     layers.Convolution((3, 3, 16)),
+    ...     layers.Deconvolution((3, 3, 1)),
+    ... )
+
     Attributes
     ----------
     {ParameterBasedLayer.Attributes}
     """
+    dilation = WithdrawProperty()
+
     def output_shape_per_dim(self, *args, **kwargs):
         return deconv_output_shape(*args, **kwargs)
 

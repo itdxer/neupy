@@ -8,7 +8,7 @@ from neupy.utils import as_tuple, tf_repeat
 from neupy.core.properties import TypedListProperty, ChoiceProperty, Property
 from neupy.exceptions import LayerConnectionError
 from .base import BaseLayer
-from .convolutions import StrideProperty
+from .convolutions import Spatial2DProperty
 
 
 __all__ = ('MaxPooling', 'AveragePooling', 'Upscale', 'GlobalPooling')
@@ -82,7 +82,7 @@ class BasePooling(BaseLayer):
     {BaseLayer.Attributes}
     """
     size = TypedListProperty(required=True, element_type=int)
-    stride = StrideProperty(default=None)
+    stride = Spatial2DProperty(default=None)
     padding = ChoiceProperty(default='VALID', choices=('SAME', 'VALID'))
     pooling_type = None
 
