@@ -33,7 +33,7 @@ def ResidualUnit(n_input_filters, n_output_filters, stride,
         # extract features.
         layers.Convolution(
             (3, 3, n_input_filters),
-            padding='SAME',
+            padding='same',
             bias=None,
             name=conv_name('2b'),
         ),
@@ -77,12 +77,17 @@ def ResidualUnit(n_input_filters, n_output_filters, stride,
     )
 
 
-def resnet50():
+def resnet50(input_shape=(224, 224, 3)):
     """
     ResNet50 network architecture with random parameters. Parameters
     can be loaded using ``neupy.storage`` module.
 
     ResNet50 has roughly 25.5 million parameters.
+
+    Parameters
+    ----------
+    input_shape : tuple
+        Network's input shape. Defaults to ``(224, 224, 3)``.
 
     Notes
     -----
@@ -113,22 +118,22 @@ def resnet50():
     https://arxiv.org/abs/1512.03385
     """
     return layers.join(
-        layers.Input((224, 224, 3)),
+        layers.Input(input_shape),
 
         # Convolutional layer reduces image's height and width by a factor
         # of 2 (because of the stride)
         # from (3, 224, 224) to (64, 112, 112)
         layers.Convolution((7, 7, 64), stride=2, bias=None,
-                           padding='SAME', name='conv1'),
+                           padding='same', name='conv1'),
 
         layers.BatchNorm(name='bn_conv1'),
         layers.Relu(),
 
         # Stride equal two 2 reduces image size by a factor of two
         # from (64, 112, 112) to (64, 56, 56)
-        layers.MaxPooling((3, 3), stride=2, padding="SAME"),
+        layers.MaxPooling((3, 3), stride=2, padding="same"),
 
-        # The branch option applies extrax convolution x+ batch
+        # The branch option applies extra convolution x+ batch
         # normalization transforamtions to the residual
         ResidualUnit(64, 256, stride=1, name='2a', has_branch=True),
         ResidualUnit(64, 256, stride=1, name='2b'),
@@ -157,6 +162,6 @@ def resnet50():
         # pooling will replace every output image with single average value.
         # Despite input iamge size output from this layer always will be
         # vector with 2048 values
-        layers.GlobalPooling(),
+        layers.GlobalPooling('avg'),
         layers.Softmax(1000, name='fc1000'),
     )

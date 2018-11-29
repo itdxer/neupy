@@ -168,7 +168,7 @@ class UpscaleLayersTestCase(BaseTestCase):
 class GlobalPoolingLayersTestCase(BaseTestCase):
     def test_global_pooling_output_shape(self):
         input_layer = layers.Input((8, 8, 3))
-        global_pooling_layer = layers.GlobalPooling()
+        global_pooling_layer = layers.GlobalPooling('avg')
         self.assertEqual(global_pooling_layer.output_shape, None)
 
         layers.join(input_layer, global_pooling_layer)
@@ -178,7 +178,7 @@ class GlobalPoolingLayersTestCase(BaseTestCase):
         x = asfloat(np.ones((2, 4, 5, 3)))
         expected_outputs = np.ones((2, 3))
 
-        global_mena_pooling_layer = layers.GlobalPooling()
+        global_mena_pooling_layer = layers.GlobalPooling('avg')
         actual_output = self.eval(global_mena_pooling_layer.output(x))
 
         self.assertEqual(actual_output.shape, (2, 3))
@@ -194,7 +194,11 @@ class GlobalPoolingLayersTestCase(BaseTestCase):
         self.assertEqual(actual_output.shape, (2, 3))
         np.testing.assert_array_equal(expected_outputs, actual_output)
 
+    def test_global_pooling_unknown_option(self):
+        with self.assertRaises(ValueError):
+            layers.GlobalPooling('unknown')
+
     def test_global_pooling_for_lower_dimensions(self):
-        layer = layers.GlobalPooling()
+        layer = layers.GlobalPooling('max')
         x = np.ones((1, 5))
         np.testing.assert_array_equal(x, layer.output(x))

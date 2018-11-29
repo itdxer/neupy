@@ -341,6 +341,9 @@ class DeconvolutionTestCase(BaseTestCase):
         with self.assertRaisesRegexp(ValueError, "unknown \S+ padding"):
             deconv_output_shape(10, 3, padding='xxx', stride=1)
 
+        with self.assertRaisesRegexp(ValueError, "doesn't support dilation"):
+            deconv_output_shape(10, 3, padding='valid', stride=1, dilation=2)
+
     def test_deconvolution_for_random_cases(self):
         # A few random cases will check if output shape computed from
         # the network is the same as the shape that we get after we

@@ -89,7 +89,7 @@ def squeezenet():
         layers.Dropout(0.5),
 
         layers.Convolution((1, 1, 1000), padding='VALID', name='conv10'),
-        layers.GlobalPooling(function=tf.reduce_mean),
+        layers.GlobalPooling('avg'),
         layers.Reshape(),
         layers.Softmax(),
     )

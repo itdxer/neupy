@@ -5,7 +5,8 @@ import math
 import tensorflow as tf
 
 from neupy.utils import as_tuple, tf_repeat
-from neupy.core.properties import TypedListProperty, ChoiceProperty, Property
+from neupy.core.properties import (TypedListProperty, ChoiceProperty, Property,
+                                   FunctionWithOptionsProperty)
 from neupy.exceptions import LayerConnectionError
 from .base import BaseLayer
 from .convolutions import Spatial2DProperty
@@ -40,13 +41,13 @@ def pooling_output_shape(dimension_size, pool_size, padding, stride):
     if dimension_size is None:
         return None
 
-    if padding == 'SAME':
+    if padding in ('SAME', 'same'):
         return math.ceil(dimension_size / stride)
 
-    elif padding == 'VALID':
+    elif padding in ('VALID', 'valid'):
         return math.ceil((dimension_size - pool_size + 1) / stride)
 
-    raise ValueError("`{!r}` is unknown convolution's padding value"
+    raise ValueError("{!r} is unknown convolution's padding value"
                      "".format(padding))
 
 
@@ -83,7 +84,9 @@ class BasePooling(BaseLayer):
     """
     size = TypedListProperty(required=True, element_type=int)
     stride = Spatial2DProperty(default=None)
-    padding = ChoiceProperty(default='VALID', choices=('SAME', 'VALID'))
+    padding = ChoiceProperty(default='VALID', choices=(
+        'SAME', 'VALID', 'same', 'valid'))
+
     pooling_type = None
 
     def __init__(self, size, **options):
@@ -123,7 +126,7 @@ class BasePooling(BaseLayer):
             input_value,
             self.size,
             pooling_type=self.pooling_type,
-            padding=self.padding,
+            padding=self.padding.upper(),
             strides=self.stride or self.size,
             data_format="NHWC",
         )
@@ -304,14 +307,25 @@ class GlobalPooling(BaseLayer):
 
     Parameters
     ----------
-    function : callable
-        Function that aggregates over dimensions.
-        Defaults to ``tensorflow.reduce_mean``.
+    function : {{'avg', 'max'}} or callable
+        Common functions has been predefined for the user.
+        These options are available:
+
+        - ``avg`` - For average global pooling. The same as
+          ``tf.reduce_mean``.
+
+        - ``avg`` - For average global pooling. The same as
+          ``tf.reduce_max``.
+
+        Parameters also excepts custom functions that have
+        following format.
 
         .. code-block:: python
 
             def agg_func(x, axis=None):
                 pass
+
+        Defaults to ``avg``.
 
     {BaseLayer.Parameters}
 
@@ -326,11 +340,18 @@ class GlobalPooling(BaseLayer):
     Examples
     --------
     >>> from neupy.layers import *
-    >>> network = Input((4, 4, 16)) > GlobalPooling()
+    >>> network = Input((4, 4, 16)) > GlobalPooling('avg')
     >>> network.output_shape
     (16,)
     """
-    function = Property(default=tf.reduce_mean)
+    function = FunctionWithOptionsProperty(choices={
+        'avg': tf.reduce_mean,
+        'max': tf.reduce_max,
+    })
+
+    def __init__(self, function, *args, **kwargs):
+        super(GlobalPooling, self).__init__(
+            *args, **dict(kwargs, function=function))
 
     @property
     def output_shape(self):
