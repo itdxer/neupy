@@ -134,7 +134,7 @@ inception_v3 = layers.join(
     Inception_3(pooling='average'),
     Inception_3(pooling='max'),
 
-    layers.GlobalPooling(),
+    layers.GlobalPooling('avg'),
     layers.Softmax(1000),
 )
 plots.network_structure(inception_v3)

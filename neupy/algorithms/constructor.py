@@ -1,6 +1,5 @@
 import abc
 import time
-import types
 from functools import wraps
 
 import six
@@ -11,7 +10,7 @@ from neupy.layers.utils import preformat_layer_shape
 from neupy.layers.connections import LayerConnection, is_sequential
 from neupy.layers.connections.base import create_input_variables
 from neupy.exceptions import InvalidConnection
-from neupy.core.properties import ChoiceProperty
+from neupy.core.properties import FunctionWithOptionsProperty
 from neupy.algorithms.base import BaseNetwork
 from neupy.utils import (
     AttributeKeyDict, asfloat, format_data, as_tuple,
@@ -91,30 +90,6 @@ def clean_layers(connection):
         connection = layers.join(*connection)
 
     return connection
-
-
-class ErrorFunctionProperty(ChoiceProperty):
-    """
-    Property that helps select error function from
-    available or define a new one.
-
-    Parameters
-    ----------
-    {ChoiceProperty.Parameters}
-    """
-    def __set__(self, instance, value):
-        if isinstance(value, types.FunctionType):
-            return super(ChoiceProperty, self).__set__(instance, value)
-        return super(ErrorFunctionProperty, self).__set__(instance, value)
-
-    def __get__(self, instance, value):
-        founded_value = super(ChoiceProperty, self).__get__(instance, value)
-
-        if isinstance(founded_value, types.FunctionType):
-            return founded_value
-
-        return super(ErrorFunctionProperty, self).__get__(
-            instance, founded_value)
 
 
 class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
@@ -278,7 +253,7 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
 
     {BaseSkeleton.fit}
     """
-    error = ErrorFunctionProperty(default='mse', choices={
+    error = FunctionWithOptionsProperty(default='mse', choices={
         'mae': errors.mae,
         'mse': errors.mse,
         'rmse': errors.rmse,

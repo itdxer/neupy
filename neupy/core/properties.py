@@ -1,3 +1,4 @@
+import types
 import numbers
 
 import numpy as np
@@ -11,7 +12,8 @@ from neupy.core.docs import SharedDocs
 __all__ = ('BaseProperty', 'Property', 'ArrayProperty', 'BoundedProperty',
            'ProperFractionProperty', 'NumberProperty', 'IntProperty',
            'TypedListProperty', 'ChoiceProperty', 'WithdrawProperty',
-           'ParameterProperty', 'CallableProperty')
+           'ParameterProperty', 'CallableProperty',
+           'FunctionWithOptionsProperty')
 
 
 class BaseProperty(SharedDocs):
@@ -347,3 +349,27 @@ class CallableProperty(Property):
             raise ValueError("The `{}` property expected to be "
                              "callable object.".format(self.name))
         super(CallableProperty, self).validate(value)
+
+
+class FunctionWithOptionsProperty(ChoiceProperty):
+    """
+    Property that helps select error function from
+    available or define a new one.
+
+    Parameters
+    ----------
+    {ChoiceProperty.Parameters}
+    """
+    def __set__(self, instance, value):
+        if isinstance(value, types.FunctionType):
+            return super(ChoiceProperty, self).__set__(instance, value)
+        return super(FunctionWithOptionsProperty, self).__set__(instance, value)
+
+    def __get__(self, instance, value):
+        founded_value = super(ChoiceProperty, self).__get__(instance, value)
+
+        if isinstance(founded_value, types.FunctionType):
+            return founded_value
+
+        return super(FunctionWithOptionsProperty, self).__get__(
+            instance, founded_value)

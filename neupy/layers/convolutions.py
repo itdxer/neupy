@@ -52,7 +52,7 @@ class Spatial2DProperty(TypedListProperty):
 
 
 def deconv_output_shape(dimension_size, filter_size, padding, stride,
-                        diation=1):
+                        dilation=1):
     """
     Computes deconvolution's output shape for one spatial dimension.
 
@@ -72,6 +72,10 @@ def deconv_output_shape(dimension_size, filter_size, padding, stride,
     stride : int
         Stride size.
 
+    dilation : int
+        Dilation rate. Only ``dilation=1`` is supported for the
+        deconvolution.
+
     Returns
     -------
     int
@@ -80,6 +84,9 @@ def deconv_output_shape(dimension_size, filter_size, padding, stride,
     """
     if dimension_size is None:
         return None
+
+    if dilation != 1:
+        raise ValueError("Deconvolutional layer doesn't support dilation")
 
     if padding in ('VALID', 'valid'):
         return dimension_size * stride + max(filter_size - stride, 0)
@@ -116,7 +123,7 @@ def conv_output_shape(dimension_size, filter_size, padding, stride,
         Stride size.
 
     dilation : int
-        Dilation rate.
+        Dilation rate. Defaults to ``1``.
 
     Returns
     -------
@@ -137,7 +144,7 @@ def conv_output_shape(dimension_size, filter_size, padding, stride,
                                                filter_size))
 
     # We can think of the dilation as very sparse convolutional fitler
-    # filter=3 and diation=2 the same as filter=5 and dilation=1
+    # filter=3 and dilation=2 the same as filter=5 and dilation=1
     filter_size = filter_size + (filter_size - 1) * (dilation - 1)
 
     if padding in ('VALID', 'valid'):
@@ -287,7 +294,7 @@ class Convolution(ParameterBasedLayer):
     dilation = Spatial2DProperty(default=1)
 
     def validate(self, input_shape):
-        if len(input_shape) != 3:
+        if input_shape and len(input_shape) != 3:
             raise LayerConnectionError(
                 "Convolutional layer expects an input with 3 "
                 "dimensions, got {} with shape {}"

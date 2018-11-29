@@ -54,7 +54,7 @@ googlenet = layers.join(
 
     Inception((128, 256, 160, 320, 32, 128)),
     Inception((128, 384, 192, 384, 48, 128)),
-    layers.GlobalPooling(function=tf.reduce_mean),
+    layers.GlobalPooling('avg'),
 
     layers.Softmax(1000),
 )
