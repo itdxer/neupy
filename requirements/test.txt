@@ -1,5 +1,5 @@
 scikit-learn>=0.18.0
-pandas==0.23.4
+pandas>=0.23.0
 Pillow==3.0.0
 
 -r main.txt
@@ -13,4 +13,3 @@ pytest-xdist==1.22.5
 
 # Storage module
 dill==0.2.3
-h5py==2.8.0
