@@ -6,7 +6,6 @@ Submodules
 
 .. toctree::
 
-   neupy.architectures.alexnet
    neupy.architectures.mixture_of_experts
    neupy.architectures.resnet
    neupy.architectures.squeezenet

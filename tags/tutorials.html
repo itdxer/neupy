@@ -48,6 +48,7 @@
         });
     </script>
     <style media="screen" type="text/css">
+        table { background-color: white; }
         .docutils { width: 100%; }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
@@ -127,21 +128,46 @@
           color: #93a4ad;
         }
 
-        #search-results ul.search {
+        .docutils.field-list, .docutils.footnote {
+            background-color: inherit;
+        }
+        .large-font {
+            font-size: 1.4em !important;
+        }
+        .right-tag {
+            float: right;
+            margin-left: 36px !important;
+            margin-right: 0px !important;
+        }
+        .short-description {
+            /* We hidde description inside of the article */
+            display: none;
+        }
+        .short-description img {
+            max-height: 160px;
+            max-width: 40%;
+            margin-left: 8px;
+        }
+        #results-list ul.search {
             padding: 0;
         }
-        #search-results li p {
+
+        #results-list .short-description {
+            /* We show description text in the archive */
+            display: block !important;
+        }
+        #results-list li p {
             margin-bottom: 5px;
             font-size: 0.9em;
         }
-        #search-results li {
+        #results-list li {
             background-color: #fff !important;
             margin-bottom: 10px;
             display: block !important;
             padding: 15px;
             border-bottom: 2px solid #ddd;
         }
-        #search-results span.tag {
+        #results-list span.tag {
             display: inline-block;
             padding: 3px 4px;
             margin-right: 8px;
@@ -192,62 +218,48 @@
       </ul>
     </nav>
 
-<div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="archive">
-        <h1>Posts tagged with <span class="title_tag">tutorials</span></h1><div class="year">
-            <h1>2016</h1>
-            <ul><li>
-                    <div class="timestamp postmeta">
-            <span>Nov 12</span>
-        </div>
-                    <h2><a href="../2016/11/12/mnist_classification.html">MNIST Classification</a></h2>
-                    <div class="postmeta">
-        <div class="author">
-            <span>Posted by Yurii Shevchuk</span>
-        </div>
-        
-        <div class="tags">
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div id="results-list">
+    <ul class="search"><li style="display: list-item;">
+                <span class="tag right-tag">2016 Nov 12</span>
+                <a href="../2016/11/12/mnist_classification.html" class="large-font">Image classification, MNIST digits</a>
+                <p><div class="short-description">
+<p>
+    This short tutorial shows how to design and train simple network for digit classification in NeuPy.
+    </p>
+</div></p>
+                <div class="postmeta">
+                    <div class="tags">
             <span>
                 Tags:
                 <a href="classification.html">classification</a>, <a href="#">tutorials</a>, <a href="supervised.html">supervised</a>, <a href="backpropagation.html">backpropagation</a>, <a href="image_recognition.html">image recognition</a>, <a href="deep_learning.html">deep learning</a></span>
         </div>
-        <div class="comments">
-            <a href="http://neupy.com/2016/11/12/mnist_classification.html#disqus_thread" data-disqus-identifier="2016/11/12/mnist_classification">Leave a comment</a>
-        </div></div>
-                </li></ul>
-        </div><div class="separator year_separator"></div><div class="year">
-            <h1>2015</h1>
-            <ul><li>
-                    <div class="timestamp postmeta">
-            <span>Jul 04</span>
-        </div>
-                    <h2><a href="../2015/07/04/boston_house_prices_dataset.html">Predict prices for houses in the area of Boston</a></h2>
-                    <div class="postmeta">
-        <div class="author">
-            <span>Posted by Yurii Shevchuk</span>
-        </div>
-        
-        <div class="tags">
+                </div>
+            </li><li style="display: list-item;">
+                <span class="tag right-tag">2015 Jul 04</span>
+                <a href="../2015/07/04/boston_house_prices_dataset.html" class="large-font">Predict prices for houses in the area of Boston</a>
+                <p><div class="short-description">
+<p>
+    Boston house prices is a classical dataset for regression. This article shows how to make a simple data processing and train neural network for house price prediction.
+    </p>
+</div></p>
+                <div class="postmeta">
+                    <div class="tags">
             <span>
                 Tags:
                 <a href="supervised.html">supervised</a>, <a href="backpropagation.html">backpropagation</a>, <a href="regression.html">regression</a>, <a href="#">tutorials</a></span>
         </div>
-        <div class="comments">
-            <a href="http://neupy.com/2015/07/04/boston_house_prices_dataset.html#disqus_thread" data-disqus-identifier="2015/07/04/boston_house_prices_dataset">Leave a comment</a>
-        </div></div>
-                </li></ul>
-        </div></div></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Articles</h1>
-    <ul><li>
-            <a href="../2018/03/26/making_art_with_growing_neural_gas.html">Making Art with Growing Neural Gas</a>
-        </li><li>
-            <a href="../2017/12/17/sofm_text_style.html">Create unique text-style with SOFM</a>
-        </li><li>
-            <a href="../2017/12/13/sofm_art.html">The Art of SOFM</a>
-        </li><li>
-            <a href="../2017/12/09/sofm_applications.html">Self-Organizing Maps and Applications</a>
-        </li><li>
-            <a href="../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
-        </li></ul>
+                </div>
+            </li></ul>
+    </div></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../search.html" method="get">
+          <div class="box">
+            <div class="search-input-container">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" name="q" id="search" placeholder="Search..." />
+            </div>
+          </div>
+    </form>
 </div></section><section><div class="widget">
     <h1>Install NeuPy</h1>
     <div class="highligh-bash">
@@ -258,16 +270,6 @@
     <p>
         <div>Learn more about NeuPy reading <a href="../docs/tutorials.html">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
     </p>
-</div></section><section><div class="widget" id="searchbox" role="search">
-    <h1><a href="#searchbox">Search</a></h1>
-    <form action="../search.html" method="get">
-          <div class="box">
-            <div class="search-input-container">
-                <span class="icon"><i class="fa fa-search"></i></span>
-                <input type="search" name="q" id="search" placeholder="Search..." />
-            </div>
-          </div>
-    </form>
 </div></section><section><div class="widget">
     <h1>Issues and feature requests</h1>
     <p>
@@ -282,7 +284,7 @@
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2019, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

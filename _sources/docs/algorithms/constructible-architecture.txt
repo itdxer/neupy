@@ -1,14 +1,14 @@
 .. _constructible-architecture:
 
-Algorithms with Constructible Network Architecture
-==================================================
+Algorithms with constructible architecture
+==========================================
 
 .. contents::
 
-Set up connections
-------------------
+Specify network structure
+-------------------------
 
-There are three ways to define relations between layers inside the algorithm. We can use predefined networks as a first argument
+There are three ways to define relations between layers. We can define network's architecture separately from the training algorithm.
 
 .. code-block:: python
 
@@ -26,7 +26,7 @@ There are three ways to define relations between layers inside the algorithm. We
         shuffle_data=True
     )
 
-Or we can set up a list of layers that define sequential relations between layers.
+Or, we can set up a list of layers that define sequential relations between layers.
 
 .. code-block:: python
 
@@ -43,7 +43,7 @@ Or we can set up a list of layers that define sequential relations between layer
         shuffle_data=True
     )
 
-This is just a syntax simplification that allows avoiding ``layer.join`` function usage.
+This is just a syntax simplification that allows to avoid using ``layer.join`` function.
 
 Small networks can be defined with a help of inline operator.
 
@@ -57,15 +57,6 @@ Small networks can be defined with a help of inline operator.
         step=0.2,
         shuffle_data=True
     )
-
-And the last way to define connections is just to set up value equal to a list or a tuple of integers.
-
-.. code-block:: python
-
-    from neupy import algorithms
-    bpnet = algorithms.GradientDescent((2, 4, 1))
-
-It's obvious that during initialization we didn't actually set up any layer types. By default NeuPy constructs from the tuple simple MLP network that contains dense layers with sigmoid activation function. This type of initialization typically suitable for tests or model benchmarks.
 
 Train networks with multiple inputs
 -----------------------------------
@@ -100,24 +91,56 @@ NeuPy allows to train networks with multiple inputs.
     x_train_cat, x_train_num, y_train = load_train_data()
     x_test_cat, x_test_num, y_test = load_test_data()
 
-    # Categorical variable should be the first, becuase
+    # Categorical variable should be the first, because
     # categorical input layer was defined first in the network
     network.train([x_train_cat, x_train_num], y_train,
                   [x_test_cat, x_test_num], y_test,
                   epochs=180)
     y_predicted = network.predict([x_test_cat, x_test_num])
 
+From the example above, you can see that we specified first layer as a list of lists. Each list has small sequence of layers specified and each sequence starts with the ``Input`` layer. This list of lists is just simple syntax sugar around the ``parallel`` function. Exactly the same architecture can be rewritten in the following way.
+
+.. code-block:: python
+
+    gdnet = algorithms.GradientDescent(
+        [
+            layers.parallel([
+                # 3 categorical inputs
+                layers.Input(3),
+                layers.Embedding(n_unique_categories, 4),
+                layers.Reshape(),
+            ], [
+                # 17 numerical inputs
+                layers.Input(17),
+            ]),
+            layers.Concatenate(),
+            layers.Relu(16),
+            layers.Sigmoid(1)
+        ]
+    )
+
+The training and prediction looks slightly different as well.
+
+.. code-block:: python
+
+    network.train([x_train_cat, x_train_num], y_train,
+                  [x_test_cat, x_test_num], y_test,
+                  epochs=180)
+    y_predicted = network.predict([x_test_cat, x_test_num])
+
+Input we specified as a list where number of values equal to the number of input layers in the network. The order in the list is also important. We defined first input layer for categorical variables and therefore we need to pass it as the first element to the input list. The same is true for the ``predict`` method.
+
 Algorithms
 ----------
 
 NeuPy supports lots of different training algorithms based on the backpropagation. You can check :ref:`Cheat sheet <cheatsheet-backprop-algorithms>` if you want to learn more about them.
 
-Before using these algorithms you must understand that not all of them are suitable for all problems. Some of the methods like :network:`Levenberg-Marquardt <LevenbergMarquardt>` or :network:`Conjugate Gradient <ConjugateGradient>` work better for small networks and they would be extremely slow for networks with millions of parameters. In addition, it's important to note that not all algorithms are possible to train with mini-batches. Algorithms like :network:`Conjugate Gradient <ConjugateGradient>` are not able to train properly with mini-batch.
+Before using these algorithms you must understand that not all of them are suitable for all problems. Some of the methods like :network:`Levenberg-Marquardt <LevenbergMarquardt>` or :network:`Conjugate Gradient <ConjugateGradient>` work better for small networks and they would be extremely slow for networks with millions parameters. In addition, it's important to note that not all algorithms are possible to train with mini-batches. Algorithms like :network:`Conjugate Gradient <ConjugateGradient>` don't work with mini-batches.
 
-Error functions
----------------
+Loss functions
+--------------
 
-NeuPy has many different :ref:`error functions <cheatsheet-error-function>`.
+NeuPy has many different :ref:`loss functions <cheatsheet-error-function>`. These loss functions can be specified specified as a string.
 
 .. code-block:: python
 
@@ -133,15 +156,16 @@ NeuPy has many different :ref:`error functions <cheatsheet-error-function>`.
         error='categorical_crossentropy',
     )
 
-Also, it's possible to create custom error functions. Error function should have two mandatory arguments.
+Also, it's possible to create custom loss functions. Loss function should have two mandatory arguments, namely expected and predicted values.
 
 .. code-block:: python
 
-    import theano.tensor as T
+    import tensorflow as tf
     from neupy import algorithms, layers
 
     def mean_absolute_error(expected, predicted):
-        return T.abs_(expected - predicted).mean()
+        abs_errors = tf.abs(expected - predicted)
+        return tf.reduce_mean(abs_errors)
 
     nnet = algorithms.MinibatchGradientDescent(
         [
@@ -153,12 +177,12 @@ Also, it's possible to create custom error functions. Error function should have
         error=mean_absolute_error,
     )
 
-Error function should return a scalar because during the training output from the error function will be used as a variable with respect to which we are differentiating
+Loss function should return a scalar, because during the training output from the loss function will be used as a variable with respect to which we are differentiating.
 
 Add-ons
 -------
 
-Algorithms with constructible architectures allow to use additional update rules for parameter regularization and step update. For instance, we want to add :network:`Weight Decay <WeightDecay>` regularization and we want to minimize step monotonically after each epoch.
+Algorithms with constructible architectures allow to use additional update rules for parameter regularization and learning rate updates. For instance, we want to add :network:`Weight Decay <WeightDecay>` regularization and we want to minimize step monotonically after each epoch.
 
 .. code-block:: python
 

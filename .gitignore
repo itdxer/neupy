@@ -11,6 +11,7 @@ build/
 # Tests
 *-failed-diff.png
 .coverage
+.coverage.*
 .pytest_cache
 
 # Other
@@ -18,10 +19,12 @@ build/
 .DS_Store
 .python-version
 notebooks/.ipynb_checkpoints/*
+.ipynb_checkpoints
 
 # Storage files
 *.dill
 *.h5
+*.hdf5
 *.pickle
 
 # Vim
@@ -34,15 +37,12 @@ site/drafts/*
 site/source/docs/*
 site/build/*
 
-# NeuPy folders
-examples/*
-notebooks/*
-
 # Examples
 examples/rbfn/music_speech/data/*
+notebooks/caltech_101_images/*
 
 # Pickle files important for VIN example
 !examples/reinforcement_learning/vin/data/*.pickle
-!examples/reinforcement_learning/vin/models/*.pickle
+!examples/reinforcement_learning/vin/models/*.hdf5
 examples/reinforcement_learning/vin/data/gridworld-16-*.pickle
 examples/reinforcement_learning/vin/data/gridworld-28-*.pickle

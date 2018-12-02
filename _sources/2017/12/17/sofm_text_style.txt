@@ -1,6 +1,16 @@
 Create unique text-style with SOFM
 ==================================
 
+.. raw:: html
+
+    <div class="short-description">
+        <img src="https://raw.githubusercontent.com/itdxer/neupy/master/site/neupy-logo.png" align="right">
+        <p>
+        Neupy's logo has been generated with a help of the neural network. This article shows the process and how it could be extended for some other text.
+        </p>
+        <span clear="right"></span>
+    </div>
+
 .. figure:: images/neupy-logo.png
     :width: 100%
     :align: center

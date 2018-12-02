@@ -18,7 +18,6 @@ Submodules
    neupy.algorithms.gd.lev_marq
    neupy.algorithms.gd.momentum
    neupy.algorithms.gd.quasi_newton
-   neupy.algorithms.gd.quickprop
    neupy.algorithms.gd.rmsprop
    neupy.algorithms.gd.rprop
 

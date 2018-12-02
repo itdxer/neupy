@@ -11,7 +11,8 @@
             <link>http://neupy.com/2018/03/26/making_art_with_growing_neural_gas.html</link>
             <guid>http://neupy.com/2018/03/26/making_art_with_growing_neural_gas.html</guid>
             <title><![CDATA[Making Art with Growing Neural Gas]]></title>
-            <description><![CDATA[<h1>Making Art with Growing Neural Gas</h1>
+            <description><![CDATA[
+<h1>Making Art with Growing Neural Gas</h1>
 <div class="figure align-center">
 <img alt="Art generated using Growing Neural Gas in NeuPy" src="http://neupy.com/_images/gng-art-final.png"/>
 </div>
@@ -229,7 +230,8 @@
             <link>http://neupy.com/2017/12/17/sofm_text_style.html</link>
             <guid>http://neupy.com/2017/12/17/sofm_text_style.html</guid>
             <title><![CDATA[Create unique text-style with SOFM]]></title>
-            <description><![CDATA[<h1>Create unique text-style with SOFM</h1>
+            <description><![CDATA[
+<h1>Create unique text-style with SOFM</h1>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="http://neupy.com/_images/neupy-logo.png"><img alt="NeuPy logo" src="http://neupy.com/_images/neupy-logo.png" style="width: 100%;"/></a>
 </div>
@@ -428,7 +430,8 @@
             <link>http://neupy.com/2017/12/13/sofm_art.html</link>
             <guid>http://neupy.com/2017/12/13/sofm_art.html</guid>
             <title><![CDATA[The Art of SOFM]]></title>
-            <description><![CDATA[<span id="sofm-art"/><h1>The Art of SOFM</h1>
+            <description><![CDATA[
+<span id="sofm-art"/><h1>The Art of SOFM</h1>
 <div class="section" id="introduction">
 <h2>Introduction</h2>
 <p>In this article, I just want to show how beautiful sometimes can be a neural network. I think, it’s quite rare that algorithm can not only extract knowledge from the data, but also produce something beautiful using exactly the same set of training rules without any modifications.</p>
@@ -516,7 +519,8 @@
             <link>http://neupy.com/2017/12/09/sofm_applications.html</link>
             <guid>http://neupy.com/2017/12/09/sofm_applications.html</guid>
             <title><![CDATA[Self-Organizing Maps and Applications]]></title>
-            <description><![CDATA[<span id="sofm-applications"/><h1><a class="toc-backref" href="#id1">Self-Organizing Maps and Applications</a></h1>
+            <description><![CDATA[
+<span id="sofm-applications"/><h1><a class="toc-backref" href="#id1">Self-Organizing Maps and Applications</a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
@@ -538,35 +542,35 @@
 </div>
 <div class="section" id="introduction">
 <h2><a class="toc-backref" href="#id2">Introduction</a></h2>
-<p>I was facinated for a while with SOFM algorithm and that’s why I decided to write this article. The reason why I like it so much because it’s pretty simple and powerful approach that can be applied to solve different problems.</p>
-<p>I belive that it’s important to understand the idea behind any algorithm even if you don’t know how to build it. For this reason, I won’t give detailed explanation on how to build your own SOFM network. Instead, I will focus on the intuition behind this algorithm and applications where you can use it. If you want to build it yourself I recommend you to read <a class="reference external" href="http://hagan.okstate.edu/NNDesign.pdf">Neural Network Design</a> book.</p>
+<p>I was fascinated for a while with SOFM algorithm and that’s why I decided to write this article. The reason why I like it so much because it’s pretty simple and powerful approach that can be applied to solve different problems.</p>
+<p>I believe that it’s important to understand the idea behind any algorithm even if you don’t know how to build it. For this reason, I won’t give detailed explanation on how to build your own SOFM network. Instead, I will focus on the intuition behind this algorithm and applications where you can use it. If you want to build it yourself I recommend you to read <a class="reference external" href="http://hagan.okstate.edu/NNDesign.pdf">Neural Network Design</a> book.</p>
 </div>
 <div class="section" id="intuition-behind-sofm">
 <h2><a class="toc-backref" href="#id3">Intuition behind SOFM</a></h2>
-<p>As in case of any neural network algorithms the main building blocks for SOFM are <strong>neurons</strong>. Each neuron typically connected to some other neurons, but number of this connections is small. Each neuron connected just to a few other neurons that we call <strong>close neighbours</strong>. There are many ways to arrange these connections, but the most common one is to arrange them into two-dimensional grid.</p>
+<p>As in case of any neural network algorithms the main building blocks for SOFM are <strong>neurons</strong>. Each neuron typically connected to some other neurons, but number of this connections is small. Each neuron connected just to a few other neurons that we call <strong>close neighbors</strong>. There are many ways to arrange these connections, but the most common one is to arrange them into two-dimensional grid.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="http://neupy.com/_images/sofm-grid.png"><img alt="SOFM grid" src="http://neupy.com/_images/sofm-grid.png" style="width: 50%;"/></a>
 </div>
 <p>Each blue dot in the image is neuron and line between two neurons means that they are connected. We call this arrangement of neurons <em>grid</em>.</p>
 <p>Each neuron in the grid has two properties: position and connections to other neurons. We define connections before we start network training and position is the only thing that changes during the training. There are many ways to initialize position for the neurons, but the easiest one is just to do it randomly. After this initialization grid won’t look as nice as it looks on the image above, but with more training iteration problem can be solved.</p>
-<p>Let’s talk about training. In each training iteration we introduce some data point and we try to find neuron that closest to this point. Neuron that closest to this point we call <strong>neuron winner</strong>. But, instead of updating position of this neuron we find its <strong>neighbours</strong>. Note, that it’s not the same as closest neighbours. Before traning we specify special parameter known as <strong>learning radius</strong>. It defines the radius within which we consider other neuron as a neighbours. On the image below you can see the same grid as before with neuron in center that we marked as a winner. You can see in the pictures that larger radius includes more neurons.</p>
+<p>Let’s talk about training. In each training iteration we introduce some data point and we try to find neuron that closest to this point. Neuron that closest to this point we call <strong>neuron winner</strong>. But, instead of updating position of this neuron we find its <strong>neighbors</strong>. Note, that it’s not the same as closest neighbors. Before training we specify special parameter known as <strong>learning radius</strong>. It defines the radius within which we consider other neuron as a neighbors. On the image below you can see the same grid as before with neuron in center that we marked as a winner. You can see in the pictures that larger radius includes more neurons.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="http://neupy.com/_images/sofm-learning-radius-comparison.png"><img alt="Compare SOFM learning radius size" src="http://neupy.com/_images/sofm-learning-radius-comparison.png" style="width: 100%;"/></a>
 </div>
-<p>And at the end of the iteration we update our neuron winner and its neighbours positions. We change their position by pushing closer to the data point that we used to find neuron winner. We “push” winner neuron much closer to the data point compared to the neighbour neurons. In fact, the further the nighbours the less “push” it get’s towards the data point. You can see how we update neurons on the image below with different learning radius parameters.</p>
+<p>And at the end of the iteration we update our neuron winner and its neighbors positions. We change their position by pushing closer to the data point that we used to find neuron winner. We “push” winner neuron much closer to the data point compared to the neighbor neurons. In fact, the further the neighbors the less “push” it get’s towards the data point. You can see how we update neurons on the image below with different learning radius parameters.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="http://neupy.com/_images/sofm-training-learning-radius-comparison.png"><img alt="Compare SOFM learning radius size" src="http://neupy.com/_images/sofm-training-learning-radius-comparison.png" style="width: 100%;"/></a>
 </div>
 <p>You probably noticed that idea is very similar to k-means algorithm, but what makes it really special is the existing relations with other neurons.</p>
-<p>It’s easy to compare this algorithm to real world. Imagine that you try to put large tablecloth on the large table. First you put it so that it will partialy cover table. Then you will go around and pull different sides of the tablecloth until you cover the table. But when you pull one side, another part of the tablecloth starts moving to the direction in which you pull it, just like it happens during the training in SOFM.</p>
+<p>It’s easy to compare this algorithm to real world. Imagine that you try to put large tablecloth on the large table. First you put it so that it will partially cover table. Then you will go around and pull different sides of the tablecloth until you cover the table. But when you pull one side, another part of the tablecloth starts moving to the direction in which you pull it, just like it happens during the training in SOFM.</p>
 </div>
 <div class="section" id="applications">
 <h2><a class="toc-backref" href="#id4">Applications</a></h2>
 <p>Surprisingly, this simple idea has a variety of applications. In this part of the article, I’ll cover a few most common applications.</p>
 <div class="section" id="clustering">
 <h3><a class="toc-backref" href="#id5">Clustering</a></h3>
-<p>Clustering is probably the most trivial application where you can use SOFM. In case of clustering, we treat every neuron as a centre of separate cluster. One of the problems is that during the training procedure when we pull one neuron closer to one of the cluster we will be forced to pull its neighbours as well. In order to avoid this issue, we need to break relations between neighbours, so that any update will not have influence on other neurons. If we set up this value as 0 it will mean that neuron winner doesn’t have any relations with other neurons which is exactly what we need for clustering.</p>
-<p>In the image below you can see visualized two features from the iris dataset and there are three SOFM neurons colored in grey. As you can see it managed to find pretty good centres of the clusters.</p>
+<p>Clustering is probably the most trivial application where you can use SOFM. In case of clustering, we treat every neuron as a centre of separate cluster. One of the problems is that during the training procedure when we pull one neuron closer to one of the cluster we will be forced to pull its neighbors as well. In order to avoid this issue, we need to break relations between neighbors, so that any update will not have influence on other neurons. If we set up this value as 0 it will mean that neuron winner doesn’t have any relations with other neurons which is exactly what we need for clustering.</p>
+<p>In the image below you can see visualized two features from the iris dataset and there are three SOFM neurons colored in grey. As you can see it managed to find pretty good centers of the clusters.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span/>$ python sofm_iris_clustering.py
 </pre></div>
 </div>
@@ -582,7 +586,7 @@
 </div>
 <div class="section" id="space-approximation">
 <h3><a class="toc-backref" href="#id6">Space approximation</a></h3>
-<p>In the previous example, we tried to do a <strong>space approximation</strong>. Space approximation is similar to clustering, but the goal is here to find the minimum number of points that cover as much data as possible. Since it’s similar to clustering we can use SOFM here as well. But as we saw in the previous example data points wasn’t using space efficiently and some points were very close to each other and some are further. Now the problem is that clusters don’t know about existence of other clusters and they behave independently. To have more cooperative behaviour between clusters we can enable learning radius in SOFM. Let’s try different example. I generated two-dimensional dataset in the shape of the moon that we will try to approximate using SOFM. First, let’s try to do it without increasing learning radius and applying the same micro-clustering technique as before.</p>
+<p>In the previous example, we tried to do a <strong>space approximation</strong>. Space approximation is similar to clustering, but the goal is here to find the minimum number of points that cover as much data as possible. Since it’s similar to clustering we can use SOFM here as well. But as we saw in the previous example data points wasn’t using space efficiently and some points were very close to each other and some are further. Now the problem is that clusters don’t know about existence of other clusters and they behave independently. To have more cooperative behavior between clusters we can enable learning radius in SOFM. Let’s try different example. I generated two-dimensional dataset in the shape of the moon that we will try to approximate using SOFM. First, let’s try to do it without increasing learning radius and applying the same micro-clustering technique as before.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="http://neupy.com/_images/sofm-moon-topology-0-radius.png"><img alt="Learning moon topology with clustering" src="http://neupy.com/_images/sofm-moon-topology-0-radius.png" style="width: 100%;"/></a>
 </div>
@@ -607,7 +611,7 @@
 <div class="section" id="high-dimensional-data-visualization">
 <h3><a class="toc-backref" href="#id7">High-dimensional data visualization</a></h3>
 <p>We used SOFM with two-dimensional feature map in order to catch dimensional properties of the datasets with only two features. If we increase number of dimensions to three it still would be possible to visualize the result, but in four dimensions it will become a bit trickier.</p>
-<p>If we use two-dimensional grid and train SOFM over the high-dimensional data then we can encode network as a heat map where each neuron in the network will be represented by the average distance to its neighbours.</p>
+<p>If we use two-dimensional grid and train SOFM over the high-dimensional data then we can encode network as a heat map where each neuron in the network will be represented by the average distance to its neighbors.</p>
 <p>As the example, let’s take a look at the <a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html">breast cancer dataset</a> available in the <a class="reference external" href="http://scikit-learn.org">scikit-learn library</a>. This dataset has 30 features and two classes.</p>
 <p>Let’s look what we can get if we apply described method on the 30-dimensional data.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span/>$ python sofm_heatmap_visualization.py
@@ -618,7 +622,7 @@
 </div>
 <p>For this example, I used SOFM with 20x20 feature map. Which basically means that we have 400 micro-clusters. Most of the micro-clusters has either blue squares or red circles and just a few of them has both or none of the classes.</p>
 <p>You can see how micro-clusters with blue squares are tended to be close to each other, and the same true for red circles. In fact, we can even draw simple bound that will separate two different classes from each other. Along this bound we can see some cases where micro-cluster has red and blue classes which means that at some places these samples sit very tight. In other cases, like in the left down corner, we can see parts that do not belong to any of the classes which means that there is a gap between data points.</p>
-<p>You can also notice that each cell in the heat map has different color. From the colorbar, we can see that black color encodes small numbers and white color encodes large numbers. Each cell has a number associated with it that defines average distance to neighbour clusters. The white color means that cluster is far away from it’s neighbours. Group of the red circles on the right side of the plot has white color, which means that this group is far from the main cluster.</p>
+<p>You can also notice that each cell in the heat map has different color. From the colorbar, we can see that black color encodes small numbers and white color encodes large numbers. Each cell has a number associated with it that defines average distance to neighbor clusters. The white color means that cluster is far away from it’s neighbors. Group of the red circles on the right side of the plot has white color, which means that this group is far from the main cluster.</p>
 <p>One problem is that color depends on the average distance which can be misleading in some cases. We can build a bit different visualization that will encode distance between two separate micro-clusters as a single value.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span/>$ python sofm_heatmap_visualization.py --expanded-heatmap
 </pre></div>
@@ -626,7 +630,7 @@
 <br/><div class="figure align-center">
 <a class="reference internal image-reference" href="http://neupy.com/_images/sofm-heatmap-expanded.png"><img alt="Embedded 30-dimensional dataset using SOFM" src="http://neupy.com/_images/sofm-heatmap-expanded.png" style="width: 100%;"/></a>
 </div>
-<p>Now between every feature and its neighbour there is an extra square. As in the previous example each square encodes distance between two neighbouring features. We do not consider two features in the map as neighbours in case if they connected diagonally. That’s why all diagonal squares between two micro-clusters color in black. Diagonals are a bit more difficult to encode, because in this case we have two different cases. In order to visualize it we can also take an average of these distances.</p>
+<p>Now between every feature and its neighbor there is an extra square. As in the previous example each square encodes distance between two neighboring features. We do not consider two features in the map as neighbors in case if they connected diagonally. That’s why all diagonal squares between two micro-clusters color in black. Diagonals are a bit more difficult to encode, because in this case we have two different cases. In order to visualize it we can also take an average of these distances.</p>
 <p>More interesting way to make this type of visualization can be with the use of images. In previous case, we use markers to encode two different classes. With images, we can use them directly as the way to represent the cluster. Let’s try to apply this idea on small dataset with images of digits from 0 to 9.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span/>$ python sofm_digits.py
 </pre></div>
@@ -714,7 +718,8 @@
             <link>http://neupy.com/2016/12/17/hyperparameter_optimization_for_neural_networks.html</link>
             <guid>http://neupy.com/2016/12/17/hyperparameter_optimization_for_neural_networks.html</guid>
             <title><![CDATA[Hyperparameter optimization for Neural Networks]]></title>
-            <description><![CDATA[<h1><a class="toc-backref" href="#id13">Hyperparameter optimization for Neural Networks</a></h1>
+            <description><![CDATA[
+<h1><a class="toc-backref" href="#id13">Hyperparameter optimization for Neural Networks</a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
@@ -755,7 +760,7 @@
 <li>Learning rate</li>
 <li>Loss function</li>
 </ul>
-<p>Even though the list of parameters in not even close to being complete, it’s still impressive how many parameters influences network’s accuracy.</p>
+<p>Even though the list of parameters in not even close to being complete, it’s still impressive how many parameters influences network’s performance.</p>
 </div>
 <div class="section" id="hyperparameter-optimization">
 <h2><a class="toc-backref" href="#id15">Hyperparameter optimization</a></h2>
@@ -936,7 +941,7 @@
 <span class="n">target</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_samples</span><span class="p">),</span> <span class="n">dataset</span><span class="o">.</span><span class="n">target</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
 <span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
-    <span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mf">0.7</span>
+    <span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -1095,7 +1100,7 @@
 <span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
     <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
     <span class="n">target</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
-    <span class="n">train_size</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span> <span class="o">/</span> <span class="mf">7.</span><span class="p">)</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">7.</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -1314,7 +1319,7 @@
 </div>
 <div class="section" id="summary">
 <h2><a class="toc-backref" href="#id28">Summary</a></h2>
-<p>The Bayesian Optimization and TPE algorithms show great improvement over the classic hyperparameter optimization methods. They allow to learn from the training history and give better and better estimations for the next set of parameters. But it still takes lots of time to apply these algorithms. It’s great if you have an access to multiple machines and you can parallel parameter tuning procedure <a class="footnote-reference" href="#id8" id="id4">[4]</a>, but usually, it’s not an option. Sometimes it’s better just to avoid hyperparameter optimization. In case if you just try to build a network for trivial problems like image classification it’s better to use existed architectures with pre-trained parameters like <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/alexnet.py">AlexNet</a>, <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/vgg19.py">VGG19</a> or <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/resnet50.py">ResNet</a>.</p>
+<p>The Bayesian Optimization and TPE algorithms show great improvement over the classic hyperparameter optimization methods. They allow to learn from the training history and give better and better estimations for the next set of parameters. But it still takes lots of time to apply these algorithms. It’s great if you have an access to multiple machines and you can parallel parameter tuning procedure <a class="footnote-reference" href="#id8" id="id4">[4]</a>, but usually, it’s not an option. Sometimes it’s better just to avoid hyperparameter optimization. In case if you just try to build a network for trivial problems like image classification it’s better to use existed architectures with pre-trained parameters like <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/vgg19.py">VGG19</a> or <a class="reference external" href="https://github.com/itdxer/neupy/tree/master/examples/cnn/resnet50.py">ResNet</a>.</p>
 <p>For unique problems that don’t have pre-trained networks the classic and simple hand-tuning is a great way to start. A few iterations can give you a good architecture which won’t be the state-of-the-art but should give you satisfying result with a minimum of problems. In case if accuracy does not suffice your needs you can always boost your performance getting more data or developing ensembles with different models.</p>
 </div>
 <div class="section" id="source-code">
@@ -1379,139 +1384,258 @@
         <item>
             <link>http://neupy.com/2016/11/12/mnist_classification.html</link>
             <guid>http://neupy.com/2016/11/12/mnist_classification.html</guid>
-            <title><![CDATA[MNIST Classification]]></title>
-            <description><![CDATA[<span id="id1"/><h1>MNIST Classification</h1>
-<p>The MNIST problem is probably the most known for those who have already
-heared about neural networks. This short tutorial shows you how to build prediction models in NeuPy. Let’s start developing model.</p>
-<p>First of all we need to load data.</p>
-<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">model_selection</span>
+            <title><![CDATA[Image classification, MNIST digits]]></title>
+            <description><![CDATA[
+<span id="mnist-classification"/><h1>Image classification, MNIST digits</h1>
+<img alt="MNIST digits example" class="align-center" src="http://neupy.com/_images/random-digits.png"/>
+<p>This short tutorial shows how to build and train simple network for digit classification in NeuPy.</p>
+<div class="section" id="data-preparation">
+<h2>Data preparation</h2>
+<p>Data can be loaded in different ways. I used scikit-learn to fetch the MNIST dataset.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mnist</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">fetch_mldata</span><span class="p">(</span><span class="s1">'MNIST original'</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">mnist</span><span class="o">.</span><span class="n">target</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">mnist</span><span class="o">.</span><span class="n">target</span>
 </pre></div>
 </div>
-<p>I used scikit-learn to fetch the MNIST dataset, but you can load it in different way.</p>
-<p>Data doesn’t have appropriate format for neural network, so we need to make simple transformation before use it.</p>
+<p>Now that we have the data we need to confirm that we have expected number of samples.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(70000, 784)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(70000,)</span>
+</pre></div>
+</div>
+<p>Every data sample has 784 features and they can be reshaped into 28x28 image.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'gray'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="http://neupy.com/_images/digit-example.png"><img alt="MNIST digit example" class="align-center" src="http://neupy.com/_images/digit-example.png" style="width: 70%;"/></a>
+<p>In this tutorial, we will use each image as a vector so we won’t need to reshape it to its original size. The only thing that we need to do is to rescale image values. Rescaling images will help network to converge faster.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">/=</span> <span class="mf">255.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">-=</span> <span class="n">X</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Notice the way division and subtraction are specified. In this way, we make update directly on the <span class="docutils literal"><span class="pre">X</span></span> matrix without copying it. It can be validated with simple example.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>  <span class="c1"># numbers will be different between runs</span>
+<span class="go">4486892960</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">-=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>  <span class="c1"># object ID didn't change</span>
+<span class="go">4486892960</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">A</span> <span class="o">-</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>  <span class="c1"># and now it's different, because it's different object</span>
+<span class="go">4602409968</span>
+</pre></div>
+</div>
+<p>After last update for matrix <span class="docutils literal"><span class="pre">A</span></span> we got different identifier for the object, which means that it got copied.</p>
+<p>In case of the in-place updates, we don’t waste memory. Current dataset is relatively small and there is no memory deficiency, but for larger datasets it might make a big difference.</p>
+<p>There is one more processing step that we need to do before we can train our network. Let’s take a look into target classes.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'int'</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="mi">10</span><span class="p">)</span>
+<span class="go">[9, 0, 9, 7, 2, 2, 3, 0, 0, 8]</span>
+</pre></div>
+</div>
+<p>All the numbers that we have are specified as integers. For our problem we want network to learn visual representation of the numbers. We cannot use them as integers, because it will create problems during the training. Basically, with the integer definition we’re implying that number <span class="docutils literal"><span class="pre">1</span></span> visually more similar to <span class="docutils literal"><span class="pre">0</span></span> than to number <span class="docutils literal"><span class="pre">7</span></span>. It happens only because difference between <span class="docutils literal"><span class="pre">1</span></span> and <span class="docutils literal"><span class="pre">0</span></span> smaller than difference between <span class="docutils literal"><span class="pre">1</span></span> and <span class="docutils literal"><span class="pre">7</span></span>. In order to avoid making any type of assumptions we will use one-hot encoding technique.</p>
 <div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">/</span> <span class="mf">255.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">-</span> <span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">target_scaler</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">target_scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">sparse</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(70000, 10)</span>
 </pre></div>
 </div>
-<p>Next we need to divide dataset into two parts: train and test. Regarding <a class="reference external" href="http://yann.lecun.com/exdb/mnist/">The
-MNIST Database</a> page we will use 60,000
-samples for training and 10,000 for test.</p>
-<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<p>You can see that every digit was transformed into a 10 dimensional vector.</p>
+<p>And finally, we need to divide our data into training and validation set. We won’t show validation set to the network and we will use it only to test network’s classification accuracy.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
-<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">target</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">train_size</span><span class="o">=</span><span class="p">(</span><span class="mf">6.</span> <span class="o">/</span> <span class="mi">7</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">X</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">test_size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">7.</span><span class="p">)</span>
 <span class="gp">... </span><span class="p">)</span>
 </pre></div>
 </div>
-<p>In the previous procedure I converted all data to <cite>float32</cite> data type. This
-simple trick will help us use less memory and decrease computational time.
-Theano is a main backend for the Gradient Descent based algorithms in NeuPy.
-For the Theano we need to add additional configuration that will explain Theano that
-we are going to use 32bit float numbers.</p>
-<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">theano</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">theano</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">floatX</span> <span class="o">=</span> <span class="s1">'float32'</span>
+<p>Notice that data was converted into 32 bit float numbers. This is the only float type that currently supported by NeuPy.</p>
+</div>
+<div class="section" id="model-initialization">
+<h2>Model initialization</h2>
+<p>It’s very easy to define neural network architectures in the NeuPy. We can define simple architecture that excepts input vector with 784 features and outputs probabilities per each digit class. In addition, we can two hidden layers with 500 and 300 output units respectively. Each hidden layer will use relu as activation function</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
+    <span class="c1"># Every image in the MNIST dataset has 784 pixels (28x28)</span>
+    <span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
+
+    <span class="c1"># Hidden layers</span>
+    <span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
+    <span class="n">Relu</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
+
+    <span class="c1"># Softmax layer ensures that we output probabilities</span>
+    <span class="c1"># and specified number of outputs equal to the unique</span>
+    <span class="c1"># number of classes</span>
+    <span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="p">)</span>
 </pre></div>
 </div>
-<p>We prepared everything that we need for the neural network training. Now we are
-able to create the neural network that will classify digits for us.</p>
-<p>Let’s start with an architecture. I didn’t reinvent the wheel and used one of the know architectures from <a class="reference external" href="http://yann.lecun.com/exdb/mnist/">The Database</a> page which is 784 &gt; 500 &gt; 300 &gt; 10. As the main activation function I used Relu and Softmax for the final layer. The main algorithm is a Nesterov Momentum that uses 100 samples per batch iteration. Actually all this and other network configuration should be clear from the code shown below.</p>
-<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="p">[</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">],</span>
-<span class="gp">... </span>    <span class="n">error</span><span class="o">=</span><span class="s1">'categorical_crossentropy'</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">momentum</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">nesterov</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">... </span><span class="p">)</span>
+<p>Because our neural network is quite small, we can rewrite this architecture with a help of the inline operator.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Isn’t it simple and clear? All the most important information related to the neural network you can find in the terminal output. If you run the code that shown above you would get the same output as on the figure below.</p>
-<a class="reference internal image-reference" href="http://neupy.com/_images/bpnet-config-logs.png"><img alt="Gradient Descent configuration" class="align-center" src="http://neupy.com/_images/bpnet-config-logs.png" style="width: 70%;"/></a>
-<p>From this output we can extract a lot of information about network configurations.</p>
-<p>First of all, as we can see, most of options have green color label, but some of them are gray. Green color defines all options which we put in network manually and gray color options are default parameters. All properties separeted on few groups and each group is a <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a>  parent classes. More information about <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm properties you will find in documentation, just click on algorithm name link and you will see it.</p>
-<p>In addition for feedforward neural networks it’s possible to check architecture in form of a table.</p>
-<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">architecture</span><span class="p">()</span>
+<p>Now that we have our architecture we can initialize training algorithm.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+
+<span class="n">mnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span>
+    <span class="n">network</span><span class="p">,</span>
+
+    <span class="c1"># Categorical cross-entropy is very popular loss function</span>
+    <span class="c1"># for the multi-class classification problems</span>
+    <span class="n">error</span><span class="o">=</span><span class="s1">'categorical_crossentropy'</span><span class="p">,</span>
+
+    <span class="c1"># Number of samples propagated through the network</span>
+    <span class="c1"># before every weight update</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+
+    <span class="c1"># Learning rate</span>
+    <span class="n">step</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+
+    <span class="c1"># Makes sure that training progress will be</span>
+    <span class="c1"># printed in the terminal</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+
+    <span class="c1"># Training data will be shuffled before every epoch</span>
+    <span class="c1"># It ensures that every batch will have different number of samples</span>
+    <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+
+    <span class="c1"># Options specific for the momentum training algorithm</span>
+    <span class="n">momentum</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>
+    <span class="n">nesterov</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="http://neupy.com/_images/bpnet-architecture.png"><img alt="Neural Network Architecture" class="align-center" src="http://neupy.com/_images/bpnet-architecture.png" style="width: 70%;"/></a>
-<p>Now we are going to train network. Let set up 20 epochs for training procedure and check the result.</p>
-<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<p>All the most important information related to the neural network you can find in the terminal output. If you run the code that shown above you should see output similar to the one shown below.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="n">Main</span> <span class="n">information</span>
+
+<span class="p">[</span><span class="n">ALGORITHM</span><span class="p">]</span> <span class="n">Momentum</span>
+
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">verbose</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">epoch_end_signal</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">show_epoch</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">shuffle_data</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">step</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">train_end_signal</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">error</span> <span class="o">=</span> <span class="n">categorical_crossentropy</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">addons</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">momentum</span> <span class="o">=</span> <span class="mf">0.99</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">nesterov</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="p">[</span><span class="n">TENSORFLOW</span><span class="p">]</span> <span class="n">Initializing</span> <span class="n">Tensorflow</span> <span class="n">variables</span> <span class="ow">and</span> <span class="n">functions</span><span class="o">.</span>
+<span class="p">[</span><span class="n">TENSORFLOW</span><span class="p">]</span> <span class="n">Initialization</span> <span class="n">finished</span> <span class="n">successfully</span><span class="o">.</span> <span class="n">It</span> <span class="n">took</span> <span class="mf">0.30</span> <span class="n">seconds</span>
 </pre></div>
 </div>
-<p>Output in terminal should look similar to this one:</p>
-<a class="reference internal image-reference" href="http://neupy.com/_images/bpnet-train-logs.png"><img alt="GradientDescent training procedure output" class="align-center" src="http://neupy.com/_images/bpnet-train-logs.png" style="width: 70%;"/></a>
-<p>Output show the most important information related to training procedure. Each epoch contains 4 columns. First one identified epoch. The second one show training error. The third one is optional. In case you have validation dataset, you can check learning perfomanse using dataset separated from the learning procedure. And the last column shows how many time network trains during this epoch.</p>
-<p>From the table is not clear network’s training progress. We can check it very easy. Network instance contains built-in method that build line plot that show training progress. Let’s check our progress.</p>
+<p>In addition, for feedforward neural networks it’s possible to check architecture in form of a table.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">mnet</span><span class="o">.</span><span class="n">architecture</span><span class="p">()</span>
+
+<span class="go">Network's architecture</span>
+
+<span class="go">-----------------------------------------------</span>
+<span class="go">| # | Input shape | Layer type | Output shape |</span>
+<span class="go">-----------------------------------------------</span>
+<span class="go">| 1 |         784 |      Input |          784 |</span>
+<span class="go">| 2 |         784 |       Relu |          500 |</span>
+<span class="go">| 3 |         500 |       Relu |          300 |</span>
+<span class="go">| 4 |         300 |    Softmax |           10 |</span>
+<span class="go">-----------------------------------------------</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="training">
+<h2>Training</h2>
+<p>Now that we have everything specified we are finally can train our network. In addition, we can add test data for which we will be able to monitor network’s training progress on the unseen data.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">mnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="go">Start training</span>
+
+<span class="go">[TRAINING DATA] shapes: (60000, 784)</span>
+<span class="go">[TEST DATA] shapes: (10000, 784)</span>
+<span class="go">[TRAINING] Total epochs: 10</span>
+
+<span class="go">---------------------------------------------------------</span>
+<span class="go">|    Epoch    |  Train err  |  Valid err  |    Time     |</span>
+<span class="go">---------------------------------------------------------</span>
+<span class="go">|           1 |     0.27667 |    0.099501 |       2 sec |</span>
+<span class="go">|           2 |    0.068402 |    0.089827 |       2 sec |</span>
+<span class="go">|           3 |    0.037638 |    0.080401 |       2 sec |</span>
+<span class="go">|           4 |    0.023067 |     0.07487 |       2 sec |</span>
+<span class="go">|           5 |    0.014583 |    0.069704 |       2 sec |</span>
+<span class="go">|           6 |   0.0083044 |      0.0672 |       2 sec |</span>
+<span class="go">|           7 |   0.0037654 |    0.068787 |       2 sec |</span>
+<span class="go">|           8 |   0.0019174 |    0.071364 |       2 sec |</span>
+<span class="go">|           9 |   0.0010768 |    0.071117 |       2 sec |</span>
+<span class="go">|          10 |  0.00082685 |     0.07037 |       2 sec |</span>
+<span class="go">---------------------------------------------------------</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="evaluations">
+<h2>Evaluations</h2>
+<p>From the table it’s hard to see network’s training progress. We can make error plot that can help us to visualize how it performed on the training and validation datasets separately.</p>
 <div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plots</span><span class="o">.</span><span class="n">error_plot</span><span class="p">(</span><span class="n">network</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plots</span><span class="o">.</span><span class="n">error_plot</span><span class="p">(</span><span class="n">mnet</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="http://neupy.com/_images/bpnet-train-errors-plot.png"><img alt="GradientDescent epoch errors plot" class="align-center" src="http://neupy.com/_images/bpnet-train-errors-plot.png" style="width: 70%;"/></a>
-<p>From the figure above you can notice that validation error does not decrease over time. Sometimes it goes up and sometimes down, but it doesn’t mean that network trains poorly. Let’s check small example that can make this problem clear.</p>
-<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">actual_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model1_prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model2_prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">])</span>
+<p>From the figure above, you can notice that validation error does not decrease all the time. Sometimes it goes up and sometimes down, but it doesn’t mean that network trains poorly. Let’s check small example that can explain who it can happen.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">actual_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1_prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model2_prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>In the code above you can see two prediction releate to the different models. The first model predicted two samples right and one wrong. The second one predicted everything right. But second model’s predictions are less certain. Let’s check the cross entropy error.</p>
-<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">estimators</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">estimators</span><span class="o">.</span><span class="n">binary_crossentropy</span><span class="p">(</span><span class="n">actual_values</span><span class="p">,</span> <span class="n">model1_prediction</span><span class="p">)</span>
-<span class="go">0.3756706118583679</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">estimators</span><span class="o">.</span><span class="n">binary_crossentropy</span><span class="p">(</span><span class="n">actual_values</span><span class="p">,</span> <span class="n">model2_prediction</span><span class="p">)</span>
-<span class="go">0.5108255743980408</span>
+<p>Above, you can see two predictions from different models. The first model predicted two samples right and one wrong. The second one predicted everything perfectly, but predictions from second model are less certain (probabilities are close to random prediction - <span class="docutils literal"><span class="pre">0.5</span></span>). Let’s check the binary cross entropy error.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">log_loss</span> <span class="k">as</span> <span class="n">binary_crossentropy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">binary_crossentropy</span><span class="p">(</span><span class="n">actual_values</span><span class="p">,</span> <span class="n">model1_prediction</span><span class="p">)</span>
+<span class="go">0.37567</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">binary_crossentropy</span><span class="p">(</span><span class="n">actual_values</span><span class="p">,</span> <span class="n">model2_prediction</span><span class="p">)</span>
+<span class="go">0.51083</span>
 </pre></div>
 </div>
-<p>That is the result that we looked for. The second model made better prediction, but it got a higher cross entropy error. It means that we less certain about our prediction. Similar situation we’ve observed in the plot above.</p>
-<p>Let’s finally make a simple report for our classification result.</p>
+<p>The second model made better prediction in terms of accuracy, but it got larger cross entropy error. Larger error means that network is less certain about its prediction. Similar situation we’ve observed in the plot above.</p>
+<p>Instead of using cross-entropy error for model performance assessment we can build our own report using functions available in scikit-learn library.</p>
 <div class="highlight-python"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y_predicted</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_test</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_predicted</span> <span class="o">=</span> <span class="n">mnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_actual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_test</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">))</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">))</span>
-<span class="go">        precision    recall  f1-score   support</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_actual</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">))</span>
+<span class="go">              precision    recall  f1-score   support</span>
 
-<span class="go">    0       0.98      0.99      0.99       936</span>
-<span class="go">    1       0.99      0.99      0.99      1163</span>
-<span class="go">    2       0.98      0.98      0.98       982</span>
-<span class="go">    3       0.98      0.99      0.98      1038</span>
-<span class="go">    4       0.98      0.98      0.98       948</span>
-<span class="go">    5       0.99      0.98      0.98       921</span>
-<span class="go">    6       0.99      0.99      0.99      1013</span>
-<span class="go">    7       0.98      0.98      0.98      1029</span>
-<span class="go">    8       0.98      0.98      0.98       978</span>
-<span class="go">    9       0.98      0.96      0.97       992</span>
+<span class="go">           0       0.99      0.99      0.99       972</span>
+<span class="go">           1       0.99      0.99      0.99      1130</span>
+<span class="go">           2       0.99      0.98      0.98       997</span>
+<span class="go">           3       0.99      0.98      0.98      1061</span>
+<span class="go">           4       0.97      0.99      0.98       966</span>
+<span class="go">           5       0.98      0.98      0.98       865</span>
+<span class="go">           6       0.99      0.99      0.99      1029</span>
+<span class="go">           7       0.98      0.99      0.98      1017</span>
+<span class="go">           8       0.98      0.98      0.98       952</span>
+<span class="go">           9       0.97      0.98      0.98      1011</span>
 
-<span class="go">    avg / total       0.98      0.98      0.98     10000</span>
+<span class="go">   micro avg       0.98      0.98      0.98     10000</span>
+<span class="go">   macro avg       0.98      0.98      0.98     10000</span>
+<span class="go">weighted avg       0.98      0.98      0.98     10000</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">score</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">score</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_actual</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s2">"Validation accuracy: {:.2%}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">score</span><span class="p">))</span>
 <span class="go">Validation accuracy: 98.37%</span>
 </pre></div>
 </div>
-<p>The 98.37% accuracy is pretty good for such a quick solution. Additional modification can improve prediction accuracy.</p>
+<p>The 98.37% accuracy is pretty good accuracy for such a simple solution. Additional modification can improve prediction accuracy.</p>
+</div>
 ]]></description>
              <pubDate>Sat, 12 Nov 2016 00:00:00 +0100</pubDate>
         </item>
@@ -1520,7 +1644,8 @@ able to create the neural network that will classify digits for us.</p>
             <link>http://neupy.com/2015/09/21/password_recovery.html</link>
             <guid>http://neupy.com/2015/09/21/password_recovery.html</guid>
             <title><![CDATA[Password recovery]]></title>
-            <description><![CDATA[<span id="id1"/><h1><a class="toc-backref" href="#id2">Password recovery</a></h1>
+            <description><![CDATA[
+<span id="id1"/><h1><a class="toc-backref" href="#id2">Password recovery</a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
@@ -1863,7 +1988,8 @@ Monte Carlo experiment shows that the fewer symbols we know the less is probabil
             <link>http://neupy.com/2015/09/20/discrete_hopfield_network.html</link>
             <guid>http://neupy.com/2015/09/20/discrete_hopfield_network.html</guid>
             <title><![CDATA[Discrete Hopfield Network]]></title>
-            <description><![CDATA[<span id="id1"/><h1><a class="toc-backref" href="#id6">Discrete Hopfield Network</a></h1>
+            <description><![CDATA[
+<span id="id1"/><h1><a class="toc-backref" href="#id6">Discrete Hopfield Network</a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
@@ -1890,15 +2016,15 @@ Monte Carlo experiment shows that the fewer symbols we know the less is probabil
 <p><a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> is a type of algorithms which is called - <a class="reference external" href="https://en.wikipedia.org/wiki/Autoassociative_memory">Autoassociative memories</a>
 Don’t be scared of the word <cite>Autoassociative</cite>.
 The idea behind this type of algorithms is very simple.
-It can store useful information in <cite>memory</cite> and later it is able to reproduce this information from partialy broken patterns.
-You can preceive it as human memory.
+It can store useful information in <cite>memory</cite> and later it is able to reproduce this information from partially broken patterns.
+You can perceive it as human memory.
 For instance, imagine that you look at an old picture of a place where you were long time ago, but this picture is of very bad quality and very blurry.
 By looking at the picture you manage to recognize a few objects or places that make sense to you and form some objects even though they are blurry.
 It can be a house, a lake or anything that can add up to the whole picture and bring out some associations about this place.
 With these details that you got from your memory so far other parts of picture start to make even more sense.
 Though you don’t clearly see all objects in the picture, you start to remember things and withdraw from your memory some images, that cannot be seen in the picture, just because of those very familiarly-shaped details that you’ve got so far.
 That’s what it is all about.
-Autoassociative memory networks is a posibily to interprete functions of memory into neural network model.</p>
+Autoassociative memory networks is a possibly to interpret functions of memory into neural network model.</p>
 <p>Don’t worry if you have only basic knowledge in Linear Algebra; in this article I’ll try to explain the idea as simple as possible.
 If you are interested in proofs of the <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> you can check them at R. Rojas. Neural Networks <a class="footnote-reference" href="#id3" id="id2">[1]</a> book.</p>
 <div class="section" id="architecture">
@@ -1962,7 +2088,7 @@ It includes just an outer product between input vector and transposed input vect
 <p><span class="math">\(W\)</span> is a weight matrix and <span class="math">\(x\)</span> is an input vector.
 Each value <span class="math">\(x_i\)</span> in the input vector can only be -1 or 1.
 So on the matrix diagonal we only have squared values and it means we will always see 1s at those places.
-Think about it, everytime, in any case, values on the diagonal can take just one possible state.
+Think about it, every time, in any case, values on the diagonal can take just one possible state.
 We can’t use this information, because it doesn’t say anything useful about patterns that are stored in the memory and even can make incorrect contribution into the output result.
 For this reason we need to set up all the diagonal values equal to zero.
 The final weight formula should look like this one below.</p>
@@ -1980,8 +2106,8 @@ The final weight formula should look like this one below.</p>
     \right]
 \end{align*}\end{split}\]</div>
 <p>Where <span class="math">\(I\)</span> is an identity matrix.</p>
-<p>But usualy we need to store more values in memory.
-For another pattern we have to do exacly the same procedure as before and then just add the generated weight matrix to the old one.</p>
+<p>But usually we need to store more values in memory.
+For another pattern we have to do exactly the same procedure as before and then just add the generated weight matrix to the old one.</p>
 <div class="math">
 \[W = W_{old} + W_{new}\]</div>
 <p>And this procedure generates us a new weight that would be valid for both previously stored patterns.
@@ -2030,7 +2156,7 @@ Let’s compute weights for the network.</p>
 \end{align*}\end{split}\]</div>
 <p>Look closer to the matrix <span class="math">\(U\)</span> that we got.
 Outer product just repeats vector 4 times with the same or inversed values.
-First and third columns (or rows, it doesn’t matter, because matrix is symmetrical) are exacly the same as the input vector.
+First and third columns (or rows, it doesn’t matter, because matrix is symmetrical) are exactly the same as the input vector.
 The second and fourth are also the same, but with an opposite sign.
 That’s because in the vector <span class="math">\(u\)</span> we have 1 on the first and third places and -1 on the other.</p>
 <p>To make weight from the <span class="math">\(U\)</span> matrix, we need to remove ones from the diagonal.</p>
@@ -2210,7 +2336,7 @@ So we multiply the first column by this selected value.</p>
         \end{array}
     \right]
 \end{align*}\end{split}\]</div>
-<p>As you can see after first iteration value is exacly the same as <span class="math">\(x\)</span> but we can keep going.
+<p>As you can see after first iteration value is exactly the same as <span class="math">\(x\)</span> but we can keep going.
 In second iteration random neuron fires again.
 Let’s pretend that this time it was the third neuron.</p>
 <div class="math">
@@ -2228,7 +2354,7 @@ Let’s pretend that this time it was the third neuron.</p>
         \end{array}
     \right]) = sign(-2) = -1
 \end{align*}\end{split}\]</div>
-<p><span class="math">\(x^{'}_3\)</span> is exacly the same as in the <span class="math">\(x^{'}\)</span> vector so we don’t need to update it.
+<p><span class="math">\(x^{'}_3\)</span> is exactly the same as in the <span class="math">\(x^{'}\)</span> vector so we don’t need to update it.
 We can repeat it as many times as we want, but we will be getting the same value.</p>
 </div>
 </div>
@@ -2241,7 +2367,7 @@ There are two good rules of thumb.</p>
 The first rule gives us a simple ration between <span class="math">\(m\)</span> and <span class="math">\(n\)</span>.</p>
 <div class="math">
 \[m \approx 0.18 n\]</div>
-<p>The main problem with this rule is that proof assumes that stored vectors inside the weight are completly random with an equal probability.
+<p>The main problem with this rule is that proof assumes that stored vectors inside the weight are completely random with an equal probability.
 Unfortunately, that is not always true.
 Let’s suppose we save some images of numbers from 0 to 9.
 Pictures are black and white, so we can encode them in bipolar vectors.
@@ -2271,7 +2397,7 @@ In terms of a linear algebra we can write formula for the <a class="reference in
 <div class="math">
 \[E = -\frac{1}{2} x^T W x\]</div>
 <p>But linear algebra notation works only with the <span class="math">\(x\)</span> vector, we can’t use matrix <span class="math">\(X\)</span> with multiple input patterns instead of the <span class="math">\(x\)</span> in this formula.
-For the energy function we’re always interested in finding a minimum value, for this reason it has minus sign at the beggining.</p>
+For the energy function we’re always interested in finding a minimum value, for this reason it has minus sign at the beginning.</p>
 <p>Let’s try to visualize it.
 Assume that values for vector <span class="math">\(x\)</span> can be continous in order and we can visualize them using two parameters.
 Let’s pretend that we have two vectors <cite>[1, -1]</cite> and <cite>[-1, 1]</cite> stored inside the network.
@@ -2441,8 +2567,8 @@ Let’s define a few images that we are going to teach the network.</p>
 <span class="go">| * * * *</span>
 </pre></div>
 </div>
-<p>Our broken pattern is really close to the minimum of 1 and 2 patterns. Randomization helps us choose direction but it’s not nessesary the right one, especialy when the broken pattern is close to 1 and 2 at the same time.</p>
-<p>Check last output with number two again. Is that a realy valid pattern for number 2? Final symbol in output is wrong. We are not able to recover patter 2 from this network, because input vector is always much closer to the minimum that looks very similar to pattern 2.</p>
+<p>Our broken pattern is really close to the minimum of 1 and 2 patterns. Randomization helps us choose direction but it’s not necessary the right one, especially when the broken pattern is close to 1 and 2 at the same time.</p>
+<p>Check last output with number two again. Is that a really valid pattern for number 2? Final symbol in output is wrong. We are not able to recover patter 2 from this network, because input vector is always much closer to the minimum that looks very similar to pattern 2.</p>
 <p>In plot below you can see first 200 iterations of the recovery procedure. Energy value was decreasing after each iteration until it reached the local minimum where pattern is equal to 2.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="http://neupy.com/_images/hopfield-energy-vis.png"><img alt="Asynchronous Discrete Hopfield Network energy update after each iteration" src="http://neupy.com/_images/hopfield-energy-vis.png" style="width: 80%;"/></a>
@@ -2460,8 +2586,8 @@ Let’s define a few images that we are going to teach the network.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="http://neupy.com/_images/hinton-diagram.png"><img alt="Asynchronous Discrete Hopfield Network energy update after each iteration" src="http://neupy.com/_images/hinton-diagram.png" style="width: 80%;"/></a>
 </div>
-<p>This graph above shows the network weight matrix and all information stored inside of it. Hinton diagram is a very simple technique for the weight visualization in neural networks. Each value encoded in square where its size is an absolute value from the weight matrix and color shows the sign of this value. White is a positive and black is a negative. Usualy Hinton diagram helps identify some patterns in the weight matrix.</p>
-<p>Let’s go back to the graph. What can you say about the network just by looking at this picture? First of all you can see that there is no squares on the diagonal. That is because they are equal to zero. The second important thing you can notice is that the plot is symmetrical. But that is not all that you can withdraw from the graph. Can you see different patterns? You can find rows or columns with exacly the same values, like the second and third columns. Fifth column is also the same but its sign is reversed. Now look closer to the antidiagonal. What can you say about it? If you are thinking that all squares are white - you are right. But why is that true? Is there always the same patterns for each memory matrix? No, it is a special property of patterns that we stored inside of it. If you draw a horizontal line in the middle of each image and look at it you will see that values are opposite symmetric. For instance, <span class="math">\(x_1\)</span> opposite symmetric to <span class="math">\(x_{30}\)</span>, <span class="math">\(x_2\)</span> to <span class="math">\(x_{29}\)</span>, <span class="math">\(x_3\)</span> to <span class="math">\(x_{28}\)</span> and so on. Zero pattern is a perfect example where each value have exacly the same opposite symmetric pair. One is almost perfect except one value on the <span class="math">\(x_2\)</span> position. Two is not clearly opposite symmetric. But if you check each value you will find that more than half of values are symmetrical. Combination of those patterns gives us a diagonal with all positive values. If we have all perfectly opposite symmetric patterns then squares on the antidiagonal will have the same length, but in this case pattern for number 2 gives a little bit of noise and squares have different sizes.</p>
+<p>This graph above shows the network weight matrix and all information stored inside of it. Hinton diagram is a very simple technique for the weight visualization in neural networks. Each value encoded in square where its size is an absolute value from the weight matrix and color shows the sign of this value. White is a positive and black is a negative. Usually Hinton diagram helps identify some patterns in the weight matrix.</p>
+<p>Let’s go back to the graph. What can you say about the network just by looking at this picture? First of all you can see that there is no squares on the diagonal. That is because they are equal to zero. The second important thing you can notice is that the plot is symmetrical. But that is not all that you can withdraw from the graph. Can you see different patterns? You can find rows or columns with exactly the same values, like the second and third columns. Fifth column is also the same but its sign is reversed. Now look closer to the antidiagonal. What can you say about it? If you are thinking that all squares are white - you are right. But why is that true? Is there always the same patterns for each memory matrix? No, it is a special property of patterns that we stored inside of it. If you draw a horizontal line in the middle of each image and look at it you will see that values are opposite symmetric. For instance, <span class="math">\(x_1\)</span> opposite symmetric to <span class="math">\(x_{30}\)</span>, <span class="math">\(x_2\)</span> to <span class="math">\(x_{29}\)</span>, <span class="math">\(x_3\)</span> to <span class="math">\(x_{28}\)</span> and so on. Zero pattern is a perfect example where each value have exactly the same opposite symmetric pair. One is almost perfect except one value on the <span class="math">\(x_2\)</span> position. Two is not clearly opposite symmetric. But if you check each value you will find that more than half of values are symmetrical. Combination of those patterns gives us a diagonal with all positive values. If we have all perfectly opposite symmetric patterns then squares on the antidiagonal will have the same length, but in this case pattern for number 2 gives a little bit of noise and squares have different sizes.</p>
 <p>Properties that we’ve reviewed so far are just the most interesting and maybe other patterns you can encounter on your own.</p>
 </div>
 <div class="section" id="more-reading">
@@ -2498,164 +2624,159 @@ from <a class="reference external" href="https://www.youtube.com/watch?v=gfPUWwB
             <link>http://neupy.com/2015/07/04/boston_house_prices_dataset.html</link>
             <guid>http://neupy.com/2015/07/04/boston_house_prices_dataset.html</guid>
             <title><![CDATA[Predict prices for houses in the area of Boston]]></title>
-            <description><![CDATA[<span id="boston-house-price"/><h1>Predict prices for houses in the area of Boston</h1>
-<p>For this article we are going to predict house prices using Conjugate Gradient algorithm.</p>
-<p>For the beginning we should load the data.</p>
+            <description><![CDATA[
+<span id="boston-house-price"/><h1>Predict prices for houses in the area of Boston</h1>
+<p>Boston house prices is a classical example of the regression problem. This article shows how to make a simple data processing and train neural network for house price forecasting.</p>
+<p>Dataset can be downloaded from many different resources. In order to simplify this process we will use scikit-learn library. It will download and extract and the data for us.</p>
 <div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
 
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_boston</span><span class="p">()</span>
 <span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">target</span>
 </pre></div>
 </div>
-<p>Let’s look closer into the data.</p>
+<p>We can print few first rows from the dataset just to make sure that</p>
 <table border="1" class="dataframe">
-  <thead>
-    <tr>
-      <th>CRIM</th>
-      <th>ZN</th>
-      <th>INDUS</th>
-      <th>CHAS</th>
-      <th>NOX</th>
-      <th>RM</th>
-      <th>AGE</th>
-      <th>DIS</th>
-      <th>RAD</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>0.00632</td>
-      <td>18</td>
-      <td>2.31</td>
-      <td>0</td>
-      <td>0.538</td>
-      <td>6.575</td>
-      <td>65.2</td>
-      <td>4.0900</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>0.02731</td>
-      <td>0</td>
-      <td>7.07</td>
-      <td>0</td>
-      <td>0.469</td>
-      <td>6.421</td>
-      <td>78.9</td>
-      <td>4.9671</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>0.02729</td>
-      <td>0</td>
-      <td>7.07</td>
-      <td>0</td>
-      <td>0.469</td>
-      <td>7.185</td>
-      <td>61.1</td>
-      <td>4.9671</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>0.03237</td>
-      <td>0</td>
-      <td>2.18</td>
-      <td>0</td>
-      <td>0.458</td>
-      <td>6.998</td>
-      <td>45.8</td>
-      <td>6.0622</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td>0.06905</td>
-      <td>0</td>
-      <td>2.18</td>
-      <td>0</td>
-      <td>0.458</td>
-      <td>7.147</td>
-      <td>54.2</td>
-      <td>6.0622</td>
-      <td>3</td>
-    </tr>
-  </tbody>
+<thead>
+<tr>
+<th>CRIM</th>
+<th>ZN</th>
+<th>INDUS</th>
+<th>CHAS</th>
+<th>NOX</th>
+<th>RM</th>
+<th>AGE</th>
+<th>DIS</th>
+<th>RAD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.00632</td>
+<td>18</td>
+<td>2.31</td>
+<td>0</td>
+<td>0.538</td>
+<td>6.575</td>
+<td>65.2</td>
+<td>4.0900</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0.02731</td>
+<td>0</td>
+<td>7.07</td>
+<td>0</td>
+<td>0.469</td>
+<td>6.421</td>
+<td>78.9</td>
+<td>4.9671</td>
+<td>2</td>
+</tr>
+<tr>
+<td>0.02729</td>
+<td>0</td>
+<td>7.07</td>
+<td>0</td>
+<td>0.469</td>
+<td>7.185</td>
+<td>61.1</td>
+<td>4.9671</td>
+<td>2</td>
+</tr>
+<tr>
+<td>0.03237</td>
+<td>0</td>
+<td>2.18</td>
+<td>0</td>
+<td>0.458</td>
+<td>6.998</td>
+<td>45.8</td>
+<td>6.0622</td>
+<td>3</td>
+</tr>
+<tr>
+<td>0.06905</td>
+<td>0</td>
+<td>2.18</td>
+<td>0</td>
+<td>0.458</td>
+<td>7.147</td>
+<td>54.2</td>
+<td>6.0622</td>
+<td>3</td>
+</tr>
+</tbody>
 </table>
-
 <table border="1" class="dataframe">
-  <thead>
-    <tr>
-      <th>TAX</th>
-      <th>PTRATIO</th>
-      <th>B</th>
-      <th>LSTAT</th>
-      <th>MEDV</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>296</td>
-      <td>15.3</td>
-      <td>396.90</td>
-      <td>4.98</td>
-      <td>24.0</td>
-    </tr>
-    <tr>
-      <td>242</td>
-      <td>17.8</td>
-      <td>396.90</td>
-      <td>9.14</td>
-      <td>21.6</td>
-    </tr>
-    <tr>
-      <td>242</td>
-      <td>17.8</td>
-      <td>392.83</td>
-      <td>4.03</td>
-      <td>34.7</td>
-    </tr>
-    <tr>
-      <td>222</td>
-      <td>18.7</td>
-      <td>394.63</td>
-      <td>2.94</td>
-      <td>33.4</td>
-    </tr>
-    <tr>
-      <td>222</td>
-      <td>18.7</td>
-      <td>396.90</td>
-      <td>5.33</td>
-      <td>36.2</td>
-    </tr>
-  </tbody>
+<thead>
+<tr>
+<th>TAX</th>
+<th>PTRATIO</th>
+<th>B</th>
+<th>LSTAT</th>
+<th>MEDV</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>296</td>
+<td>15.3</td>
+<td>396.90</td>
+<td>4.98</td>
+<td>24.0</td>
+</tr>
+<tr>
+<td>242</td>
+<td>17.8</td>
+<td>396.90</td>
+<td>9.14</td>
+<td>21.6</td>
+</tr>
+<tr>
+<td>242</td>
+<td>17.8</td>
+<td>392.83</td>
+<td>4.03</td>
+<td>34.7</td>
+</tr>
+<tr>
+<td>222</td>
+<td>18.7</td>
+<td>394.63</td>
+<td>2.94</td>
+<td>33.4</td>
+</tr>
+<tr>
+<td>222</td>
+<td>18.7</td>
+<td>396.90</td>
+<td>5.33</td>
+<td>36.2</td>
+</tr>
+</tbody>
 </table><p>Data contains 14 columns.
-The last column <span class="docutils literal"><span class="pre">MEDV</span></span> is a median value of owner-occupied homes in $1000’s.
-The goal is to predict this prices.
-Other columns we can use for Neural Network training.
-All columns description you can find below.</p>
+The last column <span class="docutils literal"><span class="pre">MEDV</span></span> is a median value of owner-occupied homes in $1000’s. The goal is to predict this value. Other columns we can use for neural network training.</p>
+<p>It’s quite hard to understand data just from the column names. Scikit-learn also provides description.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="k">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
+</pre></div>
+</div>
 <ul class="simple">
-<li>CRIM     per capita crime rate by town</li>
-<li>ZN       proportion of residential land zoned for lots over 25,000 sq.ft.</li>
-<li>INDUS    proportion of non-retail business acres per town</li>
-<li>CHAS     Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)</li>
-<li>NOX      nitric oxides concentration (parts per 10 million)</li>
-<li>RM       average number of rooms per dwelling</li>
-<li>AGE      proportion of owner-occupied units built prior to 1940</li>
-<li>DIS      weighted distances to five Boston employment centres</li>
-<li>RAD      index of accessibility to radial highways</li>
-<li>TAX      full-value property-tax rate per $10,000</li>
-<li>PTRATIO  pupil-teacher ratio by town</li>
-<li>B        1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town</li>
-<li>LSTAT    % lower status of the population</li>
+<li><span class="docutils literal"><span class="pre">CRIM</span></span> - per capita crime rate by town</li>
+<li><span class="docutils literal"><span class="pre">ZN</span></span> - proportion of residential land zoned for lots over 25,000 sq.ft.</li>
+<li><span class="docutils literal"><span class="pre">INDUS</span></span> - proportion of non-retail business acres per town</li>
+<li><span class="docutils literal"><span class="pre">CHAS</span></span> - Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)</li>
+<li><span class="docutils literal"><span class="pre">NOX</span></span> - nitric oxides concentration (parts per 10 million)</li>
+<li><span class="docutils literal"><span class="pre">RM</span></span> - average number of rooms per dwelling</li>
+<li><span class="docutils literal"><span class="pre">AGE</span></span> - proportion of owner-occupied units built prior to 1940</li>
+<li><span class="docutils literal"><span class="pre">DIS</span></span> - weighted distances to five Boston employment centres</li>
+<li><span class="docutils literal"><span class="pre">RAD</span></span> - index of accessibility to radial highways</li>
+<li><span class="docutils literal"><span class="pre">TAX</span></span> - full-value property-tax rate per $10,000</li>
+<li><span class="docutils literal"><span class="pre">PTRATIO</span></span> - pupil-teacher ratio by town</li>
+<li><span class="docutils literal"><span class="pre">B</span></span> - 1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town</li>
+<li><span class="docutils literal"><span class="pre">LSTAT</span></span> - % lower status of the population</li>
 </ul>
-<p>From data set description we can find that there are 13 continuous attributes (including “class” attribute “MEDV”) and 1 binary-valued attribute.
-There is no multiple categorical data, so we don’t need to change feature dimension.
-But we already have one problem.
-If you look closer, you will find that every column has its own data range.
-This situation is a bad thing for Neural Network training, because input values ​​make different contributions to the calculation of the output values.
-Bigger values will be more important for Network which can be perceived as invalid assumption based on data.
-For example in the first row, in the table above, column <span class="docutils literal"><span class="pre">B</span></span> contains value <cite>396.90</cite> and column <span class="docutils literal"><span class="pre">CRIM</span></span> - <cite>0.00632</cite>.
-To fix this issue we should transfrom all columns to get similar ranges.</p>
+<p>There are 13 continuous attributes (including “class” attribute “MEDV”) and 1 binary-valued attribute. There are no columns that have multiple categories, which simplifies initial data processing..</p>
+<p>From the table above you can notice that every column has values in different scales. It might slow down or completely break networks convergence. In order to fix this issue, we should normalize values in every column. One of the simplest way to do it is to map every value into range between 0 and 1, where maximum value in every column will be equal to 1 and the smallest one - to 0.</p>
 <div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span>
 
 <span class="n">data_scaler</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">MinMaxScaler</span><span class="p">()</span>
@@ -2667,181 +2788,189 @@ To fix this issue we should transfrom all columns to get similar ranges.</p>
 </div>
 <p>After transformation data looks like this.</p>
 <table border="1" class="dataframe">
-  <thead>
-    <tr>
-      <th>CRIM</th>
-      <th>ZN</th>
-      <th>INDUS</th>
-      <th>CHAS</th>
-      <th>NOX</th>
-      <th>...</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>0.000000</td>
-      <td>0.18</td>
-      <td>0.067815</td>
-      <td>0</td>
-      <td>0.314815</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <td>0.000236</td>
-      <td>0.00</td>
-      <td>0.242302</td>
-      <td>0</td>
-      <td>0.172840</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <td>0.000236</td>
-      <td>0.00</td>
-      <td>0.242302</td>
-      <td>0</td>
-      <td>0.172840</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <td>0.000293</td>
-      <td>0.00</td>
-      <td>0.063050</td>
-      <td>0</td>
-      <td>0.150206</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <td>0.000705</td>
-      <td>0.00</td>
-      <td>0.063050</td>
-      <td>0</td>
-      <td>0.150206</td>
-      <td>...</td>
-    </tr>
-  </tbody>
-</table><p>All the data is now in the range between 0 and 1.</p>
-<p>Then we should split our data set into train and validation.
-We use 85% of data for train.</p>
+<thead>
+<tr>
+<th>CRIM</th>
+<th>ZN</th>
+<th>INDUS</th>
+<th>CHAS</th>
+<th>NOX</th>
+<th>...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.000000</td>
+<td>0.18</td>
+<td>0.067815</td>
+<td>0</td>
+<td>0.314815</td>
+<td>...</td>
+</tr>
+<tr>
+<td>0.000236</td>
+<td>0.00</td>
+<td>0.242302</td>
+<td>0</td>
+<td>0.172840</td>
+<td>...</td>
+</tr>
+<tr>
+<td>0.000236</td>
+<td>0.00</td>
+<td>0.242302</td>
+<td>0</td>
+<td>0.172840</td>
+<td>...</td>
+</tr>
+<tr>
+<td>0.000293</td>
+<td>0.00</td>
+<td>0.063050</td>
+<td>0</td>
+<td>0.150206</td>
+<td>...</td>
+</tr>
+<tr>
+<td>0.000705</td>
+<td>0.00</td>
+<td>0.063050</td>
+<td>0</td>
+<td>0.150206</td>
+<td>...</td>
+</tr>
+</tbody>
+</table><p>Neural networks are prune to overfitting and we always need to have validation dataset that we will use to assess networks performance after the training.</p>
 <div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
 
+<span class="c1"># Make sure that split between train and</span>
+<span class="c1"># validation datasets will be reproducible</span>
 <span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
 
 <span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mf">0.85</span>
+    <span class="c1"># 85% of the data we will use for training</span>
+    <span class="c1"># and the other 15% will be used for validation</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.15</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>Now we are ready to build Neural Network which will predict house prices.</p>
-<div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+<p>Since we have all the data the last thing that we need is a neural network. We can design simple network with only one hidden layer.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">cgnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">ConjugateGradient</span><span class="p">(</span>
-    <span class="n">connection</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
-    <span class="p">],</span>
-    <span class="n">search_method</span><span class="o">=</span><span class="s1">'golden'</span><span class="p">,</span>
-    <span class="n">show_epoch</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+<span class="c1"># Number of features that we want</span>
+<span class="c1"># to use during the training</span>
+<span class="n">n_inputs</span> <span class="o">=</span> <span class="mi">13</span>
+
+<span class="c1"># Number of outputs in the network. For the house price</span>
+<span class="c1"># forecasting we want to predict single value per every</span>
+<span class="c1"># input sample.</span>
+<span class="n">n_outputs</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
+    <span class="c1"># This layer doesn't do any computation. It just</span>
+    <span class="c1"># defines how many inputs network should expect.</span>
+    <span class="n">Input</span><span class="p">(</span><span class="n">n_inputs</span><span class="p">),</span>
+
+    <span class="c1"># Hidden layer. Number of neurons can be adjusted</span>
+    <span class="c1"># in order to improve performance or deal with overfitting</span>
+    <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+
+    <span class="c1"># Sigmoid outputs values between 0 and 1 and all</span>
+    <span class="c1"># the prices that we want to predict has been rescaled</span>
+    <span class="c1"># to the same range.</span>
+    <span class="n">Sigmoid</span><span class="p">(</span><span class="n">n_outputs</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Now that we have the our network we can use one of the large <a class="reference external" href="http://neupy.com/pages/cheatsheet.html#algorithms">training algorithms supported by neupy</a>. Our datasets is quite small and network has small number of parameters. For cases like this we can take advantage of the more algorithms that can converge much faster. I’ll use <a class="reference internal" href="http://neupy.com/apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">Levenberg-Marquardt</span></span></a>, but you can feel free to experiment with different algorithms.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+
+<span class="n">lmnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">LevenbergMarquardt</span><span class="p">(</span>
+    <span class="c1"># First argument has to be neural network</span>
+    <span class="n">network</span><span class="p">,</span>
+
+    <span class="c1"># With this option enabled network shows its configuration</span>
+    <span class="c1"># before the training and its progress during the training</span>
     <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-    <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LinearSearch</span><span class="p">],</span>
+
+    <span class="c1"># In order to avoid showing information about</span>
+    <span class="c1"># network training progress after every epoch we can</span>
+    <span class="c1"># do it less frequently, for example, every 5th epoch.</span>
+    <span class="n">show_epoch</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="http://neupy.com/_images/cgnet-init.png"><img alt="Conjgate Gradient train" src="http://neupy.com/_images/cgnet-init.png" style="width: 80%;"/></a>
-</div>
-<p>We define network with one hidden layer.
-Input size for this layer is 50.
-This value is just a guess.
-For better and more accurate result we should choose it with other methods, but for now we can use this value.
-As the main algorithm we take Conjugate Gradient.
-This implementation of backpropagation is a little bit different from main interpretation of Conjugate Gradient.
-For GradientDescent implementation we can’t guarantee that we get the local minimum in n-th steps (where <cite>n</cite> is the dimension).
-To optimize it we should use linear search.
-It will fix and set up better steps for Conjugate Gradient.</p>
-<p>Now we are going to train the network.
-For training we set up 100 epochs.
-Also we will add test data into training function to check validation error on every epoch.</p>
-<div class="highlight-python"><div class="highlight"><pre><span/><span class="n">cgnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="http://neupy.com/_images/cgnet-train.png"><img alt="Conjgate Gradient train" src="http://neupy.com/_images/cgnet-train.png" style="width: 80%;"/></a>
-</div>
-<p>To make sure that all training processes go in a right way we can check erros updates while the training is in process.</p>
-<div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
-<span class="n">plots</span><span class="o">.</span><span class="n">error_plot</span><span class="p">(</span><span class="n">cgnet</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="http://neupy.com/_images/cgnet-error-plot.png"><img alt="Conjgate Gradient train" src="http://neupy.com/_images/cgnet-error-plot.png" style="width: 80%;"/></a>
-</div>
-<p>Error minimization procedure looks fine.
-The problem is, that last error doesn’t show us the full picture of prediction accuracy.
-Our output is always between zero and one and we count the results always into Mean Square Error.
-To fix it, we are going to inverse our transformation for predicted and actual values and for accuracy measurment we will use Root Mean Square Logarithmic Error (RMSLE).</p>
-<div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">neupy.estimators</span> <span class="kn">import</span> <span class="n">rmsle</span>
+<p>Output after initialization might look like this</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="n">Main</span> <span class="n">information</span>
 
-<span class="n">y_predict</span> <span class="o">=</span> <span class="n">cgnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">error</span> <span class="o">=</span> <span class="n">rmsle</span><span class="p">(</span><span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_test</span><span class="p">),</span>
-              <span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_predict</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<span class="p">[</span><span class="n">ALGORITHM</span><span class="p">]</span> <span class="n">LevenbergMarquardt</span>
+
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">verbose</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">epoch_end_signal</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">show_epoch</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">shuffle_data</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">train_end_signal</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">addons</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">error</span> <span class="o">=</span> <span class="n">mse</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">mu</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">mu_update_factor</span> <span class="o">=</span> <span class="mf">1.2</span>
+
+<span class="p">[</span><span class="n">TENSORFLOW</span><span class="p">]</span> <span class="n">Initializing</span> <span class="n">Tensorflow</span> <span class="n">variables</span> <span class="ow">and</span> <span class="n">functions</span><span class="o">.</span>
+<span class="p">[</span><span class="n">TENSORFLOW</span><span class="p">]</span> <span class="n">Initialization</span> <span class="n">finished</span> <span class="n">successfully</span><span class="o">.</span> <span class="n">It</span> <span class="n">took</span> <span class="mf">0.46</span> <span class="n">seconds</span>
 </pre></div>
 </div>
-<p>Now we can see that our error approximately equals to <cite>0.22</cite> which is pretty small.
-In the table below you can find 10 randomly chosen errors.</p>
-<table border="1" class="dataframe">
-  <thead>
-    <tr>
-      <th>Actual</th>
-      <th>Predicted</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>31.2</td>
-      <td>27.5</td>
-    </tr>
-    <tr>
-      <td>18.7</td>
-      <td>18.5</td>
-    </tr>
-    <tr>
-      <td>20.1</td>
-      <td>18.5</td>
-    </tr>
-    <tr>
-      <td>17.2</td>
-      <td>9.5</td>
-    </tr>
-    <tr>
-      <td>8.3</td>
-      <td>9.5</td>
-    </tr>
-    <tr>
-      <td>50.0</td>
-      <td>41.0</td>
-    </tr>
-    <tr>
-      <td>42.8</td>
-      <td>32.0</td>
-    </tr>
-    <tr>
-      <td>20.5</td>
-      <td>18.5</td>
-    </tr>
-    <tr>
-      <td>16.8</td>
-      <td>23.0</td>
-    </tr>
-    <tr>
-      <td>11.8</td>
-      <td>9.5</td>
-    </tr>
-  </tbody>
-</table><p>The results are good for the first network implementation.
-There are a lot of things which we can do to improve network results, but we will discuss them in an another article.</p>
+<p>And finally, we can use our data in order to train the network. In addition, neupy allows to specify validation datasets. It won’t use it for training. Instead, at the end of every epoch it will use validation data to estimate network forecasting performance on the unseen data.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="n">lmnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output during the training might look like this</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="n">Start</span> <span class="n">training</span>
+
+<span class="p">[</span><span class="n">TRAINING</span> <span class="n">DATA</span><span class="p">]</span> <span class="n">shapes</span><span class="p">:</span> <span class="p">(</span><span class="mi">430</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+<span class="p">[</span><span class="n">TEST</span> <span class="n">DATA</span><span class="p">]</span> <span class="n">shapes</span><span class="p">:</span> <span class="p">(</span><span class="mi">76</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+<span class="p">[</span><span class="n">TRAINING</span><span class="p">]</span> <span class="n">Total</span> <span class="n">epochs</span><span class="p">:</span> <span class="mi">30</span>
+
+<span class="o">---------------------------------------------------------</span>
+<span class="o">|</span>    <span class="n">Epoch</span>    <span class="o">|</span>  <span class="n">Train</span> <span class="n">err</span>  <span class="o">|</span>  <span class="n">Valid</span> <span class="n">err</span>  <span class="o">|</span>    <span class="n">Time</span>     <span class="o">|</span>
+<span class="o">---------------------------------------------------------</span>
+<span class="o">|</span>           <span class="mi">1</span> <span class="o">|</span>    <span class="mf">0.079689</span> <span class="o">|</span>    <span class="mf">0.037351</span> <span class="o">|</span>      <span class="mi">376</span> <span class="n">ms</span> <span class="o">|</span>
+<span class="o">|</span>           <span class="mi">5</span> <span class="o">|</span>   <span class="mf">0.0097019</span> <span class="o">|</span>    <span class="mf">0.014112</span> <span class="o">|</span>       <span class="mi">73</span> <span class="n">ms</span> <span class="o">|</span>
+<span class="o">|</span>          <span class="mi">10</span> <span class="o">|</span>    <span class="mf">0.011091</span> <span class="o">|</span>    <span class="mf">0.011521</span> <span class="o">|</span>       <span class="mi">76</span> <span class="n">ms</span> <span class="o">|</span>
+<span class="o">|</span>          <span class="mi">15</span> <span class="o">|</span>   <span class="mf">0.0045973</span> <span class="o">|</span>   <span class="mf">0.0092206</span> <span class="o">|</span>       <span class="mi">72</span> <span class="n">ms</span> <span class="o">|</span>
+<span class="o">|</span>          <span class="mi">20</span> <span class="o">|</span>    <span class="mf">0.003823</span> <span class="o">|</span>   <span class="mf">0.0098822</span> <span class="o">|</span>       <span class="mi">75</span> <span class="n">ms</span> <span class="o">|</span>
+<span class="o">|</span>          <span class="mi">25</span> <span class="o">|</span>   <span class="mf">0.0031455</span> <span class="o">|</span>   <span class="mf">0.0087205</span> <span class="o">|</span>       <span class="mi">71</span> <span class="n">ms</span> <span class="o">|</span>
+<span class="o">|</span>          <span class="mi">30</span> <span class="o">|</span>   <span class="mf">0.0025977</span> <span class="o">|</span>   <span class="mf">0.0095658</span> <span class="o">|</span>       <span class="mi">74</span> <span class="n">ms</span> <span class="o">|</span>
+<span class="o">---------------------------------------------------------</span>
+</pre></div>
+</div>
+<p>It’s also useful to visualize network training progress using line plot. In the figure below you can see two lines. One line shows training error and the other one validation error.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">error_plot</span><span class="p">(</span><span class="n">lmnet</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="http://neupy.com/_images/cgnet-error-plot.png"><img alt="Levenberg Marquardt training progress" src="http://neupy.com/_images/cgnet-error-plot.png" style="width: 80%;"/></a>
+</div>
+<p>We typically want to see decrease for the validation error. The training error might be useful during debugging. For example, it might be used in order to see if network overfits.</p>
+<p>During the training we used mean squared error as a loss function on the scaled prediction values. We can use different function in order to measure network’s forecasting performance. For example, we can use Root Means Squared Logarithmic Error (RMSLE) and compare prediction to the exact value that were scaled back to the original scale.</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">rmsle</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">predicted</span><span class="p">):</span>
+    <span class="n">log_expected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">expected</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">log_predicted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">predicted</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">squared_log_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">log_expected</span> <span class="o">-</span> <span class="n">log_predicted</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">squared_log_error</span><span class="p">))</span>
+
+<span class="n">y_predict</span> <span class="o">=</span> <span class="n">lmnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">error</span> <span class="o">=</span> <span class="n">rmsle</span><span class="p">(</span>
+    <span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_test</span><span class="p">),</span>
+    <span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_predict</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>  <span class="c1"># ~0.18</span>
+</pre></div>
+</div>
+<p>The final result is quite good for the first prototype.</p>
 ]]></description>
              <pubDate>Sat, 04 Jul 2015 00:00:00 +0200</pubDate>
         </item>
@@ -2849,12 +2978,13 @@ There are a lot of things which we can do to improve network results, but we wil
         <item>
             <link>http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html</link>
             <guid>http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html</guid>
-            <title><![CDATA[Visualize Algorithms based on the Backpropagation]]></title>
-            <description><![CDATA[<h1><a class="toc-backref" href="#id3">Visualize Algorithms based on the Backpropagation</a></h1>
+            <title><![CDATA[Visualize Algorithms based on the backpropagation]]></title>
+            <description><![CDATA[
+<h1><a class="toc-backref" href="#id3">Visualize Algorithms based on the backpropagation</a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#visualize-algorithms-based-on-the-backpropagation" id="id3">Visualize Algorithms based on the Backpropagation</a><ul>
+<li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#visualize-algorithms-based-on-the-backpropagation" id="id3">Visualize Algorithms based on the backpropagation</a><ul>
 <li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#checking-data" id="id4">Checking data</a></li>
 <li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#initialize-contour" id="id5">Initialize contour</a></li>
 <li><a class="reference internal" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html#id1" id="id6">Visualize algorithms based on the Backpropagation</a><ul>
@@ -2871,7 +3001,7 @@ There are a lot of things which we can do to improve network results, but we wil
 </li>
 </ul>
 </div>
-<p>In this article we will be testing different algorithms based on the backpropagation method, visualizing them and trying to figure out some important features from the plots.</p>
+<p>Typical neural networks have mullions of parameters and it’s quite difficult to visualize its training process. In the article, we visualize training of the network that has only 2 parameters. It allows us to explore different training algorithms and see how it behaves during the training.</p>
 <div class="section" id="checking-data">
 <h2><a class="toc-backref" href="#id4">Checking data</a></h2>
 <p>First of all we need to define simple dataset which contains 6 points with two features.</p>
