@@ -48,6 +48,7 @@
         });
     </script>
     <style media="screen" type="text/css">
+        table { background-color: white; }
         .docutils { width: 100%; }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
@@ -127,21 +128,46 @@
           color: #93a4ad;
         }
 
-        #search-results ul.search {
+        .docutils.field-list, .docutils.footnote {
+            background-color: inherit;
+        }
+        .large-font {
+            font-size: 1.4em !important;
+        }
+        .right-tag {
+            float: right;
+            margin-left: 36px !important;
+            margin-right: 0px !important;
+        }
+        .short-description {
+            /* We hidde description inside of the article */
+            display: none;
+        }
+        .short-description img {
+            max-height: 160px;
+            max-width: 40%;
+            margin-left: 8px;
+        }
+        #results-list ul.search {
             padding: 0;
         }
-        #search-results li p {
+
+        #results-list .short-description {
+            /* We show description text in the archive */
+            display: block !important;
+        }
+        #results-list li p {
             margin-bottom: 5px;
             font-size: 0.9em;
         }
-        #search-results li {
+        #results-list li {
             background-color: #fff !important;
             margin-bottom: 10px;
             display: block !important;
             padding: 15px;
             border-bottom: 2px solid #ddd;
         }
-        #search-results span.tag {
+        #results-list span.tag {
             display: inline-block;
             padding: 3px 4px;
             margin-right: 8px;
@@ -207,102 +233,43 @@
 <blockquote>
 <div><p>Number of hidden units in the layer.</p>
 </div></blockquote>
-<p><strong>weights</strong> : dict or Initializer</p>
+<p><strong>input_weights</strong> : Initializer, ndarray</p>
 <blockquote>
-<div><p>Weight parameters for different gates.
+<div><p>Weight parameters for input connection.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierUniform" title="neupy.init.XavierUniform"><span class="xref py py-class docutils literal"><span class="pre">XavierUniform()</span></span></a>.</p>
-<ul>
-<li><p class="first">In case if application requires the same initialization method
-for all weights, then it&#8217;s possible to specify initialization
-method that would be automaticaly applied to all weight
-parameters in the LSTM layer.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">layers</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.1</span><span class="p">))</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">In case if application requires different initialization
-values for different weights then it&#8217;s possible to specify
-an exact weight by name.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span>
-    <span class="n">weight_in_to_ingate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-    <span class="n">weight_hid_to_ingate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-    <span class="n">weight_cell_to_ingate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-
-    <span class="n">weight_in_to_forgetgate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-    <span class="n">weight_hid_to_forgetgate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-    <span class="n">weight_cell_to_forgetgate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-
-    <span class="n">weight_in_to_outgate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-    <span class="n">weight_hid_to_outgate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-    <span class="n">weight_cell_to_outgate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-
-    <span class="n">weight_in_to_cell</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-    <span class="n">weight_hid_to_cell</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p>If application requires modification to only one (or multiple)
-parameter then it&#8217;s better to specify the one that you need to
-modify and ignore other parameters</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">weight_in_to_ingate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.1</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Other parameters like <span class="docutils literal"><span class="pre">weight_cell_to_outgate</span></span> will be
-equal to their default values.</p>
-</li>
-</ul>
 </div></blockquote>
-<p><strong>biases</strong> : dict or Initializer</p>
+<p><strong>hidden_weights</strong> : Initializer, ndarray</p>
 <blockquote>
-<div><p>Bias parameters for different gates.
+<div><p>Weight parameters for hidden connection.
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierUniform" title="neupy.init.XavierUniform"><span class="xref py py-class docutils literal"><span class="pre">XavierUniform()</span></span></a>.</p>
+</div></blockquote>
+<p><strong>cell_weights</strong> : Initializer, ndarray</p>
+<blockquote>
+<div><p>Weight parameters for cell connection. Require only when
+<span class="docutils literal"><span class="pre">peepholes=True</span></span> otherwise it will be ignored.
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierUniform" title="neupy.init.XavierUniform"><span class="xref py py-class docutils literal"><span class="pre">XavierUniform()</span></span></a>.</p>
+</div></blockquote>
+<p><strong>bias</strong> : Initializer, ndarray</p>
+<blockquote>
+<div><p>Bias parameters for all gates.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.</p>
-<ul>
-<li><p class="first">In case if application requires the same initialization method
-for all biases, then it&#8217;s possible to specify initialization
-method that would be automaticaly applied to all bias parameters
-in the LSTM layer.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">layers</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">biases</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">In case if application requires different initialization
-values for different weights then it&#8217;s possible to specify
-an exact weight by name.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span>
-    <span class="n">bias_ingate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-    <span class="n">bias_forgetgate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-    <span class="n">bias_cell</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-    <span class="n">bias_outgate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p>If application requires modification to only one (or multiple)
-parameter then it&#8217;s better to specify the one that you need to
-modify and ignore other parameters</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">bias_ingate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Other parameters like <span class="docutils literal"><span class="pre">bias_cell</span></span> will be
-equal to their default values.</p>
-</li>
-</ul>
 </div></blockquote>
 <p><strong>activation_functions</strong> : dict, callable</p>
 <blockquote>
 <div><p>Activation functions for different gates. Defaults to:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># import theano.tensor as T</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># import tensorflow as tf</span>
 <span class="nb">dict</span><span class="p">(</span>
-    <span class="n">ingate</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">nnet</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">,</span>
-    <span class="n">forgetgate</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">nnet</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">,</span>
-    <span class="n">outgate</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">nnet</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">,</span>
-    <span class="n">cell</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">tanh</span><span class="p">,</span>
+    <span class="n">ingate</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">,</span>
+    <span class="n">forgetgate</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">,</span>
+    <span class="n">outgate</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">,</span>
+    <span class="n">cell</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">tanh</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>If application requires modification to only one parameter
 then it&#8217;s better to specify the one that you need to modify
 and ignore other parameters</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">ingate</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">tanh</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">ingate</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">tanh</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Other parameters like <span class="docutils literal"><span class="pre">forgetgate</span></span> or <span class="docutils literal"><span class="pre">outgate</span></span> will be
@@ -310,15 +277,15 @@ equal to their default values.</p>
 </div></blockquote>
 <p><strong>learn_init</strong> : bool</p>
 <blockquote>
-<div><p>If <span class="docutils literal"><span class="pre">True</span></span>, make <span class="docutils literal"><span class="pre">cell_init</span></span> and <span class="docutils literal"><span class="pre">hid_init</span></span> trainable
+<div><p>If <span class="docutils literal"><span class="pre">True</span></span>, make <span class="docutils literal"><span class="pre">cell_init</span></span> and <span class="docutils literal"><span class="pre">hidden_init</span></span> trainable
 variables. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
 </div></blockquote>
-<p><strong>cell_init</strong> : array-like, Theano variable, scalar or Initializer</p>
+<p><strong>cell_init</strong> : array-like, Tensorfow variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Initializer for initial cell state (<span class="math">\(c_0\)</span>).
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.</p>
 </div></blockquote>
-<p><strong>hid_init</strong> : array-like, Theano variable, scalar or Initializer</p>
+<p><strong>hidden_init</strong> : array-like, Tensorfow variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Initializer for initial hidden state (<span class="math">\(h_0\)</span>).
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.</p>
@@ -333,15 +300,8 @@ from <span class="math">\(x_1\)</span> to <span class="math">\(x_n\)</span>. Def
 <blockquote>
 <div><p>If <span class="docutils literal"><span class="pre">True</span></span>, only return the final sequential output
 (e.g. for tasks where a single target value for the entire
-sequence is desired). In this case, Theano makes an
+sequence is desired). In this case, Tensorfow makes an
 optimization which saves memory. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</div></blockquote>
-<p><strong>precompute_input</strong> : bool</p>
-<blockquote>
-<div><p>if <span class="docutils literal"><span class="pre">True</span></span>, precompute <span class="docutils literal"><span class="pre">input_to_hid</span></span> before iterating
-through the sequence. This can result in a speed up at the
-expense of an increase in memory usage.
-Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
 </div></blockquote>
 <p><strong>peepholes</strong> : bool</p>
 <blockquote>
@@ -359,16 +319,10 @@ backpropagation always includes the full sequence, so
 sequence length must be known at compile time (i.e.,
 cannot be given as <span class="docutils literal"><span class="pre">None</span></span>). Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
 </div></blockquote>
-<p><strong>gradient_clipping</strong> : flaot or int</p>
+<p><strong>gradient_clipping</strong> : float or int</p>
 <blockquote>
 <div><p>If nonzero, the gradient messages are clipped to the
 given value during the backward pass. Defaults to <span class="docutils literal"><span class="pre">0</span></span>.</p>
-</div></blockquote>
-<p><strong>n_gradient_steps</strong> : int</p>
-<blockquote>
-<div><p>Number of timesteps to include in the backpropagated gradient.
-If <span class="docutils literal"><span class="pre">-1</span></span>, backpropagate through the entire sequence.
-Defaults to <span class="docutils literal"><span class="pre">-1</span></span>.</p>
 </div></blockquote>
 <p><strong>name</strong> : str or None</p>
 <blockquote class="last">
@@ -421,13 +375,23 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="neupy.layers.recurrent.LSTM.cell_weights">
+<span class="descname">cell_weights</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="neupy.layers.recurrent.LSTM.gradient_clipping">
 <span class="descname">gradient_clipping</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.layers.recurrent.LSTM.hid_init">
-<span class="descname">hid_init</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.recurrent.LSTM.hidden_init">
+<span class="descname">hidden_init</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.recurrent.LSTM.hidden_weights">
+<span class="descname">hidden_weights</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -437,18 +401,18 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </dd></dl>
 
 <dl class="attribute">
+<dt id="neupy.layers.recurrent.LSTM.input_weights">
+<span class="descname">input_weights</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="neupy.layers.recurrent.LSTM.learn_init">
 <span class="descname">learn_init</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.layers.recurrent.LSTM.n_gradient_steps">
-<span class="descname">n_gradient_steps</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="neupy.layers.recurrent.LSTM.options">
-<span class="descname">options</span><em class="property"> = {'hid_init': Option(class_name='LSTM', value=ParameterProperty(name=&quot;hid_init&quot;)), 'biases': Option(class_name='LSTM', value=MultiParameterProperty(name=&quot;biases&quot;)), 'gradient_clipping': Option(class_name='LSTM', value=NumberProperty(name=&quot;gradient_clipping&quot;)), 'size': Option(class_name='BaseRNNLayer', value=IntProperty(name=&quot;size&quot;)), 'backwards': Option(class_name='LSTM', value=Property(name=&quot;backwards&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'peepholes': Option(class_name='LSTM', value=Property(name=&quot;peepholes&quot;)), 'precompute_input': Option(class_name='LSTM', value=Property(name=&quot;precompute_input&quot;)), 'weights': Option(class_name='LSTM', value=MultiParameterProperty(name=&quot;weights&quot;)), 'n_gradient_steps': Option(class_name='LSTM', value=IntProperty(name=&quot;n_gradient_steps&quot;)), 'activation_functions': Option(class_name='LSTM', value=MultiCallableProperty(name=&quot;activation_functions&quot;)), 'unroll_scan': Option(class_name='LSTM', value=Property(name=&quot;unroll_scan&quot;)), 'cell_init': Option(class_name='LSTM', value=ParameterProperty(name=&quot;cell_init&quot;)), 'learn_init': Option(class_name='LSTM', value=Property(name=&quot;learn_init&quot;)), 'only_return_final': Option(class_name='BaseRNNLayer', value=Property(name=&quot;only_return_final&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='BaseRNNLayer', value=IntProperty(name=&quot;size&quot;)), 'only_return_final': Option(class_name='BaseRNNLayer', value=Property(name=&quot;only_return_final&quot;)), 'input_weights': Option(class_name='LSTM', value=ParameterProperty(name=&quot;input_weights&quot;)), 'hidden_weights': Option(class_name='LSTM', value=ParameterProperty(name=&quot;hidden_weights&quot;)), 'cell_weights': Option(class_name='LSTM', value=ParameterProperty(name=&quot;cell_weights&quot;)), 'biases': Option(class_name='LSTM', value=ParameterProperty(name=&quot;biases&quot;)), 'activation_functions': Option(class_name='LSTM', value=MultiCallableProperty(name=&quot;activation_functions&quot;)), 'learn_init': Option(class_name='LSTM', value=Property(name=&quot;learn_init&quot;)), 'cell_init': Option(class_name='LSTM', value=ParameterProperty(name=&quot;cell_init&quot;)), 'hidden_init': Option(class_name='LSTM', value=ParameterProperty(name=&quot;hidden_init&quot;)), 'unroll_scan': Option(class_name='LSTM', value=Property(name=&quot;unroll_scan&quot;)), 'backwards': Option(class_name='LSTM', value=Property(name=&quot;backwards&quot;)), 'peepholes': Option(class_name='LSTM', value=Property(name=&quot;peepholes&quot;)), 'gradient_clipping': Option(class_name='LSTM', value=NumberProperty(name=&quot;gradient_clipping&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -471,18 +435,8 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.layers.recurrent.LSTM.precompute_input">
-<span class="descname">precompute_input</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="neupy.layers.recurrent.LSTM.unroll_scan">
 <span class="descname">unroll_scan</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.recurrent.LSTM.weights">
-<span class="descname">weights</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -499,94 +453,36 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <blockquote>
 <div><p>Number of hidden units in the layer.</p>
 </div></blockquote>
-<p><strong>weights</strong> : dict or Initializer</p>
+<p><strong>input_weights</strong> : Initializer, ndarray</p>
 <blockquote>
-<div><p>Weight parameters for different gates.
+<div><p>Weight parameters for input connection.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierUniform" title="neupy.init.XavierUniform"><span class="xref py py-class docutils literal"><span class="pre">XavierUniform()</span></span></a>.</p>
-<ul>
-<li><p class="first">In case if application requires the same initialization method
-for all weights, then it&#8217;s possible to specify initialization
-method that would be automaticaly applied to all weight
-parameters in the GRU layer.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">layers</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.1</span><span class="p">))</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">In case if application requires different initialization
-values for different weights then it&#8217;s possible to specify
-an exact weight by name.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span>
-    <span class="n">weight_in_to_updategate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-    <span class="n">weight_hid_to_updategate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-
-    <span class="n">weight_in_to_resetgate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-    <span class="n">weight_hid_to_resetgate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-
-    <span class="n">weight_in_to_hidden_update</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-    <span class="n">weight_hid_to_hidden_update</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierUniform</span><span class="p">(),</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p>If application requires modification to only one (or multiple)
-parameter then it&#8217;s better to specify the one that you need to
-modify and ignore other parameters</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">weight_in_to_updategate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.1</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Other parameters like <span class="docutils literal"><span class="pre">weight_in_to_resetgate</span></span> will be
-equal to their default values.</p>
-</li>
-</ul>
 </div></blockquote>
-<p><strong>biases</strong> : dict or Initializer</p>
+<p><strong>hidden_weights</strong> : Initializer, ndarray</p>
 <blockquote>
-<div><p>Bias parameters for different gates.
+<div><p>Weight parameters for hidden connection.
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierUniform" title="neupy.init.XavierUniform"><span class="xref py py-class docutils literal"><span class="pre">XavierUniform()</span></span></a>.</p>
+</div></blockquote>
+<p><strong>bias</strong> : Initializer, ndarray</p>
+<blockquote>
+<div><p>Bias parameters for all gates.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.</p>
-<ul>
-<li><p class="first">In case if application requires the same initialization method
-for all biases, then it&#8217;s possible to specify initialization
-method that would be automaticaly applied to all bias parameters
-in the GRU layer.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">layers</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">biases</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">In case if application requires different initialization
-values for different weights then it&#8217;s possible to specify
-an exact weight by name.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span>
-    <span class="n">bias_updategate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-    <span class="n">bias_resetgate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-    <span class="n">bias_hidden_update</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p>If application requires modification to only one (or multiple)
-parameter then it&#8217;s better to specify the one that you need to
-modify and ignore other parameters</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">bias_resetgate</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Other parameters like <span class="docutils literal"><span class="pre">bias_updategate</span></span> will be
-equal to their default values.</p>
-</li>
-</ul>
 </div></blockquote>
 <p><strong>activation_functions</strong> : dict, callable</p>
 <blockquote>
 <div><p>Activation functions for different gates. Defaults to:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># import theano.tensor as T</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># import tensorflow as tf</span>
 <span class="nb">dict</span><span class="p">(</span>
-    <span class="n">resetgate</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">nnet</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">,</span>
-    <span class="n">updategate</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">nnet</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">,</span>
-    <span class="n">hidden_update</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">tanh</span><span class="p">,</span>
+    <span class="n">resetgate</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">,</span>
+    <span class="n">updategate</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">,</span>
+    <span class="n">hidden_update</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">tanh</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>If application requires modification to only one parameter
 then it&#8217;s better to specify the one that you need to modify
 and ignore other parameters</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">resetgate</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">tanh</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">resetgate</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">tanh</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Other parameters like <span class="docutils literal"><span class="pre">updategate</span></span> or <span class="docutils literal"><span class="pre">hidden_update</span></span>
@@ -594,10 +490,10 @@ will be equal to their default values.</p>
 </div></blockquote>
 <p><strong>learn_init</strong> : bool</p>
 <blockquote>
-<div><p>If <span class="docutils literal"><span class="pre">True</span></span>, make <span class="docutils literal"><span class="pre">hid_init</span></span> trainable variable.
+<div><p>If <span class="docutils literal"><span class="pre">True</span></span>, make <span class="docutils literal"><span class="pre">hidden_init</span></span> trainable variable.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
 </div></blockquote>
-<p><strong>hid_init</strong> : array-like, Theano variable, scalar or Initializer</p>
+<p><strong>hidden_init</strong> : array-like, Tensorfow variable, scalar or Initializer</p>
 <blockquote>
 <div><p>Initializer for initial hidden state (<span class="math">\(h_0\)</span>).
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.</p>
@@ -606,7 +502,7 @@ Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Const
 <blockquote>
 <div><p>If <span class="docutils literal"><span class="pre">True</span></span>, only return the final sequential output
 (e.g. for tasks where a single target value for the entire
-sequence is desired). In this case, Theano makes an
+sequence is desired). In this case, Tensorfow makes an
 optimization which saves memory. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
 </div></blockquote>
 <p><strong>backwards</strong> : bool</p>
@@ -614,13 +510,6 @@ optimization which saves memory. Defaults to <span class="docutils literal"><spa
 <div><p>If <span class="docutils literal"><span class="pre">True</span></span>, process the sequence backwards and then reverse the
 output again such that the output from the layer is always
 from <span class="math">\(x_1\)</span> to <span class="math">\(x_n\)</span>. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-<p><strong>precompute_input</strong> : bool</p>
-<blockquote>
-<div><p>if <span class="docutils literal"><span class="pre">True</span></span>, precompute <span class="docutils literal"><span class="pre">input_to_hid</span></span> before iterating
-through the sequence. This can result in a speed up at the
-expense of an increase in memory usage.
-Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
 </div></blockquote>
 <p><strong>unroll_scan</strong> : bool</p>
 <blockquote>
@@ -683,8 +572,13 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.layers.recurrent.GRU.hid_init">
-<span class="descname">hid_init</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.recurrent.GRU.hidden_init">
+<span class="descname">hidden_init</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.recurrent.GRU.hidden_weights">
+<span class="descname">hidden_weights</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -694,18 +588,18 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </dd></dl>
 
 <dl class="attribute">
+<dt id="neupy.layers.recurrent.GRU.input_weights">
+<span class="descname">input_weights</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="neupy.layers.recurrent.GRU.learn_init">
 <span class="descname">learn_init</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.layers.recurrent.GRU.n_gradient_steps">
-<span class="descname">n_gradient_steps</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="neupy.layers.recurrent.GRU.options">
-<span class="descname">options</span><em class="property"> = {'hid_init': Option(class_name='GRU', value=ParameterProperty(name=&quot;hid_init&quot;)), 'biases': Option(class_name='GRU', value=MultiParameterProperty(name=&quot;biases&quot;)), 'gradient_clipping': Option(class_name='GRU', value=NumberProperty(name=&quot;gradient_clipping&quot;)), 'size': Option(class_name='BaseRNNLayer', value=IntProperty(name=&quot;size&quot;)), 'backwards': Option(class_name='GRU', value=Property(name=&quot;backwards&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'precompute_input': Option(class_name='GRU', value=Property(name=&quot;precompute_input&quot;)), 'weights': Option(class_name='GRU', value=MultiParameterProperty(name=&quot;weights&quot;)), 'n_gradient_steps': Option(class_name='GRU', value=IntProperty(name=&quot;n_gradient_steps&quot;)), 'activation_functions': Option(class_name='GRU', value=MultiCallableProperty(name=&quot;activation_functions&quot;)), 'unroll_scan': Option(class_name='GRU', value=Property(name=&quot;unroll_scan&quot;)), 'learn_init': Option(class_name='GRU', value=Property(name=&quot;learn_init&quot;)), 'only_return_final': Option(class_name='BaseRNNLayer', value=Property(name=&quot;only_return_final&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='BaseRNNLayer', value=IntProperty(name=&quot;size&quot;)), 'only_return_final': Option(class_name='BaseRNNLayer', value=Property(name=&quot;only_return_final&quot;)), 'input_weights': Option(class_name='GRU', value=ParameterProperty(name=&quot;input_weights&quot;)), 'hidden_weights': Option(class_name='GRU', value=ParameterProperty(name=&quot;hidden_weights&quot;)), 'biases': Option(class_name='GRU', value=ParameterProperty(name=&quot;biases&quot;)), 'activation_functions': Option(class_name='GRU', value=MultiCallableProperty(name=&quot;activation_functions&quot;)), 'learn_init': Option(class_name='GRU', value=Property(name=&quot;learn_init&quot;)), 'hidden_init': Option(class_name='GRU', value=ParameterProperty(name=&quot;hidden_init&quot;)), 'backwards': Option(class_name='GRU', value=Property(name=&quot;backwards&quot;)), 'unroll_scan': Option(class_name='GRU', value=Property(name=&quot;unroll_scan&quot;)), 'gradient_clipping': Option(class_name='GRU', value=NumberProperty(name=&quot;gradient_clipping&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -723,18 +617,8 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.layers.recurrent.GRU.precompute_input">
-<span class="descname">precompute_input</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="neupy.layers.recurrent.GRU.unroll_scan">
 <span class="descname">unroll_scan</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.recurrent.GRU.weights">
-<span class="descname">weights</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -745,19 +629,16 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
         
         
         
-        </div></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Articles</h1>
-    <ul><li>
-            <a href="../2018/03/26/making_art_with_growing_neural_gas.html">Making Art with Growing Neural Gas</a>
-        </li><li>
-            <a href="../2017/12/17/sofm_text_style.html">Create unique text-style with SOFM</a>
-        </li><li>
-            <a href="../2017/12/13/sofm_art.html">The Art of SOFM</a>
-        </li><li>
-            <a href="../2017/12/09/sofm_applications.html">Self-Organizing Maps and Applications</a>
-        </li><li>
-            <a href="../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
-        </li></ul>
+        </div></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../search.html" method="get">
+          <div class="box">
+            <div class="search-input-container">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" name="q" id="search" placeholder="Search..." />
+            </div>
+          </div>
+    </form>
 </div></section><section><div class="widget">
     <h1>Install NeuPy</h1>
     <div class="highligh-bash">
@@ -768,16 +649,6 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
     <p>
         <div>Learn more about NeuPy reading <a href="../docs/tutorials.html">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
     </p>
-</div></section><section><div class="widget" id="searchbox" role="search">
-    <h1><a href="#searchbox">Search</a></h1>
-    <form action="../search.html" method="get">
-          <div class="box">
-            <div class="search-input-container">
-                <span class="icon"><i class="fa fa-search"></i></span>
-                <input type="search" name="q" id="search" placeholder="Search..." />
-            </div>
-          </div>
-    </form>
 </div></section><section><div class="widget">
     <h1>Issues and feature requests</h1>
     <p>
@@ -792,7 +663,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2019, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

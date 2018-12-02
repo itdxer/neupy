@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="next" title="Signals and Early stopping" href="signals.html" /><link rel="prev" title="Algorithms with Constructible Network Architecture" href="constructible-architecture.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Signals and Early stopping" href="signals.html" /><link rel="prev" title="Algorithms with constructible architecture" href="constructible-architecture.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
         VERSION:     '1.5',
@@ -48,6 +48,7 @@
         });
     </script>
     <style media="screen" type="text/css">
+        table { background-color: white; }
         .docutils { width: 100%; }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
@@ -127,21 +128,46 @@
           color: #93a4ad;
         }
 
-        #search-results ul.search {
+        .docutils.field-list, .docutils.footnote {
+            background-color: inherit;
+        }
+        .large-font {
+            font-size: 1.4em !important;
+        }
+        .right-tag {
+            float: right;
+            margin-left: 36px !important;
+            margin-right: 0px !important;
+        }
+        .short-description {
+            /* We hidde description inside of the article */
+            display: none;
+        }
+        .short-description img {
+            max-height: 160px;
+            max-width: 40%;
+            margin-left: 8px;
+        }
+        #results-list ul.search {
             padding: 0;
         }
-        #search-results li p {
+
+        #results-list .short-description {
+            /* We show description text in the archive */
+            display: block !important;
+        }
+        #results-list li p {
             margin-bottom: 5px;
             font-size: 0.9em;
         }
-        #search-results li {
+        #results-list li {
             background-color: #fff !important;
             margin-bottom: 10px;
             display: block !important;
             padding: 15px;
             border-bottom: 2px solid #ddd;
         }
-        #search-results span.tag {
+        #results-list span.tag {
             display: inline-block;
             padding: 3px 4px;
             margin-right: 8px;
@@ -195,13 +221,8 @@
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="train-network-on-gpu">
 <h1>Train network on GPU</h1>
-<p>NeuPy is based on the <a class="reference external" href="http://deeplearning.net/software/theano/">Theano</a> framework and it means that you can easily train neural networks with constructible architectures on GPU.</p>
-<p>To learn more about how Theano works with GPU works, you can check <a class="reference external" href="http://deeplearning.net/software/theano/tutorial/using_gpu.html">this tutorial</a>.</p>
-<p>The simples way to train network on GPU is to run script with the following flag specified at the beginning of the command.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ <span class="nv">THEANO_FLAGS</span><span class="o">=</span><span class="s2">&quot;device=cuda0&quot;</span> python train_network.py
-</pre></div>
-</div>
-<p>Where <span class="docutils literal"><span class="pre">cuda0</span></span> is the name of your GPU device. Value can be different on different machines.</p>
+<p>NeuPy is based on the <a class="reference external" href="https://tensorflow.org/">Tensorfow</a> framework and it means that you can easily train neural networks with constructible architectures on GPU.</p>
+<p>Training on GPU doesn&#8217;t require any modifications in your code. If you want to use specific GPU among available options, you just need to use the <span class="docutils literal"><span class="pre">tf.device</span></span> context manager. See official documentation from tensorflow <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/device">here</a></p>
 </div>
 
     <div class="postmeta">
@@ -209,21 +230,18 @@
         
         
         </div><ul class="related clearfix">
-            <li class="left"> &laquo; <a href="constructible-architecture.html">Algorithms with Constructible Network Architecture</a></li>
+            <li class="left"> &laquo; <a href="constructible-architecture.html">Algorithms with constructible architecture</a></li>
             <li class="right"><a href="signals.html">Signals and Early stopping</a> &raquo; </li>
-        </ul></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Articles</h1>
-    <ul><li>
-            <a href="../../2018/03/26/making_art_with_growing_neural_gas.html">Making Art with Growing Neural Gas</a>
-        </li><li>
-            <a href="../../2017/12/17/sofm_text_style.html">Create unique text-style with SOFM</a>
-        </li><li>
-            <a href="../../2017/12/13/sofm_art.html">The Art of SOFM</a>
-        </li><li>
-            <a href="../../2017/12/09/sofm_applications.html">Self-Organizing Maps and Applications</a>
-        </li><li>
-            <a href="../../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
-        </li></ul>
+        </ul></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../search.html" method="get">
+          <div class="box">
+            <div class="search-input-container">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" name="q" id="search" placeholder="Search..." />
+            </div>
+          </div>
+    </form>
 </div></section><section><div class="widget">
     <h1>Install NeuPy</h1>
     <div class="highligh-bash">
@@ -234,16 +252,6 @@
     <p>
         <div>Learn more about NeuPy reading <a href="../tutorials.html">tutorials</a> and <a href="../../pages/documentation.html">documentation</a>.</div>
     </p>
-</div></section><section><div class="widget" id="searchbox" role="search">
-    <h1><a href="#searchbox">Search</a></h1>
-    <form action="../../search.html" method="get">
-          <div class="box">
-            <div class="search-input-container">
-                <span class="icon"><i class="fa fa-search"></i></span>
-                <input type="search" name="q" id="search" placeholder="Search..." />
-            </div>
-          </div>
-    </form>
 </div></section><section><div class="widget">
     <h1>Issues and feature requests</h1>
     <p>
@@ -258,7 +266,7 @@
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2019, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

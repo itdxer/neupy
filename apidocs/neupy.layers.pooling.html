@@ -48,6 +48,7 @@
         });
     </script>
     <style media="screen" type="text/css">
+        table { background-color: white; }
         .docutils { width: 100%; }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
@@ -127,21 +128,46 @@
           color: #93a4ad;
         }
 
-        #search-results ul.search {
+        .docutils.field-list, .docutils.footnote {
+            background-color: inherit;
+        }
+        .large-font {
+            font-size: 1.4em !important;
+        }
+        .right-tag {
+            float: right;
+            margin-left: 36px !important;
+            margin-right: 0px !important;
+        }
+        .short-description {
+            /* We hidde description inside of the article */
+            display: none;
+        }
+        .short-description img {
+            max-height: 160px;
+            max-width: 40%;
+            margin-left: 8px;
+        }
+        #results-list ul.search {
             padding: 0;
         }
-        #search-results li p {
+
+        #results-list .short-description {
+            /* We show description text in the archive */
+            display: block !important;
+        }
+        #results-list li p {
             margin-bottom: 5px;
             font-size: 0.9em;
         }
-        #search-results li {
+        #results-list li {
             background-color: #fff !important;
             margin-bottom: 10px;
             display: block !important;
             padding: 15px;
             border-bottom: 2px solid #ddd;
         }
-        #search-results span.tag {
+        #results-list span.tag {
             display: inline-block;
             padding: 3px 4px;
             margin-right: 8px;
@@ -215,17 +241,11 @@ rows/cols to get the next pool region. If stride is
 None, it is considered equal to ds (no overlap on
 pooling regions).</p>
 </div></blockquote>
-<p><strong>padding</strong> : tuple or int</p>
+<p><strong>padding</strong> : {<cite>VALID</cite>, <cite>SAME</cite>}</p>
 <blockquote>
 <div><p>(pad_h, pad_w), pad zeros to extend beyond four borders of
 the images, pad_h is the size of the top and bottom margins,
 and pad_w is the size of the left and right margins.</p>
-</div></blockquote>
-<p><strong>ignore_border</strong> : bool</p>
-<blockquote>
-<div><p>When <span class="docutils literal"><span class="pre">True</span></span>, <span class="docutils literal"><span class="pre">(5,</span> <span class="pre">5)</span></span> input with size <span class="docutils literal"><span class="pre">(2,</span> <span class="pre">2)</span></span>
-will generate a <cite>(2, 2)</cite> output. <span class="docutils literal"><span class="pre">(3,</span> <span class="pre">3)</span></span> otherwise.
-Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
 </div></blockquote>
 <p><strong>name</strong> : str or None</p>
 <blockquote class="last">
@@ -241,7 +261,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
 <span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
@@ -252,8 +272,8 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span>
 <span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
@@ -301,22 +321,13 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </table>
 <dl class="attribute">
 <dt id="neupy.layers.pooling.MaxPooling.options">
-<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'padding': Option(class_name='BasePooling', value=PaddingProperty(name=&quot;padding&quot;)), 'stride': Option(class_name='BasePooling', value=StrideProperty(name=&quot;stride&quot;)), 'ignore_border': Option(class_name='BasePooling', value=Property(name=&quot;ignore_border&quot;)), 'size': Option(class_name='BasePooling', value=TypedListProperty(name=&quot;size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='BasePooling', value=TypedListProperty(name=&quot;size&quot;)), 'stride': Option(class_name='BasePooling', value=Spatial2DProperty(name=&quot;stride&quot;)), 'padding': Option(class_name='BasePooling', value=ChoiceProperty(name=&quot;padding&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="neupy.layers.pooling.MaxPooling.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Return output base on the input value.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<dl class="attribute">
+<dt id="neupy.layers.pooling.MaxPooling.pooling_type">
+<span class="descname">pooling_type</span><em class="property"> = 'MAX'</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -328,12 +339,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : {<span class="docutils literal"><span class="pre">include_padding</span></span>, <span class="docutils literal"><span class="pre">exclude_padding</span></span>}</p>
-<blockquote>
-<div><p>Give a choice to include or exclude padding.
-Defaults to <span class="docutils literal"><span class="pre">include_padding</span></span>.</p>
-</div></blockquote>
-<p><strong>size</strong> : tuple with 2 integers</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : tuple with 2 integers</p>
 <blockquote>
 <div><p>Factor by which to downscale (vertical, horizontal).
 (2, 2) will halve the image in each dimension.</p>
@@ -345,17 +351,11 @@ rows/cols to get the next pool region. If stride is
 None, it is considered equal to ds (no overlap on
 pooling regions).</p>
 </div></blockquote>
-<p><strong>padding</strong> : tuple or int</p>
+<p><strong>padding</strong> : {<cite>VALID</cite>, <cite>SAME</cite>}</p>
 <blockquote>
 <div><p>(pad_h, pad_w), pad zeros to extend beyond four borders of
 the images, pad_h is the size of the top and bottom margins,
 and pad_w is the size of the left and right margins.</p>
-</div></blockquote>
-<p><strong>ignore_border</strong> : bool</p>
-<blockquote>
-<div><p>When <span class="docutils literal"><span class="pre">True</span></span>, <span class="docutils literal"><span class="pre">(5,</span> <span class="pre">5)</span></span> input with size <span class="docutils literal"><span class="pre">(2,</span> <span class="pre">2)</span></span>
-will generate a <cite>(2, 2)</cite> output. <span class="docutils literal"><span class="pre">(3,</span> <span class="pre">3)</span></span> otherwise.
-Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
 </div></blockquote>
 <p><strong>name</strong> : str or None</p>
 <blockquote class="last">
@@ -371,7 +371,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
 <span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">AveragePooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
@@ -382,8 +382,8 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span>
 <span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">AveragePooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
@@ -430,28 +430,14 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="neupy.layers.pooling.AveragePooling.mode">
-<span class="descname">mode</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.pooling.AveragePooling.options">
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='BasePooling', value=TypedListProperty(name=&quot;size&quot;)), 'stride': Option(class_name='BasePooling', value=Spatial2DProperty(name=&quot;stride&quot;)), 'padding': Option(class_name='BasePooling', value=ChoiceProperty(name=&quot;padding&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.layers.pooling.AveragePooling.options">
-<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'padding': Option(class_name='BasePooling', value=PaddingProperty(name=&quot;padding&quot;)), 'stride': Option(class_name='BasePooling', value=StrideProperty(name=&quot;stride&quot;)), 'mode': Option(class_name='AveragePooling', value=ChoiceProperty(name=&quot;mode&quot;)), 'ignore_border': Option(class_name='BasePooling', value=Property(name=&quot;ignore_border&quot;)), 'size': Option(class_name='BasePooling', value=TypedListProperty(name=&quot;size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.pooling.AveragePooling.pooling_type">
+<span class="descname">pooling_type</span><em class="property"> = 'AVG'</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
-
-<dl class="method">
-<dt id="neupy.layers.pooling.AveragePooling.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Return output base on the input value.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
 
 </dd></dl>
 
@@ -479,12 +465,8 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Upscale</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
-<span class="gp">... </span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">Upscale</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
 <span class="go">(3, 20, 20)</span>
 </pre></div>
@@ -530,7 +512,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </table>
 <dl class="attribute">
 <dt id="neupy.layers.pooling.Upscale.options">
-<span class="descname">options</span><em class="property"> = {'scale': Option(class_name='Upscale', value=ScaleFactorProperty(name=&quot;scale&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'scale': Option(class_name='Upscale', value=ScaleFactorProperty(name=&quot;scale&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -584,7 +566,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>function</strong> : callable</p>
 <blockquote>
 <div><p>Function that aggregates over dimensions.
-Defaults to <span class="docutils literal"><span class="pre">theano.tensor.mean</span></span>.</p>
+Defaults to <span class="docutils literal"><span class="pre">tensorflow.reduce_mean</span></span>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">agg_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="k">pass</span>
 </pre></div>
@@ -600,12 +582,8 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">16</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">GlobalPooling</span><span class="p">(),</span>
-<span class="gp">... </span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">GlobalPooling</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
 <span class="go">(16,)</span>
 </pre></div>
@@ -656,7 +634,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.pooling.GlobalPooling.options">
-<span class="descname">options</span><em class="property"> = {'function': Option(class_name='GlobalPooling', value=Property(name=&quot;function&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'function': Option(class_name='GlobalPooling', value=Property(name=&quot;function&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -686,19 +664,16 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
         
         
         
-        </div></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Articles</h1>
-    <ul><li>
-            <a href="../2018/03/26/making_art_with_growing_neural_gas.html">Making Art with Growing Neural Gas</a>
-        </li><li>
-            <a href="../2017/12/17/sofm_text_style.html">Create unique text-style with SOFM</a>
-        </li><li>
-            <a href="../2017/12/13/sofm_art.html">The Art of SOFM</a>
-        </li><li>
-            <a href="../2017/12/09/sofm_applications.html">Self-Organizing Maps and Applications</a>
-        </li><li>
-            <a href="../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
-        </li></ul>
+        </div></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../search.html" method="get">
+          <div class="box">
+            <div class="search-input-container">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" name="q" id="search" placeholder="Search..." />
+            </div>
+          </div>
+    </form>
 </div></section><section><div class="widget">
     <h1>Install NeuPy</h1>
     <div class="highligh-bash">
@@ -709,16 +684,6 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
     <p>
         <div>Learn more about NeuPy reading <a href="../docs/tutorials.html">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
     </p>
-</div></section><section><div class="widget" id="searchbox" role="search">
-    <h1><a href="#searchbox">Search</a></h1>
-    <form action="../search.html" method="get">
-          <div class="box">
-            <div class="search-input-container">
-                <span class="icon"><i class="fa fa-search"></i></span>
-                <input type="search" name="q" id="search" placeholder="Search..." />
-            </div>
-          </div>
-    </form>
 </div></section><section><div class="widget">
     <h1>Issues and feature requests</h1>
     <p>
@@ -733,7 +698,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2019, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

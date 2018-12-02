@@ -48,6 +48,7 @@
         });
     </script>
     <style media="screen" type="text/css">
+        table { background-color: white; }
         .docutils { width: 100%; }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
@@ -127,21 +128,46 @@
           color: #93a4ad;
         }
 
-        #search-results ul.search {
+        .docutils.field-list, .docutils.footnote {
+            background-color: inherit;
+        }
+        .large-font {
+            font-size: 1.4em !important;
+        }
+        .right-tag {
+            float: right;
+            margin-left: 36px !important;
+            margin-right: 0px !important;
+        }
+        .short-description {
+            /* We hidde description inside of the article */
+            display: none;
+        }
+        .short-description img {
+            max-height: 160px;
+            max-width: 40%;
+            margin-left: 8px;
+        }
+        #results-list ul.search {
             padding: 0;
         }
-        #search-results li p {
+
+        #results-list .short-description {
+            /* We show description text in the archive */
+            display: block !important;
+        }
+        #results-list li p {
             margin-bottom: 5px;
             font-size: 0.9em;
         }
-        #search-results li {
+        #results-list li {
             background-color: #fff !important;
             margin-bottom: 10px;
             display: block !important;
             padding: 15px;
             border-bottom: 2px solid #ddd;
         }
-        #search-results span.tag {
+        #results-list span.tag {
             display: inline-block;
             padding: 3px 4px;
             margin-right: 8px;
@@ -315,6 +341,19 @@ Euclidian distance to find clusters.</li>
 <li>Training error is just a ratio of miscassified
 samples</li>
 </ul>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lvqnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">LVQ</span><span class="p">(</span><span class="n">n_inputs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lvqnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lvqnet</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+<span class="go">array([1, 0])</span>
+</pre></div>
+</div>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -357,7 +396,7 @@ samples</li>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.lvq.LVQ.options">
-<span class="descname">options</span><em class="property"> = {'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;)), 'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;)), 'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -550,6 +589,19 @@ Euclidian distance to find clusters.</li>
 <li>Training error is just a ratio of miscassified
 samples</li>
 </ul>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lvqnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">LVQ2</span><span class="p">(</span><span class="n">n_inputs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lvqnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lvqnet</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+<span class="go">array([1, 0])</span>
+</pre></div>
+</div>
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.lvq.LVQ2.epsilon">
 <span class="descname">epsilon</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -557,7 +609,7 @@ samples</li>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.lvq.LVQ2.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;)), 'epsilon': Option(class_name='LVQ2', value=NumberProperty(name=&quot;epsilon&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;)), 'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;)), 'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;)), 'epsilon': Option(class_name='LVQ2', value=NumberProperty(name=&quot;epsilon&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -693,9 +745,22 @@ Euclidian distance to find clusters.</li>
 <li>Training error is just a ratio of miscassified
 samples</li>
 </ul>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lvqnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">LVQ21</span><span class="p">(</span><span class="n">n_inputs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lvqnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lvqnet</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+<span class="go">array([1, 0])</span>
+</pre></div>
+</div>
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.lvq.LVQ21.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;)), 'epsilon': Option(class_name='LVQ2', value=NumberProperty(name=&quot;epsilon&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;)), 'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;)), 'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;)), 'epsilon': Option(class_name='LVQ2', value=NumberProperty(name=&quot;epsilon&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -815,9 +880,22 @@ samples</li>
 <li>Decreasing step and increasing number of training epochs
 can improve the performance.</li>
 </ul>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lvqnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">LVQ3</span><span class="p">(</span><span class="n">n_inputs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lvqnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lvqnet</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+<span class="go">array([1, 0])</span>
+</pre></div>
+</div>
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.lvq.LVQ3.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;)), 'epsilon': Option(class_name='LVQ2', value=NumberProperty(name=&quot;epsilon&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'step': Option(class_name='LVQ3', value=NumberProperty(name=&quot;step&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'slowdown_rate': Option(class_name='LVQ3', value=NumberProperty(name=&quot;slowdown_rate&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='LVQ3', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;)), 'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;)), 'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;)), 'epsilon': Option(class_name='LVQ2', value=NumberProperty(name=&quot;epsilon&quot;)), 'slowdown_rate': Option(class_name='LVQ3', value=NumberProperty(name=&quot;slowdown_rate&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -843,19 +921,16 @@ can improve the performance.</li>
         
         
         
-        </div></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Articles</h1>
-    <ul><li>
-            <a href="../2018/03/26/making_art_with_growing_neural_gas.html">Making Art with Growing Neural Gas</a>
-        </li><li>
-            <a href="../2017/12/17/sofm_text_style.html">Create unique text-style with SOFM</a>
-        </li><li>
-            <a href="../2017/12/13/sofm_art.html">The Art of SOFM</a>
-        </li><li>
-            <a href="../2017/12/09/sofm_applications.html">Self-Organizing Maps and Applications</a>
-        </li><li>
-            <a href="../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
-        </li></ul>
+        </div></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../search.html" method="get">
+          <div class="box">
+            <div class="search-input-container">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" name="q" id="search" placeholder="Search..." />
+            </div>
+          </div>
+    </form>
 </div></section><section><div class="widget">
     <h1>Install NeuPy</h1>
     <div class="highligh-bash">
@@ -866,16 +941,6 @@ can improve the performance.</li>
     <p>
         <div>Learn more about NeuPy reading <a href="../docs/tutorials.html">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
     </p>
-</div></section><section><div class="widget" id="searchbox" role="search">
-    <h1><a href="#searchbox">Search</a></h1>
-    <form action="../search.html" method="get">
-          <div class="box">
-            <div class="search-input-container">
-                <span class="icon"><i class="fa fa-search"></i></span>
-                <input type="search" name="q" id="search" placeholder="Search..." />
-            </div>
-          </div>
-    </form>
 </div></section><section><div class="widget">
     <h1>Issues and feature requests</h1>
     <p>
@@ -890,7 +955,7 @@ can improve the performance.</li>
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2019, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

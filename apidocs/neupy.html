@@ -48,6 +48,7 @@
         });
     </script>
     <style media="screen" type="text/css">
+        table { background-color: white; }
         .docutils { width: 100%; }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
@@ -127,21 +128,46 @@
           color: #93a4ad;
         }
 
-        #search-results ul.search {
+        .docutils.field-list, .docutils.footnote {
+            background-color: inherit;
+        }
+        .large-font {
+            font-size: 1.4em !important;
+        }
+        .right-tag {
+            float: right;
+            margin-left: 36px !important;
+            margin-right: 0px !important;
+        }
+        .short-description {
+            /* We hidde description inside of the article */
+            display: none;
+        }
+        .short-description img {
+            max-height: 160px;
+            max-width: 40%;
+            margin-left: 8px;
+        }
+        #results-list ul.search {
             padding: 0;
         }
-        #search-results li p {
+
+        #results-list .short-description {
+            /* We show description text in the archive */
+            display: block !important;
+        }
+        #results-list li p {
             margin-bottom: 5px;
             font-size: 0.9em;
         }
-        #search-results li {
+        #results-list li {
             background-color: #fff !important;
             margin-bottom: 10px;
             display: block !important;
             padding: 15px;
             border-bottom: 2px solid #ddd;
         }
-        #search-results span.tag {
+        #results-list span.tag {
             display: inline-block;
             padding: 3px 4px;
             margin-right: 8px;
@@ -226,15 +252,6 @@
 <li class="toctree-l4"><a class="reference internal" href="neupy.algorithms.competitive.html#module-neupy.algorithms.competitive">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.ensemble.html">neupy.algorithms.ensemble package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="neupy.algorithms.ensemble.html#submodules">Submodules</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="neupy.algorithms.ensemble.base.html">neupy.algorithms.ensemble.base module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="neupy.algorithms.ensemble.dan.html">neupy.algorithms.ensemble.dan module</a></li>
-</ul>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="neupy.algorithms.ensemble.html#module-neupy.algorithms.ensemble">Module contents</a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.gd.html">neupy.algorithms.gd package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="neupy.algorithms.gd.html#submodules">Submodules</a><ul>
 <li class="toctree-l5"><a class="reference internal" href="neupy.algorithms.gd.adadelta.html">neupy.algorithms.gd.adadelta module</a></li>
@@ -249,23 +266,11 @@
 <li class="toctree-l5"><a class="reference internal" href="neupy.algorithms.gd.lev_marq.html">neupy.algorithms.gd.lev_marq module</a></li>
 <li class="toctree-l5"><a class="reference internal" href="neupy.algorithms.gd.momentum.html">neupy.algorithms.gd.momentum module</a></li>
 <li class="toctree-l5"><a class="reference internal" href="neupy.algorithms.gd.quasi_newton.html">neupy.algorithms.gd.quasi_newton module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="neupy.algorithms.gd.quickprop.html">neupy.algorithms.gd.quickprop module</a></li>
 <li class="toctree-l5"><a class="reference internal" href="neupy.algorithms.gd.rmsprop.html">neupy.algorithms.gd.rmsprop module</a></li>
 <li class="toctree-l5"><a class="reference internal" href="neupy.algorithms.gd.rprop.html">neupy.algorithms.gd.rprop module</a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="neupy.algorithms.gd.html#module-neupy.algorithms.gd">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.linear.html">neupy.algorithms.linear package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="neupy.algorithms.linear.html#submodules">Submodules</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="neupy.algorithms.linear.base.html">neupy.algorithms.linear.base module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="neupy.algorithms.linear.lms.html">neupy.algorithms.linear.lms module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="neupy.algorithms.linear.modify_relaxation.html">neupy.algorithms.linear.modify_relaxation module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="neupy.algorithms.linear.perceptron.html">neupy.algorithms.linear.perceptron module</a></li>
-</ul>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="neupy.algorithms.linear.html#module-neupy.algorithms.linear">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.memory.html">neupy.algorithms.memory package</a><ul>
@@ -331,7 +336,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="neupy.architectures.html">neupy.architectures package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="neupy.architectures.html#submodules">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="neupy.architectures.alexnet.html">neupy.architectures.alexnet module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.architectures.mixture_of_experts.html">neupy.architectures.mixture_of_experts module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.architectures.resnet.html">neupy.architectures.resnet module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.architectures.squeezenet.html">neupy.architectures.squeezenet module</a></li>
@@ -410,7 +414,7 @@
 <li class="toctree-l2"><a class="reference internal" href="neupy.plots.html#submodules">Submodules</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="neupy.plots.error_plot.html">neupy.plots.error_plot module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.plots.hinton.html">neupy.plots.hinton module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neupy.plots.layer_structure.html">neupy.plots.layer_structure module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neupy.plots.network_structure.html">neupy.plots.network_structure module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.plots.saliency_map.html">neupy.plots.saliency_map module</a></li>
 </ul>
 </li>
@@ -425,7 +429,6 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="neupy.environment.html">neupy.environment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="neupy.estimators.html">neupy.estimators module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="neupy.exceptions.html">neupy.exceptions module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="neupy.init.html">neupy.init module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="neupy.storage.html">neupy.storage module</a></li>
@@ -443,19 +446,16 @@
         
         
         
-        </div></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Articles</h1>
-    <ul><li>
-            <a href="../2018/03/26/making_art_with_growing_neural_gas.html">Making Art with Growing Neural Gas</a>
-        </li><li>
-            <a href="../2017/12/17/sofm_text_style.html">Create unique text-style with SOFM</a>
-        </li><li>
-            <a href="../2017/12/13/sofm_art.html">The Art of SOFM</a>
-        </li><li>
-            <a href="../2017/12/09/sofm_applications.html">Self-Organizing Maps and Applications</a>
-        </li><li>
-            <a href="../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
-        </li></ul>
+        </div></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../search.html" method="get">
+          <div class="box">
+            <div class="search-input-container">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" name="q" id="search" placeholder="Search..." />
+            </div>
+          </div>
+    </form>
 </div></section><section><div class="widget">
     <h1>Install NeuPy</h1>
     <div class="highligh-bash">
@@ -466,16 +466,6 @@
     <p>
         <div>Learn more about NeuPy reading <a href="../docs/tutorials.html">tutorials</a> and <a href="../pages/documentation.html">documentation</a>.</div>
     </p>
-</div></section><section><div class="widget" id="searchbox" role="search">
-    <h1><a href="#searchbox">Search</a></h1>
-    <form action="../search.html" method="get">
-          <div class="box">
-            <div class="search-input-container">
-                <span class="icon"><i class="fa fa-search"></i></span>
-                <input type="search" name="q" id="search" placeholder="Search..." />
-            </div>
-          </div>
-    </form>
 </div></section><section><div class="widget">
     <h1>Issues and feature requests</h1>
     <p>
@@ -490,7 +480,7 @@
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2019, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

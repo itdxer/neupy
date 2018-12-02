@@ -48,6 +48,7 @@
         });
     </script>
     <style media="screen" type="text/css">
+        table { background-color: white; }
         .docutils { width: 100%; }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
@@ -127,21 +128,46 @@
           color: #93a4ad;
         }
 
-        #search-results ul.search {
+        .docutils.field-list, .docutils.footnote {
+            background-color: inherit;
+        }
+        .large-font {
+            font-size: 1.4em !important;
+        }
+        .right-tag {
+            float: right;
+            margin-left: 36px !important;
+            margin-right: 0px !important;
+        }
+        .short-description {
+            /* We hidde description inside of the article */
+            display: none;
+        }
+        .short-description img {
+            max-height: 160px;
+            max-width: 40%;
+            margin-left: 8px;
+        }
+        #results-list ul.search {
             padding: 0;
         }
-        #search-results li p {
+
+        #results-list .short-description {
+            /* We show description text in the archive */
+            display: block !important;
+        }
+        #results-list li p {
             margin-bottom: 5px;
             font-size: 0.9em;
         }
-        #search-results li {
+        #results-list li {
             background-color: #fff !important;
             margin-bottom: 10px;
             display: block !important;
             padding: 15px;
             border-bottom: 2px solid #ddd;
         }
-        #search-results span.tag {
+        #results-list span.tag {
             display: inline-block;
             padding: 3px 4px;
             margin-right: 8px;
@@ -197,7 +223,13 @@
         </div>
     <div class="section" id="discrete-hopfield-network">
 <span id="id1"></span><h1><a class="toc-backref" href="#id6">Discrete Hopfield Network</a></h1>
-<div class="contents topic" id="contents">
+<div class="short-description">
+    <img src="_static/docimg/hopfiled-weights.png" align="right">
+    <p>
+    In this article, we describe core ideas behind discrete hopfield networks and try to understand how it works. In addition, we explore main problems related to this algorithm. And finally, we take a look into simple example that aims to memorize digit patterns and reconstruct them from corrupted samples.
+    </p>
+    <br clear="right">
+</div><div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
 <li><a class="reference internal" href="#discrete-hopfield-network" id="id6">Discrete Hopfield Network</a><ul>
@@ -223,15 +255,15 @@
 <p><a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> is a type of algorithms which is called - <a class="reference external" href="https://en.wikipedia.org/wiki/Autoassociative_memory">Autoassociative memories</a>
 Don&#8217;t be scared of the word <cite>Autoassociative</cite>.
 The idea behind this type of algorithms is very simple.
-It can store useful information in <cite>memory</cite> and later it is able to reproduce this information from partialy broken patterns.
-You can preceive it as human memory.
+It can store useful information in <cite>memory</cite> and later it is able to reproduce this information from partially broken patterns.
+You can perceive it as human memory.
 For instance, imagine that you look at an old picture of a place where you were long time ago, but this picture is of very bad quality and very blurry.
 By looking at the picture you manage to recognize a few objects or places that make sense to you and form some objects even though they are blurry.
 It can be a house, a lake or anything that can add up to the whole picture and bring out some associations about this place.
 With these details that you got from your memory so far other parts of picture start to make even more sense.
 Though you don&#8217;t clearly see all objects in the picture, you start to remember things and withdraw from your memory some images, that cannot be seen in the picture, just because of those very familiarly-shaped details that you&#8217;ve got so far.
 That&#8217;s what it is all about.
-Autoassociative memory networks is a posibily to interprete functions of memory into neural network model.</p>
+Autoassociative memory networks is a possibly to interpret functions of memory into neural network model.</p>
 <p>Don&#8217;t worry if you have only basic knowledge in Linear Algebra; in this article I&#8217;ll try to explain the idea as simple as possible.
 If you are interested in proofs of the <a class="reference internal" href="../../../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">Discrete</span> <span class="pre">Hopfield</span> <span class="pre">Network</span></span></a> you can check them at R. Rojas. Neural Networks <a class="footnote-reference" href="#id3" id="id2">[1]</a> book.</p>
 <div class="section" id="architecture">
@@ -295,7 +327,7 @@ It includes just an outer product between input vector and transposed input vect
 <p><span class="math">\(W\)</span> is a weight matrix and <span class="math">\(x\)</span> is an input vector.
 Each value <span class="math">\(x_i\)</span> in the input vector can only be -1 or 1.
 So on the matrix diagonal we only have squared values and it means we will always see 1s at those places.
-Think about it, everytime, in any case, values on the diagonal can take just one possible state.
+Think about it, every time, in any case, values on the diagonal can take just one possible state.
 We can&#8217;t use this information, because it doesn&#8217;t say anything useful about patterns that are stored in the memory and even can make incorrect contribution into the output result.
 For this reason we need to set up all the diagonal values equal to zero.
 The final weight formula should look like this one below.</p>
@@ -313,8 +345,8 @@ The final weight formula should look like this one below.</p>
     \right]
 \end{align*}\end{split}\]</div>
 <p>Where <span class="math">\(I\)</span> is an identity matrix.</p>
-<p>But usualy we need to store more values in memory.
-For another pattern we have to do exacly the same procedure as before and then just add the generated weight matrix to the old one.</p>
+<p>But usually we need to store more values in memory.
+For another pattern we have to do exactly the same procedure as before and then just add the generated weight matrix to the old one.</p>
 <div class="math">
 \[W = W_{old} + W_{new}\]</div>
 <p>And this procedure generates us a new weight that would be valid for both previously stored patterns.
@@ -363,7 +395,7 @@ Let&#8217;s compute weights for the network.</p>
 \end{align*}\end{split}\]</div>
 <p>Look closer to the matrix <span class="math">\(U\)</span> that we got.
 Outer product just repeats vector 4 times with the same or inversed values.
-First and third columns (or rows, it doesn&#8217;t matter, because matrix is symmetrical) are exacly the same as the input vector.
+First and third columns (or rows, it doesn&#8217;t matter, because matrix is symmetrical) are exactly the same as the input vector.
 The second and fourth are also the same, but with an opposite sign.
 That&#8217;s because in the vector <span class="math">\(u\)</span> we have 1 on the first and third places and -1 on the other.</p>
 <p>To make weight from the <span class="math">\(U\)</span> matrix, we need to remove ones from the diagonal.</p>
@@ -543,7 +575,7 @@ So we multiply the first column by this selected value.</p>
         \end{array}
     \right]
 \end{align*}\end{split}\]</div>
-<p>As you can see after first iteration value is exacly the same as <span class="math">\(x\)</span> but we can keep going.
+<p>As you can see after first iteration value is exactly the same as <span class="math">\(x\)</span> but we can keep going.
 In second iteration random neuron fires again.
 Let&#8217;s pretend that this time it was the third neuron.</p>
 <div class="math">
@@ -561,7 +593,7 @@ Let&#8217;s pretend that this time it was the third neuron.</p>
         \end{array}
     \right]) = sign(-2) = -1
 \end{align*}\end{split}\]</div>
-<p><span class="math">\(x^{'}_3\)</span> is exacly the same as in the <span class="math">\(x^{'}\)</span> vector so we don&#8217;t need to update it.
+<p><span class="math">\(x^{'}_3\)</span> is exactly the same as in the <span class="math">\(x^{'}\)</span> vector so we don&#8217;t need to update it.
 We can repeat it as many times as we want, but we will be getting the same value.</p>
 </div>
 </div>
@@ -574,7 +606,7 @@ There are two good rules of thumb.</p>
 The first rule gives us a simple ration between <span class="math">\(m\)</span> and <span class="math">\(n\)</span>.</p>
 <div class="math">
 \[m \approx 0.18 n\]</div>
-<p>The main problem with this rule is that proof assumes that stored vectors inside the weight are completly random with an equal probability.
+<p>The main problem with this rule is that proof assumes that stored vectors inside the weight are completely random with an equal probability.
 Unfortunately, that is not always true.
 Let&#8217;s suppose we save some images of numbers from 0 to 9.
 Pictures are black and white, so we can encode them in bipolar vectors.
@@ -604,7 +636,7 @@ In terms of a linear algebra we can write formula for the <a class="reference in
 <div class="math">
 \[E = -\frac{1}{2} x^T W x\]</div>
 <p>But linear algebra notation works only with the <span class="math">\(x\)</span> vector, we can&#8217;t use matrix <span class="math">\(X\)</span> with multiple input patterns instead of the <span class="math">\(x\)</span> in this formula.
-For the energy function we&#8217;re always interested in finding a minimum value, for this reason it has minus sign at the beggining.</p>
+For the energy function we&#8217;re always interested in finding a minimum value, for this reason it has minus sign at the beginning.</p>
 <p>Let&#8217;s try to visualize it.
 Assume that values for vector <span class="math">\(x\)</span> can be continous in order and we can visualize them using two parameters.
 Let&#8217;s pretend that we have two vectors <cite>[1, -1]</cite> and <cite>[-1, 1]</cite> stored inside the network.
@@ -774,8 +806,8 @@ Let&#8217;s define a few images that we are going to teach the network.</p>
 <span class="go">| * * * *</span>
 </pre></div>
 </div>
-<p>Our broken pattern is really close to the minimum of 1 and 2 patterns. Randomization helps us choose direction but it&#8217;s not nessesary the right one, especialy when the broken pattern is close to 1 and 2 at the same time.</p>
-<p>Check last output with number two again. Is that a realy valid pattern for number 2? Final symbol in output is wrong. We are not able to recover patter 2 from this network, because input vector is always much closer to the minimum that looks very similar to pattern 2.</p>
+<p>Our broken pattern is really close to the minimum of 1 and 2 patterns. Randomization helps us choose direction but it&#8217;s not necessary the right one, especially when the broken pattern is close to 1 and 2 at the same time.</p>
+<p>Check last output with number two again. Is that a really valid pattern for number 2? Final symbol in output is wrong. We are not able to recover patter 2 from this network, because input vector is always much closer to the minimum that looks very similar to pattern 2.</p>
 <p>In plot below you can see first 200 iterations of the recovery procedure. Energy value was decreasing after each iteration until it reached the local minimum where pattern is equal to 2.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/hopfield-energy-vis.png"><img alt="Asynchronous Discrete Hopfield Network energy update after each iteration" src="../../../_images/hopfield-energy-vis.png" style="width: 80%;" /></a>
@@ -793,8 +825,8 @@ Let&#8217;s define a few images that we are going to teach the network.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/hinton-diagram.png"><img alt="Asynchronous Discrete Hopfield Network energy update after each iteration" src="../../../_images/hinton-diagram.png" style="width: 80%;" /></a>
 </div>
-<p>This graph above shows the network weight matrix and all information stored inside of it. Hinton diagram is a very simple technique for the weight visualization in neural networks. Each value encoded in square where its size is an absolute value from the weight matrix and color shows the sign of this value. White is a positive and black is a negative. Usualy Hinton diagram helps identify some patterns in the weight matrix.</p>
-<p>Let&#8217;s go back to the graph. What can you say about the network just by looking at this picture? First of all you can see that there is no squares on the diagonal. That is because they are equal to zero. The second important thing you can notice is that the plot is symmetrical. But that is not all that you can withdraw from the graph. Can you see different patterns? You can find rows or columns with exacly the same values, like the second and third columns. Fifth column is also the same but its sign is reversed. Now look closer to the antidiagonal. What can you say about it? If you are thinking that all squares are white - you are right. But why is that true? Is there always the same patterns for each memory matrix? No, it is a special property of patterns that we stored inside of it. If you draw a horizontal line in the middle of each image and look at it you will see that values are opposite symmetric. For instance, <span class="math">\(x_1\)</span> opposite symmetric to <span class="math">\(x_{30}\)</span>, <span class="math">\(x_2\)</span> to <span class="math">\(x_{29}\)</span>, <span class="math">\(x_3\)</span> to <span class="math">\(x_{28}\)</span> and so on. Zero pattern is a perfect example where each value have exacly the same opposite symmetric pair. One is almost perfect except one value on the <span class="math">\(x_2\)</span> position. Two is not clearly opposite symmetric. But if you check each value you will find that more than half of values are symmetrical. Combination of those patterns gives us a diagonal with all positive values. If we have all perfectly opposite symmetric patterns then squares on the antidiagonal will have the same length, but in this case pattern for number 2 gives a little bit of noise and squares have different sizes.</p>
+<p>This graph above shows the network weight matrix and all information stored inside of it. Hinton diagram is a very simple technique for the weight visualization in neural networks. Each value encoded in square where its size is an absolute value from the weight matrix and color shows the sign of this value. White is a positive and black is a negative. Usually Hinton diagram helps identify some patterns in the weight matrix.</p>
+<p>Let&#8217;s go back to the graph. What can you say about the network just by looking at this picture? First of all you can see that there is no squares on the diagonal. That is because they are equal to zero. The second important thing you can notice is that the plot is symmetrical. But that is not all that you can withdraw from the graph. Can you see different patterns? You can find rows or columns with exactly the same values, like the second and third columns. Fifth column is also the same but its sign is reversed. Now look closer to the antidiagonal. What can you say about it? If you are thinking that all squares are white - you are right. But why is that true? Is there always the same patterns for each memory matrix? No, it is a special property of patterns that we stored inside of it. If you draw a horizontal line in the middle of each image and look at it you will see that values are opposite symmetric. For instance, <span class="math">\(x_1\)</span> opposite symmetric to <span class="math">\(x_{30}\)</span>, <span class="math">\(x_2\)</span> to <span class="math">\(x_{29}\)</span>, <span class="math">\(x_3\)</span> to <span class="math">\(x_{28}\)</span> and so on. Zero pattern is a perfect example where each value have exactly the same opposite symmetric pair. One is almost perfect except one value on the <span class="math">\(x_2\)</span> position. Two is not clearly opposite symmetric. But if you check each value you will find that more than half of values are symmetrical. Combination of those patterns gives us a diagonal with all positive values. If we have all perfectly opposite symmetric patterns then squares on the antidiagonal will have the same length, but in this case pattern for number 2 gives a little bit of noise and squares have different sizes.</p>
 <p>Properties that we&#8217;ve reviewed so far are just the most interesting and maybe other patterns you can encounter on your own.</p>
 </div>
 <div class="section" id="more-reading">
@@ -833,24 +865,21 @@ from <a class="reference external" href="https://www.youtube.com/watch?v=gfPUWwB
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/memory.html">memory</a>, <a href="../../../tags/unsupervised.html">unsupervised</a></span>
+                <a href="../../../tags/memory.html">memory</a>, <a href="../../../tags/unsupervised.html">unsupervised</a>, <a href="../../../tags/discrete_hopfield_network.html">discrete hopfield network</a></span>
         </div>
         </div><ul class="related clearfix">
             <li class="left"> &laquo; <a href="../21/password_recovery.html">Password recovery</a></li>
             <li class="right"><a href="../../07/04/boston_house_prices_dataset.html">Predict prices for houses in the area of Boston</a> &raquo; </li>
-        </ul><div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "neupy";    var disqus_identifier = "2015/09/20/discrete_hopfield_network";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Articles</h1>
-    <ul><li>
-            <a href="../../../2018/03/26/making_art_with_growing_neural_gas.html">Making Art with Growing Neural Gas</a>
-        </li><li>
-            <a href="../../../2017/12/17/sofm_text_style.html">Create unique text-style with SOFM</a>
-        </li><li>
-            <a href="../../../2017/12/13/sofm_art.html">The Art of SOFM</a>
-        </li><li>
-            <a href="../../../2017/12/09/sofm_applications.html">Self-Organizing Maps and Applications</a>
-        </li><li>
-            <a href="../../../2016/12/17/hyperparameter_optimization_for_neural_networks.html">Hyperparameter optimization for Neural Networks</a>
-        </li></ul>
+        </ul><div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "neupy";    var disqus_identifier = "2015/09/20/discrete_hopfield_network";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../../search.html" method="get">
+          <div class="box">
+            <div class="search-input-container">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" name="q" id="search" placeholder="Search..." />
+            </div>
+          </div>
+    </form>
 </div></section><section><div class="widget">
     <h1>Install NeuPy</h1>
     <div class="highligh-bash">
@@ -861,16 +890,6 @@ from <a class="reference external" href="https://www.youtube.com/watch?v=gfPUWwB
     <p>
         <div>Learn more about NeuPy reading <a href="../../../docs/tutorials.html">tutorials</a> and <a href="../../../pages/documentation.html">documentation</a>.</div>
     </p>
-</div></section><section><div class="widget" id="searchbox" role="search">
-    <h1><a href="#searchbox">Search</a></h1>
-    <form action="../../../search.html" method="get">
-          <div class="box">
-            <div class="search-input-container">
-                <span class="icon"><i class="fa fa-search"></i></span>
-                <input type="search" name="q" id="search" placeholder="Search..." />
-            </div>
-          </div>
-    </form>
 </div></section><section><div class="widget">
     <h1>Issues and feature requests</h1>
     <p>
@@ -885,7 +904,7 @@ from <a class="reference external" href="https://www.youtube.com/watch?v=gfPUWwB
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
-        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2017, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2019, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
       </div> <!--! end of #container --><!--[if lt IE 7 ]>
           <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

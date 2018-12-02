@@ -40,7 +40,7 @@ Signals allow us to interrupt training process.
     from neupy.exceptions import StopTraining
 
     def on_epoch_end(gdnet):
-        if gdnet.errors.last() < 0.001:
+        if gdnet.validation_errors.last() < 0.001:
             raise StopTraining("Training has been interrupted")
 
     gdnet = algorithms.GradientDescent(
