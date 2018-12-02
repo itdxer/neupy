@@ -38,7 +38,7 @@ Now that we have the data we need to confirm that we have expected number of sam
     >>> y.shape
     (70000,)
 
-Every data sample has 784 features and can be reshaped into 28x28 image.
+Every data sample has 784 features and they can be reshaped into 28x28 image.
 
 .. code-block:: python
 
@@ -51,10 +51,11 @@ Every data sample has 784 features and can be reshaped into 28x28 image.
     :align: center
     :alt: MNIST digit example
 
-In this tutorial, we will use each image as a vector so we won't need to reshape it to its original size. The only thing that we need to do is to rescale image values. Rescaling image will help network to converge faster.
+In this tutorial, we will use each image as a vector so we won't need to reshape it to its original size. The only thing that we need to do is to rescale image values. Rescaling images will help network to converge faster.
 
 .. code-block:: python
 
+    >>> X = X.astype(np.float32)
     >>> X /= 255.
     >>> X -= X.mean(axis=0)
 
@@ -87,7 +88,7 @@ There is one more processing step that we need to do before we can train our net
     >>> random.sample(y.astype('int').tolist(), 10)
     [9, 0, 9, 7, 2, 2, 3, 0, 0, 8]
 
-All number that we have are specified as integers. For our problem we want network to learn visual representation of the numbers. We cannot use them as integers, because it will create some problems during the training. Basically, with this definition we're implying that number ``1`` visually more similar to ``0`` than to number ``7``. It happens only because difference between ``1`` and ``0`` smaller than difference between ``1`` and ``7``. In order to avoid making any type of assumptions we will use one-hot encoding technique.
+All the numbers that we have are specified as integers. For our problem we want network to learn visual representation of the numbers. We cannot use them as integers, because it will create problems during the training. Basically, with the integer definition we're implying that number ``1`` visually more similar to ``0`` than to number ``7``. It happens only because difference between ``1`` and ``0`` smaller than difference between ``1`` and ``7``. In order to avoid making any type of assumptions we will use one-hot encoding technique.
 
 .. code-block:: python
 
@@ -99,7 +100,7 @@ All number that we have are specified as integers. For our problem we want netwo
 
 You can see that every digit was transformed into a 10 dimensional vector.
 
-And finally, we need to divide our data into training and validation set. We won't show validation set to the network and we will use it only to test network classification accuracy.
+And finally, we need to divide our data into training and validation set. We won't show validation set to the network and we will use it only to test network's classification accuracy.
 
 .. code-block:: python
 
@@ -117,133 +118,202 @@ Notice that data was converted into 32 bit float numbers. This is the only float
 Model initialization
 --------------------
 
-Networks architecture and training algorithm can be defined in a single statement.
+It's very easy to define neural network architectures in the NeuPy. We can define simple architecture that excepts input vector with 784 features and outputs probabilities per each digit class. In addition, we can two hidden layers with 500 and 300 output units respectively. Each hidden layer will use relu as activation function
 
 .. code-block:: python
 
-    >>> from neupy import algorithms, layers
-    >>>
-    >>> network = algorithms.Momentum(
-    ...     [
-    ...         layers.Input(784),
-    ...         layers.Relu(500),
-    ...         layers.Relu(300),
-    ...         layers.Softmax(10),
-    ...     ],
-    ...     error='categorical_crossentropy',
-    ...     step=0.01,
-    ...     verbose=True,
-    ...     shuffle_data=True,
-    ...     momentum=0.99,
-    ...     nesterov=True,
-    ... )
+    from neupy.layers import *
 
-Isn't it simple and clear? All the most important information related to the neural network you can find in the terminal output. If you run the code that shown above you would get the same output as on the figure below.
+    network = join(
+        # Every image in the MNIST dataset has 784 pixels (28x28)
+        Input(784),
 
-.. image:: images/bpnet-config-logs.png
-    :width: 70%
-    :align: center
-    :alt: Gradient Descent configuration
+        # Hidden layers
+        Relu(500),
+        Relu(300),
 
-From this output we can extract a lot of information about network configurations.
+        # Softmax layer ensures that we output probabilities
+        # and specified number of outputs equal to the unique
+        # number of classes
+        Softmax(10),
+    )
 
-First of all, as we can see, most of options have green color label, but some of them are gray. Green color defines all options which we put in network manually and gray color options are default parameters. All properties separeted on few groups and each group is a :network:`Momentum`  parent classes. More information about :network:`Momentum` algorithm properties you will find in documentation, just click on algorithm name link and you will see it.
-
-In addition for feedforward neural networks it's possible to check architecture in form of a table.
+Because our neural network is quite small, we can rewrite this architecture with a help of the inline operator.
 
 .. code-block:: python
 
-    >>> network.architecture()
+    network = Input(784) > Relu(500) > Relu(300) > Softmax(10)
 
-.. image:: images/bpnet-architecture.png
-    :width: 70%
-    :align: center
-    :alt: Neural Network Architecture
+Now that we have our architecture we can initialize training algorithm.
+
+.. code-block:: python
+
+    from neupy import algorithms
+
+    mnet = algorithms.Momentum(
+        network,
+
+        # Categorical cross-entropy is very popular loss function
+        # for the multi-class classification problems
+        error='categorical_crossentropy',
+
+        # Number of samples propagated through the network
+        # before every weight update
+        batch_size=128,
+
+        # Learning rate
+        step=0.01,
+
+        # Makes sure that training progress will be
+        # printed in the terminal
+        verbose=True,
+
+        # Training data will be shuffled before every epoch
+        # It ensures that every batch will have different number of samples
+        shuffle_data=True,
+
+        # Options specific for the momentum training algorithm
+        momentum=0.99,
+        nesterov=True,
+    )
+
+All the most important information related to the neural network you can find in the terminal output. If you run the code that shown above you should see output similar to the one shown below.
+
+.. code-block:: python
+
+    Main information
+
+    [ALGORITHM] Momentum
+
+    [OPTION] batch_size = 128
+    [OPTION] verbose = True
+    [OPTION] epoch_end_signal = None
+    [OPTION] show_epoch = 1
+    [OPTION] shuffle_data = True
+    [OPTION] step = 0.01
+    [OPTION] train_end_signal = None
+    [OPTION] error = categorical_crossentropy
+    [OPTION] addons = None
+    [OPTION] momentum = 0.99
+    [OPTION] nesterov = True
+
+    [TENSORFLOW] Initializing Tensorflow variables and functions.
+    [TENSORFLOW] Initialization finished successfully. It took 0.30 seconds
+
+In addition, for feedforward neural networks it's possible to check architecture in form of a table.
+
+.. code-block:: python
+
+    >>> mnet.architecture()
+
+    Network's architecture
+
+    -----------------------------------------------
+    | # | Input shape | Layer type | Output shape |
+    -----------------------------------------------
+    | 1 |         784 |      Input |          784 |
+    | 2 |         784 |       Relu |          500 |
+    | 3 |         500 |       Relu |          300 |
+    | 4 |         300 |    Softmax |           10 |
+    -----------------------------------------------
 
 Training
 --------
 
-Now we are going to train network. Let set up 20 epochs for training procedure and check the result.
+Now that we have everything specified we are finally can train our network. In addition, we can add test data for which we will be able to monitor network's training progress on the unseen data.
 
 .. code-block:: python
 
-    >>> network.train(x_train, y_train, x_test, y_test, epochs=20)
+    >>> mnet.train(x_train, y_train, x_test, y_test, epochs=10)
 
-Output in terminal should look similar to this one:
+    Start training
 
-.. image:: images/bpnet-train-logs.png
-    :width: 70%
-    :align: center
-    :alt: GradientDescent training procedure output
+    [TRAINING DATA] shapes: (60000, 784)
+    [TEST DATA] shapes: (10000, 784)
+    [TRAINING] Total epochs: 10
 
-Output show the most important information related to training procedure. Each epoch contains 4 columns. First one identified epoch. The second one show training error. The third one is optional. In case you have validation dataset, you can check learning perfomanse using dataset separated from the learning procedure. And the last column shows how many time network trains during this epoch.
+    ---------------------------------------------------------
+    |    Epoch    |  Train err  |  Valid err  |    Time     |
+    ---------------------------------------------------------
+    |           1 |     0.27667 |    0.099501 |       2 sec |
+    |           2 |    0.068402 |    0.089827 |       2 sec |
+    |           3 |    0.037638 |    0.080401 |       2 sec |
+    |           4 |    0.023067 |     0.07487 |       2 sec |
+    |           5 |    0.014583 |    0.069704 |       2 sec |
+    |           6 |   0.0083044 |      0.0672 |       2 sec |
+    |           7 |   0.0037654 |    0.068787 |       2 sec |
+    |           8 |   0.0019174 |    0.071364 |       2 sec |
+    |           9 |   0.0010768 |    0.071117 |       2 sec |
+    |          10 |  0.00082685 |     0.07037 |       2 sec |
+    ---------------------------------------------------------
 
 Evaluations
 -----------
 
-From the table is not clear network's training progress. We can check it very easy. Network instance contains built-in method that build line plot that show training progress. Let's check our progress.
+From the table it's hard to see network's training progress. We can make error plot that can help us to visualize how it performed on the training and validation datasets separately.
 
 .. code-block:: python
 
     >>> from neupy import plots
-    >>> plots.error_plot(network)
+    >>> plots.error_plot(mnet)
 
 .. image:: images/bpnet-train-errors-plot.png
     :width: 70%
     :align: center
     :alt: GradientDescent epoch errors plot
 
-From the figure above you can notice that validation error does not decrease over time. Sometimes it goes up and sometimes down, but it doesn't mean that network trains poorly. Let's check small example that can make this problem clear.
+From the figure above, you can notice that validation error does not decrease all the time. Sometimes it goes up and sometimes down, but it doesn't mean that network trains poorly. Let's check small example that can explain who it can happen.
 
 .. code-block:: python
 
-    >>> actual_values = np.array([1, 1, 1])
-    >>> model1_prediction = np.array([0.9, 0.9, 0.4])
-    >>> model2_prediction = np.array([0.6, 0.6, 0.6])
+    >>> actual_values = np.array([1, 1, 0])
+    >>> model1_prediction = np.array([0.9, 0.9, 0.6])
+    >>> model2_prediction = np.array([0.6, 0.6, 0.4])
 
-In the code above you can see two prediction releate to the different models. The first model predicted two samples right and one wrong. The second one predicted everything right. But second model's predictions are less certain. Let's check the cross entropy error.
+Above, you can see two predictions from different models. The first model predicted two samples right and one wrong. The second one predicted everything perfectly, but predictions from second model are less certain (probabilities are close to random prediction - ``0.5``). Let's check the binary cross entropy error.
 
 .. code-block:: python
 
-    >>> from neupy import estimators
-    >>> estimators.binary_crossentropy(actual_values, model1_prediction)
-    0.3756706118583679
-    >>> estimators.binary_crossentropy(actual_values, model2_prediction)
-    0.5108255743980408
+    >>> from sklearn.metrics import log_loss as binary_crossentropy
+    >>> binary_crossentropy(actual_values, model1_prediction)
+    0.37567
+    >>> binary_crossentropy(actual_values, model2_prediction)
+    0.51083
 
-That is the result that we looked for. The second model made better prediction, but it got a higher cross entropy error. It means that we less certain about our prediction. Similar situation we've observed in the plot above.
+The second model made better prediction in terms of accuracy, but it got larger cross entropy error. Larger error means that network is less certain about its prediction. Similar situation we've observed in the plot above.
 
-Let's finally make a simple report for our classification result.
+Instead of using cross-entropy error for model performance assessment we can build our own report using functions available in scikit-learn library.
 
 .. code-block:: python
 
     >>> from sklearn import metrics
     >>>
-    >>> y_predicted = network.predict(x_test).argmax(axis=1)
-    >>> y_test = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))
+    >>> y_predicted = mnet.predict(x_test).argmax(axis=1)
+    >>> y_actual = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))
     >>>
-    >>> print(metrics.classification_report(y_test, y_predicted))
-            precision    recall  f1-score   support
+    >>> print(metrics.classification_report(y_actual, y_predicted))
+                  precision    recall  f1-score   support
 
-        0       0.98      0.99      0.99       936
-        1       0.99      0.99      0.99      1163
-        2       0.98      0.98      0.98       982
-        3       0.98      0.99      0.98      1038
-        4       0.98      0.98      0.98       948
-        5       0.99      0.98      0.98       921
-        6       0.99      0.99      0.99      1013
-        7       0.98      0.98      0.98      1029
-        8       0.98      0.98      0.98       978
-        9       0.98      0.96      0.97       992
+               0       0.99      0.99      0.99       972
+               1       0.99      0.99      0.99      1130
+               2       0.99      0.98      0.98       997
+               3       0.99      0.98      0.98      1061
+               4       0.97      0.99      0.98       966
+               5       0.98      0.98      0.98       865
+               6       0.99      0.99      0.99      1029
+               7       0.98      0.99      0.98      1017
+               8       0.98      0.98      0.98       952
+               9       0.97      0.98      0.98      1011
 
-        avg / total       0.98      0.98      0.98     10000
+       micro avg       0.98      0.98      0.98     10000
+       macro avg       0.98      0.98      0.98     10000
+    weighted avg       0.98      0.98      0.98     10000
 
-    >>> score = metrics.accuracy_score(y_test, y_predicted)
+    >>> score = metrics.accuracy_score(y_actual, y_predicted)
     >>> print("Validation accuracy: {:.2%}".format(score))
     Validation accuracy: 98.37%
 
-The 98.37% accuracy is pretty good for such a quick solution. Additional modification can improve prediction accuracy.
-
+The 98.37% accuracy is pretty good accuracy for such a simple solution. Additional modification can improve network's accuracy.
 
 .. author:: default
 .. categories:: none
