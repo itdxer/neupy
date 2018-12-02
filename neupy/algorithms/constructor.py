@@ -553,7 +553,7 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         if not is_sequential(self.connection):
             raise TypeError("You can check architecture only for sequential "
                             "connections. For other types of connections it's "
-                            "better to use the `neupy.plots.layer_structure` "
+                            "better to use the `neupy.plots.network_structure` "
                             "function.")
 
         self.logs.title("Network's architecture")

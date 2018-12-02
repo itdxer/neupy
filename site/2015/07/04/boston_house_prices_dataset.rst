@@ -11,9 +11,9 @@ Predict prices for houses in the area of Boston
         </p>
     </div>
 
-For this article we are going to predict house prices using Conjugate Gradient algorithm.
+Boston house prices is a classical example of the regression problem. This article shows how to make a simple data processing and train neural network for house price forecasting.
 
-For the beginning we should load the data.
+Dataset can be downloaded from many different resources. In order to simplify this process we will use scikit-learn library. It will download and extract and the data for us.
 
 .. code-block:: python
 
@@ -22,7 +22,7 @@ For the beginning we should load the data.
     dataset = datasets.load_boston()
     data, target = dataset.data, dataset.target
 
-Let's look closer into the data.
+We can print few first rows from the dataset just to make sure that
 
 .. raw:: html
 
@@ -149,33 +149,31 @@ Let's look closer into the data.
     </table>
 
 Data contains 14 columns.
-The last column ``MEDV`` is a median value of owner-occupied homes in $1000's.
-The goal is to predict this prices.
-Other columns we can use for Neural Network training.
-All columns description you can find below.
+The last column ``MEDV`` is a median value of owner-occupied homes in $1000's. The goal is to predict this value. Other columns we can use for neural network training.
 
-- CRIM     per capita crime rate by town
-- ZN       proportion of residential land zoned for lots over 25,000 sq.ft.
-- INDUS    proportion of non-retail business acres per town
-- CHAS     Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
-- NOX      nitric oxides concentration (parts per 10 million)
-- RM       average number of rooms per dwelling
-- AGE      proportion of owner-occupied units built prior to 1940
-- DIS      weighted distances to five Boston employment centres
-- RAD      index of accessibility to radial highways
-- TAX      full-value property-tax rate per $10,000
-- PTRATIO  pupil-teacher ratio by town
-- B        1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town
-- LSTAT    % lower status of the population
+It's quite hard to understand data just from the column names. Scikit-learn also provides description.
 
-From data set description we can find that there are 13 continuous attributes (including "class" attribute "MEDV") and 1 binary-valued attribute.
-There is no multiple categorical data, so we don't need to change feature dimension.
-But we already have one problem.
-If you look closer, you will find that every column has its own data range.
-This situation is a bad thing for Neural Network training, because input values ​​make different contributions to the calculation of the output values.
-Bigger values will be more important for Network which can be perceived as invalid assumption based on data.
-For example in the first row, in the table above, column ``B`` contains value `396.90` and column ``CRIM`` - `0.00632`.
-To fix this issue we should transfrom all columns to get similar ranges.
+.. code-block:: python
+
+    print(dataset.DESCR)
+
+- ``CRIM`` - per capita crime rate by town
+- ``ZN`` - proportion of residential land zoned for lots over 25,000 sq.ft.
+- ``INDUS`` - proportion of non-retail business acres per town
+- ``CHAS`` - Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
+- ``NOX`` - nitric oxides concentration (parts per 10 million)
+- ``RM`` - average number of rooms per dwelling
+- ``AGE`` - proportion of owner-occupied units built prior to 1940
+- ``DIS`` - weighted distances to five Boston employment centres
+- ``RAD`` - index of accessibility to radial highways
+- ``TAX`` - full-value property-tax rate per $10,000
+- ``PTRATIO`` - pupil-teacher ratio by town
+- ``B`` - 1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town
+- ``LSTAT`` - % lower status of the population
+
+There are 13 continuous attributes (including "class" attribute "MEDV") and 1 binary-valued attribute. There are no columns that have multiple categories, which simplifies initial data processing..
+
+From the table above you can notice that every column has values in different scales. It might slow down or completely break networks convergence. In order to fix this issue, we should normalize values in every column. One of the simplest way to do it is to map every value into range between 0 and 1, where maximum value in every column will be equal to 1 and the smallest one - to 0.
 
 .. code-block:: python
 
@@ -246,89 +244,138 @@ After transformation data looks like this.
       </tbody>
     </table>
 
-All the data is now in the range between 0 and 1.
-
-Then we should split our data set into train and validation.
-We use 85% of data for train.
+Neural networks are prune to overfitting and we always need to have validation dataset that we will use to assess networks performance after the training.
 
 .. code-block:: python
 
     from sklearn.model_selection import train_test_split
     from neupy import environment
 
+    # Make sure that split between train and
+    # validation datasets will be reproducible
     environment.reproducible()
 
     x_train, x_test, y_train, y_test = train_test_split(
+        # 85% of the data we will use for training
+        # and the other 15% will be used for validation
         data, target, test_size=0.15
     )
 
-Now we are ready to build Neural Network which will predict house prices.
+Since we have all the data the last thing that we need is a neural network. We can design simple network with only one hidden layer.
 
 .. code-block:: python
 
-    from neupy import algorithms, layers
+    from neupy.layers import *
 
-    cgnet = algorithms.ConjugateGradient(
-        connection=[
-            layers.Input(13),
-            layers.Sigmoid(50),
-            layers.Sigmoid(1),
-        ],
-        search_method='golden',
-        show_epoch=25,
-        verbose=True,
-        addons=[algorithms.LinearSearch],
+    # Number of features that we want
+    # to use during the training
+    n_inputs = 13
+
+    # Number of outputs in the network. For the house price
+    # forecasting we want to predict single value per every
+    # input sample.
+    n_outputs = 1
+
+    network = join(
+        # This layer doesn't do any computation. It just
+        # defines how many inputs network should expect.
+        Input(n_inputs),
+
+        # Hidden layer. Number of neurons can be adjusted
+        # in order to improve performance or deal with overfitting
+        Sigmoid(50),
+
+        # Sigmoid outputs values between 0 and 1 and all
+        # the prices that we want to predict has been rescaled
+        # to the same range.
+        Sigmoid(n_outputs),
     )
 
-.. figure:: images/boston/cgnet-init.png
-    :width: 80%
-    :align: center
-    :alt: Conjgate Gradient train
-
-We define network with one hidden layer.
-Input size for this layer is 50.
-This value is just a guess.
-For better and more accurate result we should choose it with other methods, but for now we can use this value.
-As the main algorithm we take Conjugate Gradient.
-This implementation of backpropagation is a little bit different from main interpretation of Conjugate Gradient.
-For GradientDescent implementation we can't guarantee that we get the local minimum in n-th steps (where `n` is the dimension).
-To optimize it we should use linear search.
-It will fix and set up better steps for Conjugate Gradient.
-
-Now we are going to train the network.
-For training we set up 100 epochs.
-Also we will add test data into training function to check validation error on every epoch.
+Now that we have the our network we can use one of the large `training algorithms supported by neupy <../../../pages/cheatsheet.html#algorithms>`_. Our datasets is quite small and network has small number of parameters. For cases like this we can take advantage of the more algorithms that can converge much faster. I'll use :network:`Levenberg-Marquardt <LevenbergMarquardt>`, but you can feel free to experiment with different algorithms.
 
 .. code-block:: python
 
-    cgnet.train(x_train, y_train, x_test, y_test, epochs=100)
+    from neupy import algorithms
+
+    lmnet = algorithms.LevenbergMarquardt(
+        # First argument has to be neural network
+        network,
+
+        # With this option enabled network shows its configuration
+        # before the training and its progress during the training
+        verbose=True,
+
+        # In order to avoid showing information about
+        # network training progress after every epoch we can
+        # do it less frequently, for example, every 5th epoch.
+        show_epoch=5,
+    )
+
+Output after initialization might look like this
+
+.. code-block:: python
+
+    Main information
+
+    [ALGORITHM] LevenbergMarquardt
+
+    [OPTION] verbose = True
+    [OPTION] epoch_end_signal = None
+    [OPTION] show_epoch = 5
+    [OPTION] shuffle_data = False
+    [OPTION] train_end_signal = None
+    [OPTION] addons = None
+    [OPTION] error = mse
+    [OPTION] mu = 0.01
+    [OPTION] mu_update_factor = 1.2
+
+    [TENSORFLOW] Initializing Tensorflow variables and functions.
+    [TENSORFLOW] Initialization finished successfully. It took 0.46 seconds
+
+And finally, we can use our data in order to train the network. In addition, neupy allows to specify validation datasets. It won't use it for training. Instead, at the end of every epoch it will use validation data to estimate network forecasting performance on the unseen data.
+
+.. code-block:: python
+
+    lmnet.train(x_train, y_train, x_test, y_test, epochs=30)
+
+Output during the training might look like this
+
+.. code-block:: python
+
+    Start training
+
+    [TRAINING DATA] shapes: (430, 13)
+    [TEST DATA] shapes: (76, 13)
+    [TRAINING] Total epochs: 30
+
+    ---------------------------------------------------------
+    |    Epoch    |  Train err  |  Valid err  |    Time     |
+    ---------------------------------------------------------
+    |           1 |    0.079689 |    0.037351 |      376 ms |
+    |           5 |   0.0097019 |    0.014112 |       73 ms |
+    |          10 |    0.011091 |    0.011521 |       76 ms |
+    |          15 |   0.0045973 |   0.0092206 |       72 ms |
+    |          20 |    0.003823 |   0.0098822 |       75 ms |
+    |          25 |   0.0031455 |   0.0087205 |       71 ms |
+    |          30 |   0.0025977 |   0.0095658 |       74 ms |
+    ---------------------------------------------------------
 
 
-.. figure:: images/boston/cgnet-train.png
-    :width: 80%
-    :align: center
-    :alt: Conjgate Gradient train
-
-
-To make sure that all training processes go in a right way we can check erros updates while the training is in process.
-
+It's also useful to visualize network training progress using line plot. In the figure below you can see two lines. One line shows training error and the other one validation error.
 
 .. code-block:: python
 
     from neupy import plots
-    plots.error_plot(cgnet)
-
+    plots.error_plot(lmnet)
 
 .. figure:: images/boston/cgnet-error-plot.png
     :width: 80%
     :align: center
-    :alt: Conjgate Gradient train
+    :alt: Levenberg Marquardt training progress
 
+We typically want to see decrease for the validation error. The training error might be useful during debugging. For example, it might be used in order to see if network overfits.
 
-Error minimization procedure looks fine.
-The problem is, that last error doesn't show us the full picture of prediction accuracy.
-Our output is always between zero and one and we count the results always into Mean Square Error.
-To fix it, we are going to inverse our transformation for predicted and actual values and for accuracy measurment we will use Root Mean Square Logarithmic Error (RMSLE).
+During the training we used mean squared error as a loss function on the scaled prediction values. We can use different function in order to measure network's forecasting performance. For example, we can use Root Means Squared Logarithmic Error (RMSLE) and compare prediction to the exact value that were scaled back to the original scale.
 
 .. code-block:: python
 
@@ -340,71 +387,14 @@ To fix it, we are going to inverse our transformation for predicted and actual v
         squared_log_error = np.square(log_expected - log_predicted)
         return np.sqrt(np.mean(squared_log_error))
 
-    y_predict = cgnet.predict(x_test).round(1)
+    y_predict = lmnet.predict(x_test).round(1)
     error = rmsle(
         target_scaler.inverse_transform(y_test),
         target_scaler.inverse_transform(y_predict),
     )
-    print(error)
+    print(error)  # ~0.18
 
-Now we can see that our error approximately equals to `0.22` which is pretty small.
-In the table below you can find 10 randomly chosen errors.
-
-.. raw:: html
-
-    <table border="1" class="dataframe">
-      <thead>
-        <tr>
-          <th>Actual</th>
-          <th>Predicted</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>31.2</td>
-          <td>27.5</td>
-        </tr>
-        <tr>
-          <td>18.7</td>
-          <td>18.5</td>
-        </tr>
-        <tr>
-          <td>20.1</td>
-          <td>18.5</td>
-        </tr>
-        <tr>
-          <td>17.2</td>
-          <td>9.5</td>
-        </tr>
-        <tr>
-          <td>8.3</td>
-          <td>9.5</td>
-        </tr>
-        <tr>
-          <td>50.0</td>
-          <td>41.0</td>
-        </tr>
-        <tr>
-          <td>42.8</td>
-          <td>32.0</td>
-        </tr>
-        <tr>
-          <td>20.5</td>
-          <td>18.5</td>
-        </tr>
-        <tr>
-          <td>16.8</td>
-          <td>23.0</td>
-        </tr>
-        <tr>
-          <td>11.8</td>
-          <td>9.5</td>
-        </tr>
-      </tbody>
-    </table>
-
-The results are good for the first network implementation.
-There are a lot of things which we can do to improve network results, but we will discuss them in an another article.
+The final result is quite good for the first prototype.
 
 .. author:: default
 .. categories:: none

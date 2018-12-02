@@ -217,7 +217,7 @@ def load_dict(connection, data, ignore_missing=False,
         if some of the layers doesn't have storage parameters
         in the specified source. Defaults to ``False``.
 
-    load_by : {{``names``, ``order``, ``names_or_order``}}
+    load_by : {``names``, ``order``, ``names_or_order``}
         Defines strategy that will be used during parameter loading
 
         - ``names`` - Matches layers in the network with stored layer

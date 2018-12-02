@@ -4,17 +4,18 @@ Cheat sheet
 ===========
 
 .. contents::
+    :depth: 2
 
 Algorithms
 **********
 
-Algorithms that use Backpropagation training approach
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Algorithms based on backpropagation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. _cheatsheet-backprop-algorithms:
 
-Trainig algorithms
-++++++++++++++++++
+Training algorithms
++++++++++++++++++++
 
 .. csv-table::
     :header: "Class name", "Name"
@@ -212,8 +213,8 @@ Architectures
 
 .. _init-methods:
 
-Parameter Initialization Methods
-********************************
+Parameter initialization
+************************
 
 .. code-block:: python
 
@@ -245,8 +246,8 @@ Parameter Initialization Methods
 
 .. _cheatsheet-error-function:
 
-Error functions
-***************
+Loss functions
+**************
 
 .. csv-table::
     :header: "Function name", "Description"

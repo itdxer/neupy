@@ -97,4 +97,4 @@ alexnet = layers.join(
     layers.Relu(4096, name='dense_2') > layers.Dropout(0.5),
     layers.Softmax(1000, name='dense_3'),
 )
-plots.layer_structure(alexnet)
+plots.network_structure(alexnet)

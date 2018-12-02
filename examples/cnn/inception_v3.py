@@ -137,4 +137,4 @@ inception_v3 = layers.join(
     layers.GlobalPooling(),
     layers.Softmax(1000),
 )
-plots.layer_structure(inception_v3)
+plots.network_structure(inception_v3)

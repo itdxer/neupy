@@ -70,12 +70,12 @@ For the debugging, it's useful to explore network's architecture. It's possible 
         layers.Softmax(10),
     )
 
-To be able to visualize it we can just use :class:`layer_structure <neupy.plots.layer_structure>` function.
+To be able to visualize it we can just use :class:`network_structure <neupy.plots.network_structure>` function.
 
 .. code-block:: python
 
     from neupy import plots
-    plots.layer_structure(network)
+    plots.network_structure(network)
 
 .. raw:: html
 
@@ -93,7 +93,7 @@ Instead of showing pop-up preview we can simply save it in the separate file.
 .. code-block:: python
 
     from neupy import plots
-    plots.layer_structure(
+    plots.network_structure(
         connection,
         filepath='connection.pdf',
         show=False,
@@ -106,7 +106,7 @@ Function also works for the training algorithms with constructible architectures
     from neupy import algorithms, plots
 
     nnet = algorithms.GradientDescent((2, 3, 1))
-    plots.layer_structure(nnet)
+    plots.network_structure(nnet)
 
 .. raw:: html
 

@@ -8,7 +8,7 @@ from neupy.layers.base import ResidualConnection
 from neupy.layers.utils import extract_connection
 
 
-__all__ = ('layer_structure',)
+__all__ = ('network_structure',)
 
 
 def layer_uid(layer):
@@ -93,7 +93,7 @@ def exclude_layer_from_graph(graph, ignore_layers):
     return cleaned_graph
 
 
-def layer_structure(connection, ignore_layers=None, filepath=None, show=True):
+def network_structure(connection, ignore_layers=None, filepath=None, show=True):
     """
     Draw graphical representation of the layer connection
     structure in form of directional graph.
@@ -119,7 +119,7 @@ def layer_structure(connection, ignore_layers=None, filepath=None, show=True):
     >>> from neupy import layers, plots
     >>>
     >>> connection = layers.Input(10) > layers.Sigmoid(1)
-    >>> plots.layer_structure(connection)
+    >>> plots.network_structure(connection)
     """
     connection = extract_connection(connection)
 

@@ -1,4 +1,4 @@
-neighbor.. _sofm-applications:
+.. _sofm-applications:
 
 Self-Organizing Maps and Applications
 =====================================

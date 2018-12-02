@@ -58,4 +58,4 @@ googlenet = layers.join(
 
     layers.Softmax(1000),
 )
-plots.layer_structure(googlenet)
+plots.network_structure(googlenet)

@@ -105,9 +105,7 @@ class ConjugateGradient(WolfeLineSearchForStep, GradientDescent):
     --------
     >>> from sklearn import datasets, preprocessing
     >>> from sklearn.model_selection import train_test_split
-    >>> from neupy import algorithms, layers, estimators, environment
-    >>>
-    >>> environment.reproducible()
+    >>> from neupy import algorithms, layers
     >>>
     >>> dataset = datasets.load_boston()
     >>> data, target = dataset.data, dataset.target
@@ -127,9 +125,7 @@ class ConjugateGradient(WolfeLineSearchForStep, GradientDescent):
     ...         layers.Sigmoid(50),
     ...         layers.Sigmoid(1),
     ...     ],
-    ...     search_method='golden',
     ...     update_function='fletcher_reeves',
-    ...     addons=[algorithms.LinearSearch],
     ...     verbose=False
     ... )
     >>>
@@ -138,10 +134,6 @@ class ConjugateGradient(WolfeLineSearchForStep, GradientDescent):
     >>>
     >>> real = target_scaler.inverse_transform(y_test)
     >>> predicted = target_scaler.inverse_transform(y_predict)
-    >>>
-    >>> error = estimators.rmsle(real, predicted)
-    >>> error
-    0.2472330191179734
 
     References
     ----------
