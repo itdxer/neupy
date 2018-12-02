@@ -1,56 +1,71 @@
-import theano
-import theano.tensor as T
-from theano.ifelse import ifelse
-from theano.tensor import slinalg
 import numpy as np
+import tensorflow as tf
 
-from neupy.utils import asfloat
+from neupy.utils import tensorflow_session, flatten, function_name_scope
 from neupy.core.properties import (BoundedProperty, ChoiceProperty,
                                    WithdrawProperty)
 from neupy.algorithms import GradientDescent
 from neupy.algorithms.gd import StepSelectionBuiltIn, errors
-from neupy.algorithms.utils import parameter_values, setup_parameter_updates
+from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
+                                    make_single_vector)
 
 
 __all__ = ('LevenbergMarquardt',)
 
 
-def compute_jacobian(errors, parameters):
+@function_name_scope
+def compute_jacobian(values, parameters):
     """
     Compute jacobian.
 
     Parameters
     ----------
-    errors : Theano variable
+    values : Tensorfow variable
         Computed MSE for each sample separetly.
 
-    parameters : list of Theano variable
+    parameters : list of Tensorfow variable
         Neural network parameters (e.g. weights, biases).
 
     Returns
     -------
-    Theano variable
+    Tensorfow variable
     """
-    n_samples = errors.shape[0]
-    J = T.jacobian(errors, wrt=parameters)
+    values_shape = tf.shape(values)
+    n_samples = values_shape[0]
 
-    jacobians = []
-    for jacobian, parameter in zip(J, parameters):
-        jacobian = jacobian.reshape((n_samples, parameter.size))
-        jacobians.append(jacobian)
+    def compute_gradient_per_value(index, result):
+        gradients = tf.gradients(values[index], parameters)
+        full_gradient = make_single_vector(gradients)
+        return (index + 1, result.write(index, full_gradient))
 
-    return T.concatenate(jacobians, axis=1)
+    _, jacobian = tf.while_loop(
+        lambda index, _: index < n_samples,
+        compute_gradient_per_value,
+        [
+            tf.constant(0, tf.int32),
+            tf.TensorArray(tf.float32, size=n_samples),
+        ]
+    )
+
+    return jacobian.stack()
 
 
 class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
     """
-    Levenberg-Marquardt algorithm.
+    Levenberg-Marquardt algorithm is a variation of the Newton's method.
+    It minimizes MSE error. The algorithm approximates Hessian matrix using
+    dot product between two jacobian matrices.
 
     Notes
     -----
-    - Network minimizes only Mean Squared Error function.
+    - Method requires all training data during propagation, which means
+      it's not allowed to use mini-batches.
+
+    - Network minimizes only Mean Squared Error (MSE) loss function.
+
     - Efficient for small training datasets, because it
       computes gradient per each sample separately.
+
     - Efficient for small-sized networks.
 
     Parameters
@@ -58,7 +73,7 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
     {GradientDescent.connection}
 
     mu : float
-        Control invertion for J.T * J matrix, defaults to `0.1`.
+        Control invertion for J.T * J matrix, defaults to ``0.1``.
 
     mu_update_factor : float
         Factor to decrease the mu if update decrese the error, otherwise
@@ -112,8 +127,8 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
     def init_variables(self):
         super(LevenbergMarquardt, self).init_variables()
         self.variables.update(
-            mu=theano.shared(name='lev-marq/mu', value=asfloat(self.mu)),
-            last_error=theano.shared(name='lev-marq/last-error', value=np.nan),
+            mu=tf.Variable(self.mu, name='lev-marq/mu'),
+            last_error=tf.Variable(np.nan, name='lev-marq/last-error'),
         )
 
     def init_train_updates(self):
@@ -123,26 +138,26 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
         error_func = self.variables.error_func
         mu = self.variables.mu
 
-        new_mu = ifelse(
-            T.lt(last_error, error_func),
+        new_mu = tf.where(
+            tf.less(last_error, error_func),
             mu * self.mu_update_factor,
             mu / self.mu_update_factor,
         )
 
-        se_for_each_sample = (
-            (network_output - prediction_func) ** 2
-        ).ravel()
+        err_for_each_sample = flatten((network_output - prediction_func) ** 2)
 
         params = parameter_values(self.connection)
-        param_vector = T.concatenate([param.flatten() for param in params])
+        param_vector = make_single_vector(params)
 
-        J = compute_jacobian(se_for_each_sample, params)
+        J = compute_jacobian(err_for_each_sample, params)
+        J_T = tf.transpose(J)
         n_params = J.shape[1]
 
-        updated_params = param_vector - slinalg.solve(
-            J.T.dot(J) + new_mu * T.eye(n_params),
-            J.T.dot(se_for_each_sample)
+        parameter_update = tf.matrix_solve(
+            tf.matmul(J_T, J) + new_mu * tf.eye(n_params.value),
+            tf.matmul(J_T, tf.expand_dims(err_for_each_sample, 1))
         )
+        updated_params = param_vector - flatten(parameter_update)
 
         updates = [(mu, new_mu)]
         parameter_updates = setup_parameter_updates(params, updated_params)
@@ -155,4 +170,4 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
 
         last_error = self.errors.last()
         if last_error is not None:
-            self.variables.last_error.set_value(last_error)
+            self.variables.last_error.load(last_error, tensorflow_session())

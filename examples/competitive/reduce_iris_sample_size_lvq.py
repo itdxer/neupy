@@ -11,7 +11,7 @@ environment.reproducible()
 def plot_scattermatrix(data, target):
     df = pd.DataFrame(data)
     df['target'] = target
-    return sns.pairplot(df, hue='target')
+    return sns.pairplot(df, hue='target', diag_kind='hist')
 
 
 if __name__ == '__main__':

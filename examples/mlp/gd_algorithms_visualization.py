@@ -1,11 +1,10 @@
 from functools import partial
 
-import theano.tensor as T
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-from neupy.utils import asfloat
+from neupy.utils import asfloat, tensorflow_session
 from neupy import algorithms, layers, environment
 
 
@@ -55,18 +54,6 @@ def weight_quiver(weights, color='c'):
                color=color)
 
 
-class NoBiasSigmoid(layers.Sigmoid):
-    def output(self, input_value):
-        # Miltiply bias by zero to disable it. We need to include it in
-        # formula, because Theano use update rules for it.
-        summated = T.dot(input_value, self.weight) + (0 * self.bias)
-        return self.activation_function(summated)
-
-
-def copy_weight(weight):
-    return weight.get_value().copy()
-
-
 def save_epoch_weight(net):
     """
     Signal processor which save weight update for every
@@ -75,7 +62,8 @@ def save_epoch_weight(net):
     global weights
     global current_epoch
 
-    input_layer_weight = copy_weight(net.layers[1].weight)
+    session = tensorflow_session()
+    input_layer_weight = session.run(net.layers[1].weight)
     weights[:, current_epoch + 1:current_epoch + 2] = input_layer_weight
 
 
@@ -83,9 +71,10 @@ def get_connection():
     """
     Generate new connections every time when we call it.
     """
-    input_layer = layers.Input(2)
-    output_layer = NoBiasSigmoid(1, weight=default_weight.copy())
-    return input_layer > output_layer
+    return layers.join(
+        layers.Input(2),
+        layers.Sigmoid(1, weight=default_weight.copy(), bias=None)
+    )
 
 
 def draw_quiver(network_class, name, color='r'):
@@ -124,7 +113,9 @@ def draw_quiver(network_class, name, color='r'):
 def target_function(network, x, y):
     weight = network.layers[1].weight
     new_weight = np.array([[x], [y]])
-    weight.set_value(asfloat(new_weight))
+
+    session = tensorflow_session()
+    weight.load(asfloat(new_weight), session)
     return network.prediction_error(input_data, target_data)
 
 
@@ -162,7 +153,7 @@ algorithms = (
 
 patches = []
 for algorithm, algorithm_name, color in algorithms:
-    print("Train '{}' network".format(algorithm_name))
+    print("The '{}' network training".format(algorithm_name))
     quiver_patch = draw_quiver(algorithm, algorithm_name, color)
     patches.append(quiver_patch)
 

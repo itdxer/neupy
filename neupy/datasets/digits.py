@@ -86,7 +86,7 @@ digits_data = np.array([
         0, 0, 0, 1,
         0, 1, 1, 0,
     ]
-], dtype=np.uint8)
+], dtype=np.float32)
 digits_labels = np.arange(10)
 
 
@@ -105,19 +105,31 @@ def load_digits():
     return digits_data, digits_labels
 
 
-def make_digits(noise_level=0.1, n_samples=100):
+def make_digits(n_samples=100, noise_level=0.1, mode='flip'):
     """
     Returns discrete digits dataset.
 
     Parameters
     ----------
+    n_samples : int
+        Number of samples. Defaults to ``100``.
+
     noise_level : float
         Defines level of a discrete noise added to the images.
         Noise level defines probability for the pixel
         to be removed. Value should be in [0, 1) range.
         Defaults to ``0.1``.
-    n_samples : int
-        Number of samples. Defaults to ``100``.
+
+    mode : {``remove``, ``flip``}
+        This opption allow to specify how additional noise will
+        modify each image.
+
+        - ``flip`` - Per every randomly selected pixel function flips
+          binary value. ``1 -> 0`` and ``0 -> 1``.
+
+        - ``remove`` - Per every randomly selected pixel function checks
+          if value equal to ``1`` if it's true that it gets replaced
+          with ``0``.
 
     Returns
     -------
@@ -147,6 +159,8 @@ def make_digits(noise_level=0.1, n_samples=100):
            [0, 0, 0, 1],
            [1, 1, 1, 0]], dtype=uint8)
     """
+    if mode not in {'remove', 'flip'}:
+        raise ValueError("Unknown mode: {}".format(mode))
 
     if not 0 <= noise_level < 1:
         raise ValueError("noise_level should be float number "
@@ -160,8 +174,13 @@ def make_digits(noise_level=0.1, n_samples=100):
     digit_images = digits_data[digit_indeces]
     digit_labels = digits_labels[digit_indeces]
 
-    disable_pixel = np.random.binomial(n=1, p=noise_level,
-                                       size=digit_images.shape)
-    digit_images[disable_pixel.astype(bool)] = 0
+    mask = np.random.binomial(
+        n=1, p=noise_level, size=digit_images.shape).astype(bool)
+
+    if mode == 'flip':
+        digit_images[mask] = np.where(digit_images[mask] == 1, 0, 1)
+
+    elif mode == 'remove':
+        digit_images[mask] = 0
 
     return digit_images, digit_labels

@@ -5,15 +5,12 @@ from .gd.conjgrad import *
 from .gd.hessian import *
 from .gd.hessdiag import *
 from .gd.rprop import *
-from .gd.quickprop import *
 from .gd.momentum import *
 from .gd.adadelta import *
 from .gd.adagrad import *
 from .gd.rmsprop import *
 from .gd.adam import *
 from .gd.adamax import *
-
-from .ensemble.dan import *
 
 from .regularization.weight_decay import *
 from .regularization.weight_elimination import *
@@ -42,9 +39,5 @@ from .competitive.growing_neural_gas import *
 from .rbfn.pnn import *
 from .rbfn.rbf_kmeans import *
 from .rbfn.grnn import *
-
-from .linear.lms import *
-from .linear.modify_relaxation import *
-from .linear.perceptron import *
 
 from .rbm import *

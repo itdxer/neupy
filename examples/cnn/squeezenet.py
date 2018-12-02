@@ -1,22 +1,19 @@
 import os
 
-import theano
-import theano.tensor as T
-from neupy import layers, storage, architectures
+from neupy import storage, architectures
 
 from imagenet_tools import (CURRENT_DIR, FILES_DIR, load_image,
                             print_top_n, download_file)
 
 
-theano.config.floatX = 'float32'
-SQUEEZENET_WEIGHTS_FILE = os.path.join(FILES_DIR, 'squeezenet.pickle')
+SQUEEZENET_WEIGHTS_FILE = os.path.join(FILES_DIR, 'squeezenet.hdf5')
 
 # Networks weight ~4.8 Mb
 squeezenet = architectures.squeezenet()
 
 if not os.path.exists(SQUEEZENET_WEIGHTS_FILE):
     download_file(
-        url="http://neupy.s3.amazonaws.com/imagenet-models/squeezenet.pickle",
+        url="http://neupy.s3.amazonaws.com/tensorflow/imagenet-models/squeezenet.hdf5",
         filepath=SQUEEZENET_WEIGHTS_FILE,
         description='Downloading weights')
 
@@ -28,6 +25,5 @@ monkey_image = load_image(
     crop_size=(227, 227),
     use_bgr=True)
 
-predict = squeezenet.compile()
-output = predict(monkey_image)
+output = squeezenet.predict(monkey_image)
 print_top_n(output, n=5)

@@ -19,10 +19,10 @@ __all__ = ('Verbose',)
 
 # Customized style
 STYLES['round'] = TableStyle(
-        top=LineStyle('--', '-', '---', '--'),
-        below_header=LineStyle('--', '-', '---', '--'),
-        bottom=LineStyle('--', '-', '---', '--'),
-        row=LineStyle('| ', '', ' | ', ' |'),
+    top=LineStyle('--', '-', '---', '--'),
+    below_header=LineStyle('--', '-', '---', '--'),
+    bottom=LineStyle('--', '-', '---', '--'),
+    row=LineStyle('| ', '', ' | ', ' |'),
 )
 
 

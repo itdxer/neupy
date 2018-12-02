@@ -1,8 +1,5 @@
-import theano
-import theano.tensor as T
-import numpy as np
+import tensorflow as tf
 
-from neupy.utils import asfloat
 from neupy.core.properties import NumberProperty
 from .base import MinibatchGradientDescent
 
@@ -40,24 +37,34 @@ class Adagrad(MinibatchGradientDescent):
     >>>
     >>> mnet = algorithms.Adagrad((2, 3, 1))
     >>> mnet.train(x_train, y_train)
+
+    References
+    ----------
+    [1] John Duchi, Elad Hazan, Yoram Singer,
+        Adaptive Subgradient Methods for Online Learning and Stochastic
+        Optimization
+        http://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf
     """
     epsilon = NumberProperty(default=1e-5, minval=0)
 
-    def init_param_updates(self, layer, parameter):
+    def init_train_updates(self):
+        updates = []
         step = self.variables.step
 
-        parameter_shape = T.shape(parameter).eval()
-        prev_mean_squred_grad = theano.shared(
-            name="{}/prev-mean-squred-grad".format(parameter.name),
-            value=asfloat(np.zeros(parameter_shape)),
-        )
+        for layer, parameter, gradient in self.iter_params_and_grads():
+            prev_mean_squred_grad = tf.Variable(
+                tf.zeros(parameter.shape),
+                name="{}/prev-mean-squred-grad".format(parameter.op.name),
+                dtype=tf.float32,
+            )
 
-        gradient = T.grad(self.variables.error_func, wrt=parameter)
+            mean_squred_grad = prev_mean_squred_grad + gradient ** 2
+            parameter_delta = gradient / (
+                tf.sqrt(mean_squred_grad + self.epsilon))
 
-        mean_squred_grad = prev_mean_squred_grad + gradient ** 2
-        parameter_delta = gradient * T.sqrt(mean_squred_grad + self.epsilon)
+            updates.extend([
+                (prev_mean_squred_grad, mean_squred_grad),
+                (parameter, parameter - step * parameter_delta),
+            ])
 
-        return [
-            (prev_mean_squred_grad, mean_squred_grad),
-            (parameter, parameter - step * parameter_delta),
-        ]
+        return updates

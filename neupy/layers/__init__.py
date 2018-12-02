@@ -10,5 +10,5 @@ from .reshape import *
 from .embedding import *
 from .recurrent import *
 
-from .connections import join
+from .connections import join, parallel
 from .utils import count_parameters

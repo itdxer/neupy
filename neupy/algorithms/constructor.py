@@ -1,20 +1,22 @@
 import abc
 import time
 import types
+from functools import wraps
 
 import six
-import theano
-import theano.sparse
-import theano.tensor as T
+import tensorflow as tf
 
 from neupy import layers
-from neupy.utils import AttributeKeyDict, asfloat, format_data, as_tuple
-from neupy.layers.utils import preformat_layer_shape, iter_parameters
+from neupy.layers.utils import preformat_layer_shape
 from neupy.layers.connections import LayerConnection, is_sequential
 from neupy.layers.connections.base import create_input_variables
 from neupy.exceptions import InvalidConnection
 from neupy.core.properties import ChoiceProperty
 from neupy.algorithms.base import BaseNetwork
+from neupy.utils import (
+    AttributeKeyDict, asfloat, format_data, as_tuple,
+    tensorflow_session, initialize_uninitialized_variables
+)
 from .gd import errors
 
 
@@ -91,29 +93,6 @@ def clean_layers(connection):
     return connection
 
 
-def create_output_variable(error_function, name):
-    """
-    Create output variable based on error function.
-
-    Parameters
-    ----------
-    error_function : function
-    name : str
-
-    Returns
-    -------
-    Theano variable
-    """
-    # TODO: Solution is not user friendly. I need to find
-    # better solution later.
-    if hasattr(error_function, 'expected_dtype'):
-        network_output_dtype = error_function.expected_dtype
-    else:
-        network_output_dtype = T.matrix
-
-    return network_output_dtype(name)
-
-
 class ErrorFunctionProperty(ChoiceProperty):
     """
     Property that helps select error function from
@@ -130,29 +109,33 @@ class ErrorFunctionProperty(ChoiceProperty):
 
     def __get__(self, instance, value):
         founded_value = super(ChoiceProperty, self).__get__(instance, value)
+
         if isinstance(founded_value, types.FunctionType):
             return founded_value
-        return super(ErrorFunctionProperty, self).__get__(instance,
-                                                          founded_value)
+
+        return super(ErrorFunctionProperty, self).__get__(
+            instance, founded_value)
 
 
 class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
     """
-    Base class for algorithms implemeted in Theano.
+    Base class for algorithms implemeted in Tensorflow.
 
     Attributes
     ----------
     variables : dict
-        Theano variables.
+        Tensorflow variables.
 
     methods : dict
-        Compiled Theano functions.
+        Compiled Tensorflow functions.
     """
     def __init__(self, *args, **kwargs):
         super(BaseAlgorithm, self).__init__(*args, **kwargs)
 
-        self.logs.message("THEANO", "Initializing Theano variables and "
-                                    "functions.")
+        self.logs.message(
+            "TENSORFLOW",
+            "Initializing Tensorflow variables and functions."
+        )
         start_init_time = time.time()
 
         self.variables = AttributeKeyDict()
@@ -163,30 +146,64 @@ class BaseAlgorithm(six.with_metaclass(abc.ABCMeta)):
         self.init_methods()
 
         finish_init_time = time.time()
-        self.logs.message("THEANO", "Initialization finished successfully. "
-                          "It took {:.2f} seconds"
-                          "".format(finish_init_time - start_init_time))
+        self.logs.message(
+            "TENSORFLOW",
+            "Initialization finished successfully. It took {:.2f} seconds"
+            "".format(finish_init_time - start_init_time))
 
     @abc.abstractmethod
     def init_input_output_variables(self):
         """
-        Initialize input and output Theano variables.
+        Initialize input and output Tensorflow variables.
         """
         raise NotImplementedError
 
     @abc.abstractmethod
     def init_variables(self):
         """
-        Initialize Theano variables.
+        Initialize Tensorflow variables.
         """
         raise NotImplementedError
 
     @abc.abstractmethod
     def init_methods(self):
         """
-        Initialize Theano functions.
+        Initialize Tensorflow functions.
         """
         raise NotImplementedError
+
+
+def function(inputs, outputs, updates=None, name=None):
+    if updates is None:
+        updates = []
+
+    session = tensorflow_session()
+    tensorflow_updates = []
+
+    # Ensure that all new values has been computed. Absence of these
+    # checks might lead to the non-deterministic update behaviour.
+    new_values = [val[1] for val in updates if isinstance(val, (list, tuple))]
+
+    # Make sure that all outputs has been computed
+    with tf.control_dependencies(as_tuple(outputs, new_values)):
+        for update in updates:
+            if isinstance(update, (list, tuple)):
+                old_value, new_value = update
+                update = old_value.assign(new_value)
+            tensorflow_updates.append(update)
+
+        # Group variables in order to avoid output for the updates
+        tensorflow_updates = tf.group(*tensorflow_updates)
+
+    @wraps(function)
+    def wrapper(*input_values):
+        feed_dict = dict(zip(inputs, input_values))
+        result, _ = session.run(
+            [outputs, tensorflow_updates],
+            feed_dict=feed_dict,
+        )
+        return result
+    return wrapper
 
 
 class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
@@ -291,12 +308,14 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         super(ConstructibleNetwork, self).__init__(*args, **kwargs)
 
     def init_input_output_variables(self):
+        output_layer = self.connection.output_layers[0]
         self.variables.update(
             network_inputs=create_input_variables(
-                self.connection.input_layers),
-            network_output=create_output_variable(
-                self.error,
-                name='algo:network/var:network-output',
+                self.connection.input_layers
+            ),
+            network_output=tf.placeholder(
+                tf.float32,
+                name='network-output/from-layer-{}'.format(output_layer.name),
             ),
         )
 
@@ -309,13 +328,15 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
             prediction = self.connection.output(*network_inputs)
 
         self.variables.update(
-            step=theano.shared(
-                name='algo:network/scalar:step',
-                value=asfloat(self.step)
+            step=tf.Variable(
+                asfloat(self.step),
+                name='network/scalar-step',
+                dtype=tf.float32
             ),
-            epoch=theano.shared(
-                name='algo:network/scalar:epoch',
-                value=asfloat(self.last_epoch)
+            epoch=tf.Variable(
+                asfloat(self.last_epoch),
+                name='network/scalar-epoch',
+                dtype=tf.float32
             ),
 
             prediction_func=prediction,
@@ -329,22 +350,30 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         network_inputs = self.variables.network_inputs
         network_output = self.variables.network_output
 
+        with tf.name_scope('training-updates'):
+            training_updates = self.init_train_updates()
+
+            for layer in self.layers:
+                training_updates.extend(layer.updates)
+
+        initialize_uninitialized_variables()
+
         self.methods.update(
-            predict=theano.function(
+            predict=function(
                 inputs=network_inputs,
                 outputs=self.variables.prediction_func,
-                name='algo:network/func:predict'
+                name='network/func-predict'
             ),
-            train_epoch=theano.function(
+            train_epoch=function(
                 inputs=network_inputs + [network_output],
                 outputs=self.variables.error_func,
-                updates=self.init_train_updates(),
-                name='algo:network/func:train-epoch'
+                updates=training_updates,
+                name='network/func-train-epoch'
             ),
-            prediction_error=theano.function(
+            prediction_error=function(
                 inputs=network_inputs + [network_output],
                 outputs=self.variables.validation_error_func,
-                name='algo:network/func:prediction-error'
+                name='network/func-prediction-error'
             )
         )
 
@@ -353,32 +382,7 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         Initialize updates that would be applied after
         each training epoch.
         """
-        updates = []
-        for layer, _, parameter in iter_parameters(self.layers):
-            updates.extend(self.init_param_updates(layer, parameter))
-
-        for layer in self.layers:
-            updates.extend(layer.updates)
-
-        return updates
-
-    def init_param_updates(self, layer, parameter):
-        """
-        Initialize parameter updates.
-
-        Parameters
-        ----------
-        layer : object
-            Any layer that inherit from BaseLayer class.
-        parameter : object
-            Usualy it is a weight or bias.
-
-        Returns
-        -------
-        list
-            List of updates related to the specified parameter.
-        """
-        return []
+        raise NotImplementedError()
 
     def format_input_data(self, input_data):
         """
@@ -469,7 +473,7 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
             Current epoch number.
         """
         super(ConstructibleNetwork, self).on_epoch_start_update(epoch)
-        self.variables.epoch.set_value(epoch)
+        self.variables.epoch.load(epoch, tensorflow_session())
 
     def train(self, input_train, target_train, input_test=None,
               target_test=None, *args, **kwargs):
@@ -523,9 +527,9 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         """
         if not is_sequential(self.connection):
             raise TypeError("You can check architecture only for sequential "
-                            "connections. For other types of connections it's "
-                            "better to use the `neupy.plots.layer_structure` "
-                            "function.")
+                            "connections. For other types of connections "
+                            "it's better to use the "
+                            "`neupy.plots.network_structure` function.")
 
         self.logs.title("Network's architecture")
 

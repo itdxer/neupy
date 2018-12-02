@@ -3,6 +3,15 @@
 Password recovery
 =================
 
+.. raw:: html
+
+    <div class="short-description">
+        <p>
+        Discrete hopfiled networks can be used to solve wide variety of problems. In this article, we try to use this type of network in order to memorizes user's password and then we try reconstruct it from partially corrupted version of this password.
+        </p>
+        <span clear="right"></span>
+    </div>
+
 .. contents::
 
 In this article we are going to build a simple neural network that will recover password from a broken one.
@@ -377,5 +386,5 @@ It doesn't contain a fixed ``environment.reproducible`` function, so you will ge
 
 .. author:: default
 .. categories:: none
-.. tags:: memory, unsupervised
+.. tags:: memory, unsupervised, discrete hopfield network
 .. comments::

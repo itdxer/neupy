@@ -52,7 +52,7 @@ class Input(BaseLayer):
     >>> input_layer
     Input(10)
     """
-    size = ArrayShapeProperty(element_type=(int, type(None)))
+    size = ArrayShapeProperty(element_type=(int, type(None)), allow_none=True)
 
     def __init__(self, size, **options):
         super(Input, self).__init__(size=size, **options)

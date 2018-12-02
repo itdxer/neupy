@@ -1,45 +1,43 @@
-import theano
-import theano.tensor as T
+import tensorflow as tf
+
 from neupy import layers, plots
-
-
-theano.config.floatX = 'float32'
 
 
 def Inception(nfilters):
     return layers.join(
         [[
-            layers.MaxPooling((3, 3), stride=1, padding=(1, 1)),
-            layers.Convolution((nfilters[0], 1, 1)),
+            layers.MaxPooling((3, 3), stride=1, padding='SAME'),
+            layers.Convolution((1, 1, nfilters[0])),
             layers.Relu(),
         ], [
-            layers.Convolution((nfilters[1], 1, 1)),
+            layers.Convolution((1, 1, nfilters[1])),
             layers.Relu(),
         ], [
-            layers.Convolution((nfilters[2], 1, 1)),
+            layers.Convolution((1, 1, nfilters[2])),
             layers.Relu(),
-            layers.Convolution((nfilters[3], 3, 3), padding='half'),
+            layers.Convolution((3, 3, nfilters[3]), padding='SAME'),
             layers.Relu(),
         ], [
-            layers.Convolution((nfilters[4], 1, 1)),
+            layers.Convolution((1, 1, nfilters[4])),
             layers.Relu(),
-            layers.Convolution((nfilters[5], 5, 5), padding='half'),
+            layers.Convolution((5, 5, nfilters[5]), padding='SAME'),
             layers.Relu(),
         ]],
         layers.Concatenate(),
     )
 
 
+UNKNOWN = None
 googlenet = layers.join(
-    layers.Input((3, None, None)),
+    layers.Input((UNKNOWN, UNKNOWN, 3)),
 
-    layers.Convolution((64, 7, 7), padding='half', stride=2),
+    layers.Convolution((7, 7, 64), padding='SAME', stride=2),
     layers.Relu(),
     layers.MaxPooling((3, 3), stride=2),
     layers.LocalResponseNorm(alpha=0.00002, k=1),
 
-    layers.Convolution((64, 1, 1)) > layers.Relu(),
-    layers.Convolution((192, 3, 3), padding='half') > layers.Relu(),
+    layers.Convolution((1, 1, 64)) > layers.Relu(),
+    layers.Convolution((3, 3, 192), padding='SAME') > layers.Relu(),
     layers.LocalResponseNorm(alpha=0.00002, k=1),
     layers.MaxPooling((3, 3), stride=2),
 
@@ -56,8 +54,8 @@ googlenet = layers.join(
 
     Inception((128, 256, 160, 320, 32, 128)),
     Inception((128, 384, 192, 384, 48, 128)),
-    layers.GlobalPooling(function=T.mean),
+    layers.GlobalPooling(function=tf.reduce_mean),
 
     layers.Softmax(1000),
 )
-plots.layer_structure(googlenet)
+plots.network_structure(googlenet)

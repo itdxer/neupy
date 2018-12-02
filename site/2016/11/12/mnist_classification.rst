@@ -1,67 +1,123 @@
 .. _mnist-classification:
 
-MNIST Classification
-====================
+Image classification, MNIST digits
+==================================
 
-The MNIST problem is probably the most known for those who have already
-heared about neural networks. This short tutorial shows you how to build prediction models in NeuPy. Let's start developing model.
+.. raw:: html
 
-First of all we need to load data.
+    <div class="short-description">
+        <p>
+        This short tutorial shows how to design and train simple network for digit classification in NeuPy.
+        </p>
+    </div>
+
+
+.. image:: images/random-digits.png
+    :align: center
+    :alt: MNIST digits example
+
+This short tutorial shows how to build and train simple network for digit classification in NeuPy.
+
+Data preparation
+----------------
+
+Data can be loaded in different ways. I used scikit-learn to fetch the MNIST dataset.
 
 .. code-block:: python
 
-    >>> from sklearn import datasets, model_selection
+    >>> from sklearn import datasets
     >>> mnist = datasets.fetch_mldata('MNIST original')
-    >>> data, target = mnist.data, mnist.target
+    >>> X, y = mnist.data, mnist.target
 
-I used scikit-learn to fetch the MNIST dataset, but you can load it in different way.
+Now that we have the data we need to confirm that we have expected number of samples.
 
-Data doesn't have appropriate format for neural network, so we need to make simple transformation before use it.
+.. code-block:: python
+
+    >>> X.shape
+    (70000, 784)
+    >>> y.shape
+    (70000,)
+
+Every data sample has 784 features and can be reshaped into 28x28 image.
+
+.. code-block:: python
+
+    >>> import matplotlib.pyplot as plt
+    >>> plt.imshow(X[0].reshape((28, 28)), cmap='gray')
+    >>> plt.show()
+
+.. image:: images/digit-example.png
+    :width: 70%
+    :align: center
+    :alt: MNIST digit example
+
+In this tutorial, we will use each image as a vector so we won't need to reshape it to its original size. The only thing that we need to do is to rescale image values. Rescaling image will help network to converge faster.
+
+.. code-block:: python
+
+    >>> X /= 255.
+    >>> X -= X.mean(axis=0)
+
+Notice the way division and subtraction are specified. In this way, we make update directly on the ``X`` matrix without copying it. It can be validated with simple example.
+
+.. code-block:: python
+
+    >>> import numpy as np
+    >>> A = np.random.random((100, 10))
+    >>> id(A)  # numbers will be different between runs
+    4486892960
+    >>>
+    >>> A -= 3
+    >>> id(A)  # object ID didn't change
+    4486892960
+    >>>
+    >>> A = A - 3
+    >>> id(A)  # and now it's different, because it's different object
+    4602409968
+
+After last update for matrix ``A`` we got different identifier for the object, which means that it got copied.
+
+In case of the in-place updates, we don't waste memory. Current dataset is relatively small and there is no memory deficiency, but for larger datasets it might make a big difference.
+
+There is one more processing step that we need to do before we can train our network. Let's take a look into target classes.
+
+.. code-block:: python
+
+    >>> import random
+    >>> random.sample(y.astype('int').tolist(), 10)
+    [9, 0, 9, 7, 2, 2, 3, 0, 0, 8]
+
+All number that we have are specified as integers. For our problem we want network to learn visual representation of the numbers. We cannot use them as integers, because it will create some problems during the training. Basically, with this definition we're implying that number ``1`` visually more similar to ``0`` than to number ``7``. It happens only because difference between ``1`` and ``0`` smaller than difference between ``1`` and ``7``. In order to avoid making any type of assumptions we will use one-hot encoding technique.
 
 .. code-block:: python
 
     >>> from sklearn.preprocessing import OneHotEncoder
-    >>>
-    >>> data = data / 255.
-    >>> data = data - data.mean(axis=0)
-    >>>
-    >>> target_scaler = OneHotEncoder()
-    >>> target = target_scaler.fit_transform(target.reshape(-1, 1))
-    >>> target = target.todense()
+    >>> encoder = OneHotEncoder(sparse=False)
+    >>> y = encoder.fit_transform(y.reshape(-1, 1))
+    >>> y.shape
+    (70000, 10)
 
-Next we need to divide dataset into two parts: train and test. Regarding `The
-MNIST Database <http://yann.lecun.com/exdb/mnist/>`_ page we will use 60,000
-samples for training and 10,000 for test.
+You can see that every digit was transformed into a 10 dimensional vector.
+
+And finally, we need to divide our data into training and validation set. We won't show validation set to the network and we will use it only to test network classification accuracy.
 
 .. code-block:: python
 
-    >>> from neupy import environment
     >>> import numpy as np
     >>> from sklearn.model_selection import train_test_split
     >>>
-    >>> environment.reproducible()
-    >>>
     >>> x_train, x_test, y_train, y_test = train_test_split(
-    ...     data.astype(np.float32),
-    ...     target.astype(np.float32),
-    ...     train_size=(6. / 7)
+    ...     X.astype(np.float32),
+    ...     y.astype(np.float32),
+    ...     test_size=(1 / 7.)
     ... )
 
-In the previous procedure I converted all data to `float32` data type. This
-simple trick will help us use less memory and decrease computational time.
-Theano is a main backend for the Gradient Descent based algorithms in NeuPy.
-For the Theano we need to add additional configuration that will explain Theano that
-we are going to use 32bit float numbers.
+Notice that data was converted into 32 bit float numbers. This is the only float type that currently supported by NeuPy.
 
-.. code-block:: python
+Model initialization
+--------------------
 
-    >>> import theano
-    >>> theano.config.floatX = 'float32'
-
-We prepared everything that we need for the neural network training. Now we are
-able to create the neural network that will classify digits for us.
-
-Let's start with an architecture. I didn't reinvent the wheel and used one of the know architectures from `The Database <http://yann.lecun.com/exdb/mnist/>`_ page which is 784 > 500 > 300 > 10. As the main activation function I used Relu and Softmax for the final layer. The main algorithm is a Nesterov Momentum that uses 100 samples per batch iteration. Actually all this and other network configuration should be clear from the code shown below.
+Networks architecture and training algorithm can be defined in a single statement.
 
 .. code-block:: python
 
@@ -104,6 +160,9 @@ In addition for feedforward neural networks it's possible to check architecture 
     :align: center
     :alt: Neural Network Architecture
 
+Training
+--------
+
 Now we are going to train network. Let set up 20 epochs for training procedure and check the result.
 
 .. code-block:: python
@@ -118,6 +177,9 @@ Output in terminal should look similar to this one:
     :alt: GradientDescent training procedure output
 
 Output show the most important information related to training procedure. Each epoch contains 4 columns. First one identified epoch. The second one show training error. The third one is optional. In case you have validation dataset, you can check learning perfomanse using dataset separated from the learning procedure. And the last column shows how many time network trains during this epoch.
+
+Evaluations
+-----------
 
 From the table is not clear network's training progress. We can check it very easy. Network instance contains built-in method that build line plot that show training progress. Let's check our progress.
 

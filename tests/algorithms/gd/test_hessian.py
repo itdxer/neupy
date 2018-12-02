@@ -1,10 +1,10 @@
 from functools import partial
 
-import theano
-import theano.tensor as T
 import numpy as np
+import tensorflow as tf
 
 from neupy import algorithms
+from neupy.utils import tensorflow_session
 from neupy.algorithms.gd.hessian import find_hessian_and_gradient
 
 from utils import compare_networks
@@ -13,15 +13,6 @@ from base import BaseTestCase
 
 
 class HessianTestCase(BaseTestCase):
-    # In case of Hessian this solution will give
-    # significant improvement.
-    use_sandbox_mode = False
-
-    def test_hessian_exceptions(self):
-        with self.assertRaises(ValueError):
-            # Don't have step parameter
-            algorithms.Hessian((2, 3, 1), step=1)
-
     def test_compare_bp_and_hessian(self):
         x_train, x_test, y_train, y_test = simple_classification()
         compare_networks(
@@ -41,8 +32,8 @@ class HessianTestCase(BaseTestCase):
         )
 
     def test_hessian_computation(self):
-        x = T.scalar('x')
-        y = T.scalar('y')
+        x = tf.placeholder(name='x', dtype=tf.float32, shape=(1,))
+        y = tf.placeholder(name='y', dtype=tf.float32, shape=(1,))
 
         f = x ** 2 + y ** 3 + 7 * x * y
         # Gradient function:
@@ -53,8 +44,9 @@ class HessianTestCase(BaseTestCase):
         #  [7, 6 * y]]
         hessian, gradient = find_hessian_and_gradient(f, [x, y])
 
-        func = theano.function([x, y], [hessian, gradient])
-        hessian_output, gradient_output = func(1, 2)
+        session = tensorflow_session()
+        hessian_output, gradient_output = session.run(
+            [hessian, gradient], feed_dict={x: [1], y: [2]})
 
         np.testing.assert_array_equal(
             gradient_output,
@@ -70,4 +62,11 @@ class HessianTestCase(BaseTestCase):
 
     def test_hessian_assign_step_exception(self):
         with self.assertRaises(ValueError):
+            # Don't have step parameter
             algorithms.Hessian((2, 3, 1), step=0.01)
+
+    def test_hessian_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(algorithms.Hessian, verbose=False, penalty_const=0.1),
+            epochs=300,
+        )

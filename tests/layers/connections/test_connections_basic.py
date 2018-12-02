@@ -42,10 +42,10 @@ class ConnectionsTestCase(BaseTestCase):
 
     def test_connection_inside_connection_conv(self):
         connection = layers.join(
-            layers.Input((1, 28, 28)),
+            layers.Input((28, 28, 1)),
 
-            layers.Convolution((8, 3, 3)) > layers.Relu(),
-            layers.Convolution((8, 3, 3)) > layers.Relu(),
+            layers.Convolution((3, 3, 8)) > layers.Relu(),
+            layers.Convolution((3, 3, 8)) > layers.Relu(),
             layers.MaxPooling((2, 2)),
 
             layers.Reshape(),
@@ -72,6 +72,49 @@ class ConnectionsTestCase(BaseTestCase):
         input_value = asfloat(np.random.random((10, 2)))
 
         connection = layers.Input(2) > layers.Relu(10) > layers.Relu(1)
-        output_value = connection.output(input_value).eval()
+        output_value = self.eval(connection.output(input_value))
 
         self.assertEqual(output_value.shape, (10, 1))
+
+    def test_connection_wrong_number_of_input_values(self):
+        input_value_1 = asfloat(np.random.random((10, 2)))
+        input_value_2 = asfloat(np.random.random((10, 2)))
+
+        connection = layers.Input(2) > layers.Relu(10) > layers.Relu(1)
+
+        with self.assertRaisesRegexp(ValueError, "but 2 inputs was provided"):
+            connection.output(input_value_1, input_value_2)
+
+    def test_one_to_many_parallel_connection_output(self):
+        input_connection = layers.Input(4)
+        parallel_connections = layers.parallel(
+            layers.Linear(11),
+            layers.Linear(12),
+            layers.Linear(13),
+        )
+        layers.join(input_connection, parallel_connections)
+
+        input_value = asfloat(np.random.random((10, 4)))
+        actual_output = self.eval(parallel_connections.output(input_value))
+
+        self.assertEqual(actual_output[0].shape, (10, 11))
+        self.assertEqual(actual_output[1].shape, (10, 12))
+        self.assertEqual(actual_output[2].shape, (10, 13))
+
+    def test_many_to_many_parallel_connection_output(self):
+        connection = layers.parallel(
+            layers.Input(1) > layers.Linear(11),
+            layers.Input(2) > layers.Linear(12),
+            layers.Input(3) > layers.Linear(13),
+        )
+
+        input_value_1 = asfloat(np.random.random((10, 1)))
+        input_value_2 = asfloat(np.random.random((20, 2)))
+        input_value_3 = asfloat(np.random.random((30, 3)))
+
+        actual_output = self.eval(
+            connection.output(input_value_1, input_value_2, input_value_3))
+
+        self.assertEqual(actual_output[0].shape, (10, 11))
+        self.assertEqual(actual_output[1].shape, (20, 12))
+        self.assertEqual(actual_output[2].shape, (30, 13))

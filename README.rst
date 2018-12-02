@@ -21,17 +21,11 @@
         </a>
     </div>
 
-.. raw:: html
 
-    <h3>⚠️  NeuPy will use Tensorflow as a backend starting from version 0.7.0</h3>
-    <p><i>About a year ago, it has been officially announced that <a href="https://groups.google.com/forum/#!msg/theano-users/7Poq8BZutbY/rNCIfvAEAwAJ">Theano will stop support for their library</a>. They don't add new features anymore and soon, they will stop adding bug fixes to the library. NeuPy cannot evolve having large number of features that depend on the dead library. For this reason, NeuPy was moved to the Tensorflow.</i></p>
-    <p><i>All the Theano based code has been fully migrated to Tenorflow and it can be tested from the <a href="https://github.com/itdxer/neupy/tree/release/v0.7.0">release/v0.7.0</a> branch.</i></p>
-
-
-NeuPy v0.6.5
+NeuPy v0.7.0
 ============
 
-NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.
+NeuPy is a python library for prototyping and building neural networks. NeuPy uses Tensorflow as a computational backend for deep learning models.
 
 Installation
 ------------

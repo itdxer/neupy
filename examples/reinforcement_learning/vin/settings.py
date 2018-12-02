@@ -1,5 +1,5 @@
 import os
-
+from neupy import algorithms
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 DATA_DIR = os.path.join(CURRENT_DIR, 'data')
@@ -10,30 +10,65 @@ environments = {
         mat_file=os.path.join(DATA_DIR, 'gridworld_8.mat'),
         train_data_file=os.path.join(DATA_DIR, 'gridworld-8-train.pickle'),
         test_data_file=os.path.join(DATA_DIR, 'gridworld-8-test.pickle'),
-        pretrained_network_file=os.path.join(MODELS_DIR,
-                                             'pretrained-VIN-8.pickle'),
-        input_image_shape=(2, 8, 8),
+        pretrained_network_file=os.path.join(
+            MODELS_DIR, 'pretrained-VIN-8.hdf5'),
+
+        input_image_shape=(8, 8, 2),
         image_size=(8, 8),
         k=10,
+        epochs=120,
+        steps={
+            30: 0.005,
+            60: 0.002,
+            90: 0.001,
+        },
+        training_options=dict(
+            step=0.01,
+            batch_size=36,
+        ),
     ),
     16: dict(
         mat_file=os.path.join(DATA_DIR, 'gridworld_16.mat'),
         train_data_file=os.path.join(DATA_DIR, 'gridworld-16-train.pickle'),
         test_data_file=os.path.join(DATA_DIR, 'gridworld-16-test.pickle'),
-        pretrained_network_file=os.path.join(MODELS_DIR,
-                                             'pretrained-VIN-16.pickle'),
-        input_image_shape=(2, 16, 16),
+        pretrained_network_file=os.path.join(
+            MODELS_DIR, 'pretrained-VIN-16.hdf5'),
+
+        input_image_shape=(16, 16, 2),
         image_size=(16, 16),
         k=20,
+        epochs=120,
+        steps={
+            30: 0.005,
+            60: 0.002,
+            90: 0.001,
+        },
+        training_options=dict(
+            step=0.01,
+            batch_size=36,
+        ),
     ),
     28: dict(
         mat_file=os.path.join(DATA_DIR, 'gridworld_28.mat'),
         train_data_file=os.path.join(DATA_DIR, 'gridworld-28-train.pickle'),
         test_data_file=os.path.join(DATA_DIR, 'gridworld-28-test.pickle'),
-        pretrained_network_file=os.path.join(MODELS_DIR,
-                                             'pretrained-VIN-28.pickle'),
-        input_image_shape=(2, 28, 28),
+        pretrained_network_file=os.path.join(
+            MODELS_DIR, 'pretrained-VIN-28.hdf5'),
+
+        input_image_shape=(28, 28, 2),
         image_size=(28, 28),
         k=36,
+        epochs=120,
+        steps={
+            30: 0.005,
+            60: 0.002,
+            90: 0.001,
+        },
+        training_options=dict(
+            decay=0.9,
+            epsilon=1e-6,
+            step=0.01,
+            batch_size=36,
+        )
     ),
 }

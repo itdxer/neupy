@@ -6,7 +6,6 @@ from neupy.datasets import reber
 
 
 environment.reproducible()
-environment.speedup()
 
 
 def add_padding(data):
@@ -64,12 +63,12 @@ network = algorithms.RMSProp(
         layers.Sigmoid(1),
         # shape: (n_samples, 1)
     ],
-
-    step=0.05,
+    step=0.01,
     verbose=True,
     batch_size=64,
     error='binary_crossentropy',
 )
+network.architecture()
 network.train(x_train, y_train, x_test, y_test, epochs=20)
 
 y_predicted = network.predict(x_test).round()

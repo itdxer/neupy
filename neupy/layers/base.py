@@ -1,14 +1,14 @@
 import re
+import types
 from collections import OrderedDict
 
 import six
-import theano
-import theano.tensor as T
+import tensorflow as tf
 
 from neupy import init
-from neupy.utils import asfloat, as_tuple
 from neupy.core.config import Configurable
 from neupy.core.properties import ParameterProperty, IntProperty, Property
+from neupy.utils import asfloat, as_tuple, class_method_name_scope
 from neupy.layers.connections import BaseConnection
 
 
@@ -44,11 +44,11 @@ def generate_layer_name(layer):
 
 def create_shared_parameter(value, name, shape):
     """
-    Creates NN parameter as Theano shared variable.
+    Creates NN parameter as Tensorfow variable.
 
     Parameters
     ----------
-    value : array-like, Theano variable, scalar or Initializer
+    value : array-like, Tensorfow variable, scalar or Initializer
         Default value for the parameter.
 
     name : str
@@ -59,15 +59,29 @@ def create_shared_parameter(value, name, shape):
 
     Returns
     -------
-    Theano shared variable.
+    Tensorfow variable.
     """
-    if isinstance(value, (T.sharedvar.SharedVariable, T.Variable)):
+    if isinstance(value, tf.Variable):
         return value
 
     if isinstance(value, init.Initializer):
         value = value.sample(shape)
 
-    return theano.shared(value=asfloat(value), name=name, borrow=True)
+    return tf.Variable(asfloat(value), name=name, dtype=tf.float32)
+
+
+def initialize_layer(layer_class, kwargs, was_initialized):
+    """
+    We have a separate method for initialization, becase default
+    __reduce__ functionality requires variables to be specified
+    in order, which neupy doesn't support.
+    """
+    layer = layer_class(**kwargs)
+
+    if was_initialized:
+        layer.initialize()
+
+    return layer
 
 
 class BaseLayer(BaseConnection, Configurable):
@@ -118,13 +132,15 @@ class BaseLayer(BaseConnection, Configurable):
     def __init__(self, *args, **options):
         super(BaseLayer, self).__init__(*args)
 
+        self.output = types.MethodType(
+            class_method_name_scope(self.output), self)
+
         self.updates = []
         self.parameters = OrderedDict()
         self.name = generate_layer_name(layer=self)
         self.input_shape_ = None
 
         self.graph.add_layer(self)
-
         Configurable.__init__(self, **options)
 
     def validate(self, input_shape):
@@ -153,12 +169,12 @@ class BaseLayer(BaseConnection, Configurable):
         return input_value
 
     def add_parameter(self, value, name, shape=None, trainable=True):
-        theano_name = 'layer:{layer_name}/{parameter_name}'.format(
+        layer_name = 'layer/{layer_name}/{parameter_name}'.format(
             layer_name=self.name,
             parameter_name=name.replace('_', '-'))
 
-        parameter = create_shared_parameter(value, theano_name, shape)
-        parameter.trainable = trainable
+        parameter = create_shared_parameter(value, layer_name, shape)
+        parameter.is_trainable = trainable
 
         self.parameters[name] = parameter
 
@@ -168,6 +184,11 @@ class BaseLayer(BaseConnection, Configurable):
     def __repr__(self):
         classname = self.__class__.__name__
         return '{name}()'.format(name=classname)
+
+    def __reduce__(self):
+        parameters = self.get_params()
+        return (initialize_layer, (
+            self.__class__, parameters, self.initialized))
 
 
 class ResidualConnection(BaseLayer):
@@ -185,12 +206,12 @@ class ParameterBasedLayer(BaseLayer):
     size : int
         Layer's output size.
 
-    weight : array-like, Theano variable, scalar or Initializer
+    weight : array-like, Tensorfow variable, scalar or Initializer
         Defines layer's weights. Default initialization methods
         you can find :ref:`here <init-methods>`.
         Defaults to :class:`XavierNormal() <neupy.init.XavierNormal>`.
 
-    bias : 1D array-like, Theano variable, scalar, Initializer or None
+    bias : 1D array-like, Tensorfow variable, scalar, Initializer or None
         Defines layer's bias.
         Default initialization methods you can find
         :ref:`here <init-methods>`. Defaults to

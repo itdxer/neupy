@@ -4,30 +4,46 @@ import logging
 import unittest
 
 import numpy as np
+import tensorflow as tf
 
 from neupy import environment, layers
+from neupy.utils import tensorflow_eval, tensorflow_session
 
 from utils import vectors_for_testing
 
 
 class BaseTestCase(unittest.TestCase):
+    single_thread = False
     verbose = False
     random_seed = 0
-    use_sandbox_mode = True
+
+    def eval(self, value):
+        return tensorflow_eval(value)
 
     def setUp(self):
-        environment.reproducible(seed=self.random_seed)
+        tf.reset_default_graph()
+
+        if self.single_thread:
+            sess = tensorflow_session()
+            sess.close()
+
+            config = tf.ConfigProto(
+                allow_soft_placement=True,
+                intra_op_parallelism_threads=1,
+                inter_op_parallelism_threads=1,
+            )
+            tensorflow_session.cache = tf.Session(config=config)
 
         if not self.verbose:
             logging.disable(logging.CRITICAL)
 
-        if self.use_sandbox_mode:
-            # Optimize unit tests speed. In general all task very
-            # simple so some Theano optimizations can be redundant.
-            environment.sandbox()
-
         # Clean identifiers map for each test
         layers.BaseLayer.global_identifiers_map = {}
+        environment.reproducible(seed=self.random_seed)
+
+    def tearDown(self):
+        sess = tensorflow_session()
+        sess.close()
 
     def assertItemsEqual(self, list1, list2):
         self.assertEqual(sorted(list1), sorted(list2))
@@ -80,3 +96,18 @@ class BaseTestCase(unittest.TestCase):
 
         np.testing.assert_array_almost_equal(
             loaded_network_prediction, network_prediction)
+
+    def assertCanNetworkOverfit(self, network_class, epochs=100,
+                                min_accepted_error=0.001):
+
+        x_train = 2 * np.random.random((10, 2)) - 1  # zero centered
+        y_train = np.random.random((10, 1))
+
+        network = network_class([
+            layers.Input(2),
+            layers.Relu(20),
+            layers.Sigmoid(1),
+        ])
+
+        network.train(x_train, y_train, epochs=epochs)
+        self.assertLess(network.errors.last(), min_accepted_error)

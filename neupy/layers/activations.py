@@ -1,4 +1,5 @@
-import theano.tensor as T
+import numpy as np
+import tensorflow as tf
 
 from neupy import init
 from neupy.utils import asfloat, as_tuple
@@ -8,8 +9,8 @@ from .utils import dimshuffle
 from .base import ParameterBasedLayer
 
 
-__all__ = ('ActivationLayer', 'Linear', 'Sigmoid', 'HardSigmoid', 'Step',
-           'Tanh', 'Relu', 'Softplus', 'Softmax', 'Elu', 'PRelu', 'LeakyRelu')
+__all__ = ('ActivationLayer', 'Linear', 'Sigmoid', 'HardSigmoid', 'Tanh',
+           'Relu', 'Softplus', 'Softmax', 'Elu', 'PRelu', 'LeakyRelu')
 
 
 class ActivationLayer(ParameterBasedLayer):
@@ -55,7 +56,7 @@ class ActivationLayer(ParameterBasedLayer):
 
     def output(self, input_value):
         if self.size is not None:
-            input_value = T.dot(input_value, self.weight)
+            input_value = tf.matmul(input_value, self.weight)
 
             if self.bias is not None:
                 input_value += self.bias
@@ -105,7 +106,7 @@ class Sigmoid(ActivationLayer):
     {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
-        return T.nnet.sigmoid(input_value)
+        return tf.nn.sigmoid(input_value)
 
 
 class HardSigmoid(ActivationLayer):
@@ -125,28 +126,8 @@ class HardSigmoid(ActivationLayer):
     {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
-        return T.nnet.hard_sigmoid(input_value)
-
-
-class Step(ActivationLayer):
-    """
-    The layer with the the step activation function.
-
-    Parameters
-    ----------
-    {ActivationLayer.Parameters}
-
-    Methods
-    -------
-    {ActivationLayer.Methods}
-
-    Attributes
-    ----------
-    {ActivationLayer.Attributes}
-    """
-    def activation_function(self, input_value):
-        # Without cast function output will be boolean
-        return T.cast(T.gt(input_value, 0), 'int8')
+        input_value = (0.2 * input_value) + 0.5
+        return tf.clip_by_value(input_value, 0., 1.)
 
 
 class Tanh(ActivationLayer):
@@ -166,7 +147,7 @@ class Tanh(ActivationLayer):
     {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
-        return T.tanh(input_value)
+        return tf.nn.tanh(input_value)
 
 
 class Relu(ActivationLayer):
@@ -195,8 +176,9 @@ class Relu(ActivationLayer):
     weight = ParameterProperty(default=init.XavierNormal(gain='relu'))
 
     def activation_function(self, input_value):
-        alpha = asfloat(self.alpha)
-        return T.nnet.relu(input_value, alpha)
+        if self.alpha == 0:
+            return tf.nn.relu(input_value)
+        return tf.nn.leaky_relu(input_value, asfloat(self.alpha))
 
 
 class LeakyRelu(ActivationLayer):
@@ -221,7 +203,7 @@ class LeakyRelu(ActivationLayer):
     Do the same as ``layers.Relu(input_size, alpha=0.01)``.
     """
     def activation_function(self, input_value):
-        return T.nnet.relu(input_value, alpha=0.01)
+        return tf.nn.leaky_relu(input_value, alpha=asfloat(0.01))
 
 
 class Softplus(ActivationLayer):
@@ -241,7 +223,7 @@ class Softplus(ActivationLayer):
     {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
-        return T.nnet.softplus(input_value)
+        return tf.nn.softplus(input_value)
 
 
 class Softmax(ActivationLayer):
@@ -261,7 +243,7 @@ class Softmax(ActivationLayer):
     {ActivationLayer.Attributes}
     """
     def activation_function(self, input_value):
-        return T.nnet.softmax(input_value)
+        return tf.nn.softmax(input_value)
 
 
 class Elu(ActivationLayer):
@@ -271,10 +253,6 @@ class Elu(ActivationLayer):
 
     Parameters
     ----------
-    alpha : float
-        Alpha parameter defines the decreasing exponensial
-        rate for the negative values. Defaults to ``1``.
-
     {ActivationLayer.Parameters}
 
     Methods
@@ -289,11 +267,8 @@ class Elu(ActivationLayer):
     ----------
     .. [1] http://arxiv.org/pdf/1511.07289v3.pdf
     """
-    alpha = NumberProperty(default=1, minval=0)
-
     def activation_function(self, input_value):
-        alpha = asfloat(self.alpha)
-        return T.nnet.elu(input_value, alpha)
+        return tf.nn.elu(input_value)
 
 
 class AxesProperty(TypedListProperty):
@@ -311,16 +286,8 @@ class AxesProperty(TypedListProperty):
     {BaseProperty.required}
     """
     def __set__(self, instance, value):
-        if isinstance(value, int):
-            value = (value,)
+        value = (value,) if isinstance(value, int) else value
         super(AxesProperty, self).__set__(instance, value)
-
-    def validate(self, value):
-        super(AxesProperty, self).validate(value)
-
-        if any(element < 0 for element in value):
-            raise ValueError("Axes property is allowed only "
-                             "non-negative axis.")
 
 
 class PRelu(ActivationLayer):
@@ -333,9 +300,9 @@ class PRelu(ActivationLayer):
     alpha_axes : int or tuple
         Axes that will not include unique alpha parameter.
         Single integer value defines the same as a tuple with one value.
-        Defaults to ``1``.
+        Defaults to ``-1``.
 
-    alpha : array-like, Theano shared variable, scalar or Initializer
+    alpha : array-like, Tensorfow variable, scalar or Initializer
         Alpha parameter per each non-shared axis for the ReLu.
         Scalar value means that each element in the tensor will be
         equal to the specified value.
@@ -357,7 +324,7 @@ class PRelu(ActivationLayer):
     ----------
     .. [1] https://arxiv.org/pdf/1502.01852v1.pdf
     """
-    alpha_axes = AxesProperty(default=1)
+    alpha_axes = AxesProperty(default=-1)
     alpha = ParameterProperty(default=init.Constant(value=0.25))
 
     def __init__(self, *args, **options):
@@ -370,16 +337,27 @@ class PRelu(ActivationLayer):
         if max(self.alpha_axes) > len(input_shape):
             max_axis_index = len(input_shape) - 1
             raise ValueError("Cannot specify alpha for the axis #{}. "
-                             "Maximum available axis is #{} (0-based indeces)."
+                             "Maximum available axis is {} (0-based indeces)."
                              "".format(max(self.alpha_axes), max_axis_index))
 
     def initialize(self):
         super(PRelu, self).initialize()
+        output_shape = as_tuple(None, self.output_shape)
 
-        alpha_shape = [self.output_shape[axis - 1] for axis in self.alpha_axes]
-        self.add_parameter(value=self.alpha, name='alpha',
-                           shape=alpha_shape, trainable=True)
+        alpha_shape = [output_shape[axis] for axis in self.alpha_axes]
+        self.add_parameter(
+            value=self.alpha,
+            name='alpha',
+            shape=alpha_shape,
+            trainable=True,
+        )
 
     def activation_function(self, input_value):
-        alpha = dimshuffle(self.alpha, input_value.ndim, self.alpha_axes)
-        return T.nnet.relu(input_value, alpha)
+        input_value = tf.convert_to_tensor(input_value, dtype=tf.float32)
+        ndim = len(input_value.get_shape())
+
+        dimensions = np.arange(ndim)
+        alpha_axes = dimensions[list(self.alpha_axes)]
+
+        alpha = dimshuffle(self.alpha, ndim, alpha_axes)
+        return tf.nn.leaky_relu(tf.to_float(input_value), tf.to_float(alpha))

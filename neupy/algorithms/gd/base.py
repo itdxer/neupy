@@ -3,14 +3,14 @@ from __future__ import division
 import math
 
 import six
-import theano
-import theano.tensor as T
 import numpy as np
+import tensorflow as tf
 import progressbar
 
 from neupy.core.config import Configurable
 from neupy.core.properties import Property, BoundedProperty
 from neupy.utils import as_tuple
+from neupy.layers.utils import iter_parameters
 from neupy.algorithms.constructor import ConstructibleNetwork
 from neupy.algorithms.gd import addon_types
 
@@ -58,7 +58,7 @@ class GradientDescent(ConstructibleNetwork):
     # TODO: The arguments that have default value equal to `None`
     # are useful only in case if we need to save network in the
     # file. This solution looks bad and I need to redesign it later.
-    def __new__(cls, connection=None, options=None, floatX=None, **kwargs):
+    def __new__(cls, connection=None, options=None, **kwargs):
         # Argument `options` is a simple hack for the `__reduce__` method.
         # `__reduce__` can't retore class with keyword arguments and
         # it will put them as `dict` argument in the `options` and method
@@ -67,9 +67,6 @@ class GradientDescent(ConstructibleNetwork):
 
         if options is None:
             options = kwargs
-
-        if floatX is not None:
-            theano.config.floatX = floatX
 
         addons = options.get('addons')
 
@@ -107,15 +104,32 @@ class GradientDescent(ConstructibleNetwork):
 
         return super(GradientDescent, new_class).__new__(new_class)
 
-    def __init__(self, connection, options=None, floatX=None, **kwargs):
+    def __init__(self, connection, options=None, **kwargs):
         if options is None:
             options = kwargs
         super(GradientDescent, self).__init__(connection, **options)
 
-    def init_param_updates(self, layer, parameter):
+    def iter_params_and_grads(self):
+        layers, parameters = [], []
+
+        for layer, _, parameter in iter_parameters(self.layers):
+            layers.append(layer)
+            parameters.append(parameter)
+
+        gradients = tf.gradients(self.variables.error_func, parameters)
+        iterator = zip(layers, parameters, gradients)
+
+        for layer, parameter, gradient in iterator:
+            yield layer, parameter, gradient
+
+    def init_train_updates(self):
+        updates = []
         step = self.variables.step
-        gradient = T.grad(self.variables.error_func, wrt=parameter)
-        return [(parameter, parameter - step * gradient)]
+
+        for layer, parameter, gradient in self.iter_params_and_grads():
+            updates.append((parameter, parameter - step * gradient))
+
+        return updates
 
     def class_name(self):
         return self.main_class.__name__
@@ -128,8 +142,7 @@ class GradientDescent(ConstructibleNetwork):
 
     def __reduce__(self):
         parameters = self.get_params(with_connection=False)
-        floatX = theano.config.floatX
-        args = (self.connection, parameters, floatX)
+        args = (self.connection, parameters)
         return (self.main_class, args)
 
 
@@ -217,7 +230,8 @@ def cannot_divide_into_batches(data, batch_size):
 
 
 def apply_batches(function, arguments, batch_size, description='',
-                  show_progressbar=False, show_error_output=True):
+                  show_progressbar=False, show_error_output=True,
+                  scalar_output=True):
     """
     Apply batches to a specified function.
 
@@ -258,6 +272,9 @@ def apply_batches(function, arguments, batch_size, description='',
         raise ValueError("The argument parameter should be list or "
                          "tuple with at least one element.")
 
+    if not scalar_output and show_error_output:
+        raise ValueError("Cannot show error when output isn't scalar")
+
     samples = arguments[0]
     n_samples = len(samples)
     batch_iterator = list(iter_batches(n_samples, batch_size))
@@ -285,12 +302,22 @@ def apply_batches(function, arguments, batch_size, description='',
     outputs = []
     for i, batch in enumerate(batch_iterator):
         sliced_arguments = [argument[batch] for argument in arguments]
-
         output = function(*sliced_arguments)
+
+        if scalar_output:
+            output = np.atleast_1d(output)
+
+            if output.size > 1:
+                raise ValueError(
+                    "Cannot convert output from the batch, "
+                    "because it has more than one output value")
+
+            output = output.item(0)
+
         outputs.append(output)
 
         if show_error_output:
-            bar.update(i, error=np.atleast_1d(output).item(0))
+            bar.update(i, error=output)
         else:
             bar.update(i)
 
@@ -357,7 +384,8 @@ class MinibatchTrainingMixin(Configurable):
     batch_size = BatchSizeProperty(default=128)
 
     def apply_batches(self, function, input_data, arguments=(), description='',
-                      show_progressbar=None, show_error_output=False):
+                      show_progressbar=None, show_error_output=False,
+                      scalar_output=True):
         """
         Apply function per each mini-batch.
 
@@ -386,6 +414,9 @@ class MinibatchTrainingMixin(Configurable):
             ``True`` will show information in the progressbar.
             Error will be related to the last epoch.
 
+        scalar_output : bool
+            ``True`` means that we expect scalar value per each
+
         Returns
         -------
         list
@@ -395,7 +426,10 @@ class MinibatchTrainingMixin(Configurable):
         arguments = as_tuple(input_data, arguments)
 
         if cannot_divide_into_batches(input_data, self.batch_size):
-            return [function(*arguments)]
+            output = function(*arguments)
+            if scalar_output:
+                output = np.atleast_1d(output).item(0)
+            return [output]
 
         if show_progressbar is None:
             show_progressbar = (
@@ -412,6 +446,7 @@ class MinibatchTrainingMixin(Configurable):
             description=description,
             show_progressbar=show_progressbar,
             show_error_output=show_error_output,
+            scalar_output=scalar_output,
         )
 
 
@@ -552,5 +587,6 @@ class MinibatchGradientDescent(GradientDescent, MinibatchTrainingMixin):
             description='Prediction batches',
             show_progressbar=True,
             show_error_output=False,
+            scalar_output=False,
         )
         return np.concatenate(outputs, axis=0)

@@ -47,10 +47,10 @@ More information related to this plot function you can in the :plot:`error_plot`
     :alt: GradientDescent epoch errors plot
 
 
-Layer structure
----------------
+Network structure
+-----------------
 
-Visualize relations between layers in the network.
+Relations between layers in the network can be visualized using the ``network_structure`` function.
 
 .. code-block:: python
 
@@ -61,7 +61,7 @@ Visualize relations between layers in the network.
         layers.Relu(20),
         layers.Softmax(4),
     )
-    plots.layer_structure(network)
+    plots.network_structure(network)
 
 .. raw:: html
 

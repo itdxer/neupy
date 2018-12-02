@@ -1,4 +1,5 @@
 import copy
+from functools import partial
 
 from neupy import algorithms
 from neupy.layers import Input, Sigmoid
@@ -32,12 +33,12 @@ class RPROPTestCase(BaseTestCase):
         compare_networks(
             # Test classes
             algorithms.GradientDescent,
-            algorithms.RPROP,
+            partial(algorithms.RPROP, maxstep=0.1),
             # Test data
             (simple_input_train, simple_target_train),
             # Network configurations
             connection=self.connection,
-            step=1,
+            step=0.1,
             shuffle_data=True,
             verbose=False,
             # Test configurations
@@ -78,9 +79,47 @@ class RPROPTestCase(BaseTestCase):
 
         for algorithm_class in test_algorithms:
             with self.assertRaises(ValueError):
-                algorithm_class(self.connection,
-                                addons=[algorithms.ErrDiffStepUpdate])
+                algorithm_class(
+                    (3, 10, 2),
+                    addons=[algorithms.ErrDiffStepUpdate])
 
             # But this code should work fine
-            algorithm_class(self.connection,
-                            addons=[algorithms.WeightDecay])
+            algorithm_class(
+                (3, 10, 2),
+                addons=[algorithms.WeightDecay])
+
+    def test_rprop_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(
+                algorithms.RPROP,
+                minstep=1e-5,
+                step=0.05,
+                maxstep=1.0,
+
+                increase_factor=1.5,
+                decrease_factor=0.5,
+
+                verbose=False,
+                show_epoch=100,
+            ),
+            epochs=5000,
+            min_accepted_error=0.006,
+        )
+
+    def test_irproplus_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(
+                algorithms.IRPROPPlus,
+                minstep=1e-5,
+                step=0.05,
+                maxstep=1.0,
+
+                increase_factor=1.5,
+                decrease_factor=0.5,
+
+                verbose=False,
+                show_epoch=100,
+            ),
+            epochs=5000,
+            min_accepted_error=0.005,
+        )

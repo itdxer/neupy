@@ -99,7 +99,7 @@ function findRelevantDocuments(query) {
 
 function search(query) {
     var documents = findRelevantDocuments(query);
-    var resultsList = $('#search-results .search');
+    var resultsList = $('#results-list .search');
 
     $('#searching-in-progress').hide();
 

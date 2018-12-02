@@ -7,14 +7,16 @@ from base import BaseTestCase
 
 
 class SaliencyMapTestCase(BaseTestCase):
+    single_thread = True
+
     def test_invalid_arguments_exceptions(self):
         network = layers.join(
-            layers.Input((3, 28, 28)),
-            layers.Convolution((8, 3, 3), name='conv') > layers.Relu(),
+            layers.Input((28, 28, 3)),
+            layers.Convolution((3, 3, 8), name='conv') > layers.Relu(),
             layers.Reshape(),
             layers.Softmax(10),
         )
-        image = np.ones((3, 28, 28))
+        image = np.ones((28, 28, 3))
 
         with self.assertRaisesRegexp(ValueError, 'Invalid image shape'):
             plots.saliency_map(network, np.ones((28, 28)))
@@ -30,7 +32,7 @@ class SaliencyMapTestCase(BaseTestCase):
 
         with self.assertRaises(InvalidConnection):
             new_network = [
-                layers.Input((3, 28, 28)), layers.Input((3, 28, 28))
+                layers.Input((28, 28, 3)), layers.Input((28, 28, 3))
             ] > network.start('conv')
             plots.saliency_map(new_network, image)
 

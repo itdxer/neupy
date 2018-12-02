@@ -10,7 +10,6 @@ from collections import defaultdict, namedtuple
 import nltk
 import numpy as np
 import scipy.sparse as sp
-import ujson as json
 from six.moves.urllib.parse import urljoin, urlparse
 
 from pagerank import pagerank

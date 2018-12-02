@@ -2,17 +2,18 @@ import os
 import argparse
 from functools import partial
 
-import theano
-import theano.tensor as T
-import numpy as np
+import tensorflow as tf
 
-from neupy.utils import as_tuple, asfloat, asint
-from neupy import layers, init, algorithms, environment, storage
+from neupy import layers, init, algorithms, storage
+from neupy.utils import (as_tuple, asfloat, flatten, tf_repeat,
+                         tensorflow_session)
 
 from loaddata import load_data
 from settings import MODELS_DIR, environments
 from evaluation import evaluate_accuracy
 
+
+UNKNOWN = None
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--imsize', '-i', choices=[8, 16, 28],
@@ -20,89 +21,104 @@ parser.add_argument('--imsize', '-i', choices=[8, 16, 28],
 
 
 def random_weight(shape):
-    weight = 0.01 * np.random.random(shape)
-    return theano.shared(asfloat(weight))
+    initializer = init.Normal()
+    weight = initializer.sample(shape)
+    return tf.Variable(
+        asfloat(weight),
+        name='network/scalar-step',
+        dtype=tf.float32
+    )
 
 
-class GlobalMaxPooling(layers.BaseLayer):
+class ChannelGlobalMaxPooling(layers.BaseLayer):
     @property
     def output_shape(self):
         shape = self.input_shape
-        # as_tuple(1, (8, 8)) -> (1, 8, 8)
-        return as_tuple(1, shape[1:])
+        # as_tuple((8, 8), 1) -> (8, 8, 1)
+        return as_tuple(shape[:-1], 1)
 
     def output(self, input_value):
-        return T.max(input_value, axis=1, keepdims=True)
+        return tf.reduce_max(input_value, axis=-1, keepdims=True)
 
 
 class SelectValueAtStatePosition(layers.BaseLayer):
     @property
     def output_shape(self):
         q_output_shape = self.input_shape[0]
-        n_filters = q_output_shape[0]
-        # as_tuple(3) -> (3,)
-        return as_tuple(n_filters)
+        n_filters = q_output_shape[-1]
+        return as_tuple(n_filters)  # as_tuple(3) -> (3,)
 
     def output(self, Q, input_state_1, input_state_2):
-        # Number of samples dependce on the state batch size.
-        # Each iteration we can try to predict direction from
-        # multiple different starting points at the same time.
-        n_states = input_state_1.shape[1]
+        with tf.name_scope("Q-output"):
+            # Number of samples depend on the state's batch size.
+            # Each iteration we can try to predict direction from
+            # multiple different starting points at the same time.
+            input_shape = tf.shape(input_state_1)
+            n_states = input_shape[1]
+            Q_shape = tf.shape(Q)
 
-        # Output is a matrix that has n_samples * n_states rows
-        # and n_filters (which is Q.shape[1]) columns.
-        return Q[
-            # Numer of repetitions depends on the size of
-            # the state batch
-            T.extra_ops.repeat(T.arange(Q.shape[0]), n_states),
+            indeces = tf.stack([
+                # Numer of repetitions depends on the size of
+                # the state batch
+                tf_repeat(tf.range(Q_shape[0]), n_states),
 
-            # Extract all channels
-            :,
+                # Each state is a coordinate (x and y)
+                # that point to some place on a grid.
+                tf.cast(flatten(input_state_1), tf.int32),
+                tf.cast(flatten(input_state_2), tf.int32),
+            ])
+            indeces = tf.transpose(indeces, [1, 0])
 
-            # Each state is a coordinate (x and y)
-            # that point to some place on a grid.
-            asint(input_state_1.flatten()),
-            asint(input_state_2.flatten()),
-        ]
+            # Output is a matrix that has n_samples * n_states rows
+            # and n_filters (which is Q.shape[1]) columns.
+            return tf.gather_nd(Q, indeces)
 
 
-def create_VIN(input_image_shape=(2, 8, 8), n_hidden_filters=150,
+def create_VIN(input_image_shape=(8, 8, 2), n_hidden_filters=150,
                n_state_filters=10, k=10):
 
-    HalfPaddingConv = partial(layers.Convolution, padding='half', bias=None)
+    SamePadConvolution = partial(layers.Convolution, padding='SAME', bias=None)
 
     R = layers.join(
         layers.Input(input_image_shape, name='grid-input'),
-        layers.Convolution((n_hidden_filters, 3, 3),
-                           padding='half',
+        layers.Convolution((3, 3, n_hidden_filters),
+                           padding='SAME',
                            weight=init.Normal(),
                            bias=init.Normal()),
-        HalfPaddingConv((1, 1, 1), weight=init.Normal()),
+        SamePadConvolution((1, 1, 1), weight=init.Normal()),
     )
 
     # Create shared weights
-    q_weight = random_weight((n_state_filters, 1, 3, 3))
-    fb_weight = random_weight((n_state_filters, 1, 3, 3))
+    q_weight = random_weight((3, 3, 1, n_state_filters))
+    fb_weight = random_weight((3, 3, 1, n_state_filters))
 
-    Q = R > HalfPaddingConv((n_state_filters, 3, 3), weight=q_weight)
+    Q = R > SamePadConvolution((3, 3, n_state_filters), weight=q_weight)
 
     for i in range(k):
-        V = Q > GlobalMaxPooling()
+        V = Q > ChannelGlobalMaxPooling()
         Q = layers.join(
-            # Convolve R and V separately and then add
-            # outputs together with the Elementwise layer
+            # Convolve R and V separately and then add outputs together with
+            # the Elementwise layer. This part of the code looks different
+            # from the one that was used in the original VIN repo, but
+            # it does the same operation.
+            #
+            # conv(x, w) == (conv(x1, w1) + conv(x2, w2))
+            # where, x = concat(x1, x2)
+            #        w = concat(w1, w2)
+            #
+            # See code sample from Github Gist: https://bit.ly/2zm3ntN
             [[
                 R,
-                HalfPaddingConv((n_state_filters, 3, 3), weight=q_weight)
+                SamePadConvolution((3, 3, n_state_filters), weight=q_weight)
             ], [
                 V,
-                HalfPaddingConv((n_state_filters, 3, 3), weight=fb_weight)
+                SamePadConvolution((3, 3, n_state_filters), weight=fb_weight)
             ]],
-            layers.Elementwise(merge_function=T.add),
+            layers.Elementwise(merge_function=tf.add),
         )
 
-    input_state_1 = layers.Input(10, name='state-1-input')
-    input_state_2 = layers.Input(10, name='state-2-input')
+    input_state_1 = layers.Input(UNKNOWN, name='state-1-input')
+    input_state_2 = layers.Input(UNKNOWN, name='state-2-input')
 
     # Select the conv-net channels at the state position (S1, S2)
     VIN = [Q, input_state_1, input_state_2] > SelectValueAtStatePosition()
@@ -116,33 +132,39 @@ def create_VIN(input_image_shape=(2, 8, 8), n_hidden_filters=150,
 
 
 def loss_function(expected, predicted):
-    epsilon = 1e-7
-    log_predicted = T.log(T.clip(predicted, epsilon, 1.0 - epsilon))
-    errors = log_predicted[T.arange(expected.size), asint(expected.flatten())]
-    return -T.mean(errors)
+    epsilon = 1e-7  # for 32-bit float
+
+    predicted = tf.clip_by_value(predicted, epsilon, 1.0 - epsilon)
+    expected = tf.cast(flatten(expected), tf.int32)
+
+    log_predicted = tf.log(predicted)
+    indeces = tf.stack([tf.range(tf.size(expected)), expected])
+    indeces = tf.transpose(indeces, [1, 0])
+    errors = tf.gather_nd(log_predicted, indeces)
+    return -tf.reduce_mean(errors)
 
 
-def on_epoch_end(network):
-    steps = {
-        30: 0.005,
-        60: 0.002,
-        90: 0.001,
-    }
+def on_epoch_end_from_steps(steps):
+    def on_epoch_end(network):
+        if network.last_epoch in steps:
+            print("Saving pre-trained VIN model...")
+            storage.save(network, env['pretrained_network_file'])
 
-    if network.last_epoch in steps:
-        new_step = steps[network.last_epoch]
-        network.variables.step.set_value(new_step)
+            new_step = steps[network.last_epoch]
+            session = tensorflow_session()
+            network.variables.step.load(new_step, session)
+    return on_epoch_end
 
 
 if __name__ == '__main__':
-    environment.speedup()
-
     args = parser.parse_args()
     env = environments[args.imsize]
 
+    print("Loading train and test data...")
     x_train, s1_train, s2_train, y_train = load_data(env['train_data_file'])
     x_test, s1_test, s2_test, y_test = load_data(env['test_data_file'])
 
+    print("Initializing VIN...")
     network = algorithms.RMSProp(
         create_VIN(
             env['input_image_shape'],
@@ -151,21 +173,24 @@ if __name__ == '__main__':
             k=env['k'],
         ),
 
-        step=0.01,
         verbose=True,
-        batch_size=12,
         error=loss_function,
-        epoch_end_signal=on_epoch_end,
-
-        decay=0.9,
-        epsilon=1e-6,
+        epoch_end_signal=on_epoch_end_from_steps(env['steps']),
+        **env['training_options']
     )
-    network.train((x_train, s1_train, s2_train), y_train,
-                  (x_test, s1_test, s2_test), y_test,
-                  epochs=120)
+
+    print("Training VIN...")
+    network.train(
+        (x_train, s1_train, s2_train), y_train,
+        (x_test, s1_test, s2_test), y_test,
+        epochs=env['epochs'],
+    )
 
     if not os.path.exists(MODELS_DIR):
         os.mkdir(MODELS_DIR)
 
+    print("Saving pre-trained VIN model...")
     storage.save(network, env['pretrained_network_file'])
-    evaluate_accuracy(network.connection.compile(), x_test, s1_test, s2_test)
+
+    print("Evaluating accuracy on test set...")
+    evaluate_accuracy(network.predict, x_test, s1_test, s2_test)

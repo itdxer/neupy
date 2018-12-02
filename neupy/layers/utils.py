@@ -1,8 +1,9 @@
-import theano.tensor as T
+import numpy as np
+import tensorflow as tf
 
 
 __all__ = ('preformat_layer_shape', 'dimshuffle', 'iter_parameters',
-           'count_parameters', 'create_input_variable', 'extract_connection')
+           'count_parameters', 'extract_connection')
 
 
 def preformat_layer_shape(shape):
@@ -29,20 +30,19 @@ def dimshuffle(value, ndim, axes):
 
     Parameters
     ----------
-    value : Theano variable
+    value : Tensorfow variable
     ndim : int
     axes : tuple, list
 
     Returns
     -------
-    Theano variable
+    Tensorfow variable
     """
-    pattern = ['x'] * ndim
+    for dim in range(ndim):
+        if dim not in axes:
+            value = tf.expand_dims(value, dim)
 
-    for i, axis in enumerate(axes):
-        pattern[axis] = i
-
-    return value.dimshuffle(pattern)
+    return value
 
 
 def iter_parameters(layers, only_trainable=True):
@@ -65,12 +65,12 @@ def iter_parameters(layers, only_trainable=True):
     observed_parameters = []
 
     for layer in layers:
-        for attrname, parameter in layer.parameters.items():
-            new_parameter = parameter not in observed_parameters
+        for attrname, param in layer.parameters.items():
+            new_param = param not in observed_parameters
 
-            if new_parameter and (parameter.trainable or not only_trainable):
-                observed_parameters.append(parameter)
-                yield layer, attrname, parameter
+            if new_param and (param.is_trainable or not only_trainable):
+                observed_parameters.append(param)
+                yield layer, attrname, param
 
 
 def count_parameters(connection):
@@ -89,42 +89,10 @@ def count_parameters(connection):
     n_parameters = 0
 
     for _, _, parameter in iter_parameters(connection):
-        parameter = parameter.get_value()
-        n_parameters += parameter.size
+        shape = parameter.get_shape()
+        n_parameters += np.prod(shape.as_list())
 
     return n_parameters
-
-
-def create_input_variable(input_shape, name):
-    """
-    Create input variable based on the specified
-    input shape.
-
-    Parameters
-    ----------
-    input_shape : tuple
-    name : str
-
-    Returns
-    -------
-    Theano variable
-    """
-    dim_to_variable_type = {
-        2: T.matrix,
-        3: T.tensor3,
-        4: T.tensor4,
-    }
-
-    # Shape doesn't include batch size dimension,
-    # that's why we need to add one
-    ndim = len(input_shape) + 1
-
-    if ndim not in dim_to_variable_type:
-        raise ValueError("Layer's input needs to be 2, 3 or 4 "
-                         "dimensional. Found {} dimensions".format(ndim))
-
-    variable_type = dim_to_variable_type[ndim]
-    return variable_type(name)
 
 
 def extract_connection(instance):

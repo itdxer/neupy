@@ -149,6 +149,19 @@ class LVQ(BaseNetwork):
     {BaseSkeleton.predict}
 
     {BaseSkeleton.fit}
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from neupy import algorithms
+    >>>
+    >>> X = np.array([[0, 0], [0, 1], [1, 0], [1, 1], [2, 2], [1, 2]])
+    >>> y = np.array([0, 0, 0, 1, 1, 1])
+    >>>
+    >>> lvqnet = algorithms.LVQ(n_inputs=2, n_classes=2)
+    >>> lvqnet.train(X, y, epochs=100)
+    >>> lvqnet.predict([[2, 1], [-1, -1]])
+    array([1, 0])
     """
     n_inputs = IntProperty(minval=1)
     n_subclasses = IntProperty(minval=2, default=None, allow_none=True)
@@ -334,6 +347,19 @@ class LVQ2(LVQ):
     Notes
     -----
     {LVQ.Notes}
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from neupy import algorithms
+    >>>
+    >>> X = np.array([[0, 0], [0, 1], [1, 0], [1, 1], [2, 2], [1, 2]])
+    >>> y = np.array([0, 0, 0, 1, 1, 1])
+    >>>
+    >>> lvqnet = algorithms.LVQ2(n_inputs=2, n_classes=2)
+    >>> lvqnet.train(X, y, epochs=100)
+    >>> lvqnet.predict([[2, 1], [-1, -1]])
+    array([1, 0])
     """
     epsilon = NumberProperty(default=0.1)
 
@@ -392,6 +418,19 @@ class LVQ21(LVQ2):
     Notes
     -----
     {LVQ2.Notes}
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from neupy import algorithms
+    >>>
+    >>> X = np.array([[0, 0], [0, 1], [1, 0], [1, 1], [2, 2], [1, 2]])
+    >>> y = np.array([0, 0, 0, 1, 1, 1])
+    >>>
+    >>> lvqnet = algorithms.LVQ21(n_inputs=2, n_classes=2)
+    >>> lvqnet.train(X, y, epochs=100)
+    >>> lvqnet.predict([[2, 1], [-1, -1]])
+    array([1, 0])
     """
     def train_epoch(self, input_train, target_train):
         weight = self.weight
@@ -484,6 +523,19 @@ class LVQ3(LVQ21):
     {LVQ21.Notes}
     - Decreasing step and increasing number of training epochs
       can improve the performance.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from neupy import algorithms
+    >>>
+    >>> X = np.array([[0, 0], [0, 1], [1, 0], [1, 1], [2, 2], [1, 2]])
+    >>> y = np.array([0, 0, 0, 1, 1, 1])
+    >>>
+    >>> lvqnet = algorithms.LVQ3(n_inputs=2, n_classes=2)
+    >>> lvqnet.train(X, y, epochs=100)
+    >>> lvqnet.predict([[2, 1], [-1, -1]])
+    array([1, 0])
     """
     step = NumberProperty(minval=0, default=0.01)
     slowdown_rate = NumberProperty(minval=0, default=0.4)

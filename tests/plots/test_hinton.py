@@ -1,7 +1,6 @@
 import os
 
 import numpy as np
-import theano
 import matplotlib.pyplot as plt
 
 from neupy import plots
@@ -15,9 +14,7 @@ IMGDIR = os.path.join("plots", "images", "hinton")
 
 
 class HintonDiagramTestCase(BaseTestCase):
-    def setUp(self):
-        super(HintonDiagramTestCase, self).setUp()
-        theano.config.floatX = 'float64'
+    single_thread = True
 
     @skip_image_comparison_if_specified
     def test_simple_hinton(self):

@@ -1,8 +1,5 @@
-import theano
-import theano.tensor as T
-import numpy as np
+import tensorflow as tf
 
-from neupy.utils import asfloat
 from neupy.core.properties import ProperFractionProperty, Property
 from .base import MinibatchGradientDescent
 
@@ -51,22 +48,28 @@ class Momentum(MinibatchGradientDescent):
     momentum = ProperFractionProperty(default=0.9)
     nesterov = Property(default=False, expected_type=bool)
 
-    def init_param_updates(self, layer, parameter):
+    def init_train_updates(self):
+        """
+        Initialize updates that would be applied after
+        each training epoch.
+        """
+        updates = []
         step = self.variables.step
 
-        parameter_shape = parameter.get_value().shape
-        previous_velocity = theano.shared(
-            name="{}/previous-velocity".format(parameter.name),
-            value=asfloat(np.zeros(parameter_shape)),
-        )
+        for layer, parameter, gradient in self.iter_params_and_grads():
+            previous_velocity = tf.Variable(
+                tf.zeros(parameter.shape),
+                name="{}/previous-velocity".format(parameter.op.name),
+                dtype=tf.float32,
+            )
+            velocity = self.momentum * previous_velocity - step * gradient
 
-        gradient = T.grad(self.variables.error_func, wrt=parameter)
-        velocity = self.momentum * previous_velocity - step * gradient
+            if self.nesterov:
+                velocity = self.momentum * velocity - step * gradient
 
-        if self.nesterov:
-            velocity = self.momentum * velocity - step * gradient
+            updates.extend([
+                (parameter, parameter + velocity),
+                (previous_velocity, velocity),
+            ])
 
-        return [
-            (parameter, parameter + velocity),
-            (previous_velocity, velocity),
-        ]
+        return updates

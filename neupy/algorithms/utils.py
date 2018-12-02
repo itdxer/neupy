@@ -1,7 +1,7 @@
 import numpy as np
-import theano.tensor as T
+import tensorflow as tf
 
-
+from neupy.utils import flatten
 from neupy.layers.utils import iter_parameters
 
 
@@ -19,7 +19,7 @@ def parameter_values(connection):
 
     Yields
     ------
-    Theano shared variable
+    Tensorfow variable
         Network's trainable parameter.
     """
     parameters = []
@@ -41,7 +41,7 @@ def setup_parameter_updates(parameters, parameter_update_vector):
     parameters : list
         List of parameters.
 
-    parameter_update_vector : Theano varible
+    parameter_update_vector : Tensorfow varible
         Vector that contains updates for all parameters.
 
     Returns
@@ -53,9 +53,9 @@ def setup_parameter_updates(parameters, parameter_update_vector):
     start_position = 0
 
     for parameter in parameters:
-        end_position = start_position + parameter.size
+        end_position = start_position + tf.size(parameter)
 
-        new_parameter = T.reshape(
+        new_parameter = tf.reshape(
             parameter_update_vector[start_position:end_position],
             parameter.shape
         )
@@ -156,3 +156,8 @@ def shuffle(*arrays):
         return arrays[0]
 
     return tuple(arrays)
+
+
+def make_single_vector(parameters):
+    with tf.name_scope('make-single-vector'):
+        return tf.concat([flatten(param) for param in parameters], axis=0)

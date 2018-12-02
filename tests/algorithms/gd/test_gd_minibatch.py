@@ -2,20 +2,24 @@ from itertools import product
 
 import numpy as np
 
-from neupy import algorithms
-from neupy.algorithms.gd.base import (BatchSizeProperty, iter_batches,
-                                      average_batch_errors, count_samples,
-                                      cannot_divide_into_batches)
+from neupy import algorithms, environment
+from neupy.algorithms.gd.base import (
+    BatchSizeProperty, iter_batches,
+    average_batch_errors, count_samples,
+    cannot_divide_into_batches,
+)
 
 from data import simple_classification
 from base import BaseTestCase
 
 
 class MinibatchGDTestCase(BaseTestCase):
-    network_classes = [
-        algorithms.MinibatchGradientDescent,
-        algorithms.Momentum,
-    ]
+    def setUp(self):
+        super(MinibatchGDTestCase, self).setUp()
+        self.network_classes = [
+            algorithms.MinibatchGradientDescent,
+            algorithms.Momentum,
+        ]
 
     def test_minibatch_valid_values(self):
         valid_values = [None, 1, 10, 1000]
@@ -37,15 +41,19 @@ class MinibatchGDTestCase(BaseTestCase):
 
         for network_class in self.network_classes:
             errors = []
+
             for fullbatch_value in fullbatch_identifiers:
-                self.setUp()
+                environment.reproducible(seed=self.random_seed)
 
                 net = network_class((10, 20, 1), batch_size=fullbatch_value)
                 net.train(x_train, y_train, epochs=10)
 
                 errors.append(net.errors.last())
 
-            self.assertTrue(all(e == errors[0] for e in errors))
+            self.assertTrue(
+                np.all(np.abs(errors - errors[0]) < 1e-3),
+                msg=errors,
+            )
 
     def test_iterbatches(self):
         n_samples = 50

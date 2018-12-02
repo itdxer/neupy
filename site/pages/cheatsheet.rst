@@ -4,17 +4,18 @@ Cheat sheet
 ===========
 
 .. contents::
+    :depth: 2
 
 Algorithms
 **********
 
-Algorithms that use Backpropagation training approach
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Algorithms based on backpropagation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. _cheatsheet-backprop-algorithms:
 
-Trainig algorithms
-++++++++++++++++++
+Training algorithms
++++++++++++++++++++
 
 .. csv-table::
     :header: "Class name", "Name"
@@ -29,7 +30,6 @@ Trainig algorithms
     :network:`Momentum`, Momentum
     :network:`RPROP`, RPROP
     :network:`IRPROPPlus`, iRPROP+
-    :network:`Quickprop`, Quickprop
     :network:`Adadelta`, Adadelta
     :network:`Adagrad`, Adagrad
     :network:`RMSProp`, RMSProp
@@ -57,15 +57,6 @@ Learning rate update rules
     :network:`LinearSearch`, Linear search by Golden Search or Brent
     :network:`SearchThenConverge`, Search than converge
     :network:`StepDecay`, Minimize step monotonically after each epoch
-
-Ensembles
-~~~~~~~~~
-
-.. csv-table::
-    :header: "Class name", "Name"
-
-    :architecture:`mixture_of_experts`, Mixture of Experts
-    :network:`DynamicallyAveragedNetwork`, Dynamically Averaged Network (DAN)
 
 Neural Networks with Radial Basis Functions (RBFN)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,16 +92,6 @@ Competitive Networks
     :network:`LVQ21`, Learning Vector Quantization 2.1 (LVQ2.1)
     :network:`LVQ3`, Learning Vector Quantization 3 (LVQ3)
 
-Linear networks
-~~~~~~~~~~~~~~~
-
-.. csv-table::
-    :header: "Class name", "Name"
-
-    :network:`Perceptron`, Perceptron
-    :network:`LMS`, LMS Network
-    :network:`ModifiedRelaxation`, Modified Relaxation Network
-
 Associative
 ~~~~~~~~~~~
 
@@ -142,7 +123,6 @@ Layers with activation function
     ":layer:`Linear`", "Layer with linear activation function."
     ":layer:`Sigmoid`", "Layer with sigmoid activation function."
     ":layer:`HardSigmoid`", "Layer with hard sigmoid activation function."
-    ":layer:`Step`", "Layer with step activation function."
     ":layer:`Tanh`", "Layer with tanh activation function."
     ":layer:`Relu`", "Layer with ReLu activation function."
     ":layer:`LeakyRelu`", "Layer with Leaky ReLu activation function."
@@ -158,6 +138,7 @@ Convolutional layers
     :header: "Class name", "Description"
 
     ":layer:`Convolution`", "Convolutional layer"
+    ":layer:`Deconvolution`", "Deconvolutional layer"
 
 
 Recurrent layers
@@ -216,6 +197,7 @@ Other layers
 
     ":layer:`Input`", "Layer defines input value's feature shape"
     ":layer:`Reshape`", "Reshape tensor input"
+    ":layer:`Transpose`", "Transpose dimensions of the tensor input"
     ":layer:`Embedding`", "Embedding layer accepts indeces as an input and returns rows from the weight matrix associated with these indeces."
 
 Architectures
@@ -227,14 +209,13 @@ Architectures
     ":architecture:`vgg16`", "VGG16 network"
     ":architecture:`vgg19`", "VGG19 network"
     ":architecture:`squeezenet`", "SqueezeNet network"
-    ":architecture:`alexnet`", "AlexNet network"
+    ":architecture:`resnet50`", "ResNet-50 network"
     ":architecture:`mixture_of_experts`", Mixture of Experts
-
 
 .. _init-methods:
 
-Parameter Initialization Methods
-********************************
+Parameter initialization
+************************
 
 .. code-block:: python
 
@@ -266,8 +247,8 @@ Parameter Initialization Methods
 
 .. _cheatsheet-error-function:
 
-Error functions
-***************
+Loss functions
+**************
 
 .. csv-table::
     :header: "Function name", "Description"

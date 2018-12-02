@@ -1,10 +1,10 @@
 from collections import namedtuple
 
-import theano
 import numpy as np
+import tensorflow as tf
 from scipy.sparse import csr_matrix
 
-from neupy.utils import (preformat_value, as_tuple, AttributeKeyDict, asint,
+from neupy.utils import (preformat_value, as_tuple, AttributeKeyDict,
                          asfloat, format_data, all_equal)
 from neupy.algorithms.utils import shuffle, iter_until_converge
 from neupy import algorithms
@@ -85,14 +85,12 @@ class UtilsTestCase(BaseTestCase):
         self.assertEqual(formated_x.shape, (1, 10))
 
     def test_asfloat(self):
-        float_type = theano.config.floatX
-
         # Sparse matrix
         sparse_matrix = csr_matrix((3, 4), dtype=np.int8)
         self.assertIs(sparse_matrix, asfloat(sparse_matrix))
 
         # Numpy array-like elements
-        x = np.array([1, 2, 3], dtype=float_type)
+        x = np.array([1, 2, 3], dtype=np.float32)
         self.assertIs(x, asfloat(x))
 
         x = np.array([1, 2, 3], dtype=np.int8)
@@ -102,47 +100,30 @@ class UtilsTestCase(BaseTestCase):
         x = [1, 2, 3]
         self.assertEqual(asfloat(x).shape, (3,))
 
-        # Theano variables
-        x = theano.tensor.imatrix()
-        self.assertNotEqual(x.dtype, float_type)
-        self.assertEqual(asfloat(x).dtype, float_type)
-
-    def test_asint(self):
-        int2float_types = {
-            'float32': 'int32',
-            'float64': 'int64',
-        }
-        int_type = int2float_types[theano.config.floatX]
-
-        # Sparse matrix
-        sparse_matrix = csr_matrix((3, 4), dtype=np.int8)
-        self.assertIs(sparse_matrix, asint(sparse_matrix))
-
-        # Numpy array-like elements
-        x = np.array([1, 2, 3], dtype=int_type)
-        self.assertIs(x, asint(x))
-
-        x = np.array([1, 2, 3], dtype=np.int8)
-        self.assertIsNot(x, asint(x))
-
-        # Python list
-        x = [1, 2, 3]
-        self.assertEqual(asint(x).shape, (3,))
-
-        # Theano variables
-        x = theano.tensor.fmatrix()
-        self.assertNotEqual(x.dtype, int_type)
-        self.assertEqual(asint(x).dtype, int_type)
+        # Tensorfow variables
+        x = tf.placeholder(dtype=tf.int32)
+        self.assertNotEqual(x.dtype, tf.float32)
+        self.assertEqual(asfloat(x).dtype, tf.float32)
 
     def test_as_tuple(self):
         Case = namedtuple("Case", "input_args expected_output")
         testcases = (
-            Case(input_args=(1, 2, 3),
-                 expected_output=(1, 2, 3)),
-            Case(input_args=(None, (1, 2, 3), None),
-                 expected_output=(None, 1, 2, 3, None)),
-            Case(input_args=((1, 2, 3), (4, 5, 3)),
-                 expected_output=(1, 2, 3, 4, 5, 3)),
+            Case(
+                input_args=(1, 2, 3),
+                expected_output=(1, 2, 3),
+            ),
+            Case(
+                input_args=(None, (1, 2, 3), None),
+                expected_output=(None, 1, 2, 3, None),
+            ),
+            Case(
+                input_args=((1, 2, 3), tuple()),
+                expected_output=(1, 2, 3),
+            ),
+            Case(
+                input_args=((1, 2, 3), (4, 5, 3)),
+                expected_output=(1, 2, 3, 4, 5, 3),
+            ),
         )
 
         for testcase in testcases:

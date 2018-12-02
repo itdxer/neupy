@@ -1,21 +1,44 @@
 import inspect
+from functools import wraps
 
-import theano
-import theano.tensor as T
-from theano.tensor.var import TensorVariable
-from theano.tensor.sharedvar import TensorSharedVariable
 import numpy as np
 from scipy.sparse import issparse
+import tensorflow as tf
 
 
 __all__ = ('format_data', 'asfloat', 'AttributeKeyDict', 'preformat_value',
-           'as_tuple', 'asint', 'number_type', 'theano_random_stream',
-           'all_equal')
+           'as_tuple', 'number_type', 'all_equal', 'class_method_name_scope',
+           'tensorflow_session', 'tensorflow_eval', 'tf_repeat',
+           'initialize_uninitialized_variables', 'function_name_scope')
 
 
-# Disable annoying warning from Theano
-theano.config.warn.round = False
 number_type = (int, float, np.floating, np.integer)
+
+
+def function_name_scope(function):
+    """
+    Decorator that wraps any function with the name score that has the
+    same name as a function.
+    """
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        with tf.name_scope(function.__name__):
+            return function(*args, **kwargs)
+    return wrapper
+
+
+def class_method_name_scope(method):
+    """
+    Decorator that wraps any method with the name score that has the
+    same name as a method.
+    """
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        with tf.name_scope(self.__class__.__name__):
+            return method(*args, **kwargs)
+
+    wrapper.original_method = method
+    return wrapper
 
 
 def format_data(data, is_feature1d=True, copy=False, make_float=True):
@@ -71,76 +94,34 @@ def format_data(data, is_feature1d=True, copy=False, make_float=True):
 
 def asfloat(value):
     """
-    Convert variable to float type configured by theano
-    floatX variable.
+    Convert variable to 32 bit float number.
 
     Parameters
     ----------
-    value : matrix, ndarray, Theano variable or scalar
+    value : matrix, ndarray, Tensorfow variable or scalar
         Value that could be converted to float type.
 
     Returns
     -------
-    matrix, ndarray, Theano variable or scalar
-        Output would be input value converted to float type
-        configured by theano floatX variable.
+    matrix, ndarray, Tensorfow variable or scalar
+        Output would be input value converted to 32 bit float.
     """
-    float_type = theano.config.floatX
+    float_type = 'float32'
 
     if isinstance(value, (np.matrix, np.ndarray)):
         if value.dtype != np.dtype(float_type):
             return value.astype(float_type)
-        else:
-            return value
 
-    elif isinstance(value, (TensorVariable, TensorSharedVariable)):
-        return T.cast(value, float_type)
+        return value
+
+    elif isinstance(value, (tf.Tensor, tf.SparseTensor)):
+        return tf.cast(value, tf.float32)
 
     elif issparse(value):
         return value
 
     float_x_type = np.cast[float_type]
     return float_x_type(value)
-
-
-def asint(value):
-    """
-    Convert variable to an integer type. Number of bits per
-    integer depend on floatX Theano variable.
-
-    Parameters
-    ----------
-    value : matrix, ndarray, Theano variable or scalar
-        Value that could be converted to the integer type.
-
-    Returns
-    -------
-    matrix, ndarray, Theano variable or scalar
-        Output would be input value converted to the integer type.
-    """
-    int2float_types = {
-        'float16': 'int16',
-        'float32': 'int32',
-        'float64': 'int64',
-    }
-
-    float_type = theano.config.floatX
-    int_type = int2float_types[float_type]
-
-    if isinstance(value, (np.matrix, np.ndarray)):
-        if value.dtype != np.dtype(int_type):
-            return value.astype(int_type)
-        else:
-            return value
-
-    elif isinstance(value, (TensorVariable, TensorSharedVariable)):
-        return T.cast(value, int_type)
-
-    elif issparse(value):
-        return value
-
-    int_x_type = np.cast[int_type]
-    return int_x_type(value)
 
 
 class AttributeKeyDict(dict):
@@ -224,22 +205,11 @@ def as_tuple(*values):
     """
     cleaned_values = []
     for value in values:
-        if isinstance(value, tuple):
+        if isinstance(value, (tuple, list)):
             cleaned_values.extend(value)
         else:
             cleaned_values.append(value)
     return tuple(cleaned_values)
-
-
-def theano_random_stream():
-    """
-    Create Theano random stream instance.
-    """
-    # Use NumPy seed to make Theano code easely reproducible
-    max_possible_seed = 2147483647  # max 32-bit integer
-    seed = np.random.randint(max_possible_seed)
-    theano_random = T.shared_randomstreams.RandomStreams(seed)
-    return theano_random
 
 
 def all_equal(array):
@@ -270,3 +240,88 @@ def all_equal(array):
         return False
 
     return True
+
+
+def tensorflow_session():
+    if hasattr(tensorflow_session, 'cache'):
+        session = tensorflow_session.cache
+
+        if not session._closed:
+            return session
+
+    config = tf.ConfigProto(
+        allow_soft_placement=True,
+        inter_op_parallelism_threads=0,
+        intra_op_parallelism_threads=0,
+    )
+    session = tf.Session(config=config)
+
+    tensorflow_session.cache = session
+    return session
+
+
+def tensorflow_eval(value):
+    session = tensorflow_session()
+    initialize_uninitialized_variables()
+    return session.run(value)
+
+
+@function_name_scope
+def flatten(value):
+    return tf.reshape(value, [-1])
+
+
+@function_name_scope
+def outer(a, b):
+    a = tf.expand_dims(a, 1)
+    b = tf.expand_dims(b, 0)
+    return tf.matmul(a, b)
+
+
+@function_name_scope
+def dot(a, b):
+    return tf.tensordot(a, b, 1)
+
+
+def get_variable_size(variable):
+    size = 1
+    for dimension in variable.shape:
+        size *= int(dimension)
+    return size
+
+
+def initialize_uninitialized_variables():
+    session = tensorflow_session()
+    global_vars = tf.global_variables()
+    is_not_initialized = session.run([
+        tf.is_variable_initialized(var) for var in global_vars])
+
+    not_initialized_vars = [
+        v for (v, f) in zip(global_vars, is_not_initialized) if not f]
+
+    if len(not_initialized_vars):
+        session.run(tf.variables_initializer(not_initialized_vars))
+
+
+def tf_repeat(tensor, repeats):
+    """
+    Repeat elements of an tensor. The same as ``numpy.repeat``.
+
+    Parameters
+    ----------
+    input : tensor
+    repeats: list, tuple
+        Number of repeat for each dimension, length must be the
+        same as the number of dimensions in input.
+
+    Returns
+    -------
+    tensor
+        Has the same type as input. Has the shape
+        of ``tensor.shape * repeats``.
+    """
+    with tf.variable_scope("repeat"):
+        expanded_tensor = tf.expand_dims(tensor, -1)
+        multiples = as_tuple(1, repeats)
+        tiled_tensor = tf.tile(expanded_tensor, multiples)
+        return tf.reshape(tiled_tensor, tf.shape(tensor) * repeats)

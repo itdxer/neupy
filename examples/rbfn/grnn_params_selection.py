@@ -3,15 +3,22 @@ from operator import itemgetter
 import numpy as np
 from sklearn import datasets, grid_search
 from sklearn.model_selection import train_test_split
-from neupy import algorithms, estimators, environment
+from neupy import algorithms, environment
 
 
 environment.reproducible()
 
 
+def rmsle(expected, predicted):
+    log_expected = np.log1p(expected + 1)
+    log_predicted = np.log1p(predicted + 1)
+    squared_log_error = np.square(log_expected - log_predicted)
+    return np.sqrt(np.mean(squared_log_error))
+
+
 def scorer(network, X, y):
     result = network.predict(X)
-    return estimators.rmsle(result, y)
+    return rmsle(result, y)
 
 
 def report(grid_scores, n_top=3):
@@ -39,7 +46,7 @@ print("Run Random Search CV")
 grnnet.verbose = False
 random_search = grid_search.RandomizedSearchCV(
     grnnet,
-    param_distributions={'std': np.arange(1e-2, 1, 1e-4)},
+    param_distributions={'std': np.arange(1e-2, 1, 1e-3)},
     n_iter=400,
     scoring=scorer,
 )

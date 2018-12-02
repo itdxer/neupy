@@ -1,7 +1,7 @@
-neupy.algorithms.gd.quickprop module
+neupy.plots.network_structure module
 ====================================
 
-.. automodule:: neupy.algorithms.gd.quickprop
+.. automodule:: neupy.plots.network_structure
     :members:
     :undoc-members:
     :show-inheritance:

@@ -1,7 +1,7 @@
 import numbers
 
 import numpy as np
-import theano.tensor as T
+import tensorflow as tf
 
 from neupy import init
 from neupy.utils import number_type, as_tuple
@@ -314,14 +314,19 @@ class IntProperty(BoundedProperty):
 class ParameterProperty(ArrayProperty):
     """
     In addition to Numpy arrays and matrix property support also
-    Theano shared variables and NeuPy Initializers.
+    Tensorfow variables and NeuPy Initializers.
 
     Parameters
     ----------
     {ArrayProperty.Parameters}
     """
-    expected_type = as_tuple(np.ndarray, T.sharedvar.SharedVariable,
-                             T.Variable, init.Initializer, number_type)
+    expected_type = as_tuple(
+        np.ndarray,
+        number_type,
+        init.Initializer,
+        tf.Variable,
+        tf.Tensor,
+    )
 
     def __set__(self, instance, value):
         if isinstance(value, number_type):

@@ -1,19 +1,19 @@
+import unittest
 import tempfile
 
+import six
 import dill
-import theano
 import numpy as np
 from sklearn import datasets, preprocessing
 from six.moves import cPickle as pickle
 
-from neupy import algorithms
+from neupy import algorithms, layers, init
 
 from base import BaseTestCase
-from data import simple_classification
 from utils import catch_stdout
 
 
-class StorageTestCase(BaseTestCase):
+class BasicStorageTestCase(BaseTestCase):
     def test_simple_dill_storage(self):
         bpnet = algorithms.GradientDescent((2, 3, 1), step=0.25)
         data, target = datasets.make_regression(n_features=2, n_targets=1)
@@ -23,7 +23,7 @@ class StorageTestCase(BaseTestCase):
         target = target_scaler.fit_transform(target.reshape(-1, 1))
 
         with tempfile.NamedTemporaryFile() as temp:
-            test_layer_weights = bpnet.layers[1].weight.get_value().copy()
+            test_layer_weights = self.eval(bpnet.layers[1].weight)
             dill.dump(bpnet, temp)
             temp.file.seek(0)
 
@@ -35,12 +35,12 @@ class StorageTestCase(BaseTestCase):
             self.assertEqual([2, 3, 1], layers_sizes)
             np.testing.assert_array_equal(
                 test_layer_weights,
-                restored_bpnet.layers[1].weight.get_value()
+                self.eval(restored_bpnet.layers[1].weight)
             )
 
             bpnet.train(data, target, epochs=5)
             real_bpnet_error = bpnet.prediction_error(data, target)
-            updated_input_weight = bpnet.layers[1].weight.get_value().copy()
+            updated_input_weight = self.eval(bpnet.layers[1].weight)
 
             dill.dump(bpnet, temp)
             temp.file.seek(0)
@@ -53,7 +53,7 @@ class StorageTestCase(BaseTestCase):
 
             np.testing.assert_array_equal(
                 updated_input_weight,
-                restored_bpnet2.layers[1].weight.get_value()
+                self.eval(restored_bpnet2.layers[1].weight)
             )
 
             # Error must be big, because we didn't normalize data
@@ -97,9 +97,7 @@ class StorageTestCase(BaseTestCase):
 
                 bpnet.train(data, target, epochs=10)
                 real_bpnet_error = bpnet.prediction_error(data, target)
-                updated_input_weight = (
-                    bpnet.layers[1].weight.get_value().copy()
-                )
+                updated_input_weight = self.eval(bpnet.layers[1].weight)
 
                 dill.dump(bpnet, temp)
                 temp.file.seek(0)
@@ -112,34 +110,39 @@ class StorageTestCase(BaseTestCase):
 
                 np.testing.assert_array_equal(
                     updated_input_weight,
-                    restored_bpnet2.layers[1].weight.get_value()
+                    self.eval(restored_bpnet2.layers[1].weight)
                 )
                 # Error must be big, because we didn't normalize data
                 self.assertEqual(real_bpnet_error, restored_bpnet_error)
 
-    def test_storage_with_custom_theano_float_config(self):
-        theano.config.floatX = 'float32'
-
-        x_train, x_test, y_train, y_test = simple_classification()
-        bpnet = algorithms.GradientDescent((10, 20, 1), step=0.25)
-        bpnet.train(x_train, y_train, x_test, y_test)
+    @unittest.skipIf(six.PY2, "doesn't work for python 2")
+    def test_non_initialized_graph_storage(self):
+        network = layers.Relu(10) > layers.Relu(2)  # no input layer
 
         with tempfile.NamedTemporaryFile() as temp:
-            test_layer_weights = bpnet.layers[1].weight.get_value().copy()
-            dill.dump(bpnet, temp)
+            pickle.dump(network, temp)
             temp.file.seek(0)
 
-            theano.config.floatX = 'float64'
-            restored_bpnet = dill.load(temp)
+            network_restored = pickle.load(temp)
 
+            self.assertFalse(network_restored.layers[0].initialized)
+            self.assertIsInstance(
+                network_restored.layers[0].weight,
+                init.Initializer,
+            )
+
+            self.assertTrue(network_restored.layers[1].initialized)
             np.testing.assert_array_equal(
-                test_layer_weights,
-                restored_bpnet.layers[1].weight.get_value())
+                self.eval(network.layers[1].weight),
+                self.eval(network_restored.layers[1].weight)
+            )
 
     def test_basic_storage(self):
         input_data = np.random.random((100, 2))
         target_data = np.random.random(100) > 0.5
 
+        # We keep verbose=True in order to see if value will
+        # be True when we restore it from the pickle object.
         pnn = algorithms.PNN(std=0.123, verbose=True)
         pnn.train(input_data, target_data)
 

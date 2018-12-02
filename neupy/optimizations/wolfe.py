@@ -3,24 +3,15 @@ Main source code from Pylearn2 library:
 https://github.com/lisa-lab/pylearn2/blob/master/pylearn2/\
 optimization/linesearch.py
 """
-import theano
-import theano.tensor as T
-from theano.ifelse import ifelse
+import tensorflow as tf
 
 from neupy.utils import asfloat
-
-
-one = T.constant(asfloat(1))
-zero = T.constant(asfloat(0))
-
-theano_true = T.constant(1)
-theano_false = T.constant(0)
 
 
 def sequential_or(*conditions):
     """
     Use ``or`` operator between all conditions. Function is just
-    a syntax sugar that make long Theano logical conditions looks
+    a syntax sugar that make long Tensorfow logical conditions looks
     less ugly.
 
     Parameters
@@ -31,13 +22,13 @@ def sequential_or(*conditions):
     first_condition, other_conditions = conditions[0], conditions[1:]
     if not other_conditions:
         return first_condition
-    return T.or_(first_condition, sequential_or(*other_conditions))
+    return tf.logical_or(first_condition, sequential_or(*other_conditions))
 
 
 def sequential_and(*conditions):
     """
     Use ``and`` operator between all conditions. Function is just
-    a syntax sugar that make long Theano logical conditions looks
+    a syntax sugar that make long Tensorfow logical conditions looks
     less ugly.
 
     Parameters
@@ -48,18 +39,7 @@ def sequential_and(*conditions):
     first_condition, other_conditions = conditions[0], conditions[1:]
     if not other_conditions:
         return first_condition
-    return T.and_(first_condition, sequential_and(*other_conditions))
-
-
-def bitwise_not(condition):
-    """
-    Bitwise not compatible with Theano version 0.8.* and 0.9.*
-
-    Parameters
-    ----------
-    condition : bool, int
-    """
-    return T.neq(condition, 1)
+    return tf.logical_and(first_condition, sequential_and(*other_conditions))
 
 
 def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
@@ -71,18 +51,22 @@ def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
     ----------
     f : callable f(x)
         Objective scalar function.
+
     f_deriv : callable f'(x)
-        Objective function derivative (can be None)
+        Objective function derivative.
+
     maxiter : int
-        Maximum number of iterations.
+        Maximum number of iterations. Defaults ``20``.
+
     c1 : float
-        Parameter for Armijo condition rule.
+        Parameter for Armijo condition rule. Defaults ``1e-4``.
+
     c2 : float
-        Parameter for curvature condition rule.
+        Parameter for curvature condition rule. Defaults ``0.9``.
 
     Returns
     -------
-    Theano object
+    Variable
         Value ``x`` that satisfies strong Wolfe conditions and
         minimize function ``f``.
 
@@ -108,35 +92,34 @@ def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
 
     c1, c2 = asfloat(c1), asfloat(c2)
 
-    def search_iteration_step(x_previous, x_current, y_previous, y_current,
-                              y_deriv_previous, is_first_iteration, x_star):
+    def search_iteration_step(condition, x_previous, x_current, y_previous,
+                              y_current, y_deriv_previous, iteration, x_star):
 
         y_deriv_current = f_deriv(x_current)
-
         x_new = x_current * asfloat(2)
         y_new = f(x_new)
 
-        condition1 = T.or_(
+        condition1 = tf.logical_or(
             y_current > (y0 + c1 * x_current * y_deriv_0),
-            T.and_(
+            tf.logical_and(
                 y_current >= y_previous,
-                bitwise_not(is_first_iteration),
+                tf.not_equal(iteration, 1),
             )
         )
-        condition2 = T.abs_(y_deriv_current) <= -c2 * y_deriv_0
-        condition3 = y_deriv_current >= zero
+        condition2 = tf.abs(y_deriv_current) <= -c2 * y_deriv_0
+        condition3 = y_deriv_current >= 0
 
-        x_star = ifelse(
+        x_star = tf.where(
             condition1,
             zoom(
                 x_previous, x_current, y_previous,
                 y_current, y_deriv_previous,
                 f, f_deriv, y0, y_deriv_0, c1, c2
             ),
-            ifelse(
+            tf.where(
                 condition2,
                 x_current,
-                ifelse(
+                tf.where(
                     condition3,
                     zoom(
                         x_current, x_previous, y_current,
@@ -147,47 +130,46 @@ def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
                 ),
             ),
         )
-        y_deriv_previous_new = ifelse(
+        y_deriv_previous_new = tf.where(
             condition1,
             y_deriv_previous,
             y_deriv_current
         )
 
-        is_any_condition_satisfied = sequential_or(condition1, condition2,
-                                                   condition3)
-        y_current_new = ifelse(
+        is_any_condition_satisfied = sequential_or(
+            condition1, condition2, condition3)
+
+        y_current_new = tf.where(
             is_any_condition_satisfied,
             y_current,
             y_new
         )
-        return (
-            [
-                x_current, x_new, y_current, y_current_new,
-                y_deriv_previous_new, theano_false, x_star
-            ],
-            theano.scan_module.scan_utils.until(
-                sequential_or(
-                    T.eq(x_new, zero),
-                    is_any_condition_satisfied,
-                )
-            )
+        continue_searching_condition = tf.logical_and(
+            tf.not_equal(x_new, 0),
+            tf.logical_not(is_any_condition_satisfied),
         )
+
+        return [
+            continue_searching_condition,
+            x_current, x_new, y_current, y_current_new,
+            y_deriv_previous_new, iteration + 1, x_star
+        ]
+
+    one = tf.constant(asfloat(1))
+    zero = tf.constant(asfloat(0))
 
     x0, x1 = zero, one
     y0, y1 = f(x0), f(x1)
     y_deriv_0 = f_deriv(x0)
 
-    c1 = T.as_tensor_variable(c1)
-    c2 = T.as_tensor_variable(c2)
-
-    outs, _ = theano.scan(
-        search_iteration_step,
-        outputs_info=[x0, x1, y0, y1, y_deriv_0, theano_true, zero],
-        n_steps=maxiter
+    outs = tf.while_loop(
+        cond=lambda condition, *args: condition,
+        body=search_iteration_step,
+        loop_vars=[True, x0, x1, y0, y1, y_deriv_0, 1, zero],
+        back_prop=False,
+        maximum_iterations=maxiter,
     )
-    x_star = outs[-1][-1]
-
-    return x_star
+    return outs[-1]
 
 
 def quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, bound_size_ratio=0.1):
@@ -198,16 +180,16 @@ def quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, bound_size_ratio=0.1):
 
     Parameters
     ----------
-    x_a : float or theano variable
+    x_a : float or tensorflow variable
         Left point ``a`` in the ``x`` axis.
-    y_a : float or theano variable
+    y_a : float or tensorflow variable
         Output from function ``y`` at point ``a``.
-    y_prime_a : float or theano variable
+    y_prime_a : float or tensorflow variable
         Output from function ``y'`` (``y`` derivative) at
         point ``a``.
-    x_b : float or theano variable
+    x_b : float or tensorflow variable
         Right point ``a`` in the ``x`` axis.
-    y_b : float or theano variable
+    y_b : float or tensorflow variable
         Output from function ``y`` at point ``b``.
     bound_size_ratio : float
         Value control acceptable bounds for interpolation. If value
@@ -218,7 +200,7 @@ def quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, bound_size_ratio=0.1):
     Returns
     -------
     object
-        Theano variable that after evaluation is equal to
+        Tensorfow variable that after evaluation is equal to
         point ``x`` which is minimizer for quadratic function.
     """
 
@@ -234,15 +216,15 @@ def quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, bound_size_ratio=0.1):
     minimizer = -y_prime_a / (asfloat(2) * coef) + x_a
     bound_size_ratio = asfloat(bound_size_ratio)
 
-    return T.switch(
+    return tf.where(
         sequential_or(
             # Handle bad cases
-            T.eq(x_range, zero),
-            coef <= zero,
+            tf.equal(x_range, 0),
+            coef <= 0,
 
-            T.isnan(minimizer),
-            T.gt(minimizer, x_b - bound_size_ratio * x_range),
-            T.lt(minimizer, x_a + bound_size_ratio * x_range),
+            tf.is_nan(minimizer),
+            tf.greater(minimizer, x_b - bound_size_ratio * x_range),
+            tf.less(minimizer, x_a + bound_size_ratio * x_range),
         ),
         x_a + asfloat(0.5) * x_range,
         # Since we shifted funciton to the left, we need to shift
@@ -262,20 +244,20 @@ def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c,
 
     Parameters
     ----------
-    x_a : float or theano variable
+    x_a : float or tensorflow variable
         First point ``a`` in the ``x`` axis.
-    y_a : float or theano variable
+    y_a : float or tensorflow variable
         Output from function ``y`` at point ``a``.
-    y_prime_a : float or theano variable
+    y_prime_a : float or tensorflow variable
         Output from function ``y'`` (``y`` derivative) at
         point ``a``.
-    x_b : float or theano variable
+    x_b : float or tensorflow variable
         Second point ``b`` in the ``x`` axis.
-    y_b : float or theano variable
+    y_b : float or tensorflow variable
         Output from function ``y`` at point ``b``.
-    x_c : float or theano variable
+    x_c : float or tensorflow variable
         Third point ``c`` in the ``x`` axis.
-    y_c : float or theano variable
+    y_c : float or tensorflow variable
         Output from function ``y`` at point ``c``.
     bound_size_ratio : float
         Value control acceptable bounds for interpolation. If
@@ -287,7 +269,7 @@ def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c,
     Returns
     -------
     object
-        Theano variable that after evaluation is equal to
+        Tensorfow variable that after evaluation is equal to
         the point ``x`` which is a minimizer for the cubic function.
     """
 
@@ -318,24 +300,24 @@ def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c,
     ) / denominator
     radical = beta ** asfloat(2) - asfloat(3) * alpha * y_prime_a
 
-    minimizer = x_a + (-beta + T.sqrt(radical)) / (asfloat(3) * alpha)
+    minimizer = x_a + (-beta + tf.sqrt(radical)) / (asfloat(3) * alpha)
 
-    return ifelse(
+    return tf.where(
         sequential_or(
             # Handle bad cases
-            radical < zero,
+            radical < 0,
 
-            T.eq(x_a, x_b),
-            T.eq(x_a, x_c),
-            T.eq(x_b, x_c),
-            T.eq(alpha, zero),
+            tf.equal(x_a, x_b),
+            tf.equal(x_a, x_c),
+            tf.equal(x_b, x_c),
+            tf.equal(alpha, 0),
 
-            T.isnan(minimizer),
-            T.gt(minimizer, x_b - bound_size_ratio * from_a2b_dist),
-            T.lt(minimizer, x_a + bound_size_ratio * from_a2b_dist),
+            tf.is_nan(minimizer),
+            tf.greater(minimizer, x_b - bound_size_ratio * from_a2b_dist),
+            tf.less(minimizer, x_a + bound_size_ratio * from_a2b_dist),
         ),
         quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b),
-        minimizer
+        minimizer,
     )
 
 
@@ -350,88 +332,102 @@ def zoom(x_low, x_high, y_low, y_high, y_deriv_low,
     ----------
     x_low : float
         Step size
+
     x_high : float
         Step size
+
     y_low : float
         Value of f at x_low
+
     y_high : float
         Value of f at x_high
+
     y_deriv_low : float
         Value of derivative at x_low
+
     f : callable f(x)
         Generates computational graph
+
     f_deriv : callable f'(x)
         Generates computational graph
+
     y0 : float
         Value of f for ``x = 0``
+
     y_deriv_0 : float
         Value of the derivative for ``x = 0``
+
     c1 : float
         Parameter for Armijo condition rule.
+
     c2 : float
         Parameter for curvature condition rule.
+
+    maxiter : int
+        Maximum number of iterations. Defaults to ``10``.
     """
 
-    def zoom_itertion_step(x_low, y_low, y_deriv_low, x_high, y_high,
+    def zoom_itertion_step(_, x_low, y_low, y_deriv_low, x_high, y_high,
                            x_recent, y_recent, x_star):
-        x_new = cubic_minimizer(x_low, y_low, y_deriv_low,
-                                x_high, y_high,
-                                x_recent, y_recent)
+
+        x_new = cubic_minimizer(
+            x_low, y_low, y_deriv_low,
+            x_high, y_high,
+            x_recent, y_recent)
 
         y_new = f(x_new)
         y_deriv_new = f_deriv(x_new)
 
-        stop_loop_rule = sequential_and(
-            y_new <= y0 + c1 * x_new * y_deriv_0,
-            y_new < y_low,
-            abs(y_deriv_new) <= -c2 * y_deriv_0,
+        continue_searching_condition = sequential_or(
+            y_new > (y0 + c1 * x_new * y_deriv_0),
+            y_new >= y_low,
+            tf.abs(y_deriv_new) > (-c2 * y_deriv_0),
         )
 
-        condition1 = T.or_(
-            y_new > y0 + c1 * x_new * y_deriv_0,
+        condition1 = tf.logical_or(
+            y_new > (y0 + c1 * x_new * y_deriv_0),
             y_new >= y_low
         )
-        condition2 = y_deriv_new * (x_high - x_low) >= zero
+        condition2 = y_deriv_new * (x_high - x_low) >= 0
 
-        y_recent, x_recent, x_high, y_high = ifelse(
-            condition1,
-            [y_high, x_high, x_new, y_new],
-            ifelse(
-                condition2,
-                [y_high, x_high, x_low, y_low],
-                [y_low, x_low, x_high, y_high],
-            )
-        )
+        x_recent = tf.where(
+            tf.logical_or(condition1, condition2), x_high, x_low)
+        y_recent = tf.where(
+            tf.logical_or(condition1, condition2), y_high, y_low)
+        x_high = tf.where(
+            condition1, x_new, tf.where(condition2, x_low, x_high))
+        y_high = tf.where(
+            condition1, y_new, tf.where(condition2, y_low, y_high))
 
-        x_low, y_low, y_deriv_low = ifelse(
-            condition1,
-            [x_low, y_low, y_deriv_low],
-            [x_new, y_new, y_deriv_new],
-        )
+        x_low = tf.where(condition1, x_low, x_new)
+        y_low = tf.where(condition1, y_low, y_new)
+        y_deriv_low = tf.where(condition1, y_deriv_low, y_deriv_new)
+
         x_star = x_new
 
-        return (
-            [
-                x_low, y_low, y_deriv_low,
-                x_high, y_high,
-                y_recent, x_recent,
-                x_star
-            ],
-            theano.scan_module.scan_utils.until(stop_loop_rule)
-        )
+        return [
+            continue_searching_condition,
+            x_low, y_low, y_deriv_low,
+            x_high, y_high,
+            y_recent, x_recent,
+            x_star
+        ]
 
+    zero = tf.constant(asfloat(0))
     x_recent = zero
     y_recent = y0
 
-    outs, _ = theano.scan(
-        zoom_itertion_step,
-        outputs_info=[
+    outs = tf.while_loop(
+        cond=lambda condition, *args: condition,
+        body=zoom_itertion_step,
+        loop_vars=[
+            True,
             x_low, y_low, y_deriv_low,
             x_high, y_high,
             x_recent, y_recent,
             zero,
         ],
-        n_steps=maxiter
+        back_prop=False,
+        maximum_iterations=maxiter,
     )
-
-    return outs[-1][-1]
+    return outs[-1]

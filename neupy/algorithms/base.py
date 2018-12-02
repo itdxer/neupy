@@ -353,11 +353,11 @@ class BaseNetwork(BaseSkeleton):
             raise ValueError("Network should train at teast 3 epochs before "
                              "check the difference between errors")
 
-        logging_info_about_the_data(self, input_train, input_test)
-        logging_info_about_training(self, epochs, epsilon)
-        logs.newline()
-
         if summary == 'table':
+            logging_info_about_the_data(self, input_train, input_test)
+            logging_info_about_training(self, epochs, epsilon)
+            logs.newline()
+
             summary = SummaryTable(
                 columns=['Epoch', 'Train err', 'Valid err', 'Time'],
                 network=self,
@@ -409,8 +409,8 @@ class BaseNetwork(BaseSkeleton):
                     train_error = train_epoch(input_train, target_train)
 
                     if can_compute_validation_error:
-                        validation_error = self.prediction_error(input_test,
-                                                                 target_test)
+                        validation_error = self.prediction_error(
+                            input_test, target_test)
 
                     training_errors.append(train_error)
                     validation_errors.append(validation_error)
@@ -440,7 +440,6 @@ class BaseNetwork(BaseSkeleton):
                 train_end_signal(self)
 
             summary.finish()
-            logs.newline()
 
     def __getstate__(self):
         return self.__dict__

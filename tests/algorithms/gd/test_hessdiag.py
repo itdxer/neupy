@@ -9,19 +9,21 @@ from base import BaseTestCase
 
 
 class HessianDiagonalTestCase(BaseTestCase):
-    use_sandbox_mode = False
-
     def test_hessdiag(self):
         x_train, x_test, y_train, y_test = simple_classification()
         nw = algorithms.HessianDiagonal(
             connection=[
                 layers.Input(10),
-                layers.Sigmoid(20,
-                               weight=init.Uniform(-1, 1),
-                               bias=init.Uniform(-1, 1)),
-                layers.Sigmoid(1,
-                               weight=init.Uniform(-1, 1),
-                               bias=init.Uniform(-1, 1)),
+                layers.Sigmoid(
+                    size=20,
+                    weight=init.Uniform(-1, 1),
+                    bias=init.Uniform(-1, 1),
+                ),
+                layers.Sigmoid(
+                    size=1,
+                    weight=init.Uniform(-1, 1),
+                    bias=init.Uniform(-1, 1)
+                ),
             ],
             step=0.1,
             shuffle_data=False,
@@ -55,4 +57,16 @@ class HessianDiagonalTestCase(BaseTestCase):
             # Test configurations
             epochs=50,
             show_comparison_plot=False
+        )
+
+    def test_hessian_diagonal_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(
+                algorithms.HessianDiagonal,
+                verbose=False,
+                show_epoch=100,
+                step=0.25,
+                min_eigval=0.1,
+            ),
+            epochs=6000,
         )

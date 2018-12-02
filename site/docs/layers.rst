@@ -1,7 +1,9 @@
 Layers
 ======
 
-This part of documentation contains main information about layers.
+This part of the documentation helps to understand how to combine layers into networks. It covers basics and some of the more advanced topics.
+
+These topics are relevant only to the deep learning models.
 
 .. toctree::
     :glob:

@@ -1,9 +1,23 @@
-Visualize Algorithms based on the Backpropagation
+Visualize Algorithms based on the backpropagation
 =================================================
 
 .. contents::
 
-In this article we will be testing different algorithms based on the backpropagation method, visualizing them and trying to figure out some important features from the plots.
+.. raw:: html
+
+    <div class="short-description">
+        <img src="https://raw.githubusercontent.com/itdxer/neupy/master/site/_static/intro/vis-gd-intro.png" align="right">
+        <p>
+        Typical neural networks have mullions of parameters and it's quite difficult to visualize the process. In the article, we visualize training of the network that has only 2 parameters. It allows us to explore different training algorithms and see how it behaves during the training
+        </p>
+
+        <p>
+        These type of visualizations can provide us with useful insights about the training process.
+        </p>
+        <span clear="right"></span>
+    </div>
+
+Typical neural networks have mullions of parameters and it's quite difficult to visualize its training process. In the article, we visualize training of the network that has only 2 parameters. It allows us to explore different training algorithms and see how it behaves during the training.
 
 Checking data
 -------------

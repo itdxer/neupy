@@ -169,9 +169,12 @@ def does_layer_expect_one_input(layer):
 
     if not inspect.ismethod(layer.output):
         raise ValueError("Layer has an `output` property, "
-                         "but it not a method")
+                         "but it's not a method")
 
-    arginfo = inspect.getargspec(layer.output)
+    # The main output method overwrapped with decoretor that destroys
+    # original properties of the method. The original method can be found
+    # in the `original_method` attribute
+    arginfo = inspect.getargspec(layer.output.original_method)
 
     if arginfo.varargs is not None:
         return False
@@ -440,10 +443,8 @@ class LayerGraph(object):
 
             observed_layers.append(current_layer)
 
-        forward_subgraph = filter_dict(self.forward_graph,
-                                       observed_layers)
-        backward_subgraph = filter_dict(self.backward_graph,
-                                        observed_layers)
+        forward_subgraph = filter_dict(self.forward_graph, observed_layers)
+        backward_subgraph = filter_dict(self.backward_graph, observed_layers)
 
         # Remove old relations to the other layers.
         # Output layer cannot point to some other layers.
@@ -570,13 +571,13 @@ class LayerGraph(object):
 
         Parameters
         ----------
-        input_value : array-like, Theano variable or dict
-            - If input is an array or Theano variable than it will
+        input_value : array-like, Tensorfow variable or dict
+            - If input is an array or Tensorfow variable than it will
               be used as a direct input to the input layer/layers.
 
             - The dict type input should has a specific structure.
               Each key of the dict is a layer and each value array or
-              Theano variable. Dict defines input values for specific
+              Tensorfow variable. Dict defines input values for specific
               layers. In the dict input layer is not necessary should
               be an instance of the ``layers.Input`` class. It can be
               any layer from the graph.

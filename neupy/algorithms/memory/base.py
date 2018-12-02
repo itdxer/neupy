@@ -58,6 +58,7 @@ class DiscreteMemory(BaseSkeleton, Configurable):
         """
         if np.any(~np.isin(matrix, [0, 1])):
             raise ValueError(
-                "This network expects only descrete inputs. This mean that "
-                "you can use input data which contains 0 and 1 values."
+                "This network expects only descrete inputs. It mean that "
+                "it's possible to can use only matrices with binary values "
+                "(0 and 1)."
             )

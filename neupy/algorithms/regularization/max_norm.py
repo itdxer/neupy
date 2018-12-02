@@ -1,5 +1,7 @@
-import theano.tensor as T
+import tensorflow as tf
 
+from neupy.utils import asfloat
+from neupy.layers.utils import iter_parameters
 from neupy.core.properties import NumberProperty
 from .base import WeightUpdateConfigurable
 
@@ -22,11 +24,15 @@ def max_norm_clip(array, max_norm):
         be clipped in case if its norm will be greater than
         specified limit.
     """
-    array_norm = T.sqrt(T.sum(array ** 2))
-    return T.switch(
-        T.ge(array_norm, max_norm),
-        T.mul(max_norm, array) / array_norm,
-        array)
+    with tf.name_scope('max-norm-clip'):
+        array_norm = tf.norm(array)
+        max_norm = asfloat(max_norm)
+
+        return tf.where(
+            tf.greater_equal(array_norm, max_norm),
+            tf.multiply(max_norm, array) / array_norm,
+            array,
+        )
 
 
 class MaxNormRegularization(WeightUpdateConfigurable):
@@ -72,12 +78,16 @@ class MaxNormRegularization(WeightUpdateConfigurable):
     """
     max_norm = NumberProperty(default=10, minval=0)
 
-    def init_param_updates(self, layer, parameter):
-        updates = super(MaxNormRegularization, self).init_param_updates(
-            layer, parameter)
+    def init_train_updates(self):
+        parameters = [param for _, _, param in iter_parameters(self.layers)]
+        original_updates = super(
+            MaxNormRegularization, self).init_train_updates()
 
-        updates_mapper = dict(updates)
-        updated_value = updates_mapper[parameter]
-        updates_mapper[parameter] = max_norm_clip(updated_value, self.max_norm)
+        modified_updates = []
 
-        return list(updates_mapper.items())
+        for parameter, updated in original_updates:
+            if parameter in parameters:
+                updated = max_norm_clip(updated, self.max_norm)
+            modified_updates.append((parameter, updated))
+
+        return modified_updates

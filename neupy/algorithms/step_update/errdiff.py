@@ -1,7 +1,7 @@
-import theano
-from theano.ifelse import ifelse
 import numpy as np
+import tensorflow as tf
 
+from neupy.utils import tensorflow_session
 from neupy.core.properties import (BoundedProperty,
                                    ProperFractionProperty)
 from .base import SingleStepConfigurable
@@ -53,13 +53,13 @@ class ErrDiffStepUpdate(SingleStepConfigurable):
 
     def init_variables(self):
         self.variables.update(
-            last_error=theano.shared(
+            last_error=tf.Variable(
+                np.nan,
                 name='err-diff-step-update/last-error',
-                value=np.nan
             ),
-            previous_error=theano.shared(
+            previous_error=tf.Variable(
+                np.nan,
                 name='err-diff-step-update/previous-error',
-                value=np.nan
             ),
         )
         super(ErrDiffStepUpdate, self).init_variables()
@@ -71,15 +71,14 @@ class ErrDiffStepUpdate(SingleStepConfigurable):
         last_error = self.variables.last_error
         previous_error = self.variables.previous_error
 
-        step_update_condition = ifelse(
+        step_update_condition = tf.where(
             last_error < previous_error,
             self.update_for_smaller_error * step,
-            ifelse(
+            tf.where(
                 last_error > self.update_for_bigger_error * previous_error,
                 self.update_for_bigger_error * step,
                 step
             )
-
         )
         updates.append((step, step_update_condition))
         return updates
@@ -89,6 +88,8 @@ class ErrDiffStepUpdate(SingleStepConfigurable):
 
         previous_error = self.errors.previous()
         if previous_error:
+            session = tensorflow_session()
             last_error = self.errors.last()
-            self.variables.last_error.set_value(last_error)
-            self.variables.previous_error.set_value(previous_error)
+
+            self.variables.last_error.load(last_error, session)
+            self.variables.previous_error.load(previous_error, session)

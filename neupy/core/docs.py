@@ -275,8 +275,8 @@ class SharedDocsMeta(type):
     for objects.
     """
     def __new__(cls, clsname, bases, attrs):
-        new_class = super(SharedDocsMeta, cls).__new__(cls, clsname,
-                                                       bases, attrs)
+        new_class = super(SharedDocsMeta, cls).__new__(
+            cls, clsname, bases, attrs)
 
         if attrs.get('inherit_method_docs', True):
             inherit_docs_for_methods(new_class, attrs)

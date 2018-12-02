@@ -3,6 +3,16 @@
 Discrete Hopfield Network
 =========================
 
+.. raw:: html
+
+    <div class="short-description">
+        <img src="_static/docimg/hopfiled-weights.png" align="right">
+        <p>
+        In this article, we describe core ideas behind discrete hopfield networks and try to understand how it works. In addition, we explore main problems related to this algorithm. And finally, we take a look into simple example that aims to memorize digit patterns and reconstruct them from corrupted samples.
+        </p>
+        <br clear="right">
+    </div>
+
 .. contents::
 
 In this article we are going to learn about :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` algorithm.
@@ -10,15 +20,15 @@ In this article we are going to learn about :network:`Discrete Hopfield Network 
 :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` is a type of algorithms which is called - `Autoassociative memories <https://en.wikipedia.org/wiki/Autoassociative_memory>`_
 Don't be scared of the word `Autoassociative`.
 The idea behind this type of algorithms is very simple.
-It can store useful information in `memory` and later it is able to reproduce this information from partialy broken patterns.
-You can preceive it as human memory.
+It can store useful information in `memory` and later it is able to reproduce this information from partially broken patterns.
+You can perceive it as human memory.
 For instance, imagine that you look at an old picture of a place where you were long time ago, but this picture is of very bad quality and very blurry.
 By looking at the picture you manage to recognize a few objects or places that make sense to you and form some objects even though they are blurry.
 It can be a house, a lake or anything that can add up to the whole picture and bring out some associations about this place.
 With these details that you got from your memory so far other parts of picture start to make even more sense.
 Though you don't clearly see all objects in the picture, you start to remember things and withdraw from your memory some images, that cannot be seen in the picture, just because of those very familiarly-shaped details that you've got so far.
 That's what it is all about.
-Autoassociative memory networks is a posibily to interprete functions of memory into neural network model.
+Autoassociative memory networks is a possibly to interpret functions of memory into neural network model.
 
 Don't worry if you have only basic knowledge in Linear Algebra; in this article I'll try to explain the idea as simple as possible.
 If you are interested in proofs of the :network:`Discrete Hopfield Network <DiscreteHopfieldNetwork>` you can check them at R. Rojas. Neural Networks [1]_ book.
@@ -94,7 +104,7 @@ It includes just an outer product between input vector and transposed input vect
 :math:`W` is a weight matrix and :math:`x` is an input vector.
 Each value :math:`x_i` in the input vector can only be -1 or 1.
 So on the matrix diagonal we only have squared values and it means we will always see 1s at those places.
-Think about it, everytime, in any case, values on the diagonal can take just one possible state.
+Think about it, every time, in any case, values on the diagonal can take just one possible state.
 We can't use this information, because it doesn't say anything useful about patterns that are stored in the memory and even can make incorrect contribution into the output result.
 For this reason we need to set up all the diagonal values equal to zero.
 The final weight formula should look like this one below.
@@ -116,8 +126,8 @@ The final weight formula should look like this one below.
 
 Where :math:`I` is an identity matrix.
 
-But usualy we need to store more values in memory.
-For another pattern we have to do exacly the same procedure as before and then just add the generated weight matrix to the old one.
+But usually we need to store more values in memory.
+For another pattern we have to do exactly the same procedure as before and then just add the generated weight matrix to the old one.
 
 .. math::
 
@@ -181,7 +191,7 @@ Let's compute weights for the network.
 
 Look closer to the matrix :math:`U` that we got.
 Outer product just repeats vector 4 times with the same or inversed values.
-First and third columns (or rows, it doesn't matter, because matrix is symmetrical) are exacly the same as the input vector.
+First and third columns (or rows, it doesn't matter, because matrix is symmetrical) are exactly the same as the input vector.
 The second and fourth are also the same, but with an opposite sign.
 That's because in the vector :math:`u` we have 1 on the first and third places and -1 on the other.
 
@@ -401,7 +411,7 @@ And after this operation we set up a new value into the input vector :math:`x`.
         \right]
     \end{align*}
 
-As you can see after first iteration value is exacly the same as :math:`x` but we can keep going.
+As you can see after first iteration value is exactly the same as :math:`x` but we can keep going.
 In second iteration random neuron fires again.
 Let's pretend that this time it was the third neuron.
 
@@ -422,7 +432,7 @@ Let's pretend that this time it was the third neuron.
         \right]) = sign(-2) = -1
     \end{align*}
 
-:math:`x^{'}_3` is exacly the same as in the :math:`x^{'}` vector so we don't need to update it.
+:math:`x^{'}_3` is exactly the same as in the :math:`x^{'}` vector so we don't need to update it.
 We can repeat it as many times as we want, but we will be getting the same value.
 
 Memory limit
@@ -438,7 +448,7 @@ The first rule gives us a simple ration between :math:`m` and :math:`n`.
 
     m \approx 0.18 n
 
-The main problem with this rule is that proof assumes that stored vectors inside the weight are completly random with an equal probability.
+The main problem with this rule is that proof assumes that stored vectors inside the weight are completely random with an equal probability.
 Unfortunately, that is not always true.
 Let's suppose we save some images of numbers from 0 to 9.
 Pictures are black and white, so we can encode them in bipolar vectors.
@@ -480,7 +490,7 @@ In terms of a linear algebra we can write formula for the :network:`Discrete Hop
     E = -\frac{1}{2} x^T W x
 
 But linear algebra notation works only with the :math:`x` vector, we can't use matrix :math:`X` with multiple input patterns instead of the :math:`x` in this formula.
-For the energy function we're always interested in finding a minimum value, for this reason it has minus sign at the beggining.
+For the energy function we're always interested in finding a minimum value, for this reason it has minus sign at the beginning.
 
 Let's try to visualize it.
 Assume that values for vector :math:`x` can be continous in order and we can visualize them using two parameters.
@@ -670,9 +680,9 @@ This problem we can solve using the asynchronous network approach. We don't nece
     | *
     | * * * *
 
-Our broken pattern is really close to the minimum of 1 and 2 patterns. Randomization helps us choose direction but it's not nessesary the right one, especialy when the broken pattern is close to 1 and 2 at the same time.
+Our broken pattern is really close to the minimum of 1 and 2 patterns. Randomization helps us choose direction but it's not necessary the right one, especially when the broken pattern is close to 1 and 2 at the same time.
 
-Check last output with number two again. Is that a realy valid pattern for number 2? Final symbol in output is wrong. We are not able to recover patter 2 from this network, because input vector is always much closer to the minimum that looks very similar to pattern 2.
+Check last output with number two again. Is that a really valid pattern for number 2? Final symbol in output is wrong. We are not able to recover patter 2 from this network, because input vector is always much closer to the minimum that looks very similar to pattern 2.
 
 In plot below you can see first 200 iterations of the recovery procedure. Energy value was decreasing after each iteration until it reached the local minimum where pattern is equal to 2.
 
@@ -698,9 +708,9 @@ And finally we can look closer to the network memory using Hinton diagram.
     :align: center
     :alt: Asynchronous Discrete Hopfield Network energy update after each iteration
 
-This graph above shows the network weight matrix and all information stored inside of it. Hinton diagram is a very simple technique for the weight visualization in neural networks. Each value encoded in square where its size is an absolute value from the weight matrix and color shows the sign of this value. White is a positive and black is a negative. Usualy Hinton diagram helps identify some patterns in the weight matrix.
+This graph above shows the network weight matrix and all information stored inside of it. Hinton diagram is a very simple technique for the weight visualization in neural networks. Each value encoded in square where its size is an absolute value from the weight matrix and color shows the sign of this value. White is a positive and black is a negative. Usually Hinton diagram helps identify some patterns in the weight matrix.
 
-Let's go back to the graph. What can you say about the network just by looking at this picture? First of all you can see that there is no squares on the diagonal. That is because they are equal to zero. The second important thing you can notice is that the plot is symmetrical. But that is not all that you can withdraw from the graph. Can you see different patterns? You can find rows or columns with exacly the same values, like the second and third columns. Fifth column is also the same but its sign is reversed. Now look closer to the antidiagonal. What can you say about it? If you are thinking that all squares are white - you are right. But why is that true? Is there always the same patterns for each memory matrix? No, it is a special property of patterns that we stored inside of it. If you draw a horizontal line in the middle of each image and look at it you will see that values are opposite symmetric. For instance, :math:`x_1` opposite symmetric to :math:`x_{30}`, :math:`x_2` to :math:`x_{29}`, :math:`x_3` to :math:`x_{28}` and so on. Zero pattern is a perfect example where each value have exacly the same opposite symmetric pair. One is almost perfect except one value on the :math:`x_2` position. Two is not clearly opposite symmetric. But if you check each value you will find that more than half of values are symmetrical. Combination of those patterns gives us a diagonal with all positive values. If we have all perfectly opposite symmetric patterns then squares on the antidiagonal will have the same length, but in this case pattern for number 2 gives a little bit of noise and squares have different sizes.
+Let's go back to the graph. What can you say about the network just by looking at this picture? First of all you can see that there is no squares on the diagonal. That is because they are equal to zero. The second important thing you can notice is that the plot is symmetrical. But that is not all that you can withdraw from the graph. Can you see different patterns? You can find rows or columns with exactly the same values, like the second and third columns. Fifth column is also the same but its sign is reversed. Now look closer to the antidiagonal. What can you say about it? If you are thinking that all squares are white - you are right. But why is that true? Is there always the same patterns for each memory matrix? No, it is a special property of patterns that we stored inside of it. If you draw a horizontal line in the middle of each image and look at it you will see that values are opposite symmetric. For instance, :math:`x_1` opposite symmetric to :math:`x_{30}`, :math:`x_2` to :math:`x_{29}`, :math:`x_3` to :math:`x_{28}` and so on. Zero pattern is a perfect example where each value have exactly the same opposite symmetric pair. One is almost perfect except one value on the :math:`x_2` position. Two is not clearly opposite symmetric. But if you check each value you will find that more than half of values are symmetrical. Combination of those patterns gives us a diagonal with all positive values. If we have all perfectly opposite symmetric patterns then squares on the antidiagonal will have the same length, but in this case pattern for number 2 gives a little bit of noise and squares have different sizes.
 
 Properties that we've reviewed so far are just the most interesting and maybe other patterns you can encounter on your own.
 
@@ -721,5 +731,5 @@ References
 
 .. author:: default
 .. categories:: none
-.. tags:: memory, unsupervised
+.. tags:: memory, unsupervised, discrete hopfield network
 .. comments::

@@ -7,7 +7,6 @@ from neupy import layers, algorithms, environment
 
 
 environment.reproducible()
-environment.speedup()
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 FILES_DIR = os.path.join(CURRENT_DIR, 'files')
@@ -82,15 +81,15 @@ if __name__ == '__main__':
     network = algorithms.RMSProp(
         [
             layers.Input((window_size, n_characters)),
-            layers.LSTM(128, unroll_scan=True),
+            layers.LSTM(128),
             layers.Softmax(n_characters),
         ],
-
         step=0.01,
         verbose=True,
         batch_size=128,
         error='categorical_crossentropy',
     )
+    network.architecture()
     network.train(x_train, y_train, x_test, y_test, epochs=10)
 
     # Number of symbols that will be generated

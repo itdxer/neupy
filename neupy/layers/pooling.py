@@ -1,27 +1,20 @@
-import theano.tensor as T
-from theano.tensor.signal import pool
+from __future__ import division
 
-from neupy.utils import as_tuple
+import math
+
+import tensorflow as tf
+
+from neupy.utils import as_tuple, tf_repeat
 from neupy.core.properties import TypedListProperty, ChoiceProperty, Property
 from neupy.exceptions import LayerConnectionError
 from .base import BaseLayer
-from .convolutions import StrideProperty
+from .convolutions import Spatial2DProperty
 
 
 __all__ = ('MaxPooling', 'AveragePooling', 'Upscale', 'GlobalPooling')
 
 
-class PaddingProperty(TypedListProperty):
-    expected_type = as_tuple(TypedListProperty.expected_type, int)
-
-    def __set__(self, instance, value):
-        if isinstance(value, int):
-            value = (value, value)
-        super(PaddingProperty, self).__set__(instance, value)
-
-
-def pooling_output_shape(dimension_size, pool_size, padding, stride,
-                         ignore_border=True):
+def pooling_output_shape(dimension_size, pool_size, padding, stride):
     """
     Computes output shape for pooling operation.
 
@@ -40,9 +33,6 @@ def pooling_output_shape(dimension_size, pool_size, padding, stride,
     stride : int
         Stride size.
 
-    ignore_border : bool
-        Defaults to ``True``.
-
     Returns
     -------
     int
@@ -50,18 +40,14 @@ def pooling_output_shape(dimension_size, pool_size, padding, stride,
     if dimension_size is None:
         return None
 
-    if ignore_border:
-        output_size = dimension_size + 2 * padding - pool_size + 1
-        output_size = (output_size + stride - 1) // stride
+    if padding == 'SAME':
+        return math.ceil(dimension_size / stride)
 
-    elif stride >= pool_size:
-        output_size = (dimension_size + stride - 1) // stride
+    elif padding == 'VALID':
+        return math.ceil((dimension_size - pool_size + 1) / stride)
 
-    else:
-        output_size = (dimension_size - pool_size + stride - 1) // stride
-        output_size = max(1, output_size + 1)
-
-    return output_size
+    raise ValueError("`{!r}` is unknown convolution's padding value"
+                     "".format(padding))
 
 
 class BasePooling(BaseLayer):
@@ -80,15 +66,10 @@ class BasePooling(BaseLayer):
         None, it is considered equal to ds (no overlap on
         pooling regions).
 
-    padding : tuple or int
+    padding : {{`VALID`, `SAME`}}
         (pad_h, pad_w), pad zeros to extend beyond four borders of
         the images, pad_h is the size of the top and bottom margins,
         and pad_w is the size of the left and right margins.
-
-    ignore_border : bool
-        When ``True``, ``(5, 5)`` input with size ``(2, 2)``
-        will generate a `(2, 2)` output. ``(3, 3)`` otherwise.
-        Defaults to ``True``.
 
     {BaseLayer.Parameters}
 
@@ -101,17 +82,12 @@ class BasePooling(BaseLayer):
     {BaseLayer.Attributes}
     """
     size = TypedListProperty(required=True, element_type=int)
-    stride = StrideProperty(default=None)
-    padding = PaddingProperty(default=0, element_type=int, n_elements=2)
-    ignore_border = Property(default=True, expected_type=bool)
+    stride = Spatial2DProperty(default=None)
+    padding = ChoiceProperty(default='VALID', choices=('SAME', 'VALID'))
+    pooling_type = None
 
     def __init__(self, size, **options):
         super(BasePooling, self).__init__(size=size, **options)
-
-        if not self.ignore_border and self.padding != (0, 0):
-            raise ValueError("Cannot set padding parameter equal to {} while "
-                             "``ignore_border`` is equal to ``False``"
-                             "".format(self.padding))
 
     def validate(self, input_shape):
         if len(input_shape) != 3:
@@ -126,24 +102,37 @@ class BasePooling(BaseLayer):
         if self.input_shape is None:
             return None
 
-        n_kernels, rows, cols = self.input_shape
+        rows, cols, n_kernels = self.input_shape
         row_filter_size, col_filter_size = self.size
 
         stride = self.size if self.stride is None else self.stride
-
         row_stride, col_stride = stride
-        row_padding, col_padding = self.padding
 
-        output_rows = pooling_output_shape(rows, row_filter_size, row_padding,
-                                           row_stride, self.ignore_border)
-        output_cols = pooling_output_shape(cols, col_filter_size, col_padding,
-                                           col_stride, self.ignore_border)
+        output_rows = pooling_output_shape(
+            rows, row_filter_size, self.padding, row_stride)
 
-        return (n_kernels, output_rows, output_cols)
+        output_cols = pooling_output_shape(
+            cols, col_filter_size, self.padding, col_stride)
+
+        # In python 2, we can get float number after rounding procedure
+        # and it might break processing in the subsequent layers.
+        return (int(output_rows), int(output_cols), n_kernels)
+
+    def output(self, input_value):
+        return tf.nn.pool(
+            input_value,
+            self.size,
+            pooling_type=self.pooling_type,
+            padding=self.padding,
+            strides=self.stride or self.size,
+            data_format="NHWC",
+        )
 
     def __repr__(self):
-        return '{name}({size})'.format(name=self.__class__.__name__,
-                                       size=self.size)
+        return '{name}({size})'.format(
+            name=self.__class__.__name__,
+            size=self.size,
+        )
 
 
 class MaxPooling(BasePooling):
@@ -169,7 +158,7 @@ class MaxPooling(BasePooling):
     >>> from neupy import layers
     >>>
     >>> network = layers.join(
-    ...     layers.Input((3, 10, 10)),
+    ...     layers.Input((10, 10, 3)),
     ...     layers.MaxPooling((2, 2)),
     ... )
     >>> network.output_shape
@@ -180,17 +169,14 @@ class MaxPooling(BasePooling):
     >>> from neupy import layers
     >>>
     >>> network = layers.join(
-    ...     layers.Input((10, 30)),
-    ...     layers.Reshape((10, 30, 1)),
+    ...     layers.Input((30, 10)),
+    ...     layers.Reshape((10, 1, 30)),
     ...     layers.MaxPooling((2, 1)),
     ... )
     >>> network.output_shape
     (10, 15, 1)
     """
-    def output(self, input_value):
-        return pool.pool_2d(input_value, ws=self.size, mode='max',
-                            ignore_border=self.ignore_border,
-                            stride=self.stride, pad=self.padding)
+    pooling_type = 'MAX'
 
 
 class AveragePooling(BasePooling):
@@ -199,10 +185,6 @@ class AveragePooling(BasePooling):
 
     Parameters
     ----------
-    mode : {{``include_padding``, ``exclude_padding``}}
-        Give a choice to include or exclude padding.
-        Defaults to ``include_padding``.
-
     {BasePooling.Parameters}
 
     Methods
@@ -220,7 +202,7 @@ class AveragePooling(BasePooling):
     >>> from neupy import layers
     >>>
     >>> network = layers.join(
-    ...     layers.Input((3, 10, 10)),
+    ...     layers.Input((10, 10, 3)),
     ...     layers.AveragePooling((2, 2)),
     ... )
     >>> network.output_shape
@@ -231,25 +213,14 @@ class AveragePooling(BasePooling):
     >>> from neupy import layers
     >>>
     >>> network = layers.join(
-    ...     layers.Input((10, 30)),
-    ...     layers.Reshape((10, 30, 1)),
+    ...     layers.Input((30, 10)),
+    ...     layers.Reshape((10, 1, 30)),
     ...     layers.AveragePooling((2, 1)),
     ... )
     >>> network.output_shape
     (10, 15, 1)
     """
-    mode = ChoiceProperty(
-        default='include_padding',
-        choices={
-            'include_padding': 'average_inc_pad',
-            'exclude_padding': 'average_exc_pad'
-        }
-    )
-
-    def output(self, input_value):
-        return pool.pool_2d(input_value, ws=self.size, mode=self.mode,
-                            ignore_border=self.ignore_border,
-                            stride=self.stride, pad=self.padding)
+    pooling_type = 'AVG'
 
 
 class ScaleFactorProperty(TypedListProperty):
@@ -297,12 +268,8 @@ class Upscale(BaseLayer):
 
     Examples
     --------
-    >>> from neupy import layers
-    >>>
-    >>> network = layers.join(
-    ...     layers.Input((3, 10, 10)),
-    ...     layers.Upscale((2, 2)),
-    ... )
+    >>> from neupy.layers import *
+    >>> network = Input((10, 10, 3)) > Upscale((2, 2))
     >>> network.output_shape
     (3, 20, 20)
     """
@@ -322,22 +289,13 @@ class Upscale(BaseLayer):
         if self.input_shape is None:
             return None
 
-        channel, height, width = self.input_shape
+        height, width, channel = self.input_shape
         height_scale, width_scale = self.scale
 
-        return (channel, height_scale * height, width_scale * width)
+        return (height_scale * height, width_scale * width, channel)
 
     def output(self, input_value):
-        height_scale, width_scale = self.scale
-        scaled_value = input_value
-
-        if height_scale != 1:
-            scaled_value = T.extra_ops.repeat(scaled_value, height_scale, 2)
-
-        if width_scale != 1:
-            scaled_value = T.extra_ops.repeat(scaled_value, width_scale, 3)
-
-        return scaled_value
+        return tf_repeat(input_value, as_tuple(1, self.scale, 1))
 
 
 class GlobalPooling(BaseLayer):
@@ -348,7 +306,7 @@ class GlobalPooling(BaseLayer):
     ----------
     function : callable
         Function that aggregates over dimensions.
-        Defaults to ``theano.tensor.mean``.
+        Defaults to ``tensorflow.reduce_mean``.
 
         .. code-block:: python
 
@@ -367,25 +325,24 @@ class GlobalPooling(BaseLayer):
 
     Examples
     --------
-    >>> from neupy import layers
-    >>>
-    >>> network = layers.join(
-    ...     layers.Input((16, 4, 4)),
-    ...     layers.GlobalPooling(),
-    ... )
+    >>> from neupy.layers import *
+    >>> network = Input((4, 4, 16)) > GlobalPooling()
     >>> network.output_shape
     (16,)
     """
-    function = Property(default=T.mean)
+    function = Property(default=tf.reduce_mean)
 
     @property
     def output_shape(self):
         if self.input_shape is not None:
-            return as_tuple(self.input_shape[0])
+            return as_tuple(self.input_shape[-1])
 
     def output(self, input_value):
-        if input_value.ndim in (1, 2):
+        ndims = len(input_value.shape)
+
+        if ndims in (1, 2):
             return input_value
 
-        agg_axis = range(2, input_value.ndim)
+        # All dimensions except first and last
+        agg_axis = range(1, ndims - 1)
         return self.function(input_value, axis=list(agg_axis))

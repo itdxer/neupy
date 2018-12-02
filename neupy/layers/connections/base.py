@@ -1,42 +1,21 @@
 import copy
+import types
+from functools import wraps
 from itertools import product
 from contextlib import contextmanager
 
 import six
-import theano
+import tensorflow as tf
 
-from neupy.layers.utils import preformat_layer_shape, create_input_variable
-from neupy.utils import as_tuple
+from neupy.layers.utils import preformat_layer_shape
+from neupy.utils import as_tuple, tensorflow_session
 from .utils import join, is_sequential
 from .graph import LayerGraph
 from .inline import InlineConnection
 
 
-__all__ = ('LayerConnection', 'BaseConnection', 'ParallelConnection')
-
-
-def create_input_variables(input_layers):
-    """
-    Create input variables for each input layer
-    in the graph.
-
-    Parameters
-    ----------
-    input_layers : list of layers
-
-    Returns
-    -------
-    list of Theano variables
-    """
-    inputs = []
-
-    for input_layer in input_layers:
-        variable = create_input_variable(
-            input_layer.input_shape,
-            name="layer:{}/var:input".format(input_layer.name))
-        inputs.append(variable)
-
-    return inputs
+__all__ = ('LayerConnection', 'BaseConnection', 'ParallelConnection',
+           'parallel')
 
 
 def clean_layer_references(graph, layer_references):
@@ -70,6 +49,41 @@ def clean_layer_references(graph, layer_references):
     return layers
 
 
+def check_initialization(method):
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        result = method(*args, **kwargs)
+        self.initialized = True
+        return result
+    return wrapper
+
+
+def create_input_variables(input_layers):
+    """
+    Create input variables for each input layer
+    in the graph.
+
+    Parameters
+    ----------
+    input_layers : list of layers
+
+    Returns
+    -------
+    list of Tensorflow variables
+    """
+    inputs = []
+
+    for input_layer in input_layers:
+        variable = tf.placeholder(
+            tf.float32,
+            shape=as_tuple(None, input_layer.output_shape),
+            name="network-input/to-layer-{}".format(input_layer.name),
+        )
+        inputs.append(variable)
+
+    return inputs
+
+
 class BaseConnection(InlineConnection):
     """
     Base class from chain connections.
@@ -89,7 +103,16 @@ class BaseConnection(InlineConnection):
     output_layers : list of layers
         List of connection's output layers.
     """
+    computation_cache = {}
+
     def __init__(self):
+        self.initialized = False
+
+        # Make sure that we save information when connection was
+        # initialized. It will work even if method was reinitialized
+        self.initialize = types.MethodType(
+            check_initialization(self.initialize), self)
+
         self.training_state = True
         self.look_inside = 0
         self.graph = LayerGraph()
@@ -136,19 +159,29 @@ class BaseConnection(InlineConnection):
         yield
         self.training_state = True
 
-    def compile(self, *inputs):
+    def predict(self, *inputs):
         """
-        Compile Theano function with disabled training state.
-
-        Returns
-        -------
-        callable object
+        Using current tensorflow session this method propagates
+        input throught the network and returns output from it.
         """
-        if not inputs:
-            inputs = create_input_variables(self.input_layers)
+        session = tensorflow_session()
+        # We cache it in order to avoid graph creation
+        # every time user calls prediction.
+        cache_key = (session, id(self))
 
-        with self.disable_training_state():
-            return theano.function(inputs, self.output(*inputs))
+        if cache_key not in self.computation_cache:
+            input_variables = create_input_variables(self.input_layers)
+
+            with self.disable_training_state():
+                self.computation_cache[cache_key] = {
+                    'inputs': input_variables,
+                    'outputs': self.output(*input_variables),
+                }
+
+        graph = self.computation_cache[cache_key]
+        feed_dict = dict(zip(graph['inputs'], inputs))
+
+        return session.run(graph['outputs'], feed_dict=feed_dict)
 
 
 def make_common_graph(left_layer, right_layer):
@@ -301,7 +334,7 @@ class ParallelConnection(BaseConnection):
 
         Parameters
         ----------
-        first_input : Theano variable, array-like, dict
+        first_input : Tensorfow variable, array-like, dict
         *other_inputs
 
         Returns
@@ -348,6 +381,10 @@ class ParallelConnection(BaseConnection):
     def __iter__(self):
         for connection in self.connections:
             yield connection
+
+
+def parallel(*connections):
+    return ParallelConnection(connections)
 
 
 class LayerConnection(BaseConnection):
@@ -479,8 +516,8 @@ class LayerConnection(BaseConnection):
 
         Parameters
         ----------
-        first_input : Theano variable, array-like, dict
-            - Input values can be Theano variables or
+        first_input : Tensorfow variable, array-like, dict
+            - Input values can be Tensorfow variables or
               array-like objects
 
             - Dictionary inputs should have key that
@@ -493,7 +530,7 @@ class LayerConnection(BaseConnection):
 
         Returns
         -------
-        Theano expression
+        Tensorfow expression
         """
         if other_inputs:
             input_values = as_tuple(first_input, other_inputs)

@@ -135,15 +135,14 @@ class PNNTestCase(BaseTestCase):
         x_train, x_test, y_train, y_test = train_test_split(
             dataset.data, dataset.target, test_size=0.3)
 
-        pnnet = algorithms.PNN(verbose=False, batch_size=100)
+        pnnet = algorithms.PNN(verbose=False, batch_size=100, std=10)
         pnnet.train(x_train, y_train)
 
         y_predicted = pnnet.predict(x_test)
         self.assertEqual(y_predicted.shape, y_test.shape)
 
         y_predicted = pnnet.predict_proba(x_test)
-        self.assertEqual(y_predicted.shape,
-                         (y_test.shape[0], n_classes))
+        self.assertEqual(y_predicted.shape, (y_test.shape[0], n_classes))
 
     def test_pnn_repr(self):
         pnn = algorithms.PNN()

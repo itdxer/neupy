@@ -1,8 +1,7 @@
 from collections import namedtuple
 
-import theano
-import theano.tensor as T
 import numpy as np
+import tensorflow as tf
 
 from neupy import layers
 from neupy.utils import asfloat
@@ -13,50 +12,45 @@ from base import BaseTestCase
 
 
 class PoolingLayersTestCase(BaseTestCase):
-    use_sandbox_mode = False
+    def test_pooling_output_shape_exception(self):
+        expected_msg = r"unknown \S+ padding value"
+        with self.assertRaisesRegexp(ValueError, expected_msg):
+            pooling_output_shape(
+                dimension_size=5, pool_size=2,
+                padding=1, stride=2
+            )
 
     def test_pooling_output_shape(self):
         otuput_shape = pooling_output_shape(None, None, None, None)
         self.assertEqual(otuput_shape, None)
 
-        otuput_shape = pooling_output_shape(dimension_size=5, pool_size=2,
-                                            padding=0, stride=2,
-                                            ignore_border=True)
+        otuput_shape = pooling_output_shape(
+            dimension_size=5, pool_size=2,
+            padding='VALID', stride=2)
+
         self.assertEqual(otuput_shape, 2)
 
-        otuput_shape = pooling_output_shape(dimension_size=5, pool_size=2,
-                                            padding=0, stride=2,
-                                            ignore_border=False)
-        self.assertEqual(otuput_shape, 3)
+        otuput_shape = pooling_output_shape(
+            dimension_size=5, pool_size=2,
+            padding='VALID', stride=1)
 
-        otuput_shape = pooling_output_shape(dimension_size=5, pool_size=2,
-                                            padding=0, stride=1,
-                                            ignore_border=False)
         self.assertEqual(otuput_shape, 4)
 
-        otuput_shape = pooling_output_shape(dimension_size=5, pool_size=2,
-                                            padding=0, stride=4,
-                                            ignore_border=False)
-        self.assertEqual(otuput_shape, 2)
+        otuput_shape = pooling_output_shape(
+            dimension_size=5, pool_size=2,
+            padding='VALID', stride=4)
+
+        self.assertEqual(otuput_shape, 1)
 
     def test_pooling_undefined_output_shape(self):
         max_pool_layer = layers.MaxPooling((2, 2))
         self.assertEqual(max_pool_layer.output_shape, None)
 
     def test_pooling_defined_output_shape(self):
-        input_layer = layers.Input((3, 10, 10))
+        input_layer = layers.Input((10, 10, 3))
         max_pool_layer = layers.MaxPooling((2, 2))
-        input_layer > max_pool_layer
-
-        self.assertEqual(max_pool_layer.output_shape, (3, 5, 5))
-
-    def test_pooling_size_property_int(self):
-        max_pool_layer = layers.MaxPooling((2, 2), padding=3)
-        self.assertEqual((3, 3), max_pool_layer.padding)
-
-    def test_pooling_size_property_tuple(self):
-        max_pool_layer = layers.MaxPooling((2, 2), padding=(3, 3))
-        self.assertEqual((3, 3), max_pool_layer.padding)
+        layers.join(input_layer, max_pool_layer)
+        self.assertEqual(max_pool_layer.output_shape, (5, 5, 3))
 
     def test_pooling_stride_int(self):
         max_pool_layer = layers.MaxPooling((2, 2), stride=1)
@@ -71,48 +65,46 @@ class PoolingLayersTestCase(BaseTestCase):
         with self.assertRaises(LayerConnectionError):
             layers.join(input_layer, max_pool_layer)
 
-        # Invalid combination of parameters
         with self.assertRaises(ValueError):
-            layers.MaxPooling((2, 2), ignore_border=False, padding=1)
+            layers.MaxPooling((2, 2), padding='TEST')
+
+        with self.assertRaises(ValueError):
+            layers.MaxPooling((2, 2), padding=1)
 
     def test_pooling_repr(self):
         layer = layers.MaxPooling((2, 2))
         self.assertEqual("MaxPooling((2, 2))", str(layer))
 
     def test_max_pooling(self):
-        input_data = theano.shared(
-            asfloat(np.array([
-                [1, 2, 3, -1],
-                [4, -6, 3, 1],
-                [0, 0, 1, 0],
-                [0, -1, 0, 0],
-            ]))
-        )
+        input_data = asfloat(np.array([
+            [1, 2, 3, -1],
+            [4, -6, 3, 1],
+            [0, 0, 1, 0],
+            [0, -1, 0, 0],
+        ])).reshape(1, 4, 4, 1)
         expected_output = asfloat(np.array([
             [4, 3],
             [0, 1],
-        ]))
+        ])).reshape(1, 2, 2, 1)
 
         max_pool_layer = layers.MaxPooling((2, 2))
-        actual_output = max_pool_layer.output(input_data).eval()
+        actual_output = self.eval(max_pool_layer.output(input_data))
         np.testing.assert_array_almost_equal(actual_output, expected_output)
 
     def test_average_pooling(self):
-        input_data = theano.shared(
-            asfloat(np.array([
-                [1, 2, 3, -1],
-                [4, -6, 3, 1],
-                [0, 0, 1, 0],
-                [0, -1, 0, 0],
-            ]))
-        )
+        input_data = asfloat(np.array([
+            [1, 2, 3, -1],
+            [4, -6, 3, 1],
+            [0, 0, 1, 0],
+            [0, -1, 0, 0],
+        ])).reshape(1, 4, 4, 1)
         expected_output = asfloat(np.array([
             [1 / 4., 6 / 4.],
             [-1 / 4., 1 / 4.],
-        ]))
+        ])).reshape(1, 2, 2, 1)
 
         average_pool_layer = layers.AveragePooling((2, 2))
-        actual_output = average_pool_layer.output(input_data).eval()
+        actual_output = self.eval(average_pool_layer.output(input_data))
         np.testing.assert_array_almost_equal(actual_output, expected_output)
 
 
@@ -129,25 +121,19 @@ class UpscaleLayersTestCase(BaseTestCase):
             with self.assertRaises(ValueError):
                 layers.Upscale(invalid_scale)
 
-    def test_upscale_layer_with_one_by_one_scale(self):
-        upscale_layer = layers.Upscale((1, 1))
-
-        x = np.ones((2, 3))
-        self.assertIs(x, upscale_layer.output(x))
-
     def test_upscale_layer_shape(self):
         Case = namedtuple("Case", "scale expected_shape")
         testcases = (
-            Case(scale=(2, 2), expected_shape=(1, 28, 28)),
-            Case(scale=(2, 1), expected_shape=(1, 28, 14)),
-            Case(scale=(1, 2), expected_shape=(1, 14, 28)),
-            Case(scale=(1, 1), expected_shape=(1, 14, 14)),
-            Case(scale=(1, 10), expected_shape=(1, 14, 140)),
+            Case(scale=(2, 2), expected_shape=(28, 28, 1)),
+            Case(scale=(2, 1), expected_shape=(28, 14, 1)),
+            Case(scale=(1, 2), expected_shape=(14, 28, 1)),
+            Case(scale=(1, 1), expected_shape=(14, 14, 1)),
+            Case(scale=(1, 10), expected_shape=(14, 140, 1)),
         )
 
         for testcase in testcases:
             upscale_layer = layers.Upscale(testcase.scale)
-            layers.Input((1, 14, 14)) > upscale_layer
+            layers.Input((14, 14, 1)) > upscale_layer
 
             self.assertEqual(upscale_layer.output_shape,
                              testcase.expected_shape,
@@ -157,7 +143,7 @@ class UpscaleLayersTestCase(BaseTestCase):
         input_value = np.array([
             [1, 2, 3, 4],
             [5, 6, 7, 8],
-        ]).reshape((1, 1, 2, 4))
+        ]).reshape((1, 2, 4, 1))
         expected_output = np.array([
             [1, 1, 2, 2, 3, 3, 4, 4],
             [1, 1, 2, 2, 3, 3, 4, 4],
@@ -165,17 +151,14 @@ class UpscaleLayersTestCase(BaseTestCase):
             [5, 5, 6, 6, 7, 7, 8, 8],
             [5, 5, 6, 6, 7, 7, 8, 8],
             [5, 5, 6, 6, 7, 7, 8, 8],
-        ]).reshape((1, 1, 6, 8))
+        ]).reshape((1, 6, 8, 1))
 
         upscale_layer = layers.Upscale((3, 2))
         self.assertEqual(upscale_layer.output_shape, None)
 
-        layers.Input((1, 2, 4)) > upscale_layer
+        layers.Input((2, 4, 1)) > upscale_layer
 
-        x = T.tensor4('x')
-        actual_output = upscale_layer.output(x)
-        actual_output = actual_output.eval({x: asfloat(input_value)})
-
+        actual_output = self.eval(upscale_layer.output(asfloat(input_value)))
         np.testing.assert_array_almost_equal(
             asfloat(expected_output),
             actual_output
@@ -184,7 +167,7 @@ class UpscaleLayersTestCase(BaseTestCase):
 
 class GlobalPoolingLayersTestCase(BaseTestCase):
     def test_global_pooling_output_shape(self):
-        input_layer = layers.Input((3, 8, 8))
+        input_layer = layers.Input((8, 8, 3))
         global_pooling_layer = layers.GlobalPooling()
         self.assertEqual(global_pooling_layer.output_shape, None)
 
@@ -192,22 +175,21 @@ class GlobalPoolingLayersTestCase(BaseTestCase):
         self.assertEqual(global_pooling_layer.output_shape, (3,))
 
     def test_global_pooling(self):
-        x = asfloat(np.ones((2, 3, 4, 5)))
+        x = asfloat(np.ones((2, 4, 5, 3)))
         expected_outputs = np.ones((2, 3))
 
         global_mena_pooling_layer = layers.GlobalPooling()
-        actual_output = global_mena_pooling_layer.output(x).eval()
+        actual_output = self.eval(global_mena_pooling_layer.output(x))
 
         self.assertEqual(actual_output.shape, (2, 3))
         np.testing.assert_array_equal(expected_outputs, actual_output)
 
     def test_global_pooling_other_function(self):
-        x = asfloat(np.ones((2, 3, 4, 5)))
+        x = asfloat(np.ones((2, 4, 5, 3)))
         expected_outputs = 20 * np.ones((2, 3))
 
-        global_sum_pooling_layer = layers.GlobalPooling(function=T.sum)
-        a = T.tensor4()
-        actual_output = global_sum_pooling_layer.output(a).eval({a: x})
+        global_sum_pooling_layer = layers.GlobalPooling(function=tf.reduce_sum)
+        actual_output = self.eval(global_sum_pooling_layer.output(x))
 
         self.assertEqual(actual_output.shape, (2, 3))
         np.testing.assert_array_equal(expected_outputs, actual_output)

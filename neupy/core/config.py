@@ -1,16 +1,62 @@
 from abc import ABCMeta
 from collections import namedtuple
 
+import numpy as np
+import tensorflow as tf
 from six import with_metaclass
 
+from neupy.utils import tensorflow_eval
 from .properties import BaseProperty, WithdrawProperty
 from .docs import SharedDocsMeta
 
 
-__all__ = ('ConfigMeta', 'ConfigABCMeta', 'Configurable', 'ConfigurableABC')
+__all__ = ('ConfigMeta', 'ConfigABCMeta', 'Configurable', 'ConfigurableABC',
+           'ExtractParameters', 'DumpableObject')
 
 
 Option = namedtuple('Option', 'class_name value')
+
+
+def initialize_with_kwargs(class_, kwargs):
+    return class_(**kwargs)
+
+
+class ExtractParameters(object):
+    def get_params(self, deep=False):
+        options = {}
+
+        for property_name, option in self.options.items():
+            value = getattr(self, property_name)
+
+            if isinstance(value, tf.Variable):
+                value = tensorflow_eval(value)
+
+            property_ = option.value
+            is_numpy_array = isinstance(value, np.ndarray)
+
+            if hasattr(option.value, 'choices'):
+                choices = property_.choices
+
+                if not is_numpy_array and value in choices.values():
+                    choices = {v: k for k, v in choices.items()}
+                    value = choices[value]
+
+            # Default value is not always valid type. For this reason we
+            # need to ignore all the values that have the same value as
+            # in default attibute.
+            if is_numpy_array or value != property_.default:
+                options[property_name] = value
+
+        return options
+
+    def set_params(self, **params):
+        self.__dict__.update(params)
+        return self
+
+
+class DumpableObject(ExtractParameters):
+    def __reduce__(self):
+        return initialize_with_kwargs, (self.__class__, self.get_params())
 
 
 class ConfigMeta(SharedDocsMeta):
@@ -43,7 +89,7 @@ class ConfigMeta(SharedDocsMeta):
         return new_class
 
 
-class BaseConfigurable(object):
+class BaseConfigurable(ExtractParameters):
     """
     Base configuration class. It help set up and validate
     initialized property values.

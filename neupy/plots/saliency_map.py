@@ -1,34 +1,48 @@
-import theano
-import theano.tensor as T
 import numpy as np
+import tensorflow as tf
 import matplotlib.pyplot as plt
 from scipy.ndimage.filters import gaussian_filter
 
+from neupy.utils import tensorflow_session, as_tuple
 from neupy.exceptions import InvalidConnection
-from neupy.layers.utils import create_input_variable
 
 
-__all__ = ('saliency_map', 'compile_saliency_map')
+__all__ = ('saliency_map', 'saliency_map_graph')
 
 
-def compile_saliency_map(connection):
+def saliency_map_graph(connection):
     """
-    Compile Theano function that returns saliency map.
+    Returns tensorflow variables for saliency map.
 
     Parameters
     ----------
     connection : connection
+    image : ndarray
     """
-    x = create_input_variable(connection.input_shape,
-                              name='plots:saliency-map/var:input')
+    session = tensorflow_session()
+
+    if session in saliency_map_graph.cache:
+        return saliency_map_graph.cache[session]
+
+    x = tf.placeholder(
+        shape=as_tuple(None, connection.input_shape),
+        name='saliency-map/input',
+        dtype=tf.float32,
+    )
 
     with connection.disable_training_state():
         prediction = connection.output(x)
 
-    output_class = T.argmax(prediction)
-    saliency = T.grad(T.max(prediction), x)
+    output_class = tf.argmax(prediction[0])
+    saliency, = tf.gradients(tf.reduce_max(prediction), x)
 
-    return theano.function([x], [saliency, output_class])
+    # Caching will ensure that we won't build tensorflow graph every time
+    # we generate
+    saliency_map_graph.cache[session] = x, saliency, output_class
+    return x, saliency, output_class
+
+
+saliency_map_graph.cache = {}
 
 
 def saliency_map(connection, image, mode='heatmap', sigma=8,
@@ -122,11 +136,13 @@ def saliency_map(connection, image, mode='heatmap', sigma=8,
     if ax is None:
         ax = plt.gca()
 
-    saliency_and_output = compile_saliency_map(connection)
-    saliency, output = saliency_and_output(image)
+    x, saliency, output_class = saliency_map_graph(connection)
 
-    saliency = saliency[0].transpose((1, 2, 0))
-    saliency = saliency.max(axis=2)
+    session = tensorflow_session()
+    saliency, output = session.run(
+        [saliency, output_class], feed_dict={x: image})
+
+    saliency = saliency[0].max(axis=-1)
 
     if mode == 'heatmap':
         saliency = gaussian_filter(saliency, sigma=sigma)

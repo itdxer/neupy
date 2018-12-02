@@ -1,5 +1,6 @@
+import tensorflow as tf
+
 from neupy.core.properties import ProperFractionProperty, NumberProperty
-from neupy.utils import theano_random_stream
 from .base import BaseLayer
 
 
@@ -34,13 +35,7 @@ class Dropout(BaseLayer):
     def output(self, input_value):
         if not self.training_state:
             return input_value
-
-        theano_random = theano_random_stream()
-        proba = (1.0 - self.proba)
-        mask = theano_random.binomial(n=1, p=proba,
-                                      size=input_value.shape,
-                                      dtype=input_value.dtype)
-        return (mask * input_value) / proba
+        return tf.nn.dropout(input_value, keep_prob=(1.0 - self.proba))
 
     def __repr__(self):
         classname = self.__class__.__name__
@@ -81,9 +76,11 @@ class GaussianNoise(BaseLayer):
         if not self.training_state:
             return input_value
 
-        theano_random = theano_random_stream()
-        noise = theano_random.normal(size=input_value.shape,
-                                     avg=self.mean, std=self.std)
+        noise = tf.random_normal(
+            shape=tf.shape(input_value),
+            mean=self.mean,
+            stddev=self.std)
+
         return input_value + noise
 
     def __repr__(self):

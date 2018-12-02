@@ -1,5 +1,8 @@
+import tensorflow as tf
+
 from neupy.core.properties import BoundedProperty
 from neupy.utils import asfloat
+from neupy.layers.utils import iter_parameters
 from .base import WeightUpdateConfigurable
 
 
@@ -64,20 +67,22 @@ class WeightElimination(WeightUpdateConfigurable):
     decay_rate = BoundedProperty(default=0.1, minval=0)
     zero_weight = BoundedProperty(default=1, minval=0)
 
-    def init_param_updates(self, layer, parameter):
-        updates = super(WeightElimination, self).init_param_updates(
-            layer, parameter
-        )
+    def init_train_updates(self):
+        original_updates = super(WeightElimination, self).init_train_updates()
+        parameters = [param for _, _, param in iter_parameters(self.layers)]
+        modified_updates = []
 
         step = self.variables.step
         decay_koef = asfloat(self.decay_rate * step)
         zero_weight_square = asfloat(self.zero_weight ** 2)
 
-        updates_mapper = dict(updates)
-        updates_mapper[parameter] -= decay_koef * (
-            (2 * parameter / zero_weight_square) / (
-                1 + (parameter ** 2) / zero_weight_square
-            ) ** 2
-        )
+        for parameter, updated in original_updates:
+            if parameter in parameters:
+                updated -= decay_koef * (
+                    (2 * parameter / zero_weight_square) / tf.square(
+                        1 + tf.square(parameter) / zero_weight_square
+                    )
+                )
+            modified_updates.append((parameter, updated))
 
-        return list(updates_mapper.items())
+        return modified_updates

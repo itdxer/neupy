@@ -1,24 +1,24 @@
 # IMDB reviews classification using CBOW word embedding and RPROP MLP classifier
 
-* Install requirements
+1. Install requirements
 
 ```bash
 $ pip install -r requirements.txt
 ```
 
-* Download data
+2. Download data
 
 ```bash
 $ python loaddata.py
 ```
 
-* Train word embedding neural network
+3. Train word embedding neural network
 
 ```bash
 $ python train_word_embedding_nn.py
 ```
 
-* Train MLP classifier
+4. Train MLP classifier
 
 ```bash
 $ python train_classifier.py

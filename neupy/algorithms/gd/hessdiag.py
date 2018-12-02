@@ -1,10 +1,12 @@
 from __future__ import division
 
-import theano.tensor as T
+import tensorflow as tf
 
 from neupy.core.properties import ProperFractionProperty
-from neupy.algorithms.utils import setup_parameter_updates, parameter_values
+from neupy.utils import flatten
 from neupy.algorithms.gd import NoMultipleStepSelection
+from neupy.algorithms.utils import (setup_parameter_updates, parameter_values,
+                                    make_single_vector)
 from .base import GradientDescent
 
 
@@ -87,6 +89,11 @@ class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
     >>> error
     0.50315919814691346
 
+    Notes
+    -----
+    - Method requires all training data during propagation, which means
+      it's not allowed to use mini-batches.
+
     See Also
     --------
     :network:`GradientDescent` : GradientDescent algorithm.
@@ -96,37 +103,30 @@ class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
 
     def init_train_updates(self):
         step = self.variables.step
-        min_eigval = self.min_eigval
+        inv_min_eigval = 1 / self.min_eigval
         parameters = parameter_values(self.connection)
-        param_vector = T.concatenate([param.flatten() for param in parameters])
+        param_vector = make_single_vector(parameters)
 
-        gradients = T.grad(self.variables.error_func, wrt=parameters)
-        full_gradient = T.concatenate([grad.flatten() for grad in gradients])
+        gradients = tf.gradients(self.variables.error_func, parameters)
+        full_gradient = make_single_vector(gradients)
 
         second_derivatives = []
         for parameter, gradient in zip(parameters, gradients):
-            second_derivative = T.grad(gradient.sum(), wrt=parameter)
-            second_derivatives.append(second_derivative.flatten())
+            second_derivative, = tf.gradients(gradient, parameter)
+            second_derivatives.append(flatten(second_derivative))
 
-        hessian_diag = T.concatenate(second_derivatives)
-        hessian_diag = T.switch(
-            T.abs_(hessian_diag) < min_eigval,
-            T.switch(
-                hessian_diag < 0,
-                -min_eigval,
-                min_eigval,
-            ),
-            hessian_diag
+        hessian_diag = tf.concat(second_derivatives, axis=0)
+
+        # it's easier to clip inverse hessian rather than the hessian,.
+        inv_hessian_diag = tf.clip_by_value(
+            # inverse for diagonal matrix easy to compute with
+            # elementwise inverse operation.
+            1 / hessian_diag,
+            -inv_min_eigval,
+            inv_min_eigval,
         )
-
-        # We divide gradient by Hessian diagonal elementwise is the same
-        # as we just took diagonal Hessian inverse (which is
-        # reciprocal for each diagonal element) and mutliply
-        # by gradient. This operation is less clear, but works faster.
-        updated_parameters = (
-            param_vector -
-            step * full_gradient / hessian_diag
+        updates = setup_parameter_updates(
+            parameters,
+            param_vector - step * full_gradient * inv_hessian_diag
         )
-        updates = setup_parameter_updates(parameters, updated_parameters)
-
         return updates

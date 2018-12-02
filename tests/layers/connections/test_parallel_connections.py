@@ -1,6 +1,4 @@
 import numpy as np
-import theano
-import theano.tensor as T
 
 from neupy import layers
 from neupy.utils import asfloat
@@ -10,13 +8,13 @@ from base import BaseTestCase
 
 class TestParallelConnectionsTestCase(BaseTestCase):
     def test_parallel_layer(self):
-        input_layer = layers.Input((3, 8, 8))
+        input_layer = layers.Input((8, 8, 3))
         parallel_layer = layers.join(
             [[
-                layers.Convolution((11, 5, 5)),
+                layers.Convolution((5, 5, 11)),
             ], [
-                layers.Convolution((10, 3, 3)),
-                layers.Convolution((5, 3, 3)),
+                layers.Convolution((3, 3, 10)),
+                layers.Convolution((3, 3, 5)),
             ]],
             layers.Concatenate(),
         )
@@ -25,39 +23,35 @@ class TestParallelConnectionsTestCase(BaseTestCase):
         conn = layers.join(input_layer, parallel_layer)
         output_connection = layers.join(conn, output_layer)
 
-        x = T.tensor4()
-        y = theano.function([x], conn.output(x))
+        x_tensor4 = asfloat(np.random.random((10, 8, 8, 3)))
+        output = self.eval(conn.output(x_tensor4))
+        self.assertEqual(output.shape, (10, 4, 4, 11 + 5))
 
-        x_tensor4 = asfloat(np.random.random((10, 3, 8, 8)))
-        output = y(x_tensor4)
-        self.assertEqual(output.shape, (10, 11 + 5, 4, 4))
-
-        output_function = theano.function([x], output_connection.output(x))
-        final_output = output_function(x_tensor4)
-        self.assertEqual(final_output.shape, (10, 11 + 5, 2, 2))
+        final_output = output_connection.predict(x_tensor4)
+        self.assertEqual(final_output.shape, (10, 2, 2, 11 + 5))
 
     def test_parallel_with_joined_connections(self):
         # Should work without errors
         layers.join(
             [
-                layers.Convolution((11, 5, 5)) > layers.Relu(),
-                layers.Convolution((10, 3, 3)) > layers.Relu(),
+                layers.Convolution((5, 5, 11)) > layers.Relu(),
+                layers.Convolution((3, 3, 10)) > layers.Relu(),
             ],
             layers.Concatenate() > layers.Relu(),
         )
 
     def test_parallel_layer_with_residual_connections(self):
         connection = layers.join(
-            layers.Input((3, 8, 8)),
+            layers.Input((8, 8, 3)),
             [[
-                layers.Convolution((7, 1, 1)),
+                layers.Convolution((1, 1, 7)),
                 layers.Relu()
             ], [
                 # Residual connection
             ]],
             layers.Concatenate(),
         )
-        self.assertEqual(connection.output_shape, (10, 8, 8))
+        self.assertEqual(connection.output_shape, (8, 8, 10))
 
     def test_standalone_parallel_connection(self):
         connection = layers.join([
@@ -68,10 +62,10 @@ class TestParallelConnectionsTestCase(BaseTestCase):
         self.assertEqual(connection.input_shape, [(10,), (20,)])
         self.assertEqual(connection.output_shape, [(1,), (2,)])
 
-        outputs = connection.output(T.matrix())
-        self.assertEqual(len(outputs), 2)
+        input_value_10 = asfloat(np.random.random((2, 10)))
+        input_value_20 = asfloat(np.random.random((2, 20)))
 
-        outputs = connection.output(T.matrix(), T.matrix())
+        outputs = connection.output(input_value_10, input_value_20)
         self.assertEqual(len(outputs), 2)
 
     def test_parallel_connection_initialize_method(self):
@@ -124,7 +118,10 @@ class TestParallelConnectionsTestCase(BaseTestCase):
 
         with self.assertRaises(ValueError):
             # Received only 2 inputs instead of 3
-            connection.output(T.matrix(), T.matrix())
+            connection.output(
+                np.random.random((2, 10)),
+                np.random.random((2, 20)),
+            )
 
     def test_parallel_many_to_many_connection(self):
         relu_layer_1 = layers.Relu(1)

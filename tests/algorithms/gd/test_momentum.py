@@ -22,7 +22,7 @@ class MomentumTestCase(BaseTestCase):
         mnet.train(x_train, y_train, epochs=40)
         self.assertAlmostEqual(0.017, mnet.errors.last(), places=3)
 
-    def test_with_minibatch(self):
+    def test_momentum_with_minibatch(self):
         x_train, _, y_train, _ = simple_classification()
         compare_networks(
            # Test classes
@@ -59,4 +59,21 @@ class MomentumTestCase(BaseTestCase):
            # Test configurations
            epochs=10,
            show_comparison_plot=False,
+        )
+
+    def test_momentum_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(algorithms.Momentum, step=0.3, verbose=False),
+            epochs=1500,
+        )
+
+    def test_nesterov_momentum_overfit(self):
+        self.assertCanNetworkOverfit(
+            partial(
+                algorithms.Momentum,
+                step=0.3,
+                nesterov=True,
+                verbose=False,
+            ),
+            epochs=1500,
         )

@@ -1,6 +1,16 @@
 Hyperparameter optimization for Neural Networks
 ===============================================
 
+.. raw:: html
+
+    <div class="short-description">
+        <img src="https://raw.githubusercontent.com/itdxer/neupy/master/site/_static/intro/hyperopt-2-intro.png" align="right">
+        <p>
+        This article explains different hyperparameter algorithms that can be used for neural networks. It covers simple algorithms like Grid Search, Random Search and more complicated algorithms like Gaussian Process and Tree-structured Parzen Estimators (TPE).
+        </p>
+        <span clear="right"></span>
+    </div>
+
 .. contents::
 
 Introduction
@@ -15,8 +25,7 @@ Sometimes it can be difficult to choose a correct architecture for Neural Networ
 * Learning rate
 * Loss function
 
-Even though the list of parameters in not even close to being complete, it's still impressive how many parameters influences network's accuracy.
-
+Even though the list of parameters in not even close to being complete, it's still impressive how many parameters influences network's performance.
 
 Hyperparameter optimization
 ---------------------------
@@ -276,7 +285,7 @@ Let's import digits dataset from scikit-learn.
     target[np.arange(n_samples), dataset.target] = 1
 
     x_train, x_test, y_train, y_test = train_test_split(
-        dataset.data, target, train_size=0.7
+        dataset.data, target, test_size=0.3
     )
 
 And for the last step, we need to define parameter selection procedure. First, we need to define a function that performs Gaussian Process regression and returns mean and standard deviation of the prediction for the specified input vector.
@@ -471,7 +480,7 @@ Let's make an example. We're going to use MNIST dataset.
     x_train, x_test, y_train, y_test = train_test_split(
         data.astype(np.float32),
         target.astype(np.float32),
-        train_size=(6 / 7.)
+        test_size=(1 / 7.)
     )
 
 For hyperparameter selection, I'm going to use `hyperopt <https://github.com/hyperopt/hyperopt>`_ library. It has implemented TPE algorithm.
@@ -683,7 +692,7 @@ It's good in case if you now that some variables have relations. To overcome pro
 Summary
 -------
 
-The Bayesian Optimization and TPE algorithms show great improvement over the classic hyperparameter optimization methods. They allow to learn from the training history and give better and better estimations for the next set of parameters. But it still takes lots of time to apply these algorithms. It’s great if you have an access to multiple machines and you can parallel parameter tuning procedure [4]_, but usually, it’s not an option. Sometimes it’s better just to avoid hyperparameter optimization. In case if you just try to build a network for trivial problems like image classification it’s better to use existed architectures with pre-trained parameters like `AlexNet <https://github.com/itdxer/neupy/tree/master/examples/cnn/alexnet.py>`_, `VGG19 <https://github.com/itdxer/neupy/tree/master/examples/cnn/vgg19.py>`_ or `ResNet <https://github.com/itdxer/neupy/tree/master/examples/cnn/resnet50.py>`_.
+The Bayesian Optimization and TPE algorithms show great improvement over the classic hyperparameter optimization methods. They allow to learn from the training history and give better and better estimations for the next set of parameters. But it still takes lots of time to apply these algorithms. It’s great if you have an access to multiple machines and you can parallel parameter tuning procedure [4]_, but usually, it’s not an option. Sometimes it’s better just to avoid hyperparameter optimization. In case if you just try to build a network for trivial problems like image classification it’s better to use existed architectures with pre-trained parameters like `VGG19 <https://github.com/itdxer/neupy/tree/master/examples/cnn/vgg19.py>`_ or `ResNet <https://github.com/itdxer/neupy/tree/master/examples/cnn/resnet50.py>`_.
 
 For unique problems that don’t have pre-trained networks the classic and simple hand-tuning is a great way to start. A few iterations can give you a good architecture which won’t be the state-of-the-art but should give you satisfying result with a minimum of problems. In case if accuracy does not suffice your needs you can always boost your performance getting more data or developing ensembles with different models.
 

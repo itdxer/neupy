@@ -1,6 +1,5 @@
 import os
 import sys
-import copy
 import unittest
 import tempfile
 from contextlib import contextmanager
@@ -8,11 +7,12 @@ from contextlib import contextmanager
 import six
 import numpy as np
 import pandas as pd
-import theano.tensor as T
 from matplotlib import pyplot as plt
 from matplotlib.testing.compare import compare_images
 
-from neupy import algorithms, layers
+from neupy import algorithms, layers, environment
+from neupy.utils import asfloat
+from neupy.storage import save_dict, load_dict
 
 from data import xor_input_train, xor_target_train
 
@@ -67,7 +67,7 @@ def compare_networks(default_class, tested_class, data, **kwargs):
     network = default_class(**kwargs)
 
     if hasattr(network, 'connection'):
-        default_connections = copy.deepcopy(network.connection)
+        initial_parameters = save_dict(network.connection)
 
     network.train(*data, epochs=epochs)
 
@@ -76,7 +76,7 @@ def compare_networks(default_class, tested_class, data, **kwargs):
 
     # Compute result for test network (which must be faster)
     if hasattr(network, 'connection'):
-        kwargs['connection'] = default_connections
+        load_dict(network.connection, initial_parameters)
 
     network = tested_class(**kwargs)
 
@@ -154,7 +154,7 @@ def image_comparison(original_image_path, figsize=(10, 10), tol=1e-3):
 class StepOutput(layers.BaseLayer):
     def output(self, value):
         if not self.training_state:
-            return T.switch(value < 0, -1, 1)
+            return 2 * asfloat(value < 0) - 1
         return value
 
 
@@ -177,13 +177,13 @@ def reproducible_network_train(seed=0, epochs=500, **additional_params):
     GradientDescent instance
         Returns trained network.
     """
-    np.random.seed(seed)
+    environment.reproducible(seed)
     network = algorithms.GradientDescent(
         connection=[
             layers.Input(2),
             layers.Tanh(5),
             layers.Tanh(1),
-            StepOutput(),
+            # StepOutput(),
         ],
         **additional_params
     )

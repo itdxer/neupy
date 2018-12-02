@@ -1,0 +1,33 @@
+{#-
+    boilerplate/archive.html
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Archive page.
+
+    :copyright: Copyright 2011-2018 by Vlad Riscutia and contributors (see
+    CONTRIBUTORS file)
+    :license: FreeBSD, see LICENSE file
+-#}
+
+{%- extends "page.html" -%}
+
+{%- block body -%}
+    <div id="results-list">
+    <ul class="search">
+    {%- for year in years|sort(reverse=True) -%}
+
+        {%- for metadata in years[year] -%}
+            <li style="display: list-item;">
+                <span class="tag right-tag">{{ year }} {{ metadata.formatted_date_short }}</span>
+                <a href="{{ pathto(metadata.link) }}" class="large-font">{{ metadata.title }}</a>
+                <p>{{ metadata.short_description }}</p>
+                <div class="postmeta">
+                    {{ tag_list(metadata.filing["tags"]) }}
+                </div>
+            </li>
+        {%- endfor -%}
+    {%- endfor -%}
+    </ul>
+    </div>
+
+{%- endblock -%}

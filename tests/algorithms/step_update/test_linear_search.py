@@ -3,16 +3,19 @@ from sklearn import datasets, preprocessing
 from sklearn.model_selection import train_test_split
 
 from neupy import algorithms, layers
-from neupy.estimators import rmsle
+from neupy.utils import asfloat
+from neupy.algorithms.gd import errors
 
 from base import BaseTestCase
 
 
 class LinearSearchTestCase(BaseTestCase):
+    single_thread = 1
+
     def test_linear_search(self):
         methods = [
-            ('golden', 0.34276),
-            ('brent', 0.35192),
+            ('golden', 0.34839),
+            ('brent', 0.38637),
         ]
 
         for method_name, valid_error in methods:
@@ -30,7 +33,7 @@ class LinearSearchTestCase(BaseTestCase):
                 test_size=0.15
             )
 
-            cgnet = algorithms.ConjugateGradient(
+            cgnet = algorithms.GradientDescent(
                 connection=[
                     layers.Input(13),
                     layers.Sigmoid(50),
@@ -45,7 +48,10 @@ class LinearSearchTestCase(BaseTestCase):
             cgnet.train(x_train, y_train, epochs=4)
             y_predict = cgnet.predict(x_test).round(1)
 
-            error = rmsle(target_scaler.inverse_transform(y_test),
-                          target_scaler.inverse_transform(y_predict))
+            error = errors.rmsle(
+                asfloat(target_scaler.inverse_transform(y_test)),
+                asfloat(target_scaler.inverse_transform(y_predict)),
+            )
+            error = self.eval(error)
 
             self.assertAlmostEqual(valid_error, error, places=5)

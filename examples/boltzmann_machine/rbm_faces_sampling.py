@@ -1,11 +1,10 @@
 import itertools
 
-import theano
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
-from skimage.filters import threshold_adaptive
+from skimage.filters import threshold_local
 from neupy import algorithms, environment
 from neupy.utils import asfloat
 
@@ -58,19 +57,21 @@ def plot_rbm_sampled_images(rbm_network, data, training_data):
 def binarize_images(data):
     binarized_data = []
     for image in data:
-        binary_adaptive = threshold_adaptive(image.reshape((62, 47)),
-                                             block_size=15)
-        binarized_data.append(binary_adaptive.ravel())
+        image = image.reshape((62, 47))
+        image_threshold = threshold_local(image, block_size=15)
+        binary_adaptive_image = image > image_threshold
+        binarized_data.append(binary_adaptive_image.ravel())
     return asfloat(binarized_data)
 
 
 environment.reproducible()
-theano.config.floatX = 'float32'
 
+print("Reading images...")
 people_dataset = datasets.fetch_lfw_people()
 data = people_dataset.data
 np.random.shuffle(data)
 
+print("Binarizing images...")
 binarized_data = binarize_images(data)
 
 x_train, x_test, binarized_x_train, binarized_x_test = train_test_split(
@@ -86,7 +87,7 @@ rbm = algorithms.RBM(
     verbose=True,
     shuffle_data=True,
 )
-rbm.train(binarized_x_train, binarized_x_test, epochs=70)
+rbm.train(binarized_x_train, binarized_x_test, epochs=40)
 
 plot_rbm_sampled_images(rbm, x_test, binarized_x_test)
 plt.show()

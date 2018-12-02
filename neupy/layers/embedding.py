@@ -1,5 +1,7 @@
+import tensorflow as tf
+
 from neupy import init
-from neupy.utils import as_tuple, asint
+from neupy.utils import as_tuple
 from neupy.core.properties import IntProperty, ParameterProperty
 from .base import BaseLayer
 
@@ -23,7 +25,7 @@ class Embedding(BaseLayer):
     output_size : int
         Layer's output vector dimension.
 
-    weight : array-like, Theano variable, scalar or Initializer
+    weight : array-like, Tensorfow variable, scalar or Initializer
         Defines layer's weights. Default initialization methods
         you can find :ref:`here <init-methods>`.
         Defaults to :class:`XavierNormal() <neupy.init.XavierNormal>`.
@@ -81,8 +83,8 @@ class Embedding(BaseLayer):
     weight = ParameterProperty(default=init.XavierNormal())
 
     def __init__(self, input_size, output_size, **options):
-        super(Embedding, self).__init__(input_size=input_size,
-                                        output_size=output_size, **options)
+        super(Embedding, self).__init__(
+            input_size=input_size, output_size=output_size, **options)
 
     @property
     def output_shape(self):
@@ -97,7 +99,8 @@ class Embedding(BaseLayer):
             trainable=True)
 
     def output(self, input_value):
-        return self.weight[asint(input_value)]
+        input_value = tf.cast(input_value, tf.int32)
+        return tf.gather(self.weight, input_value)
 
     def __repr__(self):
         classname = self.__class__.__name__

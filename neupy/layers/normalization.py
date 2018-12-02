@@ -1,4 +1,4 @@
-import theano.tensor as T
+import tensorflow as tf
 
 from neupy import init
 from neupy.core.properties import (NumberProperty, ProperFractionProperty,
@@ -6,7 +6,6 @@ from neupy.core.properties import (NumberProperty, ProperFractionProperty,
 from neupy.utils import asfloat, as_tuple
 from neupy.exceptions import LayerConnectionError
 from .activations import AxesProperty
-from .utils import dimshuffle
 from .base import BaseLayer
 
 
@@ -60,7 +59,7 @@ class BatchNorm(BaseLayer):
         The axis or axes along which normalization is applied.
         ``None`` means that normalization will be applied over
         all axes except the first one. In case of 4D tensor it will
-        be equal to ``(0, 2, 3)``. Defaults to ``None``.
+        be equal to ``(0, 1, 2)``. Defaults to ``None``.
 
     epsilon : float
         Epsilon is a positive constant that adds to the standard
@@ -74,22 +73,22 @@ class BatchNorm(BaseLayer):
         the last batches seen. Value needs to be between ``0`` and ``1``.
         Defaults to ``0.1``.
 
-    gamma : array-like, Theano variable, scalar or Initializer
+    gamma : array-like, Tensorfow variable, scalar or Initializer
         Default initialization methods you can
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=1)``.
 
-    beta : array-like, Theano variable, scalar or Initializer
+    beta : array-like, Tensorfow variable, scalar or Initializer
         Default initialization methods you can
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=0)``.
 
-    running_mean : array-like, Theano variable, scalar or Initializer
+    running_mean : array-like, Tensorfow variable, scalar or Initializer
         Default initialization methods you can
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=0)``.
 
-    running_inv_std : array-like, Theano variable, scalar or Initializer
+    running_inv_std : array-like, Tensorfow variable, scalar or Initializer
         Default initialization methods you can
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=1)``.
@@ -126,16 +125,19 @@ class BatchNorm(BaseLayer):
         ndim = len(input_shape)
 
         if self.axes is None:
-            # If ndim == 4 then axes = (0, 2, 3)
+            # If ndim == 4 then axes = (0, 1, 2)
             # If ndim == 2 then axes = (0,)
-            self.axes = tuple(axis for axis in range(ndim) if axis != 1)
+            self.axes = tuple(range(ndim - 1))
 
         if any(axis >= ndim for axis in self.axes):
             raise ValueError("Cannot apply batch normalization on the axis "
                              "that doesn't exist.")
 
         opposite_axes = find_opposite_axes(self.axes, ndim)
-        parameter_shape = [input_shape[axis] for axis in opposite_axes]
+        parameter_shape = [
+            input_shape[axis] if axis in opposite_axes else 1
+            for axis in range(ndim)
+        ]
 
         if any(parameter is None for parameter in parameter_shape):
             unknown_dim_index = parameter_shape.index(None)
@@ -154,45 +156,35 @@ class BatchNorm(BaseLayer):
                            shape=parameter_shape, trainable=True)
 
     def output(self, input_value):
-        epsilon = asfloat(self.epsilon)
         alpha = asfloat(self.alpha)
-        gamma, beta = self.gamma, self.beta
-
-        ndim = input_value.ndim
-        axes = self.axes
-
         running_mean = self.running_mean
         running_inv_std = self.running_inv_std
 
-        input_mean = input_value.mean(axes)
-        input_var = input_value.var(axes)
-        input_inv_std = T.inv(T.sqrt(input_var + epsilon))
-
-        self.updates = [(
-            running_inv_std,
-            asfloat(1 - alpha) * running_inv_std + alpha * input_inv_std
-        ), (
-            running_mean,
-            asfloat(1 - alpha) * running_mean + alpha * input_mean
-        )]
-
         if not self.training_state:
-            mean = running_mean
-            inv_std = running_inv_std
-
+            mean, inv_std = running_mean, running_inv_std
         else:
-            mean = input_mean
-            inv_std = input_inv_std
+            mean = tf.reduce_mean(
+                input_value, self.axes,
+                keepdims=True, name="mean",
+            )
+            variance = tf.reduce_mean(
+                tf.squared_difference(input_value, tf.stop_gradient(mean)),
+                self.axes,
+                keepdims=True,
+                name="variance",
+            )
+            inv_std = tf.rsqrt(variance + asfloat(self.epsilon))
 
-        opposite_axes = find_opposite_axes(axes, ndim)
-
-        beta = dimshuffle(beta, ndim, opposite_axes)
-        gamma = dimshuffle(gamma, ndim, opposite_axes)
-        mean = dimshuffle(mean, ndim, opposite_axes)
-        inv_std = dimshuffle(inv_std, ndim, opposite_axes)
+            self.updates = [(
+                running_inv_std,
+                asfloat(1 - alpha) * running_inv_std + alpha * inv_std
+            ), (
+                running_mean,
+                asfloat(1 - alpha) * running_mean + alpha * mean
+            )]
 
         normalized_value = (input_value - mean) * inv_std
-        return gamma * normalized_value + beta
+        return self.gamma * normalized_value + self.beta
 
 
 class LocalResponseNorm(BaseLayer):
@@ -213,16 +205,16 @@ class LocalResponseNorm(BaseLayer):
     Parameters
     ----------
     alpha : float
-        coefficient, see equation above
+        Coefficient, see equation above
 
     beta : float
-        offset, see equation above
+        Offset, see equation above
 
     k : float
-        exponent, see equation above
+        Exponent, see equation above
 
-    n : int
-        Number of adjacent channels to normalize over, must be odd
+    depth_radius : int
+        Number of adjacent channels to normalize over, must be odd.
 
     {BaseLayer.Parameters}
 
@@ -237,12 +229,12 @@ class LocalResponseNorm(BaseLayer):
     alpha = NumberProperty(default=1e-4)
     beta = NumberProperty(default=0.75)
     k = NumberProperty(default=2)
-    n = IntProperty(default=5)
+    depth_radius = IntProperty(default=5)
 
     def __init__(self, **options):
         super(LocalResponseNorm, self).__init__(**options)
 
-        if self.n % 2 == 0:
+        if self.depth_radius % 2 == 0:
             raise ValueError("Only works with odd ``n``")
 
     def validate(self, input_shape):
@@ -254,30 +246,10 @@ class LocalResponseNorm(BaseLayer):
                 "".format(self, ndim))
 
     def output(self, input_value):
-        if not self.input_shape:
-            raise LayerConnectionError(
-                "Layer `{}` doesn't have defined input shape. Probably "
-                "it doesn't have an input layer.".format(self))
-
-        half = self.n // 2
-        squared_value = input_value ** 2
-
-        n_samples = input_value.shape[0]
-        channel = input_value.shape[1]
-        height = input_value.shape[2]
-        width = input_value.shape[3]
-
-        zero = asfloat(0)
-        extra_channels = T.alloc(zero, n_samples, channel + 2 * half,
-                                 height, width)
-        squared_value = T.set_subtensor(
-            extra_channels[:, half:half + channel, :, :],
-            squared_value
+        return tf.nn.local_response_normalization(
+            input_value,
+            depth_radius=self.depth_radius,
+            bias=self.k,
+            alpha=self.alpha,
+            beta=self.beta,
         )
-        scale = self.k
-
-        for i in range(self.n):
-            scale += self.alpha * squared_value[:, i:i + channel, :, :]
-
-        scale = scale ** self.beta
-        return input_value / scale

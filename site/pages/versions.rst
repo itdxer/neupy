@@ -3,14 +3,18 @@ Old versions
 
 .. raw:: html
 
+    <h3>Version 0.7</h3>
+
+    <li>0.7.0 (December 2018) - <a href="/index.html">documentation [html]</a></li>
+
     <h3>Version 0.6</h3>
 
-    <li>0.6.5 (October 2018) - <a href="/index.html">documentation [html]</a></li>
-    <li>0.6.4 (March 2018) - <a href="/index.html">documentation [html]</a></li>
-    <li>0.6.3 (February 2018) - <a href="/index.html">documentation [html]</a></li>
-    <li>0.6.2 (December 2017) - <a href="/index.html">documentation [html]</a></li>
-    <li>0.6.1 (November 2017) - <a href="/index.html">documentation [html]</a></li>
-    <li>0.6.0 (September 2017) - <a href="/index.html">documentation [html]</a></li>
+    <li>0.6.5 (October 2018) - <a href="/versions/docs-neupy-v0.6.35.tar.gz">documentation [gzip]</a></li>
+    <li>0.6.4 (March 2018) - <a href="/versions/docs-neupy-v0.6.35.tar.gz">documentation [gzip]</a></li>
+    <li>0.6.3 (February 2018) - <a href="/versions/docs-neupy-v0.6.35.tar.gz">documentation [gzip]</a></li>
+    <li>0.6.2 (December 2017) - <a href="/versions/docs-neupy-v0.6.35.tar.gz">documentation [gzip]</a></li>
+    <li>0.6.1 (November 2017) - <a href="/versions/docs-neupy-v0.6.35.tar.gz">documentation [gzip]</a></li>
+    <li>0.6.0 (September 2017) - <a href="/versions/docs-neupy-v0.6.35.tar.gz">documentation [gzip]</a></li>
 
     <h3>Version 0.5</h3>
 

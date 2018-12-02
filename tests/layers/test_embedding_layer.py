@@ -22,7 +22,7 @@ class EmbeddingLayerTestCase(BaseTestCase):
             [[2, 3]],
             [[8, 9]],
         ])
-        actual_output = connection.output(input_vector).eval()
+        actual_output = self.eval(connection.output(input_vector))
 
         self.assertEqual(embedding_layer.output_shape, (1, 2))
         np.testing.assert_array_equal(expected_output, actual_output)

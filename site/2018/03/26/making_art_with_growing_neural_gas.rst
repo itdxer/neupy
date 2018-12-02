@@ -5,6 +5,16 @@ Making Art with Growing Neural Gas
     :align: center
     :alt: Art generated using Growing Neural Gas in NeuPy
 
+.. raw:: html
+
+    <div class="short-description">
+        <img src="https://raw.githubusercontent.com/itdxer/neupy/master/site/_static/intro/gng-art-intro.png" align="right">
+        <p>
+        Article shows how to generate unique styles from any image using Growing Neural Gas (GNG). In addition, it explains how this type of neural network works and what problems user might encounter while training it on different images.
+        </p>
+        <br clear="right">
+    </div>
+
 Introduction
 ------------
 

@@ -1,9 +1,11 @@
 from neupy import layers
+from neupy.utils import function_name_scope
 
 
 __all__ = ('resnet50',)
 
 
+@function_name_scope
 def ResidualUnit(n_input_filters, n_output_filters, stride,
                  has_branch=False, name=None):
 
@@ -19,7 +21,7 @@ def ResidualUnit(n_input_filters, n_output_filters, stride,
         # 256 filters it can be reduced to 64 reducing amount of
         # computation by factor of 4.
         layers.Convolution(
-            size=(n_input_filters, 1, 1),
+            size=(1, 1, n_input_filters),
             stride=stride,
             bias=None,
             name=conv_name('2a'),
@@ -30,8 +32,8 @@ def ResidualUnit(n_input_filters, n_output_filters, stride,
         # This convolutional layer applies 3x3 filter in order to
         # extract features.
         layers.Convolution(
-            (n_input_filters, 3, 3),
-            padding=1,
+            (3, 3, n_input_filters),
+            padding='SAME',
             bias=None,
             name=conv_name('2b'),
         ),
@@ -42,7 +44,7 @@ def ResidualUnit(n_input_filters, n_output_filters, stride,
         # case we increase number of filters. For instamce, from previously
         # obtained 64 filters we can increase it back to the 256 filters
         layers.Convolution(
-            (n_output_filters, 1, 1),
+            (1, 1, n_output_filters),
             bias=None,
             name=conv_name('2c')
         ),
@@ -52,7 +54,7 @@ def ResidualUnit(n_input_filters, n_output_filters, stride,
     if has_branch:
         residual_branch = layers.join(
             layers.Convolution(
-                (n_output_filters, 1, 1),
+                (1, 1, n_output_filters),
                 stride=stride,
                 bias=None,
                 name=conv_name('1'),
@@ -94,7 +96,7 @@ def resnet50():
     >>> from neupy import architectures
     >>> resnet50 = architectures.resnet50()
     >>> resnet50
-    (3, 224, 224) -> [... 187 layers ...] -> 1000
+    (224, 224, 3) -> [... 187 layers ...] -> 1000
     >>>
     >>> from neupy import algorithms
     >>> network = algorithms.Momentum(resnet50)
@@ -103,8 +105,7 @@ def resnet50():
     --------
     :architecture:`vgg16` : VGG16 network
     :architecture:`squeezenet` : SqueezeNet network
-    :architecture:`alexnet` : AlexNet network
-    :architecture:`squeezenet` : SqueezeNet network
+    :architecture:`resnet50` : ResNet-50 network
 
     References
     ----------
@@ -112,20 +113,22 @@ def resnet50():
     https://arxiv.org/abs/1512.03385
     """
     return layers.join(
-        layers.Input((3, 224, 224)),
+        layers.Input((224, 224, 3)),
 
         # Convolutional layer reduces image's height and width by a factor
         # of 2 (because of the stride)
         # from (3, 224, 224) to (64, 112, 112)
-        layers.Convolution((64, 7, 7), stride=2, padding=3, name='conv1'),
+        layers.Convolution((7, 7, 64), stride=2, bias=None,
+                           padding='SAME', name='conv1'),
+
         layers.BatchNorm(name='bn_conv1'),
         layers.Relu(),
 
         # Stride equal two 2 reduces image size by a factor of two
         # from (64, 112, 112) to (64, 56, 56)
-        layers.MaxPooling((3, 3), stride=2, ignore_border=False),
+        layers.MaxPooling((3, 3), stride=2, padding="SAME"),
 
-        # The branch option applies extra convolution + batch
+        # The branch option applies extrax convolution x+ batch
         # normalization transforamtions to the residual
         ResidualUnit(64, 256, stride=1, name='2a', has_branch=True),
         ResidualUnit(64, 256, stride=1, name='2b'),

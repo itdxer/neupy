@@ -37,8 +37,8 @@ class WeightEliminationTestCase(BaseTestCase):
 
         for net_layer, decay_layer in iter_networks:
             self.assertGreater(
-                np.linalg.norm(net_layer.weight.get_value()),
-                np.linalg.norm(decay_layer.weight.get_value()),
+                np.linalg.norm(self.eval(net_layer.weight)),
+                np.linalg.norm(self.eval(decay_layer.weight)),
             )
 
     def test_with_step_minimization_alg(self):
@@ -68,7 +68,7 @@ class WeightEliminationTestCase(BaseTestCase):
 
         for case in step_test_cases:
             step = case.network.variables.step
-            self.assertAlmostEqual(step.get_value(), case.expected_step,
+            self.assertAlmostEqual(self.eval(step), case.expected_step,
                                    places=2)
 
         # Compare weight norm between networks
@@ -82,8 +82,8 @@ class WeightEliminationTestCase(BaseTestCase):
             network_layers = zip(case.with_smaller_norm.layers[1:-1],
                                  case.with_bigger_norm.layers[1:-1])
             for smaller_norm, bigger_norm in network_layers:
-                weight_smaller_norm = smaller_norm.weight.get_value()
-                weight_bigger_norm = bigger_norm.weight.get_value()
+                weight_smaller_norm = self.eval(smaller_norm.weight)
+                weight_bigger_norm = self.eval(bigger_norm.weight)
                 self.assertGreater(
                     np.linalg.norm(weight_bigger_norm),
                     np.linalg.norm(weight_smaller_norm)
