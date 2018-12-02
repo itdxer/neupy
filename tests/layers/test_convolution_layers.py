@@ -2,6 +2,7 @@ import random
 from itertools import product
 from collections import namedtuple
 
+import pytest
 import numpy as np
 import tensorflow as tf
 
@@ -222,6 +223,25 @@ class ConvLayersTestCase(BaseTestCase):
         actual_output = self.eval(network.output(input_value))
         self.assertEqual(actual_output.shape, (1, 19, 19, 5))
 
+    def test_dilated_convolution(self):
+        network = layers.join(
+            layers.Input((6, 6, 1)),
+            layers.Convolution((3, 3, 1), dilation=2, weight=1, bias=None),
+        )
+
+        input_value = asfloat(np.arange(36).reshape(1, 6, 6, 1))
+        actual_output = self.eval(network.output(input_value))
+
+        self.assertEqual(actual_output.shape, (1, 2, 2, 1))
+        self.assertEqual(actual_output.shape[1:], network.output_shape)
+
+        actual_output = actual_output[0, :, :, 0]
+        expected_output = np.array([
+            [126, 135],  # every row value adds +1 per filter value (+9)
+            [180, 189],  # every col value adds +6 per filter value (+54)
+        ])
+        np.testing.assert_array_almost_equal(actual_output, expected_output)
+
 
 class DeconvolutionTestCase(BaseTestCase):
     def test_deconvolution(self):
@@ -309,6 +329,14 @@ class DeconvolutionTestCase(BaseTestCase):
 
     def test_deconv_output_shape(self):
         self.assertEqual(None, deconv_output_shape(None, 3, 'same', 1))
+
+        self.assertEqual(12, deconv_output_shape(10, 3, 'valid', 1))
+        self.assertEqual(16, deconv_output_shape(10, 7, 'valid', 1))
+        self.assertEqual(10, deconv_output_shape(10, 3, 'same', 1))
+
+        self.assertEqual(14, deconv_output_shape(4, 5, 'valid', 3))
+        self.assertEqual(12, deconv_output_shape(4, 3, 'same', 3))
+        self.assertEqual(12, deconv_output_shape(4, 7, 'same', 3))
 
     def test_deconv_output_shape_exception(self):
         with self.assertRaisesRegexp(ValueError, "unknown \S+ padding"):
