@@ -1,7 +1,7 @@
 .. _mnist-classification:
 
-MNIST Classification
-====================
+Image classification, MNIST digits
+==================================
 
 .. raw:: html
 
@@ -62,6 +62,7 @@ Notice the way division and subtraction are specified. In this way, we make upda
 
 .. code-block:: python
 
+    >>> import numpy as np
     >>> A = np.random.random((100, 10))
     >>> id(A)  # numbers will be different between runs
     4486892960

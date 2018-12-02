@@ -16,7 +16,7 @@ When we load it by default it has randomly generated parameters. We can load pre
 .. code-block:: python
 
     from neupy import storage
-    storage.load_pickle(vgg16, '/path/to/vgg16.pickle')
+    storage.load(vgg16, '/path/to/vgg16.hdf5')
 
 We can check what input and output shapes network expects.
 
