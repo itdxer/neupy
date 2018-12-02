@@ -3,36 +3,46 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from scipy.ndimage.filters import gaussian_filter
 
-from neupy.utils import tensorflow_session
+from neupy.utils import tensorflow_session, as_tuple
 from neupy.exceptions import InvalidConnection
 
 
-__all__ = ('saliency_map', 'compute_saliency_map')
+__all__ = ('saliency_map', 'saliency_map_graph')
 
 
-def compute_saliency_map(connection, image):
+def saliency_map_graph(connection):
     """
-    Returns saliency map.
+    Returns tensorflow variables for saliency map.
 
     Parameters
     ----------
     connection : connection
     image : ndarray
     """
+    session = tensorflow_session()
+
+    if session in saliency_map_graph.cache:
+        return saliency_map_graph.cache[session]
+
     x = tf.placeholder(
-        connection.input_shape,
-        name='plots:saliency-map/var:input',
+        shape=as_tuple(None, connection.input_shape),
+        name='saliency-map/input',
         dtype=tf.float32,
     )
 
     with connection.disable_training_state():
         prediction = connection.output(x)
 
-    output_class = tf.argmax(prediction)
+    output_class = tf.argmax(prediction[0])
     saliency, = tf.gradients(tf.reduce_max(prediction), x)
 
-    session = tensorflow_session()
-    return session.run([saliency, output_class], feed_dict={x: image})
+    # Caching will ensure that we won't build tensorflow graph every time
+    # we generate
+    saliency_map_graph.cache[session] = x, saliency, output_class
+    return x, saliency, output_class
+
+
+saliency_map_graph.cache = {}
 
 
 def saliency_map(connection, image, mode='heatmap', sigma=8,
@@ -126,8 +136,10 @@ def saliency_map(connection, image, mode='heatmap', sigma=8,
     if ax is None:
         ax = plt.gca()
 
-    saliency, output = compute_saliency_map(connection, image)
-    saliency = saliency.transpose((1, 2, 0)).max(axis=2)
+    session = tensorflow_session()
+    x, saliency, output_class = saliency_map_graph(connection)
+    saliency, output = session.run([saliency, output_class], feed_dict={x: image})
+    saliency = saliency[0].max(axis=-1)
 
     if mode == 'heatmap':
         saliency = gaussian_filter(saliency, sigma=sigma)

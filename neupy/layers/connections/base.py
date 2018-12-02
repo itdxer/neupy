@@ -5,6 +5,7 @@ from itertools import product
 from contextlib import contextmanager
 
 import six
+import tensorflow as tf
 
 from neupy.layers.utils import preformat_layer_shape
 from neupy.utils import as_tuple, tensorflow_session
@@ -57,6 +58,32 @@ def check_initialization(method):
     return wrapper
 
 
+def create_input_variables(input_layers):
+    """
+    Create input variables for each input layer
+    in the graph.
+
+    Parameters
+    ----------
+    input_layers : list of layers
+
+    Returns
+    -------
+    list of Tensorflow variables
+    """
+    inputs = []
+
+    for input_layer in input_layers:
+        variable = tf.placeholder(
+            tf.float32,
+            shape=as_tuple(None, input_layer.output_shape),
+            name="network-input/to-layer-{}".format(input_layer.name),
+        )
+        inputs.append(variable)
+
+    return inputs
+
+
 class BaseConnection(InlineConnection):
     """
     Base class from chain connections.
@@ -76,6 +103,8 @@ class BaseConnection(InlineConnection):
     output_layers : list of layers
         List of connection's output layers.
     """
+    computation_cache = {}
+
     def __init__(self):
         self.initialized = False
 
@@ -130,15 +159,29 @@ class BaseConnection(InlineConnection):
         yield
         self.training_state = True
 
-    def predict(self, *args, **kwargs):
+    def predict(self, *inputs):
         """
         Using current tensorflow session this method propagates
         input throught the network and returns output from it.
         """
         session = tensorflow_session()
+        # We cache it in order to avoid graph creation
+        # every time user calls prediction.
+        cache_key = (session, id(self))
 
-        with self.disable_training_state():
-            return session.run(self.output(*args, **kwargs))
+        if cache_key not in self.computation_cache:
+            input_variables = create_input_variables(self.input_layers)
+
+            with self.disable_training_state():
+                self.computation_cache[cache_key] = {
+                    'inputs': input_variables,
+                    'outputs': self.output(*input_variables),
+                }
+
+        graph = self.computation_cache[cache_key]
+        feed_dict = dict(zip(graph['inputs'], inputs))
+
+        return session.run(graph['outputs'], feed_dict=feed_dict)
 
 
 def make_common_graph(left_layer, right_layer):

@@ -9,6 +9,7 @@ import tensorflow as tf
 from neupy import layers
 from neupy.layers.utils import preformat_layer_shape
 from neupy.layers.connections import LayerConnection, is_sequential
+from neupy.layers.connections.base import create_input_variables
 from neupy.exceptions import InvalidConnection
 from neupy.core.properties import ChoiceProperty
 from neupy.algorithms.base import BaseNetwork
@@ -20,32 +21,6 @@ from .gd import errors
 
 
 __all__ = ('ConstructibleNetwork',)
-
-
-def create_input_variables(input_layers):
-    """
-    Create input variables for each input layer
-    in the graph.
-
-    Parameters
-    ----------
-    input_layers : list of layers
-
-    Returns
-    -------
-    list of Tensorflow variables
-    """
-    inputs = []
-
-    for input_layer in input_layers:
-        variable = tf.placeholder(
-            tf.float32,
-            shape=as_tuple(None, input_layer.output_shape),
-            name="network-input/to-layer-{}".format(input_layer.name),
-        )
-        inputs.append(variable)
-
-    return inputs
 
 
 def does_layer_accept_1d_feature(layer):

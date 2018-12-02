@@ -99,7 +99,7 @@ def deprocess(image):
     image[:, :, 1] += 117
     image[:, :, 2] += 104
 
-    return image.astype(np.int8)
+    return image.astype(int)
 
 
 def top_n(probs, n=5):
