@@ -28,7 +28,7 @@
             <p align="center">
                 <b>⚠️   NeuPy now uses Tensorflow as a computational backend  ⚠️</b>
             </p>
-            <p>Starting from the version 0.7.0 neupy uses Tensorflow as a computational backend for deep learning models. All the Theano users can still use neupy with the old backend after installing latest any version before the 0.7.0 release (0.6.*). Documentation for the Theano versions can be downloaded from the website or generated from the code</p>
+            <p>Starting from the version 0.7.0 neupy uses Tensorflow as a computational backend for deep learning models. All the Theano users can still use neupy with the old backend after installing latest version before the 0.7.0 release (0.6.*). Documentation for the Theano versions can be downloaded from the website or generated from the code.</p>
             <br>
             </td>
         </tr>
