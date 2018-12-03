@@ -77,7 +77,8 @@ def ResidualUnit(n_input_filters, n_output_filters, stride,
     )
 
 
-def resnet50(input_shape=(224, 224, 3)):
+def resnet50(input_shape=(224, 224, 3), include_global_pool=True,
+             in_out_ratio=32):
     """
     ResNet50 network architecture with random parameters. Parameters
     can be loaded using ``neupy.storage`` module.
@@ -89,15 +90,29 @@ def resnet50(input_shape=(224, 224, 3)):
     input_shape : tuple
         Network's input shape. Defaults to ``(224, 224, 3)``.
 
+    include_global_pool : bool
+        Specifies if returned output should include global pooling
+        layer. Defaults to ``True``.
+
+    in_out_ratio : {4, 8, 16, 32}
+        Every layer that applies strides reduces height and width per every
+        image. There are 5 of these layers in Resnet and at the end each
+        dimensions gets reduced by ``32``. For example, 224x224 image
+        will be reduced to 7x7 image patches. This parameter specifies
+        what level of reduction we want to obtain after we've propagated
+        network through all the convolution layers.
+
     Notes
     -----
     Because of the global pooling layer, ResNet50 can be applied to
     the images with variable sizes. The only limitation is that image
-    size should be bigger than 32x32, otherwise network wont be able
+    size should be bigger than 32x32, otherwise network won't be able
     to apply all transformations to the image.
 
     Examples
     --------
+    ResNet-50 for ImageNet classification
+
     >>> from neupy import architectures
     >>> resnet50 = architectures.resnet50()
     >>> resnet50
@@ -105,6 +120,26 @@ def resnet50(input_shape=(224, 224, 3)):
     >>>
     >>> from neupy import algorithms
     >>> network = algorithms.Momentum(resnet50)
+
+    ResNet-50 for custom classification task
+
+    >>> from neupy import architectures
+    >>> resnet50 = architectures.resnet50(include_global_pool=False)
+    >>> resnet50
+    (224, 224, 3) -> [... 185 layers ...] -> (7, 7, 2048)
+    >>>
+    >>> from neupy.layers import *
+    >>> resnet50 = resnet50 > GlobalPooling('avg') > Softmax(21)
+
+    ResNet-50 for image segmentation
+
+    >>> from neupy import architectures
+    >>> resnet50 = architectures.resnet50(
+    ...     include_global_pool=False,
+    ...     in_out_ratio=8,
+    ... )
+    >>> resnet50
+    (224, 224, 3) -> [... 185 layers ...] -> (28, 28, 2048)
 
     See Also
     --------
@@ -117,7 +152,20 @@ def resnet50(input_shape=(224, 224, 3)):
     Deep Residual Learning for Image Recognition.
     https://arxiv.org/abs/1512.03385
     """
-    return layers.join(
+    possible_in_out_strides = {
+        4: [1, 1, 1],
+        8: [2, 1, 1],
+        16: [2, 2, 1],
+        32: [2, 2, 2],
+    }
+
+    if in_out_ratio not in possible_in_out_strides:
+        raise ValueError(
+            "Expected one of the folowing in_out_ratio values: {}, got "
+            "{} instead.".format(possible_in_out_strides.keys(), in_out_ratio))
+
+    strides = possible_in_out_strides[in_out_ratio]
+    resnet = layers.join(
         layers.Input(input_shape),
 
         # Convolutional layer reduces image's height and width by a factor
@@ -139,29 +187,35 @@ def resnet50(input_shape=(224, 224, 3)):
         ResidualUnit(64, 256, stride=1, name='2b'),
         ResidualUnit(64, 256, stride=1, name='2c'),
 
-        # Another stride=2 reduces width and hight by factor of 2
-        ResidualUnit(128, 512, stride=2, name='3a', has_branch=True),
+        # When stride=2 reduces width and hight by factor of 2
+        ResidualUnit(128, 512, stride=strides[0], name='3a', has_branch=True),
         ResidualUnit(128, 512, stride=1, name='3b'),
         ResidualUnit(128, 512, stride=1, name='3c'),
         ResidualUnit(128, 512, stride=1, name='3d'),
 
-        # Another stride=2 reduces width and hight by factor of 2
-        ResidualUnit(256, 1024, stride=2, name='4a', has_branch=True),
+        # When stride=2 reduces width and hight by factor of 2
+        ResidualUnit(256, 1024, stride=strides[1], name='4a', has_branch=True),
         ResidualUnit(256, 1024, stride=1, name='4b'),
         ResidualUnit(256, 1024, stride=1, name='4c'),
         ResidualUnit(256, 1024, stride=1, name='4d'),
         ResidualUnit(256, 1024, stride=1, name='4e'),
         ResidualUnit(256, 1024, stride=1, name='4f'),
 
-        # Another stride=2 reduces width and hight by factor of 2
-        ResidualUnit(512, 2048, stride=2, name='5a', has_branch=True),
+        # When stride=2 reduces width and hight by factor of 2
+        ResidualUnit(512, 2048, stride=strides[2], name='5a', has_branch=True),
         ResidualUnit(512, 2048, stride=1, name='5b'),
         ResidualUnit(512, 2048, stride=1, name='5c'),
-
-        # Since the final residual unit has 2048 output filters, global
-        # pooling will replace every output image with single average value.
-        # Despite input iamge size output from this layer always will be
-        # vector with 2048 values
-        layers.GlobalPooling('avg'),
-        layers.Softmax(1000, name='fc1000'),
     )
+
+    if include_global_pool:
+        resnet = layers.join(
+            resnet,
+            # Since the final residual unit has 2048 output filters, global
+            # pooling will replace every output image with single average value.
+            # Despite input iamge size output from this layer always will be
+            # vector with 2048 values
+            layers.GlobalPooling('avg'),
+            layers.Softmax(1000, name='fc1000'),
+        )
+
+    return resnet
