@@ -8,7 +8,7 @@ Create unique text-style with SOFM
         <p>
         Neupy's logo has been generated with a help of the neural network. This article shows the process and how it could be extended for some other text.
         </p>
-        <span clear="right"></span>
+        <br clear="right">
     </div>
 
 .. figure:: images/neupy-logo.png

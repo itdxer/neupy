@@ -8,7 +8,7 @@ Hyperparameter optimization for Neural Networks
         <p>
         This article explains different hyperparameter algorithms that can be used for neural networks. It covers simple algorithms like Grid Search, Random Search and more complicated algorithms like Gaussian Process and Tree-structured Parzen Estimators (TPE).
         </p>
-        <span clear="right"></span>
+        <br clear="right">
     </div>
 
 .. contents::

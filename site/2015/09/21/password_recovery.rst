@@ -9,7 +9,7 @@ Password recovery
         <p>
         Discrete hopfiled networks can be used to solve wide variety of problems. In this article, we try to use this type of network in order to memorizes user's password and then we try reconstruct it from partially corrupted version of this password.
         </p>
-        <span clear="right"></span>
+        <br clear="right">
     </div>
 
 .. contents::

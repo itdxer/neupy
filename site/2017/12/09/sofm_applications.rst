@@ -13,7 +13,7 @@ Self-Organizing Maps and Applications
         <p>
         This article explains how SOFM works and shows different applications where it can be used.
         </p>
-        <span clear="right"></span>
+        <br clear="right">
     </div>
 
 .. contents::
