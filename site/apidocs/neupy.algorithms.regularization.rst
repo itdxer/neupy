@@ -1,5 +1,5 @@
-neupy.algorithms.regularization package
-=======================================
+neupy\.algorithms\.regularization package
+=========================================
 
 Submodules
 ----------

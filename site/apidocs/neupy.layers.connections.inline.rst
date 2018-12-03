@@ -1,5 +1,5 @@
-neupy.layers.connections.inline module
-======================================
+neupy\.layers\.connections\.inline module
+=========================================
 
 .. automodule:: neupy.layers.connections.inline
     :members:

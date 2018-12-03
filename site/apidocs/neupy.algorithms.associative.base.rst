@@ -1,5 +1,5 @@
-neupy.algorithms.associative.base module
-========================================
+neupy\.algorithms\.associative\.base module
+===========================================
 
 .. automodule:: neupy.algorithms.associative.base
     :members:

@@ -1,5 +1,5 @@
-neupy.algorithms.rbfn.pnn module
-================================
+neupy\.algorithms\.rbfn\.pnn module
+===================================
 
 .. automodule:: neupy.algorithms.rbfn.pnn
     :members:

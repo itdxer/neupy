@@ -1,5 +1,5 @@
-neupy.core.base module
-======================
+neupy\.core\.base module
+========================
 
 .. automodule:: neupy.core.base
     :members:

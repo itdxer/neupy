@@ -1,5 +1,5 @@
-neupy.algorithms.associative.hebb module
-========================================
+neupy\.algorithms\.associative\.hebb module
+===========================================
 
 .. automodule:: neupy.algorithms.associative.hebb
     :members:

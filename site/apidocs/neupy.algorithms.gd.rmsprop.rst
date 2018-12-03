@@ -1,5 +1,5 @@
-neupy.algorithms.gd.rmsprop module
-==================================
+neupy\.algorithms\.gd\.rmsprop module
+=====================================
 
 .. automodule:: neupy.algorithms.gd.rmsprop
     :members:

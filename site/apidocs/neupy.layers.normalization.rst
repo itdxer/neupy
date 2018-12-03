@@ -1,5 +1,5 @@
-neupy.layers.normalization module
-=================================
+neupy\.layers\.normalization module
+===================================
 
 .. automodule:: neupy.layers.normalization
     :members:

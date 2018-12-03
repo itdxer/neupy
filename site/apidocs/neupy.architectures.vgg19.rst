@@ -1,5 +1,5 @@
-neupy.architectures.vgg19 module
-================================
+neupy\.architectures\.vgg19 module
+==================================
 
 .. automodule:: neupy.architectures.vgg19
     :members:

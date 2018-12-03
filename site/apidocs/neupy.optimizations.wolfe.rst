@@ -1,5 +1,5 @@
-neupy.optimizations.wolfe module
-================================
+neupy\.optimizations\.wolfe module
+==================================
 
 .. automodule:: neupy.optimizations.wolfe
     :members:

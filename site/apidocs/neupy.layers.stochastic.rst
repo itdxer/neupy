@@ -1,5 +1,5 @@
-neupy.layers.stochastic module
-==============================
+neupy\.layers\.stochastic module
+================================
 
 .. automodule:: neupy.layers.stochastic
     :members:

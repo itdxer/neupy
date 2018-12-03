@@ -1,5 +1,5 @@
-neupy.exceptions module
-=======================
+neupy\.exceptions module
+========================
 
 .. automodule:: neupy.exceptions
     :members:

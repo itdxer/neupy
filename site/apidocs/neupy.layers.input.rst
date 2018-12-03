@@ -1,5 +1,5 @@
-neupy.layers.input module
-=========================
+neupy\.layers\.input module
+===========================
 
 .. automodule:: neupy.layers.input
     :members:
