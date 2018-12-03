@@ -5,6 +5,7 @@ Old versions
 
     <h3>Version 0.7</h3>
 
+    <li>0.7.1 (December 2018) - <a href="/index.html">documentation [html]</a></li>
     <li>0.7.0 (December 2018) - <a href="/index.html">documentation [html]</a></li>
 
     <h3>Version 0.6</h3>

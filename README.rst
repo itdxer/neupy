@@ -20,7 +20,7 @@
         <img width="80%" src="https://github.com/itdxer/neupy/raw/master/site/neupy-logo.png">
         </a>
     </div>
-    
+
     <table>
         <tr>
             <td>
@@ -35,7 +35,7 @@
     </table>
 
 
-NeuPy v0.7.0
+NeuPy v0.7.1
 ============
 
 NeuPy is a python library for prototyping and building neural networks. NeuPy uses Tensorflow as a computational backend for deep learning models.
