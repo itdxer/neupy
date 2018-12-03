@@ -1,5 +1,5 @@
-neupy.layers.merge module
-=========================
+neupy\.layers\.merge module
+===========================
 
 .. automodule:: neupy.layers.merge
     :members:

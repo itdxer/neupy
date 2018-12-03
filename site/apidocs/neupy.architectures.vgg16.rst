@@ -1,5 +1,5 @@
-neupy.architectures.vgg16 module
-================================
+neupy\.architectures\.vgg16 module
+==================================
 
 .. automodule:: neupy.architectures.vgg16
     :members:

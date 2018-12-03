@@ -1,5 +1,5 @@
-neupy.algorithms.competitive.lvq module
-=======================================
+neupy\.algorithms\.competitive\.lvq module
+==========================================
 
 .. automodule:: neupy.algorithms.competitive.lvq
     :members:

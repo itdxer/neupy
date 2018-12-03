@@ -1,5 +1,5 @@
-neupy.environment module
-========================
+neupy\.environment module
+=========================
 
 .. automodule:: neupy.environment
     :members:

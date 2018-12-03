@@ -1,5 +1,5 @@
-neupy.core.logs module
-======================
+neupy\.core\.logs module
+========================
 
 .. automodule:: neupy.core.logs
     :members:

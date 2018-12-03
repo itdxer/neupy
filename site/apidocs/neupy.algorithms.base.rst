@@ -1,5 +1,5 @@
-neupy.algorithms.base module
-============================
+neupy\.algorithms\.base module
+==============================
 
 .. automodule:: neupy.algorithms.base
     :members:

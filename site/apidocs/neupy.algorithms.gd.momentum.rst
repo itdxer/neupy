@@ -1,5 +1,5 @@
-neupy.algorithms.gd.momentum module
-===================================
+neupy\.algorithms\.gd\.momentum module
+======================================
 
 .. automodule:: neupy.algorithms.gd.momentum
     :members:

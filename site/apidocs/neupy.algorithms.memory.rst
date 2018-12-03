@@ -1,5 +1,5 @@
-neupy.algorithms.memory package
-===============================
+neupy\.algorithms\.memory package
+=================================
 
 Submodules
 ----------

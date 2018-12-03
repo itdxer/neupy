@@ -1,5 +1,5 @@
-neupy.algorithms.memory.bam module
-==================================
+neupy\.algorithms\.memory\.bam module
+=====================================
 
 .. automodule:: neupy.algorithms.memory.bam
     :members:

@@ -1,5 +1,5 @@
-neupy.plots.error_plot module
-=============================
+neupy\.plots\.error\_plot module
+================================
 
 .. automodule:: neupy.plots.error_plot
     :members:

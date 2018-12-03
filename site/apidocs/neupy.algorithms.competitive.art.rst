@@ -1,5 +1,5 @@
-neupy.algorithms.competitive.art module
-=======================================
+neupy\.algorithms\.competitive\.art module
+==========================================
 
 .. automodule:: neupy.algorithms.competitive.art
     :members:

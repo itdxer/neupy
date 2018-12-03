@@ -1,5 +1,5 @@
-neupy.init module
-=================
+neupy\.init module
+==================
 
 .. automodule:: neupy.init
     :members:

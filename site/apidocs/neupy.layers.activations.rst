@@ -1,5 +1,5 @@
-neupy.layers.activations module
-===============================
+neupy\.layers\.activations module
+=================================
 
 .. automodule:: neupy.layers.activations
     :members:

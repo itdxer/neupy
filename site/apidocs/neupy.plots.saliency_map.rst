@@ -1,5 +1,5 @@
-neupy.plots.saliency_map module
-===============================
+neupy\.plots\.saliency\_map module
+==================================
 
 .. automodule:: neupy.plots.saliency_map
     :members:

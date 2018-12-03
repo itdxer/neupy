@@ -1,5 +1,5 @@
-neupy.algorithms.gd.lev_marq module
-===================================
+neupy\.algorithms\.gd\.lev\_marq module
+=======================================
 
 .. automodule:: neupy.algorithms.gd.lev_marq
     :members:
