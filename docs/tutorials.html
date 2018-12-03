@@ -48,7 +48,11 @@
         });
     </script>
     <style media="screen" type="text/css">
+        img { max-width: 800px !important; }
+        img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+
+        .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
@@ -145,11 +149,13 @@
         }
         .short-description img {
             max-height: 160px;
-            max-width: 40%;
+            max-width: 40% !important;
             margin-left: 8px;
         }
         #results-list ul.search {
             padding: 0;
+            max-width: 900px;
+            margin: auto;
         }
 
         #results-list .short-description {
@@ -232,7 +238,7 @@
 <div class="section" id="code-examples">
 <h2>Code Examples</h2>
 <p>NeuPy is very intuitive and it&#8217;s easy to read and understand the code. To learn more about different Neural Network types you can check these code examples.</p>
-<table border="1" style="background-color: white;">
+<table class="limited-width" border="1">
     <tr>
       <td colspan="2" style="text-align: center;">
           <h3>Deep Learning</h3>
@@ -359,7 +365,7 @@
           </ul>
         </td>
     </tr>
-</table><table border="1" style="background-color: white; margin-top: 50px;">
+</table><table class="limited-width" border="1" style="margin-top: 50px;">
     <tr>
       <td colspan="2" style="text-align: center;">
           <h3>Competitive networks</h3>
@@ -417,7 +423,7 @@
           <li><a href="https://github.com/itdxer/neupy/tree/master/examples/competitive/reduce_iris_sample_size_lvq.py">Reduce number of training samples in iris dataset with LVQ3</a></li>
         </td>
     </tr>
-</table><table border="1" style="background-color: white; margin-top: 50px;">
+</table><table class="limited-width" border="1" style="margin-top: 50px;">
     <tr>
       <td colspan="2" style="text-align: center;">
           <h3>Associative Memory</h3>
@@ -457,7 +463,7 @@
             </ul>
         </td>
     </tr>
-</table><table border="1" style="background-color: white; margin-top: 50px;">
+</table><table class="limited-width" border="1" style="margin-top: 50px;">
     <tr>
       <td colspan="2" style="text-align: center;">
           <h3>Radial Basis Functions (RBF)</h3>

@@ -48,7 +48,11 @@
         });
     </script>
     <style media="screen" type="text/css">
+        img { max-width: 800px !important; }
+        img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+
+        .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
@@ -145,11 +149,13 @@
         }
         .short-description img {
             max-height: 160px;
-            max-width: 40%;
+            max-width: 40% !important;
             margin-left: 8px;
         }
         #results-list ul.search {
             padding: 0;
+            max-width: 900px;
+            margin: auto;
         }
 
         #results-list .short-description {
@@ -227,7 +233,7 @@
 <p>
     This article explains different hyperparameter algorithms that can be used for neural networks. It covers simple algorithms like Grid Search, Random Search and more complicated algorithms like Gaussian Process and Tree-structured Parzen Estimators (TPE).
     </p>
-<span clear="right"></span>
+<br clear="right"/>
 </div></p>
                 <div class="postmeta">
                     <div class="tags">
