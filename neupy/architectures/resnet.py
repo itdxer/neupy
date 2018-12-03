@@ -6,15 +6,14 @@ __all__ = ('resnet50',)
 
 
 @function_name_scope
-def ResidualUnit(n_input_filters, n_output_filters, stride,
-                 has_branch=False, name=None):
-
+def ResidualUnit(n_input_filters, stride, has_branch=False, name=None):
     def bn_name(index):
         return 'bn' + name + '_branch' + index
 
     def conv_name(index):
         return 'res' + name + '_branch' + index
 
+    n_output_filters = 4 * n_input_filters
     main_branch = layers.join(
         # The main purpose of this 1x1 covolutional layer is to
         # reduce number of filters. For instance, for the tensor with
@@ -183,28 +182,28 @@ def resnet50(input_shape=(224, 224, 3), include_global_pool=True,
 
         # The branch option applies extra convolution x+ batch
         # normalization transforamtions to the residual
-        ResidualUnit(64, 256, stride=1, name='2a', has_branch=True),
-        ResidualUnit(64, 256, stride=1, name='2b'),
-        ResidualUnit(64, 256, stride=1, name='2c'),
+        ResidualUnit(64, stride=1, name='2a', has_branch=True),
+        ResidualUnit(64, stride=1, name='2b'),
+        ResidualUnit(64, stride=1, name='2c'),
 
         # When stride=2 reduces width and hight by factor of 2
-        ResidualUnit(128, 512, stride=strides[0], name='3a', has_branch=True),
-        ResidualUnit(128, 512, stride=1, name='3b'),
-        ResidualUnit(128, 512, stride=1, name='3c'),
-        ResidualUnit(128, 512, stride=1, name='3d'),
+        ResidualUnit(128, stride=strides[0], name='3a', has_branch=True),
+        ResidualUnit(128, stride=1, name='3b'),
+        ResidualUnit(128, stride=1, name='3c'),
+        ResidualUnit(128, stride=1, name='3d'),
 
         # When stride=2 reduces width and hight by factor of 2
-        ResidualUnit(256, 1024, stride=strides[1], name='4a', has_branch=True),
-        ResidualUnit(256, 1024, stride=1, name='4b'),
-        ResidualUnit(256, 1024, stride=1, name='4c'),
-        ResidualUnit(256, 1024, stride=1, name='4d'),
-        ResidualUnit(256, 1024, stride=1, name='4e'),
-        ResidualUnit(256, 1024, stride=1, name='4f'),
+        ResidualUnit(256, stride=strides[1], name='4a', has_branch=True),
+        ResidualUnit(256, stride=1, name='4b'),
+        ResidualUnit(256, stride=1, name='4c'),
+        ResidualUnit(256, stride=1, name='4d'),
+        ResidualUnit(256, stride=1, name='4e'),
+        ResidualUnit(256, stride=1, name='4f'),
 
         # When stride=2 reduces width and hight by factor of 2
-        ResidualUnit(512, 2048, stride=strides[2], name='5a', has_branch=True),
-        ResidualUnit(512, 2048, stride=1, name='5b'),
-        ResidualUnit(512, 2048, stride=1, name='5c'),
+        ResidualUnit(512, stride=strides[2], name='5a', has_branch=True),
+        ResidualUnit(512, stride=1, name='5b'),
+        ResidualUnit(512, stride=1, name='5c'),
     )
 
     if include_global_pool:
