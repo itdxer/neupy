@@ -14,7 +14,7 @@ The Art of SOFM
         <p>
         SOFM is a great example of the algorithm that can produce simple work of art when used in the right way.
         </p>
-        <span clear="right"></span>
+        <br clear="right">
     </div>
 
 

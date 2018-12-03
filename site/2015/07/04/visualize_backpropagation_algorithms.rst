@@ -14,7 +14,7 @@ Visualize Algorithms based on the backpropagation
         <p>
         These type of visualizations can provide us with useful insights about the training process.
         </p>
-        <span clear="right"></span>
+        <br clear="right">
     </div>
 
 Typical neural networks have mullions of parameters and it's quite difficult to visualize its training process. In the article, we visualize training of the network that has only 2 parameters. It allows us to explore different training algorithms and see how it behaves during the training.

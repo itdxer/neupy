@@ -18,7 +18,7 @@ NeuPy is very intuitive and it's easy to read and understand the code. To learn 
 
 .. raw:: html
 
-    <table border="1" style="background-color: white;">
+    <table class="limited-width" border="1">
         <tr>
           <td colspan="2" style="text-align: center;">
               <h3>Deep Learning</h3>
@@ -149,7 +149,7 @@ NeuPy is very intuitive and it's easy to read and understand the code. To learn 
 
 .. raw:: html
 
-    <table border="1" style="background-color: white; margin-top: 50px;">
+    <table class="limited-width" border="1" style="margin-top: 50px;">
         <tr>
           <td colspan="2" style="text-align: center;">
               <h3>Competitive networks</h3>
@@ -211,7 +211,7 @@ NeuPy is very intuitive and it's easy to read and understand the code. To learn 
 
 .. raw:: html
 
-    <table border="1" style="background-color: white; margin-top: 50px;">
+    <table class="limited-width" border="1" style="margin-top: 50px;">
         <tr>
           <td colspan="2" style="text-align: center;">
               <h3>Associative Memory</h3>
@@ -255,7 +255,7 @@ NeuPy is very intuitive and it's easy to read and understand the code. To learn 
 
 .. raw:: html
 
-    <table border="1" style="background-color: white; margin-top: 50px;">
+    <table class="limited-width" border="1" style="margin-top: 50px;">
         <tr>
           <td colspan="2" style="text-align: center;">
               <h3>Radial Basis Functions (RBF)</h3>

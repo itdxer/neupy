@@ -5,7 +5,11 @@
 {%- block extrahead -%}
     {{ super() }}
     <style media="screen" type="text/css">
+        img { max-width: 800px !important; }
+        img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+
+        .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
@@ -107,6 +111,8 @@
         }
         #results-list ul.search {
             padding: 0;
+            max-width: 900px;
+            margin: auto;
         }
 
         #results-list .short-description {
