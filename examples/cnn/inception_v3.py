@@ -1,16 +1,17 @@
+from neupy.layers import *
 from neupy import layers, plots
 
 
 def ConvReluBN(*conv_args, **conv_kwargs):
-    return layers.join(
-        layers.Convolution(*conv_args, **conv_kwargs),
-        layers.Relu(),
-        layers.BatchNorm(epsilon=0.001),
+    return join(
+        Convolution(*conv_args, **conv_kwargs),
+        Relu(),
+        BatchNorm(epsilon=0.001),
     )
 
 
 def Inception_1(conv_filters):
-    return layers.join(
+    return join(
         [[
             ConvReluBN((1, 1, conv_filters[0][0])),
         ], [
@@ -21,15 +22,15 @@ def Inception_1(conv_filters):
             ConvReluBN((3, 3, conv_filters[2][1]), padding=1),
             ConvReluBN((3, 3, conv_filters[2][2]), padding=1),
         ], [
-            layers.AveragePooling((3, 3), stride=(1, 1), padding='SAME'),
+            AveragePooling((3, 3), stride=(1, 1), padding='SAME'),
             ConvReluBN((1, 1, conv_filters[3][0])),
         ]],
-        layers.Concatenate(),
+        Concatenate(),
     )
 
 
 def Inception_2(conv_filters):
-    return layers.join(
+    return join(
         [[
             ConvReluBN((1, 1, conv_filters[0][0])),
         ], [
@@ -43,24 +44,22 @@ def Inception_2(conv_filters):
             ConvReluBN((7, 1, conv_filters[2][3]), padding=(3, 0)),
             ConvReluBN((1, 7, conv_filters[2][4]), padding=(0, 3)),
         ], [
-            layers.AveragePooling((3, 3), stride=(1, 1), padding='SAME'),
+            AveragePooling((3, 3), stride=(1, 1), padding='SAME'),
             ConvReluBN((1, 1, conv_filters[3][0])),
         ]],
-        layers.Concatenate(),
+        Concatenate(),
     )
 
 
 def Inception_3(pooling):
-    if pooling not in ('max', 'average'):
+    pooling_layers = {'max': MaxPooling, 'avg': AveragePooling}
+
+    if pooling not in pooling_layers:
         raise ValueError("Invalid pooling option: {}".format(pooling))
 
-    elif pooling == 'max':
-        Pooling = layers.MaxPooling
+    Pooling = pooling_layers[pooling]
 
-    elif pooling == 'average':
-        Pooling = layers.AveragePooling
-
-    return layers.join(
+    return join(
         [[
             ConvReluBN((1, 1, 320)),
         ], [
@@ -82,21 +81,21 @@ def Inception_3(pooling):
             Pooling((3, 3), stride=(1, 1), padding='SAME'),
             ConvReluBN((1, 1, 192)),
         ]],
-        layers.Concatenate(),
+        Concatenate(),
     )
 
 
-inception_v3 = layers.join(
-    layers.Input((299, 299, 3)),
+inception_v3 = join(
+    Input((299, 299, 3)),
 
     ConvReluBN((3, 3, 32), stride=2),
     ConvReluBN((3, 3, 32)),
     ConvReluBN((3, 3, 64), padding=1),
-    layers.MaxPooling((3, 3), stride=(2, 2)),
+    MaxPooling((3, 3), stride=(2, 2)),
 
     ConvReluBN((1, 1, 80)),
     ConvReluBN((3, 3, 192)),
-    layers.MaxPooling((3, 3), stride=(2, 2)),
+    MaxPooling((3, 3), stride=(2, 2)),
 
     Inception_1([[64], [48, 64], [64, 96, 96], [32]]),
     Inception_1([[64], [48, 64], [64, 96, 96], [64]]),
@@ -109,9 +108,9 @@ inception_v3 = layers.join(
         ConvReluBN((3, 3, 96), padding=1),
         ConvReluBN((3, 3, 96), stride=2),
     ], [
-        layers.MaxPooling((3, 3), stride=(2, 2))
+        MaxPooling((3, 3), stride=(2, 2))
     ]],
-    layers.Concatenate(),
+    Concatenate(),
 
     Inception_2([[192], [128, 128, 192], [128, 128, 128, 128, 192], [192]]),
     Inception_2([[192], [160, 160, 192], [160, 160, 160, 160, 192], [192]]),
@@ -127,14 +126,14 @@ inception_v3 = layers.join(
         ConvReluBN((7, 1, 192), padding=(3, 0)),
         ConvReluBN((3, 3, 192), stride=2),
     ], [
-        layers.MaxPooling((3, 3), stride=(2, 2))
+        MaxPooling((3, 3), stride=(2, 2))
     ]],
-    layers.Concatenate(),
+    Concatenate(),
 
-    Inception_3(pooling='average'),
+    Inception_3(pooling='avg'),
     Inception_3(pooling='max'),
 
-    layers.GlobalPooling('avg'),
-    layers.Softmax(1000),
+    GlobalPooling('avg'),
+    Softmax(1000),
 )
 plots.network_structure(inception_v3)

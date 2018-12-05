@@ -12,7 +12,7 @@ from neupy.utils import asfloat, as_tuple, class_method_name_scope
 from neupy.layers.connections import BaseConnection
 
 
-__all__ = ('BaseLayer', 'ParameterBasedLayer', 'ResidualConnection')
+__all__ = ('BaseLayer', 'ParameterBasedLayer', 'Identity')
 
 
 def generate_layer_name(layer):
@@ -191,7 +191,7 @@ class BaseLayer(BaseConnection, Configurable):
             self.__class__, parameters, self.initialized))
 
 
-class ResidualConnection(BaseLayer):
+class Identity(BaseLayer):
     """
     Residual skip connection.
     """

@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 import graphviz
 
-from neupy.layers.base import ResidualConnection
+from neupy.layers.base import Identity
 from neupy.layers.utils import extract_connection
 
 
@@ -130,7 +130,7 @@ def network_structure(connection, ignore_layers=None, filepath=None,
     if filepath is None:
         filepath = tempfile.mktemp()
 
-    ignore_layers = [ResidualConnection] + ignore_layers
+    ignore_layers = [Identity] + ignore_layers
 
     forward_graph = connection.graph.forward_graph
     forward_graph = exclude_layer_from_graph(forward_graph, ignore_layers)

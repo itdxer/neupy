@@ -5,7 +5,7 @@ import math
 import tensorflow as tf
 
 from neupy.utils import as_tuple, tf_repeat
-from neupy.core.properties import (TypedListProperty, ChoiceProperty, Property,
+from neupy.core.properties import (TypedListProperty, ChoiceProperty,
                                    FunctionWithOptionsProperty)
 from neupy.exceptions import LayerConnectionError
 from .base import BaseLayer
@@ -42,13 +42,13 @@ def pooling_output_shape(dimension_size, pool_size, padding, stride):
         return None
 
     if padding in ('SAME', 'same'):
-        return math.ceil(dimension_size / stride)
+        return int(math.ceil(dimension_size / stride))
 
     elif padding in ('VALID', 'valid'):
-        return math.ceil((dimension_size - pool_size + 1) / stride)
+        return int(math.ceil((dimension_size - pool_size + 1) / stride))
 
-    raise ValueError("{!r} is unknown convolution's padding value"
-                     "".format(padding))
+    raise ValueError(
+        "{!r} is unknown convolution's padding value".format(padding))
 
 
 class BasePooling(BaseLayer):
@@ -119,7 +119,7 @@ class BasePooling(BaseLayer):
 
         # In python 2, we can get float number after rounding procedure
         # and it might break processing in the subsequent layers.
-        return (int(output_rows), int(output_cols), n_kernels)
+        return (output_rows, output_cols, n_kernels)
 
     def output(self, input_value):
         return tf.nn.pool(

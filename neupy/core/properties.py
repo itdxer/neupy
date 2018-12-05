@@ -363,7 +363,9 @@ class FunctionWithOptionsProperty(ChoiceProperty):
     def __set__(self, instance, value):
         if isinstance(value, types.FunctionType):
             return super(ChoiceProperty, self).__set__(instance, value)
-        return super(FunctionWithOptionsProperty, self).__set__(instance, value)
+
+        return super(FunctionWithOptionsProperty, self).__set__(
+            instance, value)
 
     def __get__(self, instance, value):
         founded_value = super(ChoiceProperty, self).__get__(instance, value)

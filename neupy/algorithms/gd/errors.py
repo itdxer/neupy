@@ -166,15 +166,12 @@ def binary_crossentropy(expected, predicted):
     {error_function.Returns}
     """
     epsilon = smallest_positive_number
-    shape = tf.shape(expected)
-    n_samples = asfloat(shape[0])
 
     predicted = tf.clip_by_value(predicted, epsilon, 1.0 - epsilon)
-    total_error = tf.reduce_sum(
-        -expected * tf.log(predicted) -
-        (1 - expected) * tf.log(1 - predicted)
-    )
-    return total_error / n_samples
+    crossentropy = (
+        -expected * tf.log(predicted) - (1 - expected) * tf.log(1 - predicted))
+
+    return tf.reduce_mean(crossentropy)
 
 
 @function_name_scope
@@ -193,11 +190,11 @@ def categorical_crossentropy(expected, predicted):
     {error_function.Returns}
     """
     epsilon = smallest_positive_number
-    shape = tf.shape(expected)
-    n_samples = asfloat(shape[0])
 
     predicted = tf.clip_by_value(predicted, epsilon, 1.0 - epsilon)
-    return -tf.reduce_sum(expected * tf.log(predicted)) / n_samples
+    errors = tf.reduce_sum(expected * tf.log(predicted), axis=-1)
+
+    return -tf.reduce_mean(errors)
 
 
 @function_name_scope
