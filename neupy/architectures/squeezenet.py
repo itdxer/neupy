@@ -1,5 +1,3 @@
-import tensorflow as tf
-
 from neupy import layers
 from neupy.utils import function_name_scope
 

@@ -210,9 +210,9 @@ def resnet50(input_shape=(224, 224, 3), include_global_pool=True,
         resnet = layers.join(
             resnet,
             # Since the final residual unit has 2048 output filters, global
-            # pooling will replace every output image with single average value.
-            # Despite input iamge size output from this layer always will be
-            # vector with 2048 values
+            # pooling will replace every output image with single average
+            # value. Despite input iamge size output from this layer always
+            # will be vector with 2048 values
             layers.GlobalPooling('avg'),
             layers.Softmax(1000, name='fc1000'),
         )

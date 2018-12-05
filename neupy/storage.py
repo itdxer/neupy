@@ -83,7 +83,8 @@ def load_layer_parameter(layer, layer_data):
         parameter.load(asfloat(param_data['value']), session)
 
 
-def load_dict_by_names(layers_conn, layers_data, ignore_missing=False):
+def load_dict_by_names(layers_conn, layers_data, ignore_missing=False,
+                       skip_validation=True):
     """"
     Load parameters in to layer using layer names as the reference.
 
@@ -111,25 +112,27 @@ def load_dict_by_names(layers_conn, layers_data, ignore_missing=False):
     elif ignore_missing and all(l not in layers_data for l in layers_conn):
         raise ParameterLoaderError("Non of the layers can be matched by name")
 
-    for layer_name, layer in layers_conn.items():
-        if layer_name in layers_data:
-            validate_layer_compatibility(layer, layers_data[layer_name])
+    if not skip_validation:
+        for layer_name, layer in layers_conn.items():
+            if layer_name in layers_data:
+                validate_layer_compatibility(layer, layers_data[layer_name])
 
     for layer_name, layer in layers_conn.items():
         if layer_name in layers_data:
             load_layer_parameter(layer, layers_data[layer_name])
 
 
-def load_dict_sequentially(layers_conn, layers_data):
+def load_dict_sequentially(layers_conn, layers_data, skip_validation=True):
     """"
     Load parameters in to layer using sequential order of
     layer in connection and stored data
     """
-    # It's important to point out that it can be that there more
-    # stored layers than specified in the network. For this case we
-    # expect to match as much as we can in case if layer are matchable.
-    for layer, layer_data in zip(layers_conn, layers_data):
-        validate_layer_compatibility(layer, layer_data)
+    if not skip_validation:
+        # It's important to point out that it can be that there more
+        # stored layers than specified in the network. For this case we
+        # expect to match as much as we can in case if layer are matchable.
+        for layer, layer_data in zip(layers_conn, layers_data):
+            validate_layer_compatibility(layer, layer_data)
 
     for layer, layer_data in zip(layers_conn, layers_data):
         load_layer_parameter(layer, layer_data)
@@ -201,7 +204,7 @@ def validate_data_structure(data):
 
 
 def load_dict(connection, data, ignore_missing=False,
-              load_by='names_or_order'):
+              load_by='names_or_order', skip_validation=True):
     """
     Load network connections from dictionary.
 
@@ -232,6 +235,11 @@ def load_dict(connection, data, ignore_missing=False,
 
         Defaults to ``names_or_order``.
 
+    skip_validation : bool
+        When set to ``False`` validation will be applied per each layer in
+        order to make sure that there were no changes between created
+        and stored models. Defaults to ``True``
+
     Raises
     ------
     ValueError
@@ -244,7 +252,9 @@ def load_dict(connection, data, ignore_missing=False,
             "one of the following values: names, order, names_or_order."
             "".format(load_by))
 
-    validate_data_structure(data)
+    if not skip_validation:
+        validate_data_structure(data)
+
     initialize_uninitialized_variables()
     connection = extract_connection(connection)
 
@@ -260,10 +270,11 @@ def load_dict(connection, data, ignore_missing=False,
             "".format(len(layers_data), len(layers_conn)))
 
     if load_by == 'names':
-        load_dict_by_names(layers_conn, layers_data, ignore_missing)
+        load_dict_by_names(
+            layers_conn, layers_data, ignore_missing, skip_validation)
 
     elif load_by == 'order':
-        load_dict_sequentially(layers_conn, layers_data)
+        load_dict_sequentially(layers_conn, layers_data, skip_validation)
 
     else:
         try:
@@ -392,7 +403,7 @@ def save_pickle(connection, filepath, python_compatible=False):
 
 @shared_docs(load_dict)
 def load_pickle(connection, filepath, ignore_missing=False,
-                load_by='names_or_order'):
+                load_by='names_or_order', skip_validation=True):
     """
     Load and set parameters for layers from the
     specified filepath.
@@ -407,6 +418,8 @@ def load_pickle(connection, filepath, ignore_missing=False,
     {load_dict.ignore_missing}
 
     {load_dict.load_by}
+
+    {load_dict.skip_validation}
 
     Raises
     ------
@@ -479,7 +492,7 @@ def save_hdf5(connection, filepath):
 
 @shared_docs(load_dict)
 def load_hdf5(connection, filepath, ignore_missing=False,
-              load_by='names_or_order'):
+              load_by='names_or_order', skip_validation=True):
     """
     Load network parameters from HDF5 file.
 
@@ -493,6 +506,8 @@ def load_hdf5(connection, filepath, ignore_missing=False,
     {load_dict.ignore_missing}
 
     {load_dict.load_by}
+
+    {load_dict.skip_validation}
 
     Raises
     ------
@@ -589,7 +604,7 @@ def save_json(connection, filepath, indent=None):
 
 @shared_docs(load_dict)
 def load_json(connection, filepath, ignore_missing=False,
-              load_by='names_or_order'):
+              load_by='names_or_order', skip_validation=True):
     """
     Load network parameters from JSON file.
 
@@ -603,6 +618,8 @@ def load_json(connection, filepath, ignore_missing=False,
     {load_dict.ignore_missing}
 
     {load_dict.load_by}
+
+    {load_dict.skip_validation}
 
     Raises
     ------

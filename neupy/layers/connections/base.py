@@ -272,7 +272,7 @@ class ParallelConnection(BaseConnection):
         parallel connection has.
     """
     def __init__(self, connections):
-        from neupy.layers.base import ResidualConnection
+        from neupy.layers.base import Identity
 
         super(ParallelConnection, self).__init__()
 
@@ -284,7 +284,7 @@ class ParallelConnection(BaseConnection):
             if isinstance(layers, BaseConnection):
                 connection = layers
             elif not layers:
-                connection = ResidualConnection()
+                connection = Identity()
             else:
                 connection = join(*layers)
 

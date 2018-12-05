@@ -52,6 +52,61 @@ class ErrorFuncTestCase(BaseTestCase):
         error = errors.categorical_crossentropy(actual, predicted)
         self.assertAlmostEqual(0.28, self.eval(error), places=2)
 
+    def test_binary_crossentropy_spatial_data(self):
+        pred_values = np.array([[
+            [0.3, 0.2, 0.1],
+            [0.1, 0.1, 0.1],
+        ]])
+        pred_values = np.transpose(pred_values, (1, 2, 0))
+        pred_values = np.expand_dims(pred_values, axis=0)
+
+        true_values = np.array([[
+            [1, 0, 1],
+            [0, 0, 0],
+        ]])
+        true_values = np.transpose(true_values, (1, 2, 0))
+        true_values = np.expand_dims(true_values, axis=0)
+
+        # Making sure that input values are proper probabilities
+        self.assertTrue(np.all(pred_values.sum(axis=-1) < 1))
+
+        error = errors.binary_crossentropy(true_values, pred_values)
+        expected_error = -(
+            np.log(0.3) + np.log(0.1) + 3 * np.log(0.9) + np.log(0.8)) / 6
+
+        self.assertAlmostEqual(expected_error, self.eval(error), places=2)
+
+    def test_categorical_crossentropy_spatial_data(self):
+        pred_values = np.array([[
+            [0.3, 0.2, 0.1],
+            [0.1, 0.1, 0.1],
+        ], [
+            [0.7, 0.8, 0.9],
+            [0.9, 0.9, 0.9],
+        ]])
+        pred_values = np.transpose(pred_values, (1, 2, 0))
+        pred_values = np.expand_dims(pred_values, axis=0)
+
+        true_values = np.array([[
+            [1, 0, 1],
+            [0, 0, 0],
+        ], [
+            [0, 1, 0],
+            [1, 1, 1],
+        ]])
+        true_values = np.transpose(true_values, (1, 2, 0))
+        true_values = np.expand_dims(true_values, axis=0)
+
+        # Making sure that input values are proper probabilities
+        self.assertTrue(np.allclose(pred_values.sum(axis=-1), 1))
+        self.assertTrue(np.allclose(true_values.sum(axis=-1), 1))
+
+        error = errors.categorical_crossentropy(true_values, pred_values)
+        expected_error = -(
+            np.log(0.3) + np.log(0.1) + 3 * np.log(0.9) + np.log(0.8)) / 6
+
+        self.assertAlmostEqual(expected_error, self.eval(error), places=2)
+
     def test_mae(self):
         predicted = asfloat(np.array([1, 2, 3]))
         target = asfloat(np.array([3, 2, 1]))
