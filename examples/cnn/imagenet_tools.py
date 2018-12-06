@@ -74,13 +74,11 @@ def read_image(image_name, image_size=None, crop_size=None):
     return asfloat(image)
 
 
-def load_image(image_name, image_size=None, crop_size=None, use_bgr=True):
-    image = read_image(image_name, image_size, crop_size)
-
+def process(image, use_bgr):
     # Per channel normalization
-    image[:, :, :, 0] -= 124
-    image[:, :, :, 1] -= 117
-    image[:, :, :, 2] -= 104
+    image[:, :, :, 0] -= 123.68
+    image[:, :, :, 1] -= 116.78
+    image[:, :, :, 2] -= 103.94
 
     if use_bgr:
         # RGB -> BGR
@@ -89,15 +87,20 @@ def load_image(image_name, image_size=None, crop_size=None, use_bgr=True):
     return image
 
 
+def load_image(image_name, image_size=None, crop_size=None, use_bgr=True):
+    image = read_image(image_name, image_size, crop_size)
+    return process(image, use_bgr)
+
+
 def deprocess(image):
     image = image.copy()
 
     # BGR -> RGB
     image[:, :, (0, 1, 2)] = image[:, :, (2, 1, 0)]
 
-    image[:, :, 0] += 124
-    image[:, :, 1] += 117
-    image[:, :, 2] += 104
+    image[:, :, 0] += 123.68
+    image[:, :, 1] += 116.78
+    image[:, :, 2] += 103.94
 
     return image.astype(int)
 
