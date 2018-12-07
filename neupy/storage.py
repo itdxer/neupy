@@ -255,7 +255,6 @@ def load_dict(connection, data, ignore_missing=False,
     if not skip_validation:
         validate_data_structure(data)
 
-    initialize_uninitialized_variables()
     connection = extract_connection(connection)
 
     # We are only interested in layers that has parameters
