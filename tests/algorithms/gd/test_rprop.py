@@ -55,10 +55,21 @@ class RPROPTestCase(BaseTestCase):
             step=1,
             verbose=False
         )
+
+        uniform = init.Uniform()
+        params1 = dict(
+            weight=uniform.sample((3, 10), return_array=True),
+            bias=uniform.sample((10,), return_array=True),
+        )
+        params2 = dict(
+            weight=uniform.sample((10, 2), return_array=True),
+            bias=uniform.sample((2,), return_array=True),
+        )
+
         connection = [
             Input(3),
-            Sigmoid(10, weight=init.Uniform(), bias=init.Uniform()),
-            Sigmoid(2, weight=init.Uniform(), bias=init.Uniform()),
+            Sigmoid(10, **params1),
+            Sigmoid(2, **params2),
         ]
 
         nw = algorithms.IRPROPPlus(copy.deepcopy(connection), **options)

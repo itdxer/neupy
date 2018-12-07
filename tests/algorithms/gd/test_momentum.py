@@ -9,7 +9,7 @@ from base import BaseTestCase
 
 class MomentumTestCase(BaseTestCase):
     def test_simple_momentum(self):
-        x_train, _, y_train, _ = simple_classification()
+        x_train, x_test, y_train, y_test = simple_classification()
         mnet = algorithms.Momentum(
             (10, 20, 1),
             step=0.35,
@@ -19,8 +19,8 @@ class MomentumTestCase(BaseTestCase):
             nesterov=True,
         )
 
-        mnet.train(x_train, y_train, epochs=40)
-        self.assertAlmostEqual(0.017, mnet.errors.last(), places=3)
+        mnet.train(x_train, y_train, x_test, y_test, epochs=40)
+        self.assertGreater(0.15, mnet.validation_errors.last())
 
     def test_momentum_with_minibatch(self):
         x_train, _, y_train, _ = simple_classification()

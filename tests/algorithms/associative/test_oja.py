@@ -73,26 +73,25 @@ class OjaTestCase(BaseTestCase):
         )
 
     def test_predict_different_inputs(self):
-        ojanet = algorithms.Oja(minimized_data_size=1, verbose=False,
-                                step=0.01)
+        ojanet = algorithms.Oja(
+            minimized_data_size=1, verbose=False, step=0.01)
 
         data = np.array([[1, 2, 3]]).T
         target = np.array([[1, 2, 3]]).T
 
         ojanet.train(data, epsilon=0.01, epochs=100)
-        self.assertInvalidVectorPred(ojanet, data.ravel(), target,
-                                     decimal=2)
+        self.assertInvalidVectorPred(
+            ojanet, data.ravel(), target, decimal=2)
 
     def test_reconstruct_different_inputs(self):
-        ojanet = algorithms.Oja(minimized_data_size=1, verbose=False,
-                                step=0.01)
+        ojanet = algorithms.Oja(
+            minimized_data_size=1, verbose=False, step=0.01)
 
         data = np.array([[1, 2, 3]]).T
         target = np.array([[1, 2, 3]]).T
         input_vector = data.ravel()
 
         ojanet.train(data, epsilon=0.01, epochs=100)
-
         test_vectors = vectors_for_testing(input_vector)
 
         for i, test_vector in enumerate(test_vectors, start=1):

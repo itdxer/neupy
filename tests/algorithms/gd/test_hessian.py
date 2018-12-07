@@ -68,5 +68,5 @@ class HessianTestCase(BaseTestCase):
     def test_hessian_overfit(self):
         self.assertCanNetworkOverfit(
             partial(algorithms.Hessian, verbose=False, penalty_const=0.1),
-            epochs=300,
+            epochs=350,
         )

@@ -2,7 +2,7 @@ from itertools import product
 
 import numpy as np
 
-from neupy import algorithms, environment
+from neupy import algorithms, init, layers
 from neupy.algorithms.gd.base import (
     BatchSizeProperty, iter_batches,
     average_batch_errors, count_samples,
@@ -39,13 +39,22 @@ class MinibatchGDTestCase(BaseTestCase):
         fullbatch_identifiers = BatchSizeProperty.fullbatch_identifiers
         x_train, _, y_train, _ = simple_classification()
 
+        xavier_normal = init.XavierNormal()
+        weight1 = xavier_normal.sample((10, 20), return_array=True)
+        weight2 = xavier_normal.sample((20, 1), return_array=True)
+
         for network_class in self.network_classes:
             errors = []
 
             for fullbatch_value in fullbatch_identifiers:
-                environment.reproducible(seed=self.random_seed)
-
-                net = network_class((10, 20, 1), batch_size=fullbatch_value)
+                net = network_class(
+                    [
+                        layers.Input(10),
+                        layers.Sigmoid(20, weight=weight1),
+                        layers.Sigmoid(1, weight=weight2),
+                    ],
+                    batch_size=fullbatch_value,
+                )
                 net.train(x_train, y_train, epochs=10)
 
                 errors.append(net.errors.last())

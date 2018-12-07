@@ -67,5 +67,5 @@ class KohonenTestCase(BaseTestCase):
         ])
 
         knet.train(data, epochs=100)
-        self.assertInvalidVectorPred(knet, data.ravel(), target,
-                                     decimal=2)
+        self.assertInvalidVectorPred(
+            knet, data.ravel(), target, decimal=2)

@@ -76,7 +76,7 @@ class LevenbergMarquardtTestCase(BaseTestCase):
         lmnet.train(x_train, y_train, epochs=4)
         error = lmnet.prediction_error(x_test, y_test)
 
-        self.assertAlmostEqual(0.006, error, places=3)
+        self.assertGreater(0.01, error)
 
     def test_levenberg_marquardt_assign_step_exception(self):
         with self.assertRaises(ValueError):

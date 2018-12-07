@@ -47,9 +47,10 @@ class ConstructibleNetworkTestCase(BaseTestCase):
         x_train_2, x_train_3 = x_train[:, :2], x_train[:, 2:]
         x_test_2, x_test_3 = x_test[:, :2], x_test[:, 2:]
 
-        network.train([x_train_2, x_train_3], y_train,
-                      [x_test_2, x_test_3], y_test,
-                      epochs=100)
+        network.train(
+            [x_train_2, x_train_3], y_train,
+            [x_test_2, x_test_3], y_test,
+            epochs=200)
 
         error = network.validation_errors[-1]
         self.assertAlmostEqual(error, 0.14, places=2)

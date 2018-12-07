@@ -14,8 +14,8 @@ class LinearSearchTestCase(BaseTestCase):
 
     def test_linear_search(self):
         methods = [
-            ('golden', 0.34839),
-            ('brent', 0.38637),
+            ('golden', 0.37381297),
+            ('brent', 0.36021027),
         ]
 
         for method_name, valid_error in methods:
@@ -45,13 +45,12 @@ class LinearSearchTestCase(BaseTestCase):
                 tol=0.1,
                 addons=[algorithms.LinearSearch],
             )
-            cgnet.train(x_train, y_train, epochs=4)
-            y_predict = cgnet.predict(x_test).round(1)
+            cgnet.train(x_train, y_train, x_test, y_test, epochs=10)
+            y_predict = cgnet.predict(x_test)
 
             error = errors.rmsle(
                 asfloat(target_scaler.inverse_transform(y_test)),
                 asfloat(target_scaler.inverse_transform(y_predict)),
             )
             error = self.eval(error)
-
             self.assertAlmostEqual(valid_error, error, places=5)

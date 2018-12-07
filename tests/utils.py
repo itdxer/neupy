@@ -10,7 +10,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.testing.compare import compare_images
 
-from neupy import algorithms, layers, environment
+from neupy import algorithms, layers, environment, init
 from neupy.utils import asfloat
 from neupy.storage import save_dict, load_dict
 
@@ -178,12 +178,16 @@ def reproducible_network_train(seed=0, epochs=500, **additional_params):
         Returns trained network.
     """
     environment.reproducible(seed)
+
+    xavier_normal = init.XavierNormal()
+    tanh_weight1 = xavier_normal.sample((2, 5), return_array=True)
+    tanh_weight2 = xavier_normal.sample((5, 1), return_array=True)
+
     network = algorithms.GradientDescent(
         connection=[
             layers.Input(2),
-            layers.Tanh(5),
-            layers.Tanh(1),
-            # StepOutput(),
+            layers.Tanh(5, weight=tanh_weight1),
+            layers.Tanh(1, weight=tanh_weight2),
         ],
         **additional_params
     )

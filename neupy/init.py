@@ -3,6 +3,7 @@ import math
 
 import six
 import numpy as np
+import tensorflow as tf
 
 from neupy.core.docs import SharedDocsABCMeta
 
@@ -25,13 +26,11 @@ def identify_fans(shape):
     tuple
         Tuple that contains :math:`fan_{in}` and :math:`fan_{out}`.
     """
-    fan_in = shape[0]
+    fan_in, fan_out = shape[0], 1
     output_feature_shape = shape[1:]
 
     if output_feature_shape:
         fan_out = np.prod(output_feature_shape).item(0)
-    else:
-        fan_out = 1
 
     return fan_in, fan_out
 
@@ -51,30 +50,43 @@ def classname(instance):
     return instance.__class__.__name__
 
 
+def set_numpy_seed(seed=None):
+    if seed is not None:
+        np.random.seed(seed)
+
+
 class Initializer(six.with_metaclass(SharedDocsABCMeta)):
     """
     Base class for parameter initialization.
 
     Methods
     -------
-    sample(shape)
-        Returns tensor with specified shape.
+    sample(shape, return_array=False)
+        Returns tensorflow's tensor or numpy array with specified
+        shape. Type of the object depends on the ``return_array`` value.
+        Numpy array will be returned when ``return_array=True`` and
+        tensor otherwise.
     """
     inherit_method_docs = True
 
     @abc.abstractmethod
-    def sample(self, shape):
+    def sample(self, shape, return_array=False):
         """
-        Returns tensor with specified shape.
+        Returns tensorflow's tensor with specified shape.
 
         Parameters
         ----------
         shape : tuple
             Parameter shape.
 
+        return_array : bool
+            Returns numpy's array when equal to ``True``
+            and tensorflow's tensor when equal to ``False``.
+            Defaults to ``False``.
+
         Returns
         -------
-        array-like
+        array-like or Tensor
         """
         raise NotImplementedError
 
@@ -99,8 +111,14 @@ class Constant(Initializer):
     def __init__(self, value=0):
         self.value = value
 
-    def sample(self, shape):
-        return np.ones(shape) * self.value
+    def sample(self, shape, return_array=False):
+        if return_array:
+            return np.ones(shape) * self.value
+
+        elif self.value == 0:
+            return tf.zeros(shape)
+
+        return tf.ones(shape) * self.value
 
     def __repr__(self):
         return '{}({})'.format(classname(self), self.value)
@@ -119,16 +137,27 @@ class Normal(Initializer):
     std : int, float
         Standard deviation of the normal distribution.
 
+    seed : None or int
+        Random seed. Integer value will make results reproducible.
+        Defaults to ``None``.
+
     Methods
     -------
     {Initializer.Methods}
     """
-    def __init__(self, mean=0, std=0.01):
+    def __init__(self, mean=0, std=0.01, seed=None):
         self.mean = mean
         self.std = std
+        self.seed = seed
 
-    def sample(self, shape):
-        return np.random.normal(loc=self.mean, scale=self.std, size=shape)
+    def sample(self, shape, return_array=False):
+        if return_array:
+            set_numpy_seed(self.seed)
+            return np.random.normal(loc=self.mean, scale=self.std, size=shape)
+
+        return tf.random_normal(
+            mean=self.mean, stddev=self.std,
+            shape=shape, seed=self.seed)
 
     def __repr__(self):
         return '{}(mean={}, std={})'.format(
@@ -148,21 +177,31 @@ class Uniform(Initializer):
     maxval : int, float
         Maximum possible value.
 
+    seed : None or int
+        Random seed. Integer value will make results reproducible.
+        Defaults to ``None``.
+
     Methods
     -------
     {Initializer.Methods}
     """
-    def __init__(self, minval=0, maxval=1):
+    def __init__(self, minval=0, maxval=1, seed=None):
         self.minval = minval
         self.maxval = maxval
+        self.seed = seed
 
-    def sample(self, shape):
+    def sample(self, shape, return_array=False):
         minval, maxval = self.minval, self.maxval
-        return np.random.random(shape) * (maxval - minval) + minval
+
+        if return_array:
+            set_numpy_seed(self.seed)
+            return np.random.random(shape) * (maxval - minval) + minval
+
+        return tf.random_uniform(shape, minval, maxval, seed=self.seed)
 
     def __repr__(self):
-        return '{}({}, {})'.format(classname(self),
-                                   self.minval, self.maxval)
+        return '{}({}, {})'.format(
+            classname(self), self.minval, self.maxval)
 
 
 class Orthogonal(Initializer):
@@ -175,6 +214,10 @@ class Orthogonal(Initializer):
         Scales output matrix by a specified factor.
         Defaults to ``1``.
 
+    seed : None or int
+        Random seed. Integer value will make results reproducible.
+        Defaults to ``None``.
+
     Raises
     ------
     ValueError
@@ -185,25 +228,32 @@ class Orthogonal(Initializer):
     -------
     {Initializer.Methods}
     """
-    def __init__(self, scale=1):
+    def __init__(self, scale=1.0, seed=None):
         self.scale = scale
+        self.seed = seed
 
-    def sample(self, shape):
+    def sample(self, shape, return_array=False):
         ndim = len(shape)
 
         if ndim not in (1, 2):
-            raise ValueError("Shape attribute must have 1 or 2 dimensions. "
-                             "Found {} dimensions".format(ndim))
+            raise ValueError(
+                "Shape attribute must have 1 or 2 dimensions. "
+                "Found {} dimensions".format(ndim))
 
-        rand_matrix = np.random.randn(*shape)
+        normal = Normal(seed=self.seed)
+        rand_matrix = normal.sample(shape, return_array)
 
         if ndim == 1:
             return rand_matrix
 
-        nrows, ncols = shape
-        u, _, v = np.linalg.svd(rand_matrix, full_matrices=False)
-        ortho_base = u if nrows > ncols else v
+        if return_array:
+            u, _, v = np.linalg.svd(rand_matrix, full_matrices=False)
+        else:
+            _, u, v = tf.linalg.svd(rand_matrix, full_matrices=False)
+            v = tf.transpose(v)
 
+        nrows, ncols = shape
+        ortho_base = u if nrows > ncols else v
         return self.scale * ortho_base[:nrows, :ncols]
 
     def __repr__(self):
@@ -220,13 +270,22 @@ class InitializerWithGain(Initializer):
         Multiplies scaling factor by speified gain.
         The ``relu`` values set up gain equal to :math:`\\sqrt{{2}}`.
         Defaults to ``1``.
+
+    seed : None or int
+        Random seed. Integer value will make results reproducible.
+        Defaults to ``None``.
     """
-    def __init__(self, gain=1.0):
+    def __init__(self, gain=1.0, seed=None):
         if gain == 'relu':
             gain = math.sqrt(2)
 
         self.gain = gain
+        self.seed = seed
+
         super(InitializerWithGain, self).__init__()
+
+    def __repr__(self):
+        return '{}(gain={})'.format(classname(self), self.gain)
 
 
 class HeNormal(InitializerWithGain):
@@ -248,11 +307,13 @@ class HeNormal(InitializerWithGain):
         Delving Deep into Rectifiers: Surpassing Human-Level
         Performance on ImageNet Classification, 2015.
     """
-    def sample(self, shape):
+    def sample(self, shape, return_array=False):
         fan_in, _ = identify_fans(shape)
         variance = 2. / fan_in
         std = self.gain * np.sqrt(variance)
-        return np.random.normal(loc=0, scale=std, size=shape)
+
+        normal = Normal(0, std, seed=self.seed)
+        return normal.sample(shape, return_array)
 
 
 class HeUniform(InitializerWithGain):
@@ -274,13 +335,17 @@ class HeUniform(InitializerWithGain):
         Delving Deep into Rectifiers: Surpassing Human-Level
         Performance on ImageNet Classification, 2015.
     """
-    def sample(self, shape):
+    def sample(self, shape, return_array=False):
         fan_in, _ = identify_fans(shape)
         variance = 6. / fan_in
         abs_max_value = self.gain * np.sqrt(variance)
 
-        uniform = Uniform(minval=-abs_max_value, maxval=abs_max_value)
-        return uniform.sample(shape)
+        uniform = Uniform(
+            minval=-abs_max_value,
+            maxval=abs_max_value,
+            seed=self.seed,
+        )
+        return uniform.sample(shape, return_array)
 
 
 class XavierNormal(InitializerWithGain):
@@ -301,17 +366,23 @@ class XavierNormal(InitializerWithGain):
     [1] Xavier Glorot, Y Bengio. Understanding the difficulty
         of training deep feedforward neural networks, 2010.
     """
-    def sample(self, shape):
+    def sample(self, shape, return_array=False):
         fan_in, fan_out = identify_fans(shape)
         variance = 2. / (fan_in + fan_out)
         std = self.gain * np.sqrt(variance)
-        return np.random.normal(loc=0, scale=std, size=shape)
+
+        normal = Normal(0, std, seed=self.seed)
+        return normal.sample(shape, return_array)
 
 
 class XavierUniform(InitializerWithGain):
     """
     Xavier Glorot parameter initialization method based
     on uniform distribution.
+
+    Parameters
+    ----------
+    {InitializerWithGain.Parameters}
 
     Methods
     -------
@@ -322,10 +393,14 @@ class XavierUniform(InitializerWithGain):
     [1] Xavier Glorot, Y Bengio. Understanding the difficulty
         of training deep feedforward neural networks, 2010.
     """
-    def sample(self, shape):
+    def sample(self, shape, return_array=False):
         fan_in, fan_out = identify_fans(shape)
         variance = 6. / (fan_in + fan_out)
         abs_max_value = self.gain * np.sqrt(variance)
 
-        uniform = Uniform(minval=-abs_max_value, maxval=abs_max_value)
-        return uniform.sample(shape)
+        uniform = Uniform(
+            minval=-abs_max_value,
+            maxval=abs_max_value,
+            seed=self.seed,
+        )
+        return uniform.sample(shape, return_array)

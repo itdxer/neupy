@@ -6,7 +6,7 @@ import unittest
 import numpy as np
 import tensorflow as tf
 
-from neupy import environment, layers
+from neupy import environment, layers, init
 from neupy.utils import tensorflow_eval, tensorflow_session
 
 from utils import vectors_for_testing
@@ -84,8 +84,8 @@ class BaseTestCase(unittest.TestCase):
 
         for i, test_vector in enumerate(test_vectors, start=1):
             predicted_vector = network.predict(test_vector)
-            np.testing.assert_array_almost_equal(predicted_vector, target,
-                                                 decimal=decimal)
+            np.testing.assert_array_almost_equal(
+                predicted_vector, target, decimal=decimal)
 
     def assertPickledNetwork(self, network, input_data):
         stored_network = pickle.dumps(network)
@@ -103,10 +103,16 @@ class BaseTestCase(unittest.TestCase):
         x_train = 2 * np.random.random((10, 2)) - 1  # zero centered
         y_train = np.random.random((10, 1))
 
+        relu_xavier_normal = init.XavierNormal(gain='relu')
+        relu_weight = relu_xavier_normal.sample((2, 20), return_array=True)
+
+        xavier_normal = init.XavierNormal()
+        sigmoid_weight = xavier_normal.sample((20, 1), return_array=True)
+
         network = network_class([
             layers.Input(2),
-            layers.Relu(20),
-            layers.Sigmoid(1),
+            layers.Relu(20, weight=relu_weight),
+            layers.Sigmoid(1, weight=sigmoid_weight),
         ])
 
         network.train(x_train, y_train, epochs=epochs)
