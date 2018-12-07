@@ -67,6 +67,14 @@ class NormalInitializeTestCase(BaseInitializerTestCase):
         hormal_initializer = init.Normal(mean=0, std=0.01)
         self.assertEqual("Normal(mean=0, std=0.01)", str(hormal_initializer))
 
+    def test_reproducibility(self):
+        normal = init.Normal(mean=0, std=0.01, seed=0)
+
+        weight1 = normal.sample((10, 20), return_array=True)
+        weight2 = normal.sample((10, 20), return_array=True)
+
+        np.testing.assert_array_almost_equal(weight1, weight2)
+
 
 class UniformInitializeTestCase(BaseInitializerTestCase):
     def test_uniformal_initializer(self):
@@ -209,3 +217,11 @@ class OrthogonalInitializeTestCase(BaseInitializerTestCase):
         ortho = init.Orthogonal(scale=1)
         sampled_data = self.eval(ortho.sample(shape=(1,)))
         self.assertEqual((1,), sampled_data.shape)
+
+    def test_reproducibility(self):
+        ortho = init.Orthogonal(seed=0)
+
+        weight1 = ortho.sample((10, 20), return_array=True)
+        weight2 = ortho.sample((10, 20), return_array=True)
+
+        np.testing.assert_array_almost_equal(weight1, weight2)

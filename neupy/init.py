@@ -90,9 +90,6 @@ class Initializer(six.with_metaclass(SharedDocsABCMeta)):
         """
         raise NotImplementedError
 
-    def __repr__(self):
-        return '{}()'.format(classname(self))
-
 
 class Constant(Initializer):
     """

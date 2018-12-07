@@ -168,7 +168,7 @@ class DictStorageTestCase(BaseTestCase):
                     'bias': {'trainable': True, 'value': np.ones((6,))},
                 }
             }]
-        }, load_by='order')
+        }, load_by='order', skip_validation=False)
 
         relu = connection.layer('relu')
         self.assertEqual(12, np.sum(self.eval(relu.weight)))
@@ -189,27 +189,28 @@ class DictStorageTestCase(BaseTestCase):
             layers.Linear(5, name='linear') > layers.Relu(),
             layers.Softmax(6, name='softmax'),
         )
+        data = {
+            'metadata': {},  # avoided for simplicity
+            'graph': {},  # avoided for simplicity
+            # Input layer was avoided on purpose
+            'layers': [{
+                'name': 'name-1',
+                'class_name': 'Relu',
+                'input_shape': (3,),
+                'output_shape': (4,),
+                'configs': {},
+                'parameters': {
+                    'weight': {
+                        'trainable': True,
+                        'value': np.ones((3, 4))
+                    },
+                    'bias': {'trainable': True, 'value': np.ones((4,))},
+                }
+            }]
+        }
 
         with self.assertRaises(ParameterLoaderError):
-            storage.load_dict(connection, {
-                'metadata': {},  # avoided for simplicity
-                'graph': {},  # avoided for simplicity
-                # Input layer was avoided on purpose
-                'layers': [{
-                    'name': 'name-1',
-                    'class_name': 'Relu',
-                    'input_shape': (3,),
-                    'output_shape': (4,),
-                    'configs': {},
-                    'parameters': {
-                        'weight': {
-                            'trainable': True,
-                            'value': np.ones((3, 4))
-                        },
-                        'bias': {'trainable': True, 'value': np.ones((4,))},
-                    }
-                }]
-            }, ignore_missing=False)
+            storage.load_dict(connection, data, ignore_missing=False)
 
     def test_failed_loading_mode_for_storage(self):
         connection = layers.Input(2) > layers.Sigmoid(1)
@@ -377,6 +378,12 @@ class StoredDataValidationTestCase(BaseTestCase):
         })
         self.assertIsNone(result)
 
+    def test_basic_skip_validation(self):
+        connection = layers.Input(10) > layers.Relu(1)
+
+        with self.assertRaises(InvalidFormat):
+            storage.load_dict(connection, {}, skip_validation=False)
+
 
 class TransferLearningTestCase(BaseTestCase):
     def test_transfer_learning_using_position(self):
@@ -433,6 +440,7 @@ class TransferLearningTestCase(BaseTestCase):
             network_new,
             pretrained_layers_stored,
             load_by='names',
+            skip_validation=False,
             ignore_missing=True)
 
         random_input = asfloat(np.random.random((12, 10)))

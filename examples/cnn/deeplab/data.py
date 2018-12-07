@@ -144,7 +144,6 @@ def get_data(filepath):
         annotations.append(annotation)
 
     return (
-        # rgb_to_bgr(np.stack(images, axis=0)),
         process(np.stack(images, axis=0).astype(np.float32), use_bgr=True),
         np.stack(annotations, axis=0),
     )
