@@ -18,6 +18,7 @@ class SignalsTestCase(BaseTestCase):
         network = GradientDescent(
             connection=(2, 2, 1),
             epoch_end_signal=print_message,
+            batch_size='all',
         )
 
         network.train(xor_input_train, xor_target_train, epochs=epochs)
@@ -36,6 +37,7 @@ class SignalsTestCase(BaseTestCase):
         network = GradientDescent(
             connection=(2, 2, 1),
             train_end_signal=print_message,
+            batch_size='all',
         )
 
         network.train(xor_input_train, xor_target_train, epochs=epochs)

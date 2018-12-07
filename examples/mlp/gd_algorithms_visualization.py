@@ -123,6 +123,7 @@ def target_function(network, x, y):
 bp_network = algorithms.GradientDescent(
     get_connection(),
     step=0.3,
+    batch_size='all',
     epoch_end_signal=save_epoch_weight
 )
 network_target_function = partial(target_function, bp_network)
@@ -138,9 +139,12 @@ draw_countour(
     network_target_function
 )
 
-cgnet_class = partial(algorithms.GradientDescent,
-                      addons=[algorithms.LinearSearch],
-                      search_method='golden')
+cgnet_class = partial(
+    algorithms.GradientDescent,
+    addons=[algorithms.LinearSearch],
+    batch_size='all',
+    search_method='golden',
+)
 momentum_class = partial(algorithms.Momentum, batch_size='full')
 
 algorithms = (

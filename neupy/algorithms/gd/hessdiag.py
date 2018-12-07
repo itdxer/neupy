@@ -7,13 +7,13 @@ from neupy.utils import flatten
 from neupy.algorithms.gd import NoMultipleStepSelection
 from neupy.algorithms.utils import (setup_parameter_updates, parameter_values,
                                     make_single_vector)
-from .base import GradientDescent
+from .base import BaseGradientDescent
 
 
 __all__ = ('HessianDiagonal',)
 
 
-class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
+class HessianDiagonal(NoMultipleStepSelection, BaseGradientDescent):
     """
     Hissian diagonal is a Hessian algorithm approximation which require
     only computation of hessian matrix diagonal elements and makes it
@@ -27,15 +27,15 @@ class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
         produce huge number in hessian diagonal elements. This
         parameter control diagonal elements size. Defaults to ``1e-2``.
 
-    {GradientDescent.Parameters}
+    {BaseGradientDescent.Parameters}
 
     Attributes
     ----------
-    {GradientDescent.Attributes}
+    {BaseGradientDescent.Attributes}
 
     Methods
     -------
-    {GradientDescent.Methods}
+    {BaseGradientDescent.Methods}
 
     Examples
     --------
@@ -96,7 +96,7 @@ class HessianDiagonal(NoMultipleStepSelection, GradientDescent):
 
     See Also
     --------
-    :network:`GradientDescent` : GradientDescent algorithm.
+    :network:`BaseGradientDescent` : BaseGradientDescent algorithm.
     :network:`Hessian` : Newton's method.
     """
     min_eigval = ProperFractionProperty(default=1e-2)

@@ -17,7 +17,7 @@ class MinibatchGDTestCase(BaseTestCase):
     def setUp(self):
         super(MinibatchGDTestCase, self).setUp()
         self.network_classes = [
-            algorithms.MinibatchGradientDescent,
+            algorithms.GradientDescent,
             algorithms.Momentum,
         ]
 

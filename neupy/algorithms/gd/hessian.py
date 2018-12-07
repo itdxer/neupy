@@ -6,7 +6,7 @@ from neupy.layers.utils import count_parameters
 from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
                                     make_single_vector)
-from .base import GradientDescent
+from .base import BaseGradientDescent
 
 
 __all__ = ('Hessian',)
@@ -52,7 +52,7 @@ def find_hessian_and_gradient(error_function, parameters):
     return hessian.stack(), full_gradient
 
 
-class Hessian(StepSelectionBuiltIn, GradientDescent):
+class Hessian(StepSelectionBuiltIn, BaseGradientDescent):
     """
     Hessian gradient decent optimization, also known as Newton's method. This
     algorithm uses second-order derivative (hessian matrix) in order to
@@ -66,29 +66,29 @@ class Hessian(StepSelectionBuiltIn, GradientDescent):
         algorithm include penalty that add to hessian matrix identity
         multiplied by defined constant. Defaults to ``1``.
 
-    {GradientDescent.connection}
+    {BaseGradientDescent.connection}
 
-    {GradientDescent.error}
+    {BaseGradientDescent.error}
 
-    {GradientDescent.show_epoch}
+    {BaseGradientDescent.show_epoch}
 
-    {GradientDescent.shuffle_data}
+    {BaseGradientDescent.shuffle_data}
 
-    {GradientDescent.epoch_end_signal}
+    {BaseGradientDescent.epoch_end_signal}
 
-    {GradientDescent.train_end_signal}
+    {BaseGradientDescent.train_end_signal}
 
-    {GradientDescent.verbose}
+    {BaseGradientDescent.verbose}
 
-    {GradientDescent.addons}
+    {BaseGradientDescent.addons}
 
     Attributes
     ----------
-    {GradientDescent.Attributes}
+    {BaseGradientDescent.Attributes}
 
     Methods
     -------
-    {GradientDescent.Methods}
+    {BaseGradientDescent.Methods}
 
     Notes
     -----

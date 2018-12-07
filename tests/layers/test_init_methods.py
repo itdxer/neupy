@@ -3,7 +3,7 @@ import math
 from scipy import stats
 import numpy as np
 
-from neupy import init, environment
+from neupy import init
 
 from base import BaseTestCase
 

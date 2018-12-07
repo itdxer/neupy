@@ -1,3 +1,5 @@
+from functools import partial
+
 import numpy as np
 import tensorflow as tf
 
@@ -11,8 +13,8 @@ class BackPropAlgsTestCase(BaseTestCase):
     def setUp(self):
         super(BackPropAlgsTestCase, self).setUp()
         self.bp_algorithms = [
+            partial(algorithms.GradientDescent, batch_size='all'),
             algorithms.GradientDescent,
-            algorithms.MinibatchGradientDescent,
             algorithms.ConjugateGradient,
             algorithms.HessianDiagonal,
             algorithms.Hessian,
@@ -63,5 +65,7 @@ class BackPropAlgsTestCase(BaseTestCase):
             return tf.reduce_mean(0.5 * (predicted - expected) ** 2)
 
         x_train, _, y_train, _ = simple_classification()
-        gdnet = algorithms.GradientDescent((10, 10, 1), error=custom_mse)
+        gdnet = algorithms.GradientDescent(
+            (10, 10, 1), error=custom_mse, batch_size='all')
+
         gdnet.train(x_train, y_train)

@@ -2,13 +2,13 @@ import tensorflow as tf
 
 from neupy.utils import asfloat
 from neupy.core.properties import ProperFractionProperty, NumberProperty
-from .base import MinibatchGradientDescent
+from .base import GradientDescent
 
 
 __all__ = ('Adamax',)
 
 
-class Adamax(MinibatchGradientDescent):
+class Adamax(GradientDescent):
     """
     AdaMax algorithm.
 
@@ -28,9 +28,9 @@ class Adamax(MinibatchGradientDescent):
     step : float
         Learning rate, defaults to ``0.002``.
 
-    {MinibatchGradientDescent.batch_size}
+    {GradientDescent.batch_size}
 
-    {GradientDescent.addons}
+    {BaseGradientDescent.addons}
 
     {ConstructibleNetwork.connection}
 
@@ -48,11 +48,11 @@ class Adamax(MinibatchGradientDescent):
 
     Attributes
     ----------
-    {MinibatchGradientDescent.Attributes}
+    {GradientDescent.Attributes}
 
     Methods
     -------
-    {MinibatchGradientDescent.Methods}
+    {GradientDescent.Methods}
 
     Examples
     --------

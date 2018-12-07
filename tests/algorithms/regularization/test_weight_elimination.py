@@ -18,6 +18,7 @@ class WeightEliminationTestCase(BaseTestCase):
                 layers.Tanh(1),
             ],
             step=0.3,
+            batch_size='all',
             zero_weight=20,
             addons=[algorithms.WeightElimination]
         )

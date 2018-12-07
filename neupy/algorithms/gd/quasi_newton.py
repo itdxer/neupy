@@ -10,7 +10,7 @@ from neupy.optimizations.wolfe import line_search
 from neupy.layers.utils import count_parameters, iter_parameters
 from neupy.utils import (asfloat, dot, outer, get_variable_size,
                          function_name_scope)
-from .base import GradientDescent
+from .base import BaseGradientDescent
 
 
 __all__ = ('QuasiNewton',)
@@ -172,7 +172,7 @@ def sr1(inv_H, delta_w, delta_grad, epsilon=1e-7):
     )
 
 
-class QuasiNewton(WolfeLineSearchForStep, GradientDescent):
+class QuasiNewton(WolfeLineSearchForStep, BaseGradientDescent):
     """
     Quasi-Newton algorithm. Every iteration quasi-Network method approximates
     inverse Hessian matrix with iterative updates. It doesn't have ``step``
@@ -210,21 +210,21 @@ class QuasiNewton(WolfeLineSearchForStep, GradientDescent):
 
     {WolfeLineSearchForStep.Parameters}
 
-    {GradientDescent.connection}
+    {BaseGradientDescent.connection}
 
-    {GradientDescent.error}
+    {BaseGradientDescent.error}
 
-    {GradientDescent.show_epoch}
+    {BaseGradientDescent.show_epoch}
 
-    {GradientDescent.shuffle_data}
+    {BaseGradientDescent.shuffle_data}
 
-    {GradientDescent.epoch_end_signal}
+    {BaseGradientDescent.epoch_end_signal}
 
-    {GradientDescent.train_end_signal}
+    {BaseGradientDescent.train_end_signal}
 
-    {GradientDescent.verbose}
+    {BaseGradientDescent.verbose}
 
-    {GradientDescent.addons}
+    {BaseGradientDescent.addons}
 
     Notes
     -----
@@ -233,11 +233,11 @@ class QuasiNewton(WolfeLineSearchForStep, GradientDescent):
 
     Attributes
     ----------
-    {GradientDescent.Attributes}
+    {BaseGradientDescent.Attributes}
 
     Methods
     -------
-    {GradientDescent.Methods}
+    {BaseGradientDescent.Methods}
 
     Examples
     --------

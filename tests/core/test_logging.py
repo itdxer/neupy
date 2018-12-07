@@ -125,7 +125,11 @@ class NeuralNetworkLoggingTestCase(BaseTestCase):
         x_train, x_test, y_train, y_test = simple_classification()
 
         with catch_stdout() as out:
-            gdnet = algorithms.GradientDescent((10, 20, 1), verbose=True)
+            gdnet = algorithms.GradientDescent(
+                (10, 20, 1),
+                verbose=True,
+                batch_size='all',
+            )
             gdnet.train(x_train, y_train, x_test, y_test, epochs=4)
             y_predicted = gdnet.predict(x_test)
 

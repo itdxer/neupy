@@ -98,6 +98,7 @@ class LayerStoragePickleTestCase(BaseTestCase):
         gdnet = algorithms.GradientDescent(
             connection=(10, 4, 1),
             epoch_end_signal=on_epoch_end,
+            batch_size='all',
             step=0.5
         )
         gdnet.train(x_train, y_train)

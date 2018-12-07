@@ -38,6 +38,7 @@ class ConstructibleNetworkTestCase(BaseTestCase):
             ],
             step=0.1,
             verbose=False,
+            batch_size='all',
             shuffle_data=True,
         )
 

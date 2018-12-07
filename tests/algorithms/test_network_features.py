@@ -24,7 +24,7 @@ class NetworkMainTestCase(BaseTestCase):
     def test_training_epoch(self):
         data, target = datasets.make_classification(30, n_features=10,
                                                     n_classes=2)
-        network = algorithms.GradientDescent((10, 3, 1))
+        network = algorithms.GradientDescent((10, 3, 1), batch_size='all')
 
         self.assertEqual(network.last_epoch, 0)
 
@@ -38,7 +38,7 @@ class NetworkMainTestCase(BaseTestCase):
         data, target = datasets.make_classification(
             30, n_features=10, n_classes=2,
         )
-        network = algorithms.GradientDescent((10, 3, 1))
+        network = algorithms.GradientDescent((10, 3, 1), batch_size='all')
 
         # Should work fine without exceptions
         network.train(data, target, epochs=2)
@@ -60,6 +60,7 @@ class NetworkMainTestCase(BaseTestCase):
 
         network = algorithms.GradientDescent(
             (10, 3, 1),
+            batch_size='all',
             epoch_end_signal=stop_training_after_the_5th_epoch,
         )
         network.train(data, target, epochs=10)
@@ -71,7 +72,11 @@ class NetworkMainTestCase(BaseTestCase):
             # Disable verbose and than enable it again just
             # to make sure that `show_network_options` won't
             # trigger in the __init__ method
-            network = algorithms.GradientDescent((2, 3, 1), verbose=False)
+            network = algorithms.GradientDescent(
+                (2, 3, 1),
+                verbose=False,
+                batch_size='all',
+            )
             network.verbose = True
 
             show_network_options(network)
@@ -90,7 +95,11 @@ class NetworkMainTestCase(BaseTestCase):
             logging_info_about_the_data(network, x, y)
 
         with catch_stdout() as out:
-            network = algorithms.GradientDescent((2, 3, 1), verbose=True)
+            network = algorithms.GradientDescent(
+                (2, 3, 1),
+                verbose=True,
+                batch_size='all',
+            )
             logging_info_about_the_data(network, [x, x], [x_test, x_test])
             terminal_output = out.getvalue()
 
@@ -100,7 +109,10 @@ class NetworkMainTestCase(BaseTestCase):
     def test_parse_show_epoch_property(self):
         with catch_stdout() as out:
             network = algorithms.GradientDescent(
-                (2, 3, 1), show_epoch='5 times', verbose=True
+                (2, 3, 1),
+                show_epoch='5 times',
+                verbose=True,
+                batch_size='all',
             )
 
             show_epoch = parse_show_epoch_property(network, 100, epsilon=1e-2)
@@ -149,7 +161,11 @@ class NetworkMainTestCase(BaseTestCase):
 
     def test_network_training_summary_inline(self):
         with catch_stdout() as out:
-            network = algorithms.GradientDescent((2, 3, 1), verbose=False)
+            network = algorithms.GradientDescent(
+                (2, 3, 1),
+                verbose=False,
+                batch_size='all',
+            )
 
             x = np.zeros((5, 2))
             y = np.zeros((5, 1))
@@ -186,6 +202,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
                     (2, 3, 1),
                     step=0.1,
                     verbose=True,
+                    batch_size='all',
                     show_epoch=case.show_epoch
                 )
                 bpnet.train(xor_zero_input_train, xor_zero_target_train,
@@ -214,6 +231,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
                     (2, 3, 1),
                     step=0.1,
                     verbose=False,
+                    batch_size='all',
                     show_epoch=wrong_input_value
                 )
 
@@ -223,6 +241,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
                 (2, 3, 1),
                 step=0.1,
                 verbose=True,
+                batch_size='all',
                 show_epoch=100
             )
             bpnet.train(xor_zero_input_train, xor_zero_target_train,
@@ -235,6 +254,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
                 (2, 3, 1),
                 step=0.1,
                 verbose=True,
+                batch_size='all',
                 show_epoch=100
             )
             bpnet.train(xor_zero_input_train, xor_zero_target_train,

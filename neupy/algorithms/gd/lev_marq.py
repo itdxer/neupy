@@ -4,7 +4,7 @@ import tensorflow as tf
 from neupy.utils import tensorflow_session, flatten, function_name_scope
 from neupy.core.properties import (BoundedProperty, ChoiceProperty,
                                    WithdrawProperty)
-from neupy.algorithms import GradientDescent
+from neupy.algorithms import BaseGradientDescent
 from neupy.algorithms.gd import StepSelectionBuiltIn, errors
 from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
                                     make_single_vector)
@@ -50,7 +50,7 @@ def compute_jacobian(values, parameters):
     return jacobian.stack()
 
 
-class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
+class LevenbergMarquardt(StepSelectionBuiltIn, BaseGradientDescent):
     """
     Levenberg-Marquardt algorithm is a variation of the Newton's method.
     It minimizes MSE error. The algorithm approximates Hessian matrix using
@@ -70,7 +70,7 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
 
     Parameters
     ----------
-    {GradientDescent.connection}
+    {BaseGradientDescent.connection}
 
     mu : float
         Control invertion for J.T * J matrix, defaults to ``0.1``.
@@ -83,25 +83,25 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
         Levenberg-Marquardt works only for quadratic functions.
         Defaults to ``mse``.
 
-    {GradientDescent.show_epoch}
+    {BaseGradientDescent.show_epoch}
 
-    {GradientDescent.shuffle_data}
+    {BaseGradientDescent.shuffle_data}
 
-    {GradientDescent.epoch_end_signal}
+    {BaseGradientDescent.epoch_end_signal}
 
-    {GradientDescent.train_end_signal}
+    {BaseGradientDescent.train_end_signal}
 
-    {GradientDescent.verbose}
+    {BaseGradientDescent.verbose}
 
-    {GradientDescent.addons}
+    {BaseGradientDescent.addons}
 
     Attributes
     ----------
-    {GradientDescent.Attributes}
+    {BaseGradientDescent.Attributes}
 
     Methods
     -------
-    {GradientDescent.Methods}
+    {BaseGradientDescent.Methods}
 
     Examples
     --------
@@ -116,7 +116,7 @@ class LevenbergMarquardt(StepSelectionBuiltIn, GradientDescent):
 
     See Also
     --------
-    :network:`GradientDescent` : GradientDescent algorithm.
+    :network:`BaseGradientDescent` : BaseGradientDescent algorithm.
     """
     mu = BoundedProperty(default=0.01, minval=0)
     mu_update_factor = BoundedProperty(default=1.2, minval=1)

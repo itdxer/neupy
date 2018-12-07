@@ -146,7 +146,7 @@ NeuPy has many different :ref:`loss functions <cheatsheet-error-function>`. Thes
 
     from neupy import algorithms, layers
 
-    nnet = algorithms.MinibatchGradientDescent(
+    nnet = algorithms.GradientDescent(
         [
             layers.Input(784),
             layers.Relu(500),
@@ -167,7 +167,7 @@ Also, it's possible to create custom loss functions. Loss function should have t
         abs_errors = tf.abs(expected - predicted)
         return tf.reduce_mean(abs_errors)
 
-    nnet = algorithms.MinibatchGradientDescent(
+    nnet = algorithms.GradientDescent(
         [
             layers.Input(784),
             layers.Relu(500),
@@ -188,7 +188,7 @@ Algorithms with constructible architectures allow to use additional update rules
 
     from neupy import algorithms, layers
 
-    nnet = algorithms.MinibatchGradientDescent(
+    nnet = algorithms.GradientDescent(
         [
             layers.Input(784),
             layers.Relu(500),
@@ -208,7 +208,7 @@ Both :network:`WeightDecay` and :network:`StepDecay` algorithms have additional 
 
     from neupy import algorithms, layers
 
-    nnet = algorithms.MinibatchGradientDescent(
+    nnet = algorithms.GradientDescent(
         [
             layers.Input(784),
             layers.Relu(500),
@@ -216,7 +216,7 @@ Both :network:`WeightDecay` and :network:`StepDecay` algorithms have additional 
             layers.Softmax(10),
         ],
 
-        # Parameters from MinibatchGradientDescent
+        # Parameters from GradientDescent
         step=0.1,
         batch_size=16,
 
@@ -236,7 +236,7 @@ NeuPy doesn't allow to use multiple regularizations and step update add-ons for 
 
     >>> from neupy import algorithms, layers
     >>>
-    >>> nnet = algorithms.MinibatchGradientDescent(
+    >>> nnet = algorithms.GradientDescent(
     ...     [
     ...         layers.Input(784),
     ...         layers.Relu(500),

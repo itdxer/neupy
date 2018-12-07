@@ -1,13 +1,13 @@
 import tensorflow as tf
 
 from neupy.core.properties import ProperFractionProperty, NumberProperty
-from .base import MinibatchGradientDescent
+from .base import GradientDescent
 
 
 __all__ = ('RMSProp',)
 
 
-class RMSProp(MinibatchGradientDescent):
+class RMSProp(GradientDescent):
     """
     RMSProp algorithm.
 
@@ -20,15 +20,15 @@ class RMSProp(MinibatchGradientDescent):
     epsilon : float
         Value need to be greater than ``0``. Defaults to ``1e-7``.
 
-    {MinibatchGradientDescent.Parameters}
+    {GradientDescent.Parameters}
 
     Attributes
     ----------
-    {MinibatchGradientDescent.Attributes}
+    {GradientDescent.Attributes}
 
     Methods
     -------
-    {MinibatchGradientDescent.Methods}
+    {GradientDescent.Methods}
 
     Examples
     --------

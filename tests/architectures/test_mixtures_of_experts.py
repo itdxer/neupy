@@ -18,6 +18,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             algorithms.GradientDescent(
                 (1, 20, 1),
                 step=0.2,
+                batch_size='all',
                 verbose=False
             ),
             layers.join(

@@ -28,6 +28,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
                 layers.Sigmoid(25),
                 layers.Sigmoid(1),
             ],
+            batch_size='all',
             show_epoch=100,
             verbose=False,
         )

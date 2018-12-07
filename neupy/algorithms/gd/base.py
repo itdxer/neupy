@@ -15,10 +15,10 @@ from neupy.algorithms.constructor import ConstructibleNetwork
 from neupy.algorithms.gd import addon_types
 
 
-__all__ = ('GradientDescent', 'MinibatchGradientDescent')
+__all__ = ('BaseGradientDescent', 'GradientDescent')
 
 
-class GradientDescent(ConstructibleNetwork):
+class BaseGradientDescent(ConstructibleNetwork):
     """
     Gradient descent algorithm.
 
@@ -39,17 +39,6 @@ class GradientDescent(ConstructibleNetwork):
     Methods
     -------
     {ConstructibleNetwork.Methods}
-
-    Examples
-    --------
-    >>> import numpy as np
-    >>> from neupy.algorithms import GradientDescent
-    >>>
-    >>> x_train = np.array([[1, 2], [3, 4]])
-    >>> y_train = np.array([[1], [0]])
-    >>>
-    >>> bpnet = GradientDescent((2, 3, 1), verbose=False, step=0.1)
-    >>> bpnet.train(x_train, y_train)
     """
     supported_addon_types = addon_types.keys()
 
@@ -72,7 +61,7 @@ class GradientDescent(ConstructibleNetwork):
 
         if not addons:
             cls.main_class = cls
-            return super(GradientDescent, cls).__new__(cls)
+            return super(BaseGradientDescent, cls).__new__(cls)
 
         identified_types = []
         for addon_class in addons:
@@ -102,12 +91,12 @@ class GradientDescent(ConstructibleNetwork):
         new_class = type(new_class_name, mro_classes, {})
         new_class.main_class = cls
 
-        return super(GradientDescent, new_class).__new__(new_class)
+        return super(BaseGradientDescent, new_class).__new__(new_class)
 
     def __init__(self, connection, options=None, **kwargs):
         if options is None:
             options = kwargs
-        super(GradientDescent, self).__init__(connection, **options)
+        super(BaseGradientDescent, self).__init__(connection, **options)
 
     def iter_params_and_grads(self):
         layers, parameters = [], []
@@ -135,7 +124,7 @@ class GradientDescent(ConstructibleNetwork):
         return self.main_class.__name__
 
     def get_params(self, deep=False, with_connection=True):
-        params = super(GradientDescent, self).get_params()
+        params = super(BaseGradientDescent, self).get_params()
         if with_connection:
             params['connection'] = self.connection
         return params
@@ -469,7 +458,7 @@ def count_samples(input_data):
     return len(input_data)
 
 
-class MinibatchGradientDescent(GradientDescent, MinibatchTrainingMixin):
+class GradientDescent(BaseGradientDescent, MinibatchTrainingMixin):
     """
     Mini-batch Gradient Descent algorithm.
 
@@ -477,15 +466,15 @@ class MinibatchGradientDescent(GradientDescent, MinibatchTrainingMixin):
     ----------
     {MinibatchTrainingMixin.Parameters}
 
-    {GradientDescent.Parameters}
+    {BaseGradientDescent.Parameters}
 
     Attributes
     ----------
-    {GradientDescent.Attributes}
+    {BaseGradientDescent.Attributes}
 
     Methods
     -------
-    {GradientDescent.Methods}
+    {BaseGradientDescent.Methods}
 
     Examples
     --------
@@ -495,14 +484,10 @@ class MinibatchGradientDescent(GradientDescent, MinibatchTrainingMixin):
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> mgdnet = algorithms.MinibatchGradientDescent(
+    >>> mgdnet = algorithms.GradientDescent(
     ...     (2, 3, 1), batch_size=1
     ... )
     >>> mgdnet.train(x_train, y_train)
-
-    See Also
-    --------
-    :network:`GradientDescent` : GradientDescent algorithm.
     """
 
     def train_epoch(self, input_train, target_train):
