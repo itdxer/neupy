@@ -59,12 +59,13 @@ class BaseAssociative(BaseNetwork):
         valid_weight_shape = (self.n_inputs, self.n_outputs)
 
         if isinstance(self.weight, init.Initializer):
-            self.weight = self.weight.sample(valid_weight_shape)
+            self.weight = self.weight.sample(
+                valid_weight_shape, return_array=True)
 
         if self.weight.shape != valid_weight_shape:
-            raise ValueError("Weight matrix has invalid shape. Got {}, "
-                             "expected {}".format(self.weight.shape,
-                                                  valid_weight_shape))
+            raise ValueError(
+                "Weight matrix has invalid shape. Got {}, expected {}"
+                "".format(self.weight.shape, valid_weight_shape))
 
         self.weight = self.weight.astype(float)
 
@@ -165,14 +166,14 @@ class BaseStepAssociative(BaseAssociative):
             self.weight[:self.n_unconditioned, :] = 1
 
         if isinstance(self.bias, init.Initializer):
-            self.bias = self.bias.sample(valid_bias_shape)
+            self.bias = self.bias.sample(valid_bias_shape, return_array=True)
 
         super(BaseStepAssociative, self).init_layers()
 
         if self.bias.shape != valid_bias_shape:
-            raise ValueError("Bias vector has invalid shape. Got {}, "
-                             "expected {}".format(self.bias.shape,
-                                                  valid_bias_shape))
+            raise ValueError(
+                "Bias vector has invalid shape. Got {}, expected {}"
+                "".format(self.bias.shape, valid_bias_shape))
 
         self.bias = self.bias.astype(float)
 

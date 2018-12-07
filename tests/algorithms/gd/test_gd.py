@@ -36,7 +36,7 @@ class GradientDescentTestCase(BaseTestCase):
             verbose=False
         )
         network.train(x_train, y_train, epochs=100)
-        self.assertAlmostEqual(network.errors.last(), 0.045, places=3)
+        self.assertLess(network.errors.last(), 0.05)
 
     def test_addons_exceptions(self):
         with self.assertRaises(ValueError):

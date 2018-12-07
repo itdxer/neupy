@@ -11,7 +11,7 @@ class AdamaxTestCase(BaseTestCase):
         x_train, x_test, y_train, y_test = simple_classification()
         mnet = algorithms.Adamax(
             (10, 20, 1),
-            step=1.0,
+            step=0.1,
             batch_size='full',
             verbose=False,
             epsilon=1e-7,

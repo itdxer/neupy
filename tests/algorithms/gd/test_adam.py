@@ -12,13 +12,13 @@ class AdamTestCase(BaseTestCase):
         mnet = algorithms.Adam(
             (10, 20, 1),
             step=0.1,
-            verbose=False,
+            verbose=True,
             epsilon=1e-4,
             beta1=0.9,
             beta2=0.99,
         )
         mnet.train(x_train, y_train, x_test, y_test, epochs=200)
-        self.assertGreater(0.15, mnet.validation_errors.last())
+        self.assertGreater(0.2, mnet.validation_errors.last())
 
     def test_adam_overfit(self):
         self.assertCanNetworkOverfit(

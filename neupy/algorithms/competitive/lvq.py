@@ -186,7 +186,7 @@ class LVQ(BaseNetwork):
 
         if isinstance(self.weight, init.Initializer):
             weight_shape = (self.n_inputs, self.n_subclasses)
-            self.weight = self.weight.sample(weight_shape)
+            self.weight = self.weight.sample(weight_shape, return_array=True)
 
         if self.weight is not None:
             self.initialized = True

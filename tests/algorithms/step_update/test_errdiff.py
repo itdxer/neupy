@@ -22,4 +22,4 @@ class LearningRateUpdatesTestCase(BaseTestCase):
         network.train(xor_input_train, xor_target_train, epochs=200)
 
         self.assertNotEqual(self.eval(network.variables.step), initial_step)
-        self.assertAlmostEqual(network.errors.last(), 0, places=5)
+        self.assertAlmostEqual(network.errors.last(), 0, places=4)

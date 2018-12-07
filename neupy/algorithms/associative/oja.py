@@ -124,7 +124,7 @@ class Oja(BaseNetwork):
 
         if isinstance(self.weight, init.Initializer):
             weight_shape = (n_input_features, self.minimized_data_size)
-            self.weight = self.weight.sample(weight_shape)
+            self.weight = self.weight.sample(weight_shape, return_array=True)
 
         if n_input_features != self.weight.shape[0]:
             raise ValueError(

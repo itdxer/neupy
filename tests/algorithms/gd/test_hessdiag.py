@@ -11,45 +11,41 @@ from base import BaseTestCase
 class HessianDiagonalTestCase(BaseTestCase):
     def test_hessdiag(self):
         x_train, x_test, y_train, y_test = simple_classification()
+        params = dict(
+            weight=init.Uniform(-0.1, 0.1),
+            bias=init.Uniform(-0.1, 0.1))
+
         nw = algorithms.HessianDiagonal(
             connection=[
                 layers.Input(10),
-                layers.Sigmoid(
-                    size=20,
-                    weight=init.Uniform(-1, 1),
-                    bias=init.Uniform(-1, 1),
-                ),
-                layers.Sigmoid(
-                    size=1,
-                    weight=init.Uniform(-1, 1),
-                    bias=init.Uniform(-1, 1)
-                ),
+                layers.Sigmoid(20, **params),
+                layers.Sigmoid(1, **params),
             ],
             step=0.1,
             shuffle_data=False,
             verbose=False,
-            min_eigval=0.01,
+            min_eigval=0.1,
         )
-        nw.train(x_train / 2, y_train, epochs=10)
-        self.assertAlmostEqual(0.10, nw.errors.last(), places=2)
+        nw.train(x_train, y_train, epochs=50)
+        self.assertGreater(0.2, nw.errors.last())
 
     def test_compare_bp_and_hessian(self):
         x_train, _, y_train, _ = simple_classification()
+        params = dict(
+            weight=init.Uniform(-0.1, 0.1),
+            bias=init.Uniform(-0.1, 0.1))
+
         compare_networks(
             # Test classes
             algorithms.GradientDescent,
-            partial(algorithms.HessianDiagonal, min_eigval=0.01),
+            partial(algorithms.HessianDiagonal, min_eigval=0.1),
             # Test data
             (x_train, y_train),
             # Network configurations
             connection=[
                 layers.Input(10),
-                layers.Sigmoid(20,
-                               weight=init.Uniform(-1, 1),
-                               bias=init.Uniform(-1, 1)),
-                layers.Sigmoid(1,
-                               weight=init.Uniform(-1, 1),
-                               bias=init.Uniform(-1, 1)),
+                layers.Sigmoid(20, **params),
+                layers.Sigmoid(1, **params),
             ],
             step=0.1,
             shuffle_data=True,
@@ -69,4 +65,5 @@ class HessianDiagonalTestCase(BaseTestCase):
                 min_eigval=0.1,
             ),
             epochs=6000,
+            min_accepted_error=0.002
         )
