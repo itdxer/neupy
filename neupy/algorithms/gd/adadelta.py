@@ -1,13 +1,13 @@
 import tensorflow as tf
 
 from neupy.core.properties import ProperFractionProperty, NumberProperty
-from .base import MinibatchGradientDescent
+from .base import GradientDescent
 
 
 __all__ = ('Adadelta',)
 
 
-class Adadelta(MinibatchGradientDescent):
+class Adadelta(GradientDescent):
     """
     Adadelta algorithm.
 
@@ -26,9 +26,9 @@ class Adadelta(MinibatchGradientDescent):
         allow to achive the same effect, since multiplication by one won't
         have any effect on the update.
 
-    {MinibatchGradientDescent.batch_size}
+    {GradientDescent.batch_size}
 
-    {GradientDescent.addons}
+    {BaseGradientDescent.addons}
 
     {ConstructibleNetwork.connection}
 
@@ -44,11 +44,11 @@ class Adadelta(MinibatchGradientDescent):
 
     Attributes
     ----------
-    {MinibatchGradientDescent.Attributes}
+    {GradientDescent.Attributes}
 
     Methods
     -------
-    {MinibatchGradientDescent.Methods}
+    {GradientDescent.Methods}
 
     Examples
     --------

@@ -138,7 +138,7 @@ class BatchNormTestCase(BaseTestCase):
         x_train, x_test, y_train, y_test = simple_classification()
 
         batch_norm = layers.BatchNorm()
-        gdnet = algorithms.MinibatchGradientDescent(
+        gdnet = algorithms.GradientDescent(
             [
                 layers.Input(10),
                 layers.Relu(5),

@@ -20,7 +20,11 @@ class ErrorPlotTestCase(BaseTestCase):
     @skip_image_comparison_if_specified
     def test_error_plot_and_validation_error_warnings(self):
         with catch_stdout() as out:
-            network = algorithms.GradientDescent((2, 3, 1), verbose=True)
+            network = algorithms.GradientDescent(
+                (2, 3, 1),
+                verbose=True,
+                batch_size='all',
+            )
 
             network.errors = ErrorHistoryList([1, 2])
             network.validation_errors = ErrorHistoryList([None])
@@ -33,7 +37,7 @@ class ErrorPlotTestCase(BaseTestCase):
     def test_error_plot_ax_none(self):
         ax = plt.gca()
 
-        network = algorithms.GradientDescent((2, 3, 1))
+        network = algorithms.GradientDescent((2, 3, 1), batch_size='all')
         ax_returned = plots.error_plot(network, ax=None, show=False)
 
         self.assertIs(ax_returned, ax)
@@ -68,7 +72,11 @@ class ErrorPlotTestCase(BaseTestCase):
             ax = fig.add_subplot(1, 1, 1)
 
             x_train, x_test, y_train, y_test = simple_classification()
-            gdnet = algorithms.GradientDescent((10, 12, 1), step=0.25)
+            gdnet = algorithms.GradientDescent(
+                (10, 12, 1),
+                step=0.25,
+                batch_size='all',
+            )
             gdnet.train(x_train, y_train, x_test, y_test, epochs=100)
             plots.error_plot(gdnet, ax=ax, show=False)
 

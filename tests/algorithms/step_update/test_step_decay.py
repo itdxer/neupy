@@ -15,6 +15,7 @@ class LearningRateUpdatesTestCase(BaseTestCase):
                 layers.Tanh(1),
             ],
             step=first_step,
+            batch_size='all',
             reduction_freq=50,
             addons=[algorithms.StepDecay]
         )

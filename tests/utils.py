@@ -189,6 +189,7 @@ def reproducible_network_train(seed=0, epochs=500, **additional_params):
             layers.Tanh(5, weight=tanh_weight1),
             layers.Tanh(1, weight=tanh_weight2),
         ],
+        batch_size='all',
         **additional_params
     )
     network.train(xor_input_train, xor_target_train, epochs=epochs)

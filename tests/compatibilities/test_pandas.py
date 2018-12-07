@@ -38,7 +38,8 @@ class PandasCompatibilityTestCase(BaseTestCase):
                 layers.Sigmoid(30),
                 layers.Sigmoid(1),
             ],
-            show_epoch=100
+            show_epoch=100,
+            batch_size='all',
         )
         bpnet.train(x_train, y_train, epochs=50)
         y_predict = bpnet.predict(x_test).reshape(-1, 1)

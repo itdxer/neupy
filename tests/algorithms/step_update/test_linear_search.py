@@ -39,6 +39,7 @@ class LinearSearchTestCase(BaseTestCase):
                     layers.Sigmoid(50),
                     layers.Sigmoid(1),
                 ],
+                batch_size='all',
                 show_epoch=1,
                 verbose=False,
                 search_method=method_name,

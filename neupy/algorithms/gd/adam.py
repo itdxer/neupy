@@ -2,13 +2,13 @@ import tensorflow as tf
 
 from neupy.utils import asfloat
 from neupy.core.properties import ProperFractionProperty, NumberProperty
-from .base import MinibatchGradientDescent
+from .base import GradientDescent
 
 
 __all__ = ('Adam',)
 
 
-class Adam(MinibatchGradientDescent):
+class Adam(GradientDescent):
     """
     Adam algorithm.
 
@@ -28,9 +28,9 @@ class Adam(MinibatchGradientDescent):
     step : float
         Learning rate, defaults to ``0.001``.
 
-    {MinibatchGradientDescent.batch_size}
+    {GradientDescent.batch_size}
 
-    {GradientDescent.addons}
+    {BaseGradientDescent.addons}
 
     {ConstructibleNetwork.connection}
 
@@ -48,11 +48,11 @@ class Adam(MinibatchGradientDescent):
 
     Attributes
     ----------
-    {MinibatchGradientDescent.Attributes}
+    {GradientDescent.Attributes}
 
     Methods
     -------
-    {MinibatchGradientDescent.Methods}
+    {GradientDescent.Methods}
 
     References
     ----------

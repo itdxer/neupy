@@ -6,7 +6,7 @@ from neupy.core.properties import (ChoiceProperty, NumberProperty,
 from neupy.layers.utils import count_parameters
 from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
                                     make_single_vector)
-from .base import GradientDescent
+from .base import BaseGradientDescent
 from .quasi_newton import safe_division, WolfeLineSearchForStep
 
 
@@ -59,7 +59,7 @@ def dai_yuan(old_g, new_g, delta_w, epsilon=1e-7):
     )
 
 
-class ConjugateGradient(WolfeLineSearchForStep, GradientDescent):
+class ConjugateGradient(WolfeLineSearchForStep, BaseGradientDescent):
 
     """
     Conjugate Gradient algorithm.
@@ -77,29 +77,29 @@ class ConjugateGradient(WolfeLineSearchForStep, GradientDescent):
 
     {WolfeLineSearchForStep.Parameters}
 
-    {GradientDescent.connection}
+    {BaseGradientDescent.connection}
 
-    {GradientDescent.error}
+    {BaseGradientDescent.error}
 
-    {GradientDescent.show_epoch}
+    {BaseGradientDescent.show_epoch}
 
-    {GradientDescent.shuffle_data}
+    {BaseGradientDescent.shuffle_data}
 
-    {GradientDescent.epoch_end_signal}
+    {BaseGradientDescent.epoch_end_signal}
 
-    {GradientDescent.train_end_signal}
+    {BaseGradientDescent.train_end_signal}
 
-    {GradientDescent.verbose}
+    {BaseGradientDescent.verbose}
 
-    {GradientDescent.addons}
+    {BaseGradientDescent.addons}
 
     Attributes
     ----------
-    {GradientDescent.Attributes}
+    {BaseGradientDescent.Attributes}
 
     Methods
     -------
-    {GradientDescent.Methods}
+    {BaseGradientDescent.Methods}
 
     Examples
     --------

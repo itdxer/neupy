@@ -20,8 +20,7 @@ Training algorithms
 .. csv-table::
     :header: "Class name", "Name"
 
-    :network:`GradientDescent`, Classic Gradient Descent
-    :network:`MinibatchGradientDescent`, Mini-batch Gradient Descent
+    :network:`GradientDescent`, Gradient Descent
     :network:`ConjugateGradient`, Conjugate Gradient
     :network:`QuasiNewton`, quasi-Newton
     :network:`LevenbergMarquardt`, Levenberg-Marquardt

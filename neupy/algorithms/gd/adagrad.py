@@ -1,13 +1,13 @@
 import tensorflow as tf
 
 from neupy.core.properties import NumberProperty
-from .base import MinibatchGradientDescent
+from .base import GradientDescent
 
 
 __all__ = ('Adagrad',)
 
 
-class Adagrad(MinibatchGradientDescent):
+class Adagrad(GradientDescent):
     """
     Adagrad algorithm.
 
@@ -17,15 +17,15 @@ class Adagrad(MinibatchGradientDescent):
         Value need to be greater than ``0``.
         Defaults to ``1e-5``.
 
-    {MinibatchGradientDescent.Parameters}
+    {GradientDescent.Parameters}
 
     Attributes
     ----------
-    {MinibatchGradientDescent.Attributes}
+    {GradientDescent.Attributes}
 
     Methods
     -------
-    {MinibatchGradientDescent.Methods}
+    {GradientDescent.Methods}
 
     Examples
     --------

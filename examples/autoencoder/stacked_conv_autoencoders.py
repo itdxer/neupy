@@ -115,7 +115,7 @@ encoder_classifier.train(
 
 # The final part of training is to put encoder and final classifier layers
 # in order to fine tune network parameters before finilizing it's prediction
-classifier = algorithms.MinibatchGradientDescent(
+classifier = algorithms.GradientDescent(
     encoder > classifier_network,
     verbose=True,
     step=0.005,

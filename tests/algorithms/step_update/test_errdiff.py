@@ -13,6 +13,7 @@ class LearningRateUpdatesTestCase(BaseTestCase):
                 layers.Tanh(3),
                 layers.Tanh(1),
             ],
+            batch_size='all',
             step=initial_step,
             update_for_smaller_error=1.05,
             update_for_bigger_error=0.7,

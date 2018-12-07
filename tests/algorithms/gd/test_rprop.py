@@ -32,7 +32,7 @@ class RPROPTestCase(BaseTestCase):
     def test_compare_bp_and_rprop(self):
         compare_networks(
             # Test classes
-            algorithms.GradientDescent,
+            partial(algorithms.GradientDescent, batch_size='all'),
             partial(algorithms.RPROP, maxstep=0.1),
             # Test data
             (simple_input_train, simple_target_train),

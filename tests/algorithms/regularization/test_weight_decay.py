@@ -19,6 +19,7 @@ class WeightDecayTestCase(BaseTestCase):
             ],
             step=0.3,
             decay_rate=0.0001,
+            batch_size='all',
             addons=[algorithms.WeightDecay]
         )
         network.train(xor_input_train, xor_target_train, epochs=500)

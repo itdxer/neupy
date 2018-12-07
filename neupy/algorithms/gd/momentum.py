@@ -1,13 +1,13 @@
 import tensorflow as tf
 
 from neupy.core.properties import ProperFractionProperty, Property
-from .base import MinibatchGradientDescent
+from .base import GradientDescent
 
 
 __all__ = ('Momentum',)
 
 
-class Momentum(MinibatchGradientDescent):
+class Momentum(GradientDescent):
     """
     Momentum algorithm.
 
@@ -20,15 +20,15 @@ class Momentum(MinibatchGradientDescent):
         Instead of classic momentum computes Nesterov momentum.
         Defaults to ``False``.
 
-    {MinibatchGradientDescent.Parameters}
+    {GradientDescent.Parameters}
 
     Attributes
     ----------
-    {MinibatchGradientDescent.Attributes}
+    {GradientDescent.Attributes}
 
     Methods
     -------
-    {MinibatchGradientDescent.Methods}
+    {GradientDescent.Methods}
 
     Examples
     --------

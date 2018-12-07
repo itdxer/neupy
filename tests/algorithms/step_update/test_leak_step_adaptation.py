@@ -16,12 +16,13 @@ class LeakStepAdaptationTestCase(BaseTestCase):
     def test_leak_step_adaptation(self):
         compare_networks(
             # Test classes
-            algorithms.GradientDescent,
+            partial(algorithms.GradientDescent, batch_size='all'),
             partial(
                 algorithms.GradientDescent,
                 leak_size=0.05,
                 alpha=0.05,
                 beta=5,
+                batch_size='all',
                 addons=[algorithms.LeakStepAdaptation]
             ),
 

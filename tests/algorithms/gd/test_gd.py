@@ -10,9 +10,9 @@ from base import BaseTestCase
 from data import simple_classification
 
 
-class GradientDescentTestCase(BaseTestCase):
+class BaseGradientDescentTestCase(BaseTestCase):
     def test_network_attrs(self):
-        network = algorithms.GradientDescent((2, 2, 1), verbose=False)
+        network = algorithms.BaseGradientDescent((2, 2, 1), verbose=False)
         network.step = 0.1
         network.error = 'mse'
         network.shuffle_data = True
@@ -30,7 +30,7 @@ class GradientDescentTestCase(BaseTestCase):
         environment.reproducible()
         x_train, _, y_train, _ = simple_classification()
 
-        network = algorithms.GradientDescent(
+        network = algorithms.BaseGradientDescent(
             layers.Input(10) > layers.Tanh(20) > layers.Tanh(1),
             step=0.1,
             verbose=False
@@ -41,29 +41,29 @@ class GradientDescentTestCase(BaseTestCase):
     def test_addons_exceptions(self):
         with self.assertRaises(ValueError):
             # Invalid optimization class
-            algorithms.GradientDescent(
+            algorithms.BaseGradientDescent(
                 (2, 3, 1),
-                addons=[algorithms.GradientDescent]
+                addons=[algorithms.BaseGradientDescent]
             )
 
         with self.assertRaises(ValueError):
             # Dublicate optimization algorithms from one type
-            algorithms.GradientDescent(
+            algorithms.BaseGradientDescent(
                 (2, 3, 1),
                 addons=[algorithms.WeightDecay, algorithms.WeightDecay],
             )
 
-        algorithms.GradientDescent(
+        algorithms.BaseGradientDescent(
             (2, 3, 1),
             addons=[algorithms.WeightDecay],
             verbose=False,
         )
-        algorithms.GradientDescent(
+        algorithms.BaseGradientDescent(
             (2, 3, 1),
             addons=[algorithms.SearchThenConverge],
             verbose=False,
         )
-        algorithms.GradientDescent(
+        algorithms.BaseGradientDescent(
             (2, 3, 1),
             addons=[algorithms.WeightDecay, algorithms.SearchThenConverge],
             verbose=False
@@ -73,8 +73,8 @@ class GradientDescentTestCase(BaseTestCase):
         x_train, _, y_train, _ = simple_classification()
         compare_networks(
            # Test classes
-           partial(algorithms.GradientDescent, verbose=False),
-           partial(algorithms.MinibatchGradientDescent,
+           partial(algorithms.BaseGradientDescent, verbose=False),
+           partial(algorithms.GradientDescent,
                    batch_size=1, verbose=False),
            # Test data
            (x_train, y_train),
@@ -89,7 +89,7 @@ class GradientDescentTestCase(BaseTestCase):
         )
 
     def test_gd_get_params_method(self):
-        network = algorithms.GradientDescent((2, 3, 1))
+        network = algorithms.BaseGradientDescent((2, 3, 1))
 
         self.assertIn('connection', network.get_params(with_connection=True))
         self.assertNotIn(
@@ -99,14 +99,14 @@ class GradientDescentTestCase(BaseTestCase):
 
     def test_gd_overfit(self):
         self.assertCanNetworkOverfit(
-            partial(algorithms.GradientDescent, step=1.0, verbose=False),
+            partial(algorithms.BaseGradientDescent, step=1.0, verbose=False),
             epochs=4000,
         )
 
     def test_gd_minibatch_overfit(self):
         self.assertCanNetworkOverfit(
             partial(
-                algorithms.MinibatchGradientDescent,
+                algorithms.GradientDescent,
                 step=0.5,
                 batch_size=5,
                 verbose=False,

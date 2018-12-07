@@ -15,7 +15,11 @@ from utils import catch_stdout
 
 class BasicStorageTestCase(BaseTestCase):
     def test_simple_dill_storage(self):
-        bpnet = algorithms.GradientDescent((2, 3, 1), step=0.25)
+        bpnet = algorithms.GradientDescent(
+            (2, 3, 1),
+            step=0.25,
+            batch_size='all',
+        )
         data, target = datasets.make_regression(n_features=2, n_targets=1)
 
         data = preprocessing.MinMaxScaler().fit_transform(data)
@@ -61,8 +65,8 @@ class BasicStorageTestCase(BaseTestCase):
 
     def test_dynamic_classes(self):
         test_classes = {
-            algorithms.GradientDescent: {},
-            algorithms.MinibatchGradientDescent: {'batch_size': 10},
+            algorithms.GradientDescent: {'batch_size': 'all'},
+            algorithms.GradientDescent: {'batch_size': 10},
             algorithms.Momentum: {'momentum': 0.5},
         }
 
