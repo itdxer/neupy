@@ -13,6 +13,8 @@ class ReshapeLayerTestCase(BaseTestCase):
 
         input_layer = layers.Input((4, 3, 2, 1))
         reshape_layer = layers.Reshape()
+        self.assertIsNone(reshape_layer.output_shape)
+
         input_layer > reshape_layer
 
         y = self.eval(reshape_layer.output(x))
