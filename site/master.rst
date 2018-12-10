@@ -19,5 +19,4 @@ Sitemap
    pages/installation
    pages/cheatsheet
    pages/model_zoo
-   pages/versions
    apidocs/modules

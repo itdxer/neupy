@@ -12,14 +12,14 @@ To be able to use different input and output layers you need to use ``start`` an
 
 .. code-block:: python
 
-    >>> from neupy import layers
+    >>> from neupy.layers import *
     >>>
-    >>> network = layers.join(
-    ...     layers.Input(10),
-    ...     layers.Relu(20, name='relu-2'),
-    ...     layers.Relu(30, name='relu-3'),
-    ...     layers.Relu(40, name='relu-4'),
-    ...     layers.Relu(50),
+    >>> network = join(
+    ...     Input(10),
+    ...     Relu(20, name='relu-2'),
+    ...     Relu(30, name='relu-3'),
+    ...     Relu(40, name='relu-4'),
+    ...     Relu(50),
     ... )
     >>> network
     Input(10) > Relu(20) > Relu(30) > Relu(40) > Relu(50)
@@ -37,12 +37,12 @@ In addition, it's possible to point into multiple input and output layers
 
 .. code-block:: python
 
-    >>> from neupy import layers
+    >>> from neupy.layers import *
     >>>
-    >>> network = layers.Input(10) > layers.Relu(20, name='relu-2')
+    >>> network = Input(10) > Relu(20, name='relu-2')
     >>>
-    >>> output_1 = layers.Relu(30, name='relu-3') > layers.Sigmoid(1)
-    >>> output_2 = layers.Relu(40, name='relu-4') > layers.Sigmoid(2)
+    >>> output_1 = Relu(30, name='relu-3') > Sigmoid(1)
+    >>> output_2 = Relu(40, name='relu-4') > Sigmoid(2)
     >>>
     >>> network = network > [output_1, output_2]
     >>>
@@ -52,15 +52,15 @@ In addition, it's possible to point into multiple input and output layers
     >>> network.end('relu-3', 'relu-4')
     10 -> [... 4 layers ...] -> [(30,), (40,)]
 
-Also instead of using names we can specify layer instance
+Also, instead of using names we can specify layer instance
 
 .. code-block:: python
 
-    >>> from neupy import layers
+    >>> from neupy.layers import *
     >>>
-    >>> input_layer = layers.Input(10)
-    >>> relu_2 = layers.Relu(20)
-    >>> relu_3 = layers.Relu(30)
+    >>> input_layer = Input(10)
+    >>> relu_2 = Relu(20)
+    >>> relu_3 = Relu(30)
     >>>
     >>> network = input_layer > relu_2 > relu_3
     >>> network
@@ -76,16 +76,16 @@ Also instead of using names we can specify layer instance
 Find layer by name in the network
 ---------------------------------
 
-In larger n
+Each name is a unique identifier for the layer inside of the network. Any layer can be accessed using the `layer` method.
 
 .. code-block:: python
 
-    >>> from neupy import layers
+    >>> from neupy.layers import *
     >>>
-    >>> network = layers.join(
-    ...     layers.Input(10, name='input-1'),
-    ...     layers.Relu(8, name='relu-0'),
-    ...     layers.Relu(5, name='relu-1'),
+    >>> network = join(
+    ...     Input(10, name='input-1'),
+    ...     Relu(8, name='relu-0'),
+    ...     Relu(5, name='relu-1'),
     ... )
     >>>
     >>> network.layer('relu-0')
@@ -102,5 +102,3 @@ In larger n
 .. raw:: html
 
     <br>
-
-.. _subnetworks:

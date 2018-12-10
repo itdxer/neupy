@@ -104,7 +104,6 @@ html_sidebars = {
         'searchbox.html',
         'installation.html',
         'issues.html',
-        'old-versions.html',
     ],
 }
 

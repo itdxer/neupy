@@ -19,6 +19,7 @@ This part of the documentation helps to understand how to combine layers into ne
     :maxdepth: 2
 
     ../docs/layers
+    ../docs/layers/surgery
 
 Training algorithms
 -------------------
