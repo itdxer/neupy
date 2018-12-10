@@ -2,7 +2,6 @@
 from __future__ import print_function, unicode_literals
 
 import sys
-from contextlib import contextmanager
 
 import tableprint
 from tableprint.style import STYLES, TableStyle, LineStyle
