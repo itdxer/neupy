@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -236,34 +237,34 @@ is an epoch number and y-axis is an error.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>logx</strong> : bool</p>
-<blockquote>
-<div><p>Parameter set up logarithmic scale to x-axis.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>logx</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Parameter set up logarithmic scale to x-axis.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-<p><strong>ax</strong> : object or None</p>
-<blockquote>
-<div><p>Matplotlib axis object. <span class="docutils literal"><span class="pre">None</span></span> values means that axis equal
+</dd>
+<dt><strong>ax</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object or None</span></dt>
+<dd><p class="first last">Matplotlib axis object. <span class="docutils literal"><span class="pre">None</span></span> values means that axis equal
 to the current one (the same as <span class="docutils literal"><span class="pre">ax</span> <span class="pre">=</span> <span class="pre">plt.gca()</span></span>).
 Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>show</strong> : bool</p>
-<blockquote>
-<div><p>If parameter is equal to <span class="docutils literal"><span class="pre">True</span></span> then plot will be
+</dd>
+<dt><strong>show</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If parameter is equal to <span class="docutils literal"><span class="pre">True</span></span> then plot will be
 displayed. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">object</p>
-<blockquote class="last">
-<div><p>Matplotlib axis instance.</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>object</strong></dt>
+<dd><p class="first last">Matplotlib axis instance.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">plots</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">plots</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gdnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gdnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -305,11 +306,6 @@ displayed. Defaults to <span class="docutils literal"><span class="pre">True</sp
         If you find a bug or want to suggest a new feature feel free to
         <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
         on Github
-    </p>
-</div></section><section><div class="widget">
-    <h1>Old NeuPy versions</h1>
-    <p>
-        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 

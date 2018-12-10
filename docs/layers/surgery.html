@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Training Algorithms" href="../algorithms.html" /><link rel="prev" title="Debug layer connections" href="debug.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -227,18 +228,18 @@
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="surgery">
 <span id="id1"></span><h1>Surgery</h1>
-<p>In many applications it&#8217;s important to be able to access only part of the network.</p>
+<p>In many applications it’s important to be able to access only part of the network.</p>
 <div class="section" id="use-different-input-and-output-layers">
 <h2>Use different input and output layers</h2>
 <p>To be able to use different input and output layers you need to use <span class="docutils literal"><span class="pre">start</span></span> and <span class="docutils literal"><span class="pre">end</span></span> methods. Here is an example.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-2&#39;</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-3&#39;</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-4&#39;</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-2&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Relu</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-3&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Relu</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-4&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Relu</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
 <span class="go">Input(10) &gt; Relu(20) &gt; Relu(30) &gt; Relu(40) &gt; Relu(50)</span>
@@ -253,13 +254,13 @@
 <span class="go">Relu(20) &gt; Relu(30) &gt; Relu(40)</span>
 </pre></div>
 </div>
-<p>In addition, it&#8217;s possible to point into multiple input and output layers</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<p>In addition, it’s possible to point into multiple input and output layers</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-2&#39;</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">output_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-3&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">output_2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-4&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output_1</span> <span class="o">=</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-3&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output_2</span> <span class="o">=</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-4&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">network</span> <span class="o">&gt;</span> <span class="p">[</span><span class="n">output_1</span><span class="p">,</span> <span class="n">output_2</span><span class="p">]</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -270,12 +271,12 @@
 <span class="go">10 -&gt; [... 4 layers ...] -&gt; [(30,), (40,)]</span>
 </pre></div>
 </div>
-<p>Also instead of using names we can specify layer instance</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<p>Also, instead of using names we can specify layer instance</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">input_layer</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">relu_2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">relu_3</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input_layer</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">relu_2</span> <span class="o">=</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">relu_3</span> <span class="o">=</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">input_layer</span> <span class="o">&gt;</span> <span class="n">relu_2</span> <span class="o">&gt;</span> <span class="n">relu_3</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
@@ -288,13 +289,13 @@
 <br></div>
 <div class="section" id="find-layer-by-name-in-the-network">
 <h2>Find layer by name in the network</h2>
-<p>In larger n</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<p>Each name is a unique identifier for the layer inside of the network. Any layer can be accessed using the <cite>layer</cite> method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;input-1&#39;</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-0&#39;</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-1&#39;</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;input-1&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Relu</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-0&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Relu</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;relu-1&#39;</span><span class="p">),</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="s1">&#39;relu-0&#39;</span><span class="p">)</span>
@@ -309,14 +310,17 @@
 <span class="gr">NameError</span>: <span class="n">Cannot find layer with name &#39;test&#39;</span>
 </pre></div>
 </div>
-<br><span class="target" id="subnetworks"></span></div>
+<br></div>
 </div>
 
     <div class="postmeta">
         
         
         
-        </div></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="debug.html">Debug layer connections</a></li>
+            <li class="right"><a href="../algorithms.html">Training Algorithms</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../../search.html" method="get">
           <div class="box">
@@ -342,11 +346,6 @@
         If you find a bug or want to suggest a new feature feel free to
         <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
         on Github
-    </p>
-</div></section><section><div class="widget">
-    <h1>Old NeuPy versions</h1>
-    <p>
-        <div>Documentation for the old NeuPy versions you can find <a href="../../pages/versions.html">here</a>.</div>
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 

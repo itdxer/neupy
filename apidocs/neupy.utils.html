@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -235,32 +236,31 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : array-like</p>
-<blockquote>
-<div><p>Data that should be formated. That could be, matrix, vector or
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd><p class="first last">Data that should be formated. That could be, matrix, vector or
 Pandas DataFrame instance.</p>
-</div></blockquote>
-<p><strong>is_feature1d</strong> : bool</p>
-<blockquote>
-<div><p>Should be equal to <span class="docutils literal"><span class="pre">True</span></span> if input data is a vector that
+</dd>
+<dt><strong>is_feature1d</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Should be equal to <span class="docutils literal"><span class="pre">True</span></span> if input data is a vector that
 contains N samples with 1 feature each. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</div></blockquote>
-<p><strong>copy</strong> : bool</p>
-<blockquote>
-<div><p>Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-<p><strong>make_float</strong> : bool</p>
-<blockquote>
-<div><p>If <cite>True</cite> then input will be converted to float.
+</dd>
+<dt><strong>copy</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+<dt><strong>make_float</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If <cite>True</cite> then input will be converted to float.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ndarray</p>
-<blockquote class="last">
-<div><p>The same input data but transformed to a standardized format
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>ndarray</strong></dt>
+<dd><p class="first last">The same input data but transformed to a standardized format
 for further use.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -278,16 +278,18 @@ learning algorithms.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> : matrix, ndarray, Tensorfow variable or scalar</p>
-<blockquote>
-<div><p>Value that could be converted to float type.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>value</strong> <span class="classifier-delimiter">:</span> <span class="classifier">matrix, ndarray, Tensorfow variable or scalar</span></dt>
+<dd><p class="first last">Value that could be converted to float type.</p>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">matrix, ndarray, Tensorfow variable or scalar</p>
-<blockquote class="last">
-<div><p>Output would be input value converted to 32 bit float.</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>matrix, ndarray, Tensorfow variable or scalar</strong></dt>
+<dd><p class="first last">Output would be input value converted to 32 bit float.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -300,7 +302,7 @@ learning algorithms.</p>
 <dd><p>Modified built-in Python <span class="docutils literal"><span class="pre">dict</span></span> class. That modification
 helps get and set values like attributes.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">attrdict</span> <span class="o">=</span> <span class="n">AttributeKeyDict</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">attrdict</span> <span class="o">=</span> <span class="n">AttributeKeyDict</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">attrdict</span>
 <span class="go">{}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">attrdict</span><span class="o">.</span><span class="n">test_key</span> <span class="o">=</span> <span class="s1">&#39;test_value&#39;</span>
@@ -315,14 +317,22 @@ helps get and set values like attributes.</p>
 <dl class="function">
 <dt id="neupy.utils.preformat_value">
 <span class="descclassname">neupy.utils.</span><span class="descname">preformat_value</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/utils.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Function pre-format input value depending on it&#8217;s type.</p>
+<dd><p>Function pre-format input value depending on it’s type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> : object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>value</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">object</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>object</strong></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -336,22 +346,24 @@ helps get and set values like attributes.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>*values</strong></p>
-<blockquote>
-<div><p>Values that needs to be combined in one big tuple.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>*values</strong></dt>
+<dd><p class="first last">Values that needs to be combined in one big tuple.</p>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">tuple</p>
-<blockquote class="last">
-<div><p>All input values combined in one tuple</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>tuple</strong></dt>
+<dd><p class="first last">All input values combined in one tuple</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">as_tuple</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="bp">None</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">as_tuple</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
 <span class="go">(None, 1, 2, 3, None)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">as_tuple</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -368,20 +380,25 @@ helps get and set values like attributes.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>array</strong> : list, tuple</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>array</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list, tuple</span></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">bool</p>
-<blockquote>
-<div><p><cite>True</cite> in case if all elements are equal and
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>bool</strong></dt>
+<dd><p class="first last"><cite>True</cite> in case if all elements are equal and
 <cite>False</cite> otherwise.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
-<blockquote class="last">
-<div><p>If input array is empty</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>ValueError</strong></dt>
+<dd><p class="first last">If input array is empty</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -413,19 +430,22 @@ same name as a method.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input</strong> : tensor</p>
-<p><strong>repeats: list, tuple</strong></p>
-<blockquote>
-<div><p>Number of repeat for each dimension, length must be the
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>input</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tensor</span></dt>
+<dd></dd>
+<dt><strong>repeats: list, tuple</strong></dt>
+<dd><p class="first last">Number of repeat for each dimension, length must be the
 same as the number of dimensions in input.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">tensor</p>
-<blockquote class="last">
-<div><p>Has the same type as input. Has the shape
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>tensor</strong></dt>
+<dd><p class="first last">Has the same type as input. Has the shape
 of <span class="docutils literal"><span class="pre">tensor.shape</span> <span class="pre">*</span> <span class="pre">repeats</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -476,11 +496,6 @@ same name as a function.</p>
         If you find a bug or want to suggest a new feature feel free to
         <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
         on Github
-    </p>
-</div></section><section><div class="widget">
-    <h1>Old NeuPy versions</h1>
-    <p>
-        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 

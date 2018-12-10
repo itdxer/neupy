@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -231,11 +232,11 @@
 <dt id="neupy.algorithms.competitive.growing_neural_gas.GrowingNeuralGas">
 <em class="property">class </em><span class="descclassname">neupy.algorithms.competitive.growing_neural_gas.</span><span class="descname">GrowingNeuralGas</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/growing_neural_gas.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Growing Neural Gas (GNG) algorithm.</p>
-<p>Current algorithm has two modifications that hasn&#8217;t been mentioned
+<p>Current algorithm has two modifications that hasn’t been mentioned
 in the paper, but they help to speed up training.</p>
 <ul class="simple">
 <li>The <span class="docutils literal"><span class="pre">n_start_nodes</span></span> parameter provides possibility to increase
-number of nodes during initialization step. It&#8217;s usefull when
+number of nodes during initialization step. It’s usefull when
 algorithm takes a lot of time building up large amount of neurons.</li>
 <li>The <span class="docutils literal"><span class="pre">min_distance_for_update</span></span> parameter allows to speed up
 training when some data samples has eurons very close to them. The
@@ -246,66 +247,56 @@ minimum distance for which we will want to update weights.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_inputs</strong> : int</p>
-<blockquote>
-<div><p>Number of features in each sample.</p>
-</div></blockquote>
-<p><strong>n_start_nodes</strong> : int</p>
-<blockquote>
-<div><p>Number of nodes that algorithm generates from the data during
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>n_inputs</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of features in each sample.</p>
+</dd>
+<dt><strong>n_start_nodes</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of nodes that algorithm generates from the data during
 the initialization step. Defaults to <span class="docutils literal"><span class="pre">2</span></span>.</p>
-</div></blockquote>
-<p><strong>step</strong> : float</p>
-<blockquote>
-<div><p>Step (learning rate) for the neuron winner. Defaults to <span class="docutils literal"><span class="pre">0.2</span></span>.</p>
-</div></blockquote>
-<p><strong>neighbour_step</strong> : float</p>
-<blockquote>
-<div><p>Step (learning rate) for the neurons that connected via edges
+</dd>
+<dt><strong>step</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Step (learning rate) for the neuron winner. Defaults to <span class="docutils literal"><span class="pre">0.2</span></span>.</p>
+</dd>
+<dt><strong>neighbour_step</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Step (learning rate) for the neurons that connected via edges
 with neuron winner. This value typically has to be smaller than
 <span class="docutils literal"><span class="pre">step</span></span> value. Defaults to <span class="docutils literal"><span class="pre">0.05</span></span>.</p>
-</div></blockquote>
-<p><strong>max_edge_age</strong> : int</p>
-<blockquote>
-<div><p>It means that if edge won&#8217;t be updated for <span class="docutils literal"><span class="pre">max_edge_age</span></span> iterations
+</dd>
+<dt><strong>max_edge_age</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">It means that if edge won’t be updated for <span class="docutils literal"><span class="pre">max_edge_age</span></span> iterations
 than it would be removed. The larger the value the more updates we
 allow to do before removing edge. Defaults to <span class="docutils literal"><span class="pre">100</span></span>.</p>
-</div></blockquote>
-<p><strong>n_iter_before_neuron_added</strong> : int</p>
-<blockquote>
-<div><p>Each <span class="docutils literal"><span class="pre">n_iter_before_neuron_added</span></span> weight update algorithm add new
+</dd>
+<dt><strong>n_iter_before_neuron_added</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Each <span class="docutils literal"><span class="pre">n_iter_before_neuron_added</span></span> weight update algorithm add new
 neuron. The smaller the value the more frequently algorithm adds
 new neurons to the network. Defaults to <span class="docutils literal"><span class="pre">1000</span></span>.</p>
-</div></blockquote>
-<p><strong>error_decay_rate</strong> : float</p>
-<blockquote>
-<div><p>This error decay rate would be applied to every neuron in the
+</dd>
+<dt><strong>error_decay_rate</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">This error decay rate would be applied to every neuron in the
 graph after each training iteration. It ensures that old errors
 will be reduced over time. Defaults to <span class="docutils literal"><span class="pre">0.995</span></span>.</p>
-</div></blockquote>
-<p><strong>after_split_error_decay_rate</strong> : float</p>
-<blockquote>
-<div><p>This decay rate reduces error for neurons with largest errors
+</dd>
+<dt><strong>after_split_error_decay_rate</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">This decay rate reduces error for neurons with largest errors
 after algorithm added new neuron. This value typically lower than
 <span class="docutils literal"><span class="pre">error_decay_rate</span></span>. Defaults to <span class="docutils literal"><span class="pre">0.5</span></span>.</p>
-</div></blockquote>
-<p><strong>max_nodes</strong> : int</p>
-<blockquote>
-<div><p>Maximum number of nodes that would be generated during the training.
-This parameter won&#8217;t stop training when maximum number of nodes
+</dd>
+<dt><strong>max_nodes</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Maximum number of nodes that would be generated during the training.
+This parameter won’t stop training when maximum number of nodes
 will be exceeded. Defaults to <span class="docutils literal"><span class="pre">1000</span></span>.</p>
-</div></blockquote>
-<p><strong>min_distance_for_update</strong> : float</p>
-<blockquote>
-<div><p>Parameter controls for which neurons we want to apply updates.
+</dd>
+<dt><strong>min_distance_for_update</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Parameter controls for which neurons we want to apply updates.
 In case if euclidian distance between data sample and closest
 neurons will be less than the <span class="docutils literal"><span class="pre">min_distance_for_update</span></span> value than
 update would be skipped for this data sample. Setting value to zero
 will disable effect provided by this parameter. Defaults to <span class="docutils literal"><span class="pre">0</span></span>.</p>
-</div></blockquote>
-<p><strong>show_epoch</strong> : int or str</p>
-<blockquote>
-<div><p>This property controls how often the network will
+</dd>
+<dt><strong>show_epoch</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int or str</span></dt>
+<dd><p class="first">This property controls how often the network will
 display information about training. There are two
 main syntaxes for this property.</p>
 <ul class="simple">
@@ -313,41 +304,38 @@ main syntaxes for this property.</p>
 defines how offen would you like to see summary
 output in terminal. For instance, number <cite>100</cite> mean
 that network shows summary at 100th, 200th,
-300th ... epochs.</li>
+300th … epochs.</li>
 <li>String defines number of times you want to see output in
 terminal. For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that
 the network will show output twice with approximately
 equal period of epochs and one additional output would
 be after the finall epoch.</li>
 </ul>
-<p>Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
-<p><strong>shuffle_data</strong> : bool</p>
-<blockquote>
-<div><p>If it&#8217;s <span class="docutils literal"><span class="pre">True</span></span> class shuffles all your training data before
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</dd>
+<dt><strong>shuffle_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If it’s <span class="docutils literal"><span class="pre">True</span></span> class shuffles all your training data before
 training your network, defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</div></blockquote>
-<p><strong>epoch_end_signal</strong> : function</p>
-<blockquote>
-<div><p>Calls this function when train epoch finishes.</p>
-</div></blockquote>
-<p><strong>train_end_signal</strong> : function</p>
-<blockquote>
-<div><p>Calls this function when train process finishes.</p>
-</div></blockquote>
-<p><strong>verbose</strong> : bool</p>
-<blockquote class="last">
-<div><p>Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
+</dd>
+<dt><strong>epoch_end_signal</strong> <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd><p class="first last">Calls this function when train epoch finishes.</p>
+</dd>
+<dt><strong>train_end_signal</strong> <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd><p class="first last">Calls this function when train process finishes.</p>
+</dd>
+<dt><strong>verbose</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
 informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> -
 disable it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
 <ul class="simple">
-<li>Unlike other algorithms this network doesn&#8217;t make predictions.
+<li>Unlike other algorithms this network doesn’t make predictions.
 Intead, it learns topological structure of the data in form of
 the graph. After that training, stucture of the network can be
 extracted from the <span class="docutils literal"><span class="pre">graph</span></span> attribute.</li>
@@ -365,8 +353,8 @@ the training epoch.</li>
 <p class="rubric">References</p>
 <p>[1] A Growing Neural Gas Network Learns Topologies, Bernd Fritzke</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_blobs</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_blobs</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">make_blobs</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
@@ -377,8 +365,8 @@ the training epoch.</li>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">neural_gas</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GrowingNeuralGas</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">n_inputs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">shuffle_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">max_edge_age</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">n_iter_before_neuron_added</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">max_nodes</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
@@ -396,44 +384,50 @@ the training epoch.</li>
 <span class="go">array([[-6.829309  ,  2.27839633]])</span>
 </pre></div>
 </div>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="8%" />
-<col width="92%" />
-</colgroup>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td>graph</td>
-<td>(NeuralGasGraph instance) This attribute stores all neurons and connections between them in the form of undirected graph.</td>
-</tr>
-<tr class="row-even"><td>errors</td>
-<td>(ErrorHistoryList) Contains list of training errors. This object has the same properties as list and in addition there are three additional useful methods: <cite>last</cite>, <cite>previous</cite> and <cite>normalized</cite>.</td>
-</tr>
-<tr class="row-odd"><td>train_errors</td>
-<td>(ErrorHistoryList) Alias to the <span class="docutils literal"><span class="pre">errors</span></span> attribute.</td>
-</tr>
-<tr class="row-even"><td>validation_errors</td>
-<td>(ErrorHistoryList) The same as <cite>errors</cite> attribute, but it contains only validation errors.</td>
-</tr>
-<tr class="row-odd"><td>last_epoch</td>
-<td>(int) Value equals to the last trained epoch. After initialization it is equal to <span class="docutils literal"><span class="pre">0</span></span>.</td>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">NeuralGasGraph instance</span></dt>
+<dd><p class="first last">This attribute stores all neurons and connections between them
+in the form of undirected graph.</p>
+</dd>
+<dt><strong>errors</strong> <span class="classifier-delimiter">:</span> <span class="classifier">ErrorHistoryList</span></dt>
+<dd><p class="first last">Contains list of training errors. This object has the same
+properties as list and in addition there are three additional
+useful methods: <cite>last</cite>, <cite>previous</cite> and <cite>normalized</cite>.</p>
+</dd>
+<dt><strong>train_errors</strong> <span class="classifier-delimiter">:</span> <span class="classifier">ErrorHistoryList</span></dt>
+<dd><p class="first last">Alias to the <span class="docutils literal"><span class="pre">errors</span></span> attribute.</p>
+</dd>
+<dt><strong>validation_errors</strong> <span class="classifier-delimiter">:</span> <span class="classifier">ErrorHistoryList</span></dt>
+<dd><p class="first last">The same as <cite>errors</cite> attribute, but it contains only validation
+errors.</p>
+</dd>
+<dt><strong>last_epoch</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Value equals to the last trained epoch. After initialization
+it is equal to <span class="docutils literal"><span class="pre">0</span></span>.</p>
+</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="19%" />
-<col width="81%" />
+<col width="20%" />
+<col width="80%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>train(input_train, summary=&#8217;table&#8217;, epochs=100)</td>
+<tr class="row-odd"><td><strong>train(input_train, summary=’table’, epochs=100)</strong></td>
 <td>Network learns topological structure of the data. Learned topolog is stored in the <span class="docutils literal"><span class="pre">graph</span></span> attribute.</td>
 </tr>
-<tr class="row-even"><td>fit(*args, **kwargs)</td>
+<tr class="row-even"><td><strong>fit(*args, **kwargs)</strong></td>
 <td>Alias to the <span class="docutils literal"><span class="pre">train</span></span> method.</td>
 </tr>
-<tr class="row-odd"><td>initialize_nodes(data)</td>
+<tr class="row-odd"><td><strong>initialize_nodes(data)</strong></td>
 <td>Network initializes nodes randomly sampling <span class="docutils literal"><span class="pre">n_start_nodes</span></span> from the data. It would be applied automatically before the training in case if graph is empty.  Note: Node re-initialization can reset network.</td>
 </tr>
 </tbody>
@@ -495,7 +489,7 @@ the training epoch.</li>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.growing_neural_gas.GrowingNeuralGas.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='GrowingNeuralGas', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'n_inputs': Option(class_name='GrowingNeuralGas', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_start_nodes': Option(class_name='GrowingNeuralGas', value=IntProperty(name=&quot;n_start_nodes&quot;)), 'neighbour_step': Option(class_name='GrowingNeuralGas', value=NumberProperty(name=&quot;neighbour_step&quot;)), 'max_edge_age': Option(class_name='GrowingNeuralGas', value=IntProperty(name=&quot;max_edge_age&quot;)), 'max_nodes': Option(class_name='GrowingNeuralGas', value=IntProperty(name=&quot;max_nodes&quot;)), 'n_iter_before_neuron_added': Option(class_name='GrowingNeuralGas', value=IntProperty(name=&quot;n_iter_before_neuron_added&quot;)), 'after_split_error_decay_rate': Option(class_name='GrowingNeuralGas', value=ProperFractionProperty(name=&quot;after_split_error_decay_rate&quot;)), 'error_decay_rate': Option(class_name='GrowingNeuralGas', value=ProperFractionProperty(name=&quot;error_decay_rate&quot;)), 'min_distance_for_update': Option(class_name='GrowingNeuralGas', value=NumberProperty(name=&quot;min_distance_for_update&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/growing_neural_gas.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {‘shuffle_data’: Option(class_name=’BaseNetwork’, value=Property(name=”shuffle_data”)), ‘n_inputs’: Option(class_name=’GrowingNeuralGas’, value=IntProperty(name=”n_inputs”)), ‘n_iter_before_neuron_added’: Option(class_name=’GrowingNeuralGas’, value=IntProperty(name=”n_iter_before_neuron_added”)), ‘n_start_nodes’: Option(class_name=’GrowingNeuralGas’, value=IntProperty(name=”n_start_nodes”)), ‘max_nodes’: Option(class_name=’GrowingNeuralGas’, value=IntProperty(name=”max_nodes”)), ‘error_decay_rate’: Option(class_name=’GrowingNeuralGas’, value=ProperFractionProperty(name=”error_decay_rate”)), ‘step’: Option(class_name=’GrowingNeuralGas’, value=NumberProperty(name=”step”)), ‘neighbour_step’: Option(class_name=’GrowingNeuralGas’, value=NumberProperty(name=”neighbour_step”)), ‘after_split_error_decay_rate’: Option(class_name=’GrowingNeuralGas’, value=ProperFractionProperty(name=”after_split_error_decay_rate”)), ‘show_epoch’: Option(class_name=’BaseNetwork’, value=ShowEpochProperty(name=”show_epoch”)), ‘train_end_signal’: Option(class_name=’BaseNetwork’, value=Property(name=”train_end_signal”)), ‘epoch_end_signal’: Option(class_name=’BaseNetwork’, value=Property(name=”epoch_end_signal”)), ‘max_edge_age’: Option(class_name=’GrowingNeuralGas’, value=IntProperty(name=”max_edge_age”)), ‘verbose’: Option(class_name=’Verbose’, value=VerboseProperty(name=”verbose”)), ‘min_distance_for_update’: Option(class_name=’GrowingNeuralGas’, value=NumberProperty(name=”min_distance_for_update”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/growing_neural_gas.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -506,9 +500,17 @@ the training epoch.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_data</strong> : array-like</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>input_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">array-like</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>array-like</strong></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -521,24 +523,28 @@ the training epoch.</li>
 
 <dl class="method">
 <dt id="neupy.algorithms.competitive.growing_neural_gas.GrowingNeuralGas.train">
-<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>summary='table'</em>, <em>epochs=100</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/growing_neural_gas.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>summary=’table’</em>, <em>epochs=100</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/growing_neural_gas.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Method train neural network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_train</strong> : array-like</p>
-<p><strong>target_train</strong> : array-like or None</p>
-<p><strong>input_test</strong> : array-like or None</p>
-<p><strong>target_test</strong> : array-like or None</p>
-<p><strong>epochs</strong> : int</p>
-<blockquote>
-<div><p>Defaults to <cite>100</cite>.</p>
-</div></blockquote>
-<p><strong>epsilon</strong> : float or None</p>
-<blockquote class="last">
-<div><p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>input_train</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd></dd>
+<dt><strong>target_train</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like or None</span></dt>
+<dd></dd>
+<dt><strong>input_test</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like or None</span></dt>
+<dd></dd>
+<dt><strong>target_test</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like or None</span></dt>
+<dd></dd>
+<dt><strong>epochs</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Defaults to <cite>100</cite>.</p>
+</dd>
+<dt><strong>epsilon</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -555,26 +561,29 @@ the training epoch.</li>
 <dl class="class">
 <dt id="neupy.algorithms.competitive.growing_neural_gas.NeuralGasGraph">
 <em class="property">class </em><span class="descclassname">neupy.algorithms.competitive.growing_neural_gas.</span><span class="descname">NeuralGasGraph</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/growing_neural_gas.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Undirected graph structure that stores neural gas network&#8217;s
+<dd><p>Undirected graph structure that stores neural gas network’s
 neurons and connections between them.</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="11%" />
-<col width="89%" />
-</colgroup>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td>edges_per_node</td>
-<td>(dict) Dictionary that where key is a unique node and value is a list of nodes that connection to this edge.</td>
-</tr>
-<tr class="row-even"><td>edges</td>
-<td>(dict) Dictonary that stores age per each connection. Ech key will have the following format: <span class="docutils literal"><span class="pre">(node_1,</span> <span class="pre">node_2)</span></span>.</td>
-</tr>
-<tr class="row-odd"><td>nodes</td>
-<td>(list) List of all nodes in the graph.</td>
-</tr>
-<tr class="row-even"><td>n_nodes</td>
-<td>(int) Number of nodes in the network.</td>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>edges_per_node</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">Dictionary that where key is a unique node and value is a list
+of nodes that connection to this edge.</p>
+</dd>
+<dt><strong>edges</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">Dictonary that stores age per each connection. Ech key will have
+the following format: <span class="docutils literal"><span class="pre">(node_1,</span> <span class="pre">node_2)</span></span>.</p>
+</dd>
+<dt><strong>nodes</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">List of all nodes in the graph.</p>
+</dd>
+<dt><strong>n_nodes</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of nodes in the network.</p>
+</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -614,18 +623,19 @@ neurons and connections between them.</p>
 <dt id="neupy.algorithms.competitive.growing_neural_gas.NeuronNode">
 <em class="property">class </em><span class="descclassname">neupy.algorithms.competitive.growing_neural_gas.</span><span class="descname">NeuronNode</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/growing_neural_gas.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Structure representes neuron in the Neural Gas algorithm.</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="12%" />
-<col width="88%" />
-</colgroup>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td>weight</td>
-<td>(2d-array) Neuron&#8217;s position in the space.</td>
-</tr>
-<tr class="row-even"><td>error</td>
-<td>(float) Error accumulated during the training.</td>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">Neuron’s position in the space.</p>
+</dd>
+<dt><strong>error</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Error accumulated during the training.</p>
+</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -663,11 +673,6 @@ neurons and connections between them.</p>
         If you find a bug or want to suggest a new feature feel free to
         <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
         on Github
-    </p>
-</div></section><section><div class="widget">
-    <h1>Old NeuPy versions</h1>
-    <p>
-        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 

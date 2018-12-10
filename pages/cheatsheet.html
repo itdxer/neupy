@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -259,49 +260,46 @@
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">GradientDescent</span></span></a></td>
-<td>Classic Gradient Descent</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.MinibatchGradientDescent" title="neupy.algorithms.gd.base.MinibatchGradientDescent"><span class="xref py py-class docutils literal"><span class="pre">MinibatchGradientDescent</span></span></a></td>
-<td>Mini-batch Gradient Descent</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">ConjugateGradient</span></span></a></td>
-<td>Conjugate Gradient</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.quasi_newton.html#neupy.algorithms.gd.quasi_newton.QuasiNewton" title="neupy.algorithms.gd.quasi_newton.QuasiNewton"><span class="xref py py-class docutils literal"><span class="pre">QuasiNewton</span></span></a></td>
-<td>quasi-Newton</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">LevenbergMarquardt</span></span></a></td>
-<td>Levenberg-Marquardt</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.hessian.html#neupy.algorithms.gd.hessian.Hessian" title="neupy.algorithms.gd.hessian.Hessian"><span class="xref py py-class docutils literal"><span class="pre">Hessian</span></span></a></td>
-<td>Hessian</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.hessdiag.html#neupy.algorithms.gd.hessdiag.HessianDiagonal" title="neupy.algorithms.gd.hessdiag.HessianDiagonal"><span class="xref py py-class docutils literal"><span class="pre">HessianDiagonal</span></span></a></td>
-<td>Hessian diagonal</td>
+<td>Gradient Descent</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a></td>
 <td>Momentum</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adam.html#neupy.algorithms.gd.adam.Adam" title="neupy.algorithms.gd.adam.Adam"><span class="xref py py-class docutils literal"><span class="pre">Adam</span></span></a></td>
+<td>Adam</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adamax.html#neupy.algorithms.gd.adamax.Adamax" title="neupy.algorithms.gd.adamax.Adamax"><span class="xref py py-class docutils literal"><span class="pre">Adamax</span></span></a></td>
+<td>AdaMax</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.rmsprop.html#neupy.algorithms.gd.rmsprop.RMSProp" title="neupy.algorithms.gd.rmsprop.RMSProp"><span class="xref py py-class docutils literal"><span class="pre">RMSProp</span></span></a></td>
+<td>RMSProp</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adadelta.html#neupy.algorithms.gd.adadelta.Adadelta" title="neupy.algorithms.gd.adadelta.Adadelta"><span class="xref py py-class docutils literal"><span class="pre">Adadelta</span></span></a></td>
+<td>Adadelta</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adagrad.html#neupy.algorithms.gd.adagrad.Adagrad" title="neupy.algorithms.gd.adagrad.Adagrad"><span class="xref py py-class docutils literal"><span class="pre">Adagrad</span></span></a></td>
+<td>Adagrad</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">ConjugateGradient</span></span></a></td>
+<td>Conjugate Gradient</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.quasi_newton.html#neupy.algorithms.gd.quasi_newton.QuasiNewton" title="neupy.algorithms.gd.quasi_newton.QuasiNewton"><span class="xref py py-class docutils literal"><span class="pre">QuasiNewton</span></span></a></td>
+<td>quasi-Newton</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">LevenbergMarquardt</span></span></a></td>
+<td>Levenberg-Marquardt</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.hessian.html#neupy.algorithms.gd.hessian.Hessian" title="neupy.algorithms.gd.hessian.Hessian"><span class="xref py py-class docutils literal"><span class="pre">Hessian</span></span></a></td>
+<td>Hessian</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.hessdiag.html#neupy.algorithms.gd.hessdiag.HessianDiagonal" title="neupy.algorithms.gd.hessdiag.HessianDiagonal"><span class="xref py py-class docutils literal"><span class="pre">HessianDiagonal</span></span></a></td>
+<td>Hessian diagonal</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a></td>
 <td>RPROP</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.IRPROPPlus" title="neupy.algorithms.gd.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">IRPROPPlus</span></span></a></td>
 <td>iRPROP+</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adadelta.html#neupy.algorithms.gd.adadelta.Adadelta" title="neupy.algorithms.gd.adadelta.Adadelta"><span class="xref py py-class docutils literal"><span class="pre">Adadelta</span></span></a></td>
-<td>Adadelta</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adagrad.html#neupy.algorithms.gd.adagrad.Adagrad" title="neupy.algorithms.gd.adagrad.Adagrad"><span class="xref py py-class docutils literal"><span class="pre">Adagrad</span></span></a></td>
-<td>Adagrad</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.rmsprop.html#neupy.algorithms.gd.rmsprop.RMSProp" title="neupy.algorithms.gd.rmsprop.RMSProp"><span class="xref py py-class docutils literal"><span class="pre">RMSProp</span></span></a></td>
-<td>RMSProp</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adam.html#neupy.algorithms.gd.adam.Adam" title="neupy.algorithms.gd.adam.Adam"><span class="xref py py-class docutils literal"><span class="pre">Adam</span></span></a></td>
-<td>Adam</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adamax.html#neupy.algorithms.gd.adamax.Adamax" title="neupy.algorithms.gd.adamax.Adamax"><span class="xref py py-class docutils literal"><span class="pre">Adamax</span></span></a></td>
-<td>AdaMax</td>
 </tr>
 </tbody>
 </table>
@@ -701,7 +699,7 @@
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.input.html#neupy.layers.input.Input" title="neupy.layers.input.Input"><span class="xref py py-class docutils literal"><span class="pre">Input</span></span></a></td>
-<td>Layer defines input value&#8217;s feature shape</td>
+<td>Layer defines input value’s feature shape</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.reshape.html#neupy.layers.reshape.Reshape" title="neupy.layers.reshape.Reshape"><span class="xref py py-class docutils literal"><span class="pre">Reshape</span></span></a></td>
 <td>Reshape tensor input</td>
@@ -901,11 +899,6 @@
         If you find a bug or want to suggest a new feature feel free to
         <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
         on Github
-    </p>
-</div></section><section><div class="widget">
-    <h1>Old NeuPy versions</h1>
-    <p>
-        <div>Documentation for the old NeuPy versions you can find <a href="versions.html">here</a>.</div>
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 

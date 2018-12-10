@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -235,14 +236,19 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>forward_graph</strong> : None or dict</p>
-<p><strong>backward_graph</strong> : None or dict</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>forward_graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">None or dict</span></dt>
+<dd></dd>
+<dt><strong>backward_graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">None or dict</span></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>LayerConnectionError</strong></p>
-<blockquote class="last">
-<div><p>If graph cannot connect layers.</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>LayerConnectionError</strong></dt>
+<dd><p class="first last">If graph cannot connect layers.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -255,22 +261,28 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>from_layer</strong> : layer</p>
-<p><strong>to_layer</strong> : layer</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>from_layer</strong> <span class="classifier-delimiter">:</span> <span class="classifier">layer</span></dt>
+<dd></dd>
+<dt><strong>to_layer</strong> <span class="classifier-delimiter">:</span> <span class="classifier">layer</span></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">bool</p>
-<blockquote>
-<div><p>Returns <span class="docutils literal"><span class="pre">False</span></span> if connection has already been added into
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>bool</strong></dt>
+<dd><p class="first last">Returns <span class="docutils literal"><span class="pre">False</span></span> if connection has already been added into
 the graph, and <span class="docutils literal"><span class="pre">True</span></span> if connection was added successfully.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>LayerConnectionError</strong></p>
-<blockquote class="last">
-<div><p>Raises if it&#8217;s impossible to connect two layers or
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>LayerConnectionError</strong></dt>
+<dd><p class="first last">Raises if it’s impossible to connect two layers or
 new connection creates cycles in graph.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -285,15 +297,19 @@ new connection creates cycles in graph.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>layer</strong> : layer</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>layer</strong> <span class="classifier-delimiter">:</span> <span class="classifier">layer</span></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">bool</p>
-<blockquote class="last">
-<div><p>Returns <span class="docutils literal"><span class="pre">False</span></span> if layer has beed already added into
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>bool</strong></dt>
+<dd><p class="first last">Returns <span class="docutils literal"><span class="pre">False</span></span> if layer has beed already added into
 graph and there is no need to add it again, and
 <span class="docutils literal"><span class="pre">True</span></span> - if layer is a new and was added successfully.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -309,21 +325,27 @@ in the graph.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>from_layer</strong> : layer or list of layers</p>
-<p><strong>to_layer</strong> : layer or list of layers</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>from_layer</strong> <span class="classifier-delimiter">:</span> <span class="classifier">layer or list of layers</span></dt>
+<dd></dd>
+<dt><strong>to_layer</strong> <span class="classifier-delimiter">:</span> <span class="classifier">layer or list of layers</span></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">bool</p>
-<blockquote>
-<div><p>Returns <span class="docutils literal"><span class="pre">False</span></span> if connection has already been added into
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>bool</strong></dt>
+<dd><p class="first last">Returns <span class="docutils literal"><span class="pre">False</span></span> if connection has already been added into
 the graph, and <span class="docutils literal"><span class="pre">True</span></span> if connection was added successfully.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>LayerConnectionError</strong></p>
-<blockquote class="last">
-<div><p>Raises if cannot graph cannot connect two layers.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>LayerConnectionError</strong></dt>
+<dd><p class="first last">Raises if cannot graph cannot connect two layers.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -339,20 +361,25 @@ specified layer name.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>layer_name</strong> : str</p>
-<blockquote>
-<div><p>Name of the layer that presented in this graph.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>layer_name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">Name of the layer that presented in this graph.</p>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">layer</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>layer</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>NameError</strong></p>
-<blockquote class="last">
-<div><p>In case if there is no layer with specified
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>NameError</strong></dt>
+<dd><p class="first last">In case if there is no layer with specified
 name in the graph.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -367,16 +394,18 @@ name in the graph.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list</p>
-<blockquote>
-<div><p>List of input layers.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>list</strong></dt>
+<dd><p class="first last">List of input layers.</p>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>LayerConnectionError</strong></p>
-<blockquote class="last">
-<div><p>If graph doesn&#8217;t have input layers.</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>LayerConnectionError</strong></dt>
+<dd><p class="first last">If graph doesn’t have input layers.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -391,9 +420,17 @@ name in the graph.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>graph</strong> : LayerGraph</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">LayerGraph</span></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">OrderedDict</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>OrderedDict</strong></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -407,15 +444,20 @@ name in the graph.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>left_graph</strong> : LayerGraph instance</p>
-<p><strong>right_graph</strong> : LayerGraph instance</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>left_graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">LayerGraph instance</span></dt>
+<dd></dd>
+<dt><strong>right_graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">LayerGraph instance</span></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">LayerGraph instance</p>
-<blockquote class="last">
-<div><p>New graph that contains layers and connections
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>LayerGraph instance</strong></dt>
+<dd><p class="first last">New graph that contains layers and connections
 from input graphs.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -430,16 +472,18 @@ from input graphs.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list</p>
-<blockquote>
-<div><p>List of output layers.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>list</strong></dt>
+<dd><p class="first last">List of output layers.</p>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>LayerConnectionError</strong></p>
-<blockquote class="last">
-<div><p>If graph doesn&#8217;t have output layers.</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>LayerConnectionError</strong></dt>
+<dd><p class="first last">If graph doesn’t have output layers.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -455,9 +499,9 @@ graph and returns output from the final layers.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_value</strong> : array-like, Tensorfow variable or dict</p>
-<blockquote>
-<div><ul class="simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>input_value</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable or dict</span></dt>
+<dd><ul class="first last simple">
 <li>If input is an array or Tensorfow variable than it will
 be used as a direct input to the input layer/layers.</li>
 <li>The dict type input should has a specific structure.
@@ -467,13 +511,15 @@ layers. In the dict input layer is not necessary should
 be an instance of the <span class="docutils literal"><span class="pre">layers.Input</span></span> class. It can be
 any layer from the graph.</li>
 </ul>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">object</p>
-<blockquote class="last">
-<div><p>Output from the final layer/layers.</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>object</strong></dt>
+<dd><p class="first last">Output from the final layer/layers.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -496,11 +542,18 @@ layers.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_layers</strong> : layer, list of layers</p>
-<p><strong>output_layers</strong> : layer, list of layers</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>input_layers</strong> <span class="classifier-delimiter">:</span> <span class="classifier">layer, list of layers</span></dt>
+<dd></dd>
+<dt><strong>output_layers</strong> <span class="classifier-delimiter">:</span> <span class="classifier">layer, list of layers</span></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">LayerGraph</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>LayerGraph</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -516,9 +569,17 @@ of input layers.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>layers</strong> : layer, list of layers</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>layers</strong> <span class="classifier-delimiter">:</span> <span class="classifier">layer, list of layers</span></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">LayerGraph instance</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>LayerGraph instance</strong></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -533,9 +594,17 @@ of output layers.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>layers</strong> : layer, list of layers</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>layers</strong> <span class="classifier-delimiter">:</span> <span class="classifier">layer, list of layers</span></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">LayerGraph instance</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>LayerGraph instance</strong></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -575,11 +644,6 @@ of output layers.</p>
         If you find a bug or want to suggest a new feature feel free to
         <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
         on Github
-    </p>
-</div></section><section><div class="widget">
-    <h1>Old NeuPy versions</h1>
-    <p>
-        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 

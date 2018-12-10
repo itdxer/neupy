@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -235,23 +236,20 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>quantization</strong> : int</p>
-<blockquote>
-<div><p>Network transforms every input to discrete value.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>quantization</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Network transforms every input to discrete value.
 Quantization value contol number of total possible
 categories after quantization, defaults to <span class="docutils literal"><span class="pre">10</span></span>.</p>
-</div></blockquote>
-<p><strong>associative_unit_size</strong> : int</p>
-<blockquote>
-<div><p>Number of associative blocks in memory, defaults to <span class="docutils literal"><span class="pre">2</span></span>.</p>
-</div></blockquote>
-<p><strong>step</strong> : float</p>
-<blockquote>
-<div><p>Learning rate, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
-</div></blockquote>
-<p><strong>show_epoch</strong> : int or str</p>
-<blockquote>
-<div><p>This property controls how often the network will
+</dd>
+<dt><strong>associative_unit_size</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of associative blocks in memory, defaults to <span class="docutils literal"><span class="pre">2</span></span>.</p>
+</dd>
+<dt><strong>step</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Learning rate, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
+</dd>
+<dt><strong>show_epoch</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int or str</span></dt>
+<dd><p class="first">This property controls how often the network will
 display information about training. There are two
 main syntaxes for this property.</p>
 <ul class="simple">
@@ -259,34 +257,31 @@ main syntaxes for this property.</p>
 defines how offen would you like to see summary
 output in terminal. For instance, number <cite>100</cite> mean
 that network shows summary at 100th, 200th,
-300th ... epochs.</li>
+300th … epochs.</li>
 <li>String defines number of times you want to see output in
 terminal. For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that
 the network will show output twice with approximately
 equal period of epochs and one additional output would
 be after the finall epoch.</li>
 </ul>
-<p>Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
-<p><strong>shuffle_data</strong> : bool</p>
-<blockquote>
-<div><p>If it&#8217;s <span class="docutils literal"><span class="pre">True</span></span> class shuffles all your training data before
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</dd>
+<dt><strong>shuffle_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If it’s <span class="docutils literal"><span class="pre">True</span></span> class shuffles all your training data before
 training your network, defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</div></blockquote>
-<p><strong>epoch_end_signal</strong> : function</p>
-<blockquote>
-<div><p>Calls this function when train epoch finishes.</p>
-</div></blockquote>
-<p><strong>train_end_signal</strong> : function</p>
-<blockquote>
-<div><p>Calls this function when train process finishes.</p>
-</div></blockquote>
-<p><strong>verbose</strong> : bool</p>
-<blockquote class="last">
-<div><p>Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
+</dd>
+<dt><strong>epoch_end_signal</strong> <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd><p class="first last">Calls this function when train epoch finishes.</p>
+</dd>
+<dt><strong>train_end_signal</strong> <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd><p class="first last">Calls this function when train process finishes.</p>
+</dd>
+<dt><strong>verbose</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
 informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> -
 disable it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -297,8 +292,8 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <li>Network works for multi dimensional target values.</li>
 </ul>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.algorithms</span> <span class="kn">import</span> <span class="n">CMAC</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.algorithms</span> <span class="k">import</span> <span class="n">CMAC</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">train_space</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">test_space</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
@@ -322,15 +317,16 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <span class="go">0.0023639417543036569</span>
 </pre></div>
 </div>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td>weight</td>
-<td>(dict) Network&#8217;s weight that contains memorized patterns.</td>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">Network’s weight that contains memorized patterns.</p>
+</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -341,13 +337,13 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <col width="71%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>predict(input_data)</td>
+<tr class="row-odd"><td><strong>predict(input_data)</strong></td>
 <td>Predicts output for the specified input.</td>
 </tr>
-<tr class="row-even"><td>train(input_train, target_train, input_test=None, target_test=None,    epochs=100, epsilon=None)</td>
-<td>Train network. You can control network&#8217;s training procedure with <span class="docutils literal"><span class="pre">epochs</span></span> and <span class="docutils literal"><span class="pre">epsilon</span></span> parameters. The <span class="docutils literal"><span class="pre">input_test</span></span> and <span class="docutils literal"><span class="pre">target_test</span></span> should be presented both in case of you need to validate network&#8217;s training after each iteration.</td>
+<tr class="row-even"><td><strong>train(input_train, target_train, input_test=None, target_test=None,    epochs=100, epsilon=None)</strong></td>
+<td>Train network. You can control network’s training procedure with <span class="docutils literal"><span class="pre">epochs</span></span> and <span class="docutils literal"><span class="pre">epsilon</span></span> parameters. The <span class="docutils literal"><span class="pre">input_test</span></span> and <span class="docutils literal"><span class="pre">target_test</span></span> should be presented both in case of you need to validate network’s training after each iteration.</td>
 </tr>
-<tr class="row-odd"><td>fit(*args, **kwargs)</td>
+<tr class="row-odd"><td><strong>fit(*args, **kwargs)</strong></td>
 <td>Alias to the <span class="docutils literal"><span class="pre">train</span></span> method.</td>
 </tr>
 </tbody>
@@ -369,7 +365,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 
 <dl class="attribute">
 <dt id="neupy.algorithms.memory.cmac.CMAC.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'quantization': Option(class_name='CMAC', value=IntProperty(name=&quot;quantization&quot;)), 'associative_unit_size': Option(class_name='CMAC', value=IntProperty(name=&quot;associative_unit_size&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {‘shuffle_data’: Option(class_name=’BaseNetwork’, value=Property(name=”shuffle_data”)), ‘quantization’: Option(class_name=’CMAC’, value=IntProperty(name=”quantization”)), ‘show_epoch’: Option(class_name=’BaseNetwork’, value=ShowEpochProperty(name=”show_epoch”)), ‘associative_unit_size’: Option(class_name=’CMAC’, value=IntProperty(name=”associative_unit_size”)), ‘train_end_signal’: Option(class_name=’BaseNetwork’, value=Property(name=”train_end_signal”)), ‘epoch_end_signal’: Option(class_name=’BaseNetwork’, value=Property(name=”epoch_end_signal”)), ‘verbose’: Option(class_name=’Verbose’, value=VerboseProperty(name=”verbose”)), ‘step’: Option(class_name=’BaseNetwork’, value=NumberProperty(name=”step”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -380,9 +376,17 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_data</strong> : array-like</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>input_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">array-like</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>array-like</strong></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -405,24 +409,28 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 
 <dl class="method">
 <dt id="neupy.algorithms.memory.cmac.CMAC.train">
-<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em>, <em>input_test=None</em>, <em>target_test=None</em>, <em>epochs=100</em>, <em>epsilon=None</em>, <em>summary='table'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em>, <em>input_test=None</em>, <em>target_test=None</em>, <em>epochs=100</em>, <em>epsilon=None</em>, <em>summary=’table’</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/cmac.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Method train neural network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_train</strong> : array-like</p>
-<p><strong>target_train</strong> : array-like or None</p>
-<p><strong>input_test</strong> : array-like or None</p>
-<p><strong>target_test</strong> : array-like or None</p>
-<p><strong>epochs</strong> : int</p>
-<blockquote>
-<div><p>Defaults to <cite>100</cite>.</p>
-</div></blockquote>
-<p><strong>epsilon</strong> : float or None</p>
-<blockquote class="last">
-<div><p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>input_train</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd></dd>
+<dt><strong>target_train</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like or None</span></dt>
+<dd></dd>
+<dt><strong>input_test</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like or None</span></dt>
+<dd></dd>
+<dt><strong>target_test</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like or None</span></dt>
+<dd></dd>
+<dt><strong>epochs</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Defaults to <cite>100</cite>.</p>
+</dd>
+<dt><strong>epsilon</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -468,11 +476,6 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
         If you find a bug or want to suggest a new feature feel free to
         <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
         on Github
-    </p>
-</div></section><section><div class="widget">
-    <h1>Old NeuPy versions</h1>
-    <p>
-        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 

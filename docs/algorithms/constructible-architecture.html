@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="next" title="Train network on GPU" href="train-on-gpu.html" /><link rel="prev" title="Basics" href="basics.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Train network on GPU" href="train-on-gpu.html" /><link rel="prev" title="Basics" href="basics.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -242,7 +243,7 @@
 </div>
 <div class="section" id="specify-network-structure">
 <h2><a class="toc-backref" href="#id2">Specify network structure</a></h2>
-<p>There are three ways to define relations between layers. We can define network&#8217;s architecture separately from the training algorithm.</p>
+<p>There are three ways to define relations between layers. We can define network’s architecture separately from the training algorithm.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
 <span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
@@ -353,15 +354,15 @@
 </div>
 <div class="section" id="algorithms">
 <h2><a class="toc-backref" href="#id4">Algorithms</a></h2>
-<p>NeuPy supports lots of different training algorithms based on the backpropagation. You can check <a class="reference internal" href="../../pages/cheatsheet.html#cheatsheet-backprop-algorithms"><span>Cheat sheet</span></a> if you want to learn more about them.</p>
-<p>Before using these algorithms you must understand that not all of them are suitable for all problems. Some of the methods like <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">Levenberg-Marquardt</span></span></a> or <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> work better for small networks and they would be extremely slow for networks with millions parameters. In addition, it&#8217;s important to note that not all algorithms are possible to train with mini-batches. Algorithms like <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> don&#8217;t work with mini-batches.</p>
+<p>NeuPy supports lots of different training algorithms based on the backpropagation. You can check <a class="reference internal" href="../../pages/cheatsheet.html#cheatsheet-backprop-algorithms"><span class="std std-ref">Cheat sheet</span></a> if you want to learn more about them.</p>
+<p>Before using these algorithms you must understand that not all of them are suitable for all problems. Some of the methods like <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">Levenberg-Marquardt</span></span></a> or <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> work better for small networks and they would be extremely slow for networks with millions parameters. In addition, it’s important to note that not all algorithms are possible to train with mini-batches. Algorithms like <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> don’t work with mini-batches.</p>
 </div>
 <div class="section" id="loss-functions">
 <h2><a class="toc-backref" href="#id5">Loss functions</a></h2>
-<p>NeuPy has many different <a class="reference internal" href="../../pages/cheatsheet.html#cheatsheet-error-function"><span>loss functions</span></a>. These loss functions can be specified specified as a string.</p>
+<p>NeuPy has many different <a class="reference internal" href="../../pages/cheatsheet.html#cheatsheet-error-function"><span class="std std-ref">loss functions</span></a>. These loss functions can be specified specified as a string.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
-<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">MinibatchGradientDescent</span><span class="p">(</span>
+<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
     <span class="p">[</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
@@ -372,7 +373,7 @@
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>Also, it&#8217;s possible to create custom loss functions. Loss function should have two mandatory arguments, namely expected and predicted values.</p>
+<p>Also, it’s possible to create custom loss functions. Loss function should have two mandatory arguments, namely expected and predicted values.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
 <span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
@@ -380,7 +381,7 @@
     <span class="n">abs_errors</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">expected</span> <span class="o">-</span> <span class="n">predicted</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">abs_errors</span><span class="p">)</span>
 
-<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">MinibatchGradientDescent</span><span class="p">(</span>
+<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
     <span class="p">[</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
@@ -398,7 +399,7 @@
 <p>Algorithms with constructible architectures allow to use additional update rules for parameter regularization and learning rate updates. For instance, we want to add <a class="reference internal" href="../../apidocs/neupy.algorithms.regularization.weight_decay.html#neupy.algorithms.regularization.weight_decay.WeightDecay" title="neupy.algorithms.regularization.weight_decay.WeightDecay"><span class="xref py py-class docutils literal"><span class="pre">Weight</span> <span class="pre">Decay</span></span></a> regularization and we want to minimize step monotonically after each epoch.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
-<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">MinibatchGradientDescent</span><span class="p">(</span>
+<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
     <span class="p">[</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
@@ -416,7 +417,7 @@
 <p>Both <a class="reference internal" href="../../apidocs/neupy.algorithms.regularization.weight_decay.html#neupy.algorithms.regularization.weight_decay.WeightDecay" title="neupy.algorithms.regularization.weight_decay.WeightDecay"><span class="xref py py-class docutils literal"><span class="pre">WeightDecay</span></span></a> and <a class="reference internal" href="../../apidocs/neupy.algorithms.step_update.step_decay.html#neupy.algorithms.step_update.step_decay.StepDecay" title="neupy.algorithms.step_update.step_decay.StepDecay"><span class="xref py py-class docutils literal"><span class="pre">StepDecay</span></span></a> algorithms have additional parameters. In case if we need to modify them we can add them to the training algorithm.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
-<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">MinibatchGradientDescent</span><span class="p">(</span>
+<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
     <span class="p">[</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
@@ -424,7 +425,7 @@
         <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
     <span class="p">],</span>
 
-    <span class="c1"># Parameters from MinibatchGradientDescent</span>
+    <span class="c1"># Parameters from GradientDescent</span>
     <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
     <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
 
@@ -439,10 +440,10 @@
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>NeuPy doesn&#8217;t allow to use multiple regularizations and step update add-ons for training algorithm.</p>
+<p>NeuPy doesn’t allow to use multiple regularizations and step update add-ons for training algorithm.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">MinibatchGradientDescent</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="p">[</span>
 <span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
 <span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
@@ -495,11 +496,6 @@
         If you find a bug or want to suggest a new feature feel free to
         <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
         on Github
-    </p>
-</div></section><section><div class="widget">
-    <h1>Old NeuPy versions</h1>
-    <p>
-        <div>Documentation for the old NeuPy versions you can find <a href="../../pages/versions.html">here</a>.</div>
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 

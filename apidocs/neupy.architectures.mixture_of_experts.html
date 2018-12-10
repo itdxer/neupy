@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -242,43 +243,45 @@ the larger contribution from the individual layer.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>networks</strong> : list of connections or networks</p>
-<blockquote>
-<div><p>These networks will be combine into mixture of experts.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>networks</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of connections or networks</span></dt>
+<dd><p class="first last">These networks will be combine into mixture of experts.
 Every network should have single 1D input layer and
 single output layer. Another restriction is that all networks
 should expect the same input and output layers.</p>
-</div></blockquote>
-<p><strong>gating_layer</strong> : None or layer</p>
-<blockquote>
-<div><p>In case if value equal to <cite>None</cite> that the following layer
+</dd>
+<dt><strong>gating_layer</strong> <span class="classifier-delimiter">:</span> <span class="classifier">None or layer</span></dt>
+<dd><p class="first">In case if value equal to <cite>None</cite> that the following layer
 will be created.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gating_layer</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">networks</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Output from the gating layer should be 1D and equal to
+<p class="last">Output from the gating layer should be 1D and equal to
 the number of networks.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">connection</p>
-<blockquote>
-<div><p>Mixture of experts network that combine all networks into
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>connection</strong></dt>
+<dd><p class="first last">Mixture of experts network that combine all networks into
 single one and adds gating layer to it.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
-<blockquote class="last">
-<div><p>In case if there is some problem with input networks
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>ValueError</strong></dt>
+<dd><p class="first last">In case if there is some problem with input networks
 or custom gating layer.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">architectures</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">architectures</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">architectures</span><span class="o">.</span><span class="n">mixture_of_experts</span><span class="p">([</span>
 <span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
@@ -337,11 +340,6 @@ or custom gating layer.</p>
         If you find a bug or want to suggest a new feature feel free to
         <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
         on Github
-    </p>
-</div></section><section><div class="widget">
-    <h1>Old NeuPy versions</h1>
-    <p>
-        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 

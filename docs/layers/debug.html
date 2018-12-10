@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="next" title="Training Algorithms" href="../algorithms.html" /><link rel="prev" title="Parameter Initialization Methods" href="init-methods.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Surgery" href="surgery.html" /><link rel="prev" title="Parameter Initialization Methods" href="init-methods.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -241,7 +242,7 @@
 <span class="go">(3,)</span>
 </pre></div>
 </div>
-<p>The <span class="docutils literal"><span class="pre">input_shape</span></span> and <span class="docutils literal"><span class="pre">output_shape</span></span> properties store information about expected shape of the network&#8217;s input and it&#8217;s output shape after propagation. Notice that shapes do not store information about batch size. In our example, we might assume that we want to propagate 7 samples and network expects input matrix with shape <span class="docutils literal"><span class="pre">(7,</span> <span class="pre">10)</span></span> and for this input it will output matrix with shape <span class="docutils literal"><span class="pre">(7,</span> <span class="pre">3)</span></span>.</p>
+<p>The <span class="docutils literal"><span class="pre">input_shape</span></span> and <span class="docutils literal"><span class="pre">output_shape</span></span> properties store information about expected shape of the network’s input and it’s output shape after propagation. Notice that shapes do not store information about batch size. In our example, we might assume that we want to propagate 7 samples and network expects input matrix with shape <span class="docutils literal"><span class="pre">(7,</span> <span class="pre">10)</span></span> and for this input it will output matrix with shape <span class="docutils literal"><span class="pre">(7,</span> <span class="pre">3)</span></span>.</p>
 <p>Every layer in the network also has information about input and output shapes. We can check each layer separately.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">connection</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
@@ -266,7 +267,7 @@
 </div>
 <div class="section" id="visualize-connections">
 <h2>Visualize connections</h2>
-<p>For the debugging, it&#8217;s useful to explore network&#8217;s architecture. It&#8217;s possible to visualize network in the form of a graph. Let&#8217;s say we have this network.</p>
+<p>For the debugging, it’s useful to explore network’s architecture. It’s possible to visualize network in the form of a graph. Let’s say we have this network.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 
 <span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
@@ -367,7 +368,7 @@
 </div>
 <div class="section" id="exploring-graph-connections">
 <h2>Exploring graph connections</h2>
-<p>Any relation between layers is stored in the graph. To be able to debug connections we can check network&#8217;s graph to make sure that all connections defined correctly.</p>
+<p>Any relation between layers is stored in the graph. To be able to debug connections we can check network’s graph to make sure that all connections defined correctly.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">input_layer</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
@@ -375,7 +376,7 @@
 <span class="go">[(Input(10), [])]</span>
 </pre></div>
 </div>
-<p>Since layer is not connected to any other layer the graph is empty. We can define network with more layers and check it&#8217;s graph.</p>
+<p>Since layer is not connected to any other layer the graph is empty. We can define network with more layers and check it’s graph.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">input_layer</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="p">[[</span>
@@ -411,7 +412,7 @@
         
         </div><ul class="related clearfix">
             <li class="left"> &laquo; <a href="init-methods.html">Parameter Initialization Methods</a></li>
-            <li class="right"><a href="../algorithms.html">Training Algorithms</a> &raquo; </li>
+            <li class="right"><a href="surgery.html">Surgery</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../../search.html" method="get">
@@ -438,11 +439,6 @@
         If you find a bug or want to suggest a new feature feel free to
         <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
         on Github
-    </p>
-</div></section><section><div class="widget">
-    <h1>Old NeuPy versions</h1>
-    <p>
-        <div>Documentation for the old NeuPy versions you can find <a href="../../pages/versions.html">here</a>.</div>
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 

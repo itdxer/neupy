@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -235,62 +236,57 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>proba</strong> : float</p>
-<blockquote>
-<div><p>Fraction of the input units to drop. Value needs to be
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>proba</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Fraction of the input units to drop. Value needs to be
 between <span class="docutils literal"><span class="pre">0</span></span> and <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
-<p><strong>name</strong> : str or None</p>
-<blockquote class="last">
-<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+</dd>
+<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
+<dd><p class="first last">Layer’s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
 will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-</tbody>
-</table>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="17%" />
-<col width="83%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>input_shape</td>
-<td>(tuple) Layer&#8217;s input shape.</td>
-</tr>
-<tr class="row-even"><td>output_shape</td>
-<td>(tuple) Layer&#8217;s output shape.</td>
-</tr>
-<tr class="row-odd"><td>training_state</td>
-<td>(bool) Defines whether layer in training state or not.</td>
-</tr>
-<tr class="row-even"><td>parameters</td>
-<td>(dict) Trainable parameters.</td>
-</tr>
-<tr class="row-odd"><td>graph</td>
-<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Layer’s input shape.</p>
+</dd>
+<dt><strong>output_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Layer’s output shape.</p>
+</dd>
+<dt><strong>training_state</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Defines whether layer in training state or not.</p>
+</dd>
+<dt><strong>parameters</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">Trainable parameters.</p>
+</dd>
+<dt><strong>graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">LayerGraph instance</span></dt>
+<dd><p class="first last">Graphs that stores all relations between layers.</p>
+</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="31%" />
-<col width="69%" />
+<col width="35%" />
+<col width="65%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>disable_training_state()</td>
+<tr class="row-odd"><td><strong>disable_training_state()</strong></td>
 <td>Swith off trainig state.</td>
 </tr>
-<tr class="row-even"><td>initialize()</td>
+<tr class="row-even"><td><strong>initialize()</strong></td>
 <td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
 </table>
 <dl class="attribute">
 <dt id="neupy.layers.stochastic.Dropout.options">
-<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'proba': Option(class_name='Dropout', value=ProperFractionProperty(name=&quot;proba&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/stochastic.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘proba’: Option(class_name=’Dropout’, value=ProperFractionProperty(name=”proba”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/stochastic.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -301,7 +297,11 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>input_value</strong></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -318,64 +318,58 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <dt id="neupy.layers.stochastic.GaussianNoise">
 <em class="property">class </em><span class="descclassname">neupy.layers.stochastic.</span><span class="descname">GaussianNoise</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/stochastic.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Add gaussian noise to the input value. Mean and standard
-deviation are layer&#8217;s parameters.</p>
+deviation are layer’s parameters.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>std</strong> : float</p>
-<blockquote>
-<div><p>Standard deviation of the gaussian noise. Values needs to
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>std</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Standard deviation of the gaussian noise. Values needs to
 be greater than zero. Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
-<p><strong>mean</strong> : float</p>
-<blockquote>
-<div><p>Mean of the gaussian noise. Defaults to <span class="docutils literal"><span class="pre">0</span></span>.</p>
-</div></blockquote>
-<p><strong>name</strong> : str or None</p>
-<blockquote class="last">
-<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+</dd>
+<dt><strong>mean</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Mean of the gaussian noise. Defaults to <span class="docutils literal"><span class="pre">0</span></span>.</p>
+</dd>
+<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
+<dd><p class="first last">Layer’s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
 will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-</tbody>
-</table>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="17%" />
-<col width="83%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>input_shape</td>
-<td>(tuple) Layer&#8217;s input shape.</td>
-</tr>
-<tr class="row-even"><td>output_shape</td>
-<td>(tuple) Layer&#8217;s output shape.</td>
-</tr>
-<tr class="row-odd"><td>training_state</td>
-<td>(bool) Defines whether layer in training state or not.</td>
-</tr>
-<tr class="row-even"><td>parameters</td>
-<td>(dict) Trainable parameters.</td>
-</tr>
-<tr class="row-odd"><td>graph</td>
-<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Layer’s input shape.</p>
+</dd>
+<dt><strong>output_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Layer’s output shape.</p>
+</dd>
+<dt><strong>training_state</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Defines whether layer in training state or not.</p>
+</dd>
+<dt><strong>parameters</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">Trainable parameters.</p>
+</dd>
+<dt><strong>graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">LayerGraph instance</span></dt>
+<dd><p class="first last">Graphs that stores all relations between layers.</p>
+</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="31%" />
-<col width="69%" />
+<col width="35%" />
+<col width="65%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>disable_training_state()</td>
+<tr class="row-odd"><td><strong>disable_training_state()</strong></td>
 <td>Swith off trainig state.</td>
 </tr>
-<tr class="row-even"><td>initialize()</td>
+<tr class="row-even"><td><strong>initialize()</strong></td>
 <td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
@@ -387,7 +381,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.stochastic.GaussianNoise.options">
-<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'std': Option(class_name='GaussianNoise', value=NumberProperty(name=&quot;std&quot;)), 'mean': Option(class_name='GaussianNoise', value=NumberProperty(name=&quot;mean&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/stochastic.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘mean’: Option(class_name=’GaussianNoise’, value=NumberProperty(name=”mean”)), ‘std’: Option(class_name=’GaussianNoise’, value=NumberProperty(name=”std”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/stochastic.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -398,7 +392,11 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>input_value</strong></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -443,11 +441,6 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
         If you find a bug or want to suggest a new feature feel free to
         <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
         on Github
-    </p>
-</div></section><section><div class="widget">
-    <h1>Old NeuPy versions</h1>
-    <p>
-        <div>Documentation for the old NeuPy versions you can find <a href="../pages/versions.html">here</a>.</div>
     </p>
 </div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
