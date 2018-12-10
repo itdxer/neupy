@@ -52,6 +52,7 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
@@ -366,7 +367,7 @@ by Reducing Internal Covariate Shift,
 
 <dl class="attribute">
 <dt id="neupy.layers.normalization.BatchNorm.options">
-<span class="descname">options</span><em class="property"> = {‘epsilon’: Option(class_name=’BatchNorm’, value=NumberProperty(name=”epsilon”)), ‘gamma’: Option(class_name=’BatchNorm’, value=ParameterProperty(name=”gamma”)), ‘running_mean’: Option(class_name=’BatchNorm’, value=ParameterProperty(name=”running_mean”)), ‘axes’: Option(class_name=’BatchNorm’, value=AxesProperty(name=”axes”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘alpha’: Option(class_name=’BatchNorm’, value=ProperFractionProperty(name=”alpha”)), ‘running_inv_std’: Option(class_name=’BatchNorm’, value=ParameterProperty(name=”running_inv_std”)), ‘beta’: Option(class_name=’BatchNorm’, value=ParameterProperty(name=”beta”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/normalization.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {‘running_inv_std’: Option(class_name=’BatchNorm’, value=ParameterProperty(name=”running_inv_std”)), ‘epsilon’: Option(class_name=’BatchNorm’, value=NumberProperty(name=”epsilon”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘running_mean’: Option(class_name=’BatchNorm’, value=ParameterProperty(name=”running_mean”)), ‘axes’: Option(class_name=’BatchNorm’, value=AxesProperty(name=”axes”)), ‘alpha’: Option(class_name=’BatchNorm’, value=ProperFractionProperty(name=”alpha”)), ‘beta’: Option(class_name=’BatchNorm’, value=ParameterProperty(name=”beta”)), ‘gamma’: Option(class_name=’BatchNorm’, value=ParameterProperty(name=”gamma”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/normalization.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -492,7 +493,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.normalization.LocalResponseNorm.options">
-<span class="descname">options</span><em class="property"> = {‘k’: Option(class_name=’LocalResponseNorm’, value=NumberProperty(name=”k”)), ‘depth_radius’: Option(class_name=’LocalResponseNorm’, value=IntProperty(name=”depth_radius”)), ‘alpha’: Option(class_name=’LocalResponseNorm’, value=NumberProperty(name=”alpha”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘beta’: Option(class_name=’LocalResponseNorm’, value=NumberProperty(name=”beta”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/normalization.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {‘alpha’: Option(class_name=’LocalResponseNorm’, value=NumberProperty(name=”alpha”)), ‘beta’: Option(class_name=’LocalResponseNorm’, value=NumberProperty(name=”beta”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘k’: Option(class_name=’LocalResponseNorm’, value=NumberProperty(name=”k”)), ‘depth_radius’: Option(class_name=’LocalResponseNorm’, value=IntProperty(name=”depth_radius”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/normalization.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
