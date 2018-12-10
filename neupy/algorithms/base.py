@@ -392,54 +392,53 @@ class BaseNetwork(BaseSkeleton):
         can_compute_validation_error = (input_test is not None)
         last_epoch_shown = 0
 
-        with logs.disable_user_input():
-            for epoch in iterepochs:
-                validation_error = None
-                epoch_start_time = time.time()
-                on_epoch_start_update(epoch)
+        for epoch in iterepochs:
+            validation_error = None
+            epoch_start_time = time.time()
+            on_epoch_start_update(epoch)
 
-                if shuffle_data:
-                    data = shuffle(*as_tuple(input_train, target_train))
-                    input_train, target_train = data[:-1], data[-1]
+            if shuffle_data:
+                data = shuffle(*as_tuple(input_train, target_train))
+                input_train, target_train = data[:-1], data[-1]
 
-                    if len(input_train) == 1:
-                        input_train = input_train[0]
+                if len(input_train) == 1:
+                    input_train = input_train[0]
 
-                try:
-                    train_error = train_epoch(input_train, target_train)
+            try:
+                train_error = train_epoch(input_train, target_train)
 
-                    if can_compute_validation_error:
-                        validation_error = self.prediction_error(
-                            input_test, target_test)
+                if can_compute_validation_error:
+                    validation_error = self.prediction_error(
+                        input_test, target_test)
 
-                    training_errors.append(train_error)
-                    validation_errors.append(validation_error)
+                training_errors.append(train_error)
+                validation_errors.append(validation_error)
 
-                    epoch_finish_time = time.time()
-                    training.epoch_time = epoch_finish_time - epoch_start_time
+                epoch_finish_time = time.time()
+                training.epoch_time = epoch_finish_time - epoch_start_time
 
-                    if epoch % training.show_epoch == 0 or is_first_iteration:
-                        summary.show_last()
-                        last_epoch_shown = epoch
+                if epoch % training.show_epoch == 0 or is_first_iteration:
+                    summary.show_last()
+                    last_epoch_shown = epoch
 
-                    if epoch_end_signal is not None:
-                        epoch_end_signal(self)
+                if epoch_end_signal is not None:
+                    epoch_end_signal(self)
 
-                    is_first_iteration = False
+                is_first_iteration = False
 
-                except StopTraining as err:
-                    summary.finish()
-                    logs.message("TRAIN", "Epoch #{} stopped. {}"
-                                          "".format(epoch, str(err)))
-                    break
+            except StopTraining as err:
+                summary.finish()
+                logs.message("TRAIN", "Epoch #{} stopped. {}"
+                                      "".format(epoch, str(err)))
+                break
 
-            if epoch != last_epoch_shown:
-                summary.show_last()
+        if epoch != last_epoch_shown:
+            summary.show_last()
 
-            if train_end_signal is not None:
-                train_end_signal(self)
+        if train_end_signal is not None:
+            train_end_signal(self)
 
-            summary.finish()
+        summary.finish()
 
     def __getstate__(self):
         return self.__dict__

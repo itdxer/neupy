@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, unicode_literals
 
-import os
 import sys
-import importlib
 from contextlib import contextmanager
 
 import tableprint
@@ -24,45 +22,6 @@ STYLES['round'] = TableStyle(
     bottom=LineStyle('--', '-', '---', '--'),
     row=LineStyle('| ', '', ' | ', ' |'),
 )
-
-
-def terminal_echo(enabled, file_descriptor=sys.stdin):
-    """
-    Enable/disable echo in the terminal.
-
-    Parameters
-    ----------
-    enabled : bool
-        The `False` value means that you willn't be able to make
-        input in terminal.
-    file_descriptor : object
-        File descriptor that you would like to enable or disable.
-        Defaults to ``sys.stdin``.
-    """
-    is_windows = (os.name == 'nt')
-
-    if is_windows:
-        return
-
-    termios = importlib.import_module('termios')
-
-    try:
-        attributes = termios.tcgetattr(file_descriptor)
-        lflag = attributes[3]
-
-        if enabled:
-            lflag |= termios.ECHO
-        else:
-            lflag &= ~termios.ECHO
-
-        attributes[3] = lflag
-        termios.tcsetattr(file_descriptor, termios.TCSANOW, attributes)
-
-    except Exception:
-        # This feature is not very important, but any error in
-        # this function can crash program, so it's easier to
-        # ignore it in case if something went wrong
-        pass
 
 
 class TerminalLogger(object):
@@ -172,21 +131,6 @@ class TerminalLogger(object):
         text : str
         """
         self.message('WARN', text, color='red')
-
-    @contextmanager
-    def disable_user_input(self):
-        """
-        Context manager helps ignore user input in
-        terminal for UNIX.
-        """
-        if self.enable:
-            try:
-                terminal_echo(enabled=False)
-                yield
-            finally:
-                terminal_echo(enabled=True)
-        else:
-            yield
 
     def __reduce__(self):
         return (self.__class__, (self.enable,))
