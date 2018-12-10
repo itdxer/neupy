@@ -15,7 +15,8 @@ from tqdm import tqdm
 from imagenet_tools import process
 
 
-BASEPATH = "/Users/itdxer/Downloads/VOCdevkit/VOC2012/"
+CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
+BASEPATH = os.path.join(CURRENT_DIR, "dataset", "VOCdevkit", "VOC2012")
 
 IMAGESETS = os.path.join(BASEPATH, "ImageSets", "Segmentation")
 IMAGES = os.path.join(BASEPATH, "JPEGImages")
