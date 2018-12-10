@@ -314,7 +314,7 @@ class GlobalPooling(BaseLayer):
         - ``avg`` - For average global pooling. The same as
           ``tf.reduce_mean``.
 
-        - ``avg`` - For average global pooling. The same as
+        - ``max`` - For average global pooling. The same as
           ``tf.reduce_max``.
 
         Parameters also excepts custom functions that have
