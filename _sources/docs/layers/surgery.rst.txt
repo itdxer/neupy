@@ -3,12 +3,12 @@
 Surgery
 =======
 
-In many applications it's important to be able to access only part of the network.
+In many applications, it's important to be able to access only part of the network. NeuPy supports a few methods that allow to slice network. These methods can change structure of the network or provide access to specific layers.
 
-Use different input and output layers
--------------------------------------
+Slice networks
+--------------
 
-To be able to use different input and output layers you need to use ``start`` and ``end`` methods. Here is an example.
+In NeuPy, it's possible to slice neural networks in order to get part of the network with different input or output layers.
 
 .. code-block:: python
 
@@ -19,21 +19,33 @@ To be able to use different input and output layers you need to use ``start`` an
     ...     Relu(20, name='relu-2'),
     ...     Relu(30, name='relu-3'),
     ...     Relu(40, name='relu-4'),
-    ...     Relu(50),
+    ...     Relu(50, name='relu-5'),
     ... )
     >>> network
     Input(10) > Relu(20) > Relu(30) > Relu(40) > Relu(50)
-    >>>
+
+The ``end`` method can change network's output layer. For example, we want to get output from the ``relu-4`` layer instead of the ``relu-5``.
+
+.. code-block:: python
+
     >>> network.end('relu-4')
     Input(10) > Relu(20) > Relu(30) > Relu(40)
-    >>>
+
+The same can be done for the input layers with help of the ``start`` method.
+
+.. code-block:: python
+
     >>> network.start('relu-2')
     Relu(20) > Relu(30) > Relu(40) > Relu(50)
-    >>>
+
+These methods can be combined in sequence
+
+.. code-block:: python
+
     >>> network.start('relu-2').end('relu-4')
     Relu(20) > Relu(30) > Relu(40)
 
-In addition, it's possible to point into multiple input and output layers
+Also, it's possible to point into multiple input and output layers
 
 .. code-block:: python
 
@@ -52,7 +64,7 @@ In addition, it's possible to point into multiple input and output layers
     >>> network.end('relu-3', 'relu-4')
     10 -> [... 4 layers ...] -> [(30,), (40,)]
 
-Also, instead of using names we can specify layer instance
+Layer instance can be used as identifiers for the slicing method instead of the names.
 
 .. code-block:: python
 
@@ -73,10 +85,10 @@ Also, instead of using names we can specify layer instance
 
     <br>
 
-Find layer by name in the network
----------------------------------
+Find layers by name
+-------------------
 
-Each name is a unique identifier for the layer inside of the network. Any layer can be accessed using the `layer` method.
+Each name is a unique identifier for the layer inside of the network. Any layer can be accessed using the ``layer`` method.
 
 .. code-block:: python
 
@@ -93,7 +105,12 @@ Each name is a unique identifier for the layer inside of the network. Any layer 
     >>>
     >>> network.layer('relu-1')
     Relu(5)
-    >>>
+
+
+Exception will be triggered in case if layer with specified name wasn't defined in the network.
+
+.. code-block:: python
+
     >>> network.layer('test')
     Traceback (most recent call last):
       ...

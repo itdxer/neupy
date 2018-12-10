@@ -38,6 +38,7 @@ site/source/docs/*
 site/build/*
 
 # Examples
+examples/*
 examples/rbfn/music_speech/data/*
 notebooks/caltech_101_images/*
 examples/cnn/deeplab/dataset/*
