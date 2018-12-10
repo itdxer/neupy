@@ -23,3 +23,32 @@ def show(image, annotation, segmentation):
     plt.imshow(reverse_indeces(segmentation))
 
     plt.show()
+
+
+def get_confusion_matrix(y_val, y_pred):
+    y_valid_label = y_val.max(axis=-1)
+    interested_labels = y_valid_label == 1
+
+    y_expected = y_val.argmax(axis=-1)[interested_labels]
+    y_pred = y_pred.argmax(axis=-1)[interested_labels]
+
+    labels = list(range(21))
+    return confusion_matrix(y_expected, y_pred, labels=labels)
+
+
+def segmentation_metrics(confusion):
+    tp = np.diag(confusion)
+    sum_cols = confusion.sum(axis=1)
+    sum_rows = confusion.sum(axis=0)
+
+    union = (sum_cols + sum_rows - tp)
+    iou = tp / union
+    miou = np.mean(iou[(union > 0) & (sum_cols > 0)])
+    accuracy = tp.sum() / confusion.sum()
+
+    return accuracy, miou
+
+
+def score_segmentation(y_val, y_pred):
+    confusion = get_confusion_matrix(y_val, y_pred)
+    return segmentation_metrics(confusion)
