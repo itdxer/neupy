@@ -21,19 +21,19 @@ Training algorithms
     :header: "Class name", "Name"
 
     :network:`GradientDescent`, Gradient Descent
+    :network:`Momentum`, Momentum
+    :network:`Adam`, Adam
+    :network:`Adamax`, AdaMax
+    :network:`RMSProp`, RMSProp
+    :network:`Adadelta`, Adadelta
+    :network:`Adagrad`, Adagrad
     :network:`ConjugateGradient`, Conjugate Gradient
     :network:`QuasiNewton`, quasi-Newton
     :network:`LevenbergMarquardt`, Levenberg-Marquardt
     :network:`Hessian`, Hessian
     :network:`HessianDiagonal`, Hessian diagonal
-    :network:`Momentum`, Momentum
     :network:`RPROP`, RPROP
     :network:`IRPROPPlus`, iRPROP+
-    :network:`Adadelta`, Adadelta
-    :network:`Adagrad`, Adagrad
-    :network:`RMSProp`, RMSProp
-    :network:`Adam`, Adam
-    :network:`Adamax`, AdaMax
 
 Regularization methods
 ++++++++++++++++++++++
