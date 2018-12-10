@@ -58,8 +58,8 @@ class BasePooling(BaseLayer):
     Parameters
     ----------
     size : tuple with 2 integers
-        Factor by which to downscale (vertical, horizontal).
-        (2, 2) will halve the image in each dimension.
+        Factor by which to downscale ``(vertical, horizontal)``.
+        ``(2, 2)`` will halve the image in each dimension.
 
     stride : tuple or int.
         Stride size, which is the number of shifts over
@@ -67,8 +67,8 @@ class BasePooling(BaseLayer):
         None, it is considered equal to ds (no overlap on
         pooling regions).
 
-    padding : {{`VALID`, `SAME`}}
-        (pad_h, pad_w), pad zeros to extend beyond four borders of
+    padding : {{``valid``, ``same``}}
+        ``(pad_h, pad_w)``, pad zeros to extend beyond four borders of
         the images, pad_h is the size of the top and bottom margins,
         and pad_w is the size of the left and right margins.
 
@@ -307,7 +307,7 @@ class GlobalPooling(BaseLayer):
 
     Parameters
     ----------
-    function : {{'avg', 'max'}} or callable
+    function : {{``avg``, ``max``}} or callable
         Common functions has been predefined for the user.
         These options are available:
 

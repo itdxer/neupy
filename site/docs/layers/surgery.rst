@@ -3,10 +3,10 @@
 Surgery
 =======
 
-In many applications it's important to be able to access only part of the network. NeuPy supports a few methods that allow to slice network. These methods can change structure of the network or provide access to specific layers.
+In many applications, it's important to be able to access only part of the network. NeuPy supports a few methods that allow to slice network. These methods can change structure of the network or provide access to specific layers.
 
-Network slicing
----------------
+Slice networks
+--------------
 
 In NeuPy, it's possible to slice neural networks in order to get part of the network with different input or output layers.
 
@@ -85,8 +85,8 @@ Layer instance can be used as identifiers for the slicing method instead of the 
 
     <br>
 
-Find layer by name in the network
----------------------------------
+Find layers by name
+-------------------
 
 Each name is a unique identifier for the layer inside of the network. Any layer can be accessed using the ``layer`` method.
 
@@ -110,6 +110,7 @@ Each name is a unique identifier for the layer inside of the network. Any layer 
 Exception will be triggered in case if layer with specified name wasn't defined in the network.
 
 .. code-block:: python
+
     >>> network.layer('test')
     Traceback (most recent call last):
       ...
