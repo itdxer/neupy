@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import os
 from collections import namedtuple
 
-from neupy.core.logs import Verbose, TerminalLogger, terminal_echo
+from neupy.core.logs import Verbose, TerminalLogger
 from neupy.core import terminal
 from neupy import algorithms
 
@@ -18,19 +18,6 @@ class LoggingTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             logs = TerminalLogger()
             logs.message("tag", "text", color="unknown-color")
-
-    def test_terminal_echo_simulate_windows_behvaiour(self):
-        default_os_name = os.name
-
-        try:
-            os.name = 'nt'
-            terminal_echo(enabled=True)
-        finally:
-            os.name = default_os_name
-
-        fake_stdin = open('/dev/tty', 'r')
-        terminal_echo(enabled=True, file_descriptor=fake_stdin)
-        terminal_echo(enabled=False, file_descriptor=fake_stdin)
 
     def test_logging_switcher(self):
         class A(Verbose):
