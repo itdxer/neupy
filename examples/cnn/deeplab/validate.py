@@ -6,7 +6,7 @@ from tqdm import tqdm
 from data import (VALIDATION_SET, read_data, make_annotation_one_hot_encoded,
                   scale_images, rgb_to_bgr)
 from model import create_deeplab_model
-from train import get_confusion_matrix, segmentation_metrics
+from utils import get_confusion_matrix, segmentation_metrics
 from resnet50 import download_resnet50_weights
 
 
@@ -19,7 +19,7 @@ if __name__ == '__main__':
     resnet50_weights = download_resnet50_weights()
 
     resnet50, deeplab = create_deeplab_model(
-        resnet50_weights, args.deeplab_weights, shape=(None, None, 3))
+        resnet50_weights, args.deeplab_weights)
 
     deeplab = resnet50 > deeplab
     confusion = np.zeros((21, 21))
