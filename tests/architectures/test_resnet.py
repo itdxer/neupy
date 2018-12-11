@@ -37,3 +37,18 @@ class Resnet50TestCase(BaseTestCase):
         random_input = asfloat(np.random.random((7, 224, 224, 3)))
         prediction = self.eval(resnet50.output(random_input))
         self.assertEqual(prediction.shape, (7, 28, 28, 2048))
+
+    def test_resnet50_dilation_rates(self):
+        resnet50 = architectures.resnet50(
+            include_global_pool=False,
+            in_out_ratio=8,
+        )
+
+        layer = resnet50.layer('res4d_branch2b')
+        self.assertEqual(layer.dilation, (2, 2))
+
+        layer = resnet50.layer('res5a_branch2b')
+        self.assertEqual(layer.dilation, (2, 2))
+
+        layer = resnet50.layer('res5b_branch2b')
+        self.assertEqual(layer.dilation, (4, 4))
