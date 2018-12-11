@@ -14,13 +14,15 @@ from resnet50 import download_resnet50_weights
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--storage-folder', '-s', required=True)
-parser.add_argument('--epochs', '-e', type=int, default=30)
+parser.add_argument('--image-size', '-i', type=int, default=513)
 parser.add_argument('--batch-size', '-b', type=int, default=10)
+parser.add_argument('--epochs', '-e', type=int, default=30)
 
 
 def iter_batches(images, annotations, batch_size=10):
     images, annotations = shuffle(images, annotations)
 
+    # Note: We will exclude last incomplete batch
     for i in range(0, len(images), batch_size):
         # Note: We will exclude last incomplete batch
         yield images[i:i + batch_size], annotations[i:i + batch_size]
@@ -34,10 +36,11 @@ if __name__ == '__main__':
         os.mkdir(storage_folder)
 
     resnet50_weights_filename = download_resnet50_weights()
-    resnet50, deeplab = create_deeplab_model(resnet50_weights_filename)
+    resnet50, deeplab = create_deeplab_model(
+        resnet50_weights_filename, size=args.image_size)
 
-    images, annotations = get_training_data()
-    val_images, val_annotations = get_validation_data()
+    images, annotations = get_training_data(size=args.image_size)
+    val_images, val_annotations = get_validation_data(size=args.image_size)
 
     optimizer = algorithms.Adam(
         deeplab,

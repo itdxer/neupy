@@ -133,12 +133,12 @@ def rgb_to_bgr(images):
     return images
 
 
-def get_data(filepath):
+def get_data(filepath, size=224):
     images = []
     annotations = []
 
     for image, annotation in tqdm(read_data(filepath)):
-        image, annotation = scale_images(image, annotation, size=224)
+        image, annotation = scale_images(image, annotation, size=size)
         annotation = make_annotation_one_hot_encoded(annotation)
 
         images.append(image)
@@ -150,11 +150,11 @@ def get_data(filepath):
     )
 
 
-def get_training_data():
+def get_training_data(size=224):
     print("Loading training data...")
-    return get_data(TRAIN_SET)
+    return get_data(TRAIN_SET, size)
 
 
-def get_validation_data():
+def get_validation_data(size=224):
     print("Loading validation data...")
-    return get_data(VALIDATION_SET)
+    return get_data(VALIDATION_SET, size)

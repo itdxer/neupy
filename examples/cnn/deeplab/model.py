@@ -61,12 +61,12 @@ def patch_layers(network, patches):
                 setattr(layer, key, value)
 
 
-def create_deeplab_model(resnet50_weights=None, deeplab_weights=None, shape=(224, 224, 3)):
+def create_deeplab_model(resnet50_weights=None, deeplab_weights=None, size=None):
     print("Initializing ResNet-50 architecture...")
 
     SamePadConv = partial(Convolution, bias=None, padding='same')
     resnet50 = architectures.resnet50(
-        input_shape=shape,
+        input_shape=(size, size, 3),
         include_global_pool=False,
         in_out_ratio=16,
     )
