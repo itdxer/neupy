@@ -6,7 +6,9 @@ __all__ = ('resnet50',)
 
 
 @function_name_scope
-def ResidualUnit(n_input_filters, stride, has_branch=False, name=None):
+def ResidualUnit(n_input_filters, stride=1, rate=1, has_branch=False,
+                 name=None):
+
     def bn_name(index):
         return 'bn' + name + '_branch' + index
 
@@ -33,6 +35,7 @@ def ResidualUnit(n_input_filters, stride, has_branch=False, name=None):
         layers.Convolution(
             (3, 3, n_input_filters),
             padding='same',
+            dilation=rate,
             bias=None,
             name=conv_name('2b'),
         ),
@@ -151,28 +154,31 @@ def resnet50(input_shape=(224, 224, 3), include_global_pool=True,
     Deep Residual Learning for Image Recognition.
     https://arxiv.org/abs/1512.03385
     """
-    possible_in_out_strides = {
-        4: [1, 1, 1],
-        8: [2, 1, 1],
-        16: [2, 2, 1],
-        32: [2, 2, 2],
+    in_out_configs = {
+        4: {'strides': [1, 1, 1], 'rates': [2, 4, 8]},
+        8: {'strides': [2, 1, 1], 'rates': [1, 2, 4]},
+        16: {'strides': [2, 2, 1], 'rates': [1, 1, 2]},
+        32: {'strides': [2, 2, 2], 'rates': [1, 1, 1]},
     }
 
-    if in_out_ratio not in possible_in_out_strides:
+    if in_out_ratio not in in_out_configs:
         raise ValueError(
             "Expected one of the folowing in_out_ratio values: {}, got "
-            "{} instead.".format(possible_in_out_strides.keys(), in_out_ratio))
+            "{} instead.".format(in_out_configs.keys(), in_out_ratio))
 
-    strides = possible_in_out_strides[in_out_ratio]
+    strides = in_out_configs[in_out_ratio]['strides']
+    rates = in_out_configs[in_out_ratio]['rates']
+
     resnet = layers.join(
         layers.Input(input_shape),
 
         # Convolutional layer reduces image's height and width by a factor
         # of 2 (because of the stride)
         # from (3, 224, 224) to (64, 112, 112)
-        layers.Convolution((7, 7, 64), stride=2, bias=None,
-                           padding='same', name='conv1'),
-
+        layers.Convolution(
+            (7, 7, 64), stride=2, bias=None,
+            padding='same', name='conv1'
+        ),
         layers.BatchNorm(name='bn_conv1'),
         layers.Relu(),
 
@@ -182,28 +188,30 @@ def resnet50(input_shape=(224, 224, 3), include_global_pool=True,
 
         # The branch option applies extra convolution x+ batch
         # normalization transforamtions to the residual
-        ResidualUnit(64, stride=1, name='2a', has_branch=True),
-        ResidualUnit(64, stride=1, name='2b'),
-        ResidualUnit(64, stride=1, name='2c'),
+        ResidualUnit(64, name='2a', has_branch=True),
+        ResidualUnit(64, name='2b'),
+        ResidualUnit(64, name='2c'),
 
         # When stride=2 reduces width and hight by factor of 2
         ResidualUnit(128, stride=strides[0], name='3a', has_branch=True),
-        ResidualUnit(128, stride=1, name='3b'),
-        ResidualUnit(128, stride=1, name='3c'),
-        ResidualUnit(128, stride=1, name='3d'),
+        ResidualUnit(128, rate=rates[0], name='3b'),
+        ResidualUnit(128, rate=rates[0], name='3c'),
+        ResidualUnit(128, rate=rates[0], name='3d'),
 
         # When stride=2 reduces width and hight by factor of 2
-        ResidualUnit(256, stride=strides[1], name='4a', has_branch=True),
-        ResidualUnit(256, stride=1, name='4b'),
-        ResidualUnit(256, stride=1, name='4c'),
-        ResidualUnit(256, stride=1, name='4d'),
-        ResidualUnit(256, stride=1, name='4e'),
-        ResidualUnit(256, stride=1, name='4f'),
+        ResidualUnit(256, rate=rates[0], name='4a',
+                     stride=strides[1], has_branch=True),
+        ResidualUnit(256, rate=rates[1], name='4b'),
+        ResidualUnit(256, rate=rates[1], name='4c'),
+        ResidualUnit(256, rate=rates[1], name='4d'),
+        ResidualUnit(256, rate=rates[1], name='4e'),
+        ResidualUnit(256, rate=rates[1], name='4f'),
 
         # When stride=2 reduces width and hight by factor of 2
-        ResidualUnit(512, stride=strides[2], name='5a', has_branch=True),
-        ResidualUnit(512, stride=1, name='5b'),
-        ResidualUnit(512, stride=1, name='5c'),
+        ResidualUnit(512, rate=rates[1], name='5a',
+                     stride=strides[2], has_branch=True),
+        ResidualUnit(512, rate=rates[2], name='5b'),
+        ResidualUnit(512, rate=rates[2], name='5c'),
     )
 
     if include_global_pool:
