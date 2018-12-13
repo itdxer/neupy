@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -237,24 +236,22 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>n_words</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Number of reber words, defaults to <span class="docutils literal"><span class="pre">100</span></span>.</p>
-</dd>
-</dl>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_words</strong> : int</p>
+<blockquote>
+<div><p>Number of reber words, defaults to <span class="docutils literal"><span class="pre">100</span></span>.</p>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>list</strong></dt>
-<dd><p class="first last">List of Reber words.</p>
-</dd>
-</dl>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list</p>
+<blockquote class="last">
+<div><p>List of Reber words.</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.datasets</span> <span class="k">import</span> <span class="n">make_reber</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.datasets</span> <span class="kn">import</span> <span class="n">make_reber</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">make_reber</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 <span class="go">[&#39;TPTXVS&#39;, &#39;VXXVS&#39;, &#39;TPPTS&#39;, &#39;TTXVPXXVS&#39;]</span>
 </pre></div>
@@ -269,25 +266,23 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>word</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or list of letters</span></dt>
-<dd><p class="first last">The word that you want to test.</p>
-</dd>
-</dl>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>word</strong> : str or list of letters</p>
+<blockquote>
+<div><p>The word that you want to test.</p>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>bool</strong></dt>
-<dd><p class="first last"><span class="docutils literal"><span class="pre">True</span></span> if word valid by Reber grammar and
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">bool</p>
+<blockquote class="last">
+<div><p><span class="docutils literal"><span class="pre">True</span></span> if word valid by Reber grammar and
 <span class="docutils literal"><span class="pre">False</span></span> otherwise.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.datasets</span> <span class="k">import</span> <span class="n">is_valid_by_reber</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.datasets</span> <span class="kn">import</span> <span class="n">is_valid_by_reber</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">is_valid_by_reber</span><span class="p">(</span><span class="s1">&#39;TTS&#39;</span><span class="p">)</span>
 <span class="go">True</span>
@@ -312,32 +307,32 @@ they are build whithout grammar rules.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>n_samples</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Number of samples in dataset.</p>
-</dd>
-<dt><strong>invalid_size</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Proportion of invalid words in dataset, defaults to <span class="docutils literal"><span class="pre">0.5</span></span>.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_samples</strong> : int</p>
+<blockquote>
+<div><p>Number of samples in dataset.</p>
+</div></blockquote>
+<p><strong>invalid_size</strong> : float</p>
+<blockquote>
+<div><p>Proportion of invalid words in dataset, defaults to <span class="docutils literal"><span class="pre">0.5</span></span>.
 Value must be between <span class="docutils literal"><span class="pre">0</span></span> and <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</dd>
-<dt><strong>return_indeces</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If <span class="docutils literal"><span class="pre">True</span></span>, each word will be converted to array where each
+</div></blockquote>
+<p><strong>return_indeces</strong> : bool</p>
+<blockquote>
+<div><p>If <span class="docutils literal"><span class="pre">True</span></span>, each word will be converted to array where each
 letter converted to the index. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>tuple</strong></dt>
-<dd><p class="first last">Return two lists. First contains words and second - labels for them.</p>
-</dd>
-</dl>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">tuple</p>
+<blockquote class="last">
+<div><p>Return two lists. First contains words and second - labels for them.</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.datasets</span> <span class="k">import</span> <span class="n">make_reber_classification</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.datasets</span> <span class="kn">import</span> <span class="n">make_reber_classification</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">make_reber_classification</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">invalid_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>
@@ -348,7 +343,7 @@ letter converted to the index. Defaults to <span class="docutils literal"><span 
 <span class="go">array([0, 1, 0, 1, 1, 1, 0, 0, 0, 1])</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">make_reber_classification</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="mi">4</span><span class="p">,</span> <span class="n">invalid_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">return_indeces</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="mi">4</span><span class="p">,</span> <span class="n">invalid_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">return_indeces</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>
 <span class="go">array([array([1, 3, 1, 4]),</span>
 <span class="go">       array([0, 3, 0, 3, 0, 4, 3, 0, 4, 4]),</span>

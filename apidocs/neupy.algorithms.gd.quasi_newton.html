@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -233,7 +232,7 @@
 <dt id="neupy.algorithms.gd.quasi_newton.QuasiNewton">
 <em class="property">class </em><span class="descclassname">neupy.algorithms.gd.quasi_newton.</span><span class="descname">QuasiNewton</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Quasi-Newton algorithm. Every iteration quasi-Network method approximates
-inverse Hessian matrix with iterative updates. It doesn’t have <span class="docutils literal"><span class="pre">step</span></span>
+inverse Hessian matrix with iterative updates. It doesn&#8217;t have <span class="docutils literal"><span class="pre">step</span></span>
 parameter. Instead, algorithm applies line search for the step parameter
 that satisfies strong Wolfe condition. Parameters that control wolfe
 search start with the <span class="docutils literal"><span class="pre">wolfe_</span></span> prefix.</p>
@@ -241,63 +240,70 @@ search start with the <span class="docutils literal"><span class="pre">wolfe_</s
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>update_function</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><span class="docutils literal"><span class="pre">bfgs</span></span>, <span class="docutils literal"><span class="pre">dfp</span></span>, <span class="docutils literal"><span class="pre">sr1</span></span></span></dt>
-<dd><p class="first">Update function for the iterative inverse hessian matrix
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>update_function</strong> : <span class="docutils literal"><span class="pre">bfgs</span></span>, <span class="docutils literal"><span class="pre">dfp</span></span>, <span class="docutils literal"><span class="pre">sr1</span></span></p>
+<blockquote>
+<div><p>Update function for the iterative inverse hessian matrix
 approximation. Defaults to <span class="docutils literal"><span class="pre">bfgs</span></span>.</p>
-<ul class="last simple">
-<li><span class="docutils literal"><span class="pre">bfgs</span></span> -  It’s rank 2 formula update. It can suffer from
+<ul class="simple">
+<li><span class="docutils literal"><span class="pre">bfgs</span></span> -  It&#8217;s rank 2 formula update. It can suffer from
 round-off error and inaccurate line searches.</li>
-<li><span class="docutils literal"><span class="pre">dfp</span></span> - DFP is a method very similar to BFGS. It’s rank 2 formula
+<li><span class="docutils literal"><span class="pre">dfp</span></span> - DFP is a method very similar to BFGS. It&#8217;s rank 2 formula
 update. It can suffer from round-off error and inaccurate line
 searches.</li>
 <li><span class="docutils literal"><span class="pre">sr1</span></span> - Symmetric rank 1 (SR1). Generates update for the
-inverse hessian matrix adding symmetric rank-1 matrix. It’s
+inverse hessian matrix adding symmetric rank-1 matrix. It&#8217;s
 possible that there is no rank 1 updates for the matrix and in
-this case update won’t be applied and original inverse hessian
+this case update won&#8217;t be applied and original inverse hessian
 will be returned.</li>
 </ul>
-</dd>
-<dt><strong>h0_scale</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Default Hessian matrix is an identity matrix. The
+</div></blockquote>
+<p><strong>h0_scale</strong> : float</p>
+<blockquote>
+<div><p>Default Hessian matrix is an identity matrix. The
 <span class="docutils literal"><span class="pre">h0_scale</span></span> parameter scales identity matrix.
 Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</dd>
-<dt><strong>epsilon</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Controls numerical stability for the <span class="docutils literal"><span class="pre">update_function</span></span> parameter.
+</div></blockquote>
+<p><strong>epsilon</strong> : float</p>
+<blockquote>
+<div><p>Controls numerical stability for the <span class="docutils literal"><span class="pre">update_function</span></span> parameter.
 Defaults to <span class="docutils literal"><span class="pre">1e-7</span></span>.</p>
-</dd>
-<dt><strong>wolfe_maxiter</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Controls maximun number of iteration during the line search that
+</div></blockquote>
+<p><strong>wolfe_maxiter</strong> : int</p>
+<blockquote>
+<div><p>Controls maximun number of iteration during the line search that
 identifies optimal step size during the weight update stage.
 Defaults to <span class="docutils literal"><span class="pre">20</span></span>.</p>
-</dd>
-<dt><strong>wolfe_c1</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Parameter for Armijo condition rule. It’s used during the line search
+</div></blockquote>
+<p><strong>wolfe_c1</strong> : float</p>
+<blockquote>
+<div><p>Parameter for Armijo condition rule. It&#8217;s used during the line search
 that identifies optimal step size during the weight update stage.
 Defaults <span class="docutils literal"><span class="pre">1e-4</span></span>.</p>
-</dd>
-<dt><strong>wolfe_c2</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Parameter for curvature condition rule. It’s used during the line
+</div></blockquote>
+<p><strong>wolfe_c2</strong> : float</p>
+<blockquote>
+<div><p>Parameter for curvature condition rule. It&#8217;s used during the line
 search that identifies optimal step size during the weight update
 stage. Defaults <span class="docutils literal"><span class="pre">0.9</span></span>.</p>
-</dd>
-<dt><strong>connection</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list, tuple or LayerConnection instance</span></dt>
-<dd><p class="first">Network’s architecture. There are a few ways
+</div></blockquote>
+<p><strong>connection</strong> : list, tuple or LayerConnection instance</p>
+<blockquote>
+<div><p>Network&#8217;s architecture. There are a few ways
 to define it.</p>
-<ul class="last simple">
+<ul class="simple">
 <li>List of layers.
 For instance, <span class="docutils literal"><span class="pre">[Input(2),</span> <span class="pre">Tanh(4),</span> <span class="pre">Relu(1)]</span></span>.</li>
 <li>Construct layer connections.
 For instance, <span class="docutils literal"><span class="pre">Input(2)</span> <span class="pre">&gt;</span> <span class="pre">Tanh(4)</span> <span class="pre">&gt;</span> <span class="pre">Relu(1)</span></span>.</li>
 <li>Tuple of integers. Each integer defines Sigmoid layer
-and it’s input size.  For instance,  value <span class="docutils literal"><span class="pre">(2,</span> <span class="pre">4,</span> <span class="pre">1)</span></span>
+and it&#8217;s input size.  For instance,  value <span class="docutils literal"><span class="pre">(2,</span> <span class="pre">4,</span> <span class="pre">1)</span></span>
 means that network has 3 layers with 2 input units,
 4 hidden units and 1 output unit.</li>
 </ul>
-</dd>
-<dt><strong>error</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or function</span></dt>
-<dd><p class="first">Error/loss function. Defaults to <span class="docutils literal"><span class="pre">mse</span></span>.</p>
+</div></blockquote>
+<p><strong>error</strong> : str or function</p>
+<blockquote>
+<div><p>Error/loss function. Defaults to <span class="docutils literal"><span class="pre">mse</span></span>.</p>
 <ul class="simple">
 <li><span class="docutils literal"><span class="pre">mae</span></span> - Mean Absolute Error.</li>
 <li><span class="docutils literal"><span class="pre">mse</span></span> - Mean Squared Error.</li>
@@ -312,13 +318,14 @@ means that network has 3 layers with 2 input units,
 The first one is expected value and the second one is
 predicted value. Example:</li>
 </ul>
-<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">custom_func</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">predicted</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">custom_func</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">predicted</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">expected</span> <span class="o">-</span> <span class="n">predicted</span>
 </pre></div>
 </div>
-</dd>
-<dt><strong>show_epoch</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int or str</span></dt>
-<dd><p class="first">This property controls how often the network will
+</div></blockquote>
+<p><strong>show_epoch</strong> : int or str</p>
+<blockquote>
+<div><p>This property controls how often the network will
 display information about training. There are two
 main syntaxes for this property.</p>
 <ul class="simple">
@@ -326,37 +333,41 @@ main syntaxes for this property.</p>
 defines how offen would you like to see summary
 output in terminal. For instance, number <cite>100</cite> mean
 that network shows summary at 100th, 200th,
-300th … epochs.</li>
+300th ... epochs.</li>
 <li>String defines number of times you want to see output in
 terminal. For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that
 the network will show output twice with approximately
 equal period of epochs and one additional output would
 be after the finall epoch.</li>
 </ul>
-<p class="last">Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</dd>
-<dt><strong>shuffle_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If it’s <span class="docutils literal"><span class="pre">True</span></span> class shuffles all your training data before
+<p>Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</div></blockquote>
+<p><strong>shuffle_data</strong> : bool</p>
+<blockquote>
+<div><p>If it&#8217;s <span class="docutils literal"><span class="pre">True</span></span> class shuffles all your training data before
 training your network, defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</dd>
-<dt><strong>epoch_end_signal</strong> <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
-<dd><p class="first last">Calls this function when train epoch finishes.</p>
-</dd>
-<dt><strong>train_end_signal</strong> <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
-<dd><p class="first last">Calls this function when train process finishes.</p>
-</dd>
-<dt><strong>verbose</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
+</div></blockquote>
+<p><strong>epoch_end_signal</strong> : function</p>
+<blockquote>
+<div><p>Calls this function when train epoch finishes.</p>
+</div></blockquote>
+<p><strong>train_end_signal</strong> : function</p>
+<blockquote>
+<div><p>Calls this function when train process finishes.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool</p>
+<blockquote>
+<div><p>Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
 informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> -
 disable it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</dd>
-<dt><strong>addons</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list or None</span></dt>
-<dd><p class="first last">The list of addon algortihms. <span class="docutils literal"><span class="pre">None</span></span> by default.
+</div></blockquote>
+<p><strong>addons</strong> : list or None</p>
+<blockquote class="last">
+<div><p>The list of addon algortihms. <span class="docutils literal"><span class="pre">None</span></span> by default.
 If this option is not empty it will generate new class which
 will inherit all from this list. Support two types of
 addon algorithms: weight update and step update.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -364,7 +375,7 @@ addon algorithms: weight update and step update.</p>
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li>Method requires all training data during propagation, which means
-it’s not allowed to use mini-batches.</li>
+it&#8217;s not allowed to use mini-batches.</li>
 </ul>
 <p class="rubric">References</p>
 <dl class="docutils">
@@ -375,8 +386,8 @@ it’s not allowed to use mini-batches.</li>
 <dd>Chapter 6, Quasi-Newton Methods, p. 135-163</dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
@@ -388,29 +399,24 @@ it’s not allowed to use mini-batches.</li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">qnnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="92%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>errors</strong> <span class="classifier-delimiter">:</span> <span class="classifier">ErrorHistoryList</span></dt>
-<dd><p class="first last">Contains list of training errors. This object has the same
-properties as list and in addition there are three additional
-useful methods: <cite>last</cite>, <cite>previous</cite> and <cite>normalized</cite>.</p>
-</dd>
-<dt><strong>train_errors</strong> <span class="classifier-delimiter">:</span> <span class="classifier">ErrorHistoryList</span></dt>
-<dd><p class="first last">Alias to the <span class="docutils literal"><span class="pre">errors</span></span> attribute.</p>
-</dd>
-<dt><strong>validation_errors</strong> <span class="classifier-delimiter">:</span> <span class="classifier">ErrorHistoryList</span></dt>
-<dd><p class="first last">The same as <cite>errors</cite> attribute, but it contains only validation
-errors.</p>
-</dd>
-<dt><strong>last_epoch</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Value equals to the last trained epoch. After initialization
-it is equal to <span class="docutils literal"><span class="pre">0</span></span>.</p>
-</dd>
-</dl>
-</td>
+<tr class="row-odd"><td>errors</td>
+<td>(ErrorHistoryList) Contains list of training errors. This object has the same properties as list and in addition there are three additional useful methods: <cite>last</cite>, <cite>previous</cite> and <cite>normalized</cite>.</td>
+</tr>
+<tr class="row-even"><td>train_errors</td>
+<td>(ErrorHistoryList) Alias to the <span class="docutils literal"><span class="pre">errors</span></span> attribute.</td>
+</tr>
+<tr class="row-odd"><td>validation_errors</td>
+<td>(ErrorHistoryList) The same as <cite>errors</cite> attribute, but it contains only validation errors.</td>
+</tr>
+<tr class="row-even"><td>last_epoch</td>
+<td>(int) Value equals to the last trained epoch. After initialization it is equal to <span class="docutils literal"><span class="pre">0</span></span>.</td>
 </tr>
 </tbody>
 </table>
@@ -421,13 +427,13 @@ it is equal to <span class="docutils literal"><span class="pre">0</span></span>.
 <col width="71%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>predict(input_data)</strong></td>
+<tr class="row-odd"><td>predict(input_data)</td>
 <td>Predicts output for the specified input.</td>
 </tr>
-<tr class="row-even"><td><strong>train(input_train, target_train, input_test=None, target_test=None,    epochs=100, epsilon=None)</strong></td>
-<td>Train network. You can control network’s training procedure with <span class="docutils literal"><span class="pre">epochs</span></span> and <span class="docutils literal"><span class="pre">epsilon</span></span> parameters. The <span class="docutils literal"><span class="pre">input_test</span></span> and <span class="docutils literal"><span class="pre">target_test</span></span> should be presented both in case of you need to validate network’s training after each iteration.</td>
+<tr class="row-even"><td>train(input_train, target_train, input_test=None, target_test=None,    epochs=100, epsilon=None)</td>
+<td>Train network. You can control network&#8217;s training procedure with <span class="docutils literal"><span class="pre">epochs</span></span> and <span class="docutils literal"><span class="pre">epsilon</span></span> parameters. The <span class="docutils literal"><span class="pre">input_test</span></span> and <span class="docutils literal"><span class="pre">target_test</span></span> should be presented both in case of you need to validate network&#8217;s training after each iteration.</td>
 </tr>
-<tr class="row-odd"><td><strong>fit(*args, **kwargs)</strong></td>
+<tr class="row-odd"><td>fit(*args, **kwargs)</td>
 <td>Alias to the <span class="docutils literal"><span class="pre">train</span></span> method.</td>
 </tr>
 </tbody>
@@ -457,7 +463,7 @@ each training epoch.</p>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.gd.quasi_newton.QuasiNewton.options">
-<span class="descname">options</span><em class="property"> = {‘shuffle_data’: Option(class_name=’BaseNetwork’, value=Property(name=”shuffle_data”)), ‘verbose’: Option(class_name=’Verbose’, value=VerboseProperty(name=”verbose”)), ‘addons’: Option(class_name=’BaseGradientDescent’, value=Property(name=”addons”)), ‘epsilon’: Option(class_name=’QuasiNewton’, value=NumberProperty(name=”epsilon”)), ‘wolfe_c1’: Option(class_name=’WolfeLineSearchForStep’, value=NumberProperty(name=”wolfe_c1”)), ‘epoch_end_signal’: Option(class_name=’BaseNetwork’, value=Property(name=”epoch_end_signal”)), ‘show_epoch’: Option(class_name=’BaseNetwork’, value=ShowEpochProperty(name=”show_epoch”)), ‘wolfe_c2’: Option(class_name=’WolfeLineSearchForStep’, value=NumberProperty(name=”wolfe_c2”)), ‘update_function’: Option(class_name=’QuasiNewton’, value=ChoiceProperty(name=”update_function”)), ‘wolfe_maxiter’: Option(class_name=’WolfeLineSearchForStep’, value=IntProperty(name=”wolfe_maxiter”)), ‘error’: Option(class_name=’ConstructibleNetwork’, value=FunctionWithOptionsProperty(name=”error”)), ‘h0_scale’: Option(class_name=’QuasiNewton’, value=NumberProperty(name=”h0_scale”)), ‘train_end_signal’: Option(class_name=’BaseNetwork’, value=Property(name=”train_end_signal”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'error': Option(class_name='ConstructibleNetwork', value=FunctionWithOptionsProperty(name=&quot;error&quot;)), 'addons': Option(class_name='BaseGradientDescent', value=Property(name=&quot;addons&quot;)), 'wolfe_maxiter': Option(class_name='WolfeLineSearchForStep', value=IntProperty(name=&quot;wolfe_maxiter&quot;)), 'wolfe_c1': Option(class_name='WolfeLineSearchForStep', value=NumberProperty(name=&quot;wolfe_c1&quot;)), 'wolfe_c2': Option(class_name='WolfeLineSearchForStep', value=NumberProperty(name=&quot;wolfe_c2&quot;)), 'update_function': Option(class_name='QuasiNewton', value=ChoiceProperty(name=&quot;update_function&quot;)), 'epsilon': Option(class_name='QuasiNewton', value=NumberProperty(name=&quot;epsilon&quot;)), 'h0_scale': Option(class_name='QuasiNewton', value=NumberProperty(name=&quot;h0_scale&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/quasi_newton.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

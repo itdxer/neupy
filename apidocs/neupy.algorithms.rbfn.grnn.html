@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -238,21 +237,21 @@ only to the regression problems.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>std</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Standard deviation for PDF function, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>std</strong> : float</p>
+<blockquote>
+<div><p>Standard deviation for PDF function, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.
 If your input features have high values than standard
 deviation should also be high. For instance, if input features
 from range <span class="docutils literal"><span class="pre">[0,</span> <span class="pre">20]</span></span> that standard deviation should be
 also a big value like <span class="docutils literal"><span class="pre">10</span></span> or <span class="docutils literal"><span class="pre">15</span></span>. Small values will
 lead to bad prediction.</p>
-</dd>
-<dt><strong>verbose</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
+</div></blockquote>
+<p><strong>verbose</strong> : bool</p>
+<blockquote class="last">
+<div><p>Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
 informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> -
 disable it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -266,15 +265,15 @@ input values are normalized and have similar scales.</li>
 input features. Check <span class="docutils literal"><span class="pre">std</span></span> parameter description for
 more information.</li>
 <li>The bigger training dataset the slower prediction.
-It’s much more efficient for small datasets.</li>
-<li>Network uses lazy learning which mean that network doesn’t
+It&#8217;s much more efficient for small datasets.</li>
+<li>Network uses lazy learning which mean that network doesn&#8217;t
 need iterative training. It just stores parameters
 and use them to make a predictions.</li>
 </ul>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">estimators</span><span class="p">,</span> <span class="n">environment</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">estimators</span><span class="p">,</span> <span class="n">environment</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -285,7 +284,7 @@ and use them to make a predictions.</li>
 <span class="gp">... </span>    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">nw</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GRNN</span><span class="p">(</span><span class="n">std</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nw</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GRNN</span><span class="p">(</span><span class="n">std</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nw</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y_predicted</span> <span class="o">=</span> <span class="n">nw</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
@@ -296,24 +295,24 @@ and use them to make a predictions.</li>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="23%" />
-<col width="77%" />
+<col width="21%" />
+<col width="79%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>train(input_train, target_train, copy=True)</strong></td>
+<tr class="row-odd"><td>train(input_train, target_train, copy=True)</td>
 <td>Network just stores all the information about the data and use it for the prediction. Parameter <span class="docutils literal"><span class="pre">copy</span></span> copies input data before saving it inside the network.</td>
 </tr>
-<tr class="row-even"><td><strong>predict(input_data)</strong></td>
+<tr class="row-even"><td>predict(input_data)</td>
 <td>Predicts output for the specified input.</td>
 </tr>
-<tr class="row-odd"><td><strong>fit(*args, **kwargs)</strong></td>
+<tr class="row-odd"><td>fit(*args, **kwargs)</td>
 <td>Alias to the <span class="docutils literal"><span class="pre">train</span></span> method.</td>
 </tr>
 </tbody>
 </table>
 <dl class="attribute">
 <dt id="neupy.algorithms.rbfn.grnn.GRNN.options">
-<span class="descname">options</span><em class="property"> = {‘epoch_end_signal’: Option(class_name=’BaseNetwork’, value=Property(name=”epoch_end_signal”)), ‘show_epoch’: Option(class_name=’BaseNetwork’, value=ShowEpochProperty(name=”show_epoch”)), ‘step’: Option(class_name=’BaseNetwork’, value=NumberProperty(name=”step”)), ‘shuffle_data’: Option(class_name=’BaseNetwork’, value=Property(name=”shuffle_data”)), ‘verbose’: Option(class_name=’Verbose’, value=VerboseProperty(name=”verbose”)), ‘std’: Option(class_name=’GRNN’, value=BoundedProperty(name=”std”)), ‘train_end_signal’: Option(class_name=’BaseNetwork’, value=Property(name=”train_end_signal”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'std': Option(class_name='GRNN', value=BoundedProperty(name=&quot;std&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -324,23 +323,16 @@ and use them to make a predictions.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>input_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like (n_samples, n_features)</span></dt>
-<dd></dd>
-</dl>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_data</strong> : array-like (n_samples, n_features)</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>array-like (n_samples,)</strong></dt>
-<dd></dd>
-</dl>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">array-like (n_samples,)</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>ValueError</strong></dt>
-<dd><p class="first last">In case if something is wrong with input data.</p>
-</dd>
-</dl>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>In case if something is wrong with input data.</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -355,31 +347,29 @@ and use them to make a predictions.</li>
 <dl class="method">
 <dt id="neupy.algorithms.rbfn.grnn.GRNN.train">
 <span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em>, <em>copy=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/rbfn/grnn.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Trains network. PNN doesn’t actually train, it just stores
+<dd><p>Trains network. PNN doesn&#8217;t actually train, it just stores
 input data and use it for prediction.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>input_train</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like (n_samples, n_features)</span></dt>
-<dd></dd>
-<dt><strong>target_train</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like (n_samples,)</span></dt>
-<dd><p class="first last">Target variable should be vector or matrix
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_train</strong> : array-like (n_samples, n_features)</p>
+<p><strong>target_train</strong> : array-like (n_samples,)</p>
+<blockquote>
+<div><p>Target variable should be vector or matrix
 with one feature column.</p>
-</dd>
-<dt><strong>copy</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If value equal to <span class="docutils literal"><span class="pre">True</span></span> than input matrices will
+</div></blockquote>
+<p><strong>copy</strong> : bool</p>
+<blockquote>
+<div><p>If value equal to <span class="docutils literal"><span class="pre">True</span></span> than input matrices will
 be copied. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>ValueError</strong></dt>
-<dd><p class="first last">In case if something is wrong with input data.</p>
-</dd>
-</dl>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>In case if something is wrong with input data.</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>

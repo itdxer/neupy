@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Parameter Initialization Methods" href="init-methods.html" /><link rel="prev" title="Basics" href="basics.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Parameter Initialization Methods" href="init-methods.html" /><link rel="prev" title="Basics" href="basics.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -245,7 +244,7 @@
 </div>
 <div class="section" id="element-wise-transformation">
 <h2><a class="toc-backref" href="#id2">Element-wise transformation</a></h2>
-<p>The simplest type of layers is the one that doesn’t modify a shape of the input value. In order to construct this layer we need to inherit from the <span class="docutils literal"><span class="pre">BaseLayer</span></span> class and define the <span class="docutils literal"><span class="pre">output</span></span> method.</p>
+<p>The simplest type of layers is the one that doesn&#8217;t modify a shape of the input value. In order to construct this layer we need to inherit from the <span class="docutils literal"><span class="pre">BaseLayer</span></span> class and define the <span class="docutils literal"><span class="pre">output</span></span> method.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 
 <span class="k">class</span> <span class="nc">Double</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">):</span>
@@ -260,7 +259,7 @@
 </div>
 <div class="section" id="layers-with-activation-function">
 <h2><a class="toc-backref" href="#id3">Layers with activation function</a></h2>
-<p>Layers with activation function is a special type of layers. It can behave in two different ways depending on the initialization. If output size is specified it applies linear transformation and then applies activation function. If output size wasn’t specified than layer passes input directly through the activation function.</p>
+<p>Layers with activation function is a special type of layers. It can behave in two different ways depending on the initialization. If output size is specified it applies linear transformation and then applies activation function. If output size wasn&#8217;t specified than layer passes input directly through the activation function.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">()</span>  <span class="c1"># relu(x)</span>
 <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># relu(W * x + b)</span>
 </pre></div>
@@ -294,7 +293,7 @@
         <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">input_value</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Notice from the example that we can access the <span class="docutils literal"><span class="pre">input_shape</span></span> property. This property derived from the layer that has been attached to this layer. It’s not always available since NeuPy allows arbitrary order of the layers during the definition this information might not be available and it might be useful to add extra check that ensures that information about input shape is available and return <span class="docutils literal"><span class="pre">None</span></span> otherwise.</p>
+<p>Notice from the example that we can access the <span class="docutils literal"><span class="pre">input_shape</span></span> property. This property derived from the layer that has been attached to this layer. It&#8217;s not always available since NeuPy allows arbitrary order of the layers during the definition this information might not be available and it might be useful to add extra check that ensures that information about input shape is available and return <span class="docutils literal"><span class="pre">None</span></span> otherwise.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Mean</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">):</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -309,7 +308,7 @@
 </div>
 <div class="section" id="layer-that-accepts-multiple-inputs">
 <h2><a class="toc-backref" href="#id5">Layer that accepts multiple inputs</a></h2>
-<p>Layers like <a class="reference internal" href="../../apidocs/neupy.layers.merge.html#neupy.layers.merge.Concatenate" title="neupy.layers.merge.Concatenate"><span class="xref py py-class docutils literal"><span class="pre">Concatenate</span></span></a> accept multiple inputs and combine them into single tensor. To be able to modify multiple inputs we need to make a small modification in the <span class="docutils literal"><span class="pre">output</span></span> method. We can create layer that concatenate it’s inputs over last dimension.</p>
+<p>Layers like <a class="reference internal" href="../../apidocs/neupy.layers.merge.html#neupy.layers.merge.Concatenate" title="neupy.layers.merge.Concatenate"><span class="xref py py-class docutils literal"><span class="pre">Concatenate</span></span></a> accept multiple inputs and combine them into single tensor. To be able to modify multiple inputs we need to make a small modification in the <span class="docutils literal"><span class="pre">output</span></span> method. We can create layer that concatenate it&#8217;s inputs over last dimension.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
 <span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>

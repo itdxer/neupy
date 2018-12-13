@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -237,29 +236,34 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>size</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Number of hidden units in the layer.</p>
-</dd>
-<dt><strong>input_weights</strong> <span class="classifier-delimiter">:</span> <span class="classifier">Initializer, ndarray</span></dt>
-<dd><p class="first last">Weight parameters for input connection.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : int</p>
+<blockquote>
+<div><p>Number of hidden units in the layer.</p>
+</div></blockquote>
+<p><strong>input_weights</strong> : Initializer, ndarray</p>
+<blockquote>
+<div><p>Weight parameters for input connection.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-class docutils literal"><span class="pre">HeNormal()</span></span></a>.</p>
-</dd>
-<dt><strong>hidden_weights</strong> <span class="classifier-delimiter">:</span> <span class="classifier">Initializer, ndarray</span></dt>
-<dd><p class="first last">Weight parameters for hidden connection.
+</div></blockquote>
+<p><strong>hidden_weights</strong> : Initializer, ndarray</p>
+<blockquote>
+<div><p>Weight parameters for hidden connection.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-class docutils literal"><span class="pre">HeNormal()</span></span></a>.</p>
-</dd>
-<dt><strong>cell_weights</strong> <span class="classifier-delimiter">:</span> <span class="classifier">Initializer, ndarray</span></dt>
-<dd><p class="first last">Weight parameters for cell connection. Require only when
+</div></blockquote>
+<p><strong>cell_weights</strong> : Initializer, ndarray</p>
+<blockquote>
+<div><p>Weight parameters for cell connection. Require only when
 <span class="docutils literal"><span class="pre">peepholes=True</span></span> otherwise it will be ignored.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-class docutils literal"><span class="pre">HeNormal()</span></span></a>.</p>
-</dd>
-<dt><strong>bias</strong> <span class="classifier-delimiter">:</span> <span class="classifier">Initializer, ndarray</span></dt>
-<dd><p class="first last">Bias parameters for all gates.
+</div></blockquote>
+<p><strong>bias</strong> : Initializer, ndarray</p>
+<blockquote>
+<div><p>Bias parameters for all gates.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.</p>
-</dd>
-<dt><strong>activation_functions</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict, callable</span></dt>
-<dd><p class="first">Activation functions for different gates. Defaults to:</p>
+</div></blockquote>
+<p><strong>activation_functions</strong> : dict, callable</p>
+<blockquote>
+<div><p>Activation functions for different gates. Defaults to:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># import tensorflow as tf</span>
 <span class="nb">dict</span><span class="p">(</span>
     <span class="n">ingate</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">,</span>
@@ -270,60 +274,68 @@ Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Const
 </pre></div>
 </div>
 <p>If application requires modification to only one parameter
-then it’s better to specify the one that you need to modify
+then it&#8217;s better to specify the one that you need to modify
 and ignore other parameters</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">ingate</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">tanh</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="last">Other parameters like <span class="docutils literal"><span class="pre">forgetgate</span></span> or <span class="docutils literal"><span class="pre">outgate</span></span> will be
+<p>Other parameters like <span class="docutils literal"><span class="pre">forgetgate</span></span> or <span class="docutils literal"><span class="pre">outgate</span></span> will be
 equal to their default values.</p>
-</dd>
-<dt><strong>learn_init</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If <span class="docutils literal"><span class="pre">True</span></span>, make <span class="docutils literal"><span class="pre">cell_init</span></span> and <span class="docutils literal"><span class="pre">hidden_init</span></span> trainable
+</div></blockquote>
+<p><strong>learn_init</strong> : bool</p>
+<blockquote>
+<div><p>If <span class="docutils literal"><span class="pre">True</span></span>, make <span class="docutils literal"><span class="pre">cell_init</span></span> and <span class="docutils literal"><span class="pre">hidden_init</span></span> trainable
 variables. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</dd>
-<dt><strong>cell_init</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
-<dd><p class="first last">Initializer for initial cell state (<span class="math">\(c_0\)</span>).
+</div></blockquote>
+<p><strong>cell_init</strong> : array-like, Tensorfow variable, scalar or Initializer</p>
+<blockquote>
+<div><p>Initializer for initial cell state (<span class="math">\(c_0\)</span>).
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.</p>
-</dd>
-<dt><strong>hidden_init</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
-<dd><p class="first last">Initializer for initial hidden state (<span class="math">\(h_0\)</span>).
+</div></blockquote>
+<p><strong>hidden_init</strong> : array-like, Tensorfow variable, scalar or Initializer</p>
+<blockquote>
+<div><p>Initializer for initial hidden state (<span class="math">\(h_0\)</span>).
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.</p>
-</dd>
-<dt><strong>backwards</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If <span class="docutils literal"><span class="pre">True</span></span>, process the sequence backwards and then reverse the
+</div></blockquote>
+<p><strong>backwards</strong> : bool</p>
+<blockquote>
+<div><p>If <span class="docutils literal"><span class="pre">True</span></span>, process the sequence backwards and then reverse the
 output again such that the output from the layer is always
 from <span class="math">\(x_1\)</span> to <span class="math">\(x_n\)</span>. Defaults to <span class="docutils literal"><span class="pre">False</span></span></p>
-</dd>
-<dt><strong>only_return_final</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If <span class="docutils literal"><span class="pre">True</span></span>, only return the final sequential output
+</div></blockquote>
+<p><strong>only_return_final</strong> : bool</p>
+<blockquote>
+<div><p>If <span class="docutils literal"><span class="pre">True</span></span>, only return the final sequential output
 (e.g. for tasks where a single target value for the entire
 sequence is desired). In this case, Tensorfow makes an
 optimization which saves memory. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</dd>
-<dt><strong>peepholes</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If <span class="docutils literal"><span class="pre">True</span></span>, the LSTM uses peephole connections.
+</div></blockquote>
+<p><strong>peepholes</strong> : bool</p>
+<blockquote>
+<div><p>If <span class="docutils literal"><span class="pre">True</span></span>, the LSTM uses peephole connections.
 When <span class="docutils literal"><span class="pre">False</span></span>, cell parameters  are ignored.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</dd>
-<dt><strong>unroll_scan</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If <span class="docutils literal"><span class="pre">True</span></span> the recursion is unrolled instead of using scan.
+</div></blockquote>
+<p><strong>unroll_scan</strong> : bool</p>
+<blockquote>
+<div><p>If <span class="docutils literal"><span class="pre">True</span></span> the recursion is unrolled instead of using scan.
 For some graphs this gives a significant speed up but it
 might also consume more memory. When <span class="docutils literal"><span class="pre">unroll_scan=True</span></span>,
 backpropagation always includes the full sequence, so
 <span class="docutils literal"><span class="pre">n_gradient_steps</span></span> must be set to <span class="docutils literal"><span class="pre">-1</span></span> and the input
 sequence length must be known at compile time (i.e.,
 cannot be given as <span class="docutils literal"><span class="pre">None</span></span>). Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</dd>
-<dt><strong>gradient_clipping</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float or int</span></dt>
-<dd><p class="first last">If nonzero, the gradient messages are clipped to the
+</div></blockquote>
+<p><strong>gradient_clipping</strong> : float or int</p>
+<blockquote>
+<div><p>If nonzero, the gradient messages are clipped to the
 given value during the backward pass. Defaults to <span class="docutils literal"><span class="pre">0</span></span>.</p>
-</dd>
-<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
+<blockquote class="last">
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
 will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -407,7 +419,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.recurrent.LSTM.options">
-<span class="descname">options</span><em class="property"> = {‘input_weights’: Option(class_name=’LSTM’, value=ParameterProperty(name=”input_weights”)), ‘size’: Option(class_name=’BaseRNNLayer’, value=IntProperty(name=”size”)), ‘hidden_weights’: Option(class_name=’LSTM’, value=ParameterProperty(name=”hidden_weights”)), ‘backwards’: Option(class_name=’LSTM’, value=Property(name=”backwards”)), ‘only_return_final’: Option(class_name=’BaseRNNLayer’, value=Property(name=”only_return_final”)), ‘biases’: Option(class_name=’LSTM’, value=ParameterProperty(name=”biases”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘cell_init’: Option(class_name=’LSTM’, value=ParameterProperty(name=”cell_init”)), ‘peepholes’: Option(class_name=’LSTM’, value=Property(name=”peepholes”)), ‘unroll_scan’: Option(class_name=’LSTM’, value=Property(name=”unroll_scan”)), ‘gradient_clipping’: Option(class_name=’LSTM’, value=NumberProperty(name=”gradient_clipping”)), ‘activation_functions’: Option(class_name=’LSTM’, value=MultiCallableProperty(name=”activation_functions”)), ‘cell_weights’: Option(class_name=’LSTM’, value=ParameterProperty(name=”cell_weights”)), ‘learn_init’: Option(class_name=’LSTM’, value=Property(name=”learn_init”)), ‘hidden_init’: Option(class_name=’LSTM’, value=ParameterProperty(name=”hidden_init”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='BaseRNNLayer', value=IntProperty(name=&quot;size&quot;)), 'only_return_final': Option(class_name='BaseRNNLayer', value=Property(name=&quot;only_return_final&quot;)), 'input_weights': Option(class_name='LSTM', value=ParameterProperty(name=&quot;input_weights&quot;)), 'hidden_weights': Option(class_name='LSTM', value=ParameterProperty(name=&quot;hidden_weights&quot;)), 'cell_weights': Option(class_name='LSTM', value=ParameterProperty(name=&quot;cell_weights&quot;)), 'biases': Option(class_name='LSTM', value=ParameterProperty(name=&quot;biases&quot;)), 'activation_functions': Option(class_name='LSTM', value=MultiCallableProperty(name=&quot;activation_functions&quot;)), 'learn_init': Option(class_name='LSTM', value=Property(name=&quot;learn_init&quot;)), 'cell_init': Option(class_name='LSTM', value=ParameterProperty(name=&quot;cell_init&quot;)), 'hidden_init': Option(class_name='LSTM', value=ParameterProperty(name=&quot;hidden_init&quot;)), 'unroll_scan': Option(class_name='LSTM', value=Property(name=&quot;unroll_scan&quot;)), 'backwards': Option(class_name='LSTM', value=Property(name=&quot;backwards&quot;)), 'peepholes': Option(class_name='LSTM', value=Property(name=&quot;peepholes&quot;)), 'gradient_clipping': Option(class_name='LSTM', value=NumberProperty(name=&quot;gradient_clipping&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -418,11 +430,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_value</strong></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
 </tr>
 </tbody>
 </table>
@@ -448,24 +456,28 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>size</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Number of hidden units in the layer.</p>
-</dd>
-<dt><strong>input_weights</strong> <span class="classifier-delimiter">:</span> <span class="classifier">Initializer, ndarray</span></dt>
-<dd><p class="first last">Weight parameters for input connection.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : int</p>
+<blockquote>
+<div><p>Number of hidden units in the layer.</p>
+</div></blockquote>
+<p><strong>input_weights</strong> : Initializer, ndarray</p>
+<blockquote>
+<div><p>Weight parameters for input connection.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-class docutils literal"><span class="pre">HeNormal()</span></span></a>.</p>
-</dd>
-<dt><strong>hidden_weights</strong> <span class="classifier-delimiter">:</span> <span class="classifier">Initializer, ndarray</span></dt>
-<dd><p class="first last">Weight parameters for hidden connection.
+</div></blockquote>
+<p><strong>hidden_weights</strong> : Initializer, ndarray</p>
+<blockquote>
+<div><p>Weight parameters for hidden connection.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-class docutils literal"><span class="pre">HeNormal()</span></span></a>.</p>
-</dd>
-<dt><strong>bias</strong> <span class="classifier-delimiter">:</span> <span class="classifier">Initializer, ndarray</span></dt>
-<dd><p class="first last">Bias parameters for all gates.
+</div></blockquote>
+<p><strong>bias</strong> : Initializer, ndarray</p>
+<blockquote>
+<div><p>Bias parameters for all gates.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.</p>
-</dd>
-<dt><strong>activation_functions</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict, callable</span></dt>
-<dd><p class="first">Activation functions for different gates. Defaults to:</p>
+</div></blockquote>
+<p><strong>activation_functions</strong> : dict, callable</p>
+<blockquote>
+<div><p>Activation functions for different gates. Defaults to:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># import tensorflow as tf</span>
 <span class="nb">dict</span><span class="p">(</span>
     <span class="n">resetgate</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">,</span>
@@ -475,47 +487,52 @@ Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Const
 </pre></div>
 </div>
 <p>If application requires modification to only one parameter
-then it’s better to specify the one that you need to modify
+then it&#8217;s better to specify the one that you need to modify
 and ignore other parameters</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">resetgate</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">tanh</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="last">Other parameters like <span class="docutils literal"><span class="pre">updategate</span></span> or <span class="docutils literal"><span class="pre">hidden_update</span></span>
+<p>Other parameters like <span class="docutils literal"><span class="pre">updategate</span></span> or <span class="docutils literal"><span class="pre">hidden_update</span></span>
 will be equal to their default values.</p>
-</dd>
-<dt><strong>learn_init</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If <span class="docutils literal"><span class="pre">True</span></span>, make <span class="docutils literal"><span class="pre">hidden_init</span></span> trainable variable.
+</div></blockquote>
+<p><strong>learn_init</strong> : bool</p>
+<blockquote>
+<div><p>If <span class="docutils literal"><span class="pre">True</span></span>, make <span class="docutils literal"><span class="pre">hidden_init</span></span> trainable variable.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</dd>
-<dt><strong>hidden_init</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
-<dd><p class="first last">Initializer for initial hidden state (<span class="math">\(h_0\)</span>).
+</div></blockquote>
+<p><strong>hidden_init</strong> : array-like, Tensorfow variable, scalar or Initializer</p>
+<blockquote>
+<div><p>Initializer for initial hidden state (<span class="math">\(h_0\)</span>).
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.</p>
-</dd>
-<dt><strong>only_return_final</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If <span class="docutils literal"><span class="pre">True</span></span>, only return the final sequential output
+</div></blockquote>
+<p><strong>only_return_final</strong> : bool</p>
+<blockquote>
+<div><p>If <span class="docutils literal"><span class="pre">True</span></span>, only return the final sequential output
 (e.g. for tasks where a single target value for the entire
 sequence is desired). In this case, Tensorfow makes an
 optimization which saves memory. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</dd>
-<dt><strong>backwards</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If <span class="docutils literal"><span class="pre">True</span></span>, process the sequence backwards and then reverse the
+</div></blockquote>
+<p><strong>backwards</strong> : bool</p>
+<blockquote>
+<div><p>If <span class="docutils literal"><span class="pre">True</span></span>, process the sequence backwards and then reverse the
 output again such that the output from the layer is always
 from <span class="math">\(x_1\)</span> to <span class="math">\(x_n\)</span>. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</dd>
-<dt><strong>unroll_scan</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If <span class="docutils literal"><span class="pre">True</span></span> the recursion is unrolled instead of using scan.
+</div></blockquote>
+<p><strong>unroll_scan</strong> : bool</p>
+<blockquote>
+<div><p>If <span class="docutils literal"><span class="pre">True</span></span> the recursion is unrolled instead of using scan.
 For some graphs this gives a significant speed up but it
 might also consume more memory. When <span class="docutils literal"><span class="pre">unroll_scan=True</span></span>,
 backpropagation always includes the full sequence, so
 <span class="docutils literal"><span class="pre">n_gradient_steps</span></span> must be set to <span class="docutils literal"><span class="pre">-1</span></span> and the input
 sequence length must be known at compile time (i.e.,
 cannot be given as <span class="docutils literal"><span class="pre">None</span></span>). Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</dd>
-<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
+<blockquote class="last">
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
 will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -589,7 +606,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.recurrent.GRU.options">
-<span class="descname">options</span><em class="property"> = {‘input_weights’: Option(class_name=’GRU’, value=ParameterProperty(name=”input_weights”)), ‘hidden_weights’: Option(class_name=’GRU’, value=ParameterProperty(name=”hidden_weights”)), ‘size’: Option(class_name=’BaseRNNLayer’, value=IntProperty(name=”size”)), ‘unroll_scan’: Option(class_name=’GRU’, value=Property(name=”unroll_scan”)), ‘backwards’: Option(class_name=’GRU’, value=Property(name=”backwards”)), ‘only_return_final’: Option(class_name=’BaseRNNLayer’, value=Property(name=”only_return_final”)), ‘biases’: Option(class_name=’GRU’, value=ParameterProperty(name=”biases”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘gradient_clipping’: Option(class_name=’GRU’, value=NumberProperty(name=”gradient_clipping”)), ‘activation_functions’: Option(class_name=’GRU’, value=MultiCallableProperty(name=”activation_functions”)), ‘learn_init’: Option(class_name=’GRU’, value=Property(name=”learn_init”)), ‘hidden_init’: Option(class_name=’GRU’, value=ParameterProperty(name=”hidden_init”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='BaseRNNLayer', value=IntProperty(name=&quot;size&quot;)), 'only_return_final': Option(class_name='BaseRNNLayer', value=Property(name=&quot;only_return_final&quot;)), 'input_weights': Option(class_name='GRU', value=ParameterProperty(name=&quot;input_weights&quot;)), 'hidden_weights': Option(class_name='GRU', value=ParameterProperty(name=&quot;hidden_weights&quot;)), 'biases': Option(class_name='GRU', value=ParameterProperty(name=&quot;biases&quot;)), 'activation_functions': Option(class_name='GRU', value=MultiCallableProperty(name=&quot;activation_functions&quot;)), 'learn_init': Option(class_name='GRU', value=Property(name=&quot;learn_init&quot;)), 'hidden_init': Option(class_name='GRU', value=ParameterProperty(name=&quot;hidden_init&quot;)), 'backwards': Option(class_name='GRU', value=Property(name=&quot;backwards&quot;)), 'unroll_scan': Option(class_name='GRU', value=Property(name=&quot;unroll_scan&quot;)), 'gradient_clipping': Option(class_name='GRU', value=NumberProperty(name=&quot;gradient_clipping&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/recurrent.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -600,11 +617,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_value</strong></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
 </tr>
 </tbody>
 </table>

@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -238,33 +237,39 @@ one is has step function as activation.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>n_inputs</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Number of features (columns) in the input data.</p>
-</dd>
-<dt><strong>n_outputs</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Number of outputs in the  network.</p>
-</dd>
-<dt><strong>n_unconditioned</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Number of unconditioned units in neraul networks. All these
-units wouldn’t update during the training procedure.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_inputs</strong> : int</p>
+<blockquote>
+<div><p>Number of features (columns) in the input data.</p>
+</div></blockquote>
+<p><strong>n_outputs</strong> : int</p>
+<blockquote>
+<div><p>Number of outputs in the  network.</p>
+</div></blockquote>
+<p><strong>n_unconditioned</strong> : int</p>
+<blockquote>
+<div><p>Number of unconditioned units in neraul networks. All these
+units wouldn&#8217;t update during the training procedure.
 Unconditioned should be the first feature in the dataset.</p>
-</dd>
-<dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd><p class="first last">Neural network weights.
+</div></blockquote>
+<p><strong>weight</strong> : array-like</p>
+<blockquote>
+<div><p>Neural network weights.
 Value defined manualy should have shape <span class="docutils literal"><span class="pre">(n_inputs,</span> <span class="pre">n_outputs)</span></span>.
 Defaults to <span class="docutils literal"><span class="pre">None</span></span> which means that all unconditional
 weights will be equal to <span class="docutils literal"><span class="pre">1</span></span>. Other weights equal to <span class="docutils literal"><span class="pre">0</span></span>.</p>
-</dd>
-<dt><strong>bias</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Initializer</span></dt>
-<dd><p class="first last">Neural network bias units.
+</div></blockquote>
+<p><strong>bias</strong> : array-like, Initializer</p>
+<blockquote>
+<div><p>Neural network bias units.
 Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(-0.5)</span></span></a>.</p>
-</dd>
-<dt><strong>step</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Learning rate, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
-</dd>
-<dt><strong>show_epoch</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int or str</span></dt>
-<dd><p class="first">This property controls how often the network will
+</div></blockquote>
+<p><strong>step</strong> : float</p>
+<blockquote>
+<div><p>Learning rate, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
+</div></blockquote>
+<p><strong>show_epoch</strong> : int or str</p>
+<blockquote>
+<div><p>This property controls how often the network will
 display information about training. There are two
 main syntaxes for this property.</p>
 <ul class="simple">
@@ -272,31 +277,34 @@ main syntaxes for this property.</p>
 defines how offen would you like to see summary
 output in terminal. For instance, number <cite>100</cite> mean
 that network shows summary at 100th, 200th,
-300th … epochs.</li>
+300th ... epochs.</li>
 <li>String defines number of times you want to see output in
 terminal. For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that
 the network will show output twice with approximately
 equal period of epochs and one additional output would
 be after the finall epoch.</li>
 </ul>
-<p class="last">Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</dd>
-<dt><strong>shuffle_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If it’s <span class="docutils literal"><span class="pre">True</span></span> class shuffles all your training data before
+<p>Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</div></blockquote>
+<p><strong>shuffle_data</strong> : bool</p>
+<blockquote>
+<div><p>If it&#8217;s <span class="docutils literal"><span class="pre">True</span></span> class shuffles all your training data before
 training your network, defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</dd>
-<dt><strong>epoch_end_signal</strong> <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
-<dd><p class="first last">Calls this function when train epoch finishes.</p>
-</dd>
-<dt><strong>train_end_signal</strong> <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
-<dd><p class="first last">Calls this function when train process finishes.</p>
-</dd>
-<dt><strong>verbose</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
+</div></blockquote>
+<p><strong>epoch_end_signal</strong> : function</p>
+<blockquote>
+<div><p>Calls this function when train epoch finishes.</p>
+</div></blockquote>
+<p><strong>train_end_signal</strong> : function</p>
+<blockquote>
+<div><p>Calls this function when train process finishes.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool</p>
+<blockquote class="last">
+<div><p>Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
 informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> -
 disable it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -304,17 +312,17 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="56%" />
-<col width="44%" />
+<col width="54%" />
+<col width="46%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>predict(input_data)</strong></td>
+<tr class="row-odd"><td>predict(input_data)</td>
 <td>Predicts output for the specified input.</td>
 </tr>
-<tr class="row-even"><td><strong>train(input_train, summary=’table’, epochs=100)</strong></td>
+<tr class="row-even"><td>train(input_train, summary=&#8217;table&#8217;, epochs=100)</td>
 <td>Train neural network.</td>
 </tr>
-<tr class="row-odd"><td><strong>fit(*args, **kwargs)</strong></td>
+<tr class="row-odd"><td>fit(*args, **kwargs)</td>
 <td>Alias to the <span class="docutils literal"><span class="pre">train</span></span> method.</td>
 </tr>
 </tbody>
@@ -341,7 +349,7 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 
 <dl class="attribute">
 <dt id="neupy.algorithms.associative.base.BaseStepAssociative.options">
-<span class="descname">options</span><em class="property"> = {‘shuffle_data’: Option(class_name=’BaseNetwork’, value=Property(name=”shuffle_data”)), ‘n_inputs’: Option(class_name=’BaseStepAssociative’, value=IntProperty(name=”n_inputs”)), ‘verbose’: Option(class_name=’Verbose’, value=VerboseProperty(name=”verbose”)), ‘n_unconditioned’: Option(class_name=’BaseStepAssociative’, value=IntProperty(name=”n_unconditioned”)), ‘epoch_end_signal’: Option(class_name=’BaseNetwork’, value=Property(name=”epoch_end_signal”)), ‘show_epoch’: Option(class_name=’BaseNetwork’, value=ShowEpochProperty(name=”show_epoch”)), ‘step’: Option(class_name=’BaseNetwork’, value=NumberProperty(name=”step”)), ‘weight’: Option(class_name=’BaseStepAssociative’, value=ArrayProperty(name=”weight”)), ‘n_outputs’: Option(class_name=’BaseAssociative’, value=IntProperty(name=”n_outputs”)), ‘bias’: Option(class_name=’BaseStepAssociative’, value=ParameterProperty(name=”bias”)), ‘train_end_signal’: Option(class_name=’BaseNetwork’, value=Property(name=”train_end_signal”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'n_inputs': Option(class_name='BaseStepAssociative', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_outputs': Option(class_name='BaseAssociative', value=IntProperty(name=&quot;n_outputs&quot;)), 'weight': Option(class_name='BaseStepAssociative', value=ArrayProperty(name=&quot;weight&quot;)), 'n_unconditioned': Option(class_name='BaseStepAssociative', value=IntProperty(name=&quot;n_unconditioned&quot;)), 'bias': Option(class_name='BaseStepAssociative', value=ParameterProperty(name=&quot;bias&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/associative/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -352,17 +360,9 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>input_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_data</strong> : array-like</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>array-like</strong></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">array-like</td>
 </tr>
 </tbody>
 </table>
@@ -376,22 +376,18 @@ disable it. Defaults to <span class="docutils literal"><span class="pre">False</
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_train</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd></dd>
-<dt><strong>target_train</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like or None</span></dt>
-<dd></dd>
-<dt><strong>input_test</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like or None</span></dt>
-<dd></dd>
-<dt><strong>target_test</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like or None</span></dt>
-<dd></dd>
-<dt><strong>epochs</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Defaults to <cite>100</cite>.</p>
-</dd>
-<dt><strong>epsilon</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
-<dd><p class="first last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</dd>
-</dl>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_train</strong> : array-like</p>
+<p><strong>target_train</strong> : array-like or None</p>
+<p><strong>input_test</strong> : array-like or None</p>
+<p><strong>target_test</strong> : array-like or None</p>
+<p><strong>epochs</strong> : int</p>
+<blockquote>
+<div><p>Defaults to <cite>100</cite>.</p>
+</div></blockquote>
+<p><strong>epsilon</strong> : float or None</p>
+<blockquote class="last">
+<div><p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>

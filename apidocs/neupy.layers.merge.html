@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -239,23 +238,23 @@ same shape.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>merge_function</strong> <span class="classifier-delimiter">:</span> <span class="classifier">callable</span></dt>
-<dd><p class="first last">Callable object that accepts multiple arguments and
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>merge_function</strong> : callable</p>
+<blockquote>
+<div><p>Callable object that accepts multiple arguments and
 combine them in one with elementwise operation.
 Defaults to <span class="docutils literal"><span class="pre">tensorflow.add</span></span>.</p>
-</dd>
-<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
+<blockquote class="last">
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
 will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">input_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">input_2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
@@ -268,42 +267,41 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <span class="go">(10,)</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s input shape.</p>
-</dd>
-<dt><strong>output_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s output shape.</p>
-</dd>
-<dt><strong>training_state</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Defines whether layer in training state or not.</p>
-</dd>
-<dt><strong>parameters</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">Trainable parameters.</p>
-</dd>
-<dt><strong>graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">LayerGraph instance</span></dt>
-<dd><p class="first last">Graphs that stores all relations between layers.</p>
-</dd>
-</dl>
-</td>
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
+<tr class="row-odd"><td>training_state</td>
+<td>(bool) Defines whether layer in training state or not.</td>
+</tr>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
+</tr>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="35%" />
-<col width="65%" />
+<col width="31%" />
+<col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>disable_training_state()</strong></td>
+<tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
 </tr>
-<tr class="row-even"><td><strong>initialize()</strong></td>
+<tr class="row-even"><td>initialize()</td>
 <td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
@@ -315,7 +313,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.merge.Elementwise.options">
-<span class="descname">options</span><em class="property"> = {‘merge_function’: Option(class_name=’Elementwise’, value=CallableProperty(name=”merge_function”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/merge.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'merge_function': Option(class_name='Elementwise', value=CallableProperty(name=&quot;merge_function&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/merge.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -326,11 +324,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_value</strong></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
 </tr>
 </tbody>
 </table>
@@ -349,11 +343,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple with int</span></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_shape</strong> : tuple with int</td>
 </tr>
 </tbody>
 </table>
@@ -370,22 +360,22 @@ specified axes.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>axis</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">The axis along which the inputs will be joined.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>axis</strong> : int</p>
+<blockquote>
+<div><p>The axis along which the inputs will be joined.
 Default is <span class="docutils literal"><span class="pre">-1</span></span>.</p>
-</dd>
-<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
+<blockquote class="last">
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
 will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">input_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">input_2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
@@ -397,42 +387,41 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <span class="go">(30,)</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s input shape.</p>
-</dd>
-<dt><strong>output_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s output shape.</p>
-</dd>
-<dt><strong>training_state</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Defines whether layer in training state or not.</p>
-</dd>
-<dt><strong>parameters</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">Trainable parameters.</p>
-</dd>
-<dt><strong>graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">LayerGraph instance</span></dt>
-<dd><p class="first last">Graphs that stores all relations between layers.</p>
-</dd>
-</dl>
-</td>
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
+<tr class="row-odd"><td>training_state</td>
+<td>(bool) Defines whether layer in training state or not.</td>
+</tr>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
+</tr>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="35%" />
-<col width="65%" />
+<col width="31%" />
+<col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>disable_training_state()</strong></td>
+<tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
 </tr>
-<tr class="row-even"><td><strong>initialize()</strong></td>
+<tr class="row-even"><td>initialize()</td>
 <td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
@@ -444,7 +433,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.merge.Concatenate.options">
-<span class="descname">options</span><em class="property"> = {‘axis’: Option(class_name=’Concatenate’, value=IntProperty(name=”axis”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/merge.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'axis': Option(class_name='Concatenate', value=IntProperty(name=&quot;axis&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/merge.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -455,11 +444,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_value</strong></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
 </tr>
 </tbody>
 </table>
@@ -478,11 +463,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple with int</span></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_shape</strong> : tuple with int</td>
 </tr>
 </tbody>
 </table>
@@ -499,23 +480,23 @@ other layers and sum them.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>gating_layer_index</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Input layers passed as a list and current variable specifies
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>gating_layer_index</strong> : int</p>
+<blockquote>
+<div><p>Input layers passed as a list and current variable specifies
 index in which it can find gating network. Defaults to <cite>0</cite>,
 which means that it expects to see gating layer in zeros position.</p>
-</dd>
-<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
+<blockquote class="last">
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
 will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gating_network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Softmax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network_1</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
@@ -526,42 +507,41 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <span class="go">[(10,), (20,), (20,)] -&gt; [... 8 layers ...] -&gt; 10</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s input shape.</p>
-</dd>
-<dt><strong>output_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s output shape.</p>
-</dd>
-<dt><strong>training_state</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Defines whether layer in training state or not.</p>
-</dd>
-<dt><strong>parameters</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">Trainable parameters.</p>
-</dd>
-<dt><strong>graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">LayerGraph instance</span></dt>
-<dd><p class="first last">Graphs that stores all relations between layers.</p>
-</dd>
-</dl>
-</td>
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
+<tr class="row-odd"><td>training_state</td>
+<td>(bool) Defines whether layer in training state or not.</td>
+</tr>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
+</tr>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="35%" />
-<col width="65%" />
+<col width="31%" />
+<col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>disable_training_state()</strong></td>
+<tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
 </tr>
-<tr class="row-even"><td><strong>initialize()</strong></td>
+<tr class="row-even"><td>initialize()</td>
 <td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
@@ -573,7 +553,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.merge.GatedAverage.options">
-<span class="descname">options</span><em class="property"> = {‘gating_layer_index’: Option(class_name=’GatedAverage’, value=IntProperty(name=”gating_layer_index”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/merge.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'gating_layer_index': Option(class_name='GatedAverage', value=IntProperty(name=&quot;gating_layer_index&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/merge.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -584,11 +564,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_value</strong></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
 </tr>
 </tbody>
 </table>
@@ -607,11 +583,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple with int</span></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_shape</strong> : tuple with int</td>
 </tr>
 </tbody>
 </table>

@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -238,9 +237,9 @@ Network associate every input with some target value.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>mode</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{<span class="docutils literal"><span class="pre">sync</span></span>, <span class="docutils literal"><span class="pre">async</span></span>}</span></dt>
-<dd><p class="first">Indentify pattern recovery mode.</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : {<span class="docutils literal"><span class="pre">sync</span></span>, <span class="docutils literal"><span class="pre">async</span></span>}</p>
+<blockquote>
+<div><p>Indentify pattern recovery mode.</p>
 <ul class="simple">
 <li><span class="docutils literal"><span class="pre">sync</span></span> mode tries to recover pattern using all
 values from the input vector.</li>
@@ -249,13 +248,13 @@ input vector and iteratively repeat this procedure.
 Number of iterations defines by the <span class="docutils literal"><span class="pre">n_times</span></span>
 parameter.</li>
 </ul>
-<p class="last">Defaults to <span class="docutils literal"><span class="pre">sync</span></span>.</p>
-</dd>
-<dt><strong>n_times</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Available only in <span class="docutils literal"><span class="pre">async</span></span> mode. Identify number
+<p>Defaults to <span class="docutils literal"><span class="pre">sync</span></span>.</p>
+</div></blockquote>
+<p><strong>n_times</strong> : int</p>
+<blockquote class="last">
+<div><p>Available only in <span class="docutils literal"><span class="pre">async</span></span> mode. Identify number
 of random trials. Defaults to <span class="docutils literal"><span class="pre">100</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -265,8 +264,8 @@ of random trials. Defaults to <span class="docutils literal"><span class="pre">1
 <li>Input and output vectors should contain only binary values.</li>
 </ul>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span>
 <span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
@@ -316,23 +315,23 @@ of random trials. Defaults to <span class="docutils literal"><span class="pre">1
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="29%" />
-<col width="71%" />
+<col width="27%" />
+<col width="73%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>train(input_data, output_data)</strong></td>
+<tr class="row-odd"><td>train(input_data, output_data)</td>
 <td>Train network and update network weights.</td>
 </tr>
-<tr class="row-even"><td><strong>predict_output(input_data, n_times=None)</strong></td>
+<tr class="row-even"><td>predict_output(input_data, n_times=None)</td>
 <td>Using input data recover output data. Returns two arguments. First is an input data, second is an output data.</td>
 </tr>
-<tr class="row-odd"><td><strong>predict(input_data, n_times=None)</strong></td>
+<tr class="row-odd"><td>predict(input_data, n_times=None)</td>
 <td>Alias to the <span class="docutils literal"><span class="pre">predict_output</span></span> method.</td>
 </tr>
-<tr class="row-even"><td><strong>predict_input(output_data, n_times=None)</strong></td>
+<tr class="row-even"><td>predict_input(output_data, n_times=None)</td>
 <td>Using output data recover input data. Returns two arguments. First is input data, second is output data.</td>
 </tr>
-<tr class="row-odd"><td><strong>energy(input_data, output_data)</strong></td>
+<tr class="row-odd"><td>energy(input_data, output_data)</td>
 <td>Calculate Hopfield Energy for the input and output data.</td>
 </tr>
 </tbody>
@@ -349,7 +348,7 @@ of random trials. Defaults to <span class="docutils literal"><span class="pre">1
 
 <dl class="attribute">
 <dt id="neupy.algorithms.memory.bam.DiscreteBAM.options">
-<span class="descname">options</span><em class="property"> = {‘verbose’: Option(class_name=’Verbose’, value=VerboseProperty(name=”verbose”)), ‘n_times’: Option(class_name=’DiscreteMemory’, value=IntProperty(name=”n_times”)), ‘mode’: Option(class_name=’DiscreteMemory’, value=ChoiceProperty(name=”mode”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'mode': Option(class_name='DiscreteMemory', value=ChoiceProperty(name=&quot;mode&quot;)), 'n_times': Option(class_name='DiscreteMemory', value=IntProperty(name=&quot;n_times&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/bam.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">

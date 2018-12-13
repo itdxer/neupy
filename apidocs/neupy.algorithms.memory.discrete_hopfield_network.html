@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -238,9 +237,9 @@ and reconstruct them from corrupted samples.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>mode</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{<span class="docutils literal"><span class="pre">sync</span></span>, <span class="docutils literal"><span class="pre">async</span></span>}</span></dt>
-<dd><p class="first">Indentify pattern recovery mode.</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : {<span class="docutils literal"><span class="pre">sync</span></span>, <span class="docutils literal"><span class="pre">async</span></span>}</p>
+<blockquote>
+<div><p>Indentify pattern recovery mode.</p>
 <ul class="simple">
 <li><span class="docutils literal"><span class="pre">sync</span></span> mode tries to recover pattern using all
 values from the input vector.</li>
@@ -249,20 +248,21 @@ input vector and iteratively repeat this procedure.
 Number of iterations defines by the <span class="docutils literal"><span class="pre">n_times</span></span>
 parameter.</li>
 </ul>
-<p class="last">Defaults to <span class="docutils literal"><span class="pre">sync</span></span>.</p>
-</dd>
-<dt><strong>n_times</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Available only in <span class="docutils literal"><span class="pre">async</span></span> mode. Identify number
+<p>Defaults to <span class="docutils literal"><span class="pre">sync</span></span>.</p>
+</div></blockquote>
+<p><strong>n_times</strong> : int</p>
+<blockquote>
+<div><p>Available only in <span class="docutils literal"><span class="pre">async</span></span> mode. Identify number
 of random trials. Defaults to <span class="docutils literal"><span class="pre">100</span></span>.</p>
-</dd>
-<dt><strong>check_limit</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first">Option enable a limit of patterns control for the
+</div></blockquote>
+<p><strong>check_limit</strong> : bool</p>
+<blockquote class="last">
+<div><p>Option enable a limit of patterns control for the
 network using logarithmically proportion rule.
 Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-<div class="last math">
+<div class="math">
 \[\frac{n_{features}}{2 \cdot log_{e}(n_{features})}\]</div>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -270,9 +270,9 @@ Defaults to <span class="docutils literal"><span class="pre">True</span></span>.
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference internal" href="../2015/09/21/password_recovery.html#password-recovery"><span class="std std-ref">Password recovery</span></a></dt>
+<dt><a class="reference internal" href="../2015/09/21/password_recovery.html#password-recovery"><span>Password recovery</span></a></dt>
 <dd>Password recovery with Discrete Hopfield Network.</dd>
-<dt><a class="reference internal" href="../2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span class="std std-ref">Discrete Hopfield Network</span></a></dt>
+<dt><a class="reference internal" href="../2015/09/20/discrete_hopfield_network.html#discrete-hopfield-network"><span>Discrete Hopfield Network</span></a></dt>
 <dd>Discrete Hopfield Network article.</dd>
 </dl>
 </div>
@@ -282,12 +282,12 @@ Defaults to <span class="docutils literal"><span class="pre">True</span></span>.
 contain only zeros and ones.</li>
 </ul>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">draw_bin_image</span><span class="p">(</span><span class="n">image_matrix</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">image_matrix</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;| &#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; *&#39;</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">row</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;| &#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; *&#39;</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">row</span><span class="p">))</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span>
 <span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
@@ -357,17 +357,17 @@ contain only zeros and ones.</li>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="12%" />
-<col width="88%" />
+<col width="11%" />
+<col width="89%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>energy(input_data)</strong></td>
+<tr class="row-odd"><td>energy(input_data)</td>
 <td>Compute Discrete Hopfield Energy.</td>
 </tr>
-<tr class="row-even"><td><strong>train(input_data)</strong></td>
+<tr class="row-even"><td>train(input_data)</td>
 <td>Save input data pattern into the network memory.</td>
 </tr>
-<tr class="row-odd"><td><strong>predict(input_data, n_times=None)</strong></td>
+<tr class="row-odd"><td>predict(input_data, n_times=None)</td>
 <td>Recover data from the memory using input pattern. For the prediction procedure you can control number of iterations. If you set up this value equal to <span class="docutils literal"><span class="pre">None</span></span> then the value would be equal to the value that you set up for the property with the same name - <span class="docutils literal"><span class="pre">n_times</span></span>.</td>
 </tr>
 </tbody>
@@ -384,7 +384,7 @@ contain only zeros and ones.</li>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork.options">
-<span class="descname">options</span><em class="property"> = {‘verbose’: Option(class_name=’Verbose’, value=VerboseProperty(name=”verbose”)), ‘check_limit’: Option(class_name=’DiscreteHopfieldNetwork’, value=Property(name=”check_limit”)), ‘n_times’: Option(class_name=’DiscreteMemory’, value=IntProperty(name=”n_times”)), ‘mode’: Option(class_name=’DiscreteMemory’, value=ChoiceProperty(name=”mode”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/discrete_hopfield_network.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'mode': Option(class_name='DiscreteMemory', value=ChoiceProperty(name=&quot;mode&quot;)), 'n_times': Option(class_name='DiscreteMemory', value=IntProperty(name=&quot;n_times&quot;)), 'check_limit': Option(class_name='DiscreteHopfieldNetwork', value=Property(name=&quot;check_limit&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/discrete_hopfield_network.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">

@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Storage for Neural Networks" href="storage.html" /><link rel="prev" title="Scikit-learn compatibility" href="algorithms/sklearn-compatibility.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Storage for Neural Networks" href="storage.html" /><link rel="prev" title="Scikit-learn compatibility" href="algorithms/sklearn-compatibility.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -229,14 +228,14 @@
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="transfer-learning">
 <h1>Transfer Learning</h1>
-<p>Transfer learning allows us to transfer knowledge learned from one network to different network that aims to solve similar problem. There are two main advantages for this. First, we don’t need to start learning from scratch using some random parameters and since we don’t start from scratch training should be faster. Second, training on the small datasets might be problematic and prune to overfitting, but with pre-trained layers we can transfer knowledge that has been extracted from large dataset.</p>
+<p>Transfer learning allows us to transfer knowledge learned from one network to different network that aims to solve similar problem. There are two main advantages for this. First, we don&#8217;t need to start learning from scratch using some random parameters and since we don&#8217;t start from scratch training should be faster. Second, training on the small datasets might be problematic and prune to overfitting, but with pre-trained layers we can transfer knowledge that has been extracted from large dataset.</p>
 <p>In this part of the documentation, we can see how transfer learning can be used in NeuPy. As an example, we can build classifier that expects bird image as an input and it classifies it as one of the 10 bird species. For this task, we can use VGG16 network which was pre-trained using ImageNet data. First, we can use architecture that has been already defined in NeuPy library.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">architectures</span><span class="p">,</span> <span class="n">layers</span>
 <span class="c1"># At this point vgg16 has only random parameters</span>
 <span class="n">vgg16</span> <span class="o">=</span> <span class="n">architectures</span><span class="o">.</span><span class="n">vgg16</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>When we load it by default it has randomly generated parameters. We can load pre-trained parameters using <span class="docutils literal"><span class="pre">neupy.storage</span></span> module. You can download pre-trained models from <a class="reference internal" href="../pages/model_zoo.html#model-zoo"><span class="std std-ref">Model Zoo</span></a>.</p>
+<p>When we load it by default it has randomly generated parameters. We can load pre-trained parameters using <span class="docutils literal"><span class="pre">neupy.storage</span></span> module. You can download pre-trained models from <a class="reference internal" href="../pages/model_zoo.html#model-zoo"><span>Model Zoo</span></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">storage</span>
 <span class="n">storage</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">vgg16</span><span class="p">,</span> <span class="s1">&#39;/path/to/vgg16.hdf5&#39;</span><span class="p">)</span>
 </pre></div>
@@ -255,7 +254,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plots</span><span class="o">.</span><span class="n">network_structure</span><span class="p">(</span><span class="n">vgg16</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>In both cases, we can see that final layer layer makes prediction for 1,000 classes, but for our problem we need only 10. In NeuPy, you can easily slice over the network in order to cut layers that 23 don’t need. If you visualized network using the <span class="docutils literal"><span class="pre">plots.network_structure</span></span> function than you should have noticed that it has dropout layer before the final layer. We can use it as a reference point for slicing.</p>
+<p>In both cases, we can see that final layer layer makes prediction for 1,000 classes, but for our problem we need only 10. In NeuPy, you can easily slice over the network in order to cut layers that 23 don&#8217;t need. If you visualized network using the <span class="docutils literal"><span class="pre">plots.network_structure</span></span> function than you should have noticed that it has dropout layer before the final layer. We can use it as a reference point for slicing.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dropout</span> <span class="o">=</span> <span class="n">vgg16</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="n">dropout</span><span class="p">)</span>
 <span class="go">(3, 224, 224) -&gt; [... 37 layers ...] -&gt; 4096</span>
@@ -277,7 +276,7 @@
 <span class="go">Input(4096) &gt; Softmax(10)</span>
 </pre></div>
 </div>
-<p>You can notice that for the last layer we create small network adding <span class="docutils literal"><span class="pre">Input(4096)</span></span> layer. In this way we’re saying that network expects input with 4096 features. It’s exactly the same number of feature that we get if we propagate image through pre-trained part of the VGG16. We can transform our input images into vectors with 4096 features after propagating through the pre-trained VGG16 layers. We do it in order to speed up training for the last layer and avoid training for the pre-trained layers. We will use embedded features (4096-dimensional) that we get per each image and our training data for the new layers that we added for our bird classifier.</p>
+<p>You can notice that for the last layer we create small network adding <span class="docutils literal"><span class="pre">Input(4096)</span></span> layer. In this way we&#8217;re saying that network expects input with 4096 features. It&#8217;s exactly the same number of feature that we get if we propagate image through pre-trained part of the VGG16. We can transform our input images into vectors with 4096 features after propagating through the pre-trained VGG16 layers. We do it in order to speed up training for the last layer and avoid training for the pre-trained layers. We will use embedded features (4096-dimensional) that we get per each image and our training data for the new layers that we added for our bird classifier.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Loading 10,000 image that would be pre-processed in the</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># same way as it was done during training on ImageNet data.</span>
@@ -298,7 +297,7 @@
 </pre></div>
 </div>
 <p>Notice, that we still have our <span class="docutils literal"><span class="pre">Input(4096)</span></span> in the <span class="docutils literal"><span class="pre">new_vgg16_part</span></span> network. To make our final architecture cleaner we can simply use only last layer from the <span class="docutils literal"><span class="pre">new_vgg16_part</span></span> network or just use network without first input layer.</p>
-<p>If you have enough computational resources and/or you’re not satisfied with the accuracy that you get than you can try to remove more layers from the pre-trained network. Also, you can use network that you combined from pre-trained parts and newly trained layer (or multiple layers) and fine-tune layers using the same images, but this time you should use all layers from the network during the training.</p>
+<p>If you have enough computational resources and/or you&#8217;re not satisfied with the accuracy that you get than you can try to remove more layers from the pre-trained network. Also, you can use network that you combined from pre-trained parts and newly trained layer (or multiple layers) and fine-tune layers using the same images, but this time you should use all layers from the network during the training.</p>
 </div>
 
     <div class="postmeta">

@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -238,28 +237,28 @@ structure in form of directional graph.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>connection</strong> <span class="classifier-delimiter">:</span> <span class="classifier">BaseLayer instance, BaseNetwork instance</span></dt>
-<dd></dd>
-<dt><strong>ignore_layers</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list or None</span></dt>
-<dd><p class="first last">List of layer types that needs to be excluded
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>connection</strong> : BaseLayer instance, BaseNetwork instance</p>
+<p><strong>ignore_layers</strong> : list or None</p>
+<blockquote>
+<div><p>List of layer types that needs to be excluded
 from the plot. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</dd>
-<dt><strong>filepath</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Path to the file that stores graph. <span class="docutils literal"><span class="pre">None</span></span> means
+</div></blockquote>
+<p><strong>filepath</strong> : str or None</p>
+<blockquote>
+<div><p>Path to the file that stores graph. <span class="docutils literal"><span class="pre">None</span></span> means
 that file will be saved in temporary file.
 Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</dd>
-<dt><strong>show</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last"><span class="docutils literal"><span class="pre">True</span></span> opens PDF file. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
+<p><strong>show</strong> : bool</p>
+<blockquote class="last">
+<div><p><span class="docutils literal"><span class="pre">True</span></span> opens PDF file. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">plots</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">plots</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plots</span><span class="o">.</span><span class="n">network_structure</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>

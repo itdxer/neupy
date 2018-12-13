@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Debug layer connections" href="debug.html" /><link rel="prev" title="Create custom layers" href="create-custom-layers.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Debug layer connections" href="debug.html" /><link rel="prev" title="Create custom layers" href="create-custom-layers.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -241,8 +240,8 @@
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>Initialization class has an ability to generate parameters based on the specified shape. For instance, a first sigmoid layer has 10 inputs and 30 outputs which mean that this layer should have weight with shape <span class="docutils literal"><span class="pre">(10,</span> <span class="pre">30)</span></span>. During initialization, we don’t need to specify the shape of the parameter. This information would be provided to the Initializer class during layer initialization step.</p>
-<p>It’s possible to set up any value for the weight as long as it has valid shape. Let’s do the same initialization procedure with manually generated weights.</p>
+<p>Initialization class has an ability to generate parameters based on the specified shape. For instance, a first sigmoid layer has 10 inputs and 30 outputs which mean that this layer should have weight with shape <span class="docutils literal"><span class="pre">(10,</span> <span class="pre">30)</span></span>. During initialization, we don&#8217;t need to specify the shape of the parameter. This information would be provided to the Initializer class during layer initialization step.</p>
+<p>It&#8217;s possible to set up any value for the weight as long as it has valid shape. Let&#8217;s do the same initialization procedure with manually generated weights.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">algorithms</span>
 
@@ -256,16 +255,16 @@
 </pre></div>
 </div>
 <p>Code above does the same type of the initialization as in the previous example, the only problem that we need to hard-code expected shape of the weights.</p>
-<p>More initialization methods you can find <a class="reference internal" href="../../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.</p>
+<p>More initialization methods you can find <a class="reference internal" href="../../pages/cheatsheet.html#init-methods"><span>here</span></a>.</p>
 <div class="section" id="create-custom-initialization-methods">
 <h2>Create custom initialization methods</h2>
-<p>It’s very easy to create custom initialization method. All we need is just to inherit from the <span class="docutils literal"><span class="pre">init.Initializer</span></span> class and define <span class="docutils literal"><span class="pre">sample</span></span> method that accepts one argument (excluding the <span class="docutils literal"><span class="pre">self</span></span> argument). Argument will contain shape of the output tensor that we expect to get.</p>
+<p>It&#8217;s very easy to create custom initialization method. All we need is just to inherit from the <span class="docutils literal"><span class="pre">init.Initializer</span></span> class and define <span class="docutils literal"><span class="pre">sample</span></span> method that accepts one argument (excluding the <span class="docutils literal"><span class="pre">self</span></span> argument). Argument will contain shape of the output tensor that we expect to get.</p>
 <p>In the example below we create custom initializer that samples weights from the exponential distribution.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">init</span>
 
 <span class="k">class</span> <span class="nc">Exponential</span><span class="p">(</span><span class="n">init</span><span class="o">.</span><span class="n">Initializer</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
 
     <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>

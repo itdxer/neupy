@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Visualize Algorithms based on the backpropagation" href="visualize_backpropagation_algorithms.html" /><link rel="prev" title="Discrete Hopfield Network" href="../../09/20/discrete_hopfield_network.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Visualize Algorithms based on the backpropagation" href="visualize_backpropagation_algorithms.html" /><link rel="prev" title="Discrete Hopfield Network" href="../../09/20/discrete_hopfield_network.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -365,8 +364,8 @@
     </tr>
   </tbody>
 </table><p>Data contains 14 columns.
-The last column <span class="docutils literal"><span class="pre">MEDV</span></span> is a median value of owner-occupied homes in $1000’s. The goal is to predict this value. Other columns we can use for neural network training.</p>
-<p>It’s quite hard to understand data just from the column names. Scikit-learn also provides description.</p>
+The last column <span class="docutils literal"><span class="pre">MEDV</span></span> is a median value of owner-occupied homes in $1000&#8217;s. The goal is to predict this value. Other columns we can use for neural network training.</p>
+<p>It&#8217;s quite hard to understand data just from the column names. Scikit-learn also provides description.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -385,7 +384,7 @@ The last column <span class="docutils literal"><span class="pre">MEDV</span></sp
 <li><span class="docutils literal"><span class="pre">B</span></span> - 1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town</li>
 <li><span class="docutils literal"><span class="pre">LSTAT</span></span> - % lower status of the population</li>
 </ul>
-<p>There are 13 continuous attributes (including “class” attribute “MEDV”) and 1 binary-valued attribute. There are no columns that have multiple categories, which simplifies initial data processing..</p>
+<p>There are 13 continuous attributes (including &#8220;class&#8221; attribute &#8220;MEDV&#8221;) and 1 binary-valued attribute. There are no columns that have multiple categories, which simplifies initial data processing..</p>
 <p>From the table above you can notice that every column has values in different scales. It might slow down or completely break networks convergence. In order to fix this issue, we should normalize values in every column. One of the simplest way to do it is to map every value into range between 0 and 1, where maximum value in every column will be equal to 1 and the smallest one - to 0.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span>
 
@@ -493,7 +492,7 @@ The last column <span class="docutils literal"><span class="pre">MEDV</span></sp
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>Now that we have the our network we can use one of the large <a class="reference external" href="../../../pages/cheatsheet.html#algorithms">training algorithms supported by neupy</a>. Our datasets is quite small and network has small number of parameters. For cases like this we can take advantage of the more algorithms that can converge much faster. I’ll use <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">Levenberg-Marquardt</span></span></a>, but you can feel free to experiment with different algorithms.</p>
+<p>Now that we have the our network we can use one of the large <a class="reference external" href="../../../pages/cheatsheet.html#algorithms">training algorithms supported by neupy</a>. Our datasets is quite small and network has small number of parameters. For cases like this we can take advantage of the more algorithms that can converge much faster. I&#8217;ll use <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">Levenberg-Marquardt</span></span></a>, but you can feel free to experiment with different algorithms.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 
 <span class="n">lmnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">LevenbergMarquardt</span><span class="p">(</span>
@@ -530,7 +529,7 @@ The last column <span class="docutils literal"><span class="pre">MEDV</span></sp
 <span class="p">[</span><span class="n">TENSORFLOW</span><span class="p">]</span> <span class="n">Initialization</span> <span class="n">finished</span> <span class="n">successfully</span><span class="o">.</span> <span class="n">It</span> <span class="n">took</span> <span class="mf">0.46</span> <span class="n">seconds</span>
 </pre></div>
 </div>
-<p>And finally, we can use our data in order to train the network. In addition, neupy allows to specify validation datasets. It won’t use it for training. Instead, at the end of every epoch it will use validation data to estimate network forecasting performance on the unseen data.</p>
+<p>And finally, we can use our data in order to train the network. In addition, neupy allows to specify validation datasets. It won&#8217;t use it for training. Instead, at the end of every epoch it will use validation data to estimate network forecasting performance on the unseen data.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">lmnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -554,7 +553,7 @@ The last column <span class="docutils literal"><span class="pre">MEDV</span></sp
 <span class="o">---------------------------------------------------------</span>
 </pre></div>
 </div>
-<p>It’s also useful to visualize network training progress using line plot. In the figure below you can see two lines. One line shows training error and the other one validation error.</p>
+<p>It&#8217;s also useful to visualize network training progress using line plot. In the figure below you can see two lines. One line shows training error and the other one validation error.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
 <span class="n">plots</span><span class="o">.</span><span class="n">error_plot</span><span class="p">(</span><span class="n">lmnet</span><span class="p">)</span>
 </pre></div>
@@ -563,7 +562,7 @@ The last column <span class="docutils literal"><span class="pre">MEDV</span></sp
 <a class="reference internal image-reference" href="../../../_images/cgnet-error-plot.png"><img alt="Levenberg Marquardt training progress" src="../../../_images/cgnet-error-plot.png" style="width: 80%;" /></a>
 </div>
 <p>We typically want to see decrease for the validation error. The training error might be useful during debugging. For example, it might be used in order to see if network overfits.</p>
-<p>During the training we used mean squared error as a loss function on the scaled prediction values. We can use different function in order to measure network’s forecasting performance. For example, we can use Root Means Squared Logarithmic Error (RMSLE) and compare prediction to the exact value that were scaled back to the original scale.</p>
+<p>During the training we used mean squared error as a loss function on the scaled prediction values. We can use different function in order to measure network&#8217;s forecasting performance. For example, we can use Root Means Squared Logarithmic Error (RMSLE) and compare prediction to the exact value that were scaled back to the original scale.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="k">def</span> <span class="nf">rmsle</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">predicted</span><span class="p">):</span>

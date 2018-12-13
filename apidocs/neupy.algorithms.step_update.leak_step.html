@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -238,40 +237,38 @@ adaptation procedure in backpropagation algortihm.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>leak_size</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Defaults to <span class="docutils literal"><span class="pre">0.01</span></span>. This variable identified
-proportion, so it’s always between 0 and 1.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>leak_size</strong> : float</p>
+<blockquote>
+<div><p>Defaults to <span class="docutils literal"><span class="pre">0.01</span></span>. This variable identified
+proportion, so it&#8217;s always between 0 and 1.
 Typically this value is small.</p>
-</dd>
-<dt><strong>alpha</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">The <span class="docutils literal"><span class="pre">alpha</span></span> is control total step update ratio.
+</div></blockquote>
+<p><strong>alpha</strong> : float</p>
+<blockquote>
+<div><p>The <span class="docutils literal"><span class="pre">alpha</span></span> is control total step update ratio.
 Defaults to <span class="docutils literal"><span class="pre">0.001</span></span>. Typically this value is small.</p>
-</dd>
-<dt><strong>beta</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">This similar to <span class="docutils literal"><span class="pre">alpha</span></span>, but it control ration
+</div></blockquote>
+<p><strong>beta</strong> : float</p>
+<blockquote>
+<div><p>This similar to <span class="docutils literal"><span class="pre">alpha</span></span>, but it control ration
 only for update matrix norms. Defaults to <span class="docutils literal"><span class="pre">20</span></span>.
 Typically this value is bigger than <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>It works only with algorithms based on backpropagation.</strong></dt>
-<dd></dd>
-</dl>
+<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><p class="first last"><strong>It works only with algorithms based on backpropagation.</strong></p>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">References</p>
 <dl class="docutils">
-<dt>[1] Noboru M. “Adaptive on-line learning in changing</dt>
-<dd>environments”, 1997</dd>
+<dt>[1] Noboru M. &#8220;Adaptive on-line learning in changing</dt>
+<dd>environments&#8221;, 1997</dd>
 </dl>
-<p>[2] LeCun, “Efficient BackProp”, 1998</p>
+<p>[2] LeCun, &#8220;Efficient BackProp&#8221;, 1998</p>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">LeakStepAdaptation</span><span class="p">]</span>
@@ -305,7 +302,7 @@ Typically this value is bigger than <span class="docutils literal"><span class="
 
 <dl class="attribute">
 <dt id="neupy.algorithms.step_update.leak_step.LeakStepAdaptation.options">
-<span class="descname">options</span><em class="property"> = {‘alpha’: Option(class_name=’LeakStepAdaptation’, value=BoundedProperty(name=”alpha”)), ‘beta’: Option(class_name=’LeakStepAdaptation’, value=BoundedProperty(name=”beta”)), ‘leak_size’: Option(class_name=’LeakStepAdaptation’, value=ProperFractionProperty(name=”leak_size”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'leak_size': Option(class_name='LeakStepAdaptation', value=ProperFractionProperty(name=&quot;leak_size&quot;)), 'alpha': Option(class_name='LeakStepAdaptation', value=BoundedProperty(name=&quot;alpha&quot;)), 'beta': Option(class_name='LeakStepAdaptation', value=BoundedProperty(name=&quot;beta&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/leak_step.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

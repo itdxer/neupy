@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -237,34 +236,36 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>size</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple with 2 integers</span></dt>
-<dd><p class="first last">Factor by which to downscale <span class="docutils literal"><span class="pre">(vertical,</span> <span class="pre">horizontal)</span></span>.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : tuple with 2 integers</p>
+<blockquote>
+<div><p>Factor by which to downscale <span class="docutils literal"><span class="pre">(vertical,</span> <span class="pre">horizontal)</span></span>.
 <span class="docutils literal"><span class="pre">(2,</span> <span class="pre">2)</span></span> will halve the image in each dimension.</p>
-</dd>
-<dt><strong>stride</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple or int.</span></dt>
-<dd><p class="first last">Stride size, which is the number of shifts over
+</div></blockquote>
+<p><strong>stride</strong> : tuple or int.</p>
+<blockquote>
+<div><p>Stride size, which is the number of shifts over
 rows/cols to get the next pool region. If stride is
 None, it is considered equal to ds (no overlap on
 pooling regions).</p>
-</dd>
-<dt><strong>padding</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{<span class="docutils literal"><span class="pre">valid</span></span>, <span class="docutils literal"><span class="pre">same</span></span>}</span></dt>
-<dd><p class="first last"><span class="docutils literal"><span class="pre">(pad_h,</span> <span class="pre">pad_w)</span></span>, pad zeros to extend beyond four borders of
+</div></blockquote>
+<p><strong>padding</strong> : {<span class="docutils literal"><span class="pre">valid</span></span>, <span class="docutils literal"><span class="pre">same</span></span>}</p>
+<blockquote>
+<div><p><span class="docutils literal"><span class="pre">(pad_h,</span> <span class="pre">pad_w)</span></span>, pad zeros to extend beyond four borders of
 the images, pad_h is the size of the top and bottom margins,
 and pad_w is the size of the left and right margins.</p>
-</dd>
-<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
+<blockquote class="last">
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
 will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
 <p>2D pooling</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
@@ -275,7 +276,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </pre></div>
 </div>
 <p>1D pooling</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
@@ -286,54 +287,53 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <span class="go">(10, 15, 1)</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s input shape.</p>
-</dd>
-<dt><strong>output_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s output shape.</p>
-</dd>
-<dt><strong>training_state</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Defines whether layer in training state or not.</p>
-</dd>
-<dt><strong>parameters</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">Trainable parameters.</p>
-</dd>
-<dt><strong>graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">LayerGraph instance</span></dt>
-<dd><p class="first last">Graphs that stores all relations between layers.</p>
-</dd>
-</dl>
-</td>
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
+<tr class="row-odd"><td>training_state</td>
+<td>(bool) Defines whether layer in training state or not.</td>
+</tr>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
+</tr>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="35%" />
-<col width="65%" />
+<col width="31%" />
+<col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>disable_training_state()</strong></td>
+<tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
 </tr>
-<tr class="row-even"><td><strong>initialize()</strong></td>
+<tr class="row-even"><td>initialize()</td>
 <td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
 </table>
 <dl class="attribute">
 <dt id="neupy.layers.pooling.MaxPooling.options">
-<span class="descname">options</span><em class="property"> = {‘size’: Option(class_name=’BasePooling’, value=TypedListProperty(name=”size”)), ‘padding’: Option(class_name=’BasePooling’, value=ChoiceProperty(name=”padding”)), ‘stride’: Option(class_name=’BasePooling’, value=Spatial2DProperty(name=”stride”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='BasePooling', value=TypedListProperty(name=&quot;size&quot;)), 'stride': Option(class_name='BasePooling', value=Spatial2DProperty(name=&quot;stride&quot;)), 'padding': Option(class_name='BasePooling', value=ChoiceProperty(name=&quot;padding&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.pooling.MaxPooling.pooling_type">
-<span class="descname">pooling_type</span><em class="property"> = ‘MAX’</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">pooling_type</span><em class="property"> = 'MAX'</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -346,34 +346,36 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>size</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple with 2 integers</span></dt>
-<dd><p class="first last">Factor by which to downscale <span class="docutils literal"><span class="pre">(vertical,</span> <span class="pre">horizontal)</span></span>.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : tuple with 2 integers</p>
+<blockquote>
+<div><p>Factor by which to downscale <span class="docutils literal"><span class="pre">(vertical,</span> <span class="pre">horizontal)</span></span>.
 <span class="docutils literal"><span class="pre">(2,</span> <span class="pre">2)</span></span> will halve the image in each dimension.</p>
-</dd>
-<dt><strong>stride</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple or int.</span></dt>
-<dd><p class="first last">Stride size, which is the number of shifts over
+</div></blockquote>
+<p><strong>stride</strong> : tuple or int.</p>
+<blockquote>
+<div><p>Stride size, which is the number of shifts over
 rows/cols to get the next pool region. If stride is
 None, it is considered equal to ds (no overlap on
 pooling regions).</p>
-</dd>
-<dt><strong>padding</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{<span class="docutils literal"><span class="pre">valid</span></span>, <span class="docutils literal"><span class="pre">same</span></span>}</span></dt>
-<dd><p class="first last"><span class="docutils literal"><span class="pre">(pad_h,</span> <span class="pre">pad_w)</span></span>, pad zeros to extend beyond four borders of
+</div></blockquote>
+<p><strong>padding</strong> : {<span class="docutils literal"><span class="pre">valid</span></span>, <span class="docutils literal"><span class="pre">same</span></span>}</p>
+<blockquote>
+<div><p><span class="docutils literal"><span class="pre">(pad_h,</span> <span class="pre">pad_w)</span></span>, pad zeros to extend beyond four borders of
 the images, pad_h is the size of the top and bottom margins,
 and pad_w is the size of the left and right margins.</p>
-</dd>
-<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
+<blockquote class="last">
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
 will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
 <p>2D pooling</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
@@ -384,7 +386,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </pre></div>
 </div>
 <p>1D pooling</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
@@ -395,54 +397,53 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <span class="go">(10, 15, 1)</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s input shape.</p>
-</dd>
-<dt><strong>output_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s output shape.</p>
-</dd>
-<dt><strong>training_state</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Defines whether layer in training state or not.</p>
-</dd>
-<dt><strong>parameters</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">Trainable parameters.</p>
-</dd>
-<dt><strong>graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">LayerGraph instance</span></dt>
-<dd><p class="first last">Graphs that stores all relations between layers.</p>
-</dd>
-</dl>
-</td>
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
+<tr class="row-odd"><td>training_state</td>
+<td>(bool) Defines whether layer in training state or not.</td>
+</tr>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
+</tr>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="35%" />
-<col width="65%" />
+<col width="31%" />
+<col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>disable_training_state()</strong></td>
+<tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
 </tr>
-<tr class="row-even"><td><strong>initialize()</strong></td>
+<tr class="row-even"><td>initialize()</td>
 <td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
 </table>
 <dl class="attribute">
 <dt id="neupy.layers.pooling.AveragePooling.options">
-<span class="descname">options</span><em class="property"> = {‘size’: Option(class_name=’BasePooling’, value=TypedListProperty(name=”size”)), ‘padding’: Option(class_name=’BasePooling’, value=ChoiceProperty(name=”padding”)), ‘stride’: Option(class_name=’BasePooling’, value=Spatial2DProperty(name=”stride”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='BasePooling', value=TypedListProperty(name=&quot;size&quot;)), 'stride': Option(class_name='BasePooling', value=Spatial2DProperty(name=&quot;stride&quot;)), 'padding': Option(class_name='BasePooling', value=ChoiceProperty(name=&quot;padding&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.pooling.AveragePooling.pooling_type">
-<span class="descname">pooling_type</span><em class="property"> = ‘AVG’</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">pooling_type</span><em class="property"> = 'AVG'</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -455,71 +456,70 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>scale</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int or tuple with two int</span></dt>
-<dd><p class="first last">Scaling factor for the input value. In the tuple first
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>scale</strong> : int or tuple with two int</p>
+<blockquote>
+<div><p>Scaling factor for the input value. In the tuple first
 parameter identifies scale of the height and the second
 one of the width.</p>
-</dd>
-<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
+<blockquote class="last">
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
 will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">Upscale</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
 <span class="go">(3, 20, 20)</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s input shape.</p>
-</dd>
-<dt><strong>output_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s output shape.</p>
-</dd>
-<dt><strong>training_state</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Defines whether layer in training state or not.</p>
-</dd>
-<dt><strong>parameters</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">Trainable parameters.</p>
-</dd>
-<dt><strong>graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">LayerGraph instance</span></dt>
-<dd><p class="first last">Graphs that stores all relations between layers.</p>
-</dd>
-</dl>
-</td>
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
+<tr class="row-odd"><td>training_state</td>
+<td>(bool) Defines whether layer in training state or not.</td>
+</tr>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
+</tr>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="35%" />
-<col width="65%" />
+<col width="31%" />
+<col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>disable_training_state()</strong></td>
+<tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
 </tr>
-<tr class="row-even"><td><strong>initialize()</strong></td>
+<tr class="row-even"><td>initialize()</td>
 <td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
 </table>
 <dl class="attribute">
 <dt id="neupy.layers.pooling.Upscale.options">
-<span class="descname">options</span><em class="property"> = {‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘scale’: Option(class_name=’Upscale’, value=ScaleFactorProperty(name=”scale”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'scale': Option(class_name='Upscale', value=ScaleFactorProperty(name=&quot;scale&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -530,11 +530,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_value</strong></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
 </tr>
 </tbody>
 </table>
@@ -558,11 +554,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple with int</span></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_shape</strong> : tuple with int</td>
 </tr>
 </tbody>
 </table>
@@ -578,9 +570,9 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>function</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{<span class="docutils literal"><span class="pre">avg</span></span>, <span class="docutils literal"><span class="pre">max</span></span>} or callable</span></dt>
-<dd><p class="first">Common functions has been predefined for the user.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>function</strong> : {<span class="docutils literal"><span class="pre">avg</span></span>, <span class="docutils literal"><span class="pre">max</span></span>} or callable</p>
+<blockquote>
+<div><p>Common functions has been predefined for the user.
 These options are available:</p>
 <ul class="simple">
 <li><span class="docutils literal"><span class="pre">avg</span></span> - For average global pooling. The same as
@@ -594,60 +586,59 @@ following format.</p>
     <span class="k">pass</span>
 </pre></div>
 </div>
-<p class="last">Defaults to <span class="docutils literal"><span class="pre">avg</span></span>.</p>
-</dd>
-<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+<p>Defaults to <span class="docutils literal"><span class="pre">avg</span></span>.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
+<blockquote class="last">
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
 will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">GlobalPooling</span><span class="p">(</span><span class="s1">&#39;avg&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
 <span class="go">(16,)</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s input shape.</p>
-</dd>
-<dt><strong>output_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s output shape.</p>
-</dd>
-<dt><strong>training_state</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Defines whether layer in training state or not.</p>
-</dd>
-<dt><strong>parameters</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">Trainable parameters.</p>
-</dd>
-<dt><strong>graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">LayerGraph instance</span></dt>
-<dd><p class="first last">Graphs that stores all relations between layers.</p>
-</dd>
-</dl>
-</td>
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
+<tr class="row-odd"><td>training_state</td>
+<td>(bool) Defines whether layer in training state or not.</td>
+</tr>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
+</tr>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="35%" />
-<col width="65%" />
+<col width="31%" />
+<col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>disable_training_state()</strong></td>
+<tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
 </tr>
-<tr class="row-even"><td><strong>initialize()</strong></td>
+<tr class="row-even"><td>initialize()</td>
 <td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
@@ -659,7 +650,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.pooling.GlobalPooling.options">
-<span class="descname">options</span><em class="property"> = {‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘function’: Option(class_name=’GlobalPooling’, value=FunctionWithOptionsProperty(name=”function”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'function': Option(class_name='GlobalPooling', value=FunctionWithOptionsProperty(name=&quot;function&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/pooling.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -670,11 +661,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_value</strong></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
 </tr>
 </tbody>
 </table>

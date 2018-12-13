@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -238,19 +237,15 @@ L2-regularization.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>decay_rate</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Controls training penalties during the parameter updates.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>decay_rate</strong> : float</p>
+<blockquote>
+<div><p>Controls training penalties during the parameter updates.
 The larger the value the stronger effect regularization
 has during the training. Defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>It works with any algorithm based on the backpropagation.</strong></dt>
-<dd></dd>
-</dl>
+<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><p class="first last"><strong>It works with any algorithm based on the backpropagation.</strong></p>
 </td>
 </tr>
 </tbody>
@@ -260,7 +255,7 @@ has during the training. Defaults to <span class="docutils literal"><span class=
 <p class="last"><a class="reference internal" href="neupy.algorithms.regularization.weight_elimination.html#neupy.algorithms.regularization.weight_elimination.WeightElimination" title="neupy.algorithms.regularization.weight_elimination.WeightElimination"><span class="xref py py-class docutils literal"><span class="pre">WeightElimination</span></span></a></p>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
@@ -281,7 +276,7 @@ has during the training. Defaults to <span class="docutils literal"><span class=
 
 <dl class="attribute">
 <dt id="neupy.algorithms.regularization.weight_decay.WeightDecay.options">
-<span class="descname">options</span><em class="property"> = {‘decay_rate’: Option(class_name=’WeightDecay’, value=BoundedProperty(name=”decay_rate”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/regularization/weight_decay.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'decay_rate': Option(class_name='WeightDecay', value=BoundedProperty(name=&quot;decay_rate&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/regularization/weight_decay.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

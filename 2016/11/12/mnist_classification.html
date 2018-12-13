@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Password recovery" href="../../../2015/09/21/password_recovery.html" /><link rel="prev" title="Hyperparameter optimization for Neural Networks" href="../../12/17/hyperparameter_optimization_for_neural_networks.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="Password recovery" href="../../../2015/09/21/password_recovery.html" /><link rel="prev" title="Hyperparameter optimization for Neural Networks" href="../../12/17/hyperparameter_optimization_for_neural_networks.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -259,7 +258,7 @@
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../../../_images/digit-example.png"><img alt="MNIST digit example" class="align-center" src="../../../_images/digit-example.png" style="width: 70%;" /></a>
-<p>In this tutorial, we will use each image as a vector so we won’t need to reshape it to its original size. The only thing that we need to do is to rescale image values. Rescaling images will help network to converge faster.</p>
+<p>In this tutorial, we will use each image as a vector so we won&#8217;t need to reshape it to its original size. The only thing that we need to do is to rescale image values. Rescaling images will help network to converge faster.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">/=</span> <span class="mf">255.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">-=</span> <span class="n">X</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -281,14 +280,14 @@
 </pre></div>
 </div>
 <p>After last update for matrix <span class="docutils literal"><span class="pre">A</span></span> we got different identifier for the object, which means that it got copied.</p>
-<p>In case of the in-place updates, we don’t waste memory. Current dataset is relatively small and there is no memory deficiency, but for larger datasets it might make a big difference.</p>
-<p>There is one more processing step that we need to do before we can train our network. Let’s take a look into target classes.</p>
+<p>In case of the in-place updates, we don&#8217;t waste memory. Current dataset is relatively small and there is no memory deficiency, but for larger datasets it might make a big difference.</p>
+<p>There is one more processing step that we need to do before we can train our network. Let&#8217;s take a look into target classes.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="mi">10</span><span class="p">)</span>
 <span class="go">[9, 0, 9, 7, 2, 2, 3, 0, 0, 8]</span>
 </pre></div>
 </div>
-<p>All the numbers that we have are specified as integers. For our problem we want network to learn visual representation of the numbers. We cannot use them as integers, because it will create problems during the training. Basically, with the integer definition we’re implying that number <span class="docutils literal"><span class="pre">1</span></span> visually more similar to <span class="docutils literal"><span class="pre">0</span></span> than to number <span class="docutils literal"><span class="pre">7</span></span>. It happens only because difference between <span class="docutils literal"><span class="pre">1</span></span> and <span class="docutils literal"><span class="pre">0</span></span> smaller than difference between <span class="docutils literal"><span class="pre">1</span></span> and <span class="docutils literal"><span class="pre">7</span></span>. In order to avoid making any type of assumptions we will use one-hot encoding technique.</p>
+<p>All the numbers that we have are specified as integers. For our problem we want network to learn visual representation of the numbers. We cannot use them as integers, because it will create problems during the training. Basically, with the integer definition we&#8217;re implying that number <span class="docutils literal"><span class="pre">1</span></span> visually more similar to <span class="docutils literal"><span class="pre">0</span></span> than to number <span class="docutils literal"><span class="pre">7</span></span>. It happens only because difference between <span class="docutils literal"><span class="pre">1</span></span> and <span class="docutils literal"><span class="pre">0</span></span> smaller than difference between <span class="docutils literal"><span class="pre">1</span></span> and <span class="docutils literal"><span class="pre">7</span></span>. In order to avoid making any type of assumptions we will use one-hot encoding technique.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">sparse</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -297,7 +296,7 @@
 </pre></div>
 </div>
 <p>You can see that every digit was transformed into a 10 dimensional vector.</p>
-<p>And finally, we need to divide our data into training and validation set. We won’t show validation set to the network and we will use it only to test network’s classification accuracy.</p>
+<p>And finally, we need to divide our data into training and validation set. We won&#8217;t show validation set to the network and we will use it only to test network&#8217;s classification accuracy.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -312,7 +311,7 @@
 </div>
 <div class="section" id="model-initialization">
 <h2>Model initialization</h2>
-<p>It’s very easy to define neural network architectures in the NeuPy. We can define simple architecture that excepts input vector with 784 features and outputs probabilities per each digit class. In addition, we can two hidden layers with 500 and 300 output units respectively. Each hidden layer will use relu as activation function</p>
+<p>It&#8217;s very easy to define neural network architectures in the NeuPy. We can define simple architecture that excepts input vector with 784 features and outputs probabilities per each digit class. In addition, we can two hidden layers with 500 and 300 output units respectively. Each hidden layer will use relu as activation function</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
@@ -386,7 +385,7 @@
 <span class="p">[</span><span class="n">TENSORFLOW</span><span class="p">]</span> <span class="n">Initialization</span> <span class="n">finished</span> <span class="n">successfully</span><span class="o">.</span> <span class="n">It</span> <span class="n">took</span> <span class="mf">0.30</span> <span class="n">seconds</span>
 </pre></div>
 </div>
-<p>In addition, for feedforward neural networks it’s possible to check architecture in form of a table.</p>
+<p>In addition, for feedforward neural networks it&#8217;s possible to check architecture in form of a table.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mnet</span><span class="o">.</span><span class="n">architecture</span><span class="p">()</span>
 
 <span class="go">Network&#39;s architecture</span>
@@ -404,7 +403,7 @@
 </div>
 <div class="section" id="training">
 <h2>Training</h2>
-<p>Now that we have everything specified we are finally can train our network. In addition, we can add test data for which we will be able to monitor network’s training progress on the unseen data.</p>
+<p>Now that we have everything specified we are finally can train our network. In addition, we can add test data for which we will be able to monitor network&#8217;s training progress on the unseen data.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="go">Start training</span>
@@ -432,19 +431,19 @@
 </div>
 <div class="section" id="evaluations">
 <h2>Evaluations</h2>
-<p>From the table it’s hard to see network’s training progress. We can make error plot that can help us to visualize how it performed on the training and validation datasets separately.</p>
+<p>From the table it&#8217;s hard to see network&#8217;s training progress. We can make error plot that can help us to visualize how it performed on the training and validation datasets separately.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plots</span><span class="o">.</span><span class="n">error_plot</span><span class="p">(</span><span class="n">mnet</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../../../_images/bpnet-train-errors-plot.png"><img alt="GradientDescent epoch errors plot" class="align-center" src="../../../_images/bpnet-train-errors-plot.png" style="width: 70%;" /></a>
-<p>From the figure above, you can notice that validation error does not decrease all the time. Sometimes it goes up and sometimes down, but it doesn’t mean that network trains poorly. Let’s check small example that can explain who it can happen.</p>
+<p>From the figure above, you can notice that validation error does not decrease all the time. Sometimes it goes up and sometimes down, but it doesn&#8217;t mean that network trains poorly. Let&#8217;s check small example that can explain who it can happen.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">actual_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model1_prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model2_prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>Above, you can see two predictions from different models. The first model predicted two samples right and one wrong. The second one predicted everything perfectly, but predictions from second model are less certain (probabilities are close to random prediction - <span class="docutils literal"><span class="pre">0.5</span></span>). Let’s check the binary cross entropy error.</p>
+<p>Above, you can see two predictions from different models. The first model predicted two samples right and one wrong. The second one predicted everything perfectly, but predictions from second model are less certain (probabilities are close to random prediction - <span class="docutils literal"><span class="pre">0.5</span></span>). Let&#8217;s check the binary cross entropy error.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">log_loss</span> <span class="k">as</span> <span class="n">binary_crossentropy</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">binary_crossentropy</span><span class="p">(</span><span class="n">actual_values</span><span class="p">,</span> <span class="n">model1_prediction</span><span class="p">)</span>
 <span class="go">0.37567</span>
@@ -452,7 +451,7 @@
 <span class="go">0.51083</span>
 </pre></div>
 </div>
-<p>The second model made better prediction in terms of accuracy, but it got larger cross entropy error. Larger error means that network is less certain about its prediction. Similar situation we’ve observed in the plot above.</p>
+<p>The second model made better prediction in terms of accuracy, but it got larger cross entropy error. Larger error means that network is less certain about its prediction. Similar situation we&#8217;ve observed in the plot above.</p>
 <p>Instead of using cross-entropy error for model performance assessment we can build our own report using functions available in scikit-learn library.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -482,7 +481,7 @@
 <span class="go">Validation accuracy: 98.37%</span>
 </pre></div>
 </div>
-<p>The 98.37% accuracy is pretty good accuracy for such a simple solution. Additional modification can improve network’s accuracy.</p>
+<p>The 98.37% accuracy is pretty good accuracy for such a simple solution. Additional modification can improve network&#8217;s accuracy.</p>
 </div>
 </div>
 

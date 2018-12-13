@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -237,99 +236,104 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>axes</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, tuple with int or None</span></dt>
-<dd><p class="first last">The axis or axes along which normalization is applied.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>axes</strong> : int, tuple with int or None</p>
+<blockquote>
+<div><p>The axis or axes along which normalization is applied.
 <span class="docutils literal"><span class="pre">None</span></span> means that normalization will be applied over
 all axes except the first one. In case of 4D tensor it will
 be equal to <span class="docutils literal"><span class="pre">(0,</span> <span class="pre">1,</span> <span class="pre">2)</span></span>. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</dd>
-<dt><strong>epsilon</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Epsilon is a positive constant that adds to the standard
+</div></blockquote>
+<p><strong>epsilon</strong> : float</p>
+<blockquote>
+<div><p>Epsilon is a positive constant that adds to the standard
 deviation to prevent the division by zero.
 Defaults to <span class="docutils literal"><span class="pre">1e-5</span></span>.</p>
-</dd>
-<dt><strong>alpha</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Coefficient for the exponential moving average of
+</div></blockquote>
+<p><strong>alpha</strong> : float</p>
+<blockquote>
+<div><p>Coefficient for the exponential moving average of
 batch-wise means and standard deviations computed during
 training; the closer to one, the more it will depend on
 the last batches seen. Value needs to be between <span class="docutils literal"><span class="pre">0</span></span> and <span class="docutils literal"><span class="pre">1</span></span>.
 Defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
-</dd>
-<dt><strong>gamma</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
-<dd><p class="first last">Default initialization methods you can
-find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+</div></blockquote>
+<p><strong>gamma</strong> : array-like, Tensorfow variable, scalar or Initializer</p>
+<blockquote>
+<div><p>Default initialization methods you can
+find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <span class="docutils literal"><span class="pre">Constant(value=1)</span></span>.</p>
-</dd>
-<dt><strong>beta</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
-<dd><p class="first last">Default initialization methods you can
-find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+</div></blockquote>
+<p><strong>beta</strong> : array-like, Tensorfow variable, scalar or Initializer</p>
+<blockquote>
+<div><p>Default initialization methods you can
+find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <span class="docutils literal"><span class="pre">Constant(value=0)</span></span>.</p>
-</dd>
-<dt><strong>running_mean</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
-<dd><p class="first last">Default initialization methods you can
-find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+</div></blockquote>
+<p><strong>running_mean</strong> : array-like, Tensorfow variable, scalar or Initializer</p>
+<blockquote>
+<div><p>Default initialization methods you can
+find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <span class="docutils literal"><span class="pre">Constant(value=0)</span></span>.</p>
-</dd>
-<dt><strong>running_inv_std</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
-<dd><p class="first last">Default initialization methods you can
-find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
+</div></blockquote>
+<p><strong>running_inv_std</strong> : array-like, Tensorfow variable, scalar or Initializer</p>
+<blockquote>
+<div><p>Default initialization methods you can
+find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
 Defaults to <span class="docutils literal"><span class="pre">Constant(value=1)</span></span>.</p>
-</dd>
-<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
+<blockquote class="last">
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
 will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="rc4c23a363e7d-1" rules="none">
+<table class="docutils citation" frame="void" id="r3" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Batch Normalization: Accelerating Deep Network Training
+<tr><td class="label"><a class="fn-backref" href="#id1">[R3]</a></td><td>Batch Normalization: Accelerating Deep Network Training
 by Reducing Internal Covariate Shift,
 <a class="reference external" href="http://arxiv.org/pdf/1502.03167v3.pdf">http://arxiv.org/pdf/1502.03167v3.pdf</a></td></tr>
 </tbody>
 </table>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s input shape.</p>
-</dd>
-<dt><strong>output_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s output shape.</p>
-</dd>
-<dt><strong>training_state</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Defines whether layer in training state or not.</p>
-</dd>
-<dt><strong>parameters</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">Trainable parameters.</p>
-</dd>
-<dt><strong>graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">LayerGraph instance</span></dt>
-<dd><p class="first last">Graphs that stores all relations between layers.</p>
-</dd>
-</dl>
-</td>
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
+<tr class="row-odd"><td>training_state</td>
+<td>(bool) Defines whether layer in training state or not.</td>
+</tr>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
+</tr>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="35%" />
-<col width="65%" />
+<col width="31%" />
+<col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>disable_training_state()</strong></td>
+<tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
 </tr>
-<tr class="row-even"><td><strong>initialize()</strong></td>
+<tr class="row-even"><td>initialize()</td>
 <td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
@@ -367,7 +371,7 @@ by Reducing Internal Covariate Shift,
 
 <dl class="attribute">
 <dt id="neupy.layers.normalization.BatchNorm.options">
-<span class="descname">options</span><em class="property"> = {‘running_inv_std’: Option(class_name=’BatchNorm’, value=ParameterProperty(name=”running_inv_std”)), ‘alpha’: Option(class_name=’BatchNorm’, value=ProperFractionProperty(name=”alpha”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘beta’: Option(class_name=’BatchNorm’, value=ParameterProperty(name=”beta”)), ‘axes’: Option(class_name=’BatchNorm’, value=AxesProperty(name=”axes”)), ‘epsilon’: Option(class_name=’BatchNorm’, value=NumberProperty(name=”epsilon”)), ‘running_mean’: Option(class_name=’BatchNorm’, value=ParameterProperty(name=”running_mean”)), ‘gamma’: Option(class_name=’BatchNorm’, value=ParameterProperty(name=”gamma”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/normalization.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'axes': Option(class_name='BatchNorm', value=AxesProperty(name=&quot;axes&quot;)), 'epsilon': Option(class_name='BatchNorm', value=NumberProperty(name=&quot;epsilon&quot;)), 'alpha': Option(class_name='BatchNorm', value=ProperFractionProperty(name=&quot;alpha&quot;)), 'beta': Option(class_name='BatchNorm', value=ParameterProperty(name=&quot;beta&quot;)), 'gamma': Option(class_name='BatchNorm', value=ParameterProperty(name=&quot;gamma&quot;)), 'running_mean': Option(class_name='BatchNorm', value=ParameterProperty(name=&quot;running_mean&quot;)), 'running_inv_std': Option(class_name='BatchNorm', value=ParameterProperty(name=&quot;running_inv_std&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/normalization.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -378,11 +382,7 @@ by Reducing Internal Covariate Shift,
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_value</strong></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
 </tr>
 </tbody>
 </table>
@@ -405,7 +405,7 @@ by Reducing Internal Covariate Shift,
 <em class="property">class </em><span class="descclassname">neupy.layers.normalization.</span><span class="descname">LocalResponseNorm</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/normalization.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Local Response Normalization Layer.</p>
 <p>Aggregation is purely across channels, not within channels,
-and performed “pixelwise”.</p>
+and performed &#8220;pixelwise&#8221;.</p>
 <p>If the value of the <span class="math">\(i\)</span> th channel is <span class="math">\(x_i\)</span>, the output is</p>
 <div class="math">
 \[x_i = \frac{x_i}{ (k + ( \alpha \sum_j x_j^2 ))^\beta }\]</div>
@@ -415,58 +415,66 @@ neighboring channels.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>alpha</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Coefficient, see equation above</p>
-</dd>
-<dt><strong>beta</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Offset, see equation above</p>
-</dd>
-<dt><strong>k</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Exponent, see equation above</p>
-</dd>
-<dt><strong>depth_radius</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Number of adjacent channels to normalize over, must be odd.</p>
-</dd>
-<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha</strong> : float</p>
+<blockquote>
+<div><p>Coefficient, see equation above</p>
+</div></blockquote>
+<p><strong>beta</strong> : float</p>
+<blockquote>
+<div><p>Offset, see equation above</p>
+</div></blockquote>
+<p><strong>k</strong> : float</p>
+<blockquote>
+<div><p>Exponent, see equation above</p>
+</div></blockquote>
+<p><strong>depth_radius</strong> : int</p>
+<blockquote>
+<div><p>Number of adjacent channels to normalize over, must be odd.</p>
+</div></blockquote>
+<p><strong>name</strong> : str or None</p>
+<blockquote class="last">
+<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
 will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s input shape.</p>
-</dd>
-<dt><strong>output_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Layer’s output shape.</p>
-</dd>
-<dt><strong>training_state</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Defines whether layer in training state or not.</p>
-</dd>
-<dt><strong>parameters</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">Trainable parameters.</p>
-</dd>
-<dt><strong>graph</strong> <span class="classifier-delimiter">:</span> <span class="classifier">LayerGraph instance</span></dt>
-<dd><p class="first last">Graphs that stores all relations between layers.</p>
-</dd>
-</dl>
-</td>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>input_shape</td>
+<td>(tuple) Layer&#8217;s input shape.</td>
+</tr>
+<tr class="row-even"><td>output_shape</td>
+<td>(tuple) Layer&#8217;s output shape.</td>
+</tr>
+<tr class="row-odd"><td>training_state</td>
+<td>(bool) Defines whether layer in training state or not.</td>
+</tr>
+<tr class="row-even"><td>parameters</td>
+<td>(dict) Trainable parameters.</td>
+</tr>
+<tr class="row-odd"><td>graph</td>
+<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="35%" />
-<col width="65%" />
+<col width="31%" />
+<col width="69%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>disable_training_state()</strong></td>
+<tr class="row-odd"><td>disable_training_state()</td>
 <td>Swith off trainig state.</td>
 </tr>
-<tr class="row-even"><td><strong>initialize()</strong></td>
+<tr class="row-even"><td>initialize()</td>
 <td>Set up important configurations related to the layer.</td>
 </tr>
 </tbody>
@@ -493,7 +501,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.normalization.LocalResponseNorm.options">
-<span class="descname">options</span><em class="property"> = {‘alpha’: Option(class_name=’LocalResponseNorm’, value=NumberProperty(name=”alpha”)), ‘depth_radius’: Option(class_name=’LocalResponseNorm’, value=IntProperty(name=”depth_radius”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘beta’: Option(class_name=’LocalResponseNorm’, value=NumberProperty(name=”beta”)), ‘k’: Option(class_name=’LocalResponseNorm’, value=NumberProperty(name=”k”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/normalization.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'alpha': Option(class_name='LocalResponseNorm', value=NumberProperty(name=&quot;alpha&quot;)), 'beta': Option(class_name='LocalResponseNorm', value=NumberProperty(name=&quot;beta&quot;)), 'k': Option(class_name='LocalResponseNorm', value=NumberProperty(name=&quot;k&quot;)), 'depth_radius': Option(class_name='LocalResponseNorm', value=IntProperty(name=&quot;depth_radius&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/normalization.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -504,11 +512,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_value</strong></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
 </tr>
 </tbody>
 </table>
@@ -522,11 +526,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple with int</span></dt>
-<dd></dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_shape</strong> : tuple with int</td>
 </tr>
 </tbody>
 </table>

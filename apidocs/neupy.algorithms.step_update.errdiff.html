@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -238,40 +237,38 @@ epochs.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>update_for_smaller_error</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Multiplies this option to <span class="docutils literal"><span class="pre">step</span></span> in if the error
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>update_for_smaller_error</strong> : float</p>
+<blockquote>
+<div><p>Multiplies this option to <span class="docutils literal"><span class="pre">step</span></span> in if the error
 was less than in previous epochs. Defaults to <span class="docutils literal"><span class="pre">1.05</span></span>.
-Value can’t be less than <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</dd>
-<dt><strong>update_for_bigger_error</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Multiplies this option to <span class="docutils literal"><span class="pre">step</span></span> in if the error
+Value can&#8217;t be less than <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</div></blockquote>
+<p><strong>update_for_bigger_error</strong> : float</p>
+<blockquote>
+<div><p>Multiplies this option to <span class="docutils literal"><span class="pre">step</span></span> in if the error
 was more than in previous epochs. Defaults to <span class="docutils literal"><span class="pre">0.7</span></span>.</p>
-</dd>
-<dt><strong>error_difference</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">The value indicates how many had to increase the
+</div></blockquote>
+<p><strong>error_difference</strong> : float</p>
+<blockquote>
+<div><p>The value indicates how many had to increase the
 error from the previous epochs that would produce
 reduction step. Defaults to <span class="docutils literal"><span class="pre">1.04</span></span>.
-Value can’t be less than <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</dd>
-</dl>
+Value can&#8217;t be less than <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>It works only with algorithms based on backpropagation.</strong></dt>
-<dd></dd>
-</dl>
+<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><p class="first last"><strong>It works only with algorithms based on backpropagation.</strong></p>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">ErrDiffStepUpdate</span><span class="p">]</span>
 <span class="gp">... </span><span class="p">)</span>
 </pre></div>
@@ -298,7 +295,7 @@ Value can’t be less than <span class="docutils literal"><span class="pre">1</s
 
 <dl class="attribute">
 <dt id="neupy.algorithms.step_update.errdiff.ErrDiffStepUpdate.options">
-<span class="descname">options</span><em class="property"> = {‘error_difference’: Option(class_name=’ErrDiffStepUpdate’, value=BoundedProperty(name=”error_difference”)), ‘update_for_bigger_error’: Option(class_name=’ErrDiffStepUpdate’, value=ProperFractionProperty(name=”update_for_bigger_error”)), ‘update_for_smaller_error’: Option(class_name=’ErrDiffStepUpdate’, value=BoundedProperty(name=”update_for_smaller_error”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/errdiff.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'update_for_smaller_error': Option(class_name='ErrDiffStepUpdate', value=BoundedProperty(name=&quot;update_for_smaller_error&quot;)), 'update_for_bigger_error': Option(class_name='ErrDiffStepUpdate', value=ProperFractionProperty(name=&quot;update_for_bigger_error&quot;)), 'error_difference': Option(class_name='ErrDiffStepUpdate', value=BoundedProperty(name=&quot;error_difference&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/step_update/errdiff.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

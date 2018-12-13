@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -239,23 +238,24 @@ can be loaded using <span class="docutils literal"><span class="pre">neupy.stora
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>input_shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
-<dd><p class="first last">Network’s input shape. Defaults to <span class="docutils literal"><span class="pre">(224,</span> <span class="pre">224,</span> <span class="pre">3)</span></span>.</p>
-</dd>
-<dt><strong>include_global_pool</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Specifies if returned output should include global pooling
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_shape</strong> : tuple</p>
+<blockquote>
+<div><p>Network&#8217;s input shape. Defaults to <span class="docutils literal"><span class="pre">(224,</span> <span class="pre">224,</span> <span class="pre">3)</span></span>.</p>
+</div></blockquote>
+<p><strong>include_global_pool</strong> : bool</p>
+<blockquote>
+<div><p>Specifies if returned output should include global pooling
 layer. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</dd>
-<dt><strong>in_out_ratio</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{4, 8, 16, 32}</span></dt>
-<dd><p class="first last">Every layer that applies strides reduces height and width per every
+</div></blockquote>
+<p><strong>in_out_ratio</strong> : {4, 8, 16, 32}</p>
+<blockquote class="last">
+<div><p>Every layer that applies strides reduces height and width per every
 image. There are 5 of these layers in Resnet and at the end each
 dimensions gets reduced by <span class="docutils literal"><span class="pre">32</span></span>. For example, 224x224 image
 will be reduced to 7x7 image patches. This parameter specifies
-what level of reduction we want to obtain after we’ve propagated
+what level of reduction we want to obtain after we&#8217;ve propagated
 network through all the convolution layers.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -274,36 +274,36 @@ network through all the convolution layers.</p>
 <p class="rubric">Notes</p>
 <p>Because of the global pooling layer, ResNet50 can be applied to
 the images with variable sizes. The only limitation is that image
-size should be bigger than 32x32, otherwise network won’t be able
+size should be bigger than 32x32, otherwise network won&#8217;t be able
 to apply all transformations to the image.</p>
 <p class="rubric">References</p>
 <p>Deep Residual Learning for Image Recognition.
 <a class="reference external" href="https://arxiv.org/abs/1512.03385">https://arxiv.org/abs/1512.03385</a></p>
 <p class="rubric">Examples</p>
 <p>ResNet-50 for ImageNet classification</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">architectures</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">architectures</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">resnet50</span> <span class="o">=</span> <span class="n">architectures</span><span class="o">.</span><span class="n">resnet50</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">resnet50</span>
 <span class="go">(224, 224, 3) -&gt; [... 187 layers ...] -&gt; 1000</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span><span class="n">resnet50</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>ResNet-50 for custom classification task</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">architectures</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">resnet50</span> <span class="o">=</span> <span class="n">architectures</span><span class="o">.</span><span class="n">resnet50</span><span class="p">(</span><span class="n">include_global_pool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">architectures</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resnet50</span> <span class="o">=</span> <span class="n">architectures</span><span class="o">.</span><span class="n">resnet50</span><span class="p">(</span><span class="n">include_global_pool</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">resnet50</span>
 <span class="go">(224, 224, 3) -&gt; [... 185 layers ...] -&gt; (7, 7, 2048)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">resnet50</span> <span class="o">=</span> <span class="n">resnet50</span> <span class="o">&gt;</span> <span class="n">GlobalPooling</span><span class="p">(</span><span class="s1">&#39;avg&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Softmax</span><span class="p">(</span><span class="mi">21</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>ResNet-50 for image segmentation</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">architectures</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">architectures</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">resnet50</span> <span class="o">=</span> <span class="n">architectures</span><span class="o">.</span><span class="n">resnet50</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">include_global_pool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">include_global_pool</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">in_out_ratio</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">resnet50</span>

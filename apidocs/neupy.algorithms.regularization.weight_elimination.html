@@ -28,16 +28,15 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -240,26 +239,23 @@ overfitting.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>decay_rate</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Controls the effect of penalties on the update
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>decay_rate</strong> : float</p>
+<blockquote>
+<div><p>Controls the effect of penalties on the update
 network weights. Defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
-</dd>
-<dt><strong>zero_weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Second important parameter for weights penalization.
+</div></blockquote>
+<p><strong>zero_weight</strong> : float</p>
+<blockquote>
+<div><p>Second important parameter for weights penalization.
 Defaults to <span class="docutils literal"><span class="pre">1</span></span>. Small value can make all weights
 close to zero. Big value will make less significant
 contribution in weights update. Which mean that with
 a bigger value of the <span class="docutils literal"><span class="pre">zero_weight</span></span> parameter network
 allows higher values for the weights.</p>
-</dd>
-</dl>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>It works with any algorithm based on the backpropagation.</strong></dt>
-<dd></dd>
-</dl>
+<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><p class="first last"><strong>It works with any algorithm based on the backpropagation.</strong></p>
 </td>
 </tr>
 </tbody>
@@ -283,10 +279,10 @@ close to zero).</p>
 <dd>Generalization by Weight-Elimination with Application to
 Forecasting, in Richard P. Lippmann; John E. Moody &amp; David S.
 Touretzky, ed., Advances in Neural Information Processing
-Systems, San Francisco, CA: Morgan Kaufmann, pp. 875–882 .</dd>
+Systems, San Francisco, CA: Morgan Kaufmann, pp. 875&#8211;882 .</dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
@@ -307,7 +303,7 @@ Systems, San Francisco, CA: Morgan Kaufmann, pp. 875–882 .</dd>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.regularization.weight_elimination.WeightElimination.options">
-<span class="descname">options</span><em class="property"> = {‘decay_rate’: Option(class_name=’WeightElimination’, value=BoundedProperty(name=”decay_rate”)), ‘zero_weight’: Option(class_name=’WeightElimination’, value=BoundedProperty(name=”zero_weight”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/regularization/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'decay_rate': Option(class_name='WeightElimination', value=BoundedProperty(name=&quot;decay_rate&quot;)), 'zero_weight': Option(class_name='WeightElimination', value=BoundedProperty(name=&quot;zero_weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/regularization/weight_elimination.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
