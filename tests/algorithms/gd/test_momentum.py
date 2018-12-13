@@ -19,7 +19,7 @@ class MomentumTestCase(BaseTestCase):
             nesterov=True,
         )
 
-        mnet.train(x_train, y_train, x_test, y_test, epochs=40)
+        mnet.train(x_train, y_train, x_test, y_test, epochs=30)
         self.assertGreater(0.15, mnet.validation_errors.last())
 
     def test_momentum_with_minibatch(self):

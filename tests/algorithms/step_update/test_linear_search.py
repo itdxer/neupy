@@ -14,8 +14,8 @@ class LinearSearchTestCase(BaseTestCase):
 
     def test_linear_search(self):
         methods = [
-            ('golden', 0.37381297),
-            ('brent', 0.36021027),
+            ('golden', 0.36517048),
+            ('brent', 0.36848962),
         ]
 
         for method_name, valid_error in methods:

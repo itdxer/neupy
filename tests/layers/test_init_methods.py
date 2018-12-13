@@ -107,15 +107,11 @@ class UniformInitializeTestCase(BaseInitializerTestCase):
 
 
 class InitializerWithGainTestCase(BaseInitializerTestCase):
-    def test_gain_relu(self):
-        he_initializer = init.HeNormal(gain='relu')
-        self.assertEqual(he_initializer.gain, math.sqrt(2))
-
     def test_gain_relu_he_normal_scale(self):
         he_initializer = init.HeNormal(gain=1, seed=0)
         sample_1 = self.eval(he_initializer.sample((4, 4)))
 
-        he_initializer = init.HeNormal(gain='relu', seed=0)
+        he_initializer = init.HeNormal(gain=2, seed=0)
         sample_2 = self.eval(he_initializer.sample((4, 4)))
 
         self.assertAlmostEqual(
@@ -132,12 +128,12 @@ class HeInitializeTestCase(BaseInitializerTestCase):
 
         self.assertNormalyDistributed(weight)
         self.assertAlmostEqual(weight.mean(), 0, places=1)
-        self.assertAlmostEqual(weight.std(), math.sqrt(2. / 40),
+        self.assertAlmostEqual(weight.std(), math.sqrt(1. / 40),
                                places=2)
 
     def test_he_uniform(self):
         n_inputs = 30
-        bound = math.sqrt(6. / n_inputs)
+        bound = math.sqrt(3. / n_inputs)
 
         he_uniform = init.HeUniform()
         weight = self.eval(he_uniform.sample((n_inputs, 30)))
@@ -163,7 +159,7 @@ class XavierInitializeTestCase(BaseInitializerTestCase):
         self.assertAlmostEqual(weight.mean(), 0, places=1)
         self.assertAlmostEqual(
             weight.std(),
-            math.sqrt(2. / (n_inputs + n_outputs)),
+            math.sqrt(1. / (n_inputs + n_outputs)),
             places=2)
 
     def test_xavier_uniform(self):
@@ -172,7 +168,7 @@ class XavierInitializeTestCase(BaseInitializerTestCase):
         xavier_uniform = init.XavierUniform()
         weight = self.eval(xavier_uniform.sample((n_inputs, n_outputs)))
 
-        bound = math.sqrt(6. / (n_inputs + n_outputs))
+        bound = math.sqrt(3. / (n_inputs + n_outputs))
 
         self.assertUniformlyDistributed(weight)
         self.assertAlmostEqual(weight.mean(), 0, places=1)

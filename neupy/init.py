@@ -264,8 +264,8 @@ class InitializerWithGain(Initializer):
     Parameters
     ----------
     gain : float or {{``relu``}}
-        Multiplies scaling factor by speified gain.
-        The ``relu`` values set up gain equal to :math:`\\sqrt{{2}}`.
+        Scales variance of the distribution by this factor. Value ``2``
+        is a suitable choice for layers that have Relu non-linearity.
         Defaults to ``1``.
 
     seed : None or int
@@ -273,12 +273,8 @@ class InitializerWithGain(Initializer):
         Defaults to ``None``.
     """
     def __init__(self, gain=1.0, seed=None):
-        if gain == 'relu':
-            gain = math.sqrt(2)
-
         self.gain = gain
         self.seed = seed
-
         super(InitializerWithGain, self).__init__()
 
     def __repr__(self):
@@ -306,8 +302,8 @@ class HeNormal(InitializerWithGain):
     """
     def sample(self, shape, return_array=False):
         fan_in, _ = identify_fans(shape)
-        variance = 2. / fan_in
-        std = self.gain * np.sqrt(variance)
+        variance = 1. / fan_in
+        std = np.sqrt(self.gain * variance)
 
         normal = Normal(0, std, seed=self.seed)
         return normal.sample(shape, return_array)
@@ -334,8 +330,8 @@ class HeUniform(InitializerWithGain):
     """
     def sample(self, shape, return_array=False):
         fan_in, _ = identify_fans(shape)
-        variance = 6. / fan_in
-        abs_max_value = self.gain * np.sqrt(variance)
+        variance = 3. / fan_in
+        abs_max_value = np.sqrt(self.gain * variance)
 
         uniform = Uniform(
             minval=-abs_max_value,
@@ -365,8 +361,8 @@ class XavierNormal(InitializerWithGain):
     """
     def sample(self, shape, return_array=False):
         fan_in, fan_out = identify_fans(shape)
-        variance = 2. / (fan_in + fan_out)
-        std = self.gain * np.sqrt(variance)
+        variance = 1. / (fan_in + fan_out)
+        std = np.sqrt(self.gain * variance)
 
         normal = Normal(0, std, seed=self.seed)
         return normal.sample(shape, return_array)
@@ -392,8 +388,8 @@ class XavierUniform(InitializerWithGain):
     """
     def sample(self, shape, return_array=False):
         fan_in, fan_out = identify_fans(shape)
-        variance = 6. / (fan_in + fan_out)
-        abs_max_value = self.gain * np.sqrt(variance)
+        variance = 3. / (fan_in + fan_out)
+        abs_max_value = np.sqrt(self.gain * variance)
 
         uniform = Uniform(
             minval=-abs_max_value,

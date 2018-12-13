@@ -6,10 +6,13 @@ import collections
 import six
 import tensorflow as tf
 
+from neupy import init
 from neupy.utils import as_tuple
 from neupy.exceptions import LayerConnectionError
-from neupy.core.properties import (TypedListProperty, Property,
-                                   WithdrawProperty)
+from neupy.core.properties import (
+    TypedListProperty, Property,
+    WithdrawProperty, ParameterProperty,
+)
 from .base import ParameterBasedLayer
 
 
@@ -253,7 +256,7 @@ class Convolution(ParameterBasedLayer):
         ``(filter rows, filter columns, input channels, output channels)``.
         Default initialization methods you can find
         :ref:`here <init-methods>`. Defaults to
-        :class:`XavierNormal() <neupy.init.XavierNormal>`.
+        :class:`HeNormal(gain=2) <neupy.init.HeNormal>`.
 
     {ParameterBasedLayer.bias}
 
@@ -288,6 +291,9 @@ class Convolution(ParameterBasedLayer):
     ----------
     {ParameterBasedLayer.Attributes}
     """
+    # We use gain=2 because it's suitable choice for relu non-linearity
+    # and relu is the most common non-linearity used for CNN.
+    weight = ParameterProperty(default=init.HeNormal(gain=2))
     size = TypedListProperty(required=True, element_type=int)
     padding = PaddingProperty(default='valid')
     stride = Spatial2DProperty(default=(1, 1))
@@ -391,7 +397,7 @@ class Deconvolution(Convolution):
         ``(filter rows, filter columns, output channels, input channels)``.
         Default initialization methods you can find
         :ref:`here <init-methods>`. Defaults to
-        :class:`XavierNormal() <neupy.init.XavierNormal>`.
+        :class:`HeNormal(gain=2) <neupy.init.HeNormal>`.
 
     {ParameterBasedLayer.bias}
 

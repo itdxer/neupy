@@ -35,6 +35,14 @@ class LayersBasicsTestCase(BaseTestCase):
             self.eval(hidden_layer_2.bias),
         )
 
+    def test_predict_new_model(self):
+        input_value = np.random.random((7, 4))
+
+        network = layers.Input(4) > layers.Relu(5)
+        output_value = network.predict(input_value)
+
+        self.assertEqual(output_value.shape, (7, 5))
+
 
 class LayerNameTestCase(BaseTestCase):
     def test_layer_defined_name(self):

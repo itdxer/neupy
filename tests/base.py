@@ -103,10 +103,10 @@ class BaseTestCase(unittest.TestCase):
         x_train = 2 * np.random.random((10, 2)) - 1  # zero centered
         y_train = np.random.random((10, 1))
 
-        relu_xavier_normal = init.XavierNormal(gain='relu')
+        relu_xavier_normal = init.XavierNormal(gain=4)
         relu_weight = relu_xavier_normal.sample((2, 20), return_array=True)
 
-        xavier_normal = init.XavierNormal()
+        xavier_normal = init.XavierNormal(gain=2)
         sigmoid_weight = xavier_normal.sample((20, 1), return_array=True)
 
         network = network_class([
