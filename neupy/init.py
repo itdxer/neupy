@@ -18,18 +18,29 @@ def identify_fans(shape):
     Parameters
     ----------
     shape : tuple or list
-        Matrix shape.
 
     Returns
     -------
     tuple
         Tuple that contains :math:`fan_{in}` and :math:`fan_{out}`.
     """
-    fan_in, fan_out = shape[0], 1
-    output_feature_shape = shape[1:]
+    n_dimensions = len(shape)
 
-    if output_feature_shape:
-        fan_out = np.prod(output_feature_shape).item(0)
+    if n_dimensions == 0:
+        raise ValueError("Cannot apply initializer when shape is unknown")
+
+    elif n_dimensions == 1:
+        fan_in, fan_out = shape[0], 1
+
+    elif n_dimensions == 2:
+        fan_in, fan_out = shape
+
+    else:
+        # By default we assume that weights with more than 2 dimensions
+        # are generated for convolutional layers.
+        receptive_field = np.prod(shape[:-2]).item(0)
+        fan_in = shape[-2] * receptive_field
+        fan_out = shape[-1] * receptive_field
 
     return fan_in, fan_out
 
@@ -122,8 +133,7 @@ class Constant(Initializer):
 
 class Normal(Initializer):
     """
-    Initialize parameter sampling from the normal
-    distribution.
+    Initialize parameter sampling from the normal distribution.
 
     Parameters
     ----------
