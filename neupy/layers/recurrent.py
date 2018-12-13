@@ -147,16 +147,16 @@ class LSTM(BaseRNNLayer):
 
     input_weights : Initializer, ndarray
         Weight parameters for input connection.
-        Defaults to :class:`XavierUniform() <neupy.init.XavierUniform>`.
+        Defaults to :class:`HeNormal() <neupy.init.HeNormal>`.
 
     hidden_weights : Initializer, ndarray
         Weight parameters for hidden connection.
-        Defaults to :class:`XavierUniform() <neupy.init.XavierUniform>`.
+        Defaults to :class:`HeNormal() <neupy.init.HeNormal>`.
 
     cell_weights : Initializer, ndarray
         Weight parameters for cell connection. Require only when
         ``peepholes=True`` otherwise it will be ignored.
-        Defaults to :class:`XavierUniform() <neupy.init.XavierUniform>`.
+        Defaults to :class:`HeNormal() <neupy.init.HeNormal>`.
 
     bias : Initializer, ndarray
         Bias parameters for all gates.
@@ -252,9 +252,9 @@ class LSTM(BaseRNNLayer):
             ]
         )
     """
-    input_weights = ParameterProperty(default=init.XavierUniform())
-    hidden_weights = ParameterProperty(default=init.XavierUniform())
-    cell_weights = ParameterProperty(default=init.XavierUniform())
+    input_weights = ParameterProperty(default=init.HeNormal())
+    hidden_weights = ParameterProperty(default=init.HeNormal())
+    cell_weights = ParameterProperty(default=init.HeNormal())
     biases = ParameterProperty(default=init.Constant(0))
 
     activation_functions = MultiCallableProperty(
@@ -418,11 +418,11 @@ class GRU(BaseRNNLayer):
 
     input_weights : Initializer, ndarray
         Weight parameters for input connection.
-        Defaults to :class:`XavierUniform() <neupy.init.XavierUniform>`.
+        Defaults to :class:`HeNormal() <neupy.init.HeNormal>`.
 
     hidden_weights : Initializer, ndarray
         Weight parameters for hidden connection.
-        Defaults to :class:`XavierUniform() <neupy.init.XavierUniform>`.
+        Defaults to :class:`HeNormal() <neupy.init.HeNormal>`.
 
     bias : Initializer, ndarray
         Bias parameters for all gates.
@@ -504,8 +504,8 @@ class GRU(BaseRNNLayer):
             ]
         )
     """
-    input_weights = ParameterProperty(default=init.XavierUniform())
-    hidden_weights = ParameterProperty(default=init.XavierUniform())
+    input_weights = ParameterProperty(default=init.HeNormal())
+    hidden_weights = ParameterProperty(default=init.HeNormal())
     biases = ParameterProperty(default=init.Constant(0))
 
     activation_functions = MultiCallableProperty(

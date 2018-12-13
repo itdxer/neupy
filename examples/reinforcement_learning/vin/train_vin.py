@@ -23,11 +23,7 @@ parser.add_argument('--imsize', '-i', choices=[8, 16, 28],
 def random_weight(shape):
     initializer = init.Normal()
     weight = initializer.sample(shape)
-    return tf.Variable(
-        asfloat(weight),
-        name='network/scalar-step',
-        dtype=tf.float32
-    )
+    return tf.Variable(asfloat(weight), dtype=tf.float32)
 
 
 class ChannelGlobalMaxPooling(layers.BaseLayer):

@@ -4,6 +4,7 @@ from scipy import stats
 import numpy as np
 
 from neupy import init
+from neupy.init import identify_fans
 
 from base import BaseTestCase
 
@@ -16,6 +17,28 @@ class BaseInitializerTestCase(BaseTestCase):
     def assertNormalyDistributed(self, value):
         self.assertTrue(stats.mstats.normaltest(value.ravel()),
                         msg="Sampled distribution is not normal")
+
+
+class FanIdentifierTestCase(BaseInitializerTestCase):
+    def test_identify_fans_1d(self):
+        self.assertEqual((10, 1), identify_fans((10,)))
+        self.assertEqual((1, 1), identify_fans((1,)))
+
+    def test_identify_fans_2d(self):
+        self.assertEqual((10, 20), identify_fans((10, 20)))
+        self.assertEqual((20, 10), identify_fans((20, 10)))
+
+    def test_identify_fans_exceptions(self):
+        with self.assertRaisesRegexp(ValueError, "shape is unknown"):
+            identify_fans(tuple())
+
+    def test_identify_fans_conv(self):
+        self.assertEqual((9, 90), identify_fans((3, 3, 1, 10)))
+        self.assertEqual((250, 150), identify_fans((5, 5, 10, 6)))
+
+    def test_identify_fans_other_dim(self):
+        self.assertEqual((18, 180), identify_fans((3, 3, 2, 1, 10)))
+        self.assertEqual((48, 80), identify_fans((8, 6, 10)))
 
 
 class ConstantInitializationTestCase(BaseInitializerTestCase):
