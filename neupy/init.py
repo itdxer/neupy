@@ -272,7 +272,7 @@ class InitializerWithGain(Initializer):
 
     Parameters
     ----------
-    gain : float or {{``relu``}}
+    gain : float
         Scales variance of the distribution by this factor. Value ``2``
         is a suitable choice for layers that have Relu non-linearity.
         Defaults to ``1``.
