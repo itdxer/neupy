@@ -7,8 +7,9 @@ from contextlib import contextmanager
 import six
 import tensorflow as tf
 
-from neupy.layers.utils import preformat_layer_shape
-from neupy.utils import as_tuple, tensorflow_session
+from neupy.layers.utils import preformat_layer_shape, find_variables
+from neupy.utils import (as_tuple, tensorflow_session,
+                         initialize_uninitialized_variables)
 from .utils import join, is_sequential
 from .graph import LayerGraph
 from .inline import InlineConnection
@@ -170,6 +171,12 @@ class BaseConnection(InlineConnection):
         cache_key = (session, id(self))
 
         if cache_key not in self.computation_cache:
+            # It's important to initialize parameters when for cases when
+            # prediction requested for the network that wasn't trained or
+            # loaded from the storage.
+            variables = find_variables(self.layers)
+            initialize_uninitialized_variables(variables)
+
             input_variables = create_input_variables(self.input_layers)
 
             with self.disable_training_state():
@@ -542,9 +549,9 @@ class LayerConnection(BaseConnection):
             n_input_vars = len(input_values)
 
             if n_input_vars != n_input_layers:
-                raise ValueError("Connection has {} input layer(s), "
-                                 "but {} inputs was provided"
-                                 "".format(n_input_layers, n_input_vars))
+                raise ValueError(
+                    "Connection has {} input layer(s), but {} inputs was "
+                    "provided".format(n_input_layers, n_input_vars))
 
             # Layers in the self.graph.input_layers and
             # self.input_layers variables can have a different order.
