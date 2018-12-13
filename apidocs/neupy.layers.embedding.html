@@ -251,7 +251,7 @@ of categories or number of unique words that input vector has.</p>
 <dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
 <dd><p class="first last">Defines layer’s weights. Default initialization methods
 you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
-Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-class docutils literal"><span class="pre">HeNormal()</span></span></a>.</p>
 </dd>
 <dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
 <dd><p class="first last">Layer’s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
@@ -351,7 +351,7 @@ variables into format that suitable for Embedding layer.</p>
 
 <dl class="attribute">
 <dt id="neupy.layers.embedding.Embedding.options">
-<span class="descname">options</span><em class="property"> = {‘weight’: Option(class_name=’Embedding’, value=ParameterProperty(name=”weight”)), ‘output_size’: Option(class_name=’Embedding’, value=IntProperty(name=”output_size”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘input_size’: Option(class_name=’Embedding’, value=IntProperty(name=”input_size”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/embedding.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {‘weight’: Option(class_name=’Embedding’, value=ParameterProperty(name=”weight”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘output_size’: Option(class_name=’Embedding’, value=IntProperty(name=”output_size”)), ‘input_size’: Option(class_name=’Embedding’, value=IntProperty(name=”input_size”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/embedding.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">

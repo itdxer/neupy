@@ -270,7 +270,7 @@ become diated convolution (or atrous convolution). Defaults to <span class="docu
 <span class="docutils literal"><span class="pre">(filter</span> <span class="pre">rows,</span> <span class="pre">filter</span> <span class="pre">columns,</span> <span class="pre">input</span> <span class="pre">channels,</span> <span class="pre">output</span> <span class="pre">channels)</span></span>.
 Default initialization methods you can find
 <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
-<a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+<a class="reference internal" href="neupy.init.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-class docutils literal"><span class="pre">HeNormal(gain=2)</span></span></a>.</p>
 </dd>
 <dt><strong>bias</strong> <span class="classifier-delimiter">:</span> <span class="classifier">1D array-like, Tensorfow variable, scalar, Initializer or None</span></dt>
 <dd><p class="first last">Defines layer’s bias.
@@ -366,7 +366,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.convolutions.Convolution.options">
-<span class="descname">options</span><em class="property"> = {‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘dilation’: Option(class_name=’Convolution’, value=Spatial2DProperty(name=”dilation”)), ‘weight’: Option(class_name=’ParameterBasedLayer’, value=ParameterProperty(name=”weight”)), ‘stride’: Option(class_name=’Convolution’, value=Spatial2DProperty(name=”stride”)), ‘padding’: Option(class_name=’Convolution’, value=PaddingProperty(name=”padding”)), ‘size’: Option(class_name=’Convolution’, value=TypedListProperty(name=”size”)), ‘bias’: Option(class_name=’ParameterBasedLayer’, value=ParameterProperty(name=”bias”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {‘size’: Option(class_name=’Convolution’, value=TypedListProperty(name=”size”)), ‘padding’: Option(class_name=’Convolution’, value=PaddingProperty(name=”padding”)), ‘stride’: Option(class_name=’Convolution’, value=Spatial2DProperty(name=”stride”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘dilation’: Option(class_name=’Convolution’, value=Spatial2DProperty(name=”dilation”)), ‘weight’: Option(class_name=’Convolution’, value=ParameterProperty(name=”weight”)), ‘bias’: Option(class_name=’ParameterBasedLayer’, value=ParameterProperty(name=”bias”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -431,6 +431,11 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </dd></dl>
 
 <dl class="attribute">
+<dt id="neupy.layers.convolutions.Convolution.weight">
+<span class="descname">weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="neupy.layers.convolutions.Convolution.weight_shape">
 <span class="descname">weight_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
@@ -475,7 +480,7 @@ dimensions have different padding values, for example
 <span class="docutils literal"><span class="pre">(filter</span> <span class="pre">rows,</span> <span class="pre">filter</span> <span class="pre">columns,</span> <span class="pre">output</span> <span class="pre">channels,</span> <span class="pre">input</span> <span class="pre">channels)</span></span>.
 Default initialization methods you can find
 <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
-<a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+<a class="reference internal" href="neupy.init.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-class docutils literal"><span class="pre">HeNormal(gain=2)</span></span></a>.</p>
 </dd>
 <dt><strong>bias</strong> <span class="classifier-delimiter">:</span> <span class="classifier">1D array-like, Tensorfow variable, scalar, Initializer or None</span></dt>
 <dd><p class="first last">Defines layer’s bias.
@@ -551,7 +556,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.convolutions.Deconvolution.options">
-<span class="descname">options</span><em class="property"> = {‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘padding’: Option(class_name=’Convolution’, value=PaddingProperty(name=”padding”)), ‘weight’: Option(class_name=’ParameterBasedLayer’, value=ParameterProperty(name=”weight”)), ‘stride’: Option(class_name=’Convolution’, value=Spatial2DProperty(name=”stride”)), ‘size’: Option(class_name=’Convolution’, value=TypedListProperty(name=”size”)), ‘bias’: Option(class_name=’ParameterBasedLayer’, value=ParameterProperty(name=”bias”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {‘size’: Option(class_name=’Convolution’, value=TypedListProperty(name=”size”)), ‘padding’: Option(class_name=’Convolution’, value=PaddingProperty(name=”padding”)), ‘stride’: Option(class_name=’Convolution’, value=Spatial2DProperty(name=”stride”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘weight’: Option(class_name=’Convolution’, value=ParameterProperty(name=”weight”)), ‘bias’: Option(class_name=’ParameterBasedLayer’, value=ParameterProperty(name=”bias”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">

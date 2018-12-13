@@ -364,7 +364,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
 <dd><p class="first last">Defines layer’s weights. Default initialization methods
 you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.
-Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal()</span></span></a>.</p>
+Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-class docutils literal"><span class="pre">HeNormal()</span></span></a>.</p>
 </dd>
 <dt><strong>bias</strong> <span class="classifier-delimiter">:</span> <span class="classifier">1D array-like, Tensorfow variable, scalar, Initializer or None</span></dt>
 <dd><p class="first last">Defines layer’s bias.
@@ -435,7 +435,7 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="attribute">
 <dt id="neupy.layers.base.ParameterBasedLayer.options">
-<span class="descname">options</span><em class="property"> = {‘bias’: Option(class_name=’ParameterBasedLayer’, value=ParameterProperty(name=”bias”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘size’: Option(class_name=’ParameterBasedLayer’, value=IntProperty(name=”size”)), ‘weight’: Option(class_name=’ParameterBasedLayer’, value=ParameterProperty(name=”weight”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {‘weight’: Option(class_name=’ParameterBasedLayer’, value=ParameterProperty(name=”weight”)), ‘size’: Option(class_name=’ParameterBasedLayer’, value=IntProperty(name=”size”)), ‘name’: Option(class_name=’BaseLayer’, value=Property(name=”name”)), ‘bias’: Option(class_name=’ParameterBasedLayer’, value=ParameterProperty(name=”bias”))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
