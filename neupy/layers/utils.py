@@ -3,7 +3,7 @@ import tensorflow as tf
 
 
 __all__ = ('preformat_layer_shape', 'dimshuffle', 'iter_parameters',
-           'count_parameters', 'extract_connection')
+           'count_parameters', 'extract_connection', 'find_variables')
 
 
 def preformat_layer_shape(shape):
@@ -71,6 +71,13 @@ def iter_parameters(layers, only_trainable=True):
             if new_param and (param.is_trainable or not only_trainable):
                 observed_parameters.append(param)
                 yield layer, attrname, param
+
+
+def find_variables(layers, only_trainable=False):
+    parameters = []
+    for _, _, parameter in iter_parameters(layers, only_trainable):
+        parameters.append(parameter)
+    return parameters
 
 
 def count_parameters(connection):

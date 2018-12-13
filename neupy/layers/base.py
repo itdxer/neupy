@@ -209,7 +209,7 @@ class ParameterBasedLayer(BaseLayer):
     weight : array-like, Tensorfow variable, scalar or Initializer
         Defines layer's weights. Default initialization methods
         you can find :ref:`here <init-methods>`.
-        Defaults to :class:`XavierNormal() <neupy.init.XavierNormal>`.
+        Defaults to :class:`HeNormal() <neupy.init.HeNormal>`.
 
     bias : 1D array-like, Tensorfow variable, scalar, Initializer or None
         Defines layer's bias.
@@ -230,7 +230,7 @@ class ParameterBasedLayer(BaseLayer):
     {BaseLayer.Attributes}
     """
     size = IntProperty(minval=1)
-    weight = ParameterProperty(default=init.XavierNormal())
+    weight = ParameterProperty(default=init.HeNormal())
     bias = ParameterProperty(default=init.Constant(value=0), allow_none=True)
 
     def __init__(self, size, **options):

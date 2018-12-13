@@ -162,7 +162,16 @@ class Relu(ActivationLayer):
         is non-zero value then layer behave like a
         leaky ReLu. Defaults to ``0``.
 
-    {ActivationLayer.Parameters}
+    {ActivationLayer.size}
+
+    weight : array-like, Tensorfow variable, scalar or Initializer
+        Defines layer's weights. Default initialization methods
+        you can find :ref:`here <init-methods>`.
+        Defaults to :class:`HeNormal(gain=2) <neupy.init.HeNormal>`.
+
+    {ParameterBasedLayer.bias}
+
+    {BaseLayer.Parameters}
 
     Methods
     -------
@@ -173,7 +182,7 @@ class Relu(ActivationLayer):
     {ActivationLayer.Attributes}
     """
     alpha = NumberProperty(default=0, minval=0)
-    weight = ParameterProperty(default=init.XavierNormal(gain='relu'))
+    weight = ParameterProperty(default=init.HeNormal(gain=2))
 
     def activation_function(self, input_value):
         if self.alpha == 0:

@@ -28,7 +28,7 @@ class Embedding(BaseLayer):
     weight : array-like, Tensorfow variable, scalar or Initializer
         Defines layer's weights. Default initialization methods
         you can find :ref:`here <init-methods>`.
-        Defaults to :class:`XavierNormal() <neupy.init.XavierNormal>`.
+        Defaults to :class:`HeNormal() <neupy.init.HeNormal>`.
 
     {BaseLayer.Parameters}
 
@@ -80,7 +80,7 @@ class Embedding(BaseLayer):
     """
     input_size = IntProperty(minval=1)
     output_size = IntProperty(minval=1)
-    weight = ParameterProperty(default=init.XavierNormal())
+    weight = ParameterProperty(default=init.HeNormal())
 
     def __init__(self, input_size, output_size, **options):
         super(Embedding, self).__init__(

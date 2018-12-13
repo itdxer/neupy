@@ -86,7 +86,7 @@ def squeezenet():
         Fire(64, 256, 256, name='fire9'),
         layers.Dropout(0.5),
 
-        layers.Convolution((1, 1, 1000), padding='VALID', name='conv10'),
+        layers.Convolution((1, 1, 1000), name='conv10'),
         layers.GlobalPooling('avg'),
         layers.Reshape(),
         layers.Softmax(),
