@@ -210,16 +210,16 @@ The nice thing about this algorithm is that it tries to move in a new direction 
 Gradient Descent and Golden Search
 ++++++++++++++++++++++++++++++++++
 
-The last algorithm that I want to show is a :network:`Golden Search <LinearSearch>`. This algorithm is not able to train a network by itself, but it can help other algorithms to do it better. I will use Gradient Descent to show the huge improvement that gives :network:`Golden Search <LinearSearch>`.
+The last algorithm that I want to show is a :network:`Newton's method <Hessian>`. This algorithm is not able to train a network by itself, but it can help other algorithms to do it better. I will use Gradient Descent to show the huge improvement that gives :network:`Newton's method <Hessian>`.
 
 .. figure:: images/visualize_gd/grad-descent-and-gold-search-steps.png
     :width: 80%
     :align: center
     :alt: Gradient Descent with Golden Search steps
 
-It took just two steps to reach the goal. Let's check the first step. :network:`Golden Search <LinearSearch>` helps to find the best step size that can be in a specified direction. So basically, it just tries multiple combinations until it finds the best one. As you can see from the plot the first step size is almost perfect for the specified direction. If you went farther you would increase the error.
+It took just two steps to reach the goal. Let's check the first step. :network:`Newton's method <Hessian>` helps to find the best step size that can be in a specified direction. So basically, it just tries multiple combinations until it finds the best one. As you can see from the plot the first step size is almost perfect for the specified direction. If you went farther you would increase the error.
 
-The main disadvantage of :network:`Golden Search <LinearSearch>` is a time complexity. It will take a while to find a good step in specified direction. So for the more complicated networks it can take a lot of time to find a perfect step size.
+The main disadvantage of :network:`Newton's method <Hessian>` is a time complexity. It will take a while to find a good step in specified direction. So for the more complicated networks it can take a lot of time to find a perfect step size.
 
 Bring them all together
 -----------------------
