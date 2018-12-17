@@ -56,6 +56,7 @@ def ignore_link(link):
         '/pages/home.html',
         '/apidocs/modules.html',
         '/apidocs/neupy.html',
+        '/modules/generated/.+',
 
         # Pages that has collected information
         r'/page\d{1,}.html',
