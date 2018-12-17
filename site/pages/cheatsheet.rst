@@ -50,11 +50,27 @@ Regularization methods
 Learning rate update rules
 ++++++++++++++++++++++++++
 
+.. code-block:: python
+
+    from neupy import algorithms
+    from neupy.layers import *
+
+    optimizer = algorithms.Momentum(
+        Input(5) > Relu(10) > Sigmoid(1),
+        step=algorithms.step_decay(
+            initial_value=0.1,
+            reduction_freq=100,
+        )
+    )
+
 .. autosummary::
     :toctree: ../modules/generated/
     :template: autosummary/function.rst
+    :nosignatures:
 
     neupy.algorithms.step_decay
+    neupy.algorithms.exponential_decay
+    neupy.algorithms.polynomial_decay
 
 Neural Networks with Radial Basis Functions (RBFN)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -229,7 +245,7 @@ Architectures
 .. autosummary::
     :toctree: ../modules/generated/
     :template: autosummary/function.rst
-   :nosignatures:
+    :nosignatures:
 
     neupy.architectures.vgg16
     neupy.architectures.vgg19
@@ -277,7 +293,7 @@ Datasets
 .. autosummary::
     :toctree: ../modules/generated/
     :template: autosummary/function.rst
-   :nosignatures:
+    :nosignatures:
 
     neupy.datasets.load_digits
     neupy.datasets.make_digits
