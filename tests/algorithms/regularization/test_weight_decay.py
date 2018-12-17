@@ -1,5 +1,3 @@
-from collections import namedtuple
-
 import numpy as np
 
 from neupy import algorithms, layers
