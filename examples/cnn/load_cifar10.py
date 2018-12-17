@@ -66,10 +66,10 @@ def read_cifar10():
     x_train = np.concatenate(x_train)
     y_train = np.concatenate(y_train)
 
-    x_train = x_train.reshape((x_train.shape[0], 32, 32, 3))
+    x_train = x_train.reshape((x_train.shape[0], 3, 32, 32))
     x_train = np.transpose(x_train, (0, 2, 3, 1))
 
-    x_test = x_test.reshape((x_test.shape[0], 32, 32, 3))
+    x_test = x_test.reshape((x_test.shape[0], 3, 32, 32))
     x_test = np.transpose(x_test, (0, 2, 3, 1))
 
     print("Finished reading CIFAR10 data\n")
