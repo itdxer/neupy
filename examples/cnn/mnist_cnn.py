@@ -1,28 +1,26 @@
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
-from sklearn import model_selection, metrics, datasets
+from sklearn.model_selection import train_test_split
+from sklearn import metrics, datasets
 
 from neupy.layers import *
-from neupy import algorithms, environment
-
-
-environment.reproducible()
+from neupy import algorithms
 
 
 def load_data():
     mnist = datasets.fetch_mldata('MNIST original')
-    data = mnist.data
+    data = mnist.data.reshape(-1, 28, 28, 1)
 
-    target_scaler = OneHotEncoder()
-    target = mnist.target.reshape((-1, 1))
-    target = target_scaler.fit_transform(target).todense()
+    target_scaler = OneHotEncoder(
+        sparse=False,
+        categories='auto',
+        dtype=np.float32,
+    )
+    target = mnist.target.reshape(-1, 1)
+    target = target_scaler.fit_transform(target)
 
-    n_samples = data.shape[0]
-    data = data.reshape((n_samples, 28, 28, 1))
-
-    x_train, x_test, y_train, y_test = model_selection.train_test_split(
-        data.astype(np.float32),
-        target.astype(np.float32),
+    x_train, x_test, y_train, y_test = train_test_split(
+        data.astype(np.float32), target,
         test_size=(1 / 7.)
     )
 
@@ -57,11 +55,11 @@ network = algorithms.Momentum(
     # It's suitable for classification with 3 and more classes.
     error='categorical_crossentropy',
 
-    # Min-batch size
+    # Mini-batch size
     batch_size=128,
 
     # Learning rate
-    step=0.01,
+    step=0.05,
 
     # Shows information about algorithm and
     # training progress in terminal
@@ -83,12 +81,15 @@ network.architecture()
 
 x_train, x_test, y_train, y_test = load_data()
 
-# Train for only two epochs
+# Train for 4 epochs
 network.train(x_train, y_train, x_test, y_test, epochs=4)
 
+# Make prediction on the test dataset
 y_predicted = network.predict(x_test).argmax(axis=1)
 y_test_labels = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))
 
+# Compare network's predictions to the actual label values
+# and build simple classification report.
 print(metrics.classification_report(y_test_labels, y_predicted))
 score = metrics.accuracy_score(y_test_labels, y_predicted)
 print("Validation accuracy: {:.2%}".format(score))
