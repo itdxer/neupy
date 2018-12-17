@@ -32,6 +32,8 @@ notebooks/.ipynb_checkpoints/*
 *.swo
 
 # Site
+site/apidocs/*
+site/modules/*
 site/blog/*
 site/drafts/*
 site/source/docs/*
