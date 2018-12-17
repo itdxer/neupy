@@ -84,6 +84,13 @@ class Linear(ActivationLayer):
     Attributes
     ----------
     {ActivationLayer.Attributes}
+
+    Examples
+    --------
+    Linear Regression
+
+    >>> from neupy.layers import *
+    >>> network = Input(10) > Linear(5)
     """
     def activation_function(self, input_value):
         return input_value
@@ -104,6 +111,13 @@ class Sigmoid(ActivationLayer):
     Attributes
     ----------
     {ActivationLayer.Attributes}
+
+    Examples
+    --------
+    Feedforward Neural Networks (FNN)
+
+    >>> from neupy.layers import *
+    >>> network = Input(10) > Sigmoid(5) > Sigmoid(1)
     """
     def activation_function(self, input_value):
         return tf.nn.sigmoid(input_value)
@@ -124,6 +138,13 @@ class HardSigmoid(ActivationLayer):
     Attributes
     ----------
     {ActivationLayer.Attributes}
+
+    Examples
+    --------
+    Feedforward Neural Networks (FNN)
+
+    >>> from neupy.layers import *
+    >>> network = Input(10) > HardSigmoid(5)
     """
     def activation_function(self, input_value):
         input_value = (0.2 * input_value) + 0.5
@@ -145,6 +166,13 @@ class Tanh(ActivationLayer):
     Attributes
     ----------
     {ActivationLayer.Attributes}
+
+    Examples
+    --------
+    Feedforward Neural Networks (FNN)
+
+    >>> from neupy.layers import *
+    >>> network = Input(10) > Tanh(5)
     """
     def activation_function(self, input_value):
         return tf.nn.tanh(input_value)
@@ -180,6 +208,24 @@ class Relu(ActivationLayer):
     Attributes
     ----------
     {ActivationLayer.Attributes}
+
+    Examples
+    --------
+    Feedforward Neural Networks (FNN)
+
+    >>> from neupy.layers import *
+    >>> network = Input(10) > Relu(20) > Relu(1)
+
+    Convolutional Neural Networks (CNN)
+
+    >>> from neupy.layers import *
+    >>> network = join(
+    ...     Input((32, 32, 3)),
+    ...     Convolution((3, 3, 16)) > Relu(),
+    ...     Convolution((3, 3, 32)) > Relu(),
+    ...     Reshape(),
+    ...     Softmax(10),
+    ... )
     """
     alpha = NumberProperty(default=0, minval=0)
     weight = ParameterProperty(default=init.HeNormal(gain=2))
@@ -209,7 +255,14 @@ class LeakyRelu(ActivationLayer):
 
     Notes
     -----
-    Do the same as ``layers.Relu(input_size, alpha=0.01)``.
+    Do the same as ``Relu(input_size, alpha=0.01)``.
+
+    Examples
+    --------
+    Feedforward Neural Networks (FNN)
+
+    >>> from neupy.layers import *
+    >>> network = Input(10) > LeakyRelu(20) > LeakyRelu(1)
     """
     def activation_function(self, input_value):
         return tf.nn.leaky_relu(input_value, alpha=asfloat(0.01))
@@ -230,6 +283,13 @@ class Softplus(ActivationLayer):
     Attributes
     ----------
     {ActivationLayer.Attributes}
+
+    Examples
+    --------
+    Feedforward Neural Networks (FNN)
+
+    >>> from neupy.layers import *
+    >>> network = Input(10) > Softplus(4)
     """
     def activation_function(self, input_value):
         return tf.nn.softplus(input_value)
@@ -250,6 +310,24 @@ class Softmax(ActivationLayer):
     Attributes
     ----------
     {ActivationLayer.Attributes}
+
+    Examples
+    --------
+    Feedforward Neural Networks (FNN)
+
+    >>> from neupy.layers import *
+    >>> network = Input(10) > Relu(20) > Softmax(10)
+
+    Convolutional Neural Networks (CNN) for Semantic Segmentation
+
+    Softmax layer can be used in order to normalize probabilities
+    per pixel. In the example below, we have input 32x32 input image
+    with raw prediction  per each pixel for 10 different classes.
+    Softmax normalizes raw predictions per pixel to the probability
+    distribution.
+
+    >>> from neupy.layers import *
+    >>> network = Input((32, 32, 10)) > Softmax()
     """
     def activation_function(self, input_value):
         return tf.nn.softmax(input_value)
@@ -271,6 +349,13 @@ class Elu(ActivationLayer):
     Attributes
     ----------
     {ActivationLayer.Attributes}
+
+    Examples
+    --------
+    Feedforward Neural Networks (FNN)
+
+    >>> from neupy.layers import *
+    >>> network = Input(10) > Elu(5) > Elu(1)
 
     References
     ----------
@@ -328,6 +413,24 @@ class PRelu(ActivationLayer):
     Attributes
     ----------
     {ActivationLayer.Attributes}
+
+    Examples
+    --------
+    Feedforward Neural Networks (FNN)
+
+    >>> from neupy.layers import *
+    >>> network = Input(10) > PRelu(20) > PRelu(1)
+
+    Convolutional Neural Networks (CNN)
+
+    >>> from neupy.layers import *
+    >>> network = join(
+    ...     Input((32, 32, 3)),
+    ...     Convolution((3, 3, 16)) > PRelu(),
+    ...     Convolution((3, 3, 32)) > PRelu(),
+    ...     Reshape(),
+    ...     Softmax(10),
+    ... )
 
     References
     ----------

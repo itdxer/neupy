@@ -97,7 +97,7 @@ class BaseLayer(BaseConnection, Configurable):
     Methods
     -------
     disable_training_state()
-        Swith off trainig state.
+        Context manager that switches off trainig state.
 
     initialize()
         Set up important configurations related to the layer.
@@ -105,16 +105,21 @@ class BaseLayer(BaseConnection, Configurable):
     Attributes
     ----------
     input_shape : tuple
-        Layer's input shape.
+        Returns layer's input shape in the form of a tuple. Shape will
+        not include batch size dimension.
 
     output_shape : tuple
-        Layer's output shape.
+        Returns layer's output shape in the form of a tuple. Shape will
+        not include batch size dimension.
 
     training_state : bool
-        Defines whether layer in training state or not.
+        Defines whether layer in training state or not. Training state
+        will enable some operations inside of the layers that won't
+        work otherwise.
 
     parameters : dict
-        Trainable parameters.
+        Parameters that networks uses during propagation. It might include
+        trainable and non-trainable parameters.
 
     graph : LayerGraph instance
         Graphs that stores all relations between layers.
