@@ -17,199 +17,230 @@ Algorithms based on backpropagation
 Training algorithms
 +++++++++++++++++++
 
-.. csv-table::
-    :header: "Class name", "Name"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
+   :nosignatures:
 
-    :network:`GradientDescent`, Gradient Descent
-    :network:`Momentum`, Momentum
-    :network:`Adam`, Adam
-    :network:`Adamax`, AdaMax
-    :network:`RMSProp`, RMSProp
-    :network:`Adadelta`, Adadelta
-    :network:`Adagrad`, Adagrad
-    :network:`ConjugateGradient`, Conjugate Gradient
-    :network:`QuasiNewton`, quasi-Newton
-    :network:`LevenbergMarquardt`, Levenberg-Marquardt
-    :network:`Hessian`, Hessian
-    :network:`HessianDiagonal`, Hessian diagonal
-    :network:`RPROP`, RPROP
-    :network:`IRPROPPlus`, iRPROP+
+   neupy.algorithms.Momentum
+   neupy.algorithms.GradientDescent
+   neupy.algorithms.Adam
+   neupy.algorithms.Adamax
+   neupy.algorithms.RMSProp
+   neupy.algorithms.Adadelta
+   neupy.algorithms.Adagrad
+   neupy.algorithms.ConjugateGradient
+   neupy.algorithms.QuasiNewton
+   neupy.algorithms.LevenbergMarquardt
+   neupy.algorithms.Hessian
+   neupy.algorithms.HessianDiagonal
+   neupy.algorithms.RPROP
+   neupy.algorithms.IRPROPPlus
 
 Regularization methods
 ++++++++++++++++++++++
 
-.. csv-table::
-    :header: "Class name", "Name"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    :network:`WeightDecay`, Weight decay
-    :network:`WeightElimination`, Weight elimination
-    :network:`MaxNormRegularization`, Max-norm regularization
+    neupy.algorithms.WeightDecay
+    neupy.algorithms.WeightElimination
+    neupy.algorithms.MaxNormRegularization
 
 Learning rate update rules
 ++++++++++++++++++++++++++
 
-.. csv-table::
-    :header: "Class name", "Name"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    :network:`LeakStepAdaptation`, Leak Step Adaptation
-    :network:`ErrDiffStepUpdate`, Error difference Update
-    :network:`LinearSearch`, Linear search by Golden Search or Brent
-    :network:`SearchThenConverge`, Search than converge
-    :network:`StepDecay`, Minimize step monotonically after each epoch
+    neupy.algorithms.LeakStepAdaptation
+    neupy.algorithms.ErrDiffStepUpdate
+    neupy.algorithms.LinearSearch
+    neupy.algorithms.SearchThenConverge
+    neupy.algorithms.StepDecay
 
 Neural Networks with Radial Basis Functions (RBFN)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table::
-    :header: "Class name", "Name"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    :network:`GRNN`, Generalized Regression Neural Network (GRNN)
-    :network:`PNN`, Probabilistic Neural Network (PNN)
-    :network:`RBFKMeans`, Radial basis function K-means
+    neupy.algorithms.GRNN
+    neupy.algorithms.PNN
+    neupy.algorithms.RBFKMeans
 
 Autoasociative Memory
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table::
-    :header: "Class name", "Name"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    :network:`DiscreteBAM`, Discrete BAM Network
-    :network:`CMAC`, CMAC Network
-    :network:`DiscreteHopfieldNetwork`, Discrete Hopfield Network
+    neupy.algorithms.DiscreteBAM
+    neupy.algorithms.CMAC
+    neupy.algorithms.DiscreteHopfieldNetwork
 
 Competitive Networks
 ~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table::
-    :header: "Class name", "Name"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    :network:`ART1`, Adaptive Resonance Theory (ART1) Network
-    :network:`GrowingNeuralGas`, Growing Neural Gas (GNG) Network
-    :network:`SOFM`, Self-Organizing Feature Map (SOFM or SOM)
-    :network:`LVQ`, Learning Vector Quantization (LVQ)
-    :network:`LVQ2`, Learning Vector Quantization 2 (LVQ2)
-    :network:`LVQ21`, Learning Vector Quantization 2.1 (LVQ2.1)
-    :network:`LVQ3`, Learning Vector Quantization 3 (LVQ3)
+    neupy.algorithms.ART1
+    neupy.algorithms.GrowingNeuralGas
+    neupy.algorithms.SOFM
+    neupy.algorithms.LVQ
+    neupy.algorithms.LVQ2
+    neupy.algorithms.LVQ21
+    neupy.algorithms.LVQ3
 
 Associative
 ~~~~~~~~~~~
 
-.. csv-table::
-    :header: "Class name", "Name"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    :network:`Oja`, OJA
-    :network:`Kohonen`, Kohonen
-    :network:`Instar`, Instar
-    :network:`HebbRule`, Hebbian Neural Network
+    neupy.algorithms.Oja
+    neupy.algorithms.Kohonen
+    neupy.algorithms.Instar
+    neupy.algorithms.HebbRule
 
 Boltzmann Machine
 ~~~~~~~~~~~~~~~~~
 
-.. csv-table::
-    :header: "Class name", "Name"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    :network:`RBM`, Boolean/Bernoulli Restricted Boltzmann Machine
+    neupy.algorithms.RBM
 
 Layers
 ******
 
+.. code-block:: python
+
+    from neupy.layers import *
+    network = Input(32) > Relu(16) > Softmax(10)
+
 Layers with activation function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table::
-    :header: "Class name", "Description"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    ":layer:`Linear`", "Layer with linear activation function."
-    ":layer:`Sigmoid`", "Layer with sigmoid activation function."
-    ":layer:`HardSigmoid`", "Layer with hard sigmoid activation function."
-    ":layer:`Tanh`", "Layer with tanh activation function."
-    ":layer:`Relu`", "Layer with ReLu activation function."
-    ":layer:`LeakyRelu`", "Layer with Leaky ReLu activation function."
-    ":layer:`Elu`", "Layer with ELU activation function."
-    ":layer:`PRelu`", "Layer with Parametric ReLu activation function."
-    ":layer:`Softplus`", "Layer with softplus activation function."
-    ":layer:`Softmax`", "Layer with softmax activation function."
+    neupy.layers.Linear
+    neupy.layers.Sigmoid
+    neupy.layers.HardSigmoid
+    neupy.layers.Tanh
+    neupy.layers.Relu
+    neupy.layers.LeakyRelu
+    neupy.layers.Elu
+    neupy.layers.PRelu
+    neupy.layers.Softplus
+    neupy.layers.Softmax
 
 Convolutional layers
 ~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table::
-    :header: "Class name", "Description"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    ":layer:`Convolution`", "Convolutional layer"
-    ":layer:`Deconvolution`", "Deconvolutional layer"
+    neupy.layers.Convolution
+    neupy.layers.Deconvolution
 
 
 Recurrent layers
 ~~~~~~~~~~~~~~~~
 
-.. csv-table::
-    :header: "Class name", "Description"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    ":layer:`LSTM`", "Long-Short Term Memory (LSTM) layer"
-    ":layer:`GRU`", "Gated Recurrent Unit (GRU) layer"
+    neupy.layers.LSTM
+    neupy.layers.GRU
 
 Pooling layers
 ~~~~~~~~~~~~~~
 
-.. csv-table::
-    :header: "Class name", "Description"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    ":layer:`MaxPooling`", "Maximum pooling layer"
-    ":layer:`AveragePooling`", "Average pooling layer"
-    ":layer:`Upscale`", "Upscale layer"
-    ":layer:`GlobalPooling`", "Global pooling layer"
+    neupy.layers.MaxPooling
+    neupy.layers.AveragePooling
+    neupy.layers.Upscale
+    neupy.layers.GlobalPooling
 
 Normalization layers
 ~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table::
-    :header: "Class name", "Description"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    ":layer:`BatchNorm`", "Batch normalization layer"
-    ":layer:`LocalResponseNorm`", "Local Response Normalization layer"
+    neupy.layers.BatchNorm
+    neupy.layers.LocalResponseNorm
 
 Stochastic layers
 ~~~~~~~~~~~~~~~~~
 
-.. csv-table::
-    :header: "Class name", "Description"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    ":layer:`Dropout`", "Dropout layer"
-    ":layer:`GaussianNoise`", "Add gaussian noise to the input"
+    neupy.layers.Dropout
+    neupy.layers.GaussianNoise
 
 Merge layers
 ~~~~~~~~~~~~
 
-.. csv-table::
-    :header: "Class name", "Description"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    ":layer:`Elementwise`", "Merge multiple input layers in one with elementwise function"
-    ":layer:`Concatenate`", "Concatenate multiple input layers in one based on the specified axes."
-    ":layer:`GatedAverage`", "Average multiple layers based on the output from the gate layer."
+    neupy.layers.Elementwise
+    neupy.layers.Concatenate
+    neupy.layers.GatedAverage
 
 Other layers
 ~~~~~~~~~~~~
 
-.. csv-table::
-    :header: "Class name", "Description"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    ":layer:`Input`", "Layer defines input value's feature shape"
-    ":layer:`Reshape`", "Reshape tensor input"
-    ":layer:`Transpose`", "Transpose dimensions of the tensor input"
-    ":layer:`Embedding`", "Embedding layer accepts indeces as an input and returns rows from the weight matrix associated with these indeces."
+    neupy.layers.Input
+    neupy.layers.Reshape
+    neupy.layers.Transpose
+    neupy.layers.Embedding
 
 Architectures
 *************
 
-.. csv-table::
-    :header: "Class name", "Description"
+.. code-block:: python
 
-    ":architecture:`vgg16`", "VGG16 network"
-    ":architecture:`vgg19`", "VGG19 network"
-    ":architecture:`squeezenet`", "SqueezeNet network"
-    ":architecture:`resnet50`", "ResNet-50 network"
-    ":architecture:`mixture_of_experts`", Mixture of Experts
+    >>> from neupy import architectures
+    >>> resnet = architectures.resnet50()
+    >>> resnet
+    (224, 224, 3) -> [... 187 layers ...] -> 1000
+
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/function.rst
+   :nosignatures:
+
+    neupy.architectures.vgg16
+    neupy.architectures.vgg19
+    neupy.architectures.squeezenet
+    neupy.architectures.resnet50
+    neupy.architectures.mixture_of_experts
 
 .. _init-methods:
 
@@ -218,58 +249,42 @@ Parameter initialization
 
 .. code-block:: python
 
-    from neupy import algorithms, layers, init
+    from neupy.init import *
+    from neupy.layers import *
+    from neupy import algorithms
 
-    gdnet = algorithms.GradientDescent(
-        [
-            layers.Input(784),
-            layers.Relu(100, weight=init.HeNormal(), bias=init.HeNormal()),
-            layers.Softmax(10, weight=init.Uniform(-0.01, 0.01)),
-        ]
-    )
+    gdnet = algorithms.GradientDescent([
+          Input(784),
+          Relu(100, weight=HeNormal(), bias=Constant(0)),
+          Softmax(10, weight=Uniform(-0.01, 0.01)),
+    ])
 
 .. raw:: html
 
     <br>
 
-.. csv-table::
-    :header: "Class name", "Description"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/class.rst
 
-    ":class:`Constant <neupy.init.Constant>`", "Initialize weights with constant values"
-    ":class:`Normal <neupy.init.Normal>`", "Sample weights from the Normal distribution"
-    ":class:`Uniform <neupy.init.Uniform>`", "Sample weights from the Uniformal distribution"
-    ":class:`Orthogonal <neupy.init.Orthogonal>`", "Initialize matrix with orthogonal basis"
-    ":class:`HeNormal <neupy.init.HeNormal>`", "Kaiming He parameter initialization method based on the Normal distribution."
-    ":class:`HeUniform <neupy.init.HeUniform>`", "Kaiming He parameter initialization method based on the Uniformal distribution."
-    ":class:`XavierNormal <neupy.init.XavierNormal>`", "Glorot Xavier parameter initialization method based on the Normal distribution."
-    ":class:`XavierUniform <neupy.init.XavierUniform>`", "Glorot Xavier parameter initialization method based on the Uniformal distribution."
-
-.. _cheatsheet-error-function:
-
-Loss functions
-**************
-
-.. csv-table::
-    :header: "Function name", "Description"
-
-    ":class:`mae <neupy.algorithms.gd.errors.mae>`", "Mean absolute error"
-    ":class:`mse <neupy.algorithms.gd.errors.mse>`", "Mean squared error"
-    ":class:`rmse <neupy.algorithms.gd.errors.rmse>`", "Root mean squared error"
-    ":class:`msle <neupy.algorithms.gd.errors.msle>`", "Mean squared logarithmic error"
-    ":class:`rmsle <neupy.algorithms.gd.errors.rmsle>`", "Root mean squared logarithmic error"
-    ":class:`binary_crossentropy <neupy.algorithms.gd.errors.binary_crossentropy>`", "Cross entropy error function for the binary classification"
-    ":class:`categorical_crossentropy <neupy.algorithms.gd.errors.categorical_crossentropy>`", "Cross entropy error function for the multi-class classification"
-    ":class:`binary_hinge <neupy.algorithms.gd.errors.binary_hinge>`", "Hinge error function for the binary classification"
-    ":class:`categorical_hinge <neupy.algorithms.gd.errors.categorical_hinge>`", "Hinge error function for the multi-class classification"
-
+    neupy.init.Constant
+    neupy.init.Normal
+    neupy.init.Uniform
+    neupy.init.Orthogonal
+    neupy.init.HeNormal
+    neupy.init.HeUniform
+    neupy.init.XavierNormal
+    neupy.init.XavierUniform
 
 Datasets
 ********
 
-.. csv-table::
-    :header: "Dataset name", "Description"
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: autosummary/function.rst
+   :nosignatures:
 
-    ":class:`load_digits <neupy.datasets.digits.load_digits>`", "Load 10 discrete digit images with shape (6, 4)"
-    ":class:`make_digits <neupy.datasets.digits.make_digits>`", "Load discrete digits that has additional noise."
-    ":class:`make_reber <neupy.datasets.reber.make_reber>`", "Generate list of words valid by Grammar rules."
-    ":class:`make_reber_classification <neupy.datasets.reber.make_reber_classification>`", "Generate random dataset for Reber grammar classification."
+    neupy.datasets.load_digits
+    neupy.datasets.make_digits
+    neupy.datasets.make_reber
+    neupy.datasets.make_reber_classification

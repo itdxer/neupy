@@ -73,17 +73,18 @@ first_page_title = 'Articles'
 # Add other Sphinx extensions here
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
+    'sphinx.ext.autosummary',
+    'numpydoc',
     'sphinx.ext.linkcode',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.mathjax',
 
     'tinkerer.ext.blog',
     'tinkerer.ext.disqus',
-
-    'numpydoc',
 ]
 
-autodoc_default_flags = []
+autosummary_generate = True
+autodoc_default_flags = ['members', 'undoc-members']
 
 # Add other template paths here
 templates_path = ['_templates']
@@ -106,8 +107,6 @@ html_sidebars = {
         'issues.html',
     ],
 }
-
-autodoc_default_flags = ['members', 'undoc-members']
 
 # Add an index to the HTML documents.
 html_use_index = False

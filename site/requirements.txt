@@ -1,3 +1,4 @@
 nltk==3.2.4
 bs4==0.0.1
 Tinkerer>=1.7
+sphinx==1.7.9

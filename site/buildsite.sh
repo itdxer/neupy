@@ -1,7 +1,7 @@
 cd ../ && \
 python setup.py install && \
 cd - && \
-rm -rf apidocs && \
+rm -rf apidocs modules && \
 sphinx-apidoc -e \
               -o apidocs \
               ../neupy && \
