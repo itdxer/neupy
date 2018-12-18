@@ -35,7 +35,7 @@ class BasicStorageTestCase(BaseTestCase):
             temp.file.seek(0)
             layers_sizes = [layer.size for layer in restored_bpnet.layers]
 
-            self.assertEqual(0.25, restored_bpnet.step)
+            self.assertEqual(0.25, self.eval(restored_bpnet.step))
             self.assertEqual([2, 3, 1], layers_sizes)
             np.testing.assert_array_equal(
                 test_layer_weights,
@@ -71,8 +71,7 @@ class BasicStorageTestCase(BaseTestCase):
         }
 
         for algorithm_class, algorithm_params in test_classes.items():
-            optimization_classes = [algorithms.WeightDecay,
-                                    algorithms.SearchThenConverge]
+            optimization_classes = [algorithms.WeightDecay]
 
             bpnet = algorithm_class(
                 (3, 5, 1),
