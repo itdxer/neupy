@@ -26,11 +26,7 @@ class BaseGradientDescent(ConstructibleNetwork):
     ----------
     {ConstructibleNetwork.Parameters}
 
-    addons : list or None
-        The list of addon algortihms. ``None`` by default.
-        If this option is not empty it will generate new class which
-        will inherit all from this list. Support two types of
-        addon algorithms: weight update and step update.
+    regularizer : function
 
     Attributes
     ----------
@@ -41,61 +37,10 @@ class BaseGradientDescent(ConstructibleNetwork):
     {ConstructibleNetwork.Methods}
     """
     supported_addon_types = addon_types.keys()
-
-    addons = Property(default=None, expected_type=list)
-
-    # TODO: The arguments that have default value equal to `None`
-    # are useful only in case if we need to save network in the
-    # file. This solution looks bad and I need to redesign it later.
-    def __new__(cls, connection=None, options=None, **kwargs):
-        # Argument `options` is a simple hack for the `__reduce__` method.
-        # `__reduce__` can't retore class with keyword arguments and
-        # it will put them as `dict` argument in the `options` and method
-        # will translate it to kwargs. The same hack is in the
-        # `__init__` method.
-
-        if options is None:
-            options = kwargs
-
-        addons = options.get('addons')
-
-        if not addons:
-            cls.main_class = cls
-            return super(BaseGradientDescent, cls).__new__(cls)
-
-        identified_types = []
-        for addon_class in addons:
-            opt_class_type = getattr(addon_class, 'addon_type',  None)
-
-            if opt_class_type not in cls.supported_addon_types:
-                opt_class_name = addon_class.__name__
-                supported_opts = ', '.join(addon_types.values())
-                raise ValueError(
-                    "Invalid add-on class '{}'. Class supports only "
-                    "{}".format(opt_class_name, supported_opts)
-                )
-
-            if opt_class_type in identified_types:
-                raise ValueError(
-                    "There can be only one add-on class with "
-                    "type '{}'".format(addon_types[opt_class_type])
-                )
-
-            identified_types.append(opt_class_type)
-
-        new_class_name = (
-            cls.__name__ +
-            ''.join(class_.__name__ for class_ in addons)
-        )
-        mro_classes = tuple(list(addons) + [cls])
-        new_class = type(new_class_name, mro_classes, {})
-        new_class.main_class = cls
-
-        return super(BaseGradientDescent, new_class).__new__(new_class)
+    regularizer = Property(default=None, expected_type=object)
 
     def __init__(self, connection, options=None, **kwargs):
-        if options is None:
-            options = kwargs
+        options = options or kwargs
         super(BaseGradientDescent, self).__init__(connection, **options)
 
     def iter_params_and_grads(self):

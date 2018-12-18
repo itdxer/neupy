@@ -38,27 +38,6 @@ class BaseGradientDescentTestCase(BaseTestCase):
         network.train(x_train, y_train, epochs=100)
         self.assertLess(network.errors.last(), 0.05)
 
-    def test_addons_exceptions(self):
-        with self.assertRaises(ValueError):
-            # Invalid optimization class
-            algorithms.BaseGradientDescent(
-                (2, 3, 1),
-                addons=[algorithms.BaseGradientDescent]
-            )
-
-        with self.assertRaises(ValueError):
-            # Dublicate optimization algorithms from one type
-            algorithms.BaseGradientDescent(
-                (2, 3, 1),
-                addons=[algorithms.WeightDecay, algorithms.WeightDecay],
-            )
-
-        algorithms.BaseGradientDescent(
-            (2, 3, 1),
-            addons=[algorithms.WeightDecay],
-            verbose=False,
-        )
-
     def test_minibatch_gd(self):
         x_train, _, y_train, _ = simple_classification()
         compare_networks(

@@ -80,7 +80,7 @@ class Hessian(StepSelectionBuiltIn, BaseGradientDescent):
 
     {BaseGradientDescent.verbose}
 
-    {BaseGradientDescent.addons}
+    {BaseGradientDescent.regularizer}
 
     Attributes
     ----------

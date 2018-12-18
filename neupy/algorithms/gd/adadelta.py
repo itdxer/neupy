@@ -32,7 +32,7 @@ class Adadelta(GradientDescent):
 
     {GradientDescent.batch_size}
 
-    {BaseGradientDescent.addons}
+    {BaseGradientDescent.regularizer}
 
     {ConstructibleNetwork.connection}
 

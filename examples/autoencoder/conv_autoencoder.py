@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn import datasets
 import matplotlib.pyplot as plt
-from neupy import algorithms, layers, environment
+from neupy import algorithms, layers, environment, regularizers
 
 
 environment.reproducible()
@@ -67,8 +67,10 @@ conv_autoencoder = algorithms.Momentum(
     shuffle_data=True,
     verbose=True,
 
-    decay_rate=0.01,
-    addons=[algorithms.WeightDecay],
+    regularizer=regularizers.maxnorm(
+        decay_rate=0.01,
+        exclude=['bias'],
+    ),
 )
 conv_autoencoder.architecture()
 conv_autoencoder.train(x_train_4d, x_train, x_test_4d, x_test, epochs=15)

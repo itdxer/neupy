@@ -177,7 +177,7 @@ class IRPROPPlus(RPROP):
 
     {RPROP.decrease_factor}
 
-    {BaseGradientDescent.addons}
+    {BaseGradientDescent.regularizer}
 
     {ConstructibleNetwork.connection}
 
