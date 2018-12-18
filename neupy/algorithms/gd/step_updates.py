@@ -6,14 +6,22 @@ from neupy.utils import asfloat, function_name_scope
 __all__ = ('step_decay', 'exponential_decay', 'polynomial_decay')
 
 
-def init_variables(initial_value, name):
-    iteration = tf.Variable(asfloat(0), dtype=tf.float32, name='iteration')
-    step = tf.Variable(asfloat(initial_value), dtype=tf.float32, name=name)
+def init_variables(initial_value, iteration=0, name='step'):
+    iteration = tf.Variable(
+        asfloat(iteration),
+        dtype=tf.float32,
+        name='iteration',
+    )
+    step = tf.Variable(
+        asfloat(initial_value),
+        dtype=tf.float32,
+        name=name,
+    )
     return step, iteration
 
 
 @function_name_scope
-def step_decay(initial_value, reduction_freq, name='step'):
+def step_decay(initial_value, reduction_freq, start_iter=0, name='step'):
     """
     Algorithm minimizes learning step monotonically after
     each iteration.
@@ -24,6 +32,10 @@ def step_decay(initial_value, reduction_freq, name='step'):
     where :math:`\\alpha` is a step, :math:`t` is an iteration number
     and :math:`m` is a ``reduction_freq`` parameter.
 
+    .. code-block:: python
+
+        step = initial_value / (1 + current_iteration / reduction_freq)
+
     Notes
     -----
     Step will be reduced faster when you have smaller training batches.
@@ -31,7 +43,8 @@ def step_decay(initial_value, reduction_freq, name='step'):
     Parameters
     ----------
     initial_value : float
-        Initial value for the learning rate.
+        Initial value for the learning rate. It's the learning rate
+        returned during the first iteration.
 
     reduction_freq : int
         Parameter controls step redution frequency. The larger the
@@ -42,6 +55,10 @@ def step_decay(initial_value, reduction_freq, name='step'):
         going to be equal to ``0.06`` (which is ``0.12 / 2``),
         after ``200`` iterations ``step`` is going to be equal to
         ``0.04`` (which is ``0.12 / 3``) and so on.
+
+    start_iter : int
+        Start iteration. At has to be equal to ``0`` when network just
+        started the training. Defaults to ``0``.
 
     name : str
         Learning rate's variable name. Defaults to ``step``.
@@ -59,7 +76,7 @@ def step_decay(initial_value, reduction_freq, name='step'):
     ...     )
     ... )
     """
-    step, iteration = init_variables(initial_value, name)
+    step, iteration = init_variables(initial_value, start_iter, name)
     reduction_freq = asfloat(reduction_freq)
 
     step.updates = [
@@ -72,7 +89,7 @@ def step_decay(initial_value, reduction_freq, name='step'):
 
 @function_name_scope
 def exponential_decay(initial_value, reduction_freq, reduction_rate,
-                      staircase=False, name='step'):
+                      staircase=False, start_iter=0, name='step'):
     """
     Applies exponential decay to the learning rate. This function is a
     wrapper for the tensorflow's ``exponential_decay`` function.
@@ -83,8 +100,18 @@ def exponential_decay(initial_value, reduction_freq, reduction_rate,
     where :math:`\\alpha` is a step, :math:`t` is an iteration number,
     :math:`d` is a ``reduction_freq`` and :math:`r` is a ``reduction_rate``.
 
-    When ``staircase=True`` and the :math:`\\frac{t}{r}` value will be
+    .. code-block:: python
+
+        step = initial_value * reduction_rate ^ (
+            current_iteration / reduction_freq)
+
+    When ``staircase=True`` the :math:`\\frac{t}{r}` value will be
     rounded.
+
+    .. code-block:: python
+
+        step = initial_value * reduction_rate ^ floor(
+            current_iteration / reduction_freq)
 
     Notes
     -----
@@ -107,6 +134,10 @@ def exponential_decay(initial_value, reduction_freq, reduction_rate,
          If ``True`` decay the learning rate at discrete intervals.
          Defaults to ``False``.
 
+    start_iter : int
+        Start iteration. At has to be equal to ``0`` when network just
+        started the training. Defaults to ``0``.
+
     name : str
         Learning rate's variable name. Defaults to ``step``.
 
@@ -124,13 +155,13 @@ def exponential_decay(initial_value, reduction_freq, reduction_rate,
     ...     )
     ... )
     """
-    step, iteration = init_variables(initial_value, name)
+    step, iteration = init_variables(initial_value, start_iter, name)
     step_update = tf.train.exponential_decay(
-        learning_rate=step,
+        learning_rate=initial_value,
         global_step=iteration,
         decay_steps=reduction_freq,
         decay_rate=reduction_rate,
-        staircas=staircase,
+        staircase=staircase,
     )
 
     step.updates = [
@@ -143,10 +174,29 @@ def exponential_decay(initial_value, reduction_freq, reduction_rate,
 
 @function_name_scope
 def polynomial_decay(initial_value, decay_steps, minstep=0.001, power=1.0,
-                     cycle=False, name='step'):
+                     cycle=False, start_iter=0, name='step'):
     """
     Applies polynomial decay to the learning rate. This function is a
     wrapper for the tensorflow's ``polynomial_decay`` function.
+
+    .. code-block:: python
+
+        iteration = min(current_iteration, decay_steps)
+        step = minstep + (
+            (initial_value - minstep) *
+            (1 - iteration / decay_steps) ^ power
+        )
+
+    If cycle is ``True`` then a multiple of ``decay_steps`` is used,
+    the first one that is bigger than ``current_iterations``.
+
+    .. code-block:: python
+
+        decay_steps = decay_steps * ceil(current_iteration / decay_steps)
+        step = minstep + (
+            (initial_value - minstep) *
+            (1 - current_iteration / decay_steps) ^ power
+        )
 
     Notes
     -----
@@ -156,6 +206,26 @@ def polynomial_decay(initial_value, decay_steps, minstep=0.001, power=1.0,
     ----------
     initial_value : float
        Initial value for the learning rate.
+
+    decay_steps : int
+        When ``cycle=False`` parameter identifies number of iterations
+        when ``minstep`` will be reached. When ``cycle=True`` than
+        the ``decay_steps`` value will be increased. See code above.
+
+    minstep : float
+        Step will never be lower than that minimum possible step,
+        specified by this parameter. Defaults to ``0.001``.
+
+    power : float
+        The power of the polynomial. Defaults to ``1``.
+
+    cycle : bool
+        When value equal to ``True`` than step will be further reduced
+        when ``current_iteration > decay_steps``. Defaults to ``False``.
+
+    start_iter : int
+        Start iteration. At has to be equal to ``0`` when network just
+        started the training. Defaults to ``0``.
 
     name : str
        Learning rate's variable name. Defaults to ``step``.
@@ -169,12 +239,14 @@ def polynomial_decay(initial_value, decay_steps, minstep=0.001, power=1.0,
     ...     Input(5) > Relu(10) > Sigmoid(1),
     ...     step=algorithms.polynomial_decay(
     ...         initial_value=0.1,
+    ...         decay_steps=1000,
+    ...         minstep=0.01,
     ...     )
     ... )
     """
-    step, iteration = init_variables(initial_value, name)
+    step, iteration = init_variables(initial_value, start_iter, name)
     step_update = tf.train.polynomial_decay(
-        learning_rate=step,
+        learning_rate=initial_value,
         global_step=iteration,
         decay_steps=decay_steps,
         end_learning_rate=minstep,
@@ -183,7 +255,7 @@ def polynomial_decay(initial_value, decay_steps, minstep=0.001, power=1.0,
     )
 
     step.updates = [
-        (step, step),
+        (step, step_update),
         (iteration, iteration + 1),
     ]
 

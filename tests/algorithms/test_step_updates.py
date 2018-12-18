@@ -26,7 +26,7 @@ class StepUpdateTestCase(BaseTestCase):
         step = self.eval(optimizer.variables.step)
         self.assertAlmostEqual(step, final_value)
 
-    def test_simple_step_decay(self):
+    def test_step_decay(self):
         self.assert_invalid_step_values(
             algorithms.step_decay(
                 initial_value=0.1,
@@ -34,5 +34,41 @@ class StepUpdateTestCase(BaseTestCase):
             ),
             initial_value=0.1,
             final_value=0.1 / 4,
+            epochs=31,
+        )
+
+    def test_exponential_decay(self):
+        self.assert_invalid_step_values(
+            algorithms.exponential_decay(
+                initial_value=0.1,
+                reduction_freq=10,
+                reduction_rate=0.9,
+            ),
+            initial_value=0.1,
+            final_value=0.1 * 0.9 ** 3,
+            epochs=31,
+        )
+
+    def test_polynomial_decay_limit_reached(self):
+        self.assert_invalid_step_values(
+            algorithms.polynomial_decay(
+                initial_value=0.1,
+                decay_steps=20,
+                minstep=0.02,
+            ),
+            initial_value=0.1,
+            final_value=0.02,
+            epochs=31,
+        )
+
+    def test_polynomial_decay_limit_not_reached(self):
+        self.assert_invalid_step_values(
+            algorithms.polynomial_decay(
+                initial_value=0.1,
+                decay_steps=40,
+                minstep=0.02,
+            ),
+            initial_value=0.1,
+            final_value=0.04,
             epochs=31,
         )
