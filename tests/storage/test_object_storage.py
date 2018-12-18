@@ -63,61 +63,6 @@ class BasicStorageTestCase(BaseTestCase):
             # Error must be big, because we didn't normalize data
             self.assertEqual(real_bpnet_error, restored_bpnet_error)
 
-    def test_dynamic_classes(self):
-        test_classes = {
-            algorithms.GradientDescent: {'batch_size': 'all'},
-            algorithms.GradientDescent: {'batch_size': 10},
-            algorithms.Momentum: {'momentum': 0.5},
-        }
-
-        for algorithm_class, algorithm_params in test_classes.items():
-            optimization_classes = [algorithms.WeightDecay]
-
-            bpnet = algorithm_class(
-                (3, 5, 1),
-                addons=optimization_classes,
-                verbose=False,
-                **algorithm_params
-            )
-            data, target = datasets.make_regression(n_features=3, n_targets=1)
-
-            data = preprocessing.MinMaxScaler().fit_transform(data)
-            target_scaler = preprocessing.MinMaxScaler()
-            target = target_scaler.fit_transform(target.reshape(-1, 1))
-
-            with tempfile.NamedTemporaryFile() as temp:
-                valid_class_name = bpnet.__class__.__name__
-                dill.dump(bpnet, temp)
-                temp.file.seek(0)
-
-                restored_bpnet = dill.load(temp)
-                restored_class_name = restored_bpnet.__class__.__name__
-                temp.file.seek(0)
-
-                self.assertEqual(valid_class_name, restored_class_name)
-                self.assertEqual(optimization_classes,
-                                 restored_bpnet.addons)
-
-                bpnet.train(data, target, epochs=10)
-                real_bpnet_error = bpnet.prediction_error(data, target)
-                updated_input_weight = self.eval(bpnet.layers[1].weight)
-
-                dill.dump(bpnet, temp)
-                temp.file.seek(0)
-
-                restored_bpnet2 = dill.load(temp)
-                temp.file.seek(0)
-                restored_bpnet_error = restored_bpnet2.prediction_error(
-                    data, target
-                )
-
-                np.testing.assert_array_equal(
-                    updated_input_weight,
-                    self.eval(restored_bpnet2.layers[1].weight)
-                )
-                # Error must be big, because we didn't normalize data
-                self.assertEqual(real_bpnet_error, restored_bpnet_error)
-
     @unittest.skipIf(six.PY2, "doesn't work for python 2")
     def test_non_initialized_graph_storage(self):
         network = layers.Relu(10) > layers.Relu(2)  # no input layer

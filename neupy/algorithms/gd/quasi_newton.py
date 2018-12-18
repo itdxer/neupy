@@ -224,7 +224,7 @@ class QuasiNewton(WolfeLineSearchForStep, BaseGradientDescent):
 
     {BaseGradientDescent.verbose}
 
-    {BaseGradientDescent.addons}
+    {BaseGradientDescent.regularizer}
 
     Notes
     -----

@@ -93,7 +93,7 @@ class LevenbergMarquardt(StepSelectionBuiltIn, BaseGradientDescent):
 
     {BaseGradientDescent.verbose}
 
-    {BaseGradientDescent.addons}
+    {BaseGradientDescent.regularizer}
 
     Attributes
     ----------

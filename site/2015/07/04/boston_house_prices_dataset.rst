@@ -324,7 +324,6 @@ Output after initialization might look like this
     [OPTION] show_epoch = 5
     [OPTION] shuffle_data = False
     [OPTION] train_end_signal = None
-    [OPTION] addons = None
     [OPTION] error = mse
     [OPTION] mu = 0.01
     [OPTION] mu_update_factor = 1.2

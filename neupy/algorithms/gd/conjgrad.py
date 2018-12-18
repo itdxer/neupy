@@ -91,7 +91,7 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseGradientDescent):
 
     {BaseGradientDescent.verbose}
 
-    {BaseGradientDescent.addons}
+    {BaseGradientDescent.regularizer}
 
     Attributes
     ----------

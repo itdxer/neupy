@@ -34,7 +34,7 @@ class Adamax(GradientDescent):
 
     {GradientDescent.batch_size}
 
-    {BaseGradientDescent.addons}
+    {BaseGradientDescent.regularizer}
 
     {ConstructibleNetwork.connection}
 
