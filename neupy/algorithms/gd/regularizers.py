@@ -31,7 +31,7 @@ class Regularizer(object):
     def __repr__(self):
         kwargs_repr = [repr(arg) for arg in self.args]
         kwargs_repr += ["{}={}".format(k, v) for k, v in self.kwargs.items()]
-        kwargs_repr.append("exclude={}".format(self.exclude))
+        kwargs_repr += ["exclude={}".format(self.exclude)]
         return "{}({})".format(self.function.__name__, ', '.join(kwargs_repr))
 
 

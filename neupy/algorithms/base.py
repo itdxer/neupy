@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import division, absolute_import, unicode_literals
 
 import time
@@ -421,8 +422,7 @@ class BaseNetwork(BaseSkeleton):
 
             except StopTraining as err:
                 logs.message(
-                    "TRAIN", "Epoch #{} stopped. {}"
-                    "".format(epoch, str(err)))
+                    "TRAIN", "Epoch #{} stopped. {}".format(epoch, str(err)))
 
                 break
 
