@@ -20,6 +20,13 @@ class L2RegularizationTestCase(BaseTestCase):
         regularization_cost = self.eval(regularizer(network))
         self.assertAlmostEqual(regularization_cost, 2.2)
 
+    def test_l2_repr(self):
+        l2_repr = repr(algorithms.l2(0.01, exclude=['bias']))
+        self.assertEqual(l2_repr, "l2(0.01, exclude=['bias'])")
+
+        l2_repr = repr(algorithms.l2(decay_rate=0.01, exclude=['bias']))
+        self.assertEqual(l2_repr, "l2(decay_rate=0.01, exclude=['bias'])")
+
 
 class L1RegularizationTestCase(BaseTestCase):
     def test_l1_regularization(self):
