@@ -65,7 +65,7 @@ if __name__ == '__main__':
             # data we have 500 mini-batches.
             reduction_freq=5 * 500,
         ),
-        regularizer=algorithms.l2(0.00001),
+        regularizer=algorithms.l2(0.0001),
 
         error='categorical_crossentropy',
         batch_size=100,

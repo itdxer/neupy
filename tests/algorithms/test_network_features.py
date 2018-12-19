@@ -8,8 +8,7 @@ from sklearn import datasets
 from neupy import algorithms, layers
 from neupy.exceptions import StopTraining
 from neupy.algorithms.base import (ErrorHistoryList, show_network_options,
-                                   logging_info_about_the_data,
-                                   parse_show_epoch_property)
+                                   format_time, parse_show_epoch_property)
 
 from utils import catch_stdout
 from base import BaseTestCase
@@ -21,8 +20,9 @@ xor_zero_target_train = np.array([[1, 0, 0, 1]]).T
 
 class NetworkMainTestCase(BaseTestCase):
     def test_training_epoch(self):
-        data, target = datasets.make_classification(30, n_features=10,
-                                                    n_classes=2)
+        data, target = datasets.make_classification(
+            30, n_features=10, n_classes=2)
+
         network = algorithms.GradientDescent((10, 3, 1), batch_size='all')
 
         self.assertEqual(network.last_epoch, 0)
@@ -83,28 +83,6 @@ class NetworkMainTestCase(BaseTestCase):
 
         self.assertIn('step', terminal_output)
 
-    def test_logging_info_about_the_data(self):
-        network = algorithms.GradientDescent((2, 3, 1))
-
-        x = np.zeros((5, 2))
-        x_test = np.zeros((3, 2))
-        y = np.zeros((4, 1))
-
-        with self.assertRaisesRegexp(ValueError, "feature shape"):
-            logging_info_about_the_data(network, x, y)
-
-        with catch_stdout() as out:
-            network = algorithms.GradientDescent(
-                (2, 3, 1),
-                verbose=True,
-                batch_size='all',
-            )
-            logging_info_about_the_data(network, [x, x], [x_test, x_test])
-            terminal_output = out.getvalue()
-
-        self.assertIn("[(5, 2), (5, 2)]", terminal_output)
-        self.assertIn("[(3, 2), (3, 2)]", terminal_output)
-
     def test_parse_show_epoch_property(self):
         with catch_stdout() as out:
             network = algorithms.GradientDescent(
@@ -149,16 +127,7 @@ class NetworkMainTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             network.train(x, y, epsilon=1e-2, epochs=1)
 
-    def test_network_training_with_unknown_summary_type(self):
-        network = algorithms.GradientDescent((2, 3, 1))
-
-        x = np.zeros((5, 2))
-        y = np.zeros((5, 1))
-
-        with self.assertRaises(ValueError):
-            network.train(x, y, summary='unknown')
-
-    def test_network_training_summary_inline(self):
+    def test_network_training_summary(self):
         with catch_stdout() as out:
             network = algorithms.GradientDescent(
                 (2, 3, 1),
@@ -171,7 +140,7 @@ class NetworkMainTestCase(BaseTestCase):
 
             network.verbose = True
             n_epochs = 10
-            network.train(x, y, summary='inline', epochs=n_epochs)
+            network.train(x, y, epochs=n_epochs)
 
             terminal_output = out.getvalue().strip()
 
@@ -204,16 +173,19 @@ class NetworkPropertiesTestCase(BaseTestCase):
                     batch_size='all',
                     show_epoch=case.show_epoch
                 )
-                bpnet.train(xor_zero_input_train, xor_zero_target_train,
-                            epochs=case.n_epochs)
+                bpnet.train(
+                    xor_zero_input_train,
+                    xor_zero_target_train,
+                    epochs=case.n_epochs,
+                )
                 terminal_output = out.getvalue()
 
             # One of the choices has to be true whether other
             # choices should give count equal to zero.
             time_counts = (
-                terminal_output.count(" μs ") +
-                terminal_output.count(" ms ") +
-                terminal_output.count(" ns ")
+                terminal_output.count(" μs\n") +
+                terminal_output.count(" ms\n") +
+                terminal_output.count(" ns\n")
             )
             self.assertEqual(case.should_be_n_times, time_counts)
 
@@ -264,6 +236,14 @@ class NetworkPropertiesTestCase(BaseTestCase):
 
 
 class NetworkRepresentationTestCase(BaseTestCase):
+    def test_format_time(self):
+        self.assertEqual("01:06:40", format_time(4000))
+        self.assertEqual("02:05", format_time(125))
+        self.assertEqual("45 sec", format_time(45))
+        self.assertEqual("100 ms", format_time(0.1))
+        self.assertEqual("10 μs", format_time(1e-5))
+        self.assertEqual("200 ns", format_time(2e-7))
+
     def test_small_network_representation(self):
         network = algorithms.GradientDescent((2, 3, 1))
         self.assertIn("Input(2) > Sigmoid(3) > Sigmoid(1)", str(network))

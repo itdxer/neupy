@@ -1,8 +1,7 @@
-from __future__ import division, absolute_import
+from __future__ import division, absolute_import, unicode_literals
 
 import time
 import types
-import numbers
 
 import six
 import numpy as np
@@ -11,11 +10,47 @@ from neupy.utils import preformat_value, AttributeKeyDict, as_tuple
 from neupy.exceptions import StopTraining
 from neupy.core.base import BaseSkeleton
 from neupy.core.properties import BoundedProperty, Property, NumberProperty
-from .summary_info import SummaryTable, InlineSummary
 from .utils import iter_until_converge, shuffle
 
 
 __all__ = ('BaseNetwork',)
+
+
+def format_time(time):
+    """
+    Format seconds into human readable format.
+
+    Parameters
+    ----------
+    time : float
+        Time specified in seconds
+
+    Returns
+    -------
+    str
+        Formated time.
+    """
+    mins, seconds = divmod(int(time), 60)
+    hours, minutes = divmod(mins, 60)
+
+    if hours > 0:
+        return '{:0>2d}:{:0>2d}:{:0>2d}'.format(hours, minutes, seconds)
+
+    elif minutes > 0:
+        return '{:0>2d}:{:0>2d}'.format(minutes, seconds)
+
+    elif seconds > 0:
+        return '{:.0f} sec'.format(seconds)
+
+    elif time >= 1e-3:
+        return '{:.0f} ms'.format(time * 1e3)
+
+    elif time >= 1e-6:
+        # microseconds
+        return '{:.0f} μs'.format(time * 1e6)
+
+    # nanoseconds or smaller
+    return '{:.0f} ns'.format(time * 1e9)
 
 
 def show_network_options(network, highlight_options=None):
@@ -53,40 +88,6 @@ def show_network_options(network, highlight_options=None):
         logs.message("OPTION", msg_text, color=msg_color)
 
     logs.newline()
-
-
-def logging_info_about_the_data(network, input_train, input_test):
-    logs = network.logs
-    training_shapes = preformat_value(input_train)
-
-    logs.title("Start training")
-    logs.message("TRAINING DATA", "shapes: {}".format(training_shapes))
-
-    if isinstance(training_shapes[0], numbers.Integral):
-        training_shapes = [training_shapes]
-
-    if input_test is not None:
-        test_shapes = preformat_value(input_test)
-        logs.message("TEST DATA", "shapes: {}".format(test_shapes))
-
-        if isinstance(test_shapes[0], numbers.Integral):
-            test_shapes = [test_shapes]
-
-        for training_shape, test_shape in zip(training_shapes, test_shapes):
-            if training_shape[1:] != test_shape[1:]:
-                raise ValueError(
-                    "Train and test samples should have the same feature "
-                    "shapes. Got training input with shape {} and test "
-                    "input with shape {}".format(training_shape, test_shape))
-
-
-def logging_info_about_training(network, epochs, epsilon):
-    logs = network.logs
-    if epsilon is None:
-        logs.message("TRAINING", "Total epochs: {}".format(epochs))
-    else:
-        logs.message("TRAINING", "Epsilon: {}, Max epochs: {}"
-                                 "".format(epsilon, epochs))
 
 
 def parse_show_epoch_property(network, n_epochs, epsilon=None):
@@ -308,9 +309,27 @@ class BaseNetwork(BaseSkeleton):
     def prediction_error(self, input_test, target_test):
         raise NotImplementedError()
 
+    def print_last_error(self):
+        train_error = self.errors.last()
+        validation_error = self.validation_errors.last()
+        epoch_training_time = format_time(self.training.epoch_time)
+
+        if validation_error is not None:
+            self.logs.write(
+                "epoch #{}, train err: {:.6f}, valid err: {:.6f}, time: {}"
+                "".format(self.last_epoch, train_error, validation_error,
+                          epoch_training_time))
+        elif train_error is not None:
+            self.logs.write(
+                "epoch #{}, train err: {:.6f}, time: {}"
+                "".format(self.last_epoch, train_error, epoch_training_time))
+        else:
+            self.logs.write(
+                "epoch #{}, time: {}"
+                "".format(self.last_epoch, epoch_training_time))
+
     def train(self, input_train, target_train=None, input_test=None,
-              target_test=None, epochs=100, epsilon=None,
-              summary='table'):
+              target_test=None, epochs=100, epsilon=None):
         """
         Method train neural network.
 
@@ -340,23 +359,6 @@ class BaseNetwork(BaseSkeleton):
         if epsilon is not None and epochs <= 2:
             raise ValueError("Network should train at teast 3 epochs before "
                              "check the difference between errors")
-
-        if summary == 'table':
-            logging_info_about_the_data(self, input_train, input_test)
-            logging_info_about_training(self, epochs, epsilon)
-            logs.newline()
-
-            summary = SummaryTable(
-                columns=['Epoch', 'Train err', 'Valid err', 'Time'],
-                network=self,
-            )
-
-        elif summary == 'inline':
-            summary = InlineSummary(network=self)
-
-        else:
-            raise ValueError("`{}` is unknown summary type"
-                             "".format(summary))
 
         iterepochs = create_training_epochs_iterator(self, epochs, epsilon)
         show_epoch = parse_show_epoch_property(self, epochs, epsilon)
@@ -406,7 +408,7 @@ class BaseNetwork(BaseSkeleton):
                 training.epoch_time = epoch_finish_time - epoch_start_time
 
                 if epoch % training.show_epoch == 0 or is_first_iteration:
-                    summary.show_last()
+                    self.print_last_error()
                     last_epoch_shown = epoch
 
                 if epoch_end_signal is not None:
@@ -415,18 +417,17 @@ class BaseNetwork(BaseSkeleton):
                 is_first_iteration = False
 
             except StopTraining as err:
-                summary.finish()
-                logs.message("TRAIN", "Epoch #{} stopped. {}"
-                                      "".format(epoch, str(err)))
+                logs.message(
+                    "TRAIN", "Epoch #{} stopped. {}"
+                    "".format(epoch, str(err)))
+
                 break
 
         if epoch != last_epoch_shown:
-            summary.show_last()
+            self.print_last_error()
 
         if train_end_signal is not None:
             train_end_signal(self)
-
-        summary.finish()
 
     def __getstate__(self):
         return self.__dict__

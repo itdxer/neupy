@@ -547,11 +547,11 @@ class SOFM(Kohonen):
         if self.distance.name == 'cosine':
             self.weight /= np.linalg.norm(self.weight, axis=0)
 
-    def train(self, input_train, summary='table', epochs=100):
+    def train(self, input_train, epochs=100):
         if not self.initialized:
             self.init_weights(input_train)
 
-        super(SOFM, self).train(input_train, summary=summary, epochs=epochs)
+        super(SOFM, self).train(input_train, epochs=epochs)
 
     def train_epoch(self, input_train, target_train=None):
         step = self.step

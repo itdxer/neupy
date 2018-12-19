@@ -136,8 +136,7 @@ class CMAC(BaseNetwork):
         return np.mean(np.abs(predicted - target_data))
 
     def train(self, input_train, target_train, input_test=None,
-              target_test=None, epochs=100, epsilon=None,
-              summary='table'):
+              target_test=None, epochs=100, epsilon=None):
 
         is_test_data_partialy_missed = (
             (input_test is None and target_test is not None) or
@@ -161,5 +160,4 @@ class CMAC(BaseNetwork):
             input_train=input_train, target_train=target_train,
             input_test=input_test, target_test=target_test,
             epochs=epochs, epsilon=epsilon,
-            summary=summary
         )

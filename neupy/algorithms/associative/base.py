@@ -42,7 +42,7 @@ class BaseAssociative(BaseNetwork):
     -------
     {BaseSkeleton.predict}
 
-    train(input_train, summary='table', epochs=100)
+    train(input_train, epochs=100)
         Train neural network.
 
     {BaseSkeleton.fit}
@@ -85,14 +85,12 @@ class BaseAssociative(BaseNetwork):
 
         return input_data
 
-    def train(self, input_train, summary='table', epochs=100):
+    def train(self, input_train, epochs=100):
         input_train = self.format_input_data(input_train)
-
         return super(BaseAssociative, self).train(
             input_train=input_train, target_train=None,
             input_test=None, target_test=None,
-            epochs=epochs, epsilon=None,
-            summary=summary)
+            epochs=epochs, epsilon=None)
 
 
 class BaseStepAssociative(BaseAssociative):
@@ -196,5 +194,5 @@ class BaseStepAssociative(BaseAssociative):
         for input_row in input_train:
             input_row = np.reshape(input_row, (1, input_row.size))
             layer_output = predict(input_row)
-            weight[n_unconditioned:, :] += weight_delta(input_row,
-                                                        layer_output)
+            weight[n_unconditioned:, :] += weight_delta(
+                input_row, layer_output)

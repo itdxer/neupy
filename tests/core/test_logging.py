@@ -9,7 +9,6 @@ from neupy import algorithms
 
 from base import BaseTestCase
 from utils import catch_stdout
-from data import simple_classification
 
 
 class LoggingTestCase(BaseTestCase):
@@ -106,21 +105,3 @@ class NeuralNetworkLoggingTestCase(BaseTestCase):
 
             self.assertNotEqual("", terminal_output.strip())
             self.assertIn("verbose = True", terminal_output)
-
-    def test_nn_training(self):
-        x_train, x_test, y_train, y_test = simple_classification()
-
-        with catch_stdout() as out:
-            gdnet = algorithms.GradientDescent(
-                (10, 20, 1),
-                verbose=True,
-                batch_size='all',
-            )
-            gdnet.train(x_train, y_train, x_test, y_test, epochs=4)
-            y_predicted = gdnet.predict(x_test)
-
-            terminal_output = out.getvalue()
-
-            self.assertIn("Start training", terminal_output)
-            self.assertIn("------", terminal_output)
-            self.assertEqual(y_predicted.size, y_test.size)
