@@ -4,10 +4,10 @@ import tensorflow as tf
 from neupy.core.config import DumpableObject
 from neupy.core.properties import IntProperty, ParameterProperty
 from neupy.algorithms.base import BaseNetwork
-from neupy.algorithms.constructor import BaseAlgorithm, function
 from neupy.algorithms.gd.base import (
     MinibatchTrainingMixin,
-    average_batch_errors
+    average_batch_errors,
+    function
 )
 from neupy.layers.base import create_shared_parameter
 from neupy.utils import (
@@ -37,7 +37,7 @@ def random_sample(data, n_samples):
         return tf.gather(data, sample_indeces)
 
 
-class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
+class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
     """
     Boolean/Bernoulli Restricted Boltzmann Machine (RBM).
     Algorithm assumes that inputs are either binary
@@ -145,7 +145,10 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
         options.update({'n_visible': n_visible, 'n_hidden': n_hidden})
         super(RBM, self).__init__(**options)
 
-    def init_input_output_variables(self):
+        self.init_variables()
+        self.init_methods()
+
+    def init_variables(self):
         with tf.variable_scope('rbm'):
             self.weight = create_shared_parameter(
                 value=self.weight,
@@ -162,28 +165,21 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
                 name='visible-bias',
                 shape=(self.n_visible,),
             )
-
-            self.variables.update(
-                network_input=tf.placeholder(
-                    tf.float32,
-                    (None, self.n_visible),
-                    name="network-input",
-                ),
-                network_hidden_input=tf.placeholder(
-                    tf.float32,
-                    (None, self.n_hidden),
-                    name="network-hidden-input",
-                )
+            self.h_samples = tf.Variable(
+                tf.zeros([self.batch_size, self.n_hidden]),
+                name="hidden-samples",
+                dtype=tf.float32,
             )
 
-    def init_variables(self):
-        with tf.variable_scope('rbm'):
-            self.variables.update(
-                h_samples=tf.Variable(
-                    tf.zeros([self.batch_size, self.n_hidden]),
-                    name="hidden-samples",
-                    dtype=tf.float32,
-                ),
+            self.network_input = tf.placeholder(
+                tf.float32,
+                (None, self.n_visible),
+                name="network-input",
+            )
+            self.network_hidden_input = tf.placeholder(
+                tf.float32,
+                (None, self.n_hidden),
+                name="network-hidden-input",
             )
 
     def init_methods(self):
@@ -235,15 +231,15 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
                 visible_sample = random_binomial(visible_prob)
                 return visible_sample
 
-        network_input = self.variables.network_input
-        network_hidden_input = self.variables.network_hidden_input
+        network_input = self.network_input
+        network_hidden_input = self.network_hidden_input
         input_shape = tf.shape(network_input)
         n_samples = input_shape[0]
 
         weight = self.weight
         h_bias = self.hidden_bias
         v_bias = self.visible_bias
-        h_samples = self.variables.h_samples
+        h_samples = self.h_samples
         step = asfloat(self.step)
 
         with tf.name_scope('positive-values'):
@@ -308,48 +304,36 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
                 sample_hidden_from_visible(network_input))
 
         initialize_uninitialized_variables()
-        self.methods.update(
-            train_epoch=function(
-                [network_input],
-                error,
-                name='rbm/train-epoch',
-                updates=[
-                    (weight, weight + step * weight_update),
-                    (h_bias, h_bias + step * h_bias_update),
-                    (v_bias, v_bias + step * v_bias_update),
-                    (h_samples, random_binomial(p=h_neg)),
-                ]
-            ),
-            prediction_error=function(
-                [network_input],
-                error,
-                name='rbm/prediction-error',
-            ),
-            diff1=function(
-                [network_input],
-                free_energy(flipped_rounded_input),
-                name='rbm/diff1-error',
-            ),
-            diff2=function(
-                [network_input],
-                free_energy(rounded_input),
-                name='rbm/diff2-error',
-            ),
-            visible_to_hidden=function(
-                [network_input],
-                visible_to_hidden(network_input),
-                name='rbm/visible-to-hidden',
-            ),
-            hidden_to_visible=function(
-                [network_hidden_input],
-                hidden_to_visible(network_hidden_input),
-                name='rbm/hidden-to-visible',
-            ),
-            gibbs_sampling=function(
-                [network_input],
-                gibbs_sampling,
-                name='rbm/gibbs-sampling',
-            )
+        self.weight_update_one_step = function(
+            [network_input],
+            error,
+            name='rbm/train-epoch',
+            updates=[
+                (weight, weight + step * weight_update),
+                (h_bias, h_bias + step * h_bias_update),
+                (v_bias, v_bias + step * v_bias_update),
+                (h_samples, random_binomial(p=h_neg)),
+            ]
+        )
+        self.prediction_error_func = function(
+            [network_input],
+            error,
+            name='rbm/prediction-error',
+        )
+        self.visible_to_hidden_one_step = function(
+            [network_input],
+            visible_to_hidden(network_input),
+            name='rbm/visible-to-hidden',
+        )
+        self.hidden_to_visible_one_step = function(
+            [network_hidden_input],
+            hidden_to_visible(network_hidden_input),
+            name='rbm/hidden-to-visible',
+        )
+        self.gibbs_sampling_one_step = function(
+            [network_input],
+            gibbs_sampling,
+            name='rbm/gibbs-sampling',
         )
 
     def train(self, input_train, input_test=None, epochs=100,
@@ -386,7 +370,7 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
         float
         """
         errors = self.apply_batches(
-            function=self.methods.train_epoch,
+            function=self.weight_update_one_step,
             input_data=input_train,
 
             description='Training batches',
@@ -413,7 +397,7 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
         visible_input = format_data(visible_input, is_input_feature1d)
 
         outputs = self.apply_batches(
-            function=self.methods.visible_to_hidden,
+            function=self.visible_to_hidden_one_step,
             input_data=visible_input,
 
             description='Hidden from visible batches',
@@ -440,7 +424,7 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
         hidden_input = format_data(hidden_input, is_input_feature1d)
 
         outputs = self.apply_batches(
-            function=self.methods.hidden_to_visible,
+            function=self.hidden_to_visible_one_step,
             input_data=hidden_input,
 
             description='Visible from hidden batches',
@@ -468,7 +452,7 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
         input_data = format_data(input_data, is_input_feature1d)
 
         errors = self.apply_batches(
-            function=self.methods.prediction_error,
+            function=self.prediction_error_func,
             input_data=input_data,
 
             description='Validation batches',
@@ -500,10 +484,8 @@ class RBM(BaseAlgorithm, BaseNetwork, MinibatchTrainingMixin, DumpableObject):
         is_input_feature1d = (self.n_visible == 1)
         visible_input = format_data(visible_input, is_input_feature1d)
 
-        gibbs_sampling = self.methods.gibbs_sampling
-
         input_ = visible_input
         for iteration in range(n_iter):
-            input_ = gibbs_sampling(input_)
+            input_ = self.gibbs_sampling_one_step(input_)
 
         return input_

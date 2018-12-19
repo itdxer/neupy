@@ -65,13 +65,13 @@ if __name__ == '__main__':
             # data we have 500 mini-batches.
             reduction_freq=5 * 500,
         ),
-        batch_size=100,
+        regularizer=algorithms.l2(0.00001),
 
         error='categorical_crossentropy',
+        batch_size=100,
         shuffle_data=True,
         verbose=True,
     )
-    network.architecture()
     network.train(x_train, y_train, x_test, y_test, epochs=30)
 
     y_predicted = network.predict(x_test).argmax(axis=1)

@@ -39,13 +39,24 @@ Training algorithms
 Regularization methods
 ++++++++++++++++++++++
 
+.. code-block:: python
+
+    from neupy import algorithms
+    from neupy.layers import *
+
+    optimizer = algorithms.Momentum(
+        Input(5) > Relu(10) > Sigmoid(1),
+        step=algorithms.l2(decay_rate=0.1)
+    )
+
 .. autosummary::
     :toctree: ../modules/generated/
-    :template: autosummary/class.rst
+    :template: autosummary/function.rst
+    :nosignatures:
 
-    neupy.algorithms.WeightDecay
-    neupy.algorithms.WeightElimination
-    neupy.algorithms.MaxNormRegularization
+    neupy.algorithms.l1
+    neupy.algorithms.l2
+    neupy.algorithms.maxnorm
 
 Learning rate update rules
 ++++++++++++++++++++++++++

@@ -3,7 +3,6 @@ from __future__ import division, absolute_import
 import time
 import types
 import numbers
-from itertools import groupby
 
 import six
 import numpy as np
@@ -32,37 +31,26 @@ def show_network_options(network, highlight_options=None):
         List of enabled options. In that case all options from that
         list would be marked with a green color.
     """
-    available_classes = [cls.__name__ for cls in network.__class__.__mro__]
     logs = network.logs
 
     if highlight_options is None:
         highlight_options = {}
 
-    def group_by_class_name(value):
-        _, option = value
-        option_priority = -available_classes.index(option.class_name)
-        return option_priority, option.class_name
-
-    grouped_options = groupby(
-        sorted(network.options.items(), key=group_by_class_name),
-        group_by_class_name)
-
     logs.title("Main information")
-    logs.message("ALGORITHM", network.class_name())
+    logs.message("ALGORITHM", network.__class__.__name__)
     logs.newline()
 
-    for (_, class_name), options in grouped_options:
-        for key, data in sorted(options):
-            if key in highlight_options:
-                msg_color = 'green'
-                value = highlight_options[key]
-            else:
-                msg_color = 'gray'
-                value = data.value
+    for key, data in sorted(network.options.items()):
+        if key in highlight_options:
+            msg_color = 'green'
+            value = highlight_options[key]
+        else:
+            msg_color = 'gray'
+            value = data.value
 
-            formated_value = preformat_value(value)
-            msg_text = "{} = {}".format(key, formated_value)
-            logs.message("OPTION", msg_text, color=msg_color)
+        formated_value = preformat_value(value)
+        msg_text = "{} = {}".format(key, formated_value)
+        logs.message("OPTION", msg_text, color=msg_color)
 
     logs.newline()
 

@@ -2,15 +2,14 @@ import tensorflow as tf
 import numpy as np
 
 from neupy.utils import tensorflow_session
-from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.core.properties import BoundedProperty, ProperFractionProperty
-from .base import BaseGradientDescent
+from .base import BaseOptimizer
 
 
 __all__ = ('RPROP', 'IRPROPPlus')
 
 
-class RPROP(StepSelectionBuiltIn, BaseGradientDescent):
+class RPROP(BaseOptimizer):
     """
     Resilient backpropagation (RPROP) is an optimization
     algorithm for supervised learning.
@@ -46,15 +45,15 @@ class RPROP(StepSelectionBuiltIn, BaseGradientDescent):
         Decrease factor for step in case when gradient changes sign
         compare to previous epoch.
 
-    {BaseGradientDescent.Parameters}
+    {BaseOptimizer.Parameters}
 
     Attributes
     ----------
-    {BaseGradientDescent.Attributes}
+    {BaseOptimizer.Attributes}
 
     Methods
     -------
-    {BaseGradientDescent.Methods}
+    {BaseOptimizer.Methods}
 
     Examples
     --------
@@ -177,11 +176,11 @@ class IRPROPPlus(RPROP):
 
     {RPROP.decrease_factor}
 
-    {BaseGradientDescent.regularizer}
+    {BaseOptimizer.regularizer}
 
-    {ConstructibleNetwork.connection}
+    {BaseOptimizer.connection}
 
-    {ConstructibleNetwork.error}
+    {BaseOptimizer.error}
 
     {BaseNetwork.show_epoch}
 
@@ -197,7 +196,7 @@ class IRPROPPlus(RPROP):
     -------
     {BaseSkeleton.predict}
 
-    {ConstructibleNetwork.train}
+    {BaseOptimizer.train}
 
     {BaseSkeleton.fit}
 

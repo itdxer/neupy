@@ -199,23 +199,6 @@ All the most important information related to the neural network you can find in
     [TENSORFLOW] Initializing Tensorflow variables and functions.
     [TENSORFLOW] Initialization finished successfully. It took 0.30 seconds
 
-In addition, for feedforward neural networks it's possible to check architecture in form of a table.
-
-.. code-block:: python
-
-    >>> mnet.architecture()
-
-    Network's architecture
-
-    -----------------------------------------------
-    | # | Input shape | Layer type | Output shape |
-    -----------------------------------------------
-    | 1 |         784 |      Input |          784 |
-    | 2 |         784 |       Relu |          500 |
-    | 3 |         500 |       Relu |          300 |
-    | 4 |         300 |    Softmax |           10 |
-    -----------------------------------------------
-
 Training
 --------
 

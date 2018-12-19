@@ -53,7 +53,7 @@ class StepUpdateTestCase(BaseTestCase):
         self.assert_invalid_step_values(
             algorithms.polynomial_decay(
                 initial_value=0.1,
-                decay_steps=20,
+                decay_iter=20,
                 minstep=0.02,
             ),
             initial_value=0.1,
@@ -65,7 +65,7 @@ class StepUpdateTestCase(BaseTestCase):
         self.assert_invalid_step_values(
             algorithms.polynomial_decay(
                 initial_value=0.1,
-                decay_steps=40,
+                decay_iter=40,
                 minstep=0.02,
             ),
             initial_value=0.1,

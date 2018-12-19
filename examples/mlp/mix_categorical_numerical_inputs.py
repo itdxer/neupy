@@ -94,8 +94,7 @@ network = algorithms.Momentum(
     # Applied max-norm regularizer to prevent overfitting.
     # Maximum possible norm for any weight is specified by
     # the `max_norm` parameter.
-    addons=[algorithms.MaxNormRegularization],
-    max_norm=10,
+    regularizer=algorithms.maxnorm(0.01),
 )
 
 # Categorical input should be first, because input layer

@@ -47,7 +47,6 @@ network = algorithms.Momentum(
     # Activates Nesterov momentum
     nesterov=True,
 )
-network.architecture()
 network.train(x_train, y_train, x_test, y_test, epochs=20)
 
 y_predicted = network.predict(x_test).argmax(axis=1)

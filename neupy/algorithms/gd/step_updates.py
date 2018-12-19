@@ -173,7 +173,7 @@ def exponential_decay(initial_value, reduction_freq, reduction_rate,
 
 
 @function_name_scope
-def polynomial_decay(initial_value, decay_steps, minstep=0.001, power=1.0,
+def polynomial_decay(initial_value, decay_iter, minstep=0.001, power=1.0,
                      cycle=False, start_iter=0, name='step'):
     """
     Applies polynomial decay to the learning rate. This function is a
@@ -181,21 +181,21 @@ def polynomial_decay(initial_value, decay_steps, minstep=0.001, power=1.0,
 
     .. code-block:: python
 
-        iteration = min(current_iteration, decay_steps)
+        iteration = min(current_iteration, decay_iter)
         step = minstep + (
             (initial_value - minstep) *
-            (1 - iteration / decay_steps) ^ power
+            (1 - iteration / decay_iter) ^ power
         )
 
-    If cycle is ``True`` then a multiple of ``decay_steps`` is used,
+    If cycle is ``True`` then a multiple of ``decay_iter`` is used,
     the first one that is bigger than ``current_iterations``.
 
     .. code-block:: python
 
-        decay_steps = decay_steps * ceil(current_iteration / decay_steps)
+        decay_iter = decay_iter * ceil(current_iteration / decay_iter)
         step = minstep + (
             (initial_value - minstep) *
-            (1 - current_iteration / decay_steps) ^ power
+            (1 - current_iteration / decay_iter) ^ power
         )
 
     Notes
@@ -207,10 +207,10 @@ def polynomial_decay(initial_value, decay_steps, minstep=0.001, power=1.0,
     initial_value : float
        Initial value for the learning rate.
 
-    decay_steps : int
+    decay_iter : int
         When ``cycle=False`` parameter identifies number of iterations
         when ``minstep`` will be reached. When ``cycle=True`` than
-        the ``decay_steps`` value will be increased. See code above.
+        the ``decay_iter`` value will be increased. See code above.
 
     minstep : float
         Step will never be lower than that minimum possible step,
@@ -221,7 +221,7 @@ def polynomial_decay(initial_value, decay_steps, minstep=0.001, power=1.0,
 
     cycle : bool
         When value equal to ``True`` than step will be further reduced
-        when ``current_iteration > decay_steps``. Defaults to ``False``.
+        when ``current_iteration > decay_iter``. Defaults to ``False``.
 
     start_iter : int
         Start iteration. At has to be equal to ``0`` when network just
@@ -239,7 +239,7 @@ def polynomial_decay(initial_value, decay_steps, minstep=0.001, power=1.0,
     ...     Input(5) > Relu(10) > Sigmoid(1),
     ...     step=algorithms.polynomial_decay(
     ...         initial_value=0.1,
-    ...         decay_steps=1000,
+    ...         decay_iter=1000,
     ...         minstep=0.01,
     ...     )
     ... )
@@ -248,7 +248,7 @@ def polynomial_decay(initial_value, decay_steps, minstep=0.001, power=1.0,
     step_update = tf.train.polynomial_decay(
         learning_rate=initial_value,
         global_step=iteration,
-        decay_steps=decay_steps,
+        decay_steps=decay_iter,
         end_learning_rate=minstep,
         power=power,
         cycle=cycle,

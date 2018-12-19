@@ -75,10 +75,6 @@ network = algorithms.Momentum(
     # Randomly shuffles training dataset before every epoch
     shuffle_data=True,
 )
-
-# Shows networks architecture in terminal's output
-network.architecture()
-
 x_train, x_test, y_train, y_test = load_data()
 
 # Train for 4 epochs

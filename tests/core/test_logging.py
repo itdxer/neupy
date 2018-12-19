@@ -124,13 +124,3 @@ class NeuralNetworkLoggingTestCase(BaseTestCase):
             self.assertIn("Start training", terminal_output)
             self.assertIn("------", terminal_output)
             self.assertEqual(y_predicted.size, y_test.size)
-
-
-class TableLoggingTestCase(BaseTestCase):
-    def test_disabled_logging_table_print(self):
-        with catch_stdout() as out:
-            logs = TerminalLogger(enable=False)
-            logs.table([[1, 2], [3, 4]], headers=['A', 'B'])
-            terminal_output = out.getvalue()
-
-        self.assertEqual("", terminal_output)

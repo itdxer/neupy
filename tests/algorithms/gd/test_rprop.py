@@ -82,18 +82,6 @@ class RPROPTestCase(BaseTestCase):
         rprop_error = nw.errors.last()
         self.assertGreater(rprop_error, irprop_plus_error)
 
-    def test_rprop_exceptions(self):
-        test_algorithms = [
-            algorithms.RPROP,
-            algorithms.IRPROPPlus
-        ]
-
-        for algorithm_class in test_algorithms:
-            # But this code should work fine
-            algorithm_class(
-                (3, 10, 2),
-                addons=[algorithms.WeightDecay])
-
     def test_rprop_overfit(self):
         self.assertCanNetworkOverfit(
             partial(

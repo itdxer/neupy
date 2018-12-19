@@ -1,12 +1,12 @@
 import tensorflow as tf
 
-from neupy.utils import dot, function_name_scope
+from neupy.utils import dot, function_name_scope, asfloat
 from neupy.core.properties import (ChoiceProperty, NumberProperty,
                                    WithdrawProperty)
 from neupy.layers.utils import count_parameters
 from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
                                     make_single_vector)
-from .base import BaseGradientDescent
+from .base import BaseOptimizer
 from .quasi_newton import safe_division, WolfeLineSearchForStep
 
 
@@ -59,7 +59,7 @@ def dai_yuan(old_g, new_g, delta_w, epsilon=1e-7):
     )
 
 
-class ConjugateGradient(WolfeLineSearchForStep, BaseGradientDescent):
+class ConjugateGradient(WolfeLineSearchForStep, BaseOptimizer):
 
     """
     Conjugate Gradient algorithm.
@@ -77,29 +77,29 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseGradientDescent):
 
     {WolfeLineSearchForStep.Parameters}
 
-    {BaseGradientDescent.connection}
+    {BaseOptimizer.connection}
 
-    {BaseGradientDescent.error}
+    {BaseOptimizer.error}
 
-    {BaseGradientDescent.show_epoch}
+    {BaseOptimizer.show_epoch}
 
-    {BaseGradientDescent.shuffle_data}
+    {BaseOptimizer.shuffle_data}
 
-    {BaseGradientDescent.epoch_end_signal}
+    {BaseOptimizer.epoch_end_signal}
 
-    {BaseGradientDescent.train_end_signal}
+    {BaseOptimizer.train_end_signal}
 
-    {BaseGradientDescent.verbose}
+    {BaseOptimizer.verbose}
 
-    {BaseGradientDescent.regularizer}
+    {BaseOptimizer.regularizer}
 
     Attributes
     ----------
-    {BaseGradientDescent.Attributes}
+    {BaseOptimizer.Attributes}
 
     Methods
     -------
-    {BaseGradientDescent.Methods}
+    {BaseOptimizer.Methods}
 
     Examples
     --------
@@ -168,10 +168,15 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseGradientDescent):
                 name="conj-grad/prev-gradient",
                 dtype=tf.float32,
             ),
+            iteration=tf.Variable(
+                asfloat(self.last_epoch),
+                name='conj-grad/current-iteration',
+                dtype=tf.float32
+            ),
         )
 
     def init_train_updates(self):
-        epoch = self.variables.epoch
+        iteration = self.variables.iteration
         previous_delta = self.variables.prev_delta
         previous_gradient = self.variables.prev_gradient
 
@@ -186,7 +191,7 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseGradientDescent):
             previous_gradient, full_gradient, previous_delta, self.epsilon)
 
         parameter_delta = tf.where(
-            tf.equal(tf.mod(epoch, n_parameters), 1),
+            tf.equal(tf.mod(iteration, n_parameters), 0),
             -full_gradient,
             -full_gradient + beta * previous_delta
         )
@@ -204,6 +209,7 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseGradientDescent):
             updates.extend([
                 previous_gradient.assign(full_gradient),
                 previous_delta.assign(parameter_delta),
+                iteration.assign(iteration + 1),
             ])
 
         return updates
