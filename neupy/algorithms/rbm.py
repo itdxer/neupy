@@ -336,8 +336,7 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
             name='rbm/gibbs-sampling',
         )
 
-    def train(self, input_train, input_test=None, epochs=100,
-              summary='table'):
+    def train(self, input_train, input_test=None, epochs=100):
         """
         Train RBM.
 
@@ -348,13 +347,11 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
             Defaults to ``None``.
         epochs : int
             Number of training epochs. Defaults to ``100``.
-        summary : {'table', 'inline'}
-            Training summary type. Defaults to ``'table'``.
         """
         return super(RBM, self).train(
             input_train=input_train, target_train=None,
             input_test=input_test, target_test=None,
-            epochs=epochs, epsilon=None, summary=summary
+            epochs=epochs, epsilon=None,
         )
 
     def train_epoch(self, input_train, target_train=None):

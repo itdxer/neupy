@@ -27,6 +27,9 @@ class L2RegularizationTestCase(BaseTestCase):
         l2_repr = repr(algorithms.l2(decay_rate=0.01, exclude=['bias']))
         self.assertEqual(l2_repr, "l2(decay_rate=0.01, exclude=['bias'])")
 
+    def test_l2_regularization_training(self):
+        pass
+
 
 class L1RegularizationTestCase(BaseTestCase):
     def test_l1_regularization(self):

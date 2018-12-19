@@ -87,7 +87,7 @@ def train_network(env, network, memory, n_games=200, max_score=200,
             if len(memory) == memory_size:
                 # Train only when we collected enough samples
                 x_train, y_train = training_samples(network, memory, gamma)
-                network.train(x_train, y_train, epochs=1, summary='inline')
+                network.train(x_train, y_train, epochs=1)
                 loss = network.errors.last()
 
             state = new_state

@@ -102,7 +102,7 @@ If you want to run training in loop you have to change the way neupy outputs its
 .. code-block:: python
 
     for _ in range(1000):
-        nnet.train(x_train, y_train, epochs=1, summary='inline')
+        nnet.train(x_train, y_train, epochs=1)
 
 Prediction
 ----------
