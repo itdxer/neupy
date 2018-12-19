@@ -34,11 +34,11 @@ class Adamax(GradientDescent):
 
     {GradientDescent.batch_size}
 
-    {BaseGradientDescent.regularizer}
+    {BaseOptimizer.regularizer}
 
-    {ConstructibleNetwork.connection}
+    {BaseOptimizer.connection}
 
-    {ConstructibleNetwork.error}
+    {BaseOptimizer.error}
 
     {BaseNetwork.show_epoch}
 

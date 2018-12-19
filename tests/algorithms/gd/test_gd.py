@@ -3,16 +3,34 @@ from functools import partial
 import numpy as np
 
 from neupy import algorithms, layers, environment
-from neupy.algorithms.gd.base import apply_batches
+from neupy.algorithms.gd.base import apply_batches, generate_layers
 
 from utils import compare_networks
 from base import BaseTestCase
 from data import simple_classification
 
 
-class BaseGradientDescentTestCase(BaseTestCase):
+class NetworkConstructorTestCase(BaseTestCase):
+    def test_generate_layers(self):
+        network = generate_layers([1, 2, 3])
+
+        layer_types = (layers.Input, layers.Sigmoid, layers.Sigmoid)
+        output_shapes = [(1,), (2,), (3,)]
+
+        for layer, layer_type in zip(network, layer_types):
+            self.assertIsInstance(layer, layer_type)
+
+        for layer, output_shape in zip(network, output_shapes):
+            self.assertEqual(layer.output_shape, output_shape)
+
+    def test_generate_layers_expcetion(self):
+        with self.assertRaises(ValueError):
+            generate_layers((5,))
+
+
+class BaseOptimizerTestCase(BaseTestCase):
     def test_network_attrs(self):
-        network = algorithms.BaseGradientDescent((2, 2, 1), verbose=False)
+        network = algorithms.BaseOptimizer((2, 2, 1), verbose=False)
         network.step = 0.1
         network.error = 'mse'
         network.shuffle_data = True
@@ -30,7 +48,7 @@ class BaseGradientDescentTestCase(BaseTestCase):
         environment.reproducible()
         x_train, _, y_train, _ = simple_classification()
 
-        network = algorithms.BaseGradientDescent(
+        network = algorithms.BaseOptimizer(
             layers.Input(10) > layers.Tanh(20) > layers.Tanh(1),
             step=0.1,
             verbose=False
@@ -42,7 +60,7 @@ class BaseGradientDescentTestCase(BaseTestCase):
         x_train, _, y_train, _ = simple_classification()
         compare_networks(
            # Test classes
-           partial(algorithms.BaseGradientDescent, verbose=False),
+           partial(algorithms.BaseOptimizer, verbose=False),
            partial(algorithms.GradientDescent,
                    batch_size=1, verbose=False),
            # Test data
@@ -58,7 +76,7 @@ class BaseGradientDescentTestCase(BaseTestCase):
         )
 
     def test_gd_get_params_method(self):
-        network = algorithms.BaseGradientDescent((2, 3, 1))
+        network = algorithms.BaseOptimizer((2, 3, 1))
 
         self.assertIn('connection', network.get_params(with_connection=True))
         self.assertNotIn(
@@ -68,7 +86,7 @@ class BaseGradientDescentTestCase(BaseTestCase):
 
     def test_gd_overfit(self):
         self.assertCanNetworkOverfit(
-            partial(algorithms.BaseGradientDescent, step=1.0, verbose=False),
+            partial(algorithms.BaseOptimizer, step=1.0, verbose=False),
             epochs=4000,
         )
 

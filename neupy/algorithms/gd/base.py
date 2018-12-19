@@ -1,47 +1,259 @@
 from __future__ import division
 
 import math
+import time
+from functools import wraps
 
 import six
 import numpy as np
 import tensorflow as tf
 import progressbar
 
+from neupy import layers
 from neupy.core.config import Configurable
-from neupy.core.properties import Property, BoundedProperty
-from neupy.utils import as_tuple
+from neupy.core.properties import (
+    FunctionWithOptionsProperty,
+    ScalarVariableProperty,
+    BoundedProperty,
+    Property,
+)
+from neupy.utils import (
+    AttributeKeyDict, format_data, as_tuple,
+    tensorflow_session, initialize_uninitialized_variables
+)
 from neupy.layers.utils import iter_parameters
-from neupy.algorithms.constructor import ConstructibleNetwork
-from neupy.algorithms.gd import addon_types
+from neupy.algorithms.gd import errors
+from neupy.layers.connections import LayerConnection
+from neupy.layers.connections.base import create_input_variables
+from neupy.exceptions import InvalidConnection
+from neupy.algorithms.base import BaseNetwork
 
 
-__all__ = ('BaseGradientDescent', 'GradientDescent')
+__all__ = ('BaseOptimizer', 'GradientDescent')
 
 
-class BaseGradientDescent(ConstructibleNetwork):
+def generate_layers(layers_sizes):
+    """
+    Create from list of layer sizes basic linear network.
+
+    Parameters
+    ----------
+    layers_sizes : list or tuple
+        Ordered list of network connection structure.
+
+    Returns
+    -------
+    LayerConnection
+        Constructed connection.
+    """
+    layers_sizes = list(layers_sizes)
+    n_layers = len(layers_sizes)
+
+    if n_layers <= 1:
+        raise ValueError("Cannot generate network that "
+                         "has less than two layers")
+
+    input_layer_size = layers_sizes.pop(0)
+    connection = layers.Input(input_layer_size)
+
+    for output_size in layers_sizes:
+        next_layer = layers.Sigmoid(output_size)
+        connection = LayerConnection(connection, next_layer)
+
+    return connection
+
+
+def clean_layers(connection):
+    """
+    Clean layers connections and format transform them into one format.
+    Also this function validate layers connections.
+
+    Parameters
+    ----------
+    connection : list, tuple or object
+        Layers connetion in different formats.
+
+    Returns
+    -------
+    object
+        Cleaned layers connection.
+    """
+    if all(isinstance(element, int) for element in connection):
+        connection = generate_layers(connection)
+
+    if isinstance(connection, (list, tuple)):
+        connection = layers.join(*connection)
+
+    return connection
+
+
+def function(inputs, outputs, updates=None, name=None):
+    if updates is None:
+        updates = []
+
+    session = tensorflow_session()
+    tensorflow_updates = []
+
+    # Ensure that all new values has been computed. Absence of these
+    # checks might lead to the non-deterministic update behaviour.
+    new_values = [val[1] for val in updates if isinstance(val, (list, tuple))]
+
+    # Make sure that all outputs has been computed
+    with tf.control_dependencies(as_tuple(outputs, new_values)):
+        for update in updates:
+            if isinstance(update, (list, tuple)):
+                old_value, new_value = update
+                update = old_value.assign(new_value)
+            tensorflow_updates.append(update)
+
+        # Group variables in order to avoid output for the updates
+        tensorflow_updates = tf.group(*tensorflow_updates)
+
+    @wraps(function)
+    def wrapper(*input_values):
+        feed_dict = dict(zip(inputs, input_values))
+        result, _ = session.run(
+            [outputs, tensorflow_updates],
+            feed_dict=feed_dict,
+        )
+        return result
+    return wrapper
+
+
+class BaseOptimizer(BaseNetwork):
     """
     Gradient descent algorithm.
 
     Parameters
     ----------
-    {ConstructibleNetwork.Parameters}
+    connection : list, tuple or LayerConnection instance
+        Network's architecture. There are a few ways
+        to define it.
 
-    regularizer : function
+        - List of layers.
+          For instance, ``[Input(2), Tanh(4), Relu(1)]``.
+
+        - Construct layer connections.
+          For instance, ``Input(2) > Tanh(4) > Relu(1)``.
+
+        - Tuple of integers. Each integer defines Sigmoid layer
+          and it's input size.  For instance,  value ``(2, 4, 1)``
+          means that network has 3 layers with 2 input units,
+          4 hidden units and 1 output unit.
+
+    regularizer : function or None
+        Network's regularizer.
+
+    error : str or function
+        Error/loss function. Defaults to ``mse``.
+
+        - ``mae`` - Mean Absolute Error.
+
+        - ``mse`` - Mean Squared Error.
+
+        - ``rmse`` - Root Mean Squared Error.
+
+        - ``msle`` - Mean Squared Logarithmic Error.
+
+        - ``rmsle`` - Root Mean Squared Logarithmic Error.
+
+        - ``categorical_crossentropy`` - Categorical cross entropy.
+
+        - ``binary_crossentropy`` - Binary cross entropy.
+
+        - ``binary_hinge`` - Binary hinge entropy.
+
+        - ``categorical_hinge`` - Categorical hinge entropy.
+
+        - Custom function which accepts two mandatory arguments.
+          The first one is expected value and the second one is
+          predicted value. Example:
+
+        .. code-block:: python
+
+            def custom_func(expected, predicted):
+                return expected - predicted
+
+    step : float, Variable
+        Learning rate, defaults to ``0.1``.
+
+    {BaseNetwork.show_epoch}
+
+    {BaseNetwork.shuffle_data}
+
+    {BaseNetwork.epoch_end_signal}
+
+    {BaseNetwork.train_end_signal}
+
+    {BaseNetwork.verbose}
 
     Attributes
     ----------
-    {ConstructibleNetwork.Attributes}
+    {BaseNetwork.Attributes}
 
     Methods
     -------
-    {ConstructibleNetwork.Methods}
+    {BaseSkeleton.predict}
+
+    train(input_train, target_train, input_test=None, target_test=None,\
+    epochs=100, epsilon=None)
+        Train network. You can control network's training procedure
+        with ``epochs`` and ``epsilon`` parameters.
+        The ``input_test`` and ``target_test`` should be presented
+        both in case of you need to validate network's training
+        after each iteration.
+
+    {BaseSkeleton.fit}
     """
-    supported_addon_types = addon_types.keys()
-    regularizer = Property(default=None, expected_type=object)
+    step = ScalarVariableProperty(default=0.1)
+    regularizer = Property(default=None, allow_none=True)
+    error = FunctionWithOptionsProperty(default='mse', choices={
+        'mae': errors.mae,
+        'mse': errors.mse,
+        'rmse': errors.rmse,
+        'msle': errors.msle,
+        'rmsle': errors.rmsle,
+
+        'binary_crossentropy': errors.binary_crossentropy,
+        'categorical_crossentropy': errors.categorical_crossentropy,
+
+        'binary_hinge': errors.binary_hinge,
+        'categorical_hinge': errors.categorical_hinge,
+    })
 
     def __init__(self, connection, options=None, **kwargs):
         options = options or kwargs
-        super(BaseGradientDescent, self).__init__(connection, **options)
+        self.connection = clean_layers(connection)
+
+        self.layers = list(self.connection)
+        graph = self.connection.graph
+
+        if len(self.connection.output_layers) != 1:
+            n_outputs = len(graph.output_layers)
+            raise InvalidConnection("Connection should have one output "
+                                    "layer, got {}".format(n_outputs))
+
+        self.output_layer = graph.output_layers[0]
+        super(BaseOptimizer, self).__init__(**options)
+
+        self.logs.message(
+            "TENSORFLOW",
+            "Initializing Tensorflow variables and functions."
+        )
+        start_init_time = time.time()
+
+        self.variables = AttributeKeyDict()
+        self.methods = AttributeKeyDict()
+
+        self.init_input_output_variables()
+        self.init_variables()
+        self.init_methods()
+
+        finish_init_time = time.time()
+        self.logs.message(
+            "TENSORFLOW",
+            "Initialization finished successfully. It took {:.2f} seconds"
+            "".format(finish_init_time - start_init_time))
 
     def iter_params_and_grads(self):
         layers, parameters = [], []
@@ -65,11 +277,176 @@ class BaseGradientDescent(ConstructibleNetwork):
 
         return updates
 
-    def class_name(self):
-        return self.main_class.__name__
+    def init_input_output_variables(self):
+        output_layer = self.connection.output_layers[0]
+        self.variables.update(
+            network_inputs=create_input_variables(
+                self.connection.input_layers
+            ),
+            network_output=tf.placeholder(
+                tf.float32,
+                name='network-output/from-layer-{}'.format(output_layer.name),
+            ),
+        )
+
+    def init_variables(self):
+        network_inputs = self.variables.network_inputs
+        network_output = self.variables.network_output
+
+        train_prediction = self.connection.output(*network_inputs)
+        with self.connection.disable_training_state():
+            prediction = self.connection.output(*network_inputs)
+
+        loss = self.error(network_output, train_prediction)
+        val_loss = self.error(network_output, prediction)
+
+        if self.regularizer is not None:
+            loss = loss + self.regularizer(self.connection)
+
+        self.variables.update(
+            step=self.step,
+            prediction_func=prediction,
+            train_prediction_func=train_prediction,
+
+            error_func=loss,
+            validation_error_func=val_loss,
+        )
+
+    def init_methods(self):
+        network_inputs = self.variables.network_inputs
+        network_output = self.variables.network_output
+
+        with tf.name_scope('training-updates'):
+            training_updates = self.init_train_updates()
+
+            for layer in self.layers:
+                training_updates.extend(layer.updates)
+
+            for variable in self.variables.values():
+                if hasattr(variable, 'updates'):
+                    training_updates.extend(variable.updates)
+
+        initialize_uninitialized_variables()
+
+        self.methods.update(
+            predict=function(
+                inputs=network_inputs,
+                outputs=self.variables.prediction_func,
+                name='network/func-predict'
+            ),
+            train_epoch=function(
+                inputs=network_inputs + [network_output],
+                outputs=self.variables.error_func,
+                updates=training_updates,
+                name='network/func-train-epoch'
+            ),
+            prediction_error=function(
+                inputs=network_inputs + [network_output],
+                outputs=self.variables.validation_error_func,
+                name='network/func-prediction-error'
+            )
+        )
+
+    def format_input_data(self, input_data):
+        """
+        Input data format is depend on the input layer
+        structure.
+        Parameters
+        ----------
+        input_data : array-like or None
+        Returns
+        -------
+        array-like or None
+            Function returns formatted array.
+        """
+        input_layers = self.connection.input_layers
+
+        if not isinstance(input_data, (tuple, list)):
+            input_layer = input_layers[0]
+            return format_data(input_data)
+
+        formated_data = []
+        for input_to_layer, input_layer in zip(input_data, input_layers):
+            formated_data.append(format_data(input_to_layer))
+
+        return tuple(formated_data)
+
+    def prediction_error(self, input_data, target_data):
+        """
+        Calculate prediction accuracy for input data.
+
+        Parameters
+        ----------
+        input_data : array-like
+        target_data : array-like
+
+        Returns
+        -------
+        float
+            Prediction error.
+        """
+        return self.methods.prediction_error(*as_tuple(
+            self.format_input_data(input_data), format_data(target_data)))
+
+    def predict(self, input_data):
+        """
+        Return prediction results for the input data.
+
+        Parameters
+        ----------
+        input_data : array-like
+
+        Returns
+        -------
+        array-like
+        """
+        input_data = self.format_input_data(input_data)
+        return self.methods.predict(*as_tuple(input_data))
+
+    def train(self, input_train, target_train, input_test=None,
+              target_test=None, *args, **kwargs):
+        """
+        Train neural network.
+        """
+        is_test_data_partialy_missed = (
+            (input_test is None and target_test is not None) or
+            (input_test is not None and target_test is None)
+        )
+
+        if is_test_data_partialy_missed:
+            raise ValueError("Input or target test samples are missed. They "
+                             "must be defined together or none of them.")
+
+        input_train = self.format_input_data(input_train)
+        target_train = format_data(target_train)
+
+        input_test = self.format_input_data(input_test)
+        target_test = format_data(target_test)
+
+        return super(BaseOptimizer, self).train(
+            input_train=input_train, target_train=target_train,
+            input_test=input_test, target_test=target_test,
+            *args, **kwargs
+        )
+
+    def train_epoch(self, input_train, target_train):
+        """
+        Trains neural network over one epoch.
+
+        Parameters
+        ----------
+        input_data : array-like
+        target_data : array-like
+
+        Returns
+        -------
+        float
+            Prediction error.
+        """
+        return self.methods.train_epoch(*as_tuple(input_train, target_train))
 
     def get_params(self, deep=False, with_connection=True):
-        params = super(BaseGradientDescent, self).get_params()
+        params = super(BaseOptimizer, self).get_params()
         if with_connection:
             params['connection'] = self.connection
         return params
@@ -77,7 +454,14 @@ class BaseGradientDescent(ConstructibleNetwork):
     def __reduce__(self):
         parameters = self.get_params(with_connection=False)
         args = (self.connection, parameters)
-        return (self.main_class, args)
+        return (self.__class__.__name__, args)
+
+    def __repr__(self):
+        return "{}({}, {})".format(
+            self.__class__.__name__,
+            self.connection,
+            self.repr_options(),
+        )
 
 
 class BatchSizeProperty(BoundedProperty):
@@ -403,7 +787,7 @@ def count_samples(input_data):
     return len(input_data)
 
 
-class GradientDescent(BaseGradientDescent, MinibatchTrainingMixin):
+class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
     """
     Mini-batch Gradient Descent algorithm.
 
@@ -411,15 +795,15 @@ class GradientDescent(BaseGradientDescent, MinibatchTrainingMixin):
     ----------
     {MinibatchTrainingMixin.Parameters}
 
-    {BaseGradientDescent.Parameters}
+    {BaseOptimizer.Parameters}
 
     Attributes
     ----------
-    {BaseGradientDescent.Attributes}
+    {BaseOptimizer.Attributes}
 
     Methods
     -------
-    {BaseGradientDescent.Methods}
+    {BaseOptimizer.Methods}
 
     Examples
     --------
@@ -482,7 +866,7 @@ class GradientDescent(BaseGradientDescent, MinibatchTrainingMixin):
             Prediction error.
         """
         input_data = self.format_input_data(input_data)
-        target_data = self.format_target_data(target_data)
+        target_data = format_data(target_data)
 
         errors = self.apply_batches(
             function=self.methods.prediction_error,
@@ -512,7 +896,7 @@ class GradientDescent(BaseGradientDescent, MinibatchTrainingMixin):
         """
         outputs = self.apply_batches(
             function=self.methods.predict,
-            input_data=self.format_input_data(input_data),
+            input_data=input_data,
 
             description='Prediction batches',
             show_progressbar=True,

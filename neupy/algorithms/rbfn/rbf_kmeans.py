@@ -5,14 +5,13 @@ from numpy.linalg import norm
 
 from neupy.utils import format_data
 from neupy.core.properties import IntProperty, WithdrawProperty
-from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.algorithms.base import BaseNetwork
 
 
 __all__ = ('RBFKMeans',)
 
 
-class RBFKMeans(StepSelectionBuiltIn, BaseNetwork):
+class RBFKMeans(BaseNetwork):
     """
     Radial basis function K-means for clustering.
 

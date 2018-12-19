@@ -3,10 +3,9 @@ import tensorflow as tf
 from neupy.core.properties import BoundedProperty, WithdrawProperty
 from neupy.utils import asfloat, flatten, function_name_scope
 from neupy.layers.utils import count_parameters
-from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
                                     make_single_vector)
-from .base import BaseGradientDescent
+from .base import BaseOptimizer
 
 
 __all__ = ('Hessian',)
@@ -52,7 +51,7 @@ def find_hessian_and_gradient(error_function, parameters):
     return hessian.stack(), full_gradient
 
 
-class Hessian(StepSelectionBuiltIn, BaseGradientDescent):
+class Hessian(BaseOptimizer):
     """
     Hessian gradient decent optimization, also known as Newton's method. This
     algorithm uses second-order derivative (hessian matrix) in order to
@@ -66,29 +65,29 @@ class Hessian(StepSelectionBuiltIn, BaseGradientDescent):
         algorithm include penalty that add to hessian matrix identity
         multiplied by defined constant. Defaults to ``1``.
 
-    {BaseGradientDescent.connection}
+    {BaseOptimizer.connection}
 
-    {BaseGradientDescent.error}
+    {BaseOptimizer.error}
 
-    {BaseGradientDescent.show_epoch}
+    {BaseOptimizer.show_epoch}
 
-    {BaseGradientDescent.shuffle_data}
+    {BaseOptimizer.shuffle_data}
 
-    {BaseGradientDescent.epoch_end_signal}
+    {BaseOptimizer.epoch_end_signal}
 
-    {BaseGradientDescent.train_end_signal}
+    {BaseOptimizer.train_end_signal}
 
-    {BaseGradientDescent.verbose}
+    {BaseOptimizer.verbose}
 
-    {BaseGradientDescent.regularizer}
+    {BaseOptimizer.regularizer}
 
     Attributes
     ----------
-    {BaseGradientDescent.Attributes}
+    {BaseOptimizer.Attributes}
 
     Methods
     -------
-    {BaseGradientDescent.Methods}
+    {BaseOptimizer.Methods}
 
     Notes
     -----

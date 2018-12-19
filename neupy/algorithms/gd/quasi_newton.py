@@ -3,20 +3,19 @@ import tensorflow as tf
 from neupy.core.config import Configurable
 from neupy.core.properties import (ChoiceProperty, NumberProperty,
                                    WithdrawProperty, IntProperty)
-from neupy.algorithms.gd import StepSelectionBuiltIn
 from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
                                     make_single_vector)
 from neupy.optimizations.wolfe import line_search
 from neupy.layers.utils import count_parameters, iter_parameters
 from neupy.utils import (asfloat, dot, outer, get_variable_size,
                          function_name_scope)
-from .base import BaseGradientDescent
+from .base import BaseOptimizer
 
 
 __all__ = ('QuasiNewton',)
 
 
-class WolfeLineSearchForStep(StepSelectionBuiltIn, Configurable):
+class WolfeLineSearchForStep(Configurable):
     """
     Class that has all functions required in order to apply line search over
     step parameter that used during the network training.
@@ -172,7 +171,7 @@ def sr1(inv_H, delta_w, delta_grad, epsilon=1e-7):
     )
 
 
-class QuasiNewton(WolfeLineSearchForStep, BaseGradientDescent):
+class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
     """
     Quasi-Newton algorithm. Every iteration quasi-Network method approximates
     inverse Hessian matrix with iterative updates. It doesn't have ``step``
@@ -210,21 +209,21 @@ class QuasiNewton(WolfeLineSearchForStep, BaseGradientDescent):
 
     {WolfeLineSearchForStep.Parameters}
 
-    {BaseGradientDescent.connection}
+    {BaseOptimizer.connection}
 
-    {BaseGradientDescent.error}
+    {BaseOptimizer.error}
 
-    {BaseGradientDescent.show_epoch}
+    {BaseOptimizer.show_epoch}
 
-    {BaseGradientDescent.shuffle_data}
+    {BaseOptimizer.shuffle_data}
 
-    {BaseGradientDescent.epoch_end_signal}
+    {BaseOptimizer.epoch_end_signal}
 
-    {BaseGradientDescent.train_end_signal}
+    {BaseOptimizer.train_end_signal}
 
-    {BaseGradientDescent.verbose}
+    {BaseOptimizer.verbose}
 
-    {BaseGradientDescent.regularizer}
+    {BaseOptimizer.regularizer}
 
     Notes
     -----
@@ -233,11 +232,11 @@ class QuasiNewton(WolfeLineSearchForStep, BaseGradientDescent):
 
     Attributes
     ----------
-    {BaseGradientDescent.Attributes}
+    {BaseOptimizer.Attributes}
 
     Methods
     -------
-    {BaseGradientDescent.Methods}
+    {BaseOptimizer.Methods}
 
     Examples
     --------
@@ -295,9 +294,15 @@ class QuasiNewton(WolfeLineSearchForStep, BaseGradientDescent):
                 name="quasi-newton/prev-full-gradient",
                 dtype=tf.float32,
             ),
+            iteration=tf.Variable(
+                asfloat(self.last_epoch),
+                name='quasi-newton/current-iteration',
+                dtype=tf.float32
+            ),
         )
 
     def init_train_updates(self):
+        iteration = self.variables.iteration
         inv_hessian = self.variables.inv_hessian
         prev_params = self.variables.prev_params
         prev_full_gradient = self.variables.prev_full_gradient
@@ -309,7 +314,7 @@ class QuasiNewton(WolfeLineSearchForStep, BaseGradientDescent):
         full_gradient = make_single_vector(gradients)
 
         new_inv_hessian = tf.where(
-            tf.equal(self.variables.epoch, 1),
+            tf.equal(iteration, 0),
             inv_hessian,
             self.update_function(
                 inv_H=inv_hessian,
@@ -334,6 +339,7 @@ class QuasiNewton(WolfeLineSearchForStep, BaseGradientDescent):
                 inv_hessian.assign(new_inv_hessian),
                 prev_params.assign(param_vector),
                 prev_full_gradient.assign(full_gradient),
+                iteration.assign(iteration + 1),
             ])
 
         return updates

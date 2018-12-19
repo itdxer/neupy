@@ -126,13 +126,12 @@ network = algorithms.RMSProp(
     ],
 
     error=vae_loss,
+    regularizer=algorithms.l2(0.01),
+
     batch_size=128,
     shuffle_data=True,
     step=0.001,
     verbose=True,
-
-    decay_rate=0.01,
-    addons=[algorithms.WeightDecay],
 )
 
 x_train, x_test = load_data()

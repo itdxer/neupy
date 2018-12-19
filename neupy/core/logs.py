@@ -143,23 +143,6 @@ class TerminalLogger(object):
     def table_bottom(self, n_columns, *args, **kwargs):
         self.write(tableprint.bottom(n_columns, *args, **kwargs))
 
-    def table(self, data, headers, **kwargs):
-        if not self.enable:
-            return
-
-        widths = [len(value) for value in headers]
-        stringified_data = []
-
-        for row_values in data:
-            stringified_data.append([str(v) for v in row_values])
-
-            for i, cell_value in enumerate(row_values):
-                widths[i] = max(len(str(cell_value)), widths[i])
-
-        kwargs['width'] = widths
-        kwargs['out'] = self.stdout
-        tableprint.table(stringified_data, headers, **kwargs)
-
 
 class VerboseProperty(BaseProperty):
     """

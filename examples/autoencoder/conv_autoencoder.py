@@ -67,12 +67,8 @@ conv_autoencoder = algorithms.Momentum(
     shuffle_data=True,
     verbose=True,
 
-    regularizer=regularizers.maxnorm(
-        decay_rate=0.01,
-        exclude=['bias'],
-    ),
+    regularizer=algorithms.l2(0.01),
 )
-conv_autoencoder.architecture()
 conv_autoencoder.train(x_train_4d, x_train, x_test_4d, x_test, epochs=15)
 
 n_samples = 6

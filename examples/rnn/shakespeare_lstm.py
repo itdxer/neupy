@@ -89,7 +89,6 @@ if __name__ == '__main__':
         batch_size=128,
         error='categorical_crossentropy',
     )
-    network.architecture()
     network.train(x_train, y_train, x_test, y_test, epochs=10)
 
     # Number of symbols that will be generated

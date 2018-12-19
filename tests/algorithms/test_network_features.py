@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import textwrap
 from collections import namedtuple
 
 import numpy as np
@@ -262,39 +261,6 @@ class NetworkPropertiesTestCase(BaseTestCase):
             terminal_output = out.getvalue()
 
         self.assertEqual(1, terminal_output.count("Network converged"))
-
-    def test_network_architecture_output(self):
-        expected_architecture = textwrap.dedent("""
-        -----------------------------------------------
-        | # | Input shape | Layer type | Output shape |
-        -----------------------------------------------
-        | 1 |           2 |      Input |            2 |
-        | 2 |           2 |    Sigmoid |            3 |
-        | 3 |           3 |    Sigmoid |            1 |
-        -----------------------------------------------
-        """).strip()
-
-        with catch_stdout() as out:
-            network = algorithms.GradientDescent((2, 3, 1), verbose=True)
-            network.architecture()
-            terminal_output = out.getvalue().replace('\r', '')
-
-        # Use assertTrue to make sure that it won't through
-        # all variables in terminal in case of error
-        self.assertIn(expected_architecture, terminal_output)
-
-    def test_network_architecture_output_exception(self):
-        input_layer = layers.Input(10)
-        hidden_layer_1 = layers.Sigmoid(20)
-        hidden_layer_2 = layers.Sigmoid(20)
-        output_layer = layers.Concatenate()
-
-        connection = layers.join(input_layer, hidden_layer_1, output_layer)
-        connection = layers.join(input_layer, hidden_layer_2, output_layer)
-
-        network = algorithms.GradientDescent(connection)
-        with self.assertRaises(TypeError):
-            network.architecture()
 
 
 class NetworkRepresentationTestCase(BaseTestCase):

@@ -11,11 +11,9 @@ from .gd.adagrad import *
 from .gd.rmsprop import *
 from .gd.adam import *
 from .gd.adamax import *
-from .gd.step_updates import *
 
-from .regularization.weight_decay import *
-from .regularization.weight_elimination import *
-from .regularization.max_norm import *
+from .gd.step_updates import *
+from .gd.regularizers import *
 
 from .memory.discrete_hopfield_network import *
 from .memory.bam import *

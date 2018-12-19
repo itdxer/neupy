@@ -1,9 +1,8 @@
 from functools import partial
 
-import numpy as np
 import tensorflow as tf
 
-from neupy import algorithms, layers
+from neupy import algorithms
 
 from data import simple_classification
 from base import BaseTestCase
@@ -29,35 +28,6 @@ class BackPropAlgsTestCase(BaseTestCase):
             algorithms.Adamax,
             algorithms.RMSProp,
         ]
-
-    def test_gd_train_data(self):
-        for bp_algorithm_class in self.bp_algorithms:
-            self.assertInvalidVectorTrain(
-                bp_algorithm_class((2, 1), verbose=False),
-                np.array([0, 1]),
-                np.array([0]),
-                is_feature1d=False
-            )
-
-    def test_predict_different_inputs(self):
-        for bp_algorithm_class in self.bp_algorithms:
-            network = bp_algorithm_class(
-                [
-                    layers.Input(2),
-                    layers.Linear(
-                        size=1,
-                        bias=np.zeros(1),
-                        weight=np.zeros((2, 1)),
-                    ),
-                ],
-                verbose=False,
-            )
-            self.assertInvalidVectorPred(
-                network,
-                input_vector=np.array([0, 0]),
-                target=0,
-                is_feature1d=False
-            )
 
     def test_custom_error_functions(self):
         # Test that everything works without fail

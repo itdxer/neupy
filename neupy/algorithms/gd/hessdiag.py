@@ -4,16 +4,15 @@ import tensorflow as tf
 
 from neupy.core.properties import ProperFractionProperty
 from neupy.utils import flatten
-from neupy.algorithms.gd import NoMultipleStepSelection
 from neupy.algorithms.utils import (setup_parameter_updates, parameter_values,
                                     make_single_vector)
-from .base import BaseGradientDescent
+from .base import BaseOptimizer
 
 
 __all__ = ('HessianDiagonal',)
 
 
-class HessianDiagonal(NoMultipleStepSelection, BaseGradientDescent):
+class HessianDiagonal(BaseOptimizer):
     """
     Hissian diagonal is a Hessian algorithm approximation which require
     only computation of hessian matrix diagonal elements and makes it
@@ -27,15 +26,15 @@ class HessianDiagonal(NoMultipleStepSelection, BaseGradientDescent):
         produce huge number in hessian diagonal elements. This
         parameter control diagonal elements size. Defaults to ``1e-2``.
 
-    {BaseGradientDescent.Parameters}
+    {BaseOptimizer.Parameters}
 
     Attributes
     ----------
-    {BaseGradientDescent.Attributes}
+    {BaseOptimizer.Attributes}
 
     Methods
     -------
-    {BaseGradientDescent.Methods}
+    {BaseOptimizer.Methods}
 
     Examples
     --------
@@ -96,7 +95,7 @@ class HessianDiagonal(NoMultipleStepSelection, BaseGradientDescent):
 
     See Also
     --------
-    :network:`BaseGradientDescent` : BaseGradientDescent algorithm.
+    :network:`BaseOptimizer` : BaseOptimizer algorithm.
     :network:`Hessian` : Newton's method.
     """
     min_eigval = ProperFractionProperty(default=1e-2)
