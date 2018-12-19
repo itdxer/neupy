@@ -2,6 +2,7 @@ from __future__ import division, absolute_import, unicode_literals
 
 import time
 import types
+import warnings
 
 import six
 import numpy as np
@@ -97,8 +98,10 @@ def parse_show_epoch_property(network, n_epochs, epsilon=None):
         return show_epoch
 
     if epsilon is not None and isinstance(show_epoch, six.string_types):
-        network.logs.warning("Can't use `show_epoch` value in converging "
-                             "mode. Set up `show_epoch` property equal to 1")
+        warnings.warn(
+            "Can't use `show_epoch` value in converging mode. "
+            "Set up `show_epoch` property equal to 1"
+        )
         return 1
 
     number_end_position = show_epoch.index('time')
