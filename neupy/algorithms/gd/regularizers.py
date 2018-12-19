@@ -56,7 +56,7 @@ def define_regularizer(function):
     """
     @wraps(function)
     def wrapper(*args, **kwargs):
-        return Regularizer(function, *args, *kwargs)
+        return Regularizer(function, *args, **kwargs)
     return wrapper
 
 
