@@ -59,16 +59,6 @@ class LoggingTestCase(BaseTestCase):
                     msg_args=["Title"],
                     expectation=r"\n.*Title.*\n",
                 ),
-                Case(
-                    logs.error,
-                    msg_args=["Error message"],
-                    expectation=r"\[.*ERROR.*\] Error message",
-                ),
-                Case(
-                    logs.warning,
-                    msg_args=["Warning message"],
-                    expectation=r"\[.*WARN.*\] Warning message",
-                )
             )
 
             for test_case in test_cases:
