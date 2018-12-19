@@ -3,6 +3,7 @@ import numpy as np
 from neupy import algorithms, layers
 
 from base import BaseTestCase
+from data import simple_classification
 
 
 class L2RegularizationTestCase(BaseTestCase):
@@ -27,8 +28,19 @@ class L2RegularizationTestCase(BaseTestCase):
         l2_repr = repr(algorithms.l2(decay_rate=0.01, exclude=['bias']))
         self.assertEqual(l2_repr, "l2(decay_rate=0.01, exclude=['bias'])")
 
-    def test_l2_regularization_training(self):
-        pass
+    def test_training_with_l2_regularization(self):
+        x_train, x_test, y_train, y_test = simple_classification()
+        mnet = algorithms.Momentum(
+            (10, 20, 1),
+            step=0.35,
+            momentum=0.99,
+            batch_size='full',
+            verbose=True,
+            nesterov=True,
+            regularizer=algorithms.l2(0.01),
+        )
+        mnet.train(x_train, y_train, x_test, y_test, epochs=40)
+        self.assertGreater(0.15, mnet.validation_errors.last())
 
 
 class L1RegularizationTestCase(BaseTestCase):

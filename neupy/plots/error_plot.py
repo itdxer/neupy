@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -43,15 +45,17 @@ def error_plot(network, logx=False, ax=None, show=True):
         ax = plt.gca()
 
     if not network.errors:
-        network.logs.warning("There is no data to plot")
+        warnings.warn("There is no data to plot")
         return ax
 
     train_errors = network.errors.normalized()
     validation_errors = network.validation_errors.normalized()
 
     if len(train_errors) != len(validation_errors):
-        network.logs.warning("Mismatch in number of training and validation "
-                             "errors. Validation error will be ignored.")
+        warnings.warn(
+            "Mismatch in number of training and validation "
+            "errors. Validation error will be ignored."
+        )
         validation_errors = []
 
     if all(err is None for err in validation_errors):

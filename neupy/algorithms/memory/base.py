@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 
 from neupy.core.base import BaseSkeleton
@@ -44,8 +46,8 @@ class DiscreteMemory(BaseSkeleton, Configurable):
         self.weight = None
 
         if 'n_times' in options and self.mode != 'async':
-            self.logs.warning("You can use `n_times` property only in "
-                              "`async` mode.")
+            warnings.warn(
+                "You can use `n_times` property only in `async` mode.")
 
     def discrete_validation(self, matrix):
         """

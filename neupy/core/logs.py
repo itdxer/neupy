@@ -52,9 +52,6 @@ class TerminalLogger(object):
             self.stdout.write('\n')
 
     def newline(self):
-        """
-        Just writes an empty line.
-        """
         self.write('\r')
 
     def message(self, tag, text, color='green'):
@@ -94,30 +91,6 @@ class TerminalLogger(object):
         bold_text = terminal.bold(text)
         message = "\n{text}\n".format(text=terminal.underline(bold_text))
         self.write(message)
-
-    def error(self, text):
-        """
-        Method writes messages that related to error type.
-        Text will be displayed as message with ``tag`` parameter equal
-        to ``'ERROR'``. Color will be red.
-
-        Parameters
-        ----------
-        text : str
-        """
-        self.message('ERROR', text, color='red')
-
-    def warning(self, text):
-        """
-        Method writes messages that related to warning type.
-        Text will be displayed as message with ``tag`` parameter equal
-        to ``'WARN'``. Color will be red.
-
-        Parameters
-        ----------
-        text : str
-        """
-        self.message('WARN', text, color='red')
 
     def __reduce__(self):
         return (self.__class__, (self.enable,))
