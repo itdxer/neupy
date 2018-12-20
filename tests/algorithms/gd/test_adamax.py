@@ -1,6 +1,6 @@
 from functools import partial
 
-from neupy import algorithms
+from neupy import algorithms, layers
 
 from data import simple_classification
 from base import BaseTestCase
@@ -10,7 +10,11 @@ class AdamaxTestCase(BaseTestCase):
     def test_simple_adamax(self):
         x_train, x_test, y_train, y_test = simple_classification()
         mnet = algorithms.Adamax(
-            (10, 20, 1),
+            [
+                layers.Input(10),
+                layers.Sigmoid(20),
+                layers.Sigmoid(1)
+            ],
             step=0.1,
             batch_size='full',
             verbose=False,

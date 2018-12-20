@@ -25,7 +25,14 @@ class MinibatchGDTestCase(BaseTestCase):
         valid_values = [None, 1, 10, 1000]
 
         for net_class, value in product(self.network_classes, valid_values):
-            net_class((10, 20, 1), batch_size=value)
+            net_class(
+                [
+                    layers.Input(10),
+                    layers.Sigmoid(20),
+                    layers.Sigmoid(1)
+                ],
+                batch_size=value,
+            )
 
     def test_minibatch_invalid_values(self):
         invalid_values = [-10, 3.50, 'invalid values', [10]]
@@ -33,7 +40,14 @@ class MinibatchGDTestCase(BaseTestCase):
         for net_class, value in product(self.network_classes, invalid_values):
             msg = "Network: {}, Value: {}".format(net_class.__name__, value)
             with self.assertRaises((TypeError, ValueError), msg=msg):
-                net_class((10, 20, 1), batch_size=value)
+                net_class(
+                    [
+                        layers.Input(10),
+                        layers.Sigmoid(20),
+                        layers.Sigmoid(1)
+                    ],
+                    batch_size=value,
+                )
 
     def test_full_batch_training(self):
         fullbatch_identifiers = BatchSizeProperty.fullbatch_identifiers

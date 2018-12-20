@@ -31,7 +31,11 @@ class L2RegularizationTestCase(BaseTestCase):
     def test_training_with_l2_regularization(self):
         x_train, x_test, y_train, y_test = simple_classification()
         mnet = algorithms.Momentum(
-            (10, 20, 1),
+            [
+                layers.Input(10),
+                layers.Sigmoid(20),
+                layers.Sigmoid(1)
+            ],
             step=0.35,
             momentum=0.99,
             batch_size='full',

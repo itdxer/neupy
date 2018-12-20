@@ -23,7 +23,11 @@ class NetworkMainTestCase(BaseTestCase):
         data, target = datasets.make_classification(
             30, n_features=10, n_classes=2)
 
-        network = algorithms.GradientDescent((10, 3, 1))
+        network = algorithms.GradientDescent([
+            layers.Input(10),
+            layers.Sigmoid(3),
+            layers.Sigmoid(1),
+        ])
         self.assertEqual(network.last_epoch, 0)
 
         network.train(data, target, epochs=10)
@@ -36,7 +40,11 @@ class NetworkMainTestCase(BaseTestCase):
         data, target = datasets.make_classification(
             30, n_features=10, n_classes=2)
 
-        network = algorithms.GradientDescent((10, 3, 1), batch_size='all')
+        network = algorithms.GradientDescent([
+            layers.Input(10),
+            layers.Sigmoid(3),
+            layers.Sigmoid(1),
+        ], batch_size='all')
         # Should work fine without exceptions
         network.train(data, target, epochs=2)
         network.train(data, target, data, target, epochs=2)
@@ -56,7 +64,11 @@ class NetworkMainTestCase(BaseTestCase):
             30, n_features=10, n_classes=2)
 
         network = algorithms.GradientDescent(
-            (10, 3, 1),
+            [
+                layers.Input(10),
+                layers.Sigmoid(3),
+                layers.Sigmoid(1),
+            ],
             batch_size='all',
             epoch_end_signal=stop_training_after_the_5th_epoch,
         )
@@ -167,21 +179,11 @@ class NetworkPropertiesTestCase(BaseTestCase):
             self.assertEqual(case.should_be_n_times, time_counts)
 
     def test_show_epoch_invalid_cases(self):
-        wrong_input_values = (
-            'time 10', 'good time', '100', 'super power',
-            '0 times', '-1 times',
-            0, -100,
-        )
+        network = layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1)
 
-        for wrong_input_value in wrong_input_values:
+        for wrong_value in (0, -100):
             with self.assertRaises(ValueError):
-                algorithms.GradientDescent(
-                    layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
-                    step=0.1,
-                    verbose=False,
-                    batch_size='all',
-                    show_epoch=wrong_input_value
-                )
+                algorithms.GradientDescent(network, show_epoch=wrong_value)
 
     def test_network_convergence(self):
         with catch_stdout() as out:
@@ -232,7 +234,14 @@ class NetworkRepresentationTestCase(BaseTestCase):
         self.assertIn("Input(2) > Sigmoid(3) > Sigmoid(1)", str(network))
 
     def test_big_network_representation(self):
-        network = algorithms.GradientDescent((2, 3, 4, 5, 6, 1))
+        network = algorithms.GradientDescent([
+            layers.Input(1),
+            layers.Sigmoid(1),
+            layers.Sigmoid(1),
+            layers.Sigmoid(1),
+            layers.Sigmoid(1),
+            layers.Sigmoid(1),
+        ])
         self.assertIn("[... 6 layers ...]", str(network))
 
     def test_network_representation_for_non_feedforward(self):
