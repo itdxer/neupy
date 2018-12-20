@@ -150,7 +150,7 @@ class BatchNormTestCase(BaseTestCase):
         )
         gdnet.train(x_train, y_train, epochs=5)
 
-        error_before_save = gdnet.prediction_error(x_test, y_test)
+        error_before_save = gdnet.score(x_test, y_test)
         mean_before_save = self.eval(batch_norm.running_mean)
         variance_before_save = self.eval(batch_norm.running_inv_std)
 
@@ -158,7 +158,7 @@ class BatchNormTestCase(BaseTestCase):
             storage.save(gdnet, temp.name)
             storage.load(gdnet, temp.name)
 
-            error_after_load = gdnet.prediction_error(x_test, y_test)
+            error_after_load = gdnet.score(x_test, y_test)
             mean_after_load = self.eval(batch_norm.running_mean)
             variance_after_load = self.eval(batch_norm.running_inv_std)
 

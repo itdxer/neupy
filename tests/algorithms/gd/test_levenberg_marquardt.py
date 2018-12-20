@@ -81,7 +81,7 @@ class LevenbergMarquardtTestCase(BaseTestCase):
             show_epoch=1,
         )
         lmnet.train(x_train, y_train, epochs=4)
-        error = lmnet.prediction_error(x_test, y_test)
+        error = lmnet.score(x_test, y_test)
 
         self.assertGreater(0.01, error)
 

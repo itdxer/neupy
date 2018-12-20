@@ -44,7 +44,7 @@ class BasicStorageTestCase(BaseTestCase):
             )
 
             bpnet.train(data, target, epochs=5)
-            real_bpnet_error = bpnet.prediction_error(data, target)
+            real_bpnet_error = bpnet.score(data, target)
             updated_input_weight = self.eval(bpnet.layers[1].weight)
 
             dill.dump(bpnet, temp)
@@ -52,7 +52,7 @@ class BasicStorageTestCase(BaseTestCase):
 
             restored_bpnet2 = dill.load(temp)
             temp.file.seek(0)
-            restored_bpnet_error = restored_bpnet2.prediction_error(
+            restored_bpnet_error = restored_bpnet2.score(
                 data, target
             )
 

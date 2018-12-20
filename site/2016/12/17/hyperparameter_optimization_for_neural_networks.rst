@@ -263,7 +263,7 @@ Let's define a function that trains the neural network and return prediction err
 
         # Calculates categorical cross-entropy error between
         # predicted value for x_test and y_test value
-        return network.prediction_error(x_test, y_test)
+        return network.score(x_test, y_test)
 
 Let's import digits dataset from scikit-learn.
 
@@ -616,7 +616,7 @@ And at the end of the function, we can check some information about the training
 
 .. code-block:: python
 
-    score = mnet.prediction_error(x_test, y_test)
+    score = mnet.score(x_test, y_test)
 
     y_predicted = mnet.predict(x_test).argmax(axis=1)
     accuracy = metrics.accuracy_score(y_test.argmax(axis=1), y_predicted)
@@ -626,7 +626,7 @@ And at the end of the function, we can check some information about the training
 
     return score
 
-You can see that I've used two evaluation metrics. First one is cross-entropy. NeuPy uses it as a validation error function when we call the ``prediction_error`` method. The second one is just a prediction accuracy.
+You can see that I've used two evaluation metrics. First one is cross-entropy. NeuPy uses it as a validation error function when we call the ``score`` method. The second one is just a prediction accuracy.
 
 And finally, we run hyperparameter optimization.
 

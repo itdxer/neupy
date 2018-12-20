@@ -131,7 +131,7 @@ class CMAC(BaseNetwork):
 
         return errors / n_samples
 
-    def prediction_error(self, input_data, target_data):
+    def score(self, input_data, target_data):
         predicted = self.predict(input_data)
         return np.mean(np.abs(predicted - target_data))
 

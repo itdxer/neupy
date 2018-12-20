@@ -95,7 +95,7 @@ def draw_quiver(network_class, name, color='r'):
     weights[:, 0:1] = default_weight.copy()
 
     current_epoch = 0
-    while bpn.prediction_error(input_data, target_data) > 0.125:
+    while bpn.score(input_data, target_data) > 0.125:
         bpn.train(input_data, target_data, epochs=1)
         current_epoch += 1
 
@@ -112,7 +112,7 @@ def target_function(network, x, y):
 
     session = tensorflow_session()
     weight.load(asfloat(new_weight), session)
-    return network.prediction_error(input_data, target_data)
+    return network.score(input_data, target_data)
 
 
 # Get data for countour plot

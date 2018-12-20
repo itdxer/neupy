@@ -26,7 +26,7 @@ class BernoulliRBMTestCase(BaseTestCase):
         ])
         self.data = asfloat(self.data)
 
-    def test_rbm_prediction_error(self):
+    def test_rbm_score(self):
         rbm = algorithms.RBM(
             n_visible=4,
             n_hidden=1,
@@ -35,8 +35,8 @@ class BernoulliRBMTestCase(BaseTestCase):
         )
         rbm.train(self.data, epochs=500)
 
-        rbm_error_for_known = rbm.prediction_error(np.array([[0, 1, 0, 1]]))
-        rbm_error_for_unknown = rbm.prediction_error(np.array([[0, 1, 0, 0]]))
+        rbm_error_for_known = rbm.score(np.array([[0, 1, 0, 1]]))
+        rbm_error_for_unknown = rbm.score(np.array([[0, 1, 0, 0]]))
 
         self.assertLess(rbm_error_for_unknown, rbm_error_for_known)
 

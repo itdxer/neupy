@@ -104,7 +104,7 @@ class BaseNetwork(BaseSkeleton):
     def train_epoch(self, input_train, target_train=None):
         raise NotImplementedError()
 
-    def prediction_error(self, input_test, target_test):
+    def score(self, input_test, target_test):
         raise NotImplementedError()
 
     def print_last_error(self):
@@ -170,8 +170,7 @@ class BaseNetwork(BaseSkeleton):
                 validation_error = None
 
                 if input_test is not None:
-                    validation_error = self.prediction_error(
-                        input_test, target_test)
+                    validation_error = self.score(input_test, target_test)
 
                 self.training_errors.append(train_error)
                 self.validation_errors.append(validation_error)
