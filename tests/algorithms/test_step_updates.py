@@ -1,4 +1,4 @@
-from neupy import algorithms
+from neupy import algorithms, layers
 
 from base import BaseTestCase
 from data import simple_classification
@@ -10,7 +10,11 @@ class StepUpdateTestCase(BaseTestCase):
 
         x_train, x_test, y_train, y_test = simple_classification()
         optimizer = algorithms.Momentum(
-            (10, 5, 1),
+            [
+                layers.Input(10),
+                layers.Sigmoid(5),
+                layers.Sigmoid(1),
+            ],
             step=step,
             momentum=0.99,
             batch_size='full',

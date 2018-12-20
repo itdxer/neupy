@@ -16,7 +16,11 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         super(MixtureOfExpertsTestCase, self).setUp()
         self.networks = [
             algorithms.GradientDescent(
-                (1, 20, 1),
+                connection=[
+                    layers.Input(1),
+                    layers.Sigmoid(20),
+                    layers.Sigmoid(1)
+                ],
                 step=0.2,
                 batch_size='all',
                 verbose=False

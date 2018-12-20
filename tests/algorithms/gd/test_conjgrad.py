@@ -71,7 +71,11 @@ class ConjugateGradientTestCase(BaseTestCase):
 
     def test_conjgrad(self):
         cgnet = algorithms.ConjugateGradient(
-            (10, 5, 1),
+            [
+                layers.Input(10),
+                layers.Sigmoid(5),
+                layers.Sigmoid(1),
+            ],
             error='binary_crossentropy',
             shuffle_data=True,
             verbose=False,

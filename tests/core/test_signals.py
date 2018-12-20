@@ -1,4 +1,4 @@
-from neupy.algorithms import GradientDescent
+from neupy import layers, algorithms
 
 from data import xor_input_train, xor_target_train
 from base import BaseTestCase
@@ -15,8 +15,12 @@ class SignalsTestCase(BaseTestCase):
             global triggered_times
             triggered_times += 1
 
-        network = GradientDescent(
-            connection=(2, 2, 1),
+        network = algorithms.GradientDescent(
+            connection=[
+                layers.Input(2),
+                layers.Sigmoid(2),
+                layers.Sigmoid(1)
+            ],
             epoch_end_signal=print_message,
             batch_size='all',
         )
@@ -34,8 +38,12 @@ class SignalsTestCase(BaseTestCase):
             global triggered_times
             triggered_times += 1
 
-        network = GradientDescent(
-            connection=(2, 2, 1),
+        network = algorithms.GradientDescent(
+            connection=[
+                layers.Input(2),
+                layers.Sigmoid(2),
+                layers.Sigmoid(1)
+            ],
             train_end_signal=print_message,
             batch_size='all',
         )

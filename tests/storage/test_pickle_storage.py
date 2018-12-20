@@ -96,7 +96,11 @@ class LayerStoragePickleTestCase(BaseTestCase):
                     os.path.join(tempdir, 'training-epoch-{}'.format(epoch)))
 
         gdnet = algorithms.GradientDescent(
-            connection=(10, 4, 1),
+            connection=[
+                layers.Input(10),
+                layers.Sigmoid(4),
+                layers.Sigmoid(1)
+            ],
             epoch_end_signal=on_epoch_end,
             batch_size='all',
             step=0.5
