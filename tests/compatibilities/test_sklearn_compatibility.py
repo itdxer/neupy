@@ -5,7 +5,7 @@ from sklearn.pipeline import Pipeline
 
 from neupy import algorithms, layers
 from neupy.utils import asfloat
-from neupy.algorithms.gd import errors
+from neupy.algorithms.gd import objectives
 
 from base import BaseTestCase
 
@@ -39,7 +39,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
         pipeline.fit(x_train, y_train, gd__epochs=50)
         y_predict = pipeline.predict(x_test)
 
-        error = errors.rmsle(
+        error = objectives.rmsle(
             target_scaler.inverse_transform(y_test),
             target_scaler.inverse_transform(y_predict).round()
         )
@@ -50,7 +50,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
         def scorer(network, X, y):
             y = asfloat(y)
             result = asfloat(network.predict(X))
-            return self.eval(errors.rmsle(result[:, 0], y))
+            return self.eval(objectives.rmsle(result[:, 0], y))
 
         dataset = datasets.load_diabetes()
         x_train, x_test, y_train, y_test = train_test_split(

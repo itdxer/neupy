@@ -5,7 +5,7 @@ from neupy.utils import tensorflow_session, flatten, function_name_scope
 from neupy.core.properties import (BoundedProperty, ChoiceProperty,
                                    WithdrawProperty)
 from neupy.algorithms import BaseOptimizer
-from neupy.algorithms.gd import errors
+from neupy.algorithms.gd import objectives
 from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
                                     make_single_vector)
 
@@ -120,7 +120,7 @@ class LevenbergMarquardt(BaseOptimizer):
     """
     mu = BoundedProperty(default=0.01, minval=0)
     mu_update_factor = BoundedProperty(default=1.2, minval=1)
-    error = ChoiceProperty(default='mse', choices={'mse': errors.mse})
+    error = ChoiceProperty(default='mse', choices={'mse': objectives.mse})
 
     step = WithdrawProperty()
 

@@ -22,7 +22,7 @@ from neupy.utils import (
     tensorflow_session, initialize_uninitialized_variables
 )
 from neupy.layers.utils import iter_parameters
-from neupy.algorithms.gd import errors
+from neupy.algorithms.gd import objectives
 from neupy.layers.connections import LayerConnection
 from neupy.layers.connections.base import create_input_variables
 from neupy.exceptions import InvalidConnection
@@ -50,8 +50,8 @@ def generate_layers(layers_sizes):
     n_layers = len(layers_sizes)
 
     if n_layers <= 1:
-        raise ValueError("Cannot generate network that "
-                         "has less than two layers")
+        raise ValueError(
+            "Cannot generate network that has less than two layers")
 
     input_layer_size = layers_sizes.pop(0)
     connection = layers.Input(input_layer_size)
@@ -208,17 +208,17 @@ class BaseOptimizer(BaseNetwork):
     step = ScalarVariableProperty(default=0.1)
     regularizer = Property(default=None, allow_none=True)
     error = FunctionWithOptionsProperty(default='mse', choices={
-        'mae': errors.mae,
-        'mse': errors.mse,
-        'rmse': errors.rmse,
-        'msle': errors.msle,
-        'rmsle': errors.rmsle,
+        'mae': objectives.mae,
+        'mse': objectives.mse,
+        'rmse': objectives.rmse,
+        'msle': objectives.msle,
+        'rmsle': objectives.rmsle,
 
-        'binary_crossentropy': errors.binary_crossentropy,
-        'categorical_crossentropy': errors.categorical_crossentropy,
+        'binary_crossentropy': objectives.binary_crossentropy,
+        'categorical_crossentropy': objectives.categorical_crossentropy,
 
-        'binary_hinge': errors.binary_hinge,
-        'categorical_hinge': errors.categorical_hinge,
+        'binary_hinge': objectives.binary_hinge,
+        'categorical_hinge': objectives.categorical_hinge,
     })
 
     def __init__(self, connection, options=None, **kwargs):
