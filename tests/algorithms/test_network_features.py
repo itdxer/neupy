@@ -125,9 +125,9 @@ class NetworkPropertiesTestCase(BaseTestCase):
             # One of the choices has to be true whether other
             # choices should give count equal to zero.
             time_counts = (
-                terminal_output.count(" μs\n") +
-                terminal_output.count(" ms\n") +
-                terminal_output.count(" ns\n")
+                terminal_output.count(" μs]") +
+                terminal_output.count(" ms]") +
+                terminal_output.count(" ns]")
             )
             self.assertEqual(case.should_be_n_times, time_counts)
 

@@ -46,14 +46,14 @@ def error_plot(network, logx=False, ax=None, show=True):
     if ax is None:
         ax = plt.gca()
 
-    if not network.errors:
+    if not network.training_errors:
         warnings.warn("There is no data to plot")
         return ax
 
-    train_errors = network.errors
+    training_errors = network.training_errors
     validation_errors = network.validation_errors
 
-    if len(train_errors) != len(validation_errors):
+    if len(training_errors) != len(validation_errors):
         warnings.warn(
             "Mismatch in number of training and validation "
             "errors. Validation error will be ignored."
@@ -63,10 +63,10 @@ def error_plot(network, logx=False, ax=None, show=True):
     if all(err is None for err in validation_errors):
         validation_errors = []
 
-    errors_range = np.arange(len(train_errors))
+    errors_range = np.arange(len(training_errors))
     plot_function = ax.semilogx if logx else ax.plot
 
-    line_error_in, = plot_function(errors_range, train_errors)
+    line_error_in, = plot_function(errors_range, training_errors)
 
     if validation_errors:
         line_error_out, = plot_function(errors_range, validation_errors)

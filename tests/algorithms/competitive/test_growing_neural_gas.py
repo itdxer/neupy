@@ -81,7 +81,7 @@ class GrowingNeuralGasTestCase(BaseTestCase):
             self.make_plot(data, gng)
 
         self.assertEqual(len(gng.graph.nodes), gng.max_nodes)
-        self.assertAlmostEqual(gng.errors[-1], 0.09, places=2)
+        self.assertAlmostEqual(gng.training_errors[-1], 0.09, places=2)
 
         useless_node_present = any(
             getattr(node, 'useless_node', False) for node in gng.graph.nodes)

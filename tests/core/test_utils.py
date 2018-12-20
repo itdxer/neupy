@@ -144,7 +144,7 @@ class IterUntilConvergeTestCase(BaseTestCase):
             iterator = iter_until_converge(network, epsilon=1e-5, max_epochs=5)
 
             for epoch in iterator:
-                network.errors.append(np.nan)
+                network.training_errors.append(np.nan)
 
             terminal_output = out.getvalue()
             self.assertIn('NaN or Inf', terminal_output)

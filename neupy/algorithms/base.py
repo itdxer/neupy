@@ -48,17 +48,12 @@ class BaseNetwork(BaseSkeleton):
 
     Attributes
     ----------
-    errors : list
-        Contains list of training errors. This object has the same
-        properties as list and in addition there are three additional
-        useful methods: `last`, `previous` and `normalized`.
-
-    train_errors : list
-        Alias to the ``errors`` attribute.
+    training_errors : list
+        List of the training errors.
 
     validation_errors : list
-        The same as `errors` attribute, but it contains only validation
-        errors.
+        Contains list of training errors. Validation error will be equal
+        to ``None`` when validation wasn't done during this epoch.
 
     last_epoch : int
         Value equals to the last trained epoch. After initialization
@@ -73,7 +68,7 @@ class BaseNetwork(BaseSkeleton):
     train_end_signal = Property(expected_type=types.FunctionType)
 
     def __init__(self, *args, **options):
-        self.errors = self.train_errors = []
+        self.training_errors = []
         self.validation_errors = []
 
         self.last_epoch = 0
@@ -113,23 +108,20 @@ class BaseNetwork(BaseSkeleton):
         raise NotImplementedError()
 
     def print_last_error(self):
-        train_error = self.errors[-1]
+        train_error = self.training_errors[-1]
         validation_error = self.validation_errors[-1]
-        epoch_training_time = format_time(self.epoch_time)
+
+        messages = []
+        base_message = "#{} : [{}] ".format(
+            self.last_epoch, format_time(self.epoch_time))
+
+        if train_error is not None:
+            messages.append("train: {:.6f}".format(train_error))
 
         if validation_error is not None:
-            self.logs.write(
-                "epoch #{}, train err: {:.6f}, valid err: {:.6f}, time: {}"
-                "".format(self.last_epoch, train_error, validation_error,
-                          epoch_training_time))
-        elif train_error is not None:
-            self.logs.write(
-                "epoch #{}, train err: {:.6f}, time: {}"
-                "".format(self.last_epoch, train_error, epoch_training_time))
-        else:
-            self.logs.write(
-                "epoch #{}, time: {}"
-                "".format(self.last_epoch, epoch_training_time))
+            messages.append("valid: {:.6f}".format(validation_error))
+
+        self.logs.write(base_message + ', '.join(messages))
 
     def train(self, input_train, target_train=None, input_test=None,
               target_test=None, epochs=100, epsilon=None):
@@ -153,7 +145,7 @@ class BaseNetwork(BaseSkeleton):
             Defaults to ``None``.
         """
         if epochs <= 0:
-            raise ValueError("Number of epochs needs to be greater than 0.")
+            raise ValueError("Number of epochs needs to be a positive number")
 
         last_epoch_shown = 0
         next_epoch = self.last_epoch + 1
@@ -163,7 +155,6 @@ class BaseNetwork(BaseSkeleton):
             iterepochs = iter_until_converge(self, epsilon, max_epochs=epochs)
 
         for epoch_index, epoch in enumerate(iterepochs):
-            validation_error = None
             epoch_start_time = time.time()
             self.last_epoch = epoch
 
@@ -176,12 +167,13 @@ class BaseNetwork(BaseSkeleton):
 
             try:
                 train_error = self.train_epoch(input_train, target_train)
+                validation_error = None
 
                 if input_test is not None:
                     validation_error = self.prediction_error(
                         input_test, target_test)
 
-                self.errors.append(train_error)
+                self.training_errors.append(train_error)
                 self.validation_errors.append(validation_error)
 
                 epoch_finish_time = time.time()
@@ -196,7 +188,8 @@ class BaseNetwork(BaseSkeleton):
 
             except StopTraining as err:
                 self.logs.message(
-                    "TRAIN", "Epoch #{} stopped. {}".format(epoch, str(err))
+                    "TRAIN", "Epoch #{} was stopped. Message: {}".format(
+                        epoch, str(err))
                 )
                 break
 

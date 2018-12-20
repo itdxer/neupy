@@ -236,8 +236,8 @@ class IRPROPPlus(RPROP):
         )
 
     def train_epoch(self, input_train, target_train):
-        if len(self.errors) >= 2:
-            previous_error, last_error = self.errors[-2:]
+        if len(self.training_errors) >= 2:
+            previous_error, last_error = self.training_errors[-2:]
             session = tensorflow_session()
 
             self.variables.last_error.load(last_error, session)

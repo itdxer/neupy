@@ -129,7 +129,7 @@ class LVQTestCase(BaseTestCase):
         lvqnet.train(self.data, self.target, epochs=100)
         predicted_target = lvqnet.predict(self.data)
 
-        self.assertEqual(lvqnet.errors[-1], 0)
+        self.assertEqual(lvqnet.training_errors[-1], 0)
         np.testing.assert_array_equal(
             predicted_target,
             self.target[:, 0])
@@ -183,10 +183,10 @@ class LVQTestCase(BaseTestCase):
         )
 
         lvqnet.train(self.data, self.target, epochs=3)
-        self.assertGreater(lvqnet.errors[-1], 0)
+        self.assertGreater(lvqnet.training_errors[-1], 0)
 
         lvqnet.train(self.data, self.target, epochs=30)
-        self.assertEqual(lvqnet.errors[-1], 0)
+        self.assertEqual(lvqnet.training_errors[-1], 0)
 
     def test_compare_lvq_and_lvq2(self):
         dataset = datasets.load_iris()
