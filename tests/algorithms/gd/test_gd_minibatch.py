@@ -2,14 +2,12 @@ from itertools import product
 
 import numpy as np
 
-from neupy import algorithms, init, layers
+from neupy import algorithms, layers
 from neupy.algorithms.gd.base import (
-    BatchSizeProperty, iter_batches,
-    average_batch_errors, count_samples,
-    cannot_divide_into_batches,
+    iter_batches, average_batch_errors,
+    count_samples, cannot_divide_into_batches,
 )
 
-from data import simple_classification
 from base import BaseTestCase
 
 
