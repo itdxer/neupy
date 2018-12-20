@@ -136,15 +136,7 @@ class BaseNetwork(BaseSkeleton):
         raise NotImplementedError
 
     def on_epoch_start_update(self, epoch):
-        """
-        Function would be trigger before run all training procedure
-        related to the current epoch.
-
-        Parameters
-        ----------
-        epoch : int
-            Current epoch number.
-        """
+        pass
 
     def train_epoch(self, input_train, target_train=None):
         raise NotImplementedError()
@@ -197,7 +189,7 @@ class BaseNetwork(BaseSkeleton):
 
         last_epoch_shown = 0
         next_epoch = self.last_epoch + 1
-        iterepochs = range(next_epoch, next_epoch + epochs)
+        iterepochs = range(next_epoch, next_epoch + int(epochs))
 
         if epsilon is not None:
             iterepochs = iter_until_converge(self, epsilon, max_epochs=epochs)

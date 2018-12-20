@@ -91,19 +91,6 @@ class NetworkMainTestCase(BaseTestCase):
 
         self.assertIn('step', terminal_output)
 
-    def test_network_train_epsilon_exception(self):
-        network = algorithms.GradientDescent(
-            layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1))
-
-        x = np.zeros((5, 2))
-        y = np.zeros((5, 1))
-
-        with self.assertRaises(ValueError):
-            network.train(x, y, epochs=-1)
-
-        with self.assertRaises(ValueError):
-            network.train(x, y, epsilon=1e-2, epochs=1)
-
     def test_network_training_summary(self):
         with catch_stdout() as out:
             network = algorithms.GradientDescent(
