@@ -242,15 +242,16 @@ class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
     --------
     >>> import numpy as np
     >>> from neupy import algorithms
+    >>> from neupy.layers import *
     >>>
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> qnnet = algorithms.QuasiNewton(
-    ...     (2, 3, 1),
+    >>> optimizer = algorithms.QuasiNewton(
+    ...     Input(2) > Sigmoid(3) > Sigmoid(1),
     ...     update_function='bfgs'
     ... )
-    >>> qnnet.train(x_train, y_train, epochs=10)
+    >>> optimizer.train(x_train, y_train, epochs=10)
 
     References
     ----------

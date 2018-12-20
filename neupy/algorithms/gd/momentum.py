@@ -34,12 +34,13 @@ class Momentum(GradientDescent):
     --------
     >>> import numpy as np
     >>> from neupy import algorithms
+    >>> from neupy.layers import *
     >>>
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> mnet = algorithms.Momentum((2, 3, 1))
-    >>> mnet.train(x_train, y_train)
+    >>> optimizer = algorithms.Momentum(Input(2) > Sigmoid(3) > Sigmoid(1))
+    >>> optimizer.train(x_train, y_train)
 
     See Also
     --------

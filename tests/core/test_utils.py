@@ -4,10 +4,12 @@ import numpy as np
 import tensorflow as tf
 from scipy.sparse import csr_matrix
 
-from neupy.utils import (preformat_value, as_tuple, AttributeKeyDict,
-                         asfloat, format_data, all_equal)
+from neupy.utils import (
+    preformat_value, as_tuple, AttributeKeyDict,
+    asfloat, format_data, all_equal,
+)
 from neupy.algorithms.utils import shuffle, iter_until_converge
-from neupy import algorithms
+from neupy import algorithms, layers
 
 from base import BaseTestCase
 from utils import catch_stdout
@@ -135,7 +137,10 @@ class UtilsTestCase(BaseTestCase):
 class IterUntilConvergeTestCase(BaseTestCase):
     def test_iter_until_converge_critical_cases(self):
         with catch_stdout() as out:
-            network = algorithms.GradientDescent((2, 3, 1), verbose=True)
+            network = algorithms.GradientDescent(
+                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
+                verbose=True,
+            )
             iterator = iter_until_converge(network, epsilon=1e-5, max_epochs=5)
 
             for epoch in iterator:

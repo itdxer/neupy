@@ -68,12 +68,13 @@ class Adam(GradientDescent):
     --------
     >>> import numpy as np
     >>> from neupy import algorithms
+    >>> from neupy.layers import *
     >>>
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> mnet = algorithms.Adam((2, 3, 1))
-    >>> mnet.train(x_train, y_train)
+    >>> optimizer = algorithms.Adam(Input(2) > Sigmoid(3) > Sigmoid(1))
+    >>> optimizer.train(x_train, y_train)
     """
     step = ScalarVariableProperty(default=0.001)
     beta1 = ProperFractionProperty(default=0.9)

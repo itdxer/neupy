@@ -107,12 +107,14 @@ class LevenbergMarquardt(BaseOptimizer):
     --------
     >>> import numpy as np
     >>> from neupy import algorithms
+    >>> from neupy.layers import *
     >>>
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> lmnet = algorithms.LevenbergMarquardt((2, 3, 1))
-    >>> lmnet.train(x_train, y_train)
+    >>> network = Input(2) > Sigmoid(3) > Sigmoid(1)
+    >>> optimizer = algorithms.LevenbergMarquardt(network)
+    >>> optimizer.train(x_train, y_train)
 
     See Also
     --------

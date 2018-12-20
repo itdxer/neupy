@@ -40,12 +40,14 @@ class HessianDiagonal(BaseOptimizer):
     --------
     >>> import numpy as np
     >>> from neupy import algorithms
+    >>> from neupy.layers import *
     >>>
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> hdnet = algorithms.HessianDiagonal((2, 3, 1))
-    >>> hdnet.train(x_train, y_train)
+    >>> network = Input(2) > Sigmoid(3) > Sigmoid(1)
+    >>> optimizer = algorithms.HessianDiagonal(network)
+    >>> optimizer.train(x_train, y_train)
 
     Diabets dataset example
 

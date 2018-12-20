@@ -23,68 +23,12 @@ from neupy.utils import (
 )
 from neupy.layers.utils import iter_parameters
 from neupy.algorithms.gd import objectives
-from neupy.layers.connections import LayerConnection
 from neupy.layers.connections.base import create_input_variables
 from neupy.exceptions import InvalidConnection
 from neupy.algorithms.base import BaseNetwork
 
 
 __all__ = ('BaseOptimizer', 'GradientDescent')
-
-
-def generate_layers(layers_sizes):
-    """
-    Create from list of layer sizes basic linear network.
-
-    Parameters
-    ----------
-    layers_sizes : list or tuple
-        Ordered list of network connection structure.
-
-    Returns
-    -------
-    LayerConnection
-        Constructed connection.
-    """
-    layers_sizes = list(layers_sizes)
-    n_layers = len(layers_sizes)
-
-    if n_layers <= 1:
-        raise ValueError(
-            "Cannot generate network that has less than two layers")
-
-    input_layer_size = layers_sizes.pop(0)
-    connection = layers.Input(input_layer_size)
-
-    for output_size in layers_sizes:
-        next_layer = layers.Sigmoid(output_size)
-        connection = LayerConnection(connection, next_layer)
-
-    return connection
-
-
-def clean_layers(connection):
-    """
-    Clean layers connections and format transform them into one format.
-    Also this function validate layers connections.
-
-    Parameters
-    ----------
-    connection : list, tuple or object
-        Layers connetion in different formats.
-
-    Returns
-    -------
-    object
-        Cleaned layers connection.
-    """
-    if all(isinstance(element, int) for element in connection):
-        connection = generate_layers(connection)
-
-    if isinstance(connection, (list, tuple)):
-        connection = layers.join(*connection)
-
-    return connection
 
 
 def function(inputs, outputs, updates=None, name=None):
@@ -133,13 +77,8 @@ class BaseOptimizer(BaseNetwork):
         - List of layers.
           For instance, ``[Input(2), Tanh(4), Relu(1)]``.
 
-        - Construct layer connections.
+        - Constructed layers.
           For instance, ``Input(2) > Tanh(4) > Relu(1)``.
-
-        - Tuple of integers. Each integer defines Sigmoid layer
-          and it's input size.  For instance,  value ``(2, 4, 1)``
-          means that network has 3 layers with 2 input units,
-          4 hidden units and 1 output unit.
 
     regularizer : function or None
         Network's regularizer.
@@ -223,7 +162,11 @@ class BaseOptimizer(BaseNetwork):
 
     def __init__(self, connection, options=None, **kwargs):
         options = options or kwargs
-        self.connection = clean_layers(connection)
+
+        if isinstance(connection, (list, tuple)):
+            connection = layers.join(*connection)
+
+        self.connection = connection
 
         self.layers = list(self.connection)
         graph = self.connection.graph
@@ -809,16 +752,15 @@ class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
     --------
     >>> import numpy as np
     >>> from neupy import algorithms
+    >>> from neupy.algorithms import *
     >>>
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> mgdnet = algorithms.GradientDescent(
-    ...     (2, 3, 1), batch_size=1
-    ... )
+    >>> network = Input(2) > Sigmoid(3) > Sigmoid(1)
+    >>> mgdnet = algorithms.GradientDescent(network, batch_size=1)
     >>> mgdnet.train(x_train, y_train)
     """
-
     def train_epoch(self, input_train, target_train):
         """
         Train one epoch.

@@ -16,7 +16,10 @@ class QuasiNewtonTestCase(BaseTestCase):
     def test_exceptions(self):
         with self.assertRaises(ValueError):
             # Don't have learning rate
-            algorithms.QuasiNewton((2, 3, 1), step=0.3)
+            algorithms.QuasiNewton(
+                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
+                step=0.3,
+            )
 
     def test_update_functions(self):
         UpdateFunction = namedtuple(

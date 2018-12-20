@@ -9,7 +9,7 @@ from base import BaseTestCase
 class ConnectionsTestCase(BaseTestCase):
     def test_connection_initializations(self):
         possible_connections = (
-            (2, 3, 1),
+            layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
 
             # as a list
             [layers.Input(2), layers.Sigmoid(3), layers.Tanh(1)],
