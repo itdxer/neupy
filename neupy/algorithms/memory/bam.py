@@ -1,14 +1,22 @@
 from random import randint
 
 import numpy as np
+from numpy.core.umath_tests import inner1d
 
 from neupy.utils import format_data
 from neupy.exceptions import NotTrained
-from .utils import bin2sign, hopfield_energy, step_function
 from .base import DiscreteMemory
 
 
 __all__ = ('DiscreteBAM',)
+
+
+def bin2sign(matrix):
+    return np.where(matrix == 0, -1, 1)
+
+
+def hopfield_energy(weight, input_data, output_data):
+    return -0.5 * inner1d(input_data.dot(weight), output_data)
 
 
 class DiscreteBAM(DiscreteMemory):
@@ -94,9 +102,8 @@ class DiscreteBAM(DiscreteMemory):
     >>> zero_hint
     matrix([[0, 1, 0, 0]])
     """
-
     def format_predict(self, predicted_result):
-        return step_function(predicted_result).astype(int)
+        return np.where(predicted_result > 0, 1, 0).astype(int)
 
     def predict_input(self, output_data, n_times=None):
         output_data = format_data(output_data, is_feature1d=False)
