@@ -20,9 +20,11 @@ class TerminalLogger(object):
     ----------
     enable : bool
         Enable/disable logging output. Defaults to ``True``.
+
     template : str
         Terminal output message template. Defaults
         to ``"[{name}] {text}"``.
+
     stdout : object
         Writes output in terminal. Defaults to ``sys.stdout``.
     """

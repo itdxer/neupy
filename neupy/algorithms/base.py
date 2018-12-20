@@ -139,7 +139,7 @@ class BaseNetwork(BaseSkeleton):
         target_test : array-like or None
 
         epochs : int
-            Defaults to `100`.
+            Defaults to ``100``.
 
         epsilon : float or None
             Defaults to ``None``.
@@ -174,9 +174,7 @@ class BaseNetwork(BaseSkeleton):
 
                 self.training_errors.append(train_error)
                 self.validation_errors.append(validation_error)
-
-                epoch_finish_time = time.time()
-                self.epoch_time = epoch_finish_time - epoch_start_time
+                self.epoch_time = time.time() - epoch_start_time
 
                 if epoch % self.show_epoch == 0 or epoch_index == 0:
                     self.print_last_error()

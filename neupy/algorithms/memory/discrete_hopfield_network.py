@@ -1,14 +1,22 @@
 import math
 
 import numpy as np
+from numpy.core.umath_tests import inner1d
 
 from neupy.utils import format_data
 from neupy.core.properties import Property
-from .utils import bin2sign, hopfield_energy, step_function
 from .base import DiscreteMemory
 
 
 __all__ = ('DiscreteHopfieldNetwork',)
+
+
+def bin2sign(matrix):
+    return np.where(matrix == 0, -1, 1)
+
+
+def hopfield_energy(weight, input_data, output_data):
+    return -0.5 * inner1d(input_data.dot(weight), output_data)
 
 
 class DiscreteHopfieldNetwork(DiscreteMemory):
@@ -186,7 +194,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         else:
             output_data = input_data.dot(self.weight)
 
-        return step_function(output_data).astype(int)
+        return np.where(output_data > 0, 1, 0).astype(int)
 
     def energy(self, input_data):
         self.discrete_validation(input_data)
