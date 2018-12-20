@@ -127,7 +127,7 @@ class CMAC(BaseNetwork):
             for coord in coords:
                 weight[coord] += step * error
 
-            errors += abs(error)
+            errors += sum(abs(error))
 
         return errors / n_samples
 

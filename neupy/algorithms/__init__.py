@@ -30,7 +30,6 @@ from .competitive.lvq import *
 from .competitive.growing_neural_gas import *
 
 from .rbfn.pnn import *
-from .rbfn.rbf_kmeans import *
 from .rbfn.grnn import *
 
 from .rbm import *

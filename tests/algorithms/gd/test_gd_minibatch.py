@@ -49,32 +49,6 @@ class MinibatchGDTestCase(BaseTestCase):
                     batch_size=value,
                 )
 
-    def test_full_batch_training(self):
-        fullbatch_identifiers = BatchSizeProperty.fullbatch_identifiers
-        x_train, _, y_train, _ = simple_classification()
-
-        xavier_normal = init.XavierNormal()
-        weight1 = xavier_normal.sample((10, 20), return_array=True)
-        weight2 = xavier_normal.sample((20, 1), return_array=True)
-
-        for network_class in self.network_classes:
-
-            for fullbatch_value in fullbatch_identifiers:
-                net = network_class(
-                    [
-                        layers.Input(10),
-                        layers.Sigmoid(20, weight=weight1),
-                        layers.Sigmoid(1, weight=weight2),
-                    ],
-                    batch_size=fullbatch_value,
-                )
-                net.train(x_train, y_train, epochs=10)
-
-            self.assertTrue(
-                np.all(np.abs(net.errors - net.errors[0]) < 1e-3),
-                msg=net.errors,
-            )
-
     def test_iterbatches(self):
         n_samples = 50
         batch_size = 20
