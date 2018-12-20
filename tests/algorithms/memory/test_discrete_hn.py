@@ -1,11 +1,13 @@
 import numpy as np
 
+import warnings
 from neupy import algorithms
 
-from algorithms.memory.data import (zero, one, two, half_one,
-                                    half_zero, half_two)
+from algorithms.memory.data import (
+    zero, one, two, half_one,
+    half_zero, half_two,
+)
 from base import BaseTestCase
-from utils import catch_stdout
 
 
 class DiscreteHopfieldNetworkTestCase(BaseTestCase):
@@ -154,15 +156,14 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
                                      is_feature1d=False)
 
     def test_discrete_hn_warning(self):
-        with catch_stdout() as out:
+        with warnings.catch_warnings(record=True) as warns:
             algorithms.DiscreteHopfieldNetwork(
                 verbose=True,
                 n_times=100,
                 mode='sync'
             )
-            terminal_output = out.getvalue()
-
-        self.assertIn('only in `async` mode', terminal_output)
+            self.assertEqual(len(warns), 1)
+            self.assertIn('only in `async` mode', str(warns[0].message))
 
     def test_iterative_updates(self):
         data = np.concatenate([zero, one, two], axis=0)
