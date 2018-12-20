@@ -238,9 +238,8 @@ class IRPROPPlus(RPROP):
     def on_epoch_start_update(self, epoch):
         super(IRPROPPlus, self).on_epoch_start_update(epoch)
 
-        previous_error = self.errors.previous()
-        if previous_error:
-            last_error = self.errors.last()
+        if len(self.errors) >= 2:
+            previous_error, last_error = self.errors[-2:]
             session = tensorflow_session()
 
             self.variables.last_error.load(last_error, session)

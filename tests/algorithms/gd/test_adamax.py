@@ -23,7 +23,7 @@ class AdamaxTestCase(BaseTestCase):
             beta2=0.999,
         )
         mnet.train(x_train, y_train, x_test, y_test, epochs=50)
-        self.assertGreater(0.15, mnet.errors.last())
+        self.assertGreater(0.15, mnet.errors[-1])
 
     def test_adamax_overfit(self):
         self.assertCanNetworkOverfit(

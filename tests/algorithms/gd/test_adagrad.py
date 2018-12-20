@@ -21,7 +21,7 @@ class AdagradTestCase(BaseTestCase):
             epsilon=1e-5,
         )
         mnet.train(x_train, y_train, x_test, y_test, epochs=100)
-        self.assertGreater(0.15, mnet.validation_errors.last())
+        self.assertGreater(0.15, mnet.validation_errors[-1])
 
     def test_adagrad_overfit(self):
         self.assertCanNetworkOverfit(

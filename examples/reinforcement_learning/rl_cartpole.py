@@ -88,7 +88,7 @@ def train_network(env, network, memory, n_games=200, max_score=200,
                 # Train only when we collected enough samples
                 x_train, y_train = training_samples(network, memory, gamma)
                 network.train(x_train, y_train, epochs=1)
-                loss = network.errors.last()
+                loss = network.errors[-1]
 
             state = new_state
 

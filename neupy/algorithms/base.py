@@ -4,8 +4,6 @@ from __future__ import division, absolute_import, unicode_literals
 import time
 import types
 
-import numpy as np
-
 from neupy.utils import preformat_value, as_tuple
 from neupy.exceptions import StopTraining
 from neupy.core.base import BaseSkeleton
@@ -53,52 +51,6 @@ def show_network_options(network, highlight_options=None):
     logs.newline()
 
 
-def create_training_epochs_iterator(network, epochs, epsilon=None):
-    if epsilon is not None:
-        return iter_until_converge(network, epsilon, max_epochs=epochs)
-
-    next_epoch = network.last_epoch + 1
-    return range(next_epoch, next_epoch + epochs)
-
-
-class ErrorHistoryList(list):
-    """
-    Wrapper around the built-in list class that adds a few
-    additional methods.
-    """
-    def last(self):
-        """
-        Returns last element if list is not empty,
-        ``None`` otherwise.
-        """
-        if self and self[-1] is not None:
-            return np.sum(self[-1])
-
-    def previous(self):
-        """
-        Returns last element if list is not empty,
-        ``None`` otherwise.
-        """
-        if len(self) >= 2 and self[-2] is not None:
-            return np.sum(self[-2])
-
-    def normalized(self):
-        """
-        Normalize list that contains error outputs.
-
-        Returns
-        -------
-        list
-            Return the same list with normalized values if there
-            where some problems.
-        """
-        if not self:
-            return self
-
-        normalized_errors = map(np.sum, self)
-        return ErrorHistoryList(normalized_errors)
-
-
 class BaseNetwork(BaseSkeleton):
     """
     Base class for Neural Network algorithms.
@@ -133,15 +85,15 @@ class BaseNetwork(BaseSkeleton):
 
     Attributes
     ----------
-    errors : ErrorHistoryList
+    errors : list
         Contains list of training errors. This object has the same
         properties as list and in addition there are three additional
         useful methods: `last`, `previous` and `normalized`.
 
-    train_errors : ErrorHistoryList
+    train_errors : list
         Alias to the ``errors`` attribute.
 
-    validation_errors : ErrorHistoryList
+    validation_errors : list
         The same as `errors` attribute, but it contains only validation
         errors.
 
@@ -158,8 +110,9 @@ class BaseNetwork(BaseSkeleton):
     train_end_signal = Property(expected_type=types.FunctionType)
 
     def __init__(self, *args, **options):
-        self.errors = self.train_errors = ErrorHistoryList()
-        self.validation_errors = ErrorHistoryList()
+        self.errors = self.train_errors = []
+        self.validation_errors = []
+
         self.last_epoch = 0
         self.epoch_time = 0
 
@@ -200,8 +153,8 @@ class BaseNetwork(BaseSkeleton):
         raise NotImplementedError()
 
     def print_last_error(self):
-        train_error = self.errors.last()
-        validation_error = self.validation_errors.last()
+        train_error = self.errors[-1]
+        validation_error = self.validation_errors[-1]
         epoch_training_time = format_time(self.epoch_time)
 
         if validation_error is not None:
@@ -242,12 +195,12 @@ class BaseNetwork(BaseSkeleton):
         if epochs <= 0:
             raise ValueError("Number of epochs needs to be greater than 0.")
 
-        if epsilon is not None and epochs <= 2:
-            raise ValueError("Network should train at teast 3 epochs before "
-                             "check the difference between errors")
-
-        iterepochs = create_training_epochs_iterator(self, epochs, epsilon)
         last_epoch_shown = 0
+        next_epoch = self.last_epoch + 1
+        iterepochs = range(next_epoch, next_epoch + epochs)
+
+        if epsilon is not None:
+            iterepochs = iter_until_converge(self, epsilon, max_epochs=epochs)
 
         for epoch_index, epoch in enumerate(iterepochs):
             validation_error = None

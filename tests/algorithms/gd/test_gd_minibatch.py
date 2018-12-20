@@ -58,7 +58,6 @@ class MinibatchGDTestCase(BaseTestCase):
         weight2 = xavier_normal.sample((20, 1), return_array=True)
 
         for network_class in self.network_classes:
-            errors = []
 
             for fullbatch_value in fullbatch_identifiers:
                 net = network_class(
@@ -71,11 +70,9 @@ class MinibatchGDTestCase(BaseTestCase):
                 )
                 net.train(x_train, y_train, epochs=10)
 
-                errors.append(net.errors.last())
-
             self.assertTrue(
-                np.all(np.abs(errors - errors[0]) < 1e-3),
-                msg=errors,
+                np.all(np.abs(net.errors - net.errors[0]) < 1e-3),
+                msg=net.errors,
             )
 
     def test_iterbatches(self):

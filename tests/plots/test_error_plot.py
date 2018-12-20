@@ -2,7 +2,6 @@ import os
 
 import matplotlib.pyplot as plt
 from neupy import plots, algorithms, layers
-from neupy.algorithms.base import ErrorHistoryList
 
 from base import BaseTestCase
 from data import simple_classification
@@ -26,8 +25,8 @@ class ErrorPlotTestCase(BaseTestCase):
                 batch_size='all',
             )
 
-            network.errors = ErrorHistoryList([1, 2])
-            network.validation_errors = ErrorHistoryList([None])
+            network.errors = [1, 2]
+            network.validation_errors = [None]
 
             plots.error_plot(network, ax=None, show=False)
             terminal_output = out.getvalue()

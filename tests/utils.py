@@ -71,7 +71,7 @@ def compare_networks(default_class, tested_class, data, **kwargs):
 
     network.train(*data, epochs=epochs)
 
-    network_default_error = network.errors.last()
+    network_default_error = network.errors[-1]
     errors1 = network.errors
 
     # Compute result for test network (which must be faster)
@@ -81,7 +81,7 @@ def compare_networks(default_class, tested_class, data, **kwargs):
     network = tested_class(**kwargs)
 
     network.train(*data, epochs=epochs)
-    network_tested_error = network.errors.last()
+    network_tested_error = network.errors[-1]
     errors2 = network.errors
 
     if show_comparison_plot:

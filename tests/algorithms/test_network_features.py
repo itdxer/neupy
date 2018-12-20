@@ -7,8 +7,7 @@ import numpy as np
 from sklearn import datasets
 from neupy import algorithms, layers
 from neupy.exceptions import StopTraining
-from neupy.algorithms.base import (ErrorHistoryList, show_network_options,
-                                   format_time)
+from neupy.algorithms.base import show_network_options, format_time
 
 from utils import catch_stdout
 from base import BaseTestCase
@@ -91,22 +90,6 @@ class NetworkMainTestCase(BaseTestCase):
             terminal_output = out.getvalue()
 
         self.assertIn('step', terminal_output)
-
-    def test_empty_error_history_list(self):
-        errlist = ErrorHistoryList()
-        norm_errlist = errlist.normalized()
-        self.assertIs(norm_errlist, errlist)
-
-    def test_non_empty_error_history_list(self):
-        errlist = ErrorHistoryList()
-        errlist.append([1, 2, 1])
-        errlist.append([1, 1, 1])
-        errlist.append([2, 10])
-
-        norm_errlist = errlist.normalized()
-        expected_errorlsit = ErrorHistoryList([4, 3, 12])
-
-        self.assertEqual(norm_errlist, expected_errorlsit)
 
     def test_network_train_epsilon_exception(self):
         network = algorithms.GradientDescent(
