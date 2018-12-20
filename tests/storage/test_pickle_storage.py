@@ -83,7 +83,7 @@ class LayerStoragePickleTestCase(BaseTestCase):
 
         def on_epoch_end(network):
             epoch = network.last_epoch
-            errors[epoch] = network.prediction_error(x_test, y_test)
+            errors[epoch] = network.score(x_test, y_test)
 
             if epoch == 4:
                 storage.load_pickle(
@@ -107,7 +107,7 @@ class LayerStoragePickleTestCase(BaseTestCase):
         )
         gdnet.train(x_train, y_train)
 
-        validation_error = gdnet.prediction_error(x_test, y_test)
+        validation_error = gdnet.score(x_test, y_test)
 
         self.assertGreater(errors[2], errors[4])
         self.assertAlmostEqual(validation_error, errors[2])

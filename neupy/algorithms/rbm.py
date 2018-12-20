@@ -315,7 +315,7 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
                 (h_samples, random_binomial(p=h_neg)),
             ]
         )
-        self.prediction_error_func = function(
+        self.score_func = function(
             [network_input],
             error,
             name='rbm/prediction-error',
@@ -431,7 +431,7 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
         )
         return np.concatenate(outputs, axis=0)
 
-    def prediction_error(self, input_data, target_data=None):
+    def score(self, input_data, target_data=None):
         """
         Compute the pseudo-likelihood of input samples.
 
@@ -449,7 +449,7 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
         input_data = format_data(input_data, is_input_feature1d)
 
         errors = self.apply_batches(
-            function=self.prediction_error_func,
+            function=self.score_func,
             input_data=input_data,
 
             description='Validation batches',

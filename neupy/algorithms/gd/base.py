@@ -283,7 +283,7 @@ class BaseOptimizer(BaseNetwork):
                 updates=training_updates,
                 name='network/func-train-epoch'
             ),
-            prediction_error=function(
+            score=function(
                 inputs=network_inputs + [network_output],
                 outputs=self.variables.validation_error_func,
                 name='network/func-prediction-error'
@@ -314,7 +314,7 @@ class BaseOptimizer(BaseNetwork):
 
         return tuple(formated_data)
 
-    def prediction_error(self, input_data, target_data):
+    def score(self, input_data, target_data):
         """
         Calculate prediction accuracy for input data.
 
@@ -328,7 +328,7 @@ class BaseOptimizer(BaseNetwork):
         float
             Prediction error.
         """
-        return self.methods.prediction_error(*as_tuple(
+        return self.methods.score(*as_tuple(
             self.format_input_data(input_data), format_data(target_data)))
 
     def predict(self, input_data):
@@ -788,7 +788,7 @@ class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
             batch_size=self.batch_size,
         )
 
-    def prediction_error(self, input_data, target_data):
+    def score(self, input_data, target_data):
         """
         Check the prediction error for the specified input samples
         and their targets.
@@ -807,7 +807,7 @@ class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
         target_data = format_data(target_data)
 
         errors = self.apply_batches(
-            function=self.methods.prediction_error,
+            function=self.methods.score,
             input_data=input_data,
             arguments=as_tuple(target_data),
 
