@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import warnings
 from collections import namedtuple
 
 import numpy as np
 from sklearn import datasets
 from neupy import algorithms, layers
 from neupy.exceptions import StopTraining
-from neupy.algorithms.base import (
-    ErrorHistoryList, show_network_options,
-    format_time, parse_show_epoch_property,
-)
+from neupy.algorithms.base import (ErrorHistoryList, show_network_options,
+                                   format_time)
 
 from utils import catch_stdout
 from base import BaseTestCase
@@ -83,20 +80,6 @@ class NetworkMainTestCase(BaseTestCase):
 
         self.assertIn('step', terminal_output)
 
-    def test_parse_show_epoch_property(self):
-        network = algorithms.GradientDescent(
-            layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
-            show_epoch='5 times',
-            verbose=False,
-            batch_size='all',
-        )
-
-        with warnings.catch_warnings(record=True) as warns:
-            show_epoch = parse_show_epoch_property(network, 100, epsilon=1e-2)
-            self.assertEqual(show_epoch, 1)
-            self.assertEqual(len(warns), 1)
-            self.assertIn("Can't use", str(warns[0].message))
-
     def test_empty_error_history_list(self):
         errlist = ErrorHistoryList()
         norm_errlist = errlist.normalized()
@@ -153,13 +136,8 @@ class NetworkPropertiesTestCase(BaseTestCase):
     def test_show_epoch_valid_cases(self):
         Case = namedtuple("Case", "show_epoch should_be_n_times n_epochs")
         cases = (
-            # Show 10 epochs and the last one would be 11
-            Case(show_epoch='10 times', should_be_n_times=11, n_epochs=100),
-            Case(show_epoch='1 time', should_be_n_times=2, n_epochs=10),
-            Case(show_epoch='1 times', should_be_n_times=2, n_epochs=10),
-            # Should be equal to the number of epochs
-            Case(show_epoch='100 times', should_be_n_times=10, n_epochs=10),
             Case(show_epoch=5, should_be_n_times=3, n_epochs=10),
+            Case(show_epoch=7, should_be_n_times=3, n_epochs=10),
             Case(show_epoch=100, should_be_n_times=2, n_epochs=10),
         )
 

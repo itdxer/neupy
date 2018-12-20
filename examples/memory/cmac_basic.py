@@ -18,7 +18,7 @@ cmac = algorithms.CMAC(
     associative_unit_size=10,
     step=0.2,
     verbose=True,
-    show_epoch='4 times'
+    show_epoch=100,
 )
 cmac.train(input_train, target_train, epochs=100)
 predicted_test = cmac.predict(input_test)

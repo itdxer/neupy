@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import numpy as np
 import tensorflow as tf
 
@@ -159,5 +162,42 @@ def shuffle(*arrays):
 
 
 def make_single_vector(parameters):
-    with tf.name_scope('make-single-vector'):
+    with tf.name_scope('parameters-vector'):
         return tf.concat([flatten(param) for param in parameters], axis=0)
+
+
+def format_time(time):
+    """
+    Format seconds into human readable format.
+
+    Parameters
+    ----------
+    time : float
+        Time specified in seconds
+
+    Returns
+    -------
+    str
+        Formated time.
+    """
+    mins, seconds = divmod(int(time), 60)
+    hours, minutes = divmod(mins, 60)
+
+    if hours > 0:
+        return '{:0>2d}:{:0>2d}:{:0>2d}'.format(hours, minutes, seconds)
+
+    elif minutes > 0:
+        return '{:0>2d}:{:0>2d}'.format(minutes, seconds)
+
+    elif seconds > 0:
+        return '{:.0f} sec'.format(seconds)
+
+    elif time >= 1e-3:
+        return '{:.0f} ms'.format(time * 1e3)
+
+    elif time >= 1e-6:
+        # microseconds
+        return '{:.0f} μs'.format(time * 1e6)
+
+    # nanoseconds or smaller
+    return '{:.0f} ns'.format(time * 1e9)

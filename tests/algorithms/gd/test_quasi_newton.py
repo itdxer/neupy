@@ -92,7 +92,7 @@ class QuasiNewtonTestCase(BaseTestCase):
                 layers.Sigmoid(1, weight=init.Orthogonal()),
             ],
             shuffle_data=True,
-            show_epoch='20 times',
+            show_epoch=10,
             update_function='bfgs',
         )
 

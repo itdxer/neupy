@@ -33,12 +33,11 @@ class PandasCompatibilityTestCase(BaseTestCase):
         )
 
         bpnet = algorithms.GradientDescent(
-            connection=[
+            [
                 layers.Input(10),
                 layers.Sigmoid(30),
                 layers.Sigmoid(1),
             ],
-            show_epoch=100,
             batch_size='all',
         )
         bpnet.train(x_train, y_train, epochs=50)
