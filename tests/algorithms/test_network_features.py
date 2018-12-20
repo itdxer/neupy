@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import warnings
 from collections import namedtuple
 
 import numpy as np
 from sklearn import datasets
 from neupy import algorithms, layers
 from neupy.exceptions import StopTraining
-from neupy.algorithms.base import (ErrorHistoryList, show_network_options,
-                                   format_time, parse_show_epoch_property)
+from neupy.algorithms.base import (
+    ErrorHistoryList, show_network_options,
+    format_time, parse_show_epoch_property,
+)
 
 from utils import catch_stdout
 from base import BaseTestCase
@@ -19,12 +22,11 @@ xor_zero_target_train = np.array([[1, 0, 0, 1]]).T
 
 
 class NetworkMainTestCase(BaseTestCase):
-    def test_training_epoch(self):
+    def test_training_epoch_accumulation(self):
         data, target = datasets.make_classification(
             30, n_features=10, n_classes=2)
 
-        network = algorithms.GradientDescent((10, 3, 1), batch_size='all')
-
+        network = algorithms.GradientDescent((10, 3, 1))
         self.assertEqual(network.last_epoch, 0)
 
         network.train(data, target, epochs=10)
@@ -35,10 +37,9 @@ class NetworkMainTestCase(BaseTestCase):
 
     def test_train_and_test_dataset_training(self):
         data, target = datasets.make_classification(
-            30, n_features=10, n_classes=2,
-        )
-        network = algorithms.GradientDescent((10, 3, 1), batch_size='all')
+            30, n_features=10, n_classes=2)
 
+        network = algorithms.GradientDescent((10, 3, 1), batch_size='all')
         # Should work fine without exceptions
         network.train(data, target, epochs=2)
         network.train(data, target, data, target, epochs=2)
@@ -63,7 +64,6 @@ class NetworkMainTestCase(BaseTestCase):
             epoch_end_signal=stop_training_after_the_5th_epoch,
         )
         network.train(data, target, epochs=10)
-
         self.assertEqual(network.last_epoch, 5)
 
     def test_show_network_options_function(self):
@@ -84,20 +84,18 @@ class NetworkMainTestCase(BaseTestCase):
         self.assertIn('step', terminal_output)
 
     def test_parse_show_epoch_property(self):
-        with catch_stdout() as out:
-            network = algorithms.GradientDescent(
-                (2, 3, 1),
-                show_epoch='5 times',
-                verbose=True,
-                batch_size='all',
-            )
+        network = algorithms.GradientDescent(
+            (2, 3, 1),
+            show_epoch='5 times',
+            verbose=False,
+            batch_size='all',
+        )
 
+        with warnings.catch_warnings(record=True) as warns:
             show_epoch = parse_show_epoch_property(network, 100, epsilon=1e-2)
             self.assertEqual(show_epoch, 1)
-
-            terminal_output = out.getvalue()
-
-        self.assertIn("Can't use", terminal_output)
+            self.assertEqual(len(warns), 1)
+            self.assertIn("Can't use", str(warns[0].message))
 
     def test_empty_error_history_list(self):
         errlist = ErrorHistoryList()
@@ -215,8 +213,10 @@ class NetworkPropertiesTestCase(BaseTestCase):
                 batch_size='all',
                 show_epoch=100
             )
-            bpnet.train(xor_zero_input_train, xor_zero_target_train,
-                        epochs=3, epsilon=1e-5)
+            bpnet.train(
+                xor_zero_input_train, xor_zero_target_train,
+                epochs=3, epsilon=1e-5,
+            )
             terminal_output = out.getvalue()
         self.assertEqual(1, terminal_output.count("Network didn't converge"))
 
@@ -228,8 +228,10 @@ class NetworkPropertiesTestCase(BaseTestCase):
                 batch_size='all',
                 show_epoch=100
             )
-            bpnet.train(xor_zero_input_train, xor_zero_target_train,
-                        epochs=1e3, epsilon=1e-3)
+            bpnet.train(
+                xor_zero_input_train, xor_zero_target_train,
+                epochs=1e3, epsilon=1e-3,
+            )
             terminal_output = out.getvalue()
 
         self.assertEqual(1, terminal_output.count("Network converged"))
