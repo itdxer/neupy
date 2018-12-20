@@ -34,12 +34,13 @@ class RMSProp(GradientDescent):
     --------
     >>> import numpy as np
     >>> from neupy import algorithms
+    >>> from neupy.layers import *
     >>>
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> mnet = algorithms.RMSProp((2, 3, 1))
-    >>> mnet.train(x_train, y_train)
+    >>> optimizer = algorithms.RMSProp(Input(2) > Sigmoid(3) > Sigmoid(1))
+    >>> optimizer.train(x_train, y_train)
     """
     decay = ProperFractionProperty(default=0.95)
     epsilon = NumberProperty(default=1e-7, minval=0)

@@ -72,7 +72,7 @@ class NetworkMainTestCase(BaseTestCase):
             # to make sure that `show_network_options` won't
             # trigger in the __init__ method
             network = algorithms.GradientDescent(
-                (2, 3, 1),
+                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
                 verbose=False,
                 batch_size='all',
             )
@@ -85,7 +85,7 @@ class NetworkMainTestCase(BaseTestCase):
 
     def test_parse_show_epoch_property(self):
         network = algorithms.GradientDescent(
-            (2, 3, 1),
+            layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
             show_epoch='5 times',
             verbose=False,
             batch_size='all',
@@ -114,7 +114,8 @@ class NetworkMainTestCase(BaseTestCase):
         self.assertEqual(norm_errlist, expected_errorlsit)
 
     def test_network_train_epsilon_exception(self):
-        network = algorithms.GradientDescent((2, 3, 1))
+        network = algorithms.GradientDescent(
+            layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1))
 
         x = np.zeros((5, 2))
         y = np.zeros((5, 1))
@@ -128,7 +129,7 @@ class NetworkMainTestCase(BaseTestCase):
     def test_network_training_summary(self):
         with catch_stdout() as out:
             network = algorithms.GradientDescent(
-                (2, 3, 1),
+                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
                 verbose=False,
                 batch_size='all',
             )
@@ -165,7 +166,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
         for case in cases:
             with catch_stdout() as out:
                 bpnet = algorithms.GradientDescent(
-                    (2, 3, 1),
+                    layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
                     step=0.1,
                     verbose=True,
                     batch_size='all',
@@ -197,7 +198,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
         for wrong_input_value in wrong_input_values:
             with self.assertRaises(ValueError):
                 algorithms.GradientDescent(
-                    (2, 3, 1),
+                    layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
                     step=0.1,
                     verbose=False,
                     batch_size='all',
@@ -207,7 +208,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
     def test_network_convergence(self):
         with catch_stdout() as out:
             bpnet = algorithms.GradientDescent(
-                (2, 3, 1),
+                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
                 step=0.1,
                 verbose=True,
                 batch_size='all',
@@ -222,7 +223,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
 
         with catch_stdout() as out:
             bpnet = algorithms.GradientDescent(
-                (2, 3, 1),
+                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
                 step=0.1,
                 verbose=True,
                 batch_size='all',
@@ -247,7 +248,9 @@ class NetworkRepresentationTestCase(BaseTestCase):
         self.assertEqual("200 ns", format_time(2e-7))
 
     def test_small_network_representation(self):
-        network = algorithms.GradientDescent((2, 3, 1))
+        network = algorithms.GradientDescent(
+            layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1))
+
         self.assertIn("Input(2) > Sigmoid(3) > Sigmoid(1)", str(network))
 
     def test_big_network_representation(self):

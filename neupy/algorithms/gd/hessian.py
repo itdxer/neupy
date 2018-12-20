@@ -102,12 +102,13 @@ class Hessian(BaseOptimizer):
     --------
     >>> import numpy as np
     >>> from neupy import algorithms
+    >>> from neupy.layers import *
     >>>
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> mnet = algorithms.Hessian((2, 3, 1))
-    >>> mnet.train(x_train, y_train)
+    >>> optimizer = algorithms.Hessian(Input(2) > Sigmoid(3) > Sigmoid(1))
+    >>> optimizer.train(x_train, y_train)
 
     See Also
     --------

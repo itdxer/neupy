@@ -3,29 +3,11 @@ from functools import partial
 import numpy as np
 
 from neupy import algorithms, layers, environment
-from neupy.algorithms.gd.base import apply_batches, generate_layers
+from neupy.algorithms.gd.base import apply_batches
 
 from utils import compare_networks
 from base import BaseTestCase
 from data import simple_classification
-
-
-class NetworkConstructorTestCase(BaseTestCase):
-    def test_generate_layers(self):
-        network = generate_layers([1, 2, 3])
-
-        layer_types = (layers.Input, layers.Sigmoid, layers.Sigmoid)
-        output_shapes = [(1,), (2,), (3,)]
-
-        for layer, layer_type in zip(network, layer_types):
-            self.assertIsInstance(layer, layer_type)
-
-        for layer, output_shape in zip(network, output_shapes):
-            self.assertEqual(layer.output_shape, output_shape)
-
-    def test_generate_layers_expcetion(self):
-        with self.assertRaises(ValueError):
-            generate_layers((5,))
 
 
 class BaseOptimizerTestCase(BaseTestCase):
@@ -76,7 +58,8 @@ class BaseOptimizerTestCase(BaseTestCase):
         )
 
     def test_gd_get_params_method(self):
-        network = algorithms.BaseOptimizer((2, 3, 1))
+        network = algorithms.BaseOptimizer(
+            layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1))
 
         self.assertIn('connection', network.get_params(with_connection=True))
         self.assertNotIn(

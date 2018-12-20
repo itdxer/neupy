@@ -17,7 +17,7 @@ class BasicStorageTestCase(BaseTestCase):
     @unittest.skip("broken for now. cannot pickle Variable step")
     def test_simple_dill_storage(self):
         bpnet = algorithms.GradientDescent(
-            (2, 3, 1),
+            layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
             step=0.25,
             batch_size='all',
         )

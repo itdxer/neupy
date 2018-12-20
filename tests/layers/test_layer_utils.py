@@ -46,5 +46,5 @@ class CountParametersTestCase(BaseTestCase):
             extract_connection(object)
 
     def test_preformat_layer_shape(self):
-        self.assertEqual((2, 3, 1), preformat_layer_shape((2, 3, 1)))
+        self.assertEqual((3, 4, 5), preformat_layer_shape((3, 4, 5)))
         self.assertEqual(10, preformat_layer_shape((10,)))

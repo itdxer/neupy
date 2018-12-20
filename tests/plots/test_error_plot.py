@@ -1,7 +1,7 @@
 import os
 
 import matplotlib.pyplot as plt
-from neupy import plots, algorithms
+from neupy import plots, algorithms, layers
 from neupy.algorithms.base import ErrorHistoryList
 
 from base import BaseTestCase
@@ -21,7 +21,7 @@ class ErrorPlotTestCase(BaseTestCase):
     def test_error_plot_and_validation_error_warnings(self):
         with catch_stdout() as out:
             network = algorithms.GradientDescent(
-                (2, 3, 1),
+                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
                 verbose=True,
                 batch_size='all',
             )
@@ -37,7 +37,10 @@ class ErrorPlotTestCase(BaseTestCase):
     def test_error_plot_ax_none(self):
         ax = plt.gca()
 
-        network = algorithms.GradientDescent((2, 3, 1), batch_size='all')
+        network = algorithms.GradientDescent(
+            layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
+            batch_size='all',
+        )
         ax_returned = plots.error_plot(network, ax=None, show=False)
 
         self.assertIs(ax_returned, ax)

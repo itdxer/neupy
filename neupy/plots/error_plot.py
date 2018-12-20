@@ -35,11 +35,13 @@ def error_plot(network, logx=False, ax=None, show=True):
     Examples
     --------
     >>> from neupy import algorithms, plots
+    >>> from neupy.layers import *
     >>>
-    >>> gdnet = algorithms.GradientDescent((2, 3, 1))
-    >>> gdnet.train(x_train, y_train, x_test, y_test, epochs=100)
+    >>> network = Input(2) > Sigmoid(3) > Sigmoid(1)
+    >>> optimizer = algorithms.GradientDescent(network)
+    >>> optimizer.train(x_train, y_train, x_test, y_test, epochs=100)
     >>>
-    >>> plots.error_plot(gdnet)
+    >>> plots.error_plot(optimizer)
     """
     if ax is None:
         ax = plt.gca()

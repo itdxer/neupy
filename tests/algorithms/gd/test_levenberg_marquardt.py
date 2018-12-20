@@ -44,10 +44,17 @@ class LevenbergMarquardtTestCase(BaseTestCase):
             self.eval(jacobian_actual)
         )
 
-    def test_levenberg_marquardt_invalid_error_exceptions(self):
+    def test_levenberg_marquardt_exceptions(self):
         with self.assertRaises(ValueError):
-            algorithms.LevenbergMarquardt((2, 3, 1),
-                                          error='categorical_crossentropy')
+            algorithms.LevenbergMarquardt(
+                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
+                error='categorical_crossentropy')
+
+        with self.assertRaises(ValueError):
+            # Doesn't have step parameter
+            algorithms.LevenbergMarquardt(
+                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
+                step=0.01)
 
     def test_levenberg_marquardt(self):
         dataset = datasets.make_regression(n_samples=50, n_features=2)
@@ -77,11 +84,6 @@ class LevenbergMarquardtTestCase(BaseTestCase):
         error = lmnet.prediction_error(x_test, y_test)
 
         self.assertGreater(0.01, error)
-
-    def test_levenberg_marquardt_assign_step_exception(self):
-        with self.assertRaises(ValueError):
-            # Doesn't have step parameter
-            algorithms.LevenbergMarquardt((2, 3, 1), step=0.01)
 
     def test_levenberg_marquardt_overfit(self):
         self.assertCanNetworkOverfit(

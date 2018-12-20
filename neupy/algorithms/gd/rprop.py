@@ -59,12 +59,13 @@ class RPROP(BaseOptimizer):
     --------
     >>> import numpy as np
     >>> from neupy import algorithms
+    >>> from neupy.layers import *
     >>>
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> rpropnet = algorithms.RPROP((2, 3, 1))
-    >>> rpropnet.train(x_train, y_train)
+    >>> optimizer = algorithms.RPROP(Input(2) > Sigmoid(3) > Sigmoid(1))
+    >>> optimizer.train(x_train, y_train)
 
     See Also
     --------
@@ -208,12 +209,13 @@ class IRPROPPlus(RPROP):
     --------
     >>> import numpy as np
     >>> from neupy import algorithms
+    >>> from neupy.layers import *
     >>>
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> rpropnet = algorithms.IRPROPPlus((2, 3, 1))
-    >>> rpropnet.train(x_train, y_train)
+    >>> optimizer = algorithms.IRPROPPlus(Input(2) > Sigmoid(3) > Sigmoid(1))
+    >>> optimizer.train(x_train, y_train)
 
     References
     ----------

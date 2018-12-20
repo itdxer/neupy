@@ -5,7 +5,7 @@ from collections import namedtuple
 
 from neupy.core.logs import Verbose, TerminalLogger
 from neupy.core import terminal
-from neupy import algorithms
+from neupy import algorithms, layers
 
 from base import BaseTestCase
 from utils import catch_stdout
@@ -67,8 +67,6 @@ class LoggingTestCase(BaseTestCase):
                 self.assertRegexpMatches(
                     terminal_output, test_case.expectation)
 
-
-class TerminalTestCase(BaseTestCase):
     def test_terminal_colors(self):
         real_is_color_supported = terminal.is_color_supported
 
@@ -85,12 +83,18 @@ class TerminalTestCase(BaseTestCase):
 class NeuralNetworkLoggingTestCase(BaseTestCase):
     def test_nn_init_logging(self):
         with catch_stdout() as out:
-            algorithms.GradientDescent((2, 3, 1), verbose=False)
+            algorithms.GradientDescent(
+                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
+                verbose=False,
+            )
             terminal_output = out.getvalue()
             self.assertEqual("", terminal_output.strip())
 
         with catch_stdout() as out:
-            algorithms.GradientDescent((2, 3, 1), verbose=True)
+            algorithms.GradientDescent(
+                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
+                verbose=True,
+            )
             terminal_output = out.getvalue()
 
             self.assertNotEqual("", terminal_output.strip())

@@ -3,7 +3,7 @@ from functools import partial
 import numpy as np
 import tensorflow as tf
 
-from neupy import algorithms
+from neupy import algorithms, layers
 from neupy.utils import tensorflow_session
 from neupy.algorithms.gd.hessian import find_hessian_and_gradient
 
@@ -63,7 +63,10 @@ class HessianTestCase(BaseTestCase):
     def test_hessian_assign_step_exception(self):
         with self.assertRaises(ValueError):
             # Don't have step parameter
-            algorithms.Hessian((2, 3, 1), step=0.01)
+            algorithms.Hessian(
+                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
+                step=0.01,
+            )
 
     def test_hessian_overfit(self):
         self.assertCanNetworkOverfit(
