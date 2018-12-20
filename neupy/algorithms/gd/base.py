@@ -693,11 +693,7 @@ class MinibatchTrainingMixin(Configurable):
             return [output]
 
         if show_progressbar is None:
-            show_progressbar = (
-                self.training and
-                self.training.show_epoch == 1 and
-                self.logs.enable
-            )
+            show_progressbar = self.show_epoch == 1 and self.logs.enable
 
         return apply_batches(
             function=function,

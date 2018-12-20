@@ -3,56 +3,17 @@ from __future__ import division, absolute_import, unicode_literals
 
 import time
 import types
-import warnings
 
-import six
 import numpy as np
 
-from neupy.utils import preformat_value, AttributeKeyDict, as_tuple
+from neupy.utils import preformat_value, as_tuple
 from neupy.exceptions import StopTraining
 from neupy.core.base import BaseSkeleton
-from neupy.core.properties import BoundedProperty, Property, NumberProperty
-from .utils import iter_until_converge, shuffle
+from neupy.core.properties import Property, NumberProperty, IntProperty
+from .utils import iter_until_converge, shuffle, format_time
 
 
 __all__ = ('BaseNetwork',)
-
-
-def format_time(time):
-    """
-    Format seconds into human readable format.
-
-    Parameters
-    ----------
-    time : float
-        Time specified in seconds
-
-    Returns
-    -------
-    str
-        Formated time.
-    """
-    mins, seconds = divmod(int(time), 60)
-    hours, minutes = divmod(mins, 60)
-
-    if hours > 0:
-        return '{:0>2d}:{:0>2d}:{:0>2d}'.format(hours, minutes, seconds)
-
-    elif minutes > 0:
-        return '{:0>2d}:{:0>2d}'.format(minutes, seconds)
-
-    elif seconds > 0:
-        return '{:.0f} sec'.format(seconds)
-
-    elif time >= 1e-3:
-        return '{:.0f} ms'.format(time * 1e3)
-
-    elif time >= 1e-6:
-        # microseconds
-        return '{:.0f} μs'.format(time * 1e6)
-
-    # nanoseconds or smaller
-    return '{:.0f} ns'.format(time * 1e9)
 
 
 def show_network_options(network, highlight_options=None):
@@ -92,78 +53,12 @@ def show_network_options(network, highlight_options=None):
     logs.newline()
 
 
-def parse_show_epoch_property(network, n_epochs, epsilon=None):
-    show_epoch = network.show_epoch
-
-    if isinstance(show_epoch, int):
-        return show_epoch
-
-    if epsilon is not None and isinstance(show_epoch, six.string_types):
-        warnings.warn(
-            "Can't use `show_epoch` value in converging mode. "
-            "Set up `show_epoch` property equal to 1"
-        )
-        return 1
-
-    number_end_position = show_epoch.index('time')
-    # Ignore grammar mistakes like `2 time`, this error could be
-    # really annoying
-    n_epochs_to_check = int(show_epoch[:number_end_position].strip())
-
-    if n_epochs <= n_epochs_to_check:
-        return 1
-
-    return int(round(n_epochs / n_epochs_to_check))
-
-
 def create_training_epochs_iterator(network, epochs, epsilon=None):
     if epsilon is not None:
         return iter_until_converge(network, epsilon, max_epochs=epochs)
 
     next_epoch = network.last_epoch + 1
     return range(next_epoch, next_epoch + epochs)
-
-
-class ShowEpochProperty(BoundedProperty):
-    """
-    Class helps validate specific syntax for `show_epoch`
-    property from ``BaseNetwork`` class.
-
-    Parameters
-    ----------
-    {BoundedProperty.Parameters}
-    """
-    expected_type = tuple([int] + [six.string_types])
-
-    def validate(self, value):
-        if not isinstance(value, six.string_types):
-            if value < 1:
-                raise ValueError("Property `{}` value should be integer "
-                                 "greater than zero or string. See the "
-                                 "documentation for more information."
-                                 "".format(self.name))
-            return
-
-        if 'time' not in value:
-            raise ValueError("`{}` value has invalid string format."
-                             "".format(self.name))
-
-        valid_endings = ('times', 'time')
-        number_end_position = value.index('time')
-        number_part = value[:number_end_position].strip()
-
-        if not value.endswith(valid_endings) or not number_part.isdigit():
-            valid_endings_formated = ', '.join(valid_endings)
-            raise ValueError(
-                "Property `{}` in string format should be a positive number "
-                "with one of those endings: {}. For example: `10 times`."
-                "".format(self.name, valid_endings_formated)
-            )
-
-        if int(number_part) < 1:
-            raise ValueError("Part that related to the number in `{}` "
-                             "property should be an integer greater or "
-                             "equal to one.".format(self.name))
 
 
 class ErrorHistoryList(list):
@@ -213,22 +108,14 @@ class BaseNetwork(BaseSkeleton):
     step : float
         Learning rate, defaults to ``0.1``.
 
-    show_epoch : int or str
+    show_epoch : int
         This property controls how often the network will
-        display information about training. There are two
-        main syntaxes for this property.
+        display information about training.
 
-        - You can define it as a positive integer number. It
-          defines how offen would you like to see summary
-          output in terminal. For instance, number `100` mean
-          that network shows summary at 100th, 200th,
-          300th ... epochs.
-
-        - String defines number of times you want to see output in
-          terminal. For instance, value ``'2 times'`` mean that
-          the network will show output twice with approximately
-          equal period of epochs and one additional output would
-          be after the finall epoch.
+        It has to be defined as positive integer. It defines how offen
+        would you like to see summary output in terminal. For instance,
+        number ``100`` mean that network shows summary at 100th, 200th,
+        300th ... epochs.
 
         Defaults to ``1``.
 
@@ -264,7 +151,7 @@ class BaseNetwork(BaseSkeleton):
     """
     step = NumberProperty(default=0.1, minval=0)
 
-    show_epoch = ShowEpochProperty(minval=1, default=1)
+    show_epoch = IntProperty(minval=1, default=1)
     shuffle_data = Property(default=False, expected_type=bool)
 
     epoch_end_signal = Property(expected_type=types.FunctionType)
@@ -273,8 +160,8 @@ class BaseNetwork(BaseSkeleton):
     def __init__(self, *args, **options):
         self.errors = self.train_errors = ErrorHistoryList()
         self.validation_errors = ErrorHistoryList()
-        self.training = AttributeKeyDict()
         self.last_epoch = 0
+        self.epoch_time = 0
 
         super(BaseNetwork, self).__init__(*args, **options)
 
@@ -305,7 +192,6 @@ class BaseNetwork(BaseSkeleton):
         epoch : int
             Current epoch number.
         """
-        self.last_epoch = epoch
 
     def train_epoch(self, input_train, target_train=None):
         raise NotImplementedError()
@@ -316,7 +202,7 @@ class BaseNetwork(BaseSkeleton):
     def print_last_error(self):
         train_error = self.errors.last()
         validation_error = self.validation_errors.last()
-        epoch_training_time = format_time(self.training.epoch_time)
+        epoch_training_time = format_time(self.epoch_time)
 
         if validation_error is not None:
             self.logs.write(
@@ -353,10 +239,6 @@ class BaseNetwork(BaseSkeleton):
         epsilon : float or None
             Defaults to ``None``.
         """
-        show_epoch = self.show_epoch
-        logs = self.logs
-        training = self.training = AttributeKeyDict()
-
         if epochs <= 0:
             raise ValueError("Number of epochs needs to be greater than 0.")
 
@@ -365,33 +247,15 @@ class BaseNetwork(BaseSkeleton):
                              "check the difference between errors")
 
         iterepochs = create_training_epochs_iterator(self, epochs, epsilon)
-        show_epoch = parse_show_epoch_property(self, epochs, epsilon)
-        training.show_epoch = show_epoch
-        training.epoch_time = 0
-
-        # Storring attributes and methods in local variables we prevent
-        # useless __getattr__ call a lot of times in each loop.
-        # This variables speed up loop in case on huge amount of
-        # iterations.
-        training_errors = self.errors
-        validation_errors = self.validation_errors
-        shuffle_data = self.shuffle_data
-
-        train_epoch = self.train_epoch
-        epoch_end_signal = self.epoch_end_signal
-        train_end_signal = self.train_end_signal
-        on_epoch_start_update = self.on_epoch_start_update
-
-        is_first_iteration = True
-        can_compute_validation_error = (input_test is not None)
         last_epoch_shown = 0
 
-        for epoch in iterepochs:
+        for epoch_index, epoch in enumerate(iterepochs):
             validation_error = None
             epoch_start_time = time.time()
-            on_epoch_start_update(epoch)
+            self.last_epoch = epoch
+            self.on_epoch_start_update(epoch)
 
-            if shuffle_data:
+            if self.shuffle_data:
                 data = shuffle(*as_tuple(input_train, target_train))
                 input_train, target_train = data[:-1], data[-1]
 
@@ -399,38 +263,36 @@ class BaseNetwork(BaseSkeleton):
                     input_train = input_train[0]
 
             try:
-                train_error = train_epoch(input_train, target_train)
+                train_error = self.train_epoch(input_train, target_train)
 
-                if can_compute_validation_error:
+                if input_test is not None:
                     validation_error = self.prediction_error(
                         input_test, target_test)
 
-                training_errors.append(train_error)
-                validation_errors.append(validation_error)
+                self.errors.append(train_error)
+                self.validation_errors.append(validation_error)
 
                 epoch_finish_time = time.time()
-                training.epoch_time = epoch_finish_time - epoch_start_time
+                self.epoch_time = epoch_finish_time - epoch_start_time
 
-                if epoch % training.show_epoch == 0 or is_first_iteration:
+                if epoch % self.show_epoch == 0 or epoch_index == 0:
                     self.print_last_error()
                     last_epoch_shown = epoch
 
-                if epoch_end_signal is not None:
-                    epoch_end_signal(self)
-
-                is_first_iteration = False
+                if self.epoch_end_signal is not None:
+                    self.epoch_end_signal(self)
 
             except StopTraining as err:
-                logs.message(
-                    "TRAIN", "Epoch #{} stopped. {}".format(epoch, str(err)))
-
+                self.logs.message(
+                    "TRAIN", "Epoch #{} stopped. {}".format(epoch, str(err))
+                )
                 break
 
         if epoch != last_epoch_shown:
             self.print_last_error()
 
-        if train_end_signal is not None:
-            train_end_signal(self)
+        if self.train_end_signal is not None:
+            self.train_end_signal(self)
 
     def __getstate__(self):
         return self.__dict__
