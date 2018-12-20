@@ -116,4 +116,4 @@ class BaseTestCase(unittest.TestCase):
         ])
 
         network.train(x_train, y_train, epochs=epochs)
-        self.assertLess(network.errors[-1], min_accepted_error)
+        self.assertLess(network.training_errors[-1], min_accepted_error)

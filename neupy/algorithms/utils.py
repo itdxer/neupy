@@ -69,7 +69,7 @@ def iter_until_converge(network, epsilon, max_epochs):
     # Trigger first iteration and store first error term
     yield network.last_epoch
 
-    previous_error = error_delta = network.errors[-1]
+    previous_error = error_delta = network.training_errors[-1]
     epoch = network.last_epoch
 
     while error_delta > epsilon:
@@ -78,7 +78,7 @@ def iter_until_converge(network, epsilon, max_epochs):
 
         yield epoch
 
-        last_error = network.errors[-1]
+        last_error = network.training_errors[-1]
         error_delta = abs(last_error - previous_error)
         previous_error = last_error
 

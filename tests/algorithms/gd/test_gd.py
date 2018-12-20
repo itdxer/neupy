@@ -43,7 +43,7 @@ class BaseOptimizerTestCase(BaseTestCase):
             verbose=False
         )
         network.train(x_train, y_train, epochs=100)
-        self.assertLess(network.errors[-1], 0.05)
+        self.assertLess(network.training_errors[-1], 0.05)
 
     def test_minibatch_gd(self):
         x_train, _, y_train, _ = simple_classification()

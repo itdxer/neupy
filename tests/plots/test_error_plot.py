@@ -1,13 +1,15 @@
 import os
+import warnings
 
 import matplotlib.pyplot as plt
 from neupy import plots, algorithms, layers
 
 from base import BaseTestCase
 from data import simple_classification
-from utils import (image_comparison, reproducible_network_train,
-                   format_image_name, skip_image_comparison_if_specified,
-                   catch_stdout)
+from utils import (
+    image_comparison, reproducible_network_train,
+    format_image_name, skip_image_comparison_if_specified,
+)
 
 
 IMGDIR = os.path.join("plots", "images", "error-plot")
@@ -18,19 +20,20 @@ class ErrorPlotTestCase(BaseTestCase):
 
     @skip_image_comparison_if_specified
     def test_error_plot_and_validation_error_warnings(self):
-        with catch_stdout() as out:
+        with warnings.catch_warnings(record=True) as warns:
             network = algorithms.GradientDescent(
                 layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
                 verbose=True,
                 batch_size='all',
             )
 
-            network.errors = [1, 2]
+            network.training_errors = [1, 2]
             network.validation_errors = [None]
 
             plots.error_plot(network, ax=None, show=False)
-            terminal_output = out.getvalue()
-            self.assertIn("error will be ignored", terminal_output)
+
+            self.assertEqual(len(warns), 1)
+            self.assertIn("error will be ignored", str(warns[0].message))
 
     @skip_image_comparison_if_specified
     def test_error_plot_ax_none(self):
@@ -75,7 +78,11 @@ class ErrorPlotTestCase(BaseTestCase):
 
             x_train, x_test, y_train, y_test = simple_classification()
             gdnet = algorithms.GradientDescent(
-                (10, 12, 1),
+                [
+                    layers.Input(10),
+                    layers.Sigmoid(12),
+                    layers.Sigmoid(1),
+                ],
                 step=0.25,
                 batch_size='all',
             )

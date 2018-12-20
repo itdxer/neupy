@@ -27,7 +27,7 @@ class RPROPTestCase(BaseTestCase):
         )
 
         nw.train(simple_input_train, simple_target_train, epochs=100)
-        self.assertGreater(1e-4, nw.errors[-1])
+        self.assertGreater(1e-4, nw.training_errors[-1])
 
     def test_compare_bp_and_rprop(self):
         compare_networks(
@@ -74,12 +74,12 @@ class RPROPTestCase(BaseTestCase):
 
         nw = algorithms.IRPROPPlus(copy.deepcopy(connection), **options)
         nw.train(simple_input_train, simple_target_train, epochs=100)
-        irprop_plus_error = nw.errors[-1]
-        self.assertGreater(1e-4, nw.errors[-1])
+        irprop_plus_error = nw.training_errors[-1]
+        self.assertGreater(1e-4, nw.training_errors[-1])
 
         nw = algorithms.RPROP(copy.deepcopy(connection), **options)
         nw.train(simple_input_train, simple_target_train, epochs=100)
-        rprop_error = nw.errors[-1]
+        rprop_error = nw.training_errors[-1]
         self.assertGreater(rprop_error, irprop_plus_error)
 
     def test_rprop_overfit(self):
