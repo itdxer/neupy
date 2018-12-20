@@ -230,7 +230,6 @@ class NetworkRepresentationTestCase(BaseTestCase):
     def test_small_network_representation(self):
         network = algorithms.GradientDescent(
             layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1))
-
         self.assertIn("Input(2) > Sigmoid(3) > Sigmoid(1)", str(network))
 
     def test_big_network_representation(self):

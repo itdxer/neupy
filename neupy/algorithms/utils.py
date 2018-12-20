@@ -5,32 +5,10 @@ import numpy as np
 import tensorflow as tf
 
 from neupy.utils import flatten
-from neupy.layers.utils import iter_parameters
 
 
-__all__ = ('shuffle', 'parameter_values', 'iter_until_converge',
-           'setup_parameter_updates')
-
-
-def parameter_values(connection):
-    """
-    List of all trainable parameters in the network.
-
-    Parameters
-    ----------
-    connection : layer, connection
-
-    Yields
-    ------
-    Tensorfow variable
-        Network's trainable parameter.
-    """
-    parameters = []
-
-    for _, _, parameter in iter_parameters(connection):
-        parameters.append(parameter)
-
-    return parameters
+__all__ = ('shuffle', 'iter_until_converge', 'setup_parameter_updates',
+           'make_single_vector', 'format_time')
 
 
 def setup_parameter_updates(parameters, parameter_update_vector):

@@ -4,8 +4,9 @@ import tensorflow as tf
 
 from neupy.core.properties import ProperFractionProperty
 from neupy.utils import flatten
-from neupy.algorithms.utils import (setup_parameter_updates, parameter_values,
-                                    make_single_vector)
+from neupy.layers.utils import find_variables
+from neupy.algorithms.utils import setup_parameter_updates, make_single_vector
+
 from .base import BaseOptimizer
 
 
@@ -105,7 +106,7 @@ class HessianDiagonal(BaseOptimizer):
     def init_train_updates(self):
         step = self.variables.step
         inv_min_eigval = 1 / self.min_eigval
-        parameters = parameter_values(self.connection)
+        parameters = find_variables(self.connection, only_trainable=True)
         param_vector = make_single_vector(parameters)
 
         gradients = tf.gradients(self.variables.error_func, parameters)
