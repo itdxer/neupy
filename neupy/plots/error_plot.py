@@ -50,8 +50,8 @@ def error_plot(network, logx=False, ax=None, show=True):
         warnings.warn("There is no data to plot")
         return ax
 
-    train_errors = network.errors.normalized()
-    validation_errors = network.validation_errors.normalized()
+    train_errors = network.errors
+    validation_errors = network.validation_errors
 
     if len(train_errors) != len(validation_errors):
         warnings.warn(

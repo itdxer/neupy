@@ -40,7 +40,7 @@ Signals allow us to interrupt training process.
     from neupy.exceptions import StopTraining
 
     def on_epoch_end(gdnet):
-        if gdnet.validation_errors.last() < 0.001:
+        if gdnet.validation_errors[-1] < 0.001:
             raise StopTraining("Training has been interrupted")
 
     gdnet = algorithms.GradientDescent(
@@ -64,13 +64,14 @@ If we use constructible architectures than it's possible to save parameter after
         epoch = gdnet.last_epoch
         errors = gdnet.validation_errors
 
-        if errors.previous() and errors.last() > errors.previous():
-            # Load parameters and stop training
-            storage.load(gdnet, 'training-epoch-{}.pickle'.format(epoch - 1))
-            raise StopTraining("Training has been interrupted")
-        else:
-            # Save parameters after successful epoch
-            storage.save(gdnet, 'training-epoch-{}.pickle'.format(epoch))
+        if len(errors) >= 2:
+            if errors[-1] > errors[-2]:
+                # Load parameters and stop training
+                storage.load(gdnet, 'training-epoch-{}.pickle'.format(epoch - 1))
+                raise StopTraining("Training has been interrupted")
+            else:
+                # Save parameters after successful epoch
+                storage.save(gdnet, 'training-epoch-{}.pickle'.format(epoch))
 
     gdnet = algorithms.GradientDescent(
         [

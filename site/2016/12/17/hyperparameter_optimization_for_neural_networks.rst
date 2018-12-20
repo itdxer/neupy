@@ -589,7 +589,7 @@ After that, we can define training algorithm for the network.
     from neupy.exceptions import StopTraining
 
     def on_epoch_end(network):
-        if network.errors.last() > 10:
+        if network.errors[-1] > 10:
             raise StopTraining("Training was interrupted. Error is to high.")
 
     mnet = algorithms.RMSProp(

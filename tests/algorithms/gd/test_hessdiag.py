@@ -27,7 +27,7 @@ class HessianDiagonalTestCase(BaseTestCase):
             min_eigval=0.1,
         )
         nw.train(x_train, y_train, epochs=50)
-        self.assertGreater(0.2, nw.errors.last())
+        self.assertGreater(0.2, nw.errors[-1])
 
     def test_compare_bp_and_hessian(self):
         x_train, _, y_train, _ = simple_classification()

@@ -21,8 +21,8 @@ class AdadeltaTestCase(BaseTestCase):
             epsilon=1e-5,
         )
         mnet.train(x_train, y_train, x_test, y_test, epochs=100)
-        self.assertGreater(0.05, mnet.errors.last())
-        self.assertGreater(0.15, mnet.validation_errors.last())
+        self.assertGreater(0.05, mnet.errors[-1])
+        self.assertGreater(0.15, mnet.validation_errors[-1])
 
     def test_adadelta_overfit(self):
         self.assertCanNetworkOverfit(

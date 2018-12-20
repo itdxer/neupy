@@ -44,7 +44,7 @@ class L2RegularizationTestCase(BaseTestCase):
             regularizer=algorithms.l2(0.01),
         )
         mnet.train(x_train, y_train, x_test, y_test, epochs=40)
-        self.assertGreater(0.15, mnet.validation_errors.last())
+        self.assertGreater(0.15, mnet.validation_errors[-1])
 
 
 class L1RegularizationTestCase(BaseTestCase):

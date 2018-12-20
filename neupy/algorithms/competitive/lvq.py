@@ -6,54 +6,22 @@ from neupy import init
 from neupy.utils import format_data
 from neupy.exceptions import NotTrained
 from neupy.algorithms.base import BaseNetwork
-from neupy.core.properties import (IntProperty, Property, TypedListProperty,
-                                   NumberProperty)
+from neupy.core.properties import (
+    IntProperty, Property,
+    TypedListProperty, NumberProperty,
+)
 
 
 __all__ = ('LVQ', 'LVQ2', 'LVQ21', 'LVQ3')
 
 
 def euclid_distance(input_data, weight):
-    """
-    Negative Euclidian distance between input
-    data and weight.
-
-    Parameters
-    ----------
-    input_data : array-like
-        Input data.
-
-    weight : array-like
-        Neural network's weights.
-
-    Returns
-    -------
-    array-like
-    """
     input_data = np.expand_dims(input_data, axis=0)
     euclid_dist = np.linalg.norm(input_data - weight, axis=1)
     return np.expand_dims(euclid_dist, axis=0)
 
 
 def n_argmin(array, n, axis=0):
-    """
-    Returns indeces of n minimum values.
-
-    Parameters
-    ----------
-    array : array-like
-
-    n : int
-        Number of minimum indeces.
-
-    axis : int
-        Axis along which to search minimum values.
-        Defaults to ``0``.
-
-    Returns
-    -------
-    array-like
-    """
     sorted_argumets = array.argsort(axis=axis).ravel()
     return sorted_argumets[:n]
 
@@ -168,11 +136,16 @@ class LVQ(BaseNetwork):
     n_classes = IntProperty(minval=2)
 
     prototypes_per_class = TypedListProperty(allow_none=True, default=None)
-    weight = Property(expected_type=(np.ndarray, init.Initializer),
-                      allow_none=True, default=None)
-
-    n_updates_to_stepdrop = IntProperty(default=None, allow_none=True,
-                                        minval=1)
+    weight = Property(
+        expected_type=(np.ndarray, init.Initializer),
+        allow_none=True,
+        default=None,
+    )
+    n_updates_to_stepdrop = IntProperty(
+        default=None,
+        allow_none=True,
+        minval=1,
+    )
     minstep = NumberProperty(minval=0, default=1e-5)
 
     def __init__(self, **options):
@@ -317,7 +290,7 @@ class LVQ(BaseNetwork):
             predicted_class = subclass_to_class[winner_subclass]
 
             weight_update = input_row - weight[winner_subclass, :]
-            is_correct_prediction = (predicted_class == target)
+            is_correct_prediction = (predicted_class == target).item(0)
 
             if is_correct_prediction:
                 weight[winner_subclass, :] += step * weight_update
@@ -379,7 +352,7 @@ class LVQ2(LVQ):
             top2_class = subclass_to_class[top2_subclass]
 
             top1_weight_update = input_row - weight[top1_subclass, :]
-            is_correct_prediction = (top1_class == target)
+            is_correct_prediction = (top1_class == target).item(0)
 
             closest_dist, runner_up_dist = output[0, winner_subclasses]
             double_update_condition_satisfied = (
@@ -448,7 +421,7 @@ class LVQ21(LVQ2):
             top2_class = subclass_to_class[top2_subclass]
 
             top1_weight_update = input_row - weight[top1_subclass, :]
-            is_correct_prediction = (top1_class == target)
+            is_correct_prediction = (top1_class == target).item(0)
 
             closest_dist, runner_up_dist = output[0, winner_subclasses]
             double_update_condition_satisfied = (
@@ -557,8 +530,8 @@ class LVQ3(LVQ21):
             top2_class = subclass_to_class[top2_subclass]
 
             top1_weight_update = input_row - weight[top1_subclass, :]
-            is_first_correct = (top1_class == target)
-            is_second_correct = (top2_class == target)
+            is_first_correct = (top1_class == target).item(0)
+            is_second_correct = (top2_class == target).item()
 
             closest_dist, runner_up_dist = output[0, winner_subclasses]
             double_update_condition_satisfied = (

@@ -170,6 +170,6 @@ class LevenbergMarquardt(BaseOptimizer):
     def on_epoch_start_update(self, epoch):
         super(LevenbergMarquardt, self).on_epoch_start_update(epoch)
 
-        last_error = self.errors.last()
-        if last_error is not None:
+        if self.errors is not None:
+            last_error = self.errors[-1]
             self.variables.last_error.load(last_error, tensorflow_session())
