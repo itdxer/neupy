@@ -14,43 +14,6 @@ from .utils import iter_until_converge, shuffle, format_time
 __all__ = ('BaseNetwork',)
 
 
-def show_network_options(network, highlight_options=None):
-    """
-    Display all available parameters options for Neural Network.
-
-    Parameters
-    ----------
-    network : object
-        Neural network instance.
-
-    highlight_options : list
-        List of enabled options. In that case all options from that
-        list would be marked with a green color.
-    """
-    logs = network.logs
-
-    if highlight_options is None:
-        highlight_options = {}
-
-    logs.title("Main information")
-    logs.message("ALGORITHM", network.__class__.__name__)
-    logs.newline()
-
-    for key, data in sorted(network.options.items()):
-        if key in highlight_options:
-            msg_color = 'green'
-            value = highlight_options[key]
-        else:
-            msg_color = 'gray'
-            value = data.value
-
-        formated_value = preformat_value(value)
-        msg_text = "{} = {}".format(key, formated_value)
-        logs.message("OPTION", msg_text, color=msg_color)
-
-    logs.newline()
-
-
 class BaseNetwork(BaseSkeleton):
     """
     Base class for Neural Network algorithms.
@@ -118,8 +81,16 @@ class BaseNetwork(BaseSkeleton):
 
         super(BaseNetwork, self).__init__(*args, **options)
 
-        if self.verbose:
-            show_network_options(self, highlight_options=options)
+        self.logs.title("Main information")
+        self.logs.message("ALGORITHM", self.__class__.__name__)
+        self.logs.newline()
+
+        for key, data in sorted(self.options.items()):
+            formated_value = preformat_value(getattr(self, key))
+            msg_text = "{} = {}".format(key, formated_value)
+            self.logs.message("OPTION", msg_text, color='green')
+
+        self.logs.newline()
 
     def predict(self, input_data):
         """
