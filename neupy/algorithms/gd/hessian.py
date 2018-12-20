@@ -2,9 +2,8 @@ import tensorflow as tf
 
 from neupy.core.properties import BoundedProperty, WithdrawProperty
 from neupy.utils import asfloat, flatten, function_name_scope
-from neupy.layers.utils import count_parameters
-from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
-                                    make_single_vector)
+from neupy.layers.utils import count_parameters, find_variables
+from neupy.algorithms.utils import setup_parameter_updates, make_single_vector
 from .base import BaseOptimizer
 
 
@@ -121,7 +120,7 @@ class Hessian(BaseOptimizer):
         penalty_const = asfloat(self.penalty_const)
 
         n_parameters = count_parameters(self.connection)
-        parameters = parameter_values(self.connection)
+        parameters = find_variables(self.connection, only_trainable=True)
         param_vector = make_single_vector(parameters)
 
         hessian_matrix, full_gradient = find_hessian_and_gradient(

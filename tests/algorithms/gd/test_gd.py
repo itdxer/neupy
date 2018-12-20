@@ -12,7 +12,14 @@ from data import simple_classification
 
 class BaseOptimizerTestCase(BaseTestCase):
     def test_network_attrs(self):
-        network = algorithms.BaseOptimizer((2, 2, 1), verbose=False)
+        network = algorithms.BaseOptimizer(
+            [
+                layers.Input(2),
+                layers.Sigmoid(2),
+                layers.Sigmoid(1),
+            ],
+            verbose=False,
+        )
         network.step = 0.1
         network.error = 'mse'
         network.shuffle_data = True

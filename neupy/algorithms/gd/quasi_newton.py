@@ -1,14 +1,20 @@
 import tensorflow as tf
 
 from neupy.core.config import Configurable
-from neupy.core.properties import (ChoiceProperty, NumberProperty,
-                                   WithdrawProperty, IntProperty)
-from neupy.algorithms.utils import (parameter_values, setup_parameter_updates,
-                                    make_single_vector)
+from neupy.core.properties import (
+    ChoiceProperty, NumberProperty,
+    WithdrawProperty, IntProperty,
+)
+from neupy.algorithms.utils import setup_parameter_updates, make_single_vector
 from neupy.optimizations.wolfe import line_search
-from neupy.layers.utils import count_parameters, iter_parameters
-from neupy.utils import (asfloat, dot, outer, get_variable_size,
-                         function_name_scope)
+from neupy.layers.utils import (
+    count_parameters, iter_parameters,
+    find_variables,
+)
+from neupy.utils import (
+    asfloat, dot, outer, get_variable_size,
+    function_name_scope,
+)
 from .base import BaseOptimizer
 
 
@@ -308,7 +314,7 @@ class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
         prev_params = self.variables.prev_params
         prev_full_gradient = self.variables.prev_full_gradient
 
-        params = parameter_values(self.connection)
+        params = find_variables(self.connection, only_trainable=True)
         param_vector = make_single_vector(params)
 
         gradients = tf.gradients(self.variables.error_func, params)
