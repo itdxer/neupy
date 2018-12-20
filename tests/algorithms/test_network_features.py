@@ -7,7 +7,7 @@ import numpy as np
 from sklearn import datasets
 from neupy import algorithms, layers
 from neupy.exceptions import StopTraining
-from neupy.algorithms.base import show_network_options, format_time
+from neupy.algorithms.utils import format_time
 
 from utils import catch_stdout
 from base import BaseTestCase
@@ -73,23 +73,6 @@ class NetworkMainTestCase(BaseTestCase):
         )
         network.train(data, target, epochs=10)
         self.assertEqual(network.last_epoch, 5)
-
-    def test_show_network_options_function(self):
-        with catch_stdout() as out:
-            # Disable verbose and than enable it again just
-            # to make sure that `show_network_options` won't
-            # trigger in the __init__ method
-            network = algorithms.GradientDescent(
-                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
-                verbose=False,
-                batch_size='all',
-            )
-            network.verbose = True
-
-            show_network_options(network)
-            terminal_output = out.getvalue()
-
-        self.assertIn('step', terminal_output)
 
     def test_network_training_summary(self):
         with catch_stdout() as out:

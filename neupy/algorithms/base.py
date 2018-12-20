@@ -104,10 +104,7 @@ class BaseNetwork(BaseSkeleton):
         -------
         array-like
         """
-        raise NotImplementedError
-
-    def on_epoch_start_update(self, epoch):
-        pass
+        raise NotImplementedError()
 
     def train_epoch(self, input_train, target_train=None):
         raise NotImplementedError()
@@ -169,7 +166,6 @@ class BaseNetwork(BaseSkeleton):
             validation_error = None
             epoch_start_time = time.time()
             self.last_epoch = epoch
-            self.on_epoch_start_update(epoch)
 
             if self.shuffle_data:
                 data = shuffle(*as_tuple(input_train, target_train))
