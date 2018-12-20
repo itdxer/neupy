@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 
 from neupy import algorithms, layers
 from neupy.utils import asfloat
-from neupy.algorithms.gd import errors
+from neupy.algorithms.gd import objectives
 
 from base import BaseTestCase
 
@@ -45,7 +45,7 @@ class PandasCompatibilityTestCase(BaseTestCase):
         y_predict = bpnet.predict(x_test).reshape(-1, 1)
         y_test = y_test.reshape(-1, 1)
 
-        error = errors.rmsle(
+        error = objectives.rmsle(
             target_scaler.inverse_transform(y_test),
             target_scaler.inverse_transform(y_predict).round()
         )

@@ -5,7 +5,7 @@ import numpy as np
 from sklearn import datasets, preprocessing, model_selection
 
 from neupy.utils import asfloat
-from neupy.algorithms.gd import errors
+from neupy.algorithms.gd import objectives
 from neupy import algorithms, layers, architectures
 
 from base import BaseTestCase
@@ -114,7 +114,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         network_output = bpnet.predict(x_test)
 
         network_error = self.eval(
-            errors.categorical_crossentropy(y_test, network_output))
+            objectives.categorical_crossentropy(y_test, network_output))
 
         # -------------- Train ensemlbe -------------- #
 
@@ -130,7 +130,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         ensemble_output = moe.predict(x_test)
 
         ensemlbe_error = self.eval(
-            errors.categorical_crossentropy(y_test, ensemble_output))
+            objectives.categorical_crossentropy(y_test, ensemble_output))
         self.assertGreater(network_error, ensemlbe_error)
 
     def test_mixture_of_experts_architecture(self):
