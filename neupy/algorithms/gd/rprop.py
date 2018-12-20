@@ -235,15 +235,15 @@ class IRPROPPlus(RPROP):
                 np.nan, name='irprop-plus/previous-error'),
         )
 
-    def on_epoch_start_update(self, epoch):
-        super(IRPROPPlus, self).on_epoch_start_update(epoch)
-
+    def train_epoch(self, input_train, target_train):
         if len(self.errors) >= 2:
             previous_error, last_error = self.errors[-2:]
             session = tensorflow_session()
 
             self.variables.last_error.load(last_error, session)
             self.variables.previous_error.load(previous_error, session)
+
+        return super(IRPROPPlus, self).train_epoch(input_train, target_train)
 
     def update_prev_delta(self, prev_delta):
         last_error = self.variables.last_error
