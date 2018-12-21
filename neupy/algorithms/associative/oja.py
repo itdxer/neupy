@@ -38,13 +38,7 @@ class Oja(BaseNetwork):
         Defines networks weights.
         Defaults to :class:`XavierNormal() <neupy.init.XavierNormal>`.
 
-    {BaseNetwork.step}
-
-    {BaseNetwork.show_epoch}
-
-    {BaseNetwork.epoch_end_signal}
-
-    {Verbose.verbose}
+    {BaseNetwork.Parameters}
 
     Methods
     -------
@@ -52,22 +46,15 @@ class Oja(BaseNetwork):
         Reconstruct original dataset from the minimized input.
 
     train(X, epsilon=1e-2, epochs=100)
-        Trains algorithm based on the input dataset.
-        For the dimensionality reduction input dataset
-        assumes to be also a target.
+        Trains the model to the data X. Network trains until the difference
+        between two last errors less than ``epsilon`` or maximum number of
+        ``epochs`` was reached.
 
-    {BaseSkeleton.predict}
+    predict(X)
+        Returns hidden representation of the input data ``X``. Basically,
+        it applies dimensionality reduction.
 
     {BaseSkeleton.fit}
-
-    Raises
-    ------
-    ValueError
-        - Triggers when you try to reconstruct output
-          without training.
-
-        - Invalid number of input data features for the
-          ``train`` and ``reconstruct`` methods.
 
     Examples
     --------

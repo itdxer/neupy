@@ -82,8 +82,6 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
     predict(X)
         Alias to the ``visible_to_hidden`` method.
 
-    {BaseSkeleton.fit}
-
     visible_to_hidden(visible_input)
         Populates data throught the network and returns output
         from the hidden layer.
@@ -94,6 +92,8 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
 
     gibbs_sampling(visible_input, n_iter=1)
         Makes Gibbs sampling ``n`` times using visible input.
+
+    {BaseSkeleton.fit}
 
     Examples
     --------

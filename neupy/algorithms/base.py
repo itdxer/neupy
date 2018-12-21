@@ -118,7 +118,6 @@ class BaseNetwork(BaseSkeleton):
         it is equal to ``0``.
     """
     step = NumberProperty(default=0.1, minval=0)
-
     show_epoch = IntProperty(minval=1, default=1)
     shuffle_data = Property(default=False, expected_type=bool)
     epoch_end_signal = Property(expected_type=types.FunctionType)

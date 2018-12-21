@@ -26,15 +26,7 @@ class BaseAssociative(BaseNetwork):
         Value defined manualy should have shape ``(n_inputs, n_outputs)``.
         Defaults to :class:`Normal() <neupy.init.Normal>`.
 
-    {BaseNetwork.step}
-
-    {BaseNetwork.show_epoch}
-
-    {BaseNetwork.shuffle_data}
-
-    {BaseNetwork.epoch_end_signal}
-
-    {Verbose.verbose}
+    {BaseNetwork.Parameters}
 
     Methods
     -------
@@ -51,9 +43,9 @@ class BaseAssociative(BaseNetwork):
 
     def __init__(self, **options):
         super(BaseAssociative, self).__init__(**options)
-        self.init_layers()
+        self.init_weights()
 
-    def init_layers(self):
+    def init_weights(self):
         valid_weight_shape = (self.n_inputs, self.n_outputs)
 
         if isinstance(self.weight, init.Initializer):
@@ -75,12 +67,10 @@ class BaseAssociative(BaseNetwork):
                 "Cannot make prediction, because input "
                 "data has more than 2 dimensions")
 
-        n_samples, n_features = X.shape
-
-        if n_features != self.n_inputs:
+        if X.shape[1] != self.n_inputs:
             raise ValueError(
                 "Input data expected to have {} features, "
-                "but got {}".format(self.n_inputs, n_features))
+                "but got {}".format(self.n_inputs, X.shape[1]))
 
         return X
 
@@ -116,23 +106,11 @@ class BaseStepAssociative(BaseAssociative):
         Neural network bias units.
         Defaults to :class:`Constant(-0.5) <neupy.init.Constant>`.
 
-    {BaseNetwork.step}
-
-    {BaseNetwork.show_epoch}
-
-    {BaseNetwork.shuffle_data}
-
-    {BaseNetwork.epoch_end_signal}
-
-    {Verbose.verbose}
+    {BaseNetwork.Parameters}
 
     Methods
     -------
-    {BaseSkeleton.predict}
-
-    {BaseAssociative.train}
-
-    {BaseSkeleton.fit}
+    {BaseAssociative.Methods}
     """
     n_inputs = IntProperty(minval=2, required=True)
     n_unconditioned = IntProperty(minval=1, required=True)
@@ -140,16 +118,12 @@ class BaseStepAssociative(BaseAssociative):
     weight = ArrayProperty()
     bias = ParameterProperty(default=init.Constant(-0.5))
 
-    def init_layers(self):
+    def init_weights(self):
         if self.n_inputs <= self.n_unconditioned:
             raise ValueError(
                 "Number of uncondition features should be less than total "
-                "number of features. `n_inputs`={} and "
-                "`n_unconditioned`={}".format(
-                    self.n_inputs,
-                    self.n_unconditioned
-                )
-            )
+                "number of features. `n_inputs`={} and `n_unconditioned`={}"
+                "".format(self.n_inputs, self.n_unconditioned))
 
         valid_weight_shape = (self.n_inputs, self.n_outputs)
         valid_bias_shape = (self.n_outputs,)
@@ -161,7 +135,7 @@ class BaseStepAssociative(BaseAssociative):
         if isinstance(self.bias, init.Initializer):
             self.bias = self.bias.sample(valid_bias_shape, return_array=True)
 
-        super(BaseStepAssociative, self).init_layers()
+        super(BaseStepAssociative, self).init_weights()
 
         if self.bias.shape != valid_bias_shape:
             raise ValueError(

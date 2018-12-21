@@ -442,7 +442,7 @@ class SOFM(Kohonen):
 
         self.initialized = False
         if not callable(self.weight):
-            self.init_layers()
+            self.init_weights()
             self.initialized = True
 
             if self.distance.name == 'cosine':
