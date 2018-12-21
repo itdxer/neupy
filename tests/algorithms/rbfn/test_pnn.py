@@ -145,7 +145,7 @@ class PNNTestCase(BaseTestCase):
         self.assertEqual(y_predicted.shape, (y_test.shape[0], n_classes))
 
     def test_pnn_repr(self):
-        pnn = algorithms.PNN()
+        pnn = algorithms.PNN(std=0.1)
 
         self.assertIn('PNN', str(pnn))
         self.assertIn('std', str(pnn))
