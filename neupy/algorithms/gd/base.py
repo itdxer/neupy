@@ -322,17 +322,15 @@ class BaseOptimizer(BaseNetwork):
         X = [format_data(x) for x in as_tuple(X)]
         return self.methods.predict(*X)
 
-    def train(self, X_train, y_train, X_test=None,
-              y_test=None, *args, **kwargs):
-        """
-        Train neural network.
-        """
-        is_test_data_partialy_missed = (
+    def train(self, X_train, y_train, X_test=None, y_test=None,
+              *args, **kwargs):
+
+        is_test_data_partialy_missing = (
             (X_test is None and y_test is not None) or
             (X_test is not None and y_test is None)
         )
 
-        if is_test_data_partialy_missed:
+        if is_test_data_partialy_missing:
             raise ValueError("Input or target test samples are missed. They "
                              "must be defined together or none of them.")
 
@@ -350,19 +348,6 @@ class BaseOptimizer(BaseNetwork):
         )
 
     def train_epoch(self, X_train, y_train):
-        """
-        Trains neural network over one epoch.
-
-        Parameters
-        ----------
-        X : array-like
-        y : array-like
-
-        Returns
-        -------
-        float
-            Prediction error.
-        """
         return self.methods.train_epoch(*as_tuple(X_train, y_train))
 
     def get_params(self, deep=False, with_connection=True):
