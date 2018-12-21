@@ -36,7 +36,7 @@ class PNN(BaseSkeleton, MinibatchTrainingMixin):
     ----------
     std : float
         Standard deviation for the Probability Density Function (PDF).
-        Defaults to ``0.1``. If your input features have high values
+        If your input features have high values
         than standard deviation should also be high. For instance,
         if input features from range ``[0, 20]`` that standard
         deviation should be also a big value like ``10`` or ``15``.
@@ -85,14 +85,15 @@ class PNN(BaseSkeleton, MinibatchTrainingMixin):
     >>> metrics.accuracy_score(y_test, y_predicted)
     0.98888888888888893
     """
-    std = BoundedProperty(default=0.1, minval=0)
+    std = BoundedProperty(minval=0)
 
-    def __init__(self, **options):
+    def __init__(self, std, batch_size=128, verbose=False):
+        self.std = std
         self.classes = None
         self.X_train = None
         self.y_train = None
 
-        super(PNN, self).__init__(**options)
+        super(PNN, self).__init__(batch_size=batch_size, verbose=verbose)
 
     def train(self, X_train, y_train, copy=True):
         """
