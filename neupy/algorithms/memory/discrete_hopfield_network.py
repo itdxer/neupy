@@ -1,4 +1,5 @@
 import math
+import random
 
 import numpy as np
 from numpy.core.umath_tests import inner1d
@@ -147,14 +148,13 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         super(DiscreteHopfieldNetwork, self).__init__(
             mode=mode, n_times=n_times, verbose=verbose)
 
-    def train(self, X):
-        self.discrete_validation(X)
+    def train(self, X_bin):
+        self.discrete_validation(X_bin)
 
-        X = bin2sign(X)
-        X = format_data(
-            X, is_feature1d=False, make_float=False)
+        X_sign = bin2sign(X_bin)
+        X_sign = format_data(X_sign, is_feature1d=False, make_float=False)
 
-        n_rows, n_features = X.shape
+        n_rows, n_features = X_sign.shape
         n_rows_after_update = self.n_memorized_samples + n_rows
 
         if self.check_limit:
@@ -175,45 +175,44 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
                              "Got {} features instead of {}."
                              "".format(n_features, n_features_expected))
 
-        self.weight += X.T.dot(X)
+        self.weight += X_sign.T.dot(X_sign)
         np.fill_diagonal(self.weight, np.zeros(len(self.weight)))
         self.n_memorized_samples = n_rows_after_update
 
-    def predict(self, X, n_times=None):
-        self.discrete_validation(X)
-        X = format_data(
-            bin2sign(X), is_feature1d=False, make_float=False)
+    def predict(self, X_bin, n_times=None):
+        self.discrete_validation(X_bin)
+
+        X_sign = bin2sign(X_bin)
+        X_sign = format_data(X_sign, is_feature1d=False, make_float=False)
 
         if self.mode == 'async':
+            _, n_features = X_sign.shape
+
             if n_times is None:
                 n_times = self.n_times
 
-            _, n_features = X.shape
-            output_data = X
-
             for _ in range(n_times):
-                position = np.random.randint(0, n_features - 1)
-                raw_new_value = output_data.dot(self.weight[:, position])
-                output_data[:, position] = np.sign(raw_new_value)
+                position = random.randrange(n_features)
+                raw_new_value = X_sign.dot(self.weight[:, position])
+                X_sign[:, position] = np.sign(raw_new_value)
         else:
-            output_data = X.dot(self.weight)
+            X_sign = X_sign.dot(self.weight)
 
-        return np.where(output_data > 0, 1, 0).astype(int)
+        return np.where(X_sign > 0, 1, 0).astype(int)
 
-    def energy(self, X):
-        self.discrete_validation(X)
+    def energy(self, X_bin):
+        self.discrete_validation(X_bin)
 
-        X = bin2sign(X)
-        X = format_data(
-            X, is_feature1d=False, make_float=False)
+        X_sign = bin2sign(X_bin)
+        X_sign = format_data(X_sign, is_feature1d=False, make_float=False)
 
-        n_rows, n_features = X.shape
+        n_rows, n_features = X_sign.shape
 
         if n_rows == 1:
-            return hopfield_energy(self.weight, X, X)
+            return hopfield_energy(self.weight, X_sign, X_sign)
 
         output = np.zeros(n_rows)
-        for i, row in enumerate(X):
+        for i, row in enumerate(X_sign):
             output[i] = hopfield_energy(self.weight, row, row)
 
         return output
