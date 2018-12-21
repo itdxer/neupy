@@ -18,7 +18,7 @@ class GRNN(BaseSkeleton):
     Parameters
     ----------
     std : float
-        Standard deviation for PDF function, defaults to ``0.1``.
+        Standard deviation for PDF function.
         If your input features have high values than standard
         deviation should also be high. For instance, if input features
         from range ``[0, 20]`` that standard deviation should be
@@ -76,12 +76,13 @@ class GRNN(BaseSkeleton):
     >>> estimators.rmse(y_predicted, y_test)
     0.2381013391408185
     """
-    std = BoundedProperty(default=0.1, minval=0)
+    std = BoundedProperty(minval=0)
 
-    def __init__(self, **options):
+    def __init__(self, std, verbose=False):
+        self.std = std
         self.X_train = None
         self.y_train = None
-        super(GRNN, self).__init__(**options)
+        super(GRNN, self).__init__(verbose=verbose)
 
     def train(self, X_train, y_train, copy=True):
         """

@@ -1,5 +1,3 @@
-import warnings
-
 import numpy as np
 
 from neupy.core.properties import ChoiceProperty, IntProperty
@@ -43,12 +41,10 @@ class DiscreteMemory(BaseSkeleton, Configurable):
     n_times = IntProperty(minval=1)
 
     def __init__(self, mode='sync', n_times=100, verbose=False):
-        super(DiscreteMemory, self).__init__()
-
         self.mode = mode
         self.n_times = n_times
-        self.verbose = verbose
         self.weight = None
+        super(DiscreteMemory, self).__init__(verbose=verbose)
 
     def discrete_validation(self, matrix):
         """
