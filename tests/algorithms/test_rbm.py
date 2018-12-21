@@ -96,8 +96,10 @@ class BernoulliRBMTestCase(BaseTestCase):
 
         self.assertNotEqual(len(data) % batch_size, 0)
 
-        rbm = algorithms.RBM(n_visible=4, n_hidden=1, step=0.1,
-                             batch_size=batch_size)
+        rbm = algorithms.RBM(
+            n_visible=4, n_hidden=1, step=0.1,
+            batch_size=batch_size
+        )
         # Check if it's possilbe to train RBM in case if
         # we cannot divide dataset into full mini-batches
         rbm.train(data, epochs=2)
@@ -132,3 +134,9 @@ class BernoulliRBMTestCase(BaseTestCase):
 
         sampled_data = rbm.gibbs_sampling(data, n_iter=1)
         self.assertNotEqual(0, np.abs(sampled_data - self.data).sum())
+
+    def test_rbm_predict(self):
+        rbm = algorithms.RBM(n_visible=4, n_hidden=1)
+        hidden_state = rbm.visible_to_hidden(self.data)
+        prediction = rbm.predict(self.data)
+        np.testing.assert_array_almost_equal(hidden_state, prediction)

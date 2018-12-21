@@ -12,10 +12,10 @@ Dataset file: http://opihi.cs.uvic.ca/sound/music_speech.tar.gz
 """
 import numpy as np
 from neupy import algorithms
+from sklearn.utils import shuffle
 from sklearn import preprocessing, model_selection, metrics, decomposition
 import matplotlib.pyplot as plt
 from librosa.feature import mfcc
-from sklearn.utils import shuffle
 
 from getdata import train_test_data, parser
 

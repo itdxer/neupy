@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import numpy as np
 import tensorflow as tf
 
-from neupy.utils import flatten
+from neupy.utils import flatten, as_tuple
 
 
 __all__ = ('shuffle', 'iter_until_converge', 'setup_parameter_updates',
@@ -96,21 +96,22 @@ def iter_until_converge(network, epsilon, max_epochs):
                               "".format(epoch))
 
 
-def shuffle(*arrays):
+def shuffle(X, y):
     """
-    Randomly shuffle rows in the arrays qithout breaking
-    associations between rows in different arrays.
+    Randomly shuffle rows in the arrays without breaking
+    associations between rows in ``X`` and ``y``.
 
     Parameters
     ----------
-    *arrays
-        Arrays that should be shuffled.
+    X : array-line
+    y : array-line
 
     Returns
     -------
-    list
-        List of arrays that contain shuffeled input data.
+    tupe
+        Shuffled ``X`` and ``y``.
     """
+    arrays = as_tuple(X, y)
     filtered_arrays = tuple(array for array in arrays if array is not None)
 
     if not filtered_arrays:
@@ -133,10 +134,10 @@ def shuffle(*arrays):
         if array is not None:
             arrays[i] = array[indices]
 
-    if len(arrays) == 1:
-        return arrays[0]
+    X = arrays[:-1] if len(arrays) > 2 else arrays[0]
+    y = arrays[-1]
 
-    return tuple(arrays)
+    return X, y
 
 
 def make_single_vector(parameters):
