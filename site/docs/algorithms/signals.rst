@@ -4,30 +4,23 @@ Signals and Early stopping
 Basics
 ------
 
-Signal is a special type of functions that can be triggered after a certain event. Most of the NeuPy algorithm supports two types of events
-
-1. ``epoch_end_signal`` - event that triggers after each training epoch
-2. ``train_end_signal`` - event that triggers at the end of the training
+Signal is a special type of functions that can be triggered after a certain event. The ``epoch_end_signal`` event triggers after each training epoch.
 
 .. code-block:: python
 
     from neupy import algorithms
 
-    def on_epoch_end(bpnet):
-        print("Last epoch: {}".format(bpnet.last_epoch))
-
-    def on_training_end(bpnet):
-        print("Training finished")
+    def on_epoch_end(optimizer):
+        print("Last epoch: {}".format(optimizer.last_epoch))
 
     bpnet = algorithms.GradientDescent(
         (2, 5, 1),
         epoch_end_signal=on_epoch_end,
-        train_end_signal=on_training_end,
         show_epoch=100,
         verbose=True
     )
 
-Each signal can be defined as a function that accepts one mandatory argument. When event callback function triggers training algorithm passes its instance as a first argument to the callback.
+The signal can be defined as a function that accepts one mandatory argument. When event callback function triggers training algorithm passes its instance as a first argument to the callback.
 
 Early stopping
 --------------

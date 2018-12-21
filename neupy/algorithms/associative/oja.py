@@ -44,8 +44,6 @@ class Oja(BaseNetwork):
 
     {BaseNetwork.epoch_end_signal}
 
-    {BaseNetwork.train_end_signal}
-
     {Verbose.verbose}
 
     Methods
@@ -128,11 +126,8 @@ class Oja(BaseNetwork):
 
         if n_input_features != self.weight.shape[0]:
             raise ValueError(
-                "Invalid number of features. Expected {}, got {}".format(
-                    self.weight.shape[0],
-                    n_input_features
-                )
-            )
+                "Invalid number of features. Expected {}, got {}"
+                "".format(self.weight.shape[0], n_input_features))
 
         super(Oja, self).train(X, epsilon=epsilon, epochs=epochs)
 
@@ -144,11 +139,7 @@ class Oja(BaseNetwork):
         if X.shape[1] != self.minimized_data_size:
             raise ValueError(
                 "Invalid input data feature space, expected "
-                "{}, got {}.".format(
-                    X.shape[1],
-                    self.minimized_data_size
-                )
-            )
+                "{}, got {}.".format(X.shape[1], self.minimized_data_size))
 
         return np.dot(X, self.weight.T)
 

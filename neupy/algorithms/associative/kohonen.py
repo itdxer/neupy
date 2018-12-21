@@ -27,8 +27,6 @@ class Kohonen(BaseAssociative):
 
     {BaseNetwork.epoch_end_signal}
 
-    {BaseNetwork.train_end_signal}
-
     {Verbose.verbose}
 
     Methods

@@ -34,8 +34,6 @@ class BaseAssociative(BaseNetwork):
 
     {BaseNetwork.epoch_end_signal}
 
-    {BaseNetwork.train_end_signal}
-
     {Verbose.verbose}
 
     Methods
@@ -73,23 +71,23 @@ class BaseAssociative(BaseNetwork):
         X = format_data(X, is_feature1d=(self.n_inputs == 1))
 
         if X.ndim != 2:
-            raise ValueError("Cannot make prediction, because input "
-                             "data has more than 2 dimensions")
+            raise ValueError(
+                "Cannot make prediction, because input "
+                "data has more than 2 dimensions")
 
         n_samples, n_features = X.shape
 
         if n_features != self.n_inputs:
-            raise ValueError("Input data expected to have {} features, "
-                             "but got {}".format(self.n_inputs, n_features))
+            raise ValueError(
+                "Input data expected to have {} features, "
+                "but got {}".format(self.n_inputs, n_features))
 
         return X
 
     def train(self, X_train, epochs=100):
         X_train = self.format_input_data(X_train)
         return super(BaseAssociative, self).train(
-            X_train=X_train, y_train=None,
-            X_test=None, y_test=None,
-            epochs=epochs, epsilon=None)
+            X_train=X_train, epochs=epochs)
 
 
 class BaseStepAssociative(BaseAssociative):
@@ -125,8 +123,6 @@ class BaseStepAssociative(BaseAssociative):
     {BaseNetwork.shuffle_data}
 
     {BaseNetwork.epoch_end_signal}
-
-    {BaseNetwork.train_end_signal}
 
     {Verbose.verbose}
 

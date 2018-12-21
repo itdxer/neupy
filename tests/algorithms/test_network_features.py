@@ -183,3 +183,26 @@ class NetworkPropertiesTestCase(BaseTestCase):
             terminal_output = out.getvalue()
 
         self.assertEqual(1, terminal_output.count("Network converged"))
+
+    def test_train_epoch_end(self):
+        global triggered_times
+
+        triggered_times = 0
+        epochs = 4
+
+        def print_message(network):
+            global triggered_times
+            triggered_times += 1
+
+        network = algorithms.GradientDescent(
+            connection=[
+                layers.Input(2),
+                layers.Sigmoid(2),
+                layers.Sigmoid(1)
+            ],
+            epoch_end_signal=print_message,
+            batch_size='all',
+        )
+
+        network.train(xor_zero_x_train, xor_zero_y_train, epochs=epochs)
+        self.assertEqual(triggered_times, epochs)

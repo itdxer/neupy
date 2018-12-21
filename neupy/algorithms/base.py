@@ -102,9 +102,6 @@ class BaseNetwork(BaseSkeleton):
     epoch_end_signal : function
         Calls this function when train epoch finishes.
 
-    train_end_signal : function
-        Calls this function when train process finishes.
-
     {Verbose.Parameters}
 
     Attributes
@@ -124,9 +121,7 @@ class BaseNetwork(BaseSkeleton):
 
     show_epoch = IntProperty(minval=1, default=1)
     shuffle_data = Property(default=False, expected_type=bool)
-
     epoch_end_signal = Property(expected_type=types.FunctionType)
-    train_end_signal = Property(expected_type=types.FunctionType)
 
     def __init__(self, *args, **options):
         self.training_errors = []
@@ -216,9 +211,6 @@ class BaseNetwork(BaseSkeleton):
 
         if epoch != last_epoch_shown:
             self.print_last_error()
-
-        if self.train_end_signal is not None:
-            self.train_end_signal(self)
 
     def __getstate__(self):
         return self.__dict__
