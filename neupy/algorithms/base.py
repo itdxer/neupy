@@ -5,7 +5,7 @@ import time
 import types
 from abc import abstractmethod
 
-from neupy.utils import preformat_value, as_tuple
+from neupy.utils import preformat_value
 from neupy.exceptions import StopTraining
 from neupy.core.logs import Verbose
 from neupy.core.config import ConfigurableABC
@@ -165,14 +165,14 @@ class BaseNetwork(BaseSkeleton):
         if epsilon is not None:
             iterepochs = iter_until_converge(self, epsilon, max_epochs=epochs)
 
-        for epoch_index, epoch in enumerate(iterepochs):
-            epoch_start_time = time.time()
-            self.last_epoch = epoch
+        try:
+            for epoch_index, epoch in enumerate(iterepochs):
+                epoch_start_time = time.time()
+                self.last_epoch = epoch
 
-            if self.shuffle_data:
-                X_train, y_train = shuffle(X_train, y_train)
+                if self.shuffle_data:
+                    X_train, y_train = shuffle(X_train, y_train)
 
-            try:
                 train_error = self.train_epoch(X_train, y_train)
                 validation_error = None
 
@@ -190,12 +190,11 @@ class BaseNetwork(BaseSkeleton):
                 if self.epoch_end_signal is not None:
                     self.epoch_end_signal(self)
 
-            except StopTraining as err:
-                message = "Epoch #{} was stopped. Message: {}".format(
-                    epoch, str(err))
-
-                self.logs.message("TRAIN", message)
-                break
+        except StopTraining as err:
+            self.logs.message(
+                "TRAIN",
+                "Epoch #{} was stopped. Message: {}".format(epoch, str(err))
+            )
 
         if epoch != last_epoch_shown:
             self.print_last_error()

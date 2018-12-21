@@ -110,6 +110,7 @@ class NetworkMainTestCase(BaseTestCase):
         with self.assertRaisesRegexp(ValueError, "a positive number"):
             network.train(np.zeros((4, 2)), np.zeros((4, 1)), epochs=-1)
 
+
 class NetworkPropertiesTestCase(BaseTestCase):
     def test_show_epoch_valid_cases(self):
         Case = namedtuple("Case", "show_epoch should_be_n_times n_epochs")
