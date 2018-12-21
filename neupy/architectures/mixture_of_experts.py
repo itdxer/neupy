@@ -1,5 +1,4 @@
 from neupy import layers
-from neupy.utils import all_equal
 from neupy.layers.utils import extract_connection
 
 
@@ -34,11 +33,11 @@ def check_if_connections_compatible(connections):
         input_shapes.append(connection.input_shape)
         output_shapes.append(connection.output_shape)
 
-    if not all_equal(input_shapes):
+    if any(shape != input_shapes[0] for shape in input_shapes):
         raise ValueError("Networks have different input shapes: {}"
                          "".format(input_shapes))
 
-    if not all_equal(output_shapes):
+    if any(shape != output_shapes[0] for shape in output_shapes):
         raise ValueError("Networks have different output shapes: {}"
                          "".format(output_shapes))
 

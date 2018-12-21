@@ -3,9 +3,11 @@ from __future__ import division, absolute_import, unicode_literals
 
 import time
 import types
+import inspect
 from abc import abstractmethod
 
-from neupy.utils import preformat_value
+import numpy as np
+
 from neupy.exceptions import StopTraining
 from neupy.core.logs import Verbose
 from neupy.core.config import ConfigurableABC
@@ -14,6 +16,22 @@ from .utils import iter_until_converge, shuffle, format_time
 
 
 __all__ = ('BaseSkeleton', 'BaseNetwork')
+
+
+def preformat_value(value):
+    if inspect.isfunction(value) or inspect.isclass(value):
+        return value.__name__
+
+    elif isinstance(value, (list, tuple, set)):
+        return [preformat_value(v) for v in value]
+
+    elif isinstance(value, (np.ndarray, np.matrix)):
+        return value.shape
+
+    elif hasattr(value, 'default'):
+        return value.default
+
+    return value
 
 
 class BaseSkeleton(ConfigurableABC, Verbose):

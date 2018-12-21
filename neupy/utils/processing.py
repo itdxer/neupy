@@ -1,11 +1,9 @@
-import inspect
-
 import numpy as np
 import tensorflow as tf
 from scipy.sparse import issparse
 
 
-__all__ = ('format_data', 'asfloat', 'preformat_value')
+__all__ = ('format_data', 'asfloat')
 
 
 def format_data(data, is_feature1d=True, copy=False, make_float=True):
@@ -89,30 +87,3 @@ def asfloat(value):
 
     float_x_type = np.cast[float_type]
     return float_x_type(value)
-
-
-def preformat_value(value):
-    """
-    Function pre-format input value depending on it's type.
-
-    Parameters
-    ----------
-    value : object
-
-    Returns
-    -------
-    object
-    """
-    if inspect.isfunction(value) or inspect.isclass(value):
-        return value.__name__
-
-    elif isinstance(value, (list, tuple, set)):
-        return [preformat_value(v) for v in value]
-
-    elif isinstance(value, (np.ndarray, np.matrix)):
-        return value.shape
-
-    elif hasattr(value, 'default'):
-        return value.default
-
-    return value

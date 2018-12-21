@@ -12,6 +12,39 @@ __all__ = (
 )
 
 
+def tensorflow_session():
+    if hasattr(tensorflow_session, 'cache'):
+        session = tensorflow_session.cache
+
+        if not session._closed:
+            return session
+
+    config = tf.ConfigProto(
+        allow_soft_placement=True,
+        inter_op_parallelism_threads=0,
+        intra_op_parallelism_threads=0,
+    )
+    session = tf.Session(config=config)
+
+    tensorflow_session.cache = session
+    return session
+
+
+def initialize_uninitialized_variables(variables=None):
+    if variables is None:
+        variables = tf.global_variables()
+
+    session = tensorflow_session()
+    is_not_initialized = session.run([
+        tf.is_variable_initialized(var) for var in variables])
+
+    not_initialized_vars = [
+        v for (v, f) in zip(variables, is_not_initialized) if not f]
+
+    if len(not_initialized_vars):
+        session.run(tf.variables_initializer(not_initialized_vars))
+
+
 def function_name_scope(function):
     """
     Decorator that wraps any function with the name score that has the
@@ -38,24 +71,6 @@ def class_method_name_scope(method):
     return wrapper
 
 
-def tensorflow_session():
-    if hasattr(tensorflow_session, 'cache'):
-        session = tensorflow_session.cache
-
-        if not session._closed:
-            return session
-
-    config = tf.ConfigProto(
-        allow_soft_placement=True,
-        inter_op_parallelism_threads=0,
-        intra_op_parallelism_threads=0,
-    )
-    session = tf.Session(config=config)
-
-    tensorflow_session.cache = session
-    return session
-
-
 def tensorflow_eval(value):
     session = tensorflow_session()
     initialize_uninitialized_variables()
@@ -77,21 +92,6 @@ def outer(a, b):
 @function_name_scope
 def dot(a, b):
     return tf.tensordot(a, b, 1)
-
-
-def initialize_uninitialized_variables(variables=None):
-    if variables is None:
-        variables = tf.global_variables()
-
-    session = tensorflow_session()
-    is_not_initialized = session.run([
-        tf.is_variable_initialized(var) for var in variables])
-
-    not_initialized_vars = [
-        v for (v, f) in zip(variables, is_not_initialized) if not f]
-
-    if len(not_initialized_vars):
-        session.run(tf.variables_initializer(not_initialized_vars))
 
 
 def tf_repeat(tensor, repeats):

@@ -5,7 +5,7 @@ import tensorflow as tf
 
 from neupy.core.properties import IntProperty, CallableProperty
 from neupy.exceptions import LayerConnectionError
-from neupy.utils import as_tuple, all_equal
+from neupy.utils import as_tuple
 from .base import BaseLayer
 
 
@@ -234,7 +234,7 @@ class GatedAverage(BaseLayer):
                 "got {} networks instead."
                 "".format(n_gating_weights, (n_input_layers - 1)))
 
-        if not all_equal(other_layers_shape):
+        if any(shape != other_layers_shape[0] for shape in other_layers_shape):
             raise LayerConnectionError(
                 "Output layer that has to be merged expect to have the "
                 "same shapes. Shapes: {!r}".format(other_layers_shape))

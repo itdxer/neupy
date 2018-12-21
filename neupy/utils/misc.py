@@ -5,10 +5,7 @@ import tensorflow as tf
 import numpy as np
 
 
-__all__ = (
-    'as_tuple', 'number_type', 'AttributeKeyDict',
-    'all_equal', 'reproducible',
-)
+__all__ = ('as_tuple', 'number_type', 'AttributeKeyDict', 'reproducible')
 
 
 number_type = (int, float, np.floating, np.integer)
@@ -45,6 +42,22 @@ def as_tuple(*values):
     return tuple(cleaned_values)
 
 
+def reproducible(seed=0):
+    """
+    Set up the same seed value for the NumPy and
+    python random module to make your code reproducible.
+
+    Parameters
+    ----------
+    seed : int
+        Defaults to ``0``.
+    """
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    random.seed(seed)
+    tf.set_random_seed(seed)
+
+
 class AttributeKeyDict(dict):
     """
     Modified built-in Python ``dict`` class. That modification
@@ -72,49 +85,3 @@ class AttributeKeyDict(dict):
 
     def __reduce__(self):
         return (self.__class__, (dict(self),))
-
-
-def all_equal(array):
-    """
-    Checks if all elements in the array are equal.
-
-    Parameters
-    ----------
-    array : list, tuple
-
-    Raises
-    ------
-    ValueError
-        If input array is empty
-
-    Returns
-    -------
-    bool
-        `True` in case if all elements are equal and
-        `False` otherwise.
-    """
-    if not array:
-        raise ValueError("Array is empty")
-
-    first_item = array[0]
-
-    if any(item != first_item for item in array):
-        return False
-
-    return True
-
-
-def reproducible(seed=0):
-    """
-    Set up the same seed value for the NumPy and
-    python random module to make your code reproducible.
-
-    Parameters
-    ----------
-    seed : int
-        Defaults to ``0``.
-    """
-    os.environ['PYTHONHASHSEED'] = str(seed)
-    np.random.seed(seed)
-    random.seed(seed)
-    tf.set_random_seed(seed)
