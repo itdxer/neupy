@@ -4,11 +4,9 @@ import numpy as np
 import tensorflow as tf
 from scipy.sparse import csr_matrix
 
-from neupy.utils import (
-    preformat_value, as_tuple, AttributeKeyDict,
-    asfloat, format_data, all_equal
-)
+from neupy.utils import as_tuple, AttributeKeyDict, asfloat, format_data
 from neupy.algorithms.utils import shuffle, iter_until_converge, format_time
+from neupy.algorithms.base import preformat_value
 from neupy import algorithms, layers
 
 from base import BaseTestCase
@@ -175,19 +173,3 @@ class ShuffleTestCase(BaseTestCase):
         input_with_nones = (None, None)
         actual_output = shuffle(*input_with_nones)
         self.assertEqual(input_with_nones, actual_output)
-
-
-class AllValuesEqualTestCase(BaseTestCase):
-    def test_all_equal(self):
-        self.assertTrue(all_equal([1] * 10))
-        self.assertTrue(all_equal([(1, 5)] * 10))
-        self.assertTrue(all_equal([0.1] * 2))
-        self.assertTrue(all_equal([5]))
-
-        self.assertFalse(all_equal([1, 2, 3, 4, 5]))
-        self.assertFalse(all_equal([2, 2, 2, 2, 1]))
-        self.assertFalse(all_equal([5, 5 - 1e-8]))
-
-    def test_all_equal_exception(self):
-        with self.assertRaises(ValueError):
-            all_equal([])
