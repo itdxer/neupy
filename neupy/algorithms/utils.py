@@ -83,17 +83,25 @@ def iter_until_converge(network, epsilon, max_epochs):
         previous_error = last_error
 
         if epoch >= max_epochs and error_delta > epsilon:
-            logs.message("TRAIN", "Epoch #{} interrupted. Network didn't "
-                                  "converge after {} iterations"
-                                  "".format(epoch, max_epochs))
+            logs.message(
+                "TRAIN", (
+                    "Epoch #{} interrupted. Network didn't converge "
+                    "after {} iterations".format(epoch, max_epochs)
+                )
+            )
             return
 
     if np.isnan(error_delta) or np.isinf(error_delta):
-        logs.message("TRAIN", "Epoch #{} interrupted. Network error value is "
-                              "NaN or Inf.".format(epoch))
+        logs.message(
+            "TRAIN", (
+                "Epoch #{} interrupted. "
+                "Delta between errors NaN or Inf.".format(epoch)
+            )
+        )
     else:
-        logs.message("TRAIN", "Epoch #{} interrupted. Network converged."
-                              "".format(epoch))
+        logs.message(
+            "TRAIN",
+            "Epoch #{} interrupted. Network converged.".format(epoch))
 
 
 def shuffle(X, y):

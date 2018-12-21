@@ -358,9 +358,9 @@ class SOFM(Kohonen):
     Examples
     --------
     >>> import numpy as np
-    >>> from neupy import algorithms, environment
+    >>> from neupy import algorithms, utils
     >>>
-    >>> environment.reproducible()
+    >>> utils.reproducible()
     >>>
     >>> data = np.array([
     ...     [0.1961, 0.9806],

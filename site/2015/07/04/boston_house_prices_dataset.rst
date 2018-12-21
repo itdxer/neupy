@@ -249,11 +249,11 @@ Neural networks are prune to overfitting and we always need to have validation d
 .. code-block:: python
 
     from sklearn.model_selection import train_test_split
-    from neupy import environment
+    from neupy import utils
 
     # Make sure that split between train and
     # validation datasets will be reproducible
-    environment.reproducible()
+    utils.reproducible()
 
     x_train, x_test, y_train, y_test = train_test_split(
         # 85% of the data we will use for training

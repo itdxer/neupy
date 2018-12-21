@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets
-from neupy import algorithms, layers, environment
+from neupy import algorithms, layers, utils
 
 
-environment.reproducible()
+utils.reproducible()
 
 mnist = datasets.fetch_mldata('MNIST original')
 

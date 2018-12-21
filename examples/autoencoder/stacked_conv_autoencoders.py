@@ -4,10 +4,10 @@ import numpy as np
 from sklearn import datasets, metrics
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
-from neupy import algorithms, layers, environment
+from neupy import algorithms, layers, utils
 
 
-environment.reproducible()
+utils.reproducible()
 
 mnist = datasets.fetch_mldata('MNIST original')
 data = mnist.data / 255.

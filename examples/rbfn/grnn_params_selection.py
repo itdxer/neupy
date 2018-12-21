@@ -3,10 +3,10 @@ from operator import itemgetter
 import numpy as np
 from sklearn import datasets, grid_search
 from sklearn.model_selection import train_test_split
-from neupy import algorithms, environment
+from neupy import algorithms, utils
 
 
-environment.reproducible()
+utils.reproducible()
 
 
 def rmsle(expected, predicted):

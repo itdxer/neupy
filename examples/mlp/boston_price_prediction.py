@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets, preprocessing
 from sklearn.model_selection import train_test_split
-from neupy import algorithms, layers, environment
+from neupy import algorithms, layers, utils
 
 
 def rmsle(expected, predicted):
@@ -12,7 +12,7 @@ def rmsle(expected, predicted):
     return np.sqrt(np.mean(squared_log_error))
 
 
-environment.reproducible()
+utils.reproducible()
 plt.style.use('ggplot')
 
 dataset = datasets.load_boston()

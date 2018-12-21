@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
 from neupy.utils import asfloat, tensorflow_session
-from neupy import algorithms, layers, environment
+from neupy import algorithms, layers, utils
 
 
-environment.reproducible()
+utils.reproducible()
 
 X = np.array([
     [0.9, 0.3],

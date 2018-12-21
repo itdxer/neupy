@@ -141,9 +141,9 @@ def make_digits(n_samples=100, noise_level=0.1, mode='flip'):
 
     Examples
     --------
-    >>> from neupy import datasets, environment
+    >>> from neupy import datasets, utils
     >>>
-    >>> environment.reproducible()
+    >>> utils.reproducible()
     >>>
     >>> digits, labels = datasets.make_digits(noise_level=0.15)
     >>> digit, label = digits[0], labels[0]

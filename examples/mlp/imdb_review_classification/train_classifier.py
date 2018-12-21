@@ -4,7 +4,7 @@ import dill
 import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn import metrics
-from neupy import algorithms, layers, environment
+from neupy import algorithms, layers, utils
 
 from src.word_embedding_nn import WordEmbeddingNN
 from src.preprocessing import TokenizeText, IgnoreUnknownWords
@@ -13,7 +13,7 @@ from src.utils import (WORD_EMBEDDING_NN, NN_CLASSIFIER_MODEL, REVIEWS_FILE,
 
 
 logger = create_logger(__name__)
-environment.reproducible()
+utils.reproducible()
 
 if not os.path.exists(WORD_EMBEDDING_NN):
     raise EnvironmentError(

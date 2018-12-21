@@ -1,7 +1,7 @@
 import os
 
 import pandas as pd
-from neupy import environment
+from neupy import utils
 
 from src.word_embedding_nn import WordEmbeddingNN
 from src.preprocessing import TokenizeText
@@ -9,7 +9,7 @@ from src.utils import create_logger, REVIEWS_FILE, WORD_EMBEDDING_NN
 
 
 logger = create_logger(__name__)
-environment.reproducible()
+utils.reproducible()
 
 if not os.path.exists(REVIEWS_FILE):
     raise EnvironmentError("Cannot find reviews.csv file. Probably you "

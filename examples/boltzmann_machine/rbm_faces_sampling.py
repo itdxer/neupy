@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from skimage.filters import threshold_local
-from neupy import algorithms, environment
+from neupy import algorithms, utils
 from neupy.utils import asfloat
 
 
@@ -64,7 +64,7 @@ def binarize_images(data):
     return asfloat(binarized_data)
 
 
-environment.reproducible()
+utils.reproducible()
 
 print("Reading images...")
 people_dataset = datasets.fetch_lfw_people()

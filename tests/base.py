@@ -6,7 +6,7 @@ import unittest
 import numpy as np
 import tensorflow as tf
 
-from neupy import environment, layers, init
+from neupy import utils, layers, init
 from neupy.utils import tensorflow_eval, tensorflow_session
 
 from utils import vectors_for_testing
@@ -39,7 +39,7 @@ class BaseTestCase(unittest.TestCase):
 
         # Clean identifiers map for each test
         layers.BaseLayer.global_identifiers_map = {}
-        environment.reproducible(seed=self.random_seed)
+        utils.reproducible(seed=self.random_seed)
 
     def tearDown(self):
         sess = tensorflow_session()

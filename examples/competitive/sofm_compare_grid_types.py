@@ -1,11 +1,11 @@
 import matplotlib.pyplot as plt
-from neupy import algorithms, environment
+from neupy import algorithms, utils
 
 from utils import plot_2d_grid, make_circle
 
 
 plt.style.use('ggplot')
-environment.reproducible()
+utils.reproducible()
 
 
 if __name__ == '__main__':

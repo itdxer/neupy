@@ -41,9 +41,9 @@ class Kohonen(BaseAssociative):
     Examples
     --------
     >>> import numpy as np
-    >>> from neupy import algorithms, layers, environment
+    >>> from neupy import algorithms, layers, utils
     >>>
-    >>> environment.reproducible()
+    >>> utils.reproducible()
     >>>
     >>> X = np.array([
     ...     [0.1961,  0.9806],

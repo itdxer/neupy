@@ -69,9 +69,9 @@ class PNN(BaseSkeleton, MinibatchTrainingMixin):
     >>>
     >>> from sklearn import datasets, metrics
     >>> from sklearn.model_selection import train_test_split
-    >>> from neupy import algorithms, environment
+    >>> from neupy import algorithms, utils
     >>>
-    >>> environment.reproducible()
+    >>> utils.reproducible()
     >>>
     >>> dataset = datasets.load_digits()
     >>> x_train, x_test, y_train, y_test = train_test_split(

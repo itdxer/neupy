@@ -5,10 +5,10 @@ from collections import deque
 
 import gym
 import numpy as np
-from neupy import layers, algorithms, environment, storage
+from neupy import layers, algorithms, utils, storage
 
 
-environment.reproducible()
+utils.reproducible()
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 FILES_DIR = os.path.join(CURRENT_DIR, 'files')

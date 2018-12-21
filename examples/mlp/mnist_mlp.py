@@ -1,10 +1,10 @@
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 from sklearn import model_selection, metrics, datasets
-from neupy import algorithms, layers, environment
+from neupy import algorithms, layers, utils
 
 
-environment.reproducible()
+utils.reproducible()
 
 mnist = datasets.fetch_mldata('MNIST original')
 
