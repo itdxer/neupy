@@ -16,30 +16,30 @@ class PNNTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             # size of target data not the same as
             # size of input data.
-            pnnet = algorithms.PNN(verbose=False)
+            pnnet = algorithms.PNN(std=0.1, verbose=False)
             pnnet.train(np.array([[0], [0]]), np.array([0]))
 
         with self.assertRaises(ValueError):
             # 2-D target vector (must be 1-D)
-            pnnet = algorithms.PNN(verbose=False)
+            pnnet = algorithms.PNN(std=0.1, verbose=False)
             pnnet.train(np.array([[0]]), np.array([[0, 0]]))
 
         with self.assertRaises(ValueError):
             # invalid feature size for prediction data
-            pnnet = algorithms.PNN(verbose=False)
+            pnnet = algorithms.PNN(std=0.1, verbose=False)
             pnnet.train(np.array([[0], [0]]), np.array([0]))
             pnnet.predict(np.array([[0]]))
 
         msg = "hasn't been trained"
         with self.assertRaisesRegexp(NotTrained, msg):
             # predict without training
-            pnnet = algorithms.PNN(verbose=False)
+            pnnet = algorithms.PNN(std=0.1, verbose=False)
             pnnet.predict(np.array([[0]]))
 
         with self.assertRaises(ValueError):
             # different number of features for
             # train and test data
-            grnet = algorithms.PNN(verbose=False)
+            grnet = algorithms.PNN(std=0.1, verbose=False)
             grnet.train(np.array([[0]]), np.array([0]))
             grnet.predict(np.array([[0, 0]]))
 
@@ -114,12 +114,12 @@ class PNNTestCase(BaseTestCase):
 
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(
-            algorithms.PNN(verbose=False),
+            algorithms.PNN(std=0.1, verbose=False),
             np.array([1, 2, 3]),
             np.array([1, 0, 1]))
 
     def test_predict_different_inputs(self):
-        pnnet = algorithms.PNN(verbose=False)
+        pnnet = algorithms.PNN(std=0.1, verbose=False)
 
         data = np.array([[1, 2, 3]]).T
         target = np.array([[1, 0, 1]]).T

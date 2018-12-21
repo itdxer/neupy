@@ -13,29 +13,29 @@ class GRNNTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             # size of target data not the same as size of
             # input data.
-            grnet = algorithms.GRNN(verbose=False)
+            grnet = algorithms.GRNN(std=0.1, verbose=False)
             grnet.train(np.array([[0], [0]]), np.array([0]))
 
         with self.assertRaises(ValueError):
             # 2 features for target data
-            grnet = algorithms.GRNN(verbose=False)
+            grnet = algorithms.GRNN(std=0.1, verbose=False)
             grnet.train(np.array([[0], [0]]), np.array([[0, 0]]))
 
         with self.assertRaises(ValueError):
             # invalid feature size for prediction data
-            grnet = algorithms.GRNN(verbose=False)
+            grnet = algorithms.GRNN(std=0.1, verbose=False)
             grnet.train(np.array([[0], [0]]), np.array([0]))
             grnet.predict(np.array([[0]]))
 
         with self.assertRaises(NotTrained):
             # Prediction without training
-            grnet = algorithms.GRNN(verbose=False)
+            grnet = algorithms.GRNN(std=0.1, verbose=False)
             grnet.predict(np.array([[0]]))
 
         with self.assertRaises(ValueError):
             # different number of features for
             # train and test data
-            grnet = algorithms.GRNN(verbose=False)
+            grnet = algorithms.GRNN(std=0.1, verbose=False)
             grnet.train(np.array([[0]]), np.array([0]))
             grnet.predict(np.array([[0, 0]]))
 
@@ -70,13 +70,13 @@ class GRNNTestCase(BaseTestCase):
 
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(
-            algorithms.GRNN(verbose=False),
+            algorithms.GRNN(std=0.1, verbose=False),
             np.array([1, 2, 3]),
             np.array([1, 2, 3])
         )
 
     def test_predict_different_inputs(self):
-        grnnet = algorithms.GRNN(verbose=False)
+        grnnet = algorithms.GRNN(std=0.1, verbose=False)
 
         data = np.array([[1, 2, 3]]).T
         target = np.array([[1, 2, 3]]).T
