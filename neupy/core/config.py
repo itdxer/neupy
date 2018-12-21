@@ -17,10 +17,6 @@ __all__ = ('ConfigMeta', 'ConfigABCMeta', 'Configurable', 'ConfigurableABC',
 Option = namedtuple('Option', 'class_name value')
 
 
-def initialize_with_kwargs(class_, kwargs):
-    return class_(**kwargs)
-
-
 class ExtractParameters(object):
     def get_params(self, deep=False):
         options = {}
@@ -54,6 +50,10 @@ class ExtractParameters(object):
         return self
 
 
+def initialize_with_kwargs(class_, kwargs):
+    return class_(**kwargs)
+
+
 class DumpableObject(ExtractParameters):
     def __reduce__(self):
         return initialize_with_kwargs, (self.__class__, self.get_params())
@@ -72,8 +72,7 @@ class ConfigMeta(SharedDocsMeta):
             new_class.options = {}
 
         for base_class in parents:
-            new_class.options = dict(base_class.options,
-                                     **new_class.options)
+            new_class.options = dict(base_class.options, **new_class.options)
 
         options = new_class.options
 

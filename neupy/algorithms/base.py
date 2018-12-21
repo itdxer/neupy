@@ -12,7 +12,8 @@ from neupy.exceptions import StopTraining
 from neupy.core.logs import Verbose
 from neupy.core.config import ConfigurableABC
 from neupy.core.properties import Property, NumberProperty, IntProperty
-from .utils import iter_until_converge, shuffle, format_time
+from neupy.utils.processing import shuffle
+from neupy.utils.iters import iter_until_converge
 
 
 __all__ = ('BaseSkeleton', 'BaseNetwork')
@@ -32,6 +33,43 @@ def preformat_value(value):
         return value.default
 
     return value
+
+
+def format_time(time):
+    """
+    Format seconds into human readable format.
+
+    Parameters
+    ----------
+    time : float
+        Time specified in seconds
+
+    Returns
+    -------
+    str
+        Formated time.
+    """
+    mins, seconds = divmod(int(time), 60)
+    hours, minutes = divmod(mins, 60)
+
+    if hours > 0:
+        return '{:0>2d}:{:0>2d}:{:0>2d}'.format(hours, minutes, seconds)
+
+    elif minutes > 0:
+        return '{:0>2d}:{:0>2d}'.format(minutes, seconds)
+
+    elif seconds > 0:
+        return '{:.0f} sec'.format(seconds)
+
+    elif time >= 1e-3:
+        return '{:.0f} ms'.format(time * 1e3)
+
+    elif time >= 1e-6:
+        # microseconds
+        return '{:.0f} μs'.format(time * 1e6)
+
+    # nanoseconds or smaller
+    return '{:.0f} ns'.format(time * 1e9)
 
 
 class BaseSkeleton(ConfigurableABC, Verbose):

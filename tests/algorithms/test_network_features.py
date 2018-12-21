@@ -7,6 +7,7 @@ import numpy as np
 from sklearn import datasets
 from neupy import algorithms, layers
 from neupy.exceptions import StopTraining
+from neupy.algorithms.base import format_time
 
 from utils import catch_stdout
 from base import BaseTestCase
@@ -108,6 +109,14 @@ class NetworkMainTestCase(BaseTestCase):
 
         with self.assertRaisesRegexp(ValueError, "a positive number"):
             network.train(np.zeros((4, 2)), np.zeros((4, 1)), epochs=-1)
+
+    def test_format_time(self):
+        self.assertEqual("01:06:40", format_time(4000))
+        self.assertEqual("02:05", format_time(125))
+        self.assertEqual("45 sec", format_time(45))
+        self.assertEqual("100 ms", format_time(0.1))
+        self.assertEqual("10 μs", format_time(1e-5))
+        self.assertEqual("200 ns", format_time(2e-7))
 
 
 class NetworkPropertiesTestCase(BaseTestCase):

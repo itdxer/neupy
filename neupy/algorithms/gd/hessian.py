@@ -1,9 +1,12 @@
 import tensorflow as tf
 
 from neupy.core.properties import BoundedProperty, WithdrawProperty
-from neupy.utils import asfloat, flatten, function_name_scope
+from neupy.utils import (
+    asfloat, flatten, function_name_scope,
+    make_single_vector,
+)
 from neupy.layers.utils import count_parameters, find_variables
-from neupy.algorithms.utils import setup_parameter_updates, make_single_vector
+from neupy.utils.tf_utils import setup_parameter_updates
 from .base import BaseOptimizer
 
 

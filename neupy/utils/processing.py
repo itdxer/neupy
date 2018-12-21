@@ -2,8 +2,10 @@ import numpy as np
 import tensorflow as tf
 from scipy.sparse import issparse
 
+from neupy.utils.misc import as_tuple
 
-__all__ = ('format_data', 'asfloat')
+
+__all__ = ('format_data', 'asfloat', 'shuffle')
 
 
 def format_data(data, is_feature1d=True, copy=False, make_float=True):
@@ -87,3 +89,47 @@ def asfloat(value):
 
     float_x_type = np.cast[float_type]
     return float_x_type(value)
+
+
+def shuffle(X, y):
+    """
+    Randomly shuffle rows in the arrays without breaking
+    associations between rows in ``X`` and ``y``.
+
+    Parameters
+    ----------
+    X : array-line
+    y : array-line
+
+    Returns
+    -------
+    tupe
+        Shuffled ``X`` and ``y``.
+    """
+    arrays = as_tuple(X, y)
+    filtered_arrays = tuple(array for array in arrays if array is not None)
+
+    if not filtered_arrays:
+        return arrays
+
+    first = filtered_arrays[0]
+    n_samples = first.shape[0]
+
+    if any(n_samples != array.shape[0] for array in filtered_arrays):
+        array_shapes = [array.shape for array in filtered_arrays]
+        raise ValueError("Cannot shuffle matrices. All matrices should "
+                         "have the same number of rows. Input shapes are: {}"
+                         "".format(array_shapes))
+
+    indices = np.arange(n_samples)
+    np.random.shuffle(indices)
+
+    arrays = list(arrays)
+    for i, array in enumerate(arrays):
+        if array is not None:
+            arrays[i] = array[indices]
+
+    X = arrays[:-1] if len(arrays) > 2 else arrays[0]
+    y = arrays[-1]
+
+    return X, y

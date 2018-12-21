@@ -36,11 +36,10 @@ class PNN(BaseSkeleton, MinibatchTrainingMixin):
     ----------
     std : float
         Standard deviation for the Probability Density Function (PDF).
-        If your input features have high values
-        than standard deviation should also be high. For instance,
-        if input features from range ``[0, 20]`` that standard
-        deviation should be also a big value like ``10`` or ``15``.
-        Small values will lead to bad prediction.
+        If your input features have high values than standard deviation
+        should also be high. For instance, if input features from range
+        ``[0, 20]`` that standard deviation should be also a big value
+        like ``10`` or ``15``. Small values will lead to bad prediction.
 
     {MinibatchTrainingMixin.batch_size}
 
@@ -56,7 +55,8 @@ class PNN(BaseSkeleton, MinibatchTrainingMixin):
         The ``y_train`` argument should be a vector or
         matrix with one feature column.
 
-    {BaseSkeleton.predict}
+    predict(X)
+        Return classes associated with each sample in the ``X``.
 
     predict_proba(X)
         Predict probabilities for each class.
@@ -69,9 +69,7 @@ class PNN(BaseSkeleton, MinibatchTrainingMixin):
     >>>
     >>> from sklearn import datasets, metrics
     >>> from sklearn.model_selection import train_test_split
-    >>> from neupy import algorithms, utils
-    >>>
-    >>> utils.reproducible()
+    >>> from neupy import algorithms
     >>>
     >>> dataset = datasets.load_digits()
     >>> x_train, x_test, y_train, y_test = train_test_split(
@@ -127,8 +125,7 @@ class PNN(BaseSkeleton, MinibatchTrainingMixin):
             raise ValueError("Number of samples in the input and target "
                              "datasets are different")
 
-        n_target_features = y_train.shape[1]
-        if n_target_features != 1:
+        if y_train.shape[1] != 1:
             raise ValueError("Target value should be a vector or a "
                              "matrix with one column")
 
@@ -193,15 +190,13 @@ class PNN(BaseSkeleton, MinibatchTrainingMixin):
         array-like (n_samples, n_classes)
         """
         if self.classes is None:
-            raise NotTrained("Cannot make a prediction. Network "
-                             "hasn't been trained yet")
+            raise NotTrained(
+                "Cannot make a prediction. Network hasn't been trained yet")
 
-        X_size = X.shape[1]
-        train_data_size = self.X_train.shape[1]
-
-        if X_size != train_data_size:
-            raise ValueError("Input data must contain {0} features, got "
-                             "{1}".format(train_data_size, X_size))
+        if X.shape[1] != self.X_train.shape[1]:
+            raise ValueError(
+                "Input data must contain {0} features, got {1}"
+                "".format(self.X_train.shape[1],  X.shape[1]))
 
         class_ratios = self.class_ratios.reshape((-1, 1))
         pdf_outputs = pdf_between_data(self.X_train, X, self.std)

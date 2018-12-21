@@ -1,10 +1,10 @@
 import tensorflow as tf
 
-from neupy.utils import dot, function_name_scope, asfloat
+from neupy.utils import dot, function_name_scope, asfloat, make_single_vector
 from neupy.core.properties import (ChoiceProperty, NumberProperty,
                                    WithdrawProperty)
 from neupy.layers.utils import count_parameters, find_variables
-from neupy.algorithms.utils import setup_parameter_updates, make_single_vector
+from neupy.utils.tf_utils import setup_parameter_updates
 from .base import BaseOptimizer
 from .quasi_newton import safe_division, WolfeLineSearchForStep
 

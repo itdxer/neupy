@@ -50,7 +50,8 @@ class GRNN(BaseSkeleton):
         it for the prediction. Parameter ``copy`` copies input data
         before saving it inside the network.
 
-    {BaseSkeleton.predict}
+    predict(X)
+        Return prediction per each sample in the ``X``.
 
     {BaseSkeleton.fit}
 
@@ -58,9 +59,7 @@ class GRNN(BaseSkeleton):
     --------
     >>> from sklearn import datasets, preprocessing
     >>> from sklearn.model_selection import train_test_split
-    >>> from neupy import algorithms, estimators, utils
-    >>>
-    >>> utils.reproducible()
+    >>> from neupy import algorithms, estimators
     >>>
     >>> dataset = datasets.load_diabetes()
     >>> x_train, x_test, y_train, y_test = train_test_split(
@@ -109,8 +108,7 @@ class GRNN(BaseSkeleton):
         X_train = format_data(X_train, copy=copy)
         y_train = format_data(y_train, copy=copy)
 
-        n_target_features = y_train.shape[1]
-        if n_target_features != 1:
+        if y_train.shape[1] != 1:
             raise ValueError("Target value must be one dimensional array")
 
         self.X_train = X_train
@@ -138,17 +136,15 @@ class GRNN(BaseSkeleton):
         array-like (n_samples,)
         """
         if self.X_train is None:
-            raise NotTrained("Cannot make a prediction. Network "
-                             "hasn't been trained yet")
+            raise NotTrained(
+                "Cannot make a prediction. Network hasn't been trained yet")
 
         X = format_data(X)
 
-        X_size = X.shape[1]
-        train_data_size = self.X_train.shape[1]
-
-        if X_size != train_data_size:
-            raise ValueError("Input data must contain {0} features, got "
-                             "{1}".format(train_data_size, X_size))
+        if X.shape[1] != self.X_train.shape[1]:
+            raise ValueError(
+                "Input data must contain {0} features, got {1}"
+                "".format(self.X_train.shape[1], X.shape[1]))
 
         ratios = pdf_between_data(self.X_train, X, self.std)
         return (dot(self.y_train.T, ratios) / ratios.sum(axis=0)).T

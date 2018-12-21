@@ -1,13 +1,16 @@
 import numpy as np
 import tensorflow as tf
 
-from neupy.utils import tensorflow_session, flatten, function_name_scope
+from neupy.utils import (
+    tensorflow_session, flatten,
+    function_name_scope, make_single_vector,
+)
 from neupy.core.properties import (BoundedProperty, ChoiceProperty,
                                    WithdrawProperty)
 from neupy.algorithms import BaseOptimizer
 from neupy.algorithms.gd import objectives
 from neupy.layers.utils import find_variables
-from neupy.algorithms.utils import setup_parameter_updates, make_single_vector
+from neupy.utils.tf_utils import setup_parameter_updates
 
 
 __all__ = ('LevenbergMarquardt',)
