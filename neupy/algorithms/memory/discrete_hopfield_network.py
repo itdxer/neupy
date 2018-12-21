@@ -144,7 +144,8 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         self.n_memorized_samples = 0
         self.check_limit = check_limit
 
-        super(DiscreteHopfieldNetwork, self).__init__(mode, n_times, verbose)
+        super(DiscreteHopfieldNetwork, self).__init__(
+            mode=mode, n_times=n_times, verbose=verbose)
 
     def train(self, X):
         self.discrete_validation(X)
