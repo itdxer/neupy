@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 
 from collections import namedtuple
 
+from neupy.core import logs
 from neupy.core.logs import Verbose, TerminalLogger
-from neupy.core import terminal
 from neupy import algorithms, layers
 
 from base import BaseTestCase
@@ -68,16 +68,18 @@ class LoggingTestCase(BaseTestCase):
                     terminal_output, test_case.expectation)
 
     def test_terminal_colors(self):
-        real_is_color_supported = terminal.is_color_supported
+        logger = TerminalLogger()
+        real_is_color_supported = logs.is_color_supported
 
-        terminal.is_color_supported = lambda: False
-        self.assertEqual('test', terminal.red('test'))
+        logs.is_color_supported = lambda: False
+        red_color = logger.colors['red']
+        self.assertEqual('test', red_color('test'))
 
-        terminal.is_color_supported = lambda: True
-        self.assertNotEqual('test', terminal.red('test'))
-        self.assertIn('test', terminal.red('test'))
+        logs.is_color_supported = lambda: True
+        self.assertNotEqual('test', red_color('test'))
+        self.assertIn('test', red_color('test'))
 
-        terminal.is_color_supported = real_is_color_supported
+        logs.is_color_supported = real_is_color_supported
 
 
 class NeuralNetworkLoggingTestCase(BaseTestCase):
