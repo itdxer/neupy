@@ -5,7 +5,7 @@ from neupy import algorithms
 from base import BaseTestCase
 
 
-input_data = np.array([
+X = np.array([
     [0, 1],
     [1, 1],
 ])
@@ -42,7 +42,7 @@ class HebbRuleTestCase(BaseTestCase):
             verbose=False,
         )
 
-        hn.train(input_data, epochs=2)
+        hn.train(X, epochs=2)
 
         test_data = np.array([
             [0, 0],
@@ -66,10 +66,10 @@ class HebbRuleTestCase(BaseTestCase):
         )
 
         # Test learning limit
-        hn.train(input_data, epochs=50)
+        hn.train(X, epochs=50)
         self.assertEqual(np.round(hn.weight[1, 0], 2), 10)
 
-        hn.train(input_data, epochs=50)
+        hn.train(X, epochs=50)
         self.assertEqual(np.round(hn.weight[1, 0], 2), 10)
 
     def test_weights(self):
@@ -122,6 +122,6 @@ class HebbRuleTestCase(BaseTestCase):
             verbose=False
         )
 
-        inet.train(input_data, epochs=10)
+        inet.train(X, epochs=10)
         self.assertInvalidVectorPred(inet, np.array([0, 0]), 0,
                                      is_feature1d=False)

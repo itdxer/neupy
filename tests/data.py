@@ -6,15 +6,15 @@ from sklearn.model_selection import StratifiedShuffleSplit
 from neupy.utils import asfloat
 
 
-xor_input_train = np.array([[-1, -1], [-1, 1], [1, -1], [1, 1]])
-xor_target_train = np.array([[1, -1, -1, 1]]).T
+xor_x_train = np.array([[-1, -1], [-1, 1], [1, -1], [1, 1]])
+xor_y_train = np.array([[1, -1, -1, 1]]).T
 
-simple_input_train = asfloat(np.array([
+simple_x_train = asfloat(np.array([
     [0.1, 0.1, 0.2],
     [0.2, 0.3, 0.4],
     [0.1, 0.7, 0.2],
 ]))
-simple_target_train = asfloat(np.array([
+simple_y_train = asfloat(np.array([
     [0.2, 0.2],
     [0.3, 0.3],
     [0.5, 0.5],

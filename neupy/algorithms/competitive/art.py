@@ -42,10 +42,10 @@ class ART1(BaseNetwork):
 
     Methods
     -------
-    train(input_data)
+    train(X)
         ART trains until all clusters are found.
 
-    predict(input_data)
+    predict(X)
         Each prediction trains a new network. Basically it's
         an alias to the ``train`` method.
 
@@ -74,19 +74,19 @@ class ART1(BaseNetwork):
     rho = ProperFractionProperty(default=0.5)
     n_clusters = IntProperty(default=2, minval=2)
 
-    def train(self, input_data):
-        input_data = format_data(input_data)
+    def train(self, X):
+        X = format_data(X)
 
-        if input_data.ndim != 2:
+        if X.ndim != 2:
             raise ValueError("Input value must be 2 dimensional, got "
-                             "{}".format(input_data.ndim))
+                             "{}".format(X.ndim))
 
-        n_samples, n_features = input_data.shape
+        n_samples, n_features = X.shape
         n_clusters = self.n_clusters
         step = self.step
         rho = self.rho
 
-        if np.any((input_data != 0) & (input_data != 1)):
+        if np.any((X != 0) & (X != 1)):
             raise ValueError("ART1 Network works only with binary matrices")
 
         if not hasattr(self, 'weight_21'):
@@ -107,7 +107,7 @@ class ART1(BaseNetwork):
         classes = np.zeros(n_samples)
 
         # Train network
-        for i, p in enumerate(input_data):
+        for i, p in enumerate(X):
             disabled_neurons = []
             reseted_values = []
             reset = True
@@ -150,5 +150,5 @@ class ART1(BaseNetwork):
 
         return classes
 
-    def predict(self, input_data):
-        return self.train(input_data)
+    def predict(self, X):
+        return self.train(X)

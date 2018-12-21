@@ -76,7 +76,7 @@ class PoolingLayersTestCase(BaseTestCase):
         self.assertEqual("MaxPooling((2, 2))", str(layer))
 
     def test_max_pooling(self):
-        input_data = asfloat(np.array([
+        X = asfloat(np.array([
             [1, 2, 3, -1],
             [4, -6, 3, 1],
             [0, 0, 1, 0],
@@ -88,11 +88,11 @@ class PoolingLayersTestCase(BaseTestCase):
         ])).reshape(1, 2, 2, 1)
 
         max_pool_layer = layers.MaxPooling((2, 2))
-        actual_output = self.eval(max_pool_layer.output(input_data))
+        actual_output = self.eval(max_pool_layer.output(X))
         np.testing.assert_array_almost_equal(actual_output, expected_output)
 
     def test_average_pooling(self):
-        input_data = asfloat(np.array([
+        X = asfloat(np.array([
             [1, 2, 3, -1],
             [4, -6, 3, 1],
             [0, 0, 1, 0],
@@ -104,7 +104,7 @@ class PoolingLayersTestCase(BaseTestCase):
         ])).reshape(1, 2, 2, 1)
 
         average_pool_layer = layers.AveragePooling((2, 2))
-        actual_output = self.eval(average_pool_layer.output(input_data))
+        actual_output = self.eval(average_pool_layer.output(X))
         np.testing.assert_array_almost_equal(actual_output, expected_output)
 
 

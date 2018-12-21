@@ -2,9 +2,9 @@ import warnings
 
 import numpy as np
 
-from neupy.core.base import BaseSkeleton
 from neupy.core.properties import ChoiceProperty, IntProperty
 from neupy.core.config import Configurable
+from neupy.algorithms.base import BaseSkeleton
 
 
 __all__ = ('DiscreteMemory',)
@@ -37,7 +37,6 @@ class DiscreteMemory(BaseSkeleton, Configurable):
         Available only in ``async`` mode. Identify number
         of random trials. Defaults to ``100``.
     """
-
     mode = ChoiceProperty(default='sync', choices=['async', 'sync'])
     n_times = IntProperty(default=100, minval=1)
 

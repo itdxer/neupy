@@ -152,24 +152,24 @@ class IterUntilConvergeTestCase(BaseTestCase):
 
 class ShuffleTestCase(BaseTestCase):
     def test_shuffle_basic(self):
-        input_data = np.arange(10)
-        shuffeled_data = shuffle(input_data, input_data)
+        X = np.arange(10)
+        shuffeled_data = shuffle(X, X)
         np.testing.assert_array_equal(*shuffeled_data)
 
     def test_shuffle_empty_input(self):
         np.testing.assert_array_equal(tuple(), shuffle())
 
     def test_shuffle_single_input(self):
-        input_data = np.ones(10)
-        shuffeled_data = shuffle(input_data)
+        X = np.ones(10)
+        shuffeled_data = shuffle(X)
         # Output suppose to be a shuffled array, but
         # not a tuple with shuffled array
-        np.testing.assert_array_equal(input_data, shuffeled_data)
+        np.testing.assert_array_equal(X, shuffeled_data)
 
     def test_shuffle_invalid_shapes_exception(self):
-        input_data = np.arange(10)
+        X = np.arange(10)
         with self.assertRaisesRegexp(ValueError, r'\(10,\), \(9,\)'):
-            shuffle(input_data, input_data[:len(input_data) - 1])
+            shuffle(X, X[:len(X) - 1])
 
     def test_shuffle_with_nones(self):
         input_with_nones = (None, None)

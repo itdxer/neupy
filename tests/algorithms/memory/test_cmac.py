@@ -7,14 +7,14 @@ from base import BaseTestCase
 
 class CMACTestCase(BaseTestCase):
     def test_cmac(self):
-        input_train = np.reshape(np.linspace(0, 2 * np.pi, 100), (100, 1))
-        input_train_before = input_train.copy()
+        X_train = np.reshape(np.linspace(0, 2 * np.pi, 100), (100, 1))
+        X_train_before = X_train.copy()
 
-        input_test = np.reshape(np.linspace(np.pi, 2 * np.pi, 50), (50, 1))
+        X_test = np.reshape(np.linspace(np.pi, 2 * np.pi, 50), (50, 1))
 
-        target_train = np.sin(input_train)
-        target_train_before = target_train.copy()
-        target_test = np.sin(input_test)
+        y_train = np.sin(X_train)
+        y_train_before = y_train.copy()
+        y_test = np.sin(X_test)
 
         cmac = algorithms.CMAC(
             quantization=100,
@@ -22,20 +22,20 @@ class CMACTestCase(BaseTestCase):
             step=0.2,
             verbose=False,
         )
-        cmac.train(input_train, target_train, epochs=100)
+        cmac.train(X_train, y_train, epochs=100)
 
-        predicted_test = cmac.predict(input_test)
+        predicted_test = cmac.predict(X_test)
         predicted_test = predicted_test.reshape((len(predicted_test), 1))
-        error = metrics.mean_absolute_error(target_test, predicted_test)
+        error = metrics.mean_absolute_error(y_test, predicted_test)
 
         self.assertAlmostEqual(error, 0.0024, places=4)
 
         # Test that algorithm didn't modify data samples
-        np.testing.assert_array_equal(input_train, input_train_before)
-        np.testing.assert_array_equal(input_train, input_train_before)
-        np.testing.assert_array_equal(target_train, target_train_before)
+        np.testing.assert_array_equal(X_train, X_train_before)
+        np.testing.assert_array_equal(X_train, X_train_before)
+        np.testing.assert_array_equal(y_train, y_train_before)
 
-        self.assertPickledNetwork(cmac, input_train)
+        self.assertPickledNetwork(cmac, X_train)
 
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(
@@ -59,24 +59,24 @@ class CMACTestCase(BaseTestCase):
         )
 
     def test_cmac_multi_output(self):
-        input_train = np.linspace(0, 2 * np.pi, 100)
-        input_train = np.vstack([input_train, input_train])
+        X_train = np.linspace(0, 2 * np.pi, 100)
+        X_train = np.vstack([X_train, X_train])
 
-        input_test = np.linspace(0, 2 * np.pi, 100)
-        input_test = np.vstack([input_test, input_test])
+        X_test = np.linspace(0, 2 * np.pi, 100)
+        X_test = np.vstack([X_test, X_test])
 
-        target_train = np.sin(input_train)
-        target_test = np.sin(input_test)
+        y_train = np.sin(X_train)
+        y_test = np.sin(X_test)
 
         cmac = algorithms.CMAC(
             quantization=100,
             associative_unit_size=32,
             step=0.2,
         )
-        cmac.train(input_train, target_train,
-                   input_test, target_test, epochs=100)
-        predicted_test = cmac.predict(input_test)
-        error = metrics.mean_absolute_error(target_test, predicted_test)
+        cmac.train(X_train, y_train,
+                   X_test, y_test, epochs=100)
+        predicted_test = cmac.predict(X_test)
+        error = metrics.mean_absolute_error(y_test, predicted_test)
 
         self.assertAlmostEqual(error, 0, places=6)
 
@@ -88,5 +88,5 @@ class CMACTestCase(BaseTestCase):
         )
 
         with self.assertRaises(ValueError):
-            cmac.train(input_train=True, target_train=True,
-                       input_test=None, target_test=True)
+            cmac.train(X_train=True, y_train=True,
+                       X_test=None, y_test=True)

@@ -13,8 +13,8 @@ from utils import catch_stdout
 from base import BaseTestCase
 
 
-xor_zero_input_train = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-xor_zero_target_train = np.array([[1, 0, 0, 1]]).T
+xor_zero_x_train = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+xor_zero_y_train = np.array([[1, 0, 0, 1]]).T
 
 
 class NetworkMainTestCase(BaseTestCase):
@@ -44,6 +44,7 @@ class NetworkMainTestCase(BaseTestCase):
             layers.Sigmoid(3),
             layers.Sigmoid(1),
         ], batch_size='all')
+
         # Should work fine without exceptions
         network.train(data, target, epochs=2)
         network.train(data, target, data, target, epochs=2)
@@ -52,7 +53,7 @@ class NetworkMainTestCase(BaseTestCase):
             network.train(data, target, data, epochs=2)
 
         with self.assertRaises(ValueError):
-            network.train(data, target, target_test=target, epochs=2)
+            network.train(data, target, y_test=target, epochs=2)
 
     def test_stop_iteration(self):
         def stop_training_after_the_5th_epoch(network):
@@ -96,6 +97,18 @@ class NetworkMainTestCase(BaseTestCase):
         # Also network prints 5 additional lines at the beggining
         self.assertEqual(terminal_output.count('\n'), n_epochs - 1)
 
+    def test_wrong_number_of_training_epochs(self):
+        network = algorithms.GradientDescent(
+            layers.Input(2) > layers.Sigmoid(1),
+            verbose=False,
+            batch_size='all',
+        )
+
+        with self.assertRaisesRegexp(ValueError, "a positive number"):
+            network.train(np.zeros((4, 2)), np.zeros((4, 1)), epochs=0)
+
+        with self.assertRaisesRegexp(ValueError, "a positive number"):
+            network.train(np.zeros((4, 2)), np.zeros((4, 1)), epochs=-1)
 
 class NetworkPropertiesTestCase(BaseTestCase):
     def test_show_epoch_valid_cases(self):
@@ -116,8 +129,8 @@ class NetworkPropertiesTestCase(BaseTestCase):
                     show_epoch=case.show_epoch
                 )
                 bpnet.train(
-                    xor_zero_input_train,
-                    xor_zero_target_train,
+                    xor_zero_x_train,
+                    xor_zero_y_train,
                     epochs=case.n_epochs,
                 )
                 terminal_output = out.getvalue()
@@ -148,7 +161,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
                 show_epoch=100
             )
             bpnet.train(
-                xor_zero_input_train, xor_zero_target_train,
+                xor_zero_x_train, xor_zero_y_train,
                 epochs=3, epsilon=1e-5,
             )
             terminal_output = out.getvalue()
@@ -163,7 +176,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
                 show_epoch=100
             )
             bpnet.train(
-                xor_zero_input_train, xor_zero_target_train,
+                xor_zero_x_train, xor_zero_y_train,
                 epochs=1e3, epsilon=1e-3,
             )
             terminal_output = out.getvalue()

@@ -15,9 +15,9 @@ from neupy.core.properties import (
 __all__ = ('LVQ', 'LVQ2', 'LVQ21', 'LVQ3')
 
 
-def euclid_distance(input_data, weight):
-    input_data = np.expand_dims(input_data, axis=0)
-    euclid_dist = np.linalg.norm(input_data - weight, axis=1)
+def euclid_distance(X, weight):
+    X = np.expand_dims(X, axis=0)
+    euclid_dist = np.linalg.norm(X - weight, axis=1)
     return np.expand_dims(euclid_dist, axis=0)
 
 
@@ -211,16 +211,16 @@ class LVQ(BaseNetwork):
         updates_ratio = (1 - self.n_updates / self.n_updates_to_stepdrop)
         return self.minstep + (self.step - self.minstep) * updates_ratio
 
-    def predict(self, input_data):
+    def predict(self, X):
         if not self.initialized:
             raise NotTrained("LVQ network hasn't been trained yet")
 
-        input_data = format_data(input_data)
+        X = format_data(X)
         subclass_to_class = self.subclass_to_class
         weight = self.weight
 
         predictions = []
-        for input_row in input_data:
+        for input_row in X:
             output = euclid_distance(input_row, weight)
             winner_subclass = int(output.argmin(axis=1))
 
@@ -229,11 +229,11 @@ class LVQ(BaseNetwork):
 
         return np.array(predictions)
 
-    def train(self, input_train, target_train, *args, **kwargs):
-        input_train = format_data(input_train)
-        target_train = format_data(target_train)
+    def train(self, X_train, y_train, *args, **kwargs):
+        X_train = format_data(X_train)
+        y_train = format_data(y_train)
 
-        n_input_samples = len(input_train)
+        n_input_samples = len(X_train)
 
         if n_input_samples <= self.n_subclasses:
             raise ValueError("Number of training input samples should be "
@@ -242,7 +242,7 @@ class LVQ(BaseNetwork):
                              "".format(n_input_samples))
 
         if not self.initialized:
-            target_classes = sorted(np.unique(target_train).astype(np.int))
+            target_classes = sorted(np.unique(y_train).astype(np.int))
             expected_classes = list(range(self.n_classes))
 
             if target_classes != expected_classes:
@@ -254,7 +254,7 @@ class LVQ(BaseNetwork):
             weights = []
             iterator = zip(target_classes, self.prototypes_per_class)
             for target_class, n_prototypes in iterator:
-                is_valid_class = (target_train[:, 0] == target_class)
+                is_valid_class = (y_train[:, 0] == target_class)
                 is_valid_class = is_valid_class.astype('float64')
                 n_samples_per_class = sum(is_valid_class)
                 is_valid_class /= n_samples_per_class
@@ -270,20 +270,20 @@ class LVQ(BaseNetwork):
                     np.arange(n_input_samples), n_prototypes,
                     replace=False, p=is_valid_class)
 
-                class_weight = input_train[class_weight_indeces]
+                class_weight = X_train[class_weight_indeces]
                 weights.extend(class_weight)
 
             self.weight = np.array(weights)
             self.initialized = True
 
-        super(LVQ, self).train(input_train, target_train, *args, **kwargs)
+        super(LVQ, self).train(X_train, y_train, *args, **kwargs)
 
-    def train_epoch(self, input_train, target_train):
+    def train_epoch(self, X_train, y_train):
         weight = self.weight
         subclass_to_class = self.subclass_to_class
 
         n_correct_predictions = 0
-        for input_row, target in zip(input_train, target_train):
+        for input_row, target in zip(X_train, y_train):
             step = self.training_step
             output = euclid_distance(input_row, weight)
             winner_subclass = int(output.argmin())
@@ -300,7 +300,7 @@ class LVQ(BaseNetwork):
             n_correct_predictions += is_correct_prediction
             self.n_updates += 1
 
-        n_samples = len(input_train)
+        n_samples = len(X_train)
         return 1 - n_correct_predictions / n_samples
 
 
@@ -336,13 +336,13 @@ class LVQ2(LVQ):
     """
     epsilon = NumberProperty(default=0.1)
 
-    def train_epoch(self, input_train, target_train):
+    def train_epoch(self, X_train, y_train):
         weight = self.weight
         epsilon = self.epsilon
         subclass_to_class = self.subclass_to_class
 
         n_correct_predictions = 0
-        for input_row, target in zip(input_train, target_train):
+        for input_row, target in zip(X_train, y_train):
             step = self.training_step
             output = euclid_distance(input_row, weight)
             winner_subclasses = n_argmin(output, n=2, axis=1)
@@ -375,7 +375,7 @@ class LVQ2(LVQ):
 
             n_correct_predictions += is_correct_prediction
 
-        n_samples = len(input_train)
+        n_samples = len(X_train)
         return 1 - n_correct_predictions / n_samples
 
 
@@ -405,13 +405,13 @@ class LVQ21(LVQ2):
     >>> lvqnet.predict([[2, 1], [-1, -1]])
     array([1, 0])
     """
-    def train_epoch(self, input_train, target_train):
+    def train_epoch(self, X_train, y_train):
         weight = self.weight
         epsilon = self.epsilon
         subclass_to_class = self.subclass_to_class
 
         n_correct_predictions = 0
-        for input_row, target in zip(input_train, target_train):
+        for input_row, target in zip(X_train, y_train):
             step = self.training_step
             output = euclid_distance(input_row, weight)
             winner_subclasses = n_argmin(output, n=2, axis=1)
@@ -452,7 +452,7 @@ class LVQ21(LVQ2):
             n_correct_predictions += is_correct_prediction
             self.n_updates += 1
 
-        n_samples = len(input_train)
+        n_samples = len(X_train)
         return 1 - n_correct_predictions / n_samples
 
 
@@ -513,14 +513,14 @@ class LVQ3(LVQ21):
     step = NumberProperty(minval=0, default=0.01)
     slowdown_rate = NumberProperty(minval=0, default=0.4)
 
-    def train_epoch(self, input_train, target_train):
+    def train_epoch(self, X_train, y_train):
         weight = self.weight
         epsilon = self.epsilon
         slowdown_rate = self.slowdown_rate
         subclass_to_class = self.subclass_to_class
 
         n_correct_predictions = 0
-        for input_row, target in zip(input_train, target_train):
+        for input_row, target in zip(X_train, y_train):
             step = self.training_step
             output = euclid_distance(input_row, weight)
             winner_subclasses = n_argmin(output, n=2, axis=1)
@@ -570,5 +570,5 @@ class LVQ3(LVQ21):
             n_correct_predictions += is_first_correct
             self.n_updates += 1
 
-        n_samples = len(input_train)
+        n_samples = len(X_train)
         return 1 - n_correct_predictions / n_samples

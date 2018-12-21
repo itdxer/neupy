@@ -15,8 +15,8 @@ def bin2sign(matrix):
     return np.where(matrix == 0, -1, 1)
 
 
-def hopfield_energy(weight, input_data, output_data):
-    return -0.5 * inner1d(input_data.dot(weight), output_data)
+def hopfield_energy(weight, X, output_data):
+    return -0.5 * inner1d(X.dot(weight), output_data)
 
 
 class DiscreteHopfieldNetwork(DiscreteMemory):
@@ -46,13 +46,13 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
     Methods
     -------
-    energy(input_data)
+    energy(X)
         Compute Discrete Hopfield Energy.
 
-    train(input_data)
+    train(X)
         Save input data pattern into the network memory.
 
-    predict(input_data, n_times=None)
+    predict(X, n_times=None)
         Recover data from the memory using input pattern.
         For the prediction procedure you can control number
         of iterations. If you set up this value equal to ``None``
@@ -143,14 +143,14 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
         super(DiscreteHopfieldNetwork, self).__init__(**options)
         self.n_memorized_samples = 0
 
-    def train(self, input_data):
-        self.discrete_validation(input_data)
+    def train(self, X):
+        self.discrete_validation(X)
 
-        input_data = bin2sign(input_data)
-        input_data = format_data(
-            input_data, is_feature1d=False, make_float=False)
+        X = bin2sign(X)
+        X = format_data(
+            X, is_feature1d=False, make_float=False)
 
-        n_rows, n_features = input_data.shape
+        n_rows, n_features = X.shape
         n_rows_after_update = self.n_memorized_samples + n_rows
 
         if self.check_limit:
@@ -171,45 +171,45 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
                              "Got {} features instead of {}."
                              "".format(n_features, n_features_expected))
 
-        self.weight += input_data.T.dot(input_data)
+        self.weight += X.T.dot(X)
         np.fill_diagonal(self.weight, np.zeros(len(self.weight)))
         self.n_memorized_samples = n_rows_after_update
 
-    def predict(self, input_data, n_times=None):
-        self.discrete_validation(input_data)
-        input_data = format_data(
-            bin2sign(input_data), is_feature1d=False, make_float=False)
+    def predict(self, X, n_times=None):
+        self.discrete_validation(X)
+        X = format_data(
+            bin2sign(X), is_feature1d=False, make_float=False)
 
         if self.mode == 'async':
             if n_times is None:
                 n_times = self.n_times
 
-            _, n_features = input_data.shape
-            output_data = input_data
+            _, n_features = X.shape
+            output_data = X
 
             for _ in range(n_times):
                 position = np.random.randint(0, n_features - 1)
                 raw_new_value = output_data.dot(self.weight[:, position])
                 output_data[:, position] = np.sign(raw_new_value)
         else:
-            output_data = input_data.dot(self.weight)
+            output_data = X.dot(self.weight)
 
         return np.where(output_data > 0, 1, 0).astype(int)
 
-    def energy(self, input_data):
-        self.discrete_validation(input_data)
+    def energy(self, X):
+        self.discrete_validation(X)
 
-        input_data = bin2sign(input_data)
-        input_data = format_data(
-            input_data, is_feature1d=False, make_float=False)
+        X = bin2sign(X)
+        X = format_data(
+            X, is_feature1d=False, make_float=False)
 
-        n_rows, n_features = input_data.shape
+        n_rows, n_features = X.shape
 
         if n_rows == 1:
-            return hopfield_energy(self.weight, input_data, input_data)
+            return hopfield_energy(self.weight, X, X)
 
         output = np.zeros(n_rows)
-        for i, row in enumerate(input_data):
+        for i, row in enumerate(X):
             output[i] = hopfield_energy(self.weight, row, row)
 
         return output

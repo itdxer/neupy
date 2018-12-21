@@ -15,12 +15,12 @@ from base import BaseTestCase
 
 class ConjugateGradientTestCase(BaseTestCase):
     def test_functions(self):
-        Case = namedtuple("Case", "func input_data answer")
+        Case = namedtuple("Case", "func X answer")
 
         testcases = [
             Case(
                 func=cg.fletcher_reeves,
-                input_data=(
+                X=(
                     asfloat(np.array([1.35,  0.3])),
                     asfloat(np.array([0.11, -0.5])),
                     asfloat(np.array([0, 0])),
@@ -29,7 +29,7 @@ class ConjugateGradientTestCase(BaseTestCase):
             ),
             Case(
                 func=cg.polak_ribiere,
-                input_data=(
+                X=(
                     asfloat(np.array([1.,  -0.5])),
                     asfloat(np.array([1.2, -0.45])),
                     asfloat(np.array([0, 0])),
@@ -38,7 +38,7 @@ class ConjugateGradientTestCase(BaseTestCase):
             ),
             Case(
                 func=cg.hentenes_stiefel,
-                input_data=(
+                X=(
                     asfloat(np.array([1.,  -0.5])),
                     asfloat(np.array([1.2, -0.45])),
                     asfloat(np.array([0.2, 0.05])),
@@ -47,7 +47,7 @@ class ConjugateGradientTestCase(BaseTestCase):
             ),
             Case(
                 func=cg.liu_storey,
-                input_data=(
+                X=(
                     asfloat(np.array([1.,  -0.5])),
                     asfloat(np.array([1.2, -0.45])),
                     asfloat(np.array([0.2, 0.05])),
@@ -56,7 +56,7 @@ class ConjugateGradientTestCase(BaseTestCase):
             ),
             Case(
                 func=cg.dai_yuan,
-                input_data=(
+                X=(
                     asfloat(np.array([1.,  -0.5])),
                     asfloat(np.array([1.2, -0.45])),
                     asfloat(np.array([0.2, 0.05])),
@@ -66,7 +66,7 @@ class ConjugateGradientTestCase(BaseTestCase):
         ]
 
         for testcase in testcases:
-            result = self.eval(testcase.func(*testcase.input_data))
+            result = self.eval(testcase.func(*testcase.X))
             self.assertAlmostEqual(result, testcase.answer, places=1)
 
     def test_conjgrad(self):

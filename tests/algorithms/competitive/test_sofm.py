@@ -10,7 +10,7 @@ from neupy.algorithms.competitive.neighbours import gaussian_df
 from base import BaseTestCase
 
 
-input_data = np.array([
+X = np.array([
     [0.1961, 0.9806],
     [-0.1961, 0.9806],
     [0.9806, 0.1961],
@@ -376,14 +376,14 @@ class SOFMTestCase(BaseTestCase):
             n_outputs=3,
             weight=self.weight,
         )
-        output = sofm.predict(input_data[0])
+        output = sofm.predict(X[0])
         self.assertEqual(output.shape, (1, 3))
 
     def test_sofm(self):
         sn = algorithms.SOFM(
             n_inputs=2,
             n_outputs=3,
-            weight=input_data[(2, 0, 4), :].T,
+            weight=X[(2, 0, 4), :].T,
             learning_radius=0,
             features_grid=(3,),
             shuffle_data=True,
@@ -392,10 +392,10 @@ class SOFMTestCase(BaseTestCase):
             reduce_step_after=None,
             reduce_std_after=None,
         )
-        sn.train(input_data, epochs=100)
+        sn.train(X, epochs=100)
 
         np.testing.assert_array_almost_equal(
-            sn.predict(input_data), answers)
+            sn.predict(X), answers)
 
     def test_sofm_euclide_norm_distance(self):
         weight = np.array([
@@ -416,7 +416,7 @@ class SOFMTestCase(BaseTestCase):
             verbose=False
         )
 
-        sn.train(input_data, epochs=10)
+        sn.train(X, epochs=10)
 
         answers = np.array([
             [0., 0., 0., 1., 0., 0.],
@@ -428,7 +428,7 @@ class SOFMTestCase(BaseTestCase):
         ])
 
         np.testing.assert_array_almost_equal(
-            sn.predict(input_data),
+            sn.predict(X),
             answers
         )
 
@@ -440,7 +440,7 @@ class SOFMTestCase(BaseTestCase):
             verbose=False,
         )
 
-        data = np.concatenate([input_data, input_data], axis=1)
+        data = np.concatenate([X, X], axis=1)
 
         sofm.train(data, epochs=1)
         error_after_first_epoch = sofm.training_errors[-1]
@@ -455,10 +455,10 @@ class SOFMTestCase(BaseTestCase):
             distance='cos',
             learning_radius=1,
             features_grid=(3, 1),
-            weight=input_data[(0, 2, 4), :].T,
+            weight=X[(0, 2, 4), :].T,
             verbose=False
         )
-        sn.train(input_data, epochs=3)
+        sn.train(X, epochs=3)
 
         answers = np.array([
             [1., 0., 0.],
@@ -469,7 +469,7 @@ class SOFMTestCase(BaseTestCase):
             [0., 0., 1.],
         ])
         np.testing.assert_array_almost_equal(
-            sn.predict(input_data),
+            sn.predict(X),
             answers)
 
     def test_sofm_weight_norm_after_training_with_custom_weights(self):
@@ -479,7 +479,7 @@ class SOFMTestCase(BaseTestCase):
             distance='cos',
             learning_radius=1,
             features_grid=(3, 1),
-            weight=input_data[(0, 2, 4), :].T,
+            weight=X[(0, 2, 4), :].T,
             verbose=False
         )
 
@@ -487,7 +487,7 @@ class SOFMTestCase(BaseTestCase):
         expected_norms = np.array([1, 1, 1])
         np.testing.assert_array_almost_equal(expected_norms, actual_norms)
 
-        sofm.train(input_data, epochs=6)
+        sofm.train(X, epochs=6)
 
         actual_norms = np.linalg.norm(sofm.weight, axis=0)
         expected_norms = np.array([1, 1, 1])
@@ -509,7 +509,7 @@ class SOFMTestCase(BaseTestCase):
     def test_train_different_inputs(self):
         self.assertInvalidVectorTrain(
             algorithms.SOFM(n_inputs=1, n_outputs=1, verbose=False),
-            input_data.ravel())
+            X.ravel())
 
     def test_predict_different_inputs(self):
         sofmnet = algorithms.SOFM(n_inputs=1, n_outputs=2, verbose=False)
@@ -528,8 +528,8 @@ class SOFMTestCase(BaseTestCase):
             [0, 1],
         ])
 
-        sofmnet.train(input_data.ravel())
-        self.assertInvalidVectorPred(sofmnet, input_data.ravel(),
+        sofmnet.train(X.ravel())
+        self.assertInvalidVectorPred(sofmnet, X.ravel(),
                                      target, decimal=2)
 
     def test_sofm_std_parameter(self):
@@ -540,11 +540,11 @@ class SOFMTestCase(BaseTestCase):
             weight=self.weight)
 
         sofm_1 = algorithms.SOFM(std=1, **default_params)
-        sofm_1.train(input_data[:1], epochs=1)
+        sofm_1.train(X[:1], epochs=1)
         dist_1 = np.linalg.norm(sofm_1.weight[0, :] - sofm_1.weight[1, :])
 
         sofm_0 = algorithms.SOFM(std=0.1, **default_params)
-        sofm_0.train(input_data[:1], epochs=1)
+        sofm_0.train(X[:1], epochs=1)
         dist_0 = np.linalg.norm(sofm_0.weight[0, :] - sofm_0.weight[1, :])
 
         # Since SOFM-1 has bigger std than SOFM-0, two updated
@@ -591,7 +591,7 @@ class SOFMTestCase(BaseTestCase):
         self.assertLess(distance_bottom_right, distance_bottom_left)
 
     def test_sofm_storage(self):
-        input_data = np.random.random((100, 10))
+        X = np.random.random((100, 10))
         sofm = algorithms.SOFM(
             n_inputs=10,
             features_grid=(10, 10),
@@ -601,8 +601,8 @@ class SOFMTestCase(BaseTestCase):
             weight=np.random.random((10, 100))
         )
 
-        sofm.train(input_data, epochs=10)
-        self.assertPickledNetwork(sofm, input_data)
+        sofm.train(X, epochs=10)
+        self.assertPickledNetwork(sofm, X)
 
         parameters = sofm.get_params()
         self.assertIn('weight', parameters)
@@ -611,7 +611,7 @@ class SOFMTestCase(BaseTestCase):
 
 class SOFMParameterReductionTestCase(BaseTestCase):
     def test_sofm_step_reduction(self):
-        input_data = 4 * np.ones((1, 2))
+        X = 4 * np.ones((1, 2))
         default_params = dict(
             n_inputs=2,
             n_outputs=1,
@@ -619,27 +619,27 @@ class SOFMParameterReductionTestCase(BaseTestCase):
             weight=np.ones((2, 1)))
 
         sofm_1 = algorithms.SOFM(reduce_step_after=1, **default_params)
-        sofm_1.train(input_data, epochs=4)
-        dist_1 = np.linalg.norm(sofm_1.weight.T - input_data)
+        sofm_1.train(X, epochs=4)
+        dist_1 = np.linalg.norm(sofm_1.weight.T - X)
 
         sofm_2 = algorithms.SOFM(reduce_step_after=10, **default_params)
-        sofm_2.train(input_data, epochs=4)
-        dist_2 = np.linalg.norm(sofm_2.weight.T - input_data)
+        sofm_2.train(X, epochs=4)
+        dist_2 = np.linalg.norm(sofm_2.weight.T - X)
 
         # SOFM-2 suppose to be closer, becase learning rate decreases
         # slower with bigger reduction factor
         self.assertLess(dist_2, dist_1)
 
         sofm_3 = algorithms.SOFM(reduce_step_after=None, **default_params)
-        sofm_3.train(input_data, epochs=4)
-        dist_3 = np.linalg.norm(sofm_3.weight.T - input_data)
+        sofm_3.train(X, epochs=4)
+        dist_3 = np.linalg.norm(sofm_3.weight.T - X)
 
         # SOFM-3 doesn't have any step reduction, so it
         # converges even faster than SOFM-2
         self.assertLess(dist_3, dist_2)
 
     def test_sofm_std_reduction(self):
-        input_data = 4 * np.ones((1, 2))
+        X = 4 * np.ones((1, 2))
         default_params = dict(
             n_inputs=2,
             n_outputs=3,
@@ -651,27 +651,27 @@ class SOFMParameterReductionTestCase(BaseTestCase):
             reduce_radius_after=None)
 
         sofm_1 = algorithms.SOFM(reduce_std_after=1, **default_params)
-        sofm_1.train(input_data, epochs=4)
-        dist_1 = np.linalg.norm(sofm_1.weight.T - input_data)
+        sofm_1.train(X, epochs=4)
+        dist_1 = np.linalg.norm(sofm_1.weight.T - X)
 
         sofm_2 = algorithms.SOFM(reduce_std_after=10, **default_params)
-        sofm_2.train(input_data, epochs=4)
-        dist_2 = np.linalg.norm(sofm_2.weight.T - input_data)
+        sofm_2.train(X, epochs=4)
+        dist_2 = np.linalg.norm(sofm_2.weight.T - X)
 
         # SOFM-2 suppose to be closer, becase std decreases
         # slower with bigger reduction factor
         self.assertLess(dist_2, dist_1)
 
         sofm_3 = algorithms.SOFM(reduce_std_after=None, **default_params)
-        sofm_3.train(input_data, epochs=4)
-        dist_3 = np.linalg.norm(sofm_3.weight.T - input_data)
+        sofm_3.train(X, epochs=4)
+        dist_3 = np.linalg.norm(sofm_3.weight.T - X)
 
         # SOFM-3 doesn't have any std reduction, so it
         # converges even faster than SOFM-2
         self.assertLess(dist_3, dist_2)
 
     def test_sofm_learning_radius_reduction(self):
-        input_data = 4 * np.ones((1, 2))
+        X = 4 * np.ones((1, 2))
         default_params = dict(
             n_inputs=2,
             n_outputs=3,
@@ -679,27 +679,27 @@ class SOFMParameterReductionTestCase(BaseTestCase):
             learning_radius=1)
 
         sofm_1 = algorithms.SOFM(reduce_radius_after=1, **default_params)
-        sofm_1.train(input_data, epochs=4)
-        dist_1 = np.linalg.norm(sofm_1.weight.T - input_data)
+        sofm_1.train(X, epochs=4)
+        dist_1 = np.linalg.norm(sofm_1.weight.T - X)
 
         sofm_2 = algorithms.SOFM(reduce_radius_after=3, **default_params)
-        sofm_2.train(input_data, epochs=4)
-        dist_2 = np.linalg.norm(sofm_2.weight.T - input_data)
+        sofm_2.train(X, epochs=4)
+        dist_2 = np.linalg.norm(sofm_2.weight.T - X)
 
         # SOFM-2 suppose to be closer, becase learning radius
         # decreases slower with bigger reduction factor
         self.assertLess(dist_2, dist_1)
 
         sofm_3 = algorithms.SOFM(reduce_radius_after=None, **default_params)
-        sofm_3.train(input_data, epochs=4)
-        dist_3 = np.linalg.norm(sofm_3.weight.T - input_data)
+        sofm_3.train(X, epochs=4)
+        dist_3 = np.linalg.norm(sofm_3.weight.T - X)
 
         # SOFM-3 doesn't have any learning radius reduction, so it
         # converges even faster than SOFM-2
         self.assertLess(dist_3, dist_2)
 
     def test_sofm_custom_parameter_reduction(self):
-        input_data = 4 * np.ones((1, 2))
+        X = 4 * np.ones((1, 2))
         default_params = dict(
             n_inputs=2,
             n_outputs=3,
@@ -714,8 +714,8 @@ class SOFMParameterReductionTestCase(BaseTestCase):
             reduce_std_after=None)
 
         sofm_1 = algorithms.SOFM(**default_params)
-        sofm_1.train(input_data, epochs=4)
-        dist_1 = np.linalg.norm(sofm_1.weight.T - input_data)
+        sofm_1.train(X, epochs=4)
+        dist_1 = np.linalg.norm(sofm_1.weight.T - X)
 
         def on_epoch_end_update_radius(network):
             if network.last_epoch % 2 == 0:
@@ -740,8 +740,8 @@ class SOFMParameterReductionTestCase(BaseTestCase):
                 epoch_end_signal=on_epoch_end,
                 **default_params
             )
-            sofm_2.train(input_data, epochs=4)
-            dist_2 = np.linalg.norm(sofm_2.weight.T - input_data)
+            sofm_2.train(X, epochs=4)
+            dist_2 = np.linalg.norm(sofm_2.weight.T - X)
 
             self.assertLess(dist_1, dist_2,
                             msg="Test case name: {}".format(testcase_name))
@@ -759,12 +759,12 @@ class SOFMWeightInitializationTestCase(BaseTestCase):
             )
 
     def test_sample_data_function(self):
-        input_data = np.random.random((10, 4))
-        sampled_weights = sofm.sample_data(input_data, features_grid=(7, 1))
+        X = np.random.random((10, 4))
+        sampled_weights = sofm.sample_data(X, features_grid=(7, 1))
         self.assertEqual(sampled_weights.shape, (4, 7))
 
-        input_data = np.random.random((3, 4))
-        sampled_weights = sofm.sample_data(input_data, features_grid=(7, 1))
+        X = np.random.random((3, 4))
+        sampled_weights = sofm.sample_data(X, features_grid=(7, 1))
         self.assertEqual(sampled_weights.shape, (4, 7))
 
     def test_sofm_init_during_the_training(self):
@@ -774,10 +774,10 @@ class SOFMWeightInitializationTestCase(BaseTestCase):
             weight='sample_from_data',
         )
 
-        input_data = np.random.random((10, 4))
+        X = np.random.random((10, 4))
         self.assertTrue(callable(sofm.weight))
 
-        sofm.train(input_data, epochs=1)
+        sofm.train(X, epochs=1)
         self.assertFalse(callable(sofm.weight))
 
     def test_sample_data_weight_init_in_sofm(self):
@@ -787,10 +787,10 @@ class SOFMWeightInitializationTestCase(BaseTestCase):
             weight='sample_from_data',
         )
 
-        input_data = np.random.random((10, 4))
+        X = np.random.random((10, 4))
         self.assertTrue(callable(sofm.weight))
 
-        sofm.init_weights(input_data)
+        sofm.init_weights(X)
         self.assertFalse(callable(sofm.weight))
         self.assertEqual(sofm.weight.shape, (4, 7))
 
@@ -801,10 +801,10 @@ class SOFMWeightInitializationTestCase(BaseTestCase):
             weight='init_pca',
         )
 
-        input_data = np.random.random((100, 4))
+        X = np.random.random((100, 4))
         self.assertTrue(callable(sofm.weight))
 
-        sofm.init_weights(input_data)
+        sofm.init_weights(X)
         self.assertFalse(callable(sofm.weight))
         self.assertEqual(sofm.weight.shape, (4, 9))
 
@@ -834,10 +834,10 @@ class SOFMWeightInitializationTestCase(BaseTestCase):
             distance='cos',
             weight='sample_from_data'
         )
-        sofm.init_weights(input_data)
+        sofm.init_weights(X)
 
         with self.assertRaises(WeightInitializationError):
-            sofm.init_weights(input_data)
+            sofm.init_weights(X)
 
     def test_sofm_double_initialization_exception(self):
         sofm = algorithms.SOFM(
@@ -846,7 +846,7 @@ class SOFMWeightInitializationTestCase(BaseTestCase):
             verbose=False,
             weight='sample_from_data'
         )
-        sofm.init_weights(input_data)
+        sofm.init_weights(X)
 
         with self.assertRaises(WeightInitializationError):
-            sofm.init_weights(input_data)
+            sofm.init_weights(X)

@@ -8,7 +8,7 @@ environment.reproducible()
 plt.style.use('ggplot')
 
 
-input_data = np.array([
+X = np.array([
     [0.1961, 0.9806],
     [-0.1961, 0.9806],
     [0.9806, 0.1961],
@@ -30,8 +30,8 @@ sofmnet = algorithms.SOFM(
     features_grid=(3, 1),
 )
 
-plt.plot(input_data.T[0:1, :], input_data.T[1:2, :], 'ko')
-sofmnet.train(input_data, epochs=100)
+plt.plot(X.T[0:1, :], X.T[1:2, :], 'ko')
+sofmnet.train(X, epochs=100)
 
 print("> Start plotting")
 plt.xlim(-1, 1.2)
@@ -40,5 +40,5 @@ plt.ylim(-1, 1.2)
 plt.plot(sofmnet.weight[0:1, :], sofmnet.weight[1:2, :], 'bx')
 plt.show()
 
-for data in input_data:
+for data in X:
     print(sofmnet.predict(np.reshape(data, (2, 1)).T))

@@ -7,7 +7,7 @@ from numpy.core.umath_tests import inner1d
 __all__ = ('pdf_between_data',)
 
 
-def pdf_between_data(train_data, input_data, std):
+def pdf_between_data(train_data, X, std):
     """
     Compute PDF between two samples.
 
@@ -16,7 +16,7 @@ def pdf_between_data(train_data, input_data, std):
     train_data : array
         Training dataset.
 
-    input_data : array
+    X : array
         Input dataset
 
     std : float
@@ -28,13 +28,13 @@ def pdf_between_data(train_data, input_data, std):
     array-like
     """
     n_train_samples = train_data.shape[0]
-    n_samples = input_data.shape[0]
+    n_samples = X.shape[0]
 
     results = np.zeros((n_train_samples, n_samples))
     variance = std ** 2
     const = std * math.sqrt(2 * math.pi)
 
-    for i, input_row in enumerate(input_data):
+    for i, input_row in enumerate(X):
         inputs = np.tile(input_row, (n_train_samples, 1))
         class_difference = (train_data - inputs)
         total_distance = inner1d(class_difference, class_difference)

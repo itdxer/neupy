@@ -134,11 +134,11 @@ class BaseOptimizer(BaseNetwork):
     -------
     {BaseSkeleton.predict}
 
-    train(input_train, target_train, input_test=None, target_test=None,\
+    train(X_train, y_train, X_test=None, y_test=None,\
     epochs=100, epsilon=None)
         Train network. You can control network's training procedure
         with ``epochs`` and ``epsilon`` parameters.
-        The ``input_test`` and ``target_test`` should be presented
+        The ``X_test`` and ``y_test`` should be presented
         both in case of you need to validate network's training
         after each iteration.
 
@@ -290,13 +290,13 @@ class BaseOptimizer(BaseNetwork):
             )
         )
 
-    def format_input_data(self, input_data):
+    def format_input_data(self, X):
         """
         Input data format is depend on the input layer
         structure.
         Parameters
         ----------
-        input_data : array-like or None
+        X : array-like or None
         Returns
         -------
         array-like or None
@@ -304,24 +304,24 @@ class BaseOptimizer(BaseNetwork):
         """
         input_layers = self.connection.input_layers
 
-        if not isinstance(input_data, (tuple, list)):
+        if not isinstance(X, (tuple, list)):
             input_layer = input_layers[0]
-            return format_data(input_data)
+            return format_data(X)
 
         formated_data = []
-        for input_to_layer, input_layer in zip(input_data, input_layers):
+        for input_to_layer, input_layer in zip(X, input_layers):
             formated_data.append(format_data(input_to_layer))
 
         return tuple(formated_data)
 
-    def score(self, input_data, target_data):
+    def score(self, X, y):
         """
         Calculate prediction accuracy for input data.
 
         Parameters
         ----------
-        input_data : array-like
-        target_data : array-like
+        X : array-like
+        y : array-like
 
         Returns
         -------
@@ -329,64 +329,64 @@ class BaseOptimizer(BaseNetwork):
             Prediction error.
         """
         return self.methods.score(*as_tuple(
-            self.format_input_data(input_data), format_data(target_data)))
+            self.format_input_data(X), format_data(y)))
 
-    def predict(self, input_data):
+    def predict(self, X):
         """
         Return prediction results for the input data.
 
         Parameters
         ----------
-        input_data : array-like
+        X : array-like
 
         Returns
         -------
         array-like
         """
-        input_data = self.format_input_data(input_data)
-        return self.methods.predict(*as_tuple(input_data))
+        X = self.format_input_data(X)
+        return self.methods.predict(*as_tuple(X))
 
-    def train(self, input_train, target_train, input_test=None,
-              target_test=None, *args, **kwargs):
+    def train(self, X_train, y_train, X_test=None,
+              y_test=None, *args, **kwargs):
         """
         Train neural network.
         """
         is_test_data_partialy_missed = (
-            (input_test is None and target_test is not None) or
-            (input_test is not None and target_test is None)
+            (X_test is None and y_test is not None) or
+            (X_test is not None and y_test is None)
         )
 
         if is_test_data_partialy_missed:
             raise ValueError("Input or target test samples are missed. They "
                              "must be defined together or none of them.")
 
-        input_train = self.format_input_data(input_train)
-        target_train = format_data(target_train)
+        X_train = self.format_input_data(X_train)
+        y_train = format_data(y_train)
 
-        input_test = self.format_input_data(input_test)
-        target_test = format_data(target_test)
+        X_test = self.format_input_data(X_test)
+        y_test = format_data(y_test)
 
         return super(BaseOptimizer, self).train(
-            input_train=input_train, target_train=target_train,
-            input_test=input_test, target_test=target_test,
+            X_train=X_train, y_train=y_train,
+            X_test=X_test, y_test=y_test,
             *args, **kwargs
         )
 
-    def train_epoch(self, input_train, target_train):
+    def train_epoch(self, X_train, y_train):
         """
         Trains neural network over one epoch.
 
         Parameters
         ----------
-        input_data : array-like
-        target_data : array-like
+        X : array-like
+        y : array-like
 
         Returns
         -------
         float
             Prediction error.
         """
-        return self.methods.train_epoch(*as_tuple(input_train, target_train))
+        return self.methods.train_epoch(*as_tuple(X_train, y_train))
 
     def get_params(self, deep=False, with_connection=True):
         params = super(BaseOptimizer, self).get_params()
@@ -644,7 +644,7 @@ class MinibatchTrainingMixin(Configurable):
     """
     batch_size = BatchSizeProperty(default=128)
 
-    def apply_batches(self, function, input_data, arguments=(), description='',
+    def apply_batches(self, function, X, arguments=(), description='',
                       show_progressbar=None, show_error_output=False,
                       scalar_output=True):
         """
@@ -654,7 +654,7 @@ class MinibatchTrainingMixin(Configurable):
         ----------
         function : callable
 
-        input_data : array-like
+        X : array-like
             First argument to the function that can be divided
             into mini-batches.
 
@@ -684,9 +684,9 @@ class MinibatchTrainingMixin(Configurable):
             List of outputs from the function. Each output is an
             object that ``function`` returned.
         """
-        arguments = as_tuple(input_data, arguments)
+        arguments = as_tuple(X, arguments)
 
-        if cannot_divide_into_batches(input_data, self.batch_size):
+        if cannot_divide_into_batches(X, self.batch_size):
             output = function(*arguments)
             if scalar_output:
                 output = np.atleast_1d(output).item(0)
@@ -707,13 +707,13 @@ class MinibatchTrainingMixin(Configurable):
         )
 
 
-def count_samples(input_data):
+def count_samples(X):
     """
     Count number of samples in the input data
 
     Parameters
     ----------
-    input_data : array-like or list/tuple of array-like objects
+    X : array-like or list/tuple of array-like objects
         Input data to the network
 
     Returns
@@ -721,9 +721,9 @@ def count_samples(input_data):
     int
         Number of samples in the input data.
     """
-    if isinstance(input_data, (list, tuple)):
-        return len(input_data[0])
-    return len(input_data)
+    if isinstance(X, (list, tuple)):
+        return len(X[0])
+    return len(X)
 
 
 class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
@@ -757,16 +757,16 @@ class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
     >>> mgdnet = algorithms.GradientDescent(network, batch_size=1)
     >>> mgdnet.train(x_train, y_train)
     """
-    def train_epoch(self, input_train, target_train):
+    def train_epoch(self, X_train, y_train):
         """
         Train one epoch.
 
         Parameters
         ----------
-        input_train : array-like
+        X_train : array-like
             Training input dataset.
 
-        target_train : array-like
+        y_train : array-like
             Training target dataset.
 
         Returns
@@ -776,57 +776,57 @@ class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
         """
         errors = self.apply_batches(
             function=self.methods.train_epoch,
-            input_data=input_train,
-            arguments=as_tuple(target_train),
+            X=X_train,
+            arguments=as_tuple(y_train),
 
             description='Training batches',
             show_error_output=True,
         )
         return average_batch_errors(
             errors,
-            n_samples=count_samples(input_train),
+            n_samples=count_samples(X_train),
             batch_size=self.batch_size,
         )
 
-    def score(self, input_data, target_data):
+    def score(self, X, y):
         """
         Check the prediction error for the specified input samples
         and their targets.
 
         Parameters
         ----------
-        input_data : array-like
-        target_data : array-like
+        X : array-like
+        y : array-like
 
         Returns
         -------
         float
             Prediction error.
         """
-        input_data = self.format_input_data(input_data)
-        target_data = format_data(target_data)
+        X = self.format_input_data(X)
+        y = format_data(y)
 
         errors = self.apply_batches(
             function=self.methods.score,
-            input_data=input_data,
-            arguments=as_tuple(target_data),
+            X=X,
+            arguments=as_tuple(y),
 
             description='Validation batches',
             show_error_output=True,
         )
         return average_batch_errors(
             errors,
-            n_samples=count_samples(input_data),
+            n_samples=count_samples(X),
             batch_size=self.batch_size,
         )
 
-    def predict(self, input_data):
+    def predict(self, X):
         """
         Makes a raw prediction.
 
         Parameters
         ----------
-        input_data : array-like
+        X : array-like
 
         Returns
         -------
@@ -834,7 +834,7 @@ class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
         """
         outputs = self.apply_batches(
             function=self.methods.predict,
-            input_data=input_data,
+            X=X,
 
             description='Prediction batches',
             show_progressbar=True,

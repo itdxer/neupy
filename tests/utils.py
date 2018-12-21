@@ -14,7 +14,7 @@ from neupy import algorithms, layers, environment, init
 from neupy.utils import asfloat
 from neupy.storage import save_dict, load_dict
 
-from data import xor_input_train, xor_target_train
+from data import xor_x_train, xor_y_train
 
 
 @contextmanager
@@ -192,7 +192,7 @@ def reproducible_network_train(seed=0, epochs=500, **additional_params):
         batch_size='all',
         **additional_params
     )
-    network.train(xor_input_train, xor_target_train, epochs=epochs)
+    network.train(xor_x_train, xor_y_train, epochs=epochs)
     return network
 
 

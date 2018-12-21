@@ -68,11 +68,11 @@ class BaseTestCase(unittest.TestCase):
         elif 'epsilon' in train_args and 'epsilon' not in train_kwargs:
             train_kwargs['epsilon'] = 0.1
 
-        for i, input_data in enumerate(input_vectors, start=1):
+        for i, X in enumerate(input_vectors, start=1):
             if target is None:
-                network.train(input_data, **train_kwargs)
+                network.train(X, **train_kwargs)
             else:
-                network.train(*input_data, **train_kwargs)
+                network.train(*X, **train_kwargs)
 
     def assertInvalidVectorPred(self, network, input_vector, target,
                                 decimal=5, is_feature1d=True):
@@ -87,12 +87,12 @@ class BaseTestCase(unittest.TestCase):
             np.testing.assert_array_almost_equal(
                 predicted_vector, target, decimal=decimal)
 
-    def assertPickledNetwork(self, network, input_data):
+    def assertPickledNetwork(self, network, X):
         stored_network = pickle.dumps(network)
         loaded_network = pickle.loads(stored_network)
 
-        network_prediction = network.predict(input_data)
-        loaded_network_prediction = loaded_network.predict(input_data)
+        network_prediction = network.predict(X)
+        loaded_network_prediction = loaded_network.predict(X)
 
         np.testing.assert_array_almost_equal(
             loaded_network_prediction, network_prediction)

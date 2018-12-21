@@ -5,7 +5,7 @@ from neupy import algorithms
 from neupy.layers import Input, Sigmoid
 from neupy import init
 
-from data import simple_input_train, simple_target_train
+from data import simple_x_train, simple_y_train
 from utils import compare_networks
 from base import BaseTestCase
 
@@ -26,7 +26,7 @@ class RPROPTestCase(BaseTestCase):
             verbose=False
         )
 
-        nw.train(simple_input_train, simple_target_train, epochs=100)
+        nw.train(simple_x_train, simple_y_train, epochs=100)
         self.assertGreater(1e-4, nw.training_errors[-1])
 
     def test_compare_bp_and_rprop(self):
@@ -35,7 +35,7 @@ class RPROPTestCase(BaseTestCase):
             partial(algorithms.GradientDescent, batch_size='all'),
             partial(algorithms.RPROP, maxstep=0.1),
             # Test data
-            (simple_input_train, simple_target_train),
+            (simple_x_train, simple_y_train),
             # Network configurations
             connection=self.connection,
             step=0.1,
@@ -73,12 +73,12 @@ class RPROPTestCase(BaseTestCase):
         ]
 
         nw = algorithms.IRPROPPlus(copy.deepcopy(connection), **options)
-        nw.train(simple_input_train, simple_target_train, epochs=100)
+        nw.train(simple_x_train, simple_y_train, epochs=100)
         irprop_plus_error = nw.training_errors[-1]
         self.assertGreater(1e-4, nw.training_errors[-1])
 
         nw = algorithms.RPROP(copy.deepcopy(connection), **options)
-        nw.train(simple_input_train, simple_target_train, epochs=100)
+        nw.train(simple_x_train, simple_y_train, epochs=100)
         rprop_error = nw.training_errors[-1]
         self.assertGreater(rprop_error, irprop_plus_error)
 

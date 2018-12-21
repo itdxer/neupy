@@ -10,7 +10,7 @@ from neupy import algorithms, layers, environment
 
 environment.reproducible()
 
-input_data = np.array([
+X = np.array([
     [0.9, 0.3],
     [0.5, 0.3],
     [0.2, 0.1],
@@ -18,7 +18,7 @@ input_data = np.array([
     [0.1, 0.8],
     [0.1, 0.9],
 ])
-target_data = np.array([
+y = np.array([
     [1],
     [1],
     [1],
@@ -95,8 +95,8 @@ def draw_quiver(network_class, name, color='r'):
     weights[:, 0:1] = default_weight.copy()
 
     current_epoch = 0
-    while bpn.score(input_data, target_data) > 0.125:
-        bpn.train(input_data, target_data, epochs=1)
+    while bpn.score(X, y) > 0.125:
+        bpn.train(X, y, epochs=1)
         current_epoch += 1
 
     weights = weights[:, :current_epoch + 1]
@@ -112,7 +112,7 @@ def target_function(network, x, y):
 
     session = tensorflow_session()
     weight.load(asfloat(new_weight), session)
-    return network.score(input_data, target_data)
+    return network.score(X, y)
 
 
 # Get data for countour plot

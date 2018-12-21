@@ -28,7 +28,7 @@ First of all we need to define simple dataset which contains 6 points with two f
 
     import numpy as np
 
-    input_data = np.array([
+    X = np.array([
         [0.9, 0.3],
         [0.5, 0.3],
         [0.2, 0.1],
@@ -36,7 +36,7 @@ First of all we need to define simple dataset which contains 6 points with two f
         [0.1, 0.8],
         [0.1, 0.9],
     ])
-    target_data = np.array([
+    y = np.array([
         [1],
         [1],
         [1],
@@ -51,7 +51,7 @@ So we can make a scatter plot and look closer at this dots.
 
     import matplotlib.pyplot as plt
 
-    plt.scatter(input_data[:, 0], input_data[:, 1], c=target_data, s=100)
+    plt.scatter(X[:, 0], X[:, 1], c=y, s=100)
     plt.show()
 
 .. figure:: images/visualize_gd/bp-vis-scatter.png

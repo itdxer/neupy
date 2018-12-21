@@ -87,13 +87,13 @@ class BasicStorageTestCase(BaseTestCase):
             )
 
     def test_basic_storage(self):
-        input_data = np.random.random((100, 2))
-        target_data = np.random.random(100) > 0.5
+        X = np.random.random((100, 2))
+        y = np.random.random(100) > 0.5
 
         # We keep verbose=True in order to see if value will
         # be True when we restore it from the pickle object.
         pnn = algorithms.PNN(std=0.123, verbose=True)
-        pnn.train(input_data, target_data)
+        pnn.train(X, y)
 
         stored_pnn = pickle.dumps(pnn)
         loaded_pnn = pickle.loads(stored_pnn)
@@ -115,8 +115,8 @@ class BasicStorageTestCase(BaseTestCase):
                 terminal_output = out.getvalue()
                 self.assertIn("Test message", terminal_output)
 
-        pnn_prediction = pnn.predict(input_data)
-        loaded_pnn_prediction = loaded_pnn.predict(input_data)
+        pnn_prediction = pnn.predict(X)
+        loaded_pnn_prediction = loaded_pnn.predict(X)
 
         np.testing.assert_array_almost_equal(
             loaded_pnn_prediction, pnn_prediction)
