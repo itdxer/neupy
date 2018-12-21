@@ -28,18 +28,6 @@ def neg_euclid_distance(X, weight):
     """
     Negative Euclidian distance between input
     data and weight.
-
-    Parameters
-    ----------
-    X : array-like
-        Input dataset.
-
-    weight : array-like
-        Neural network's weights.
-
-    Returns
-    -------
-    array-like
     """
     euclid_dist = norm(X.T - weight, axis=0)
     return -np.expand_dims(euclid_dist, axis=0)
@@ -47,19 +35,7 @@ def neg_euclid_distance(X, weight):
 
 def cosine_similarity(X, weight):
     """
-    Cosine similarity between input data and weight.
-
-    Parameters
-    ----------
-    X : array-like
-        Input dataset.
-
-    weight : array-like
-        Neural network's weights.
-
-    Returns
-    -------
-    array-like
+    Cosine similarity between input data and weight.]
     """
     norm_prod = norm(X) * norm(weight, axis=0)
     summated_data = np.dot(X, weight)
@@ -79,11 +55,7 @@ def decay_function(value, epoch, reduction_rate):
         Current training iteration (epoch).
 
     reduction_rate : int
-        The larger the value the slower decay
-
-    Returns
-    -------
-    float
+        The larger the value the slower decay]
     """
     return value / (1 + epoch / reduction_rate)
 
@@ -390,7 +362,6 @@ class SOFM(Kohonen):
             'sample_from_data': sample_data,
         }
     )
-
     features_grid = TypedListProperty(allow_none=True, default=None)
 
     DistanceParameter = namedtuple('DistanceParameter', 'name func')

@@ -11,7 +11,6 @@ from matplotlib import pyplot as plt
 from matplotlib.testing.compare import compare_images
 
 from neupy import algorithms, layers, utils, init
-from neupy.utils import asfloat
 from neupy.storage import save_dict, load_dict
 
 from data import xor_x_train, xor_y_train
@@ -99,14 +98,6 @@ def compare_networks(default_class, tested_class, data, **kwargs):
 def format_image_name(name):
     """
     Add to image name prefix that identify Python versions.
-
-    Parameters
-    ----------
-    name : str
-
-    Returns
-    -------
-    str
     """
     name_prefix = 'test_py3_' if six.PY3 else 'test_py2_'
     return name_prefix + name
@@ -149,13 +140,6 @@ def image_comparison(original_image_path, figsize=(10, 10), tol=1e-3):
         if error:
             raise AssertionError("Image comparison failed. \n"
                                  "Information: {}".format(error))
-
-
-class StepOutput(layers.BaseLayer):
-    def output(self, value):
-        if not self.training_state:
-            return 2 * asfloat(value < 0) - 1
-        return value
 
 
 def reproducible_network_train(seed=0, epochs=500, **additional_params):
