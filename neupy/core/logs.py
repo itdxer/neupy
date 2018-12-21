@@ -1,14 +1,62 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, unicode_literals
 
+import os
 import sys
 
 from .config import Configurable
 from .properties import BaseProperty
-from . import terminal
 
 
 __all__ = ('Verbose',)
+
+
+def is_color_supported():
+    """
+    Returns ``True`` if the running system's terminal supports
+    color, and ``False`` otherwise.
+
+    Notes
+    -----
+    Code from Djano: https://github.com/django/django/blob/\
+    master/django/core/management/color.py
+
+    Returns
+    -------
+    bool
+    """
+    supported_platform = (
+        sys.platform != 'Pocket PC' and
+        (sys.platform != 'win32' or 'ANSICON' in os.environ)
+    )
+
+    # isatty is not always implemented
+    is_a_tty = hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
+    is_support = (supported_platform and is_a_tty)
+    return is_support
+
+
+def create_style(ansi_code, use_bright_mode=False):
+    """
+    Create style based on ANSI code number.
+
+    Parameters
+    ----------
+    ansi_code : int
+        ANSI style code.
+
+    Returns
+    -------
+    function
+        Function that takes string argument and add ANDI styles
+        if its possible.
+    """
+    def style(text):
+        if is_color_supported():
+            mode = int(use_bright_mode)
+            return "\033[{};{}m{}\033[0m".format(mode, ansi_code, text)
+        return text
+    return style
 
 
 class TerminalLogger(object):
@@ -28,12 +76,15 @@ class TerminalLogger(object):
     stdout : object
         Writes output in terminal. Defaults to ``sys.stdout``.
     """
-
     colors = {
-        'gray': terminal.gray,
-        'green': terminal.green,
-        'red': terminal.red,
-        'white': terminal.white,
+        'gray': create_style(ansi_code=37),
+        'green': create_style(ansi_code=32),
+        'red': create_style(ansi_code=31),
+        'white': create_style(ansi_code=37),
+    }
+    styles = {
+        'bold': create_style(ansi_code=1, use_bright_mode=True),
+        'underline': create_style(ansi_code=4, use_bright_mode=True),
     }
 
     def __init__(self, enable=True):
@@ -90,9 +141,9 @@ class TerminalLogger(object):
         ----------
         text : str
         """
-        bold_text = terminal.bold(text)
-        message = "\n{text}\n".format(text=terminal.underline(bold_text))
-        self.write(message)
+        bold = self.styles['bold']
+        underline = self.styles['underline']
+        self.write("\n{text}\n".format(text=underline(bold(text))))
 
     def __reduce__(self):
         return (self.__class__, (self.enable,))
