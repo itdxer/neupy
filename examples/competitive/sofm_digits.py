@@ -4,10 +4,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from sklearn import datasets
-from neupy import algorithms, environment
+from neupy import algorithms, utils
 
 
-environment.reproducible()
+utils.reproducible()
 
 GRID_HEIGHT = 40
 GRID_WIDTH = 40

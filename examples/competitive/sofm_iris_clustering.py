@@ -1,11 +1,11 @@
 import numpy as np
 from sklearn import datasets
 import matplotlib.pyplot as plt
-from neupy import algorithms, environment
+from neupy import algorithms, utils
 
 
 plt.style.use('ggplot')
-environment.reproducible()
+utils.reproducible()
 
 
 if __name__ == '__main__':

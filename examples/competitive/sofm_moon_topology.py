@@ -1,12 +1,12 @@
 import matplotlib.pyplot as plt
 from sklearn import datasets
-from neupy import algorithms, environment
+from neupy import algorithms, utils
 
 from utils import plot_2d_grid
 
 
 plt.style.use('ggplot')
-environment.reproducible()
+utils.reproducible()
 
 
 if __name__ == '__main__':

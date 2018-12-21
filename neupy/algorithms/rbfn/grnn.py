@@ -58,9 +58,9 @@ class GRNN(BaseSkeleton):
     --------
     >>> from sklearn import datasets, preprocessing
     >>> from sklearn.model_selection import train_test_split
-    >>> from neupy import algorithms, estimators, environment
+    >>> from neupy import algorithms, estimators, utils
     >>>
-    >>> environment.reproducible()
+    >>> utils.reproducible()
     >>>
     >>> dataset = datasets.load_diabetes()
     >>> x_train, x_test, y_train, y_test = train_test_split(

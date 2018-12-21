@@ -22,8 +22,8 @@ But you can test code without it.
 
 .. code-block:: python
 
-    from neupy import environment
-    environment.reproducible()
+    from neupy import utils
+    utils.reproducible()
 
 If you can't reproduce with your version of Python or libraries you can install those ones that were used in this article:
 
@@ -382,7 +382,7 @@ Download script
 
 You can download and test a full script from the `github repository <https://github.com/itdxer/neupy/tree/master/examples/memory/password_recovery.py>`_.
 
-It doesn't contain a fixed ``environment.reproducible`` function, so you will get different outputs after each run.
+It doesn't contain a fixed ``utils.reproducible`` function, so you will get different outputs after each run.
 
 .. author:: default
 .. categories:: none

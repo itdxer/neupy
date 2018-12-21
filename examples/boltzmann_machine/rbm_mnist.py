@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from sklearn import datasets
-from neupy import algorithms, environment
+from neupy import algorithms, utils
 from neupy.utils import asfloat, tensorflow_session
 
 
@@ -21,7 +21,7 @@ def plot_rbm_components(rbm_network):
     plt.show()
 
 
-environment.reproducible()
+utils.reproducible()
 
 mnist = datasets.fetch_mldata('MNIST original')
 data = asfloat(mnist.data > 130)

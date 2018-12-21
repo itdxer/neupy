@@ -7,7 +7,6 @@ import numpy as np
 from sklearn import datasets
 from neupy import algorithms, layers
 from neupy.exceptions import StopTraining
-from neupy.algorithms.utils import format_time
 
 from utils import catch_stdout
 from base import BaseTestCase
@@ -166,6 +165,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
                 epochs=3, epsilon=1e-5,
             )
             terminal_output = out.getvalue()
+
         self.assertEqual(1, terminal_output.count("Network didn't converge"))
 
         with catch_stdout() as out:
@@ -183,41 +183,3 @@ class NetworkPropertiesTestCase(BaseTestCase):
             terminal_output = out.getvalue()
 
         self.assertEqual(1, terminal_output.count("Network converged"))
-
-
-class NetworkRepresentationTestCase(BaseTestCase):
-    def test_format_time(self):
-        self.assertEqual("01:06:40", format_time(4000))
-        self.assertEqual("02:05", format_time(125))
-        self.assertEqual("45 sec", format_time(45))
-        self.assertEqual("100 ms", format_time(0.1))
-        self.assertEqual("10 μs", format_time(1e-5))
-        self.assertEqual("200 ns", format_time(2e-7))
-
-    def test_small_network_representation(self):
-        network = algorithms.GradientDescent(
-            layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1))
-        self.assertIn("Input(2) > Sigmoid(3) > Sigmoid(1)", str(network))
-
-    def test_big_network_representation(self):
-        network = algorithms.GradientDescent([
-            layers.Input(1),
-            layers.Sigmoid(1),
-            layers.Sigmoid(1),
-            layers.Sigmoid(1),
-            layers.Sigmoid(1),
-            layers.Sigmoid(1),
-        ])
-        self.assertIn("[... 6 layers ...]", str(network))
-
-    def test_network_representation_for_non_feedforward(self):
-        input_layer = layers.Input(10)
-        hidden_layer_1 = layers.Sigmoid(20)
-        hidden_layer_2 = layers.Sigmoid(20)
-        output_layer = layers.Concatenate()
-
-        connection = layers.join(input_layer, hidden_layer_1, output_layer)
-        connection = layers.join(input_layer, hidden_layer_2, output_layer)
-
-        network = algorithms.GradientDescent(connection)
-        self.assertIn("[... 4 layers ...]", str(network))

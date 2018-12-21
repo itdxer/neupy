@@ -55,10 +55,10 @@ class HessianDiagonal(BaseOptimizer):
     >>> import numpy as np
     >>> from sklearn.model_selection import train_test_split
     >>> from sklearn import datasets, preprocessing
-    >>> from neupy import algorithms, layers, environment
+    >>> from neupy import algorithms, layers, utils
     >>> from neupy.estimators import rmsle
     >>>
-    >>> environment.reproducible()
+    >>> utils.reproducible()
     >>>
     >>> dataset = datasets.load_diabetes()
     >>> data, target = dataset.data, dataset.target

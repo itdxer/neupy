@@ -1,13 +1,13 @@
 from itertools import product
 
 import matplotlib.pyplot as plt
-from neupy import algorithms, environment, init
+from neupy import algorithms, utils, init
 
 from utils import plot_2d_grid, make_circle, make_elipse, make_square
 
 
 plt.style.use('ggplot')
-environment.reproducible()
+utils.reproducible()
 
 
 if __name__ == '__main__':

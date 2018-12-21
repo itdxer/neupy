@@ -272,9 +272,9 @@ Let's import digits dataset from scikit-learn.
     import numpy as np
     from sklearn import datasets
     from sklearn.model_selection import train_test_split
-    from neupy import environment
+    from neupy import utils
 
-    environment.reproducible()
+    utils.reproducible()
 
     dataset = datasets.load_digits()
     n_samples = dataset.target.size

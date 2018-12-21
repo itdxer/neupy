@@ -3,13 +3,13 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets, preprocessing
-from neupy import algorithms, environment
+from neupy import algorithms, utils
 
 from utils import iter_neighbours
 
 
 plt.style.use('ggplot')
-environment.reproducible()
+utils.reproducible()
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--expanded-heatmap', action='store_true')

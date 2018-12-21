@@ -1,10 +1,10 @@
 import numpy as np
 from sklearn import datasets
 import matplotlib.pyplot as plt
-from neupy import algorithms, layers, environment, regularizers
+from neupy import algorithms, layers, utils, regularizers
 
 
-environment.reproducible()
+utils.reproducible()
 
 mnist = datasets.fetch_mldata('MNIST original')
 data = (mnist.data / 255.).astype(np.float32)

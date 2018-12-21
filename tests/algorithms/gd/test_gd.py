@@ -2,7 +2,7 @@ from functools import partial
 
 import numpy as np
 
-from neupy import algorithms, layers, environment
+from neupy import algorithms, layers, utils
 from neupy.algorithms.gd.base import apply_batches
 
 from utils import compare_networks
@@ -34,7 +34,7 @@ class BaseOptimizerTestCase(BaseTestCase):
             network.shuffle_data = 1
 
     def test_gd(self):
-        environment.reproducible()
+        utils.reproducible()
         x_train, _, y_train, _ = simple_classification()
 
         network = algorithms.BaseOptimizer(
@@ -112,3 +112,19 @@ class GDAdditionalFunctionsTestCase(BaseTestCase):
                 arguments=[np.random.random((36, 1))],
                 batch_size=12,
             )
+
+    def test_small_network_representation(self):
+        network = algorithms.GradientDescent(
+            layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1))
+        self.assertIn("Input(2) > Sigmoid(3) > Sigmoid(1)", str(network))
+
+    def test_large_network_representation(self):
+        network = algorithms.GradientDescent([
+            layers.Input(1),
+            layers.Sigmoid(1),
+            layers.Sigmoid(1),
+            layers.Sigmoid(1),
+            layers.Sigmoid(1),
+            layers.Sigmoid(1),
+        ])
+        self.assertIn("[... 6 layers ...]", str(network))

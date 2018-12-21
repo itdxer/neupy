@@ -2,10 +2,10 @@ import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn import datasets
-from neupy import algorithms, environment
+from neupy import algorithms, utils
 
 
-environment.reproducible()
+utils.reproducible()
 
 
 def plot_scattermatrix(data, target):

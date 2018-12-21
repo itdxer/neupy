@@ -1,3 +1,4 @@
+import numpy as np
 import tensorflow as tf
 
 from neupy.core.config import Configurable
@@ -11,10 +12,7 @@ from neupy.layers.utils import (
     count_parameters, iter_parameters,
     find_variables,
 )
-from neupy.utils import (
-    asfloat, dot, outer, get_variable_size,
-    function_name_scope,
-)
+from neupy.utils import asfloat, dot, outer, function_name_scope
 from .base import BaseOptimizer
 
 
@@ -60,7 +58,8 @@ class WolfeLineSearchForStep(Configurable):
             # with tensorflow variables and get output from the network
             start_pos = 0
             for layer, attrname, param in layers_and_parameters:
-                end_pos = start_pos + get_variable_size(param)
+                n_param_values = int(np.prod(param.shape))
+                end_pos = start_pos + n_param_values
                 updated_param_value = tf.reshape(
                     updated_params[start_pos:end_pos],
                     param.shape

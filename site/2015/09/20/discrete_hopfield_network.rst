@@ -657,8 +657,8 @@ This problem we can solve using the asynchronous network approach. We don't nece
 
 .. code-block:: python
 
-    >>> from neupy import environment
-    >>> environment.reproducible()
+    >>> from neupy import utils
+    >>> utils.reproducible()
     >>>
     >>> dhnet.mode = 'async'
     >>> dhnet.n_times = 400

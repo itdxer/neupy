@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from neupy import algorithms, environment
+from neupy import algorithms, utils
 
 
-environment.reproducible()
+utils.reproducible()
 plt.style.use('ggplot')
 
 X_train = np.reshape(np.linspace(0, 2 * np.pi, 100), (100, 1))

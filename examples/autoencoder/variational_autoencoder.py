@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from sklearn import model_selection, datasets
 
-from neupy import layers, environment, algorithms
+from neupy import layers, utils, algorithms
 from neupy.exceptions import LayerConnectionError
 
 
-environment.reproducible()
+utils.reproducible()
 
 
 def load_data():
