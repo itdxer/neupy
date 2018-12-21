@@ -13,33 +13,11 @@ class Instar(BaseStepAssociative):
 
     Parameters
     ----------
-    {BaseAssociative.n_inputs}
-
-    {BaseAssociative.n_outputs}
-
-    {BaseStepAssociative.n_unconditioned}
-
-    {BaseAssociative.weight}
-
-    {BaseStepAssociative.bias}
-
-    {BaseNetwork.step}
-
-    {BaseNetwork.show_epoch}
-
-    {BaseNetwork.shuffle_data}
-
-    {BaseNetwork.epoch_end_signal}
-
-    {Verbose.verbose}
+    {BaseAssociative.Parameters}
 
     Methods
     -------
-    {BaseSkeleton.predict}
-
-    {BaseAssociative.train}
-
-    {BaseSkeleton.fit}
+    {BaseAssociative.Methods}
 
     Examples
     --------

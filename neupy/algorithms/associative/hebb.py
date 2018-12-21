@@ -7,9 +7,8 @@ __all__ = ('HebbRule',)
 
 class HebbRule(BaseStepAssociative):
     """
-    Hebbian Learning Neural Network is an unsupervised
-    learning technique. Network can learn associations from
-    the data.
+    Neural Network with Hebbian Learning. It's an unsupervised algorithm.
+    Network can learn associations from the data.
 
     Notes
     -----
@@ -26,33 +25,11 @@ class HebbRule(BaseStepAssociative):
         parameter network's weights will increase fast.
         Defaults to ``0.2``.
 
-    {BaseAssociative.n_inputs}
-
-    {BaseAssociative.n_outputs}
-
-    {BaseStepAssociative.n_unconditioned}
-
-    {BaseAssociative.weight}
-
-    {BaseStepAssociative.bias}
-
-    {BaseNetwork.step}
-
-    {BaseNetwork.show_epoch}
-
-    {BaseNetwork.shuffle_data}
-
-    {BaseNetwork.epoch_end_signal}
-
-    {Verbose.verbose}
+    {BaseStepAssociative.Parameters}
 
     Methods
     -------
-    {BaseSkeleton.predict}
-
-    {BaseAssociative.train}
-
-    {BaseSkeleton.fit}
+    {BaseStepAssociative.Methods}
 
     Examples
     --------
