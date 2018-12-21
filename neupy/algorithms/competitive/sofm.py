@@ -7,7 +7,7 @@ import numpy as np
 from numpy.linalg import norm
 
 from neupy import init
-from neupy.utils import as_tuple
+from neupy.utils import as_tuple, format_data
 from neupy.algorithms import Kohonen
 from neupy.exceptions import WeightInitializationError
 from neupy.algorithms.associative.base import BaseAssociative
@@ -468,7 +468,8 @@ class SOFM(Kohonen):
 
         is_pca_init = (
             isinstance(options.get('weight'), six.string_types) and
-            options.get('weight') == 'init_pca')
+            options.get('weight') == 'init_pca'
+        )
 
         self.initialized = False
         if not callable(self.weight):
@@ -484,7 +485,10 @@ class SOFM(Kohonen):
                 "grid. Grid type: {}".format(self.grid_type.name))
 
     def predict_raw(self, X):
-        X = self.format_input_data(X)
+        X = format_data(X, is_feature1d=(self.n_inputs == 1))
+
+        if X.ndim != 2:
+            raise ValueError("Only 2D inputs are allowed")
 
         n_samples = X.shape[0]
         output = np.zeros((n_samples, self.n_outputs))
@@ -550,7 +554,6 @@ class SOFM(Kohonen):
     def train(self, X_train, epochs=100):
         if not self.initialized:
             self.init_weights(X_train)
-
         super(SOFM, self).train(X_train, epochs=epochs)
 
     def train_epoch(self, X_train, y_train=None):
