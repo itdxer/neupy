@@ -40,7 +40,7 @@ class BAMTestCase(BaseTestCase):
             dbnet.weight = np.array([[0, 1], [1, 0]])
             dbnet.train(np.array([0, 1, 1]), np.array([0, 1]))
 
-    def test_bam_input_data_validation(self):
+    def test_bam_X_validation(self):
         dbnet = algorithms.DiscreteBAM()
         dbnet.weight = np.array([[0, 1], [1, 0]])
 

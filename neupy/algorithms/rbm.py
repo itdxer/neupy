@@ -76,8 +76,11 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
 
     Methods
     -------
-    train(input_train, epochs=100)
+    train(X_train, epochs=100)
         Trains network.
+
+    predict(X)
+        Alias to the ``visible_to_hidden`` method.
 
     {BaseSkeleton.fit}
 
@@ -336,31 +339,31 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
             name='rbm/gibbs-sampling',
         )
 
-    def train(self, input_train, input_test=None, epochs=100):
+    def train(self, X_train, X_test=None, epochs=100):
         """
         Train RBM.
 
         Parameters
         ----------
-        input_train : 1D or 2D array-like
-        input_test : 1D or 2D array-like or None
+        X_train : 1D or 2D array-like
+        X_test : 1D or 2D array-like or None
             Defaults to ``None``.
         epochs : int
             Number of training epochs. Defaults to ``100``.
         """
         return super(RBM, self).train(
-            input_train=input_train, target_train=None,
-            input_test=input_test, target_test=None,
+            X_train=X_train, y_train=None,
+            X_test=X_test, y_test=None,
             epochs=epochs, epsilon=None,
         )
 
-    def train_epoch(self, input_train, target_train=None):
+    def train_epoch(self, X_train, y_train=None):
         """
         Train one epoch.
 
         Parameters
         ----------
-        input_train : array-like (n_samples, n_features)
+        X_train : array-like (n_samples, n_features)
 
         Returns
         -------
@@ -368,14 +371,17 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
         """
         errors = self.apply_batches(
             function=self.weight_update_one_step,
-            input_data=input_train,
+            X=X_train,
 
             description='Training batches',
             show_error_output=True,
         )
 
-        n_samples = len(input_train)
+        n_samples = len(X_train)
         return average_batch_errors(errors, n_samples, self.batch_size)
+
+    def predict(self, X):
+        return self.visible_to_hidden(X)
 
     def visible_to_hidden(self, visible_input):
         """
@@ -395,7 +401,7 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
 
         outputs = self.apply_batches(
             function=self.visible_to_hidden_one_step,
-            input_data=visible_input,
+            X=visible_input,
 
             description='Hidden from visible batches',
             show_progressbar=True,
@@ -422,7 +428,7 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
 
         outputs = self.apply_batches(
             function=self.hidden_to_visible_one_step,
-            input_data=hidden_input,
+            X=hidden_input,
 
             description='Visible from hidden batches',
             show_progressbar=True,
@@ -431,13 +437,13 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
         )
         return np.concatenate(outputs, axis=0)
 
-    def score(self, input_data, target_data=None):
+    def score(self, X, y=None):
         """
         Compute the pseudo-likelihood of input samples.
 
         Parameters
         ----------
-        input_data : array-like
+        X : array-like
             Values of the visible layer
 
         Returns
@@ -446,18 +452,18 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
             Value of the pseudo-likelihood.
         """
         is_input_feature1d = (self.n_visible == 1)
-        input_data = format_data(input_data, is_input_feature1d)
+        X = format_data(X, is_input_feature1d)
 
         errors = self.apply_batches(
             function=self.score_func,
-            input_data=input_data,
+            X=X,
 
             description='Validation batches',
             show_error_output=True,
         )
         return average_batch_errors(
             errors,
-            n_samples=len(input_data),
+            n_samples=len(X),
             batch_size=self.batch_size,
         )
 

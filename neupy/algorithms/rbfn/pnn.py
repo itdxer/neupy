@@ -3,16 +3,15 @@ import numpy as np
 from neupy.utils import format_data
 from neupy.exceptions import NotTrained
 from neupy.core.properties import BoundedProperty
-from neupy.algorithms.base import BaseNetwork
+from neupy.algorithms.base import BaseSkeleton
 from neupy.algorithms.gd.base import MinibatchTrainingMixin
-from .learning import LazyLearningMixin
 from .utils import pdf_between_data
 
 
 __all__ = ('PNN',)
 
 
-class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
+class PNN(BaseSkeleton, MinibatchTrainingMixin):
     """
     Probabilistic Neural Network (PNN). Network applies only to
     the classification problems.
@@ -20,17 +19,18 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
     Notes
     -----
     - PNN Network is sensitive for cases when one input feature
-      has higher values than the other one. Before use it make
-      sure that input values are normalized and have similar scales.
+      has higher values than the other one. Input data has to be
+      normalized before training.
 
-    - Make sure that standard deviation in the same range as
-      input features. Check ``std`` parameter description for
-      more information.
+    - Standard deviation has to match the range of the input features
+      Check ``std`` parameter description for more information.
 
     - The bigger training dataset the slower prediction.
-      It's much more efficient for small datasets.
+      Algorithm is much more efficient for small datasets.
 
-    {LazyLearningMixin.Notes}
+    - Network uses lazy learning which mean that network doesn't
+      need iterative training. It just stores parameters
+      and use them to make a predictions.
 
     Parameters
     ----------
@@ -44,18 +44,21 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
 
     {MinibatchTrainingMixin.batch_size}
 
-    {BaseNetwork.verbose}
+    {Verbose.verbose}
 
     Methods
     -------
-    {LazyLearningMixin.train}
+    train(X_train, y_train, copy=True)
+        Network just stores all the information about the data and use
+        it for the prediction. Parameter ``copy`` copies input data
+        before saving it inside the network.
 
-        The ``target_train`` argument should be a vector or
+        The ``y_train`` argument should be a vector or
         matrix with one feature column.
 
     {BaseSkeleton.predict}
 
-    predict_proba(input_data)
+    predict_proba(X)
         Predict probabilities for each class.
 
     {BaseSkeleton.fit}
@@ -85,19 +88,22 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
     std = BoundedProperty(default=0.1, minval=0)
 
     def __init__(self, **options):
-        super(PNN, self).__init__(**options)
         self.classes = None
+        self.X_train = None
+        self.y_train = None
 
-    def train(self, input_train, target_train, copy=True):
+        super(PNN, self).__init__(**options)
+
+    def train(self, X_train, y_train, copy=True):
         """
         Trains network. PNN doesn't actually train, it just stores
         input data and use it for prediction.
 
         Parameters
         ----------
-        input_train : array-like (n_samples, n_features)
+        X_train : array-like (n_samples, n_features)
 
-        target_train : array-like (n_samples,)
+        y_train : array-like (n_samples,)
             Target variable should be vector or matrix
             with one feature column.
 
@@ -110,19 +116,24 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
         ValueError
             In case if something is wrong with input data.
         """
-        input_train = format_data(input_train, copy=copy)
-        target_train = format_data(target_train, copy=copy, make_float=False)
+        X_train = format_data(X_train, copy=copy)
+        y_train = format_data(y_train, copy=copy, make_float=False)
 
-        LazyLearningMixin.train(self, input_train, target_train)
+        self.X_train = X_train
+        self.y_train = y_train
 
-        n_target_features = target_train.shape[1]
+        if X_train.shape[0] != y_train.shape[0]:
+            raise ValueError("Number of samples in the input and target "
+                             "datasets are different")
+
+        n_target_features = y_train.shape[1]
         if n_target_features != 1:
             raise ValueError("Target value should be a vector or a "
                              "matrix with one column")
 
-        classes = self.classes = np.unique(target_train)
+        classes = self.classes = np.unique(y_train)
         n_classes = classes.size
-        n_samples = input_train.shape[0]
+        n_samples = X_train.shape[0]
 
         class_ratios = self.class_ratios = np.zeros(n_classes)
         row_comb_matrix = self.row_comb_matrix = np.zeros(
@@ -130,17 +141,17 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
 
         for i, class_name in enumerate(classes):
             class_name = classes[i]
-            class_val_positions = (target_train == class_name)
+            class_val_positions = (y_train == class_name)
             row_comb_matrix[i, class_val_positions.ravel()] = 1
             class_ratios[i] = np.sum(class_val_positions)
 
-    def predict_proba(self, input_data):
+    def predict_proba(self, X):
         """
         Predict probabilities for each class.
 
         Parameters
         ----------
-        input_data : array-like (n_samples, n_features)
+        X : array-like (n_samples, n_features)
 
         Returns
         -------
@@ -148,7 +159,7 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
         """
         outputs = self.apply_batches(
             function=self.predict_raw,
-            input_data=format_data(input_data),
+            X=format_data(X),
 
             description='Prediction batches',
             show_progressbar=True,
@@ -160,13 +171,13 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
         total_output_sum = raw_output.sum(axis=0).reshape((-1, 1))
         return raw_output.T / total_output_sum
 
-    def predict_raw(self, input_data):
+    def predict_raw(self, X):
         """
         Raw prediction.
 
         Parameters
         ----------
-        input_data : array-like (n_samples, n_features)
+        X : array-like (n_samples, n_features)
 
         Raises
         ------
@@ -184,25 +195,25 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
             raise NotTrained("Cannot make a prediction. Network "
                              "hasn't been trained yet")
 
-        input_data_size = input_data.shape[1]
-        train_data_size = self.input_train.shape[1]
+        X_size = X.shape[1]
+        train_data_size = self.X_train.shape[1]
 
-        if input_data_size != train_data_size:
+        if X_size != train_data_size:
             raise ValueError("Input data must contain {0} features, got "
-                             "{1}".format(train_data_size, input_data_size))
+                             "{1}".format(train_data_size, X_size))
 
         class_ratios = self.class_ratios.reshape((-1, 1))
-        pdf_outputs = pdf_between_data(self.input_train, input_data, self.std)
+        pdf_outputs = pdf_between_data(self.X_train, X, self.std)
 
         return np.dot(self.row_comb_matrix, pdf_outputs) / class_ratios
 
-    def predict(self, input_data):
+    def predict(self, X):
         """
         Predicts class from the input data.
 
         Parameters
         ----------
-        input_data : array-like (n_samples, n_features)
+        X : array-like (n_samples, n_features)
 
         Returns
         -------
@@ -210,7 +221,7 @@ class PNN(BaseNetwork, LazyLearningMixin, MinibatchTrainingMixin):
         """
         outputs = self.apply_batches(
             function=self.predict_raw,
-            input_data=format_data(input_data),
+            X=format_data(X),
 
             description='Prediction batches',
             show_progressbar=True,

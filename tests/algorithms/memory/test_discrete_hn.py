@@ -47,7 +47,7 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
         dhnet = algorithms.DiscreteHopfieldNetwork(check_limit=False)
         dhnet.train(data)
 
-    def test_input_data_validation(self):
+    def test_X_validation(self):
         dhnet = algorithms.DiscreteHopfieldNetwork()
         dhnet.weight = np.array([[0, 1], [1, 0]])
 

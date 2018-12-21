@@ -45,7 +45,7 @@ class Kohonen(BaseAssociative):
     >>>
     >>> environment.reproducible()
     >>>
-    >>> input_data = np.array([
+    >>> X = np.array([
     ...     [0.1961,  0.9806],
     ...     [-0.1961,  0.9806],
     ...     [0.9806,  0.1961],
@@ -60,8 +60,8 @@ class Kohonen(BaseAssociative):
     ...     step=0.5,
     ...     verbose=False
     ... )
-    >>> kohonet.train(input_data, epochs=100)
-    >>> kohonet.predict(input_data)
+    >>> kohonet.train(X, epochs=100)
+    >>> kohonet.predict(X)
     array([[ 0.,  1.,  0.],
            [ 0.,  1.,  0.],
            [ 1.,  0.,  0.],
@@ -69,23 +69,23 @@ class Kohonen(BaseAssociative):
            [ 0.,  0.,  1.],
            [ 0.,  0.,  1.]])
     """
-    def predict_raw(self, input_data):
-        input_data = self.format_input_data(input_data)
-        return input_data.dot(self.weight)
+    def predict_raw(self, X):
+        X = self.format_input_data(X)
+        return X.dot(self.weight)
 
-    def predict(self, input_data):
-        raw_output = self.predict_raw(input_data)
+    def predict(self, X):
+        raw_output = self.predict_raw(X)
         output = np.zeros(raw_output.shape, dtype=np.int0)
         max_args = raw_output.argmax(axis=1)
         output[range(raw_output.shape[0]), max_args] = 1
         return output
 
-    def train_epoch(self, input_train, target_train):
+    def train_epoch(self, X_train, y_train):
         step = self.step
         predict = self.predict
 
         error = 0
-        for input_row in input_train:
+        for input_row in X_train:
             input_row = np.reshape(input_row, (1, input_row.size))
             layer_output = predict(input_row)
 
@@ -95,4 +95,4 @@ class Kohonen(BaseAssociative):
 
             error += np.abs(distance).mean()
 
-        return error / len(input_train)
+        return error / len(X_train)

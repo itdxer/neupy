@@ -167,10 +167,10 @@ class LevenbergMarquardt(BaseOptimizer):
 
         return updates
 
-    def train_epoch(self, input_train, target_train):
+    def train_epoch(self, X_train, y_train):
         if self.training_errors:
             last_error = self.training_errors[-1]
             self.variables.last_error.load(last_error, tensorflow_session())
 
         return super(LevenbergMarquardt, self).train_epoch(
-            input_train, target_train)
+            X_train, y_train)

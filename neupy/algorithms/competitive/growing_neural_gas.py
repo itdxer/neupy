@@ -202,7 +202,7 @@ class GrowingNeuralGas(BaseNetwork):
 
     Methods
     -------
-    train(input_train, epochs=100)
+    train(X_train, epochs=100)
         Network learns topological structure of the data. Learned
         topolog is stored in the ``graph`` attribute.
 
@@ -296,21 +296,21 @@ class GrowingNeuralGas(BaseNetwork):
         self.n_updates = 0
         self.graph = NeuralGasGraph()
 
-    def format_input_data(self, input_data):
+    def format_input_data(self, X):
         is_feature1d = self.n_inputs == 1
-        input_data = format_data(input_data, is_feature1d)
+        X = format_data(X, is_feature1d)
 
-        if input_data.ndim != 2:
+        if X.ndim != 2:
             raise ValueError("Cannot make prediction, because input "
                              "data has more than 2 dimensions")
 
-        n_samples, n_features = input_data.shape
+        n_samples, n_features = X.shape
 
         if n_features != self.n_inputs:
             raise ValueError("Input data expected to have {} features, "
                              "but got {}".format(self.n_inputs, n_features))
 
-        return input_data
+        return X
 
     def initialize_nodes(self, data):
         self.graph = NeuralGasGraph()
@@ -318,18 +318,18 @@ class GrowingNeuralGas(BaseNetwork):
         for sample in sample_data_point(data, n=self.n_start_nodes):
             self.graph.add_node(NeuronNode(sample.reshape(1, -1)))
 
-    def train(self, input_train, epochs=100):
-        input_train = self.format_input_data(input_train)
+    def train(self, X_train, epochs=100):
+        X_train = self.format_input_data(X_train)
 
         if not self.graph.nodes:
-            self.initialize_nodes(input_train)
+            self.initialize_nodes(X_train)
 
         return super(GrowingNeuralGas, self).train(
-            input_train=input_train, target_train=None,
-            input_test=None, target_test=None,
+            X_train=X_train, y_train=None,
+            X_test=None, y_test=None,
             epochs=epochs, epsilon=None)
 
-    def train_epoch(self, input_train, target_train=None):
+    def train_epoch(self, X_train, y_train=None):
         graph = self.graph
         step = self.step
         neighbour_step = self.neighbour_step
@@ -345,11 +345,11 @@ class GrowingNeuralGas(BaseNetwork):
         # squared distances during the training.
         min_distance_for_update = np.square(self.min_distance_for_update)
 
-        n_samples = len(input_train)
+        n_samples = len(X_train)
         total_error = 0
         did_update = False
 
-        for sample in input_train:
+        for sample in X_train:
             nodes = graph.nodes
             weights = np.concatenate([node.weight for node in nodes])
 

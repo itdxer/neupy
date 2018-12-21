@@ -1,6 +1,6 @@
 from neupy import layers, algorithms
 
-from data import xor_input_train, xor_target_train
+from data import xor_x_train, xor_y_train
 from base import BaseTestCase
 
 
@@ -25,7 +25,7 @@ class SignalsTestCase(BaseTestCase):
             batch_size='all',
         )
 
-        network.train(xor_input_train, xor_target_train, epochs=epochs)
+        network.train(xor_x_train, xor_y_train, epochs=epochs)
         self.assertEqual(triggered_times, epochs)
 
     def test_train_end(self):
@@ -48,5 +48,5 @@ class SignalsTestCase(BaseTestCase):
             batch_size='all',
         )
 
-        network.train(xor_input_train, xor_target_train, epochs=epochs)
+        network.train(xor_x_train, xor_y_train, epochs=epochs)
         self.assertEqual(triggered_times, 1)

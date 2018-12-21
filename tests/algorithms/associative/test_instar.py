@@ -5,7 +5,7 @@ from neupy import algorithms
 from base import BaseTestCase
 
 
-input_data = np.array([
+X = np.array([
     [0, 1, -1, -1],
     [1, 1, -1, -1],
 ])
@@ -28,7 +28,7 @@ class HebbRuleTestCase(BaseTestCase):
             **self.default_properties
         )
 
-        inet.train(input_data, epochs=10)
+        inet.train(X, epochs=10)
 
         test_input = np.array([[0, 1, -1, -1]])
         self.assertEqual(inet.predict(test_input), 1)
@@ -39,7 +39,7 @@ class HebbRuleTestCase(BaseTestCase):
         )
 
     def test_multiple_outputs(self):
-        input_data = np.array([
+        X = np.array([
             [-0.1961, 0.9806],
         ])
         innet = algorithms.Instar(
@@ -53,7 +53,7 @@ class HebbRuleTestCase(BaseTestCase):
             step=0.5,
             verbose=False
         )
-        innet.train(input_data, epochs=1)
+        innet.train(X, epochs=1)
         np.testing.assert_array_almost_equal(
             innet.weight,
             np.array([
@@ -81,6 +81,6 @@ class HebbRuleTestCase(BaseTestCase):
             **self.default_properties
         )
 
-        inet.train(input_data, epochs=10)
+        inet.train(X, epochs=10)
         self.assertInvalidVectorPred(inet, np.array([0, 1, -1, -1]), 1,
                                      is_feature1d=False)

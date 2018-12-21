@@ -3,15 +3,61 @@ from __future__ import division, absolute_import, unicode_literals
 
 import time
 import types
+from abc import abstractmethod
 
 from neupy.utils import preformat_value, as_tuple
 from neupy.exceptions import StopTraining
-from neupy.core.base import BaseSkeleton
+from neupy.core.logs import Verbose
+from neupy.core.config import ConfigurableABC
 from neupy.core.properties import Property, NumberProperty, IntProperty
 from .utils import iter_until_converge, shuffle, format_time
 
 
-__all__ = ('BaseNetwork',)
+__all__ = ('BaseSkeleton', 'BaseNetwork')
+
+
+class BaseSkeleton(ConfigurableABC, Verbose):
+    """
+    Base class for neural network algorithms.
+
+    Methods
+    -------
+    fit(\*args, \*\*kwargs)
+        Alias to the ``train`` method.
+
+    predict(X)
+        Predicts output for the specified input.
+    """
+    @abstractmethod
+    def train(self, X, y):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def predict(self, X):
+        raise NotImplementedError()
+
+    def transform(self, X):
+        return self.predict(X)
+
+    def fit(self, X, y=None, *args, **kwargs):
+        self.train(X, y, *args, **kwargs)
+        return self
+
+    def repr_options(self):
+        options = []
+        for option_name in self.options:
+            option_value = getattr(self, option_name)
+            option_value = preformat_value(option_value)
+
+            option_repr = "{}={}".format(option_name, option_value)
+            options.append(option_repr)
+
+        return ', '.join(options)
+
+    def __repr__(self):
+        class_name = self.__class__.__name__
+        available_options = self.repr_options()
+        return "{}({})".format(class_name, available_options)
 
 
 class BaseNetwork(BaseSkeleton):
@@ -24,19 +70,16 @@ class BaseNetwork(BaseSkeleton):
         Learning rate, defaults to ``0.1``.
 
     show_epoch : int
-        This property controls how often the network will
-        display information about training.
-
-        It has to be defined as positive integer. It defines how offen
-        would you like to see summary output in terminal. For instance,
-        number ``100`` mean that network shows summary at 100th, 200th,
-        300th ... epochs.
+        This property controls how often the network will display
+        information about training. It has to be defined as positive
+        integer. For instance, number ``100`` mean that network shows
+        summary at 1st, 100th, 200th, 300th ... and last epochs.
 
         Defaults to ``1``.
 
     shuffle_data : bool
-        If it's ``True`` class shuffles all your training data before
-        training your network, defaults to ``True``.
+        If it's ``True`` than training data will be shuffled before
+        the training. Defaults to ``True``.
 
     epoch_end_signal : function
         Calls this function when train epoch finishes.
@@ -87,24 +130,10 @@ class BaseNetwork(BaseSkeleton):
 
         self.logs.newline()
 
-    def predict(self, input_data):
-        """
-        Return prediction results for the input data.
-
-        Parameters
-        ----------
-        input_data : array-like
-
-        Returns
-        -------
-        array-like
-        """
+    def train_epoch(self, X_train, y_train=None):
         raise NotImplementedError()
 
-    def train_epoch(self, input_train, target_train=None):
-        raise NotImplementedError()
-
-    def score(self, input_test, target_test):
+    def score(self, X_test, y_test):
         raise NotImplementedError()
 
     def print_last_error(self):
@@ -123,27 +152,9 @@ class BaseNetwork(BaseSkeleton):
 
         self.logs.write(base_message + ', '.join(messages))
 
-    def train(self, input_train, target_train=None, input_test=None,
-              target_test=None, epochs=100, epsilon=None):
-        """
-        Method train neural network.
+    def train(self, X_train, y_train=None, X_test=None,
+              y_test=None, epochs=100, epsilon=None):
 
-        Parameters
-        ----------
-        input_train : array-like
-
-        target_train : array-like or None
-
-        input_test : array-like or None
-
-        target_test : array-like or None
-
-        epochs : int
-            Defaults to ``100``.
-
-        epsilon : float or None
-            Defaults to ``None``.
-        """
         if epochs <= 0:
             raise ValueError("Number of epochs needs to be a positive number")
 
@@ -159,18 +170,18 @@ class BaseNetwork(BaseSkeleton):
             self.last_epoch = epoch
 
             if self.shuffle_data:
-                data = shuffle(*as_tuple(input_train, target_train))
-                input_train, target_train = data[:-1], data[-1]
+                data = shuffle(*as_tuple(X_train, y_train))
+                X_train, y_train = data[:-1], data[-1]
 
-                if len(input_train) == 1:
-                    input_train = input_train[0]
+                if len(X_train) == 1:
+                    X_train = X_train[0]
 
             try:
-                train_error = self.train_epoch(input_train, target_train)
+                train_error = self.train_epoch(X_train, y_train)
                 validation_error = None
 
-                if input_test is not None:
-                    validation_error = self.score(input_test, target_test)
+                if X_test is not None:
+                    validation_error = self.score(X_test, y_test)
 
                 self.training_errors.append(train_error)
                 self.validation_errors.append(validation_error)
@@ -184,10 +195,10 @@ class BaseNetwork(BaseSkeleton):
                     self.epoch_end_signal(self)
 
             except StopTraining as err:
-                self.logs.message(
-                    "TRAIN", "Epoch #{} was stopped. Message: {}".format(
-                        epoch, str(err))
-                )
+                message = "Epoch #{} was stopped. Message: {}".format(
+                    epoch, str(err))
+
+                self.logs.message("TRAIN", message)
                 break
 
         if epoch != last_epoch_shown:

@@ -24,14 +24,14 @@ from .neighbours import (find_step_scaler_on_rect_grid,
 __all__ = ('SOFM',)
 
 
-def neg_euclid_distance(input_data, weight):
+def neg_euclid_distance(X, weight):
     """
     Negative Euclidian distance between input
     data and weight.
 
     Parameters
     ----------
-    input_data : array-like
+    X : array-like
         Input dataset.
 
     weight : array-like
@@ -41,17 +41,17 @@ def neg_euclid_distance(input_data, weight):
     -------
     array-like
     """
-    euclid_dist = norm(input_data.T - weight, axis=0)
+    euclid_dist = norm(X.T - weight, axis=0)
     return -np.expand_dims(euclid_dist, axis=0)
 
 
-def cosine_similarity(input_data, weight):
+def cosine_similarity(X, weight):
     """
     Cosine similarity between input data and weight.
 
     Parameters
     ----------
-    input_data : array-like
+    X : array-like
         Input dataset.
 
     weight : array-like
@@ -61,8 +61,8 @@ def cosine_similarity(input_data, weight):
     -------
     array-like
     """
-    norm_prod = norm(input_data) * norm(weight, axis=0)
-    summated_data = np.dot(input_data, weight)
+    norm_prod = norm(X) * norm(weight, axis=0)
+    summated_data = np.dot(X, weight)
     cosine_dist = summated_data / norm_prod
     return np.reshape(cosine_dist, (1, weight.shape[1]))
 
@@ -483,13 +483,13 @@ class SOFM(Kohonen):
                 "Cannot apply PCA weight initialization for non-rectangular "
                 "grid. Grid type: {}".format(self.grid_type.name))
 
-    def predict_raw(self, input_data):
-        input_data = self.format_input_data(input_data)
+    def predict_raw(self, X):
+        X = self.format_input_data(X)
 
-        n_samples = input_data.shape[0]
+        n_samples = X.shape[0]
         output = np.zeros((n_samples, self.n_outputs))
 
-        for i, input_row in enumerate(input_data):
+        for i, input_row in enumerate(X):
             output[i, :] = self.distance.func(
                 input_row.reshape(1, -1), self.weight)
 
@@ -535,31 +535,31 @@ class SOFM(Kohonen):
         step_scaler = step_scaler.reshape(self.n_outputs)
         return index_y, step * step_scaler[index_y]
 
-    def init_weights(self, input_train):
+    def init_weights(self, X_train):
         if self.initialized:
             raise WeightInitializationError(
                 "Weights have been already initialized")
 
         weight_initializer = self.weight
-        self.weight = weight_initializer(input_train, self.features_grid)
+        self.weight = weight_initializer(X_train, self.features_grid)
         self.initialized = True
 
         if self.distance.name == 'cosine':
             self.weight /= np.linalg.norm(self.weight, axis=0)
 
-    def train(self, input_train, epochs=100):
+    def train(self, X_train, epochs=100):
         if not self.initialized:
-            self.init_weights(input_train)
+            self.init_weights(X_train)
 
-        super(SOFM, self).train(input_train, epochs=epochs)
+        super(SOFM, self).train(X_train, epochs=epochs)
 
-    def train_epoch(self, input_train, target_train=None):
+    def train_epoch(self, X_train, y_train=None):
         step = self.step
         predict = self.predict
         update_indexes = self.update_indexes
 
         error = 0
-        for input_row in input_train:
+        for input_row in X_train:
             input_row = np.reshape(input_row, (1, input_row.size))
             layer_output = predict(input_row)
 
@@ -573,4 +573,4 @@ class SOFM(Kohonen):
             self.weight[:, index_y] = updated_weights
             error += np.abs(distance).mean()
 
-        return error / len(input_train)
+        return error / len(X_train)

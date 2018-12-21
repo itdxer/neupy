@@ -50,10 +50,10 @@ class Oja(BaseNetwork):
 
     Methods
     -------
-    reconstruct(input_data)
+    reconstruct(X)
         Reconstruct original dataset from the minimized input.
 
-    train(input_data, epsilon=1e-2, epochs=100)
+    train(X, epsilon=1e-2, epochs=100)
         Trains algorithm based on the input dataset.
         For the dimensionality reduction input dataset
         assumes to be also a target.
@@ -100,16 +100,16 @@ class Oja(BaseNetwork):
     minimized_data_size = IntProperty(minval=1)
     weight = ParameterProperty(default=init.XavierNormal())
 
-    def train_epoch(self, input_data, target_train):
+    def train_epoch(self, X, y_train):
         weight = self.weight
 
-        minimized = np.dot(input_data, weight)
+        minimized = np.dot(X, weight)
         reconstruct = np.dot(minimized, weight.T)
-        error = input_data - reconstruct
+        error = X - reconstruct
 
         weight += self.step * np.dot(error.T, minimized)
 
-        mae = np.sum(np.abs(error)) / input_data.size
+        mae = np.sum(np.abs(error)) / X.size
 
         # Clean objects from the memory
         del minimized
@@ -118,9 +118,9 @@ class Oja(BaseNetwork):
 
         return mae
 
-    def train(self, input_data, epsilon=1e-2, epochs=100):
-        input_data = format_data(input_data)
-        n_input_features = input_data.shape[1]
+    def train(self, X, epsilon=1e-2, epochs=100):
+        X = format_data(X)
+        n_input_features = X.shape[1]
 
         if isinstance(self.weight, init.Initializer):
             weight_shape = (n_input_features, self.minimized_data_size)
@@ -134,27 +134,27 @@ class Oja(BaseNetwork):
                 )
             )
 
-        super(Oja, self).train(input_data, epsilon=epsilon, epochs=epochs)
+        super(Oja, self).train(X, epsilon=epsilon, epochs=epochs)
 
-    def reconstruct(self, input_data):
+    def reconstruct(self, X):
         if not isinstance(self.weight, np.ndarray):
             raise NotTrained("Network hasn't been trained yet")
 
-        input_data = format_data(input_data)
-        if input_data.shape[1] != self.minimized_data_size:
+        X = format_data(X)
+        if X.shape[1] != self.minimized_data_size:
             raise ValueError(
                 "Invalid input data feature space, expected "
                 "{}, got {}.".format(
-                    input_data.shape[1],
+                    X.shape[1],
                     self.minimized_data_size
                 )
             )
 
-        return np.dot(input_data, self.weight.T)
+        return np.dot(X, self.weight.T)
 
-    def predict(self, input_data):
+    def predict(self, X):
         if not isinstance(self.weight, np.ndarray):
             raise NotTrained("Network hasn't been trained yet")
 
-        input_data = format_data(input_data)
-        return np.dot(input_data, self.weight)
+        X = format_data(X)
+        return np.dot(X, self.weight)

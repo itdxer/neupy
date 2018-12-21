@@ -3,15 +3,14 @@ from numpy import dot
 from neupy.utils import format_data
 from neupy.exceptions import NotTrained
 from neupy.core.properties import BoundedProperty
-from neupy.algorithms.base import BaseNetwork
-from .learning import LazyLearningMixin
+from neupy.algorithms.base import BaseSkeleton
 from .utils import pdf_between_data
 
 
 __all__ = ('GRNN',)
 
 
-class GRNN(LazyLearningMixin, BaseNetwork):
+class GRNN(BaseSkeleton):
     """
     Generalized Regression Neural Network (GRNN). Network applies
     only to the regression problems.
@@ -30,22 +29,26 @@ class GRNN(LazyLearningMixin, BaseNetwork):
 
     Notes
     -----
-    - GRNN Network is sensitive for cases when one input feature has
-      higher values than the other one. Before use it make sure that
-      input values are normalized and have similar scales.
+    - GRNN Network is sensitive for cases when one input feature
+      has higher values than the other one. Input data has to be
+      normalized before training.
 
-    - Make sure that standard deviation in the same range as
-      input features. Check ``std`` parameter description for
-      more information.
+    - Standard deviation has to match the range of the input features
+      Check ``std`` parameter description for more information.
 
     - The bigger training dataset the slower prediction.
-      It's much more efficient for small datasets.
+      Algorithm is much more efficient for small datasets.
 
-    {LazyLearningMixin.Notes}
+    - Network uses lazy learning which mean that network doesn't
+      need iterative training. It just stores parameters
+      and use them to make a predictions.
 
     Methods
     -------
-    {LazyLearningMixin.train}
+    train(X_train, y_train, copy=True)
+        Network just stores all the information about the data and use
+        it for the prediction. Parameter ``copy`` copies input data
+        before saving it inside the network.
 
     {BaseSkeleton.predict}
 
@@ -75,16 +78,21 @@ class GRNN(LazyLearningMixin, BaseNetwork):
     """
     std = BoundedProperty(default=0.1, minval=0)
 
-    def train(self, input_train, target_train, copy=True):
+    def __init__(self, **options):
+        self.X_train = None
+        self.y_train = None
+        super(GRNN, self).__init__(**options)
+
+    def train(self, X_train, y_train, copy=True):
         """
         Trains network. PNN doesn't actually train, it just stores
         input data and use it for prediction.
 
         Parameters
         ----------
-        input_train : array-like (n_samples, n_features)
+        X_train : array-like (n_samples, n_features)
 
-        target_train : array-like (n_samples,)
+        y_train : array-like (n_samples,)
             Target variable should be vector or matrix
             with one feature column.
 
@@ -97,22 +105,27 @@ class GRNN(LazyLearningMixin, BaseNetwork):
         ValueError
             In case if something is wrong with input data.
         """
-        input_train = format_data(input_train, copy=copy)
-        target_train = format_data(target_train, copy=copy)
+        X_train = format_data(X_train, copy=copy)
+        y_train = format_data(y_train, copy=copy)
 
-        n_target_features = target_train.shape[1]
+        n_target_features = y_train.shape[1]
         if n_target_features != 1:
             raise ValueError("Target value must be one dimensional array")
 
-        LazyLearningMixin.train(self, input_train, target_train)
+        self.X_train = X_train
+        self.y_train = y_train
 
-    def predict(self, input_data):
+        if X_train.shape[0] != y_train.shape[0]:
+            raise ValueError("Number of samples in the input and target "
+                             "datasets are different")
+
+    def predict(self, X):
         """
         Make a prediction from the input data.
 
         Parameters
         ----------
-        input_data : array-like (n_samples, n_features)
+        X : array-like (n_samples, n_features)
 
         Raises
         ------
@@ -123,18 +136,18 @@ class GRNN(LazyLearningMixin, BaseNetwork):
         -------
         array-like (n_samples,)
         """
-        if self.input_train is None:
+        if self.X_train is None:
             raise NotTrained("Cannot make a prediction. Network "
                              "hasn't been trained yet")
 
-        input_data = format_data(input_data)
+        X = format_data(X)
 
-        input_data_size = input_data.shape[1]
-        train_data_size = self.input_train.shape[1]
+        X_size = X.shape[1]
+        train_data_size = self.X_train.shape[1]
 
-        if input_data_size != train_data_size:
+        if X_size != train_data_size:
             raise ValueError("Input data must contain {0} features, got "
-                             "{1}".format(train_data_size, input_data_size))
+                             "{1}".format(train_data_size, X_size))
 
-        ratios = pdf_between_data(self.input_train, input_data, self.std)
-        return (dot(self.target_train.T, ratios) / ratios.sum(axis=0)).T
+        ratios = pdf_between_data(self.X_train, X, self.std)
+        return (dot(self.y_train.T, ratios) / ratios.sum(axis=0)).T

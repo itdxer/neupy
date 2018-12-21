@@ -42,7 +42,7 @@ class BaseAssociative(BaseNetwork):
     -------
     {BaseSkeleton.predict}
 
-    train(input_train, epochs=100)
+    train(X_train, epochs=100)
         Train neural network.
 
     {BaseSkeleton.fit}
@@ -69,27 +69,27 @@ class BaseAssociative(BaseNetwork):
 
         self.weight = self.weight.astype(float)
 
-    def format_input_data(self, input_data):
+    def format_input_data(self, X):
         is_feature1d = self.n_inputs == 1
-        input_data = format_data(input_data, is_feature1d)
+        X = format_data(X, is_feature1d)
 
-        if input_data.ndim != 2:
+        if X.ndim != 2:
             raise ValueError("Cannot make prediction, because input "
                              "data has more than 2 dimensions")
 
-        n_samples, n_features = input_data.shape
+        n_samples, n_features = X.shape
 
         if n_features != self.n_inputs:
             raise ValueError("Input data expected to have {} features, "
                              "but got {}".format(self.n_inputs, n_features))
 
-        return input_data
+        return X
 
-    def train(self, input_train, epochs=100):
-        input_train = self.format_input_data(input_train)
+    def train(self, X_train, epochs=100):
+        X_train = self.format_input_data(X_train)
         return super(BaseAssociative, self).train(
-            input_train=input_train, target_train=None,
-            input_test=None, target_test=None,
+            X_train=X_train, y_train=None,
+            X_test=None, y_test=None,
             epochs=epochs, epsilon=None)
 
 
@@ -175,23 +175,23 @@ class BaseStepAssociative(BaseAssociative):
 
         self.bias = self.bias.astype(float)
 
-    def predict(self, input_data):
-        input_data = format_data(input_data, is_feature1d=False)
-        raw_output = input_data.dot(self.weight) + self.bias
+    def predict(self, X):
+        X = format_data(X, is_feature1d=False)
+        raw_output = X.dot(self.weight) + self.bias
         return np.where(raw_output > 0, 1, 0)
 
-    def train(self, input_train, *args, **kwargs):
-        input_train = format_data(input_train, is_feature1d=False)
+    def train(self, X_train, *args, **kwargs):
+        X_train = format_data(X_train, is_feature1d=False)
         return super(BaseStepAssociative, self).train(
-            input_train, *args, **kwargs)
+            X_train, *args, **kwargs)
 
-    def train_epoch(self, input_train, target_train):
+    def train_epoch(self, X_train, y_train):
         weight = self.weight
         n_unconditioned = self.n_unconditioned
         predict = self.predict
         weight_delta = self.weight_delta
 
-        for input_row in input_train:
+        for input_row in X_train:
             input_row = np.reshape(input_row, (1, input_row.size))
             layer_output = predict(input_row)
             weight[n_unconditioned:, :] += weight_delta(

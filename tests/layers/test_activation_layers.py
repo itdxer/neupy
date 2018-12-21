@@ -11,12 +11,12 @@ from data import simple_classification
 
 class ActivationLayersTestCase(BaseTestCase):
     def test_activation_layers_without_size(self):
-        input_data = np.array([1, 2, -1, 10])
+        X = np.array([1, 2, -1, 10])
         expected_output = np.array([1, 2, 0, 10])
 
         layer = layers.Relu()
 
-        actual_output = self.eval(layer.output(input_data))
+        actual_output = self.eval(layer.output(X))
         np.testing.assert_array_equal(actual_output, expected_output)
 
     def test_sigmoid_layer(self):
@@ -51,22 +51,22 @@ class ActivationLayersTestCase(BaseTestCase):
         self.assertEqual(10, self.eval(layer.activation_function(10)))
 
         # Test alpha parameter
-        input_data = asfloat(np.array([[10, 1, 0.1, 0, -0.1, -1]]).T)
+        X = asfloat(np.array([[10, 1, 0.1, 0, -0.1, -1]]).T)
         expected_output = asfloat(np.array([[10, 1, 0.1, 0, -0.01, -0.1]]).T)
         layer = layers.Relu(1, alpha=0.1)
 
-        actual_output = self.eval(layer.activation_function(input_data))
+        actual_output = self.eval(layer.activation_function(X))
         np.testing.assert_array_almost_equal(
             expected_output,
             actual_output
         )
 
     def test_leaky_relu(self):
-        input_data = asfloat(np.array([[10, 1, 0.1, 0, -0.1, -1]]).T)
+        X = asfloat(np.array([[10, 1, 0.1, 0, -0.1, -1]]).T)
         expected_output = asfloat(np.array([[10, 1, 0.1, 0, -0.001, -0.01]]).T)
         layer = layers.LeakyRelu(1)
 
-        actual_output = self.eval(layer.activation_function(input_data))
+        actual_output = self.eval(layer.activation_function(X))
         np.testing.assert_array_almost_equal(
             expected_output,
             actual_output
@@ -165,14 +165,14 @@ class PReluTestCase(BaseTestCase):
         prelu_layer = layers.PRelu(1, alpha=0.25)
         layers.Input(1) > prelu_layer
 
-        input_data = np.array([[10, 1, 0.1, 0, -0.1, -1]]).T
+        X = np.array([[10, 1, 0.1, 0, -0.1, -1]]).T
         expected_output = np.array([[10, 1, 0.1, 0, -0.025, -0.25]]).T
-        actual_output = self.eval(prelu_layer.activation_function(input_data))
+        actual_output = self.eval(prelu_layer.activation_function(X))
 
         np.testing.assert_array_almost_equal(expected_output, actual_output)
 
     def test_prelu_output_by_spatial_input(self):
-        input_data = asfloat(np.random.random((1, 10, 10, 3)))
+        X = asfloat(np.random.random((1, 10, 10, 3)))
 
         input_layer = layers.Input((10, 10, 3))
         conv_layer = layers.Convolution((3, 3, 5))
@@ -180,7 +180,7 @@ class PReluTestCase(BaseTestCase):
 
         connection = input_layer > conv_layer > prelu_layer
 
-        actual_output = input_data
+        actual_output = X
         for layer in connection:
             actual_output = layer.output(actual_output)
 

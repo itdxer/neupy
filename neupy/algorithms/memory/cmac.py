@@ -38,11 +38,11 @@ class CMAC(BaseNetwork):
     -------
     {BaseSkeleton.predict}
 
-    train(input_train, target_train, input_test=None, target_test=None,\
+    train(X_train, y_train, X_test=None, y_test=None,\
     epochs=100, epsilon=None)
         Train network. You can control network's training procedure
         with ``epochs`` and ``epsilon`` parameters.
-        The ``input_test`` and ``target_test`` should be presented
+        The ``X_test`` and ``y_test`` should be presented
         both in case of you need to validate network's training
         after each iteration.
 
@@ -56,11 +56,11 @@ class CMAC(BaseNetwork):
     >>> train_space = np.linspace(0, 2 * np.pi, 100)
     >>> test_space = np.linspace(np.pi, 2 * np.pi, 50)
     >>>
-    >>> input_train = np.reshape(train_space, (100, 1))
-    >>> input_test = np.reshape(test_space, (50, 1))
+    >>> X_train = np.reshape(train_space, (100, 1))
+    >>> X_test = np.reshape(test_space, (50, 1))
     >>>
-    >>> target_train = np.sin(input_train)
-    >>> target_test = np.sin(input_test)
+    >>> y_train = np.sin(X_train)
+    >>> y_test = np.sin(X_test)
     >>>
     >>> cmac = CMAC(
     ...     quantization=100,
@@ -68,10 +68,10 @@ class CMAC(BaseNetwork):
     ...     step=0.2,
     ... )
     ...
-    >>> cmac.train(input_train, target_train, epochs=100)
+    >>> cmac.train(X_train, y_train, epochs=100)
     >>>
-    >>> predicted_test = cmac.predict(input_test)
-    >>> cmac.error(target_test, predicted_test)
+    >>> predicted_test = cmac.predict(X_test)
+    >>> cmac.error(y_test, predicted_test)
     0.0023639417543036569
     """
     quantization = IntProperty(default=10, minval=1)
@@ -81,14 +81,14 @@ class CMAC(BaseNetwork):
         self.weight = {}
         super(CMAC, self).__init__(**options)
 
-    def predict(self, input_data):
-        input_data = format_data(input_data)
+    def predict(self, X):
+        X = format_data(X)
 
         get_memory_coords = self.get_memory_coords
         get_result_by_coords = self.get_result_by_coords
         predicted = []
 
-        for input_sample in self.quantize(input_data):
+        for input_sample in self.quantize(X):
             coords = get_memory_coords(input_sample)
             predicted.append(get_result_by_coords(coords))
 
@@ -106,20 +106,20 @@ class CMAC(BaseNetwork):
             point = ((quantized_value + i) / assoc_unit_size).astype(int)
             yield tuple(np.concatenate([point, [i]]))
 
-    def quantize(self, input_data):
-        return (input_data * self.quantization).astype(int)
+    def quantize(self, X):
+        return (X * self.quantization).astype(int)
 
-    def train_epoch(self, input_train, target_train):
+    def train_epoch(self, X_train, y_train):
         get_memory_coords = self.get_memory_coords
         get_result_by_coords = self.get_result_by_coords
         weight = self.weight
         step = self.step
 
-        n_samples = input_train.shape[0]
-        quantized_input = self.quantize(input_train)
+        n_samples = X_train.shape[0]
+        quantized_input = self.quantize(X_train)
         errors = 0
 
-        for input_sample, target_sample in zip(quantized_input, target_train):
+        for input_sample, target_sample in zip(quantized_input, y_train):
             coords = list(get_memory_coords(input_sample))
             predicted = get_result_by_coords(coords)
 
@@ -131,33 +131,33 @@ class CMAC(BaseNetwork):
 
         return errors / n_samples
 
-    def score(self, input_data, target_data):
-        predicted = self.predict(input_data)
-        return np.mean(np.abs(predicted - target_data))
+    def score(self, X, y):
+        predicted = self.predict(X)
+        return np.mean(np.abs(predicted - y))
 
-    def train(self, input_train, target_train, input_test=None,
-              target_test=None, epochs=100, epsilon=None):
+    def train(self, X_train, y_train, X_test=None,
+              y_test=None, epochs=100, epsilon=None):
 
         is_test_data_partialy_missed = (
-            (input_test is None and target_test is not None) or
-            (input_test is not None and target_test is None)
+            (X_test is None and y_test is not None) or
+            (X_test is not None and y_test is None)
         )
 
         if is_test_data_partialy_missed:
             raise ValueError("Input and target test samples are missed. "
                              "They must be defined together or none of them.")
 
-        input_train = format_data(input_train)
-        target_train = format_data(target_train)
+        X_train = format_data(X_train)
+        y_train = format_data(y_train)
 
-        if input_test is not None:
-            input_test = format_data(input_test)
+        if X_test is not None:
+            X_test = format_data(X_test)
 
-        if target_test is not None:
-            target_test = format_data(target_test)
+        if y_test is not None:
+            y_test = format_data(y_test)
 
         return super(CMAC, self).train(
-            input_train=input_train, target_train=target_train,
-            input_test=input_test, target_test=target_test,
+            X_train=X_train, y_train=y_train,
+            X_test=X_test, y_test=y_test,
             epochs=epochs, epsilon=epsilon,
         )

@@ -5,7 +5,7 @@ from neupy import algorithms
 from base import BaseTestCase
 
 
-input_data = np.array([
+X = np.array([
     [0.1961,  0.9806],
     [-0.1961,  0.9806],
     [0.9806,  0.1961],
@@ -29,7 +29,7 @@ class KohonenTestCase(BaseTestCase):
         )
 
         # test one iteration update
-        data = np.reshape(input_data[0, :], (1, input_data.shape[1]))
+        data = np.reshape(X[0, :], (1, X.shape[1]))
         kh.train(data, epochs=1)
         np.testing.assert_array_almost_equal(
             kh.weight,
