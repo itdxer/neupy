@@ -191,7 +191,6 @@ All the most important information related to the neural network you can find in
     [OPTION] show_epoch = 1
     [OPTION] shuffle_data = True
     [OPTION] step = 0.01
-    [OPTION] train_end_signal = None
     [OPTION] error = categorical_crossentropy
     [OPTION] momentum = 0.99
     [OPTION] nesterov = True

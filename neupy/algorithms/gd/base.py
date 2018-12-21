@@ -122,8 +122,6 @@ class BaseOptimizer(BaseNetwork):
 
     {BaseNetwork.epoch_end_signal}
 
-    {BaseNetwork.train_end_signal}
-
     {BaseNetwork.verbose}
 
     Attributes
@@ -303,9 +301,8 @@ class BaseOptimizer(BaseNetwork):
         float
             Prediction error.
         """
-        X = [format_data(x) for x in as_tuple(X)]
-        y = format_data(y)
-        return self.methods.score(*as_tuple(X, y))
+        X_and_y = [format_data(x) for x in as_tuple(X, y)]
+        return self.methods.score(*X_and_y)
 
     def predict(self, X):
         """

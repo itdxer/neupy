@@ -38,8 +38,6 @@ class ART1(BaseNetwork):
 
     {BaseNetwork.epoch_end_signal}
 
-    {BaseNetwork.train_end_signal}
-
     Methods
     -------
     train(X)

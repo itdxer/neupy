@@ -74,8 +74,6 @@ class Hessian(BaseOptimizer):
 
     {BaseOptimizer.epoch_end_signal}
 
-    {BaseOptimizer.train_end_signal}
-
     {BaseOptimizer.verbose}
 
     {BaseOptimizer.regularizer}
