@@ -4,7 +4,7 @@ from random import choice, randint
 
 import numpy as np
 
-from neupy.algorithms.utils import shuffle
+from neupy.utils.processing import shuffle
 
 
 __all__ = ('make_reber', 'is_valid_by_reber', 'make_reber_classification')
@@ -188,8 +188,9 @@ def make_reber_classification(n_samples, invalid_size=0.5,
         word = [choice(avaliable_letters) for _ in range(word_length)]
         invalid_words.append(''.join(word))
 
-    samples, labels = shuffle(np.array(valid_words + invalid_words),
-                              np.array(valid_labels + invalid_labels))
+    samples, labels = shuffle(
+        np.array(valid_words + invalid_words),
+        np.array(valid_labels + invalid_labels))
 
     if return_indeces:
         samples = convert_letters_to_indeces(samples)

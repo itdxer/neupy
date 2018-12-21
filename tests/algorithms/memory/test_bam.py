@@ -20,20 +20,10 @@ class BAMTestCase(BaseTestCase):
         self.data = np.concatenate([zero, one], axis=0)
         self.hints = np.concatenate([zero_hint, one_hint], axis=0)
 
-    def test_bam_prediction_method(self):
-        dbnet = algorithms.DiscreteBAM()
-        dbnet.weight = np.array([[0, 1], [1, 0]])
-
-        with self.assertRaises(ValueError):
-            dbnet.prediction()
-
-        with self.assertRaises(ValueError):
-            dbnet.prediction(np.array([0, 1]), np.array([0, 1]))
-
     def test_bam_exceptions(self):
         with self.assertRaises(NotTrained):
             dbnet = algorithms.DiscreteBAM()
-            dbnet.predict(np.array([-1, 1]))
+            dbnet.predict(np.array([0, 1]))
 
         with self.assertRaises(ValueError):
             dbnet = algorithms.DiscreteBAM()
@@ -163,9 +153,7 @@ class BAMTestCase(BaseTestCase):
 
         self.assertTrue(np.any(one != dbnet.predict_output(half_one)[0]))
         np.testing.assert_array_almost_equal(
-            one,
-            dbnet.predict_output(half_one, n_times=100)[0]
-        )
+            one, dbnet.predict_output(half_one, n_times=100)[0])
 
     def test_bam_energy_function(self):
         input_vector = np.array([[1, 0, 0, 1, 1, 0, 0]])
@@ -209,8 +197,7 @@ class BAMTestCase(BaseTestCase):
             algorithms.DiscreteBAM(),
             np.array([1, 0, 0, 1]),
             np.array([1, 0]),
-            is_feature1d=False
-        )
+            is_feature1d=False)
 
     def test_bam_predict_different_inputs(self):
         bamnet = algorithms.DiscreteBAM()
@@ -219,11 +206,9 @@ class BAMTestCase(BaseTestCase):
         target = np.array([[1, 0]])
 
         bamnet.train(data, target)
-        test_vectors = vectors_for_testing(data.reshape(data.size),
-                                           is_feature1d=False)
+        test_vectors = vectors_for_testing(
+            data.reshape(data.size), is_feature1d=False)
 
         for test_vector in test_vectors:
             np.testing.assert_array_almost_equal(
-                bamnet.predict(test_vector)[1],
-                target
-            )
+                bamnet.predict(test_vector)[1], target)

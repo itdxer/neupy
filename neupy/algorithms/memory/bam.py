@@ -1,4 +1,4 @@
-from random import randint
+import random
 
 import numpy as np
 from numpy.core.umath_tests import inner1d
@@ -13,6 +13,10 @@ __all__ = ('DiscreteBAM',)
 
 def bin2sign(matrix):
     return np.where(matrix == 0, -1, 1)
+
+
+def sign2bin(matrix):
+    return np.where(matrix > 0, 1, 0).astype(int)
 
 
 def hopfield_energy(weight, X, y):
@@ -100,64 +104,65 @@ class DiscreteBAM(DiscreteMemory):
     >>> zero_hint
     matrix([[0, 1, 0, 0]])
     """
-    def format_predict(self, predicted_result):
-        return np.where(predicted_result > 0, 1, 0).astype(int)
+    def apply_async_process(self, X_sign, y_sign, n_times=None):
+        if n_times is None:
+            n_times = self.n_times
 
-    def predict_input(self, y, n_times=None):
-        return self.prediction(X=None, y=y, n_times=n_times)
+        n_input_features = X_sign.shape[-1]
+        n_output_features = y_sign.shape[-1]
 
-    def predict_output(self, X, n_times=None):
-        return self.prediction(X=X, y=None, n_times=n_times)
+        for _ in range(n_times):
+            i = random.randrange(n_input_features)
+            j = random.randrange(n_output_features)
 
-    def prediction(self, X=None, y=None, n_times=None):
+            X_sign[:, i] = np.sign(y_sign.dot(self.weight[i, :]))
+            y_sign[:, j] = np.sign(X_sign.dot(self.weight[:, j]))
+
+        return sign2bin(X_sign), sign2bin(y_sign)
+
+    def predict_input(self, y_bin, n_times=None):
         if self.weight is None:
             raise NotTrained("Network hasn't been trained yet")
 
-        X = format_data(X, is_feature1d=False)
-        y = format_data(y, is_feature1d=False)
+        self.discrete_validation(y_bin)
 
-        if X is None and y is not None:
-            self.discrete_validation(y)
-            y = bin2sign(y)
-            X = np.sign(y.dot(self.weight.T))
+        y_bin = format_data(y_bin, is_feature1d=False)
+        y_sign = bin2sign(y_bin)
+        X_sign = np.sign(y_sign.dot(self.weight.T))
 
-        elif X is not None and y is None:
-            self.discrete_validation(X)
-            X = bin2sign(X)
-            y = np.sign(X.dot(self.weight))
+        if self.mode == 'sync':
+            return sign2bin(X_sign), y_bin
 
-        else:
-            raise ValueError("Prediction is possible only for input or output")
+        return self.apply_async_process(X_sign, y_sign, n_times)
 
-        n_output_features = y.shape[-1]
-        n_input_features = X.shape[-1]
+    def predict_output(self, X_bin, n_times=None):
+        if self.weight is None:
+            raise NotTrained("Network hasn't been trained yet")
 
-        if self.mode == 'async':
-            if n_times is None:
-                n_times = self.n_times
+        self.discrete_validation(X_bin)
 
-            for _ in range(n_times):
-                i = randint(0, n_input_features - 1)
-                j = randint(0, n_output_features - 1)
+        X_bin = format_data(X_bin, is_feature1d=False)
+        X_sign = bin2sign(X_bin)
+        y_sign = np.sign(X_sign.dot(self.weight))
 
-                X[:, i] = np.sign(y.dot(self.weight[i, :]))
-                y[:, j] = np.sign(X.dot(self.weight[:, j]))
+        if self.mode == 'sync':
+            return X_bin, sign2bin(y_sign)
 
-        return (
-            self.format_predict(X),
-            self.format_predict(y),
-        )
+        return self.apply_async_process(X_sign, y_sign, n_times)
 
-    def train(self, X, y):
-        self.discrete_validation(X)
-        self.discrete_validation(y)
+    def predict(self, X_bin, n_times=None):
+        return self.predict_output(X_bin, n_times)
 
-        y = bin2sign(format_data(y, is_feature1d=False))
-        X = bin2sign(format_data(X, is_feature1d=False))
+    def train(self, X_bin, y_bin):
+        self.discrete_validation(X_bin)
+        self.discrete_validation(y_bin)
 
-        _, wight_nrows = X.shape
-        _, wight_ncols = y.shape
-        weight_shape = (wight_nrows, wight_ncols)
+        X_sign = bin2sign(format_data(X_bin, is_feature1d=False))
+        y_sign = bin2sign(format_data(y_bin, is_feature1d=False))
+
+        _, weight_nrows = X_sign.shape
+        _, weight_ncols = y_sign.shape
+        weight_shape = (weight_nrows, weight_ncols)
 
         if self.weight is None:
             self.weight = np.zeros(weight_shape)
@@ -166,26 +171,24 @@ class DiscreteBAM(DiscreteMemory):
             raise ValueError(
                 "Invalid input shapes. Number of input "
                 "features must be equal to {} and {} output "
-                "features".format(wight_nrows, wight_ncols))
+                "features".format(weight_nrows, weight_ncols))
 
-        self.weight += X.T.dot(y)
+        self.weight += X_sign.T.dot(y_sign)
 
-    def energy(self, X, y):
-        self.discrete_validation(X)
-        self.discrete_validation(y)
+    def energy(self, X_bin, y_bin):
+        self.discrete_validation(X_bin)
+        self.discrete_validation(y_bin)
 
-        X, y = bin2sign(X), bin2sign(y)
-        X = format_data(X, is_feature1d=False)
-        y = format_data(y, is_feature1d=False)
-        nrows, n_features = X.shape
+        X_sign, y_sign = bin2sign(X_bin), bin2sign(y_bin)
+        X_sign = format_data(X_sign, is_feature1d=False)
+        y_sign = format_data(y_sign, is_feature1d=False)
+        nrows, n_features = X_sign.shape
 
         if nrows == 1:
-            return hopfield_energy(self.weight, X, y)
+            return hopfield_energy(self.weight, X_sign, y_sign)
 
         output = np.zeros(nrows)
-        for i, rows in enumerate(zip(X, y)):
+        for i, rows in enumerate(zip(X_sign, y_sign)):
             output[i] = hopfield_energy(self.weight, *rows)
 
         return output
-
-    predict = predict_output

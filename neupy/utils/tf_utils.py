@@ -8,7 +8,8 @@ from neupy.utils.misc import as_tuple
 __all__ = (
     'class_method_name_scope', 'function_name_scope',
     'tensorflow_session', 'tensorflow_eval', 'tf_repeat',
-    'initialize_uninitialized_variables', 'flatten', 'outer', 'dot'
+    'initialize_uninitialized_variables', 'flatten', 'outer',
+    'dot', 'make_single_vector', 'setup_parameter_updates',
 )
 
 
@@ -116,3 +117,44 @@ def tf_repeat(tensor, repeats):
         multiples = as_tuple(1, repeats)
         tiled_tensor = tf.tile(expanded_tensor, multiples)
         return tf.reshape(tiled_tensor, tf.shape(tensor) * repeats)
+
+
+def make_single_vector(parameters):
+    with tf.name_scope('parameters-vector'):
+        return tf.concat([flatten(param) for param in parameters], axis=0)
+
+
+def setup_parameter_updates(parameters, parameter_update_vector):
+    """
+    Creates update rules for list of parameters from one vector.
+    Function is useful in Conjugate Gradient or
+    Levenberg-Marquardt optimization algorithms
+
+    Parameters
+    ----------
+    parameters : list
+        List of parameters.
+
+    parameter_update_vector : Tensorfow varible
+        Vector that contains updates for all parameters.
+
+    Returns
+    -------
+    list
+        List of updates separeted for each parameter.
+    """
+    updates = []
+    start_position = 0
+
+    for parameter in parameters:
+        end_position = start_position + tf.size(parameter)
+
+        new_parameter = tf.reshape(
+            parameter_update_vector[start_position:end_position],
+            parameter.shape
+        )
+        updates.append((parameter, new_parameter))
+
+        start_position = end_position
+
+    return updates

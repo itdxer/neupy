@@ -123,8 +123,9 @@ class TerminalLogger(object):
         """
         if color not in self.colors:
             available_colors = ', '.join(self.colors.keys())
-            raise ValueError("Invalid color `{}`. Available colors: {}"
-                             "".format(color, available_colors))
+            raise ValueError(
+                "Invalid color `{}`. Available colors: {}"
+                "".format(color, available_colors))
 
         colorizer = self.colors[color]
         formated_tag = colorizer(tag.upper())

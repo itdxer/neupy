@@ -238,14 +238,12 @@ Recovery from memory
 ~~~~~~~~~~~~~~~~~~~~
 
 The main advantage of Autoassociative network is that it is able to recover pattern from the memory using just a partial information about the pattern.
-There are already two main approaches to this situation, synchronous and asynchronous.
-We are going to master both of them.
+There are already two main approaches to this situation, synchronous and asynchronous. We are going to master both of them.
 
 Synchronous
 ^^^^^^^^^^^
 
-Synchronous approach is much more easier for understanding, so we are going to look at it firstly.
-To recover your pattern from memory you just need to multiply the weight matrix by the input vector.
+Synchronous approach is much more easier for understanding, so we are going to look at it firstly. To recover your pattern from memory you just need to multiply the weight matrix by the input vector.
 
 .. math::
 
@@ -323,16 +321,9 @@ Of course you can use 0 and 1 values and sometime you will get the correct resul
 Asynchronous
 ^^^^^^^^^^^^
 
-Previous approach is good, but it has some limitations.
-If you change one value in the input vector it can change your output result and value won't converge to the known pattern.
-Another popular approach is an **asynchronous**.
-This approach is more likely to remind you of real memory.
-At the same time in network activates just one random neuron instead of all of them.
-In terms of neural networks we say that **neuron fires**.
-We iteratively repeat this operation multiple times and after some point network will converge to some pattern.
+Previous approach is good, but it has some limitations. If you change one value in the input vector it can change your output result and value won't converge to the known pattern. Another popular approach is an **asynchronous**. This approach is more likely to remind you of real memory. At the same time in network activates just one random neuron instead of all of them. In terms of neural networks we say that **neuron fires**. We iteratively repeat this operation multiple times and after some point network will converge to some pattern.
 
-Let's look at this example:
-Consider that we already have a weight matrix :math:`W` with one pattern :math:`x`  inside of it.
+Let's look at this example: Consider that we already have a weight matrix :math:`W` with one pattern :math:`x`  inside of it.
 
 .. math::
 
@@ -375,9 +366,7 @@ Let's assume that we have a vector :math:`x^{'}` from which we want to recover t
         \right]
     \end{align*}
 
-In first iteration one neuron fires.
-Let it be the second one.
-So we multiply the first column by this selected value.
+In first iteration one neuron fires. Let it be the second one. So we multiply the first column by this selected value.
 
 .. math::
 
@@ -411,9 +400,7 @@ And after this operation we set up a new value into the input vector :math:`x`.
         \right]
     \end{align*}
 
-As you can see after first iteration value is exactly the same as :math:`x` but we can keep going.
-In second iteration random neuron fires again.
-Let's pretend that this time it was the third neuron.
+As you can see, after first iteration value is exactly the same as :math:`x` but we can keep going. In second iteration random neuron fires again. Let's pretend that this time it was the third neuron.
 
 .. math::
 
@@ -432,8 +419,7 @@ Let's pretend that this time it was the third neuron.
         \right]) = sign(-2) = -1
     \end{align*}
 
-:math:`x^{'}_3` is exactly the same as in the :math:`x^{'}` vector so we don't need to update it.
-We can repeat it as many times as we want, but we will be getting the same value.
+:math:`x^{'}_3` is exactly the same as in the :math:`x^{'}` vector so we don't need to update it. We can repeat it as many times as we want, but we will be getting the same value.
 
 Memory limit
 ------------
@@ -441,7 +427,7 @@ Memory limit
 Obviously, you can't store infinite number of vectors inside the network.
 There are two good rules of thumb.
 
-Concider that :math:`n` is the dimension (number of features) of your input vector and :math:`m` is the number of patterns that you want to store in the network.
+Consider that :math:`n` is the dimension (number of features) of your input vector and :math:`m` is the number of patterns that you want to store in the network.
 The first rule gives us a simple ration between :math:`m` and :math:`n`.
 
 .. math::
@@ -463,8 +449,7 @@ The second rule uses a logarithmic proportion.
 
     m = \left \lfloor \frac{n}{2 \cdot log(n)} \right \rfloor
 
-Both of these rules are good assumtions about the nature of data and its possible limits in memory.
-Of course you can find situations when these rules will fail.
+Both of these rules are good assumptions about the nature of data and its possible limits in memory. Of course, you can find situations when these rules will fail.
 
 Hallucinations
 --------------

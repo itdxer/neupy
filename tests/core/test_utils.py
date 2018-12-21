@@ -7,8 +7,9 @@ import numpy as np
 import tensorflow as tf
 from scipy.sparse import csr_matrix
 
-from neupy.utils import as_tuple, AttributeKeyDict, asfloat, format_data
-from neupy.algorithms.utils import shuffle, iter_until_converge, format_time
+from neupy.utils.misc import as_tuple, AttributeKeyDict, asfloat
+from neupy.utils.iters import iter_until_converge
+from neupy.utils.processing import shuffle, format_data
 from neupy.algorithms.base import preformat_value
 from neupy import algorithms, layers
 
@@ -135,14 +136,6 @@ class UtilsTestCase(BaseTestCase):
                 actual_output, testcase.expected_output,
                 msg="Input args: {}".format(testcase.input_args)
             )
-
-    def test_format_time(self):
-        self.assertEqual("01:06:40", format_time(4000))
-        self.assertEqual("02:05", format_time(125))
-        self.assertEqual("45 sec", format_time(45))
-        self.assertEqual("100 ms", format_time(0.1))
-        self.assertEqual("10 μs", format_time(1e-5))
-        self.assertEqual("200 ns", format_time(2e-7))
 
 
 class IterUntilConvergeTestCase(BaseTestCase):

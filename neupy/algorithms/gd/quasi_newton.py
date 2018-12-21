@@ -6,13 +6,16 @@ from neupy.core.properties import (
     ChoiceProperty, NumberProperty,
     WithdrawProperty, IntProperty,
 )
-from neupy.algorithms.utils import setup_parameter_updates, make_single_vector
+from neupy.utils.tf_utils import setup_parameter_updates
 from neupy.optimizations.wolfe import line_search
 from neupy.layers.utils import (
     count_parameters, iter_parameters,
     find_variables,
 )
-from neupy.utils import asfloat, dot, outer, function_name_scope
+from neupy.utils import (
+    asfloat, dot, outer, function_name_scope,
+    make_single_vector,
+)
 from .base import BaseOptimizer
 
 

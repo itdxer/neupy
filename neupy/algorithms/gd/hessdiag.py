@@ -3,9 +3,9 @@ from __future__ import division
 import tensorflow as tf
 
 from neupy.core.properties import ProperFractionProperty
-from neupy.utils import flatten
+from neupy.utils import flatten, make_single_vector
 from neupy.layers.utils import find_variables
-from neupy.algorithms.utils import setup_parameter_updates, make_single_vector
+from neupy.utils.tf_utils import setup_parameter_updates
 
 from .base import BaseOptimizer
 
