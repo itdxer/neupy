@@ -46,7 +46,7 @@ class Oja(BaseNetwork):
         Reconstruct original dataset from the minimized input.
 
     train(X, epsilon=1e-2, epochs=100)
-        Trains the model to the data X. Network trains until the difference
+        Trains the network to the data X. Network trains until the difference
         between two last errors less than ``epsilon`` or maximum number of
         ``epochs`` was reached.
 

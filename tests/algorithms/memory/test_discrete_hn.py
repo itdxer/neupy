@@ -1,6 +1,5 @@
 import numpy as np
 
-import warnings
 from neupy import algorithms
 
 from algorithms.memory.data import (
@@ -149,21 +148,15 @@ class DiscreteHopfieldNetworkTestCase(BaseTestCase):
         )
 
     def test_predict_different_inputs(self):
-        dhnet = algorithms.DiscreteHopfieldNetwork()
         data = np.array([[1, 0, 0, 1]])
-        dhnet.train(data)
-        self.assertInvalidVectorPred(dhnet, np.array([1, 0, 0, 1]), data,
-                                     is_feature1d=False)
 
-    def test_discrete_hn_warning(self):
-        with warnings.catch_warnings(record=True) as warns:
-            algorithms.DiscreteHopfieldNetwork(
-                verbose=True,
-                n_times=100,
-                mode='sync'
-            )
-            self.assertEqual(len(warns), 1)
-            self.assertIn('only in `async` mode', str(warns[0].message))
+        dhnet = algorithms.DiscreteHopfieldNetwork()
+        dhnet.train(data)
+
+        self.assertInvalidVectorPred(
+            dhnet, np.array([1, 0, 0, 1]), data,
+            is_feature1d=False,
+        )
 
     def test_iterative_updates(self):
         data = np.concatenate([zero, one, two], axis=0)

@@ -36,17 +36,19 @@ class DiscreteMemory(BaseSkeleton, Configurable):
     n_times : int
         Available only in ``async`` mode. Identify number
         of random trials. Defaults to ``100``.
+
+    {Verbose.verbose}
     """
-    mode = ChoiceProperty(default='sync', choices=['async', 'sync'])
-    n_times = IntProperty(default=100, minval=1)
+    mode = ChoiceProperty(choices=['async', 'sync'])
+    n_times = IntProperty(minval=1)
 
-    def __init__(self, **options):
-        super(DiscreteMemory, self).__init__(**options)
+    def __init__(self, mode='sync', n_times=100, verbose=False):
+        super(DiscreteMemory, self).__init__()
+
+        self.mode = mode
+        self.n_times = n_times
+        self.verbose = verbose
         self.weight = None
-
-        if 'n_times' in options and self.mode != 'async':
-            warnings.warn(
-                "You can use `n_times` property only in `async` mode.")
 
     def discrete_validation(self, matrix):
         """
@@ -61,5 +63,4 @@ class DiscreteMemory(BaseSkeleton, Configurable):
             raise ValueError(
                 "This network expects only descrete inputs. It mean that "
                 "it's possible to can use only matrices with binary values "
-                "(0 and 1)."
-            )
+                "(0 and 1).")
