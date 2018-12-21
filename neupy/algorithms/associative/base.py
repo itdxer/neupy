@@ -70,8 +70,7 @@ class BaseAssociative(BaseNetwork):
         self.weight = self.weight.astype(float)
 
     def format_input_data(self, X):
-        is_feature1d = self.n_inputs == 1
-        X = format_data(X, is_feature1d)
+        X = format_data(X, is_feature1d=(self.n_inputs == 1))
 
         if X.ndim != 2:
             raise ValueError("Cannot make prediction, because input "

@@ -170,8 +170,8 @@ class BaseNetwork(BaseSkeleton):
 
         self.logs.write(base_message + ', '.join(messages))
 
-    def train(self, X_train, y_train=None, X_test=None,
-              y_test=None, epochs=100, epsilon=None):
+    def train(self, X_train, y_train=None, X_test=None, y_test=None,
+              epochs=100, epsilon=None):
 
         if epochs <= 0:
             raise ValueError("Number of epochs needs to be a positive number")

@@ -134,8 +134,7 @@ class BaseOptimizer(BaseNetwork):
     -------
     {BaseSkeleton.predict}
 
-    train(X_train, y_train, X_test=None, y_test=None,\
-    epochs=100, epsilon=None)
+    train(X_train, y_train, X_test=None, y_test=None, epochs=100, epsilon=None)
         Train network. You can control network's training procedure
         with ``epochs`` and ``epsilon`` parameters.
         The ``X_test`` and ``y_test`` should be presented
@@ -290,30 +289,6 @@ class BaseOptimizer(BaseNetwork):
             )
         )
 
-    def format_input_data(self, X):
-        """
-        Input data format is depend on the input layer
-        structure.
-        Parameters
-        ----------
-        X : array-like or None
-        Returns
-        -------
-        array-like or None
-            Function returns formatted array.
-        """
-        input_layers = self.connection.input_layers
-
-        if not isinstance(X, (tuple, list)):
-            input_layer = input_layers[0]
-            return format_data(X)
-
-        formated_data = []
-        for input_to_layer, input_layer in zip(X, input_layers):
-            formated_data.append(format_data(input_to_layer))
-
-        return tuple(formated_data)
-
     def score(self, X, y):
         """
         Calculate prediction accuracy for input data.
@@ -328,8 +303,9 @@ class BaseOptimizer(BaseNetwork):
         float
             Prediction error.
         """
-        return self.methods.score(*as_tuple(
-            self.format_input_data(X), format_data(y)))
+        X = [format_data(x) for x in as_tuple(X)]
+        y = format_data(y)
+        return self.methods.score(*as_tuple(X, y))
 
     def predict(self, X):
         """
@@ -343,8 +319,8 @@ class BaseOptimizer(BaseNetwork):
         -------
         array-like
         """
-        X = self.format_input_data(X)
-        return self.methods.predict(*as_tuple(X))
+        X = [format_data(x) for x in as_tuple(X)]
+        return self.methods.predict(*X)
 
     def train(self, X_train, y_train, X_test=None,
               y_test=None, *args, **kwargs):
@@ -360,11 +336,12 @@ class BaseOptimizer(BaseNetwork):
             raise ValueError("Input or target test samples are missed. They "
                              "must be defined together or none of them.")
 
-        X_train = self.format_input_data(X_train)
+        X_train = [format_data(x) for x in as_tuple(X_train)]
         y_train = format_data(y_train)
 
-        X_test = self.format_input_data(X_test)
-        y_test = format_data(y_test)
+        if X_test is not None:
+            X_test = [format_data(x) for x in as_tuple(X_test)]
+            y_test = format_data(y_test)
 
         return super(BaseOptimizer, self).train(
             X_train=X_train, y_train=y_train,
@@ -539,13 +516,16 @@ def apply_batches(function, arguments, batch_size, description='',
     samples = arguments[0]
     n_samples = len(samples)
     batch_iterator = list(iter_batches(n_samples, batch_size))
+    bar = progressbar.NullBar()
 
     if show_progressbar:
         widgets = [
-            progressbar.Timer(format='Time: %(elapsed)s'), ' |',
+            progressbar.Timer(format='Time: %(elapsed)s'),
+            ' |',
             progressbar.Percentage(),
             progressbar.Bar(),
-            ' ', progressbar.ETA(),
+            ' ',
+            progressbar.ETA(),
         ]
 
         if show_error_output:
@@ -557,8 +537,6 @@ def apply_batches(function, arguments, batch_size, description='',
             poll_interval=0.1,
         )
         bar.update(0)
-    else:
-        bar = progressbar.NullBar()
 
     outputs = []
     for i, batch in enumerate(batch_iterator):
@@ -576,11 +554,8 @@ def apply_batches(function, arguments, batch_size, description='',
             output = output.item(0)
 
         outputs.append(output)
-
-        if show_error_output:
-            bar.update(i, error=output)
-        else:
-            bar.update(i)
+        kwargs = {'error': output} if show_error_output else {}
+        bar.update(i, **kwargs)
 
     bar.fd.write('\r' + ' ' * bar.term_width + '\r')
     return outputs
@@ -803,7 +778,7 @@ class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
         float
             Prediction error.
         """
-        X = self.format_input_data(X)
+        X = [format_data(x) for x in as_tuple(X)]
         y = format_data(y)
 
         errors = self.apply_batches(
