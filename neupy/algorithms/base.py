@@ -77,6 +77,12 @@ class BaseSkeleton(ConfigurableABC, Verbose):
         available_options = self.repr_options()
         return "{}({})".format(class_name, available_options)
 
+    def __getstate__(self):
+        return self.__dict__
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+
 
 class BaseNetwork(BaseSkeleton):
     """
@@ -210,9 +216,3 @@ class BaseNetwork(BaseSkeleton):
 
         if epoch != last_epoch_shown:
             self.print_last_error()
-
-    def __getstate__(self):
-        return self.__dict__
-
-    def __setstate__(self, state):
-        self.__dict__.update(state)

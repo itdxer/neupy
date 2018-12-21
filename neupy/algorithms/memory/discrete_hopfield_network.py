@@ -31,9 +31,7 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
 
     Parameters
     ----------
-    {DiscreteMemory.mode}
-
-    {DiscreteMemory.n_times}
+    {DiscreteMemory.Parameters}
 
     check_limit : bool
         Option enable a limit of patterns control for the
@@ -47,10 +45,11 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     Methods
     -------
     energy(X)
-        Compute Discrete Hopfield Energy.
+        Computes Discrete Hopfield Energy.
 
     train(X)
-        Save input data pattern into the network memory.
+        Save input data pattern into the network's memory. Each call will
+        make partial fit for the network.
 
     predict(X, n_times=None)
         Recover data from the memory using input pattern.
@@ -137,11 +136,15 @@ class DiscreteHopfieldNetwork(DiscreteMemory):
     :ref:`password-recovery`: Password recovery with Discrete Hopfield Network.
     :ref:`discrete-hopfield-network`: Discrete Hopfield Network article.
     """
-    check_limit = Property(default=True, expected_type=bool)
+    check_limit = Property(expected_type=bool)
 
-    def __init__(self, **options):
-        super(DiscreteHopfieldNetwork, self).__init__(**options)
+    def __init__(self, mode='sync', n_times=100, verbose=False,
+                 check_limit=True):
+
         self.n_memorized_samples = 0
+        self.check_limit = check_limit
+
+        super(DiscreteHopfieldNetwork, self).__init__(mode, n_times, verbose)
 
     def train(self, X):
         self.discrete_validation(X)

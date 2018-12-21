@@ -173,9 +173,9 @@ class Verbose(Configurable):
     Parameters
     ----------
     verbose : bool
-        Property controls verbose output interminal. ``True`` enables
-        informative output in the terminal and ``False`` -
-        disable it. Defaults to ``False``.
+        Property controls verbose output in terminal. The ``True`` value
+        enables informative output in the terminal and ``False`` - disable
+        it. Defaults to ``False``.
 
     Attributes
     ----------

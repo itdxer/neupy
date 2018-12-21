@@ -30,13 +30,7 @@ class ART1(BaseNetwork):
     n_clusters : int
         Number of clusters, defaults to ``2``. Min value is also ``2``.
 
-    {BaseNetwork.step}
-
-    {BaseNetwork.show_epoch}
-
-    {BaseNetwork.shuffle_data}
-
-    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.Parameters}
 
     Methods
     -------
@@ -44,8 +38,8 @@ class ART1(BaseNetwork):
         ART trains until all clusters are found.
 
     predict(X)
-        Each prediction trains a new network. Basically it's
-        an alias to the ``train`` method.
+        Each prediction trains a new network. It's an alias to
+        the ``train`` method.
 
     {BaseSkeleton.fit}
 

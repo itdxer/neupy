@@ -40,11 +40,9 @@ class CMAC(BaseNetwork):
 
     train(X_train, y_train, X_test=None, y_test=None,\
     epochs=100, epsilon=None)
-        Train network. You can control network's training procedure
-        with ``epochs`` and ``epsilon`` parameters.
-        The ``X_test`` and ``y_test`` should be presented
-        both in case of you need to validate network's training
-        after each iteration.
+        Trains the network to the data X. Network trains until the difference
+        between two last errors less than ``epsilon`` or maximum number of
+        ``epochs`` was reached.
 
     {BaseSkeleton.fit}
 
@@ -135,8 +133,8 @@ class CMAC(BaseNetwork):
         predicted = self.predict(X)
         return np.mean(np.abs(predicted - y))
 
-    def train(self, X_train, y_train, X_test=None,
-              y_test=None, epochs=100, epsilon=None):
+    def train(self, X_train, y_train, X_test=None, y_test=None,
+              epochs=100, epsilon=None):
 
         is_test_data_partialy_missed = (
             (X_test is None and y_test is not None) or
@@ -144,20 +142,18 @@ class CMAC(BaseNetwork):
         )
 
         if is_test_data_partialy_missed:
-            raise ValueError("Input and target test samples are missed. "
-                             "They must be defined together or none of them.")
+            raise ValueError(
+                "Input and target test samples are missed. "
+                "They must be defined together or none of them.")
 
         X_train = format_data(X_train)
         y_train = format_data(y_train)
 
         if X_test is not None:
             X_test = format_data(X_test)
-
-        if y_test is not None:
             y_test = format_data(y_test)
 
         return super(CMAC, self).train(
-            X_train=X_train, y_train=y_train,
-            X_test=X_test, y_test=y_test,
+            X_train, y_train, X_test, y_test,
             epochs=epochs, epsilon=epsilon,
         )
