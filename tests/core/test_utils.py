@@ -156,16 +156,6 @@ class ShuffleTestCase(BaseTestCase):
         shuffeled_data = shuffle(X, X)
         np.testing.assert_array_equal(*shuffeled_data)
 
-    def test_shuffle_empty_input(self):
-        np.testing.assert_array_equal(tuple(), shuffle())
-
-    def test_shuffle_single_input(self):
-        X = np.ones(10)
-        shuffeled_data = shuffle(X)
-        # Output suppose to be a shuffled array, but
-        # not a tuple with shuffled array
-        np.testing.assert_array_equal(X, shuffeled_data)
-
     def test_shuffle_invalid_shapes_exception(self):
         X = np.arange(10)
         with self.assertRaisesRegexp(ValueError, r'\(10,\), \(9,\)'):

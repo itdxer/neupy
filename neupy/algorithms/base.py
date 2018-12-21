@@ -170,11 +170,7 @@ class BaseNetwork(BaseSkeleton):
             self.last_epoch = epoch
 
             if self.shuffle_data:
-                data = shuffle(*as_tuple(X_train, y_train))
-                X_train, y_train = data[:-1], data[-1]
-
-                if len(X_train) == 1:
-                    X_train = X_train[0]
+                X_train, y_train = shuffle(X_train, y_train)
 
             try:
                 train_error = self.train_epoch(X_train, y_train)
