@@ -7,9 +7,9 @@ import numpy as np
 import tensorflow as tf
 from scipy.sparse import csr_matrix
 
-from neupy.utils.misc import as_tuple, AttributeKeyDict, asfloat
+from neupy.utils.misc import as_tuple, AttributeKeyDict
 from neupy.utils.iters import iter_until_converge
-from neupy.utils.processing import shuffle, format_data
+from neupy.utils.processing import shuffle, format_data, asfloat
 from neupy.algorithms.base import preformat_value
 from neupy import algorithms, layers
 
