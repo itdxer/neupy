@@ -253,8 +253,7 @@ class BaseNetwork(BaseSkeleton):
         except StopTraining as err:
             self.logs.message(
                 "TRAIN",
-                "Epoch #{} was stopped. Message: {}".format(epoch, str(err))
-            )
+                "Epoch #{} was stopped. Message: {}".format(epoch, str(err)))
 
         if epoch != last_epoch_shown:
             self.print_last_error()

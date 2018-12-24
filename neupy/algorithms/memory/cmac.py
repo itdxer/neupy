@@ -68,7 +68,7 @@ class CMAC(BaseNetwork):
     >>> cmac.train(X_train, y_train, epochs=100)
     >>>
     >>> predicted_test = cmac.predict(X_test)
-    >>> cmac.error(y_test, predicted_test)
+    >>> cmac.score(y_test, predicted_test)
     0.0023639417543036569
     """
     quantization = IntProperty(default=10, minval=1)
