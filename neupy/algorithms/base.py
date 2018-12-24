@@ -190,17 +190,6 @@ class BaseNetwork(BaseSkeleton):
 
         super(BaseNetwork, self).__init__(*args, **options)
 
-        self.logs.title("Main information")
-        self.logs.message("ALGORITHM", self.__class__.__name__)
-        self.logs.newline()
-
-        for key, data in sorted(self.options.items()):
-            formated_value = preformat_value(getattr(self, key))
-            msg_text = "{} = {}".format(key, formated_value)
-            self.logs.message("OPTION", msg_text, color='green')
-
-        self.logs.newline()
-
     def train_epoch(self, X_train, y_train=None):
         raise NotImplementedError()
 
