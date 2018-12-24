@@ -132,12 +132,11 @@ class BaseOptimizer(BaseNetwork):
     -------
     {BaseSkeleton.predict}
 
-    train(X_train, y_train, X_test=None, y_test=None, epochs=100, epsilon=None)
+    train(X_train, y_train, X_test=None, y_test=None, epochs=100)
         Train network. You can control network's training procedure
-        with ``epochs`` and ``epsilon`` parameters.
-        The ``X_test`` and ``y_test`` should be presented
-        both in case of you need to validate network's training
-        after each iteration.
+        with ``epochs`` parameter. The ``X_test`` and ``y_test`` should
+        be presented both in case network's validation required
+        after each training epoch.
 
     {BaseSkeleton.fit}
     """

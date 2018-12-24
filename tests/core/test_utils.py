@@ -8,13 +8,10 @@ import tensorflow as tf
 from scipy.sparse import csr_matrix
 
 from neupy.utils.misc import as_tuple, AttributeKeyDict
-from neupy.utils.iters import iter_until_converge
 from neupy.utils.processing import shuffle, format_data, asfloat
 from neupy.algorithms.base import preformat_value
-from neupy import algorithms, layers
 
 from base import BaseTestCase
-from utils import catch_stdout
 
 
 class UtilsTestCase(BaseTestCase):
@@ -134,24 +131,7 @@ class UtilsTestCase(BaseTestCase):
             actual_output = as_tuple(*testcase.input_args)
             self.assertEqual(
                 actual_output, testcase.expected_output,
-                msg="Input args: {}".format(testcase.input_args)
-            )
-
-
-class IterUntilConvergeTestCase(BaseTestCase):
-    def test_iter_until_converge_critical_cases(self):
-        with catch_stdout() as out:
-            network = algorithms.GradientDescent(
-                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
-                verbose=True,
-            )
-            iterator = iter_until_converge(network, epsilon=1e-5, max_epochs=5)
-
-            for epoch in iterator:
-                network.training_errors.append(np.nan)
-
-            terminal_output = out.getvalue()
-            self.assertIn('NaN or Inf', terminal_output)
+                msg="Input args: {}".format(testcase.input_args))
 
 
 class ShuffleTestCase(BaseTestCase):

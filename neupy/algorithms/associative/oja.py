@@ -45,10 +45,9 @@ class Oja(BaseNetwork):
     reconstruct(X)
         Reconstruct original dataset from the minimized input.
 
-    train(X, epsilon=1e-2, epochs=100)
-        Trains the network to the data X. Network trains until the difference
-        between two last errors less than ``epsilon`` or maximum number of
-        ``epochs`` was reached.
+    train(X, epochs=100)
+        Trains the network to the data X. Network trains until maximum
+        number of ``epochs`` was reached.
 
     predict(X)
         Returns hidden representation of the input data ``X``. Basically,
@@ -69,7 +68,7 @@ class Oja(BaseNetwork):
     ...     verbose=False
     ... )
     >>>
-    >>> ojanet.train(data, epsilon=1e-5)
+    >>> ojanet.train(data, epochs=100)
     >>> minimized = ojanet.predict(data)
     >>> minimized
     array([[-2.82843122],
@@ -103,7 +102,7 @@ class Oja(BaseNetwork):
 
         return mae
 
-    def train(self, X, epsilon=1e-2, epochs=100):
+    def train(self, X, epochs=100):
         X = format_data(X)
         n_input_features = X.shape[1]
 
@@ -116,7 +115,7 @@ class Oja(BaseNetwork):
                 "Invalid number of features. Expected {}, got {}"
                 "".format(self.weight.shape[0], n_input_features))
 
-        super(Oja, self).train(X, epsilon=epsilon, epochs=epochs)
+        super(Oja, self).train(X, epochs=epochs)
 
     def reconstruct(self, X):
         if not isinstance(self.weight, np.ndarray):

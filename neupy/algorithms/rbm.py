@@ -354,8 +354,7 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
         return super(RBM, self).train(
             X_train=X_train, y_train=None,
             X_test=X_test, y_test=None,
-            epochs=epochs, epsilon=None,
-        )
+            epochs=epochs)
 
     def train_epoch(self, X_train, y_train=None):
         """

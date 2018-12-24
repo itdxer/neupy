@@ -325,7 +325,7 @@ class GrowingNeuralGas(BaseNetwork):
         return super(GrowingNeuralGas, self).train(
             X_train=X_train, y_train=None,
             X_test=None, y_test=None,
-            epochs=epochs, epsilon=None)
+            epochs=epochs)
 
     def train_epoch(self, X_train, y_train=None):
         graph = self.graph
