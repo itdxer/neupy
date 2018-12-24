@@ -38,8 +38,7 @@ class CMAC(BaseNetwork):
     -------
     {BaseSkeleton.predict}
 
-    train(X_train, y_train, X_test=None, y_test=None,\
-    epochs=100, epsilon=None)
+    train(X_train, y_train, X_test=None, y_test=None, epochs=100, epsilon=None)
         Trains the network to the data X. Network trains until the difference
         between two last errors less than ``epsilon`` or maximum number of
         ``epochs`` was reached.

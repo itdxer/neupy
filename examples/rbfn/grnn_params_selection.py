@@ -1,12 +1,9 @@
-from operator import itemgetter
+import heapq
 
 import numpy as np
-from sklearn import datasets, grid_search
-from sklearn.model_selection import train_test_split
-from neupy import algorithms, utils
-
-
-utils.reproducible()
+from sklearn import datasets
+from sklearn.model_selection import train_test_split, RandomizedSearchCV
+from neupy import algorithms
 
 
 def rmsle(expected, predicted):
@@ -21,34 +18,27 @@ def scorer(network, X, y):
     return rmsle(result, y)
 
 
-def report(grid_scores, n_top=3):
-    scores = sorted(grid_scores, key=itemgetter(1), reverse=False)
-    for i, score in enumerate(scores[:n_top]):
-        print("Model with rank: {0}".format(i + 1))
-        print("Mean validation score: {0:.3f} (std: {1:.3f})".format(
-              score.mean_validation_score,
-              np.std(score.cv_validation_scores)))
-        print("Parameters: {0}".format(score.parameters))
-        print("")
+def report(results, n_top=3):
+    ranks = heapq.nlargest(n_top, results['rank_test_score'])
 
+    for i in ranks:
+        candidates = np.flatnonzero(results['rank_test_score'] == i)
+        for candidate in candidates:
+            print("Mean validation score: {0:.3f} (std: {1:.3f})".format(
+                  results['mean_test_score'][candidate],
+                  results['std_test_score'][candidate]))
+            print("Parameters: {0}".format(results['params'][candidate]))
+            print("")
 
-dataset = datasets.load_diabetes()
-x_train, x_test, y_train, y_test = train_test_split(
-    dataset.data, dataset.target, test_size=0.3
-)
-
-grnnet = algorithms.GRNN(std=0.5, verbose=True)
-grnnet.train(x_train, y_train)
-error = scorer(grnnet, x_test, y_test)
-print("GRNN RMSLE = {:.3f}\n".format(error))
 
 print("Run Random Search CV")
-grnnet.verbose = False
-random_search = grid_search.RandomizedSearchCV(
-    grnnet,
+dataset = datasets.load_diabetes()
+random_search = RandomizedSearchCV(
+    algorithms.GRNN(std=0.1, verbose=False),
     param_distributions={'std': np.arange(1e-2, 1, 1e-3)},
-    n_iter=400,
+    n_iter=100,
+    cv=3,
     scoring=scorer,
 )
 random_search.fit(dataset.data, dataset.target)
-report(random_search.grid_scores_)
+report(random_search.cv_results_)
