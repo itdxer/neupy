@@ -25,6 +25,10 @@ class BAMTestCase(BaseTestCase):
             dbnet = algorithms.DiscreteBAM()
             dbnet.predict(np.array([0, 1]))
 
+        with self.assertRaises(NotTrained):
+            dbnet = algorithms.DiscreteBAM()
+            dbnet.predict_input(np.array([0, 1]))
+
         with self.assertRaises(ValueError):
             dbnet = algorithms.DiscreteBAM()
             dbnet.weight = np.array([[0, 1], [1, 0]])
