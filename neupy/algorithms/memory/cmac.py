@@ -38,10 +38,9 @@ class CMAC(BaseNetwork):
     -------
     {BaseSkeleton.predict}
 
-    train(X_train, y_train, X_test=None, y_test=None, epochs=100, epsilon=None)
-        Trains the network to the data X. Network trains until the difference
-        between two last errors less than ``epsilon`` or maximum number of
-        ``epochs`` was reached.
+    train(X_train, y_train, X_test=None, y_test=None, epochs=100)
+        Trains the network to the data X. Network trains until maximum
+        number of ``epochs`` was reached.
 
     {BaseSkeleton.fit}
 
@@ -132,9 +131,7 @@ class CMAC(BaseNetwork):
         predicted = self.predict(X)
         return np.mean(np.abs(predicted - y))
 
-    def train(self, X_train, y_train, X_test=None, y_test=None,
-              epochs=100, epsilon=None):
-
+    def train(self, X_train, y_train, X_test=None, y_test=None, epochs=100):
         is_test_data_partialy_missed = (
             (X_test is None and y_test is not None) or
             (X_test is not None and y_test is None)
@@ -153,6 +150,4 @@ class CMAC(BaseNetwork):
             y_test = format_data(y_test)
 
         return super(CMAC, self).train(
-            X_train, y_train, X_test, y_test,
-            epochs=epochs, epsilon=epsilon,
-        )
+            X_train, y_train, X_test, y_test, epochs=epochs)

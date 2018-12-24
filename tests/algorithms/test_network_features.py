@@ -160,39 +160,6 @@ class NetworkPropertiesTestCase(BaseTestCase):
             with self.assertRaises(ValueError):
                 algorithms.GradientDescent(network, show_epoch=wrong_value)
 
-    def test_network_convergence(self):
-        with catch_stdout() as out:
-            bpnet = algorithms.GradientDescent(
-                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
-                step=0.1,
-                verbose=True,
-                batch_size='all',
-                show_epoch=100
-            )
-            bpnet.train(
-                xor_zero_x_train, xor_zero_y_train,
-                epochs=3, epsilon=1e-5,
-            )
-            terminal_output = out.getvalue()
-
-        self.assertEqual(1, terminal_output.count("Network didn't converge"))
-
-        with catch_stdout() as out:
-            bpnet = algorithms.GradientDescent(
-                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
-                step=0.1,
-                verbose=True,
-                batch_size='all',
-                show_epoch=100
-            )
-            bpnet.train(
-                xor_zero_x_train, xor_zero_y_train,
-                epochs=1e3, epsilon=1e-3,
-            )
-            terminal_output = out.getvalue()
-
-        self.assertEqual(1, terminal_output.count("Network converged"))
-
     def test_train_epoch_end(self):
         global triggered_times
 

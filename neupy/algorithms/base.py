@@ -13,7 +13,6 @@ from neupy.core.logs import Verbose
 from neupy.core.config import ConfigurableABC
 from neupy.core.properties import Property, NumberProperty, IntProperty
 from neupy.utils.processing import shuffle
-from neupy.utils.iters import iter_until_converge
 
 
 __all__ = ('BaseSkeleton', 'BaseNetwork')
@@ -159,7 +158,7 @@ class BaseNetwork(BaseSkeleton):
         the training. Defaults to ``True``.
 
     epoch_end_signal : function
-        Calls this function when train epoch finishes.
+        Function will be triggered at the end of every training epoch.
 
     {Verbose.Parameters}
 
@@ -169,7 +168,7 @@ class BaseNetwork(BaseSkeleton):
         List of the training errors.
 
     validation_errors : list
-        Contains list of training errors. Validation error will be equal
+        Contains list of validation errors. Validation error will be equal
         to ``None`` when validation wasn't done during this epoch.
 
     last_epoch : int
@@ -213,7 +212,7 @@ class BaseNetwork(BaseSkeleton):
         self.logs.write(base_message + ', '.join(messages))
 
     def train(self, X_train, y_train=None, X_test=None, y_test=None,
-              epochs=100, epsilon=None):
+              epochs=100):
 
         if epochs <= 0:
             raise ValueError("Number of epochs needs to be a positive number")
@@ -221,9 +220,6 @@ class BaseNetwork(BaseSkeleton):
         last_epoch_shown = 0
         next_epoch = self.last_epoch + 1
         iterepochs = range(next_epoch, next_epoch + int(epochs))
-
-        if epsilon is not None:
-            iterepochs = iter_until_converge(self, epsilon, max_epochs=epochs)
 
         try:
             for epoch_index, epoch in enumerate(iterepochs):

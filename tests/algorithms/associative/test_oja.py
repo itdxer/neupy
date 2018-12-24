@@ -31,7 +31,7 @@ class OjaTestCase(BaseTestCase):
             verbose=False
         )
 
-        ojanet.train(self.data, epsilon=1e-5, epochs=100)
+        ojanet.train(self.data, epochs=100)
         minimized_data = ojanet.predict(self.data)
         np.testing.assert_array_almost_equal(
             minimized_data, self.result,
@@ -56,7 +56,7 @@ class OjaTestCase(BaseTestCase):
             # Can't predict without training
             ojanet.predict(np.random.random((4, 1)))
 
-        ojanet.train(self.data, epsilon=1e-5)
+        ojanet.train(self.data, epochs=2)
 
         with self.assertRaises(ValueError):
             # Invalid #feature for reconstruct
@@ -79,7 +79,7 @@ class OjaTestCase(BaseTestCase):
         data = np.array([[1, 2, 3]]).T
         target = np.array([[1, 2, 3]]).T
 
-        ojanet.train(data, epsilon=0.01, epochs=100)
+        ojanet.train(data, epochs=100)
         self.assertInvalidVectorPred(
             ojanet, data.ravel(), target, decimal=2)
 
@@ -91,7 +91,7 @@ class OjaTestCase(BaseTestCase):
         target = np.array([[1, 2, 3]]).T
         input_vector = data.ravel()
 
-        ojanet.train(data, epsilon=0.01, epochs=100)
+        ojanet.train(data, epochs=100)
         test_vectors = vectors_for_testing(input_vector)
 
         for i, test_vector in enumerate(test_vectors, start=1):
