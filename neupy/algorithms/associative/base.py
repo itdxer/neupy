@@ -154,7 +154,7 @@ class BaseStepAssociative(BaseAssociative):
         return super(BaseStepAssociative, self).train(
             X_train, *args, **kwargs)
 
-    def train_epoch(self, X_train, y_train):
+    def one_training_update(self, X_train, y_train):
         weight = self.weight
         n_unconditioned = self.n_unconditioned
         predict = self.predict

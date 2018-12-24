@@ -525,7 +525,7 @@ class SOFM(Kohonen):
             self.init_weights(X_train)
         super(SOFM, self).train(X_train, epochs=epochs)
 
-    def train_epoch(self, X_train, y_train=None):
+    def one_training_update(self, X_train, y_train=None):
         step = self.step
         predict = self.predict
         update_indexes = self.update_indexes

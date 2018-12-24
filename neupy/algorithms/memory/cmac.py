@@ -105,7 +105,7 @@ class CMAC(BaseNetwork):
     def quantize(self, X):
         return (X * self.quantization).astype(int)
 
-    def train_epoch(self, X_train, y_train):
+    def one_training_update(self, X_train, y_train):
         get_memory_coords = self.get_memory_coords
         get_result_by_coords = self.get_result_by_coords
         weight = self.weight
