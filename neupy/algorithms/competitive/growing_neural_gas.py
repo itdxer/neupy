@@ -327,7 +327,7 @@ class GrowingNeuralGas(BaseNetwork):
             X_test=None, y_test=None,
             epochs=epochs)
 
-    def train_epoch(self, X_train, y_train=None):
+    def one_training_update(self, X_train, y_train=None):
         graph = self.graph
         step = self.step
         neighbour_step = self.neighbour_step

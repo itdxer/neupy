@@ -356,7 +356,7 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
             X_test=X_test, y_test=None,
             epochs=epochs)
 
-    def train_epoch(self, X_train, y_train=None):
+    def one_training_update(self, X_train, y_train=None):
         """
         Train one epoch.
 

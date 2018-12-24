@@ -61,7 +61,7 @@ class Kohonen(BaseAssociative):
         output[range(raw_output.shape[0]), max_args] = 1
         return output
 
-    def train_epoch(self, X_train, y_train):
+    def one_training_update(self, X_train, y_train):
         step = self.step
         predict = self.predict
 

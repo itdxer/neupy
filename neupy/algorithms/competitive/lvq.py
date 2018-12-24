@@ -276,7 +276,7 @@ class LVQ(BaseNetwork):
 
         super(LVQ, self).train(X_train, y_train, *args, **kwargs)
 
-    def train_epoch(self, X_train, y_train):
+    def one_training_update(self, X_train, y_train):
         weight = self.weight
         subclass_to_class = self.subclass_to_class
 
@@ -334,7 +334,7 @@ class LVQ2(LVQ):
     """
     epsilon = NumberProperty(default=0.1)
 
-    def train_epoch(self, X_train, y_train):
+    def one_training_update(self, X_train, y_train):
         weight = self.weight
         epsilon = self.epsilon
         subclass_to_class = self.subclass_to_class
@@ -403,7 +403,7 @@ class LVQ21(LVQ2):
     >>> lvqnet.predict([[2, 1], [-1, -1]])
     array([1, 0])
     """
-    def train_epoch(self, X_train, y_train):
+    def one_training_update(self, X_train, y_train):
         weight = self.weight
         epsilon = self.epsilon
         subclass_to_class = self.subclass_to_class
@@ -509,7 +509,7 @@ class LVQ3(LVQ21):
     step = NumberProperty(minval=0, default=0.01)
     slowdown_rate = NumberProperty(minval=0, default=0.4)
 
-    def train_epoch(self, X_train, y_train):
+    def one_training_update(self, X_train, y_train):
         weight = self.weight
         epsilon = self.epsilon
         slowdown_rate = self.slowdown_rate

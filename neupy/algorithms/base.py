@@ -136,6 +136,10 @@ class BaseSkeleton(ConfigurableABC, Verbose):
         self.__dict__.update(state)
 
 
+class Table(list):
+    pass
+
+
 class BaseNetwork(BaseSkeleton):
     """
     Base class for Neural Network algorithms.
@@ -189,7 +193,7 @@ class BaseNetwork(BaseSkeleton):
 
         super(BaseNetwork, self).__init__(*args, **options)
 
-    def train_epoch(self, X_train, y_train=None):
+    def one_training_update(self, X_train, y_train=None):
         raise NotImplementedError()
 
     def score(self, X_test, y_test):
@@ -229,7 +233,7 @@ class BaseNetwork(BaseSkeleton):
                 if self.shuffle_data:
                     X_train, y_train = shuffle(X_train, y_train)
 
-                train_error = self.train_epoch(X_train, y_train)
+                train_error = self.one_training_update(X_train, y_train)
                 validation_error = None
 
                 if X_test is not None:

@@ -84,7 +84,7 @@ class Oja(BaseNetwork):
     minimized_data_size = IntProperty(minval=1)
     weight = ParameterProperty(default=init.XavierNormal())
 
-    def train_epoch(self, X, y_train):
+    def one_training_update(self, X, y_train):
         weight = self.weight
 
         minimized = np.dot(X, weight)

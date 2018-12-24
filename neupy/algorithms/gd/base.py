@@ -163,7 +163,6 @@ class BaseOptimizer(BaseNetwork):
             connection = layers.join(*connection)
 
         self.connection = connection
-
         self.layers = list(self.connection)
         graph = self.connection.graph
 
@@ -172,7 +171,6 @@ class BaseOptimizer(BaseNetwork):
             raise InvalidConnection("Connection should have one output "
                                     "layer, got {}".format(n_outputs))
 
-        self.output_layer = graph.output_layers[0]
         super(BaseOptimizer, self).__init__(**options)
 
         self.logs.message(
@@ -273,7 +271,7 @@ class BaseOptimizer(BaseNetwork):
                 outputs=self.variables.prediction_func,
                 name='network/func-predict'
             ),
-            train_epoch=function(
+            one_training_update=function(
                 inputs=network_inputs + [network_output],
                 outputs=self.variables.error_func,
                 updates=training_updates,
@@ -343,8 +341,8 @@ class BaseOptimizer(BaseNetwork):
             *args, **kwargs
         )
 
-    def train_epoch(self, X_train, y_train):
-        return self.methods.train_epoch(*as_tuple(X_train, y_train))
+    def one_training_update(self, X_train, y_train):
+        return self.methods.one_training_update(*as_tuple(X_train, y_train))
 
     def get_params(self, deep=False, with_connection=True):
         params = super(BaseOptimizer, self).get_params()
@@ -361,8 +359,7 @@ class BaseOptimizer(BaseNetwork):
         return "{}({}, {})".format(
             self.__class__.__name__,
             self.connection,
-            self.repr_options(),
-        )
+            self.repr_options())
 
 
 class BatchSizeProperty(BoundedProperty):
@@ -713,7 +710,7 @@ class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
     >>> mgdnet = algorithms.GradientDescent(network, batch_size=1)
     >>> mgdnet.train(x_train, y_train)
     """
-    def train_epoch(self, X_train, y_train):
+    def one_training_update(self, X_train, y_train):
         """
         Train one epoch.
 
@@ -731,7 +728,7 @@ class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
             Training error.
         """
         errors = self.apply_batches(
-            function=self.methods.train_epoch,
+            function=self.methods.one_training_update,
             X=X_train,
             arguments=as_tuple(y_train),
 

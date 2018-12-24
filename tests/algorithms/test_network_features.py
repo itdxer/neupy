@@ -160,7 +160,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
             with self.assertRaises(ValueError):
                 algorithms.GradientDescent(network, show_epoch=wrong_value)
 
-    def test_train_epoch_end(self):
+    def test_one_training_update_end(self):
         global triggered_times
 
         triggered_times = 0
