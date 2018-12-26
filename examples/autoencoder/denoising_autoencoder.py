@@ -6,13 +6,11 @@ from neupy import algorithms, layers, utils
 
 utils.reproducible()
 
-mnist = datasets.fetch_mldata('MNIST original')
+X, _ = datasets.fetch_openml('mnist_784', version=1, return_X_y=True)
+X = (X / 255.).astype(np.float32)
 
-data = mnist.data
-data = (data / 255.).astype(np.float32)
-
-np.random.shuffle(data)
-x_train, x_test = data[:60000], data[60000:]
+np.random.shuffle(X)
+x_train, x_test = X[:60000], X[60000:]
 
 autoencoder = algorithms.Momentum(
     [

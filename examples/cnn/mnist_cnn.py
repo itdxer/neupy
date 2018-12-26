@@ -8,19 +8,15 @@ from neupy import algorithms
 
 
 def load_data():
-    mnist = datasets.fetch_mldata('MNIST original')
-    data = mnist.data.reshape(-1, 28, 28, 1)
+    X, y = datasets.fetch_openml('mnist_784', version=1, return_X_y=True)
+    X = X.reshape(-1, 28, 28, 1)
 
-    target_scaler = OneHotEncoder(
-        sparse=False,
-        categories='auto',
-        dtype=np.float32,
-    )
-    target = mnist.target.reshape(-1, 1)
-    target = target_scaler.fit_transform(target)
+    target_scaler = OneHotEncoder(sparse=False, categories='auto')
+    y = target_scaler.fit_transform(y.reshape(-1, 1))
 
     x_train, x_test, y_train, y_test = train_test_split(
-        data.astype(np.float32), target,
+        X.astype(np.float32),
+        y.astype(np.float32),
         test_size=(1 / 7.)
     )
 

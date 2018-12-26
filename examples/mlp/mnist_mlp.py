@@ -1,23 +1,19 @@
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 from sklearn import model_selection, metrics, datasets
-from neupy import algorithms, layers, utils
+from neupy import algorithms, layers
 
 
-utils.reproducible()
+X, y = datasets.fetch_openml('mnist_784', version=1, return_X_y=True)
+target_scaler = OneHotEncoder(categories='auto', sparse=False)
+target = target_scaler.fit_transform(y.reshape(-1, 1))
 
-mnist = datasets.fetch_mldata('MNIST original')
-
-target_scaler = OneHotEncoder()
-target = mnist.target.reshape((-1, 1))
-target = target_scaler.fit_transform(target).todense()
-
-data = mnist.data / 255.
-data = data - data.mean(axis=0)
+X /= 255.
+X -= X.mean(axis=0)
 
 x_train, x_test, y_train, y_test = model_selection.train_test_split(
-    data.astype(np.float32),
-    target.astype(np.float32),
+    X.astype(np.float32),
+    y.astype(np.float32),
     test_size=(1 / 7.)
 )
 
