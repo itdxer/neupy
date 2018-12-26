@@ -4,21 +4,19 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from sklearn import model_selection, datasets
 
-from neupy import layers, utils, algorithms
+from neupy import layers, algorithms
 from neupy.exceptions import LayerConnectionError
 
 
-utils.reproducible()
-
-
 def load_data():
-    mnist = datasets.fetch_mldata('MNIST original')
+    X, y = datasets.fetch_openml('mnist_784', version=1, return_X_y=True)
 
-    data = mnist.data / 255.
-    data = data - data.mean(axis=0)
+    X = X / 255.
+    X -= X.mean(axis=0)
 
     x_train, x_test = model_selection.train_test_split(
-        data.astype(np.float32), test_size=(1 / 7.)
+        X.astype(np.float32),
+        test_size=(1 / 7.)
     )
     return x_train, x_test
 

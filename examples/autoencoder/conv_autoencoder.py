@@ -1,16 +1,14 @@
 import numpy as np
 from sklearn import datasets
 import matplotlib.pyplot as plt
-from neupy import algorithms, layers, utils, regularizers
+from neupy import algorithms, layers
 
 
-utils.reproducible()
+X, _ = datasets.fetch_openml('mnist_784', version=1, return_X_y=True)
+X = (X / 255.).astype(np.float32)
 
-mnist = datasets.fetch_mldata('MNIST original')
-data = (mnist.data / 255.).astype(np.float32)
-
-np.random.shuffle(data)
-x_train, x_test = data[:60000], data[60000:]
+np.random.shuffle(X)
+x_train, x_test = X[:60000], X[60000:]
 x_train_4d = x_train.reshape((60000, 28, 28, 1))
 x_test_4d = x_test.reshape((10000, 28, 28, 1))
 

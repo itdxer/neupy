@@ -23,8 +23,8 @@ def plot_rbm_components(rbm_network):
 
 utils.reproducible()
 
-mnist = datasets.fetch_mldata('MNIST original')
-data = asfloat(mnist.data > 130)
+X, _ = datasets.fetch_openml('mnist_784', version=1, return_X_y=True)
+X = asfloat(X > 130)
 
 rbm = algorithms.RBM(
     n_visible=784,
@@ -35,5 +35,5 @@ rbm = algorithms.RBM(
     verbose=True,
     shuffle_data=True,
 )
-rbm.train(data, data, epochs=10)
+rbm.train(X, X, epochs=10)
 plot_rbm_components(rbm)
