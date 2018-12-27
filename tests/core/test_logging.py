@@ -5,7 +5,6 @@ from collections import namedtuple
 
 from neupy.core import logs
 from neupy.core.logs import Verbose, TerminalLogger
-from neupy import algorithms, layers
 
 from base import BaseTestCase
 from helpers import catch_stdout
@@ -80,24 +79,3 @@ class LoggingTestCase(BaseTestCase):
         self.assertIn('test', red_color('test'))
 
         logs.is_color_supported = real_is_color_supported
-
-
-class NeuralNetworkLoggingTestCase(BaseTestCase):
-    def test_nn_init_logging(self):
-        with catch_stdout() as out:
-            algorithms.GradientDescent(
-                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
-                verbose=False,
-            )
-            terminal_output = out.getvalue()
-            self.assertEqual("", terminal_output.strip())
-
-        with catch_stdout() as out:
-            algorithms.GradientDescent(
-                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
-                verbose=True,
-            )
-            terminal_output = out.getvalue()
-
-            self.assertNotEqual("", terminal_output.strip())
-            self.assertIn("verbose = True", terminal_output)

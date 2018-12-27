@@ -3,10 +3,12 @@ from collections import namedtuple
 import numpy as np
 
 from neupy.core.config import Configurable
-from neupy.core.properties import (Property, ArrayProperty, TypedListProperty,
-                                   BoundedProperty, ProperFractionProperty,
-                                   NumberProperty, IntProperty, ChoiceProperty,
-                                   WithdrawProperty)
+from neupy.core.properties import (
+    Property, ArrayProperty, TypedListProperty,
+    BoundedProperty, ProperFractionProperty,
+    NumberProperty, IntProperty, ChoiceProperty,
+    WithdrawProperty,
+)
 
 from base import BaseTestCase
 
