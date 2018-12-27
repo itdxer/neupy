@@ -5,6 +5,7 @@ import time
 import types
 import inspect
 from abc import abstractmethod
+from collections import defaultdict
 
 import numpy as np
 
@@ -12,7 +13,8 @@ from neupy.exceptions import StopTraining
 from neupy.core.logs import Verbose
 from neupy.core.config import ConfigurableABC
 from neupy.core.properties import Property, NumberProperty, IntProperty
-from neupy.utils.processing import shuffle
+from neupy.algorithms import signals as base_signals
+from neupy.utils import iters, as_tuple
 
 
 __all__ = ('BaseSkeleton', 'BaseNetwork')
@@ -32,43 +34,6 @@ def preformat_value(value):
         return value.default
 
     return value
-
-
-def format_time(time):
-    """
-    Format seconds into human readable format.
-
-    Parameters
-    ----------
-    time : float
-        Time specified in seconds
-
-    Returns
-    -------
-    str
-        Formated time.
-    """
-    mins, seconds = divmod(int(time), 60)
-    hours, minutes = divmod(mins, 60)
-
-    if hours > 0:
-        return '{:0>2d}:{:0>2d}:{:0>2d}'.format(hours, minutes, seconds)
-
-    elif minutes > 0:
-        return '{:0>2d}:{:0>2d}'.format(minutes, seconds)
-
-    elif seconds > 0:
-        return '{:.0f} sec'.format(seconds)
-
-    elif time >= 1e-3:
-        return '{:.0f} ms'.format(time * 1e3)
-
-    elif time >= 1e-6:
-        # microseconds
-        return '{:.0f} μs'.format(time * 1e6)
-
-    # nanoseconds or smaller
-    return '{:.0f} ns'.format(time * 1e9)
 
 
 class BaseSkeleton(ConfigurableABC, Verbose):
@@ -136,8 +101,20 @@ class BaseSkeleton(ConfigurableABC, Verbose):
         self.__dict__.update(state)
 
 
-class Table(list):
-    pass
+class Events(object):
+    def __init__(self, network, signals):
+        self.data = defaultdict(list)
+        self.network = network
+        self.signals = signals
+
+    def trigger(self, name, **data):
+        if data:
+            self.data[name].append(data)
+
+        for signal in self.signals:
+            if hasattr(signal, name):
+                signal_method = getattr(signal, name)
+                signal_method(self.network, **data)
 
 
 class BaseNetwork(BaseSkeleton):
@@ -161,8 +138,9 @@ class BaseNetwork(BaseSkeleton):
         If it's ``True`` than training data will be shuffled before
         the training. Defaults to ``True``.
 
-    epoch_end_signal : function
-        Function will be triggered at the end of every training epoch.
+    signals : dict, list or function
+        Function that will be triggered after certain events during
+        the training.
 
     {Verbose.Parameters}
 
@@ -182,78 +160,134 @@ class BaseNetwork(BaseSkeleton):
     step = NumberProperty(default=0.1, minval=0)
     show_epoch = IntProperty(minval=1, default=1)
     shuffle_data = Property(default=False, expected_type=bool)
-    epoch_end_signal = Property(expected_type=types.FunctionType)
+    signals = Property(expected_type=object)
 
     def __init__(self, *args, **options):
-        self.training_errors = []
-        self.validation_errors = []
-
-        self.last_epoch = 0
-        self.epoch_time = 0
-
         super(BaseNetwork, self).__init__(*args, **options)
 
+        self.last_epoch = 0
+        self.n_updates_made = 0
+
+        signals = list(as_tuple(
+            self.signals,
+            base_signals.PrintLastErrorSignal(),
+            base_signals.ProgressbarSignal(),
+        ))
+
+        for i, signal in enumerate(signals):
+            if isinstance(signal, (types.FunctionType, types.LambdaType)):
+                signals[i] = base_signals.EpochEndSignal(signal)
+
+        self.events = Events(network=self, signals=signals)
+
+    def predict(self, X):
+        """
+        Return prediction results for the input data.
+
+        Parameters
+        ----------
+        input_data : array-like
+
+        Returns
+        -------
+        array-like
+        """
+        raise NotImplementedError()
+
     def one_training_update(self, X_train, y_train=None):
+        """
+        Function would be trigger before run all training procedure
+        related to the current epoch.
+
+        Parameters
+        ----------
+        epoch : int
+            Current epoch number.
+        """
         raise NotImplementedError()
 
     def score(self, X_test, y_test):
         raise NotImplementedError()
 
-    def print_last_error(self):
-        train_error = self.training_errors[-1]
-        validation_error = self.validation_errors[-1]
+    @property
+    def training_errors(self):
+        errors = self.events.data.get('train_error', [])
+        return [error['value'] for error in errors]
 
-        messages = []
-        base_message = "#{} : [{}] ".format(
-            self.last_epoch, format_time(self.epoch_time))
-
-        if train_error is not None:
-            messages.append("train: {:.6f}".format(train_error))
-
-        if validation_error is not None:
-            messages.append("valid: {:.6f}".format(validation_error))
-
-        self.logs.write(base_message + ', '.join(messages))
+    @property
+    def validation_errors(self):
+        errors = self.events.data.get('valid_error', [])
+        return [error['value'] for error in errors]
 
     def train(self, X_train, y_train=None, X_test=None, y_test=None,
-              epochs=100):
+              epochs=100, batch_size=None):
+        """
+        Method train neural network.
 
+        epochs : int
+            Defaults to `100`.
+
+        epsilon : float or None
+            Defaults to ``None``.
+        """
         if epochs <= 0:
             raise ValueError("Number of epochs needs to be a positive number")
 
-        last_epoch_shown = 0
-        next_epoch = self.last_epoch + 1
-        iterepochs = range(next_epoch, next_epoch + int(epochs))
+        epochs = int(epochs)
+        first_epoch = self.last_epoch + 1
+        batch_size = batch_size or getattr(self, 'batch_size', None)
+
+        self.events.trigger(
+            name='train_start',
+            X_train=X_train,
+            y_train=y_train,
+            epochs=epochs,
+            batch_size=batch_size
+        )
 
         try:
-            for epoch_index, epoch in enumerate(iterepochs):
-                epoch_start_time = time.time()
+            for epoch in range(first_epoch, first_epoch + epochs):
+                self.events.trigger('epoch_start')
+
                 self.last_epoch = epoch
+                iterator = iters.minibatches(
+                    (X_train, y_train),
+                    batch_size,
+                    self.shuffle_data,
+                )
 
-                if self.shuffle_data:
-                    X_train, y_train = shuffle(X_train, y_train)
+                for X_batch, y_batch in iterator:
+                    self.events.trigger('update_start')
+                    update_start_time = time.time()
 
-                train_error = self.one_training_update(X_train, y_train)
-                validation_error = None
+                    train_error = self.one_training_update(X_batch, y_batch)
+                    self.n_updates_made += 1
+
+                    self.events.trigger(
+                        name='train_error',
+                        value=train_error,
+                        eta=time.time() - update_start_time,
+                        epoch=epoch,
+                        n_updates=self.n_updates_made - 1,
+                    )
+                    self.events.trigger('update_end')
 
                 if X_test is not None:
+                    test_start_time = time.time()
                     validation_error = self.score(X_test, y_test)
+                    self.events.trigger(
+                        name='valid_error',
+                        value=validation_error,
+                        eta=time.time() - test_start_time,
+                        epoch=epoch,
+                        n_updates=self.n_updates_made,
+                    )
 
-                self.training_errors.append(train_error)
-                self.validation_errors.append(validation_error)
-                self.epoch_time = time.time() - epoch_start_time
-
-                if epoch % self.show_epoch == 0 or epoch_index == 0:
-                    self.print_last_error()
-                    last_epoch_shown = epoch
-
-                if self.epoch_end_signal is not None:
-                    self.epoch_end_signal(self)
+                self.events.trigger('epoch_end')
 
         except StopTraining as err:
             self.logs.message(
                 "TRAIN",
                 "Epoch #{} was stopped. Message: {}".format(epoch, str(err)))
 
-        if epoch != last_epoch_shown:
-            self.print_last_error()
+        self.events.trigger('train_end')

@@ -225,7 +225,7 @@ class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
 
     {BaseOptimizer.shuffle_data}
 
-    {BaseOptimizer.epoch_end_signal}
+    {BaseOptimizer.signals}
 
     {BaseOptimizer.verbose}
 

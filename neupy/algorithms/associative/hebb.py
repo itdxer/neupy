@@ -36,7 +36,7 @@ class HebbRule(BaseStepAssociative):
     >>> import numpy as np
     >>> from neupy import algorithms
     >>>
-    ... pavlov_dog_data = np.array([
+    >>> pavlov_dog_data = np.array([
     ...     [1, 0],  # food, no bell
     ...     [1, 1],  # food, bell
     ... ])
@@ -57,10 +57,10 @@ class HebbRule(BaseStepAssociative):
     ... )
     >>> hebbnet.train(pavlov_dog_data, epochs=2)
     >>> hebbnet.predict(dog_test_cases)
-    array([[-1],
-           [ 1],
-           [ 1],
-           [ 1]])
+    array([[0],
+           [1],
+           [1],
+           [1]])
     """
     decay_rate = BoundedProperty(default=0.2, minval=0)
 

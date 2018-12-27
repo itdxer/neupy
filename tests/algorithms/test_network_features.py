@@ -7,7 +7,7 @@ import numpy as np
 from sklearn import datasets
 from neupy import algorithms, layers
 from neupy.exceptions import StopTraining
-from neupy.algorithms.base import format_time
+from neupy.algorithms.signals import format_time
 
 from utils import catch_stdout
 from base import BaseTestCase
@@ -40,10 +40,12 @@ class NetworkMainTestCase(BaseTestCase):
             30, n_features=10, n_classes=2)
 
         network = algorithms.GradientDescent([
-            layers.Input(10),
-            layers.Sigmoid(3),
-            layers.Sigmoid(1),
-        ], batch_size='all')
+                layers.Input(10),
+                layers.Sigmoid(3),
+                layers.Sigmoid(1),
+            ],
+            batch_size=None,
+        )
 
         # Should work fine without exceptions
         network.train(data, target, epochs=2)
@@ -69,8 +71,8 @@ class NetworkMainTestCase(BaseTestCase):
                 layers.Sigmoid(3),
                 layers.Sigmoid(1),
             ],
-            batch_size='all',
-            epoch_end_signal=stop_training_after_the_5th_epoch,
+            batch_size=None,
+            signals=stop_training_after_the_5th_epoch,
         )
         network.train(data, target, epochs=10)
         self.assertEqual(network.last_epoch, 5)
@@ -80,7 +82,7 @@ class NetworkMainTestCase(BaseTestCase):
             network = algorithms.GradientDescent(
                 layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
                 verbose=False,
-                batch_size='all',
+                batch_size=None,
             )
 
             x = np.zeros((5, 2))
@@ -101,7 +103,7 @@ class NetworkMainTestCase(BaseTestCase):
         network = algorithms.GradientDescent(
             layers.Input(2) > layers.Sigmoid(1),
             verbose=False,
-            batch_size='all',
+            batch_size=None,
         )
 
         with self.assertRaisesRegexp(ValueError, "a positive number"):
@@ -134,7 +136,7 @@ class NetworkPropertiesTestCase(BaseTestCase):
                     layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
                     step=0.1,
                     verbose=True,
-                    batch_size='all',
+                    batch_size=None,
                     show_epoch=case.show_epoch
                 )
                 bpnet.train(
@@ -176,8 +178,8 @@ class NetworkPropertiesTestCase(BaseTestCase):
                 layers.Sigmoid(2),
                 layers.Sigmoid(1)
             ],
-            epoch_end_signal=print_message,
-            batch_size='all',
+            signals=print_message,
+            batch_size=None,
         )
 
         network.train(xor_zero_x_train, xor_zero_y_train, epochs=epochs)

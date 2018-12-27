@@ -17,7 +17,7 @@ class HessianTestCase(BaseTestCase):
         x_train, x_test, y_train, y_test = simple_classification()
         compare_networks(
             # Test classes
-            partial(algorithms.GradientDescent, batch_size='all'),
+            partial(algorithms.GradientDescent, batch_size=None),
             partial(algorithms.Hessian, penalty_const=1),
             # Test data
             (x_train, y_train, x_test, y_test),

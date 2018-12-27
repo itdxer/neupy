@@ -198,7 +198,7 @@ class PReluTestCase(BaseTestCase):
                 prelu_layer1,
                 prelu_layer2,
             ],
-            batch_size='all',
+            batch_size=None,
         )
 
         prelu1_alpha_before_training = self.eval(prelu_layer1.alpha)

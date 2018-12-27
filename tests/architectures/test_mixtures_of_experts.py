@@ -22,7 +22,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                     layers.Sigmoid(1)
                 ],
                 step=0.2,
-                batch_size='all',
+                batch_size=None,
                 verbose=False
             ),
             layers.join(

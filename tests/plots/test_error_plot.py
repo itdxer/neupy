@@ -24,7 +24,7 @@ class ErrorPlotTestCase(BaseTestCase):
             network = algorithms.GradientDescent(
                 layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
                 verbose=True,
-                batch_size='all',
+                batch_size=None,
             )
 
             network.training_errors = [1, 2]
@@ -41,7 +41,7 @@ class ErrorPlotTestCase(BaseTestCase):
 
         network = algorithms.GradientDescent(
             layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
-            batch_size='all',
+            batch_size=None,
         )
         ax_returned = plots.error_plot(network, ax=None, show=False)
 
@@ -84,7 +84,7 @@ class ErrorPlotTestCase(BaseTestCase):
                     layers.Sigmoid(1),
                 ],
                 step=0.25,
-                batch_size='all',
+                batch_size=None,
             )
             gdnet.train(x_train, y_train, x_test, y_test, epochs=100)
             plots.error_plot(gdnet, ax=ax, show=False)

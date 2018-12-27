@@ -151,8 +151,7 @@ class BaseStepAssociative(BaseAssociative):
 
     def train(self, X_train, *args, **kwargs):
         X_train = format_data(X_train, is_feature1d=False)
-        return super(BaseStepAssociative, self).train(
-            X_train, *args, **kwargs)
+        return super(BaseStepAssociative, self).train(X_train, *args, **kwargs)
 
     def one_training_update(self, X_train, y_train):
         weight = self.weight
@@ -160,8 +159,9 @@ class BaseStepAssociative(BaseAssociative):
         predict = self.predict
         weight_delta = self.weight_delta
 
-        for input_row in X_train:
-            input_row = np.reshape(input_row, (1, input_row.size))
-            layer_output = predict(input_row)
-            weight[n_unconditioned:, :] += weight_delta(
-                input_row, layer_output)
+        for x_row in X_train:
+            x_row = np.expand_dims(x_row, axis=0)
+            layer_output = predict(x_row)
+            weight[n_unconditioned:, :] += weight_delta(x_row, layer_output)
+
+        return np.linalg.norm(weight)

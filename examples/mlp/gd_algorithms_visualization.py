@@ -85,7 +85,7 @@ def draw_quiver(network_class, name, color='r'):
     global weights
     global current_epoch
 
-    bpn = network_class(get_connection(), epoch_end_signal=save_epoch_weight)
+    bpn = network_class(get_connection(), signals=save_epoch_weight)
 
     # We don't know in advance number of epochs that network
     # need to reach the goal. For this reason we use 1000 as
@@ -119,8 +119,8 @@ def target_function(network, x, y):
 bp_network = algorithms.GradientDescent(
     get_connection(),
     step=0.3,
-    batch_size='all',
-    epoch_end_signal=save_epoch_weight
+    batch_size=None,
+    signals=save_epoch_weight
 )
 network_target_function = partial(target_function, bp_network)
 
@@ -137,7 +137,7 @@ draw_countour(
 
 algorithms = (
     (partial(algorithms.GradientDescent, step=0.3), 'Gradient Descent', 'k'),
-    (partial(algorithms.Momentum, batch_size='full', step=0.3), 'Momentum', 'g'),
+    (partial(algorithms.Momentum, batch_size=None, step=0.3), 'Momentum', 'g'),
     (partial(algorithms.RPROP, step=0.3), 'RPROP', 'm'),
     (partial(algorithms.IRPROPPlus, step=0.3), 'iRPROP+', 'r'),
     (partial(algorithms.Hessian, penalty_const=0.01), "Newton's method", 'y'),

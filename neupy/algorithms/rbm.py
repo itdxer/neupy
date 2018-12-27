@@ -4,14 +4,9 @@ import tensorflow as tf
 from neupy.core.config import DumpableObject
 from neupy.core.properties import IntProperty, ParameterProperty
 from neupy.algorithms.base import BaseNetwork
-from neupy.algorithms.gd.base import (
-    MinibatchTrainingMixin,
-    average_batch_errors,
-    function
-)
 from neupy.layers.base import create_shared_parameter
 from neupy.utils import (
-    asfloat, format_data, dot,
+    asfloat, format_data, dot, function, apply_batches,
     initialize_uninitialized_variables
 )
 from neupy import init
@@ -37,7 +32,7 @@ def random_sample(data, n_samples):
         return tf.gather(data, sample_indeces)
 
 
-class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
+class RBM(BaseNetwork, DumpableObject):
     """
     Boolean/Bernoulli Restricted Boltzmann Machine (RBM).
     Algorithm assumes that inputs are either binary
@@ -368,16 +363,7 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
         -------
         float
         """
-        errors = self.apply_batches(
-            function=self.weight_update_one_step,
-            X=X_train,
-
-            description='Training batches',
-            show_error_output=True,
-        )
-
-        n_samples = len(X_train)
-        return average_batch_errors(errors, n_samples, self.batch_size)
+        return self.weight_update_one_step(X_train)
 
     def predict(self, X):
         return self.visible_to_hidden(X)
@@ -398,14 +384,11 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
         is_input_feature1d = (self.n_visible == 1)
         visible_input = format_data(visible_input, is_input_feature1d)
 
-        outputs = self.apply_batches(
+        outputs = apply_batches(
             function=self.visible_to_hidden_one_step,
-            X=visible_input,
-
-            description='Hidden from visible batches',
-            show_progressbar=True,
-            show_error_output=False,
-            scalar_output=False,
+            inputs=visible_input,
+            batch_size=self.batch_size,
+            show_progressbar=self.logs.enable,
         )
         return np.concatenate(outputs, axis=0)
 
@@ -425,14 +408,11 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
         is_input_feature1d = (self.n_hidden == 1)
         hidden_input = format_data(hidden_input, is_input_feature1d)
 
-        outputs = self.apply_batches(
+        outputs = apply_batches(
             function=self.hidden_to_visible_one_step,
-            X=hidden_input,
-
-            description='Visible from hidden batches',
-            show_progressbar=True,
-            show_error_output=False,
-            scalar_output=False,
+            inputs=hidden_input,
+            batch_size=self.batch_size,
+            show_progressbar=self.logs.enable,
         )
         return np.concatenate(outputs, axis=0)
 
@@ -450,20 +430,14 @@ class RBM(BaseNetwork, MinibatchTrainingMixin, DumpableObject):
         float
             Value of the pseudo-likelihood.
         """
-        is_input_feature1d = (self.n_visible == 1)
-        X = format_data(X, is_input_feature1d)
-
-        errors = self.apply_batches(
+        return apply_batches(
             function=self.score_func,
-            X=X,
-
-            description='Validation batches',
-            show_error_output=True,
-        )
-        return average_batch_errors(
-            errors,
-            n_samples=len(X),
+            inputs=format_data(X, is_feature1d=(self.n_visible == 1)),
             batch_size=self.batch_size,
+
+            show_output=True,
+            show_progressbar=self.logs.enable,
+            average_outputs=True,
         )
 
     def gibbs_sampling(self, visible_input, n_iter=1):

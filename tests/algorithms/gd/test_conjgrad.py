@@ -95,7 +95,7 @@ class ConjugateGradientTestCase(BaseTestCase):
         compare_networks(
             # Test classes
             partial(
-                partial(algorithms.GradientDescent, batch_size='all'),
+                partial(algorithms.GradientDescent, batch_size=None),
                 step=1.0,
             ),
             partial(

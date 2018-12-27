@@ -129,7 +129,7 @@ if __name__ == '__main__':
 
         step=0.0005,
         error='rmse',
-        batch_size='full',
+        batch_size=None,
         verbose=False
     )
 

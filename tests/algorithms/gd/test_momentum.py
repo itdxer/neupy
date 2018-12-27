@@ -18,7 +18,7 @@ class MomentumTestCase(BaseTestCase):
             ],
             step=0.35,
             momentum=0.99,
-            batch_size='full',
+            batch_size=None,
             verbose=False,
             nesterov=True,
         )
@@ -30,7 +30,7 @@ class MomentumTestCase(BaseTestCase):
         x_train, _, y_train, _ = simple_classification()
         compare_networks(
            # Test classes
-           partial(algorithms.Momentum, batch_size='full'),
+           partial(algorithms.Momentum, batch_size=None),
            partial(algorithms.Momentum, batch_size=1),
            # Test data
            (x_train, y_train),
@@ -63,7 +63,7 @@ class MomentumTestCase(BaseTestCase):
                layers.Sigmoid(20),
                layers.Sigmoid(1)
            ],
-           batch_size='full',
+           batch_size=None,
            step=0.25,
            momentum=0.9,
            shuffle_data=True,

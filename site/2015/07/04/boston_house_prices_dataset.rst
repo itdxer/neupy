@@ -320,7 +320,7 @@ Output after initialization might look like this
     [ALGORITHM] LevenbergMarquardt
 
     [OPTION] verbose = True
-    [OPTION] epoch_end_signal = None
+    [OPTION] signals = None
     [OPTION] show_epoch = 5
     [OPTION] shuffle_data = False
     [OPTION] error = mse

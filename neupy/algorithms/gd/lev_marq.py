@@ -90,11 +90,9 @@ class LevenbergMarquardt(BaseOptimizer):
 
     {BaseOptimizer.shuffle_data}
 
-    {BaseOptimizer.epoch_end_signal}
+    {BaseOptimizer.signals}
 
     {BaseOptimizer.verbose}
-
-    {BaseOptimizer.regularizer}
 
     Attributes
     ----------
@@ -126,6 +124,7 @@ class LevenbergMarquardt(BaseOptimizer):
     error = ChoiceProperty(default='mse', choices={'mse': objectives.mse})
 
     step = WithdrawProperty()
+    regularizer = WithdrawProperty()
 
     def init_variables(self):
         super(LevenbergMarquardt, self).init_variables()

@@ -17,7 +17,7 @@ class StepUpdateTestCase(BaseTestCase):
             ],
             step=step,
             momentum=0.99,
-            batch_size='full',
+            batch_size=None,
             verbose=False,
             nesterov=True,
         )
