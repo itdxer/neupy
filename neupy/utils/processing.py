@@ -2,8 +2,6 @@ import numpy as np
 import tensorflow as tf
 from scipy.sparse import issparse
 
-from neupy.utils.misc import as_tuple
-
 
 __all__ = ('format_data', 'asfloat')
 
