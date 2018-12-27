@@ -50,28 +50,6 @@ class NetworkMainTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             network.train(data, target, y_test=target, epochs=2)
 
-    def test_network_training_summary(self):
-        with catch_stdout() as out:
-            network = algorithms.GradientDescent(
-                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
-                verbose=False,
-                batch_size=None,
-            )
-
-            x = np.zeros((5, 2))
-            y = np.zeros((5, 1))
-
-            network.verbose = True
-            n_epochs = 10
-            network.train(x, y, epochs=n_epochs)
-
-            terminal_output = out.getvalue().strip()
-
-        # `n_epochs - 1` because \n appears only between
-        # inline summary lines.
-        # Also network prints 5 additional lines at the beggining
-        self.assertEqual(terminal_output.count('\n'), n_epochs - 1)
-
     def test_wrong_number_of_training_epochs(self):
         network = algorithms.GradientDescent(
             layers.Input(2) > layers.Sigmoid(1),

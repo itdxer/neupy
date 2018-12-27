@@ -184,6 +184,29 @@ class SignalsTestCase(BaseTestCase):
             )
             self.assertEqual(case.should_be_n_times, time_counts)
 
+    def test_network_training_summary(self):
+        with catch_stdout() as out:
+            network = algorithms.GradientDescent(
+                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
+                verbose=False,
+                batch_size=None,
+            )
+
+            x = np.zeros((5, 2))
+            y = np.zeros((5, 1))
+
+            network.verbose = True
+            n_epochs = 10
+            network.train(x, y, epochs=n_epochs)
+
+            terminal_output = out.getvalue().strip()
+
+        # `n_epochs - 1` because \n appears only between
+        # inline summary lines.
+        # Also network prints 5 additional lines at the beggining
+        self.assertEqual(terminal_output.count('\n'), n_epochs - 1)
+        self.assertEqual(terminal_output.count('train: '), n_epochs)
+
     def test_format_time(self):
         self.assertEqual("01:06:40", format_time(4000))
         self.assertEqual("02:05", format_time(125))
