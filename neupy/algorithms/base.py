@@ -224,8 +224,15 @@ class BaseNetwork(BaseSkeleton):
         """
         Method train neural network.
 
+        Parameters
+        ----------
+        X_train : array-like
+        y_train : array-like or None
+        X_test : array-like or None
+        y_test : array-like or None
+
         epochs : int
-            Defaults to `100`.
+            Defaults to ``100``.
 
         epsilon : float or None
             Defaults to ``None``.

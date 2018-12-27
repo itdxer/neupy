@@ -5,7 +5,7 @@ from itertools import product
 
 import numpy as np
 
-from neupy.optimizations import wolfe
+from neupy.algorithms.minseach import wolfe
 
 from base import BaseTestCase
 
