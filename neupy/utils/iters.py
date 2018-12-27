@@ -59,8 +59,8 @@ def minibatches(inputs, batch_size=None, shuffle=False):
         np.random.shuffle(indeces)
 
         for index in range(n_batches):
-            batch_indeces = indeces[index * batch_size:(index + 1) * batch_size]
-            yield apply_slices(inputs, batch_indeces)
+            batch_indeces = slice(index * batch_size, (index + 1) * batch_size)
+            yield apply_slices(inputs, indeces[batch_indeces])
 
     elif n_batches != 1:
         for index in range(n_batches):
