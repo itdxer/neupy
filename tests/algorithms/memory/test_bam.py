@@ -7,7 +7,7 @@ from neupy.exceptions import NotTrained
 
 from algorithms.memory.data import zero, one, half_one, half_zero
 from base import BaseTestCase
-from utils import vectors_for_testing
+from helpers import vectors_for_testing
 
 
 zero_hint = np.array([[0, 1, 0, 0]])

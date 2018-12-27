@@ -2,9 +2,9 @@ from functools import partial
 
 from neupy import algorithms, layers, utils
 
-from utils import compare_networks
+from helpers import compare_networks
 from base import BaseTestCase
-from data import simple_classification
+from helpers import simple_classification
 
 
 class GradientDescentTestCase(BaseTestCase):

@@ -9,7 +9,7 @@ from neupy import algorithms, layers
 from neupy.exceptions import StopTraining
 from neupy.algorithms.signals import format_time
 
-from utils import catch_stdout
+from helpers import catch_stdout
 from base import BaseTestCase
 
 

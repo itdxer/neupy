@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from sklearn import datasets, preprocessing
 from neupy import algorithms, utils
 
-from utils import iter_neighbours
+from helpers import iter_neighbours
 
 
 plt.style.use('ggplot')

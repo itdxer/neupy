@@ -10,7 +10,7 @@ from neupy.exceptions import LayerConnectionError
 from neupy.layers.normalization import find_opposite_axes
 
 from base import BaseTestCase
-from data import simple_classification
+from helpers import simple_classification
 
 
 class BatchNormTestCase(BaseTestCase):

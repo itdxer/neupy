@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from neupy.algorithms.minseach.golden_search import fmin_golden_search
+from neupy.algorithms.minsearch.golden_search import fmin_golden_search
 
 from base import BaseTestCase
 

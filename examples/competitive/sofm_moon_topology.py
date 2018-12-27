@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from sklearn import datasets
 from neupy import algorithms, utils
 
-from utils import plot_2d_grid
+from helpers import plot_2d_grid
 
 
 plt.style.use('ggplot')

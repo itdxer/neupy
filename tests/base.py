@@ -9,7 +9,7 @@ import tensorflow as tf
 from neupy import utils, layers, init
 from neupy.utils import tensorflow_eval, tensorflow_session
 
-from utils import vectors_for_testing
+from helpers import vectors_for_testing
 
 
 class BaseTestCase(unittest.TestCase):

@@ -3,8 +3,8 @@ from functools import partial
 from neupy import algorithms, layers
 from neupy import init
 
-from utils import compare_networks
-from data import simple_classification
+from helpers import compare_networks
+from helpers import simple_classification
 from base import BaseTestCase
 
 

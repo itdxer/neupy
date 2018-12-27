@@ -1,7 +1,7 @@
 from neupy import algorithms, layers
 
 from base import BaseTestCase
-from data import simple_classification
+from helpers import simple_classification
 
 
 class StepUpdateTestCase(BaseTestCase):

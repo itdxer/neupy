@@ -7,13 +7,51 @@ from contextlib import contextmanager
 import six
 import numpy as np
 import pandas as pd
+from sklearn import datasets
+from sklearn.model_selection import StratifiedShuffleSplit
 from matplotlib import pyplot as plt
 from matplotlib.testing.compare import compare_images
 
 from neupy import algorithms, layers, utils, init
 from neupy.storage import save_dict, load_dict
 
-from data import xor_x_train, xor_y_train
+
+def simple_classification(n_samples=100, n_features=10, random_state=33):
+    """
+    Generate simple classification task for training.
+
+    Parameters
+    ----------
+    n_samples : int
+        Number of samples in dataset.
+    n_features : int
+        Number of features for each sample.
+    random_state : int
+        Random state to make results reproducible.
+
+    Returns
+    -------
+    tuple
+        Returns tuple that contains 4 variables. There are input train,
+        input test, target train, target test respectevly.
+    """
+    X, y = datasets.make_classification(
+        n_samples=n_samples,
+        n_features=n_features,
+        random_state=random_state,
+    )
+    shuffle_split = StratifiedShuffleSplit(
+        n_splits=1,
+        train_size=0.6,
+        test_size=0.1,
+        random_state=random_state,
+    )
+
+    train_index, test_index = next(shuffle_split.split(X, y))
+    x_train, x_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+
+    return x_train, x_test, y_train, y_test
 
 
 @contextmanager
@@ -162,6 +200,9 @@ def reproducible_network_train(seed=0, epochs=500, **additional_params):
         Returns trained network.
     """
     utils.reproducible(seed)
+
+    xor_x_train = np.array([[-1, -1], [-1, 1], [1, -1], [1, 1]])
+    xor_y_train = np.array([[1, -1, -1, 1]]).T
 
     xavier_normal = init.XavierNormal()
     tanh_weight1 = xavier_normal.sample((2, 5), return_array=True)

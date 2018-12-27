@@ -7,7 +7,7 @@ from neupy.core.properties import (
     WithdrawProperty, IntProperty,
 )
 from neupy.utils.tf_utils import setup_parameter_updates
-from neupy.algorithms.minseach.wolfe import line_search
+from neupy.algorithms.minsearch.wolfe import line_search
 from neupy.layers.utils import (
     count_parameters, iter_parameters,
     find_variables,
