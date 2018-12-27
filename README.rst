@@ -188,34 +188,34 @@ Articles and Notebooks
         </tr>
         <tr>
             <td border="0" width="30%">
-                <a href="https://github.com/itdxer/neupy/blob/release/v0.6.4/notebooks/Playing%20with%20MLP%20visualizations.ipynb">
+                <a href="https://github.com/itdxer/neupy/blob/master/notebooks/Playing%20with%20MLP%20visualizations.ipynb">
                 <img src="site/_static/intro/mlp-vis-intro.png">
                 </a>
             </td>
             <td border="0" valign="top">
-                <h3><a href="https://github.com/itdxer/neupy/blob/release/v0.6.4/notebooks/Playing%20with%20MLP%20visualizations.ipynb">Playing with MLP visualizations</a></h3>
+                <h3><a href="https://github.com/itdxer/neupy/blob/master/notebooks/Playing%20with%20MLP%20visualizations.ipynb">Playing with MLP visualizations</a></h3>
                 <p>This notebook shows interesting ways to look inside of your MLP network.</p>
             </td>
         </tr>
         <tr>
             <td border="0" width="30%">
-                <a href="https://github.com/itdxer/neupy/tree/release/v0.6.4/examples/reinforcement_learning/vin">
+                <a href="https://github.com/itdxer/neupy/tree/master/examples/reinforcement_learning/vin">
                 <img src="site/_static/intro/vin-intro.png">
                 </a>
             </td>
             <td border="0" valign="top">
-                <h3><a href="https://github.com/itdxer/neupy/tree/release/v0.6.4/examples/reinforcement_learning/vin">Exploring world with Value Iteration Network (VIN)</a></h3>
+                <h3><a href="https://github.com/itdxer/neupy/tree/master/examples/reinforcement_learning/vin">Exploring world with Value Iteration Network (VIN)</a></h3>
                 <p>One of the basic applications of the Value Iteration Network that learns how to find an optimal path between two points in the environment with obstacles.</p>
             </td>
         </tr>
         <tr>
             <td border="0" width="30%">
-                <a href="https://github.com/itdxer/neupy/tree/release/v0.6.4/examples/boltzmann_machine">
+                <a href="https://github.com/itdxer/neupy/tree/master/examples/boltzmann_machine">
                 <img src="site/_static/intro/boltzman-machine-intro.png">
                 </a>
             </td>
             <td border="0" valign="top">
-                <h3><a href="https://github.com/itdxer/neupy/tree/release/v0.6.4/examples/boltzmann_machine">Features learned by Restricted Boltzmann Machine (RBM)</a></h3>
+                <h3><a href="https://github.com/itdxer/neupy/tree/master/examples/boltzmann_machine">Features learned by Restricted Boltzmann Machine (RBM)</a></h3>
                 <p>Set of examples that use and explore knowledge extracted by Restricted Boltzmann Machine</p>
             </td>
         </tr>
