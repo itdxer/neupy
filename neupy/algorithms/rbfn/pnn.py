@@ -1,17 +1,16 @@
 import numpy as np
 
-from neupy.utils import format_data
-from neupy.exceptions import NotTrained
-from neupy.core.properties import BoundedProperty
+from neupy.utils import format_data, apply_batches
+from neupy.core.properties import BoundedProperty, IntProperty
 from neupy.algorithms.base import BaseSkeleton
-from neupy.algorithms.gd.base import MinibatchTrainingMixin
+from neupy.exceptions import NotTrained
 from .utils import pdf_between_data
 
 
 __all__ = ('PNN',)
 
 
-class PNN(BaseSkeleton, MinibatchTrainingMixin):
+class PNN(BaseSkeleton):
     """
     Probabilistic Neural Network (PNN). Network applies only to
     the classification problems.
@@ -41,7 +40,10 @@ class PNN(BaseSkeleton, MinibatchTrainingMixin):
         ``[0, 20]`` that standard deviation should be also a big value
         like ``10`` or ``15``. Small values will lead to bad prediction.
 
-    {MinibatchTrainingMixin.batch_size}
+    batch_size : int or None
+        Set up min-batch size. The ``None`` value will ensure that all data
+        samples will be propagated through the network at once.
+        Defaults to ``128``.
 
     {Verbose.verbose}
 
@@ -84,9 +86,12 @@ class PNN(BaseSkeleton, MinibatchTrainingMixin):
     0.98888888888888893
     """
     std = BoundedProperty(minval=0)
+    batch_size = IntProperty(default=128, minval=0, allow_none=True)
 
     def __init__(self, std, batch_size=128, verbose=False):
         self.std = std
+        self.batch_size = batch_size
+
         self.classes = None
         self.X_train = None
         self.y_train = None
@@ -155,14 +160,11 @@ class PNN(BaseSkeleton, MinibatchTrainingMixin):
         -------
         array-like (n_samples, n_classes)
         """
-        outputs = self.apply_batches(
+        outputs = apply_batches(
             function=self.predict_raw,
-            X=format_data(X),
-
-            description='Prediction batches',
-            show_progressbar=True,
-            show_error_output=False,
-            scalar_output=False,
+            inputs=format_data(X),
+            batch_size=self.batch_size,
+            show_progressbar=self.logs.enable,
         )
         raw_output = np.concatenate(outputs, axis=1)
 
@@ -215,14 +217,11 @@ class PNN(BaseSkeleton, MinibatchTrainingMixin):
         -------
         array-like (n_samples,)
         """
-        outputs = self.apply_batches(
+        outputs = apply_batches(
             function=self.predict_raw,
-            X=format_data(X),
-
-            description='Prediction batches',
-            show_progressbar=True,
-            show_error_output=False,
-            scalar_output=False,
+            inputs=format_data(X),
+            batch_size=self.batch_size,
+            show_progressbar=self.logs.enable,
         )
 
         raw_output = np.concatenate(outputs, axis=1)

@@ -4,7 +4,7 @@ Signals and Early stopping
 Basics
 ------
 
-Signal is a special type of functions that can be triggered after a certain event. The ``epoch_end_signal`` event triggers after each training epoch.
+Signal is a special type of functions that can be triggered after a certain event. The ``signals`` event triggers after each training epoch.
 
 .. code-block:: python
 
@@ -15,7 +15,7 @@ Signal is a special type of functions that can be triggered after a certain even
 
     bpnet = algorithms.GradientDescent(
         (2, 5, 1),
-        epoch_end_signal=on_epoch_end,
+        signals=on_epoch_end,
         show_epoch=100,
         verbose=True
     )
@@ -43,7 +43,7 @@ Signals allow us to interrupt training process.
             layers.Relu(300),
             layers.Softmax(10),
         ],
-        epoch_end_signal=on_epoch_end,
+        signals=on_epoch_end,
     )
 
 If we use constructible architectures than it's possible to save parameter after each training epoch and load them in case if validation error increases.
@@ -73,5 +73,5 @@ If we use constructible architectures than it's possible to save parameter after
             layers.Relu(300),
             layers.Softmax(10),
         ],
-        epoch_end_signal=on_epoch_end,
+        signals=on_epoch_end,
     )

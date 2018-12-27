@@ -1,4 +1,4 @@
-from numpy import dot
+import numpy as np
 
 from .base import BaseStepAssociative
 
@@ -51,7 +51,7 @@ class Instar(BaseStepAssociative):
     def weight_delta(self, input_row, layer_output):
         n_unconditioned = self.n_unconditioned
         weight = self.weight[n_unconditioned:, :]
-        return self.step * dot(
-            (input_row[:, n_unconditioned:].T - weight),
-            layer_output.T
-        )
+
+        return self.step * np.dot(
+            input_row[:, n_unconditioned:].T - weight,
+            layer_output.T)

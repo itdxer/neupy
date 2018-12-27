@@ -71,15 +71,15 @@ class Hessian(BaseOptimizer):
 
     {BaseOptimizer.error}
 
+    {BaseOptimizer.regularizer}
+
     {BaseOptimizer.show_epoch}
 
     {BaseOptimizer.shuffle_data}
 
-    {BaseOptimizer.epoch_end_signal}
+    {BaseOptimizer.signals}
 
     {BaseOptimizer.verbose}
-
-    {BaseOptimizer.regularizer}
 
     Attributes
     ----------

@@ -101,8 +101,8 @@ class LayerStoragePickleTestCase(BaseTestCase):
                 layers.Sigmoid(4),
                 layers.Sigmoid(1)
             ],
-            epoch_end_signal=on_epoch_end,
-            batch_size='all',
+            signals=on_epoch_end,
+            batch_size=None,
             step=0.5
         )
         gdnet.train(x_train, y_train)

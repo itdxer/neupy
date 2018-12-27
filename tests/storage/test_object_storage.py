@@ -19,7 +19,7 @@ class BasicStorageTestCase(BaseTestCase):
         bpnet = algorithms.GradientDescent(
             layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
             step=0.25,
-            batch_size='all',
+            batch_size=None,
         )
         data, target = datasets.make_regression(n_features=2, n_targets=1)
 

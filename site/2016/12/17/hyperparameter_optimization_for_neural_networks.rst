@@ -468,18 +468,17 @@ Let's make an example. We're going to use MNIST dataset.
     from sklearn import datasets, preprocessing
     from sklearn.model_selection import train_test_split
 
-    mnist = datasets.fetch_mldata('MNIST original')
+    X, y = datasets.fetch_openml('mnist_784', version=1, return_X_y=True)
 
-    target_scaler = preprocessing.OneHotEncoder()
-    target = mnist.target.reshape((-1, 1))
-    target = target_scaler.fit_transform(target).todense()
+    target_scaler = preprocessing.OneHotEncoder(sparse=False, categories='auto')
+    y = target_scaler.fit_transform(y.reshape(-1, 1))
 
-    data = mnist.data / 255.
-    data = data - data.mean(axis=0)
+    X /= 255.
+    X -= X.mean(axis=0)
 
     x_train, x_test, y_train, y_test = train_test_split(
-        data.astype(np.float32),
-        target.astype(np.float32),
+        X.astype(np.float32),
+        y.astype(np.float32),
         test_size=(1 / 7.)
     )
 
@@ -601,7 +600,7 @@ After that, we can define training algorithm for the network.
         error='categorical_crossentropy',
         shuffle_data=True,
 
-        epoch_end_signal=on_epoch_end,
+        signals=on_epoch_end,
     )
 
 All settings should be clear from the code. You can check :network:`RMSProp` documentation to find more information about its input parameters. In addition, I've added a simple rule that interrupts training when the error is too high. This is an example of a simple rule that can be changed.

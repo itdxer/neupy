@@ -15,7 +15,7 @@ class AdadeltaTestCase(BaseTestCase):
                 layers.Sigmoid(20),
                 layers.Sigmoid(1)
             ],
-            batch_size='full',
+            batch_size=None,
             verbose=False,
             decay=0.95,
             epsilon=1e-5,
@@ -27,5 +27,4 @@ class AdadeltaTestCase(BaseTestCase):
     def test_adadelta_overfit(self):
         self.assertCanNetworkOverfit(
             partial(algorithms.Adadelta, verbose=False),
-            epochs=3000,
-        )
+            epochs=3000)

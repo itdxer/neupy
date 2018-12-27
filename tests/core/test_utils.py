@@ -8,7 +8,7 @@ import tensorflow as tf
 from scipy.sparse import csr_matrix
 
 from neupy.utils.misc import as_tuple, AttributeKeyDict
-from neupy.utils.processing import shuffle, format_data, asfloat
+from neupy.utils.processing import format_data, asfloat
 from neupy.algorithms.base import preformat_value
 
 from base import BaseTestCase
@@ -132,20 +132,3 @@ class UtilsTestCase(BaseTestCase):
             self.assertEqual(
                 actual_output, testcase.expected_output,
                 msg="Input args: {}".format(testcase.input_args))
-
-
-class ShuffleTestCase(BaseTestCase):
-    def test_shuffle_basic(self):
-        X = np.arange(10)
-        shuffeled_data = shuffle(X, X)
-        np.testing.assert_array_equal(*shuffeled_data)
-
-    def test_shuffle_invalid_shapes_exception(self):
-        X = np.arange(10)
-        with self.assertRaisesRegexp(ValueError, r'\(10,\), \(9,\)'):
-            shuffle(X, X[:len(X) - 1])
-
-    def test_shuffle_with_nones(self):
-        input_with_nones = (None, None)
-        actual_output = shuffle(*input_with_nones)
-        self.assertEqual(input_with_nones, actual_output)

@@ -171,7 +171,7 @@ if __name__ == '__main__':
 
         verbose=True,
         error=loss_function,
-        epoch_end_signal=on_epoch_end_from_steps(env['steps']),
+        signals=on_epoch_end_from_steps(env['steps']),
         **env['training_options']
     )
 

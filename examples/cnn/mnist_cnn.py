@@ -10,25 +10,16 @@ from neupy import algorithms
 def load_data():
     X, y = datasets.fetch_openml('mnist_784', version=1, return_X_y=True)
     X = X.reshape(-1, 28, 28, 1)
+    X /= 255.
 
     target_scaler = OneHotEncoder(sparse=False, categories='auto')
     y = target_scaler.fit_transform(y.reshape(-1, 1))
 
-    x_train, x_test, y_train, y_test = train_test_split(
+    return train_test_split(
         X.astype(np.float32),
         y.astype(np.float32),
         test_size=(1 / 7.)
     )
-
-    mean = x_train.mean(axis=(0, 1, 2))
-    std = x_train.std(axis=(0, 1, 2))
-
-    x_train -= mean
-    x_train /= std
-    x_test -= mean
-    x_test /= std
-
-    return x_train, x_test, y_train, y_test
 
 
 network = algorithms.Momentum(
@@ -71,9 +62,11 @@ network = algorithms.Momentum(
     # Randomly shuffles training dataset before every epoch
     shuffle_data=True,
 )
+print("Preparing data...")
 x_train, x_test, y_train, y_test = load_data()
 
 # Train for 4 epochs
+print("Training...")
 network.train(x_train, y_train, x_test, y_test, epochs=4)
 
 # Make prediction on the test dataset

@@ -16,7 +16,7 @@ class AdagradTestCase(BaseTestCase):
                 layers.Sigmoid(1)
             ],
             step=0.1,
-            batch_size='full',
+            batch_size=None,
             verbose=False,
             epsilon=1e-5,
         )

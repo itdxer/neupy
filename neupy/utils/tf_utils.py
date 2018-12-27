@@ -10,7 +10,41 @@ __all__ = (
     'tensorflow_session', 'tensorflow_eval', 'tf_repeat',
     'initialize_uninitialized_variables', 'flatten', 'outer',
     'dot', 'make_single_vector', 'setup_parameter_updates',
+    'function',
 )
+
+
+def function(inputs, outputs, updates=None, name=None):
+    if updates is None:
+        updates = []
+
+    session = tensorflow_session()
+    tensorflow_updates = []
+
+    # Ensure that all new values has been computed. Absence of these
+    # checks might lead to the non-deterministic update behaviour.
+    new_values = [val[1] for val in updates if isinstance(val, (list, tuple))]
+
+    # Make sure that all outputs has been computed
+    with tf.control_dependencies(as_tuple(outputs, new_values)):
+        for update in updates:
+            if isinstance(update, (list, tuple)):
+                old_value, new_value = update
+                update = old_value.assign(new_value)
+            tensorflow_updates.append(update)
+
+        # Group variables in order to avoid output for the updates
+        tensorflow_updates = tf.group(*tensorflow_updates)
+
+    @wraps(function)
+    def wrapper(*input_values):
+        feed_dict = dict(zip(inputs, input_values))
+        result, _ = session.run(
+            [outputs, tensorflow_updates],
+            feed_dict=feed_dict,
+        )
+        return result
+    return wrapper
 
 
 def tensorflow_session():

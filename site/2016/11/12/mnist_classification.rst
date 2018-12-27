@@ -26,8 +26,7 @@ Data can be loaded in different ways. I used scikit-learn to fetch the MNIST dat
 .. code-block:: python
 
     >>> from sklearn import datasets
-    >>> mnist = datasets.fetch_mldata('MNIST original')
-    >>> X, y = mnist.data, mnist.target
+    >>> X, y = datasets.fetch_openml('mnist_784', version=1, return_X_y=True)
 
 Now that we have the data we need to confirm that we have expected number of samples.
 
@@ -187,7 +186,7 @@ All the most important information related to the neural network you can find in
 
     [OPTION] batch_size = 128
     [OPTION] verbose = True
-    [OPTION] epoch_end_signal = None
+    [OPTION] signals = None
     [OPTION] show_epoch = 1
     [OPTION] shuffle_data = True
     [OPTION] step = 0.01

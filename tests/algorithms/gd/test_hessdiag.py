@@ -37,7 +37,7 @@ class HessianDiagonalTestCase(BaseTestCase):
 
         compare_networks(
             # Test classes
-            partial(algorithms.GradientDescent, batch_size='all'),
+            partial(algorithms.GradientDescent, batch_size=None),
             partial(algorithms.HessianDiagonal, min_eigval=0.1),
             # Test data
             (x_train, y_train),

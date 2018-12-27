@@ -16,7 +16,7 @@ class RMSPropTestCase(BaseTestCase):
                 layers.Sigmoid(1)
             ],
             step=0.02,
-            batch_size='full',
+            batch_size=None,
             verbose=False,
             epsilon=1e-5,
             decay=0.9,

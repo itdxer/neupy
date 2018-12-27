@@ -1,18 +1,15 @@
 from functools import partial
 
-import numpy as np
-
 from neupy import algorithms, layers, utils
-from neupy.algorithms.gd.base import apply_batches
 
 from utils import compare_networks
 from base import BaseTestCase
 from data import simple_classification
 
 
-class BaseOptimizerTestCase(BaseTestCase):
+class GradientDescentTestCase(BaseTestCase):
     def test_network_attrs(self):
-        network = algorithms.BaseOptimizer(
+        network = algorithms.GradientDescent(
             [
                 layers.Input(2),
                 layers.Sigmoid(2),
@@ -37,7 +34,7 @@ class BaseOptimizerTestCase(BaseTestCase):
         utils.reproducible()
         x_train, _, y_train, _ = simple_classification()
 
-        network = algorithms.BaseOptimizer(
+        network = algorithms.GradientDescent(
             layers.Input(10) > layers.Tanh(20) > layers.Tanh(1),
             step=0.1,
             verbose=False
@@ -49,7 +46,7 @@ class BaseOptimizerTestCase(BaseTestCase):
         x_train, _, y_train, _ = simple_classification()
         compare_networks(
            # Test classes
-           partial(algorithms.BaseOptimizer, verbose=False),
+           partial(algorithms.GradientDescent, verbose=False),
            partial(algorithms.GradientDescent,
                    batch_size=1, verbose=False),
            # Test data
@@ -65,7 +62,7 @@ class BaseOptimizerTestCase(BaseTestCase):
         )
 
     def test_gd_get_params_method(self):
-        network = algorithms.BaseOptimizer(
+        network = algorithms.GradientDescent(
             layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1))
 
         self.assertIn('connection', network.get_params(with_connection=True))
@@ -76,7 +73,7 @@ class BaseOptimizerTestCase(BaseTestCase):
 
     def test_gd_overfit(self):
         self.assertCanNetworkOverfit(
-            partial(algorithms.BaseOptimizer, step=1.0, verbose=False),
+            partial(algorithms.GradientDescent, step=1.0, verbose=False),
             epochs=4000,
         )
 
@@ -93,26 +90,6 @@ class BaseOptimizerTestCase(BaseTestCase):
 
 
 class GDAdditionalFunctionsTestCase(BaseTestCase):
-    def test_gd_apply_batches_exceptions(self):
-        with self.assertRaisesRegexp(ValueError, "at least one element"):
-            apply_batches(function=lambda x: x, arguments=[], batch_size=12)
-
-        with self.assertRaisesRegexp(ValueError, "Cannot show error"):
-            apply_batches(
-                function=lambda x: x,
-                arguments=[np.random.random((36, 1))],
-                batch_size=12,
-                show_error_output=True,
-                scalar_output=False,
-            )
-
-        with self.assertRaisesRegexp(ValueError, "Cannot convert output"):
-            apply_batches(
-                function=lambda x: x,
-                arguments=[np.random.random((36, 1))],
-                batch_size=12,
-            )
-
     def test_small_network_representation(self):
         network = algorithms.GradientDescent(
             layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1))

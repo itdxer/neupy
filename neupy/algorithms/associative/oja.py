@@ -28,6 +28,8 @@ class Oja(BaseNetwork):
       For instance, if your input data have values between
       ``0`` and ``1`` error value equal to ``100`` is big.
 
+    - During the traning network report mean absolute error (MAE)
+
     Parameters
     ----------
     minimized_data_size : int
@@ -92,7 +94,6 @@ class Oja(BaseNetwork):
         error = X - reconstruct
 
         weight += self.step * np.dot(error.T, minimized)
-
         mae = np.sum(np.abs(error)) / X.size
 
         # Clean objects from the memory

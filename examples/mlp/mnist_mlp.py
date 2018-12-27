@@ -4,18 +4,19 @@ from sklearn import model_selection, metrics, datasets
 from neupy import algorithms, layers
 
 
-X, y = datasets.fetch_openml('mnist_784', version=1, return_X_y=True)
-target_scaler = OneHotEncoder(categories='auto', sparse=False)
-target = target_scaler.fit_transform(y.reshape(-1, 1))
+def load_data():
+    X, y = datasets.fetch_openml('mnist_784', version=1, return_X_y=True)
+    X /= 255.
+    X -= X.mean(axis=0)
 
-X /= 255.
-X -= X.mean(axis=0)
+    target_scaler = OneHotEncoder(sparse=False, categories='auto')
+    y = target_scaler.fit_transform(y.reshape(-1, 1))
 
-x_train, x_test, y_train, y_test = model_selection.train_test_split(
-    X.astype(np.float32),
-    y.astype(np.float32),
-    test_size=(1 / 7.)
-)
+    return model_selection.train_test_split(
+        X.astype(np.float32),
+        y.astype(np.float32),
+        test_size=(1 / 7.))
+
 
 network = algorithms.Momentum(
     [
@@ -43,6 +44,11 @@ network = algorithms.Momentum(
     # Activates Nesterov momentum
     nesterov=True,
 )
+
+print("Preparing data...")
+x_train, x_test, y_train, y_test = load_data()
+
+print("Training...")
 network.train(x_train, y_train, x_test, y_test, epochs=20)
 
 y_predicted = network.predict(x_test).argmax(axis=1)

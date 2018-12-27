@@ -1,25 +1,19 @@
 from __future__ import division
 
-import math
 import time
-from functools import wraps
 
-import six
 import numpy as np
 import tensorflow as tf
-import progressbar
 
 from neupy import layers
-from neupy.core.config import Configurable
 from neupy.core.properties import (
     FunctionWithOptionsProperty,
     ScalarVariableProperty,
-    BoundedProperty,
-    Property,
+    IntProperty, Property,
 )
 from neupy.utils import (
-    AttributeKeyDict, format_data, as_tuple,
-    tensorflow_session, initialize_uninitialized_variables
+    AttributeKeyDict, format_data, as_tuple, function,
+    initialize_uninitialized_variables, iters,
 )
 from neupy.layers.utils import iter_parameters
 from neupy.algorithms.gd import objectives
@@ -29,39 +23,6 @@ from neupy.algorithms.base import BaseNetwork
 
 
 __all__ = ('BaseOptimizer', 'GradientDescent')
-
-
-def function(inputs, outputs, updates=None, name=None):
-    if updates is None:
-        updates = []
-
-    session = tensorflow_session()
-    tensorflow_updates = []
-
-    # Ensure that all new values has been computed. Absence of these
-    # checks might lead to the non-deterministic update behaviour.
-    new_values = [val[1] for val in updates if isinstance(val, (list, tuple))]
-
-    # Make sure that all outputs has been computed
-    with tf.control_dependencies(as_tuple(outputs, new_values)):
-        for update in updates:
-            if isinstance(update, (list, tuple)):
-                old_value, new_value = update
-                update = old_value.assign(new_value)
-            tensorflow_updates.append(update)
-
-        # Group variables in order to avoid output for the updates
-        tensorflow_updates = tf.group(*tensorflow_updates)
-
-    @wraps(function)
-    def wrapper(*input_values):
-        feed_dict = dict(zip(inputs, input_values))
-        result, _ = session.run(
-            [outputs, tensorflow_updates],
-            feed_dict=feed_dict,
-        )
-        return result
-    return wrapper
 
 
 class BaseOptimizer(BaseNetwork):
@@ -120,7 +81,7 @@ class BaseOptimizer(BaseNetwork):
 
     {BaseNetwork.shuffle_data}
 
-    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.signals}
 
     {BaseNetwork.verbose}
 
@@ -206,13 +167,7 @@ class BaseOptimizer(BaseNetwork):
             yield layer, parameter, gradient
 
     def init_train_updates(self):
-        updates = []
-        step = self.variables.step
-
-        for layer, parameter, gradient in self.iter_params_and_grads():
-            updates.append((parameter, parameter - step * gradient))
-
-        return updates
+        raise NotImplementedError()
 
     def init_input_output_variables(self):
         output_layer = self.connection.output_layers[0]
@@ -362,330 +317,16 @@ class BaseOptimizer(BaseNetwork):
             self.repr_options())
 
 
-class BatchSizeProperty(BoundedProperty):
-    """
-    Batch size property
-
-    Parameters
-    ----------
-    {BoundedProperty.maxval}
-
-    {BaseProperty.default}
-
-    {BaseProperty.required}
-    """
-    expected_type = (type(None), int)
-    fullbatch_identifiers = [None, -1, 'all', '*', 'full']
-
-    def __init__(self, *args, **kwargs):
-        super(BatchSizeProperty, self).__init__(minval=1, *args, **kwargs)
-
-    def __set__(self, instance, value):
-        if isinstance(value, six.string_types):
-            value = value.lower()
-
-        if value in self.fullbatch_identifiers:
-            value = None
-
-        super(BatchSizeProperty, self).__set__(instance, value)
-
-    def validate(self, value):
-        if value is not None:
-            super(BatchSizeProperty, self).validate(value)
-
-
-def iter_batches(n_samples, batch_size):
-    """
-    Iterates batch slices.
-
-    Parameters
-    ----------
-    n_samples : int
-        Number of samples. Number should be greater than ``0``.
-
-    batch_size : int
-        Mini-batch size. Number should be greater than ``0``.
-
-    Yields
-    ------
-    object
-        Batch slices.
-    """
-    n_batches = int(math.ceil(n_samples / batch_size))
-
-    for batch_index in range(n_batches):
-        yield slice(
-            batch_index * batch_size,
-            (batch_index + 1) * batch_size
-        )
-
-
-def cannot_divide_into_batches(data, batch_size):
-    """
-    Checkes whether data can be divided into at least
-    two batches.
-
-    Parameters
-    ----------
-    data : array-like
-        Dataset.
-
-    batch_size : int or None
-        Size of the batch.
-
-    Returns
-    -------
-    bool
-    """
-    if isinstance(data, (list, tuple)):
-        # In case if network has more than one input
-        data = data[0]
-
-    n_samples = len(data)
-    return batch_size is None or n_samples <= batch_size
-
-
-def apply_batches(function, arguments, batch_size, description='',
-                  show_progressbar=False, show_error_output=True,
-                  scalar_output=True):
-    """
-    Apply batches to a specified function.
-
-    Parameters
-    ----------
-    function : func
-        Function that accepts one or more positional arguments.
-        Each of them should be an array-like variable that
-        have exactly the same number of rows.
-
-    arguments : tuple, list
-        The arguemnts that will be provided to the function specified
-        in the ``function`` argument.
-
-    batch_size : int
-        Mini-batch size.
-
-    description : str
-        Short description that will be displayed near the progressbar
-        in verbose mode. Defaults to ``''`` (empty string).
-
-    show_progressbar : bool
-        ``True`` means that function will show progressbar in the
-        terminal. Defaults to ``False``.
-
-    show_error_output : bool
-        Assumes that outputs from the function errors.
-        ``True`` will show information in the progressbar.
-        Error will be related to the last epoch.
-        Defaults to ``True``.
-
-    Returns
-    -------
-    list
-        List of function outputs.
-    """
-    if not arguments:
-        raise ValueError("The argument parameter should be list or "
-                         "tuple with at least one element.")
-
-    if not scalar_output and show_error_output:
-        raise ValueError("Cannot show error when output isn't scalar")
-
-    samples = arguments[0]
-    n_samples = len(samples)
-    batch_iterator = list(iter_batches(n_samples, batch_size))
-    bar = progressbar.NullBar()
-
-    if show_progressbar:
-        widgets = [
-            progressbar.Timer(format='Time: %(elapsed)s'),
-            ' |',
-            progressbar.Percentage(),
-            progressbar.Bar(),
-            ' ',
-            progressbar.ETA(),
-        ]
-
-        if show_error_output:
-            widgets.extend([' | ', progressbar.DynamicMessage('error')])
-
-        bar = progressbar.ProgressBar(
-            widgets=widgets,
-            max_value=len(batch_iterator),
-            poll_interval=0.1,
-        )
-        bar.update(0)
-
-    outputs = []
-    for i, batch in enumerate(batch_iterator):
-        sliced_arguments = [argument[batch] for argument in arguments]
-        output = function(*sliced_arguments)
-
-        if scalar_output:
-            output = np.atleast_1d(output)
-
-            if output.size > 1:
-                raise ValueError(
-                    "Cannot convert output from the batch, "
-                    "because it has more than one output value")
-
-            output = output.item(0)
-
-        outputs.append(output)
-        kwargs = {'error': output} if show_error_output else {}
-        bar.update(i, **kwargs)
-
-    bar.fd.write('\r' + ' ' * bar.term_width + '\r')
-    return outputs
-
-
-def average_batch_errors(errors, n_samples, batch_size):
-    """
-    Computes average error per sample.
-
-    Parameters
-    ----------
-    errors : list
-        List of errors where each element is a average error
-        per batch.
-
-    n_samples : int
-        Number of samples in the dataset.
-
-    batch_size : int
-        Mini-batch size.
-
-    Returns
-    -------
-    float
-        Average error per sample.
-    """
-    if batch_size is None:
-        return errors[0]
-
-    n_samples_in_final_batch = n_samples % batch_size
-
-    if n_samples_in_final_batch == 0:
-        return batch_size * sum(errors) / n_samples
-
-    all_errors_without_last = errors[:-1]
-    last_error = errors[-1]
-
-    total_error = (
-        sum(all_errors_without_last) * batch_size +
-        last_error * n_samples_in_final_batch
-    )
-    average_error = total_error / n_samples
-    return average_error
-
-
-class MinibatchTrainingMixin(Configurable):
-    """
-    Mixin that helps to train network using mini-batches.
-
-    Notes
-    -----
-    Works with ``BaseNetwork`` class.
-
-    Parameters
-    ----------
-    batch_size : int or {{None, -1, 'all', '*', 'full'}}
-        Set up min-batch size. If mini-batch size is equal
-        to one of the values from the list (like ``full``) then
-        it's just a batch that equal to number of samples.
-        Defaults to ``128``.
-    """
-    batch_size = BatchSizeProperty(default=128)
-
-    def apply_batches(self, function, X, arguments=(), description='',
-                      show_progressbar=None, show_error_output=False,
-                      scalar_output=True):
-        """
-        Apply function per each mini-batch.
-
-        Parameters
-        ----------
-        function : callable
-
-        X : array-like
-            First argument to the function that can be divided
-            into mini-batches.
-
-        arguments : tuple
-            Additional arguments to the function.
-
-        description : str
-            Some description for the progressbar. Defaults to ``''``.
-
-        show_progressbar : None or bool
-            ``True``/``False`` will show/hide progressbar. If value
-            is equal to ``None`` than progressbar will be visible in
-            case if network expects to see logging after each
-            training epoch.
-
-        show_error_output : bool
-            Assumes that outputs from the function errors.
-            ``True`` will show information in the progressbar.
-            Error will be related to the last epoch.
-
-        scalar_output : bool
-            ``True`` means that we expect scalar value per each
-
-        Returns
-        -------
-        list
-            List of outputs from the function. Each output is an
-            object that ``function`` returned.
-        """
-        arguments = as_tuple(X, arguments)
-
-        if cannot_divide_into_batches(X, self.batch_size):
-            output = function(*arguments)
-            if scalar_output:
-                output = np.atleast_1d(output).item(0)
-            return [output]
-
-        if show_progressbar is None:
-            show_progressbar = self.show_epoch == 1 and self.logs.enable
-
-        return apply_batches(
-            function=function,
-            arguments=arguments,
-            batch_size=self.batch_size,
-
-            description=description,
-            show_progressbar=show_progressbar,
-            show_error_output=show_error_output,
-            scalar_output=scalar_output,
-        )
-
-
-def count_samples(X):
-    """
-    Count number of samples in the input data
-
-    Parameters
-    ----------
-    X : array-like or list/tuple of array-like objects
-        Input data to the network
-
-    Returns
-    -------
-    int
-        Number of samples in the input data.
-    """
-    if isinstance(X, (list, tuple)):
-        return len(X[0])
-    return len(X)
-
-
-class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
+class GradientDescent(BaseOptimizer):
     """
     Mini-batch Gradient Descent algorithm.
 
     Parameters
     ----------
-    {MinibatchTrainingMixin.Parameters}
+    batch_size : int or None
+        Set up min-batch size. The ``None`` value will ensure that all data
+        samples will be propagated through the network at once.
+        Defaults to ``128``.
 
     {BaseOptimizer.Parameters}
 
@@ -710,6 +351,17 @@ class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
     >>> mgdnet = algorithms.GradientDescent(network, batch_size=1)
     >>> mgdnet.train(x_train, y_train)
     """
+    batch_size = IntProperty(default=128, minval=0, allow_none=True)
+
+    def init_train_updates(self):
+        updates = []
+        step = self.variables.step
+
+        for _, parameter, gradient in self.iter_params_and_grads():
+            updates.append((parameter, parameter - step * gradient))
+
+        return updates
+
     def one_training_update(self, X_train, y_train):
         """
         Train one epoch.
@@ -727,19 +379,7 @@ class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
         float
             Training error.
         """
-        errors = self.apply_batches(
-            function=self.methods.one_training_update,
-            X=X_train,
-            arguments=as_tuple(y_train),
-
-            description='Training batches',
-            show_error_output=True,
-        )
-        return average_batch_errors(
-            errors,
-            n_samples=count_samples(X_train),
-            batch_size=self.batch_size,
-        )
+        return self.methods.one_training_update(*as_tuple(X_train, y_train))
 
     def score(self, X, y):
         """
@@ -759,18 +399,13 @@ class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
         X = [format_data(x) for x in as_tuple(X)]
         y = format_data(y)
 
-        errors = self.apply_batches(
+        return iters.apply_batches(
             function=self.methods.score,
-            X=X,
-            arguments=as_tuple(y),
-
-            description='Validation batches',
-            show_error_output=True,
-        )
-        return average_batch_errors(
-            errors,
-            n_samples=count_samples(X),
+            inputs=as_tuple(X, y),
             batch_size=self.batch_size,
+            show_output=True,
+            show_progressbar=self.logs.enable,
+            average_outputs=True,
         )
 
     def predict(self, X):
@@ -785,13 +420,11 @@ class GradientDescent(BaseOptimizer, MinibatchTrainingMixin):
         -------
         array-like
         """
-        outputs = self.apply_batches(
+        outputs = iters.apply_batches(
             function=self.methods.predict,
-            X=X,
-
-            description='Prediction batches',
-            show_progressbar=True,
-            show_error_output=False,
-            scalar_output=False,
+            inputs=[format_data(x) for x in as_tuple(X)],
+            batch_size=self.batch_size,
+            show_output=False,
+            show_progressbar=self.logs.enable,
         )
         return np.concatenate(outputs, axis=0)

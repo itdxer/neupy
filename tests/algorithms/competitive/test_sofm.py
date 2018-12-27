@@ -732,7 +732,7 @@ class SOFMParameterReductionTestCase(BaseTestCase):
 
         for testcase_name, on_epoch_end in testcases.items():
             sofm_2 = algorithms.SOFM(
-                epoch_end_signal=on_epoch_end,
+                signals=on_epoch_end,
                 **default_params
             )
             sofm_2.train(X, epochs=4)

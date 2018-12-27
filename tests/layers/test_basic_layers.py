@@ -23,7 +23,7 @@ class LayersBasicsTestCase(BaseTestCase):
 
         # Check that it is able to train network without errors
         x_train = y_train = asfloat(np.random.random((15, 10)))
-        gdnet = algorithms.GradientDescent(network, batch_size='all')
+        gdnet = algorithms.GradientDescent(network, batch_size=None)
         gdnet.train(x_train, y_train, epochs=5)
 
         np.testing.assert_array_almost_equal(

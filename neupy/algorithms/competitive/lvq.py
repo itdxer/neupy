@@ -106,7 +106,7 @@ class LVQ(BaseNetwork):
 
     {BaseNetwork.shuffle_data}
 
-    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.signals}
 
     {Verbose.verbose}
 
@@ -483,7 +483,7 @@ class LVQ3(LVQ21):
 
     {BaseNetwork.shuffle_data}
 
-    {BaseNetwork.epoch_end_signal}
+    {BaseNetwork.signals}
 
     {Verbose.verbose}
 

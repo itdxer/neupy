@@ -4,8 +4,6 @@ from random import choice, randint
 
 import numpy as np
 
-from neupy.utils.processing import shuffle
-
 
 __all__ = ('make_reber', 'is_valid_by_reber', 'make_reber_classification')
 
@@ -122,7 +120,7 @@ def convert_letters_to_indeces(samples):
     return np.array(index_samples)
 
 
-def make_reber_classification(n_samples, invalid_size=0.5,
+def make_reber_classification(n_samples, invalid_size=0.5, lenrange=(3, 14),
                               return_indeces=False):
     """
     Generate random dataset for Reber grammar classification.
@@ -137,6 +135,10 @@ def make_reber_classification(n_samples, invalid_size=0.5,
     invalid_size : float
         Proportion of invalid words in dataset, defaults to ``0.5``.
         Value must be between ``0`` and ``1``.
+
+    lenrange : tuple
+        Length of each word will be bounded by the two numbers
+        specified in this range. Defaults to ``(3, 14)``.
 
     return_indeces : bool
         If ``True``, each word will be converted to array where each
@@ -184,13 +186,17 @@ def make_reber_classification(n_samples, invalid_size=0.5,
     invalid_labels = [0] * n_valid_words
 
     for i in range(n_invalid_words):
-        word_length = randint(3, 14)
+        word_length = randint(*lenrange)
         word = [choice(avaliable_letters) for _ in range(word_length)]
         invalid_words.append(''.join(word))
 
-    samples, labels = shuffle(
-        np.array(valid_words + invalid_words),
-        np.array(valid_labels + invalid_labels))
+    samples = np.array(valid_words + invalid_words)
+    labels = np.array(valid_labels + invalid_labels)
+
+    indeces = np.arange(len(samples))
+    np.random.shuffle(indeces)
+
+    samples, labels = samples[indeces], labels[indeces]
 
     if return_indeces:
         samples = convert_letters_to_indeces(samples)

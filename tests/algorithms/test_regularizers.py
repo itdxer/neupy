@@ -38,7 +38,7 @@ class L2RegularizationTestCase(BaseTestCase):
             ],
             step=0.35,
             momentum=0.99,
-            batch_size='full',
+            batch_size=None,
             verbose=True,
             nesterov=True,
             regularizer=algorithms.l2(0.01),
