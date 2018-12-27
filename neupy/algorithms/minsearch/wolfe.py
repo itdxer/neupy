@@ -182,15 +182,19 @@ def quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, bound_size_ratio=0.1):
     ----------
     x_a : float or tensorflow variable
         Left point ``a`` in the ``x`` axis.
+
     y_a : float or tensorflow variable
         Output from function ``y`` at point ``a``.
+
     y_prime_a : float or tensorflow variable
-        Output from function ``y'`` (``y`` derivative) at
-        point ``a``.
+        Output from function ``y'`` (``y`` derivative) at point ``a``.
+
     x_b : float or tensorflow variable
         Right point ``a`` in the ``x`` axis.
+
     y_b : float or tensorflow variable
         Output from function ``y`` at point ``b``.
+
     bound_size_ratio : float
         Value control acceptable bounds for interpolation. If value
         close to one of the points interpolation result will be ignored.
@@ -246,19 +250,25 @@ def cubic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, x_c, y_c,
     ----------
     x_a : float or tensorflow variable
         First point ``a`` in the ``x`` axis.
+
     y_a : float or tensorflow variable
         Output from function ``y`` at point ``a``.
+
     y_prime_a : float or tensorflow variable
-        Output from function ``y'`` (``y`` derivative) at
-        point ``a``.
+        Output from function ``y'`` (``y`` derivative) at point ``a``.
+
     x_b : float or tensorflow variable
         Second point ``b`` in the ``x`` axis.
+
     y_b : float or tensorflow variable
         Output from function ``y`` at point ``b``.
+
     x_c : float or tensorflow variable
         Third point ``c`` in the ``x`` axis.
+
     y_c : float or tensorflow variable
         Output from function ``y`` at point ``c``.
+
     bound_size_ratio : float
         Value control acceptable bounds for interpolation. If
         value is close to one of the points than interpolation

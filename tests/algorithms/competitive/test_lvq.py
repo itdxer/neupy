@@ -14,7 +14,7 @@ class LVQTestCase(BaseTestCase):
     def setUp(self):
         xor_x_train = np.array([[-1, -1], [-1, 1], [1, -1], [1, 1]])
         xor_y_train = np.array([[1, -1, -1, 1]]).T
-        
+
         self.data = np.concatenate(
             [
                 xor_x_train,

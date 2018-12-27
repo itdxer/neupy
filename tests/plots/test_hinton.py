@@ -6,8 +6,11 @@ import matplotlib.pyplot as plt
 from neupy import plots
 
 from base import BaseTestCase
-from helpers import (skip_image_comparison_if_specified, image_comparison,
-                   format_image_name)
+from helpers import (
+    skip_image_comparison_if_specified,
+    image_comparison,
+    format_image_name,
+)
 
 
 IMGDIR = os.path.join("plots", "images", "hinton")

@@ -1,6 +1,8 @@
 import copy
 from functools import partial
 
+import numpy as np
+
 from neupy import algorithms, init
 from neupy.layers import Input, Sigmoid
 from neupy.utils import asfloat
