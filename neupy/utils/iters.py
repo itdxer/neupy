@@ -123,9 +123,11 @@ def make_progressbar(max_value, show_output):
 
 
 def apply_batches(function, inputs, batch_size, show_progressbar=False,
-                  show_output=True, average_outputs=False):
+                  show_output=False, average_outputs=False):
     """
-    Apply batches to a specified function.
+    Splits inputs into mini-batches and passes them to the function.
+    Function returns list of outputs or average loss in case
+    if ``average_outputs=True``.
 
     Parameters
     ----------
@@ -139,13 +141,22 @@ def apply_batches(function, inputs, batch_size, show_progressbar=False,
         in the ``function`` argument.
 
     batch_size : int
-        Mini-batch size.
+        Mini-batch size. Defines maximum number of samples that will be
+        used as an input to the ``function``.
+
+    show_progressbar : bool
+        When ``True`` than progress bar will be shown in the terminal.
+        Defaults to ``False``.
 
     show_output : bool
-        Assumes that outputs from the function errors.
-        ``True`` will show information in the progressbar.
-        Error will be related to the last epoch.
-        Defaults to ``True``.
+        Assumes that outputs from the function errors. The ``True`` value
+        will show information in the progressbar. Error will be related to
+        the last epoch. Defaults to ``False``.
+
+    average_outputs : bool
+        Output from each batch will be combined into single average. This
+        option assumes that loss per batch was calculated from.
+        Defaults to ``False``.
 
     Returns
     -------
@@ -172,9 +183,12 @@ def apply_batches(function, inputs, batch_size, show_progressbar=False,
         kwargs = dict(loss=output) if show_output else {}
         bar.update(i, **kwargs)
 
+    # Clean progressbar from the screen
     bar.fd.write('\r' + ' ' * bar.term_width + '\r')
 
     if average_outputs:
+        # When loss calculated per batch separately it might be
+        # necessary to combine error into single value
         return average_batch_errors(outputs, n_samples, batch_size)
 
     return outputs

@@ -45,13 +45,74 @@ class ItersUtilsTestCase(BaseTestCase):
         self.assertFalse(np.allclose(data == collected_samples, b=1e-7))
 
     def test_minibatches_nested_inputs(self):
-        pass
+        data = [np.arange(24)], np.arange(24)
+        iterbatches = iters.minibatches(data, batch_size=12, shuffle=False)
+
+        collected_samples = []
+        for batch in iterbatches:
+            collected_samples.append(batch)
+
+        batch_1 = np.arange(12)
+        batch_2 = np.arange(12, 24)
+
+        self.assertEqual(len(collected_samples), 2)
+        np.testing.assert_array_equal(collected_samples[0][0], [batch_1])
+        np.testing.assert_array_equal(collected_samples[0][1], batch_1)
+
+        np.testing.assert_array_equal(collected_samples[1][0], [batch_2])
+        np.testing.assert_array_equal(collected_samples[1][1], batch_2)
+
+    def test_minibatches_nested_inputs_with_nones(self):
+        data = [np.arange(24)], None
+        iterbatches = iters.minibatches(data, batch_size=12, shuffle=False)
+
+        collected_samples = []
+        for batch in iterbatches:
+            collected_samples.append(batch)
+
+        batch_1 = np.arange(12)
+        batch_2 = np.arange(12, 24)
+
+        self.assertEqual(len(collected_samples), 2)
+        np.testing.assert_array_equal(collected_samples[0][0], [batch_1])
+        np.testing.assert_array_equal(collected_samples[0][1], None)
+
+        np.testing.assert_array_equal(collected_samples[1][0], [batch_2])
+        np.testing.assert_array_equal(collected_samples[1][1], None)
+
+    def test_apply_batches_with_progressbar(self):
+        # So far we just make sure that test didn't trigger any error
+        # In the future, we need to check content of the terminal output
+        outputs = iters.apply_batches(
+            function=lambda x: x * 2,
+            inputs=np.arange(20),
+            batch_size=8,
+            show_progressbar=True,
+        )
+        self.assertEqual(len(outputs), 3)
 
     def test_apply_batches(self):
-        pass
+        def mse(y_actual, y_predicted):
+            return np.mean((y_actual - y_predicted) ** 2)
 
-    def test_apply_batches_average_outputs(self):
-        pass
+        y_actual = np.arange(20)
+        y_predicted = np.ones(20) * 10
+
+        outputs = iters.apply_batches(
+            function=mse,
+            inputs=[y_actual, y_predicted],
+            batch_size=7,
+        )
+        np.testing.assert_array_almost_equal(
+            outputs, np.array([53, 4, 45.1666666]))
+
+        avg_loss = iters.apply_batches(
+            function=mse,
+            inputs=[y_actual, y_predicted],
+            batch_size=7,
+            average_outputs=True,
+        )
+        self.assertEqual(avg_loss, mse(y_actual, y_predicted))
 
     def test_batch_average(self):
         expected_error = 0.9  # or 225 / 250
