@@ -30,9 +30,6 @@ def preformat_value(value):
     elif isinstance(value, (np.ndarray, np.matrix)):
         return value.shape
 
-    elif hasattr(value, 'default'):
-        return value.default
-
     return value
 
 
