@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import random
+import pickle
 from collections import namedtuple
 
 import numpy as np
@@ -30,6 +31,11 @@ class MiscUtilsTestCase(BaseTestCase):
         del attrdict.val1
         with self.assertRaises(KeyError):
             attrdict.val1
+
+        # Storage
+        recovered = pickle.loads(pickle.dumps(attrdict))
+        self.assertDictEqual(dict(recovered), {
+            'new_value': 'test', 'val2': 'world'})
 
     def test_as_tuple(self):
         Case = namedtuple("Case", "input_args expected_output")
