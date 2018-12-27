@@ -1,6 +1,6 @@
 import numpy as np
 
-from neupy.utils import format_data, apply_batches
+from neupy.utils import format_data, iters
 from neupy.core.properties import BoundedProperty, IntProperty
 from neupy.algorithms.base import BaseSkeleton
 from neupy.exceptions import NotTrained
@@ -160,7 +160,7 @@ class PNN(BaseSkeleton):
         -------
         array-like (n_samples, n_classes)
         """
-        outputs = apply_batches(
+        outputs = iters.apply_batches(
             function=self.predict_raw,
             inputs=format_data(X),
             batch_size=self.batch_size,
@@ -217,7 +217,7 @@ class PNN(BaseSkeleton):
         -------
         array-like (n_samples,)
         """
-        outputs = apply_batches(
+        outputs = iters.apply_batches(
             function=self.predict_raw,
             inputs=format_data(X),
             batch_size=self.batch_size,

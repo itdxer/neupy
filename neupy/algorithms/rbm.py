@@ -6,7 +6,7 @@ from neupy.core.properties import IntProperty, ParameterProperty
 from neupy.algorithms.base import BaseNetwork
 from neupy.layers.base import create_shared_parameter
 from neupy.utils import (
-    asfloat, format_data, dot, function, apply_batches,
+    asfloat, format_data, dot, function, iters,
     initialize_uninitialized_variables
 )
 from neupy import init
@@ -384,7 +384,7 @@ class RBM(BaseNetwork, DumpableObject):
         is_input_feature1d = (self.n_visible == 1)
         visible_input = format_data(visible_input, is_input_feature1d)
 
-        outputs = apply_batches(
+        outputs = iters.apply_batches(
             function=self.visible_to_hidden_one_step,
             inputs=visible_input,
             batch_size=self.batch_size,
@@ -408,7 +408,7 @@ class RBM(BaseNetwork, DumpableObject):
         is_input_feature1d = (self.n_hidden == 1)
         hidden_input = format_data(hidden_input, is_input_feature1d)
 
-        outputs = apply_batches(
+        outputs = iters.apply_batches(
             function=self.hidden_to_visible_one_step,
             inputs=hidden_input,
             batch_size=self.batch_size,
@@ -430,7 +430,7 @@ class RBM(BaseNetwork, DumpableObject):
         float
             Value of the pseudo-likelihood.
         """
-        return apply_batches(
+        return iters.apply_batches(
             function=self.score_func,
             inputs=format_data(X, is_feature1d=(self.n_visible == 1)),
             batch_size=self.batch_size,

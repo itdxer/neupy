@@ -72,12 +72,17 @@ def catch_stdout():
     ...     self.assertIn("test", terminal_output)
     """
     old_out = sys.stdout
+    old_err = sys.stderr
+
     out = six.StringIO()
+
     sys.stdout = out
+    sys.stderr = out
 
     yield out
 
     sys.stdout = old_out
+    sys.stderr = old_err
 
 
 def compare_networks(default_class, tested_class, data, **kwargs):

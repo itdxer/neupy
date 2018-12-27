@@ -424,7 +424,6 @@ class GradientDescent(BaseOptimizer):
             function=self.methods.predict,
             inputs=[format_data(x) for x in as_tuple(X)],
             batch_size=self.batch_size,
-            show_output=False,
             show_progressbar=self.logs.enable,
         )
         return np.concatenate(outputs, axis=0)
