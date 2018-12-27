@@ -8,7 +8,7 @@ from neupy.core.logs import Verbose, TerminalLogger
 from neupy import algorithms, layers
 
 from base import BaseTestCase
-from utils import catch_stdout
+from helpers import catch_stdout
 
 
 class LoggingTestCase(BaseTestCase):

@@ -1,13 +1,24 @@
 import copy
 from functools import partial
 
-from neupy import algorithms
+from neupy import algorithms, init
 from neupy.layers import Input, Sigmoid
-from neupy import init
+from neupy.utils import asfloat
 
-from data import simple_x_train, simple_y_train
-from utils import compare_networks
+from helpers import compare_networks
 from base import BaseTestCase
+
+
+simple_x_train = asfloat(np.array([
+    [0.1, 0.1, 0.2],
+    [0.2, 0.3, 0.4],
+    [0.1, 0.7, 0.2],
+]))
+simple_y_train = asfloat(np.array([
+    [0.2, 0.2],
+    [0.3, 0.3],
+    [0.5, 0.5],
+]))
 
 
 class RPROPTestCase(BaseTestCase):

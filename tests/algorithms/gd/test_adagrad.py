@@ -2,7 +2,7 @@ from functools import partial
 
 from neupy import algorithms, layers
 
-from data import simple_classification
+from helpers import simple_classification
 from base import BaseTestCase
 
 

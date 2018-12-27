@@ -8,7 +8,7 @@ from neupy.utils import asfloat
 from neupy import algorithms, layers, init
 from neupy.algorithms.gd import quasi_newton as qn
 
-from data import simple_classification
+from helpers import simple_classification
 from base import BaseTestCase
 
 

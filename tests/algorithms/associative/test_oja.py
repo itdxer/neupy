@@ -4,7 +4,7 @@ from neupy import algorithms, init
 from neupy.exceptions import NotTrained
 
 from base import BaseTestCase
-from utils import vectors_for_testing
+from helpers import vectors_for_testing
 
 
 class OjaTestCase(BaseTestCase):

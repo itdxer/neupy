@@ -6,7 +6,7 @@ from neupy.utils import asfloat
 from neupy import layers, algorithms, init
 
 from base import BaseTestCase
-from data import simple_classification
+from helpers import simple_classification
 
 
 class ActivationLayersTestCase(BaseTestCase):

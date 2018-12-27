@@ -7,12 +7,14 @@ from neupy import algorithms, init
 from neupy.exceptions import NotTrained
 
 from base import BaseTestCase
-from utils import compare_networks
-from data import xor_x_train, xor_y_train
+from helpers import compare_networks
 
 
 class LVQTestCase(BaseTestCase):
     def setUp(self):
+        xor_x_train = np.array([[-1, -1], [-1, 1], [1, -1], [1, 1]])
+        xor_y_train = np.array([[1, -1, -1, 1]]).T
+        
         self.data = np.concatenate(
             [
                 xor_x_train,

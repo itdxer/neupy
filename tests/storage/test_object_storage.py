@@ -10,7 +10,7 @@ from six.moves import cPickle as pickle
 from neupy import algorithms, layers, init
 
 from base import BaseTestCase
-from utils import catch_stdout
+from helpers import catch_stdout
 
 
 class BasicStorageTestCase(BaseTestCase):

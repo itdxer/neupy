@@ -8,7 +8,7 @@ from neupy.utils import asfloat
 from neupy.exceptions import StopTraining
 
 from base import BaseTestCase
-from data import simple_classification
+from helpers import simple_classification
 
 
 class LayerStoragePickleTestCase(BaseTestCase):

@@ -8,8 +8,8 @@ from neupy import algorithms, layers
 from neupy.utils import asfloat
 from neupy.algorithms.gd import conjgrad as cg
 
-from data import simple_classification
-from utils import compare_networks
+from helpers import simple_classification
+from helpers import compare_networks
 from base import BaseTestCase
 
 

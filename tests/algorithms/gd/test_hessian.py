@@ -7,8 +7,8 @@ from neupy import algorithms, layers
 from neupy.utils import tensorflow_session
 from neupy.algorithms.gd.hessian import find_hessian_and_gradient
 
-from utils import compare_networks
-from data import simple_classification
+from helpers import compare_networks
+from helpers import simple_classification
 from base import BaseTestCase
 
 

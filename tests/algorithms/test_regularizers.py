@@ -3,7 +3,7 @@ import numpy as np
 from neupy import algorithms, layers
 
 from base import BaseTestCase
-from data import simple_classification
+from helpers import simple_classification
 
 
 class L2RegularizationTestCase(BaseTestCase):

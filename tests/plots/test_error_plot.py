@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from neupy import plots, algorithms, layers
 
 from base import BaseTestCase
-from data import simple_classification
-from utils import (
+from helpers import simple_classification
+from helpers import (
     image_comparison, reproducible_network_train,
     format_image_name, skip_image_comparison_if_specified,
 )
