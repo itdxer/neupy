@@ -494,15 +494,15 @@ class LayerGraph(object):
         Parameters
         ----------
         input_value : array-like, Tensorfow variable or dict
-            - If input is an array or Tensorfow variable than it will
-              be used as a direct input to the input layer/layers.
+          - If input is an array or Tensorfow variable than it will
+            be used as a direct input to the input layer/layers.
 
-            - The dict type input should has a specific structure.
-              Each key of the dict is a layer and each value array or
-              Tensorfow variable. Dict defines input values for specific
-              layers. In the dict input layer is not necessary should
-              be an instance of the ``layers.Input`` class. It can be
-              any layer from the graph.
+          - The dict type input should has a specific structure.
+            Each key of the dict is a layer and each value array or
+            Tensorfow variable. Dict defines input values for specific
+            layers. In the dict input layer is not necessary should
+            be an instance of the ``layers.Input`` class. It can be
+            any layer from the graph.
 
         Returns
         -------
@@ -511,6 +511,25 @@ class LayerGraph(object):
         """
         outputs = {}
         backward_graph = self.backward_graph
+
+        if isinstance(input_value, (list, tuple)):
+            n_input_layers = len(self.input_layers)
+            n_input_vars = len(input_value)
+
+            if n_input_vars != n_input_layers:
+                raise ValueError(
+                    "Connection has {} input layer(s), but {} inputs was "
+                    "provided".format(n_input_layers, n_input_vars))
+
+            # Layers in the self.graph.input_layers and
+            # self.input_layers variables can have a different order.
+            # Order in the self.input_layers is defined by user
+            input_value_as_dict = {}
+
+            for layer, value in zip(self.input_layers, input_value):
+                input_value_as_dict[layer] = value
+
+            input_value = input_value_as_dict
 
         if isinstance(input_value, dict):
             for layer, input_variable in input_value.items():

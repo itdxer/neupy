@@ -53,6 +53,10 @@ class MiscUtilsTestCase(BaseTestCase):
                 expected_output=(1, 2, 3),
             ),
             Case(
+                input_args=((1, 2, 3), [], (4, 5)),
+                expected_output=(1, 2, 3, 4, 5),
+            ),
+            Case(
                 input_args=((1, 2, 3), (4, 5, 3)),
                 expected_output=(1, 2, 3, 4, 5, 3),
             ),

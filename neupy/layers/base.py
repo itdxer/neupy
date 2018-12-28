@@ -7,12 +7,12 @@ import tensorflow as tf
 
 from neupy import init
 from neupy.core.config import Configurable
-from neupy.core.properties import ParameterProperty, IntProperty, Property
-from neupy.utils import asfloat, as_tuple, class_method_name_scope
+from neupy.core.properties import Property
+from neupy.utils import asfloat, class_method_name_scope
 from neupy.layers.connections import BaseConnection
 
 
-__all__ = ('BaseLayer', 'ParameterBasedLayer', 'Identity')
+__all__ = ('BaseLayer', 'Identity')
 
 
 def generate_layer_name(layer):
@@ -42,7 +42,7 @@ def generate_layer_name(layer):
     return "{}-{}".format(layer_name.lower(), layer_id)
 
 
-def create_shared_parameter(value, name, shape):
+def create_shared_parameter(value, name, shape, trainable):
     """
     Creates NN parameter as Tensorfow variable.
 
@@ -57,6 +57,9 @@ def create_shared_parameter(value, name, shape):
     shape : tuple
         Parameter's shape.
 
+    trainable : bool
+        Whether parameter trainable by backpropagation.
+
     Returns
     -------
     Tensorfow variable.
@@ -67,7 +70,12 @@ def create_shared_parameter(value, name, shape):
     if isinstance(value, init.Initializer):
         value = value.sample(shape)
 
-    return tf.Variable(asfloat(value), name=name, dtype=tf.float32)
+    return tf.Variable(
+        asfloat(value),
+        name=name,
+        dtype=tf.float32,
+        trainable=trainable,
+    )
 
 
 def initialize_layer(layer_class, kwargs, was_initialized):
@@ -178,13 +186,11 @@ class BaseLayer(BaseConnection, Configurable):
             layer_name=self.name,
             parameter_name=name.replace('_', '-'))
 
-        parameter = create_shared_parameter(value, layer_name, shape)
-        parameter.is_trainable = trainable
+        self.parameters[name] = create_shared_parameter(
+            value, layer_name, shape, trainable)
 
-        self.parameters[name] = parameter
-
-        setattr(self, name, parameter)
-        return parameter
+        setattr(self, name, self.parameters[name])
+        return self.parameters[name]
 
     def __repr__(self):
         classname = self.__class__.__name__
@@ -200,66 +206,3 @@ class Identity(BaseLayer):
     """
     Residual skip connection.
     """
-
-
-class ParameterBasedLayer(BaseLayer):
-    """
-    Layer that creates weight and bias parameters.
-
-    Parameters
-    ----------
-    size : int
-        Layer's output size.
-
-    weight : array-like, Tensorfow variable, scalar or Initializer
-        Defines layer's weights. Default initialization methods
-        you can find :ref:`here <init-methods>`.
-        Defaults to :class:`HeNormal() <neupy.init.HeNormal>`.
-
-    bias : 1D array-like, Tensorfow variable, scalar, Initializer or None
-        Defines layer's bias.
-        Default initialization methods you can find
-        :ref:`here <init-methods>`. Defaults to
-        :class:`Constant(0) <neupy.init.Constant>`.
-        The ``None`` value excludes bias from the calculations and
-        do not add it into parameters list.
-
-    {BaseLayer.Parameters}
-
-    Methods
-    -------
-    {BaseLayer.Methods}
-
-    Attributes
-    ----------
-    {BaseLayer.Attributes}
-    """
-    size = IntProperty(minval=1)
-    weight = ParameterProperty(default=init.HeNormal())
-    bias = ParameterProperty(default=init.Constant(value=0), allow_none=True)
-
-    def __init__(self, size, **options):
-        super(ParameterBasedLayer, self).__init__(size=size, **options)
-
-    @property
-    def weight_shape(self):
-        return as_tuple(self.input_shape, self.output_shape)
-
-    @property
-    def bias_shape(self):
-        if self.bias is not None:
-            return as_tuple(self.output_shape)
-
-    def initialize(self):
-        super(ParameterBasedLayer, self).initialize()
-
-        self.add_parameter(value=self.weight, name='weight',
-                           shape=self.weight_shape, trainable=True)
-
-        if self.bias is not None:
-            self.add_parameter(value=self.bias, name='bias',
-                               shape=self.bias_shape, trainable=True)
-
-    def __repr__(self):
-        classname = self.__class__.__name__
-        return '{name}({size})'.format(name=classname, size=self.size)

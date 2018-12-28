@@ -6,14 +6,14 @@ from neupy.utils import asfloat, as_tuple
 from neupy.core.properties import (NumberProperty, TypedListProperty,
                                    ParameterProperty, IntProperty)
 from .utils import dimshuffle
-from .base import ParameterBasedLayer
+from .base import BaseLayer
 
 
 __all__ = ('ActivationLayer', 'Linear', 'Sigmoid', 'HardSigmoid', 'Tanh',
            'Relu', 'Softplus', 'Softmax', 'Elu', 'PRelu', 'LeakyRelu')
 
 
-class ActivationLayer(ParameterBasedLayer):
+class ActivationLayer(BaseLayer):
     """
     Base class for the layers based on the activation
     functions.
@@ -25,21 +25,31 @@ class ActivationLayer(ParameterBasedLayer):
         parameters and will return only activation function
         output for the specified input value.
 
-    {ParameterBasedLayer.weight}
+    weight : array-like, Tensorfow variable, scalar or Initializer
+        Defines layer's weights. Default initialization methods
+        you can find :ref:`here <init-methods>`.
+        Defaults to :class:`HeNormal() <neupy.init.HeNormal>`.
 
-    {ParameterBasedLayer.bias}
+    bias : 1D array-like, Tensorfow variable, scalar, Initializer or None
+        Defines layer's bias. Default initialization methods you can find
+        :ref:`here <init-methods>`. Defaults to
+        :class:`Constant(0) <neupy.init.Constant>`.
+        The ``None`` value excludes bias from the calculations and
+        do not add it into parameters list.
 
     {BaseLayer.Parameters}
 
     Methods
     -------
-    {ParameterBasedLayer.Methods}
+    {BaseLayer.Methods}
 
     Attributes
     ----------
-    {ParameterBasedLayer.Attributes}
+    {BaseLayer.Attributes}
     """
     size = IntProperty(minval=1, default=None, allow_none=True)
+    weight = ParameterProperty(default=init.HeNormal())
+    bias = ParameterProperty(default=init.Constant(value=0), allow_none=True)
 
     def __init__(self, size=None, **options):
         super(ActivationLayer, self).__init__(size=size, **options)
@@ -54,6 +64,17 @@ class ActivationLayer(ParameterBasedLayer):
         if self.size is not None:
             super(ActivationLayer, self).initialize()
 
+            self.add_parameter(
+                value=self.weight, name='weight',
+                shape=as_tuple(self.input_shape, self.output_shape),
+                trainable=True)
+
+            if self.bias is not None:
+                self.add_parameter(
+                    value=self.bias, name='bias',
+                    shape=as_tuple(self.output_shape),
+                    trainable=True)
+
     def output(self, input_value):
         if self.size is not None:
             input_value = tf.matmul(input_value, self.weight)
@@ -64,9 +85,8 @@ class ActivationLayer(ParameterBasedLayer):
         return self.activation_function(input_value)
 
     def __repr__(self):
-        if self.size is None:
-            return super(ParameterBasedLayer, self).__repr__()
-        return super(ActivationLayer, self).__repr__()
+        classname = self.__class__.__name__
+        return '{name}({size})'.format(name=classname, size=self.size or '')
 
 
 class Linear(ActivationLayer):
@@ -197,7 +217,7 @@ class Relu(ActivationLayer):
         you can find :ref:`here <init-methods>`.
         Defaults to :class:`HeNormal(gain=2) <neupy.init.HeNormal>`.
 
-    {ParameterBasedLayer.bias}
+    {ActivationLayer.bias}
 
     {BaseLayer.Parameters}
 

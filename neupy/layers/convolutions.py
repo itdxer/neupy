@@ -13,7 +13,7 @@ from neupy.core.properties import (
     TypedListProperty, Property,
     WithdrawProperty, ParameterProperty,
 )
-from .base import ParameterBasedLayer
+from .base import BaseLayer
 
 
 __all__ = ('Convolution', 'Deconvolution')
@@ -216,7 +216,7 @@ class PaddingProperty(Property):
                              "got {}".format(value))
 
 
-class Convolution(ParameterBasedLayer):
+class Convolution(BaseLayer):
     """
     Convolutional layer.
 
@@ -258,7 +258,12 @@ class Convolution(ParameterBasedLayer):
         :ref:`here <init-methods>`. Defaults to
         :class:`HeNormal(gain=2) <neupy.init.HeNormal>`.
 
-    {ParameterBasedLayer.bias}
+    bias : 1D array-like, Tensorfow variable, scalar, Initializer or None
+        Defines layer's bias. Default initialization methods you can find
+        :ref:`here <init-methods>`. Defaults to
+        :class:`Constant(0) <neupy.init.Constant>`.
+        The ``None`` value excludes bias from the calculations and
+        do not add it into parameters list.
 
     {BaseLayer.Parameters}
 
@@ -285,19 +290,24 @@ class Convolution(ParameterBasedLayer):
 
     Methods
     -------
-    {ParameterBasedLayer.Methods}
+    {BaseLayer.Methods}
 
     Attributes
     ----------
-    {ParameterBasedLayer.Attributes}
+    {BaseLayer.Attributes}
     """
+    size = TypedListProperty(required=True, element_type=int)
     # We use gain=2 because it's suitable choice for relu non-linearity
     # and relu is the most common non-linearity used for CNN.
     weight = ParameterProperty(default=init.HeNormal(gain=2))
-    size = TypedListProperty(required=True, element_type=int)
+    bias = ParameterProperty(default=init.Constant(value=0), allow_none=True)
+
     padding = PaddingProperty(default='valid')
     stride = Spatial2DProperty(default=(1, 1))
     dilation = Spatial2DProperty(default=1)
+
+    def __init__(self, size, **options):
+        super(Convolution, self).__init__(size=size, **options)
 
     def validate(self, input_shape):
         if input_shape and len(input_shape) != 3:
@@ -344,9 +354,19 @@ class Convolution(ParameterBasedLayer):
         n_rows, n_cols, n_filters = self.size
         return (n_rows, n_cols, n_channels, n_filters)
 
-    @property
-    def bias_shape(self):
-        return as_tuple(self.size[-1])
+    def initialize(self):
+        super(Convolution, self).initialize()
+
+        self.add_parameter(
+            value=self.weight, name='weight',
+            shape=self.weight_shape,
+            trainable=True)
+
+        if self.bias is not None:
+            self.add_parameter(
+                value=self.bias, name='bias',
+                shape=as_tuple(self.size[-1]),
+                trainable=True)
 
     def output(self, input_value):
         padding = self.padding
@@ -378,6 +398,10 @@ class Convolution(ParameterBasedLayer):
 
         return output
 
+    def __repr__(self):
+        classname = self.__class__.__name__
+        return '{name}({size})'.format(name=classname, size=self.size)
+
 
 class Deconvolution(Convolution):
     """
@@ -399,13 +423,13 @@ class Deconvolution(Convolution):
         :ref:`here <init-methods>`. Defaults to
         :class:`HeNormal(gain=2) <neupy.init.HeNormal>`.
 
-    {ParameterBasedLayer.bias}
+    {Convolution.bias}
 
     {BaseLayer.Parameters}
 
     Methods
     -------
-    {ParameterBasedLayer.Methods}
+    {Convolution.Methods}
 
     Examples
     --------
@@ -419,7 +443,7 @@ class Deconvolution(Convolution):
 
     Attributes
     ----------
-    {ParameterBasedLayer.Attributes}
+    {Convolution.Attributes}
     """
     dilation = WithdrawProperty()
 

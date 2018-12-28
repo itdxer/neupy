@@ -151,22 +151,26 @@ class RBM(BaseNetwork, DumpableObject):
             self.weight = create_shared_parameter(
                 value=self.weight,
                 name='weight',
-                shape=(self.n_visible, self.n_hidden)
+                shape=(self.n_visible, self.n_hidden),
+                trainable=False,
             )
             self.hidden_bias = create_shared_parameter(
                 value=self.hidden_bias,
                 name='hidden-bias',
                 shape=(self.n_hidden,),
+                trainable=False,
             )
             self.visible_bias = create_shared_parameter(
                 value=self.visible_bias,
                 name='visible-bias',
                 shape=(self.n_visible,),
+                trainable=False,
             )
             self.h_samples = tf.Variable(
                 tf.zeros([self.batch_size, self.n_hidden]),
                 name="hidden-samples",
                 dtype=tf.float32,
+                trainable=False,
             )
 
             self.network_input = tf.placeholder(

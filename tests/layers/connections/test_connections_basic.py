@@ -92,10 +92,10 @@ class ConnectionsTestCase(BaseTestCase):
             layers.Linear(12),
             layers.Linear(13),
         )
-        layers.join(input_connection, parallel_connections)
+        one_to_many = layers.join(input_connection, parallel_connections)
 
         input_value = asfloat(np.random.random((10, 4)))
-        actual_output = self.eval(parallel_connections.output(input_value))
+        actual_output = self.eval(one_to_many.output(input_value))
 
         self.assertEqual(actual_output[0].shape, (10, 11))
         self.assertEqual(actual_output[1].shape, (10, 12))
