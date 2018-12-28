@@ -68,40 +68,6 @@ def filter_dict(dictionary, include_keys):
     return filtered_dict
 
 
-def merge_dicts_with_list(first_dict, second_dict):
-    """
-    Create new dict that contains all elements from the first
-    one and from the second one. Function assumes that all value
-    elements are lists. In case if one key appears in both dicts
-    function will merge these lists into one.
-
-    Parameters
-    ----------
-    first_dict : dict
-    second_dict : dict
-
-    Returns
-    -------
-    dict
-    """
-    common_dict = OrderedDict()
-
-    for key, value in first_dict.items():
-        # To make sure that we copied lists inside of the
-        # dictionary, but didn't copied values inside of the list
-        common_dict[key] = copy.copy(value)
-
-    for key, values in second_dict.items():
-        if key in common_dict:
-            for value in values:
-                if value not in common_dict[key]:
-                    common_dict[key].append(value)
-        else:
-            common_dict[key] = copy.copy(values)
-
-    return common_dict
-
-
 def is_cyclic(graph):
     """
     Check if graph has cycles.
@@ -164,12 +130,12 @@ def does_layer_expect_one_input(layer):
         layer, ``False`` otherwise.
     """
     if not hasattr(layer, 'output'):
-        raise ValueError("Layer `{}` doesn't have "
-                         "output method".format(layer))
+        raise ValueError(
+            "Layer `{}` doesn't have output method".format(layer))
 
     if not inspect.ismethod(layer.output):
-        raise ValueError("Layer has an `output` property, "
-                         "but it's not a method")
+        raise ValueError(
+            "Layer has an `output` property, but it's not a method")
 
     # The main output method overwrapped with decoretor that destroys
     # original properties of the method. The original method can be found
@@ -191,22 +157,14 @@ class LayerGraph(object):
     Parameters
     ----------
     forward_graph : None or dict
-    backward_graph : None or dict
 
     Raises
     ------
     LayerConnectionError
         If graph cannot connect layers.
     """
-    def __init__(self, forward_graph=None, backward_graph=None):
-        if forward_graph is None:
-            forward_graph = OrderedDict()
-
-        if backward_graph is None:
-            backward_graph = OrderedDict()
-
-        self.forward_graph = forward_graph
-        self.backward_graph = backward_graph
+    def __init__(self, forward_graph=None):
+        self.forward_graph = forward_graph or OrderedDict()
 
     @classmethod
     def merge(cls, left_graph, right_graph):
@@ -224,33 +182,41 @@ class LayerGraph(object):
             New graph that contains layers and connections
             from input graphs.
         """
-        forward_graph = merge_dicts_with_list(
-            left_graph.forward_graph,
-            right_graph.forward_graph
-        )
-        backward_graph = merge_dicts_with_list(
-            left_graph.backward_graph,
-            right_graph.backward_graph
-        )
-        return cls(forward_graph, backward_graph)
+
+        forward_graph = OrderedDict()
+
+        for key, value in left_graph.forward_graph.items():
+            # To make sure that we copied lists inside of the
+            # dictionary, but didn't copied values inside of the list
+            forward_graph[key] = copy.copy(value)
+
+        for key, values in right_graph.forward_graph.items():
+            if key in forward_graph:
+                for value in values:
+                    if value not in forward_graph[key]:
+                        forward_graph[key].append(value)
+            else:
+                forward_graph[key] = copy.copy(values)
+
+        return cls(forward_graph)
+
+    @property
+    def backward_graph(self):
+        # Make sure that order stays the same
+        backward = OrderedDict([(layer, []) for layer in self.forward_graph])
+
+        for to_layer, from_layers in self.forward_graph.items():
+            for from_layer in from_layers:
+                backward[from_layer].append(to_layer)
+
+        return backward
 
     def add_layer(self, layer):
         """
         Add new layer into the graph.
-
-        Parameters
-        ----------
-        layer : layer
-
-        Returns
-        -------
-        bool
-            Returns ``False`` if layer has beed already added into
-            graph and there is no need to add it again, and
-            ``True`` - if layer is a new and was added successfully.
         """
         if layer in self.forward_graph:
-            return False
+            return
 
         for existed_layer in self.forward_graph:
             if existed_layer.name == layer.name:
@@ -259,9 +225,6 @@ class LayerGraph(object):
                     "already defined in the graph.".format(layer, layer.name))
 
         self.forward_graph[layer] = []
-        self.backward_graph[layer] = []
-
-        return True
 
     def add_connection(self, from_layer, to_layer):
         """
@@ -285,21 +248,17 @@ class LayerGraph(object):
             the graph, and ``True`` if connection was added successfully.
         """
         if from_layer is to_layer:
-            raise LayerConnectionError("Cannot connect layer `{}` "
-                                       "to itself".format(from_layer))
+            raise LayerConnectionError(
+                "Cannot connect layer `{}` to itself".format(from_layer))
 
         self.add_layer(from_layer)
         self.add_layer(to_layer)
 
-        forward_connections = self.forward_graph[from_layer]
-        backward_connections = self.backward_graph[to_layer]
-
-        if to_layer in forward_connections:
+        if to_layer in self.forward_graph[from_layer]:
             # Layers have been already connected
             return False
 
-        forward_connections.append(to_layer)
-        backward_connections.append(from_layer)
+        self.forward_graph[from_layer].append(to_layer)
 
         if is_cyclic(self.forward_graph):
             raise LayerConnectionError(
@@ -358,6 +317,7 @@ class LayerGraph(object):
         # set up input shape for layers that don't have it.
         layers = copy.copy(from_layers)
         forward_graph = self.forward_graph
+        backward_graph = self.backward_graph
 
         # We need to know whether all input layers
         # have defined input shape
@@ -379,7 +339,7 @@ class LayerGraph(object):
 
                 elif not expect_one_input and all_inputs_has_shape:
                     input_shapes = []
-                    for incoming_layer in self.backward_graph[next_layer]:
+                    for incoming_layer in backward_graph[next_layer]:
                         input_shapes.append(incoming_layer.output_shape)
 
                     if None not in input_shapes:
@@ -409,7 +369,7 @@ class LayerGraph(object):
         """
         Returns graph with reversed connections.
         """
-        return LayerGraph(self.backward_graph, self.forward_graph)
+        return LayerGraph(self.backward_graph)
 
     def subgraph_for_output(self, output_layers):
         """
@@ -432,26 +392,23 @@ class LayerGraph(object):
 
         observed_layers = []
         layers = copy.copy(output_layers)
+        backward_graph = self.backward_graph
 
         while layers:
             current_layer = layers.pop()
-            next_layers = self.backward_graph[current_layer]
+            observed_layers.append(current_layer)
 
-            for next_layer in next_layers:
+            for next_layer in backward_graph[current_layer]:
                 if next_layer not in observed_layers:
                     layers.append(next_layer)
 
-            observed_layers.append(current_layer)
-
         forward_subgraph = filter_dict(self.forward_graph, observed_layers)
-        backward_subgraph = filter_dict(self.backward_graph, observed_layers)
-
         # Remove old relations to the other layers.
         # Output layer cannot point to some other layers.
         for layer in output_layers:
             forward_subgraph[layer] = []
 
-        return LayerGraph(forward_subgraph, backward_subgraph)
+        return LayerGraph(forward_subgraph)
 
     def subgraph_for_input(self, input_layers):
         """
@@ -588,6 +545,7 @@ class LayerGraph(object):
             Output from the final layer/layers.
         """
         outputs = {}
+        backward_graph = self.backward_graph
 
         if isinstance(input_value, dict):
             for layer, input_variable in input_value.items():
@@ -595,8 +553,9 @@ class LayerGraph(object):
                     layer = self.find_layer_by_name(layer)
 
                 if layer not in self.forward_graph:
-                    raise ValueError("The `{}` layer doesn't appear "
-                                     "in the graph".format(layer))
+                    raise ValueError(
+                        "The `{}` layer doesn't appear in the graph"
+                        "".format(layer))
 
                 outputs[layer] = layer.output(input_variable)
         else:
@@ -607,7 +566,7 @@ class LayerGraph(object):
             if layer in outputs:
                 return outputs[layer]
 
-            input_layers = self.backward_graph[layer]
+            input_layers = backward_graph[layer]
             inputs = []
             for input_layer in input_layers:
                 if input_layer in outputs:
@@ -647,6 +606,9 @@ class LayerGraph(object):
             prepared_graph[from_layer.name] = [l.name for l in to_layers]
 
         return list(prepared_graph.items())
+
+    def __contains__(self, layer):
+        return layer in self.forward_graph
 
     def __len__(self):
         return len(self.forward_graph)

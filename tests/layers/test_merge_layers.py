@@ -36,6 +36,7 @@ class ElementwiseTestCase(BaseTestCase):
         elem_layer = layers.Elementwise()
 
         layers.join(input_layer_1, elem_layer)
+
         with self.assertRaises(LayerConnectionError):
             layers.join(input_layer_2, elem_layer)
 
@@ -110,9 +111,17 @@ class ConcatenateTestCase(BaseTestCase):
         hidden_layer_22 = layers.Convolution((3, 3, 4))
         concat_layer = layers.Concatenate(axis=-1)
 
-        connection = layers.join(input_layer, hidden_layer_1, concat_layer)
-        connection = layers.join(input_layer, hidden_layer_21,
-                                 hidden_layer_22, concat_layer)
+        connection = layers.join(
+            input_layer,
+            hidden_layer_1,
+            concat_layer,
+        )
+        connection = layers.join(
+            input_layer,
+            hidden_layer_21,
+            hidden_layer_22,
+            concat_layer,
+        )
         connection.initialize()
 
         self.assertEqual((24, 24, 11), concat_layer.output_shape)

@@ -1,7 +1,6 @@
 from neupy import layers
 from neupy.layers.connections import is_sequential
-from neupy.layers.connections.graph import (merge_dicts_with_list,
-                                            does_layer_expect_one_input)
+from neupy.layers.connections.graph import does_layer_expect_one_input
 
 from base import BaseTestCase
 
@@ -31,15 +30,6 @@ class ConnectionSecondaryFunctionsTestCase(BaseTestCase):
         self.assertFalse(is_sequential(connection_4))
         self.assertTrue(is_sequential(connection_31))
         self.assertTrue(is_sequential(connection_32))
-
-    def test_dict_merging(self):
-        first_dict = dict(a=[1, 2, 3])
-        second_dict = dict(a=[3, 4])
-
-        merged_dict = merge_dicts_with_list(first_dict, second_dict)
-
-        self.assertEqual(['a'], list(merged_dict.keys()))
-        self.assertEqual([1, 2, 3, 4], merged_dict['a'])
 
     def test_does_layer_expect_one_input_function(self):
         with self.assertRaises(ValueError):

@@ -43,7 +43,6 @@ def clean_layer_references(graph, layer_references):
     for layer_reference in layer_references:
         if isinstance(layer_reference, six.string_types):
             layer_reference = graph.find_layer_by_name(layer_reference)
-
         layers.append(layer_reference)
 
     return layers
@@ -108,38 +107,69 @@ class BaseConnection(object):
 
     def __init__(self):
         self.initialized = False
+        self.training_state = True
+        self.graph = LayerGraph()
 
         # Make sure that we save information when connection was
         # initialized. It will work even if method was reinitialized
         self.initialize = types.MethodType(
             check_initialization(self.initialize), self)
 
-        self.training_state = True
-        self.look_inside = 0
-        self.graph = LayerGraph()
+    @property
+    def input_layers(self):
+        return self.graph.input_layers
 
-        self.input_layers = [self]
-        self.output_layers = [self]
+    @property
+    def output_layers(self):
+        return self.graph.output_layers
 
-    def connect(self, left, right):
+    @property
+    def input_shape(self):
         """
-        Make connection between two objects.
+        Connection's input shape/shapes.
+
+        Returns
+        -------
+        list of tuples, tuple or None
+            - List of tuples: in case if there are more than
+              one input layer. Each tuple is a shape of the
+              specific input layer.
+
+            - tuple: in case if there is one input layer.
+              Tuple object defines input layer's shape.
         """
-        return LayerConnection(left, right)
+        input_shapes = []
+        for input_layer in self.input_layers:
+            input_shapes.append(input_layer.input_shape)
+        return input_shapes[0] if len(input_shapes) == 1 else input_shapes
 
-    def __gt__(self, other):
-        return self.compare(self, other)
+    @property
+    def output_shape(self):
+        """
+        Connection's output shape/shapes.
 
-    def __lt__(self, other):
-        return self.compare(other, self)
+        Returns
+        -------
+        list of tuples, tuple or None
+            - List of tuples: in case if there are more than
+              one input layer. Each tuple is a shape of the
+              specific input layer.
+
+            - tuple: in case if there is one input layer.
+              Tuple object defines input layer's shape.
+        """
+        output_shapes = []
+        for output_layer in self.output_layers:
+            output_shapes.append(output_layer.output_shape)
+        return output_shapes[0] if len(output_shapes) == 1 else output_shapes
 
     def compare(self, left, right):
-        original_connection = self.connect(left, right)
-        self.events.append(('__gt__', left, right, original_connection))
+        connection = LayerConnection(left, right)
+        self.events.append(('__gt__', left, right, connection))
 
         subgraph = LayerGraph()
-
         previous_operator = None
+
         for operation in reversed(self.events):
             operator = operation[0]
 
@@ -147,32 +177,21 @@ class BaseConnection(object):
                 break
 
             if operator == '__gt__':
-                _, left_operation, right_operation, prev_conn = operation
-
-                if isinstance(left_operation, (list, tuple)):
-                    left_operation = ParallelConnection(left_operation)
-
-                if isinstance(right_operation, (list, tuple)):
-                    right_operation = ParallelConnection(right_operation)
-
-                subgraph = LayerGraph.merge(subgraph, prev_conn.graph)
-
-                for left_layer in left_operation.output_layers:
-                    for right_layer in right_operation.input_layers:
-                        subgraph.connect_layers(left_layer, right_layer)
+                _, left_operation, right_operation, cached_conn = operation
+                subgraph = LayerGraph.merge(subgraph, cached_conn.graph)
 
             previous_operator = operator
 
-        connection = LayerConnection(left_layer, right_layer)
-        connection.full_graph = original_connection.full_graph
-        connection.graph = connection.full_graph.subgraph(
-            subgraph.input_layers,
-            subgraph.output_layers,
-        )
-        connection.input_layers = subgraph.input_layers
-        connection.output_layers = subgraph.output_layers
+        connection = LayerConnection(left_operation, right_operation)
+        connection.graph = subgraph
 
         return connection
+
+    def __gt__(self, other):
+        return self.compare(self, other)
+
+    def __lt__(self, other):
+        return self.compare(other, self)
 
     def __rshift__(self, other):
         return self.compare(self, other)
@@ -199,7 +218,7 @@ class BaseConnection(object):
         ----------
         input_value
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def initialize(self):
         """
@@ -244,29 +263,6 @@ class BaseConnection(object):
         feed_dict = dict(zip(graph['inputs'], inputs))
 
         return session.run(graph['outputs'], feed_dict=feed_dict)
-
-
-def make_common_graph(left_layer, right_layer):
-    """
-    Makes common graph for two layers that exists
-    in different graphs.
-
-    Parameters
-    ----------
-    left_layer : layer
-    right_layer : layer
-
-    Returns
-    -------
-    LayerGraph instance
-        Graph that contains both layers and their connections.
-    """
-    graph = LayerGraph.merge(left_layer.graph, right_layer.graph)
-
-    for layer in graph.forward_graph.keys():
-        layer.graph = graph
-
-    return graph
 
 
 def topological_sort(graph):
@@ -337,10 +333,7 @@ class ParallelConnection(BaseConnection):
         from neupy.layers.base import Identity
 
         super(ParallelConnection, self).__init__()
-
         self.connections = []
-        self.input_layers = []
-        self.output_layers = []
 
         for layers in connections:
             if isinstance(layers, BaseConnection):
@@ -352,35 +345,9 @@ class ParallelConnection(BaseConnection):
 
             self.connections.append(connection)
 
-            for input_layer in connection.input_layers:
-                if input_layer not in self.input_layers:
-                    self.input_layers.append(input_layer)
-
-            for output_layer in connection.output_layers:
-                if output_layer not in self.output_layers:
-                    self.output_layers.append(output_layer)
-
-    @property
-    def input_shape(self):
-        """
-        Returns input shape per each network parallel
-        connection.
-        """
-        input_shapes = []
+        self.graph = LayerGraph()
         for connection in self.connections:
-            input_shapes.append(connection.input_shape)
-        return input_shapes
-
-    @property
-    def output_shape(self):
-        """
-        Returns output shape per each network parallel
-        connection.
-        """
-        output_shapes = []
-        for connection in self.connections:
-            output_shapes.append(connection.output_shape)
-        return output_shapes
+            self.graph = LayerGraph.merge(self.graph, connection.graph)
 
     def initialize(self):
         """
@@ -484,85 +451,14 @@ class LayerConnection(BaseConnection):
     def __init__(self, left, right):
         super(LayerConnection, self).__init__()
 
-        self.left_raw = left
-        self.right_raw = right
-
         if isinstance(left, (list, tuple)):
             left = ParallelConnection(left)
 
         if isinstance(right, (list, tuple)):
             right = ParallelConnection(right)
 
-        self.left = left
-        self.right = right
-
-        layers = product(left.output_layers, right.input_layers)
-        for left_output, right_input in layers:
-            self.full_graph = make_common_graph(left_output, right_input)
-
-        self.full_graph.connect_layers(left.output_layers, right.input_layers)
-
-        self.input_layers = self.left.input_layers
-        self.output_layers = self.right.output_layers
-
-        # Generates subgraph that contains only connections
-        # between specified input and output layers
-        self.graph = self.full_graph.subgraph(
-            self.input_layers, self.output_layers)
-
-    @property
-    def input_shape(self):
-        """
-        Connection's input shape/shapes.
-
-        Returns
-        -------
-        list of tuples, tuple or None
-            - List of tuples: in case if there are more than
-              one input layer. Each tuple is a shape of the
-              specific input layer.
-
-            - tuple: in case if there is one input layer.
-              Tuple object defines input layer's shape.
-        """
-        # Cannot save them during initialization step,
-        # because input shape can be modified later
-        if len(self.input_layers) == 1:
-            input_layer = self.input_layers[0]
-            return input_layer.input_shape
-
-        input_shapes = []
-        for input_layer in self.input_layers:
-            input_shapes.append(input_layer.input_shape)
-
-        return input_shapes
-
-    @property
-    def output_shape(self):
-        """
-        Connection's output shape/shapes.
-
-        Returns
-        -------
-        list of tuples, tuple or None
-            - List of tuples: in case if there are more than
-              one input layer. Each tuple is a shape of the
-              specific input layer.
-
-            - tuple: in case if there is one input layer.
-              Tuple object defines input layer's shape.
-        """
-        # Cannot save them during initialization step,
-        # because input shape can be modified later
-        if len(self.output_layers) == 1:
-            output_layer = self.output_layers[0]
-            return output_layer.output_shape
-
-        output_shapes = []
-        for output_layer in self.output_layers:
-            output_shapes.append(output_layer.output_shape)
-
-        return output_shapes
+        self.graph = LayerGraph.merge(left.graph, right.graph)
+        self.graph.connect_layers(left.output_layers, right.input_layers)
 
     def initialize(self):
         """
@@ -644,16 +540,6 @@ class LayerConnection(BaseConnection):
 
         new_connection = copy.copy(self)
         new_connection.graph = subgraph
-        new_connection.input_layers = subgraph.input_layers
-
-        # don't care about self.left and self.right attributes.
-        # remove them to make sure that other function
-        # won't use invalid references
-        if hasattr(new_connection, 'left'):
-            del new_connection.left
-
-        if hasattr(new_connection, 'right'):
-            del new_connection.right
 
         return new_connection
 
@@ -681,16 +567,6 @@ class LayerConnection(BaseConnection):
 
         new_connection = copy.copy(self)
         new_connection.graph = subgraph
-        new_connection.output_layers = subgraph.output_layers
-
-        # don't care about self.left and self.right attributes.
-        # remove them to make sure that other function
-        # won't use invalid references
-        if hasattr(new_connection, 'left'):
-            del new_connection.left
-
-        if hasattr(new_connection, 'right'):
-            del new_connection.right
 
         return new_connection
 
