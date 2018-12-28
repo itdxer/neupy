@@ -12,7 +12,6 @@ from neupy.utils import (as_tuple, tensorflow_session,
                          initialize_uninitialized_variables)
 from .utils import join, is_sequential
 from .graph import LayerGraph
-from .inline import InlineConnection
 
 
 __all__ = ('LayerConnection', 'BaseConnection', 'ParallelConnection',
@@ -85,7 +84,7 @@ def create_input_variables(input_layers):
     return inputs
 
 
-class BaseConnection(InlineConnection):
+class BaseConnection(object):
     """
     Base class from chain connections.
 
@@ -104,6 +103,7 @@ class BaseConnection(InlineConnection):
     output_layers : list of layers
         List of connection's output layers.
     """
+    events = []
     computation_cache = {}
 
     def __init__(self):
@@ -127,11 +127,66 @@ class BaseConnection(InlineConnection):
         """
         return LayerConnection(left, right)
 
+    def __gt__(self, other):
+        return self.compare(self, other)
+
+    def __lt__(self, other):
+        return self.compare(other, self)
+
+    def compare(self, left, right):
+        original_connection = self.connect(left, right)
+        self.events.append(('__gt__', left, right, original_connection))
+
+        subgraph = LayerGraph()
+
+        previous_operator = None
+        for operation in reversed(self.events):
+            operator = operation[0]
+
+            if operator == previous_operator:
+                break
+
+            if operator == '__gt__':
+                _, left_operation, right_operation, prev_conn = operation
+
+                if isinstance(left_operation, (list, tuple)):
+                    left_operation = ParallelConnection(left_operation)
+
+                if isinstance(right_operation, (list, tuple)):
+                    right_operation = ParallelConnection(right_operation)
+
+                subgraph = LayerGraph.merge(subgraph, prev_conn.graph)
+
+                for left_layer in left_operation.output_layers:
+                    for right_layer in right_operation.input_layers:
+                        subgraph.connect_layers(left_layer, right_layer)
+
+            previous_operator = operator
+
+        connection = LayerConnection(left_layer, right_layer)
+        connection.full_graph = original_connection.full_graph
+        connection.graph = connection.full_graph.subgraph(
+            subgraph.input_layers,
+            subgraph.output_layers,
+        )
+        connection.input_layers = subgraph.input_layers
+        connection.output_layers = subgraph.output_layers
+
+        return connection
+
     def __rshift__(self, other):
-        return super(BaseConnection, self).__gt__(other)
+        return self.compare(self, other)
 
     def __lshift__(self, other):
-        return super(BaseConnection, self).__lt__(other)
+        return self.compare(other, self)
+
+    def __bool__(self):
+        self.events.append(('__bool__', self))
+        return True
+
+    def __nonzero__(self):
+        # Hack for python 2
+        return self.__bool__()
 
     def __iter__(self):
         yield self
