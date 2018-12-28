@@ -346,7 +346,7 @@ def save_dict(connection):
         for attrname, parameter in layer.parameters.items():
             parameters[attrname] = {
                 'value': asfloat(session.run(parameter)),
-                'trainable': parameter.is_trainable,
+                'trainable': parameter.trainable,
             }
 
         for option_name in layer.options:

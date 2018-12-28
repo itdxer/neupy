@@ -1,4 +1,3 @@
-import copy
 import types
 from functools import wraps
 from itertools import chain
@@ -446,75 +445,44 @@ class ExecutableGraph(BaseConnection):
         -------
         Tensorfow expression
         """
+        inputs = first_input
         if other_inputs:
-            input_values = as_tuple(first_input, other_inputs)
-        else:
-            input_values = first_input
+            inputs = as_tuple(first_input, other_inputs)
+        return self.graph.propagate_forward(inputs)
 
-        if isinstance(input_values, (list, tuple)):
-            n_input_layers = len(self.input_layers)
-            n_input_vars = len(input_values)
-
-            if n_input_vars != n_input_layers:
-                raise ValueError(
-                    "Connection has {} input layer(s), but {} inputs was "
-                    "provided".format(n_input_layers, n_input_vars))
-
-            # Layers in the self.graph.input_layers and
-            # self.input_layers variables can have a different order.
-            # Order in the self.input_layers is defined by user
-            input_values_as_dict = {}
-
-            for layer, value in zip(self.input_layers, input_values):
-                input_values_as_dict[layer] = value
-
-            input_values = input_values_as_dict
-
-        return self.graph.propagate_forward(input_values)
-
-    def start(self, first_layer, *other_layers):
+    def start(self, *input_layers):
         """
         Create new LayerConnection instance that point to
         different input layers.
 
         Parameters
         ----------
-        first_layer : layer, str
-            Layer instance or layer name.
-
-        *other_layers
+        *input_layers
             Layer instances or layer names.
 
         Returns
         -------
         connection
         """
-        input_layers = as_tuple(first_layer, other_layers)
         input_layers = clean_layer_references(self.graph, input_layers)
-
         subgraph = self.graph.subgraph_for_input(input_layers)
         return ExecutableGraph(subgraph)
 
-    def end(self, first_layer, *other_layers):
+    def end(self, *output_layers):
         """
         Create new LayerConnection instance that point to
         different output layers.
 
         Parameters
         ----------
-        first_layer : layer, str
-            Layer instance or layer name.
-
-        *other_layers
+        *output_layers
             Layer instances or layer names.
 
         Returns
         -------
         connection
         """
-        output_layers = as_tuple(first_layer, other_layers)
         output_layers = clean_layer_references(self.graph, output_layers)
-
         subgraph = self.graph.subgraph_for_output(output_layers)
         return ExecutableGraph(subgraph)
 
@@ -553,7 +521,7 @@ class ExecutableGraph(BaseConnection):
             layer.training_state = True
 
     def __len__(self):
-        return len(self.graph.forward_graph)
+        return len(self.graph)
 
     def __iter__(self):
         for layer in topological_sort(self.graph.backward_graph):

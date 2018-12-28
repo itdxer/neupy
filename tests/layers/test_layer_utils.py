@@ -26,9 +26,6 @@ class CountParametersTestCase(BaseTestCase):
         n_parameters = layers.count_parameters(hidden_layer)
         self.assertEqual(n_parameters, 10 * 5 + 5)
 
-    def test_join_empty_connection(self):
-        self.assertEqual(layers.join(), None)
-
     def test_connection_extraction(self):
         connection = layers.Input(2) > layers.Sigmoid(3)
         self.assertIs(extract_connection(connection), connection)

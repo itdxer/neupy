@@ -1,5 +1,5 @@
 from neupy import layers
-from neupy.layers.connections import is_sequential
+from neupy.layers.connections.base import is_sequential
 from neupy.layers.connections.graph import does_layer_expect_one_input
 
 from base import BaseTestCase

@@ -103,12 +103,10 @@ class ActivationLayersTestCase(BaseTestCase):
             actual_output
         )
 
-    def test_linear_layer_withut_bias(self):
+    def test_linear_layer_withuot_bias(self):
         input_layer = layers.Input(10)
         output_layer = layers.Linear(2, weight=init.Constant(0.1), bias=None)
         connection = input_layer > output_layer
-
-        self.assertEqual(output_layer.bias_shape, None)
 
         input_value = asfloat(np.ones((1, 10)))
         actual_output = self.eval(connection.output(input_value))
