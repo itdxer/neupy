@@ -11,36 +11,6 @@ from neupy.exceptions import LayerConnectionError
 __all__ = ('LayerGraph',)
 
 
-def filter_list(iterable, include_values):
-    """
-    Create new list that contains only values
-    specified in the ``include_values`` attribute.
-
-    Parameters
-    ----------
-    iterable : list
-        List that needs to be filtered.
-
-    include_values : list, tuple
-        List of values that needs to be included in the
-        filtered list. Other values that hasn't been
-        defined in the list will be excluded from the
-        list specified by ``iterable`` attribute.
-
-    Returns
-    -------
-    list
-        Filtered list.
-    """
-    filtered_list = []
-
-    for value in iterable:
-        if value in include_values:
-            filtered_list.append(value)
-
-    return filtered_list
-
-
 def filter_dict(dictionary, include_keys):
     """
     Create new list that contains only values
@@ -63,7 +33,7 @@ def filter_dict(dictionary, include_keys):
 
     for key, value in dictionary.items():
         if key in include_keys:
-            filtered_dict[key] = filter_list(value, include_keys)
+            filtered_dict[key] = [v for v in value if v in include_keys]
 
     return filtered_dict
 
@@ -464,13 +434,8 @@ class LayerGraph(object):
         list
             List of input layers.
         """
-        input_layers = []
-
-        for layer, next_layers in self.backward_graph.items():
-            if not next_layers:
-                input_layers.append(layer)
-
-        return input_layers
+        reversed_graph = self.reverse()
+        return reversed_graph.output_layers
 
     @property
     def output_layers(self):
