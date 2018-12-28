@@ -12,7 +12,7 @@ X = np.array([
 
 
 class HebbRuleTestCase(BaseTestCase):
-    def test_validations(self):
+    def test_input_validations_for_hebb_rule(self):
         invalid_cases = (
             # Missed required parameters
             dict(),
@@ -33,6 +33,13 @@ class HebbRuleTestCase(BaseTestCase):
             with self.assertRaises(ValueError):
                 algorithms.HebbRule(**invalid_case_params)
 
+    def test_hebb_rule_trainig_exception(self):
+        hebb = algorithms.HebbRule(n_inputs=2, n_outputs=3, n_unconditioned=1)
+        err_message = "expected to have 2 features"
+
+        with self.assertRaisesRegexp(ValueError, err_message):
+            hebb.train(np.ones((6, 3)))
+
     def test_learning_process(self):
         hn = algorithms.HebbRule(
             n_inputs=2,
@@ -41,7 +48,6 @@ class HebbRuleTestCase(BaseTestCase):
             step=1,
             verbose=False,
         )
-
         hn.train(X, epochs=2)
 
         test_data = np.array([
