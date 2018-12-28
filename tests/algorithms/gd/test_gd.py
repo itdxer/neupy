@@ -1,6 +1,7 @@
 from functools import partial
 
 from neupy import algorithms, layers
+from neupy.exceptions import InvalidConnection
 
 from base import BaseTestCase
 from helpers import simple_classification
@@ -63,3 +64,12 @@ class GradientDescentTestCase(BaseTestCase):
             layers.Sigmoid(1),
         ])
         self.assertIn("[... 6 layers ...]", str(network))
+
+    def test_raise_exception_for_multioutputs(self):
+        output_1 = layers.Relu(1)
+        output_2 = layers.Relu(2)
+        network = layers.Input(5) > [output_1, output_2]
+
+        error_message = "should have one output layer"
+        with self.assertRaisesRegexp(InvalidConnection, error_message):
+            algorithms.GradientDescent(network)
