@@ -1,21 +1,21 @@
 import copy
 import types
 from functools import wraps
-from itertools import product
+from itertools import chain
 from contextlib import contextmanager
 
 import six
 import tensorflow as tf
 
 from neupy.layers.utils import preformat_layer_shape, find_variables
-from neupy.utils import (as_tuple, tensorflow_session,
-                         initialize_uninitialized_variables)
-from .utils import join, is_sequential
+from neupy.utils import (
+    as_tuple, tensorflow_session,
+    initialize_uninitialized_variables,
+)
 from .graph import LayerGraph
 
 
-__all__ = ('LayerConnection', 'BaseConnection', 'ParallelConnection',
-           'parallel')
+__all__ = ('ExecutableGraph', 'BaseConnection', 'parallel', 'join')
 
 
 def clean_layer_references(graph, layer_references):
@@ -46,6 +46,30 @@ def clean_layer_references(graph, layer_references):
         layers.append(layer_reference)
 
     return layers
+
+
+def is_sequential(connection):
+    """
+    Check whether graph connection is a sequence.
+
+    Parameters
+    ----------
+    connection : connection
+
+    Returns
+    -------
+    bool
+    """
+    forward_graph_layers = connection.graph.forward_graph.values()
+    backward_graph_layers = connection.graph.backward_graph.values()
+
+    for layers in chain(forward_graph_layers, backward_graph_layers):
+        if len(layers) >= 2:
+            # One of the layers has multiple input
+            # or output connections
+            return False
+
+    return True
 
 
 def check_initialization(method):
@@ -164,8 +188,7 @@ class BaseConnection(object):
         return output_shapes[0] if len(output_shapes) == 1 else output_shapes
 
     def compare(self, left, right):
-        connection = LayerConnection(left, right)
-        self.events.append(('__gt__', left, right, connection))
+        self.events.append(('__gt__', left, right, join(left, right)))
 
         subgraph = LayerGraph()
         previous_operator = None
@@ -182,10 +205,7 @@ class BaseConnection(object):
 
             previous_operator = operator
 
-        connection = LayerConnection(left_operation, right_operation)
-        connection.graph = subgraph
-
-        return connection
+        return ExecutableGraph(subgraph)
 
     def __gt__(self, other):
         return self.compare(self, other)
@@ -306,117 +326,61 @@ def topological_sort(graph):
     return sorted_nodes
 
 
-class ParallelConnection(BaseConnection):
+def parallel(*connections):
+    from neupy.layers.base import Identity
+
+    graph = LayerGraph()
+
+    for connection in connections:
+        if isinstance(connection, (list, tuple)):
+            connection = join(*connection) if connection else Identity()
+        graph = LayerGraph.merge(graph, connection.graph)
+
+    return ExecutableGraph(graph)
+
+
+def join(*connections):
     """
-    Connection between separate layer networks in parallel.
-    Each network has it's own input and out layers.
+    Connect two layers.
 
     Parameters
     ----------
-    connections : list of list or connection
-        List of networks.
+    *connections : layers or connections
 
-    Attributes
-    ----------
-    connections : list of connections
-        List of networks.
+    Returns
+    -------
+    connection
+        Layers connected in a sequence.
 
-    input_layers : list of connections
-        Combined list of all input layers that each
-        parallel connection has.
-
-    output_layers : list of connections
-        Combined list of all output layers that each
-        parallel connection has.
+    Examples
+    --------
+    >>> from neupy import layers
+    >>> conn = layers.join(
+    ...     layers.Input(784),
+    ...     layers.Relu(500),
+    ...     layers.Relu(300),
+    ...     layers.Softmax(10),
+    ... )
     """
-    def __init__(self, connections):
-        from neupy.layers.base import Identity
+    graph = LayerGraph()
 
-        super(ParallelConnection, self).__init__()
-        self.connections = []
+    for connection in connections:
+        if isinstance(connection, (list, tuple)):
+            connection = parallel(*connection)
 
-        for layers in connections:
-            if isinstance(layers, BaseConnection):
-                connection = layers
-            elif not layers:
-                connection = Identity()
-            else:
-                connection = join(*layers)
+        merged_graph = LayerGraph.merge(graph, connection.graph)
 
-            self.connections.append(connection)
+        if merged_graph.output_layers:
+            merged_graph.connect_layers(
+                graph.output_layers,
+                connection.graph.input_layers)
 
-        self.graph = LayerGraph()
-        for connection in self.connections:
-            self.graph = LayerGraph.merge(self.graph, connection.graph)
+        graph = merged_graph
 
-    def initialize(self):
-        """
-        Initialize all connections.
-        """
-        for connection in self.connections:
-            connection.initialize()
-
-    def output(self, first_input, *other_inputs):
-        """
-        Compute outputs per each network in parallel
-        connection.
-
-        Parameters
-        ----------
-        first_input : Tensorfow variable, array-like, dict
-        *other_inputs
-
-        Returns
-        -------
-        list
-        """
-        n_inputs = len(other_inputs) + 1  # +1 for first input
-        n_connections = len(self.connections)
-
-        if not other_inputs:
-            input_values = [first_input] * n_connections
-
-        elif n_inputs == n_connections:
-            input_values = as_tuple(first_input, other_inputs)
-
-        else:
-            raise ValueError("Expected {} input values for parallel "
-                             "connection, got {}"
-                             "".format(n_connections, n_inputs))
-
-        outputs = []
-        for input_value, connection in zip(input_values, self.connections):
-            connection_output = connection.output(input_value)
-            outputs.append(connection_output)
-
-        return outputs
-
-    @contextmanager
-    def disable_training_state(self):
-        """
-        Disable training state for all layers in all
-        connections.
-        """
-        for connection in self.connections:
-            for layer in connection:
-                layer.training_state = False
-
-        yield
-
-        for connection in self.connections:
-            for layer in connection:
-                layer.training_state = True
-
-    def __iter__(self):
-        for connection in self.connections:
-            yield connection
+    return ExecutableGraph(graph)
 
 
-def parallel(*connections):
-    return ParallelConnection(connections)
-
-
-class LayerConnection(BaseConnection):
+class ExecutableGraph(BaseConnection):
     """
     Make connection between layers.
 
@@ -448,17 +412,9 @@ class LayerConnection(BaseConnection):
         Graph that stores relations between layer
         in the network.
     """
-    def __init__(self, left, right):
-        super(LayerConnection, self).__init__()
-
-        if isinstance(left, (list, tuple)):
-            left = ParallelConnection(left)
-
-        if isinstance(right, (list, tuple)):
-            right = ParallelConnection(right)
-
-        self.graph = LayerGraph.merge(left.graph, right.graph)
-        self.graph.connect_layers(left.output_layers, right.input_layers)
+    def __init__(self, graph):
+        super(ExecutableGraph, self).__init__()
+        self.graph = graph
 
     def initialize(self):
         """
@@ -537,11 +493,7 @@ class LayerConnection(BaseConnection):
         input_layers = clean_layer_references(self.graph, input_layers)
 
         subgraph = self.graph.subgraph_for_input(input_layers)
-
-        new_connection = copy.copy(self)
-        new_connection.graph = subgraph
-
-        return new_connection
+        return ExecutableGraph(subgraph)
 
     def end(self, first_layer, *other_layers):
         """
@@ -564,11 +516,7 @@ class LayerConnection(BaseConnection):
         output_layers = clean_layer_references(self.graph, output_layers)
 
         subgraph = self.graph.subgraph_for_output(output_layers)
-
-        new_connection = copy.copy(self)
-        new_connection.graph = subgraph
-
-        return new_connection
+        return ExecutableGraph(subgraph)
 
     @property
     def layers(self):
@@ -614,10 +562,10 @@ class LayerConnection(BaseConnection):
     def __repr__(self):
         n_layers = len(self)
 
-        if n_layers > 5 or not is_sequential(self):
-            return '{} -> [... {} layers ...] -> {}'.format(
-                preformat_layer_shape(self.input_shape),
-                n_layers,
-                preformat_layer_shape(self.output_shape))
+        if n_layers <= 5 and is_sequential(self):
+            return ' > '.join([repr(layer) for layer in self])
 
-        return ' > '.join([repr(layer) for layer in self])
+        return '{} -> [... {} layers ...] -> {}'.format(
+            preformat_layer_shape(self.input_shape),
+            n_layers,
+            preformat_layer_shape(self.output_shape))
