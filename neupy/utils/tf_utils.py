@@ -15,6 +15,29 @@ __all__ = (
 
 
 def function(inputs, outputs, updates=None, name=None):
+    """
+    Function simulates behaviour of the Theano's functions.
+
+    Parameters
+    ----------
+    inputs : list
+        List of input placeholders
+
+    outputs : list, Tensor
+        Output that has to be computed by the function
+
+    updates : list or None
+        List of the updates that has to be performed on the variables.
+        The ``None`` value means that no updates will be applied at the
+        end of the computation. Defaults to ``None``.
+
+    name : str or None
+        Defaults to ``None``.
+
+    Returns
+    -------
+    function
+    """
     if updates is None:
         updates = []
 
@@ -100,7 +123,9 @@ def class_method_name_scope(method):
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         with tf.name_scope(self.__class__.__name__):
-            return method(*args, **kwargs)
+            if hasattr(method, '__self__'):  # check if method bounded
+                return method(*args, **kwargs)
+            return method(self, *args, **kwargs)
 
     wrapper.original_method = method
     return wrapper
@@ -119,8 +144,8 @@ def flatten(value):
 
 @function_name_scope
 def outer(a, b):
-    a = tf.expand_dims(a, 1)
-    b = tf.expand_dims(b, 0)
+    a = tf.expand_dims(a, 1)  # column vector
+    b = tf.expand_dims(b, 0)  # row vector
     return tf.matmul(a, b)
 
 
@@ -148,8 +173,11 @@ def tf_repeat(tensor, repeats):
     """
     with tf.variable_scope("repeat"):
         expanded_tensor = tf.expand_dims(tensor, -1)
+
         multiples = as_tuple(1, repeats)
         tiled_tensor = tf.tile(expanded_tensor, multiples)
+
+        repeats = tf.convert_to_tensor(repeats)
         return tf.reshape(tiled_tensor, tf.shape(tensor) * repeats)
 
 
@@ -182,13 +210,11 @@ def setup_parameter_updates(parameters, parameter_update_vector):
 
     for parameter in parameters:
         end_position = start_position + tf.size(parameter)
-
         new_parameter = tf.reshape(
             parameter_update_vector[start_position:end_position],
             parameter.shape
         )
         updates.append((parameter, new_parameter))
-
         start_position = end_position
 
     return updates
