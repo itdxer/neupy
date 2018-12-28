@@ -308,7 +308,7 @@ class BaseOptimizer(BaseNetwork):
     def __reduce__(self):
         parameters = self.get_params(with_connection=False)
         args = (self.connection, parameters)
-        return (self.__class__.__name__, args)
+        return (self.__class__, args)
 
     def __repr__(self):
         return "{}({}, {})".format(

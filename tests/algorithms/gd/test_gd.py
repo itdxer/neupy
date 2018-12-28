@@ -1,3 +1,4 @@
+import pickle
 from functools import partial
 
 from neupy import algorithms, layers
@@ -73,3 +74,17 @@ class GradientDescentTestCase(BaseTestCase):
         error_message = "should have one output layer"
         with self.assertRaisesRegexp(InvalidConnection, error_message):
             algorithms.GradientDescent(network)
+
+    def test_gd_storage(self):
+        network = algorithms.GradientDescent([
+                layers.Input(2),
+                layers.Sigmoid(3),
+                layers.Sigmoid(1),
+            ],
+            step=0.2,
+            shuffle_data=True,
+        )
+        recovered_network = pickle.loads(pickle.dumps(network))
+
+        self.assertAlmostEqual(self.eval(recovered_network.step), 0.2)
+        self.assertEqual(recovered_network.shuffle_data, True)
