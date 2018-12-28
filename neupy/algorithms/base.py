@@ -177,20 +177,6 @@ class BaseNetwork(BaseSkeleton):
 
         self.events = Events(network=self, signals=signals)
 
-    def predict(self, X):
-        """
-        Return prediction results for the input data.
-
-        Parameters
-        ----------
-        input_data : array-like
-
-        Returns
-        -------
-        array-like
-        """
-        raise NotImplementedError()
-
     def one_training_update(self, X_train, y_train=None):
         """
         Function would be trigger before run all training procedure
@@ -272,7 +258,7 @@ class BaseNetwork(BaseSkeleton):
                         value=train_error,
                         eta=time.time() - update_start_time,
                         epoch=epoch,
-                        n_updates=self.n_updates_made - 1,
+                        n_updates=self.n_updates_made,
                     )
                     self.events.trigger('update_end')
 
