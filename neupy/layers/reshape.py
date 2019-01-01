@@ -10,14 +10,6 @@ from .base import BaseLayer
 __all__ = ('Reshape', 'Transpose')
 
 
-class NewShapeProperty(TypedListProperty):
-    def validate(self, value):
-        super(NewShapeProperty, self).validate(value)
-
-        if value.count(-1) >= 2:
-            raise ValueError("Only single -1 value can be specified")
-
-
 class Reshape(BaseLayer):
     """
     Reshapes input tensor.
@@ -30,7 +22,7 @@ class Reshape(BaseLayer):
         to get the output feature with more that 2 dimensions then you can
         set up new feature shape using tuples or list. Defaults to ``[-1]``.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
 
     Methods
     -------
@@ -61,10 +53,14 @@ class Reshape(BaseLayer):
     >>> conn.output_shape
     (5, 2, 2)
     """
-    shape = NewShapeProperty(default=(-1,))
+    shape = TypedListProperty()
 
-    def __init__(self, shape=(-1,), **options):
-        super(Reshape, self).__init__(shape=shape, **options)
+    def __init__(self, shape=-1, name=None):
+        if shape.count(-1) >= 2:
+            raise ValueError("Only single -1 value can be specified")
+
+        self.shape = as_tuple(shape)
+        super(Reshape, self).__init__(name=name)
 
     @property
     def output_shape(self):
@@ -117,7 +113,7 @@ class Transpose(BaseLayer):
         transpose batch dimension and using ``0`` in the list of
         permuted dimensions is not allowed.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
 
     Methods
     -------
@@ -138,13 +134,14 @@ class Transpose(BaseLayer):
     """
     perm = TypedListProperty()
 
-    def __init__(self, perm, **options):
+    def __init__(self, perm, name=None):
         if 0 in perm:
             raise ValueError(
                 "Batch dimension has fixed position and 0 "
                 "index cannot be used.")
 
-        super(Transpose, self).__init__(perm=perm, **options)
+        self.perm = perm
+        super(Transpose, self).__init__(name=name)
 
     def validate(self, input_shape):
         if len(input_shape) < 2:

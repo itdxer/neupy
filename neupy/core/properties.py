@@ -5,7 +5,7 @@ import numpy as np
 import tensorflow as tf
 
 from neupy import init
-from neupy.utils import number_type, as_tuple, asfloat
+from neupy.utils import as_tuple, asfloat
 from neupy.core.docs import SharedDocs
 
 
@@ -14,6 +14,9 @@ __all__ = ('BaseProperty', 'Property', 'ArrayProperty', 'BoundedProperty',
            'TypedListProperty', 'ChoiceProperty', 'WithdrawProperty',
            'ParameterProperty', 'CallableProperty',
            'FunctionWithOptionsProperty')
+
+
+number_type = (int, float, np.floating, np.integer)
 
 
 class BaseProperty(SharedDocs):

@@ -36,6 +36,7 @@ class LayersBasicsTestCase(BaseTestCase):
         )
 
     def test_predict_new_model(self):
+        raise NotImplementedError()
         input_value = np.random.random((7, 4))
 
         network = layers.Input(4) > layers.Relu(5)
@@ -61,7 +62,8 @@ class LayerNameTestCase(BaseTestCase):
         hidden_layer = layers.Sigmoid(5)
         output_layer = layers.Sigmoid(10)
 
-        layers.join(input_layer, hidden_layer, output_layer)
+        connection = input_layer >> hidden_layer >> output_layer
+        connection.outputs
 
         self.assertEqual(hidden_layer.name, 'sigmoid-1')
         self.assertIn('layer/sigmoid-1/weight', hidden_layer.weight.name)

@@ -17,7 +17,7 @@ class Dropout(BaseLayer):
         Fraction of the input units to drop. Value needs to be
         between ``0`` and ``1``.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
 
     Methods
     -------
@@ -27,13 +27,14 @@ class Dropout(BaseLayer):
     ----------
     {BaseLayer.Attributes}
     """
-    proba = ProperFractionProperty(required=True)
+    proba = ProperFractionProperty()
 
-    def __init__(self, proba, **options):
-        super(Dropout, self).__init__(proba=proba, **options)
+    def __init__(self, proba, name=None):
+        self.proba = proba
+        super(Dropout, self).__init__(name=name)
 
-    def output(self, input_value):
-        if not self.training_state:
+    def output(self, input_value, training_state=False):
+        if not training_state:
             return input_value
         return tf.nn.dropout(input_value, keep_prob=(1.0 - self.proba))
 
@@ -56,7 +57,7 @@ class GaussianNoise(BaseLayer):
     mean : float
         Mean of the gaussian noise. Defaults to ``0``.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
 
     Methods
     -------
@@ -66,14 +67,16 @@ class GaussianNoise(BaseLayer):
     ----------
     {BaseLayer.Attributes}
     """
-    std = NumberProperty(default=1, minval=0)
-    mean = NumberProperty(default=0)
+    std = NumberProperty(minval=0)
+    mean = NumberProperty()
 
-    def __init__(self, mean=1, std=0, **options):
-        super(GaussianNoise, self).__init__(mean=mean, std=std, **options)
+    def __init__(self, mean=1, std=0, name=None):
+        self.mean = mean
+        self.std = std
+        super(GaussianNoise, self).__init__(name=name)
 
-    def output(self, input_value):
-        if not self.training_state:
+    def output(self, input_value, training_state=False):
+        if not training_state:
             return input_value
 
         noise = tf.random_normal(

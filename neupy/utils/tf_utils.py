@@ -10,7 +10,7 @@ __all__ = (
     'tensorflow_session', 'tensorflow_eval', 'tf_repeat',
     'initialize_uninitialized_variables', 'flatten', 'outer',
     'dot', 'make_single_vector', 'setup_parameter_updates',
-    'function',
+    'function', 'dimshuffle',
 )
 
 
@@ -218,3 +218,24 @@ def setup_parameter_updates(parameters, parameter_update_vector):
         start_position = end_position
 
     return updates
+
+
+def dimshuffle(value, ndim, axes):
+    """
+    Shuffle dimension based on the specified number of
+    dimensions and axes.
+
+    Parameters
+    ----------
+    value : Tensorfow variable
+    ndim : int
+    axes : tuple, list
+
+    Returns
+    -------
+    Tensorfow variable
+    """
+    for dim in range(ndim):
+        if dim not in axes:
+            value = tf.expand_dims(value, dim)
+    return value

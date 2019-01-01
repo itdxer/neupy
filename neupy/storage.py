@@ -260,7 +260,7 @@ def load_dict(connection, data, ignore_missing=False,
     # We are only interested in layers that has parameters
     layers = data['layers']
     layers_data = [l for l in layers if l['parameters']]
-    layers_conn = [l for l in connection if l.parameters]
+    layers_conn = [l for l in connection if l.variables]
 
     if not ignore_missing and len(layers_data) != len(layers_conn):
         raise ParameterLoaderError(
@@ -343,7 +343,7 @@ def save_dict(connection):
         parameters = {}
         configs = {}
 
-        for attrname, parameter in layer.parameters.items():
+        for attrname, parameter in layer.variables.items():
             parameters[attrname] = {
                 'value': asfloat(session.run(parameter)),
                 'trainable': parameter.trainable,

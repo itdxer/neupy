@@ -97,8 +97,7 @@ class BasePooling(BaseLayer):
             raise LayerConnectionError(
                 "Pooling layer expects an input with 3 "
                 "dimensions, got {} with shape {}"
-                "".format(len(input_shape), input_shape)
-            )
+                "".format(len(input_shape), input_shape))
 
     @property
     def output_shape(self):
@@ -128,14 +127,12 @@ class BasePooling(BaseLayer):
             pooling_type=self.pooling_type,
             padding=self.padding.upper(),
             strides=self.stride or self.size,
-            data_format="NHWC",
-        )
+            data_format="NHWC")
 
     def __repr__(self):
         return '{name}({size})'.format(
             name=self.__class__.__name__,
-            size=self.size,
-        )
+            size=self.size)
 
 
 class MaxPooling(BasePooling):
@@ -272,14 +269,15 @@ class Upscale(BaseLayer):
     Examples
     --------
     >>> from neupy.layers import *
-    >>> network = Input((10, 10, 3)) > Upscale((2, 2))
+    >>> network = Input((10, 10, 3)) >> Upscale((2, 2))
     >>> network.output_shape
     (3, 20, 20)
     """
-    scale = ScaleFactorProperty(required=True, n_elements=2)
+    scale = ScaleFactorProperty(n_elements=2)
 
-    def __init__(self, scale, **options):
-        super(Upscale, self).__init__(scale=scale, **options)
+    def __init__(self, scale, name=None):
+        self.scale = scale
+        super(Upscale, self).__init__(name=name)
 
     def validate(self, input_shape):
         if len(input_shape) != 3:
@@ -327,7 +325,7 @@ class GlobalPooling(BaseLayer):
 
         Defaults to ``avg``.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
 
     Methods
     -------
@@ -340,7 +338,7 @@ class GlobalPooling(BaseLayer):
     Examples
     --------
     >>> from neupy.layers import *
-    >>> network = Input((4, 4, 16)) > GlobalPooling('avg')
+    >>> network = Input((4, 4, 16)) >> GlobalPooling('avg')
     >>> network.output_shape
     (16,)
     """
@@ -349,14 +347,12 @@ class GlobalPooling(BaseLayer):
         'max': tf.reduce_max,
     })
 
-    def __init__(self, function, *args, **kwargs):
-        super(GlobalPooling, self).__init__(
-            *args, **dict(kwargs, function=function))
+    def __init__(self, function, name=None):
+        self.function = function
+        super(GlobalPooling, self).__init__(name=name)
 
-    @property
-    def output_shape(self):
-        if self.input_shape is not None:
-            return as_tuple(self.input_shape[-1])
+    def get_output_shape(self, input_shape):
+        return as_tuple(input_shape[-1])
 
     def output(self, input_value):
         ndims = len(input_value.shape)

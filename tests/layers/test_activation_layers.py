@@ -1,12 +1,37 @@
 import math
 
 import numpy as np
+import tensorflow as tf
 
 from neupy.utils import asfloat
 from neupy import layers, algorithms, init
 
 from base import BaseTestCase
 from helpers import simple_classification
+
+
+class ActivationLayerMainTestCase(BaseTestCase):
+    def test_linear_layer_withuot_bias(self):
+        input_layer = layers.Input(10)
+        output_layer = layers.Linear(2, weight=init.Constant(0.1), bias=None)
+        connection = input_layer > output_layer
+
+        input_value = asfloat(np.ones((1, 10)))
+        actual_output = self.eval(connection.output(input_value))
+        expected_output = np.ones((1, 2))
+
+        np.testing.assert_array_almost_equal(expected_output, actual_output)
+
+        with self.assertRaises(TypeError):
+            layers.Linear(2, weight=None)
+
+    def test_repr_without_size(self):
+        layer = layers.Sigmoid()
+        self.assertEqual("Sigmoid()", str(layer))
+
+    def test_repr_with_size(self):
+        layer = layers.Sigmoid(13)
+        self.assertEqual("Sigmoid(13)", str(layer))
 
 
 class ActivationLayersTestCase(BaseTestCase):
@@ -22,10 +47,6 @@ class ActivationLayersTestCase(BaseTestCase):
     def test_sigmoid_layer(self):
         layer1 = layers.Sigmoid(1)
         self.assertGreater(1, self.eval(layer1.activation_function(1.)))
-
-    def test_sigmoid_repr_without_size(self):
-        layer = layers.Sigmoid()
-        self.assertEqual("Sigmoid()", str(layer))
 
     def test_hard_sigmoid_layer(self):
         layer = layers.HardSigmoid(6)
@@ -103,46 +124,35 @@ class ActivationLayersTestCase(BaseTestCase):
             actual_output
         )
 
-    def test_linear_layer_withuot_bias(self):
-        input_layer = layers.Input(10)
-        output_layer = layers.Linear(2, weight=init.Constant(0.1), bias=None)
-        connection = input_layer > output_layer
-
-        input_value = asfloat(np.ones((1, 10)))
-        actual_output = self.eval(connection.output(input_value))
-        expected_output = np.ones((1, 2))
-
-        np.testing.assert_array_almost_equal(expected_output, actual_output)
-
-        with self.assertRaises(TypeError):
-            layers.Linear(2, weight=None)
-
 
 class PReluTestCase(BaseTestCase):
     def test_invalid_alpha_axes_parameter(self):
+        x = tf.placeholder(shape=(3, 10), dtype=tf.float32)
         prelu_layer = layers.PRelu(10, alpha_axes=2)
+
         with self.assertRaises(ValueError):
             # cannot specify 2-axis, because we only
             # have 0 and 1 axes (2D input)
-            layers.Input(10) > prelu_layer
+            prelu_layer.output(x)
 
         with self.assertRaises(ValueError):
             # 0-axis is not allowed
             layers.PRelu(10, alpha_axes=0)
 
-    def test_prelu_random_params(self):
+    def test_prelu_alpha_init_random_params(self):
+        x = tf.placeholder(shape=(3, 10), dtype=tf.float32)
         prelu_layer = layers.PRelu(10, alpha=init.XavierNormal())
-        layers.Input(10) > prelu_layer
+        prelu_layer.output(x)
 
         alpha = self.eval(prelu_layer.alpha)
         self.assertEqual(10, np.unique(alpha).size)
 
-    def test_prelu_layer_param_dense(self):
+    def test_prelu_alpha_init_constant_value(self):
+        x = tf.placeholder(shape=(3, 10), dtype=tf.float32)
         prelu_layer = layers.PRelu(10, alpha=0.25)
-        layers.Input(10) > prelu_layer
+        prelu_layer.output(x)
 
         alpha = self.eval(prelu_layer.alpha)
-
         self.assertEqual(alpha.shape, (10,))
         np.testing.assert_array_almost_equal(alpha, np.ones(10) * 0.25)
 
@@ -161,7 +171,6 @@ class PReluTestCase(BaseTestCase):
 
     def test_prelu_output_by_dense_input(self):
         prelu_layer = layers.PRelu(1, alpha=0.25)
-        layers.Input(1) > prelu_layer
 
         X = np.array([[10, 1, 0.1, 0, -0.1, -1]]).T
         expected_output = np.array([[10, 1, 0.1, 0, -0.025, -0.25]]).T

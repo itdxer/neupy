@@ -40,3 +40,7 @@ script:
 after_success:
   - pip install codecov
   - codecov
+
+branches:
+  except:
+    - release/v0.8.0

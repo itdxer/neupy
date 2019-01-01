@@ -5,10 +5,7 @@ import tensorflow as tf
 import numpy as np
 
 
-__all__ = ('as_tuple', 'number_type', 'AttributeKeyDict', 'reproducible')
-
-
-number_type = (int, float, np.floating, np.integer)
+__all__ = ('as_tuple', 'AttributeKeyDict', 'reproducible')
 
 
 def as_tuple(*values):

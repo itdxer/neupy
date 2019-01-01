@@ -15,9 +15,8 @@ from neupy.utils import (
     AttributeKeyDict, format_data, as_tuple, function,
     initialize_uninitialized_variables, iters,
 )
-from neupy.layers.utils import iter_parameters
+from neupy.layers.utils import iter_variables
 from neupy.algorithms.gd import objectives
-from neupy.layers.connections.base import create_input_variables
 from neupy.exceptions import InvalidConnection
 from neupy.algorithms.base import BaseNetwork
 
@@ -125,10 +124,9 @@ class BaseOptimizer(BaseNetwork):
 
         self.connection = connection
         self.layers = list(self.connection)
-        graph = self.connection.graph
 
         if len(self.connection.output_layers) != 1:
-            n_outputs = len(graph.output_layers)
+            n_outputs = len(connection.output_layers)
             raise InvalidConnection("Connection should have one output "
                                     "layer, got {}".format(n_outputs))
 
@@ -156,7 +154,7 @@ class BaseOptimizer(BaseNetwork):
     def iter_params_and_grads(self):
         layers, parameters = [], []
 
-        for layer, _, parameter in iter_parameters(self.layers):
+        for layer, _, parameter in iter_variables(self.layers):
             layers.append(layer)
             parameters.append(parameter)
 
@@ -172,9 +170,7 @@ class BaseOptimizer(BaseNetwork):
     def init_input_output_variables(self):
         output_layer = self.connection.output_layers[0]
         self.variables.update(
-            network_inputs=create_input_variables(
-                self.connection.input_layers
-            ),
+            network_inputs=self.connection.inputs,
             network_output=tf.placeholder(
                 tf.float32,
                 name='network-output/from-layer-{}'.format(output_layer.name),
@@ -182,23 +178,17 @@ class BaseOptimizer(BaseNetwork):
         )
 
     def init_variables(self):
-        network_inputs = self.variables.network_inputs
         network_output = self.variables.network_output
-
-        train_prediction = self.connection.output(*network_inputs)
-        with self.connection.disable_training_state():
-            prediction = self.connection.output(*network_inputs)
-
-        loss = self.error(network_output, train_prediction)
-        val_loss = self.error(network_output, prediction)
+        loss = self.error(network_output, self.connection.outputs)
+        val_loss = self.error(network_output, self.connection.training_outputs)
 
         if self.regularizer is not None:
             loss = loss + self.regularizer(self.connection)
 
         self.variables.update(
             step=self.step,
-            prediction_func=prediction,
-            train_prediction_func=train_prediction,
+            prediction_func=self.connection.training_outputs,
+            train_prediction_func=self.connection.outputs,
 
             error_func=loss,
             validation_error_func=val_loss,
@@ -269,7 +259,7 @@ class BaseOptimizer(BaseNetwork):
         array-like
         """
         X = [format_data(x) for x in as_tuple(X)]
-        return self.methods.predict(*X)
+        return self.connection.predict(*X)
 
     def train(self, X_train, y_train, X_test=None, y_test=None,
               *args, **kwargs):
