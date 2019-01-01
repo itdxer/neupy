@@ -139,7 +139,7 @@ Iterate through all network parameters
 
 .. code-block:: python
 
-    >>> from neupy.layers.utils import iter_parameters
+    >>> from neupy.layers.utils import iter_variables
     >>>
     >>> network = layers.join(
     ...     layers.Input(1),
@@ -150,7 +150,7 @@ Iterate through all network parameters
     >>> print(network)
     Input(1) > Sigmoid(2) > Sigmoid(3)
     >>>
-    >>> for layer, attrname, parameter in iter_parameters(network):
+    >>> for layer, attrname, parameter in iter_variables(network):
     ...     # Each parameter is tensorflow variable
     ...     print("Layer: {}".format(layer))
     ...     print("Name: {}".format(attrname))

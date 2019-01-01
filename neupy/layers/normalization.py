@@ -1,8 +1,11 @@
 import tensorflow as tf
 
-from neupy import init
-from neupy.core.properties import (NumberProperty, ProperFractionProperty,
-                                   ParameterProperty, IntProperty)
+from neupy.core.properties import (
+    NumberProperty,
+    ProperFractionProperty,
+    ParameterProperty,
+    IntProperty,
+)
 from neupy.utils import asfloat, as_tuple
 from neupy.exceptions import LayerConnectionError
 from .activations import AxesProperty
@@ -93,7 +96,7 @@ class BatchNorm(BaseLayer):
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=1)``.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
 
     Methods
     -------
@@ -109,14 +112,27 @@ class BatchNorm(BaseLayer):
            by Reducing Internal Covariate Shift,
            http://arxiv.org/pdf/1502.03167v3.pdf
     """
-    axes = AxesProperty(default=None)
-    epsilon = NumberProperty(default=1e-5, minval=0)
-    alpha = ProperFractionProperty(default=0.1)
-    beta = ParameterProperty(default=init.Constant(value=0))
-    gamma = ParameterProperty(default=init.Constant(value=1))
+    axes = AxesProperty(allow_none=True)
+    epsilon = NumberProperty(minval=0)
+    alpha = ProperFractionProperty()
+    beta = ParameterProperty()
+    gamma = ParameterProperty()
 
-    running_mean = ParameterProperty(default=init.Constant(value=0))
-    running_inv_std = ParameterProperty(default=init.Constant(value=1))
+    running_mean = ParameterProperty()
+    running_inv_std = ParameterProperty()
+
+    def __init__(self, axes=None, alpha=0.1, beta=0, gamma=1, epsilon=1e-5,
+                 running_mean=0, running_inv_std=1, name=None):
+
+        self.axes = axes
+        self.alpha = alpha
+        self.beta = beta
+        self.gamma = gamma
+        self.epsilon = epsilon
+        self.running_mean = running_mean
+        self.running_inv_std = running_inv_std
+
+        super(BatchNorm, self).__init__(name=name)
 
     def initialize(self):
         super(BatchNorm, self).initialize()
@@ -216,7 +232,7 @@ class LocalResponseNorm(BaseLayer):
     depth_radius : int
         Number of adjacent channels to normalize over, must be odd.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
 
     Methods
     -------
@@ -226,26 +242,30 @@ class LocalResponseNorm(BaseLayer):
     ----------
     {BaseLayer.Attributes}
     """
-    alpha = NumberProperty(default=1e-4)
-    beta = NumberProperty(default=0.75)
-    k = NumberProperty(default=2)
-    depth_radius = IntProperty(default=5)
+    alpha = NumberProperty()
+    beta = NumberProperty()
+    k = NumberProperty()
+    depth_radius = IntProperty()
 
-    def __init__(self, **options):
-        super(LocalResponseNorm, self).__init__(**options)
+    def __init__(self, alpha=1e-4, beta=0.75, k=2, depth_radius=5, name=None):
+        if depth_radius % 2 == 0:
+            raise ValueError("Only works with odd `depth_radius` values")
 
-        if self.depth_radius % 2 == 0:
-            raise ValueError("Only works with odd ``n``")
+        self.alpha = alpha
+        self.beta = beta
+        self.k = k
+        self.depth_radius = depth_radius
 
-    def validate(self, input_shape):
-        ndim = len(input_shape)
+        super(LocalResponseNorm, self).__init__(name=name)
+
+    def output(self, input_value):
+        ndim = len(input_value.shape)
 
         if ndim != 3:
             raise LayerConnectionError(
                 "Layer `{}` expected input with 3 dimensions, got {}"
-                "".format(self, ndim))
+                "".format(self.name, ndim))
 
-    def output(self, input_value):
         return tf.nn.local_response_normalization(
             input_value,
             depth_radius=self.depth_radius,

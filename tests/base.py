@@ -2,12 +2,14 @@ import pickle
 import inspect
 import logging
 import unittest
+from collections import defaultdict
 
 import numpy as np
 import tensorflow as tf
 
 from neupy import utils, layers, init
 from neupy.utils import tensorflow_eval, tensorflow_session
+from neupy.layers.base import generate_layer_name
 
 from helpers import vectors_for_testing
 
@@ -38,7 +40,7 @@ class BaseTestCase(unittest.TestCase):
             logging.disable(logging.CRITICAL)
 
         # Clean identifiers map for each test
-        layers.BaseLayer.global_identifiers_map = {}
+        generate_layer_name.coutners = defaultdict(int)
         utils.reproducible(seed=self.random_seed)
 
     def tearDown(self):

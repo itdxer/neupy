@@ -30,7 +30,7 @@ class Embedding(BaseLayer):
         you can find :ref:`here <init-methods>`.
         Defaults to :class:`HeNormal() <neupy.init.HeNormal>`.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
 
     Methods
     -------
@@ -47,7 +47,7 @@ class Embedding(BaseLayer):
     variables into format that suitable for Embedding layer.
 
     >>> import numpy as np
-    >>> from neupy import layers
+    >>> from neupy.layers import *
     >>>
     >>> dataset = np.array([
     ...     ['cold', 'high'],
@@ -70,33 +70,31 @@ class Embedding(BaseLayer):
     >>> n_unique_categories = len(unique_value)
     >>> embedded_size = 1
     >>>
-    >>> connection = layers.join(
-    ...     layers.Input(n_features),
-    ...     layers.Embedding(n_unique_categories, embedded_size),
+    >>> connection = join(
+    ...     Input(n_features),
+    ...     Embedding(n_unique_categories, embedded_size),
     ...     # Output from the embedding layer is 3D
     ...     # To make output 2D we need to reshape dimensions
-    ...     layers.Reshape(),
+    ...     Reshape(),
     ... )
     """
     input_size = IntProperty(minval=1)
     output_size = IntProperty(minval=1)
-    weight = ParameterProperty(default=init.HeNormal())
+    weight = ParameterProperty()
 
-    def __init__(self, input_size, output_size, **options):
-        super(Embedding, self).__init__(
-            input_size=input_size, output_size=output_size, **options)
+    def __init__(self, input_size, output_size,
+                 weight=init.HeNormal(), name=None):
 
-    @property
-    def output_shape(self):
-        if self.input_shape is not None:
-            return as_tuple(self.input_shape, self.output_size)
-
-    def initialize(self):
-        super(Embedding, self).initialize()
-        self.add_parameter(
+        self.input_size = input_size
+        self.output_size = output_size
+        self.weight = self.variable(
             value=self.weight, name='weight',
-            shape=as_tuple(self.input_size, self.output_size),
-            trainable=True)
+            shape=as_tuple(self.input_size, self.output_size)
+        )
+        super(Embedding, self).__init__(name=name)
+
+    def get_output_shape(self, input_shape):
+        return as_tuple(input_shape, self.output_size)
 
     def output(self, input_value):
         input_value = tf.cast(input_value, tf.int32)
@@ -107,5 +105,4 @@ class Embedding(BaseLayer):
         return '{name}({input_size}, {output_size})'.format(
             name=classname,
             input_size=self.input_size,
-            output_size=self.output_size,
-        )
+            output_size=self.output_size)

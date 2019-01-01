@@ -19,8 +19,8 @@ def ResidualUnit(n_input_filters, stride=1, rate=1, has_branch=False,
     main_branch = layers.join(
         # The main purpose of this 1x1 covolutional layer is to
         # reduce number of filters. For instance, for the tensor with
-        # 256 filters it can be reduced to 64 reducing amount of
-        # computation by factor of 4.
+        # 256 filters it can be reduced to 64. This trick allows to
+        # reduce computation by factor of 4.
         layers.Convolution(
             size=(1, 1, n_input_filters),
             stride=stride,
@@ -42,8 +42,8 @@ def ResidualUnit(n_input_filters, stride=1, rate=1, has_branch=False,
         layers.BatchNorm(name=bn_name('2b')),
         layers.Relu(),
 
-        # last layer reverse operations of the first layer. In this
-        # case we increase number of filters. For instamce, from previously
+        # Last layer reverses operations of the first layer. In this
+        # case we increase number of filters. For instance, from previously
         # obtained 64 filters we can increase it back to the 256 filters
         layers.Convolution(
             (1, 1, n_output_filters),
@@ -66,14 +66,14 @@ def ResidualUnit(n_input_filters, stride=1, rate=1, has_branch=False,
     else:
         # Empty list defines residual connection, meaning that
         # output from this branch would be equal to its input
-        residual_branch = []
+        residual_branch = layers.Identity('residual-' + name)
 
     return layers.join(
         # For the output from two branches we just combine results
         # with simple elementwise sum operation. The main purpose of
         # the residual connection is to build shortcuts for the
         # gradient during backpropagation.
-        [main_branch, residual_branch],
+        (main_branch | residual_branch),
         layers.Elementwise(),
         layers.Relu(),
     )

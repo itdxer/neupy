@@ -1,5 +1,5 @@
 from neupy import layers, algorithms
-from neupy.layers.utils import extract_connection, preformat_layer_shape
+from neupy.layers.utils import extract_connection, make_one_if_possible
 
 from base import BaseTestCase
 
@@ -42,6 +42,6 @@ class CountParametersTestCase(BaseTestCase):
         with self.assertRaisesRegexp(TypeError, "Invalid input type"):
             extract_connection(object)
 
-    def test_preformat_layer_shape(self):
-        self.assertEqual((3, 4, 5), preformat_layer_shape((3, 4, 5)))
-        self.assertEqual(10, preformat_layer_shape((10,)))
+    def test_make_one_if_possible(self):
+        self.assertEqual((3, 4, 5), make_one_if_possible((3, 4, 5)))
+        self.assertEqual(10, make_one_if_possible((10,)))

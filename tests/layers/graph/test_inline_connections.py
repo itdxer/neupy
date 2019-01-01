@@ -1,7 +1,4 @@
-import unittest
-
 from neupy import layers
-from neupy.exceptions import LayerConnectionError
 
 from base import BaseTestCase
 
@@ -22,8 +19,8 @@ class InlineConnectionsTestCase(BaseTestCase):
         input_layer = layers.Input((10, 10, 3))
         concat = layers.Concatenate()
 
-        network_concat = input_layer > [left_branch, right_branch] > concat
-        network = network_concat > layers.Reshape() > layers.Softmax()
+        network_concat = input_layer >> (left_branch | right_branch) >> concat
+        network = network_concat >> layers.Reshape() >> layers.Softmax()
 
         self.assertEqual(network_concat.input_shape, (10, 10, 3))
         self.assertEqual(network_concat.output_shape, (4, 4, 48))
@@ -34,9 +31,9 @@ class InlineConnectionsTestCase(BaseTestCase):
     def test_inline_connection_wtih_different_pointers(self):
         relu_2 = layers.Relu(2)
 
-        connection_1 = layers.Input(1) > relu_2 > layers.Relu(3)
-        connection_2 = relu_2 > layers.Relu(4)
-        connection_3 = layers.Input(1) > relu_2
+        connection_1 = layers.Input(1) >> relu_2 >> layers.Relu(3)
+        connection_2 = relu_2 >> layers.Relu(4)
+        connection_3 = layers.Input(1) >> relu_2
 
         self.assertEqual(connection_1.input_shape, (1,))
         self.assertEqual(connection_1.output_shape, (3,))
@@ -177,24 +174,3 @@ class InlineConnectionsTestCase(BaseTestCase):
         self.assertEqual(len(connection), 5)
         self.assertEqual(connection.input_shape, [(1,), (1,)])
         self.assertEqual(connection.output_shape, [(20,), (10,)])
-
-    @unittest.skip("Not working right now")
-    def test_inline_connections_after_exception(self):
-        # One possibility to solve it is to reset all states in
-        # connections/inline.py and when we assing new shape
-        # in connections/graph.py:connect_layers catch error if happens
-        # and destroy connection between layers
-        input_layer = layers.Input(2)
-
-        with self.assertRaises(LayerConnectionError):
-            # it suppose to fail because layers in parallel connections
-            # specified with different output shapes.
-            input_layer > [
-                layers.Sigmoid(20),
-                layers.Sigmoid(10)
-            ] > layers.Elementwise()
-
-        # Issue #181. Bug presented in NeuPy versions <= 0.8.0
-        network = input_layer > layers.Softmax(5)
-        self.assertEqual(network.input_shape, (2,))
-        self.assertEqual(network.output_shape, (5,))

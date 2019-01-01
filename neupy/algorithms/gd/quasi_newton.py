@@ -9,11 +9,13 @@ from neupy.core.properties import (
 from neupy.utils.tf_utils import setup_parameter_updates
 from neupy.algorithms.minsearch.wolfe import line_search
 from neupy.layers.utils import (
-    count_parameters, iter_parameters,
+    count_parameters,
+    iter_variables,
     find_variables,
 )
 from neupy.utils import (
-    asfloat, dot, outer, function_name_scope,
+    asfloat, dot, outer,
+    function_name_scope,
     make_single_vector,
 )
 from .base import BaseOptimizer
@@ -51,30 +53,32 @@ class WolfeLineSearchForStep(Configurable):
     def find_optimal_step(self, parameter_vector, parameter_update):
         network_inputs = self.variables.network_inputs
         network_output = self.variables.network_output
-        layers_and_parameters = list(iter_parameters(self.layers))
+        layers_and_parameters = list(iter_variables(self.layers))
 
         def prediction(step):
             step = asfloat(step)
             updated_params = parameter_vector + step * parameter_update
 
-            # This trick allow us to replace shared variables
-            # with tensorflow variables and get output from the network
-            start_pos = 0
-            for layer, attrname, param in layers_and_parameters:
-                n_param_values = int(np.prod(param.shape))
-                end_pos = start_pos + n_param_values
-                updated_param_value = tf.reshape(
-                    updated_params[start_pos:end_pos],
-                    param.shape
-                )
-                setattr(layer, attrname, updated_param_value)
-                start_pos = end_pos
+            try:
+                # This trick allow us to replace shared variables
+                # with tensorflow variables and get output from the network
+                start_pos = 0
+                for layer, attrname, param in layers_and_parameters:
+                    n_param_values = int(np.prod(param.shape))
+                    end_pos = start_pos + n_param_values
+                    updated_param_value = tf.reshape(
+                        updated_params[start_pos:end_pos],
+                        param.shape
+                    )
+                    setattr(layer, attrname, updated_param_value)
+                    start_pos = end_pos
 
-            output = self.connection.output(*network_inputs)
+                output = self.connection.output(*network_inputs)
 
-            # Restore previous parameters
-            for layer, attrname, param in layers_and_parameters:
-                setattr(layer, attrname, param)
+            finally:
+                # Restore previous parameters
+                for layer, attrname, param in layers_and_parameters:
+                    setattr(layer, attrname, param)
 
             return output
 

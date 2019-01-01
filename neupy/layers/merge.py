@@ -3,7 +3,7 @@ from functools import reduce
 
 import tensorflow as tf
 
-from neupy.core.properties import IntProperty, CallableProperty
+from neupy.core.properties import FunctionWithOptionsProperty, IntProperty
 from neupy.exceptions import LayerConnectionError
 from neupy.utils import as_tuple
 from .base import BaseLayer
@@ -20,12 +20,12 @@ class Elementwise(BaseLayer):
 
     Parameters
     ----------
-    merge_function : callable
+    merge_function : callable or {{``add``, ``mul``}}
         Callable object that accepts multiple arguments and
         combine them in one with elementwise operation.
-        Defaults to ``tensorflow.add``.
+        Defaults to ``add``.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
 
     Methods
     -------
@@ -38,20 +38,23 @@ class Elementwise(BaseLayer):
     Examples
     --------
     >>> from neupy import layers
-    >>>
-    >>> input_1 = layers.Input(10)
-    >>> input_2 = layers.Input(10)
-    >>>
-    >>> network = [input_1, input_2] > layers.Elementwise()
+    >>> network = (Input(10) | Input(10)) >> Elementwise('add')
     >>>
     >>> network.input_shape
     [(10,), (10,)]
     >>> network.output_shape
     (10,)
     """
-    merge_function = CallableProperty(default=tf.add)
+    merge_function = FunctionWithOptionsProperty(choices={
+        'add': tf.add,
+        'multiply': tf.multiply,
+    })
 
-    def validate(self, input_shapes):
+    def __init__(self, merge_function='add', name=None):
+        self.merge_function = merge_function
+        super(Elementwise, self).__init__(name=name)
+
+    def get_output_shape(self, input_shapes):
         n_unique_shapes = len(set(input_shapes))
 
         if n_unique_shapes != 1:
@@ -60,13 +63,14 @@ class Elementwise(BaseLayer):
                 "exactly the same shapes. Input shapes: {}"
                 "".format(self, input_shapes))
 
-    @property
-    def output_shape(self):
-        if self.input_shape:
-            return self.input_shape[0]
+        return input_shapes[0]
 
-    def output(self, *input_values):
-        return reduce(self.merge_function, input_values)
+    def output(self, inpurs):
+        if not isinstance(inpurs, (list, tuple)) or len(inpurs) != 1:
+            raise LayerConnectionError(
+                "Layer `{}` expected multiple inputs".format(self.name))
+
+        return reduce(self.merge_function, inpurs)
 
 
 class Concatenate(BaseLayer):
@@ -80,7 +84,7 @@ class Concatenate(BaseLayer):
         The axis along which the inputs will be joined.
         Default is ``-1``.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
 
     Methods
     -------
@@ -92,20 +96,21 @@ class Concatenate(BaseLayer):
 
     Examples
     --------
-    >>> from neupy import layers
+    >>> from neupy.layers import *
     >>>
-    >>> input_1 = layers.Input(10)
-    >>> input_2 = layers.Input(20)
-    >>> network = [input_1, input_2] > layers.Concatenate()
-    >>>
+    >>> network = (Input(10) | Input(20)) >> Concatenate()
     >>> network.input_shape
     [(10,), (20,)]
     >>> network.output_shape
     (30,)
     """
-    axis = IntProperty(default=-1)
+    axis = IntProperty()
 
-    def validate(self, input_shapes):
+    def __init__(self, axis=-1, name=None):
+        self.axis = axis
+        super(Concatenate, self).__init__(name=name)
+
+    def get_output_shape(self, input_shapes):
         # The axis value has 0-based indeces where 0s index points
         # to the batch dimension of the input. Shapes in the neupy
         # do not store information about the batch and we need to
@@ -131,13 +136,8 @@ class Concatenate(BaseLayer):
                         "Shapes: {} and {}"
                         "".format(axis, input_shapes[0], input_shape))
 
-    @property
-    def output_shape(self):
-        if not self.input_shape:
-            return
-
         axis = self.axis
-        input_shapes = copy.copy(self.input_shape)
+        input_shapes = copy.copy(input_shapes)
         output_shape = list(input_shapes.pop(0))
 
         for input_shape in input_shapes:
@@ -145,8 +145,8 @@ class Concatenate(BaseLayer):
 
         return tuple(output_shape)
 
-    def output(self, *input_values):
-        return tf.concat(input_values, axis=self.axis)
+    def output(self, inputs):
+        return tf.concat(inputs, axis=self.axis)
 
 
 def exclude_index(array, index):
@@ -201,11 +201,15 @@ class GatedAverage(BaseLayer):
     >>> network_1 = Input(20) > Relu(10)
     >>> network_2 = Input(20) > Relu(20) > Relu(10)
     >>>
-    >>> network = [gating_network, network_1, network_2] > GatedAverage()
+    >>> network = (gating_network | network_1 | network_2) >> GatedAverage()
     >>> network
     [(10,), (20,), (20,)] -> [... 8 layers ...] -> 10
     """
     gating_layer_index = IntProperty(default=0)
+
+    def __init__(self, gating_layer_index=0, name=None):
+        self.gating_layer_index = gating_layer_index
+        super(GatedAverage, self).__init__(name=name)
 
     def validate(self, input_shapes):
         n_input_layers = len(input_shapes)
@@ -239,21 +243,17 @@ class GatedAverage(BaseLayer):
                 "Output layer that has to be merged expect to have the "
                 "same shapes. Shapes: {!r}".format(other_layers_shape))
 
-    @property
-    def output_shape(self):
-        if not self.input_shape:
-            return
-
+    def get_output_shape(self, input_shape):
         if self.gating_layer_index >= 0:
             # Take layer from the left side from the gating layer.
             # In case if gating layer at th zeros position then
             # it will take the last layer (-1 index).
-            return self.input_shape[self.gating_layer_index - 1]
+            return input_shape[self.gating_layer_index - 1]
 
         # In case if it negative index, we take layer from the right side
-        return self.input_shape[self.gating_layer_index + 1]
+        return input_shape[self.gating_layer_index + 1]
 
-    def output(self, *input_values):
+    def output(self, input_values):
         gating_value = input_values[self.gating_layer_index]
         other_values = exclude_index(input_values, self.gating_layer_index)
 
