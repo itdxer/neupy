@@ -209,11 +209,15 @@ class BaseGraph(ConfigurableABC):
 
     @lazy_property
     def outputs(self):
+        networks_output = self.output(*as_tuple(self.inputs))
         initialize_uninitialized_variables()
-        return self.output(self.inputs)
+        return networks_output
 
+    @lazy_property
     def training_outputs(self):
-        pass
+        networks_output = self.output(*as_tuple(self.inputs), training=True)
+        initialize_uninitialized_variables()
+        return networks_output
 
     @classmethod
     def compare(cls, left, right):
@@ -352,17 +356,25 @@ class LayerGraph(BaseGraph):
     def output_shape(self):
         return self.get_output_shape(self.input_shape)
 
-    def get_output_shape(self, first_input, *others):
-        inputs = as_tuple(first_input, others) if others else first_input
-        return self.propagate_forward(inputs, method='get_output_shape')
+    @property
+    def output_shapes_per_layer(self):
+        return self.propagate_forward(
+            [l.output_shape for l in self.input_layers],
+            method='get_output_shape')
 
-    def output(self, first_input, *others):
-        inputs = as_tuple(first_input, others) if others else first_input
-        return self.propagate_forward(inputs, method='output')
+    def get_output_shape(self, *inputs):
+        outputs = self.propagate_forward(inputs, method='get_output_shape')
+        return make_one_if_possible([outputs[l] for l in self.output_layers])
+
+    def output(self, *inputs, **kwargs):
+        outputs = self.propagate_forward(inputs, method='output', **kwargs)
+        return make_one_if_possible([outputs[l] for l in self.output_layers])
 
     def preformat_inputs(self, inputs):
+        if len(inputs) == 1 and isinstance(inputs[0], dict):
+            inputs = inputs[0]
+
         if not isinstance(inputs, dict):
-            inputs = as_tuple(inputs)
             n_input_layers = len(self.input_layers)
             n_input_vars = len(inputs)
 
@@ -384,27 +396,40 @@ class LayerGraph(BaseGraph):
 
         return inputs
 
-    def propagate_forward(self, inputs, method):
+    def pass_through_the_layer(self, layer, method, *args, **kwargs):
+        layer_method = getattr(layer, method)
+
+        try:
+            return layer_method(*args, **kwargs)
+        except Exception as exception:
+            layer_id = layer.name if hasattr(layer, 'name') else repr(layer)
+            extra_message = (
+                "Exception occured while propagating data through the "
+                "method `{}` in the layer `{}`. Layer's parameters: {}"
+                "".format(method, layer_id, layer.get_params()))
+
+            raise exception.__class__(
+                str(exception).strip('.') + ". " + extra_message)
+
+    def propagate_forward(self, inputs, method, **kwargs):
         backward_graph = self.backward_graph
         inputs = self.preformat_inputs(inputs)
-        inputs = copy.copy(inputs)
+        outputs = copy.copy(inputs)
 
-        for layer, layer_input in list(inputs.items()):
-            layer_method = getattr(layer, method)
-            inputs[layer] = layer_method(layer_input)
+        for layer, layer_input in inputs.items():
+            outputs[layer] = self.pass_through_the_layer(
+                layer, method, layer_input, **kwargs)
 
-        for layer in (l for l in self if l not in inputs):
-            layer_inputs = make_one_if_possible(
-                [inputs[l] for l in backward_graph[layer]])
+        for layer in (l for l in self if l not in outputs):
+            layer_inputs = [outputs[l] for l in backward_graph[layer]]
+            outputs[layer] = self.pass_through_the_layer(
+                layer, method, *layer_inputs, **kwargs)
 
-            layer_method = getattr(layer, method)
-            inputs[layer] = layer_method(layer_inputs)
-
-        return make_one_if_possible([inputs[l] for l in self.output_layers])
+        return outputs
 
     def predict(self, *inputs):
         session = tensorflow_session()
-        feed_dict = dict(zip(self.inputs, inputs))
+        feed_dict = dict(zip(as_tuple(self.inputs), inputs))
         return session.run(self.outputs, feed_dict=feed_dict)
 
     def is_sequential(self):
@@ -572,6 +597,9 @@ class BaseLayer(BaseGraph):
             layer_name=self.name,
             parameter_name=name.replace('_', '-'))
 
+        if isinstance(value, BaseLayer):
+            value = getattr(value, name)
+
         return create_shared_parameter(
             value, layer_name, shape, trainable)
 
@@ -587,8 +615,8 @@ class Identity(BaseLayer):
     def get_output_shape(self, input_shape):
         return input_shape
 
-    def output(self, input_value):
-        return input_value
+    def output(self, input, **kwargs):
+        return input
 
 
 class Input(BaseLayer):
@@ -598,8 +626,8 @@ class Input(BaseLayer):
         self.size = as_tuple(size)
         super(Input, self).__init__(name=name)
 
-    def output(self, inputs):
-        return inputs
+    def output(self, input, **kwargs):
+        return input
 
     def get_output_shape(self, input_shape):
         return input_shape or as_tuple(self.size)

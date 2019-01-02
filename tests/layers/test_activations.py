@@ -13,11 +13,11 @@ from helpers import simple_classification
 class ActivationLayerMainTestCase(BaseTestCase):
     def test_linear_layer_withuot_bias(self):
         input_layer = layers.Input(10)
-        output_layer = layers.Linear(2, weight=init.Constant(0.1), bias=None)
-        connection = input_layer > output_layer
+        output_layer = layers.Linear(2, weight=0.1, bias=None)
+        network = input_layer >> output_layer
 
         input_value = asfloat(np.ones((1, 10)))
-        actual_output = self.eval(connection.output(input_value))
+        actual_output = self.eval(network.output(input_value))
         expected_output = np.ones((1, 2))
 
         np.testing.assert_array_almost_equal(expected_output, actual_output)
@@ -30,8 +30,24 @@ class ActivationLayerMainTestCase(BaseTestCase):
         self.assertEqual("Sigmoid()", str(layer))
 
     def test_repr_with_size(self):
-        layer = layers.Sigmoid(13)
-        self.assertEqual("Sigmoid(13)", str(layer))
+        layer1 = layers.Sigmoid(13)
+        self.assertEqual("Sigmoid(13)", str(layer1))
+
+        layer2 = layers.Sigmoid(13, name='sigmoid')
+        self.assertEqual("Sigmoid(13)", str(layer2))
+
+    def test_failed_propagation_for_multiple_inputs(self):
+        in1 = layers.Input(1)
+        in2 = layers.Input(2)
+        out = layers.Relu(3, name='relu')
+        network = (in1 | in2) >> out
+
+        expected_message = (
+            "2 positional arguments but 3 were given.*"
+            "in the layer `relu`")
+
+        with self.assertRaisesRegexp(TypeError, expected_message):
+            network.outputs
 
 
 class ActivationLayersTestCase(BaseTestCase):
@@ -78,9 +94,7 @@ class ActivationLayersTestCase(BaseTestCase):
 
         actual_output = self.eval(layer.activation_function(X))
         np.testing.assert_array_almost_equal(
-            expected_output,
-            actual_output
-        )
+            expected_output, actual_output)
 
     def test_leaky_relu(self):
         X = asfloat(np.array([[10, 1, 0.1, 0, -0.1, -1]]).T)
@@ -89,16 +103,13 @@ class ActivationLayersTestCase(BaseTestCase):
 
         actual_output = self.eval(layer.activation_function(X))
         np.testing.assert_array_almost_equal(
-            expected_output,
-            actual_output
-        )
+            expected_output, actual_output)
 
     def test_softplus_layer(self):
         layer = layers.Softplus(1)
         self.assertAlmostEqual(
             math.log(2),
-            self.eval(layer.activation_function(0.))
-        )
+            self.eval(layer.activation_function(0.)))
 
     def test_softmax_layer(self):
         test_input = asfloat(np.array([[0.5, 0.5, 0.1]]))
@@ -107,22 +118,18 @@ class ActivationLayersTestCase(BaseTestCase):
         correct_result = np.array([[0.37448695, 0.37448695, 0.25102611]])
         np.testing.assert_array_almost_equal(
             correct_result,
-            self.eval(softmax_layer.activation_function(test_input))
-        )
+            self.eval(softmax_layer.activation_function(test_input)))
 
     def test_elu_layer(self):
         test_input = asfloat(np.array([[10, 1, 0.1, 0, -1]]).T)
         expected_output = np.array([
-            [10, 1, 0.1, 0, -0.6321205588285577]
-        ]).T
+            [10, 1, 0.1, 0, -0.6321205588285577]]).T
 
         layer = layers.Elu()
         actual_output = self.eval(layer.activation_function(test_input))
 
         np.testing.assert_array_almost_equal(
-            expected_output,
-            actual_output
-        )
+            expected_output, actual_output)
 
 
 class PReluTestCase(BaseTestCase):
@@ -161,7 +168,8 @@ class PReluTestCase(BaseTestCase):
         conv_layer = layers.Convolution((3, 3, 5))
         prelu_layer = layers.PRelu(alpha=0.25, alpha_axes=(1, 3))
 
-        input_layer > conv_layer > prelu_layer
+        network = input_layer >> conv_layer >> prelu_layer
+        network.outputs
 
         alpha = self.eval(prelu_layer.alpha)
         expected_alpha = np.ones((8, 5)) * 0.25
@@ -185,10 +193,10 @@ class PReluTestCase(BaseTestCase):
         conv_layer = layers.Convolution((3, 3, 5))
         prelu_layer = layers.PRelu(alpha=0.25, alpha_axes=(1, 3))
 
-        connection = input_layer > conv_layer > prelu_layer
+        network = input_layer >> conv_layer >> prelu_layer
 
         actual_output = X
-        for layer in connection:
+        for layer in network:
             actual_output = layer.output(actual_output)
 
         actual_output = self.eval(actual_output)

@@ -100,8 +100,8 @@ def deconv_output_shape(dimension_size, filter_size, padding, stride,
     elif isinstance(padding, int):
         return dimension_size * stride - 2 * padding + filter_size - 1
 
-    raise ValueError("`{!r}` is unknown deconvolution's padding value"
-                     "".format(padding))
+    raise ValueError(
+        "`{!r}` is unknown deconvolution's padding value".format(padding))
 
 
 def conv_output_shape(dimension_size, filter_size, padding, stride,
@@ -138,13 +138,14 @@ def conv_output_shape(dimension_size, filter_size, padding, stride,
         return None
 
     if not isinstance(stride, int):
-        raise ValueError("Stride needs to be an integer, got {} (value {!r})"
-                         "".format(type(stride), stride))
+        raise ValueError(
+            "Stride needs to be an integer, got {} (value {!r})"
+            "".format(type(stride), stride))
 
     if not isinstance(filter_size, int):
-        raise ValueError("Filter size needs to be an integer, got {} "
-                         "(value {!r})".format(type(filter_size),
-                                               filter_size))
+        raise ValueError(
+            "Filter size needs to be an integer, got {} "
+            "(value {!r})".format(type(filter_size), filter_size))
 
     # We can think of the dilation as very sparse convolutional fitler
     # filter=3 and dilation=2 the same as filter=5 and dilation=1
@@ -265,7 +266,7 @@ class Convolution(BaseLayer):
         The ``None`` value excludes bias from the calculations and
         do not add it into parameters list.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
 
     Examples
     --------
@@ -296,21 +297,30 @@ class Convolution(BaseLayer):
     ----------
     {BaseLayer.Attributes}
     """
-    size = TypedListProperty(required=True, element_type=int)
+    size = TypedListProperty(element_type=int, n_elements=3)
+    weight = ParameterProperty()
+    bias = ParameterProperty(allow_none=True)
+
+    padding = PaddingProperty()
+    stride = Spatial2DProperty()
+    dilation = Spatial2DProperty()
+
     # We use gain=2 because it's suitable choice for relu non-linearity
     # and relu is the most common non-linearity used for CNN.
-    weight = ParameterProperty(default=init.HeNormal(gain=2))
-    bias = ParameterProperty(default=init.Constant(value=0), allow_none=True)
+    def __init__(self, size, padding='valid', stride=1, dilation=1,
+                 weight=init.HeNormal(gain=2), bias=0, name=None):
 
-    padding = PaddingProperty(default='valid')
-    stride = Spatial2DProperty(default=(1, 1))
-    dilation = Spatial2DProperty(default=1)
+        self.size = size
+        self.padding = padding
+        self.stride = stride
+        self.dilation = dilation
+        self.weight = weight
+        self.bias = bias
 
-    def __init__(self, size, **options):
-        super(Convolution, self).__init__(size=size, **options)
+        super(Convolution, self).__init__(name=name)
 
-    def validate(self, input_shape):
-        if input_shape and len(input_shape) != 3:
+    def fail_if_shape_invalid(self, input_shape):
+        if len(input_shape) != 3:
             raise LayerConnectionError(
                 "Convolutional layer expects an input with 3 "
                 "dimensions, got {} with shape {}"
@@ -319,7 +329,9 @@ class Convolution(BaseLayer):
     def output_shape_per_dim(self, *args, **kwargs):
         return conv_output_shape(*args, **kwargs)
 
-    def find_output_from_input_shape(self, input_shape):
+    def get_output_shape(self, input_shape):
+        self.fail_if_shape_invalid(input_shape)
+
         padding = self.padding
         rows, cols, _ = input_shape
 
@@ -343,33 +355,18 @@ class Convolution(BaseLayer):
 
         return (output_rows, output_cols, n_kernels)
 
-    @property
-    def output_shape(self):
-        if self.input_shape is not None:
-            return self.find_output_from_input_shape(self.input_shape)
-
-    @property
-    def weight_shape(self):
-        n_channels = self.input_shape[-1]
-        n_rows, n_cols, n_filters = self.size
-        return (n_rows, n_cols, n_channels, n_filters)
-
-    def initialize(self):
-        super(Convolution, self).initialize()
-
-        self.add_parameter(
-            value=self.weight, name='weight',
-            shape=self.weight_shape,
-            trainable=True)
-
-        if self.bias is not None:
-            self.add_parameter(
-                value=self.bias, name='bias',
-                shape=as_tuple(self.size[-1]),
-                trainable=True)
-
     def output(self, input_value):
+        input_value = tf.convert_to_tensor(input_value, tf.float32)
+        input_shape = input_value.shape
         padding = self.padding
+
+        self.fail_if_shape_invalid(input_shape[1:])
+        n_channels = input_shape[-1]
+        n_rows, n_cols, n_filters = self.size
+
+        self.weight = self.variable(
+            value=self.weight, name='weight',
+            shape=(n_rows, n_cols, n_channels, n_filters))
 
         if not isinstance(padding, six.string_types):
             height_pad, weight_pad = padding
@@ -393,6 +390,10 @@ class Convolution(BaseLayer):
         )
 
         if self.bias is not None:
+            self.bias = self.variable(
+                value=self.bias, name='bias',
+                shape=as_tuple(n_filters))
+
             bias = tf.reshape(self.bias, (1, 1, 1, -1))
             output += bias
 
@@ -416,6 +417,8 @@ class Deconvolution(Convolution):
 
     {Convolution.stride}
 
+    {Convolution.dilation}
+
     weight : array-like, Tensorfow variable, scalar or Initializer
         Defines layer's weights. Shape of the weight will be equal to
         ``(filter rows, filter columns, output channels, input channels)``.
@@ -425,7 +428,7 @@ class Deconvolution(Convolution):
 
     {Convolution.bias}
 
-    {BaseLayer.Parameters}
+    {Convolution.name}
 
     Methods
     -------
@@ -445,28 +448,42 @@ class Deconvolution(Convolution):
     ----------
     {Convolution.Attributes}
     """
-    dilation = WithdrawProperty()
+    def __init__(self, size, padding='valid', stride=1,
+                 weight=init.HeNormal(gain=2), bias=0, name=None):
+
+        super(Deconvolution, self).__init__(
+            size=size, padding=padding, stride=stride,
+            dilation=1, weight=weight, bias=bias, name=name)
 
     def output_shape_per_dim(self, *args, **kwargs):
         return deconv_output_shape(*args, **kwargs)
 
     @property
     def weight_shape(self):
-        # Compare to the regular convolution weights
-        # have switched input and output channels.
         return as_tuple(self.size, self.input_shape[-1])
 
     def output(self, input_value):
-        input_shape = tf.shape(input_value)
+        input_value = tf.convert_to_tensor(input_value, tf.float32)
+        input_shape = input_value.shape
+        padding = self.padding
+        batch_size = input_shape[0]
+
+        self.fail_if_shape_invalid(input_shape[1:])
+        n_channels = input_shape[-1]
+        n_rows, n_cols, n_filters = self.size
+
         # We need to get information about output shape from the input
         # tensor's shape, because for some inputs we might have
         # height and width specified as None and shape value won't be
         # computed for these dimensions.
-        output_shape = self.find_output_from_input_shape(
+        output_shape = self.get_output_shape(
             tf.unstack(input_shape[1:]))
 
-        batch_size = input_shape[0]
-        padding = self.padding
+        # Compare to the regular convolution weights,
+        # transposed one has switched input and output channels.
+        self.weight = self.variable(
+            value=self.weight, name='weight',
+            shape=(n_rows, n_cols, n_filters, n_channels))
 
         if isinstance(self.padding, (list, tuple)):
             height_pad, width_pad = self.padding
@@ -504,6 +521,10 @@ class Deconvolution(Convolution):
                 output = output[:, :, w_pad:-w_pad, :]
 
         if self.bias is not None:
+            self.bias = self.variable(
+                value=self.bias, name='bias',
+                shape=as_tuple(n_filters))
+
             bias = tf.reshape(self.bias, (1, 1, 1, -1))
             output += bias
 

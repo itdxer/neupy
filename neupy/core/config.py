@@ -37,11 +37,7 @@ class ExtractParameters(object):
                     choices = {v: k for k, v in choices.items()}
                     value = choices[value]
 
-            # Default value is not always valid type. For this reason we
-            # need to ignore all the values that have the same value as
-            # in default attibute.
-            if is_numpy_array or value != property_.default:
-                options[property_name] = value
+            options[property_name] = value
 
         return options
 

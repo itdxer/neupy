@@ -135,7 +135,7 @@ class LevenbergMarquardt(BaseOptimizer):
 
     def init_train_updates(self):
         network_output = self.variables.network_output
-        prediction_func = self.variables.train_prediction_func
+        training_outputs = self.connection.training_outputs
         last_error = self.variables.last_error
         error_func = self.variables.error_func
         mu = self.variables.mu
@@ -146,7 +146,7 @@ class LevenbergMarquardt(BaseOptimizer):
             mu / self.mu_update_factor,
         )
 
-        err_for_each_sample = flatten((network_output - prediction_func) ** 2)
+        err_for_each_sample = flatten((network_output - training_outputs) ** 2)
 
         params = find_variables(self.connection, only_trainable=True)
         param_vector = make_single_vector(params)

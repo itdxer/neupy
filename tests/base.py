@@ -40,7 +40,7 @@ class BaseTestCase(unittest.TestCase):
             logging.disable(logging.CRITICAL)
 
         # Clean identifiers map for each test
-        generate_layer_name.coutners = defaultdict(int)
+        generate_layer_name.counters = defaultdict(int)
         utils.reproducible(seed=self.random_seed)
 
     def tearDown(self):

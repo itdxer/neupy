@@ -173,7 +173,7 @@ class BaseOptimizer(BaseNetwork):
             network_inputs=self.connection.inputs,
             network_output=tf.placeholder(
                 tf.float32,
-                name='network-output/from-layer-{}'.format(output_layer.name),
+                name='placeholder/target-{}'.format(output_layer.name),
             ),
         )
 
@@ -187,9 +187,6 @@ class BaseOptimizer(BaseNetwork):
 
         self.variables.update(
             step=self.step,
-            prediction_func=self.connection.training_outputs,
-            train_prediction_func=self.connection.outputs,
-
             error_func=loss,
             validation_error_func=val_loss,
         )
@@ -213,17 +210,17 @@ class BaseOptimizer(BaseNetwork):
         self.methods.update(
             predict=function(
                 inputs=network_inputs,
-                outputs=self.variables.prediction_func,
+                outputs=self.connection.outputs,
                 name='network/func-predict'
             ),
             one_training_update=function(
-                inputs=network_inputs + [network_output],
+                inputs=as_tuple(network_inputs, network_output),
                 outputs=self.variables.error_func,
                 updates=training_updates,
                 name='network/func-train-epoch'
             ),
             score=function(
-                inputs=network_inputs + [network_output],
+                inputs=as_tuple(network_inputs, network_output),
                 outputs=self.variables.validation_error_func,
                 name='network/func-prediction-error'
             )
@@ -270,8 +267,9 @@ class BaseOptimizer(BaseNetwork):
         )
 
         if is_test_data_partialy_missing:
-            raise ValueError("Input or target test samples are missed. They "
-                             "must be defined together or none of them.")
+            raise ValueError(
+                "Input or target test samples are missed. They "
+                "must be defined together or none of them.")
 
         X_train = [format_data(x) for x in as_tuple(X_train)]
         y_train = format_data(y_train)
@@ -283,8 +281,7 @@ class BaseOptimizer(BaseNetwork):
         return super(BaseOptimizer, self).train(
             X_train=X_train, y_train=y_train,
             X_test=X_test, y_test=y_test,
-            *args, **kwargs
-        )
+            *args, **kwargs)
 
     def one_training_update(self, X_train, y_train):
         return self.methods.one_training_update(*as_tuple(X_train, y_train))

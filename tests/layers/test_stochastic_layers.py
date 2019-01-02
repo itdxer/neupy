@@ -11,7 +11,8 @@ class DropoutLayerTestCase(BaseTestCase):
         test_input = np.ones((50, 20))
         dropout_layer = layers.Dropout(proba=0.5)
 
-        layer_output = self.eval(dropout_layer.output(test_input))
+        y = dropout_layer.output(test_input, training=True)
+        layer_output = self.eval(y)
 
         self.assertGreater(layer_output.sum(), 900)
         self.assertLess(layer_output.sum(), 1100)
@@ -23,10 +24,7 @@ class DropoutLayerTestCase(BaseTestCase):
     def test_dropout_disable_training_state(self):
         test_input = np.ones((50, 20))
         dropout_layer = layers.Dropout(proba=0.5)
-
-        with dropout_layer.disable_training_state():
-            layer_output = dropout_layer.output(test_input)
-
+        layer_output = dropout_layer.output(test_input)
         np.testing.assert_array_equal(layer_output, test_input)
 
     def test_dropout_repr(self):
@@ -39,16 +37,13 @@ class GaussianNoiseLayerTestCase(BaseTestCase):
         test_input = np.zeros((50, 20))
         gauss_noise = layers.GaussianNoise(std=0.5)
 
-        layer_output = self.eval(gauss_noise.output(test_input))
+        layer_output = self.eval(gauss_noise.output(test_input, training=True))
         self.assertTrue(stats.mstats.normaltest(layer_output))
 
     def test_gaussian_noise_disable_training_state(self):
         test_input = np.ones((50, 20))
         gauss_noise = layers.GaussianNoise(std=1)
-
-        with gauss_noise.disable_training_state():
-            layer_output = gauss_noise.output(test_input)
-
+        layer_output = gauss_noise.output(test_input)
         np.testing.assert_array_equal(layer_output, test_input)
 
     def test_gaussian_noise_repr(self):
