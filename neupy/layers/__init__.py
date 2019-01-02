@@ -1,8 +1,8 @@
 from .base import *
 from .activations import *
-# from .convolutions import *
+from .convolutions import *
 # from .pooling import *
-# from .stochastic import *
+from .stochastic import *
 # from .normalization import *
 # from .merge import *
 # from .reshape import *

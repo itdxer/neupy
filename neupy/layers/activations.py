@@ -61,8 +61,7 @@ class Linear(BaseLayer):
     weight = ParameterProperty()
     bias = ParameterProperty(allow_none=True)
 
-    def __init__(self, size=None, weight=init.HeNormal(),
-                 bias=init.Constant(value=0), name=None):
+    def __init__(self, size=None, weight=init.HeNormal(), bias=0, name=None):
 
         self.size = size
         self.weight = weight
@@ -75,18 +74,18 @@ class Linear(BaseLayer):
             return as_tuple(self.size)
         return input_shape
 
-    def output(self, inputs):
-        inputs = tf.convert_to_tensor(inputs, dtype=tf.float32)
-        n_input_features = inputs.shape[-1]
+    def output(self, input, **kwargs):
+        input = tf.convert_to_tensor(input, dtype=tf.float32)
+        n_input_features = input.shape[-1]
 
         if self.size is None:
-            return self.activation_function(inputs)
+            return self.activation_function(input)
 
         self.weight = self.variable(
             value=self.weight, name='weight',
             shape=as_tuple(n_input_features, self.size),
         )
-        output = tf.matmul(inputs, self.weight)
+        output = tf.matmul(input, self.weight)
 
         if self.bias is not None:
             self.bias = self.variable(

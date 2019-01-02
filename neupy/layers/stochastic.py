@@ -33,8 +33,8 @@ class Dropout(BaseLayer):
         self.proba = proba
         super(Dropout, self).__init__(name=name)
 
-    def output(self, input_value, training_state=False):
-        if not training_state:
+    def output(self, input_value, training=False):
+        if not training:
             return input_value
         return tf.nn.dropout(input_value, keep_prob=(1.0 - self.proba))
 
@@ -75,8 +75,8 @@ class GaussianNoise(BaseLayer):
         self.std = std
         super(GaussianNoise, self).__init__(name=name)
 
-    def output(self, input_value, training_state=False):
-        if not training_state:
+    def output(self, input_value, training=False):
+        if not training:
             return input_value
 
         noise = tf.random_normal(

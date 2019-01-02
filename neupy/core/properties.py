@@ -182,8 +182,8 @@ class TypedListProperty(BaseProperty):
         super(TypedListProperty, self).validate(value)
 
         if self.n_elements is not None and len(value) != self.n_elements:
-            raise ValueError("Expected list with {} variables"
-                             "".format(self.n_elements))
+            raise ValueError(
+                "Expected list with {} variables".format(self.n_elements))
 
         if not all(isinstance(v, self.element_type) for v in value):
             if isinstance(self.element_type, tuple):
