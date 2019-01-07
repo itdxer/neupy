@@ -183,7 +183,7 @@ class DefinitionsTestCase(BaseTestCase):
             layers.Concatenate(),
         )
         self.assertEqual(network.input_shape, [None, None, None, None])
-        self.assertEqual(network.output_shape, None)
+        self.assertEqual(network.output_shape, (None, None, None))
 
         # Connect them at the end, because we need to make
         # sure tha parallel networks defined without input shapes

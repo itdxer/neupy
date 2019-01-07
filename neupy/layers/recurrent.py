@@ -325,7 +325,7 @@ class LSTM(BaseRNNLayer):
             trainable=self.learn_init,
         )
 
-    def output(self, input_value):
+    def output(self, input_value, **kwargs):
         # Because scan iterates over the first dimension we
         # dimshuffle to (n_time_steps, n_batch, n_features)
         input_value = tf.transpose(input_value, [1, 0, 2])
@@ -549,7 +549,7 @@ class GRU(BaseRNNLayer):
             trainable=self.learn_init
         )
 
-    def output(self, input_value):
+    def output(self, input_value, **kwargs):
         # Because scan iterates over the first dimension we
         # dimshuffle to (n_time_steps, n_batch, n_features)
         input_value = tf.transpose(input_value, [1, 0, 2])

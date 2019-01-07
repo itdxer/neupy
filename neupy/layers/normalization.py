@@ -270,13 +270,13 @@ class LocalResponseNorm(Identity):
         self.k = k
         self.depth_radius = depth_radius
 
-    def output(self, input):
+    def output(self, input, **kwargs):
         input = tf.convert_to_tensor(input, dtype=tf.float32)
         ndim = len(input.shape)
 
-        if ndim != 3:
+        if ndim != 4:
             raise LayerConnectionError(
-                "Layer `{}` expected input with 3 dimensions, got {}"
+                "Layer `{}` expected input with 4 dimensions, got {}"
                 "".format(self.name, ndim))
 
         return tf.nn.local_response_normalization(
