@@ -1,13 +1,13 @@
 import tensorflow as tf
 
 from neupy.core.properties import ProperFractionProperty, NumberProperty
-from .base import BaseLayer
+from .base import Identity
 
 
 __all__ = ('Dropout', 'GaussianNoise')
 
 
-class Dropout(BaseLayer):
+class Dropout(Identity):
     """
     Dropout layer
 
@@ -17,21 +17,21 @@ class Dropout(BaseLayer):
         Fraction of the input units to drop. Value needs to be
         between ``0`` and ``1``.
 
-    {BaseLayer.name}
+    {Identity.name}
 
     Methods
     -------
-    {BaseLayer.Methods}
+    {Identity.Methods}
 
     Attributes
     ----------
-    {BaseLayer.Attributes}
+    {Identity.Attributes}
     """
     proba = ProperFractionProperty()
 
     def __init__(self, proba, name=None):
-        self.proba = proba
         super(Dropout, self).__init__(name=name)
+        self.proba = proba
 
     def output(self, input_value, training=False):
         if not training:
@@ -43,7 +43,7 @@ class Dropout(BaseLayer):
         return "{}(proba={})".format(classname, self.proba)
 
 
-class GaussianNoise(BaseLayer):
+class GaussianNoise(Identity):
     """
     Add gaussian noise to the input value. Mean and standard
     deviation are layer's parameters.
@@ -57,23 +57,23 @@ class GaussianNoise(BaseLayer):
     mean : float
         Mean of the gaussian noise. Defaults to ``0``.
 
-    {BaseLayer.name}
+    {Identity.name}
 
     Methods
     -------
-    {BaseLayer.Methods}
+    {Identity.Methods}
 
     Attributes
     ----------
-    {BaseLayer.Attributes}
+    {Identity.Attributes}
     """
     std = NumberProperty(minval=0)
     mean = NumberProperty()
 
     def __init__(self, mean=1, std=0, name=None):
+        super(GaussianNoise, self).__init__(name=name)
         self.mean = mean
         self.std = std
-        super(GaussianNoise, self).__init__(name=name)
 
     def output(self, input_value, training=False):
         if not training:

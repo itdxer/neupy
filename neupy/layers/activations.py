@@ -62,38 +62,40 @@ class Linear(BaseLayer):
     bias = ParameterProperty(allow_none=True)
 
     def __init__(self, size=None, weight=init.HeNormal(), bias=0, name=None):
+        super(Linear, self).__init__(name=name)
 
         self.size = size
         self.weight = weight
         self.bias = bias
 
-        super(Linear, self).__init__(name=name)
+        if size is not None and bias is not None:
+            self.bias = self.variable(
+                name='bias',
+                value=self.bias,
+                shape=as_tuple(self.size))
 
     def get_output_shape(self, input_shape):
         if self.size is not None:
-            return as_tuple(self.size)
+            return tf.TensorShape(self.size)
         return input_shape
 
     def output(self, input, **kwargs):
         input = tf.convert_to_tensor(input, dtype=tf.float32)
-        n_input_features = input.shape[-1]
 
         if self.size is None:
             return self.activation_function(input)
 
+        n_input_features = input.shape[-1]
         self.weight = self.variable(
-            value=self.weight, name='weight',
-            shape=as_tuple(n_input_features, self.size),
-        )
-        output = tf.matmul(input, self.weight)
+            name='weight',
+            value=self.weight,
+            shape=as_tuple(n_input_features, self.size))
 
-        if self.bias is not None:
-            self.bias = self.variable(
-                value=self.bias, name='bias',
-                shape=as_tuple(self.size),
-            )
-            output += self.bias
+        if self.bias is None:
+            output = tf.matmul(input, self.weight)
+            return self.activation_function(output)
 
+        output = tf.matmul(input, self.weight) + self.bias
         return self.activation_function(output)
 
     def activation_function(self, input_value):
@@ -463,9 +465,7 @@ class PRelu(Linear):
         self.alpha = self.variable(
             value=self.alpha,
             name='alpha',
-            shape=[input_shape[axis] for axis in self.alpha_axes],
-            trainable=True,
-        )
+            shape=[input_shape[axis] for axis in self.alpha_axes])
 
         dimensions = np.arange(ndim)
         alpha_axes = dimensions[list(self.alpha_axes)]

@@ -19,12 +19,6 @@ class ElementwiseTestCase(BaseTestCase):
         actual_output = self.eval(elem_layer.output(x1_matrix, x2_matrix))
         np.testing.assert_array_almost_equal(expected_output, actual_output)
 
-    def test_elementwise_initialize(self):
-        # Suppose not to fail if you initialize
-        # it without connection
-        elem_layer = layers.Elementwise()
-        elem_layer.initialize()
-
     def test_elementwise_single_input(self):
         elem_layer = layers.Elementwise()
         output = elem_layer.output(None)

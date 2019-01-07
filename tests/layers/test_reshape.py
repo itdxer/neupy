@@ -67,12 +67,12 @@ class ReshapeLayerTestCase(BaseTestCase):
         with self.assertRaisesRegexp(ValueError, "Only single"):
             layers.Reshape([-1, -1])
 
+        network = layers.join(
+            layers.Input(20),
+            layers.Reshape((3, 6)),
+        )
         with self.assertRaisesRegexp(ValueError, "Cannot derive"):
-            layers.join(
-                layers.Input(20),
-                layers.Reshape((-1, 6)),
-                layers.Reshape(),  # this layer uses output_shape
-            )
+            layers.Reshape((-1, 6)).get_output_shape((20,))
 
 
 class TransposeTestCase(BaseTestCase):
@@ -105,8 +105,9 @@ class TransposeTestCase(BaseTestCase):
                 layers.Transpose([2, 0]),  # cannot use 0 index (batch dim)
             )
 
-        with self.assertRaisesRegexp(LayerConnectionError, "at least 3"):
-            layers.join(
-                layers.Input(20),
-                layers.Transpose([2, 1]),
-            )
+        network = layers.join(
+            layers.Input(20),
+            layers.Transpose([2, 1]),
+        )
+        with self.assertRaisesRegexp(ValueError, "must be 2 but is 3"):
+            network.outputs

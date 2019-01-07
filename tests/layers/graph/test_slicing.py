@@ -30,11 +30,10 @@ class SliceLayerConnectionsTestCase(BaseTestCase):
     def test_select_network_branch(self):
         network = layers.join(
             layers.Input(10, name='input-1'),
-            [[
+            layers.parallel(
                 layers.Relu(1, name='relu-1'),
-            ], [
                 layers.Relu(2, name='relu-2'),
-            ]]
+            )
         )
 
         self.assertEqual(network.input_shape, (10,))
@@ -77,7 +76,7 @@ class SliceLayerConnectionsTestCase(BaseTestCase):
 
     def test_cut_using_layer_object(self):
         relu = layers.Relu(2)
-        network = layers.Input(10) > relu > layers.Sigmoid(1)
+        network = layers.Input(10) >> relu >> layers.Sigmoid(1)
 
         self.assertEqual(network.input_shape, (10,))
         self.assertEqual(network.output_shape, (1,))
@@ -109,9 +108,13 @@ class SliceLayerConnectionsTestCase(BaseTestCase):
         self.assertEqual(len(network), 3)
 
         relu_1_network = network.start('relu-1')
-        self.assertEqual(relu_1_network.input_shape, (10,))
+        self.assertEqual(relu_1_network.input_shape, None)
         self.assertEqual(relu_1_network.output_shape, (1,))
         self.assertEqual(len(relu_1_network), 2)
+        self.assertDictEqual(relu_1_network.forward_graph, {
+            network.layer('relu-1'): [network.layer('relu-2')],
+            network.layer('relu-2'): [],
+        })
 
         x_test = asfloat(np.ones((7, 10)))
         y_predicted = self.eval(relu_1_network.output(x_test))
@@ -132,9 +135,13 @@ class SliceLayerConnectionsTestCase(BaseTestCase):
 
         cutted_network = network.start('relu-1').end('relu-2')
 
-        self.assertEqual(cutted_network.input_shape, (8,))
+        self.assertEqual(cutted_network.input_shape, None)
         self.assertEqual(cutted_network.output_shape, (2,))
         self.assertEqual(len(cutted_network), 2)
+        self.assertDictEqual(cutted_network.forward_graph, {
+            network.layer('relu-1'): [network.layer('relu-2')],
+            network.layer('relu-2'): [],
+        })
 
         x_test = asfloat(np.ones((7, 8)))
         y_predicted = self.eval(cutted_network.output(x_test))
@@ -152,9 +159,12 @@ class SliceLayerConnectionsTestCase(BaseTestCase):
         self.assertEqual(len(network), 3)
 
         cutted_network = network.start('relu-1').start('relu-2')
-        self.assertEqual(cutted_network.input_shape, (5,))
+        self.assertEqual(cutted_network.input_shape, None)
         self.assertEqual(cutted_network.output_shape, (1,))
         self.assertEqual(len(cutted_network), 1)
+        self.assertDictEqual(cutted_network.forward_graph, {
+            network.layer('relu-2'): [],
+        })
 
         x_test = asfloat(np.ones((7, 5)))
         y_predicted = self.eval(cutted_network.output(x_test))
@@ -174,9 +184,13 @@ class SliceLayerConnectionsTestCase(BaseTestCase):
         self.assertEqual(len(network), 5)
 
         cutted_network = network.start('relu-1').end('relu-2')
-        self.assertEqual(cutted_network.input_shape, (8,))
+        self.assertEqual(cutted_network.input_shape, None)
         self.assertEqual(cutted_network.output_shape, (2,))
         self.assertEqual(len(cutted_network), 2)
+        self.assertDictEqual(cutted_network.forward_graph, {
+            network.layer('relu-1'): [network.layer('relu-2')],
+            network.layer('relu-2'): [],
+        })
 
         new_network = layers.join(
             layers.Input(8),

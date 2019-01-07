@@ -38,6 +38,8 @@ def pooling_output_shape(dimension_size, pool_size, padding, stride):
     -------
     int
     """
+    dimension_size = dimension_size.value
+
     if dimension_size is None:
         return None
 
@@ -83,28 +85,28 @@ class BasePooling(BaseLayer):
     {BaseLayer.Attributes}
     """
     size = TypedListProperty(required=True, element_type=int)
-    stride = Spatial2DProperty(default=None)
-    padding = ChoiceProperty(default='VALID', choices=(
-        'SAME', 'VALID', 'same', 'valid'))
-
+    stride = Spatial2DProperty(allow_none=True)
+    padding = ChoiceProperty(choices=('SAME', 'VALID', 'same', 'valid'))
     pooling_type = None
 
-    def __init__(self, size, **options):
-        super(BasePooling, self).__init__(size=size, **options)
+    def __init__(self, size, stride=None, padding='valid', name=None):
+        super(BasePooling, self).__init__(name=name)
 
-    def validate(self, input_shape):
-        if len(input_shape) != 3:
+        self.size = size
+        self.stride = stride
+        self.padding = padding
+
+    def fail_if_shape_invalid(self, input_shape):
+        if input_shape and len(input_shape) != 3:
             raise LayerConnectionError(
                 "Pooling layer expects an input with 3 "
                 "dimensions, got {} with shape {}"
                 "".format(len(input_shape), input_shape))
 
-    @property
-    def output_shape(self):
-        if self.input_shape is None:
-            return None
+    def get_output_shape(self, input_shape):
+        self.fail_if_shape_invalid(input_shape)
 
-        rows, cols, n_kernels = self.input_shape
+        rows, cols, n_kernels = input_shape
         row_filter_size, col_filter_size = self.size
 
         stride = self.size if self.stride is None else self.stride
@@ -118,7 +120,7 @@ class BasePooling(BaseLayer):
 
         # In python 2, we can get float number after rounding procedure
         # and it might break processing in the subsequent layers.
-        return (output_rows, output_cols, n_kernels)
+        return tf.TensorShape((output_rows, output_cols, n_kernels))
 
     def output(self, input_value):
         return tf.nn.pool(
@@ -223,28 +225,6 @@ class AveragePooling(BasePooling):
     pooling_type = 'AVG'
 
 
-class ScaleFactorProperty(TypedListProperty):
-    """
-    Defines sclaing factor for the Upscale layer.
-
-    Parameters
-    ----------
-    {TypedListProperty.Parameters}
-    """
-    expected_type = (tuple, int)
-
-    def __set__(self, instance, value):
-        if isinstance(value, int):
-            value = as_tuple(value, value)
-        super(ScaleFactorProperty, self).__set__(instance, value)
-
-    def validate(self, value):
-        if any(element <= 0 for element in value):
-            raise ValueError("Scale factor property accepts only positive "
-                             "integer numbers.")
-        super(ScaleFactorProperty, self).validate(value)
-
-
 class Upscale(BaseLayer):
     """
     Upscales input over two axis (height and width).
@@ -256,7 +236,7 @@ class Upscale(BaseLayer):
         parameter identifies scale of the height and the second
         one of the width.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
 
     Methods
     -------
@@ -273,27 +253,34 @@ class Upscale(BaseLayer):
     >>> network.output_shape
     (3, 20, 20)
     """
-    scale = ScaleFactorProperty(n_elements=2)
+    scale = TypedListProperty(n_elements=2)
 
     def __init__(self, scale, name=None):
-        self.scale = scale
         super(Upscale, self).__init__(name=name)
 
-    def validate(self, input_shape):
+        if isinstance(scale, int):
+            scale = as_tuple(scale, scale)
+
+        if any(element <= 0 for element in scale):
+            raise ValueError(
+                "Only positive integers are allowed for scale")
+
+        self.scale = scale
+
+    def fail_if_shape_invalid(self, input_shape):
         if len(input_shape) != 3:
             raise LayerConnectionError(
                 "Upscale layer should have an input value with "
                 "3 feature dimensions (channel, height, width)")
 
-    @property
-    def output_shape(self):
-        if self.input_shape is None:
-            return None
+    def get_output_shape(self, input_shape):
+        self.fail_if_shape_invalid(input_shape)
 
-        height, width, channel = self.input_shape
+        height, width, channel = input_shape
         height_scale, width_scale = self.scale
 
-        return (height_scale * height, width_scale * width, channel)
+        return tf.TensorShape([
+            height_scale * height, width_scale * width, channel])
 
     def output(self, input_value):
         return tf_repeat(input_value, as_tuple(1, self.scale, 1))
@@ -348,11 +335,11 @@ class GlobalPooling(BaseLayer):
     })
 
     def __init__(self, function, name=None):
-        self.function = function
         super(GlobalPooling, self).__init__(name=name)
+        self.function = function
 
     def get_output_shape(self, input_shape):
-        return as_tuple(input_shape[-1])
+        return tf.TensorShape(input_shape[-1])
 
     def output(self, input_value):
         ndims = len(input_value.shape)

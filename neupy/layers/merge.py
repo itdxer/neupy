@@ -51,10 +51,10 @@ class Elementwise(BaseLayer):
     })
 
     def __init__(self, merge_function='add', name=None):
-        self.merge_function = merge_function
         super(Elementwise, self).__init__(name=name)
+        self.merge_function = merge_function
 
-    def get_output_shape(self, input_shapes):
+    def get_output_shape(self, *input_shapes):
         n_unique_shapes = len(set(input_shapes))
 
         if n_unique_shapes != 1:
@@ -65,12 +65,12 @@ class Elementwise(BaseLayer):
 
         return input_shapes[0]
 
-    def output(self, inpurs):
-        if not isinstance(inpurs, (list, tuple)) or len(inpurs) != 1:
+    def output(self, *inputs):
+        if not isinstance(inputs, (list, tuple)) or len(inputs) != 1:
             raise LayerConnectionError(
                 "Layer `{}` expected multiple inputs".format(self.name))
 
-        return reduce(self.merge_function, inpurs)
+        return reduce(self.merge_function, inputs)
 
 
 class Concatenate(BaseLayer):
@@ -107,10 +107,10 @@ class Concatenate(BaseLayer):
     axis = IntProperty()
 
     def __init__(self, axis=-1, name=None):
-        self.axis = axis
         super(Concatenate, self).__init__(name=name)
+        self.axis = axis
 
-    def get_output_shape(self, input_shapes):
+    def get_output_shape(self, *input_shapes):
         # The axis value has 0-based indeces where 0s index points
         # to the batch dimension of the input. Shapes in the neupy
         # do not store information about the batch and we need to
@@ -137,15 +137,15 @@ class Concatenate(BaseLayer):
                         "".format(axis, input_shapes[0], input_shape))
 
         axis = self.axis
-        input_shapes = copy.copy(input_shapes)
+        input_shapes = list(input_shapes)
         output_shape = list(input_shapes.pop(0))
 
         for input_shape in input_shapes:
             output_shape[axis] += input_shape[axis]
 
-        return tuple(output_shape)
+        return tf.TensorShape(output_shape)
 
-    def output(self, inputs):
+    def output(self, *inputs):
         return tf.concat(inputs, axis=self.axis)
 
 
@@ -197,21 +197,21 @@ class GatedAverage(BaseLayer):
     --------
     >>> from neupy.layers import *
     >>>
-    >>> gating_network = Input(10) > Softmax(2)
-    >>> network_1 = Input(20) > Relu(10)
-    >>> network_2 = Input(20) > Relu(20) > Relu(10)
+    >>> gate = Input(10) > Softmax(2)
+    >>> net1 = Input(20) > Relu(10)
+    >>> net2 = Input(20) > Relu(20) > Relu(10)
     >>>
-    >>> network = (gating_network | network_1 | network_2) >> GatedAverage()
+    >>> network = (gate | net1 | net2) >> GatedAverage()
     >>> network
     [(10,), (20,), (20,)] -> [... 8 layers ...] -> 10
     """
     gating_layer_index = IntProperty(default=0)
 
     def __init__(self, gating_layer_index=0, name=None):
-        self.gating_layer_index = gating_layer_index
         super(GatedAverage, self).__init__(name=name)
+        self.gating_layer_index = gating_layer_index
 
-    def validate(self, input_shapes):
+    def fail_if_shape_invalid(self, input_shapes):
         n_input_layers = len(input_shapes)
         gating_layer_index = self.gating_layer_index
 
@@ -225,7 +225,7 @@ class GatedAverage(BaseLayer):
 
         other_layers_shape = exclude_index(input_shapes, gating_layer_index)
 
-        if len(gating_layer_shape) != 1:
+        if gating_layer_shape and len(gating_layer_shape) != 1:
             raise LayerConnectionError(
                 "Output from the gating network should be vector. Output "
                 "shape from gating layer: {!r}".format(gating_layer_shape))
@@ -243,15 +243,17 @@ class GatedAverage(BaseLayer):
                 "Output layer that has to be merged expect to have the "
                 "same shapes. Shapes: {!r}".format(other_layers_shape))
 
-    def get_output_shape(self, input_shape):
+    def get_output_shape(self, *input_shapes):
+        self.fail_if_shape_invalid(input_shapes)
+
         if self.gating_layer_index >= 0:
             # Take layer from the left side from the gating layer.
             # In case if gating layer at th zeros position then
             # it will take the last layer (-1 index).
-            return input_shape[self.gating_layer_index - 1]
+            return input_shapes[self.gating_layer_index - 1]
 
         # In case if it negative index, we take layer from the right side
-        return input_shape[self.gating_layer_index + 1]
+        return input_shapes[self.gating_layer_index + 1]
 
     def output(self, input_values):
         gating_value = input_values[self.gating_layer_index]
@@ -259,8 +261,8 @@ class GatedAverage(BaseLayer):
 
         # Input shape is exactly the same as output shape
         n_output_dim = len(self.output_shape)
-
         output_values = []
+
         for i, other_value in enumerate(other_values):
             output_value = tf.multiply(
                 other_value,

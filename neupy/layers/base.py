@@ -1,6 +1,8 @@
 import re
+import sys
 import copy
 import types
+import traceback
 from itertools import chain
 from functools import wraps
 from abc import abstractmethod
@@ -198,14 +200,19 @@ class BaseGraph(ConfigurableABC):
         self.placeholders = []
 
         for layer in self.input_layers:
+            shape = layer.output_shape
+
+            if layer.output_shape is not tf.TensorShape(None):
+                shape = as_tuple(None, shape)
+
             placeholder = tf.placeholder(
                 tf.float32,
-                shape=as_tuple(None, layer.output_shape),
+                shape=shape,
                 name="placeholder/{}".format(layer.name),
             )
             self.placeholders.append(placeholder)
 
-        return make_one_if_possible(self.placeholders)
+        return self.placeholders
 
     @lazy_property
     def outputs(self):
@@ -219,14 +226,14 @@ class BaseGraph(ConfigurableABC):
         initialize_uninitialized_variables()
         return networks_output
 
-    @classmethod
-    def compare(cls, left, right):
-        cls.events.append(('__gt__', join(left, right)))
+    def __gt__(self, other):
+        left, right = self, other
+        self.events.append(('__gt__', join(left, right)))
 
         graph = LayerGraph()
         previous_operator = None
 
-        for operator, value in reversed(cls.events):
+        for operator, value in reversed(self.events):
             if operator == previous_operator:
                 break
 
@@ -240,28 +247,24 @@ class BaseGraph(ConfigurableABC):
 
         return graph
 
-    def __gt__(self, other):
-        return self.compare(self, other)
-
-    def __lt__(self, other):
-        return self.compare(other, self)
-
-    def __rshift__(self, other):
-        return join(self, other)
-
-    def __lshift__(self, other):
-        return join(other, self)
-
     def __bool__(self):
         self.events.append(('__bool__', self))
         return True
 
+    def __nonzero__(self):
+        return self.__bool__()  # Hack for python 2
+
+    def __rshift__(self, other):
+        return join(self, other)
+
+    def __irshift__(self, other):
+        return self.__rshift__(other)
+
     def __or__(self, other):
         return parallel(self, other)
 
-    def __nonzero__(self):
-        # Hack for python 2
-        return self.__bool__()
+    def __ior__(self, other):
+        return self.__or__(other)
 
     def __contains__(self, entity):
         return entity in self.forward_graph
@@ -292,16 +295,13 @@ class LayerGraph(BaseGraph):
 
         for layer_reference in layer_references:
             if isinstance(layer_reference, six.string_types):
-                layer_reference = self.find_layer_by_name(layer_reference)
+                layer_reference = self.layer(layer_reference)
             layers.append(layer_reference)
 
         return layers
 
     def end(self, *output_layers):
         output_layers = self.clean_layer_references(output_layers)
-
-        if not isinstance(output_layers, (list, tuple)):
-            output_layers = [output_layers]
 
         if all(layer not in self.forward_graph for layer in output_layers):
             return self.__class__()
@@ -327,40 +327,57 @@ class LayerGraph(BaseGraph):
         # Output layers for the reversed graph are
         # input layers for normal graph
         graph_reversed = self.reverse()
-        subgraph_reversed = graph_reversed.subgraph_for_output(input_layers)
+        subgraph_reversed = graph_reversed.end(*input_layers)
 
         # Reverse it to make normal graph
         return subgraph_reversed.reverse()
 
-    @property
+    @lazy_property
     def layers(self):
         return list(self)
 
     def layer(self, layer_name):
+        if not isinstance(layer_name, six.string_types):
+            raise ValueError(
+                "Layer name expected to be a string, "
+                "got value {}".format(layer_name))
+
+        layers = []
+
         for layer in self.forward_graph:
             if layer.name == layer_name:
-                return layer
+                layers.append(layer)
 
-        raise NameError("Cannot find layer with name {!r}".format(layer_name))
+        if not layers:
+            raise NameError(
+                "Cannot find layer with name {!r}".format(layer_name))
 
-    def init_variables(self):
-        for layer in self:
-            layer.init_variables()
+        if len(layers) >= 2:
+            raise NameError(
+                "Ambiguous layer name. Network has {} layers with the same "
+                "name. Layers: {}".format(layer_name, len(layers), layers))
+
+        return layers[0]
+
+    @property
+    def input_shapes(self):
+        return [l.input_shape for l in self.input_layers]
 
     @property
     def input_shape(self):
-        return make_one_if_possible(
-            [l.output_shape for l in self.input_layers])
+        return make_one_if_possible(self.input_shapes)
 
     @property
     def output_shape(self):
-        return self.get_output_shape(self.input_shape)
+        outputs = self.propagate_forward(
+            self.input_shapes, method='get_output_shape')
+
+        return make_one_if_possible([outputs[l] for l in self.output_layers])
 
     @property
     def output_shapes_per_layer(self):
         return self.propagate_forward(
-            [l.output_shape for l in self.input_layers],
-            method='get_output_shape')
+            self.input_shapes, method='get_output_shape')
 
     def get_output_shape(self, *inputs):
         outputs = self.propagate_forward(inputs, method='get_output_shape')
@@ -385,16 +402,24 @@ class LayerGraph(BaseGraph):
 
             inputs = dict(zip(self.input_layers, inputs))
 
+        prepared_inputs = {}
         for layer, input_variable in inputs.items():
             if isinstance(layer, six.string_types):
-                layer = self.find_layer_by_name(layer)
+                layer = self.layer(layer)
 
             if layer not in self.forward_graph:
                 raise ValueError(
                     "The `{}` layer doesn't appear in the network"
                     "".format(layer.name))
 
-        return inputs
+            if layer not in self.input_layers:
+                raise ValueError(
+                    "`{}` is not an input layer in the network"
+                    "".format(layer.name))
+
+            prepared_inputs[layer] = input_variable
+
+        return prepared_inputs
 
     def pass_through_the_layer(self, layer, method, *args, **kwargs):
         layer_method = getattr(layer, method)
@@ -403,13 +428,16 @@ class LayerGraph(BaseGraph):
             return layer_method(*args, **kwargs)
         except Exception as exception:
             layer_id = layer.name if hasattr(layer, 'name') else repr(layer)
-            extra_message = (
-                "Exception occured while propagating data through the "
-                "method `{}` in the layer `{}`. Layer's parameters: {}"
-                "".format(method, layer_id, layer.get_params()))
-
             raise exception.__class__(
-                str(exception).strip('.') + ". " + extra_message)
+                "{original_message}. Exception occured while propagating data "
+                "through the method `{method}` in the layer `{layer_id}`. "
+                "Layer's parameters: {params}".format(
+                    original_message=str(exception).strip('.'),
+                    method=method,
+                    layer_id=layer_id,
+                    params=layer.get_params()
+                )
+            ).with_traceback(sys.last_traceback)
 
     def propagate_forward(self, inputs, method, **kwargs):
         backward_graph = self.backward_graph
@@ -420,7 +448,7 @@ class LayerGraph(BaseGraph):
             outputs[layer] = self.pass_through_the_layer(
                 layer, method, layer_input, **kwargs)
 
-        for layer in (l for l in self if l not in outputs):
+        for layer in (l for l in self if l not in inputs):
             layer_inputs = [outputs[l] for l in backward_graph[layer]]
             outputs[layer] = self.pass_through_the_layer(
                 layer, method, *layer_inputs, **kwargs)
@@ -449,15 +477,10 @@ class LayerGraph(BaseGraph):
             yield layer
 
     def __repr__(self):
-        n_layers = len(self)
-
-        if n_layers <= 5 and self.is_sequential():
-            return ' > '.join([repr(layer) for layer in self])
-
         return '{} -> [... {} layers ...] -> {}'.format(
-            make_one_if_possible(self.input_shape),
-            n_layers,
-            make_one_if_possible(self.output_shape))
+            make_one_if_possible(self.input_shape) or '?',
+            len(self),
+            make_one_if_possible(self.output_shape) or '?')
 
 
 def merge(left_graph, right_graph, combine=False):
@@ -504,8 +527,6 @@ def join(*connections):
     graph = LayerGraph()
 
     for connection in connections:
-        if isinstance(connection, (list, tuple)):
-            connection = join(*connection)
         graph = merge(graph, connection, combine=True)
 
     return graph
@@ -565,6 +586,7 @@ class BaseLayer(BaseGraph):
 
         self.updates = []
         self.name = name
+        self.input_shape = tf.TensorShape(None)
 
         # This decorator ensures that result produced by the
         # `output` method will be marked under layer's name scope.
@@ -573,10 +595,10 @@ class BaseLayer(BaseGraph):
 
     @property
     def output_shape(self):
-        return self.get_output_shape(None)
+        return self.get_output_shape(tf.TensorShape(None))
 
     def get_output_shape(self, input_shape):
-        return None
+        return tf.TensorShape(None)
 
     @property
     def variable_names(self):
@@ -612,6 +634,21 @@ class BaseLayer(BaseGraph):
 
 
 class Identity(BaseLayer):
+    """
+    Passes input without changes
+
+    Parameters
+    ----------
+    {BaseLayer.name}
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
+    """
     def get_output_shape(self, input_shape):
         return input_shape
 
@@ -620,19 +657,21 @@ class Identity(BaseLayer):
 
 
 class Input(BaseLayer):
-    size = TypedListProperty(element_type=(int, type(None)), allow_none=True)
+    shape = TypedListProperty(element_type=(int, type(None)), allow_none=True)
 
-    def __init__(self, size, name=None):
-        self.size = as_tuple(size)
+    def __init__(self, shape, name=None):
         super(Input, self).__init__(name=name)
+
+        self.shape = as_tuple(shape)
+        self.input_shape = tf.TensorShape(self.shape)
 
     def output(self, input, **kwargs):
         return input
 
     def get_output_shape(self, input_shape):
-        return input_shape or as_tuple(self.size)
+        return input_shape or tf.TensorShape(self.input_shape)
 
     def __repr__(self):
-        return '{name}({size})'.format(
+        return '{name}({shape})'.format(
             name=self.__class__.__name__,
-            size=make_one_if_possible(self.size))
+            shape=make_one_if_possible(self.shape))

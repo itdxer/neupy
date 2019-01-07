@@ -1,15 +1,15 @@
 import tensorflow as tf
 
 from neupy.core.properties import (
-    NumberProperty,
     ProperFractionProperty,
     ParameterProperty,
+    TypedListProperty,
+    NumberProperty,
     IntProperty,
 )
 from neupy.utils import asfloat, as_tuple
 from neupy.exceptions import LayerConnectionError
-from .activations import AxesProperty
-from .base import BaseLayer
+from .base import Identity
 
 
 __all__ = ('BatchNorm', 'LocalResponseNorm')
@@ -46,13 +46,14 @@ def find_opposite_axes(axes, ndim):
     []
     """
     if any(axis >= ndim for axis in axes):
-        raise ValueError("Some axes have invalid values. Axis value "
-                         "should be between 0 and {}".format(ndim))
+        raise ValueError(
+            "Some axes have invalid values. Axis value "
+            "should be between 0 and {}".format(ndim))
 
     return [axis for axis in range(ndim) if axis not in axes]
 
 
-class BatchNorm(BaseLayer):
+class BatchNorm(Identity):
     """
     Batch-normalization layer.
 
@@ -96,15 +97,15 @@ class BatchNorm(BaseLayer):
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=1)``.
 
-    {BaseLayer.name}
+    {Identity.name}
 
     Methods
     -------
-    {BaseLayer.Methods}
+    {Identity.Methods}
 
     Attributes
     ----------
-    {BaseLayer.Attributes}
+    {Identity.Attributes}
 
     References
     ----------
@@ -112,7 +113,7 @@ class BatchNorm(BaseLayer):
            by Reducing Internal Covariate Shift,
            http://arxiv.org/pdf/1502.03167v3.pdf
     """
-    axes = AxesProperty(allow_none=True)
+    axes = TypedListProperty(allow_none=True)
     epsilon = NumberProperty(minval=0)
     alpha = ProperFractionProperty()
     beta = ParameterProperty()
@@ -124,6 +125,8 @@ class BatchNorm(BaseLayer):
     def __init__(self, axes=None, alpha=0.1, beta=0, gamma=1, epsilon=1e-5,
                  running_mean=0, running_inv_std=1, name=None):
 
+        super(BatchNorm, self).__init__(name=name)
+
         self.axes = axes
         self.alpha = alpha
         self.beta = beta
@@ -132,12 +135,12 @@ class BatchNorm(BaseLayer):
         self.running_mean = running_mean
         self.running_inv_std = running_inv_std
 
-        super(BatchNorm, self).__init__(name=name)
+        if axes is not None and 0 in axes:
+            raise ValueError(
+                "Cannot specify axes for batch dimension (0-axis)")
 
-    def initialize(self):
-        super(BatchNorm, self).initialize()
-
-        input_shape = as_tuple(None, self.input_shape)
+    def initialize_variables(self, input):
+        input_shape = input.shape
         ndim = len(input_shape)
 
         if self.axes is None:
@@ -146,8 +149,9 @@ class BatchNorm(BaseLayer):
             self.axes = tuple(range(ndim - 1))
 
         if any(axis >= ndim for axis in self.axes):
-            raise ValueError("Cannot apply batch normalization on the axis "
-                             "that doesn't exist.")
+            raise ValueError(
+                "Cannot apply batch normalization "
+                "on the axis that doesn't exist.")
 
         opposite_axes = find_opposite_axes(self.axes, ndim)
         parameter_shape = [
@@ -157,34 +161,42 @@ class BatchNorm(BaseLayer):
 
         if any(parameter is None for parameter in parameter_shape):
             unknown_dim_index = parameter_shape.index(None)
-            raise ValueError("Cannot apply batch normalization on the axis "
-                             "with unknown size over the dimension #{} "
-                             "(0-based indeces).".format(unknown_dim_index))
+            raise ValueError(
+                "Cannot apply batch normalization on the axis "
+                "with unknown size over the dimension #{} "
+                "(0-based indeces).".format(unknown_dim_index))
 
-        self.add_parameter(value=self.running_mean, shape=parameter_shape,
-                           name='running_mean', trainable=False)
-        self.add_parameter(value=self.running_inv_std, shape=parameter_shape,
-                           name='running_inv_std', trainable=False)
+        self.running_mean = self.variable(
+            value=self.running_mean, shape=parameter_shape,
+            name='running_mean', trainable=False)
 
-        self.add_parameter(value=self.gamma, name='gamma',
-                           shape=parameter_shape, trainable=True)
-        self.add_parameter(value=self.beta, name='beta',
-                           shape=parameter_shape, trainable=True)
+        self.running_inv_std = self.variable(
+            value=self.running_inv_std, shape=parameter_shape,
+            name='running_inv_std', trainable=False)
 
-    def output(self, input_value):
-        alpha = asfloat(self.alpha)
-        running_mean = self.running_mean
-        running_inv_std = self.running_inv_std
+        self.gamma = self.variable(
+            value=self.gamma, name='gamma',
+            shape=parameter_shape)
 
-        if not self.training_state:
-            mean, inv_std = running_mean, running_inv_std
+        self.beta = self.variable(
+            value=self.beta, name='beta',
+            shape=parameter_shape)
+
+    def output(self, input, training=False):
+        input = tf.convert_to_tensor(input, dtype=tf.float32)
+        self.initialize_variables(input)
+
+        if not training:
+            mean = self.running_mean
+            inv_std = self.running_inv_std
         else:
+            alpha = asfloat(self.alpha)
             mean = tf.reduce_mean(
-                input_value, self.axes,
+                input, self.axes,
                 keepdims=True, name="mean",
             )
             variance = tf.reduce_mean(
-                tf.squared_difference(input_value, tf.stop_gradient(mean)),
+                tf.squared_difference(input, tf.stop_gradient(mean)),
                 self.axes,
                 keepdims=True,
                 name="variance",
@@ -192,18 +204,18 @@ class BatchNorm(BaseLayer):
             inv_std = tf.rsqrt(variance + asfloat(self.epsilon))
 
             self.updates = [(
-                running_inv_std,
-                asfloat(1 - alpha) * running_inv_std + alpha * inv_std
+                self.running_inv_std,
+                asfloat(1 - alpha) * self.running_inv_std + alpha * inv_std
             ), (
-                running_mean,
-                asfloat(1 - alpha) * running_mean + alpha * mean
+                self.running_mean,
+                asfloat(1 - alpha) * self.running_mean + alpha * mean
             )]
 
-        normalized_value = (input_value - mean) * inv_std
+        normalized_value = (input - mean) * inv_std
         return self.gamma * normalized_value + self.beta
 
 
-class LocalResponseNorm(BaseLayer):
+class LocalResponseNorm(Identity):
     """
     Local Response Normalization Layer.
 
@@ -232,15 +244,15 @@ class LocalResponseNorm(BaseLayer):
     depth_radius : int
         Number of adjacent channels to normalize over, must be odd.
 
-    {BaseLayer.name}
+    {Identity.name}
 
     Methods
     -------
-    {BaseLayer.Methods}
+    {Identity.Methods}
 
     Attributes
     ----------
-    {BaseLayer.Attributes}
+    {Identity.Attributes}
     """
     alpha = NumberProperty()
     beta = NumberProperty()
@@ -248,6 +260,8 @@ class LocalResponseNorm(BaseLayer):
     depth_radius = IntProperty()
 
     def __init__(self, alpha=1e-4, beta=0.75, k=2, depth_radius=5, name=None):
+        super(LocalResponseNorm, self).__init__(name=name)
+
         if depth_radius % 2 == 0:
             raise ValueError("Only works with odd `depth_radius` values")
 
@@ -256,10 +270,9 @@ class LocalResponseNorm(BaseLayer):
         self.k = k
         self.depth_radius = depth_radius
 
-        super(LocalResponseNorm, self).__init__(name=name)
-
-    def output(self, input_value):
-        ndim = len(input_value.shape)
+    def output(self, input):
+        input = tf.convert_to_tensor(input, dtype=tf.float32)
+        ndim = len(input.shape)
 
         if ndim != 3:
             raise LayerConnectionError(
@@ -267,9 +280,8 @@ class LocalResponseNorm(BaseLayer):
                 "".format(self.name, ndim))
 
         return tf.nn.local_response_normalization(
-            input_value,
+            input,
             depth_radius=self.depth_radius,
             bias=self.k,
             alpha=self.alpha,
-            beta=self.beta,
-        )
+            beta=self.beta)
