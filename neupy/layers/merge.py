@@ -5,7 +5,7 @@ import tensorflow as tf
 
 from neupy.core.properties import FunctionWithOptionsProperty, IntProperty
 from neupy.exceptions import LayerConnectionError
-from neupy.utils import as_tuple
+from neupy.utils import as_tuple, tf_utils
 from .base import BaseLayer
 
 
@@ -55,15 +55,16 @@ class Elementwise(BaseLayer):
         self.merge_function = merge_function
 
     def get_output_shape(self, *input_shapes):
-        n_unique_shapes = len(set(input_shapes))
+        input_shapes = [tf.TensorShape(shape) for shape in input_shapes]
+        first_shape = input_shapes[0]
 
-        if n_unique_shapes != 1:
+        if any(shape != first_shape for shape in input_shapes):
             raise LayerConnectionError(
                 "The `{}` layer expects all input values with "
                 "exactly the same shapes. Input shapes: {}"
                 "".format(self, input_shapes))
 
-        return input_shapes[0]
+        return first_shape
 
     def output(self, *inputs):
         if not isinstance(inputs, (list, tuple)) or len(inputs) != 1:
@@ -111,11 +112,12 @@ class Concatenate(BaseLayer):
         self.axis = axis
 
     def get_output_shape(self, *input_shapes):
+        input_shapes = [tf.TensorShape(shape) for shape in input_shapes]
         # The axis value has 0-based indeces where 0s index points
         # to the batch dimension of the input. Shapes in the neupy
         # do not store information about the batch and we need to
         # put None value on the 0s position.
-        valid_shape = as_tuple(None, input_shapes[0])
+        valid_shape = tf_utils.add_batch_dim(input_shapes[0])
 
         # Avoid using negative indeces
         possible_axes = list(range(len(valid_shape)))
@@ -244,6 +246,7 @@ class GatedAverage(BaseLayer):
                 "same shapes. Shapes: {!r}".format(other_layers_shape))
 
     def get_output_shape(self, *input_shapes):
+        input_shapes = [tf.TensorShape(shape) for shape in input_shapes]
         self.fail_if_shape_invalid(input_shapes)
 
         if self.gating_layer_index >= 0:

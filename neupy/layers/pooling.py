@@ -38,7 +38,8 @@ def pooling_output_shape(dimension_size, pool_size, padding, stride):
     -------
     int
     """
-    dimension_size = dimension_size.value
+    if isinstance(dimension_size, tf.Dimension):
+        dimension_size = dimension_size.value
 
     if dimension_size is None:
         return None
@@ -97,13 +98,18 @@ class BasePooling(BaseLayer):
         self.padding = padding
 
     def fail_if_shape_invalid(self, input_shape):
-        if input_shape and len(input_shape) != 3:
+        if len(input_shape) != 3:
             raise LayerConnectionError(
                 "Pooling layer expects an input with 3 "
                 "dimensions, got {} with shape {}"
                 "".format(len(input_shape), input_shape))
 
     def get_output_shape(self, input_shape):
+        input_shape = tf.TensorShape(input_shape)
+
+        if input_shape.ndims is None:
+            return tf.TensorShape((None, None, None))
+
         self.fail_if_shape_invalid(input_shape)
 
         rows, cols, n_kernels = input_shape
@@ -274,6 +280,11 @@ class Upscale(BaseLayer):
                 "3 feature dimensions (channel, height, width)")
 
     def get_output_shape(self, input_shape):
+        input_shape = tf.TensorShape(input_shape)
+
+        if input_shape.ndims is None:
+            return tf.TensorShape((None, None, None))
+
         self.fail_if_shape_invalid(input_shape)
 
         height, width, channel = input_shape

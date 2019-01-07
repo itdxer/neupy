@@ -94,7 +94,8 @@ class Embedding(BaseLayer):
             shape=as_tuple(input_size, output_size))
 
     def get_output_shape(self, input_shape):
-        return tf.TensorShape(as_tuple(input_shape.dims, self.output_size))
+        input_shape = tf.TensorShape(input_shape)
+        return input_shape.concatenate(self.output_size)
 
     def output(self, input_value):
         input_value = tf.cast(input_value, tf.int32)

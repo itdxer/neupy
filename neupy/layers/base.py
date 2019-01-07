@@ -169,6 +169,14 @@ def lazy_property(function):
     return wrapper
 
 
+def shape_to_tuple(shape):
+    if isinstance(shape, tf.TensorShape):
+        if shape.ndims is not None:
+            return tuple([dim.value for dim in shape.dims])
+        return None
+    return shape
+
+
 class BaseGraph(ConfigurableABC):
     events = []
 
@@ -200,9 +208,9 @@ class BaseGraph(ConfigurableABC):
         self.placeholders = []
 
         for layer in self.input_layers:
-            shape = layer.output_shape
+            shape = shape_to_tuple(layer.output_shape)
 
-            if layer.output_shape is not tf.TensorShape(None):
+            if shape is not None:
                 shape = as_tuple(None, shape)
 
             placeholder = tf.placeholder(
@@ -365,14 +373,16 @@ class LayerGraph(BaseGraph):
 
     @property
     def input_shape(self):
-        return make_one_if_possible(self.input_shapes)
+        return make_one_if_possible(
+            [shape_to_tuple(l.input_shape) for l in self.input_layers])
 
     @property
     def output_shape(self):
         outputs = self.propagate_forward(
             self.input_shapes, method='get_output_shape')
 
-        return make_one_if_possible([outputs[l] for l in self.output_layers])
+        return make_one_if_possible([
+            shape_to_tuple(outputs[l]) for l in self.output_layers])
 
     @property
     def output_shapes_per_layer(self):
@@ -650,7 +660,7 @@ class Identity(BaseLayer):
     {BaseLayer.Attributes}
     """
     def get_output_shape(self, input_shape):
-        return input_shape
+        return tf.TensorShape(input_shape)
 
     def output(self, input, **kwargs):
         return input
@@ -669,7 +679,7 @@ class Input(BaseLayer):
         return input
 
     def get_output_shape(self, input_shape):
-        return input_shape or tf.TensorShape(self.input_shape)
+        return tf.TensorShape(input_shape or self.input_shape)
 
     def __repr__(self):
         return '{name}({shape})'.format(

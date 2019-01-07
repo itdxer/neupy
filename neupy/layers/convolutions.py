@@ -86,7 +86,8 @@ def deconv_output_shape(dimension_size, filter_size, padding, stride,
         Dimension size after applying deconvolution
         operation with specified configurations.
     """
-    dimension_size = dimension_size.value
+    if isinstance(dimension_size, tf.Dimension):
+        dimension_size = dimension_size.value
 
     if dimension_size is None:
         return None
@@ -137,7 +138,8 @@ def conv_output_shape(dimension_size, filter_size, padding, stride,
         Dimension size after applying convolution
         operation with specified configurations.
     """
-    dimension_size = dimension_size.value
+    if isinstance(dimension_size, tf.Dimension):
+        dimension_size = dimension_size.value
 
     if dimension_size is None:
         return None
@@ -330,7 +332,7 @@ class Convolution(BaseLayer):
                 shape=as_tuple(n_filters))
 
     def fail_if_shape_invalid(self, input_shape):
-        if len(input_shape) != 3:
+        if input_shape and len(input_shape) != 3:
             raise LayerConnectionError(
                 "Convolutional layer expects an input with 3 "
                 "dimensions, got {} with shape {}"
@@ -340,6 +342,11 @@ class Convolution(BaseLayer):
         return conv_output_shape(*args, **kwargs)
 
     def get_output_shape(self, input_shape):
+        input_shape = tf.TensorShape(input_shape)
+
+        if input_shape.ndims is None:
+            return tf.TensorShape((None, None, None))
+
         self.fail_if_shape_invalid(input_shape)
 
         padding = self.padding

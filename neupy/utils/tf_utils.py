@@ -242,3 +242,7 @@ def dimshuffle(value, ndim, axes):
         if dim not in axes:
             value = tf.expand_dims(value, dim)
     return value
+
+
+def add_batch_dim(shape):
+    return tf.TensorShape([None]).concatenate(shape)
