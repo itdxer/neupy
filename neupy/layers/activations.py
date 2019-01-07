@@ -77,15 +77,15 @@ class Linear(BaseLayer):
     def get_output_shape(self, input_shape):
         if self.size is not None:
             return tf.TensorShape(self.size)
-        return input_shape
+        return tf.TensorShape(input_shape)
 
     def output(self, input, **kwargs):
         input = tf.convert_to_tensor(input, dtype=tf.float32)
+        n_input_features = input.shape[-1]
 
         if self.size is None:
             return self.activation_function(input)
 
-        n_input_features = input.shape[-1]
         self.weight = self.variable(
             name='weight',
             value=self.weight,

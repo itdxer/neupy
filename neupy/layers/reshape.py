@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
-from neupy.utils import as_tuple
+from neupy.utils import as_tuple, tf_utils
 from neupy.exceptions import LayerConnectionError
 from neupy.core.properties import TypedListProperty
 from .base import BaseLayer
@@ -63,6 +63,8 @@ class Reshape(BaseLayer):
             raise ValueError("Only single -1 value can be specified")
 
     def get_output_shape(self, input_shape):
+        input_shape = tf.TensorShape(input_shape)
+
         if -1 not in self.shape:
             return tf.TensorShape(self.shape)
 
@@ -146,10 +148,14 @@ class Transpose(BaseLayer):
                 "Transpose expects input with at least 3 dimensions.")
 
     def get_output_shape(self, input_shape):
+        input_shape = tf.TensorShape(input_shape)
         self.fail_if_shape_invalid(input_shape)
+
         # Input shape doesn't have information about the batch size and perm
         # indeces require to have this dimension on zero's position.
-        input_shape = np.array(as_tuple(None, input_shape.dims))
+        input_shape = tf_utils.add_batch_dim(input_shape)
+        input_shape = np.array(input_shape.dims)
+
         return tf.TensorShape(input_shape[self.perm])
 
     def output(self, input_value):
