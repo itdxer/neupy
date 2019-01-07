@@ -25,7 +25,7 @@ from neupy.layers.utils import (
 from neupy.utils import (
     as_tuple, tensorflow_session,
     initialize_uninitialized_variables,
-    class_method_name_scope,
+    class_method_name_scope, shape_to_tuple,
 )
 
 
@@ -167,14 +167,6 @@ def lazy_property(function):
         return getattr(self, attr)
 
     return wrapper
-
-
-def shape_to_tuple(shape):
-    if isinstance(shape, tf.TensorShape):
-        if shape.ndims is not None:
-            return tuple([dim.value for dim in shape.dims])
-        return None
-    return shape
 
 
 class BaseGraph(ConfigurableABC):
@@ -482,6 +474,14 @@ class LayerGraph(BaseGraph):
 
         return True
 
+    def layer_names_only(self):
+        prepared_graph = OrderedDict()
+
+        for from_layer, to_layers in self.forward_graph.items():
+            prepared_graph[from_layer.name] = [l.name for l in to_layers]
+
+        return list(prepared_graph.items())
+
     def __iter__(self):
         for layer in topological_sort(self.backward_graph):
             yield layer
@@ -605,7 +605,8 @@ class BaseLayer(BaseGraph):
 
     @property
     def output_shape(self):
-        return self.get_output_shape(tf.TensorShape(None))
+        return shape_to_tuple(
+            self.get_output_shape(tf.TensorShape(None)))
 
     def get_output_shape(self, input_shape):
         return tf.TensorShape(None)

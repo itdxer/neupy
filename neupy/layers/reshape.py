@@ -86,7 +86,7 @@ class Reshape(BaseLayer):
         return tf.TensorShape([
             missing_value if val == -1 else val for val in self.shape])
 
-    def output(self, input_value):
+    def output(self, input_value, **kwargs):
         """
         Reshape the feature space for the input value.
 
@@ -158,7 +158,7 @@ class Transpose(BaseLayer):
 
         return tf.TensorShape(input_shape[self.perm])
 
-    def output(self, input_value):
+    def output(self, input_value, **kwargs):
         # Input value has batch dimension, but perm will never have it
         # specified as (zero index), so we need to add it in order to
         # fix batch dimesnion in place.

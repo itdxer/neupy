@@ -372,7 +372,7 @@ class Convolution(BaseLayer):
 
         return tf.TensorShape((output_rows, output_cols, n_kernels))
 
-    def output(self, input_value):
+    def output(self, input_value, **kwargs):
         input_value = tf.convert_to_tensor(input_value, tf.float32)
         input_shape = input_value.shape
         padding = self.padding
@@ -475,7 +475,7 @@ class Deconvolution(Convolution):
     def weight_shape(self):
         return as_tuple(self.size, self.input_shape[-1])
 
-    def output(self, input_value):
+    def output(self, input_value, **kwargs):
         input_value = tf.convert_to_tensor(input_value, tf.float32)
         input_shape = input_value.shape
         padding = self.padding

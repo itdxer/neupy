@@ -97,7 +97,7 @@ class Embedding(BaseLayer):
         input_shape = tf.TensorShape(input_shape)
         return input_shape.concatenate(self.output_size)
 
-    def output(self, input_value):
+    def output(self, input_value, **kwargs):
         input_value = tf.cast(input_value, tf.int32)
         return tf.gather(self.weight, input_value)
 

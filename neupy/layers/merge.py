@@ -66,11 +66,10 @@ class Elementwise(BaseLayer):
 
         return first_shape
 
-    def output(self, *inputs):
+    def output(self, *inputs, **kwargs):
         if not isinstance(inputs, (list, tuple)) or len(inputs) != 1:
             raise LayerConnectionError(
                 "Layer `{}` expected multiple inputs".format(self.name))
-
         return reduce(self.merge_function, inputs)
 
 
@@ -147,7 +146,7 @@ class Concatenate(BaseLayer):
 
         return tf.TensorShape(output_shape)
 
-    def output(self, *inputs):
+    def output(self, *inputs, **kwargs):
         return tf.concat(inputs, axis=self.axis)
 
 
@@ -258,7 +257,7 @@ class GatedAverage(BaseLayer):
         # In case if it negative index, we take layer from the right side
         return input_shapes[self.gating_layer_index + 1]
 
-    def output(self, input_values):
+    def output(self, input_values, **kwargs):
         gating_value = input_values[self.gating_layer_index]
         other_values = exclude_index(input_values, self.gating_layer_index)
 

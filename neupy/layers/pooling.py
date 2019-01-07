@@ -128,7 +128,7 @@ class BasePooling(BaseLayer):
         # and it might break processing in the subsequent layers.
         return tf.TensorShape((output_rows, output_cols, n_kernels))
 
-    def output(self, input_value):
+    def output(self, input_value, **kwargs):
         return tf.nn.pool(
             input_value,
             self.size,
@@ -293,7 +293,8 @@ class Upscale(BaseLayer):
         return tf.TensorShape([
             height_scale * height, width_scale * width, channel])
 
-    def output(self, input_value):
+    def output(self, input_value, **kwargs):
+        self.fail_if_shape_invalid(input_value.shape[1:])
         return tf_repeat(input_value, as_tuple(1, self.scale, 1))
 
 
@@ -352,7 +353,7 @@ class GlobalPooling(BaseLayer):
     def get_output_shape(self, input_shape):
         return tf.TensorShape(input_shape[-1])
 
-    def output(self, input_value):
+    def output(self, input_value, **kwargs):
         ndims = len(input_value.shape)
 
         if ndims in (1, 2):

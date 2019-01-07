@@ -335,7 +335,7 @@ def save_dict(connection):
         },
         # Make it as a list in order to save the right order
         # of paramters, otherwise it can be convert to the dictionary.
-        'graph': connection.graph.layer_names_only(),
+        'graph': connection.layer_names_only(),
         'layers': [],
     }
 

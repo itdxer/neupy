@@ -10,7 +10,7 @@ __all__ = (
     'tensorflow_session', 'tensorflow_eval', 'tf_repeat',
     'initialize_uninitialized_variables', 'flatten', 'outer',
     'dot', 'make_single_vector', 'setup_parameter_updates',
-    'function', 'dimshuffle',
+    'function', 'dimshuffle', 'shape_to_tuple', 'add_batch_dim',
 )
 
 
@@ -246,3 +246,11 @@ def dimshuffle(value, ndim, axes):
 
 def add_batch_dim(shape):
     return tf.TensorShape([None]).concatenate(shape)
+
+
+def shape_to_tuple(shape):
+    if isinstance(shape, tf.TensorShape):
+        if shape.ndims is not None:
+            return tuple([dim.value for dim in shape.dims])
+        return None
+    return shape
