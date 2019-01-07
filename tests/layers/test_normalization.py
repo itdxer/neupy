@@ -34,25 +34,33 @@ class BatchNormTestCase(BaseTestCase):
         )
 
         batch_norm = layers.BatchNorm(gamma=gamma, beta=beta)
-        layers.Input(10) > batch_norm
+        network = layers.join(layers.Input(10), batch_norm)
+        y = network.outputs
 
         self.assertIs(gamma, batch_norm.gamma)
         self.assertIs(beta, batch_norm.beta)
 
     def test_find_pposite_axis_valid_cases(self):
         testcases = (
-            dict(input_kwargs={'axes': [0, 1], 'ndim': 4},
-                 expected_output=[2, 3]),
-            dict(input_kwargs={'axes': [], 'ndim': 4},
-                 expected_output=[0, 1, 2, 3]),
-            dict(input_kwargs={'axes': [0, 1, 2], 'ndim': 3},
-                 expected_output=[]),
+            dict(
+                input_kwargs={'axes': [0, 1], 'ndim': 4},
+                expected_output=[2, 3],
+            ),
+            dict(
+                input_kwargs={'axes': [], 'ndim': 4},
+                expected_output=[0, 1, 2, 3],
+            ),
+            dict(
+                input_kwargs={'axes': [0, 1, 2], 'ndim': 3},
+                expected_output=[],
+            ),
         )
 
         for testcase in testcases:
             actual_output = find_opposite_axes(**testcase['input_kwargs'])
-            self.assertEqual(actual_output, testcase['expected_output'],
-                             msg="Kwargs: ".format(testcase['input_kwargs']))
+            self.assertEqual(
+                actual_output, testcase['expected_output'],
+                msg="Kwargs: ".format(testcase['input_kwargs']))
 
     def test_simple_batch_norm(self):
         connection = layers.Input(10) > layers.BatchNorm()
@@ -62,7 +70,7 @@ class BatchNormTestCase(BaseTestCase):
             name='input_value',
             dtype=tf.float32,
         )
-        output_value = self.eval(connection.output(input_value))
+        output_value = self.eval(connection.output(input_value, training=True))
 
         self.assertTrue(stats.mstats.normaltest(output_value))
         self.assertAlmostEqual(output_value.mean(), 0, places=3)
@@ -81,7 +89,7 @@ class BatchNormTestCase(BaseTestCase):
             name='input_value',
             dtype=tf.float32,
         )
-        output_value = self.eval(connection.output(input_value))
+        output_value = self.eval(connection.output(input_value, training=True))
 
         self.assertAlmostEqual(output_value.mean(), default_beta, places=3)
         self.assertAlmostEqual(output_value.std(), default_gamma, places=3)
@@ -99,18 +107,8 @@ class BatchNormTestCase(BaseTestCase):
             name='input_value',
             dtype=tf.float32,
         )
-        outpu_value = self.eval(connection.output(input_value))
-
+        outpu_value = self.eval(connection.output(input_value, training=True))
         self.assertEqual(outpu_value.shape, (30, 1))
-
-    def test_batch_norm_exceptions(self):
-        with self.assertRaises(ValueError):
-            # Axis does not exist
-            layers.Input(10) > layers.BatchNorm(axes=2)
-
-        with self.assertRaises(ValueError):
-            connection = layers.Relu() > layers.BatchNorm()
-            connection.initialize()
 
     def test_batch_norm_in_non_training_state(self):
         batch_norm = layers.BatchNorm()
@@ -124,15 +122,14 @@ class BatchNormTestCase(BaseTestCase):
 
         self.assertEqual(len(batch_norm.updates), 0)
 
-        batch_norm.output(input_value)
+        batch_norm.output(input_value, training=True)
         self.assertEqual(len(batch_norm.updates), 2)
 
-        with batch_norm.disable_training_state():
-            # Without training your running mean and std suppose to be
-            # equal to 0 and 1 respectavely.
-            output_value = self.eval(batch_norm.output(input_value))
-            np.testing.assert_array_almost_equal(
-                self.eval(input_value), output_value, decimal=4)
+        # Without training your running mean and std suppose to be
+        # equal to 0 and 1 respectavely.
+        output_value = self.eval(batch_norm.output(input_value))
+        np.testing.assert_array_almost_equal(
+            self.eval(input_value), output_value, decimal=4)
 
     def test_batch_norm_storage(self):
         x_train, x_test, y_train, y_test = simple_classification()
@@ -183,7 +180,7 @@ class LocalResponseNormTestCase(BaseTestCase):
         conn = input_layer > layers.LocalResponseNorm()
 
         x_tensor = asfloat(np.ones((1, 1, 1, 1)))
-        actual_output = self.eval(conn.output(x_tensor))
+        actual_output = self.eval(conn.output(x_tensor, training=True))
         expected_output = np.array([0.59458]).reshape((-1, 1, 1, 1))
 
         np.testing.assert_array_almost_equal(

@@ -46,8 +46,9 @@ class Spatial2DProperty(TypedListProperty):
         super(Spatial2DProperty, self).validate(value)
 
         if len(value) > 2:
-            raise ValueError("Stide can have only one or two elements "
-                             "in the list. Got {}".format(len(value)))
+            raise ValueError(
+                "Stide can have only one or two elements "
+                "in the list. Got {}".format(len(value)))
 
         if any(element <= 0 for element in value):
             raise ValueError(
@@ -85,6 +86,8 @@ def deconv_output_shape(dimension_size, filter_size, padding, stride,
         Dimension size after applying deconvolution
         operation with specified configurations.
     """
+    dimension_size = dimension_size.value
+
     if dimension_size is None:
         return None
 
@@ -134,6 +137,8 @@ def conv_output_shape(dimension_size, filter_size, padding, stride,
         Dimension size after applying convolution
         operation with specified configurations.
     """
+    dimension_size = dimension_size.value
+
     if dimension_size is None:
         return None
 
@@ -161,8 +166,8 @@ def conv_output_shape(dimension_size, filter_size, padding, stride,
         return int(math.ceil(
             (dimension_size + 2 * padding - filter_size + 1) / stride))
 
-    raise ValueError("`{!r}` is unknown convolution's padding value"
-                     "".format(padding))
+    raise ValueError(
+        "`{!r}` is unknown convolution's padding value".format(padding))
 
 
 class PaddingProperty(Property):
@@ -181,8 +186,7 @@ class PaddingProperty(Property):
             if value < 0:
                 raise ValueError(
                     "Integer border mode value needs to be "
-                    "greater or equal to zero, got {}".format(value)
-                )
+                    "greater or equal to zero, got {}".format(value))
 
             value = (value, value)
 
@@ -198,8 +202,7 @@ class PaddingProperty(Property):
             raise ValueError(
                 "Border mode property suppose to get a tuple that "
                 "contains two elements, got {} elements"
-                "".format(len(value))
-            )
+                "".format(len(value)))
 
         is_invalid_string = (
             isinstance(value, six.string_types) and
@@ -208,13 +211,14 @@ class PaddingProperty(Property):
 
         if is_invalid_string:
             valid_choices = ', '.join(self.valid_string_choices)
-            raise ValueError("`{}` is invalid string value. Available: {}"
-                             "".format(value, valid_choices))
+            raise ValueError(
+                "`{}` is invalid string value. Available choices: {}"
+                "".format(value, valid_choices))
 
         if isinstance(value, tuple) and any(element < 0 for element in value):
-            raise ValueError("Tuple border mode value needs to contain "
-                             "only elements that greater or equal to zero, "
-                             "got {}".format(value))
+            raise ValueError(
+                "Tuple border mode value needs to contain only elements "
+                "that greater or equal to zero, got {}".format(value))
 
 
 class Convolution(BaseLayer):
@@ -310,6 +314,8 @@ class Convolution(BaseLayer):
     def __init__(self, size, padding='valid', stride=1, dilation=1,
                  weight=init.HeNormal(gain=2), bias=0, name=None):
 
+        super(Convolution, self).__init__(name=name)
+
         self.size = size
         self.padding = padding
         self.stride = stride
@@ -317,7 +323,11 @@ class Convolution(BaseLayer):
         self.weight = weight
         self.bias = bias
 
-        super(Convolution, self).__init__(name=name)
+        if bias is not None:
+            _, _, n_filters = size
+            self.bias = self.variable(
+                value=self.bias, name='bias',
+                shape=as_tuple(n_filters))
 
     def fail_if_shape_invalid(self, input_shape):
         if len(input_shape) != 3:
@@ -353,7 +363,7 @@ class Convolution(BaseLayer):
             col_padding, col_stride, col_dilation,
         )
 
-        return (output_rows, output_cols, n_kernels)
+        return tf.TensorShape((output_rows, output_cols, n_kernels))
 
     def output(self, input_value):
         input_value = tf.convert_to_tensor(input_value, tf.float32)
@@ -386,14 +396,10 @@ class Convolution(BaseLayer):
             padding=padding,
             strides=self.stride,
             dilation_rate=self.dilation,
-            data_format="NHWC"
+            data_format="NHWC",
         )
 
         if self.bias is not None:
-            self.bias = self.variable(
-                value=self.bias, name='bias',
-                shape=as_tuple(n_filters))
-
             bias = tf.reshape(self.bias, (1, 1, 1, -1))
             output += bias
 
@@ -521,10 +527,6 @@ class Deconvolution(Convolution):
                 output = output[:, :, w_pad:-w_pad, :]
 
         if self.bias is not None:
-            self.bias = self.variable(
-                value=self.bias, name='bias',
-                shape=as_tuple(n_filters))
-
             bias = tf.reshape(self.bias, (1, 1, 1, -1))
             output += bias
 

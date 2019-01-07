@@ -9,6 +9,21 @@ from helpers import simple_classification
 
 
 class GradientDescentTestCase(BaseTestCase):
+    def test_network_initializations(self):
+        possible_connections = (
+            # as a list
+            [layers.Input(2), layers.Sigmoid(3), layers.Tanh(1)],
+
+            # as forward sequence with inline operators
+            layers.Input(2) > layers.Relu(10) > layers.Tanh(1),
+            layers.Input(2) >> layers.Relu(10) >> layers.Tanh(1),
+        )
+
+        for i, connection in enumerate(possible_connections, start=1):
+            network = algorithms.GradientDescent(connection)
+            message = "[Test #{}] Connection: {}".format(i, connection)
+            self.assertEqual(len(network.layers), 3, msg=message)
+
     def test_gd(self):
         x_train, _, y_train, _ = simple_classification()
 

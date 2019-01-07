@@ -102,7 +102,7 @@ def extract_connection(instance):
     """
     # Note: Import it here in order to prevent loops
     from neupy.algorithms.base import BaseNetwork
-    from neupy.layers.base import BaseConnection
+    from neupy.layers.base import BaseGraph
     from neupy import layers
 
     if isinstance(instance, (list, tuple)):
@@ -111,7 +111,7 @@ def extract_connection(instance):
     if isinstance(instance, BaseNetwork):
         return instance.connection
 
-    if isinstance(instance, BaseConnection):
+    if isinstance(instance, BaseGraph):
         return instance
 
     raise TypeError("Invalid input type. Input should be network, connection "

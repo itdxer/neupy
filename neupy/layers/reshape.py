@@ -20,7 +20,7 @@ class Reshape(BaseLayer):
         New feature shape. The ``-1`` value means that this value
         will be computed from the total size that remains. If you need
         to get the output feature with more that 2 dimensions then you can
-        set up new feature shape using tuples or list. Defaults to ``[-1]``.
+        set up new feature shape using tuples or list. Defaults to ``-1``.
 
     {BaseLayer.name}
 
@@ -38,7 +38,7 @@ class Reshape(BaseLayer):
     Covert 4D input to 2D
 
     >>> from neupy.layers import *
-    >>> conn = Input((2, 5, 5)) > Reshape()
+    >>> conn = Input((2, 5, 5)) >> Reshape()
     >>> conn.input_shape
     (2, 5, 5)
     >>> conn.output_shape
@@ -47,7 +47,7 @@ class Reshape(BaseLayer):
     Convert 3D to 4D
 
     >>> from neupy.layers import *
-    >>> conn = Input((5, 4)) > Reshape((5, 2, 2))
+    >>> conn = Input((5, 4)) >> Reshape((5, 2, 2))
     >>> conn.input_shape
     (5, 4)
     >>> conn.output_shape
@@ -56,36 +56,32 @@ class Reshape(BaseLayer):
     shape = TypedListProperty()
 
     def __init__(self, shape=-1, name=None):
-        if shape.count(-1) >= 2:
+        super(Reshape, self).__init__(name=name)
+        self.shape = as_tuple(shape)
+
+        if self.shape.count(-1) >= 2:
             raise ValueError("Only single -1 value can be specified")
 
-        self.shape = as_tuple(shape)
-        super(Reshape, self).__init__(name=name)
-
-    @property
-    def output_shape(self):
+    def get_output_shape(self, input_shape):
         if -1 not in self.shape:
-            return as_tuple(self.shape)
+            return tf.TensorShape(self.shape)
 
-        if not self.input_shape:
-            return
-
-        if None not in self.input_shape:
+        if input_shape.is_fully_defined():
             known_shape_values = [val for val in self.shape if val != -1]
 
-            flatten_shape = np.prod(self.input_shape)
+            flatten_shape = np.prod(input_shape)
             expected_shape_parts = np.prod(known_shape_values)
 
             if flatten_shape % expected_shape_parts != 0:
                 raise ValueError(
                     "Cannot derive values for shape {} from the input "
-                    "shape {}".format(self.shape, self.input_shape))
+                    "shape {}".format(self.shape, input_shape))
 
             missing_value = int(flatten_shape // expected_shape_parts)
         else:
             missing_value = None
 
-        return as_tuple([
+        return tf.TensorShape([
             missing_value if val == -1 else val for val in self.shape])
 
     def output(self, input_value):
@@ -126,7 +122,7 @@ class Transpose(BaseLayer):
     Examples
     --------
     >>> from neupy.layers import *
-    >>> conn = Input((7, 11)) > Transpose((2, 1))
+    >>> conn = Input((7, 11)) >> Transpose((2, 1))
     >>> conn.input_shape
     (7, 11)
     >>> conn.output_shape
@@ -135,25 +131,26 @@ class Transpose(BaseLayer):
     perm = TypedListProperty()
 
     def __init__(self, perm, name=None):
+        super(Transpose, self).__init__(name=name)
+
         if 0 in perm:
             raise ValueError(
                 "Batch dimension has fixed position and 0 "
                 "index cannot be used.")
 
         self.perm = perm
-        super(Transpose, self).__init__(name=name)
 
-    def validate(self, input_shape):
+    def fail_if_shape_invalid(self, input_shape):
         if len(input_shape) < 2:
             raise LayerConnectionError(
                 "Transpose expects input with at least 3 dimensions.")
 
-    @property
-    def output_shape(self):
+    def get_output_shape(self, input_shape):
+        self.fail_if_shape_invalid(input_shape)
         # Input shape doesn't have information about the batch size and perm
         # indeces require to have this dimension on zero's position.
-        input_shape = np.array(as_tuple(None, self.input_shape))
-        return as_tuple(input_shape[self.perm].tolist())
+        input_shape = np.array(as_tuple(None, input_shape.dims))
+        return tf.TensorShape(input_shape[self.perm])
 
     def output(self, input_value):
         # Input value has batch dimension, but perm will never have it

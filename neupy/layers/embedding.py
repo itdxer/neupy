@@ -85,16 +85,16 @@ class Embedding(BaseLayer):
     def __init__(self, input_size, output_size,
                  weight=init.HeNormal(), name=None):
 
+        super(Embedding, self).__init__(name=name)
+
         self.input_size = input_size
         self.output_size = output_size
         self.weight = self.variable(
-            value=self.weight, name='weight',
-            shape=as_tuple(self.input_size, self.output_size)
-        )
-        super(Embedding, self).__init__(name=name)
+            value=weight, name='weight',
+            shape=as_tuple(input_size, output_size))
 
     def get_output_shape(self, input_shape):
-        return as_tuple(input_shape, self.output_size)
+        return tf.TensorShape(as_tuple(input_shape.dims, self.output_size))
 
     def output(self, input_value):
         input_value = tf.cast(input_value, tf.int32)
