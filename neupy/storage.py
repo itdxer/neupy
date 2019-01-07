@@ -330,8 +330,6 @@ def save_dict(connection):
             'library': 'neupy',
             'version': neupy.__version__,
             'created': strftime("%a, %d %b %Y %H:%M:%S %Z", gmtime()),
-            # TODO: Remove in case if we won't need this field
-            # 'theano_float': theano.config.floatX,
         },
         # Make it as a list in order to save the right order
         # of paramters, otherwise it can be convert to the dictionary.
