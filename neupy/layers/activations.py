@@ -3,6 +3,7 @@ import tensorflow as tf
 
 from neupy import init
 from neupy.utils import asfloat, as_tuple, tf_utils
+from neupy.exceptions import LayerConnectionError
 from neupy.core.properties import (
     NumberProperty, TypedListProperty,
     ParameterProperty, IntProperty,
@@ -70,14 +71,22 @@ class Linear(BaseLayer):
 
         if size is not None and bias is not None:
             self.bias = self.variable(
-                name='bias',
-                value=self.bias,
+                value=self.bias, name='bias',
                 shape=as_tuple(self.size))
 
     def get_output_shape(self, input_shape):
-        if self.size is not None:
-            return tf.TensorShape(self.size)
-        return tf.TensorShape(input_shape)
+        input_shape = tf.TensorShape(input_shape)
+
+        if self.size is None:
+            return input_shape
+
+        if input_shape and input_shape.ndims != 2:
+            raise LayerConnectionError(
+                "Input shape expected to have 2 dimensions, got {} instead. "
+                "Shape: {}".format(input_shape.ndims, input_shape))
+
+        n_samples = input_shape[0]
+        return tf.TensorShape((n_samples, self.size))
 
     def output(self, input, **kwargs):
         input = tf.convert_to_tensor(input, dtype=tf.float32)
@@ -87,8 +96,7 @@ class Linear(BaseLayer):
             return self.activation_function(input)
 
         self.weight = self.variable(
-            name='weight',
-            value=self.weight,
+            value=self.weight, name='weight',
             shape=as_tuple(n_input_features, self.size))
 
         if self.bias is None:

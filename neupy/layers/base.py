@@ -26,6 +26,7 @@ from neupy.utils import (
     as_tuple, tensorflow_session,
     initialize_uninitialized_variables,
     class_method_name_scope, shape_to_tuple,
+    tf_utils,
 )
 
 
@@ -141,6 +142,9 @@ def topological_sort(graph):
     sorted_nodes = []
     graph_unsorted = graph.copy()
 
+    if not graph_unsorted:
+        return sorted_nodes
+
     while graph_unsorted:
         acyclic = False
 
@@ -200,14 +204,9 @@ class BaseGraph(ConfigurableABC):
         self.placeholders = []
 
         for layer in self.input_layers:
-            shape = shape_to_tuple(layer.output_shape)
-
-            if shape is not None:
-                shape = as_tuple(None, shape)
-
             placeholder = tf.placeholder(
                 tf.float32,
-                shape=shape,
+                shape=shape_to_tuple(layer.output_shape),
                 name="placeholder/{}".format(layer.name),
             )
             self.placeholders.append(placeholder)
@@ -287,6 +286,12 @@ class BaseGraph(ConfigurableABC):
 
 
 class LayerGraph(BaseGraph):
+    def __init__(self, forward_graph=None):
+        super(LayerGraph, self).__init__(forward_graph)
+        # This allows to runs simple check that ensures that
+        # created graph have defined layer shape
+        self.output_shape
+
     def reverse(self):
         return self.__class__(self.backward_graph)
 
@@ -359,31 +364,31 @@ class LayerGraph(BaseGraph):
 
         return layers[0]
 
-    @property
+    @lazy_property
     def input_shapes(self):
-        return [l.input_shape for l in self.input_layers]
+        return [tf.TensorShape(l.input_shape) for l in self.input_layers]
 
-    @property
+    @lazy_property
     def input_shape(self):
-        return make_one_if_possible(
-            [shape_to_tuple(l.input_shape) for l in self.input_layers])
+        return make_one_if_possible(self.input_shapes)
 
-    @property
+    @lazy_property
     def output_shape(self):
-        outputs = self.propagate_forward(
-            self.input_shapes, method='get_output_shape')
+        return self.get_output_shape(*self.input_shapes)
 
-        return make_one_if_possible([
-            shape_to_tuple(outputs[l]) for l in self.output_layers])
-
-    @property
+    @lazy_property
     def output_shapes_per_layer(self):
         return self.propagate_forward(
-            self.input_shapes, method='get_output_shape')
+            copy.deepcopy(self.input_shapes),
+            method='get_output_shape')
 
     def get_output_shape(self, *inputs):
-        outputs = self.propagate_forward(inputs, method='get_output_shape')
-        return make_one_if_possible([outputs[l] for l in self.output_layers])
+        outputs = self.propagate_forward(
+            copy.deepcopy(inputs),
+            method='get_output_shape',
+        )
+        return make_one_if_possible(
+            [outputs[l] for l in self.output_layers])
 
     def output(self, *inputs, **kwargs):
         outputs = self.propagate_forward(inputs, method='output', **kwargs)
@@ -487,10 +492,17 @@ class LayerGraph(BaseGraph):
             yield layer
 
     def __repr__(self):
+        def format_shapes(shape):
+            if isinstance(shape, tf.TensorShape):
+                return str(shape)
+
+            shapes = ', '.join([format_shapes(s) for s in shape])
+            return '[' + shapes + ']'
+
         return '{} -> [... {} layers ...] -> {}'.format(
-            make_one_if_possible(self.input_shape) or '?',
+            format_shapes(self.input_shape),
             len(self),
-            make_one_if_possible(self.output_shape) or '?')
+            format_shapes(self.output_shape))
 
 
 def merge(left_graph, right_graph, combine=False):
@@ -596,7 +608,6 @@ class BaseLayer(BaseGraph):
 
         self.updates = []
         self.name = name
-        self.input_shape = tf.TensorShape(None)
 
         # This decorator ensures that result produced by the
         # `output` method will be marked under layer's name scope.
@@ -604,9 +615,12 @@ class BaseLayer(BaseGraph):
             class_method_name_scope(self.output), self)
 
     @property
+    def input_shape(self):
+        return tf.TensorShape(None)
+
+    @property
     def output_shape(self):
-        return shape_to_tuple(
-            self.get_output_shape(tf.TensorShape(None)))
+        return self.get_output_shape(tf.TensorShape(None))
 
     def get_output_shape(self, input_shape):
         return tf.TensorShape(None)
@@ -672,15 +686,17 @@ class Input(BaseLayer):
 
     def __init__(self, shape, name=None):
         super(Input, self).__init__(name=name)
-
         self.shape = as_tuple(shape)
-        self.input_shape = tf.TensorShape(self.shape)
+
+    @property
+    def input_shape(self):
+        return tf_utils.add_batch_dim(self.shape)
 
     def output(self, input, **kwargs):
         return input
 
     def get_output_shape(self, input_shape):
-        return tf.TensorShape(input_shape or self.input_shape)
+        return tf.TensorShape(self.input_shape)
 
     def __repr__(self):
         return '{name}({shape})'.format(

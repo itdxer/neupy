@@ -6,7 +6,7 @@ import numpy as np
 import tensorflow as tf
 
 from neupy import layers
-from neupy.utils import asfloat, as_tuple
+from neupy.utils import asfloat, as_tuple, shape_to_tuple
 from neupy.layers.convolutions import conv_output_shape, deconv_output_shape
 from neupy.exceptions import LayerConnectionError
 
@@ -35,17 +35,15 @@ class ConvLayersTestCase(BaseTestCase):
         x = asfloat(np.random.random((20, 12, 11, 2)))
 
         for stride, padding in product(strides, paddings):
-            inp = layers.Input((12, 11, 2))
-            conv = layers.Convolution(
-                (3, 4, 5), padding=padding, stride=stride)
-
-            network = inp >> conv
+            network = layers.join(
+                layers.Input((12, 11, 2)),
+                layers.Convolution((3, 4, 5), padding=padding, stride=stride),
+            )
             y = self.eval(network.output(x))
-            actual_output_shape = as_tuple(y.shape[1:])
 
-            self.assertEqual(
-                actual_output_shape,
-                network.output_shape,
+            self.assertShapesEqual(
+                y.shape[1:],
+                network.output_shape[1:],
                 msg='padding={} and stride={}'.format(padding, stride),
             )
 
@@ -145,19 +143,17 @@ class ConvLayersTestCase(BaseTestCase):
             layers.Convolution((1, 3, 3), padding=(3, 3, 3))
 
     def test_conv_invalid_input_shape(self):
-        inp = layers.Input(10)
-        conv = layers.Convolution((1, 3, 3))
-        network = inp >> conv
-
         with self.assertRaises(LayerConnectionError):
-            network.outputs
+            layers.join(
+                layers.Input(10),
+                layers.Convolution((1, 3, 3)),
+            )
 
     def test_conv_with_custom_int_padding(self):
-        inp = layers.Input((5, 5, 1))
-        conv = layers.Convolution((3, 3, 1), bias=0, weight=1, padding=2)
-
-        network = (inp >> conv)
-        network.outputs
+        network = layers.join(
+            layers.Input((5, 5, 1)),
+            layers.Convolution((3, 3, 1), bias=0, weight=1, padding=2),
+        )
 
         x = asfloat(np.ones((1, 5, 5, 1)))
         expected_output = np.array([
@@ -189,7 +185,7 @@ class ConvLayersTestCase(BaseTestCase):
         actual_output = self.eval(network.output(x))
 
         np.testing.assert_array_almost_equal(expected_output, actual_output)
-        self.assertEqual(network.output_shape, (3, 7, 1))
+        self.assertShapesEqual(network.output_shape, (None, 3, 7, 1))
 
     def test_conv_without_bias(self):
         inp = layers.Input((5, 5, 1))
@@ -209,7 +205,7 @@ class ConvLayersTestCase(BaseTestCase):
             layers.Input((None, None, 3)),
             layers.Convolution((3, 3, 5)),
         )
-        self.assertEqual(network.output_shape, (None, None, 5))
+        self.assertShapesEqual(network.output_shape, (None, None, None, 5))
 
         input_value = asfloat(np.ones((1, 12, 12, 3)))
         actual_output = self.eval(network.output(input_value))
@@ -228,8 +224,10 @@ class ConvLayersTestCase(BaseTestCase):
         input_value = asfloat(np.arange(36).reshape(1, 6, 6, 1))
         actual_output = self.eval(network.output(input_value))
 
-        self.assertEqual(actual_output.shape, (1, 2, 2, 1))
-        self.assertEqual(actual_output.shape[1:], network.output_shape)
+        self.assertShapesEqual(actual_output.shape, (1, 2, 2, 1))
+        self.assertShapesEqual(
+            actual_output.shape[1:],
+            network.output_shape[1:])
 
         actual_output = actual_output[0, :, :, 0]
         expected_output = np.array([
@@ -248,11 +246,12 @@ class DeconvolutionTestCase(BaseTestCase):
         )
 
         shapes = network.output_shapes_per_layer
+        shapes = {l: shape_to_tuple(s) for l, s in shapes.items()}
         self.assertDictEqual(
             shapes, {
-                network.layers[0]: (10, 10, 3),
-                network.layers[1]: (8, 8, 7),
-                network.layers[2]: (10, 10, 4),
+                network.layers[0]: (None, 10, 10, 3),
+                network.layers[1]: (None, 8, 8, 7),
+                network.layers[2]: (None, 10, 10, 4),
             }
         )
 
@@ -269,11 +268,13 @@ class DeconvolutionTestCase(BaseTestCase):
         )
 
         shapes = network.output_shapes_per_layer
+        shapes = {l: shape_to_tuple(s) for l, s in shapes.items()}
+
         self.assertDictEqual(
             shapes, {
-                network.layers[0]: (10, 10, 3),
-                network.layers[1]: (10, 10, 7),
-                network.layers[2]: (10, 10, 4),
+                network.layers[0]: (None, 10, 10, 3),
+                network.layers[1]: (None, 10, 10, 7),
+                network.layers[2]: (None, 10, 10, 4),
             }
         )
 
@@ -290,11 +291,12 @@ class DeconvolutionTestCase(BaseTestCase):
         )
 
         shapes = network.output_shapes_per_layer
+        shapes = {l: shape_to_tuple(s) for l, s in shapes.items()}
         self.assertDictEqual(
             shapes, {
-                network.layers[0]: (10, 10, 3),
-                network.layers[1]: (26, 26, 7),
-                network.layers[2]: (10, 10, 4),
+                network.layers[0]: (None, 10, 10, 3),
+                network.layers[1]: (None, 26, 26, 7),
+                network.layers[2]: (None, 10, 10, 4),
             }
         )
 
@@ -311,11 +313,12 @@ class DeconvolutionTestCase(BaseTestCase):
         )
 
         shapes = network.output_shapes_per_layer
+        shapes = {l: shape_to_tuple(s) for l, s in shapes.items()}
         self.assertSequenceEqual(
             shapes, {
-                network.layers[0]: (10, 10, 3),
-                network.layers[1]: (26, 14, 7),
-                network.layers[2]: (10, 10, 4),
+                network.layers[0]: (None, 10, 10, 3),
+                network.layers[1]: (None, 26, 14, 7),
+                network.layers[2]: (None, 10, 10, 4),
             }
         )
 
@@ -332,11 +335,12 @@ class DeconvolutionTestCase(BaseTestCase):
         )
 
         shapes = network.output_shapes_per_layer
+        shapes = {l: shape_to_tuple(s) for l, s in shapes.items()}
         self.assertDictEqual(
             shapes, {
-                network.layers[0]: (None, None, 3),
-                network.layers[1]: (None, None, 7),
-                network.layers[2]: (None, None, 4),
+                network.layers[0]: (None, None, None, 3),
+                network.layers[1]: (None, None, None, 7),
+                network.layers[2]: (None, None, None, 4),
             }
         )
 
@@ -410,4 +414,4 @@ class DeconvolutionTestCase(BaseTestCase):
 
             input_value = asfloat(np.random.random((1, height, width, 1)))
             actual_output = self.eval(network.output(input_value))
-            self.assertEqual(actual_output.shape[1:], network.output_shape)
+            self.assertEqual(actual_output.shape[1:], network.output_shape[1:])

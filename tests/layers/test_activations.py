@@ -37,17 +37,16 @@ class ActivationLayerMainTestCase(BaseTestCase):
         self.assertEqual("Sigmoid(13)", str(layer2))
 
     def test_failed_propagation_for_multiple_inputs(self):
-        in1 = layers.Input(1)
-        in2 = layers.Input(2)
-        out = layers.Relu(3, name='relu')
-        network = (in1 | in2) >> out
-
+        inputs = layers.parallel(
+            layers.Input(1),
+            layers.Input(2),
+        )
         expected_message = (
             "2 positional arguments but 3 were given.*"
-            "in the layer `relu`")
-
+            "in the layer `relu`"
+        )
         with self.assertRaisesRegexp(TypeError, expected_message):
-            network.outputs
+            layers.join(inputs, layers.Relu(3, name='relu'))
 
 
 class ActivationLayersTestCase(BaseTestCase):

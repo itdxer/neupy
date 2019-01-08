@@ -17,8 +17,8 @@ class SubnetworksTestCase(BaseTestCase):
 
         self.assertEqual(len(network), 6)
         self.assertTrue(network.is_sequential())
-        self.assertEqual(network.input_shape, (2,))
-        self.assertEqual(network.output_shape, (1,))
+        self.assertShapesEqual(network.input_shape, (None, 2))
+        self.assertShapesEqual(network.output_shape, (None, 1))
 
     def test_subnetwork_in_conv_network(self):
         network = layers.join(
@@ -34,8 +34,8 @@ class SubnetworksTestCase(BaseTestCase):
 
         self.assertEqual(8, len(network))
         self.assertTrue(network.is_sequential())
-        self.assertEqual(network.input_shape, (28, 28, 1))
-        self.assertEqual(network.output_shape, (1,))
+        self.assertShapesEqual(network.input_shape, (None, 28, 28, 1))
+        self.assertShapesEqual(network.output_shape, (None, 1))
 
         expected_order = [
             layers.Input,
