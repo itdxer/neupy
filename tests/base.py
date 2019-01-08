@@ -8,7 +8,7 @@ import numpy as np
 import tensorflow as tf
 
 from neupy import utils, layers, init
-from neupy.utils import tensorflow_eval, tensorflow_session
+from neupy.utils import tensorflow_eval, tensorflow_session, shape_to_tuple
 from neupy.layers.base import generate_layer_name
 
 from helpers import vectors_for_testing
@@ -119,3 +119,8 @@ class BaseTestCase(unittest.TestCase):
 
         network.train(x_train, y_train, epochs=epochs)
         self.assertLess(network.training_errors[-1], min_accepted_error)
+
+    def assertShapesEqual(self, shape1, shape2, *args, **kwargs):
+        shape1 = shape_to_tuple(shape1)
+        shape2 = shape_to_tuple(shape2)
+        self.assertEqual(shape1, shape2, *args, **kwargs)

@@ -37,14 +37,14 @@ class OldInlineDefinitionsTestCase(BaseTestCase):
         connection_2 = relu_2 > layers.Relu(4)
         connection_3 = layers.Input(1) > relu_2
 
-        self.assertEqual(connection_1.input_shape, (1,))
-        self.assertEqual(connection_1.output_shape, (3,))
+        self.assertShapesEqual(connection_1.input_shape, (None, 1))
+        self.assertShapesEqual(connection_1.output_shape, (None, 3))
 
-        self.assertEqual(connection_2.input_shape, None)
-        self.assertEqual(connection_2.output_shape, (4,))
+        self.assertShapesEqual(connection_2.input_shape, None)
+        self.assertShapesEqual(connection_2.output_shape, (None, 4))
 
-        self.assertEqual(connection_3.input_shape, (1,))
-        self.assertEqual(connection_3.output_shape, (2,))
+        self.assertShapesEqual(connection_3.input_shape, (None, 1))
+        self.assertShapesEqual(connection_3.output_shape, (None, 2))
 
         self.assertIn(relu_2, connection_2.input_layers)
         self.assertIn(relu_2, connection_3.output_layers)
@@ -67,18 +67,18 @@ class OldInlineDefinitionsTestCase(BaseTestCase):
         network_concat = input_layer > (left_branch | right_branch) > concat
         network = network_concat > layers.Reshape() > layers.Softmax()
 
-        self.assertEqual(network_concat.input_shape, (10, 10, 3))
-        self.assertEqual(network_concat.output_shape, (4, 4, 48))
+        self.assertShapesEqual(network_concat.input_shape, (None, 10, 10, 3))
+        self.assertShapesEqual(network_concat.output_shape, (None, 4, 4, 48))
 
-        self.assertEqual(network.input_shape, (10, 10, 3))
-        self.assertEqual(network.output_shape, (768,))
+        self.assertShapesEqual(network.input_shape, (None, 10, 10, 3))
+        self.assertShapesEqual(network.output_shape, (None, 768))
 
 
 class InlineDefinitionsTestCase(BaseTestCase):
     def test_inline_definition(self):
         connection = layers.Input(2) >> layers.Relu(10) >> layers.Tanh(1)
-        self.assertEqual(connection.input_shape, (2,))
-        self.assertEqual(connection.output_shape, (1,))
+        self.assertShapesEqual(connection.input_shape, (None, 2))
+        self.assertShapesEqual(connection.output_shape, (None, 1))
 
         input_value = asfloat(np.random.random((10, 2)))
         output_value = self.eval(connection.output(input_value))
@@ -89,13 +89,13 @@ class InlineDefinitionsTestCase(BaseTestCase):
         in2 = layers.Input(20)
         conn = (in1 | in2) >> layers.Concatenate()
 
-        self.assertEqual(conn.input_shape, [(10,), (20,)])
-        self.assertEqual(conn.output_shape, (30,))
+        self.assertShapesEqual(conn.input_shape, [(None, 10), (None, 20)])
+        self.assertShapesEqual(conn.output_shape, (None, 30))
 
     def test_connection_shape_multiple_outputs(self):
         conn = layers.Input(10) >> (layers.Sigmoid(1) | layers.Sigmoid(2))
-        self.assertEqual(conn.input_shape, (10,))
-        self.assertEqual(conn.output_shape, [(1,), (2,)])
+        self.assertShapesEqual(conn.input_shape, (None, 10))
+        self.assertShapesEqual(conn.output_shape, [(None, 1), (None, 2)])
 
     def test_inline_operation_order(self):
         in1 = layers.Input(10)
@@ -103,8 +103,8 @@ class InlineDefinitionsTestCase(BaseTestCase):
         out2 = layers.Sigmoid(2)
         conn = in1 >> out1 | out2
 
-        self.assertEqual(conn.input_shape, [(10,), None])
-        self.assertEqual(conn.output_shape, [(1,), (2,)])
+        self.assertShapesEqual(conn.input_shape, [(None, 10), None])
+        self.assertShapesEqual(conn.output_shape, [(None, 1), (None, 2)])
 
     def test_sequential_partial_definitions(self):
         # Tree structure:
@@ -136,8 +136,8 @@ class InlineDefinitionsTestCase(BaseTestCase):
         network >>= layers.Relu(3)
 
         self.assertEqual(len(network), 3)
-        self.assertEqual(network.input_shape, (1,))
-        self.assertEqual(network.output_shape, (3,))
+        self.assertShapesEqual(network.input_shape, (None, 1))
+        self.assertShapesEqual(network.output_shape, (None, 3))
 
 
 class DefinitionsTestCase(BaseTestCase):
@@ -182,13 +182,13 @@ class DefinitionsTestCase(BaseTestCase):
             ]),
             layers.Concatenate(),
         )
-        self.assertEqual(network.input_shape, [None, None, None, None])
-        self.assertEqual(network.output_shape, (None, None, None))
+        self.assertShapesEqual(network.input_shape, [None, None, None, None])
+        self.assertShapesEqual(network.output_shape, (None, None, None, None))
 
         # Connect them at the end, because we need to make
         # sure tha parallel networks defined without input shapes
         network = layers.join(input_layer, network)
-        self.assertEqual((5, 5, 24), network.output_shape)
+        self.assertShapesEqual(network.output_shape, (None, 5, 5, 24))
 
     def test_residual_connections(self):
         network = layers.join(
@@ -202,5 +202,6 @@ class DefinitionsTestCase(BaseTestCase):
             ),
             layers.Concatenate(),
         )
-        self.assertEqual((5, 5, 3), network.input_shape)
-        self.assertEqual((5, 5, 11), network.output_shape)
+
+        self.assertShapesEqual((None, 5, 5, 3), network.input_shape)
+        self.assertShapesEqual((None, 5, 5, 11), network.output_shape)

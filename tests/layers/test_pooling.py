@@ -45,21 +45,23 @@ class PoolingLayersTestCase(BaseTestCase):
 
     def test_pooling_undefined_output_shape(self):
         max_pool_layer = layers.MaxPooling((2, 2))
-        self.assertEqual(max_pool_layer.output_shape, (None, None, None))
+        self.assertShapesEqual(
+            max_pool_layer.output_shape,
+            (None, None, None, None))
 
     def test_pooling_output_shape(self):
         network = layers.join(
             layers.Input((10, 10, 3)),
             layers.MaxPooling((2, 2)),
         )
-        self.assertEqual(network.output_shape, (5, 5, 3))
+        self.assertShapesEqual(network.output_shape, (None, 5, 5, 3))
 
     def test_pooling_stride_int(self):
         network = layers.join(
             layers.Input((28, 28, 1)),
             layers.MaxPooling((2, 2), stride=1, padding='same'),
         )
-        self.assertEqual(
+        self.assertShapesEqual(
             network.input_shape,
             network.output_shape)
 
@@ -115,11 +117,10 @@ class PoolingLayersTestCase(BaseTestCase):
 
 class UpscaleLayersTestCase(BaseTestCase):
     def test_upscale_layer_exceptions(self):
-        network = layers.join(layers.Input(10), layers.Upscale((2, 2)))
         with self.assertRaises(LayerConnectionError):
             # Input shape should have 3 feature dimensions
             # (and +1 for the batch)
-            network.outputs
+            layers.join(layers.Input(10), layers.Upscale((2, 2)))
 
         invalid_scales = [-1, (2, 0), (-4, 1), (3, 3, 3)]
         for invalid_scale in invalid_scales:
@@ -129,11 +130,11 @@ class UpscaleLayersTestCase(BaseTestCase):
     def test_upscale_layer_shape(self):
         Case = namedtuple("Case", "scale expected_shape")
         testcases = (
-            Case(scale=(2, 2), expected_shape=(28, 28, 1)),
-            Case(scale=(2, 1), expected_shape=(28, 14, 1)),
-            Case(scale=(1, 2), expected_shape=(14, 28, 1)),
-            Case(scale=(1, 1), expected_shape=(14, 14, 1)),
-            Case(scale=(1, 10), expected_shape=(14, 140, 1)),
+            Case(scale=(2, 2), expected_shape=(None, 28, 28, 1)),
+            Case(scale=(2, 1), expected_shape=(None, 28, 14, 1)),
+            Case(scale=(1, 2), expected_shape=(None, 14, 28, 1)),
+            Case(scale=(1, 1), expected_shape=(None, 14, 14, 1)),
+            Case(scale=(1, 10), expected_shape=(None, 14, 140, 1)),
         )
 
         for testcase in testcases:
@@ -142,7 +143,7 @@ class UpscaleLayersTestCase(BaseTestCase):
                 layers.Upscale(testcase.scale),
             )
 
-            self.assertEqual(
+            self.assertShapesEqual(
                 network.output_shape,
                 testcase.expected_shape,
                 msg="scale: {}".format(testcase.scale))
@@ -163,13 +164,11 @@ class UpscaleLayersTestCase(BaseTestCase):
 
         upscale_layer = layers.Upscale((3, 2))
         network = layers.join(layers.Input((2, 4, 1)), upscale_layer)
-        self.assertEqual(network.output_shape, (6, 8, 1))
+        self.assertShapesEqual(network.output_shape, (None, 6, 8, 1))
 
         actual_output = self.eval(network.output(asfloat(input_value)))
         np.testing.assert_array_almost_equal(
-            asfloat(expected_output),
-            actual_output
-        )
+            asfloat(expected_output), actual_output)
 
 
 class GlobalPoolingLayersTestCase(BaseTestCase):
@@ -180,8 +179,8 @@ class GlobalPoolingLayersTestCase(BaseTestCase):
             input_layer,
             global_pooling_layer
         )
-        self.assertEqual(network.input_shape, (8, 8, 3))
-        self.assertEqual(network.output_shape, (3,))
+        self.assertShapesEqual(network.input_shape, (None, 8, 8, 3))
+        self.assertShapesEqual(network.output_shape, (None, 3))
 
     def test_global_pooling(self):
         x = asfloat(np.ones((2, 4, 5, 3)))
@@ -200,7 +199,7 @@ class GlobalPoolingLayersTestCase(BaseTestCase):
         global_sum_pooling_layer = layers.GlobalPooling(function=tf.reduce_sum)
         actual_output = self.eval(global_sum_pooling_layer.output(x))
 
-        self.assertEqual(actual_output.shape, (2, 3))
+        self.assertShapesEqual(actual_output.shape, (2, 3))
         np.testing.assert_array_equal(expected_outputs, actual_output)
 
     def test_global_pooling_unknown_option(self):

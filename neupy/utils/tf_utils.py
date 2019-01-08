@@ -6,11 +6,19 @@ from neupy.utils.misc import as_tuple
 
 
 __all__ = (
+    # Main tensorflow functions
+    'tensorflow_session', 'tensorflow_eval',
+    'initialize_uninitialized_variables', 'function',
+
+    # Functions that help to deal with tensorflow name scope
     'class_method_name_scope', 'function_name_scope',
-    'tensorflow_session', 'tensorflow_eval', 'tf_repeat',
-    'initialize_uninitialized_variables', 'flatten', 'outer',
+
+    # Misc utils for tensorflow
+    'flatten', 'outer', 'tf_repeat', 'dimshuffle',
     'dot', 'make_single_vector', 'setup_parameter_updates',
-    'function', 'dimshuffle', 'shape_to_tuple', 'add_batch_dim',
+
+    # Functions that help to deal with shapes
+    'shape_to_tuple', 'add_batch_dim', 'probably_equal_shapes'
 )
 
 
@@ -253,4 +261,15 @@ def shape_to_tuple(shape):
         if shape.ndims is not None:
             return tuple([dim.value for dim in shape.dims])
         return None
+
+    if isinstance(shape, list):
+        return [shape_to_tuple(s) for s in shape]
+
+    if isinstance(shape, tuple):
+        return tuple([shape_to_tuple(s) for s in shape])
+
     return shape
+
+
+def probably_equal_shapes(shape_a, shape_b):
+    return shape_to_tuple(shape_a) == shape_to_tuple(shape_b)

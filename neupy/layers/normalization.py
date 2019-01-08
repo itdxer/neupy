@@ -15,44 +15,6 @@ from .base import Identity
 __all__ = ('BatchNorm', 'LocalResponseNorm')
 
 
-def find_opposite_axes(axes, ndim):
-    """
-    Based on the total number of dimensions function
-    finds all axes that are missed in the specified
-    list ``axes``.
-
-    Parameters
-    ----------
-    axes : list or tuple
-        Already known axes.
-
-    ndim : int
-        Total number of dimensions.
-
-    Returns
-    -------
-    list
-
-    Examples
-    --------
-    >>> from neupy.layers.normalization import find_opposite_axes
-    >>> find_opposite_axes([0, 1], ndim=4)
-    [2, 3]
-    >>>
-    >>> find_opposite_axes([], ndim=4)
-    [0, 1, 2, 3]
-    >>>
-    >>> find_opposite_axes([0, 1, 2], ndim=3)
-    []
-    """
-    if any(axis >= ndim for axis in axes):
-        raise ValueError(
-            "Some axes have invalid values. Axis value "
-            "should be between 0 and {}".format(ndim))
-
-    return [axis for axis in range(ndim) if axis not in axes]
-
-
 class BatchNorm(Identity):
     """
     Batch-normalization layer.
@@ -153,18 +115,18 @@ class BatchNorm(Identity):
                 "Cannot apply batch normalization "
                 "on the axis that doesn't exist.")
 
-        opposite_axes = find_opposite_axes(self.axes, ndim)
-        parameter_shape = [
-            input_shape[axis] if axis in opposite_axes else 1
+        parameter_shape = tuple([
+            input_shape[axis].value if axis not in self.axes else 1
             for axis in range(ndim)
-        ]
+        ])
 
         if any(parameter is None for parameter in parameter_shape):
             unknown_dim_index = parameter_shape.index(None)
             raise ValueError(
-                "Cannot apply batch normalization on the axis "
-                "with unknown size over the dimension #{} "
-                "(0-based indeces).".format(unknown_dim_index))
+                "Cannot apply batch normalization on the axis with unknown "
+                "size over the dimnsion #{} (0-based indeces). Input "
+                "shape: {}, Layer name: {}".format(
+                    unknown_dim_index, input_shape, self.name))
 
         self.running_mean = self.variable(
             value=self.running_mean, shape=parameter_shape,
@@ -270,15 +232,15 @@ class LocalResponseNorm(Identity):
         self.k = k
         self.depth_radius = depth_radius
 
-    def output(self, input, **kwargs):
-        input = tf.convert_to_tensor(input, dtype=tf.float32)
-        ndim = len(input.shape)
-
-        if ndim != 4:
+    def get_output_shape(self, input_shape):
+        if input_shape and input_shape.ndims != 4:
             raise LayerConnectionError(
-                "Layer `{}` expected input with 4 dimensions, got {}"
-                "".format(self.name, ndim))
+                "Layer `{}` expected input with 4 dimensions, got {} instead. "
+                "Shape: {}".format(self.name, input_shape.ndims, input_shape))
 
+        return super(Identity, self).get_output_shape(input_shape)
+
+    def output(self, input, **kwargs):
         return tf.nn.local_response_normalization(
             input,
             depth_radius=self.depth_radius,

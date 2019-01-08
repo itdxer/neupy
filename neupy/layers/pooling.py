@@ -98,21 +98,22 @@ class BasePooling(BaseLayer):
         self.padding = padding
 
     def fail_if_shape_invalid(self, input_shape):
-        if len(input_shape) != 3:
+        if input_shape and input_shape.ndims != 4:
             raise LayerConnectionError(
-                "Pooling layer expects an input with 3 "
+                "Pooling layer expects an input with 4 "
                 "dimensions, got {} with shape {}"
                 "".format(len(input_shape), input_shape))
 
     def get_output_shape(self, input_shape):
         input_shape = tf.TensorShape(input_shape)
+        n_samples = input_shape[0]
 
         if input_shape.ndims is None:
-            return tf.TensorShape((None, None, None))
+            return tf.TensorShape((n_samples, None, None, None))
 
         self.fail_if_shape_invalid(input_shape)
 
-        rows, cols, n_kernels = input_shape
+        n_samples, rows, cols, n_kernels = input_shape
         row_filter_size, col_filter_size = self.size
 
         stride = self.size if self.stride is None else self.stride
@@ -126,7 +127,7 @@ class BasePooling(BaseLayer):
 
         # In python 2, we can get float number after rounding procedure
         # and it might break processing in the subsequent layers.
-        return tf.TensorShape((output_rows, output_cols, n_kernels))
+        return tf.TensorShape((n_samples, output_rows, output_cols, n_kernels))
 
     def output(self, input_value, **kwargs):
         return tf.nn.pool(
@@ -274,27 +275,33 @@ class Upscale(BaseLayer):
         self.scale = scale
 
     def fail_if_shape_invalid(self, input_shape):
-        if len(input_shape) != 3:
+        if input_shape and input_shape.ndims != 4:
             raise LayerConnectionError(
-                "Upscale layer should have an input value with "
-                "3 feature dimensions (channel, height, width)")
+                "Upscale layer should have an input value with 4 dimensions "
+                "(batch, height, width, channel), got input with {} "
+                "dimensions instead. Shape: {}"
+                "".format(input_shape.ndims, input_shape))
 
     def get_output_shape(self, input_shape):
         input_shape = tf.TensorShape(input_shape)
-
-        if input_shape.ndims is None:
-            return tf.TensorShape((None, None, None))
-
         self.fail_if_shape_invalid(input_shape)
 
-        height, width, channel = input_shape
+        if input_shape.ndims is None:
+            return tf.TensorShape((None, None, None, None))
+
+        n_samples, height, width, channel = input_shape
         height_scale, width_scale = self.scale
 
         return tf.TensorShape([
-            height_scale * height, width_scale * width, channel])
+            n_samples,
+            height_scale * height,
+            width_scale * width,
+            channel,
+        ])
 
     def output(self, input_value, **kwargs):
-        self.fail_if_shape_invalid(input_value.shape[1:])
+        input_value = tf.convert_to_tensor(input_value, dtype=tf.float32)
+        self.fail_if_shape_invalid(input_value.shape)
         return tf_repeat(input_value, as_tuple(1, self.scale, 1))
 
 
@@ -351,7 +358,7 @@ class GlobalPooling(BaseLayer):
         self.function = function
 
     def get_output_shape(self, input_shape):
-        return tf.TensorShape(input_shape[-1])
+        return tf.TensorShape([input_shape[0], input_shape[-1]])
 
     def output(self, input_value, **kwargs):
         ndims = len(input_value.shape)
