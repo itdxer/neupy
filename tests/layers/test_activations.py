@@ -14,7 +14,7 @@ class ActivationLayerMainTestCase(BaseTestCase):
     def test_linear_layer_withuot_bias(self):
         input_layer = layers.Input(10)
         output_layer = layers.Linear(2, weight=0.1, bias=None)
-        network = input_layer >> output_layer
+        network = layers.join(input_layer, output_layer)
 
         input_value = asfloat(np.ones((1, 10)))
         actual_output = self.eval(network.output(input_value))
@@ -22,6 +22,7 @@ class ActivationLayerMainTestCase(BaseTestCase):
 
         np.testing.assert_array_almost_equal(expected_output, actual_output)
 
+    def test_exception(self):
         with self.assertRaises(TypeError):
             layers.Linear(2, weight=None)
 

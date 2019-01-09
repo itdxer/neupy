@@ -288,14 +288,18 @@ class BaseGraph(ConfigurableABC):
 
 
 class LayerGraph(BaseGraph):
-    def __init__(self, forward_graph=None):
+    def __init__(self, forward_graph=None, validate=True):
         super(LayerGraph, self).__init__(forward_graph)
-        # This allows to runs simple check that ensures that
-        # created graph have defined layer shape
-        self.output_shape
+
+        if validate:
+            # This allows to runs simple check that ensures that
+            # created graph have defined layer shape
+            self.output_shape
 
     def reverse(self):
-        return self.__class__(self.backward_graph)
+        # This trick allow to avoid check between layers since
+        # layers in reverse order they might be incompatible
+        return self.__class__(self.backward_graph, validate=False)
 
     def clean_layer_references(self, layer_references):
         layers = []
@@ -315,13 +319,12 @@ class LayerGraph(BaseGraph):
 
         observed_layers = []
         layers = copy.copy(output_layers)
-        backward_graph = self.backward_graph
 
         while layers:
             current_layer = layers.pop()
             observed_layers.append(current_layer)
 
-            for next_layer in backward_graph[current_layer]:
+            for next_layer in self.backward_graph[current_layer]:
                 if next_layer not in observed_layers:
                     layers.append(next_layer)
 
@@ -610,6 +613,7 @@ class BaseLayer(BaseGraph):
         if name is None:
             name = generate_layer_name(layer=self)
 
+        self.variables = {}
         self.updates = []
         self.name = name
 
@@ -629,30 +633,15 @@ class BaseLayer(BaseGraph):
     def get_output_shape(self, input_shape):
         return tf.TensorShape(None)
 
-    @property
-    def variable_names(self):
-        names = []
-
-        for name, option in self.options.items():
-            if isinstance(option.value, ParameterProperty):
-                names.append(name)
-
-        return names
-
-    @property
-    def variables(self):
-        return {var: getattr(self, var) for var in self.variable_names}
-
     def variable(self, value, name, shape=None, trainable=True):
         layer_name = 'layer/{layer_name}/{parameter_name}'.format(
             layer_name=self.name,
             parameter_name=name.replace('_', '-'))
 
-        if isinstance(value, BaseLayer):
-            value = getattr(value, name)
-
-        return create_shared_parameter(
+        self.variables[self.name] = create_shared_parameter(
             value, layer_name, shape, trainable)
+
+        return self.variables[self.name]
 
     def _repr_arguments(self, *args, **kwargs):
         def format_value(value):
@@ -737,11 +726,8 @@ class Input(BaseLayer):
     Attributes
     ----------
     {BaseLayer.Attributes}
-
-    Examples
-    --------
     """
-    shape = TypedListProperty(element_type=(int, type(None)), allow_none=True)
+    shape = TypedListProperty(element_type=(int, type(None)))
 
     def __init__(self, shape, name=None):
         super(Input, self).__init__(name=name)
@@ -755,7 +741,13 @@ class Input(BaseLayer):
         return input
 
     def get_output_shape(self, input_shape):
-        return self.input_shape
+        if not self.input_shape.is_compatible_with(input_shape):
+            raise LayerConnectionError(
+                "Input layer got unexpected input shape. "
+                "Received shape: {}, Expected shape: {}"
+                "".format(input_shape, self.input_shape)
+            )
+        return self.input_shape.merge_with(input_shape)
 
     def __repr__(self):
         return self._repr_arguments(

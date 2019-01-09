@@ -1,3 +1,5 @@
+import types
+
 import numpy as np
 import tensorflow as tf
 
@@ -68,40 +70,13 @@ def unroll_scan(fn, sequence, outputs_info):
         return tf.stack(outputs)
 
 
-class MultiCallableProperty(ParameterProperty):
-    expected_type = as_tuple(dict)
-
-    def __set__(self, instance, value):
-        self.validate(value)
-
-        default_value = self.default.copy()
-        default_value.update(value)
-        value = default_value
-
-        value = AttributeKeyDict(value)
-        instance.__dict__[self.name] = value
-
-    def validate(self, value):
-        if not isinstance(value, self.expected_type):
-            raise TypeError(
-                "Parameter `{}` should be a dictionary, "
-                "got `{!r}`".format(self.name, type(value)))
-
-        for key, func in value.items():
-            if not callable(func):
-                raise ValueError(
-                    "Values for the `{}` parameter should be "
-                    "callable objects, got value `{!r}` for the "
-                    "`{}` key".format(self.name, func, key))
-
-
 class BaseRNNLayer(BaseLayer):
     """
     Base class for the recurrent layers
 
     Parameters
     ----------
-    size : int
+    n_units : int
         Number of hidden units in the layer.
 
     only_return_final : bool
@@ -110,31 +85,35 @@ class BaseRNNLayer(BaseLayer):
         sequence is desired). In this case, Tensorfow makes an
         optimization which saves memory. Defaults to ``True``.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
     """
-    size = IntProperty(minval=1)
-    only_return_final = Property(default=True, expected_type=bool)
+    n_units = IntProperty(minval=1)
+    only_return_final = Property(expected_type=bool)
 
-    def __init__(self, size, **kwargs):
-        super(BaseRNNLayer, self).__init__(size=size, **kwargs)
+    def __init__(self, n_units, only_return_final=True, name=None):
+        super(BaseRNNLayer, self).__init__(name=name)
+        self.only_return_final = only_return_final
+        self.n_units = n_units
 
-    def validate(self, input_shape):
-        n_input_dims = len(input_shape) + 1  # +1 for batch dimension
-        clsname = self.__class__.__name__
-
-        if n_input_dims != 3:
+    def fail_if_shape_invalid(self, input_shape):
+        if input_shape and input_shape.ndims != 3:
+            clsname = self.__class__.__name__
             raise LayerConnectionError(
                 "{} layer was expected input with three dimensions, "
-                "but got input with {} dimensions instead"
-                "".format(clsname, n_input_dims))
+                "but got input with {} dimensions instead. Layer: {}"
+                "".format(clsname, input_shape.ndims, self))
 
-    @property
-    def output_shape(self):
+    def get_output_shape(self, input_shape):
+        input_shape = tf.TensorShape(input_shape)
+        n_samples = input_shape[0]
+
+        self.fail_if_shape_invalid(input_shape)
+
         if self.only_return_final:
-            return as_tuple(self.size)
+            return tf.TensorShape((n_samples, self.n_units))
 
-        n_time_steps = self.input_shape[0]
-        return as_tuple(n_time_steps, self.size)
+        n_time_steps = input_shape[1]
+        return tf.TensorShape((n_samples, n_time_steps, self.n_units))
 
 
 class LSTM(BaseRNNLayer):
@@ -143,7 +122,9 @@ class LSTM(BaseRNNLayer):
 
     Parameters
     ----------
-    {BaseRNNLayer.size}
+    {BaseRNNLayer.n_units}
+
+    {BaseRNNLayer.only_return_final}
 
     input_weights : Initializer, ndarray
         Weight parameters for input connection.
@@ -162,29 +143,21 @@ class LSTM(BaseRNNLayer):
         Bias parameters for all gates.
         Defaults to :class:`Constant(0) <neupy.init.Constant>`.
 
-    activation_functions : dict, callable
-        Activation functions for different gates. Defaults to:
+    ingate : function
+        Activation function for the input gate.
+        Defaults to ``tf.nn.sigmoid``.
 
-        .. code-block:: python
+    forgetgate : function
+        Activation function for the forget gate.
+        Defaults to ``tf.nn.sigmoid``.
 
-            # import tensorflow as tf
-            dict(
-                ingate=tf.nn.sigmoid,
-                forgetgate=tf.nn.sigmoid,
-                outgate=tf.nn.sigmoid,
-                cell=tf.tanh,
-            )
+    outgate : function
+        Activation function for the output gate.
+        Defaults to ``tf.nn.sigmoid``.
 
-        If application requires modification to only one parameter
-        then it's better to specify the one that you need to modify
-        and ignore other parameters
-
-        .. code-block:: python
-
-            dict(ingate=tf.tanh)
-
-        Other parameters like ``forgetgate`` or ``outgate`` will be
-        equal to their default values.
+    cell : function
+        Activation function for the cell.
+        Defaults to ``tf.tanh``.
 
     learn_init : bool
         If ``True``, make ``cell_init`` and ``hidden_init`` trainable
@@ -202,8 +175,6 @@ class LSTM(BaseRNNLayer):
         If ``True``, process the sequence backwards and then reverse the
         output again such that the output from the layer is always
         from :math:`x_1` to :math:`x_n`. Defaults to ``False``
-
-    {BaseRNNLayer.only_return_final}
 
     peepholes : bool
         If ``True``, the LSTM uses peephole connections.
@@ -223,7 +194,7 @@ class LSTM(BaseRNNLayer):
         If nonzero, the gradient messages are clipped to the
         given value during the backward pass. Defaults to ``0``.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
 
     Notes
     -----
@@ -252,85 +223,113 @@ class LSTM(BaseRNNLayer):
             ]
         )
     """
-    input_weights = ParameterProperty(default=init.HeNormal())
-    hidden_weights = ParameterProperty(default=init.HeNormal())
-    cell_weights = ParameterProperty(default=init.HeNormal())
-    biases = ParameterProperty(default=init.Constant(0))
+    input_weights = ParameterProperty()
+    hidden_weights = ParameterProperty()
+    cell_weights = ParameterProperty()
+    biases = ParameterProperty()
 
-    activation_functions = MultiCallableProperty(
-        default=dict(
-            ingate=tf.nn.sigmoid,
-            forgetgate=tf.nn.sigmoid,
-            outgate=tf.nn.sigmoid,
-            cell=tf.tanh,
+    ingate = Property(expected_type=types.FunctionType)
+    forgetgate = Property(expected_type=types.FunctionType)
+    outgate = Property(expected_type=types.FunctionType)
+    cell = Property(expected_type=types.FunctionType)
+
+    learn_init = Property(expected_type=bool)
+    cell_init = ParameterProperty()
+    hidden_init = ParameterProperty()
+
+    unroll_scan = Property(expected_type=bool)
+    backwards = Property(expected_type=bool)
+    peepholes = Property(expected_type=bool)
+    gradient_clipping = NumberProperty(minval=0)
+
+    def __init__(self, n_units, only_return_final=True,
+                 # Trainable parameters
+                 input_weights=init.HeNormal(),
+                 hidden_weights=init.HeNormal(),
+                 cell_weights=init.HeNormal(), biases=0,
+                 # Activation functions
+                 ingate=tf.nn.sigmoid, forgetgate=tf.nn.sigmoid,
+                 outgate=tf.nn.sigmoid, cell=tf.tanh,
+                 # Cell states
+                 cell_init=0, hidden_init=0, learn_init=False,
+                 # Misc
+                 unroll_scan=False, backwards=False, peepholes=False,
+                 gradient_clipping=0, name=None):
+
+        super(LSTM, self).__init__(
+            n_units=n_units,
+            only_return_final=only_return_final,
+            name=name,
         )
-    )
 
-    learn_init = Property(default=False, expected_type=bool)
-    cell_init = ParameterProperty(default=init.Constant(0))
-    hidden_init = ParameterProperty(default=init.Constant(0))
+        self.input_weights = input_weights
+        self.hidden_weights = hidden_weights
+        self.cell_weights = cell_weights
+        self.biases = biases
 
-    unroll_scan = Property(default=False, expected_type=bool)
-    backwards = Property(default=False, expected_type=bool)
-    peepholes = Property(default=False, expected_type=bool)
-    gradient_clipping = NumberProperty(default=0, minval=0)
+        self.ingate = ingate
+        self.forgetgate = forgetgate
+        self.outgate = outgate
+        self.cell = cell
 
-    def initialize(self):
-        super(LSTM, self).initialize()
-        n_inputs = np.prod(self.input_shape[1:])
+        self.learn_init = learn_init
+        self.cell_init = cell_init
+        self.hidden_init = hidden_init
+
+        self.unroll_scan = unroll_scan
+        self.backwards = backwards
+        self.peepholes = peepholes
+        self.gradient_clipping = gradient_clipping
+
+    def initialize_variables(self, input):
+        self.input_weights = self.variable(
+            value=self.input_weights,
+            name='input_weights',
+            shape=(input.shape[-1], 4 * self.n_units),
+        )
+        self.hidden_weights = self.variable(
+            value=self.hidden_weights, name='hidden_weights',
+            shape=(self.n_units, 4 * self.n_units),
+        )
+        self.biases = self.variable(
+            value=self.biases, name='biases',
+            shape=(4 * self.n_units,),
+        )
+        self.cell_init = self.variable(
+            value=self.cell_init,
+            shape=(1, self.n_units),
+            name="cell_init",
+            trainable=self.learn_init,
+        )
+        self.hidden_init = self.variable(
+            value=self.hidden_init,
+            shape=(1, self.n_units),
+            name="hidden_init",
+            trainable=self.learn_init,
+        )
 
         # If peephole (cell to gate) connections were enabled, initialize
         # peephole connections.  These are elementwise products with the cell
         # state, so they are represented as vectors.
         if self.peepholes:
-            self.weight_cell_to_ingate = self.add_parameter(
+            self.weight_cell_to_ingate = self.variable(
                 value=self.cell_weights,
                 name='weight_cell_to_ingate',
-                shape=(self.size,))
-            self.weight_cell_to_forgetgate = self.add_parameter(
+                shape=(self.n_units,))
+            self.weight_cell_to_forgetgate = self.variable(
                 value=self.cell_weights,
                 name='weight_cell_to_forgetgate',
-                shape=(self.size,))
-            self.weight_cell_to_outgate = self.add_parameter(
+                shape=(self.n_units,))
+            self.weight_cell_to_outgate = self.variable(
                 value=self.cell_weights,
                 name='weight_cell_to_outgate',
-                shape=(self.size,))
+                shape=(self.n_units,))
 
-        self.input_weights = self.add_parameter(
-            value=self.input_weights,
-            name='input_weights',
-            shape=(n_inputs, 4 * self.size),
-        )
-        self.hidden_weights = self.add_parameter(
-            value=self.hidden_weights,
-            name='hidden_weights',
-            shape=(self.size, 4 * self.size),
-        )
-        self.biases = self.add_parameter(
-            value=self.biases, name='biases',
-            shape=(4 * self.size,),
-        )
-
-        # Initialization parameters
-        self.add_parameter(
-            value=self.cell_init,
-            shape=(1, self.size),
-            name="cell_init",
-            trainable=self.learn_init,
-        )
-        self.add_parameter(
-            value=self.hidden_init,
-            shape=(1, self.size),
-            name="hidden_init",
-            trainable=self.learn_init,
-        )
-
-    def output(self, input_value, **kwargs):
+    def output(self, input, **kwargs):
         # Because scan iterates over the first dimension we
         # dimshuffle to (n_time_steps, n_batch, n_features)
-        input_value = tf.transpose(input_value, [1, 0, 2])
-        input_shape = tf.shape(input_value)
-        n_batch = input_shape[1]
+        input = tf.transpose(input, [1, 0, 2])
+        self.initialize_variables(input)
 
         def one_lstm_step(states, input_n):
             with tf.name_scope('lstm-cell'):
@@ -355,9 +354,9 @@ class LSTM(BaseRNNLayer):
                         cell_previous * self.weight_cell_to_forgetgate)
 
                 # Apply nonlinearities
-                ingate = self.activation_functions.ingate(ingate)
-                forgetgate = self.activation_functions.forgetgate(forgetgate)
-                cell_input = self.activation_functions.cell(cell_input)
+                ingate = self.ingate(ingate)
+                forgetgate = self.forgetgate(forgetgate)
+                cell_input = self.cell(cell_input)
 
                 # Compute new cell value
                 cell = forgetgate * cell_previous + ingate * cell_input
@@ -365,15 +364,16 @@ class LSTM(BaseRNNLayer):
                 if self.peepholes:
                     outgate += cell * self.weight_cell_to_outgate
 
-                outgate = self.activation_functions.outgate(outgate)
+                outgate = self.outgate(outgate)
 
                 # Compute new hidden unit activation
                 hid = outgate * tf.tanh(cell)
                 return [cell, hid]
 
+        n_batch = input.shape[1]
         cell_init = tf.tile(self.cell_init, (n_batch, 1))
         hidden_init = tf.tile(self.hidden_init, (n_batch, 1))
-        sequence = input_value
+        sequence = input
 
         if self.backwards:
             sequence = tf.reverse(sequence, axis=[0])
@@ -388,7 +388,7 @@ class LSTM(BaseRNNLayer):
         else:
             _, hid_out = tf.scan(
                 fn=one_lstm_step,
-                elems=input_value,
+                elems=input,
                 initializer=[cell_init, hidden_init],
                 name='lstm-scan',
             )
@@ -414,7 +414,9 @@ class GRU(BaseRNNLayer):
 
     Parameters
     ----------
-    {BaseRNNLayer.size}
+    {BaseRNNLayer.n_units}
+
+    {BaseRNNLayer.only_return_final}
 
     input_weights : Initializer, ndarray
         Weight parameters for input connection.
@@ -424,32 +426,21 @@ class GRU(BaseRNNLayer):
         Weight parameters for hidden connection.
         Defaults to :class:`HeNormal() <neupy.init.HeNormal>`.
 
-    bias : Initializer, ndarray
+    biases : Initializer, ndarray
         Bias parameters for all gates.
         Defaults to :class:`Constant(0) <neupy.init.Constant>`.
 
-    activation_functions : dict, callable
-        Activation functions for different gates. Defaults to:
+    resetgate : function
+        Activation function for the reset gate.
+        Defaults to ``tf.nn.sigmoid``.
 
-        .. code-block:: python
+    updategate : function
+        Activation function for the update gate.
+        Defaults to ``tf.nn.sigmoid``.
 
-            # import tensorflow as tf
-            dict(
-                resetgate=tf.nn.sigmoid,
-                updategate=tf.nn.sigmoid,
-                hidden_update=tf.tanh,
-            )
-
-        If application requires modification to only one parameter
-        then it's better to specify the one that you need to modify
-        and ignore other parameters
-
-        .. code-block:: python
-
-            dict(resetgate=tf.tanh)
-
-        Other parameters like ``updategate`` or ``hidden_update``
-        will be equal to their default values.
+    hidden_update : function
+        Activation function for the hidden state update.
+        Defaults to ``tf.tanh``.
 
     learn_init : bool
         If ``True``, make ``hidden_init`` trainable variable.
@@ -458,8 +449,6 @@ class GRU(BaseRNNLayer):
     hidden_init : array-like, Tensorfow variable, scalar or Initializer
         Initializer for initial hidden state (:math:`h_0`).
         Defaults to :class:`Constant(0) <neupy.init.Constant>`.
-
-    {BaseRNNLayer.only_return_final}
 
     backwards : bool
         If ``True``, process the sequence backwards and then reverse the
@@ -475,7 +464,7 @@ class GRU(BaseRNNLayer):
         sequence length must be known at compile time (i.e.,
         cannot be given as ``None``). Defaults to ``False``.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
 
     Notes
     -----
@@ -504,57 +493,82 @@ class GRU(BaseRNNLayer):
             ]
         )
     """
-    input_weights = ParameterProperty(default=init.HeNormal())
-    hidden_weights = ParameterProperty(default=init.HeNormal())
-    biases = ParameterProperty(default=init.Constant(0))
+    input_weights = ParameterProperty()
+    hidden_weights = ParameterProperty()
+    biases = ParameterProperty()
 
-    activation_functions = MultiCallableProperty(
-        default=dict(
-            resetgate=tf.nn.sigmoid,
-            updategate=tf.nn.sigmoid,
-            hidden_update=tf.tanh,
-        )
-    )
+    resetgate = Property(expected_type=types.FunctionType)
+    updategate = Property(expected_type=types.FunctionType)
+    hidden_update = Property(expected_type=types.FunctionType)
 
+    hidden_init = ParameterProperty()
     learn_init = Property(default=False, expected_type=bool)
-    hidden_init = ParameterProperty(default=init.Constant(0))
 
-    backwards = Property(default=False, expected_type=bool)
-    unroll_scan = Property(default=False, expected_type=bool)
+    backwards = Property(expected_type=bool)
+    unroll_scan = Property(expected_type=bool)
     gradient_clipping = NumberProperty(default=0, minval=0)
 
-    def initialize(self):
-        super(GRU, self).initialize()
-        n_inputs = np.prod(self.input_shape[1:])
+    def __init__(self, n_units, only_return_final=True,
+                 # Trainable parameters
+                 input_weights=init.HeNormal(),
+                 hidden_weights=init.HeNormal(), biases=0,
+                 # Activation functions
+                 resetgate=tf.nn.sigmoid, updategate=tf.nn.sigmoid,
+                 hidden_update=tf.tanh,
+                 # Cell states
+                 hidden_init=0, learn_init=False,
+                 # Misc
+                 unroll_scan=False, backwards=False,
+                 gradient_clipping=0, name=None):
 
-        self.input_weights = self.add_parameter(
+        super(GRU, self).__init__(
+            n_units=n_units,
+            only_return_final=only_return_final,
+            name=name,
+        )
+
+        self.input_weights = input_weights
+        self.hidden_weights = hidden_weights
+        self.biases = biases
+
+        self.resetgate = resetgate
+        self.updategate = updategate
+        self.hidden_update = hidden_update
+
+        self.hidden_init = hidden_init
+        self.learn_init = learn_init
+
+        self.unroll_scan = unroll_scan
+        self.backwards = backwards
+        self.gradient_clipping = gradient_clipping
+
+    def initialize_variables(self, input):
+        self.input_weights = self.variable(
             value=self.input_weights,
             name='input_weights',
-            shape=(n_inputs, 3 * self.size),
+            shape=(input.shape[-1], 3 * self.n_units),
         )
-        self.hidden_weights = self.add_parameter(
+        self.hidden_weights = self.variable(
             value=self.hidden_weights,
             name='hidden_weights',
-            shape=(self.size, 3 * self.size),
+            shape=(self.n_units, 3 * self.n_units),
         )
-        self.biases = self.add_parameter(
+        self.biases = self.variable(
             value=self.biases, name='biases',
-            shape=(3 * self.size,),
+            shape=(3 * self.n_units,),
         )
-
-        self.add_parameter(
+        self.hidden_init = self.variable(
             value=self.hidden_init,
-            shape=(1, self.size),
+            shape=(1, self.n_units),
             name="hidden_init",
             trainable=self.learn_init
         )
 
-    def output(self, input_value, **kwargs):
+    def output(self, input, **kwargs):
         # Because scan iterates over the first dimension we
         # dimshuffle to (n_time_steps, n_batch, n_features)
-        input_value = tf.transpose(input_value, [1, 0, 2])
-        input_shape = tf.shape(input_value)
-        n_batch = input_shape[1]
+        input = tf.transpose(input, [1, 0, 2])
+        self.initialize_variables(input)
 
         # Create single recurrent computation step function
         # input_n is the n'th vector of the input
@@ -579,11 +593,8 @@ class GRU(BaseRNNLayer):
                     input_n, 3, axis=1)
 
                 # Reset and update gates
-                resetgate = self.activation_functions.resetgate(
-                    hid_resetgate + in_resetgate)
-
-                updategate = self.activation_functions.updategate(
-                    hid_updategate + in_updategate)
+                resetgate = self.resetgate(hid_resetgate + in_resetgate)
+                updategate = self.updategate(hid_updategate + in_updategate)
 
                 # Compute W_{xc}x_t + r_t \odot (W_{hc} h_{t - 1})
                 hidden_update = in_hidden + resetgate * hid_hidden
@@ -592,16 +603,16 @@ class GRU(BaseRNNLayer):
                     hidden_update = clip_gradient(
                         hidden_update, self.gradient_clipping)
 
-                hidden_update = self.activation_functions.hidden_update(
-                    hidden_update)
+                hidden_update = self.hidden_update(hidden_update)
 
                 # Compute (1 - u_t)h_{t - 1} + u_t c_t
                 return [
                     hid_previous - updategate * (hid_previous - hidden_update)
                 ]
 
+        n_batch = input.shape[1]  # batch dim has been moved
         hidden_init = tf.tile(self.hidden_init, (n_batch, 1))
-        sequence = input_value
+        sequence = input
 
         if self.backwards:
             sequence = tf.reverse(sequence, axis=[0])
@@ -616,7 +627,7 @@ class GRU(BaseRNNLayer):
         else:
             hid_out, = tf.scan(
                 fn=one_gru_step,
-                elems=input_value,
+                elems=input,
                 initializer=[hidden_init],
                 name='gru-scan',
             )
