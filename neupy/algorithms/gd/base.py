@@ -123,12 +123,12 @@ class BaseOptimizer(BaseNetwork):
             connection = layers.join(*connection)
 
         self.connection = connection
-        self.layers = list(self.connection)
 
         if len(self.connection.output_layers) != 1:
             n_outputs = len(connection.output_layers)
-            raise InvalidConnection("Connection should have one output "
-                                    "layer, got {}".format(n_outputs))
+            raise InvalidConnection(
+                "Connection should have one output "
+                "layer, got {}".format(n_outputs))
 
         super(BaseOptimizer, self).__init__(**options)
 
@@ -154,14 +154,13 @@ class BaseOptimizer(BaseNetwork):
     def iter_params_and_grads(self):
         layers, parameters = [], []
 
-        for layer, _, parameter in iter_variables(self.layers):
+        for layer, _, parameter in self.connection.iter_variables():
             layers.append(layer)
             parameters.append(parameter)
 
         gradients = tf.gradients(self.variables.error_func, parameters)
-        iterator = zip(layers, parameters, gradients)
 
-        for layer, parameter, gradient in iterator:
+        for layer, parameter, gradient in zip(layers, parameters, gradients):
             yield layer, parameter, gradient
 
     def init_train_updates(self):
@@ -198,7 +197,7 @@ class BaseOptimizer(BaseNetwork):
         with tf.name_scope('training-updates'):
             training_updates = self.init_train_updates()
 
-            for layer in self.layers:
+            for layer in self.connection.layers:
                 training_updates.extend(layer.updates)
 
             for variable in self.variables.values():
