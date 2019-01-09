@@ -2,6 +2,7 @@ import re
 import sys
 import copy
 import types
+import inspect
 import traceback
 from itertools import chain
 from functools import wraps
@@ -9,6 +10,7 @@ from abc import abstractmethod
 from collections import OrderedDict, defaultdict
 
 import six
+import numpy as np
 import tensorflow as tf
 
 from neupy.core.config import ConfigurableABC
@@ -434,17 +436,19 @@ class LayerGraph(BaseGraph):
         try:
             return layer_method(*args, **kwargs)
         except Exception as exception:
-            layer_id = layer.name if hasattr(layer, 'name') else repr(layer)
-            raise exception.__class__(
+            modified_exception = exception.__class__(
                 "{original_message}. Exception occured while propagating data "
-                "through the method `{method}` in the layer `{layer_id}`. "
-                "Layer's parameters: {params}".format(
+                "through the method `{method}`. Layer: {layer!r}".format(
                     original_message=str(exception).strip('.'),
-                    method=method,
-                    layer_id=layer_id,
-                    params=layer.get_params()
+                    method=method, layer=layer
                 )
-            ).with_traceback(sys.last_traceback)
+            )
+
+            if hasattr(sys, 'last_traceback'):
+                modified_exception = modified_exception.with_traceback(
+                    sys.last_traceback)
+
+            raise modified_exception
 
     def propagate_forward(self, inputs, method, **kwargs):
         backward_graph = self.backward_graph
@@ -650,9 +654,41 @@ class BaseLayer(BaseGraph):
         return create_shared_parameter(
             value, layer_name, shape, trainable)
 
+    def _repr_arguments(self, *args, **kwargs):
+        def format_value(value):
+            references = {
+                'Variable': tf.Variable,
+                'Array': np.ndarray,
+                'Matrix': np.matrix,
+            }
+
+            for name, datatype in references.items():
+                if isinstance(value, datatype):
+                    return '{}(shape={})'.format(name, value.shape)
+
+            return repr(value)
+
+        formatted_args = [str(arg) for arg in args]
+        init_args = inspect.getargspec(self.__class__.__init__).args
+
+        # Kwargs will have destroyed order of the arguments, and order in
+        # the __init__ method allows to use proper order and validate names
+        for name in sorted(kwargs.keys(), key=init_args.index):
+            value = format_value(kwargs[name])
+            formatted_args.append('{}={}'.format(name, value))
+
+        return '{clsname}({formatted_args})'.format(
+            clsname=self.__class__.__name__,
+            formatted_args=', '.join(formatted_args))
+
     def __repr__(self):
-        classname = self.__class__.__name__
-        return '{name}(name={})'.format(self.name, name=classname)
+        kwargs = {}
+
+        for name in self.options:
+            value = getattr(self, name)
+            kwargs[name] = value
+
+        return self._repr_arguments(**kwargs)
 
     def __reduce__(self):
         return (self.__class__, self.get_params())
@@ -660,7 +696,8 @@ class BaseLayer(BaseGraph):
 
 class Identity(BaseLayer):
     """
-    Passes input without changes
+    Passes input through the layer without changes. Can be useful while
+    defining residual connections in the network.
 
     Parameters
     ----------
@@ -682,6 +719,28 @@ class Identity(BaseLayer):
 
 
 class Input(BaseLayer):
+    """
+    Layer defines network's input.
+
+    Parameters
+    ----------
+    shape : int or tuple
+        Shape of the input features per sample. Batch dimension has to
+        be excluded from the shape.
+
+    {BaseLayer.name}
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
+
+    Examples
+    --------
+    """
     shape = TypedListProperty(element_type=(int, type(None)), allow_none=True)
 
     def __init__(self, shape, name=None):
@@ -696,9 +755,9 @@ class Input(BaseLayer):
         return input
 
     def get_output_shape(self, input_shape):
-        return tf.TensorShape(self.input_shape)
+        return self.input_shape
 
     def __repr__(self):
-        return '{name}({shape})'.format(
-            name=self.__class__.__name__,
-            shape=make_one_if_possible(self.shape))
+        return self._repr_arguments(
+            make_one_if_possible(self.shape),
+            name=self.name)

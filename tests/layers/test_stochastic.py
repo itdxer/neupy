@@ -29,7 +29,9 @@ class DropoutLayerTestCase(BaseTestCase):
 
     def test_dropout_repr(self):
         layer = layers.Dropout(0.5)
-        self.assertEqual("Dropout(proba=0.5)", str(layer))
+        self.assertEqual(
+            "Dropout(proba=0.5, name='dropout-1')",
+            str(layer))
 
 
 class GaussianNoiseLayerTestCase(BaseTestCase):
@@ -48,4 +50,6 @@ class GaussianNoiseLayerTestCase(BaseTestCase):
 
     def test_gaussian_noise_repr(self):
         layer = layers.GaussianNoise(0, 1)
-        self.assertEqual("GaussianNoise(mean=0, std=1)", str(layer))
+        self.assertEqual(
+            "GaussianNoise(mean=0, std=1, name='gaussian-noise-1')",
+            str(layer))

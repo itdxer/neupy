@@ -99,6 +99,9 @@ class Reshape(BaseLayer):
         output_shape = as_tuple(n_samples, self.shape)
         return tf.reshape(input_value, output_shape)
 
+    def __repr__(self):
+        return self._repr_arguments(self.shape, name=self.name)
+
 
 class Transpose(BaseLayer):
     """
@@ -156,3 +159,6 @@ class Transpose(BaseLayer):
         # specified as (zero index), so we need to add it in order to
         # fix batch dimesnion in place.
         return tf.transpose(input_value, list(self.perm))
+
+    def __repr__(self):
+        return self._repr_arguments(self.perm, name=self.name)

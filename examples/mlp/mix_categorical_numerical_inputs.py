@@ -57,7 +57,7 @@ x_test_num = only_numerical(x_test)
 
 network = algorithms.Momentum(
     [
-        [[
+        layers.parallel([
             # 3 categorical inputs
             layers.Input(3),
 
@@ -73,7 +73,7 @@ network = algorithms.Momentum(
         ], [
             # 17 numerical inputs
             layers.Input(17),
-        ]],
+        ]),
 
         # Concatenate (batch_size, 12) and (batch_size, 17)
         # into one matrix with shape (batch_size, 29)

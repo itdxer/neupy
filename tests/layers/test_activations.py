@@ -27,24 +27,24 @@ class ActivationLayerMainTestCase(BaseTestCase):
 
     def test_repr_without_size(self):
         layer = layers.Sigmoid()
-        self.assertEqual("Sigmoid()", str(layer))
+        self.assertEqual("Sigmoid(name='sigmoid-1')", str(layer))
 
     def test_repr_with_size(self):
         layer1 = layers.Sigmoid(13)
-        self.assertEqual("Sigmoid(13)", str(layer1))
-
-        layer2 = layers.Sigmoid(13, name='sigmoid')
-        self.assertEqual("Sigmoid(13)", str(layer2))
+        self.assertEqual(
+            str(layer1),
+            (
+                "Sigmoid(13, weight=HeNormal(gain=1.0), "
+                "bias=Variable(shape=(13,)), name='sigmoid-1')"
+            )
+        )
 
     def test_failed_propagation_for_multiple_inputs(self):
         inputs = layers.parallel(
             layers.Input(1),
             layers.Input(2),
         )
-        expected_message = (
-            "2 positional arguments but 3 were given.*"
-            "in the layer `relu`"
-        )
+        expected_message = "2 positional arguments but 3 were given."
         with self.assertRaisesRegexp(TypeError, expected_message):
             layers.join(inputs, layers.Relu(3, name='relu'))
 
@@ -79,21 +79,6 @@ class ActivationLayersTestCase(BaseTestCase):
     def test_tanh_layer(self):
         layer1 = layers.Tanh(1)
         self.assertGreater(1, self.eval(layer1.activation_function(1.)))
-
-    def test_relu_layer(self):
-        layer = layers.Relu(1)
-        self.assertEqual(0, self.eval(layer.activation_function(-10)))
-        self.assertEqual(0, self.eval(layer.activation_function(0)))
-        self.assertEqual(10, self.eval(layer.activation_function(10)))
-
-        # Test alpha parameter
-        X = asfloat(np.array([[10, 1, 0.1, 0, -0.1, -1]]).T)
-        expected_output = asfloat(np.array([[10, 1, 0.1, 0, -0.01, -0.1]]).T)
-        layer = layers.Relu(1, alpha=0.1)
-
-        actual_output = self.eval(layer.activation_function(X))
-        np.testing.assert_array_almost_equal(
-            expected_output, actual_output)
 
     def test_leaky_relu(self):
         X = asfloat(np.array([[10, 1, 0.1, 0, -0.1, -1]]).T)
@@ -131,15 +116,50 @@ class ActivationLayersTestCase(BaseTestCase):
             expected_output, actual_output)
 
 
+class ReluTestCase(BaseTestCase):
+    def test_relu_activation(self):
+        layer = layers.Relu()
+        self.assertEqual(0, self.eval(layer.activation_function(-10)))
+        self.assertEqual(0, self.eval(layer.activation_function(0)))
+        self.assertEqual(10, self.eval(layer.activation_function(10)))
+
+        layer = layers.Relu(alpha=0.1)
+        self.assertAlmostEqual(-1, self.eval(layer.activation_function(-10)))
+        self.assertAlmostEqual(-0.2, self.eval(layer.activation_function(-2)))
+
+    def test_relu(self):
+        # Test alpha parameter
+        X = asfloat(np.array([[10, 1, 0.1, 0, -0.1, -1]]).T)
+        expected_output = asfloat(np.array([[10, 1, 0.1, 0, -0.01, -0.1]]).T)
+        layer = layers.Relu(1, alpha=0.1)
+
+        actual_output = self.eval(layer.activation_function(X))
+        np.testing.assert_array_almost_equal(
+            expected_output, actual_output)
+
+    def test_repr_without_size(self):
+        self.assertEqual("Relu(alpha=0, name='relu-1')", str(layers.Relu()))
+
+    def test_repr_with_size(self):
+        self.assertEqual(
+            str(layers.Relu(10)),
+            (
+                "Relu(10, alpha=0, weight=HeNormal(gain=2), "
+                "bias=Variable(shape=(10,)), name='relu-1')"
+            )
+        )
+
+
 class PReluTestCase(BaseTestCase):
     def test_invalid_alpha_axes_parameter(self):
-        x = tf.placeholder(shape=(3, 10), dtype=tf.float32)
-        prelu_layer = layers.PRelu(10, alpha_axes=2)
-
+        network = layers.join(
+            layers.PRelu(10, alpha_axes=2),
+            layers.Relu(),
+        )
         with self.assertRaises(ValueError):
             # cannot specify 2-axis, because we only
             # have 0 and 1 axes (2D input)
-            prelu_layer.output(x)
+            layers.join(layers.Input(10), network)
 
         with self.assertRaises(ValueError):
             # 0-axis is not allowed
@@ -231,3 +251,18 @@ class PReluTestCase(BaseTestCase):
             prelu2_alpha_before_training,
             prelu2_alpha_after_training,
         )))
+
+    def test_repr_without_size(self):
+        self.assertEqual(
+            "PRelu(alpha_axes=(-1,), alpha=Constant(0.25), name='p-relu-1')",
+            str(layers.PRelu()))
+
+    def test_repr_with_size(self):
+        self.assertEqual(
+            str(layers.PRelu(10)),
+            (
+                "PRelu(10, alpha_axes=(-1,), alpha=Constant(0.25), "
+                "weight=HeNormal(gain=2), bias=Variable(shape=(10,)), "
+                "name='p-relu-1')"
+            )
+        )

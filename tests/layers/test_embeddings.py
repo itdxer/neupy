@@ -27,5 +27,10 @@ class EmbeddingLayerTestCase(BaseTestCase):
         np.testing.assert_array_equal(expected_output, actual_output)
 
     def test_embedding_layer_repr(self):
-        layer = layers.Embedding(5, 2)
-        self.assertEqual("Embedding(5, 2)", str(layer))
+        self.assertEqual(
+            str(layers.Embedding(5, 2)),
+            (
+                "Embedding(5, 2, weight=Variable(shape=(5, 2)), "
+                "name='embedding-1')"
+            )
+        )
