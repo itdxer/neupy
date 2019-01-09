@@ -145,11 +145,14 @@ def create_shared_parameter(value, name, shape, trainable=True):
     if shape is not None:
         shape = [v.value if isinstance(v, tf.Dimension) else v for v in shape]
 
-    if isinstance(value, tf.Variable):
-        return value
+    if isinstance(value, (int, float)):
+        value = init.Constant(value)
 
     if isinstance(value, init.Initializer):
         value = value.sample(shape)
+
+    if isinstance(value, tf.Variable):
+        return value
 
     return tf.Variable(
         asfloat(value),
