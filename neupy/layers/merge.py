@@ -64,6 +64,7 @@ class Elementwise(BaseLayer):
 
     def __init__(self, merge_function='add', name=None):
         super(Elementwise, self).__init__(name=name)
+        self.original_function = merge_function
         self.merge_function = merge_function
 
     def get_output_shape(self, *input_shapes):
@@ -90,6 +91,10 @@ class Elementwise(BaseLayer):
 
     def output(self, *inputs, **kwargs):
         return reduce(self.merge_function, inputs)
+
+    def __repr__(self):
+        return self._repr_arguments(
+            repr(self.original_function), name=self.name)
 
 
 class Concatenate(BaseLayer):

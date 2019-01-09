@@ -416,8 +416,15 @@ class Convolution(BaseLayer):
         return output
 
     def __repr__(self):
-        classname = self.__class__.__name__
-        return '{name}({size})'.format(name=classname, size=self.size)
+        return self._repr_arguments(
+            self.size,
+            padding=self.padding,
+            stride=self.stride,
+            dilation=self.dilation,
+            weight=self.weight,
+            bias=self.bias,
+            name=self.name,
+        )
 
 
 class Deconvolution(Convolution):

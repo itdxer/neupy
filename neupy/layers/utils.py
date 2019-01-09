@@ -5,8 +5,10 @@ from neupy import init
 from neupy.utils import asfloat
 
 
-__all__ = ('make_one_if_possible', 'iter_variables',
-           'count_parameters', 'extract_connection', 'find_variables')
+__all__ = (
+    'make_one_if_possible', 'iter_variables', 'format_variable',
+    'count_parameters', 'extract_connection', 'find_variables',
+)
 
 
 def make_one_if_possible(shape):

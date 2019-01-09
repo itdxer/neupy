@@ -51,7 +51,7 @@ def pooling_output_shape(dimension_size, pool_size, padding, stride):
         return int(math.ceil((dimension_size - pool_size + 1) / stride))
 
     raise ValueError(
-        "{!r} is unknown convolution's padding value".format(padding))
+        "{!r} is unknown padding value for pooling".format(padding))
 
 
 class BasePooling(BaseLayer):
@@ -139,9 +139,12 @@ class BasePooling(BaseLayer):
             data_format="NHWC")
 
     def __repr__(self):
-        return '{name}({size})'.format(
-            name=self.__class__.__name__,
-            size=self.size)
+        return self._repr_arguments(
+            self.size,
+            name=self.name,
+            stride=self.stride,
+            padding=self.padding,
+        )
 
 
 class MaxPooling(BasePooling):
@@ -304,6 +307,9 @@ class Upscale(BaseLayer):
         self.fail_if_shape_invalid(input_value.shape)
         return tf_repeat(input_value, as_tuple(1, self.scale, 1))
 
+    def __repr__(self):
+        return self._repr_arguments(self.scale, name=self.name)
+
 
 class GlobalPooling(BaseLayer):
     """
@@ -321,7 +327,7 @@ class GlobalPooling(BaseLayer):
         - ``max`` - For average global pooling. The same as
           ``tf.reduce_max``.
 
-        Parameters also excepts custom functions that have
+        Parameter also excepts custom functions that have
         following format.
 
         .. code-block:: python
@@ -346,7 +352,7 @@ class GlobalPooling(BaseLayer):
     >>> from neupy.layers import *
     >>> network = Input((4, 4, 16)) >> GlobalPooling('avg')
     >>> network.output_shape
-    (16,)
+    (None, 16)
     """
     function = FunctionWithOptionsProperty(choices={
         'avg': tf.reduce_mean,
@@ -355,6 +361,7 @@ class GlobalPooling(BaseLayer):
 
     def __init__(self, function, name=None):
         super(GlobalPooling, self).__init__(name=name)
+        self.original_function = function
         self.function = function
 
     def get_output_shape(self, input_shape):
@@ -369,3 +376,7 @@ class GlobalPooling(BaseLayer):
         # All dimensions except first and last
         agg_axis = range(1, ndims - 1)
         return self.function(input_value, axis=list(agg_axis))
+
+    def __repr__(self):
+        return self._repr_arguments(
+            repr(self.original_function), name=self.name)

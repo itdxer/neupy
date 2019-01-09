@@ -13,7 +13,7 @@ from base import BaseTestCase
 
 class PoolingLayersTestCase(BaseTestCase):
     def test_pooling_output_shape_exception(self):
-        expected_msg = r"unknown \S+ padding value"
+        expected_msg = r"1 is unknown padding value for pooling"
         with self.assertRaisesRegexp(ValueError, expected_msg):
             pooling_output_shape(
                 dimension_size=5,
@@ -74,7 +74,21 @@ class PoolingLayersTestCase(BaseTestCase):
 
     def test_pooling_repr(self):
         layer = layers.MaxPooling((2, 2))
-        self.assertEqual("MaxPooling((2, 2))", str(layer))
+        self.assertEqual(
+            str(layer),
+            (
+                "MaxPooling((2, 2), stride=None, padding='valid', "
+                "name='max-pooling-1')"
+            ),
+        )
+        layer = layers.MaxPooling((2, 2), stride=(3, 3))
+        self.assertEqual(
+            str(layer),
+            (
+                "MaxPooling((2, 2), stride=(3, 3), padding='valid', "
+                "name='max-pooling-2')"
+            ),
+        )
 
     def test_max_pooling(self):
         X = asfloat(np.array([
@@ -114,12 +128,21 @@ class PoolingLayersTestCase(BaseTestCase):
         actual_output = self.eval(network.output(X))
         np.testing.assert_array_almost_equal(actual_output, expected_output)
 
+    def test_upscale_late_shape_init(self):
+        network = layers.join(
+            layers.AveragePooling((2, 2)),
+            layers.Softmax(),
+        )
+        self.assertShapesEqual(network.output_shape, (None, None, None, None))
+
+        network = layers.join(layers.Input((10, 10, 1)), network)
+        self.assertShapesEqual(network.output_shape, (None, 5, 5, 1))
+
 
 class UpscaleLayersTestCase(BaseTestCase):
     def test_upscale_layer_exceptions(self):
         with self.assertRaises(LayerConnectionError):
-            # Input shape should have 3 feature dimensions
-            # (and +1 for the batch)
+            # Input shape should be 4 dimensional
             layers.join(layers.Input(10), layers.Upscale((2, 2)))
 
         invalid_scales = [-1, (2, 0), (-4, 1), (3, 3, 3)]
@@ -170,6 +193,21 @@ class UpscaleLayersTestCase(BaseTestCase):
         np.testing.assert_array_almost_equal(
             asfloat(expected_output), actual_output)
 
+    def test_upscale_late_shape_init(self):
+        network = layers.join(
+            layers.Upscale((2, 2)),
+            layers.Softmax(),
+        )
+        self.assertShapesEqual(network.output_shape, (None, None, None, None))
+
+        network = layers.join(layers.Input((10, 10, 5)), network)
+        self.assertShapesEqual(network.output_shape, (None, 20, 20, 5))
+
+    def test_global_pooling_repr(self):
+        self.assertEqual(
+            "Upscale((2, 3), name='upscale-1')",
+            str(layers.Upscale((2, 3))))
+
 
 class GlobalPoolingLayersTestCase(BaseTestCase):
     def test_global_pooling_output_shape(self):
@@ -208,5 +246,27 @@ class GlobalPoolingLayersTestCase(BaseTestCase):
 
     def test_global_pooling_for_lower_dimensions(self):
         layer = layers.GlobalPooling('max')
-        x = np.ones((1, 5))
+        x = np.random.random((4, 5))
         np.testing.assert_array_equal(x, layer.output(x))
+
+    def test_global_pooling_late_shape_init(self):
+        network = layers.join(
+            layers.Convolution((3, 3, 12)),
+            layers.GlobalPooling('max'),
+        )
+        self.assertShapesEqual(network.output_shape, (None, None))
+
+        network = layers.join(layers.Input((10, 10, 1)), network)
+        self.assertShapesEqual(network.output_shape, (None, 12))
+
+    def test_global_pooling_repr(self):
+        layer = layers.GlobalPooling('max')
+        self.assertEqual(
+            "GlobalPooling('max', name='global-pooling-1')",
+            str(layer))
+
+        layer = layers.GlobalPooling(lambda x: x)
+        self.assertRegexpMatches(
+            str(layer),
+            r"GlobalPooling\(<function .+>, name='global-pooling-2'\)",
+        )

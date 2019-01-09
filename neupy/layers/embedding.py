@@ -102,8 +102,9 @@ class Embedding(BaseLayer):
         return tf.gather(self.weight, input_value)
 
     def __repr__(self):
-        classname = self.__class__.__name__
-        return '{name}({input_size}, {output_size})'.format(
-            name=classname,
-            input_size=self.input_size,
-            output_size=self.output_size)
+        return self._repr_arguments(
+            self.input_size,
+            self.output_size,
+            name=self.name,
+            weight=self.weight,
+        )

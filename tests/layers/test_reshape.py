@@ -69,6 +69,17 @@ class ReshapeLayerTestCase(BaseTestCase):
                 layers.Reshape((-1, 6)),
             )
 
+    def test_reshape_repr(self):
+        layer = layers.Reshape()
+        self.assertEqual(
+            "Reshape((-1,), name='reshape-1')",
+            str(layer))
+
+        layer = layers.Reshape((5, 2), name='reshape-layer')
+        self.assertEqual(
+            "Reshape((5, 2), name='reshape-layer')",
+            str(layer))
+
 
 class TransposeTestCase(BaseTestCase):
     def test_simple_transpose(self):
@@ -100,3 +111,14 @@ class TransposeTestCase(BaseTestCase):
                 layers.Input(20),
                 layers.Transpose((0, 2, 1)),
             )
+
+    def test_transpose_repr(self):
+        layer = layers.Transpose((0, 2, 1))
+        self.assertEqual(
+            "Transpose((0, 2, 1), name='transpose-1')",
+            str(layer))
+
+        layer = layers.Transpose((0, 2, 1), name='test')
+        self.assertEqual(
+            "Transpose((0, 2, 1), name='test')",
+            str(layer))

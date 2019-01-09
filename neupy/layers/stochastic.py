@@ -38,10 +38,6 @@ class Dropout(Identity):
             return input_value
         return tf.nn.dropout(input_value, keep_prob=(1.0 - self.proba))
 
-    def __repr__(self):
-        classname = self.__class__.__name__
-        return "{}(proba={})".format(classname, self.proba)
-
 
 class GaussianNoise(Identity):
     """
@@ -67,8 +63,8 @@ class GaussianNoise(Identity):
     ----------
     {Identity.Attributes}
     """
-    std = NumberProperty(minval=0)
     mean = NumberProperty()
+    std = NumberProperty(minval=0)
 
     def __init__(self, mean=1, std=0, name=None):
         super(GaussianNoise, self).__init__(name=name)
@@ -85,7 +81,3 @@ class GaussianNoise(Identity):
             stddev=self.std)
 
         return input_value + noise
-
-    def __repr__(self):
-        classname = self.__class__.__name__
-        return "{}(mean={}, std={})".format(classname, self.mean, self.std)

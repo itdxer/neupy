@@ -11,8 +11,11 @@ from neupy.core.properties import (
 from .base import BaseLayer
 
 
-__all__ = ('Linear', 'Linear', 'Sigmoid', 'HardSigmoid', 'Tanh',
-           'Relu', 'Softplus', 'Softmax', 'Elu', 'PRelu', 'LeakyRelu')
+__all__ = (
+    'Linear', 'Sigmoid', 'Tanh', 'Softmax',
+    'Relu', 'LeakyRelu', 'Elu', 'PRelu',
+    'Softplus', 'HardSigmoid',
+)
 
 
 class Linear(BaseLayer):
@@ -21,10 +24,13 @@ class Linear(BaseLayer):
 
     Parameters
     ----------
-    size : int or None
-        Layer input size. ``None`` means that layer will not create
-        parameters and will return only activation function
-        output for the specified input value.
+    n_units : int or None
+        Number of units in the layers. It also corresponds to the number of
+        output features that will be produced per sample after passing it
+        through this layer. The ``None`` value means that layer will not have
+        parameters and it will only apply activation function to the input
+        without linear transformation output for the specified input value.
+        Defaulst to ``None``.
 
     weight : array-like, Tensorfow variable, scalar or Initializer
         Defines layer's weights. Default initialization methods
@@ -58,26 +64,28 @@ class Linear(BaseLayer):
     >>> from neupy.layers import *
     >>> network = Input(10) >> Linear(5)
     """
-    size = IntProperty(minval=1, allow_none=True)
+    n_units = IntProperty(minval=1, allow_none=True)
     weight = ParameterProperty()
     bias = ParameterProperty(allow_none=True)
 
-    def __init__(self, size=None, weight=init.HeNormal(), bias=0, name=None):
+    def __init__(self, n_units=None, weight=init.HeNormal(), bias=0,
+                 name=None):
+
         super(Linear, self).__init__(name=name)
 
-        self.size = size
+        self.n_units = n_units
         self.weight = weight
         self.bias = bias
 
-        if size is not None and bias is not None:
+        if n_units is not None and bias is not None:
             self.bias = self.variable(
                 value=self.bias, name='bias',
-                shape=as_tuple(self.size))
+                shape=as_tuple(self.n_units))
 
     def get_output_shape(self, input_shape):
         input_shape = tf.TensorShape(input_shape)
 
-        if self.size is None:
+        if self.n_units is None:
             return input_shape
 
         if input_shape and input_shape.ndims != 2:
@@ -86,18 +94,18 @@ class Linear(BaseLayer):
                 "Shape: {}".format(input_shape.ndims, input_shape))
 
         n_samples = input_shape[0]
-        return tf.TensorShape((n_samples, self.size))
+        return tf.TensorShape((n_samples, self.n_units))
 
     def output(self, input, **kwargs):
         input = tf.convert_to_tensor(input, dtype=tf.float32)
         n_input_features = input.shape[-1]
 
-        if self.size is None:
+        if self.n_units is None:
             return self.activation_function(input)
 
         self.weight = self.variable(
             value=self.weight, name='weight',
-            shape=as_tuple(n_input_features, self.size))
+            shape=as_tuple(n_input_features, self.n_units))
 
         if self.bias is None:
             output = tf.matmul(input, self.weight)
@@ -110,8 +118,15 @@ class Linear(BaseLayer):
         return input_value
 
     def __repr__(self):
-        classname = self.__class__.__name__
-        return '{name}({size})'.format(name=classname, size=self.size or '')
+        if self.n_units is None:
+            return self._repr_arguments(name=self.name)
+
+        return self._repr_arguments(
+            self.n_units,
+            name=self.name,
+            weight=self.weight,
+            bias=self.bias,
+        )
 
 
 class Sigmoid(Linear):
@@ -202,7 +217,7 @@ class Relu(Linear):
 
     Parameters
     ----------
-    {Linear.size}
+    {Linear.n_units}
 
     alpha : float
         Alpha parameter defines the decreasing rate
@@ -247,17 +262,29 @@ class Relu(Linear):
     """
     alpha = NumberProperty(minval=0)
 
-    def __init__(self, size=None, alpha=0, weight=init.HeNormal(gain=2),
+    def __init__(self, n_units=None, alpha=0, weight=init.HeNormal(gain=2),
                  bias=init.Constant(value=0), name=None):
 
         self.alpha = alpha
         super(Relu, self).__init__(
-            size=size, weight=weight, bias=bias, name=name)
+            n_units=n_units, weight=weight, bias=bias, name=name)
 
     def activation_function(self, input_value):
         if self.alpha == 0:
             return tf.nn.relu(input_value)
         return tf.nn.leaky_relu(input_value, asfloat(self.alpha))
+
+    def __repr__(self):
+        if self.n_units is None:
+            return self._repr_arguments(name=self.name, alpha=self.alpha)
+
+        return self._repr_arguments(
+            self.n_units,
+            name=self.name,
+            alpha=self.alpha,
+            weight=self.weight,
+            bias=self.bias,
+        )
 
 
 class LeakyRelu(Linear):
@@ -444,9 +471,8 @@ class PRelu(Linear):
     alpha_axes = TypedListProperty()
     alpha = ParameterProperty()
 
-    def __init__(self, size=None, alpha=init.Constant(value=0.25),
-                 alpha_axes=-1, weight=init.HeNormal(gain=2),
-                 bias=init.Constant(value=0), name=None):
+    def __init__(self, n_units=None, alpha_axes=-1, alpha=0.25,
+                 weight=init.HeNormal(gain=2), bias=0, name=None):
 
         self.alpha = alpha
         self.alpha_axes = as_tuple(alpha_axes)
@@ -455,20 +481,23 @@ class PRelu(Linear):
             raise ValueError("Cannot specify alpha for 0-axis")
 
         super(PRelu, self).__init__(
-            size=size, weight=weight, bias=bias, name=name)
+            n_units=n_units, weight=weight, bias=bias, name=name)
 
-    def activation_function(self, input_value):
-        input_value = tf.convert_to_tensor(input_value, dtype=tf.float32)
-        input_shape = input_value.shape
-        ndim = len(input_shape)
-
-        if max(self.alpha_axes) >= ndim:
-            max_axis_index = len(input_shape) - 1
+    def get_output_shape(self, input_shape):
+        if input_shape and max(self.alpha_axes) >= input_shape.ndims:
+            max_axis_index = input_shape.ndims - 1
 
             raise ValueError(
                 "Cannot specify alpha for the axis #{}. Maximum "
                 "available axis is {} (0-based indeces)."
                 "".format(max(self.alpha_axes), max_axis_index))
+
+        return super(PRelu, self).get_output_shape(input_shape)
+
+    def activation_function(self, input_value):
+        input_value = tf.convert_to_tensor(input_value, dtype=tf.float32)
+        input_shape = input_value.shape
+        ndim = len(input_shape)
 
         self.alpha = self.variable(
             value=self.alpha,
@@ -480,3 +509,20 @@ class PRelu(Linear):
 
         alpha = tf_utils.dimshuffle(self.alpha, ndim, alpha_axes)
         return tf.nn.leaky_relu(tf.to_float(input_value), tf.to_float(alpha))
+
+    def __repr__(self):
+        if self.n_units is None:
+            return self._repr_arguments(
+                name=self.name,
+                alpha_axes=self.alpha_axes,
+                alpha=self.alpha,
+            )
+
+        return self._repr_arguments(
+            self.n_units,
+            name=self.name,
+            alpha_axes=self.alpha_axes,
+            alpha=self.alpha,
+            weight=self.weight,
+            bias=self.bias,
+        )
