@@ -5,84 +5,7 @@ from neupy import init
 from neupy.utils import asfloat
 
 
-__all__ = (
-    'make_one_if_possible', 'iter_variables', 'format_variable',
-    'count_parameters', 'extract_connection', 'find_variables',
-)
-
-
-def make_one_if_possible(shape):
-    """
-    Format layer's input or output shape.
-
-    Parameters
-    ----------
-    shape : int or tuple
-
-    Returns
-    -------
-    int or tuple
-    """
-    if isinstance(shape, (tuple, list)) and len(shape) == 1:
-        return shape[0]
-    return shape
-
-
-def iter_variables(layers, only_trainable=True):
-    """
-    Iterate through layer parameters.
-
-    Parameters
-    ----------
-    layers : list of layers or connection
-
-    only_trainable : bool
-        If `True` returns only trainable parameters.
-        Defaults to `True`.
-
-    Yields
-    ------
-    tuple
-        Tuple with three ariables: (layer, attribute_name, parameter)
-    """
-    observed_parameters = []
-
-    for layer in layers:
-        for attrname, param in layer.variables.items():
-            new_param = param not in observed_parameters
-
-            if new_param and (param.trainable or not only_trainable):
-                observed_parameters.append(param)
-                yield layer, attrname, param
-
-
-def find_variables(layers, only_trainable=False):
-    parameters = []
-    for _, _, parameter in iter_variables(layers, only_trainable):
-        parameters.append(parameter)
-    return parameters
-
-
-def count_parameters(connection):
-    """
-    Count number of parameters in Neural Network.
-
-    Parameters
-    ----------
-    connection : list of laters or connection
-
-    Returns
-    -------
-    int
-        Number of parameters.
-    """
-    n_parameters = 0
-
-    for _, _, parameter in iter_variables(connection):
-        shape = parameter.get_shape()
-        n_parameters += np.prod(shape.as_list())
-
-    return n_parameters
+__all__ = ('create_shared_parameter', 'extract_connection',)
 
 
 def extract_connection(instance):
@@ -116,8 +39,9 @@ def extract_connection(instance):
     if isinstance(instance, BaseGraph):
         return instance
 
-    raise TypeError("Invalid input type. Input should be network, connection "
-                    "or list of layers, got {}".format(type(instance)))
+    raise TypeError(
+        "Invalid input type. Input should be network, connection "
+        "or list of layers, got {}".format(type(instance)))
 
 
 def create_shared_parameter(value, name, shape, trainable=True):

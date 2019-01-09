@@ -53,7 +53,7 @@ class WolfeLineSearchForStep(Configurable):
     def find_optimal_step(self, parameter_vector, parameter_update):
         network_inputs = self.variables.network_inputs
         network_output = self.variables.network_output
-        layers_and_parameters = list(iter_variables(self.layers))
+        layers_and_parameters = list(self.connection.iter_variables())
 
         def prediction(step):
             step = asfloat(step)

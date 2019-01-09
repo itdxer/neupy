@@ -20,10 +20,7 @@ from neupy.core.properties import (
     TypedListProperty,
     ParameterProperty,
 )
-from neupy.layers.utils import (
-    create_shared_parameter,
-    make_one_if_possible,
-)
+from neupy.layers.utils import create_shared_parameter
 from neupy.utils import (
     as_tuple, tensorflow_session,
     initialize_uninitialized_variables,
@@ -37,6 +34,23 @@ __all__ = (
     'BaseLayer', 'Identity', 'Input',
     'join', 'parallel', 'merge',
 )
+
+
+def make_one_if_possible(shape):
+    """
+    Format layer's input or output shape.
+
+    Parameters
+    ----------
+    shape : int or tuple
+
+    Returns
+    -------
+    int or tuple
+    """
+    if isinstance(shape, (tuple, list)) and len(shape) == 1:
+        return shape[0]
+    return shape
 
 
 def filter_graph(dictionary, include_keys):
@@ -468,6 +482,22 @@ class LayerGraph(BaseGraph):
                 layer, method, *layer_inputs, **kwargs)
 
         return outputs
+
+    def iter_variables(self, unique=True, trainable=True):
+        observed_variables = []
+
+        for layer in self:
+            for name, value in layer.variables.items():
+                if value in observed_variables:
+                    continue
+
+                if trainable and not value.trainable:
+                    continue
+
+                if unique:
+                    observed_variables.append(value)
+
+                yield layer, name, value
 
     def predict(self, *inputs):
         session = tensorflow_session()
