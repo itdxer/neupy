@@ -8,10 +8,6 @@ from neupy.core.properties import (
 )
 from neupy.utils.tf_utils import setup_parameter_updates
 from neupy.algorithms.minsearch.wolfe import line_search
-from neupy.layers.utils import (
-    count_parameters,
-    find_variables,
-)
 from neupy.utils import (
     asfloat, dot, outer,
     function_name_scope,
@@ -286,7 +282,7 @@ class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
 
     def init_variables(self):
         super(QuasiNewton, self).init_variables()
-        n_parameters = count_parameters(self.network)
+        n_parameters = self.network.n_parameters
 
         self.variables.update(
             inv_hessian=tf.Variable(
@@ -317,7 +313,8 @@ class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
         prev_params = self.variables.prev_params
         prev_full_gradient = self.variables.prev_full_gradient
 
-        params = find_variables(self.network, only_trainable=True)
+        variables = self.network.variables
+        params = [var for var in variables.values() if var.trainable]
         param_vector = make_single_vector(params)
 
         gradients = tf.gradients(self.variables.loss, params)

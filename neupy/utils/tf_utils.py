@@ -2,8 +2,8 @@ from functools import wraps
 
 import tensorflow as tf
 
-from neupy import init
 from neupy.utils.misc import as_tuple
+from neupy.utils.processing import asfloat
 
 
 __all__ = (
@@ -15,11 +15,8 @@ __all__ = (
     'class_method_name_scope', 'function_name_scope',
 
     # Misc utils for tensorflow
-    'flatten', 'outer', 'tf_repeat', 'dimshuffle',
+    'flatten', 'outer', 'tf_repeat', 'dimshuffle', 'shape_to_tuple',
     'dot', 'make_single_vector', 'setup_parameter_updates',
-
-    # Functions that help to deal with shapes
-    'shape_to_tuple', 'add_batch_dim',
 )
 
 
@@ -253,10 +250,6 @@ def dimshuffle(value, ndim, axes):
     return value
 
 
-def add_batch_dim(shape):
-    return tf.TensorShape([None]).concatenate(shape)
-
-
 def shape_to_tuple(shape):
     if isinstance(shape, tf.TensorShape):
         if shape.ndims is not None:
@@ -297,8 +290,9 @@ def create_variable(value, name, shape, trainable=True):
     -------
     Tensorfow variable.
     """
+    from neupy import init
+
     if shape is not None:
-        old_shape = shape
         shape = shape_to_tuple(shape)
 
     if isinstance(value, tf.Variable):

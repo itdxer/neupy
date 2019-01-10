@@ -283,3 +283,20 @@ class PReluTestCase(BaseTestCase):
                 "name='p-relu-1')"
             )
         )
+
+    def test_prelu_variables(self):
+        network = layers.join(
+            layers.Input(2),
+            layers.PRelu(3, name='prelu'),
+        )
+        self.assertDictEqual(network.layer('prelu').variables, {})
+
+        network.outputs
+        variables = network.layer('prelu').variables
+        self.assertSequenceEqual(
+            sorted(variables.keys()),
+            ['alpha', 'bias', 'weight'])
+
+        self.assertShapesEqual(variables['bias'].shape, (3,))
+        self.assertShapesEqual(variables['weight'].shape, (2, 3))
+        self.assertShapesEqual(variables['alpha'].shape, (3,))

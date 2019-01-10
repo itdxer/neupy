@@ -1,9 +1,3 @@
-import tensorflow as tf
-
-from neupy import init
-from neupy.utils import asfloat, shape_to_tuple, as_tuple
-
-
 __all__ = ('extract_network',)
 
 
@@ -24,7 +18,7 @@ def extract_network(instance):
     ValueError
         In case if input object doesn't have connection of layers.
     """
-    # Note: Import it here in order to prevent loops
+    # Note: Import it here in order to import loops
     from neupy.algorithms.base import BaseNetwork
     from neupy.layers.base import BaseGraph
     from neupy import layers
@@ -41,11 +35,3 @@ def extract_network(instance):
     raise TypeError(
         "Invalid input type. Input should be network, connection "
         "or list of layers, got {}".format(type(instance)))
-
-
-def count_parameters(*args, **kwargs):
-    pass
-
-
-def find_variables(*args, **kwargs):
-    pass

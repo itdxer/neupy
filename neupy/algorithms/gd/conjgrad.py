@@ -3,7 +3,6 @@ import tensorflow as tf
 from neupy.utils import dot, function_name_scope, asfloat, make_single_vector
 from neupy.core.properties import (ChoiceProperty, NumberProperty,
                                    WithdrawProperty)
-from neupy.layers.utils import count_parameters, find_variables
 from neupy.utils.tf_utils import setup_parameter_updates
 from .base import BaseOptimizer
 from .quasi_newton import safe_division, WolfeLineSearchForStep
@@ -152,7 +151,7 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseOptimizer):
 
     def init_variables(self):
         super(ConjugateGradient, self).init_variables()
-        n_parameters = count_parameters(self.network)
+        n_parameters = self.network.n_parameters
 
         self.variables.update(
             prev_delta=tf.Variable(
@@ -177,8 +176,9 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseOptimizer):
         previous_delta = self.variables.prev_delta
         previous_gradient = self.variables.prev_gradient
 
-        n_parameters = count_parameters(self.network)
-        parameters = find_variables(self.network, only_trainable=True)
+        n_parameters = self.network.n_parameters
+        variables = self.network.variables
+        parameters = [var for var in variables.values() if var.trainable]
         param_vector = make_single_vector(parameters)
 
         gradients = tf.gradients(self.variables.loss, parameters)
