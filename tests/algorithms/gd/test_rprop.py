@@ -110,7 +110,7 @@ class RPROPTestCase(BaseTestCase):
                 show_epoch=100,
             ),
             epochs=5000,
-            min_accepted_error=0.006,
+            min_accepted_loss=0.006,
         )
 
     def test_irproplus_overfit(self):
@@ -128,5 +128,5 @@ class RPROPTestCase(BaseTestCase):
                 show_epoch=100,
             ),
             epochs=5000,
-            min_accepted_error=0.005,
+            min_accepted_loss=0.005,
         )

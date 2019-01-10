@@ -60,7 +60,7 @@ conv_autoencoder = algorithms.Momentum(
     step=0.02,
     momentum=0.9,
     batch_size=128,
-    error='rmse',
+    loss='rmse',
 
     shuffle_data=True,
     verbose=True,

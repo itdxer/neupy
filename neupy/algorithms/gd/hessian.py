@@ -69,7 +69,7 @@ class Hessian(BaseOptimizer):
 
     {BaseOptimizer.network}
 
-    {BaseOptimizer.error}
+    {BaseOptimizer.loss}
 
     {BaseOptimizer.regularizer}
 

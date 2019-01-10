@@ -65,5 +65,5 @@ class HessianDiagonalTestCase(BaseTestCase):
                 min_eigval=0.1,
             ),
             epochs=6000,
-            min_accepted_error=0.002
+            min_accepted_loss=0.002
         )

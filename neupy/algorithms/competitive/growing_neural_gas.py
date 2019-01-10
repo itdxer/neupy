@@ -117,7 +117,7 @@ class NeuronNode(object):
     """
     def __init__(self, weight):
         self.weight = weight
-        self.error = 0
+        self.loss = 0
 
     def __repr__(self):
         return "<{} error={}>".format(
@@ -335,7 +335,7 @@ class GrowingNeuralGas(BaseNetwork):
         max_nodes = self.max_nodes
         max_edge_age = self.max_edge_age
 
-        error_decay_rate = self.error_decay_rate
+        error_decay_rate = self.loss_decay_rate
         after_split_error_decay_rate = self.after_split_error_decay_rate
         n_iter_before_neuron_added = self.n_iter_before_neuron_added
 

@@ -87,7 +87,7 @@ if __name__ == '__main__':
         step=0.01,
         verbose=True,
         batch_size=128,
-        error='categorical_crossentropy',
+        loss='categorical_crossentropy',
     )
     network.train(x_train, y_train, x_test, y_test, epochs=10)
 

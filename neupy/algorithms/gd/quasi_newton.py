@@ -82,10 +82,10 @@ class WolfeLineSearchForStep(Configurable):
             return output
 
         def phi(step):
-            return self.error(network_output, prediction(step))
+            return self.loss(network_output, prediction(step))
 
         def derphi(step):
-            error_func = self.error(network_output, prediction(step))
+            error_func = self.loss(network_output, prediction(step))
             gradient, = tf.gradients(error_func, step)
             return gradient
 
@@ -222,7 +222,7 @@ class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
 
     {BaseOptimizer.network}
 
-    {BaseOptimizer.error}
+    {BaseOptimizer.loss}
 
     {BaseOptimizer.show_epoch}
 

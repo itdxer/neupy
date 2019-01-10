@@ -72,7 +72,7 @@ class LSTMTestCase(BaseTestCase):
             step=0.01,
             verbose=verbose,
             batch_size=16,
-            error='binary_crossentropy',
+            loss='binary_crossentropy',
         )
         network.train(x_train, y_train, x_test, y_test, epochs=20)
 
@@ -143,7 +143,7 @@ class LSTMTestCase(BaseTestCase):
     #         step=0.05,
     #         verbose=False,
     #         batch_size=1,
-    #         error='binary_crossentropy',
+    #         loss='binary_crossentropy',
     #     )
     #     network.train(x_train, y_train, x_test, y_test, epochs=20)
     #
@@ -169,7 +169,7 @@ class LSTMTestCase(BaseTestCase):
     #         step=0.02,
     #         verbose=False,
     #         batch_size=1,
-    #         error='binary_crossentropy',
+    #         loss='binary_crossentropy',
     #     )
     #     network.train(x_train, y_train, x_test, y_test, epochs=20)
     #
@@ -211,7 +211,7 @@ class GRUTestCase(BaseTestCase):
             step=0.05,
             verbose=False,
             batch_size=16,
-            error='binary_crossentropy',
+            loss='binary_crossentropy',
         )
         network.train(x_train, y_train, x_test, y_test, epochs=20)
 
@@ -274,7 +274,7 @@ class GRUTestCase(BaseTestCase):
     #         step=0.01,
     #         verbose=False,
     #         batch_size=1,
-    #         error='binary_crossentropy',
+    #         loss='binary_crossentropy',
     #     )
     #     network.train(x_train, y_train, x_test, y_test, epochs=10)
     #
@@ -300,7 +300,7 @@ class GRUTestCase(BaseTestCase):
     #         step=0.01,
     #         verbose=False,
     #         batch_size=10,
-    #         error='binary_crossentropy',
+    #         loss='binary_crossentropy',
     #     )
     #     network.train(x_train, y_train, x_test, y_test, epochs=20)
     #

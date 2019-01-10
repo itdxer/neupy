@@ -97,10 +97,11 @@ class BaseTestCase(unittest.TestCase):
         loaded_network_prediction = loaded_network.predict(X)
 
         np.testing.assert_array_almost_equal(
-            loaded_network_prediction, network_prediction)
+            loaded_network_prediction,
+            network_prediction)
 
     def assertCanNetworkOverfit(self, network_class, epochs=100,
-                                min_accepted_error=0.001):
+                                min_accepted_loss=0.001):
 
         x_train = 2 * np.random.random((10, 2)) - 1  # zero centered
         y_train = np.random.random((10, 1))
@@ -118,7 +119,7 @@ class BaseTestCase(unittest.TestCase):
         ])
 
         network.train(x_train, y_train, epochs=epochs)
-        self.assertLess(network.training_errors[-1], min_accepted_error)
+        self.assertLess(network.training_errors[-1], min_accepted_loss)
 
     def assertShapesEqual(self, shape1, shape2, *args, **kwargs):
         shape1 = shape_to_tuple(shape1)

@@ -78,7 +78,7 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseOptimizer):
 
     {BaseOptimizer.network}
 
-    {BaseOptimizer.error}
+    {BaseOptimizer.loss}
 
     {BaseOptimizer.show_epoch}
 

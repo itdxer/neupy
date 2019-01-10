@@ -23,7 +23,7 @@ autoencoder = algorithms.Momentum(
     verbose=True,
     momentum=0.99,
     nesterov=True,
-    error='rmse',
+    loss='rmse',
 )
 autoencoder.train(x_train, x_train, x_test, x_test, epochs=100)
 

@@ -154,7 +154,7 @@ Now that we have our architecture we can initialize training algorithm.
 
         # Categorical cross-entropy is very popular loss function
         # for the multi-class classification problems
-        error='categorical_crossentropy',
+        loss='categorical_crossentropy',
 
         # Number of samples propagated through the network
         # before every weight update

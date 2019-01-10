@@ -42,7 +42,7 @@ class BaseOptimizer(BaseNetwork):
     regularizer : function or None
         Network's regularizer.
 
-    error : str or function
+    loss : str or function
         Error/loss function. Defaults to ``mse``.
 
         - ``mae`` - Mean Absolute Error.
@@ -101,7 +101,7 @@ class BaseOptimizer(BaseNetwork):
     """
     step = ScalarVariableProperty(default=0.1)
     regularizer = Property(default=None, allow_none=True)
-    error = FunctionWithOptionsProperty(default='mse', choices={
+    loss = FunctionWithOptionsProperty(default='mse', choices={
         'mae': objectives.mae,
         'mse': objectives.mse,
         'rmse': objectives.rmse,
@@ -163,17 +163,17 @@ class BaseOptimizer(BaseNetwork):
         raise NotImplementedError()
 
     def init_functions(self):
-        loss = self.error(
+        loss = self.loss(
             self.network.targets[0],
             self.network.outputs,
         )
-        val_loss = self.error(
+        val_loss = self.loss(
             self.network.targets[0],
             self.network.training_outputs,
         )
 
         if self.regularizer is not None:
-            loss = loss + self.regularizer(self.network)
+            loss += self.regularizer(self.network)
 
         self.variables.update(
             step=self.step,
@@ -197,18 +197,18 @@ class BaseOptimizer(BaseNetwork):
             predict=function(
                 inputs=self.network.inputs,
                 outputs=self.network.outputs,
-                name='network/func-predict'
+                name='network/predict'
             ),
             one_training_update=function(
                 inputs=as_tuple(self.network.inputs, self.network.targets),
                 outputs=loss,
                 updates=training_updates,
-                name='network/func-train-epoch'
+                name='network/one-update-step'
             ),
             score=function(
                 inputs=as_tuple(self.network.inputs, self.network.targets),
                 outputs=val_loss,
-                name='network/func-prediction-error'
+                name='network/score'
             )
         )
 
@@ -320,9 +320,9 @@ class GradientDescent(BaseOptimizer):
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> network = Input(2) > Sigmoid(3) > Sigmoid(1)
-    >>> mgdnet = algorithms.GradientDescent(network, batch_size=1)
-    >>> mgdnet.train(x_train, y_train)
+    >>> network = Input(2) >> Sigmoid(3) >> Sigmoid(1)
+    >>> optimizer = algorithms.GradientDescent(network, batch_size=1)
+    >>> optimizer.train(x_train, y_train)
     """
     batch_size = IntProperty(default=128, minval=0, allow_none=True)
 

@@ -85,7 +85,7 @@ NeuPy allows to train networks with multiple inputs.
 
         step=0.5,
         verbose=True,
-        error='binary_crossentropy',
+        loss='binary_crossentropy',
     )
 
     x_train_cat, x_train_num, y_train = load_train_data()
@@ -153,7 +153,7 @@ NeuPy has many different :ref:`loss functions <cheatsheet-error-function>`. Thes
             layers.Relu(300),
             layers.Softmax(10),
         ],
-        error='categorical_crossentropy',
+        loss='categorical_crossentropy',
     )
 
 Also, it's possible to create custom loss functions. Loss function should have two mandatory arguments, namely expected and predicted values.
@@ -174,7 +174,7 @@ Also, it's possible to create custom loss functions. Loss function should have t
             layers.Relu(300),
             layers.Softmax(10),
         ],
-        error=mean_absolute_error,
+        loss=mean_absolute_error,
     )
 
 Loss function should return a scalar, because during the training output from the loss function will be used as a variable with respect to which we are differentiating.

@@ -103,7 +103,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         default_configs = dict(
             step=0.1,
             batch_size=10,
-            error='categorical_crossentropy',
+            loss='categorical_crossentropy',
             verbose=False)
 
         architecture = layers.join(

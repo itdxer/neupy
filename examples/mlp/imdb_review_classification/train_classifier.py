@@ -40,7 +40,7 @@ classifier = algorithms.RPROP(
         layers.Relu(50),
         layers.Sigmoid(1),
     ],
-    error='binary_crossentropy',
+    loss='binary_crossentropy',
     verbose=True,
     shuffle_data=True,
 

@@ -181,7 +181,7 @@ class IRPROPPlus(RPROP):
 
     {BaseOptimizer.network}
 
-    {BaseOptimizer.error}
+    {BaseOptimizer.loss}
 
     {BaseNetwork.show_epoch}
 
@@ -228,8 +228,8 @@ class IRPROPPlus(RPROP):
     def init_variables(self):
         super(IRPROPPlus, self).init_variables()
         self.variables.update(
-            last_error=tf.Variable(np.nan, name='irprop-plus/last-error'),
-            previous_error=tf.Variable(
+            last_loss=tf.Variable(np.nan, name='irprop-plus/last-error'),
+            previous_loss=tf.Variable(
                 np.nan, name='irprop-plus/previous-error'),
         )
 
