@@ -277,13 +277,10 @@ class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
     )
     epsilon = NumberProperty(default=1e-7, minval=0)
     h0_scale = NumberProperty(default=1, minval=0)
-
     step = WithdrawProperty()
 
-    def init_variables(self):
-        super(QuasiNewton, self).init_variables()
+    def init_functions(self):
         n_parameters = self.network.n_parameters
-
         self.variables.update(
             inv_hessian=tf.Variable(
                 asfloat(self.h0_scale) * tf.eye(n_parameters),
@@ -306,6 +303,7 @@ class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
                 dtype=tf.float32
             ),
         )
+        super(QuasiNewton, self).init_functions()
 
     def init_train_updates(self):
         iteration = self.variables.iteration

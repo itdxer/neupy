@@ -79,14 +79,13 @@ class Adamax(GradientDescent):
     beta2 = ProperFractionProperty(default=0.999)
     epsilon = NumberProperty(default=1e-7, minval=0)
 
-    def init_variables(self):
-        super(Adamax, self).init_variables()
-
+    def init_functions(self):
         self.variables.iteration = tf.Variable(
             asfloat(1),
             name='iteration',
             dtype=tf.float32,
         )
+        super(Adamax, self).init_functions()
 
     def init_train_updates(self):
         updates = []

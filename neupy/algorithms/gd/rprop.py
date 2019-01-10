@@ -225,13 +225,13 @@ class IRPROPPlus(RPROP):
     :network:`RPROP` : RPROP algorithm.
     :network:`GradientDescent` : GradientDescent algorithm.
     """
-    def init_variables(self):
-        super(IRPROPPlus, self).init_variables()
+    def init_functions(self):
         self.variables.update(
-            last_loss=tf.Variable(np.nan, name='irprop-plus/last-error'),
-            previous_loss=tf.Variable(
+            last_error=tf.Variable(np.nan, name='irprop-plus/last-error'),
+            previous_error=tf.Variable(
                 np.nan, name='irprop-plus/previous-error'),
         )
+        super(IRPROPPlus, self).init_functions()
 
     def one_training_update(self, X_train, y_train):
         if len(self.training_errors) >= 2:
