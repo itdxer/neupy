@@ -34,3 +34,15 @@ class EmbeddingLayerTestCase(BaseTestCase):
                 "name='embedding-1')"
             )
         )
+
+    def test_embedding_variables(self):
+        network = layers.join(
+            layers.Input(2),
+            layers.Embedding(3, 5, name='embed'),
+        )
+        self.assertDictEqual(network.layer('embed').variables, {})
+
+        network.outputs
+        variables = network.layer('embed').variables
+        self.assertSequenceEqual(list(variables.keys()), ['weight'])
+        self.assertShapesEqual(variables['weight'].shape, (3, 5))

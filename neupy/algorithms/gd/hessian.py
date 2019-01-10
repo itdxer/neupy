@@ -5,7 +5,6 @@ from neupy.utils import (
     asfloat, flatten, function_name_scope,
     make_single_vector,
 )
-from neupy.layers.utils import count_parameters, find_variables
 from neupy.utils.tf_utils import setup_parameter_updates
 from .base import BaseOptimizer
 
@@ -120,8 +119,9 @@ class Hessian(BaseOptimizer):
     def init_train_updates(self):
         penalty_const = asfloat(self.penalty_const)
 
-        n_parameters = count_parameters(self.network)
-        parameters = find_variables(self.network, only_trainable=True)
+        n_parameters = self.network.n_parameters
+        variables = self.network.variables
+        parameters = [var for var in variables.values() if var.trainable]
         param_vector = make_single_vector(parameters)
 
         hessian_matrix, full_gradient = find_hessian_and_gradient(

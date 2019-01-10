@@ -9,7 +9,6 @@ from neupy.core.properties import (BoundedProperty, ChoiceProperty,
                                    WithdrawProperty)
 from neupy.algorithms import BaseOptimizer
 from neupy.algorithms.gd import objectives
-from neupy.layers.utils import find_variables
 from neupy.utils.tf_utils import setup_parameter_updates
 
 
@@ -148,7 +147,8 @@ class LevenbergMarquardt(BaseOptimizer):
 
         err_for_each_sample = flatten((network_output - training_outputs) ** 2)
 
-        params = find_variables(self.network, only_trainable=True)
+        variables = self.network.variables
+        params = [var for var in variables.values() if var.trainable]
         param_vector = make_single_vector(params)
 
         J = compute_jacobian(err_for_each_sample, params)

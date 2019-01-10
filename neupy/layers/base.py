@@ -504,6 +504,15 @@ class LayerGraph(BaseGraph):
 
         return variables
 
+    @property
+    def n_parameters(self):
+        n_parameters = 0
+
+        for variable in self.variables.values():
+            n_parameters += variable.shape.num_elements()
+
+        return n_parameters
+
     def predict(self, *inputs):
         session = tensorflow_session()
         feed_dict = dict(zip(as_tuple(self.inputs), inputs))
@@ -773,7 +782,8 @@ class Input(BaseLayer):
 
     @property
     def input_shape(self):
-        return tf_utils.add_batch_dim(self.shape)
+        batch_shape = tf.TensorShape([None])
+        return batch_shape.concatenate(self.shape)
 
     def output(self, input, **kwargs):
         return input

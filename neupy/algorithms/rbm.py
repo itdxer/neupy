@@ -4,10 +4,7 @@ import tensorflow as tf
 from neupy.core.config import DumpableObject
 from neupy.core.properties import IntProperty, ParameterProperty
 from neupy.algorithms.base import BaseNetwork
-from neupy.utils import (
-    asfloat, format_data, dot, function, iters,
-    initialize_uninitialized_variables
-)
+from neupy.utils import asfloat, format_data, dot, iters, tf_utils
 from neupy import init
 
 
@@ -304,8 +301,8 @@ class RBM(BaseNetwork, DumpableObject):
             gibbs_sampling = sample_visible_from_hidden(
                 sample_hidden_from_visible(network_input))
 
-        initialize_uninitialized_variables()
-        self.weight_update_one_step = function(
+        tf_utils.initialize_uninitialized_variables()
+        self.weight_update_one_step = tf_utils.function(
             [network_input],
             error,
             name='rbm/train-epoch',
@@ -316,22 +313,22 @@ class RBM(BaseNetwork, DumpableObject):
                 (h_samples, random_binomial(p=h_neg)),
             ]
         )
-        self.score_func = function(
+        self.score_func = tf_utils.function(
             [network_input],
             error,
             name='rbm/prediction-error',
         )
-        self.visible_to_hidden_one_step = function(
+        self.visible_to_hidden_one_step = tf_utils.function(
             [network_input],
             visible_to_hidden(network_input),
             name='rbm/visible-to-hidden',
         )
-        self.hidden_to_visible_one_step = function(
+        self.hidden_to_visible_one_step = tf_utils.function(
             [network_hidden_input],
             hidden_to_visible(network_hidden_input),
             name='rbm/hidden-to-visible',
         )
-        self.gibbs_sampling_one_step = function(
+        self.gibbs_sampling_one_step = tf_utils.function(
             [network_input],
             gibbs_sampling,
             name='rbm/gibbs-sampling',

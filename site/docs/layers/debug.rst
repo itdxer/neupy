@@ -120,7 +120,7 @@ Function also works for the training algorithms with constructible architectures
 Count number of parameters
 --------------------------
 
-The ``count_parameters`` function allow to go through the network and count total number of parameters in it.
+The ``n_parameters`` attribute returns number of parameters in the network
 
 .. code-block:: python
 
@@ -131,7 +131,7 @@ The ``count_parameters`` function allow to go through the network and count tota
     ...     layers.Relu(5),  # weight: 10 * 5, bias: 5, total: 55
     ...     layers.Relu(2),  # weight:  5 * 2, bias: 2, total: 12
     ... )
-    >>> layers.count_parameters(connection)
+    >>> network.n_parameters
     67
 
 Iterate through all network parameters
