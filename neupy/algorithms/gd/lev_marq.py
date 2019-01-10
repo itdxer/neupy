@@ -125,12 +125,12 @@ class LevenbergMarquardt(BaseOptimizer):
     step = WithdrawProperty()
     regularizer = WithdrawProperty()
 
-    def init_variables(self):
-        super(LevenbergMarquardt, self).init_variables()
+    def init_functions(self):
         self.variables.update(
             mu=tf.Variable(self.mu, name='lev-marq/mu'),
-            last_loss=tf.Variable(np.nan, name='lev-marq/last-error'),
+            last_error=tf.Variable(np.nan, name='lev-marq/last-error'),
         )
+        super(LevenbergMarquardt, self).init_functions()
 
     def init_train_updates(self):
         network_output = self.network.targets[0]

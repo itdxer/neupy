@@ -139,10 +139,10 @@ class RBM(BaseNetwork, DumpableObject):
         options.update({'n_visible': n_visible, 'n_hidden': n_hidden})
         super(RBM, self).__init__(**options)
 
-        self.init_variables()
+        self.init_functions()
         self.init_methods()
 
-    def init_variables(self):
+    def init_functions(self):
         with tf.variable_scope('rbm'):
             self.weight = tf_utils.create_variable(
                 value=self.weight,

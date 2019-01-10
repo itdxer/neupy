@@ -16,7 +16,7 @@ class AdamTestCase(BaseTestCase):
                 layers.Sigmoid(1)
             ],
             step=0.1,
-            verbose=True,
+            verbose=False,
             epsilon=1e-4,
             beta1=0.9,
             beta2=0.99,

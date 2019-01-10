@@ -149,10 +149,8 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseOptimizer):
     )
     step = WithdrawProperty()
 
-    def init_variables(self):
-        super(ConjugateGradient, self).init_variables()
+    def init_functions(self):
         n_parameters = self.network.n_parameters
-
         self.variables.update(
             prev_delta=tf.Variable(
                 tf.zeros([n_parameters]),
@@ -170,6 +168,7 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseOptimizer):
                 dtype=tf.float32
             ),
         )
+        super(ConjugateGradient, self).init_functions()
 
     def init_train_updates(self):
         iteration = self.variables.iteration
