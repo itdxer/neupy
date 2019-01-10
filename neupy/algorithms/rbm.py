@@ -4,7 +4,6 @@ import tensorflow as tf
 from neupy.core.config import DumpableObject
 from neupy.core.properties import IntProperty, ParameterProperty
 from neupy.algorithms.base import BaseNetwork
-from neupy.layers.base import create_shared_parameter
 from neupy.utils import (
     asfloat, format_data, dot, function, iters,
     initialize_uninitialized_variables
@@ -148,19 +147,19 @@ class RBM(BaseNetwork, DumpableObject):
 
     def init_variables(self):
         with tf.variable_scope('rbm'):
-            self.weight = create_shared_parameter(
+            self.weight = tf_utils.create_variable(
                 value=self.weight,
                 name='weight',
                 shape=(self.n_visible, self.n_hidden),
                 trainable=False,
             )
-            self.hidden_bias = create_shared_parameter(
+            self.hidden_bias = tf_utils.create_variable(
                 value=self.hidden_bias,
                 name='hidden-bias',
                 shape=(self.n_hidden,),
                 trainable=False,
             )
-            self.visible_bias = create_shared_parameter(
+            self.visible_bias = tf_utils.create_variable(
                 value=self.visible_bias,
                 name='visible-bias',
                 shape=(self.n_visible,),

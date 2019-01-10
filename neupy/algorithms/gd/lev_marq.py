@@ -137,7 +137,7 @@ class LevenbergMarquardt(BaseOptimizer):
         network_output = self.network.targets[0]
         training_outputs = self.network.training_outputs
         last_error = self.variables.last_error
-        error_func = self.variables.error_func
+        error_func = self.variables.loss
         mu = self.variables.mu
 
         new_mu = tf.where(

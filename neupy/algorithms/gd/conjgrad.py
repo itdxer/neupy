@@ -181,7 +181,7 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseOptimizer):
         parameters = find_variables(self.network, only_trainable=True)
         param_vector = make_single_vector(parameters)
 
-        gradients = tf.gradients(self.variables.error_func, parameters)
+        gradients = tf.gradients(self.variables.loss, parameters)
         full_gradient = make_single_vector(gradients)
 
         beta = self.update_function(

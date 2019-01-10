@@ -5,7 +5,6 @@ from functools import wraps
 import tensorflow as tf
 
 from neupy.utils import asfloat
-from neupy.layers.utils import iter_variables
 
 
 __all__ = ('define_regularizer', 'l1', 'l2', 'maxnorm')
@@ -22,9 +21,9 @@ class Regularizer(object):
     def __call__(self, network):
         cost = asfloat(0)
 
-        for layer, attrname, param in iter_variables(network):
-            if attrname not in self.exclude:
-                cost += self.function(param, *self.args, **self.kwargs)
+        for (layer, varname), variable in network.variables.items():
+            if varname not in self.exclude and variable.trainable:
+                cost += self.function(variable, *self.args, **self.kwargs)
 
         return cost
 

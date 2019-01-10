@@ -89,15 +89,17 @@ class Embedding(BaseLayer):
 
         self.input_size = input_size
         self.output_size = output_size
-        self.weight = self.variable(
-            value=weight, name='weight',
-            shape=as_tuple(input_size, output_size))
+        self.weight = weight
 
     def get_output_shape(self, input_shape):
         input_shape = tf.TensorShape(input_shape)
         return input_shape.concatenate(self.output_size)
 
     def output(self, input_value, **kwargs):
+        self.weight = self.variable(
+            value=self.weight, name='weight',
+            shape=as_tuple(self.input_size, self.output_size))
+
         input_value = tf.cast(input_value, tf.int32)
         return tf.gather(self.weight, input_value)
 
