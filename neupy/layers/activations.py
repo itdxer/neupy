@@ -77,11 +77,6 @@ class Linear(BaseLayer):
         self.weight = weight
         self.bias = bias
 
-        if n_units is not None and bias is not None:
-            self.bias = self.variable(
-                value=self.bias, name='bias',
-                shape=as_tuple(self.n_units))
-
     def get_output_shape(self, input_shape):
         input_shape = tf.TensorShape(input_shape)
 
@@ -110,6 +105,10 @@ class Linear(BaseLayer):
         if self.bias is None:
             output = tf.matmul(input, self.weight)
             return self.activation_function(output)
+
+        self.bias = self.variable(
+            value=self.bias, name='bias',
+            shape=as_tuple(self.n_units))
 
         output = tf.matmul(input, self.weight) + self.bias
         return self.activation_function(output)

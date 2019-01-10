@@ -683,10 +683,10 @@ class BaseLayer(BaseGraph):
             layer_name=self.name,
             parameter_name=name.replace('_', '-'))
 
-        self.variables[self.name] = create_shared_parameter(
+        self.variables[name] = create_shared_parameter(
             value, layer_name, shape, trainable)
 
-        return self.variables[self.name]
+        return self.variables[name]
 
     def _repr_arguments(self, *args, **kwargs):
         def format_value(value):
