@@ -76,7 +76,7 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseOptimizer):
 
     {WolfeLineSearchForStep.Parameters}
 
-    {BaseOptimizer.connection}
+    {BaseOptimizer.network}
 
     {BaseOptimizer.error}
 
@@ -117,7 +117,7 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseOptimizer):
     ... )
     >>>
     >>> cgnet = algorithms.ConjugateGradient(
-    ...     connection=[
+    ...     network=[
     ...         layers.Input(13),
     ...         layers.Sigmoid(50),
     ...         layers.Sigmoid(1),
@@ -152,7 +152,7 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseOptimizer):
 
     def init_variables(self):
         super(ConjugateGradient, self).init_variables()
-        n_parameters = count_parameters(self.connection)
+        n_parameters = count_parameters(self.network)
 
         self.variables.update(
             prev_delta=tf.Variable(
@@ -177,8 +177,8 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseOptimizer):
         previous_delta = self.variables.prev_delta
         previous_gradient = self.variables.prev_gradient
 
-        n_parameters = count_parameters(self.connection)
-        parameters = find_variables(self.connection, only_trainable=True)
+        n_parameters = count_parameters(self.network)
+        parameters = find_variables(self.network, only_trainable=True)
         param_vector = make_single_vector(parameters)
 
         gradients = tf.gradients(self.variables.error_func, parameters)

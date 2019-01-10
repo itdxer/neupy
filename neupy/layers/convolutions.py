@@ -11,7 +11,7 @@ from neupy.utils import as_tuple
 from neupy.exceptions import LayerConnectionError
 from neupy.core.properties import (
     TypedListProperty, Property,
-    WithdrawProperty, ParameterProperty,
+    ParameterProperty,
 )
 from .base import BaseLayer
 

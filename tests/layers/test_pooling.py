@@ -49,7 +49,7 @@ class PoolingLayersTestCase(BaseTestCase):
             max_pool_layer.output_shape,
             (None, None, None, None))
 
-    def test_pooling_output_shape(self):
+    def test_pooling_layer_output_shape(self):
         network = layers.join(
             layers.Input((10, 10, 3)),
             layers.MaxPooling((2, 2)),

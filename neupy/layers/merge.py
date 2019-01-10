@@ -5,7 +5,7 @@ import tensorflow as tf
 
 from neupy.core.properties import FunctionWithOptionsProperty, IntProperty
 from neupy.exceptions import LayerConnectionError
-from neupy.utils import as_tuple, tf_utils
+from neupy.utils import tf_utils
 from .base import BaseLayer
 
 
@@ -80,12 +80,12 @@ class Elementwise(BaseLayer):
             return tf.TensorShape(None)
 
         for shape in input_shapes:
-            if not tf_utils.probably_equal_shapes(shape, first_shape):
+            if not shape.is_compatible_with(first_shape):
                 formatted_shapes = tf_utils.shape_to_tuple(input_shapes)
                 raise LayerConnectionError(
-                    "The `{}` layer expects all input values with "
-                    "exactly the same shapes. Input shapes: {}"
-                    "".format(self.name, formatted_shapes))
+                    "Input shapes to the `{}` layer have incompatible shapes. "
+                    "Input shapes: {}, Layer: {}"
+                    "".format(self.name, formatted_shapes, self))
 
         return first_shape
 
@@ -265,7 +265,7 @@ class GatedAverage(BaseLayer):
                 "".format(n_expected_networks, (n_input_layers - 1)))
 
         for shape in other_shapes:
-            if not tf_utils.probably_equal_shapes(shape, other_shapes[0]):
+            if not shape.is_compatible_with(other_shapes[0]):
                 raise LayerConnectionError(
                     "Output layer that has to be merged expect to "
                     "have the same shapes. Shapes: {!r}"

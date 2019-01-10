@@ -1,7 +1,7 @@
 import numpy as np
 
 from neupy import layers
-from neupy.utils import asfloat, tf_utils
+from neupy.utils import asfloat
 from neupy.exceptions import LayerConnectionError
 
 from base import BaseTestCase

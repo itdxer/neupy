@@ -70,7 +70,7 @@ class LevenbergMarquardtTestCase(BaseTestCase):
         )
 
         lmnet = algorithms.LevenbergMarquardt(
-            connection=[
+            network=[
                 layers.Input(2),
                 layers.Sigmoid(6),
                 layers.Sigmoid(1),

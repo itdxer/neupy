@@ -14,7 +14,7 @@ def Fire(s_1x1, e_1x1, e_3x3, name):
             name=name + '/squeeze1x1'
         ),
         layers.Relu(),
-        [[
+        layers.parallel([
             layers.Convolution(
                 (1, 1, e_1x1),
                 padding='SAME',
@@ -28,7 +28,7 @@ def Fire(s_1x1, e_1x1, e_3x3, name):
                 name=name + '/expand3x3'
             ),
             layers.Relu(),
-        ]],
+        ]),
         layers.Concatenate(),
     )
 

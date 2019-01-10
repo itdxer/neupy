@@ -67,7 +67,7 @@ class Hessian(BaseOptimizer):
         algorithm include penalty that add to hessian matrix identity
         multiplied by defined constant. Defaults to ``1``.
 
-    {BaseOptimizer.connection}
+    {BaseOptimizer.network}
 
     {BaseOptimizer.error}
 
@@ -120,8 +120,8 @@ class Hessian(BaseOptimizer):
     def init_train_updates(self):
         penalty_const = asfloat(self.penalty_const)
 
-        n_parameters = count_parameters(self.connection)
-        parameters = find_variables(self.connection, only_trainable=True)
+        n_parameters = count_parameters(self.network)
+        parameters = find_variables(self.network, only_trainable=True)
         param_vector = make_single_vector(parameters)
 
         hessian_matrix, full_gradient = find_hessian_and_gradient(

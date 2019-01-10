@@ -7,7 +7,7 @@ from neupy.core.properties import (
     NumberProperty,
     IntProperty,
 )
-from neupy.utils import asfloat, as_tuple
+from neupy.utils import asfloat
 from neupy.exceptions import LayerConnectionError
 from .base import Identity
 

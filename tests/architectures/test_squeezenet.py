@@ -9,8 +9,8 @@ from base import BaseTestCase
 class SqueezenetTestCase(BaseTestCase):
     def test_squeezenet_architecture(self):
         squeezenet = architectures.squeezenet()
-        self.assertEqual(squeezenet.input_shape, (227, 227, 3))
-        self.assertEqual(squeezenet.output_shape, (1000,))
+        self.assertShapesEqual(squeezenet.input_shape, (None, 227, 227, 3))
+        self.assertShapesEqual(squeezenet.output_shape, (None, 1000))
 
         random_input = asfloat(np.random.random((7, 227, 227, 3)))
         prediction = self.eval(squeezenet.output(random_input))

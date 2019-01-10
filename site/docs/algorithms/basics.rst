@@ -32,7 +32,7 @@ In contrast, network with constructible architectures require two basic steps. F
 
     from neupy import layers
 
-    connection = layers.join(
+    network = layers.join(
         layers.Input(10),
         layers.Relu(5),
         layers.Softmax(4),

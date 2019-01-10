@@ -73,7 +73,7 @@ class HessianDiagonal(BaseOptimizer):
     ... )
     >>>
     >>> nw = algorithms.HessianDiagonal(
-    ...     connection=[
+    ...     network=[
     ...         layers.Input(10),
     ...         layers.Sigmoid(20),
     ...         layers.Sigmoid(1),
@@ -106,7 +106,7 @@ class HessianDiagonal(BaseOptimizer):
     def init_train_updates(self):
         step = self.variables.step
         inv_min_eigval = 1 / self.min_eigval
-        parameters = find_variables(self.connection, only_trainable=True)
+        parameters = find_variables(self.network, only_trainable=True)
         param_vector = make_single_vector(parameters)
 
         gradients = tf.gradients(self.variables.error_func, parameters)

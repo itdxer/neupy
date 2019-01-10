@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 
-from neupy import layers, init
+from neupy import layers
 from neupy.utils import asfloat
 from neupy.exceptions import LayerConnectionError
 
@@ -35,8 +35,8 @@ class ElementwiseTestCase(BaseTestCase):
             layers.Input(2),
             layers.Input(1),
         )
-        message = "layer expects all input values with exactly the same shapes"
-        with self.assertRaisesRegexp(LayerConnectionError, message):
+        error_message = "layer have incompatible shapes"
+        with self.assertRaisesRegexp(LayerConnectionError, error_message):
             layers.join(inputs, layers.Elementwise('add'))
 
     def test_elementwise_in_network(self):

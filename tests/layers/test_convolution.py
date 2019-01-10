@@ -6,7 +6,7 @@ import numpy as np
 import tensorflow as tf
 
 from neupy import layers
-from neupy.utils import asfloat, as_tuple, shape_to_tuple
+from neupy.utils import asfloat, shape_to_tuple
 from neupy.layers.convolutions import conv_output_shape, deconv_output_shape
 from neupy.exceptions import LayerConnectionError
 
@@ -110,7 +110,7 @@ class ConvLayersTestCase(BaseTestCase):
                 dimension_size=5, filter_size=5,
                 padding=1.5, stride=5,
             )
-#
+
     def test_conv_output_shape_int_padding(self):
         output_shape = conv_output_shape(
             dimension_size=10,
@@ -119,14 +119,14 @@ class ConvLayersTestCase(BaseTestCase):
             stride=5,
         )
         self.assertEqual(output_shape, 3)
-#
+
     def test_conv_unknown_dim_size(self):
         shape = conv_output_shape(
             dimension_size=None, filter_size=5,
             padding='VALID', stride=5,
         )
         self.assertEqual(shape, None)
-#
+
     def test_conv_invalid_padding_exception(self):
         error_msg = "greater or equal to zero"
         with self.assertRaisesRegexp(ValueError, error_msg):

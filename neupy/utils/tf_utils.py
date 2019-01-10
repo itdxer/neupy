@@ -18,7 +18,7 @@ __all__ = (
     'dot', 'make_single_vector', 'setup_parameter_updates',
 
     # Functions that help to deal with shapes
-    'shape_to_tuple', 'add_batch_dim', 'probably_equal_shapes'
+    'shape_to_tuple', 'add_batch_dim',
 )
 
 
@@ -269,7 +269,3 @@ def shape_to_tuple(shape):
         return tuple([shape_to_tuple(s) for s in shape])
 
     return shape
-
-
-def probably_equal_shapes(shape_a, shape_b):
-    return shape_to_tuple(shape_a) == shape_to_tuple(shape_b)

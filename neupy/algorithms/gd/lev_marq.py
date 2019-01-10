@@ -73,7 +73,7 @@ class LevenbergMarquardt(BaseOptimizer):
 
     Parameters
     ----------
-    {BaseOptimizer.connection}
+    {BaseOptimizer.network}
 
     mu : float
         Control invertion for J.T * J matrix, defaults to ``0.1``.
@@ -135,7 +135,7 @@ class LevenbergMarquardt(BaseOptimizer):
 
     def init_train_updates(self):
         network_output = self.variables.network_output
-        training_outputs = self.connection.training_outputs
+        training_outputs = self.network.training_outputs
         last_error = self.variables.last_error
         error_func = self.variables.error_func
         mu = self.variables.mu
@@ -148,7 +148,7 @@ class LevenbergMarquardt(BaseOptimizer):
 
         err_for_each_sample = flatten((network_output - training_outputs) ** 2)
 
-        params = find_variables(self.connection, only_trainable=True)
+        params = find_variables(self.network, only_trainable=True)
         param_vector = make_single_vector(params)
 
         J = compute_jacobian(err_for_each_sample, params)

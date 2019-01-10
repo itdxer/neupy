@@ -70,7 +70,7 @@ class Embedding(BaseLayer):
     >>> n_unique_categories = len(unique_value)
     >>> embedded_size = 1
     >>>
-    >>> connection = join(
+    >>> network = join(
     ...     Input(n_features),
     ...     Embedding(n_unique_categories, embedded_size),
     ...     # Output from the embedding layer is 3D

@@ -16,7 +16,7 @@ class HessianDiagonalTestCase(BaseTestCase):
             bias=init.Uniform(-0.1, 0.1))
 
         nw = algorithms.HessianDiagonal(
-            connection=[
+            network=[
                 layers.Input(10),
                 layers.Sigmoid(20, **params),
                 layers.Sigmoid(1, **params),
@@ -42,7 +42,7 @@ class HessianDiagonalTestCase(BaseTestCase):
             # Test data
             (x_train, y_train),
             # Network configurations
-            connection=[
+            network=[
                 layers.Input(10),
                 layers.Sigmoid(20, **params),
                 layers.Sigmoid(1, **params),

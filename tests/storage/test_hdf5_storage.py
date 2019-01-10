@@ -12,7 +12,7 @@ from base import BaseTestCase
 
 class HDF5StorageTestCase(BaseTestCase):
     def test_simple_storage_hdf5(self):
-        connection_1 = layers.join(
+        network_1 = layers.join(
             layers.Input(10),
             [
                 layers.Sigmoid(5),
@@ -20,7 +20,7 @@ class HDF5StorageTestCase(BaseTestCase):
             ],
             layers.Elementwise(),
         )
-        connection_2 = layers.join(
+        network_2 = layers.join(
             layers.Input(10),
             [
                 layers.Sigmoid(5),
@@ -30,24 +30,24 @@ class HDF5StorageTestCase(BaseTestCase):
         )
 
         random_input = asfloat(np.random.random((13, 10)))
-        random_output_1 = self.eval(connection_1.output(random_input))
-        random_output_2_1 = self.eval(connection_2.output(random_input))
+        random_output_1 = self.eval(network_1.output(random_input))
+        random_output_2_1 = self.eval(network_2.output(random_input))
 
         # Outputs has to be different
         self.assertFalse(np.any(random_output_1 == random_output_2_1))
 
         with tempfile.NamedTemporaryFile() as temp:
-            storage.save_hdf5(connection_1, temp.name)
-            storage.load_hdf5(connection_2, temp.name)
+            storage.save_hdf5(network_1, temp.name)
+            storage.load_hdf5(network_2, temp.name)
 
             random_output_2_2 = self.eval(
-                connection_2.output(random_input))
+                network_2.output(random_input))
 
             np.testing.assert_array_almost_equal(
                 random_output_1, random_output_2_2)
 
     def test_hdf5_storage_broken_attributes(self):
-        connection = layers.Input(1) > layers.Relu(2, name='relu')
+        network = layers.Input(1) > layers.Relu(2, name='relu')
         json_loads = json.loads
 
         def break_json(value):
@@ -56,7 +56,7 @@ class HDF5StorageTestCase(BaseTestCase):
             return json_loads(value)
 
         with tempfile.NamedTemporaryFile() as temp:
-            storage.save_hdf5(connection, temp.name)
+            storage.save_hdf5(network, temp.name)
 
             with patch('json.loads', side_effect=break_json):
-                storage.load_hdf5(connection, temp.name)
+                storage.load_hdf5(network, temp.name)

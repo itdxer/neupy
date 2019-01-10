@@ -1,14 +1,13 @@
-import numpy as np
 import tensorflow as tf
 
 from neupy import init
 from neupy.utils import asfloat
 
 
-__all__ = ('create_shared_parameter', 'extract_connection',)
+__all__ = ('create_shared_parameter', 'extract_network')
 
 
-def extract_connection(instance):
+def extract_network(instance):
     """
     Extract connection from different types of object.
 
@@ -34,7 +33,7 @@ def extract_connection(instance):
         return layers.join(*instance)
 
     if isinstance(instance, BaseNetwork):
-        return instance.connection
+        return instance.network
 
     if isinstance(instance, BaseGraph):
         return instance
@@ -84,3 +83,15 @@ def create_shared_parameter(value, name, shape, trainable=True):
         dtype=tf.float32,
         trainable=trainable,
     )
+
+
+def count_parameters(*args, **kwargs):
+    pass
+
+
+def find_variables(*args, **kwargs):
+    pass
+
+
+def iter_variables(*args, **kwargs):
+    pass

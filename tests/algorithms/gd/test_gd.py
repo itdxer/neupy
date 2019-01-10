@@ -41,11 +41,11 @@ class GradientDescentTestCase(BaseTestCase):
 
         self.assertIn(
             'connection',
-            network.get_params(with_connection=True),
+            network.get_params(with_network=True),
         )
         self.assertNotIn(
             'connection',
-            network.get_params(with_connection=False),
+            network.get_params(with_network=False),
         )
 
     def test_gd_overfit(self):

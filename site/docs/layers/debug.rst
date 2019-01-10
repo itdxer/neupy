@@ -9,7 +9,7 @@ The simplest way to debug network is just to explore input and output shapes.
 .. code-block:: python
 
     >>> from neupy import layers
-    >>> connection = layers.Input(10) > layers.Relu(5) > layers.Softmax(3)
+    >>> network = layers.Input(10) > layers.Relu(5) > layers.Softmax(3)
     >>> connection
     Input(10) > Relu(5) > Softmax(3)
     >>>
@@ -126,7 +126,7 @@ The ``count_parameters`` function allow to go through the network and count tota
 
     >>> from neupy import layers
     >>>
-    >>> connection = layers.join(
+    >>> network = layers.join(
     ...     layers.Input(10),
     ...     layers.Relu(5),  # weight: 10 * 5, bias: 5, total: 55
     ...     layers.Relu(2),  # weight:  5 * 2, bias: 2, total: 12

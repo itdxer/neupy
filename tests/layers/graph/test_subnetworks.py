@@ -1,6 +1,6 @@
 import numpy as np
 
-from neupy import layers, algorithms
+from neupy import layers
 from neupy.utils import asfloat
 
 from base import BaseTestCase
@@ -47,7 +47,7 @@ class SubnetworksTestCase(BaseTestCase):
             self.assertIsInstance(actual_layer, expected_layer)
 
     def test_many_to_many_parallel_subnetworks(self):
-        connection = layers.parallel(
+        network = layers.parallel(
             layers.Input(1) >> layers.Linear(11),
             layers.Input(2) >> layers.Linear(12),
             layers.Input(3) >> layers.Linear(13),
@@ -58,7 +58,7 @@ class SubnetworksTestCase(BaseTestCase):
         input_value_3 = asfloat(np.random.random((30, 3)))
 
         actual_output = self.eval(
-            connection.output(input_value_1, input_value_2, input_value_3))
+            network.output(input_value_1, input_value_2, input_value_3))
 
         self.assertEqual(actual_output[0].shape, (10, 11))
         self.assertEqual(actual_output[1].shape, (20, 12))

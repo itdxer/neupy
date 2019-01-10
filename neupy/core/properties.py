@@ -9,11 +9,12 @@ from neupy.utils import as_tuple, asfloat
 from neupy.core.docs import SharedDocs
 
 
-__all__ = ('BaseProperty', 'Property', 'ArrayProperty', 'BoundedProperty',
-           'ProperFractionProperty', 'NumberProperty', 'IntProperty',
-           'TypedListProperty', 'ChoiceProperty', 'WithdrawProperty',
-           'ParameterProperty', 'CallableProperty',
-           'FunctionWithOptionsProperty')
+__all__ = (
+    'BaseProperty', 'Property', 'ArrayProperty', 'BoundedProperty',
+    'ProperFractionProperty', 'NumberProperty', 'IntProperty',
+    'TypedListProperty', 'ChoiceProperty', 'WithdrawProperty',
+    'ParameterProperty', 'CallableProperty', 'FunctionWithOptionsProperty',
+)
 
 
 number_type = (int, float, np.floating, np.integer)
@@ -88,11 +89,10 @@ class BaseProperty(SharedDocs):
             else:
                 availabe_types = availabe_types.__name__
 
-            raise TypeError("Invalid data type `{0}` for `{1}` property. "
-                            "Expected types: {2}".format(
-                                value.__class__.__name__, self.name,
-                                availabe_types
-                            ))
+            dtype = value.__class__.__name__
+            raise TypeError(
+                "Invalid data type `{0}` for `{1}` property. "
+                "Expected types: {2}".format(dtype, self.name, availabe_types))
 
     def __repr__(self):
         classname = self.__class__.__name__
@@ -192,8 +192,10 @@ class TypedListProperty(BaseProperty):
             else:
                 element_type_name = self.element_type.__name__
 
-            raise TypeError("Valid list element types for `{}` are: {}"
-                            "".format(self.name, element_type_name))
+            raise TypeError(
+                "The `{}` parameter received invalid element types "
+                "in list/tuple. Element type: {}, Value: {}"
+                "".format(self.name, element_type_name, value))
 
 
 class ChoiceProperty(BaseProperty):

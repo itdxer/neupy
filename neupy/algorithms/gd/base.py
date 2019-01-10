@@ -15,7 +15,6 @@ from neupy.utils import (
     AttributeKeyDict, format_data, as_tuple, function,
     initialize_uninitialized_variables, iters,
 )
-from neupy.layers.utils import iter_variables
 from neupy.algorithms.gd import objectives
 from neupy.exceptions import InvalidConnection
 from neupy.algorithms.base import BaseNetwork
@@ -30,7 +29,7 @@ class BaseOptimizer(BaseNetwork):
 
     Parameters
     ----------
-    connection : list, tuple or LayerConnection instance
+    network : list, tuple or LayerConnection instance
         Network's architecture. There are a few ways
         to define it.
 
@@ -38,7 +37,7 @@ class BaseOptimizer(BaseNetwork):
           For instance, ``[Input(2), Tanh(4), Relu(1)]``.
 
         - Constructed layers.
-          For instance, ``Input(2) > Tanh(4) > Relu(1)``.
+          For instance, ``Input(2) >> Tanh(4) >> Relu(1)``.
 
     regularizer : function or None
         Network's regularizer.
@@ -116,16 +115,16 @@ class BaseOptimizer(BaseNetwork):
         'categorical_hinge': objectives.categorical_hinge,
     })
 
-    def __init__(self, connection, options=None, **kwargs):
+    def __init__(self, network, options=None, **kwargs):
         options = options or kwargs
 
-        if isinstance(connection, (list, tuple)):
-            connection = layers.join(*connection)
+        if isinstance(network, (list, tuple)):
+            network = layers.join(*network)
 
-        self.connection = connection
+        self.network = network
 
-        if len(self.connection.output_layers) != 1:
-            n_outputs = len(connection.output_layers)
+        if len(self.network.output_layers) != 1:
+            n_outputs = len(network.output_layers)
             raise InvalidConnection(
                 "Connection should have one output "
                 "layer, got {}".format(n_outputs))
@@ -154,7 +153,7 @@ class BaseOptimizer(BaseNetwork):
     def iter_params_and_grads(self):
         layers, parameters = [], []
 
-        for layer, _, parameter in self.connection.iter_variables():
+        for layer, _, parameter in self.network.iter_variables():
             layers.append(layer)
             parameters.append(parameter)
 
@@ -167,9 +166,9 @@ class BaseOptimizer(BaseNetwork):
         raise NotImplementedError()
 
     def init_input_output_variables(self):
-        output_layer = self.connection.output_layers[0]
+        output_layer = self.network.output_layers[0]
         self.variables.update(
-            network_inputs=self.connection.inputs,
+            network_inputs=self.network.inputs,
             network_output=tf.placeholder(
                 tf.float32,
                 name='placeholder/target-{}'.format(output_layer.name),
@@ -178,11 +177,11 @@ class BaseOptimizer(BaseNetwork):
 
     def init_variables(self):
         network_output = self.variables.network_output
-        loss = self.error(network_output, self.connection.outputs)
-        val_loss = self.error(network_output, self.connection.training_outputs)
+        loss = self.error(network_output, self.network.outputs)
+        val_loss = self.error(network_output, self.network.training_outputs)
 
         if self.regularizer is not None:
-            loss = loss + self.regularizer(self.connection)
+            loss = loss + self.regularizer(self.network)
 
         self.variables.update(
             step=self.step,
@@ -197,7 +196,7 @@ class BaseOptimizer(BaseNetwork):
         with tf.name_scope('training-updates'):
             training_updates = self.init_train_updates()
 
-            for layer in self.connection.layers:
+            for layer in self.network.layers:
                 training_updates.extend(layer.updates)
 
             for variable in self.variables.values():
@@ -209,7 +208,7 @@ class BaseOptimizer(BaseNetwork):
         self.methods.update(
             predict=function(
                 inputs=network_inputs,
-                outputs=self.connection.outputs,
+                outputs=self.network.outputs,
                 name='network/func-predict'
             ),
             one_training_update=function(
@@ -255,7 +254,7 @@ class BaseOptimizer(BaseNetwork):
         array-like
         """
         X = [format_data(x) for x in as_tuple(X)]
-        return self.connection.predict(*X)
+        return self.network.predict(*X)
 
     def train(self, X_train, y_train, X_test=None, y_test=None,
               *args, **kwargs):
@@ -285,21 +284,21 @@ class BaseOptimizer(BaseNetwork):
     def one_training_update(self, X_train, y_train):
         return self.methods.one_training_update(*as_tuple(X_train, y_train))
 
-    def get_params(self, deep=False, with_connection=True):
+    def get_params(self, deep=False, with_network=True):
         params = super(BaseOptimizer, self).get_params()
-        if with_connection:
-            params['connection'] = self.connection
+        if with_network:
+            params['network'] = self.network
         return params
 
     def __reduce__(self):
-        parameters = self.get_params(with_connection=False)
-        args = (self.connection, parameters)
+        parameters = self.get_params(with_network=False)
+        args = (self.network, parameters)
         return (self.__class__, args)
 
     def __repr__(self):
         return "{}({}, {})".format(
             self.__class__.__name__,
-            self.connection,
+            self.network,
             self.repr_options())
 
 

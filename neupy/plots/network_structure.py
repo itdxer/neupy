@@ -5,7 +5,7 @@ from collections import OrderedDict
 import graphviz
 
 from neupy.layers.base import Identity
-from neupy.layers.utils import extract_connection
+from neupy.layers.utils import extract_network
 
 
 __all__ = ('network_structure',)
@@ -93,15 +93,15 @@ def exclude_layer_from_graph(graph, ignore_layers):
     return cleaned_graph
 
 
-def network_structure(connection, ignore_layers=None, filepath=None,
+def network_structure(network, ignore_layers=None, filepath=None,
                       show=True):
     """
-    Draw graphical representation of the layer connection
+    Draw graphical representation of the layer network
     structure in form of directional graph.
 
     Parameters
     ----------
-    connection : BaseLayer instance, BaseNetwork instance
+    network : BaseLayer instance, BaseNetwork instance
 
     ignore_layers : list or None
         List of layer types that needs to be excluded
@@ -119,10 +119,10 @@ def network_structure(connection, ignore_layers=None, filepath=None,
     --------
     >>> from neupy import layers, plots
     >>>
-    >>> connection = layers.Input(10) > layers.Sigmoid(1)
-    >>> plots.network_structure(connection)
+    >>> network = layers.Input(10) > layers.Sigmoid(1)
+    >>> plots.network_structure(network)
     """
-    connection = extract_connection(connection)
+    network = extract_network(network)
 
     if ignore_layers is None:
         ignore_layers = []
@@ -132,7 +132,7 @@ def network_structure(connection, ignore_layers=None, filepath=None,
 
     ignore_layers = [Identity] + ignore_layers
 
-    forward_graph = connection.graph.forward_graph
+    forward_graph = network.graph.forward_graph
     forward_graph = exclude_layer_from_graph(forward_graph, ignore_layers)
 
     digraph = graphviz.Digraph()

@@ -1,55 +1,55 @@
 import numpy as np
 
 from neupy import layers
-from neupy.utils import asfloat, as_tuple
+from neupy.utils import asfloat
 
 from base import BaseTestCase
 
 
 class OldInlineDefinitionsTestCase(BaseTestCase):
-    def test_inline_connection_python_compatibility(self):
-        connection = layers.Input(1) > layers.Relu(2)
-        self.assertTrue(connection.__bool__())
-        self.assertTrue(connection.__nonzero__())
+    def test_inline_network_python_compatibility(self):
+        network = layers.Input(1) > layers.Relu(2)
+        self.assertTrue(network.__bool__())
+        self.assertTrue(network.__nonzero__())
 
-    def test_inline_connection_order(self):
+    def test_inline_network_order(self):
         input_layer_1 = layers.Input(1)
         relu_2 = layers.Relu(2)
         relu_3 = layers.Relu(3)
 
-        connection_1 = input_layer_1 > relu_2 > relu_3
-        self.assertEqual(list(connection_1), [input_layer_1, relu_2, relu_3])
+        network_1 = input_layer_1 > relu_2 > relu_3
+        self.assertEqual(list(network_1), [input_layer_1, relu_2, relu_3])
 
         input_layer_4 = layers.Input(4)
         relu_5 = layers.Relu(5)
         relu_6 = layers.Relu(6)
 
-        connection_2 = input_layer_4 > relu_5
-        self.assertEqual(list(connection_2), [input_layer_4, relu_5])
+        network_2 = input_layer_4 > relu_5
+        self.assertEqual(list(network_2), [input_layer_4, relu_5])
 
-        connection_3 = relu_5 > relu_6
-        self.assertEqual(list(connection_3), [relu_5, relu_6])
+        network_3 = relu_5 > relu_6
+        self.assertEqual(list(network_3), [relu_5, relu_6])
 
-    def test_inline_connection_wtih_different_pointers(self):
+    def test_inline_network_wtih_different_pointers(self):
         relu_2 = layers.Relu(2)
 
-        connection_1 = layers.Input(1) > relu_2 > layers.Relu(3)
-        connection_2 = relu_2 > layers.Relu(4)
-        connection_3 = layers.Input(1) > relu_2
+        network_1 = layers.Input(1) > relu_2 > layers.Relu(3)
+        network_2 = relu_2 > layers.Relu(4)
+        network_3 = layers.Input(1) > relu_2
 
-        self.assertShapesEqual(connection_1.input_shape, (None, 1))
-        self.assertShapesEqual(connection_1.output_shape, (None, 3))
+        self.assertShapesEqual(network_1.input_shape, (None, 1))
+        self.assertShapesEqual(network_1.output_shape, (None, 3))
 
-        self.assertShapesEqual(connection_2.input_shape, None)
-        self.assertShapesEqual(connection_2.output_shape, (None, 4))
+        self.assertShapesEqual(network_2.input_shape, None)
+        self.assertShapesEqual(network_2.output_shape, (None, 4))
 
-        self.assertShapesEqual(connection_3.input_shape, (None, 1))
-        self.assertShapesEqual(connection_3.output_shape, (None, 2))
+        self.assertShapesEqual(network_3.input_shape, (None, 1))
+        self.assertShapesEqual(network_3.output_shape, (None, 2))
 
-        self.assertIn(relu_2, connection_2.input_layers)
-        self.assertIn(relu_2, connection_3.output_layers)
+        self.assertIn(relu_2, network_2.input_layers)
+        self.assertIn(relu_2, network_3.output_layers)
 
-    def test_inline_connection_with_parallel_connection(self):
+    def test_inline_network_with_parallel_network(self):
         left_branch = layers.join(
             layers.Convolution((3, 3, 32)),
             layers.Relu(),
@@ -76,15 +76,15 @@ class OldInlineDefinitionsTestCase(BaseTestCase):
 
 class InlineDefinitionsTestCase(BaseTestCase):
     def test_inline_definition(self):
-        connection = layers.Input(2) >> layers.Relu(10) >> layers.Tanh(1)
-        self.assertShapesEqual(connection.input_shape, (None, 2))
-        self.assertShapesEqual(connection.output_shape, (None, 1))
+        network = layers.Input(2) >> layers.Relu(10) >> layers.Tanh(1)
+        self.assertShapesEqual(network.input_shape, (None, 2))
+        self.assertShapesEqual(network.output_shape, (None, 1))
 
         input_value = asfloat(np.random.random((10, 2)))
-        output_value = self.eval(connection.output(input_value))
+        output_value = self.eval(network.output(input_value))
         self.assertEqual(output_value.shape, (10, 1))
 
-    def test_connection_shape_multiple_inputs(self):
+    def test_network_shape_multiple_inputs(self):
         in1 = layers.Input(10)
         in2 = layers.Input(20)
         conn = (in1 | in2) >> layers.Concatenate()
@@ -92,7 +92,7 @@ class InlineDefinitionsTestCase(BaseTestCase):
         self.assertShapesEqual(conn.input_shape, [(None, 10), (None, 20)])
         self.assertShapesEqual(conn.output_shape, (None, 30))
 
-    def test_connection_shape_multiple_outputs(self):
+    def test_network_shape_multiple_outputs(self):
         conn = layers.Input(10) >> (layers.Sigmoid(1) | layers.Sigmoid(2))
         self.assertShapesEqual(conn.input_shape, (None, 10))
         self.assertShapesEqual(conn.output_shape, [(None, 1), (None, 2)])
@@ -141,7 +141,7 @@ class InlineDefinitionsTestCase(BaseTestCase):
 
 
 class DefinitionsTestCase(BaseTestCase):
-    def test_one_to_many_parallel_connection_output(self):
+    def test_one_to_many_parallel_network_output(self):
         one_to_many = layers.join(
             layers.Input(4),
             layers.parallel(
@@ -158,7 +158,7 @@ class DefinitionsTestCase(BaseTestCase):
         self.assertEqual(actual_output[1].shape, (10, 12))
         self.assertEqual(actual_output[2].shape, (10, 13))
 
-    def test_connections_with_complex_parallel_relations(self):
+    def test_networks_with_complex_parallel_relations(self):
         input_layer = layers.Input((5, 5, 3))
         network = layers.join(
             layers.parallel([
@@ -190,7 +190,7 @@ class DefinitionsTestCase(BaseTestCase):
         network = layers.join(input_layer, network)
         self.assertShapesEqual(network.output_shape, (None, 5, 5, 24))
 
-    def test_residual_connections(self):
+    def test_residual_networks(self):
         network = layers.join(
             layers.Input((5, 5, 3)),
             layers.parallel(

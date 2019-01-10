@@ -67,9 +67,9 @@ def save_epoch_weight(net):
     weights[:, current_epoch + 1:current_epoch + 2] = input_layer_weight
 
 
-def get_connection():
+def create_network():
     """
-    Generate new connections every time when we call it.
+    Generate new network every time when we call it.
     """
     return layers.join(
         layers.Input(2),
@@ -85,7 +85,7 @@ def draw_quiver(network_class, name, color='r'):
     global weights
     global current_epoch
 
-    bpn = network_class(get_connection(), signals=save_epoch_weight)
+    bpn = network_class(create_network(), signals=save_epoch_weight)
 
     # We don't know in advance number of epochs that network
     # need to reach the goal. For this reason we use 1000 as
@@ -117,7 +117,7 @@ def target_function(network, x, y):
 
 # Get data for countour plot
 bp_network = algorithms.GradientDescent(
-    get_connection(),
+    create_network(),
     step=0.3,
     batch_size=None,
     signals=save_epoch_weight
