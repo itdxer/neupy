@@ -212,17 +212,31 @@ class BaseGraph(ConfigurableABC, DumpableObject):
 
     @lazy_property
     def inputs(self):
-        self.placeholders = []
+        placeholders = []
 
         for layer in self.input_layers:
             placeholder = tf.placeholder(
                 tf.float32,
-                shape=shape_to_tuple(layer.output_shape),
-                name="placeholder/{}".format(layer.name),
+                shape=shape_to_tuple(layer.input_shape),
+                name="placeholder/input-{}".format(layer.name),
             )
-            self.placeholders.append(placeholder)
+            placeholders.append(placeholder)
 
-        return self.placeholders
+        return placeholders
+
+    @lazy_property
+    def targets(self):
+        placeholders = []
+
+        for layer in self.output_layers:
+            placeholder = tf.placeholder(
+                tf.float32,
+                shape=shape_to_tuple(layer.output_shape),
+                name="placeholder/target-{}".format(layer.name),
+            )
+            placeholders.append(placeholder)
+
+        return placeholders
 
     @lazy_property
     def outputs(self):
