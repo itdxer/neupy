@@ -50,8 +50,8 @@ class WolfeLineSearchForStep(Configurable):
     wolfe_c2 = NumberProperty(default=0.9, minval=0)
 
     def find_optimal_step(self, parameter_vector, parameter_update):
-        network_inputs = self.variables.network_inputs
-        network_output = self.variables.network_output
+        network_inputs = self.network.inputs
+        network_output = self.network.targets[0]
         layers_and_parameters = list(self.network.iter_variables())
 
         def prediction(step):

@@ -134,7 +134,7 @@ class LevenbergMarquardt(BaseOptimizer):
         )
 
     def init_train_updates(self):
-        network_output = self.variables.network_output
+        network_output = self.network.targets[0]
         training_outputs = self.network.training_outputs
         last_error = self.variables.last_error
         error_func = self.variables.error_func

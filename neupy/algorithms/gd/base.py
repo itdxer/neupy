@@ -139,10 +139,7 @@ class BaseOptimizer(BaseNetwork):
 
         self.variables = AttributeKeyDict()
         self.methods = AttributeKeyDict()
-
-        self.init_input_output_variables()
-        self.init_variables()
-        self.init_methods()
+        self.init_functions()
 
         finish_init_time = time.time()
         self.logs.message(
@@ -165,20 +162,15 @@ class BaseOptimizer(BaseNetwork):
     def init_train_updates(self):
         raise NotImplementedError()
 
-    def init_input_output_variables(self):
-        output_layer = self.network.output_layers[0]
-        self.variables.update(
-            network_inputs=self.network.inputs,
-            network_output=tf.placeholder(
-                tf.float32,
-                name='placeholder/target-{}'.format(output_layer.name),
-            ),
+    def init_functions(self):
+        loss = self.error(
+            self.network.targets[0],
+            self.network.outputs,
         )
-
-    def init_variables(self):
-        network_output = self.variables.network_output
-        loss = self.error(network_output, self.network.outputs)
-        val_loss = self.error(network_output, self.network.training_outputs)
+        val_loss = self.error(
+            self.network.targets[0],
+            self.network.training_outputs,
+        )
 
         if self.regularizer is not None:
             loss = loss + self.regularizer(self.network)
@@ -188,10 +180,6 @@ class BaseOptimizer(BaseNetwork):
             error_func=loss,
             validation_error_func=val_loss,
         )
-
-    def init_methods(self):
-        network_inputs = self.variables.network_inputs
-        network_output = self.variables.network_output
 
         with tf.name_scope('training-updates'):
             training_updates = self.init_train_updates()
@@ -207,19 +195,19 @@ class BaseOptimizer(BaseNetwork):
 
         self.methods.update(
             predict=function(
-                inputs=network_inputs,
+                inputs=self.network.inputs,
                 outputs=self.network.outputs,
                 name='network/func-predict'
             ),
             one_training_update=function(
-                inputs=as_tuple(network_inputs, network_output),
-                outputs=self.variables.error_func,
+                inputs=as_tuple(self.network.inputs, self.network.targets),
+                outputs=loss,
                 updates=training_updates,
                 name='network/func-train-epoch'
             ),
             score=function(
-                inputs=as_tuple(network_inputs, network_output),
-                outputs=self.variables.validation_error_func,
+                inputs=as_tuple(self.network.inputs, self.network.targets),
+                outputs=val_loss,
                 name='network/func-prediction-error'
             )
         )
