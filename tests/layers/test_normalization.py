@@ -16,12 +16,12 @@ from helpers import simple_classification
 class BatchNormTestCase(BaseTestCase):
     def test_batch_norm_as_shared_variable(self):
         gamma = tf.Variable(
-            asfloat(np.ones(2)),
+            asfloat(np.ones((1, 2))),
             name='gamma',
             dtype=tf.float32,
         )
         beta = tf.Variable(
-            asfloat(2 * np.ones(2)),
+            asfloat(2 * np.ones((1, 2))),
             name='beta',
             dtype=tf.float32,
         )

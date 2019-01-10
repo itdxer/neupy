@@ -125,39 +125,39 @@ class BaseOptimizer(BaseNetwork):
 
         if len(self.network.output_layers) != 1:
             n_outputs = len(network.output_layers)
+
             raise InvalidConnection(
                 "Connection should have one output "
                 "layer, got {}".format(n_outputs))
 
         super(BaseOptimizer, self).__init__(**options)
 
+        start_init_time = time.time()
         self.logs.message(
             "TENSORFLOW",
-            "Initializing Tensorflow variables and functions."
-        )
-        start_init_time = time.time()
+            "Initializing Tensorflow variables and functions.")
 
         self.variables = AttributeKeyDict()
-        self.methods = AttributeKeyDict()
+        self.functions = AttributeKeyDict()
         self.init_functions()
 
-        finish_init_time = time.time()
         self.logs.message(
             "TENSORFLOW",
             "Initialization finished successfully. It took {:.2f} seconds"
-            "".format(finish_init_time - start_init_time))
+            "".format(time.time() - start_init_time))
 
     def iter_params_and_grads(self):
-        layers, parameters = [], []
+        layers, variables = [], []
 
-        for layer, _, parameter in self.network.iter_variables():
-            layers.append(layer)
-            parameters.append(parameter)
+        for (layer, _), variable in self.network.variables.items():
+            if variable.trainable:
+                layers.append(layer)
+                variables.append(variable)
 
-        gradients = tf.gradients(self.variables.error_func, parameters)
+        gradients = tf.gradients(self.variables.loss, variables)
 
-        for layer, parameter, gradient in zip(layers, parameters, gradients):
-            yield layer, parameter, gradient
+        for layer, variable, gradient in zip(layers, variables, gradients):
+            yield layer, variable, gradient
 
     def init_train_updates(self):
         raise NotImplementedError()
@@ -177,8 +177,8 @@ class BaseOptimizer(BaseNetwork):
 
         self.variables.update(
             step=self.step,
-            error_func=loss,
-            validation_error_func=val_loss,
+            loss=loss,
+            val_loss=val_loss,
         )
 
         with tf.name_scope('training-updates'):
@@ -193,7 +193,7 @@ class BaseOptimizer(BaseNetwork):
 
         initialize_uninitialized_variables()
 
-        self.methods.update(
+        self.functions.update(
             predict=function(
                 inputs=self.network.inputs,
                 outputs=self.network.outputs,
@@ -227,7 +227,7 @@ class BaseOptimizer(BaseNetwork):
             Prediction error.
         """
         X_and_y = [format_data(x) for x in as_tuple(X, y)]
-        return self.methods.score(*X_and_y)
+        return self.functions.score(*X_and_y)
 
     def predict(self, X):
         """
@@ -270,7 +270,8 @@ class BaseOptimizer(BaseNetwork):
             *args, **kwargs)
 
     def one_training_update(self, X_train, y_train):
-        return self.methods.one_training_update(*as_tuple(X_train, y_train))
+        return self.functions.one_training_update(
+            *as_tuple(X_train, y_train))
 
     def get_params(self, deep=False, with_network=True):
         params = super(BaseOptimizer, self).get_params()
@@ -352,7 +353,8 @@ class GradientDescent(BaseOptimizer):
         float
             Training error.
         """
-        return self.methods.one_training_update(*as_tuple(X_train, y_train))
+        return self.functions.one_training_update(
+            *as_tuple(X_train, y_train))
 
     def score(self, X, y):
         """
@@ -373,7 +375,7 @@ class GradientDescent(BaseOptimizer):
         y = format_data(y)
 
         return iters.apply_batches(
-            function=self.methods.score,
+            function=self.functions.score,
             inputs=as_tuple(X, y),
             batch_size=self.batch_size,
             show_output=True,
@@ -394,7 +396,7 @@ class GradientDescent(BaseOptimizer):
         array-like
         """
         outputs = iters.apply_batches(
-            function=self.methods.predict,
+            function=self.functions.predict,
             inputs=[format_data(x) for x in as_tuple(X)],
             batch_size=self.batch_size,
             show_progressbar=self.logs.enable,

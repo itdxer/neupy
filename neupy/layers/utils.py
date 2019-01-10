@@ -1,10 +1,10 @@
 import tensorflow as tf
 
 from neupy import init
-from neupy.utils import asfloat
+from neupy.utils import asfloat, shape_to_tuple, as_tuple
 
 
-__all__ = ('create_shared_parameter', 'extract_network')
+__all__ = ('extract_network',)
 
 
 def extract_network(instance):
@@ -43,55 +43,9 @@ def extract_network(instance):
         "or list of layers, got {}".format(type(instance)))
 
 
-def create_shared_parameter(value, name, shape, trainable=True):
-    """
-    Creates NN parameter as Tensorfow variable.
-
-    Parameters
-    ----------
-    value : array-like, Tensorfow variable, scalar or Initializer
-        Default value for the parameter.
-
-    name : str
-        Shared variable name.
-
-    shape : tuple
-        Parameter's shape.
-
-    trainable : bool
-        Whether parameter trainable by backpropagation.
-
-    Returns
-    -------
-    Tensorfow variable.
-    """
-    if shape is not None:
-        shape = [v.value if isinstance(v, tf.Dimension) else v for v in shape]
-
-    if isinstance(value, (int, float)):
-        value = init.Constant(value)
-
-    if isinstance(value, init.Initializer):
-        value = value.sample(shape)
-
-    if isinstance(value, tf.Variable):
-        return value
-
-    return tf.Variable(
-        asfloat(value),
-        name=name,
-        dtype=tf.float32,
-        trainable=trainable,
-    )
-
-
 def count_parameters(*args, **kwargs):
     pass
 
 
 def find_variables(*args, **kwargs):
-    pass
-
-
-def iter_variables(*args, **kwargs):
     pass

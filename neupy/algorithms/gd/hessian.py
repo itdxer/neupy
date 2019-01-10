@@ -125,7 +125,7 @@ class Hessian(BaseOptimizer):
         param_vector = make_single_vector(parameters)
 
         hessian_matrix, full_gradient = find_hessian_and_gradient(
-            self.variables.error_func, parameters
+            self.variables.loss, parameters
         )
         parameter_update = tf.matrix_solve(
             hessian_matrix + penalty_const * tf.eye(n_parameters),

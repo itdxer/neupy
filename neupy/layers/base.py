@@ -15,7 +15,6 @@ import tensorflow as tf
 from neupy.core.config import ConfigurableABC, DumpableObject
 from neupy.exceptions import LayerConnectionError
 from neupy.core.properties import Property, TypedListProperty
-from neupy.layers.utils import create_shared_parameter
 from neupy.utils import (
     as_tuple, tensorflow_session,
     initialize_uninitialized_variables,
@@ -492,21 +491,18 @@ class LayerGraph(BaseGraph):
 
         return outputs
 
-    def iter_variables(self, unique=True, trainable=True):
+    @property
+    def variables(self):
+        variables = OrderedDict()
         observed_variables = []
 
         for layer in self:
             for name, value in layer.variables.items():
-                if value in observed_variables:
-                    continue
-
-                if trainable and not value.trainable:
-                    continue
-
-                if unique:
+                if value not in observed_variables:
                     observed_variables.append(value)
+                    variables[(layer, name)] = value
 
-                yield layer, name, value
+        return variables
 
     def predict(self, *inputs):
         session = tensorflow_session()
@@ -683,7 +679,7 @@ class BaseLayer(BaseGraph):
             layer_name=self.name,
             parameter_name=name.replace('_', '-'))
 
-        self.variables[name] = create_shared_parameter(
+        self.variables[name] = tf_utils.create_variable(
             value, layer_name, shape, trainable)
 
         return self.variables[name]

@@ -82,14 +82,10 @@ class BaseProperty(SharedDocs):
         value : object
         """
         if not isinstance(value, self.expected_type):
-            availabe_types = self.expected_type
-
-            if isinstance(availabe_types, (list, tuple)):
-                availabe_types = ', '.join(t.__name__ for t in availabe_types)
-            else:
-                availabe_types = availabe_types.__name__
-
+            availabe_types = as_tuple(self.expected_type)
+            availabe_types = ', '.join(t.__name__ for t in availabe_types)
             dtype = value.__class__.__name__
+
             raise TypeError(
                 "Invalid data type `{0}` for `{1}` property. "
                 "Expected types: {2}".format(dtype, self.name, availabe_types))
@@ -186,15 +182,13 @@ class TypedListProperty(BaseProperty):
                 "Expected list with {} variables".format(self.n_elements))
 
         if not all(isinstance(v, self.element_type) for v in value):
-            if isinstance(self.element_type, tuple):
-                type_names = (type_.__name__ for type_ in self.element_type)
-                element_type_name = ', '.join(type_names)
-            else:
-                element_type_name = self.element_type.__name__
+            element_type = as_tuple(self.element_type)
+            type_names = (type_.__name__ for type_ in element_type)
+            element_type_name = ', '.join(type_names)
 
             raise TypeError(
                 "The `{}` parameter received invalid element types "
-                "in list/tuple. Element type: {}, Value: {}"
+                "in list/tuple. Expected element types: {}, Value: {}"
                 "".format(self.name, element_type_name, value))
 
 
@@ -222,12 +216,15 @@ class ChoiceProperty(BaseProperty):
 
         if not isinstance(self.choices, dict):
             class_name = self.choices.__class__.__name__
-            raise ValueError("Choice properties can be only a `dict`, got "
-                             "`{0}`".format(class_name))
+
+            raise ValueError(
+                "Choice properties can be only a `dict`, got "
+                "`{0}`".format(class_name))
 
         if not self.choices:
-            raise ValueError("Must be at least one choice in property "
-                             "`{0}`".format(self.name))
+            raise ValueError(
+                "Must be at least one choice in property "
+                "`{0}`".format(self.name))
 
     def __set__(self, instance, value):
         if value in self.choices:

@@ -52,7 +52,7 @@ class WolfeLineSearchForStep(Configurable):
     def find_optimal_step(self, parameter_vector, parameter_update):
         network_inputs = self.network.inputs
         network_output = self.network.targets[0]
-        layers_and_parameters = list(self.network.iter_variables())
+        layers_and_parameters = list(self.network.variables.items())
 
         def prediction(step):
             step = asfloat(step)
@@ -62,22 +62,22 @@ class WolfeLineSearchForStep(Configurable):
                 # This trick allow us to replace shared variables
                 # with tensorflow variables and get output from the network
                 start_pos = 0
-                for layer, attrname, param in layers_and_parameters:
+                for (layer, varname), param in layers_and_parameters:
                     n_param_values = int(np.prod(param.shape))
                     end_pos = start_pos + n_param_values
                     updated_param_value = tf.reshape(
                         updated_params[start_pos:end_pos],
                         param.shape
                     )
-                    setattr(layer, attrname, updated_param_value)
+                    setattr(layer, varname, updated_param_value)
                     start_pos = end_pos
 
                 output = self.network.output(*network_inputs)
 
             finally:
                 # Restore previous parameters
-                for layer, attrname, param in layers_and_parameters:
-                    setattr(layer, attrname, param)
+                for (layer, varname), param in layers_and_parameters:
+                    setattr(layer, varname, param)
 
             return output
 
@@ -320,7 +320,7 @@ class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
         params = find_variables(self.network, only_trainable=True)
         param_vector = make_single_vector(params)
 
-        gradients = tf.gradients(self.variables.error_func, params)
+        gradients = tf.gradients(self.variables.loss, params)
         full_gradient = make_single_vector(gradients)
 
         new_inv_hessian = tf.where(

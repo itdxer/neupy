@@ -40,6 +40,15 @@ class ActivationLayerMainTestCase(BaseTestCase):
             )
         )
 
+    def test_failed_propagation_for_multiple_inputs(self):
+        inputs = layers.parallel(
+            layers.Input(1),
+            layers.Input(2),
+        )
+        expected_message = "2 positional arguments but 3 were given."
+        with self.assertRaisesRegexp(TypeError, expected_message):
+            layers.join(inputs, layers.Relu(3, name='relu'))
+
     def test_variables(self):
         network = layers.join(
             layers.Input(2),
@@ -55,15 +64,6 @@ class ActivationLayerMainTestCase(BaseTestCase):
 
         self.assertShapesEqual(variables['bias'].shape, (3,))
         self.assertShapesEqual(variables['weight'].shape, (2, 3))
-
-    def test_failed_propagation_for_multiple_inputs(self):
-        inputs = layers.parallel(
-            layers.Input(1),
-            layers.Input(2),
-        )
-        expected_message = "2 positional arguments but 3 were given."
-        with self.assertRaisesRegexp(TypeError, expected_message):
-            layers.join(inputs, layers.Relu(3, name='relu'))
 
 
 class ActivationLayersTestCase(BaseTestCase):

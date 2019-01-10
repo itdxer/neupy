@@ -139,8 +139,6 @@ Iterate through all network parameters
 
 .. code-block:: python
 
-    >>> from neupy.layers.utils import iter_variables
-    >>>
     >>> network = layers.join(
     ...     layers.Input(1),
     ...     layers.Sigmoid(2),
@@ -150,28 +148,27 @@ Iterate through all network parameters
     >>> print(network)
     Input(1) > Sigmoid(2) > Sigmoid(3)
     >>>
-    >>> for layer, attrname, parameter in iter_variables(network):
-    ...     # Each parameter is tensorflow variable
+    >>> for (layer, varname), variable in network.variables.items():
     ...     print("Layer: {}".format(layer))
-    ...     print("Name: {}".format(attrname))
-    ...     print("Parameter: {}".format(parameter))
+    ...     print("Name: {}".format(varname))
+    ...     print("Variable: {}".format(variable))
     ...     print()
     ...
     Layer: Sigmoid(2)
     Name: weight
-    Parameter: <tf.Variable 'layer/sigmoid-3/weight:0' shape=(1, 2) dtype=float32_ref>
+    Variable: <tf.Variable 'layer/sigmoid-3/weight:0' shape=(1, 2) dtype=float32_ref>
 
     Layer: Sigmoid(2)
     Name: bias
-    Parameter: <tf.Variable 'layer/sigmoid-3/bias:0' shape=(2,) dtype=float32_ref>
+    Variable: <tf.Variable 'layer/sigmoid-3/bias:0' shape=(2,) dtype=float32_ref>
 
     Layer: Sigmoid(3)
     Name: weight
-    Parameter: <tf.Variable 'layer/sigmoid-4/weight:0' shape=(2, 3) dtype=float32_ref>
+    Variable: <tf.Variable 'layer/sigmoid-4/weight:0' shape=(2, 3) dtype=float32_ref>
 
     Layer: Sigmoid(3)
     Name: bias
-    Parameter: <tf.Variable 'layer/sigmoid-4/bias:0' shape=(3,) dtype=float32_ref>
+    Variable: <tf.Variable 'layer/sigmoid-4/bias:0' shape=(3,) dtype=float32_ref>
 
 Exploring graph connections
 ---------------------------

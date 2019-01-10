@@ -30,7 +30,7 @@ class EmbeddingLayerTestCase(BaseTestCase):
         self.assertEqual(
             str(layers.Embedding(5, 2)),
             (
-                "Embedding(5, 2, weight=Variable(shape=(5, 2)), "
+                "Embedding(5, 2, weight=HeNormal(gain=1.0), "
                 "name='embedding-1')"
             )
         )

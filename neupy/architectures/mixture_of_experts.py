@@ -51,13 +51,6 @@ def check_if_networks_compatible(networks):
                 "".format(tf_utils.shape_to_tuple(output_shapes)))
 
 
-def check_if_gating_layer_valid(gating_layer, n_layers_to_combine):
-    if not isinstance(gating_layer, layers.BaseLayer):
-        raise ValueError(
-            "Invalid type for gating layer. Type: {}"
-            "".format(type(gating_layer)))
-
-
 def mixture_of_experts(instances, gating_layer=None):
     """
     Generates mixture of experts architecture from the set of
@@ -153,7 +146,10 @@ def mixture_of_experts(instances, gating_layer=None):
     if gating_layer is None:
         gating_layer = layers.Softmax(n_layers_to_combine)
 
-    check_if_gating_layer_valid(gating_layer, n_layers_to_combine)
+    if not isinstance(gating_layer, layers.BaseLayer):
+        raise ValueError(
+            "Invalid type for gating layer. Type: {}"
+            "".format(type(gating_layer)))
 
     return layers.join(
         layers.Input(n_features),

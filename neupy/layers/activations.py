@@ -499,8 +499,7 @@ class PRelu(Linear):
         ndim = len(input_shape)
 
         self.alpha = self.variable(
-            value=self.alpha,
-            name='alpha',
+            value=self.alpha, name='alpha',
             shape=[input_shape[axis] for axis in self.alpha_axes])
 
         dimensions = np.arange(ndim)
