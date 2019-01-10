@@ -3,7 +3,6 @@ import sys
 import copy
 import types
 import inspect
-import traceback
 from itertools import chain
 from functools import wraps
 from abc import abstractmethod
@@ -13,13 +12,9 @@ import six
 import numpy as np
 import tensorflow as tf
 
-from neupy.core.config import ConfigurableABC
+from neupy.core.config import ConfigurableABC, DumpableObject
 from neupy.exceptions import LayerConnectionError
-from neupy.core.properties import (
-    Property,
-    TypedListProperty,
-    ParameterProperty,
-)
+from neupy.core.properties import Property, TypedListProperty
 from neupy.layers.utils import create_shared_parameter
 from neupy.utils import (
     as_tuple, tensorflow_session,
@@ -189,7 +184,7 @@ def lazy_property(function):
     return wrapper
 
 
-class BaseGraph(ConfigurableABC):
+class BaseGraph(ConfigurableABC, DumpableObject):
     events = []
 
     def __init__(self, forward_graph=None):
@@ -511,7 +506,7 @@ class LayerGraph(BaseGraph):
         for layers in chain(forward_graph_layers, backward_graph_layers):
             if len(layers) >= 2:
                 # One of the layers has multiple input
-                # or output connections
+                # or output networks
                 return False
 
         return True
@@ -524,11 +519,17 @@ class LayerGraph(BaseGraph):
 
         return list(prepared_graph.items())
 
+    def get_params(self):
+        return {'forward_graph': self.forward_graph}
+
     def __iter__(self):
         for layer in topological_sort(self.backward_graph):
             yield layer
 
     def __repr__(self):
+        if not self.forward_graph:
+            return "[empty graph]"
+
         def format_shapes(shape):
             if isinstance(shape, tf.TensorShape):
                 return str(shape)
@@ -571,22 +572,22 @@ def merge(left_graph, right_graph, combine=False):
     return LayerGraph(forward_graph)
 
 
-def parallel(*connections):
+def parallel(*networks):
     graph = LayerGraph()
 
-    for connection in connections:
-        if isinstance(connection, (list, tuple)):
-            connection = join(*connection)
-        graph = merge(graph, connection)
+    for network in networks:
+        if isinstance(network, (list, tuple)):
+            network = join(*network)
+        graph = merge(graph, network)
 
     return graph
 
 
-def join(*connections):
+def join(*networks):
     graph = LayerGraph()
 
-    for connection in connections:
-        graph = merge(graph, connection, combine=True)
+    for network in networks:
+        graph = merge(graph, network, combine=True)
 
     return graph
 
@@ -709,14 +710,11 @@ class BaseLayer(BaseGraph):
 
         return self._repr_arguments(**kwargs)
 
-    def __reduce__(self):
-        return (self.__class__, self.get_params())
-
 
 class Identity(BaseLayer):
     """
     Passes input through the layer without changes. Can be useful while
-    defining residual connections in the network.
+    defining residual networks in the network.
 
     Parameters
     ----------

@@ -36,7 +36,7 @@ class Adam(GradientDescent):
 
     {BaseOptimizer.regularizer}
 
-    {BaseOptimizer.connection}
+    {BaseOptimizer.network}
 
     {BaseOptimizer.error}
 

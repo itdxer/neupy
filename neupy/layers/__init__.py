@@ -8,5 +8,3 @@ from .merge import *
 from .reshape import *
 from .embedding import *
 from .recurrent import *
-#
-from .utils import count_parameters

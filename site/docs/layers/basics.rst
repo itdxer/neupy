@@ -237,7 +237,7 @@ This layer does the same as the `numpy.reshape <https://docs.scipy.org/doc/numpy
 .. code-block:: python
 
     >>> from neupy import layers
-    >>> connection = layers.Input((3, 10, 10)) > layers.Reshape()
+    >>> network = layers.Input((3, 10, 10)) > layers.Reshape()
     >>> connection.input_shape
     (3, 10, 10)
     >>> connection.output_shape
@@ -248,7 +248,7 @@ Also, we can specify expected output shape as a parameters for the :layer:`Resha
 .. code-block:: python
 
     >>> from neupy import layers
-    >>> connection = layers.Input((3, 10, 10)) > layers.Reshape((3, 100))
+    >>> network = layers.Input((3, 10, 10)) > layers.Reshape((3, 100))
     >>> connection.input_shape
     (3, 10, 10)
     >>> connection.output_shape
@@ -381,7 +381,7 @@ Subnetworks
 
     from neupy.layers import *
 
-    connection = layers.join(
+    network = layers.join(
         Input((1, 28, 28)),
 
         Convolution((32, 3, 3)),
@@ -412,7 +412,7 @@ Does it look simple to you? Not at all. However, this is a really simple network
 
     from neupy.layers import *
 
-    connection = layers.join(
+    network = layers.join(
         Input((28, 28, 1)),
 
         Convolution((3, 3, 32)) > Relu() > BatchNorm(),

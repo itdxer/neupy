@@ -1,10 +1,10 @@
 import copy
-import unittest
 
 import numpy as np
 from sklearn import datasets, preprocessing, model_selection
 
 from neupy.utils import asfloat
+from neupy.exceptions import LayerConnectionError
 from neupy.algorithms.gd import objectives
 from neupy import algorithms, layers, architectures
 
@@ -16,7 +16,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         super(MixtureOfExpertsTestCase, self).setUp()
         self.networks = [
             algorithms.GradientDescent(
-                connection=[
+                network=[
                     layers.Input(1),
                     layers.Sigmoid(20),
                     layers.Sigmoid(1)
@@ -37,44 +37,65 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             architectures.mixture_of_experts(*self.networks)
 
         with self.assertRaisesRegexp(ValueError, "has more than one input"):
+            last_network = layers.join(
+                layers.parallel(
+                    layers.Input(1),
+                    layers.Input(2),
+                ),
+                layers.Concatenate(),
+            )
             architectures.mixture_of_experts(
-                networks=self.networks + [
-                    [layers.Input(1), layers.Input(1)] > layers.Softmax(1),
-                ])
+                instances=self.networks + [last_network])
 
         with self.assertRaisesRegexp(ValueError, "has more than one output"):
+            last_network = layers.join(
+                layers.Input(1),
+                layers.parallel(
+                    layers.Softmax(1),
+                    layers.Softmax(1),
+                ),
+            )
             architectures.mixture_of_experts(
-                networks=self.networks + [
-                    layers.Input(1) > [layers.Softmax(1), layers.Softmax(1)],
-                ])
+                instances=self.networks + [last_network])
 
-        with self.assertRaisesRegexp(ValueError, "should receive vector"):
+        error_message = (
+            "Each network from the mixture of experts has to "
+            "process only 2-dimensional inputs. Network #2.+"
+            "Input layer's shape: \(\?, 1, 1, 1\)"
+        )
+        with self.assertRaisesRegexp(ValueError, error_message):
+            last_network = layers.Input((1, 1, 1))
             architectures.mixture_of_experts(
-                networks=self.networks + [layers.Input((1, 1, 1))])
+                instances=self.networks + [last_network])
 
     def test_mixture_of_experts_problem_with_incompatible_networks(self):
-        with self.assertRaisesRegexp(ValueError, "different input shapes"):
+        error_message = "Networks have incompatible input shapes."
+        with self.assertRaisesRegexp(ValueError, error_message):
             architectures.mixture_of_experts(
-                networks=self.networks + [layers.Input(10)])
+                instances=self.networks + [layers.Input(10)])
 
-        with self.assertRaisesRegexp(ValueError, "different output shapes"):
+        error_message = "Networks have incompatible output shapes."
+        with self.assertRaisesRegexp(ValueError, error_message):
             architectures.mixture_of_experts(
-                networks=self.networks + [
-                    layers.Input(1) > layers.Relu(10)
+                instances=self.networks + [
+                    layers.Input(1) >> layers.Relu(10)
                 ])
 
     def test_mixture_of_experts_init_gating_network_exceptions(self):
         with self.assertRaisesRegexp(ValueError, "Invalid type"):
             architectures.mixture_of_experts(
-                networks=self.networks,
-                gating_layer=(layers.Input(1) > layers.Softmax(2)))
+                instances=self.networks,
+                gating_layer=(layers.Input(1) >> layers.Softmax(2)))
 
-        with self.assertRaisesRegexp(ValueError, "invalid number of outputs"):
+        error_message = (
+            "Gating layer can work only for combining only "
+            "10 networks, got 2 networks instead."
+        )
+        with self.assertRaisesRegexp(LayerConnectionError, error_message):
             architectures.mixture_of_experts(
-                networks=self.networks,
+                instances=self.networks,
                 gating_layer=layers.Softmax(10))
 
-    @unittest.skip("Broken connection/layer copy")
     def test_mixture_of_experts_multi_class_classification(self):
         insize, outsize = (10, 3)
         n_epochs = 10
@@ -98,7 +119,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
             n_informative=5)
 
         input_scaler = preprocessing.MinMaxScaler((-1, 1))
-        one_hot = preprocessing.OneHotEncoder()
+        one_hot = preprocessing.OneHotEncoder(categories='auto')
 
         target = target.reshape((-1, 1))
         encoded_target = one_hot.fit_transform(target)
@@ -135,6 +156,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
 
         ensemlbe_error = self.eval(
             objectives.categorical_crossentropy(y_test, ensemble_output))
+
         self.assertGreater(network_error, ensemlbe_error)
 
     def test_mixture_of_experts_architecture(self):
@@ -157,8 +179,8 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         ])
 
         self.assertEqual(len(network), 12)
-        self.assertEqual(network.input_shape, (10,))
-        self.assertEqual(network.output_shape, (5,))
+        self.assertShapesEqual(network.input_shape, (None, 10))
+        self.assertShapesEqual(network.output_shape, (None, 5))
 
         random_input = asfloat(np.random.random((3, 10)))
         prediction = self.eval(network.output(random_input))

@@ -1,45 +1,54 @@
+import tensorflow as tf
+
 from neupy import layers
-from neupy.layers.utils import extract_connection
+from neupy.utils import tf_utils, as_tuple
+from neupy.layers.utils import extract_network
 
 
 __all__ = ('mixture_of_experts',)
 
 
-def check_if_connection_is_valid(connection, index):
-    if len(connection.input_layers) > 1:
+def check_if_network_is_valid(network, index):
+    if len(network.input_layers) > 1:
         raise ValueError(
-            "Network #{} (0-based indeces) has more than one input "
-            "layer. Input layers: {!r}"
-            "".format(index, connection.input_layers))
+            "Each network from the mixture of experts has to process single "
+            "input tensor. Network #{} (0-based indeces) has more than one "
+            "input layer. Input layers: {}"
+            "".format(index, network.output_layers))
 
-    if len(connection.output_layers) > 1:
+    if len(network.output_layers) > 1:
         raise ValueError(
-            "Network #{} (0-based indeces) has more than one output "
-            "layer. Output layers: {!r}"
-            "".format(index, connection.output_layers))
+            "Each network from the mixture of experts has to output single "
+            "tensor. Network #{} (0-based indeces) has more than one output "
+            "layer. Output layers: {}".format(index, network.output_layers))
 
-    if len(connection.input_shape) != 1:
+    if network.input_shape.ndims != 2:
         raise ValueError(
-            "Network #{} (0-based indeces) should receive vector as "
-            "an input. Input layer shape: {!r}"
-            "".format(index, connection.input_shape))
+            "Each network from the mixture of experts has to process "
+            "only 2-dimensional inputs. Network #{} (0-based indeces) "
+            "processes only {}-dimensional inputs. Input layer's shape: {}"
+            "".format(index, network.input_shape.ndims, network.input_shape))
 
 
-def check_if_connections_compatible(connections):
+def check_if_networks_compatible(networks):
     input_shapes = []
     output_shapes = []
 
-    for i, connection in enumerate(connections):
-        input_shapes.append(connection.input_shape)
-        output_shapes.append(connection.output_shape)
+    for i, network in enumerate(networks):
+        input_shapes.append(network.input_shape)
+        output_shapes.append(network.output_shape)
 
-    if any(shape != input_shapes[0] for shape in input_shapes):
-        raise ValueError("Networks have different input shapes: {}"
-                         "".format(input_shapes))
+    for shape in input_shapes:
+        if not shape.is_compatible_with(input_shapes[0]):
+            raise ValueError(
+                "Networks have incompatible input shapes. Shapes: {}"
+                "".format(tf_utils.shape_to_tuple(input_shapes)))
 
-    if any(shape != output_shapes[0] for shape in output_shapes):
-        raise ValueError("Networks have different output shapes: {}"
-                         "".format(output_shapes))
+    for shape in output_shapes:
+        if not shape.is_compatible_with(output_shapes[0]):
+            raise ValueError(
+                "Networks have incompatible output shapes. Shapes: {}"
+                "".format(tf_utils.shape_to_tuple(output_shapes)))
 
 
 def check_if_gating_layer_valid(gating_layer, n_layers_to_combine):
@@ -48,14 +57,8 @@ def check_if_gating_layer_valid(gating_layer, n_layers_to_combine):
             "Invalid type for gating layer. Type: {}"
             "".format(type(gating_layer)))
 
-    output_shape = gating_layer.output_shape[0]
-    if output_shape != n_layers_to_combine:
-        raise ValueError(
-            "Gating layer has invalid number of outputs. Expected {}, got {}"
-            "".format(output_shape, n_layers_to_combine))
 
-
-def mixture_of_experts(networks, gating_layer=None):
+def mixture_of_experts(instances, gating_layer=None):
     """
     Generates mixture of experts architecture from the set of
     networks that has the same input and output shapes.
@@ -69,7 +72,7 @@ def mixture_of_experts(networks, gating_layer=None):
 
     Parameters
     ----------
-    networks : list of connections or networks
+    instances : list of networks or optimizers
         These networks will be combine into mixture of experts.
         Every network should have single 1D input layer and
         single output layer. Another restriction is that all networks
@@ -94,7 +97,7 @@ def mixture_of_experts(networks, gating_layer=None):
 
     Returns
     -------
-    connection
+    network
         Mixture of experts network that combine all networks into
         single one and adds gating layer to it.
 
@@ -124,20 +127,28 @@ def mixture_of_experts(networks, gating_layer=None):
     >>>
     >>> gdnet = algorithms.Momentum(network, step=0.1)
     """
-    if not isinstance(networks, (list, tuple)):
+    if not isinstance(instances, (list, tuple)):
         raise ValueError("Networks should be specified as a list")
 
-    connections = []
-    for index, network in enumerate(networks):
-        connection = extract_connection(network)
-        check_if_connection_is_valid(connection, index)
-        connections.append(connection)
+    networks = []
+    for index, instance in enumerate(instances):
+        network = extract_network(instance)
+        check_if_network_is_valid(network, index)
+        networks.append(network)
 
-    check_if_connections_compatible(connections)
+    check_if_networks_compatible(networks)
+    input_shape = tf.TensorShape(None)
 
-    first_connection = connections[0]
-    n_features = first_connection.input_shape[0]
-    n_layers_to_combine = len(connections)
+    for network in networks:
+        input_shape = input_shape.merge_with(network.input_shape)
+
+    n_layers_to_combine = len(networks)
+    n_features = input_shape[1].value
+
+    if n_features is None:
+        raise ValueError(
+            "Cannot create mixture of experts model, because "
+            "number of input features is unknown")
 
     if gating_layer is None:
         gating_layer = layers.Softmax(n_layers_to_combine)
@@ -148,6 +159,6 @@ def mixture_of_experts(networks, gating_layer=None):
         layers.Input(n_features),
         # Note: Gating network should be specified
         # as a first parameter.
-        [gating_layer] + connections,
+        layers.parallel(*as_tuple(gating_layer, networks)),
         layers.GatedAverage(),
     )

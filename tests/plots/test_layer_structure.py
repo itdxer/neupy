@@ -20,19 +20,19 @@ def reproducible_mktemp():
 
 class LayerStructurePlotTestCase(BaseTestCase):
     def test_that_network_structure_does_not_fail(self):
-        connection = layers.Input(10) > layers.Sigmoid(1)
+        network = layers.Input(10) > layers.Sigmoid(1)
 
         with tempfile.NamedTemporaryFile() as temp:
             filesize_before = os.path.getsize(temp.name)
-            plots.network_structure(connection, filepath=temp.name, show=False)
+            plots.network_structure(network, filepath=temp.name, show=False)
             filesize_after = os.path.getsize(temp.name)
 
             self.assertEqual(filesize_before, 0)
             self.assertGreater(filesize_after, filesize_before)
 
     def test_that_network_structure_for_network(self):
-        connection = layers.Input(10) > layers.Sigmoid(1)
-        network = algorithms.GradientDescent(connection)
+        network = layers.Input(10) > layers.Sigmoid(1)
+        network = algorithms.GradientDescent(network)
 
         with tempfile.NamedTemporaryFile() as temp:
             filesize_before = os.path.getsize(temp.name)
@@ -43,10 +43,10 @@ class LayerStructurePlotTestCase(BaseTestCase):
             self.assertGreater(filesize_after, filesize_before)
 
     def test_network_structure_undefined_file_name(self):
-        connection = layers.Input(10) > layers.Sigmoid(1)
+        network = layers.Input(10) > layers.Sigmoid(1)
 
         with reproducible_mktemp():
-            plots.network_structure(connection, filepath=None, show=False)
+            plots.network_structure(network, filepath=None, show=False)
 
             temp_filename = tempfile.mktemp()
             filesize_after = os.path.getsize(temp_filename)
@@ -55,16 +55,16 @@ class LayerStructurePlotTestCase(BaseTestCase):
 
 class LayerStructureExcludeLayersPlotTestCase(BaseTestCase):
     def test_network_structure_exclude_layer_nothing_to_exclude(self):
-        connection = layers.Input(10) > layers.Sigmoid(1)
-        graph = connection.graph.forward_graph
+        network = layers.Input(10) > layers.Sigmoid(1)
+        graph = network.graph.forward_graph
         new_graph = exclude_layer_from_graph(graph, tuple())
 
         self.assertEqual(graph, new_graph)
 
     def test_network_structure_exclude_layer(self):
         input_layer = layers.Input(10)
-        connection = input_layer > layers.Sigmoid(1)
-        graph = connection.graph.forward_graph
+        network = input_layer > layers.Sigmoid(1)
+        graph = network.graph.forward_graph
 
         actual_graph = exclude_layer_from_graph(graph, [layers.Sigmoid])
         expected_graph = OrderedDict()
@@ -74,15 +74,15 @@ class LayerStructureExcludeLayersPlotTestCase(BaseTestCase):
 
     def test_network_structure_ignore_layers_attr(self):
         input_layer = layers.Input(10)
-        connection = input_layer > layers.Sigmoid(1)
+        network = input_layer > layers.Sigmoid(1)
 
         with tempfile.NamedTemporaryFile() as temp:
-            plots.network_structure(connection, filepath=temp.name, show=False,
+            plots.network_structure(network, filepath=temp.name, show=False,
                                     ignore_layers=[])
             filesize_first = os.path.getsize(temp.name)
 
         with tempfile.NamedTemporaryFile() as temp:
-            plots.network_structure(connection, filepath=temp.name, show=False,
+            plots.network_structure(network, filepath=temp.name, show=False,
                                     ignore_layers=[layers.Sigmoid])
             filesize_second = os.path.getsize(temp.name)
 

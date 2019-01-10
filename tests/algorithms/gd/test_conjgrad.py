@@ -105,7 +105,7 @@ class ConjugateGradientTestCase(BaseTestCase):
             # Test data
             (asfloat(x_train), asfloat(y_train)),
             # Network configurations
-            connection=layers.join(
+            network=layers.join(
                 layers.Input(10),
                 layers.Sigmoid(5),
                 layers.Sigmoid(1),

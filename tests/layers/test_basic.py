@@ -52,13 +52,13 @@ class LayerNameTestCase(BaseTestCase):
         self.assertEqual(output_layer.name, 'sigmoid-1')
         self.assertEqual(input_layer.name, 'input-1')
 
-    def test_layer_name_for_connection(self):
+    def test_layer_name_for_network(self):
         input_layer = layers.Input(1)
         hidden_layer = layers.Sigmoid(5)
         output_layer = layers.Sigmoid(10)
 
-        connection = input_layer >> hidden_layer >> output_layer
-        connection.outputs
+        network = input_layer >> hidden_layer >> output_layer
+        network.outputs
 
         self.assertEqual(hidden_layer.name, 'sigmoid-1')
         self.assertIn('layer/sigmoid-1/weight', hidden_layer.weight.name)

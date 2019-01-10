@@ -179,7 +179,7 @@ class IRPROPPlus(RPROP):
 
     {BaseOptimizer.regularizer}
 
-    {BaseOptimizer.connection}
+    {BaseOptimizer.network}
 
     {BaseOptimizer.error}
 

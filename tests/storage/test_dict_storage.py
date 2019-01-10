@@ -17,7 +17,7 @@ class DictStorageTestCase(BaseTestCase):
     maxDiff = 10000
 
     def test_storage_save_dict(self):
-        connection = layers.join(
+        network = layers.join(
             [[
                 layers.Input(2, name='input-1'),
                 layers.PRelu(1, name='prelu')
@@ -29,16 +29,16 @@ class DictStorageTestCase(BaseTestCase):
             layers.Concatenate(name='concatenate'),
             layers.Softmax(3, name='softmax'),
         )
-        dict_connection = storage.save_dict(connection)
+        dict_network = storage.save_dict(network)
 
         expected_keys = ('metadata', 'layers', 'graph')
-        self.assertItemsEqual(expected_keys, dict_connection.keys())
+        self.assertItemsEqual(expected_keys, dict_network.keys())
 
         expected_metadata_keys = ('created', 'language', 'library', 'version')
-        actual_metadata_keys = dict_connection['metadata'].keys()
+        actual_metadata_keys = dict_network['metadata'].keys()
         self.assertItemsEqual(expected_metadata_keys, actual_metadata_keys)
 
-        self.assertEqual(len(dict_connection['layers']), 7)
+        self.assertEqual(len(dict_network['layers']), 7)
 
         expected_layers = [{
             'class_name': 'Input',
@@ -89,7 +89,7 @@ class DictStorageTestCase(BaseTestCase):
             'output_shape': (3,)
         }]
         actual_layers = []
-        for i, layer in enumerate(dict_connection['layers']):
+        for i, layer in enumerate(dict_network['layers']):
             self.assertIn('parameters', layer, msg="Layer #" + str(i))
 
             layer = copy.deepcopy(layer)
@@ -100,12 +100,12 @@ class DictStorageTestCase(BaseTestCase):
 
     def test_storage_load_dict_using_names(self):
         relu = layers.Relu(2, name='relu')
-        connection = layers.Input(10) > relu
+        network = layers.Input(10) > relu
 
         weight = np.ones((10, 2))
         bias = np.ones((2,))
 
-        storage.load_dict(connection, {
+        storage.load_dict(network, {
             'metadata': {},  # avoided for simplicity
             'graph': {},  # avoided for simplicity
             # Input layer was avoided on purpose
@@ -126,14 +126,14 @@ class DictStorageTestCase(BaseTestCase):
         np.testing.assert_array_almost_equal(bias, self.eval(relu.bias))
 
     def test_storage_load_dict_using_wrong_names(self):
-        connection = layers.join(
+        network = layers.join(
             layers.Input(3),
             layers.Relu(4, name='relu'),
             layers.Linear(5, name='linear') > layers.Relu(),
             layers.Softmax(6, name='softmax'),
         )
 
-        storage.load_dict(connection, {
+        storage.load_dict(network, {
             'metadata': {},  # avoided for simplicity
             'graph': {},  # avoided for simplicity
             # Input layer was avoided on purpose
@@ -170,20 +170,20 @@ class DictStorageTestCase(BaseTestCase):
             }]
         }, load_by='order', skip_validation=False)
 
-        relu = connection.layer('relu')
+        relu = network.layer('relu')
         self.assertEqual(12, np.sum(self.eval(relu.weight)))
         self.assertEqual(4, np.sum(self.eval(relu.bias)))
 
-        linear = connection.layer('linear')
+        linear = network.layer('linear')
         self.assertEqual(20, np.sum(self.eval(linear.weight)))
         self.assertEqual(5, np.sum(self.eval(linear.bias)))
 
-        softmax = connection.layer('softmax')
+        softmax = network.layer('softmax')
         self.assertEqual(30, np.sum(self.eval(softmax.weight)))
         self.assertEqual(6, np.sum(self.eval(softmax.bias)))
 
     def test_storage_load_dict_invalid_number_of_paramters(self):
-        connection = layers.join(
+        network = layers.join(
             layers.Input(3),
             layers.Relu(4, name='relu'),
             layers.Linear(5, name='linear') > layers.Relu(),
@@ -210,13 +210,13 @@ class DictStorageTestCase(BaseTestCase):
         }
 
         with self.assertRaises(ParameterLoaderError):
-            storage.load_dict(connection, data, ignore_missing=False)
+            storage.load_dict(network, data, ignore_missing=False)
 
     def test_failed_loading_mode_for_storage(self):
-        connection = layers.Input(2) > layers.Sigmoid(1)
+        network = layers.Input(2) > layers.Sigmoid(1)
 
         with self.assertRaisesRegexp(ValueError, "Invalid value"):
-            storage.load_dict(connection, {}, load_by='unknown')
+            storage.load_dict(network, {}, load_by='unknown')
 
     def test_failed_load_parameter_invalid_type(self):
         sigmoid = layers.Sigmoid(1, bias=None)
@@ -336,8 +336,8 @@ class StoredDataValidationTestCase(BaseTestCase):
         self.assertIsNone(result)
 
     def test_storage_data_layer_compatibility(self):
-        connection = layers.Input(2) > layers.Sigmoid(3, name='sigm')
-        sigmoid = connection.layer('sigm')
+        network = layers.Input(2) > layers.Sigmoid(3, name='sigm')
+        sigmoid = network.layer('sigm')
 
         with self.assertRaises(ParameterLoaderError):
             validate_layer_compatibility(sigmoid, {
@@ -379,10 +379,10 @@ class StoredDataValidationTestCase(BaseTestCase):
         self.assertIsNone(result)
 
     def test_basic_skip_validation(self):
-        connection = layers.Input(10) > layers.Relu(1)
+        network = layers.Input(10) > layers.Relu(1)
 
         with self.assertRaises(InvalidFormat):
-            storage.load_dict(connection, {}, skip_validation=False)
+            storage.load_dict(network, {}, skip_validation=False)
 
 
 class TransferLearningTestCase(BaseTestCase):

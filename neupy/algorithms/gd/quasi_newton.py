@@ -10,7 +10,6 @@ from neupy.utils.tf_utils import setup_parameter_updates
 from neupy.algorithms.minsearch.wolfe import line_search
 from neupy.layers.utils import (
     count_parameters,
-    iter_variables,
     find_variables,
 )
 from neupy.utils import (
@@ -53,7 +52,7 @@ class WolfeLineSearchForStep(Configurable):
     def find_optimal_step(self, parameter_vector, parameter_update):
         network_inputs = self.variables.network_inputs
         network_output = self.variables.network_output
-        layers_and_parameters = list(self.connection.iter_variables())
+        layers_and_parameters = list(self.network.iter_variables())
 
         def prediction(step):
             step = asfloat(step)
@@ -73,7 +72,7 @@ class WolfeLineSearchForStep(Configurable):
                     setattr(layer, attrname, updated_param_value)
                     start_pos = end_pos
 
-                output = self.connection.output(*network_inputs)
+                output = self.network.output(*network_inputs)
 
             finally:
                 # Restore previous parameters
@@ -221,7 +220,7 @@ class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
 
     {WolfeLineSearchForStep.Parameters}
 
-    {BaseOptimizer.connection}
+    {BaseOptimizer.network}
 
     {BaseOptimizer.error}
 
@@ -287,7 +286,7 @@ class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
 
     def init_variables(self):
         super(QuasiNewton, self).init_variables()
-        n_parameters = count_parameters(self.connection)
+        n_parameters = count_parameters(self.network)
 
         self.variables.update(
             inv_hessian=tf.Variable(
@@ -318,7 +317,7 @@ class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
         prev_params = self.variables.prev_params
         prev_full_gradient = self.variables.prev_full_gradient
 
-        params = find_variables(self.connection, only_trainable=True)
+        params = find_variables(self.network, only_trainable=True)
         param_vector = make_single_vector(params)
 
         gradients = tf.gradients(self.variables.error_func, params)

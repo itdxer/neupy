@@ -28,20 +28,20 @@ class BatchNormTestCase(BaseTestCase):
 
         batch_norm = layers.BatchNorm(gamma=gamma, beta=beta)
         network = layers.join(layers.Input(2), batch_norm)
-        y = network.outputs
+        network.outputs
 
         self.assertIs(gamma, batch_norm.gamma)
         self.assertIs(beta, batch_norm.beta)
 
     def test_simple_batch_norm(self):
-        connection = layers.Input(10) > layers.BatchNorm()
+        network = layers.Input(10) > layers.BatchNorm()
 
         input_value = tf.Variable(
             asfloat(np.random.random((30, 10))),
             name='input_value',
             dtype=tf.float32,
         )
-        output_value = self.eval(connection.output(input_value, training=True))
+        output_value = self.eval(network.output(input_value, training=True))
 
         self.assertTrue(stats.mstats.normaltest(output_value))
         self.assertAlmostEqual(output_value.mean(), 0, places=3)
@@ -50,7 +50,7 @@ class BatchNormTestCase(BaseTestCase):
     def test_batch_norm_gamma_beta_params(self):
         default_beta = -3.14
         default_gamma = 4.3
-        connection = layers.join(
+        network = layers.join(
             layers.Input(10),
             layers.BatchNorm(gamma=default_gamma, beta=default_beta)
         )
@@ -60,13 +60,13 @@ class BatchNormTestCase(BaseTestCase):
             name='input_value',
             dtype=tf.float32,
         )
-        output_value = self.eval(connection.output(input_value, training=True))
+        output_value = self.eval(network.output(input_value, training=True))
 
         self.assertAlmostEqual(output_value.mean(), default_beta, places=3)
         self.assertAlmostEqual(output_value.std(), default_gamma, places=3)
 
     def test_batch_norm_between_layers(self):
-        connection = layers.join(
+        network = layers.join(
             layers.Input(10),
             layers.Relu(40),
             layers.BatchNorm(),
@@ -78,7 +78,7 @@ class BatchNormTestCase(BaseTestCase):
             name='input_value',
             dtype=tf.float32,
         )
-        outpu_value = self.eval(connection.output(input_value, training=True))
+        outpu_value = self.eval(network.output(input_value, training=True))
         self.assertEqual(outpu_value.shape, (30, 1))
 
     def test_batch_norm_in_non_training_state(self):

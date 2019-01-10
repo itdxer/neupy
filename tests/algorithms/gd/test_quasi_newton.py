@@ -86,7 +86,7 @@ class QuasiNewtonTestCase(BaseTestCase):
         x_train, x_test, y_train, y_test = simple_classification()
 
         qnnet = algorithms.QuasiNewton(
-            connection=[
+            network=[
                 layers.Input(10),
                 layers.Sigmoid(30, weight=init.Orthogonal()),
                 layers.Sigmoid(1, weight=init.Orthogonal()),
@@ -106,7 +106,7 @@ class QuasiNewtonTestCase(BaseTestCase):
         x_train, x_test, y_train, y_test = simple_classification()
 
         qnnet = algorithms.QuasiNewton(
-            connection=[
+            network=[
                 layers.Input(10),
                 layers.Sigmoid(30, weight=init.Orthogonal()),
                 layers.Sigmoid(1, weight=init.Orthogonal()),
@@ -127,7 +127,7 @@ class QuasiNewtonTestCase(BaseTestCase):
         x_train, x_test, y_train, y_test = simple_classification()
 
         qnnet = algorithms.QuasiNewton(
-            connection=[
+            network=[
                 layers.Input(10),
                 layers.Sigmoid(30, weight=init.Orthogonal()),
                 layers.Sigmoid(1, weight=init.Orthogonal()),

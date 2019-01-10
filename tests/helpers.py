@@ -109,7 +109,7 @@ def compare_networks(default_class, tested_class, data, **kwargs):
     network = default_class(**kwargs)
 
     if hasattr(network, 'connection'):
-        initial_parameters = save_dict(network.connection)
+        initial_parameters = save_dict(network.network)
 
     network.train(*data, epochs=epochs)
 
@@ -118,7 +118,7 @@ def compare_networks(default_class, tested_class, data, **kwargs):
 
     # Compute result for test network (which must be faster)
     if hasattr(network, 'connection'):
-        load_dict(network.connection, initial_parameters)
+        load_dict(network.network, initial_parameters)
 
     network = tested_class(**kwargs)
 
@@ -214,7 +214,7 @@ def reproducible_network_train(seed=0, epochs=500, **additional_params):
     tanh_weight2 = xavier_normal.sample((5, 1), return_array=True)
 
     network = algorithms.GradientDescent(
-        connection=[
+        network=[
             layers.Input(2),
             layers.Tanh(5, weight=tanh_weight1),
             layers.Tanh(1, weight=tanh_weight2),

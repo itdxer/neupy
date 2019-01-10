@@ -22,7 +22,7 @@ class HessianTestCase(BaseTestCase):
             # Test data
             (x_train, y_train, x_test, y_test),
             # Network configurations
-            connection=[
+            network=[
                 layers.Input(10),
                 layers.Sigmoid(15),
                 layers.Sigmoid(1)

@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
-from neupy.utils import as_tuple, tf_utils
+from neupy.utils import as_tuple
 from neupy.exceptions import LayerConnectionError
 from neupy.core.properties import TypedListProperty
 from .base import BaseLayer

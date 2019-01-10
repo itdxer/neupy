@@ -9,7 +9,7 @@ from six.moves import cPickle as pickle
 
 import neupy
 from neupy.core.docs import shared_docs
-from neupy.layers.utils import extract_connection
+from neupy.layers.utils import extract_network
 from neupy.utils import (asfloat, tensorflow_session,
                          initialize_uninitialized_variables)
 
@@ -33,7 +33,7 @@ class ParameterLoaderError(Exception):
 class InvalidFormat(Exception):
     """
     Exception triggers when there are some issue with
-    data format that stores connection data.
+    data format that stores network data.
     """
 
 
@@ -105,7 +105,7 @@ def load_dict_by_names(layers_conn, layers_data, ignore_missing=False,
     if not ignore_missing and layers_data.keys() != layers_conn.keys():
         raise ParameterLoaderError(
             "Cannot match layers by name. \n"
-            "  Layer names in connection: {}\n"
+            "  Layer names in network: {}\n"
             "  Layer names in stored data: {}"
             "".format(layers_conn.keys(), layers_data.keys()))
 
@@ -125,7 +125,7 @@ def load_dict_by_names(layers_conn, layers_data, ignore_missing=False,
 def load_dict_sequentially(layers_conn, layers_data, skip_validation=True):
     """"
     Load parameters in to layer using sequential order of
-    layer in connection and stored data
+    layer in network and stored data
     """
     if not skip_validation:
         # It's important to point out that it can be that there more
@@ -203,14 +203,14 @@ def validate_data_structure(data):
                     "".format(layer_index, param_name))
 
 
-def load_dict(connection, data, ignore_missing=False,
+def load_dict(network, data, ignore_missing=False,
               load_by='names_or_order', skip_validation=True):
     """
-    Load network connections from dictionary.
+    Load network networks from dictionary.
 
     Parameters
     ----------
-    connection : network, list of layer or connection
+    network : network, list of layer or network
 
     data : dict
         Dictionary that stores network parameters.
@@ -255,12 +255,12 @@ def load_dict(connection, data, ignore_missing=False,
     if not skip_validation:
         validate_data_structure(data)
 
-    connection = extract_connection(connection)
+    network = extract_network(network)
 
     # We are only interested in layers that has parameters
     layers = data['layers']
     layers_data = [l for l in layers if l['parameters']]
-    layers_conn = [l for l in connection if l.variables]
+    layers_conn = [l for l in network if l.variables]
 
     if not ignore_missing and len(layers_data) != len(layers_conn):
         raise ParameterLoaderError(
@@ -289,19 +289,19 @@ def load_dict(connection, data, ignore_missing=False,
             # should also be the same
             load_dict_sequentially(layers_conn, layers_data)
 
-    # We need to initalize connection, to make sure
+    # We need to initalize network, to make sure
     # that each layer will generate shared variables
-    # and validate connections
-    connection.initialize()
+    # and validate networks
+    network.initialize()
 
 
-def save_dict(connection):
+def save_dict(network):
     """
     Save network into the dictionary.
 
     Parameters
     ----------
-    connection : network, list of layer or connection
+    network : network, list of layer or network
 
     Returns
     -------
@@ -314,13 +314,13 @@ def save_dict(connection):
     --------
     >>> from neupy import layers, storage
     >>>
-    >>> connection = layers.Input(10) > layers.Softmax(3)
-    >>> layers_data = storage.save_dict(connection)
+    >>> network = layers.Input(10) > layers.Softmax(3)
+    >>> layers_data = storage.save_dict(network)
     >>>
     >>> layers_data.keys()
     ['layers', 'graph', 'metadata']
     """
-    connection = extract_connection(connection)
+    network = extract_network(network)
     session = tensorflow_session()
     initialize_uninitialized_variables()
 
@@ -333,11 +333,11 @@ def save_dict(connection):
         },
         # Make it as a list in order to save the right order
         # of paramters, otherwise it can be convert to the dictionary.
-        'graph': connection.layer_names_only(),
+        'graph': network.layer_names_only(),
         'layers': [],
     }
 
-    for layer in connection:
+    for layer in network:
         parameters = {}
         configs = {}
 
@@ -364,13 +364,13 @@ def save_dict(connection):
 
 
 @shared_docs(save_dict)
-def save_pickle(connection, filepath, python_compatible=False):
+def save_pickle(network, filepath, python_compatible=False):
     """
     Save layer parameters in pickle file.
 
     Parameters
     ----------
-    {save_dict.connection}
+    {save_dict.network}
 
     filepath : str
         Path to the pickle file that stores network parameters.
@@ -386,11 +386,11 @@ def save_pickle(connection, filepath, python_compatible=False):
     --------
     >>> from neupy import layers, storage
     >>>
-    >>> connection = layers.Input(10) > layers.Softmax(3)
-    >>> storage.save_pickle(connection, '/path/to/parameters.pickle')
+    >>> network = layers.Input(10) > layers.Softmax(3)
+    >>> storage.save_pickle(network, '/path/to/parameters.pickle')
     """
-    connection = extract_connection(connection)
-    data = save_dict(connection)
+    network = extract_network(network)
+    data = save_dict(network)
 
     with open(filepath, 'wb+') as f:
         # Protocol 2 is compatible for both python versions
@@ -399,7 +399,7 @@ def save_pickle(connection, filepath, python_compatible=False):
 
 
 @shared_docs(load_dict)
-def load_pickle(connection, filepath, ignore_missing=False,
+def load_pickle(network, filepath, ignore_missing=False,
                 load_by='names_or_order', skip_validation=True):
     """
     Load and set parameters for layers from the
@@ -407,7 +407,7 @@ def load_pickle(connection, filepath, ignore_missing=False,
 
     Parameters
     ----------
-    {load_dict.connection}
+    {load_dict.network}
 
     filepath : str
         Path to pickle file that will store network parameters.
@@ -426,10 +426,10 @@ def load_pickle(connection, filepath, ignore_missing=False,
     --------
     >>> from neupy import layers, storage
     >>>
-    >>> connection = layers.Input(10) > layers.Softmax(3)
-    >>> storage.load_pickle(connection, '/path/to/parameters.pickle')
+    >>> network = layers.Input(10) > layers.Softmax(3)
+    >>> storage.load_pickle(network, '/path/to/parameters.pickle')
     """
-    connection = extract_connection(connection)
+    network = extract_network(network)
 
     with open(filepath, 'rb') as f:
         # Specify encoding for python 3 in order to be able to
@@ -437,17 +437,17 @@ def load_pickle(connection, filepath, ignore_missing=False,
         options = {'encoding': 'latin1'} if six.PY3 else {}
         data = pickle.load(f, **options)
 
-    load_dict(connection, data, ignore_missing, load_by)
+    load_dict(network, data, ignore_missing, load_by)
 
 
 @shared_docs(save_dict)
-def save_hdf5(connection, filepath):
+def save_hdf5(network, filepath):
     """
     Save network parameters in HDF5 format.
 
     Parameters
     ----------
-    {save_dict.connection}
+    {save_dict.network}
 
     filepath : str
         Path to the HDF5 file that stores network parameters.
@@ -456,11 +456,11 @@ def save_hdf5(connection, filepath):
     --------
     >>> from neupy import layers, storage
     >>>
-    >>> connection = layers.Input(10) > layers.Softmax(3)
-    >>> storage.save_hdf5(connection, '/path/to/parameters.hdf5')
+    >>> network = layers.Input(10) > layers.Softmax(3)
+    >>> storage.save_hdf5(network, '/path/to/parameters.hdf5')
     """
-    connection = extract_connection(connection)
-    data = save_dict(connection)
+    network = extract_network(network)
+    data = save_dict(network)
 
     with h5py.File(filepath, mode='w') as f:
         layer_names = []
@@ -488,14 +488,14 @@ def save_hdf5(connection, filepath):
 
 
 @shared_docs(load_dict)
-def load_hdf5(connection, filepath, ignore_missing=False,
+def load_hdf5(network, filepath, ignore_missing=False,
               load_by='names_or_order', skip_validation=True):
     """
     Load network parameters from HDF5 file.
 
     Parameters
     ----------
-    {load_dict.connection}
+    {load_dict.network}
 
     filepath : str
         Path to HDF5 file that will store network parameters.
@@ -514,10 +514,10 @@ def load_hdf5(connection, filepath, ignore_missing=False,
     --------
     >>> from neupy import layers, storage
     >>>
-    >>> connection = layers.Input(10) > layers.Softmax(3)
-    >>> storage.load_hdf5(connection, '/path/to/parameters.hdf5')
+    >>> network = layers.Input(10) > layers.Softmax(3)
+    >>> storage.load_hdf5(network, '/path/to/parameters.hdf5')
     """
-    connection = extract_connection(connection)
+    network = extract_network(network)
     data = {}
 
     with h5py.File(filepath, mode='r') as f:
@@ -546,7 +546,7 @@ def load_hdf5(connection, filepath, ignore_missing=False,
 
             data['layers'].append(layer)
 
-    load_dict(connection, data, ignore_missing, load_by)
+    load_dict(network, data, ignore_missing, load_by)
 
 
 def convert_numpy_array_to_list_recursively(data):
@@ -564,13 +564,13 @@ def convert_numpy_array_to_list_recursively(data):
 
 
 @shared_docs(save_dict)
-def save_json(connection, filepath, indent=None):
+def save_json(network, filepath, indent=None):
     """
     Save network parameters in JSON format.
 
     Parameters
     ----------
-    {save_dict.connection}
+    {save_dict.network}
 
     filepath : str
         Path to the JSON file that stores network parameters.
@@ -585,11 +585,11 @@ def save_json(connection, filepath, indent=None):
     --------
     >>> from neupy import layers, storage
     >>>
-    >>> connection = layers.Input(10) > layers.Softmax(3)
-    >>> storage.save_json(connection, '/path/to/parameters.json')
+    >>> network = layers.Input(10) > layers.Softmax(3)
+    >>> storage.save_json(network, '/path/to/parameters.json')
     """
-    connection = extract_connection(connection)
-    data = save_dict(connection)
+    network = extract_network(network)
+    data = save_dict(network)
 
     with open(filepath, 'w') as f:
         # Without extra data processor we won't be able to dump
@@ -600,14 +600,14 @@ def save_json(connection, filepath, indent=None):
 
 
 @shared_docs(load_dict)
-def load_json(connection, filepath, ignore_missing=False,
+def load_json(network, filepath, ignore_missing=False,
               load_by='names_or_order', skip_validation=True):
     """
     Load network parameters from JSON file.
 
     Parameters
     ----------
-    {load_dict.connection}
+    {load_dict.network}
 
     filepath : str
         Path to JSON file that will store network parameters.
@@ -626,16 +626,16 @@ def load_json(connection, filepath, ignore_missing=False,
     --------
     >>> from neupy import layers, storage
     >>>
-    >>> connection = layers.Input(10) > layers.Softmax(3)
-    >>> storage.load_json(connection, '/path/to/parameters.json')
+    >>> network = layers.Input(10) > layers.Softmax(3)
+    >>> storage.load_json(network, '/path/to/parameters.json')
     """
-    connection = extract_connection(connection)
-    data = save_dict(connection)
+    network = extract_network(network)
+    data = save_dict(network)
 
     with open(filepath, 'r') as f:
         data = json.load(f)
 
-    load_dict(connection, data, ignore_missing, load_by)
+    load_dict(network, data, ignore_missing, load_by)
 
 
 # Convenient aliases

@@ -68,7 +68,7 @@ decoder = layers.join(
 )
 
 conv_autoencoder = algorithms.Momentum(
-    connection=encoder > decoder,
+    network=encoder > decoder,
     verbose=True,
     step=0.1,
     momentum=0.99,

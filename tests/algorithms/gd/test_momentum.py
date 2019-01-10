@@ -35,7 +35,7 @@ class MomentumTestCase(BaseTestCase):
            # Test data
            (x_train, y_train),
            # Network configurations
-           connection=[
+           network=[
                layers.Input(10),
                layers.Sigmoid(20),
                layers.Sigmoid(1)
@@ -58,7 +58,7 @@ class MomentumTestCase(BaseTestCase):
            # Test data
            (x_train, y_train),
            # Network configurations
-           connection=[
+           network=[
                layers.Input(10),
                layers.Sigmoid(20),
                layers.Sigmoid(1)

@@ -27,48 +27,48 @@ class LayerStoragePickleTestCase(BaseTestCase):
             self.assertGreater(filesize_after, 0)
 
     def test_simple_storage_pickle(self):
-        connection_1 = layers.join(
+        network_1 = layers.join(
             layers.Input(10),
             layers.Sigmoid(5),
             layers.Sigmoid(2),
         )
-        connection_2 = layers.join(
+        network_2 = layers.join(
             layers.Input(10),
             layers.Sigmoid(5),
             layers.Sigmoid(2),
         )
 
         random_input = asfloat(np.random.random((13, 10)))
-        random_output_1 = self.eval(connection_1.output(random_input))
-        random_output_2_1 = self.eval(connection_2.output(random_input))
+        random_output_1 = self.eval(network_1.output(random_input))
+        random_output_2_1 = self.eval(network_2.output(random_input))
 
         self.assertFalse(np.any(random_output_1 == random_output_2_1))
 
         with tempfile.NamedTemporaryFile() as temp:
-            storage.save_pickle(connection_1, temp.name)
-            storage.load_pickle(connection_2, temp.name)
-            random_output_2_2 = self.eval(connection_2.output(random_input))
+            storage.save_pickle(network_1, temp.name)
+            storage.load_pickle(network_2, temp.name)
+            random_output_2_2 = self.eval(network_2.output(random_input))
 
             np.testing.assert_array_almost_equal(
                 random_output_1, random_output_2_2)
 
     def test_storage_pickle_save_load_save(self):
-        connection = layers.join(
+        network = layers.join(
             layers.Input(10),
             layers.Sigmoid(5),
             layers.Sigmoid(2),
         )
 
         with tempfile.NamedTemporaryFile() as temp:
-            storage.save_pickle(connection, temp.name)
+            storage.save_pickle(network, temp.name)
             temp.file.seek(0)
 
             filesize_first = os.path.getsize(temp.name)
 
-            storage.load_pickle(connection, temp.name)
+            storage.load_pickle(network, temp.name)
 
         with tempfile.NamedTemporaryFile() as temp:
-            storage.save_pickle(connection, temp.name)
+            storage.save_pickle(network, temp.name)
             temp.file.seek(0)
 
             filesize_second = os.path.getsize(temp.name)
@@ -87,16 +87,16 @@ class LayerStoragePickleTestCase(BaseTestCase):
 
             if epoch == 4:
                 storage.load_pickle(
-                    network.connection,
+                    network.network,
                     os.path.join(tempdir, 'training-epoch-2'))
                 raise StopTraining('Stop training process after 4th epoch')
             else:
                 storage.save_pickle(
-                    network.connection,
+                    network.network,
                     os.path.join(tempdir, 'training-epoch-{}'.format(epoch)))
 
         gdnet = algorithms.GradientDescent(
-            connection=[
+            network=[
                 layers.Input(10),
                 layers.Sigmoid(4),
                 layers.Sigmoid(1)
