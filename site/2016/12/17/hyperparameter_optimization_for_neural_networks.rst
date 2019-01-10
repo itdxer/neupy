@@ -257,7 +257,7 @@ Let's define a function that trains the neural network and return prediction err
 
             step=0.001,
             batch_size=128,
-            error='categorical_crossentropy',
+            loss='categorical_crossentropy',
         )
         network.train(x_train, y_train, epochs=100)
 
@@ -597,7 +597,7 @@ After that, we can define training algorithm for the network.
         batch_size=batch_size,
         step=step,
 
-        error='categorical_crossentropy',
+        loss='categorical_crossentropy',
         shuffle_data=True,
 
         signals=on_epoch_end,

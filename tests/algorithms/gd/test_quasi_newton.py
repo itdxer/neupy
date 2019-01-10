@@ -154,7 +154,7 @@ class QuasiNewtonTestCase(BaseTestCase):
                 verbose=False,
             ),
             epochs=100,
-            min_accepted_error=0.002,
+            min_accepted_loss=0.002,
         )
 
     def test_quasi_newton_dfp_overfit(self):
@@ -165,7 +165,7 @@ class QuasiNewtonTestCase(BaseTestCase):
                 verbose=False,
             ),
             epochs=350,
-            min_accepted_error=0.002,
+            min_accepted_loss=0.002,
         )
 
     def test_quasi_newton_sr1_overfit(self):
@@ -177,7 +177,7 @@ class QuasiNewtonTestCase(BaseTestCase):
                 epsilon=1e-5,
             ),
             epochs=250,
-            min_accepted_error=0.002,
+            min_accepted_loss=0.002,
         )
 
     def test_safe_division(self):

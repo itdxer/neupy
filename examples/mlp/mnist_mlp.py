@@ -28,7 +28,7 @@ network = algorithms.Momentum(
 
     # Using categorical cross-entropy as a loss function.
     # It's suitable for classification with 3 and more classes.
-    error='categorical_crossentropy',
+    loss='categorical_crossentropy',
 
     # Learning rate
     step=0.01,

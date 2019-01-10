@@ -66,7 +66,7 @@ network = algorithms.RMSProp(
     step=0.01,
     verbose=True,
     batch_size=64,
-    error='binary_crossentropy',
+    loss='binary_crossentropy',
 )
 network.train(x_train, y_train, x_test, y_test, epochs=20)
 

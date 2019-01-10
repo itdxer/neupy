@@ -67,7 +67,7 @@ if __name__ == '__main__':
         ),
         regularizer=algorithms.l2(0.0001),
 
-        error='categorical_crossentropy',
+        loss='categorical_crossentropy',
         batch_size=100,
         shuffle_data=True,
         verbose=True,

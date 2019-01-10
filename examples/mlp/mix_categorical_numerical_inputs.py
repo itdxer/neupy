@@ -89,7 +89,7 @@ network = algorithms.Momentum(
     verbose=True,
     momentum=0.9,
     nesterov=True,
-    error='binary_crossentropy',
+    loss='binary_crossentropy',
 
     # Applied max-norm regularizer to prevent overfitting.
     # Maximum possible norm for any weight is specified by

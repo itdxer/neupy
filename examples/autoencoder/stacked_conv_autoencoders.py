@@ -74,7 +74,7 @@ conv_autoencoder = algorithms.Momentum(
     momentum=0.99,
     shuffle_data=True,
     batch_size=64,
-    error='rmse',
+    loss='rmse',
 )
 conv_autoencoder.train(
     x_unlabeled_4d, x_unlabeled,
@@ -100,7 +100,7 @@ encoder_classifier = algorithms.Adadelta(
     step=0.05,
     shuffle_data=True,
     batch_size=64,
-    error='categorical_crossentropy',
+    loss='categorical_crossentropy',
 )
 encoder_classifier.train(
     x_labeled_encoded, y_labeled,
@@ -116,7 +116,7 @@ classifier = algorithms.GradientDescent(
     step=0.005,
     shuffle_data=True,
     batch_size=64,
-    error='categorical_crossentropy',
+    loss='categorical_crossentropy',
     regularizer=algorithms.l2(0.02),
 )
 classifier.train(x_labeled_4d, y_labeled, epochs=100)

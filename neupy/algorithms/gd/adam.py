@@ -38,7 +38,7 @@ class Adam(GradientDescent):
 
     {BaseOptimizer.network}
 
-    {BaseOptimizer.error}
+    {BaseOptimizer.loss}
 
     {BaseNetwork.show_epoch}
 

@@ -48,7 +48,7 @@ class LevenbergMarquardtTestCase(BaseTestCase):
         with self.assertRaises(ValueError):
             algorithms.LevenbergMarquardt(
                 layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
-                error='categorical_crossentropy')
+                loss='categorical_crossentropy')
 
         with self.assertRaises(ValueError):
             # Doesn't have step parameter

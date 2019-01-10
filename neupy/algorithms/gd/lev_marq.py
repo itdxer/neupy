@@ -130,7 +130,7 @@ class LevenbergMarquardt(BaseOptimizer):
         super(LevenbergMarquardt, self).init_variables()
         self.variables.update(
             mu=tf.Variable(self.mu, name='lev-marq/mu'),
-            last_error=tf.Variable(np.nan, name='lev-marq/last-error'),
+            last_loss=tf.Variable(np.nan, name='lev-marq/last-error'),
         )
 
     def init_train_updates(self):

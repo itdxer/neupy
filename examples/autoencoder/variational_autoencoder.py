@@ -123,7 +123,7 @@ network = algorithms.RMSProp(
         decoder,
     ],
 
-    error=vae_loss,
+    loss=vae_loss,
     regularizer=algorithms.l2(0.01),
 
     batch_size=128,

@@ -76,7 +76,7 @@ class ConjugateGradientTestCase(BaseTestCase):
                 layers.Sigmoid(5),
                 layers.Sigmoid(1),
             ],
-            error='binary_crossentropy',
+            loss='binary_crossentropy',
             shuffle_data=True,
             verbose=False,
             update_function='fletcher_reeves',
@@ -110,7 +110,7 @@ class ConjugateGradientTestCase(BaseTestCase):
                 layers.Sigmoid(5),
                 layers.Sigmoid(1),
             ),
-            error='mse',
+            loss='mse',
             shuffle_data=True,
             # Test configurations
             epochs=50,
