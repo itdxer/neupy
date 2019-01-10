@@ -36,9 +36,25 @@ class ActivationLayerMainTestCase(BaseTestCase):
             str(layer1),
             (
                 "Sigmoid(13, weight=HeNormal(gain=1.0), "
-                "bias=Variable(shape=(13,)), name='sigmoid-1')"
+                "bias=Constant(0), name='sigmoid-1')"
             )
         )
+
+    def test_variables(self):
+        network = layers.join(
+            layers.Input(2),
+            layers.Sigmoid(3, name='sigmoid'),
+        )
+        self.assertDictEqual(network.layer('sigmoid').variables, {})
+
+        network.outputs
+        variables = network.layer('sigmoid').variables
+        self.assertSequenceEqual(
+            sorted(variables.keys()),
+            ['bias', 'weight'])
+
+        self.assertShapesEqual(variables['bias'].shape, (3,))
+        self.assertShapesEqual(variables['weight'].shape, (2, 3))
 
     def test_failed_propagation_for_multiple_inputs(self):
         inputs = layers.parallel(
@@ -146,7 +162,7 @@ class ReluTestCase(BaseTestCase):
             str(layers.Relu(10)),
             (
                 "Relu(10, alpha=0, weight=HeNormal(gain=2), "
-                "bias=Variable(shape=(10,)), name='relu-1')"
+                "bias=Constant(0), name='relu-1')"
             )
         )
 
@@ -263,7 +279,7 @@ class PReluTestCase(BaseTestCase):
             str(layers.PRelu(10)),
             (
                 "PRelu(10, alpha_axes=(-1,), alpha=Constant(0.25), "
-                "weight=HeNormal(gain=2), bias=Variable(shape=(10,)), "
+                "weight=HeNormal(gain=2), bias=Constant(0), "
                 "name='p-relu-1')"
             )
         )

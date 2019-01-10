@@ -112,14 +112,14 @@ class BaseTestCase(unittest.TestCase):
         xavier_normal = init.XavierNormal(gain=2)
         sigmoid_weight = xavier_normal.sample((20, 1), return_array=True)
 
-        network = network_class([
+        optimizer = network_class([
             layers.Input(2),
             layers.Relu(20, weight=relu_weight),
             layers.Sigmoid(1, weight=sigmoid_weight),
         ])
 
-        network.train(x_train, y_train, epochs=epochs)
-        self.assertLess(network.training_errors[-1], min_accepted_loss)
+        optimizer.train(x_train, y_train, epochs=epochs)
+        self.assertLess(optimizer.training_errors[-1], min_accepted_loss)
 
     def assertShapesEqual(self, shape1, shape2, *args, **kwargs):
         shape1 = shape_to_tuple(shape1)
