@@ -88,7 +88,14 @@ class RPROP(BaseOptimizer):
     def init_train_updates(self):
         updates = []
 
-        for layer, parameter, gradient in self.iter_params_and_grads():
+        variables = []
+        for (_, _), variable in self.network.variables.items():
+            if variable.trainable:
+                variables.append(variable)
+
+        gradients = tf.gradients(self.variables.loss, variables)
+
+        for parameter, gradient in zip(variables, gradients):
             with tf.variable_scope(parameter.op.name):
                 steps = tf.Variable(
                     # Steps will be decreased after the first iteration,

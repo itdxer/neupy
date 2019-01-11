@@ -50,27 +50,10 @@ class Momentum(GradientDescent):
     nesterov = Property(default=False, expected_type=bool)
 
     def init_train_updates(self):
-        """
-        Initialize updates that would be applied after
-        each training epoch.
-        """
-        updates = []
-        step = self.variables.step
-
-        for layer, parameter, gradient in self.iter_params_and_grads():
-            previous_velocity = tf.Variable(
-                tf.zeros(parameter.shape),
-                name="{}/previous-velocity".format(parameter.op.name),
-                dtype=tf.float32,
-            )
-            velocity = self.momentum * previous_velocity - step * gradient
-
-            if self.nesterov:
-                velocity = self.momentum * velocity - step * gradient
-
-            updates.extend([
-                (parameter, parameter + velocity),
-                (previous_velocity, velocity),
-            ])
-
-        return updates
+        optimizer = tf.train.MomentumOptimizer(
+            use_nesterov=self.nesterov,
+            momentum=self.momentum,
+            learning_rate=self.step,
+        )
+        self.functions.optimizer = optimizer
+        return [optimizer.minimize(self.variables.loss)]

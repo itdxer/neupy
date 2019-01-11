@@ -279,33 +279,35 @@ class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
     h0_scale = NumberProperty(default=1, minval=0)
     step = WithdrawProperty()
 
-    def init_functions(self):
-        n_parameters = self.network.n_parameters
-        self.variables.update(
-            inv_hessian=tf.Variable(
-                asfloat(self.h0_scale) * tf.eye(n_parameters),
-                name="quasi-newton/inv-hessian",
-                dtype=tf.float32,
-            ),
-            prev_params=tf.Variable(
-                tf.zeros([n_parameters]),
-                name="quasi-newton/prev-params",
-                dtype=tf.float32,
-            ),
-            prev_full_gradient=tf.Variable(
-                tf.zeros([n_parameters]),
-                name="quasi-newton/prev-full-gradient",
-                dtype=tf.float32,
-            ),
-            iteration=tf.Variable(
-                asfloat(self.last_epoch),
-                name='quasi-newton/current-iteration',
-                dtype=tf.float32
-            ),
-        )
-        super(QuasiNewton, self).init_functions()
+    def init_variables(self):
+        with tf.name_scope('quasi-newton'):
+            n_parameters = self.network.n_parameters
+            self.variables.update(
+                inv_hessian=tf.Variable(
+                    asfloat(self.h0_scale) * tf.eye(n_parameters),
+                    name="inv-hessian",
+                    dtype=tf.float32,
+                ),
+                prev_params=tf.Variable(
+                    tf.zeros([n_parameters]),
+                    name="prev-params",
+                    dtype=tf.float32,
+                ),
+                prev_full_gradient=tf.Variable(
+                    tf.zeros([n_parameters]),
+                    name="prev-full-gradient",
+                    dtype=tf.float32,
+                ),
+                iteration=tf.Variable(
+                    asfloat(self.last_epoch),
+                    name='current-iteration',
+                    dtype=tf.float32
+                ),
+            )
 
     def init_train_updates(self):
+        self.init_variables()
+
         iteration = self.variables.iteration
         inv_hessian = self.variables.inv_hessian
         prev_params = self.variables.prev_params

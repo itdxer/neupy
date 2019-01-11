@@ -17,6 +17,9 @@ class RMSProp(GradientDescent):
         Decay rate. Value need to be between ``0`` and ``1``.
         Defaults to ``0.95``.
 
+    momentum : float
+        Defaults to ``0``.
+
     epsilon : float
         Value need to be greater than ``0``. Defaults to ``1e-7``.
 
@@ -43,29 +46,15 @@ class RMSProp(GradientDescent):
     >>> optimizer.train(x_train, y_train)
     """
     decay = ProperFractionProperty(default=0.95)
+    momentum = NumberProperty(default=0, minval=0)
     epsilon = NumberProperty(default=1e-7, minval=0)
 
     def init_train_updates(self):
-        updates = []
-        step = self.variables.step
-
-        for layer, parameter, gradient in self.iter_params_and_grads():
-            prev_mean_squred_grad = tf.Variable(
-                tf.zeros(parameter.shape),
-                name="{}/prev-mean-squared-grad".format(parameter.op.name),
-                dtype=tf.float32,
-            )
-
-            mean_squred_grad = (
-                self.decay * prev_mean_squred_grad +
-                (1. - self.decay) * tf.pow(gradient, 2)
-            )
-            parameter_delta = gradient / tf.sqrt(
-                mean_squred_grad + self.epsilon)
-
-            updates.extend([
-                (prev_mean_squred_grad, mean_squred_grad),
-                (parameter, parameter - step * parameter_delta),
-            ])
-
-        return updates
+        optimizer = tf.train.RMSPropOptimizer(
+            decay=self.decay,
+            momentum=self.momentum,
+            epsilon=self.epsilon,
+            learning_rate=self.step,
+        )
+        self.functions.optimizer = optimizer
+        return [optimizer.minimize(self.variables.loss)]

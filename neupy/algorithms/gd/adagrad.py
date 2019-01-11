@@ -13,10 +13,6 @@ class Adagrad(GradientDescent):
 
     Parameters
     ----------
-    epsilon : float
-        Value need to be greater than ``0``.
-        Defaults to ``1e-5``.
-
     {GradientDescent.Parameters}
 
     Attributes
@@ -46,26 +42,9 @@ class Adagrad(GradientDescent):
         Optimization
         http://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf
     """
-    epsilon = NumberProperty(default=1e-5, minval=0)
-
     def init_train_updates(self):
-        updates = []
-        step = self.variables.step
-
-        for layer, parameter, gradient in self.iter_params_and_grads():
-            prev_mean_squred_grad = tf.Variable(
-                tf.zeros(parameter.shape),
-                name="{}/prev-mean-squred-grad".format(parameter.op.name),
-                dtype=tf.float32,
-            )
-
-            mean_squred_grad = prev_mean_squred_grad + gradient ** 2
-            parameter_delta = gradient / (
-                tf.sqrt(mean_squred_grad + self.epsilon))
-
-            updates.extend([
-                (prev_mean_squred_grad, mean_squred_grad),
-                (parameter, parameter - step * parameter_delta),
-            ])
-
-        return updates
+        optimizer = tf.train.AdagradOptimizer(
+            learning_rate=self.step,
+        )
+        self.functions.optimizer = optimizer
+        return [optimizer.minimize(self.variables.loss)]
