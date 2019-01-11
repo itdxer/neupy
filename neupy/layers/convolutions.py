@@ -325,12 +325,6 @@ class Convolution(BaseLayer):
         self.weight = weight
         self.bias = bias
 
-        if bias is not None:
-            _, _, n_filters = size
-            self.bias = self.variable(
-                value=self.bias, name='bias',
-                shape=as_tuple(n_filters))
-
     def fail_if_shape_invalid(self, input_shape):
         if input_shape and input_shape.ndims != 4:
             raise LayerConnectionError(
@@ -375,22 +369,29 @@ class Convolution(BaseLayer):
             n_kernels,
         ))
 
-    def output(self, input_value, **kwargs):
-        input_value = tf.convert_to_tensor(input_value, tf.float32)
-        input_shape = input_value.shape
-        padding = self.padding
-
-        self.fail_if_shape_invalid(input_shape)
+    def create_variables(self, input_shape):
         n_channels = input_shape[-1]
         n_rows, n_cols, n_filters = self.size
 
+        # Compare to the regular convolution weights,
+        # transposed one has switched input and output channels.
         self.weight = self.variable(
             value=self.weight, name='weight',
             shape=(n_rows, n_cols, n_channels, n_filters))
 
+        if bias is not None:
+            self.bias = self.variable(
+                value=self.bias, name='bias',
+                shape=as_tuple(n_filters))
+
+    def output(self, input, **kwargs):
+        input = tf.convert_to_tensor(input, tf.float32)
+        self.fail_if_shape_invalid(input.shape)
+        padding = self.padding
+
         if not isinstance(padding, six.string_types):
             height_pad, weight_pad = padding
-            input_value = tf.pad(input_value, [
+            input = tf.pad(input, [
                 [0, 0],
                 [height_pad, height_pad],
                 [weight_pad, weight_pad],
@@ -401,7 +402,7 @@ class Convolution(BaseLayer):
             padding = 'VALID'
 
         output = tf.nn.convolution(
-            input_value,
+            input,
             self.weight,
             padding=padding,
             strides=self.stride,
@@ -481,30 +482,30 @@ class Deconvolution(Convolution):
     def output_shape_per_dim(self, *args, **kwargs):
         return deconv_output_shape(*args, **kwargs)
 
-    @property
-    def weight_shape(self):
-        return as_tuple(self.size, self.input_shape[-1])
-
-    def output(self, input_value, **kwargs):
-        input_value = tf.convert_to_tensor(input_value, tf.float32)
-        input_shape = input_value.shape
-        padding = self.padding
-
-        self.fail_if_shape_invalid(input_shape)
+    def create_variables(self, input_shape):
         n_channels = input_shape[-1]
         n_rows, n_cols, n_filters = self.size
-
-        # We need to get information about output shape from the input
-        # tensor's shape, because for some inputs we might have
-        # height and width specified as None and shape value won't be
-        # computed for these dimensions.
-        output_shape = self.get_output_shape(input_shape)
 
         # Compare to the regular convolution weights,
         # transposed one has switched input and output channels.
         self.weight = self.variable(
             value=self.weight, name='weight',
             shape=(n_rows, n_cols, n_filters, n_channels))
+
+        if bias is not None:
+            self.bias = self.variable(
+                value=self.bias, name='bias',
+                shape=as_tuple(n_filters))
+
+    def output(self, input, **kwargs):
+        input = tf.convert_to_tensor(input, tf.float32)
+
+        # We need to get information about output shape from the input
+        # tensor's shape, because for some inputs we might have
+        # height and width specified as None and shape value won't be
+        # computed for these dimensions.
+        output_shape = self.get_output_shape(input.shape)
+        padding = self.padding
 
         if isinstance(self.padding, (list, tuple)):
             height_pad, width_pad = self.padding
@@ -525,7 +526,7 @@ class Deconvolution(Convolution):
             ))
 
         output = tf.nn.conv2d_transpose(
-            input_value,
+            input,
             self.weight,
             output_shape,
             as_tuple(1, self.stride, 1),

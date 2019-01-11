@@ -55,41 +55,44 @@ n_unique_categories = int(x_train_cat.max() + 1)
 x_test_cat = convert_categorical.transform(x_test[:, :3])
 x_test_num = only_numerical(x_test)
 
-network = algorithms.Momentum(
-    [
-        layers.parallel([
-            # 3 categorical inputs
-            layers.Input(3),
+network = layers.join(
+    layers.parallel([
+        # 3 categorical inputs
+        layers.Input(3),
 
-            # Train embedding matrix for categorical inputs.
-            # It has 18 different unique categories (6 categories
-            # per each of the 3 columns). Next layer projects each
-            # category into 4 dimensional space. Output shape from
-            # the layer should be: (batch_size, 3, 4)
-            layers.Embedding(n_unique_categories, 4),
+        # Train embedding matrix for categorical inputs.
+        # It has 18 different unique categories (6 categories
+        # per each of the 3 columns). Next layer projects each
+        # category into 4 dimensional space. Output shape from
+        # the layer should be: (batch_size, 3, 4)
+        layers.Embedding(n_unique_categories, 4),
 
-            # Reshape (batch_size, 3, 4) to (batch_size, 12)
-            layers.Reshape(),
-        ], [
-            # 17 numerical inputs
-            layers.Input(17),
-        ]),
+        # Reshape (batch_size, 3, 4) to (batch_size, 12)
+        layers.Reshape(),
+    ], [
+        # 17 numerical inputs
+        layers.Input(17),
+    ]),
 
-        # Concatenate (batch_size, 12) and (batch_size, 17)
-        # into one matrix with shape (batch_size, 29)
-        layers.Concatenate(),
+    # Concatenate (batch_size, 12) and (batch_size, 17)
+    # into one matrix with shape (batch_size, 29)
+    layers.Concatenate(),
 
-        layers.Relu(128),
-        layers.Relu(32) > layers.Dropout(0.5),
+    layers.Relu(128),
+    layers.Relu(32) >> layers.Dropout(0.5),
 
-        layers.Sigmoid(1)
-    ],
+    layers.Sigmoid(1),
+)
+
+optimizer = algorithms.Momentum(
+    network,
 
     step=0.2,
     verbose=True,
+    loss='binary_crossentropy',
+
     momentum=0.9,
     nesterov=True,
-    loss='binary_crossentropy',
 
     # Applied max-norm regularizer to prevent overfitting.
     # Maximum possible norm for any weight is specified by
@@ -99,10 +102,10 @@ network = algorithms.Momentum(
 
 # Categorical input should be first, because input layer
 # for categorical matrices was defined first.
-network.train([x_train_cat, x_train_num], y_train,
-              [x_test_cat, x_test_num], y_test,
-              epochs=40)
-y_predicted = network.predict([x_test_cat, x_test_num])
+optimizer.train([x_train_cat, x_train_num], y_train,
+                [x_test_cat, x_test_num], y_test,
+                epochs=40)
 
+y_predicted = optimizer.predict([x_test_cat, x_test_num])
 accuracy = accuracy_score(y_test, y_predicted.round())
 print("Accuracy: {:.2%}".format(accuracy))

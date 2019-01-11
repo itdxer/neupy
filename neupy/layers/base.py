@@ -3,12 +3,14 @@ import sys
 import copy
 import types
 import inspect
+import tempfile
 from itertools import chain
 from functools import wraps
 from abc import abstractmethod
 from collections import OrderedDict, defaultdict
 
 import six
+import graphviz
 import numpy as np
 import tensorflow as tf
 
@@ -475,7 +477,7 @@ class LayerGraph(BaseGraph):
 
             raise modified_exception
 
-    def propagate_forward(self, inputs, method, **kwargs):
+    def propagate_forward(self, inputs, method, freeze=False, **kwargs):
         backward_graph = self.backward_graph
         inputs = self.preformat_inputs(inputs)
         outputs = copy.copy(inputs)
@@ -537,6 +539,39 @@ class LayerGraph(BaseGraph):
             prepared_graph[from_layer.name] = [l.name for l in to_layers]
 
         return list(prepared_graph.items())
+
+    def show(self, filepath=None):
+        if filepath is None:
+            filepath = tempfile.mktemp()
+
+        def layer_uid(layer):
+            return str(id(layer))
+
+        digraph = graphviz.Digraph()
+        shapes_per_layer = self.output_shapes_per_layer
+
+        for layer in self.forward_graph.keys():
+            digraph.node(layer_uid(layer), str(layer.name))
+
+        output_id = 1
+        for from_layer, to_layers in self.forward_graph.items():
+            for to_layer in to_layers:
+                digraph.edge(
+                    layer_uid(from_layer),
+                    layer_uid(to_layer),
+                    label=" {}".format(shapes_per_layer[from_layer]))
+
+            if not to_layers:
+                output = 'output-{}'.format(output_id)
+
+                digraph.node(output, 'Output #{}'.format(output_id))
+                digraph.edge(
+                    layer_uid(from_layer), output,
+                    label=" {}".format(shapes_per_layer[from_layer]))
+
+                output_id += 1
+
+        digraph.render(filepath, view=True)
 
     def get_params(self):
         return {'forward_graph': self.forward_graph}
@@ -667,6 +702,7 @@ class BaseLayer(BaseGraph):
         self.variables = OrderedDict()
         self.updates = []
         self.name = name
+        self.frozen = False
 
         # This decorator ensures that result produced by the
         # `output` method will be marked under layer's name scope.
@@ -679,7 +715,7 @@ class BaseLayer(BaseGraph):
 
     @property
     def output_shape(self):
-        return self.get_output_shape(tf.TensorShape(None))
+        return self.get_output_shape(self.input_shape)
 
     def get_output_shape(self, input_shape):
         return tf.TensorShape(None)

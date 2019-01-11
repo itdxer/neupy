@@ -10,7 +10,7 @@ from neupy import algorithms, layers, utils
 
 utils.reproducible()
 
-X = np.array([
+X_train = np.array([
     [0.9, 0.3],
     [0.5, 0.3],
     [0.2, 0.1],
@@ -18,7 +18,7 @@ X = np.array([
     [0.1, 0.8],
     [0.1, 0.9],
 ])
-y = np.array([
+y_train = np.array([
     [1],
     [1],
     [1],
@@ -54,7 +54,7 @@ def weight_quiver(weights, color='c'):
                color=color)
 
 
-def save_epoch_weight(net):
+def save_epoch_weight(optimizer):
     """
     Signal processor which save weight update for every
     epoch.
@@ -63,7 +63,7 @@ def save_epoch_weight(net):
     global current_epoch
 
     session = tensorflow_session()
-    input_layer_weight = session.run(net.layers[1].weight)
+    input_layer_weight = session.run(optimizer.network.layers[1].weight)
     weights[:, current_epoch + 1:current_epoch + 2] = input_layer_weight
 
 
@@ -95,8 +95,8 @@ def draw_quiver(network_class, name, color='r'):
     weights[:, 0:1] = default_weight.copy()
 
     current_epoch = 0
-    while bpn.score(X, y) > 0.125:
-        bpn.train(X, y, epochs=1)
+    while bpn.score(X_train, y_train) > 0.125:
+        bpn.train(X_train, y_train, epochs=1)
         current_epoch += 1
 
     weights = weights[:, :current_epoch + 1]
@@ -106,13 +106,14 @@ def draw_quiver(network_class, name, color='r'):
     return mpatches.Patch(color=color, label=label)
 
 
-def target_function(network, x, y):
-    weight = network.layers[1].weight
+def target_function(optimizer, x, y):
+    weight = optimizer.network.layers[1].weight
     new_weight = np.array([[x], [y]])
 
     session = tensorflow_session()
     weight.load(asfloat(new_weight), session)
-    return network.score(X, y)
+
+    return optimizer.score(X_train, y_train)
 
 
 # Get data for countour plot

@@ -38,8 +38,7 @@ cgnet = algorithms.Hessian(
     ],
     verbose=True,
 )
-
-cgnet.train(x_train, y_train, x_test, y_test, epochs=3)
+cgnet.train(x_train, y_train, x_test, y_test, epochs=10)
 y_predict = cgnet.predict(x_test)
 
 y_test = target_scaler.inverse_transform(y_test.reshape((-1, 1)))
