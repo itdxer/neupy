@@ -585,8 +585,9 @@ def merge(left_graph, right_graph, combine=False):
 
     if is_cyclic(forward_graph):
         raise LayerConnectionError(
-            "Cannot create connection between layers, "
-            "because it creates cycle in the graph.")
+            "Cannot define connection between layers, because it creates "
+            "cycle in the graph. Left graph: {}, Right graph: {}"
+            "".format(left_graph, right_graph))
 
     return LayerGraph(forward_graph)
 
@@ -663,7 +664,7 @@ class BaseLayer(BaseGraph):
         if name is None:
             name = generate_layer_name(layer=self)
 
-        self.variables = {}
+        self.variables = OrderedDict()
         self.updates = []
         self.name = name
 

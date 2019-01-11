@@ -79,65 +79,12 @@ class Adam(GradientDescent):
     beta2 = ProperFractionProperty(default=0.999)
     epsilon = NumberProperty(default=1e-7, minval=0)
 
-    def init_functions(self):
-        self.variables.iteration = tf.Variable(
-            asfloat(1),
-            name='iteration',
-            dtype=tf.float32,
-        )
-        super(Adam, self).init_functions()
-
     def init_train_updates(self):
-        updates = []
-
-        iteration = self.variables.iteration
-        step = self.variables.step
-
-        # Since beta1 and beta2 are typically close to 1 and initial
-        # values for first and second moments are close to zero the
-        # initial estimates for these moments will be biased towards zero.
-        # In order to solve this problem we need to correct this bias
-        # by rescaling moments with large values during first updates
-        # and vanishing this scaling factor more and more after every
-        # update.
-        #
-        # Note that bias correction factor has been changed in order
-        # to improve computational speed (suggestion from the original
-        # paper).
-        bias_correction = (
-            tf.sqrt(1. - self.beta2 ** iteration) /
-            (1. - self.beta1 ** iteration)
+        optimizer = tf.train.AdamOptimizer(
+            beta1=self.beta1,
+            beta2=self.beta2,
+            epsilon=self.epsilon,
+            learning_rate=self.step,
         )
-
-        for layer, parameter, gradient in self.iter_params_and_grads():
-            prev_first_moment = tf.Variable(
-                tf.zeros(parameter.shape),
-                name="{}/prev-first-moment".format(parameter.op.name),
-                dtype=tf.float32,
-            )
-            prev_second_moment = tf.Variable(
-                tf.zeros(parameter.shape),
-                name="{}/prev-second-moment".format(parameter.op.name),
-                dtype=tf.float32,
-            )
-
-            first_moment = (
-                self.beta1 * prev_first_moment +
-                (1. - self.beta1) * gradient
-            )
-            second_moment = (
-                self.beta2 * prev_second_moment +
-                (1. - self.beta2) * gradient ** 2
-            )
-
-            parameter_delta = bias_correction * first_moment / (
-                tf.sqrt(second_moment) + self.epsilon)
-
-            updates.extend([
-                (prev_first_moment, first_moment),
-                (prev_second_moment, second_moment),
-                (parameter, parameter - step * parameter_delta),
-            ])
-
-        updates.append((iteration, iteration + 1))
-        return updates
+        self.functions.optimizer = optimizer
+        return [optimizer.minimize(self.variables.loss)]

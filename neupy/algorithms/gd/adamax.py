@@ -97,7 +97,14 @@ class Adamax(GradientDescent):
 
         scale = step / (1. - beta1 ** iteration)
 
-        for layer, parameter, gradient in self.iter_params_and_grads():
+        variables = []
+        for (_, _), variable in self.network.variables.items():
+            if variable.trainable:
+                variables.append(variable)
+
+        gradients = tf.gradients(self.variables.loss, variables)
+
+        for parameter, gradient in zip(variables, gradients):
             prev_first_moment = tf.Variable(
                 tf.zeros(parameter.shape),
                 name="{}/prev-first-moment".format(parameter.op.name),

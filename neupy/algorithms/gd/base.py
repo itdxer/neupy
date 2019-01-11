@@ -139,25 +139,13 @@ class BaseOptimizer(BaseNetwork):
 
         self.variables = AttributeKeyDict()
         self.functions = AttributeKeyDict()
+        self.network.outputs
         self.init_functions()
 
         self.logs.message(
             "TENSORFLOW",
             "Initialization finished successfully. It took {:.2f} seconds"
             "".format(time.time() - start_init_time))
-
-    def iter_params_and_grads(self):
-        layers, variables = [], []
-
-        for (layer, _), variable in self.network.variables.items():
-            if variable.trainable:
-                layers.append(layer)
-                variables.append(variable)
-
-        gradients = tf.gradients(self.variables.loss, variables)
-
-        for layer, variable, gradient in zip(layers, variables, gradients):
-            yield layer, variable, gradient
 
     def init_train_updates(self):
         raise NotImplementedError()
@@ -197,18 +185,18 @@ class BaseOptimizer(BaseNetwork):
             predict=function(
                 inputs=self.network.inputs,
                 outputs=self.network.outputs,
-                name='network/predict'
+                name='optimizer/predict'
             ),
             one_training_update=function(
                 inputs=as_tuple(self.network.inputs, self.network.targets),
                 outputs=loss,
                 updates=training_updates,
-                name='network/one-update-step'
+                name='optimizer/one-update-step'
             ),
             score=function(
                 inputs=as_tuple(self.network.inputs, self.network.targets),
                 outputs=val_loss,
-                name='network/score'
+                name='optimizer/score'
             )
         )
 
@@ -328,13 +316,11 @@ class GradientDescent(BaseOptimizer):
     batch_size = IntProperty(default=128, minval=0, allow_none=True)
 
     def init_train_updates(self):
-        updates = []
-        step = self.variables.step
-
-        for _, parameter, gradient in self.iter_params_and_grads():
-            updates.append((parameter, parameter - step * gradient))
-
-        return updates
+        optimizer = tf.train.GradientDescentOptimizer(
+            learning_rate=self.step,
+        )
+        self.functions.optimizer = optimizer
+        return [optimizer.minimize(self.variables.loss)]
 
     def one_training_update(self, X_train, y_train):
         """

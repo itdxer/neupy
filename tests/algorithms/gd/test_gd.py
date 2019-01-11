@@ -8,23 +8,6 @@ from base import BaseTestCase
 
 
 class GradientDescentTestCase(BaseTestCase):
-    def test_gd_overfit(self):
-        self.assertCanNetworkOverfit(
-            partial(algorithms.GradientDescent, step=1.0, verbose=False),
-            epochs=4000,
-        )
-
-    def test_gd_minibatch_overfit(self):
-        self.assertCanNetworkOverfit(
-            partial(
-                algorithms.GradientDescent,
-                step=0.5,
-                batch_size=5,
-                verbose=False,
-            ),
-            epochs=4000,
-        )
-
     def test_large_network_representation(self):
         optimizer = algorithms.GradientDescent([
             layers.Input(1),
