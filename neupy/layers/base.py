@@ -217,7 +217,7 @@ class BaseGraph(ConfigurableABC, DumpableObject):
             placeholder = tf.placeholder(
                 tf.float32,
                 shape=shape_to_tuple(layer.input_shape),
-                name="placeholder/input-{}".format(layer.name),
+                name="placeholder/input/{}".format(layer.name),
             )
             placeholders.append(placeholder)
 
@@ -231,7 +231,7 @@ class BaseGraph(ConfigurableABC, DumpableObject):
             placeholder = tf.placeholder(
                 tf.float32,
                 shape=shape_to_tuple(layer.output_shape),
-                name="placeholder/target-{}".format(layer.name),
+                name="placeholder/target/{}".format(layer.name),
             )
             placeholders.append(placeholder)
 
