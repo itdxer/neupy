@@ -120,7 +120,7 @@ class LevenbergMarquardt(BaseOptimizer):
     """
     mu = BoundedProperty(default=0.01, minval=0)
     mu_update_factor = BoundedProperty(default=1.2, minval=1)
-    error = ChoiceProperty(default='mse', choices={'mse': objectives.mse})
+    loss = ChoiceProperty(default='mse', choices={'mse': objectives.mse})
 
     step = WithdrawProperty()
     regularizer = WithdrawProperty()

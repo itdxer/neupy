@@ -88,21 +88,20 @@ class Adamax(GradientDescent):
         super(Adamax, self).init_functions()
 
     def init_train_updates(self):
-        updates = []
-
         iteration = self.variables.iteration
         step = self.variables.step
         beta1 = self.beta1
         beta2 = self.beta2
 
-        scale = step / (1. - beta1 ** iteration)
-
+        updates = []
         variables = []
+
         for (_, _), variable in self.network.variables.items():
             if variable.trainable:
                 variables.append(variable)
 
         gradients = tf.gradients(self.variables.loss, variables)
+        scale = step / (1. - beta1 ** iteration)
 
         for parameter, gradient in zip(variables, gradients):
             prev_first_moment = tf.Variable(

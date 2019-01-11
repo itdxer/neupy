@@ -77,7 +77,6 @@ def line_search(f, f_deriv, maxiter=20, c1=1e-4, c2=0.9):
     1999, pg. 59-60.
     For the zoom phase it uses an algorithm by [...].
     """
-
     if not 0 < c1 < 1:
         raise ValueError("c1 should be a float between 0 and 1")
 

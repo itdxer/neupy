@@ -58,17 +58,18 @@ class WolfeLineSearchForStep(Configurable):
                 # This trick allow us to replace shared variables
                 # with tensorflow variables and get output from the network
                 start_pos = 0
-                for (layer, varname), param in layers_and_parameters:
-                    n_param_values = int(np.prod(param.shape))
+                for (layer, varname), variable in layers_and_parameters:
+                    n_param_values = int(variable.shape.num_elements())
                     end_pos = start_pos + n_param_values
+
                     updated_param_value = tf.reshape(
                         updated_params[start_pos:end_pos],
-                        param.shape
-                    )
+                        variable.shape)
+
                     setattr(layer, varname, updated_param_value)
                     start_pos = end_pos
 
-                output = self.network.output(*network_inputs)
+                output = self.network.output(*network_inputs, training=True)
 
             finally:
                 # Restore previous parameters
@@ -86,7 +87,8 @@ class WolfeLineSearchForStep(Configurable):
             return gradient
 
         return line_search(
-            phi, derphi, self.wolfe_maxiter, self.wolfe_c1, self.wolfe_c2)
+            phi, derphi, self.wolfe_maxiter,
+            self.wolfe_c1, self.wolfe_c2)
 
 
 @function_name_scope

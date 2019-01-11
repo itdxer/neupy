@@ -295,7 +295,7 @@ def create_variable(value, name, shape, trainable=True):
     if shape is not None:
         shape = shape_to_tuple(shape)
 
-    if isinstance(value, tf.Variable):
+    if isinstance(value, (tf.Variable, tf.Tensor)):
         variable_shape = shape_to_tuple(value.shape)
 
         if as_tuple(variable_shape) != as_tuple(shape):
