@@ -165,7 +165,7 @@ class Concatenate(BaseLayer):
                         "".format(axis, valid_shape, input_shape))
 
         output_shape = input_shapes.pop(0)
-        output_shape = output_shape.dims
+        output_shape = [dim.value for dim in output_shape.dims]
 
         for input_shape in input_shapes:
             output_shape[self.axis] += input_shape[self.axis]

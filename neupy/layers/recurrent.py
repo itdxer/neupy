@@ -543,11 +543,11 @@ class GRU(BaseRNNLayer):
         self.backwards = backwards
         self.gradient_clipping = gradient_clipping
 
-    def initialize_variables(self, input):
+    def initialize_variables(self, input_shape):
         self.input_weights = self.variable(
             value=self.input_weights,
             name='input_weights',
-            shape=(input.shape[-1], 3 * self.n_units),
+            shape=(input_shape[-1], 3 * self.n_units),
         )
         self.hidden_weights = self.variable(
             value=self.hidden_weights,
@@ -569,7 +569,6 @@ class GRU(BaseRNNLayer):
         # Because scan iterates over the first dimension we
         # dimshuffle to (n_time_steps, n_batch, n_features)
         input = tf.transpose(input, [1, 0, 2])
-        self.initialize_variables(input)
 
         # Create single recurrent computation step function
         # input_n is the n'th vector of the input

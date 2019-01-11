@@ -86,18 +86,32 @@ class Reshape(BaseLayer):
 
         return tf.TensorShape([n_sampes] + new_feature_shape)
 
-    def output(self, input_value, **kwargs):
+    def output(self, input, **kwargs):
         """
         Reshape the feature space for the input value.
 
         Parameters
         ----------
-        input_value : array-like or Tensorfow variable
+        input : array-like or Tensorfow variable
         """
-        input_shape = tf.shape(input_value)
+        input = tf.convert_to_tensor(input, dtype=tf.float32)
+        input_shape = tf.shape(input)
+
         n_samples = input_shape[0]
-        output_shape = as_tuple(n_samples, self.shape)
-        return tf.reshape(input_value, output_shape)
+        expected_shape = self.get_output_shape(input.shape)
+        feature_shape = expected_shape[1:]
+
+        if feature_shape.is_fully_defined():
+            # For cases when we have -1 in the shape and feature shape
+            # can be precomputed from the input we want to be explicit about
+            # expected output shape. Because of the unknown batch dimension
+            # it won't be possible to tensorflow to derive exact output
+            # shape from the -1
+            output_shape = as_tuple(n_samples, feature_shape.dims)
+        else:
+            output_shape = as_tuple(n_samples, self.shape)
+
+        return tf.reshape(input, output_shape)
 
     def __repr__(self):
         return self._repr_arguments(self.shape, name=self.name)
@@ -154,11 +168,11 @@ class Transpose(BaseLayer):
 
         return tf.TensorShape(input_shape[perm])
 
-    def output(self, input_value, **kwargs):
+    def output(self, input, **kwargs):
         # Input value has batch dimension, but perm will never have it
         # specified as (zero index), so we need to add it in order to
         # fix batch dimesnion in place.
-        return tf.transpose(input_value, list(self.perm))
+        return tf.transpose(input, list(self.perm))
 
     def __repr__(self):
         return self._repr_arguments(self.perm, name=self.name)

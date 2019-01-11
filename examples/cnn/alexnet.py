@@ -1,3 +1,5 @@
+import tensorflow as tf
+
 from neupy import layers, plots
 
 
@@ -23,15 +25,19 @@ class SliceChannels(layers.BaseLayer):
         self.to_channel = to_channel
         super(SliceChannels, self).__init__(**kwargs)
 
-    @property
-    def output_shape(self):
-        if not self.input_shape:
-            return
-
-        height, width, _ = self.input_shape
+    def get_output_shape(self, input_shape):
         n_channels = self.to_channel - self.from_channel
 
-        return (height, width, n_channels)
+        if input_shape.ndims is None:
+            return tf.TensorShape((None, None, None, n_channels))
+
+        if input_shape.ndims != 4:
+            raise ValueError(
+                "Layer {} expects 4 dimensional inputs, got {} instead."
+                "".format(self.name, input_shape.ndims))
+
+        n_samples, height, width, _ = input_shape
+        return tf.TensorShape((n_samples, height, width, n_channels))
 
     def output(self, input_value):
         return input_value[:, :, :, self.from_channel:self.to_channel]
@@ -52,7 +58,7 @@ alexnet = layers.join(
     layers.MaxPooling((3, 3), stride=(2, 2)),
     layers.LocalResponseNorm(),
 
-    [[
+    layers.parallel([
         SliceChannels(0, 48),
         layers.Convolution((5, 5, 128), padding='SAME', name='conv_2_1'),
         layers.Relu(),
@@ -60,7 +66,7 @@ alexnet = layers.join(
         SliceChannels(48, 96),
         layers.Convolution((5, 5, 128), padding='SAME', name='conv_2_2'),
         layers.Relu(),
-    ]],
+    ]),
     layers.Concatenate(),
 
     layers.MaxPooling((3, 3), stride=(2, 2)),
@@ -69,7 +75,7 @@ alexnet = layers.join(
     layers.Convolution((3, 3, 384), padding='SAME', name='conv_3'),
     layers.Relu(),
 
-    [[
+    layers.parallel([
         SliceChannels(0, 192),
         layers.Convolution((3, 3, 192), padding='SAME', name='conv_4_1'),
         layers.Relu(),
@@ -77,10 +83,10 @@ alexnet = layers.join(
         SliceChannels(192, 384),
         layers.Convolution((3, 3, 192), padding='SAME', name='conv_4_2'),
         layers.Relu(),
-    ]],
+    ]),
     layers.Concatenate(),
 
-    [[
+    layers.parallel([
         SliceChannels(0, 192),
         layers.Convolution((3, 3, 128), padding='SAME', name='conv_5_1'),
         layers.Relu(),
@@ -88,7 +94,7 @@ alexnet = layers.join(
         SliceChannels(192, 384),
         layers.Convolution((3, 3, 128), padding='SAME', name='conv_5_2'),
         layers.Relu(),
-    ]],
+    ]),
     layers.Concatenate(),
     layers.MaxPooling((3, 3), stride=(2, 2)),
 
@@ -97,4 +103,4 @@ alexnet = layers.join(
     layers.Relu(4096, name='dense_2') > layers.Dropout(0.5),
     layers.Softmax(1000, name='dense_3'),
 )
-plots.network_structure(alexnet)
+alexnet.show()

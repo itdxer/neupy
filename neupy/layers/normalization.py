@@ -101,8 +101,7 @@ class BatchNorm(Identity):
             raise ValueError(
                 "Cannot specify axes for batch dimension (0-axis)")
 
-    def initialize_variables(self, input):
-        input_shape = input.shape
+    def create_variables(self, input_shape):
         ndim = len(input_shape)
 
         if self.axes is None:
@@ -146,7 +145,6 @@ class BatchNorm(Identity):
 
     def output(self, input, training=False):
         input = tf.convert_to_tensor(input, dtype=tf.float32)
-        self.initialize_variables(input)
 
         if not training:
             mean = self.running_mean
@@ -238,7 +236,7 @@ class LocalResponseNorm(Identity):
                 "Layer `{}` expected input with 4 dimensions, got {} instead. "
                 "Shape: {}".format(self.name, input_shape.ndims, input_shape))
 
-        return super(Identity, self).get_output_shape(input_shape)
+        return super(LocalResponseNorm, self).get_output_shape(input_shape)
 
     def output(self, input, **kwargs):
         return tf.nn.local_response_normalization(
