@@ -88,10 +88,10 @@ def create_VIN(input_image_shape=(8, 8, 2), n_hidden_filters=150,
     q_weight = random_weight((3, 3, 1, n_state_filters))
     fb_weight = random_weight((3, 3, 1, n_state_filters))
 
-    Q = R > SamePadConvolution((3, 3, n_state_filters), weight=q_weight)
+    Q = R >> SamePadConvolution((3, 3, n_state_filters), weight=q_weight)
 
     for i in range(k):
-        V = Q > ChannelGlobalMaxPooling()
+        V = Q >> ChannelGlobalMaxPooling()
         Q = layers.join(
             # Convolve R and V separately and then add outputs together with
             # the Elementwise layer. This part of the code looks different
@@ -117,12 +117,12 @@ def create_VIN(input_image_shape=(8, 8, 2), n_hidden_filters=150,
     input_state_2 = layers.Input(UNKNOWN, name='state-2-input')
 
     # Select the conv-net channels at the state position (S1, S2)
-    VIN = [Q, input_state_1, input_state_2] > SelectValueAtStatePosition()
+    VIN = (Q | input_state_1 | input_state_2) >> SelectValueAtStatePosition()
 
     # Set up softmax layer that predicts actions base on (S1, S2)
     # position. Each action encodes specific direction:
     # N, S, E, W, NE, NW, SE, SW (in the same order)
-    VIN = VIN > layers.Softmax(8, bias=None, weight=init.Normal())
+    VIN = VIN >> layers.Softmax(8, bias=None, weight=init.Normal())
 
     return VIN
 

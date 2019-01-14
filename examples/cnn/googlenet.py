@@ -1,61 +1,61 @@
 import tensorflow as tf
 
-from neupy import layers, plots
+from neupy.layers import *
 
 
 def Inception(nfilters):
-    return layers.join(
-        [[
-            layers.MaxPooling((3, 3), stride=1, padding='SAME'),
-            layers.Convolution((1, 1, nfilters[0])),
-            layers.Relu(),
+    return join(
+        parallel([
+            MaxPooling((3, 3), stride=1, padding='SAME'),
+            Convolution((1, 1, nfilters[0])),
+            Relu(),
         ], [
-            layers.Convolution((1, 1, nfilters[1])),
-            layers.Relu(),
+            Convolution((1, 1, nfilters[1])),
+            Relu(),
         ], [
-            layers.Convolution((1, 1, nfilters[2])),
-            layers.Relu(),
-            layers.Convolution((3, 3, nfilters[3]), padding='SAME'),
-            layers.Relu(),
+            Convolution((1, 1, nfilters[2])),
+            Relu(),
+            Convolution((3, 3, nfilters[3]), padding='SAME'),
+            Relu(),
         ], [
-            layers.Convolution((1, 1, nfilters[4])),
-            layers.Relu(),
-            layers.Convolution((5, 5, nfilters[5]), padding='SAME'),
-            layers.Relu(),
-        ]],
-        layers.Concatenate(),
+            Convolution((1, 1, nfilters[4])),
+            Relu(),
+            Convolution((5, 5, nfilters[5]), padding='SAME'),
+            Relu(),
+        ]),
+        Concatenate(),
     )
 
 
 UNKNOWN = None
-googlenet = layers.join(
-    layers.Input((UNKNOWN, UNKNOWN, 3)),
+googlenet = join(
+    Input((UNKNOWN, UNKNOWN, 3)),
 
-    layers.Convolution((7, 7, 64), padding='SAME', stride=2),
-    layers.Relu(),
-    layers.MaxPooling((3, 3), stride=2),
-    layers.LocalResponseNorm(alpha=0.00002, k=1),
+    Convolution((7, 7, 64), padding='SAME', stride=2),
+    Relu(),
+    MaxPooling((3, 3), stride=2),
+    LocalResponseNorm(alpha=0.00002, k=1),
 
-    layers.Convolution((1, 1, 64)) > layers.Relu(),
-    layers.Convolution((3, 3, 192), padding='SAME') > layers.Relu(),
-    layers.LocalResponseNorm(alpha=0.00002, k=1),
-    layers.MaxPooling((3, 3), stride=2),
+    Convolution((1, 1, 64)) >> Relu(),
+    Convolution((3, 3, 192), padding='SAME') >> Relu(),
+    LocalResponseNorm(alpha=0.00002, k=1),
+    MaxPooling((3, 3), stride=2),
 
     Inception((32, 64, 96, 128, 16, 32)),
     Inception((64, 128, 128, 192, 32, 96)),
-    layers.MaxPooling((3, 3), stride=2),
+    MaxPooling((3, 3), stride=2),
 
     Inception((64, 192, 96, 208, 16, 48)),
     Inception((64, 160, 112, 224, 24, 64)),
     Inception((64, 128, 128, 256, 24, 64)),
     Inception((64, 112, 144, 288, 32, 64)),
     Inception((128, 256, 160, 320, 32, 128)),
-    layers.MaxPooling((3, 3), stride=2),
+    MaxPooling((3, 3), stride=2),
 
     Inception((128, 256, 160, 320, 32, 128)),
     Inception((128, 384, 192, 384, 48, 128)),
-    layers.GlobalPooling('avg'),
+    GlobalPooling('avg'),
 
-    layers.Softmax(1000),
+    Softmax(1000),
 )
 googlenet.show()

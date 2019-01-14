@@ -16,11 +16,11 @@ conv_autoencoder = algorithms.Momentum(
     [
         layers.Input((28, 28, 1)),
 
-        layers.Convolution((3, 3, 16)) > layers.Relu(),
-        layers.Convolution((3, 3, 16)) > layers.Relu(),
+        layers.Convolution((3, 3, 16)) >> layers.Relu(),
+        layers.Convolution((3, 3, 16)) >> layers.Relu(),
         layers.MaxPooling((2, 2)),
 
-        layers.Convolution((3, 3, 32)) > layers.Relu(),
+        layers.Convolution((3, 3, 32)) >> layers.Relu(),
         layers.MaxPooling((2, 2)),
 
         layers.Reshape(),
@@ -46,11 +46,11 @@ conv_autoencoder = algorithms.Momentum(
         # If convolution operation in first layers with zero padding reduces
         # size of the image, then convolution with padding=2 increases size
         # of the image. It just does the opposite to the previous convolution
-        layers.Convolution((3, 3, 16), padding=2) > layers.Relu(),
+        layers.Convolution((3, 3, 16), padding=2) >> layers.Relu(),
 
         layers.Upscale((2, 2)),
-        layers.Convolution((3, 3, 16), padding=2) > layers.Relu(),
-        layers.Convolution((3, 3, 1), padding=2) > layers.Sigmoid(),
+        layers.Convolution((3, 3, 16), padding=2) >> layers.Relu(),
+        layers.Convolution((3, 3, 1), padding=2) >> layers.Sigmoid(),
 
         # We have to convert 4d tensor to the 2d in order to be
         # able to compute RMSE.

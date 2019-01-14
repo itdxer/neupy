@@ -42,18 +42,18 @@ if __name__ == '__main__':
         [
             Input((32, 32, 3)),
 
-            Convolution((3, 3, 32)) > Relu(),
-            Convolution((3, 3, 32)) > Relu(),
+            Convolution((3, 3, 32)) >> Relu(),
+            Convolution((3, 3, 32)) >> Relu(),
             MaxPooling((2, 2)),
             Dropout(0.2),
 
-            Convolution((3, 3, 64)) > Relu(),
-            Convolution((3, 3, 64)) > Relu(),
+            Convolution((3, 3, 64)) >> Relu(),
+            Convolution((3, 3, 64)) >> Relu(),
             MaxPooling((2, 2)),
             Dropout(0.2),
 
             Reshape(),
-            Relu(512) > Dropout(0.5),
+            Relu(512) >> Dropout(0.5),
             Softmax(10),
         ],
 
