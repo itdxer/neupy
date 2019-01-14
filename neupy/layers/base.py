@@ -419,7 +419,25 @@ class LayerGraph(BaseGraph):
         return make_one_if_possible(
             [outputs[l] for l in self.output_layers])
 
+    def create_variables(self):
+        output_shapes = self.output_shapes_per_layer
+        backward_graph = self.backward_graph
+
+        for layer in self:
+            input_shapes = [layer.input_shape]
+            from_layers = backward_graph[layer]
+
+            if layer.frozen:
+                continue
+
+            if from_layers:
+                input_shapes = [output_shapes[l] for l in from_layers]
+
+            layer.create_variables(*input_shapes)
+            layer.frozen = True
+
     def output(self, *inputs, **kwargs):
+        self.create_variables()
         outputs = self.propagate_forward(inputs, method='output', **kwargs)
         return make_one_if_possible([outputs[l] for l in self.output_layers])
 
@@ -477,7 +495,7 @@ class LayerGraph(BaseGraph):
 
             raise modified_exception
 
-    def propagate_forward(self, inputs, method, freeze=False, **kwargs):
+    def propagate_forward(self, inputs, method, **kwargs):
         backward_graph = self.backward_graph
         inputs = self.preformat_inputs(inputs)
         outputs = copy.copy(inputs)
@@ -495,6 +513,8 @@ class LayerGraph(BaseGraph):
 
     @property
     def variables(self):
+        self.create_variables()
+
         variables = OrderedDict()
         observed_variables = []
 
@@ -719,6 +739,9 @@ class BaseLayer(BaseGraph):
 
     def get_output_shape(self, input_shape):
         return tf.TensorShape(None)
+
+    def create_variables(self, *input_shapes):
+        return NotImplemented
 
     def variable(self, value, name, shape=None, trainable=True):
         layer_name = 'layer/{layer_name}/{parameter_name}'.format(

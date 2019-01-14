@@ -102,6 +102,7 @@ class SliceLayerConnectionsTestCase(BaseTestCase):
             layers.Relu(5, name='relu-1'),
             layers.Relu(1, name='relu-2'),
         )
+        network.create_variables()
 
         self.assertShapesEqual(network.input_shape, (None, 10))
         self.assertShapesEqual(network.output_shape, (None, 1))
@@ -128,6 +129,7 @@ class SliceLayerConnectionsTestCase(BaseTestCase):
             layers.Relu(2, name='relu-2'),
             layers.Relu(1, name='relu-3'),
         )
+        network.create_variables()
 
         self.assertShapesEqual(network.input_shape, (None, 10))
         self.assertShapesEqual(network.output_shape, (None, 1))
@@ -153,6 +155,7 @@ class SliceLayerConnectionsTestCase(BaseTestCase):
             layers.Relu(5, name='relu-1'),
             layers.Relu(1, name='relu-2'),
         )
+        network.create_variables()
 
         self.assertShapesEqual(network.input_shape, (None, 10))
         self.assertShapesEqual(network.output_shape, (None, 1))

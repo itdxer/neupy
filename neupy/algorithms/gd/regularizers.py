@@ -50,7 +50,7 @@ def define_regularizer(function):
     ...     return decay_rate * tf.reduce_sum(tf.pow(weight, 2))
     ...
     >>> l2_regularizer = l2(dacay_rate=0.01)
-    >>> network = Input(5) > Relu(10) > Sigmoid(1)
+    >>> network = Input(5) >> Relu(10) >> Sigmoid(1)
     >>> reguarization_cost = l2_regularizer(network)
     """
     @wraps(function)
@@ -88,7 +88,7 @@ def l1(weight, decay_rate=0.01):
     >>> from neupy.layers import *
     >>>
     >>> optimizer = algorithms.Momentum(
-    ...     Input(5) > Relu(10) > Sigmoid(1),
+    ...     Input(5) >> Relu(10) >> Sigmoid(1),
     ...     step=algorithms.l1(decay_rate=0.01)
     ... )
 
@@ -98,7 +98,7 @@ def l1(weight, decay_rate=0.01):
     >>> from neupy.layers import *
     >>>
     >>> optimizer = algorithms.Momentum(
-    ...     Input(5) > Relu(10) > Sigmoid(1),
+    ...     Input(5) >> Relu(10) >> Sigmoid(1),
     ...     step=algorithms.l1(decay_rate=0.01, exclude=[])
     ... )
     """
@@ -134,7 +134,7 @@ def l2(weight, decay_rate=0.01):
     >>> from neupy.layers import *
     >>>
     >>> optimizer = algorithms.Momentum(
-    ...     Input(5) > Relu(10) > Sigmoid(1),
+    ...     Input(5) >> Relu(10) >> Sigmoid(1),
     ...     step=algorithms.l2(decay_rate=0.01)
     ... )
 
@@ -144,7 +144,7 @@ def l2(weight, decay_rate=0.01):
     >>> from neupy.layers import *
     >>>
     >>> optimizer = algorithms.Momentum(
-    ...     Input(5) > Relu(10) > Sigmoid(1),
+    ...     Input(5) >> Relu(10) >> Sigmoid(1),
     ...     step=algorithms.l2(decay_rate=0.01, exclude=[])
     ... )
     """
@@ -181,7 +181,7 @@ def maxnorm(weight, decay_rate=0.01):
     >>> from neupy.layers import *
     >>>
     >>> optimizer = algorithms.Momentum(
-    ...     Input(5) > Relu(10) > Sigmoid(1),
+    ...     Input(5) >> Relu(10) >> Sigmoid(1),
     ...     step=algorithms.maxnorm(decay_rate=0.01)
     ... )
 
@@ -191,7 +191,7 @@ def maxnorm(weight, decay_rate=0.01):
     >>> from neupy.layers import *
     >>>
     >>> optimizer = algorithms.Momentum(
-    ...     Input(5) > Relu(10) > Sigmoid(1),
+    ...     Input(5) >> Relu(10) >> Sigmoid(1),
     ...     step=algorithms.maxnorm(decay_rate=0.01, exclude=[])
     ... )
     """

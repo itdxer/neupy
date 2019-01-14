@@ -3,7 +3,7 @@ import tensorflow as tf
 
 from neupy import init
 from neupy.utils import asfloat, as_tuple, tf_utils
-from neupy.exceptions import LayerConnectionError
+from neupy.exceptions import LayerConnectionError, WeightInitializationError
 from neupy.core.properties import (
     NumberProperty, TypedListProperty,
     ParameterProperty, IntProperty,
@@ -92,6 +92,18 @@ class Linear(BaseLayer):
         return tf.TensorShape((n_samples, self.n_units))
 
     def create_variables(self, input_shape):
+        if self.n_units is None:
+            return
+
+        input_shape = tf.TensorShape(input_shape)
+
+        if input_shape.ndims != 2:
+            raise WeightInitializationError(
+                "Cannot initialize variables for the layer `{}`, because "
+                "expected input shape has to be 2 dimensional, got input "
+                "with shape {}. Layer: {}".format(
+                    self.name, input_shape.ndims, input_shape, self))
+
         _, n_input_features = input_shape
 
         self.weight = self.variable(
@@ -487,6 +499,8 @@ class PRelu(Linear):
             n_units=n_units, weight=weight, bias=bias, name=name)
 
     def get_output_shape(self, input_shape):
+        input_shape = tf.TensorShape(input_shape)
+
         if input_shape and max(self.alpha_axes) >= input_shape.ndims:
             max_axis_index = input_shape.ndims - 1
 
@@ -497,20 +511,23 @@ class PRelu(Linear):
 
         return super(PRelu, self).get_output_shape(input_shape)
 
-    def activation_function(self, input_value):
-        input_value = tf.convert_to_tensor(input_value, dtype=tf.float32)
-        input_shape = input_value.shape
-        ndim = len(input_shape)
+    def create_variables(self, input_shape):
+        super(PRelu, self).create_variables(input_shape)
+        output_shape = self.get_output_shape(input_shape)
 
         self.alpha = self.variable(
             value=self.alpha, name='alpha',
-            shape=[input_shape[axis] for axis in self.alpha_axes])
+            shape=[output_shape[axis] for axis in self.alpha_axes])
+
+    def activation_function(self, input):
+        input = tf.convert_to_tensor(input, dtype=tf.float32)
+        ndim = input.shape.ndims
 
         dimensions = np.arange(ndim)
         alpha_axes = dimensions[list(self.alpha_axes)]
 
         alpha = tf_utils.dimshuffle(self.alpha, ndim, alpha_axes)
-        return tf.nn.leaky_relu(tf.to_float(input_value), tf.to_float(alpha))
+        return tf.nn.leaky_relu(tf.to_float(input), tf.to_float(alpha))
 
     def __repr__(self):
         if self.n_units is None:

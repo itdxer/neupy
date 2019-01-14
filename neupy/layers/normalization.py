@@ -163,13 +163,18 @@ class BatchNorm(Identity):
             )
             inv_std = tf.rsqrt(variance + asfloat(self.epsilon))
 
-            self.updates = [(
-                self.running_inv_std,
-                asfloat(1 - alpha) * self.running_inv_std + alpha * inv_std
-            ), (
-                self.running_mean,
-                asfloat(1 - alpha) * self.running_mean + alpha * mean
-            )]
+            tf.add_to_collection(
+                tf.GraphKeys.UPDATE_OPS,
+                self.running_inv_std.assign(
+                    asfloat(1 - alpha) * self.running_inv_std + alpha * inv_std
+                )
+            )
+            tf.add_to_collection(
+                tf.GraphKeys.UPDATE_OPS,
+                self.running_mean.assign(
+                    asfloat(1 - alpha) * self.running_mean + alpha * mean
+                )
+            )
 
         normalized_value = (input - mean) * inv_std
         return self.gamma * normalized_value + self.beta
