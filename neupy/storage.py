@@ -257,6 +257,11 @@ def load_dict(network, data, ignore_missing=False,
 
     network = extract_network(network)
 
+    # We need to initalize network, to make sure
+    # that each layer will generate shared variables
+    # and validate networks
+    network.create_variables()
+
     # We are only interested in layers that has parameters
     layers = data['layers']
     layers_data = [l for l in layers if l['parameters']]
@@ -289,11 +294,6 @@ def load_dict(network, data, ignore_missing=False,
             # should also be the same
             load_dict_sequentially(layers_conn, layers_data)
 
-    # We need to initalize network, to make sure
-    # that each layer will generate shared variables
-    # and validate networks
-    network.initialize()
-
 
 def save_dict(network):
     """
@@ -314,7 +314,7 @@ def save_dict(network):
     --------
     >>> from neupy import layers, storage
     >>>
-    >>> network = layers.Input(10) > layers.Softmax(3)
+    >>> network = layers.Input(10) >> layers.Softmax(3)
     >>> layers_data = storage.save_dict(network)
     >>>
     >>> layers_data.keys()

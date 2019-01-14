@@ -119,7 +119,7 @@ if __name__ == '__main__':
             layers.Relu(64),
             layers.Relu(48),
             layers.Relu(32),
-            layers.Relu(64) > layers.Dropout(0.2),
+            layers.Relu(64) >> layers.Dropout(0.2),
 
             # Expecting two different actions:
             # 1. Move left

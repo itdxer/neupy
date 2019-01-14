@@ -14,8 +14,11 @@ CIFAR10_TAR_PATH = os.path.join(FILES_DIR, "cifar-10-python.tar.gz")
 CIFAR10_PATH = os.path.join(FILES_DIR, "cifar-10-batches-py")
 
 TEST_FILE = 'test_batch'
-TRAINING_FILES = ['data_batch_1', 'data_batch_2', 'data_batch_3',
-                  'data_batch_4', 'data_batch_5']
+TRAINING_FILES = [
+    'data_batch_1', 'data_batch_2',
+    'data_batch_3', 'data_batch_4',
+    'data_batch_5',
+]
 
 
 def download_cifar10_if_not_found():

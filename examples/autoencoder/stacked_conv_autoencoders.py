@@ -35,11 +35,11 @@ x_unlabeled_4d = x_unlabeled.reshape((n_unlabeled, 28, 28, 1))
 encoder = layers.join(
     layers.Input((28, 28, 1)),
 
-    layers.Convolution((3, 3, 16)) > layers.Relu(),
-    layers.Convolution((3, 3, 16)) > layers.Relu(),
+    layers.Convolution((3, 3, 16)) >> layers.Relu(),
+    layers.Convolution((3, 3, 16)) >> layers.Relu(),
     layers.MaxPooling((2, 2)),
 
-    layers.Convolution((3, 3, 32)) > layers.Relu(),
+    layers.Convolution((3, 3, 32)) >> layers.Relu(),
     layers.MaxPooling((2, 2)),
 
     layers.Reshape(),
@@ -58,17 +58,17 @@ decoder = layers.join(
     layers.Reshape((5, 5, 32)),
 
     layers.Upscale((2, 2)),
-    layers.Convolution((3, 3, 16), padding=2) > layers.Relu(),
+    layers.Convolution((3, 3, 16), padding=2) >> layers.Relu(),
 
     layers.Upscale((2, 2)),
-    layers.Convolution((3, 3, 16), padding=2) > layers.Relu(),
-    layers.Convolution((3, 3, 1), padding=2) > layers.Sigmoid(),
+    layers.Convolution((3, 3, 16), padding=2) >> layers.Relu(),
+    layers.Convolution((3, 3, 1), padding=2) >> layers.Sigmoid(),
 
     layers.Reshape(),
 )
 
 conv_autoencoder = algorithms.Momentum(
-    network=encoder > decoder,
+    network=encoder >> decoder,
     verbose=True,
     step=0.1,
     momentum=0.99,
@@ -95,7 +95,7 @@ classifier_network = layers.join(
 )
 
 encoder_classifier = algorithms.Adadelta(
-    layers.Input(encoder.output_shape) > classifier_network,
+    layers.Input(encoder.output_shape) >> classifier_network,
     verbose=True,
     step=0.05,
     shuffle_data=True,
@@ -111,7 +111,7 @@ encoder_classifier.train(
 # The final part of training is to put encoder and final classifier layers
 # in order to fine tune network parameters before finilizing it's prediction
 classifier = algorithms.GradientDescent(
-    encoder > classifier_network,
+    encoder >> classifier_network,
     verbose=True,
     step=0.005,
     shuffle_data=True,

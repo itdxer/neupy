@@ -78,7 +78,7 @@ def Inception_3(pooling):
         ], [
             Pooling((3, 3), stride=(1, 1), padding='SAME'),
             ConvReluBN((1, 1, 192)),
-        ]],
+        ]),
         Concatenate(),
     )
 
@@ -134,4 +134,4 @@ inception_v3 = join(
     GlobalPooling('avg'),
     Softmax(1000),
 )
-plots.network_structure(inception_v3)
+inception_v3.show()

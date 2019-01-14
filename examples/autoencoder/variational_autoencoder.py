@@ -91,8 +91,8 @@ def vae_loss(expected, predicted):
     graph = tf.get_default_graph()
     x = graph.get_tensor_by_name('network-input/to-layer-input:0')
 
-    mean = (encoder > mu).output(x)
-    log_var = (encoder > sigma).output(x)
+    mean = (encoder >> mu).output(x)
+    log_var = (encoder >> sigma).output(x)
 
     epsilon = 1e-7
     predicted = tf.clip_by_value(predicted, epsilon, 1.0 - epsilon)
@@ -106,14 +106,14 @@ def vae_loss(expected, predicted):
 
 
 # Construct Variational Autoencoder
-encoder = layers.Input(784, name='input') > layers.Tanh(256)
+encoder = layers.Input(784, name='input') >> layers.Tanh(256)
 
 # Two is the maximum number of dimensions that we can visualize
 mu = layers.Linear(2, name='mu')
 sigma = layers.Linear(2, name='sigma')
-sampler = [mu, sigma] > GaussianSample()
+sampler = [mu, sigma] >> GaussianSample()
 
-decoder = layers.Tanh(256) > layers.Sigmoid(784)
+decoder = layers.Tanh(256) >> layers.Sigmoid(784)
 
 # Train network
 network = algorithms.RMSProp(
@@ -136,5 +136,5 @@ x_train, x_test = load_data()
 network.train(x_train, x_train, x_test, x_test, epochs=50)
 
 # Sample digits from the obtained distribution
-generator = algorithms.GradientDescent(layers.Input(2) > decoder)
+generator = algorithms.GradientDescent(layers.Input(2) >> decoder)
 generate_and_plot_sampels(generator, 25, 25)

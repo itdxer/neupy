@@ -1,9 +1,9 @@
 import tensorflow as tf
 
-from neupy import layers, plots
+from neupy.layers import *
 
 
-class SliceChannels(layers.BaseLayer):
+class SliceChannels(BaseLayer):
     """
     Layer expects image as an input with second dimension
     sepcified as a channel. Image will be sliced over the channel.
@@ -18,12 +18,12 @@ class SliceChannels(layers.BaseLayer):
         To which channel we will be slicing. This layer won't be
         included in the output.
 
-    {BaseLayer.Parameters}
+    {BaseLayer.name}
     """
-    def __init__(self, from_channel, to_channel, **kwargs):
+    def __init__(self, from_channel, to_channel, name=None):
         self.from_channel = from_channel
         self.to_channel = to_channel
-        super(SliceChannels, self).__init__(**kwargs)
+        super(SliceChannels, self).__init__(name=name)
 
     def get_output_shape(self, input_shape):
         n_channels = self.to_channel - self.from_channel
@@ -49,58 +49,58 @@ class SliceChannels(layers.BaseLayer):
             self.to_channel)
 
 
-alexnet = layers.join(
-    layers.Input((227, 227, 3)),
+alexnet = join(
+    Input((227, 227, 3)),
 
-    layers.Convolution((11, 11, 96), stride=(4, 4), name='conv_1'),
-    layers.Relu(),
+    Convolution((11, 11, 96), stride=(4, 4), name='conv_1'),
+    Relu(),
 
-    layers.MaxPooling((3, 3), stride=(2, 2)),
-    layers.LocalResponseNorm(),
+    MaxPooling((3, 3), stride=(2, 2)),
+    LocalResponseNorm(),
 
-    layers.parallel([
+    parallel([
         SliceChannels(0, 48),
-        layers.Convolution((5, 5, 128), padding='SAME', name='conv_2_1'),
-        layers.Relu(),
+        Convolution((5, 5, 128), padding='SAME', name='conv_2_1'),
+        Relu(),
     ], [
         SliceChannels(48, 96),
-        layers.Convolution((5, 5, 128), padding='SAME', name='conv_2_2'),
-        layers.Relu(),
+        Convolution((5, 5, 128), padding='SAME', name='conv_2_2'),
+        Relu(),
     ]),
-    layers.Concatenate(),
+    Concatenate(),
 
-    layers.MaxPooling((3, 3), stride=(2, 2)),
-    layers.LocalResponseNorm(),
+    MaxPooling((3, 3), stride=(2, 2)),
+    LocalResponseNorm(),
 
-    layers.Convolution((3, 3, 384), padding='SAME', name='conv_3'),
-    layers.Relu(),
+    Convolution((3, 3, 384), padding='SAME', name='conv_3'),
+    Relu(),
 
-    layers.parallel([
+    parallel([
         SliceChannels(0, 192),
-        layers.Convolution((3, 3, 192), padding='SAME', name='conv_4_1'),
-        layers.Relu(),
+        Convolution((3, 3, 192), padding='SAME', name='conv_4_1'),
+        Relu(),
     ], [
         SliceChannels(192, 384),
-        layers.Convolution((3, 3, 192), padding='SAME', name='conv_4_2'),
-        layers.Relu(),
+        Convolution((3, 3, 192), padding='SAME', name='conv_4_2'),
+        Relu(),
     ]),
-    layers.Concatenate(),
+    Concatenate(),
 
-    layers.parallel([
+    parallel([
         SliceChannels(0, 192),
-        layers.Convolution((3, 3, 128), padding='SAME', name='conv_5_1'),
-        layers.Relu(),
+        Convolution((3, 3, 128), padding='SAME', name='conv_5_1'),
+        Relu(),
     ], [
         SliceChannels(192, 384),
-        layers.Convolution((3, 3, 128), padding='SAME', name='conv_5_2'),
-        layers.Relu(),
+        Convolution((3, 3, 128), padding='SAME', name='conv_5_2'),
+        Relu(),
     ]),
-    layers.Concatenate(),
-    layers.MaxPooling((3, 3), stride=(2, 2)),
+    Concatenate(),
+    MaxPooling((3, 3), stride=(2, 2)),
 
-    layers.Reshape(),
-    layers.Relu(4096, name='dense_1') > layers.Dropout(0.5),
-    layers.Relu(4096, name='dense_2') > layers.Dropout(0.5),
-    layers.Softmax(1000, name='dense_3'),
+    Reshape(),
+    Relu(4096, name='dense_1') >> Dropout(0.5),
+    Relu(4096, name='dense_2') >> Dropout(0.5),
+    Softmax(1000, name='dense_3'),
 )
 alexnet.show()
