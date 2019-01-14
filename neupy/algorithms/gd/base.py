@@ -170,14 +170,11 @@ class BaseOptimizer(BaseNetwork):
         )
 
         with tf.name_scope('training-updates'):
-            training_updates = self.init_train_updates()
+            update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
 
-            for layer in self.network.layers:
-                training_updates.extend(layer.updates)
-
-            for variable in self.variables.values():
-                if hasattr(variable, 'updates'):
-                    training_updates.extend(variable.updates)
+            with tf.control_dependencies(update_ops):
+                training_updates = self.init_train_updates()
+                training_updates.extend(update_ops)
 
         initialize_uninitialized_variables()
 

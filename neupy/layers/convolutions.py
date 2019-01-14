@@ -379,7 +379,7 @@ class Convolution(BaseLayer):
             value=self.weight, name='weight',
             shape=(n_rows, n_cols, n_channels, n_filters))
 
-        if bias is not None:
+        if self.bias is not None:
             self.bias = self.variable(
                 value=self.bias, name='bias',
                 shape=as_tuple(n_filters))
@@ -492,7 +492,7 @@ class Deconvolution(Convolution):
             value=self.weight, name='weight',
             shape=(n_rows, n_cols, n_filters, n_channels))
 
-        if bias is not None:
+        if self.bias is not None:
             self.bias = self.variable(
                 value=self.bias, name='bias',
                 shape=as_tuple(n_filters))

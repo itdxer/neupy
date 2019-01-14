@@ -69,7 +69,7 @@ def step_decay(initial_value, reduction_freq, start_iter=0, name='step'):
     >>> from neupy.layers import *
     >>>
     >>> optimizer = algorithms.Momentum(
-    ...     Input(5) > Relu(10) > Sigmoid(1),
+    ...     Input(5) >> Relu(10) >> Sigmoid(1),
     ...     step=algorithms.step_decay(
     ...         initial_value=0.1,
     ...         reduction_freq=100,
@@ -79,10 +79,13 @@ def step_decay(initial_value, reduction_freq, start_iter=0, name='step'):
     step, iteration = init_variables(initial_value, start_iter, name)
     reduction_freq = asfloat(reduction_freq)
 
-    step.updates = [
-        (step, initial_value / (1 + iteration / reduction_freq)),
-        (iteration, iteration + 1),
-    ]
+    step_update = initial_value / (1 + iteration / reduction_freq)
+    updated_step = step.assign(step_update)
+    tf.add_to_collection(tf.GraphKeys.UPDATE_OPS, updated_step)
+
+    with tf.control_dependencies([updated_step]):
+        next_iteration = iteration.assign(iteration + 1)
+        tf.add_to_collection(tf.GraphKeys.UPDATE_OPS, next_iteration)
 
     return step
 
@@ -147,7 +150,7 @@ def exponential_decay(initial_value, reduction_freq, reduction_rate,
     >>> from neupy.layers import *
     >>>
     >>> optimizer = algorithms.Momentum(
-    ...     Input(5) > Relu(10) > Sigmoid(1),
+    ...     Input(5) >> Relu(10) >> Sigmoid(1),
     ...     step=algorithms.exponential_decay(
     ...         initial_value=0.1,
     ...         reduction_freq=1000,
@@ -164,10 +167,12 @@ def exponential_decay(initial_value, reduction_freq, reduction_rate,
         staircase=staircase,
     )
 
-    step.updates = [
-        (step, step_update),
-        (iteration, iteration + 1),
-    ]
+    updated_step = step.assign(step_update)
+    tf.add_to_collection(tf.GraphKeys.UPDATE_OPS, updated_step)
+
+    with tf.control_dependencies([updated_step]):
+        next_iteration = iteration.assign(iteration + 1)
+        tf.add_to_collection(tf.GraphKeys.UPDATE_OPS, next_iteration)
 
     return step
 
@@ -236,7 +241,7 @@ def polynomial_decay(initial_value, decay_iter, minstep=0.001, power=1.0,
     >>> from neupy.layers import *
     >>>
     >>> optimizer = algorithms.Momentum(
-    ...     Input(5) > Relu(10) > Sigmoid(1),
+    ...     Input(5) >> Relu(10) >> Sigmoid(1),
     ...     step=algorithms.polynomial_decay(
     ...         initial_value=0.1,
     ...         decay_iter=1000,
@@ -254,9 +259,11 @@ def polynomial_decay(initial_value, decay_iter, minstep=0.001, power=1.0,
         cycle=cycle,
     )
 
-    step.updates = [
-        (step, step_update),
-        (iteration, iteration + 1),
-    ]
+    updated_step = step.assign(step_update)
+    tf.add_to_collection(tf.GraphKeys.UPDATE_OPS, updated_step)
+
+    with tf.control_dependencies([updated_step]):
+        next_iteration = iteration.assign(iteration + 1)
+        tf.add_to_collection(tf.GraphKeys.UPDATE_OPS, next_iteration)
 
     return step

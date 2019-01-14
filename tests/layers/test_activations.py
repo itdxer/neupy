@@ -185,7 +185,8 @@ class PReluTestCase(BaseTestCase):
     def test_prelu_alpha_init_random_params(self):
         x = tf.placeholder(shape=(3, 10), dtype=tf.float32)
         prelu_layer = layers.PRelu(10, alpha=init.XavierNormal())
-        prelu_layer.output(x)
+
+        prelu_layer.create_variables((None, 5))
 
         alpha = self.eval(prelu_layer.alpha)
         self.assertEqual(10, np.unique(alpha).size)
@@ -193,28 +194,29 @@ class PReluTestCase(BaseTestCase):
     def test_prelu_alpha_init_constant_value(self):
         x = tf.placeholder(shape=(3, 10), dtype=tf.float32)
         prelu_layer = layers.PRelu(10, alpha=0.25)
-        prelu_layer.output(x)
+        prelu_layer.create_variables((None, 5))
 
         alpha = self.eval(prelu_layer.alpha)
         self.assertEqual(alpha.shape, (10,))
         np.testing.assert_array_almost_equal(alpha, np.ones(10) * 0.25)
 
     def test_prelu_layer_param_conv(self):
-        input_layer = layers.Input((10, 10, 3))
-        conv_layer = layers.Convolution((3, 3, 5))
-        prelu_layer = layers.PRelu(alpha=0.25, alpha_axes=(1, 3))
+        network = layers.join(
+            layers.Input((10, 10, 3)),
+            layers.Convolution((3, 3, 5)),
+            layers.PRelu(alpha=0.25, alpha_axes=(1, 3), name='prelu'),
+        )
+        network.create_variables()
 
-        network = input_layer >> conv_layer >> prelu_layer
-        network.outputs
-
-        alpha = self.eval(prelu_layer.alpha)
+        alpha = self.eval(network.layer('prelu').alpha)
         expected_alpha = np.ones((8, 5)) * 0.25
 
         self.assertEqual(alpha.shape, (8, 5))
         np.testing.assert_array_almost_equal(alpha, expected_alpha)
 
     def test_prelu_output_by_dense_input(self):
-        prelu_layer = layers.PRelu(1, alpha=0.25)
+        prelu_layer = layers.PRelu(alpha=0.25)
+        prelu_layer.create_variables((None, 1))
 
         X = np.array([[10, 1, 0.1, 0, -0.1, -1]]).T
         expected_output = np.array([[10, 1, 0.1, 0, -0.025, -0.25]]).T
@@ -223,19 +225,14 @@ class PReluTestCase(BaseTestCase):
         np.testing.assert_array_almost_equal(expected_output, actual_output)
 
     def test_prelu_output_by_spatial_input(self):
+        network = layers.join(
+            layers.Input((10, 10, 3)),
+            layers.Convolution((3, 3, 5)),
+            layers.PRelu(alpha=0.25, alpha_axes=(1, 3)),
+        )
+
         X = asfloat(np.random.random((1, 10, 10, 3)))
-
-        input_layer = layers.Input((10, 10, 3))
-        conv_layer = layers.Convolution((3, 3, 5))
-        prelu_layer = layers.PRelu(alpha=0.25, alpha_axes=(1, 3))
-
-        network = input_layer >> conv_layer >> prelu_layer
-
-        actual_output = X
-        for layer in network:
-            actual_output = layer.output(actual_output)
-
-        actual_output = self.eval(actual_output)
+        actual_output = self.eval(network.output(X))
         self.assertEqual(actual_output.shape, (1, 8, 8, 5))
 
     def test_prelu_param_updates(self):
@@ -291,7 +288,7 @@ class PReluTestCase(BaseTestCase):
         )
         self.assertDictEqual(network.layer('prelu').variables, {})
 
-        network.outputs
+        network.create_variables()
         variables = network.layer('prelu').variables
         self.assertSequenceEqual(
             sorted(variables.keys()),

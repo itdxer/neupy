@@ -82,25 +82,34 @@ class BatchNormTestCase(BaseTestCase):
         self.assertEqual(outpu_value.shape, (30, 1))
 
     def test_batch_norm_in_non_training_state(self):
-        batch_norm = layers.BatchNorm()
-        layers.Input(10) > batch_norm
-
+        network = layers.join(
+            layers.Input(10),
+            layers.BatchNorm(),
+        )
         input_value = tf.Variable(
             asfloat(np.random.random((30, 10))),
             name='input_value',
             dtype=tf.float32,
         )
 
-        self.assertEqual(len(batch_norm.updates), 0)
+        update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+        self.assertEqual(len(update_ops), 0)
 
-        batch_norm.output(input_value, training=True)
-        self.assertEqual(len(batch_norm.updates), 2)
+        output_value = network.output(input_value)
+        update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+        self.assertEqual(len(update_ops), 0)
+
+        network.output(input_value, training=True)
+        update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+        self.assertEqual(len(update_ops), 2)
 
         # Without training your running mean and std suppose to be
         # equal to 0 and 1 respectavely.
-        output_value = self.eval(batch_norm.output(input_value))
+        output_value = self.eval(output_value)
         np.testing.assert_array_almost_equal(
-            self.eval(input_value), output_value, decimal=4)
+            self.eval(input_value),
+            output_value,
+            decimal=4)
 
     @unittest.skip("Storage tests are broken")
     def test_batch_norm_storage(self):
