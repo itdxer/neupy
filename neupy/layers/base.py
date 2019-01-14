@@ -564,11 +564,9 @@ class LayerGraph(BaseGraph):
         if filepath is None:
             filepath = tempfile.mktemp()
 
-        def layer_uid(layer):
-            return str(id(layer))
-
         digraph = graphviz.Digraph()
         shapes_per_layer = self.output_shapes_per_layer
+        layer_uid = lambda layer: str(id(layer))
 
         for layer in self.forward_graph.keys():
             digraph.node(layer_uid(layer), str(layer.name))

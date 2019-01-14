@@ -22,19 +22,19 @@ def load_data():
     )
 
 
-network = algorithms.Momentum(
+optimizer = algorithms.Momentum(
     [
         Input((28, 28, 1)),
 
-        Convolution((3, 3, 32)) > BatchNorm() > Relu(),
-        Convolution((3, 3, 48)) > BatchNorm() > Relu(),
+        Convolution((3, 3, 32)) >> BatchNorm() >> Relu(),
+        Convolution((3, 3, 48)) >> BatchNorm() >> Relu(),
         MaxPooling((2, 2)),
 
-        Convolution((3, 3, 64)) > BatchNorm() > Relu(),
+        Convolution((3, 3, 64)) >> BatchNorm() >> Relu(),
         MaxPooling((2, 2)),
 
         Reshape(),
-        Linear(1024) > BatchNorm() > Relu(),
+        Linear(1024) >> BatchNorm() >> Relu(),
         Softmax(10),
     ],
 
@@ -42,12 +42,16 @@ network = algorithms.Momentum(
     # It's suitable for classification with 3 and more classes.
     loss='categorical_crossentropy',
 
-    # Mini-batch size
+    # Mini-batch size. It defined how many samples will be propagated
+    # through the network at once. During the training, weights will
+    # be updated after every mini-batch propagation.
+    # Note: When number of training samples is not divisible by 128
+    # the last mini-batch will have less than 128 samples.
     batch_size=128,
 
     # Step == Learning rate
     # Step decay algorithm minimizes learning step
-    # monotonically after each iteration.
+    # monotonically after each weight update.
     step=algorithms.step_decay(
         initial_value=0.05,
         # Parameter controls step redution frequency. The higher
@@ -65,12 +69,12 @@ network = algorithms.Momentum(
 print("Preparing data...")
 x_train, x_test, y_train, y_test = load_data()
 
-# Train for 4 epochs
+# Training network for 4 epochs
 print("Training...")
-network.train(x_train, y_train, x_test, y_test, epochs=4)
+optimizer.train(x_train, y_train, x_test, y_test, epochs=4)
 
 # Make prediction on the test dataset
-y_predicted = network.predict(x_test).argmax(axis=1)
+y_predicted = optimizer.predict(x_test).argmax(axis=1)
 y_test_labels = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))
 
 # Compare network's predictions to the actual label values

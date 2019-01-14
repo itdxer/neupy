@@ -87,24 +87,23 @@ network = layers.join(
 optimizer = algorithms.Momentum(
     network,
 
-    step=0.2,
+    step=0.05,
     verbose=True,
     loss='binary_crossentropy',
 
     momentum=0.9,
     nesterov=True,
 
-    # Applied max-norm regularizer to prevent overfitting.
-    # Maximum possible norm for any weight is specified by
-    # the `max_norm` parameter.
-    regularizer=algorithms.maxnorm(0.01),
+    # Apply L2 (Weight Decay) regularziation in
+    # order to prevent overfitting
+    regularizer=algorithms.l2(0.01),
 )
 
 # Categorical input should be first, because input layer
 # for categorical matrices was defined first.
 optimizer.train([x_train_cat, x_train_num], y_train,
                 [x_test_cat, x_test_num], y_test,
-                epochs=40)
+                epochs=50)
 
 y_predicted = optimizer.predict([x_test_cat, x_test_num])
 accuracy = accuracy_score(y_test, y_predicted.round())
