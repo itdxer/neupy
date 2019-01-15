@@ -615,7 +615,30 @@ class LayerGraph(BaseGraph):
             format_shapes(self.output_shape))
 
 
+def validate_graphs_before_merging(left_graph, right_graph):
+    n_left_outputs = len(left_graph.output_layers)
+    n_right_inputs = len(right_graph.input_layers)
+
+    if n_left_outputs > 1 and n_right_inputs > 1:
+        raise LayerConnectionError(
+            "Cannot make many to many connection between graphs. One graph "
+            "has {n_left_outputs} outputs (layer names: {left_names}) and "
+            "the other one has {n_right_inputs} inputs (layer names: "
+            "{right_names}). First graph: {left_graph}, Second graph: "
+            "{right_graph}".format(
+                left_graph=left_graph,
+                n_left_outputs=n_left_outputs,
+                left_names=[l.name for l in left_graph.output_layers],
+
+                right_graph=right_graph,
+                n_right_inputs=n_right_inputs,
+                right_names=[l.name for l in right_graph.input_layers],
+            )
+        )
+
+
 def merge(left_graph, right_graph, combine=False):
+    validate_graphs_before_merging(left_graph, right_graph)
     forward_graph = OrderedDict()
 
     for key, value in left_graph.forward_graph.items():
@@ -718,8 +741,9 @@ class BaseLayer(BaseGraph):
             name = generate_layer_name(layer=self)
 
         self.variables = OrderedDict()
-        self.updates = []
         self.name = name
+
+        self._input_shape = tf.TensorShape(None)
         self.frozen = False
 
         # This decorator ensures that result produced by the
@@ -729,7 +753,18 @@ class BaseLayer(BaseGraph):
 
     @property
     def input_shape(self):
-        return tf.TensorShape(None)
+        return tf.TensorShape(self._input_shape)
+
+    @input_shape.setter
+    def input_shape(self, shape):
+        if not self._input_shape.is_compatible_with(shape):
+            raise ValueError(
+                "Cannot update input shape of the layer, because it's "
+                "incompatible with current input shape. Current shape: {}, "
+                "New shape: {}, Layer: {}".format(
+                    self._input_shape, shape, self))
+
+        self._input_shape = shape
 
     @property
     def output_shape(self):
@@ -836,6 +871,10 @@ class Input(BaseLayer):
 
     def __init__(self, shape, name=None):
         super(Input, self).__init__(name=name)
+
+        if isinstance(shape, tf.TensorShape):
+            shape = shape_to_tuple(shape)
+
         self.shape = as_tuple(shape)
 
     @property

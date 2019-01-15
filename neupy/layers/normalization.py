@@ -127,6 +127,7 @@ class BatchNorm(Identity):
                 "shape: {}, Layer name: {}".format(
                     unknown_dim_index, input_shape, self.name))
 
+        self.input_shape = input_shape
         self.running_mean = self.variable(
             value=self.running_mean, shape=parameter_shape,
             name='running_mean', trainable=False)

@@ -71,7 +71,7 @@ class Adam(GradientDescent):
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> optimizer = algorithms.Adam(Input(2) > Sigmoid(3) > Sigmoid(1))
+    >>> optimizer = algorithms.Adam(Input(2) >> Sigmoid(3) >> Sigmoid(1))
     >>> optimizer.train(x_train, y_train)
     """
     step = ScalarVariableProperty(default=0.001)

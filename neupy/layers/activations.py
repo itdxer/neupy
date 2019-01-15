@@ -104,6 +104,7 @@ class Linear(BaseLayer):
                 "with shape {}. Layer: {}".format(
                     self.name, input_shape.ndims, input_shape, self))
 
+        self.input_shape = input_shape
         _, n_input_features = input_shape
 
         self.weight = self.variable(
@@ -117,7 +118,6 @@ class Linear(BaseLayer):
 
     def output(self, input, **kwargs):
         input = tf.convert_to_tensor(input, dtype=tf.float32)
-        n_input_features = input.shape[-1]
 
         if self.n_units is None:
             return self.activation_function(input)
