@@ -335,41 +335,42 @@ class Convolution(BaseLayer):
     def output_shape_per_dim(self, *args, **kwargs):
         return conv_output_shape(*args, **kwargs)
 
-    def get_output_shape(self, input_shape):
-        input_shape = tf.TensorShape(input_shape)
+    def expected_output_shape(self, input_shape):
         n_samples = input_shape[0]
-
-        self.fail_if_shape_invalid(input_shape)
-
-        if input_shape.ndims is None:
-            return tf.TensorShape((n_samples, None, None, None))
-
-        padding = self.padding
-        _, rows, cols, _ = input_shape
-
         row_filter_size, col_filter_size, n_kernels = self.size
         row_stride, col_stride = self.stride
         row_dilation, col_dilation = self.dilation
 
-        if isinstance(padding, (list, tuple)):
-            row_padding, col_padding = padding
+        if isinstance(self.padding, (list, tuple)):
+            row_padding, col_padding = self.padding
         else:
-            row_padding, col_padding = padding, padding
+            row_padding, col_padding = self.padding, self.padding
 
-        return tf.TensorShape((
+        return (
             n_samples,
             self.output_shape_per_dim(
-                rows, row_filter_size,
+                input_shape[1], row_filter_size,
                 row_padding, row_stride, row_dilation
             ),
             self.output_shape_per_dim(
-                cols, col_filter_size,
+                input_shape[2], col_filter_size,
                 col_padding, col_stride, col_dilation
             ),
             n_kernels,
-        ))
+        )
+
+    def get_output_shape(self, input_shape):
+        input_shape = tf.TensorShape(input_shape)
+        self.fail_if_shape_invalid(input_shape)
+
+        if input_shape.ndims is None:
+            n_samples = input_shape[0]
+            return tf.TensorShape((n_samples, None, None, None))
+
+        return tf.TensorShape(self.expected_output_shape(input_shape))
 
     def create_variables(self, input_shape):
+        self.input_shape = input_shape
         n_channels = input_shape[-1]
         n_rows, n_cols, n_filters = self.size
 
@@ -483,6 +484,7 @@ class Deconvolution(Convolution):
         return deconv_output_shape(*args, **kwargs)
 
     def create_variables(self, input_shape):
+        self.input_shape = input_shape
         n_channels = input_shape[-1]
         n_rows, n_cols, n_filters = self.size
 
@@ -499,13 +501,17 @@ class Deconvolution(Convolution):
 
     def output(self, input, **kwargs):
         input = tf.convert_to_tensor(input, tf.float32)
-
         # We need to get information about output shape from the input
         # tensor's shape, because for some inputs we might have
         # height and width specified as None and shape value won't be
         # computed for these dimensions.
-        output_shape = self.get_output_shape(input.shape)
         padding = self.padding
+
+        # It's important that expected output shape gets computed on then
+        # Tensor (produced by tf.shape) rather than on TensorShape object.
+        # Tensorflow cannot convert TensorShape object into Tensor and
+        # it will cause an exception in the conv2d_transpose layer.
+        output_shape = self.expected_output_shape(tf.shape(input))
 
         if isinstance(self.padding, (list, tuple)):
             height_pad, width_pad = self.padding
@@ -515,22 +521,22 @@ class Deconvolution(Convolution):
             padding = 'VALID'
 
             # conv2d_transpose doesn't know about extra paddings that we added
-            # in the convolution. For this reason we have to expand our
+            # in the convolution. For this reason, we have to expand our
             # expected output shape and later we will remove these paddings
             # manually after transpose convolution.
-            output_shape = tf.TensorShape((
+            output_shape = (
                 output_shape[0],
                 output_shape[1] + 2 * height_pad,
                 output_shape[2] + 2 * width_pad,
                 output_shape[3],
-            ))
+            )
 
         output = tf.nn.conv2d_transpose(
-            input,
-            self.weight,
-            output_shape,
-            as_tuple(1, self.stride, 1),
-            padding,
+            value=input,
+            filter=self.weight,
+            output_shape=list(output_shape),
+            strides=as_tuple(1, self.stride, 1),
+            padding=padding,
             data_format="NHWC"
         )
 
@@ -548,3 +554,13 @@ class Deconvolution(Convolution):
             output += bias
 
         return output
+
+    def __repr__(self):
+        return self._repr_arguments(
+            self.size,
+            padding=self.padding,
+            stride=self.stride,
+            weight=self.weight,
+            bias=self.bias,
+            name=self.name,
+        )

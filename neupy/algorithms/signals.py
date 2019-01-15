@@ -56,13 +56,13 @@ class EpochEndSignal(object):
 
 class ProgressbarSignal(object):
     def train_start(self, network, **kwargs):
-
         if kwargs['batch_size'] is None:
             self.n_batches = 1
-        else:
-            self.n_batches = iters.count_minibatches(
-                kwargs['X_train'],
-                kwargs['batch_size'])
+            return
+
+        self.n_batches = iters.count_minibatches(
+            kwargs['X_train'],
+            kwargs['batch_size'])
 
     def epoch_start(self, network):
         self.index = 0
@@ -80,6 +80,7 @@ class ProgressbarSignal(object):
         self.bar.update(self.index, loss=self.last_error)
 
     def epoch_end(self, network):
+        self.bar.finish(end='\r')
         self.bar.fd.write('\r' + ' ' * self.bar.term_width + '\r')
 
     def __reduce__(self):

@@ -1,88 +1,93 @@
 import numpy as np
 from sklearn import datasets
 import matplotlib.pyplot as plt
-from neupy import algorithms, layers
+
+from neupy.layers import *
+from neupy import algorithms
 
 
-X, _ = datasets.fetch_openml('mnist_784', version=1, return_X_y=True)
-X = (X / 255.).astype(np.float32)
+def load_data():
+    X, _ = datasets.fetch_openml('mnist_784', version=1, return_X_y=True)
+    X = (X / 255.).astype(np.float32)
 
-np.random.shuffle(X)
-x_train, x_test = X[:60000], X[60000:]
-x_train_4d = x_train.reshape((60000, 28, 28, 1))
-x_test_4d = x_test.reshape((10000, 28, 28, 1))
+    np.random.shuffle(X)
+    x_train_2d, x_test_2d = X[:60000], X[60000:]
+    x_train_4d = x_train_2d.reshape((60000, 28, 28, 1))
+    x_test_4d = x_test_2d.reshape((10000, 28, 28, 1))
 
-conv_autoencoder = algorithms.Momentum(
-    [
-        layers.Input((28, 28, 1)),
+    return x_train_4d, x_test_4d
 
-        layers.Convolution((3, 3, 16)) >> layers.Relu(),
-        layers.Convolution((3, 3, 16)) >> layers.Relu(),
-        layers.MaxPooling((2, 2)),
 
-        layers.Convolution((3, 3, 32)) >> layers.Relu(),
-        layers.MaxPooling((2, 2)),
+def visualize_reconstructions(x_test_4d, n_samples=6):
+    x_test = x_test_4d.reshape(x_test_4d.shape[0], -1)
+    images = x_test[:n_samples] * 255.
+    predicted_images = optimizer.predict(x_test_4d[:n_samples])
+    predicted_images = predicted_images * 255.
 
-        layers.Reshape(),
+    # Compare real and reconstructed images
+    fig, axes = plt.subplots(n_samples, 2, figsize=(12, 8))
+    iterator = zip(axes, images, predicted_images)
 
-        layers.Relu(128),
-        layers.Relu(16),
+    for (left_ax, right_ax), real_image, predicted_image in iterator:
+        real_image = real_image.reshape((28, 28))
+        predicted_image = predicted_image.reshape((28, 28))
 
-        # Notice that in the decoder every operation reverts back changes
-        # from the encoder layer. Upscale replaces MaxPooling and
-        # Convolutional layer without padding replaced with large padding
-        # that increase size of the image.
-        layers.Relu(128),
+        left_ax.imshow(real_image, cmap=plt.cm.binary)
+        right_ax.imshow(predicted_image, cmap=plt.cm.binary)
+
+    plt.show()
+
+
+if __name__ == '__main__':
+    network = join(
+        Input((28, 28, 1)),
+
+        Convolution((3, 3, 16)) >> Relu(),
+        Convolution((3, 3, 16)) >> Relu(),
+        MaxPooling((2, 2)),
+
+        Convolution((3, 3, 32)) >> Relu(),
+        MaxPooling((2, 2)),
+
+        Reshape(),
+
+        Relu(128),
+        Relu(16),
+
+        # Notice that in the decoder every operation reverts back
+        # changes from the encoder layer.
+        Relu(128),
 
         # 800 is a shape that we got after we reshaped our image in the
         # Reshape layer
-        layers.Relu(800),
+        Relu(800),
 
-        layers.Reshape((5, 5, 32)),
+        Reshape((5, 5, 32)),
 
         # Upscaling layer reverts changes from the max pooling layer
-        layers.Upscale((2, 2)),
+        Upscale((2, 2)),
 
-        # If convolution operation in first layers with zero padding reduces
-        # size of the image, then convolution with padding=2 increases size
-        # of the image. It just does the opposite to the previous convolution
-        layers.Convolution((3, 3, 16), padding=2) >> layers.Relu(),
+        # Deconvolution (a.k.a Transposed Convolution) reverts
+        # changes done by Convolution
+        Deconvolution((3, 3, 16)) >> Relu(),
 
-        layers.Upscale((2, 2)),
-        layers.Convolution((3, 3, 16), padding=2) >> layers.Relu(),
-        layers.Convolution((3, 3, 1), padding=2) >> layers.Sigmoid(),
+        Upscale((2, 2)),
+        Deconvolution((3, 3, 16)) >> Relu(),
+        Deconvolution((3, 3, 1)) >> Sigmoid()
+    )
+    optimizer = algorithms.Momentum(
+        network,
+        step=0.02,
+        momentum=0.9,
+        batch_size=128,
+        loss='rmse',
 
-        # We have to convert 4d tensor to the 2d in order to be
-        # able to compute RMSE.
-        layers.Reshape(),
-    ],
+        shuffle_data=True,
+        verbose=True,
 
-    step=0.02,
-    momentum=0.9,
-    batch_size=128,
-    loss='rmse',
+        regularizer=algorithms.l2(0.01),
+    )
 
-    shuffle_data=True,
-    verbose=True,
-
-    regularizer=algorithms.l2(0.01),
-)
-conv_autoencoder.train(x_train_4d, x_train, x_test_4d, x_test, epochs=15)
-
-n_samples = 6
-images = x_test[:n_samples] * 255.
-predicted_images = conv_autoencoder.predict(x_test_4d[:n_samples])
-predicted_images = predicted_images * 255.
-
-# Compare real and reconstructed images
-fig, axes = plt.subplots(n_samples, 2, figsize=(12, 8))
-iterator = zip(axes, images, predicted_images)
-
-for (left_ax, right_ax), real_image, predicted_image in iterator:
-    real_image = real_image.reshape((28, 28))
-    predicted_image = predicted_image.reshape((28, 28))
-
-    left_ax.imshow(real_image, cmap=plt.cm.binary)
-    right_ax.imshow(predicted_image, cmap=plt.cm.binary)
-
-plt.show()
+    x_train_4d, x_test_4d = load_data()
+    optimizer.train(x_train_4d, x_train_4d, x_test_4d, x_test_4d, epochs=1)
+    visualize_reconstructions(x_test_4d, n_samples=6)

@@ -4,6 +4,8 @@ import numpy as np
 from sklearn import datasets, metrics
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
+
+from neupy.layers import *
 from neupy import algorithms, layers
 
 
@@ -32,53 +34,52 @@ x_unlabeled_4d = x_unlabeled.reshape((n_unlabeled, 28, 28, 1))
 # We will features trained in the encoder and the first part for the future
 # classifier. At first we pre-train them with unlabeled data, since we have
 # a lot of it and we hope to learn some common features from it.
-encoder = layers.join(
-    layers.Input((28, 28, 1)),
+encoder = join(
+    Input((28, 28, 1)),
 
-    layers.Convolution((3, 3, 16)) >> layers.Relu(),
-    layers.Convolution((3, 3, 16)) >> layers.Relu(),
-    layers.MaxPooling((2, 2)),
+    Convolution((3, 3, 16)) >> Relu(),
+    Convolution((3, 3, 16)) >> Relu(),
+    MaxPooling((2, 2)),
 
-    layers.Convolution((3, 3, 32)) >> layers.Relu(),
-    layers.MaxPooling((2, 2)),
+    Convolution((3, 3, 32)) >> Relu(),
+    MaxPooling((2, 2)),
 
-    layers.Reshape(),
+    Reshape(),
 
-    layers.Relu(256),
-    layers.Relu(128),
+    Relu(256),
+    Relu(128),
 )
 
-# Notice that in the decoder every operation reverts back changes from the
-# encoder layer. Upscale replaces MaxPooling and Convolutional layer
-# without padding replaced with large padding that increase size of the image.
-decoder = layers.join(
-    layers.Relu(256),
-    layers.Relu(32 * 5 * 5),
+# Notice that in the decoder every operation reverts
+# back changes from the encoder layer.
+decoder = join(
+    Relu(256),
+    Relu(32 * 5 * 5),
 
-    layers.Reshape((5, 5, 32)),
+    Reshape((5, 5, 32)),
 
-    layers.Upscale((2, 2)),
-    layers.Convolution((3, 3, 16), padding=2) >> layers.Relu(),
+    Upscale((2, 2)),
+    Deconvolution((3, 3, 16)) >> Relu(),
 
-    layers.Upscale((2, 2)),
-    layers.Convolution((3, 3, 16), padding=2) >> layers.Relu(),
-    layers.Convolution((3, 3, 1), padding=2) >> layers.Sigmoid(),
-
-    layers.Reshape(),
+    Upscale((2, 2)),
+    Deconvolution((3, 3, 16)) >> Relu(),
+    Deconvolution((3, 3, 1)) >> Sigmoid(),
 )
 
 conv_autoencoder = algorithms.Momentum(
-    network=encoder >> decoder,
-    verbose=True,
-    step=0.1,
-    momentum=0.99,
-    shuffle_data=True,
-    batch_size=64,
+    network=(encoder >> decoder),
+
     loss='rmse',
+    step=0.02,
+    batch_size=128,
+    regularizer=algorithms.l2(0.001),
+
+    shuffle_data=True,
+    verbose=True,
 )
 conv_autoencoder.train(
-    x_unlabeled_4d, x_unlabeled,
-    x_labeled_4d, x_labeled,
+    x_unlabeled_4d, x_unlabeled_4d,
+    x_labeled_4d, x_labeled_4d,
     epochs=1,
 )
 
@@ -88,14 +89,14 @@ conv_autoencoder.train(
 x_labeled_encoded = encoder.predict(x_labeled_4d)
 x_unlabeled_encoded = encoder.predict(x_unlabeled_4d)
 
-classifier_network = layers.join(
-    layers.PRelu(512),
-    layers.Dropout(0.25),
-    layers.Softmax(10),
+classifier_network = join(
+    PRelu(512),
+    Dropout(0.25),
+    Softmax(10),
 )
 
 encoder_classifier = algorithms.Adadelta(
-    layers.Input(encoder.output_shape) >> classifier_network,
+    Input(encoder.output_shape[1:]) >> classifier_network,
     verbose=True,
     step=0.05,
     shuffle_data=True,
@@ -111,7 +112,7 @@ encoder_classifier.train(
 # The final part of training is to put encoder and final classifier layers
 # in order to fine tune network parameters before finilizing it's prediction
 classifier = algorithms.GradientDescent(
-    encoder >> classifier_network,
+    network=(encoder >> classifier_network),
     verbose=True,
     step=0.005,
     shuffle_data=True,

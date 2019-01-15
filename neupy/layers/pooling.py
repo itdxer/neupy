@@ -261,7 +261,7 @@ class Upscale(BaseLayer):
     >>> from neupy.layers import *
     >>> network = Input((10, 10, 3)) >> Upscale((2, 2))
     >>> network.output_shape
-    (3, 20, 20)
+    (20, 20, 3)
     """
     scale = TypedListProperty(n_elements=2)
 
@@ -368,9 +368,10 @@ class GlobalPooling(BaseLayer):
         return tf.TensorShape([input_shape[0], input_shape[-1]])
 
     def output(self, input_value, **kwargs):
+        input_value = tf.convert_to_tensor(input_value, dtype=tf.float32)
         ndims = len(input_value.shape)
 
-        if ndims in (1, 2):
+        if ndims == 2:
             return input_value
 
         # All dimensions except first and last

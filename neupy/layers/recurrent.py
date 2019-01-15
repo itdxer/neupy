@@ -282,11 +282,12 @@ class LSTM(BaseRNNLayer):
         self.peepholes = peepholes
         self.gradient_clipping = gradient_clipping
 
-    def initialize_variables(self, input):
+    def create_variables(self, input_shape):
+        self.input_shape = input_shape
         self.input_weights = self.variable(
             value=self.input_weights,
             name='input_weights',
-            shape=(input.shape[-1], 4 * self.n_units),
+            shape=(input_shape[-1], 4 * self.n_units),
         )
         self.hidden_weights = self.variable(
             value=self.hidden_weights, name='hidden_weights',
@@ -330,7 +331,6 @@ class LSTM(BaseRNNLayer):
         # Because scan iterates over the first dimension we
         # dimshuffle to (n_time_steps, n_batch, n_features)
         input = tf.transpose(input, [1, 0, 2])
-        self.initialize_variables(input)
 
         def one_lstm_step(states, input_n):
             with tf.name_scope('lstm-cell'):
@@ -543,7 +543,7 @@ class GRU(BaseRNNLayer):
         self.backwards = backwards
         self.gradient_clipping = gradient_clipping
 
-    def initialize_variables(self, input_shape):
+    def create_variables(self, input_shape):
         self.input_weights = self.variable(
             value=self.input_weights,
             name='input_weights',

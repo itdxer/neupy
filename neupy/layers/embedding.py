@@ -96,6 +96,7 @@ class Embedding(BaseLayer):
         return input_shape.concatenate(self.output_size)
 
     def create_variables(self, input_shape):
+        self.input_shape = input_shape
         self.weight = self.variable(
             value=self.weight, name='weight',
             shape=as_tuple(self.input_size, self.output_size))

@@ -247,7 +247,8 @@ class GlobalPoolingLayersTestCase(BaseTestCase):
     def test_global_pooling_for_lower_dimensions(self):
         layer = layers.GlobalPooling('max')
         x = np.random.random((4, 5))
-        np.testing.assert_array_equal(x, layer.output(x))
+        y = layer.output(x)
+        self.assertShapesEqual(y.shape, (4, 5))
 
     def test_global_pooling_late_shape_init(self):
         network = layers.join(

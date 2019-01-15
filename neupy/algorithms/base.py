@@ -166,9 +166,9 @@ class BaseNetwork(BaseSkeleton):
         self.n_updates_made = 0
 
         signals = list(as_tuple(
-            self.signals,
-            base_signals.PrintLastErrorSignal(),
             base_signals.ProgressbarSignal(),
+            base_signals.PrintLastErrorSignal(),
+            self.signals,
         ))
 
         for i, signal in enumerate(signals):
