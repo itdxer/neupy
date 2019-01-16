@@ -17,10 +17,6 @@ def sample_data_point(data, n=1):
     return data[indeces, :]
 
 
-def make_edge_id(node_1, node_2):
-    return (node_1, node_2) if node_1 < node_2 else (node_2, node_1)
-
-
 class NeuralGasGraph(object):
     """
     Undirected graph structure that stores neural gas network's
@@ -37,10 +33,13 @@ class NeuralGasGraph(object):
         the following format: ``(node_1, node_2)``.
 
     nodes : list
-        List of all nodes in the graph.
+        List of all nodes in the graph (read-only attribute).
 
     n_nodes : int
-        Number of nodes in the network.
+        Number of nodes in the network (read-only attribute).
+
+    n_edges : int
+        Number of edges in the network (read-only attribute).
     """
     def __init__(self):
         self.edges_per_node = {}
@@ -54,25 +53,53 @@ class NeuralGasGraph(object):
     def n_nodes(self):
         return len(self.edges_per_node)
 
+    @property
+    def n_edges(self):
+        return len(self.edges)
+
     def add_node(self, node):
         self.edges_per_node[node] = set()
 
     def remove_node(self, node):
+        if self.edges_per_node[node]:
+            raise ValueError(
+                "Cannot remove node, because it has edges with other node")
+
         del self.edges_per_node[node]
 
     def add_edge(self, node_1, node_2):
+        if node_2 in self.edges_per_node[node_1]:
+            return self.reset_edge(node_1, node_2)
+
         self.edges_per_node[node_1].add(node_2)
         self.edges_per_node[node_2].add(node_1)
+        self.edges[(node_1, node_2)] = 0
 
-        edge_id = make_edge_id(node_1, node_2)
+    def reset_edge(self, node_1, node_2):
+        edge_id = self.find_edge_id(node_1, node_2)
         self.edges[edge_id] = 0
 
     def remove_edge(self, node_1, node_2):
+        edge_id = self.find_edge_id(node_1, node_2)
+
         self.edges_per_node[node_1].remove(node_2)
         self.edges_per_node[node_2].remove(node_1)
 
-        edge_id = make_edge_id(node_1, node_2)
         del self.edges[edge_id]
+
+    def find_edge_id(self, node_1, node_2):
+        if (node_1, node_2) in self.edges:
+            return (node_1, node_2)
+
+        if (node_2, node_1) in self.edges:
+            return (node_2, node_1)
+
+        raise ValueError("Edge between specified nodes doesn't exist")
+
+    def __repr__(self):
+        return "{}(n_nodes={}, n_edges={})".format(
+            self.__class__.__name__,
+            self.n_nodes, self.n_edges)
 
 
 class NeuronNode(object):
@@ -90,9 +117,6 @@ class NeuronNode(object):
     def __init__(self, weight):
         self.weight = weight
         self.error = 0
-
-    def __lt__(self, other):
-        return id(self) < id(other)
 
 
 class GrowingNeuralGas(BaseNetwork):
@@ -344,7 +368,7 @@ class GrowingNeuralGas(BaseNetwork):
             graph.add_edge(closest_neuron, second_closest)
 
             for to_neuron in list(graph.edges_per_node[closest_neuron]):
-                edge_id = make_edge_id(to_neuron, closest_neuron)
+                edge_id = graph.find_edge_id(to_neuron, closest_neuron)
                 age = graph.edges[edge_id]
 
                 if age >= max_edge_age:
