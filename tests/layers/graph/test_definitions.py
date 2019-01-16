@@ -230,7 +230,7 @@ class DefinitionsTestCase(BaseTestCase):
     def test_fail_when_cycle_created(self):
         network = layers.join(
             layers.Input(10),
-            layers.Relu(5),
+            layers.Relu(10),
         )
 
         error_message = (
