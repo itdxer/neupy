@@ -615,7 +615,7 @@ class LayerGraph(BaseGraph):
             format_shapes(self.output_shape))
 
 
-def validate_graphs_before_merging(left_graph, right_graph):
+def validate_graphs_before_combining(left_graph, right_graph):
     n_left_outputs = len(left_graph.output_layers)
     n_right_inputs = len(right_graph.input_layers)
 
@@ -639,7 +639,7 @@ def validate_graphs_before_merging(left_graph, right_graph):
 
 def merge(left_graph, right_graph, combine=False):
     if combine:
-        validate_graphs_before_merging(left_graph, right_graph)
+        validate_graphs_before_combining(left_graph, right_graph)
 
     forward_graph = OrderedDict()
 

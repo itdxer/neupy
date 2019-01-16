@@ -2,6 +2,7 @@ import numpy as np
 
 from neupy import layers
 from neupy.utils import asfloat
+from neupy.exceptions import LayerConnectionError
 
 from base import BaseTestCase
 
@@ -205,3 +206,42 @@ class DefinitionsTestCase(BaseTestCase):
 
         self.assertShapesEqual((None, 5, 5, 3), network.input_shape)
         self.assertShapesEqual((None, 5, 5, 11), network.output_shape)
+
+    def test_fail_many_to_many_connection(self):
+        network_a = layers.join(
+            layers.Input(10),
+            layers.parallel(
+                layers.Relu(5),
+                layers.Relu(4),
+            ),
+        )
+        network_b = layers.join(
+            layers.parallel(
+                layers.Relu(5),
+                layers.Relu(4),
+            ),
+            layers.Concatenate(),
+        )
+
+        error_message = "Cannot make many to many connection between graphs"
+        with self.assertRaisesRegexp(LayerConnectionError, error_message):
+            layers.join(network_a, network_b)
+
+    def test_fail_when_cycle_created(self):
+        network = layers.join(
+            layers.Input(10),
+            layers.Relu(5),
+        )
+
+        error_message = (
+            "Cannot define connection between layers, "
+            "because it creates cycle in the graph"
+        )
+        with self.assertRaisesRegexp(LayerConnectionError, error_message):
+            layers.join(network, network)
+
+        extra_relu = layers.Relu(5)
+        network = layers.join(network, extra_relu)
+
+        with self.assertRaisesRegexp(LayerConnectionError, error_message):
+            layers.join(network, extra_relu)
