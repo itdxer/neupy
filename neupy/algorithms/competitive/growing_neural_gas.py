@@ -63,7 +63,8 @@ class NeuralGasGraph(object):
     def remove_node(self, node):
         if self.edges_per_node[node]:
             raise ValueError(
-                "Cannot remove node, because it has edges with other node")
+                "Cannot remove node, because it's connected to "
+                "{} other node(s)".format(len(self.edges_per_node[node])))
 
         del self.edges_per_node[node]
 
@@ -117,6 +118,11 @@ class NeuronNode(object):
     def __init__(self, weight):
         self.weight = weight
         self.error = 0
+
+    def __repr__(self):
+        return "{}(error={})".format(
+            self.__class__.__name__,
+            round(float(self.error), 6))
 
 
 class GrowingNeuralGas(BaseNetwork):

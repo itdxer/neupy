@@ -162,8 +162,18 @@ class NeuralGasGraphTestCase(BaseTestCase):
         self.assertEqual(graph.n_edges, 1)
 
         error_message = (
-            "Cannot remove node, because it "
-            "has edges with other node"
+            "Cannot remove node, because it's "
+            "connected to 1 other node\(s\)"
         )
         with self.assertRaisesRegexp(ValueError, error_message):
             graph.remove_node(node_a)
+
+    def test_node_repr(self):
+        node_a = NeuronNode(1)
+        self.assertEqual(str(node_a), "NeuronNode(error=0.0)")
+
+        node_a.error = 1
+        self.assertEqual(str(node_a), "NeuronNode(error=1.0)")
+
+        node_a.error = 3.141592654
+        self.assertEqual(str(node_a), "NeuronNode(error=3.141593)")
