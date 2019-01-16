@@ -4,9 +4,9 @@ from functools import partial
 
 import tensorflow as tf
 
-from neupy import layers, init, algorithms, storage
-from neupy.utils import (as_tuple, asfloat, flatten, tf_repeat,
-                         tensorflow_session)
+from neupy import init, algorithms, storage
+from neupy.layers import *
+from neupy.utils import as_tuple, asfloat, tf_utils, tensorflow_session
 
 from loaddata import load_data
 from settings import MODELS_DIR, environments
@@ -20,31 +20,28 @@ parser.add_argument('--imsize', '-i', choices=[8, 16, 28],
                     type=int, required=True)
 
 
-def random_weight(shape):
+def create_random_weight(shape):
     initializer = init.Normal()
     weight = initializer.sample(shape)
     return tf.Variable(asfloat(weight), dtype=tf.float32)
 
 
-class ChannelGlobalMaxPooling(layers.BaseLayer):
-    @property
-    def output_shape(self):
-        shape = self.input_shape
-        # as_tuple((8, 8), 1) -> (8, 8, 1)
-        return as_tuple(shape[:-1], 1)
+class ChannelGlobalMaxPooling(BaseLayer):
+    def get_output_shape(self, input_shape):
+        return input_shape[:-1].concatenate(1)
 
-    def output(self, input_value):
+    def output(self, input_value, **kwargs):
         return tf.reduce_max(input_value, axis=-1, keepdims=True)
 
 
-class SelectValueAtStatePosition(layers.BaseLayer):
-    @property
-    def output_shape(self):
-        q_output_shape = self.input_shape[0]
-        n_filters = q_output_shape[-1]
-        return as_tuple(n_filters)  # as_tuple(3) -> (3,)
+class SelectValueAtStatePosition(BaseLayer):
+    def get_output_shape(self, Q_input_shape, state_shape_1, state_shape_2):
+        n_samples = Q_input_shape[0]
+        n_states = state_shape_1[1]
+        n_filters = Q_input_shape[-1]
+        return tf.TensorShape((n_samples * n_states, n_filters))
 
-    def output(self, Q, input_state_1, input_state_2):
+    def output(self, Q, input_state_1, input_state_2, **kwargs):
         with tf.name_scope("Q-output"):
             # Number of samples depend on the state's batch size.
             # Each iteration we can try to predict direction from
@@ -56,14 +53,13 @@ class SelectValueAtStatePosition(layers.BaseLayer):
             indeces = tf.stack([
                 # Numer of repetitions depends on the size of
                 # the state batch
-                tf_repeat(tf.range(Q_shape[0]), n_states),
+                tf_utils.repeat(tf.range(Q_shape[0]), n_states),
 
                 # Each state is a coordinate (x and y)
                 # that point to some place on a grid.
-                tf.cast(flatten(input_state_1), tf.int32),
-                tf.cast(flatten(input_state_2), tf.int32),
-            ])
-            indeces = tf.transpose(indeces, [1, 0])
+                tf.cast(tf_utils.flatten(input_state_1), tf.int32),
+                tf.cast(tf_utils.flatten(input_state_2), tf.int32),
+            ], axis=1)
 
             # Output is a matrix that has n_samples * n_states rows
             # and n_filters (which is Q.shape[1]) columns.
@@ -73,26 +69,26 @@ class SelectValueAtStatePosition(layers.BaseLayer):
 def create_VIN(input_image_shape=(8, 8, 2), n_hidden_filters=150,
                n_state_filters=10, k=10):
 
-    SamePadConvolution = partial(layers.Convolution, padding='SAME', bias=None)
-
-    R = layers.join(
-        layers.Input(input_image_shape, name='grid-input'),
-        layers.Convolution((3, 3, n_hidden_filters),
-                           padding='SAME',
-                           weight=init.Normal(),
-                           bias=init.Normal()),
-        SamePadConvolution((1, 1, 1), weight=init.Normal()),
-    )
+    # Default initialization method
+    normal = init.Normal()
 
     # Create shared weights
-    q_weight = random_weight((3, 3, 1, n_state_filters))
-    fb_weight = random_weight((3, 3, 1, n_state_filters))
+    q_weight = create_random_weight((3, 3, 1, n_state_filters))
+    fb_weight = create_random_weight((3, 3, 1, n_state_filters))
 
-    Q = R >> SamePadConvolution((3, 3, n_state_filters), weight=q_weight)
+    # Define basic layers
+    SamePadConv = partial(Convolution, padding='SAME', bias=None)
+
+    R = join(
+        Input(input_image_shape, name='grid-input'),
+        SamePadConv((3, 3, n_hidden_filters), weight=normal, bias=normal),
+        SamePadConv((1, 1, 1), weight=normal),
+    )
+    Q = R >> SamePadConv((3, 3, n_state_filters), weight=q_weight)
 
     for i in range(k):
         V = Q >> ChannelGlobalMaxPooling()
-        Q = layers.join(
+        Q = join(
             # Convolve R and V separately and then add outputs together with
             # the Elementwise layer. This part of the code looks different
             # from the one that was used in the original VIN repo, but
@@ -103,18 +99,15 @@ def create_VIN(input_image_shape=(8, 8, 2), n_hidden_filters=150,
             #        w = concat(w1, w2)
             #
             # See code sample from Github Gist: https://bit.ly/2zm3ntN
-            [[
-                R,
-                SamePadConvolution((3, 3, n_state_filters), weight=q_weight)
-            ], [
-                V,
-                SamePadConvolution((3, 3, n_state_filters), weight=fb_weight)
-            ]],
-            layers.Elementwise(merge_function=tf.add),
+            parallel(
+                R >> SamePadConv((3, 3, n_state_filters), weight=q_weight),
+                V >> SamePadConv((3, 3, n_state_filters), weight=fb_weight),
+            ),
+            Elementwise('add'),
         )
 
-    input_state_1 = layers.Input(UNKNOWN, name='state-1-input')
-    input_state_2 = layers.Input(UNKNOWN, name='state-2-input')
+    input_state_1 = Input(UNKNOWN, name='state-1-input')
+    input_state_2 = Input(UNKNOWN, name='state-2-input')
 
     # Select the conv-net channels at the state position (S1, S2)
     VIN = (Q | input_state_1 | input_state_2) >> SelectValueAtStatePosition()
@@ -122,7 +115,7 @@ def create_VIN(input_image_shape=(8, 8, 2), n_hidden_filters=150,
     # Set up softmax layer that predicts actions base on (S1, S2)
     # position. Each action encodes specific direction:
     # N, S, E, W, NE, NW, SE, SW (in the same order)
-    VIN = VIN >> layers.Softmax(8, bias=None, weight=init.Normal())
+    VIN = VIN >> Softmax(8, bias=None, weight=normal)
 
     return VIN
 
@@ -131,12 +124,12 @@ def loss_function(expected, predicted):
     epsilon = 1e-7  # for 32-bit float
 
     predicted = tf.clip_by_value(predicted, epsilon, 1.0 - epsilon)
-    expected = tf.cast(flatten(expected), tf.int32)
+    expected = tf.cast(tf_utils.flatten(expected), tf.int32)
 
     log_predicted = tf.log(predicted)
-    indeces = tf.stack([tf.range(tf.size(expected)), expected])
-    indeces = tf.transpose(indeces, [1, 0])
+    indeces = tf.stack([tf.range(tf.size(expected)), expected], axis=1)
     errors = tf.gather_nd(log_predicted, indeces)
+
     return -tf.reduce_mean(errors)
 
 
@@ -149,6 +142,7 @@ def on_epoch_end_from_steps(steps):
             new_step = steps[network.last_epoch]
             session = tensorflow_session()
             network.variables.step.load(new_step, session)
+
     return on_epoch_end
 
 
@@ -168,9 +162,20 @@ if __name__ == '__main__':
             n_state_filters=10,
             k=env['k'],
         ),
-
         verbose=True,
+
+        # Loss function applies categorical cross entropy
+        # in a bit more efficient way.
         loss=loss_function,
+
+        # Shape of the target value might be different compare to the
+        # expected shape of the output. Without this change network will
+        # assume that target shape will be the same as network's output
+        # shape, which is (None, 8)
+        target=tf.placeholder(tf.float32, shape=(None, None)),
+
+        # Signal will ensure that step (learning rate) will be reduced
+        # after certain number of iterations
         signals=on_epoch_end_from_steps(env['steps']),
         **env['training_options']
     )

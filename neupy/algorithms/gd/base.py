@@ -12,8 +12,8 @@ from neupy.core.properties import (
     IntProperty, Property,
 )
 from neupy.utils import (
-    AttributeKeyDict, format_data, as_tuple, function,
-    initialize_uninitialized_variables, iters,
+    AttributeKeyDict, format_data,
+    as_tuple, iters, tf_utils,
 )
 from neupy.algorithms.gd import objectives
 from neupy.exceptions import InvalidConnection
@@ -100,6 +100,7 @@ class BaseOptimizer(BaseNetwork):
     {BaseSkeleton.fit}
     """
     step = ScalarVariableProperty(default=0.1)
+    target = Property(default=None, allow_none=True)
     regularizer = Property(default=None, allow_none=True)
     loss = FunctionWithOptionsProperty(default='mse', choices={
         'mae': objectives.mae,
@@ -130,6 +131,11 @@ class BaseOptimizer(BaseNetwork):
                 "Connection should have one output "
                 "layer, got {}".format(n_outputs))
 
+        target = options.get('target')
+        if target is not None and isinstance(target, (list, tuple)):
+            options['target'] = tf.placeholder(tf.float32, shape=target)
+
+        self.target = self.network.targets[0]
         super(BaseOptimizer, self).__init__(**options)
 
         start_init_time = time.time()
@@ -151,14 +157,8 @@ class BaseOptimizer(BaseNetwork):
         raise NotImplementedError()
 
     def init_functions(self):
-        loss = self.loss(
-            self.network.targets[0],
-            self.network.outputs,
-        )
-        val_loss = self.loss(
-            self.network.targets[0],
-            self.network.training_outputs,
-        )
+        loss = self.loss(self.target, self.network.outputs)
+        val_loss = self.loss(self.target, self.network.training_outputs)
 
         if self.regularizer is not None:
             loss += self.regularizer(self.network)
@@ -176,22 +176,22 @@ class BaseOptimizer(BaseNetwork):
                 training_updates = self.init_train_updates()
                 training_updates.extend(update_ops)
 
-        initialize_uninitialized_variables()
+        tf_utils.initialize_uninitialized_variables()
 
         self.functions.update(
-            predict=function(
+            predict=tf_utils.function(
                 inputs=self.network.inputs,
                 outputs=self.network.outputs,
                 name='optimizer/predict'
             ),
-            one_training_update=function(
-                inputs=as_tuple(self.network.inputs, self.network.targets),
+            one_training_update=tf_utils.function(
+                inputs=as_tuple(self.network.inputs, self.target),
                 outputs=loss,
                 updates=training_updates,
                 name='optimizer/one-update-step'
             ),
-            score=function(
-                inputs=as_tuple(self.network.inputs, self.network.targets),
+            score=tf_utils.function(
+                inputs=as_tuple(self.network.inputs, self.target),
                 outputs=val_loss,
                 name='optimizer/score'
             )
@@ -266,6 +266,12 @@ class BaseOptimizer(BaseNetwork):
 
     def __reduce__(self):
         parameters = self.get_params(with_network=False)
+
+        # We only need to know placeholders shape
+        # in order to be able to reconstruct it
+        parameters['target'] = tf_utils.shape_to_tuple(
+            parameters['target'].shape)
+
         args = (self.network, parameters)
         return (self.__class__, args)
 

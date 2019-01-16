@@ -47,7 +47,6 @@ class WolfeLineSearchForStep(Configurable):
 
     def find_optimal_step(self, parameter_vector, parameter_update):
         network_inputs = self.network.inputs
-        network_output = self.network.targets[0]
         layers_and_parameters = list(self.network.variables.items())
 
         def prediction(step):
@@ -79,10 +78,10 @@ class WolfeLineSearchForStep(Configurable):
             return output
 
         def phi(step):
-            return self.loss(network_output, prediction(step))
+            return self.loss(self.target, prediction(step))
 
         def derphi(step):
-            error_func = self.loss(network_output, prediction(step))
+            error_func = self.loss(self.target, prediction(step))
             gradient, = tf.gradients(error_func, step)
             return gradient
 
