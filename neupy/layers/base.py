@@ -638,7 +638,9 @@ def validate_graphs_before_merging(left_graph, right_graph):
 
 
 def merge(left_graph, right_graph, combine=False):
-    validate_graphs_before_merging(left_graph, right_graph)
+    if combine:
+        validate_graphs_before_merging(left_graph, right_graph)
+
     forward_graph = OrderedDict()
 
     for key, value in left_graph.forward_graph.items():
