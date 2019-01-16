@@ -31,12 +31,12 @@ class TFUtilsTestCase(BaseTestCase):
         ))
         self.assertEqual(actual, 570)
 
-    def test_tf_repeat(self):
+    def test_repeat(self):
         matrix = np.array([
             [1, 2],
             [3, 4],
         ])
-        actual = self.eval(tf_utils.tf_repeat(matrix, (2, 3)))
+        actual = self.eval(tf_utils.repeat(matrix, (2, 3)))
         expected = np.array([
             [1, 1, 1, 2, 2, 2],
             [1, 1, 1, 2, 2, 2],

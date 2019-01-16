@@ -4,7 +4,7 @@ import math
 
 import tensorflow as tf
 
-from neupy.utils import as_tuple, tf_repeat
+from neupy.utils import as_tuple, tf_utils
 from neupy.core.properties import (TypedListProperty, ChoiceProperty,
                                    FunctionWithOptionsProperty)
 from neupy.exceptions import LayerConnectionError
@@ -305,7 +305,7 @@ class Upscale(BaseLayer):
     def output(self, input_value, **kwargs):
         input_value = tf.convert_to_tensor(input_value, dtype=tf.float32)
         self.fail_if_shape_invalid(input_value.shape)
-        return tf_repeat(input_value, as_tuple(1, self.scale, 1))
+        return tf_utils.repeat(input_value, as_tuple(1, self.scale, 1))
 
     def __repr__(self):
         return self._repr_arguments(self.scale, name=self.name)
@@ -317,15 +317,18 @@ class GlobalPooling(BaseLayer):
 
     Parameters
     ----------
-    function : {{``avg``, ``max``}} or callable
+    function : {{``avg``, ``max``, ``sum``}} or callable
         Common functions has been predefined for the user.
         These options are available:
 
         - ``avg`` - For average global pooling. The same as
           ``tf.reduce_mean``.
 
-        - ``max`` - For average global pooling. The same as
+        - ``max`` - For max global pooling. The same as
           ``tf.reduce_max``.
+
+        - ``sum`` - For sum global pooling. The same as
+          ``tf.reduce_sum``.
 
         Parameter also excepts custom functions that have
         following format.
@@ -357,6 +360,7 @@ class GlobalPooling(BaseLayer):
     function = FunctionWithOptionsProperty(choices={
         'avg': tf.reduce_mean,
         'max': tf.reduce_max,
+        'sum': tf.reduce_sum,
     })
 
     def __init__(self, function, name=None):

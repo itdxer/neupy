@@ -316,7 +316,7 @@ class LayerGraph(BaseGraph):
         super(LayerGraph, self).__init__(forward_graph)
 
         if validate:
-            # This allows to runs simple check that ensures that
+            # This allows to run simple check that ensures that
             # created graph have defined layer shape
             self.output_shape
 
@@ -640,7 +640,9 @@ def validate_graphs_before_combining(left_graph, right_graph):
     right_in_shapes = as_tuple(right_graph.input_shape)
 
     for left_layer, left_out_shape in zip(left_out_layers, left_out_shapes):
-        for right_layer, right_in_shape in zip(right_in_layers, right_in_shapes):
+        right = zip(right_in_layers, right_in_shapes)
+
+        for right_layer, right_in_shape in right:
             if left_out_shape.is_compatible_with(right_in_shape):
                 continue
 
@@ -779,6 +781,10 @@ class BaseLayer(BaseGraph):
 
     @property
     def input_shape(self):
+        # Explicit TensorShape transformation not only ensures
+        # that we have right type in the output, but also copies
+        # value stored in the `_input_shape` in order to make sure
+        # that no inplace update can effect original value
         return tf.TensorShape(self._input_shape)
 
     @input_shape.setter

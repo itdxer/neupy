@@ -15,7 +15,7 @@ __all__ = (
     'class_method_name_scope', 'function_name_scope',
 
     # Misc utils for tensorflow
-    'flatten', 'outer', 'tf_repeat', 'dimshuffle', 'shape_to_tuple',
+    'flatten', 'outer', 'repeat', 'dimshuffle', 'shape_to_tuple',
     'dot', 'make_single_vector', 'setup_parameter_updates',
 )
 
@@ -163,7 +163,7 @@ def dot(a, b):
     return tf.tensordot(a, b, 1)
 
 
-def tf_repeat(tensor, repeats):
+def repeat(tensor, repeats):
     """
     Repeat elements of an tensor. The same as ``numpy.repeat``.
 
