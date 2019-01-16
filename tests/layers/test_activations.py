@@ -4,6 +4,7 @@ import numpy as np
 import tensorflow as tf
 
 from neupy.utils import asfloat
+from neupy.exceptions import LayerConnectionError
 from neupy import layers, algorithms, init
 
 from base import BaseTestCase
@@ -40,15 +41,6 @@ class ActivationLayerMainTestCase(BaseTestCase):
             )
         )
 
-    def test_failed_propagation_for_multiple_inputs(self):
-        inputs = layers.parallel(
-            layers.Input(1),
-            layers.Input(2),
-        )
-        expected_message = "2 positional arguments but 3 were given."
-        with self.assertRaisesRegexp(TypeError, expected_message):
-            layers.join(inputs, layers.Relu(3, name='relu'))
-
     def test_variables(self):
         network = layers.join(
             layers.Input(2),
@@ -64,6 +56,26 @@ class ActivationLayerMainTestCase(BaseTestCase):
 
         self.assertShapesEqual(variables['bias'].shape, (3,))
         self.assertShapesEqual(variables['weight'].shape, (2, 3))
+
+    def test_failed_propagation_for_multiple_inputs(self):
+        inputs = layers.parallel(
+            layers.Input(1),
+            layers.Input(2),
+        )
+        expected_message = "2 positional arguments but 3 were given."
+        with self.assertRaisesRegexp(TypeError, expected_message):
+            layers.join(inputs, layers.Relu(3, name='relu'))
+
+    def test_fail_rejoining_to_new_input(self):
+        network = layers.join(
+            layers.Input(10),
+            layers.Relu(5, name='relu'),
+        )
+        network.create_variables()
+
+        error_message = "Cannot connect layer `in` to layer `relu`"
+        with self.assertRaisesRegexp(LayerConnectionError, error_message):
+            layers.join(layers.Input(7, name='in'), network.layer('relu'))
 
 
 class ActivationLayersTestCase(BaseTestCase):

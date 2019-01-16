@@ -616,10 +616,10 @@ class LayerGraph(BaseGraph):
 
 
 def validate_graphs_before_combining(left_graph, right_graph):
-    n_left_outputs = len(left_graph.output_layers)
-    n_right_inputs = len(right_graph.input_layers)
+    left_out_layers = left_graph.output_layers
+    right_in_layers = right_graph.input_layers
 
-    if n_left_outputs > 1 and n_right_inputs > 1:
+    if len(left_out_layers) > 1 and len(right_in_layers) > 1:
         raise LayerConnectionError(
             "Cannot make many to many connection between graphs. One graph "
             "has {n_left_outputs} outputs (layer names: {left_names}) and "
@@ -627,14 +627,38 @@ def validate_graphs_before_combining(left_graph, right_graph):
             "{right_names}). First graph: {left_graph}, Second graph: "
             "{right_graph}".format(
                 left_graph=left_graph,
-                n_left_outputs=n_left_outputs,
-                left_names=[l.name for l in left_graph.output_layers],
+                n_left_outputs=len(left_out_layers),
+                left_names=[layer.name for layer in left_out_layers],
 
                 right_graph=right_graph,
-                n_right_inputs=n_right_inputs,
-                right_names=[l.name for l in right_graph.input_layers],
+                n_right_inputs=len(right_in_layers),
+                right_names=[layer.name for layer in right_in_layers],
             )
         )
+
+    left_out_shapes = as_tuple(left_graph.output_shape)
+    right_in_shapes = as_tuple(right_graph.input_shape)
+
+    for left_layer, left_out_shape in zip(left_out_layers, left_out_shapes):
+        for right_layer, right_in_shape in zip(right_in_layers, right_in_shapes):
+            if left_out_shape.is_compatible_with(right_in_shape):
+                continue
+
+            raise LayerConnectionError(
+                "Cannot connect layer `{left_name}` to layer `{right_name}`, "
+                "because output shape ({left_out_shape}) of the first layer "
+                "is incompatible with the input shape ({right_in_shape}) "
+                "of the second layer. First layer: {left_layer}, Second "
+                "layer: {right_layer}".format(
+                    left_layer=left_layer,
+                    left_name=left_layer.name,
+                    left_out_shape=left_out_shape,
+
+                    right_layer=right_layer,
+                    right_name=right_layer.name,
+                    right_in_shape=right_in_shape,
+                )
+            )
 
 
 def merge(left_graph, right_graph, combine=False):
@@ -827,8 +851,8 @@ class BaseLayer(BaseGraph):
 
 class Identity(BaseLayer):
     """
-    Passes input through the layer without changes. Can be useful while
-    defining residual networks in the network.
+    Passes input through the layer without changes. Can be
+    useful while defining residual networks in the network.
 
     Parameters
     ----------
@@ -856,8 +880,8 @@ class Input(BaseLayer):
     Parameters
     ----------
     shape : int or tuple
-        Shape of the input features per sample. Batch dimension has to
-        be excluded from the shape.
+        Shape of the input features per sample. Batch
+        dimension has to be excluded from the shape.
 
     {BaseLayer.name}
 

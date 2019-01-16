@@ -6,10 +6,30 @@ from base import BaseTestCase
 
 class InputTestCase(BaseTestCase):
     def test_input_exceptions(self):
+        layer = layers.Input(10)
         error_message = "Input layer got unexpected input"
 
         with self.assertRaisesRegexp(LayerConnectionError, error_message):
-            layers.join(layers.Input(2), layers.Input(1))
+            layer.get_output_shape((10, 15))
+
+    def test_output_shape_merging(self):
+        layer = layers.Input(10)
+        self.assertShapesEqual(layer.get_output_shape((None, 10)), (None, 10))
+        self.assertShapesEqual(layer.get_output_shape((5, 10)), (5, 10))
+
+        layer = layers.Input((None, None, 3))
+        self.assertShapesEqual(
+            layer.get_output_shape((None, 28, 28, 3)),
+            (None, 28, 28, 3),
+        )
+        self.assertShapesEqual(
+            layer.get_output_shape((None, None, 28, 3)),
+            (None, None, 28, 3),
+        )
+        self.assertShapesEqual(
+            layer.get_output_shape((10, 28, 28, None)),
+            (10, 28, 28, 3),
+        )
 
     def test_merged_inputs(self):
         network = layers.join(
