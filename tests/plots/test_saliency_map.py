@@ -12,7 +12,7 @@ class SaliencyMapTestCase(BaseTestCase):
     def test_invalid_arguments_exceptions(self):
         network = layers.join(
             layers.Input((28, 28, 3)),
-            layers.Convolution((3, 3, 8), name='conv') > layers.Relu(),
+            layers.Convolution((3, 3, 8), name='conv') >> layers.Relu(),
             layers.Reshape(),
             layers.Softmax(10),
         )
@@ -25,16 +25,24 @@ class SaliencyMapTestCase(BaseTestCase):
             plots.saliency_map(network, image, mode='invalid-mode')
 
         with self.assertRaises(InvalidConnection):
-            new_network = network > [
-                layers.Sigmoid(1), layers.Sigmoid(2)
-            ]
+            new_network = layers.join(
+                network,
+                layers.paralell(
+                    layers.Sigmoid(1),
+                    layers.Sigmoid(2),
+                )
+            )
             plots.saliency_map(new_network, image)
 
         with self.assertRaises(InvalidConnection):
-            new_network = [
-                layers.Input((28, 28, 3)), layers.Input((28, 28, 3))
-            ] > network.start('conv')
+            new_network = layers.join(
+                layers.parallel(
+                    layers.Input((28, 28, 3)),
+                    layers.Input((28, 28, 3)),
+                ),
+                network.start('conv'),
+            )
             plots.saliency_map(new_network, image)
 
         with self.assertRaisesRegexp(InvalidConnection, 'invalid input shape'):
-            plots.saliency_map(layers.Input(10) > layers.Relu(), image)
+            plots.saliency_map(layers.Input(10) >> layers.Relu(), image)

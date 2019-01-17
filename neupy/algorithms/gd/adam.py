@@ -1,6 +1,5 @@
 import tensorflow as tf
 
-from neupy.utils import asfloat
 from neupy.core.properties import (
     ProperFractionProperty,
     ScalarVariableProperty,
