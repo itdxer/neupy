@@ -307,18 +307,12 @@ class BaseGraph(ConfigurableABC, DumpableObject):
 
 
 class LayerGraph(BaseGraph):
-    def __init__(self, forward_graph=None, validate=True):
+    def __init__(self, forward_graph=None):
         super(LayerGraph, self).__init__(forward_graph)
 
-        if validate:
-            # This allows to run simple check that ensures that
-            # created graph have defined layer shape
-            self.output_shape
-
-    def reverse(self):
-        # This trick allow to avoid check between layers since
-        # layers in reverse order they might be incompatible
-        return self.__class__(self.backward_graph, validate=False)
+        # This allows to run simple check that ensures that
+        # created graph have defined layer shape
+        self.output_shape
 
     def clean_layer_references(self, layer_references):
         layers = []
@@ -330,36 +324,31 @@ class LayerGraph(BaseGraph):
 
         return layers
 
-    def end(self, *output_layers):
-        output_layers = self.clean_layer_references(output_layers)
+    def slice(self, directed_graph, layers):
+        layers = self.clean_layer_references(layers)
 
-        if all(layer not in self.forward_graph for layer in output_layers):
+        if all(layer not in self.forward_graph for layer in layers):
             return self.__class__()
 
         observed_layers = []
-        layers = copy.copy(output_layers)
+        layers = copy.copy(layers)
 
         while layers:
             current_layer = layers.pop()
             observed_layers.append(current_layer)
 
-            for next_layer in self.backward_graph[current_layer]:
+            for next_layer in directed_graph[current_layer]:
                 if next_layer not in observed_layers:
                     layers.append(next_layer)
 
         forward_subgraph = filter_graph(self.forward_graph, observed_layers)
         return self.__class__(forward_subgraph)
 
+    def end(self, *output_layers):
+        return self.slice(self.backward_graph, output_layers)
+
     def start(self, *input_layers):
-        input_layers = self.clean_layer_references(input_layers)
-
-        # Output layers for the reversed graph are
-        # input layers for normal graph
-        graph_reversed = self.reverse()
-        subgraph_reversed = graph_reversed.end(*input_layers)
-
-        # Reverse it to make normal graph
-        return subgraph_reversed.reverse()
+        return self.slice(self.forward_graph, input_layers)
 
     @lazy_property
     def layers(self):
