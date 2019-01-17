@@ -15,16 +15,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
     def setUp(self):
         super(MixtureOfExpertsTestCase, self).setUp()
         self.networks = [
-            algorithms.GradientDescent(
-                network=[
-                    layers.Input(1),
-                    layers.Sigmoid(20),
-                    layers.Sigmoid(1)
-                ],
-                step=0.2,
-                batch_size=None,
-                verbose=False
-            ),
+            layers.Input(1),
             layers.join(
                 layers.Input(1),
                 layers.Sigmoid(20),
@@ -45,7 +36,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                 layers.Concatenate(),
             )
             architectures.mixture_of_experts(
-                instances=self.networks + [last_network])
+                networks=self.networks + [last_network])
 
         with self.assertRaisesRegexp(ValueError, "has more than one output"):
             last_network = layers.join(
@@ -56,7 +47,7 @@ class MixtureOfExpertsTestCase(BaseTestCase):
                 ),
             )
             architectures.mixture_of_experts(
-                instances=self.networks + [last_network])
+                networks=self.networks + [last_network])
 
         error_message = (
             "Each network from the mixture of experts has to "
@@ -66,25 +57,25 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         with self.assertRaisesRegexp(ValueError, error_message):
             last_network = layers.Input((1, 1, 1))
             architectures.mixture_of_experts(
-                instances=self.networks + [last_network])
+                networks=self.networks + [last_network])
 
     def test_mixture_of_experts_problem_with_incompatible_networks(self):
         error_message = "Networks have incompatible input shapes."
         with self.assertRaisesRegexp(ValueError, error_message):
             architectures.mixture_of_experts(
-                instances=self.networks + [layers.Input(10)])
+                networks=self.networks + [layers.Input(10)])
 
         error_message = "Networks have incompatible output shapes."
         with self.assertRaisesRegexp(ValueError, error_message):
             architectures.mixture_of_experts(
-                instances=self.networks + [
+                networks=self.networks + [
                     layers.Input(1) >> layers.Relu(10)
                 ])
 
     def test_mixture_of_experts_init_gating_network_exceptions(self):
         with self.assertRaisesRegexp(ValueError, "Invalid type"):
             architectures.mixture_of_experts(
-                instances=self.networks,
+                networks=self.networks,
                 gating_layer=(layers.Input(1) >> layers.Softmax(2)))
 
         error_message = (
@@ -93,8 +84,29 @@ class MixtureOfExpertsTestCase(BaseTestCase):
         )
         with self.assertRaisesRegexp(LayerConnectionError, error_message):
             architectures.mixture_of_experts(
-                instances=self.networks,
+                networks=self.networks,
                 gating_layer=layers.Softmax(10))
+
+    def test_mixture_of_experts_undefined_features(self):
+        error_message = (
+            "Cannot create mixture of experts model, because "
+            "number of input features is unknown"
+        )
+        with self.assertRaisesRegexp(ValueError, error_message):
+            architectures.mixture_of_experts([
+                layers.Input(None) >> layers.Relu(10),
+                layers.Input(None) >> layers.Relu(10),
+            ])
+
+    def test_mixture_of_experts_non_network_inputs(self):
+        error_message = (
+            "Invalid input, Mixture of experts expects networks/layers"
+        )
+        with self.assertRaisesRegexp(TypeError, error_message):
+            architectures.mixture_of_experts([
+                layers.Input(5) >> layers.Relu(10),
+                [layers.Input(5), layers.Relu(10)]
+            ])
 
     def test_mixture_of_experts_multi_class_classification(self):
         insize, outsize = (10, 3)

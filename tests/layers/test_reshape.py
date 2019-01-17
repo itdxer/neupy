@@ -1,7 +1,7 @@
 import numpy as np
 
 from neupy import layers
-from neupy.utils import asfloat
+from neupy.utils import asfloat, tf_utils
 from neupy.exceptions import LayerConnectionError
 
 from base import BaseTestCase
@@ -80,6 +80,25 @@ class ReshapeLayerTestCase(BaseTestCase):
             "Reshape((5, 2), name='reshape-layer')",
             str(layer))
 
+    def test_partially_defined_input_shape(self):
+        network = layers.join(
+            layers.Input((None, None, 3)),
+            layers.Convolution((3, 3, 5)),
+            layers.Reshape((-1, 5)),
+        )
+
+        self.assertShapesEqual(network.input_shape, (None, None, None, 3))
+        self.assertShapesEqual(network.output_shape, (None, None, 5))
+
+        x = network.inputs
+        y = network.outputs
+        session = tf_utils.tensorflow_session()
+
+        images = np.random.random((2, 10, 10, 3))
+        output = session.run(y, feed_dict={x: images})
+
+        self.assertEqual(output.shape, (2, 64, 5))
+
 
 class TransposeTestCase(BaseTestCase):
     def test_simple_transpose(self):
@@ -122,3 +141,12 @@ class TransposeTestCase(BaseTestCase):
         self.assertEqual(
             "Transpose((0, 2, 1), name='test')",
             str(layer))
+
+    def test_transpose_undefined_input_shape(self):
+        network = layers.Transpose((1, 0, 2))
+        self.assertShapesEqual(network.input_shape, None)
+        self.assertShapesEqual(network.output_shape, (None, None, None))
+
+        network = layers.Transpose((1, 0))
+        self.assertShapesEqual(network.input_shape, None)
+        self.assertShapesEqual(network.output_shape, (None, None))

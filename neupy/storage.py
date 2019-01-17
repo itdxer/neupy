@@ -9,7 +9,8 @@ from six.moves import cPickle as pickle
 
 import neupy
 from neupy.core.docs import shared_docs
-from neupy.layers.utils import extract_network
+from neupy.layers.base import LayerGraph
+from neupy.algorithms.base import BaseNetwork
 from neupy.utils import asfloat, tf_utils
 
 
@@ -34,6 +35,18 @@ class InvalidFormat(Exception):
     Exception triggers when there are some issue with
     data format that stores network data.
     """
+
+
+def extract_network(instance):
+    if isinstance(instance, BaseNetwork):
+        return instance.network
+
+    if isinstance(instance, LayerGraph):
+        return instance
+
+    raise TypeError(
+        "Invalid input type. Input should be network or optimizer "
+        "with network, got `{}` instance instead".format(type(instance)))
 
 
 def load_layer_parameter(layer, layer_data):

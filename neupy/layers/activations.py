@@ -96,16 +96,14 @@ class Linear(BaseLayer):
             return
 
         input_shape = tf.TensorShape(input_shape)
-
-        if input_shape.ndims != 2:
-            raise WeightInitializationError(
-                "Cannot initialize variables for the layer `{}`, because "
-                "expected input shape has to be 2 dimensional, got input "
-                "with shape {}. Layer: {}".format(
-                    self.name, input_shape.ndims, input_shape, self))
-
         self.input_shape = input_shape
         _, n_input_features = input_shape
+
+        if n_input_features.value is None:
+            raise WeightInitializationError(
+                "Cannot create variables for the layer `{}`, because "
+                "number of input features is unknown. Input shape: {}"
+                "Layer: {}".format(self.name, input_shape, self))
 
         self.weight = self.variable(
             value=self.weight, name='weight',
@@ -162,6 +160,11 @@ class Sigmoid(Linear):
 
     Examples
     --------
+    Logistic Regression (LR)
+
+    >>> from neupy.layers import *
+    >>> network = Input(10) >> Sigmoid(1)
+
     Feedforward Neural Networks (FNN)
 
     >>> from neupy.layers import *

@@ -236,6 +236,17 @@ class ConvLayersTestCase(BaseTestCase):
         ])
         np.testing.assert_array_almost_equal(actual_output, expected_output)
 
+    def test_convolution_repr(self):
+        layer = layers.Convolution((3, 3, 10), name='conv')
+        self.assertEqual(
+            str(layer),
+            (
+                "Convolution((3, 3, 10), padding='VALID', stride=(1, 1), "
+                "dilation=(1, 1), weight=HeNormal(gain=2), bias=Constant(0), "
+                "name='conv')"
+            )
+        )
+
 
 class DeconvolutionTestCase(BaseTestCase):
     def test_deconvolution(self):
@@ -415,3 +426,13 @@ class DeconvolutionTestCase(BaseTestCase):
             input_value = asfloat(np.random.random((1, height, width, 1)))
             actual_output = self.eval(network.output(input_value))
             self.assertEqual(actual_output.shape[1:], network.output_shape[1:])
+
+    def test_deconvolution_repr(self):
+        layer = layers.Deconvolution((3, 3, 10), name='deconv')
+        self.assertEqual(
+            str(layer),
+            (
+                "Deconvolution((3, 3, 10), padding='VALID', stride=(1, 1), "
+                "weight=HeNormal(gain=2), bias=Constant(0), name='deconv')"
+            )
+        )

@@ -218,7 +218,7 @@ class BaseGraph(ConfigurableABC, DumpableObject):
             )
             placeholders.append(placeholder)
 
-        return placeholders
+        return make_one_if_possible(placeholders)
 
     @lazy_property
     def targets(self):
@@ -232,7 +232,7 @@ class BaseGraph(ConfigurableABC, DumpableObject):
             )
             placeholders.append(placeholder)
 
-        return placeholders
+        return make_one_if_possible(placeholders)
 
     @lazy_property
     def outputs(self):
@@ -814,7 +814,7 @@ class BaseLayer(BaseGraph):
 
             for name, datatype in references.items():
                 if isinstance(value, datatype):
-                    return '{}(shape={})'.format(name, value.shape)
+                    return '<{} shape={}>'.format(name, value.shape)
 
             return repr(value)
 

@@ -105,7 +105,7 @@ class Reshape(BaseLayer):
             # For cases when we have -1 in the shape and feature shape
             # can be precomputed from the input we want to be explicit about
             # expected output shape. Because of the unknown batch dimension
-            # it won't be possible to tensorflow to derive exact output
+            # it won't be possible for tensorflow to derive exact output
             # shape from the -1
             output_shape = as_tuple(n_samples, feature_shape.dims)
         else:
@@ -156,12 +156,17 @@ class Transpose(BaseLayer):
     def fail_if_shape_invalid(self, input_shape):
         if input_shape and max(self.perm) >= input_shape.ndims:
             raise LayerConnectionError(
-                "Cannot apply transpose operation to the input. "
-                "Permuntation: {}, Shape: {}".format(self.perm, input_shape))
+                "Cannot apply transpose operation to the "
+                "input. Permuntation: {}, Input shape: {}"
+                "".format(self.perm, input_shape))
 
     def get_output_shape(self, input_shape):
         input_shape = tf.TensorShape(input_shape)
         self.fail_if_shape_invalid(input_shape)
+
+        if input_shape.ndims is None:
+            n_dims_expected = len(self.perm)
+            return tf.TensorShape([None] * n_dims_expected)
 
         input_shape = np.array(input_shape.dims)
         perm = list(self.perm)

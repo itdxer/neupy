@@ -101,15 +101,14 @@ class BasePooling(BaseLayer):
         if input_shape and input_shape.ndims != 4:
             raise LayerConnectionError(
                 "Pooling layer expects an input with 4 "
-                "dimensions, got {} with shape {}"
-                "".format(len(input_shape), input_shape))
+                "dimensions, got {} with shape {}. Layer: {}"
+                "".format(len(input_shape), input_shape, self))
 
     def get_output_shape(self, input_shape):
         input_shape = tf.TensorShape(input_shape)
-        n_samples = input_shape[0]
 
         if input_shape.ndims is None:
-            return tf.TensorShape((n_samples, None, None, None))
+            return tf.TensorShape((None, None, None, None))
 
         self.fail_if_shape_invalid(input_shape)
 

@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from collections import namedtuple
 
 import numpy as np
+import progressbar
 from sklearn.datasets import make_classification
 
 from neupy import algorithms, layers
@@ -169,11 +170,15 @@ class SignalsTestCase(BaseTestCase):
         for case in cases:
             with catch_stdout() as out:
                 bpnet = algorithms.GradientDescent(
-                    layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
+                    layers.join(
+                        layers.Input(2),
+                        layers.Sigmoid(3),
+                        layers.Sigmoid(1),
+                    ),
                     step=0.1,
                     verbose=True,
                     batch_size=None,
-                    show_epoch=case.show_epoch
+                    show_epoch=case.show_epoch,
                 )
                 bpnet.train(x_train, y_train, epochs=case.n_epochs)
                 terminal_output = out.getvalue()
@@ -190,7 +195,11 @@ class SignalsTestCase(BaseTestCase):
     def test_network_training_summary(self):
         with catch_stdout() as out:
             network = algorithms.GradientDescent(
-                layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
+                layers.join(
+                    layers.Input(2),
+                    layers.Sigmoid(3),
+                    layers.Sigmoid(1),
+                ),
                 verbose=False,
                 batch_size=None,
             )
@@ -217,3 +226,50 @@ class SignalsTestCase(BaseTestCase):
         self.assertEqual("100 ms", format_time(0.1))
         self.assertEqual("10 μs", format_time(1e-5))
         self.assertEqual("200 ns", format_time(2e-7))
+
+    def test_progressbar_signal(self):
+        x_train = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+        y_train = np.array([[1, 0, 0, 1]]).T
+
+        class BatchStartSignal(object):
+            def update_end(self, network):
+                progressbar_signal = network.events.signals[0]
+                bar = progressbar_signal.bar
+
+                if isinstance(bar, progressbar.NullBar):
+                    network.nullbar += 1
+                else:
+                    network.otherbar += 1
+
+        network = algorithms.GradientDescent(
+            layers.join(
+                layers.Input(2),
+                layers.Sigmoid(1),
+            ),
+            verbose=False,
+            batch_size=2,
+            signals=BatchStartSignal
+        )
+
+        network.nullbar = 0
+        network.otherbar = 0
+
+        network.verbose = True
+        network.train(x_train, y_train, epochs=10)
+
+        self.assertEqual(network.nullbar, 0)
+        self.assertEqual(network.otherbar, 20)
+
+        network.verbose = True
+        network.batch_size = 10
+        network.train(x_train, y_train, epochs=10)
+
+        self.assertEqual(network.nullbar, 10)
+        self.assertEqual(network.otherbar, 20)
+
+        network.verbose = False
+        network.batch_size = 1
+        network.train(x_train, y_train, epochs=10)
+
+        self.assertEqual(network.nullbar, 50)
+        self.assertEqual(network.otherbar, 20)

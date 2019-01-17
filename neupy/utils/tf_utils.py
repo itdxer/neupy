@@ -1,5 +1,6 @@
 from functools import wraps
 
+import numpy as np
 import tensorflow as tf
 
 from neupy.utils.misc import as_tuple
@@ -295,15 +296,16 @@ def create_variable(value, name, shape, trainable=True):
     if shape is not None:
         shape = shape_to_tuple(shape)
 
-    if isinstance(value, (tf.Variable, tf.Tensor)):
+    if isinstance(value, (tf.Variable, tf.Tensor, np.ndarray, np.matrix)):
         variable_shape = shape_to_tuple(value.shape)
 
         if as_tuple(variable_shape) != as_tuple(shape):
             raise ValueError(
-                "Cannot create variable with name {}. Provided variable "
+                "Cannot create variable with name `{}`. Provided variable "
                 "with shape {} is incompatible with expected shape {}"
                 "".format(name, variable_shape, shape))
 
+    if isinstance(value, (tf.Variable, tf.Tensor)):
         return value
 
     if isinstance(value, (int, float)):

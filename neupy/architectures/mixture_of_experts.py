@@ -2,13 +2,19 @@ import tensorflow as tf
 
 from neupy import layers
 from neupy.utils import tf_utils, as_tuple
-from neupy.layers.utils import extract_network
+from neupy.layers.base import BaseGraph
 
 
 __all__ = ('mixture_of_experts',)
 
 
 def check_if_network_is_valid(network, index):
+    if not isinstance(network, BaseGraph):
+        raise TypeError(
+            "Invalid input, Mixture of experts expects networks/layers"
+            "in the list of networks, got `{}` instance instead"
+            "".format(type(network)))
+
     if len(network.input_layers) > 1:
         raise ValueError(
             "Each network from the mixture of experts has to process single "
@@ -51,7 +57,7 @@ def check_if_networks_compatible(networks):
                 "".format(tf_utils.shape_to_tuple(output_shapes)))
 
 
-def mixture_of_experts(instances, gating_layer=None):
+def mixture_of_experts(networks, gating_layer=None):
     """
     Generates mixture of experts architecture from the set of
     networks that has the same input and output shapes.
@@ -65,11 +71,7 @@ def mixture_of_experts(instances, gating_layer=None):
 
     Parameters
     ----------
-    instances : list of networks or optimizers
-        These networks will be combine into mixture of experts.
-        Every network should have single 1D input layer and
-        single output layer. Another restriction is that all networks
-        should expect the same input and output layers.
+    networks : list of networks/layers
 
     gating_layer : None or layer
         In case if value equal to `None` that the following layer
@@ -120,14 +122,11 @@ def mixture_of_experts(instances, gating_layer=None):
     >>>
     >>> gdnet = algorithms.Momentum(network, step=0.1)
     """
-    if not isinstance(instances, (list, tuple)):
+    if not isinstance(networks, (list, tuple)):
         raise ValueError("Networks should be specified as a list")
 
-    networks = []
-    for index, instance in enumerate(instances):
-        network = extract_network(instance)
+    for index, network in enumerate(networks):
         check_if_network_is_valid(network, index)
-        networks.append(network)
 
     check_if_networks_compatible(networks)
     input_shape = tf.TensorShape(None)

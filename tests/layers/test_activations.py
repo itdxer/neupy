@@ -1,9 +1,13 @@
 import math
 
 import numpy as np
+import tensorflow as tf
 
 from neupy.utils import asfloat
-from neupy.exceptions import LayerConnectionError
+from neupy.exceptions import (
+    LayerConnectionError,
+    WeightInitializationError,
+)
 from neupy import layers, algorithms, init
 
 from base import BaseTestCase
@@ -75,6 +79,50 @@ class ActivationLayerMainTestCase(BaseTestCase):
         error_message = "Cannot connect layer `in` to layer `relu`"
         with self.assertRaisesRegexp(LayerConnectionError, error_message):
             layers.join(layers.Input(7, name='in'), network.layer('relu'))
+
+    def test_invalid_input_shape(self):
+        error_message = (
+            "Input shape expected to have 2 "
+            "dimensions, got 3 instead. Shape: \(\?, 10, 3\)"
+        )
+        with self.assertRaisesRegexp(LayerConnectionError, error_message):
+            layers.join(
+                layers.Input((10, 3)),
+                layers.Linear(10),
+            )
+
+    def test_unknwown_feature_during_weight_init(self):
+        network = layers.join(
+            layers.Input(None),
+            layers.Linear(10, name='linear'),
+        )
+
+        message = (
+            "Cannot create variables for the layer `linear`, "
+            "because number of input features is unknown. "
+            "Input shape: \(\?, \?\)"
+        )
+        with self.assertRaisesRegexp(WeightInitializationError, message):
+            network.create_variables()
+
+        with self.assertRaisesRegexp(WeightInitializationError, message):
+            network.outputs
+
+    def test_invalid_weight_shape(self):
+        network = layers.join(
+            layers.Input(5),
+            layers.Linear(4, weight=np.ones((3, 3))),
+        )
+        with self.assertRaisesRegexp(ValueError, "Cannot create variable"):
+            network.create_variables()
+
+        variable = tf.Variable(np.ones((3, 3)), dtype=tf.float32)
+        network = layers.join(
+            layers.Input(5),
+            layers.Linear(4, weight=variable),
+        )
+        with self.assertRaisesRegexp(ValueError, "Cannot create variable"):
+            network.create_variables()
 
 
 class ActivationLayersTestCase(BaseTestCase):

@@ -8,9 +8,8 @@ from neupy.core.properties import (
 from neupy.utils.tf_utils import setup_parameter_updates
 from neupy.algorithms.minsearch.wolfe import line_search
 from neupy.utils import (
-    asfloat, dot, outer,
-    function_name_scope,
-    make_single_vector,
+    asfloat, dot, outer, as_tuple,
+    function_name_scope, make_single_vector,
 )
 from .base import BaseOptimizer
 
@@ -45,7 +44,7 @@ class WolfeLineSearchForStep(Configurable):
     wolfe_c2 = NumberProperty(default=0.9, minval=0)
 
     def find_optimal_step(self, parameter_vector, parameter_update):
-        network_inputs = self.network.inputs
+        network_inputs = as_tuple(self.network.inputs)
         layers_and_parameters = list(self.network.variables.items())
 
         def prediction(step):
