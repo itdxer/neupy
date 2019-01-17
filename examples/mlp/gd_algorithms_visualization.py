@@ -85,11 +85,7 @@ def draw_quiver(network_class, name, color='r'):
     global weights
     global current_epoch
 
-    bpn = network_class(
-        get_connection(),
-        step=0.3,
-        epoch_end_signal=save_epoch_weight
-    )
+    bpn = network_class(get_connection(), epoch_end_signal=save_epoch_weight)
 
     # We don't know in advance number of epochs that network
     # need to reach the goal. For this reason we use 1000 as
@@ -139,20 +135,12 @@ draw_countour(
     network_target_function
 )
 
-cgnet_class = partial(
-    algorithms.GradientDescent,
-    addons=[algorithms.LinearSearch],
-    batch_size='all',
-    search_method='golden',
-)
-momentum_class = partial(algorithms.Momentum, batch_size='full')
-
 algorithms = (
-    (algorithms.GradientDescent, 'Gradient Descent', 'k'),
-    (momentum_class, 'Momentum', 'g'),
-    (algorithms.RPROP, 'RPROP', 'm'),
-    (algorithms.IRPROPPlus, 'iRPROP+', 'r'),
-    (cgnet_class, 'Gradient Descent and\nGolden Search', 'y'),
+    (partial(algorithms.GradientDescent, step=0.3), 'Gradient Descent', 'k'),
+    (partial(algorithms.Momentum, batch_size='full', step=0.3), 'Momentum', 'g'),
+    (partial(algorithms.RPROP, step=0.3), 'RPROP', 'm'),
+    (partial(algorithms.IRPROPPlus, step=0.3), 'iRPROP+', 'r'),
+    (partial(algorithms.Hessian, penalty_const=0.01), "Newton's method", 'y'),
 )
 
 patches = []

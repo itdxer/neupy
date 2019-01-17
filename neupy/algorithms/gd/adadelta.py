@@ -1,6 +1,10 @@
 import tensorflow as tf
 
-from neupy.core.properties import ProperFractionProperty, NumberProperty
+from neupy.core.properties import (
+    ProperFractionProperty,
+    ScalarVariableProperty,
+    NumberProperty,
+)
 from .base import GradientDescent
 
 
@@ -67,7 +71,7 @@ class Adadelta(GradientDescent):
         ADADELTA: An Adaptive Learning Rate Method
         https://arxiv.org/pdf/1212.5701.pdf
     """
-    step = NumberProperty(default=1.0, minval=0)
+    step = ScalarVariableProperty(default=1.0)
     decay = ProperFractionProperty(default=0.95)
     epsilon = NumberProperty(default=1e-7, minval=0)
 

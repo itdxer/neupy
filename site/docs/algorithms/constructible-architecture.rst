@@ -182,7 +182,7 @@ Loss function should return a scalar, because during the training output from th
 Add-ons
 -------
 
-Algorithms with constructible architectures allow to use additional update rules for parameter regularization and learning rate updates. For instance, we want to add :network:`Weight Decay <WeightDecay>` regularization and we want to minimize step monotonically after each epoch.
+Algorithms with constructible architectures allow to use additional update rules for parameter regularization. For instance, we want to add :network:`Weight Decay <WeightDecay>` regularization.
 
 .. code-block:: python
 
@@ -198,11 +198,10 @@ Algorithms with constructible architectures allow to use additional update rules
         step=0.1,
         batch_size=16,
 
-        addons=[algorithms.WeightDecay,
-                algorithms.StepDecay]
+        addons=[algorithms.WeightDecay]
     )
 
-Both :network:`WeightDecay` and :network:`StepDecay` algorithms have additional parameters. In case if we need to modify them we can add them to the training algorithm.
+The :network:`WeightDecay` have additional parameters. In case if we need to modify them we can add them to the training algorithm.
 
 .. code-block:: python
 
@@ -220,14 +219,10 @@ Both :network:`WeightDecay` and :network:`StepDecay` algorithms have additional 
         step=0.1,
         batch_size=16,
 
-        # Parameters from StepDecay
-        reduction_freq=50,
-
         # Parameters from WeightDecay
         decay_rate=0.05,
 
-        addons=[algorithms.WeightDecay,
-                algorithms.StepDecay]
+        addons=[algorithms.WeightDecay]
     )
 
 NeuPy doesn't allow to use multiple regularizations and step update add-ons for training algorithm.

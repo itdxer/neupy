@@ -171,7 +171,6 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseGradientDescent):
         )
 
     def init_train_updates(self):
-        step = self.variables.step
         epoch = self.variables.epoch
         previous_delta = self.variables.prev_delta
         previous_gradient = self.variables.prev_gradient

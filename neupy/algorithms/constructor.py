@@ -10,7 +10,10 @@ from neupy.layers.utils import preformat_layer_shape
 from neupy.layers.connections import LayerConnection, is_sequential
 from neupy.layers.connections.base import create_input_variables
 from neupy.exceptions import InvalidConnection
-from neupy.core.properties import FunctionWithOptionsProperty
+from neupy.core.properties import (
+    FunctionWithOptionsProperty,
+    ScalarVariableProperty,
+)
 from neupy.algorithms.base import BaseNetwork
 from neupy.utils import (
     AttributeKeyDict, asfloat, format_data, as_tuple,
@@ -233,7 +236,18 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
             def custom_func(expected, predicted):
                 return expected - predicted
 
-    {BaseNetwork.Parameters}
+    step : float, Variable
+        Learning rate, defaults to ``0.1``.
+
+    {BaseNetwork.show_epoch}
+
+    {BaseNetwork.shuffle_data}
+
+    {BaseNetwork.epoch_end_signal}
+
+    {BaseNetwork.train_end_signal}
+
+    {BaseNetwork.verbose}
 
     Attributes
     ----------
@@ -253,6 +267,7 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
 
     {BaseSkeleton.fit}
     """
+    step = ScalarVariableProperty(default=0.1)
     error = FunctionWithOptionsProperty(default='mse', choices={
         'mae': errors.mae,
         'mse': errors.mse,
@@ -303,11 +318,7 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
             prediction = self.connection.output(*network_inputs)
 
         self.variables.update(
-            step=tf.Variable(
-                asfloat(self.step),
-                name='network/scalar-step',
-                dtype=tf.float32
-            ),
+            step=self.step,
             epoch=tf.Variable(
                 asfloat(self.last_epoch),
                 name='network/scalar-epoch',
@@ -330,6 +341,10 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
 
             for layer in self.layers:
                 training_updates.extend(layer.updates)
+
+            for variable in self.variables.values():
+                if hasattr(variable, 'updates'):
+                    training_updates.extend(variable.updates)
 
         initialize_uninitialized_variables()
 
@@ -522,5 +537,5 @@ class ConstructibleNetwork(BaseAlgorithm, BaseNetwork):
         self.logs.newline()
 
     def __repr__(self):
-        return "{}({}, {})".format(self.class_name(), self.connection,
-                                   self.repr_options())
+        return "{}({}, {})".format(
+            self.class_name(), self.connection, self.repr_options())

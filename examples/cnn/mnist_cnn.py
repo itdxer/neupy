@@ -58,8 +58,15 @@ network = algorithms.Momentum(
     # Mini-batch size
     batch_size=128,
 
-    # Learning rate
-    step=0.05,
+    # Step == Learning rate
+    # Step decay algorithm minimizes learning step
+    # monotonically after each iteration.
+    step=algorithms.step_decay(
+        initial_value=0.05,
+        # Parameter controls step redution frequency. The higher
+        # the value the slower step parameter decreases.
+        reduction_freq=500,
+    ),
 
     # Shows information about algorithm and
     # training progress in terminal
@@ -67,13 +74,6 @@ network = algorithms.Momentum(
 
     # Randomly shuffles training dataset before every epoch
     shuffle_data=True,
-
-    # Step decay algorithm minimizes learning step
-    # monotonically after each iteration.
-    addons=[algorithms.StepDecay],
-    # Parameter controls step redution frequency. The higher
-    # the value the slower step parameter decreases.
-    reduction_freq=8,
 )
 
 # Shows networks architecture in terminal's output

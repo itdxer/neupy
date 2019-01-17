@@ -58,16 +58,6 @@ class BaseGradientDescentTestCase(BaseTestCase):
             addons=[algorithms.WeightDecay],
             verbose=False,
         )
-        algorithms.BaseGradientDescent(
-            (2, 3, 1),
-            addons=[algorithms.SearchThenConverge],
-            verbose=False,
-        )
-        algorithms.BaseGradientDescent(
-            (2, 3, 1),
-            addons=[algorithms.WeightDecay, algorithms.SearchThenConverge],
-            verbose=False
-        )
 
     def test_minibatch_gd(self):
         x_train, _, y_train, _ = simple_classification()

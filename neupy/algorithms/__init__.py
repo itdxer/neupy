@@ -11,16 +11,11 @@ from .gd.adagrad import *
 from .gd.rmsprop import *
 from .gd.adam import *
 from .gd.adamax import *
+from .gd.step_updates import *
 
 from .regularization.weight_decay import *
 from .regularization.weight_elimination import *
 from .regularization.max_norm import *
-
-from .step_update.step_decay import *
-from .step_update.search_then_converge import *
-from .step_update.errdiff import *
-from .step_update.leak_step import *
-from .step_update.linear_search import *
 
 from .memory.discrete_hopfield_network import *
 from .memory.bam import *

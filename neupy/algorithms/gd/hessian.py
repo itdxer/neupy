@@ -115,7 +115,6 @@ class Hessian(StepSelectionBuiltIn, BaseGradientDescent):
     :network:`HessianDiagonal` : Hessian diagonal approximation.
     """
     penalty_const = BoundedProperty(default=1, minval=0)
-
     step = WithdrawProperty()
 
     def init_train_updates(self):
