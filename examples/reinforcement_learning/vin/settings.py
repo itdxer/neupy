@@ -68,7 +68,7 @@ environments = {
             decay=0.9,
             epsilon=1e-6,
             step=0.01,
-            batch_size=36,
+            batch_size=12,
         )
     ),
 }
