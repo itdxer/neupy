@@ -1,6 +1,9 @@
 import tensorflow as tf
 
-from neupy.core.properties import ProperFractionProperty, NumberProperty
+from neupy.core.properties import (
+    ProperFractionProperty,
+    NumberProperty, Property,
+)
 from .base import GradientDescent
 
 
@@ -22,6 +25,13 @@ class RMSProp(GradientDescent):
 
     epsilon : float
         Value need to be greater than ``0``. Defaults to ``1e-7``.
+
+    centered : bool
+        (from Tensorflow documentation) If ``True``, gradients are
+        normalized by the estimated variance of the gradient; if ``False``,
+        by the uncentered second moment. Setting this to ``True`` may
+        help with training, but is slightly more expensive in terms
+        of computation and memory. Defaults to ``False``.
 
     {GradientDescent.Parameters}
 
@@ -49,11 +59,13 @@ class RMSProp(GradientDescent):
     decay = ProperFractionProperty(default=0.95)
     momentum = NumberProperty(default=0, minval=0)
     epsilon = NumberProperty(default=1e-7, minval=0)
+    centered = Property(default=False, expected_type=bool)
 
     def init_train_updates(self):
         optimizer = tf.train.RMSPropOptimizer(
             decay=self.decay,
             momentum=self.momentum,
+            centered=self.centered,
             epsilon=self.epsilon,
             learning_rate=self.step,
         )
