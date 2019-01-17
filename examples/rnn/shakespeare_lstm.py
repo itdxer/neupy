@@ -3,10 +3,8 @@ import os
 import numpy as np
 from tqdm import trange
 from sklearn.model_selection import train_test_split
-from neupy import layers, algorithms, utils
+from neupy import layers, algorithms
 
-
-utils.reproducible()
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 FILES_DIR = os.path.join(CURRENT_DIR, 'files')

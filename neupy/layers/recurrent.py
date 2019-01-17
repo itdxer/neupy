@@ -613,7 +613,6 @@ class GRU(BaseRNNLayer):
                     hid_previous - updategate * (hid_previous - hidden_update)
                 ]
 
-
         input_shape = tf.shape(input)
         n_samples = input_shape[1]  # batch dim has been moved
         hidden_init = tf.tile(self.hidden_init, (n_samples, 1))

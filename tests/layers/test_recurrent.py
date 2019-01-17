@@ -69,7 +69,7 @@ class LSTMTestCase(BaseTestCase):
                 layers.Sigmoid(1),
             ],
 
-            step=0.01,
+            step=0.05,
             verbose=verbose,
             batch_size=16,
             loss='binary_crossentropy',

@@ -27,7 +27,7 @@ class SaliencyMapTestCase(BaseTestCase):
         with self.assertRaises(InvalidConnection):
             new_network = layers.join(
                 network,
-                layers.paralell(
+                layers.parallel(
                     layers.Sigmoid(1),
                     layers.Sigmoid(2),
                 )
