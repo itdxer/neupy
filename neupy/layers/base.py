@@ -17,12 +17,7 @@ import tensorflow as tf
 from neupy.core.config import ConfigurableABC, DumpableObject
 from neupy.exceptions import LayerConnectionError
 from neupy.core.properties import Property, TypedListProperty
-from neupy.utils import (
-    as_tuple, tensorflow_session,
-    initialize_uninitialized_variables,
-    class_method_name_scope, shape_to_tuple,
-    tf_utils,
-)
+from neupy.utils import as_tuple, tf_utils
 
 
 __all__ = (
@@ -218,7 +213,7 @@ class BaseGraph(ConfigurableABC, DumpableObject):
         for layer in self.input_layers:
             placeholder = tf.placeholder(
                 tf.float32,
-                shape=shape_to_tuple(layer.input_shape),
+                shape=tf_utils.shape_to_tuple(layer.input_shape),
                 name="placeholder/input/{}".format(layer.name),
             )
             placeholders.append(placeholder)
@@ -232,7 +227,7 @@ class BaseGraph(ConfigurableABC, DumpableObject):
         for layer in self.output_layers:
             placeholder = tf.placeholder(
                 tf.float32,
-                shape=shape_to_tuple(layer.output_shape),
+                shape=tf_utils.shape_to_tuple(layer.output_shape),
                 name="placeholder/target/{}".format(layer.name),
             )
             placeholders.append(placeholder)
@@ -242,13 +237,13 @@ class BaseGraph(ConfigurableABC, DumpableObject):
     @lazy_property
     def outputs(self):
         networks_output = self.output(*as_tuple(self.inputs))
-        initialize_uninitialized_variables()
+        tf_utils.initialize_uninitialized_variables()
         return networks_output
 
     @lazy_property
     def training_outputs(self):
         networks_output = self.output(*as_tuple(self.inputs), training=True)
-        initialize_uninitialized_variables()
+        tf_utils.initialize_uninitialized_variables()
         return networks_output
 
     def __gt__(self, other):
@@ -536,7 +531,7 @@ class LayerGraph(BaseGraph):
         return n_parameters
 
     def predict(self, *inputs):
-        session = tensorflow_session()
+        session = tf_utils.tensorflow_session()
         feed_dict = dict(zip(as_tuple(self.inputs), inputs))
         return session.run(self.outputs, feed_dict=feed_dict)
 
@@ -777,7 +772,7 @@ class BaseLayer(BaseGraph):
         # This decorator ensures that result produced by the
         # `output` method will be marked under layer's name scope.
         self.output = types.MethodType(
-            class_method_name_scope(self.output), self)
+            tf_utils.class_method_name_scope(self.output), self)
 
     @property
     def input_shape(self):
@@ -905,7 +900,7 @@ class Input(BaseLayer):
         super(Input, self).__init__(name=name)
 
         if isinstance(shape, tf.TensorShape):
-            shape = shape_to_tuple(shape)
+            shape = tf_utils.shape_to_tuple(shape)
 
         self.shape = as_tuple(shape)
 

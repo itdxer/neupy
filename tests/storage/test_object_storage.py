@@ -66,7 +66,7 @@ class BasicStorageTestCase(BaseTestCase):
 
     @unittest.skipIf(six.PY2, "doesn't work for python 2")
     def test_non_initialized_graph_storage(self):
-        network = layers.Relu(10) > layers.Relu(2)  # no input layer
+        network = layers.Relu(10) >> layers.Relu(2)  # no input layer
 
         with tempfile.NamedTemporaryFile() as temp:
             pickle.dump(network, temp)
@@ -74,16 +74,18 @@ class BasicStorageTestCase(BaseTestCase):
 
             network_restored = pickle.load(temp)
 
-            self.assertFalse(network_restored.layers[0].initialized)
+            self.assertFalse(network_restored.layers[0].frozen)
             self.assertIsInstance(
                 network_restored.layers[0].weight,
                 init.Initializer,
             )
 
-            self.assertTrue(network_restored.layers[1].initialized)
-            np.testing.assert_array_equal(
-                self.eval(network.layers[1].weight),
-                self.eval(network_restored.layers[1].weight)
+            # Loaded parmeters are not variables and we
+            # expect layer not to be frozen
+            self.assertFalse(network_restored.layers[1].frozen)
+            self.assertIsInstance(
+                network_restored.layers[1].weight,
+                init.Initializer,
             )
 
     def test_basic_storage(self):

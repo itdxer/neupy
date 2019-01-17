@@ -103,7 +103,7 @@ class HessianDiagonal(BaseOptimizer):
     min_eigval = ProperFractionProperty(default=1e-2)
 
     def init_train_updates(self):
-        step = self.variables.step
+        step = self.step
         inv_min_eigval = 1 / self.min_eigval
         variables = self.network.variables
         parameters = [var for var in variables.values() if var.trainable]

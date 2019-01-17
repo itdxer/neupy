@@ -14,18 +14,18 @@ class HDF5StorageTestCase(BaseTestCase):
     def test_simple_storage_hdf5(self):
         network_1 = layers.join(
             layers.Input(10),
-            [
+            layers.parallel(
                 layers.Sigmoid(5),
                 layers.Relu(5),
-            ],
+            ),
             layers.Elementwise(),
         )
         network_2 = layers.join(
             layers.Input(10),
-            [
+            layers.parallel(
                 layers.Sigmoid(5),
                 layers.Relu(5),
-            ],
+            ),
             layers.Elementwise(),
         )
 

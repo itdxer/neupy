@@ -22,12 +22,12 @@ class StepUpdateTestCase(BaseTestCase):
             nesterov=True,
         )
 
-        step = self.eval(optimizer.variables.step)
+        step = self.eval(optimizer.step)
         self.assertAlmostEqual(step, initial_value)
 
         optimizer.train(x_train, y_train, x_test, y_test, epochs=epochs)
 
-        step = self.eval(optimizer.variables.step)
+        step = self.eval(optimizer.step)
         self.assertAlmostEqual(step, final_value)
 
     def test_step_decay(self):

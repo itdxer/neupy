@@ -10,8 +10,7 @@ from six.moves import cPickle as pickle
 import neupy
 from neupy.core.docs import shared_docs
 from neupy.layers.utils import extract_network
-from neupy.utils import (asfloat, tensorflow_session,
-                         initialize_uninitialized_variables)
+from neupy.utils import asfloat, tf_utils
 
 
 __all__ = (
@@ -37,39 +36,12 @@ class InvalidFormat(Exception):
     """
 
 
-def validate_layer_compatibility(layer, layer_data):
-    """
-    Checkes if it's possible to load stored data in the
-    specified layer.
-
-    Raises
-    ------
-    ParameterLoaderError
-        When there are some problems with stored data.
-    """
-    expected_input_shape = layer_data['input_shape']
-    expected_output_shape = layer_data['output_shape']
-
-    if list(expected_input_shape) != list(layer.input_shape):
-        raise ParameterLoaderError(
-            "Layer `{}` from file has input shape equal to {}, "
-            "but specified shape is {}"
-            "".format(layer.name, expected_input_shape, layer.input_shape))
-
-    if list(expected_output_shape) != list(layer.output_shape):
-        raise ParameterLoaderError(
-            "Layer `{}` from file has output shape equal to {}, "
-            "but specified shape is {}"
-            "".format(layer.name, expected_output_shape,
-                      layer.output_shape))
-
-
 def load_layer_parameter(layer, layer_data):
     """
     Set layer parameters to the values specified in the
     stored data
     """
-    session = tensorflow_session()
+    session = tf_utils.tensorflow_session()
 
     for param_name, param_data in layer_data['parameters'].items():
         parameter = getattr(layer, param_name)
@@ -83,8 +55,7 @@ def load_layer_parameter(layer, layer_data):
         parameter.load(asfloat(param_data['value']), session)
 
 
-def load_dict_by_names(layers_conn, layers_data, ignore_missing=False,
-                       skip_validation=True):
+def load_dict_by_names(layers_conn, layers_data, ignore_missing=False):
     """"
     Load parameters in to layer using layer names as the reference.
 
@@ -112,28 +83,16 @@ def load_dict_by_names(layers_conn, layers_data, ignore_missing=False,
     elif ignore_missing and all(l not in layers_data for l in layers_conn):
         raise ParameterLoaderError("Non of the layers can be matched by name")
 
-    if not skip_validation:
-        for layer_name, layer in layers_conn.items():
-            if layer_name in layers_data:
-                validate_layer_compatibility(layer, layers_data[layer_name])
-
     for layer_name, layer in layers_conn.items():
         if layer_name in layers_data:
             load_layer_parameter(layer, layers_data[layer_name])
 
 
-def load_dict_sequentially(layers_conn, layers_data, skip_validation=True):
+def load_dict_sequentially(layers_conn, layers_data):
     """"
     Load parameters in to layer using sequential order of
     layer in network and stored data
     """
-    if not skip_validation:
-        # It's important to point out that it can be that there more
-        # stored layers than specified in the network. For this case we
-        # expect to match as much as we can in case if layer are matchable.
-        for layer, layer_data in zip(layers_conn, layers_data):
-            validate_layer_compatibility(layer, layer_data)
-
     for layer, layer_data in zip(layers_conn, layers_data):
         load_layer_parameter(layer, layer_data)
 
@@ -169,17 +128,11 @@ def validate_data_structure(data):
                 "Layer in the {} position (0-based indeces) is not a "
                 "dictionary (it is {})".format(layer_index, type(layer)))
 
-        for attr in ('parameters', 'input_shape', 'output_shape', 'name'):
+        for attr in ('parameters', 'name'):
             if attr not in layer:
                 raise InvalidFormat(
                     "Layer in the {} position (0-based indeces) don't "
                     "have key `{}` specified".format(layer_index, attr))
-
-        for attr in ('input_shape', 'output_shape'):
-            if not isinstance(layer[attr], (list, tuple)):
-                raise InvalidFormat(
-                    "{} has invalid format for shape. It should be list "
-                    "or tuple, got {}".format(attr, type(layer[attr])))
 
         if not isinstance(layer['parameters'], dict):
             raise InvalidFormat(
@@ -275,10 +228,10 @@ def load_dict(network, data, ignore_missing=False,
 
     if load_by == 'names':
         load_dict_by_names(
-            layers_conn, layers_data, ignore_missing, skip_validation)
+            layers_conn, layers_data, ignore_missing)
 
     elif load_by == 'order':
-        load_dict_sequentially(layers_conn, layers_data, skip_validation)
+        load_dict_sequentially(layers_conn, layers_data)
 
     else:
         try:
@@ -321,8 +274,10 @@ def save_dict(network):
     ['layers', 'graph', 'metadata']
     """
     network = extract_network(network)
-    session = tensorflow_session()
-    initialize_uninitialized_variables()
+    network.create_variables()
+
+    session = tf_utils.tensorflow_session()
+    tf_utils.initialize_uninitialized_variables()
 
     data = {
         'metadata': {
@@ -353,8 +308,6 @@ def save_dict(network):
 
         data['layers'].append({
             'class_name': layer.__class__.__name__,
-            'input_shape': layer.input_shape,
-            'output_shape': layer.output_shape,
             'name': layer.name,
             'parameters': parameters,
             'configs': configs,

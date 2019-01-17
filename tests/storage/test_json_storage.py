@@ -12,18 +12,18 @@ class JSONStorageTestCase(BaseTestCase):
     def test_json_storage(self):
         connection_1 = layers.join(
             layers.Input(10),
-            [
+            layers.parallel(
                 layers.Sigmoid(5),
                 layers.Relu(5),
-            ],
+            ),
             layers.Elementwise(),
         )
         connection_2 = layers.join(
             layers.Input(10),
-            [
+            layers.parallel(
                 layers.Sigmoid(5),
                 layers.Relu(5),
-            ],
+            ),
             layers.Elementwise(),
         )
 

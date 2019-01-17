@@ -141,7 +141,7 @@ def on_epoch_end_from_steps(steps):
 
             new_step = steps[network.last_epoch]
             session = tensorflow_session()
-            network.variables.step.load(new_step, session)
+            network.step.load(new_step, session)
 
     return on_epoch_end
 
