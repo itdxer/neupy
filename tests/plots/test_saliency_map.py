@@ -40,6 +40,7 @@ class SaliencyMapTestCase(BaseTestCase):
                     layers.Input((28, 28, 3)),
                     layers.Input((28, 28, 3)),
                 ),
+                layers.Concatenate(),
                 network.start('conv'),
             )
             plots.saliency_map(new_network, image)
