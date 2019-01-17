@@ -197,7 +197,7 @@ class InlineConnectionsTestCase(BaseTestCase):
                 layers.Sigmoid(10)
             ] > layers.Elementwise()
 
-        # Issue #181. Bug presented in NeuPy versions <= 0.7.2
+        # Issue #181. Bug presented in NeuPy versions <= 0.8.0
         network = input_layer > layers.Softmax(5)
         self.assertEqual(network.input_shape, (2,))
         self.assertEqual(network.output_shape, (5,))

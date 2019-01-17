@@ -11,8 +11,8 @@ from load_cifar10 import read_cifar10
 def process_cifar10_data(x_train, x_test):
     x_train, x_test = asfloat(x_train), asfloat(x_test)
 
-    mean = x_train.mean(axis=(0, 1, 2)).reshape((1, 1, 1, -1))
-    std = x_train.std(axis=(0, 1, 2)).reshape((1, 1, 1, -1))
+    mean = x_train.mean(axis=(0, 1, 2)).reshape(1, 1, 1, -1)
+    std = x_train.std(axis=(0, 1, 2)).reshape(1, 1, 1, -1)
 
     x_train -= mean
     x_train /= std
@@ -25,9 +25,9 @@ def process_cifar10_data(x_train, x_test):
 def one_hot_encoder(y_train, y_test):
     y_train, y_test = asfloat(y_train), asfloat(y_test)
 
-    target_scaler = OneHotEncoder(categories='auto')
-    y_train = target_scaler.fit_transform(y_train.reshape((-1, 1))).todense()
-    y_test = target_scaler.transform(y_test.reshape((-1, 1))).todense()
+    target_scaler = OneHotEncoder(categories='auto', sparse=False)
+    y_train = target_scaler.fit_transform(y_train.reshape(-1, 1))
+    y_test = target_scaler.transform(y_test.reshape(-1, 1))
 
     return y_train, y_test
 
@@ -57,19 +57,19 @@ if __name__ == '__main__':
             Softmax(10),
         ],
 
-        step=0.001,
+        step=algorithms.step_decay(
+            initial_value=0.001,
+            # Parameter controls step redution frequency. The larger
+            # the value the slower step parameter decreases. Step will
+            # be reduced after every mini-batch update. In the training
+            # data we have 500 mini-batches.
+            reduction_freq=5 * 500,
+        ),
         batch_size=100,
 
         error='categorical_crossentropy',
         shuffle_data=True,
         verbose=True,
-
-        # Parameter controls step redution frequency. The larger
-        # the value the slower step parameter decreases.
-        # Step will be reduced after every mini-batch update. In the
-        # training data we have 500 mini-batches.
-        reduction_freq=5 * 500,
-        addons=[algorithms.StepDecay],
     )
     network.architecture()
     network.train(x_train, y_train, x_test, y_test, epochs=30)

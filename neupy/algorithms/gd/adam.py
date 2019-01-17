@@ -1,7 +1,11 @@
 import tensorflow as tf
 
 from neupy.utils import asfloat
-from neupy.core.properties import ProperFractionProperty, NumberProperty
+from neupy.core.properties import (
+    ProperFractionProperty,
+    ScalarVariableProperty,
+    NumberProperty,
+)
 from .base import GradientDescent
 
 
@@ -71,7 +75,7 @@ class Adam(GradientDescent):
     >>> mnet = algorithms.Adam((2, 3, 1))
     >>> mnet.train(x_train, y_train)
     """
-    step = NumberProperty(default=0.001, minval=0)
+    step = ScalarVariableProperty(default=0.001)
     beta1 = ProperFractionProperty(default=0.9)
     beta2 = ProperFractionProperty(default=0.999)
     epsilon = NumberProperty(default=1e-7, minval=0)

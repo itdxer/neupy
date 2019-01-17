@@ -11,7 +11,7 @@ import numpy as np
 from neupy.utils import preformat_value, AttributeKeyDict, as_tuple
 from neupy.exceptions import StopTraining
 from neupy.core.base import BaseSkeleton
-from neupy.core.properties import BoundedProperty, NumberProperty, Property
+from neupy.core.properties import BoundedProperty, Property, NumberProperty
 from .summary_info import SummaryTable, InlineSummary
 from .utils import iter_until_converge, shuffle
 

@@ -89,11 +89,6 @@ class RPROPTestCase(BaseTestCase):
         ]
 
         for algorithm_class in test_algorithms:
-            with self.assertRaises(ValueError):
-                algorithm_class(
-                    (3, 10, 2),
-                    addons=[algorithms.ErrDiffStepUpdate])
-
             # But this code should work fine
             algorithm_class(
                 (3, 10, 2),

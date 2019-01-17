@@ -5,7 +5,7 @@ import numpy as np
 import tensorflow as tf
 
 from neupy import init
-from neupy.utils import number_type, as_tuple
+from neupy.utils import number_type, as_tuple, asfloat
 from neupy.core.docs import SharedDocs
 
 
@@ -282,8 +282,8 @@ class ProperFractionProperty(BoundedProperty):
     expected_type = (float, int)
 
     def __init__(self, *args, **kwargs):
-        super(ProperFractionProperty, self).__init__(minval=0, maxval=1,
-                                                     *args, **kwargs)
+        super(ProperFractionProperty, self).__init__(
+            minval=0, maxval=1, *args, **kwargs)
 
 
 class NumberProperty(BoundedProperty):
@@ -375,3 +375,16 @@ class FunctionWithOptionsProperty(ChoiceProperty):
 
         return super(FunctionWithOptionsProperty, self).__get__(
             instance, founded_value)
+
+
+class ScalarVariableProperty(BaseProperty):
+    expected_type = (tf.Variable,)
+
+    def __set__(self, instance, value):
+        if isinstance(value, number_type):
+            value = tf.Variable(
+                asfloat(value),
+                dtype=tf.float32,
+                name=self.name,
+            )
+        super(ScalarVariableProperty, self).__set__(instance, value)

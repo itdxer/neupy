@@ -1,7 +1,11 @@
 import tensorflow as tf
 
 from neupy.utils import asfloat
-from neupy.core.properties import ProperFractionProperty, NumberProperty
+from neupy.core.properties import (
+    ProperFractionProperty,
+    ScalarVariableProperty,
+    NumberProperty,
+)
 from .base import GradientDescent
 
 
@@ -71,7 +75,7 @@ class Adamax(GradientDescent):
         Adam: a Method for Stochastic Optimization.
         https://arxiv.org/pdf/1412.6980.pdf
     """
-    step = NumberProperty(default=0.002, minval=0)
+    step = ScalarVariableProperty(default=0.002)
     beta1 = ProperFractionProperty(default=0.9)
     beta2 = ProperFractionProperty(default=0.999)
     epsilon = NumberProperty(default=1e-7, minval=0)

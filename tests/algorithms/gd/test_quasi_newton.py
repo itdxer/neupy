@@ -18,14 +18,6 @@ class QuasiNewtonTestCase(BaseTestCase):
             # Don't have learning rate
             algorithms.QuasiNewton((2, 3, 1), step=0.3)
 
-        with self.assertRaises(ValueError):
-            # Since it don't have learning rate, there is no need to set
-            # up learning rate update algorithm
-            algorithms.QuasiNewton(
-                (2, 3, 1),
-                addons=[algorithms.LinearSearch]
-            )
-
     def test_update_functions(self):
         UpdateFunction = namedtuple(
             "UpdateFunction",

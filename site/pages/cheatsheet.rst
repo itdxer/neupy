@@ -18,9 +18,8 @@ Training algorithms
 +++++++++++++++++++
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
-   :nosignatures:
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
    neupy.algorithms.Momentum
    neupy.algorithms.GradientDescent
@@ -41,8 +40,8 @@ Regularization methods
 ++++++++++++++++++++++
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
     neupy.algorithms.WeightDecay
     neupy.algorithms.WeightElimination
@@ -52,21 +51,17 @@ Learning rate update rules
 ++++++++++++++++++++++++++
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/function.rst
 
-    neupy.algorithms.LeakStepAdaptation
-    neupy.algorithms.ErrDiffStepUpdate
-    neupy.algorithms.LinearSearch
-    neupy.algorithms.SearchThenConverge
-    neupy.algorithms.StepDecay
+    neupy.algorithms.step_decay
 
 Neural Networks with Radial Basis Functions (RBFN)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
     neupy.algorithms.GRNN
     neupy.algorithms.PNN
@@ -76,8 +71,8 @@ Autoasociative Memory
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
     neupy.algorithms.DiscreteBAM
     neupy.algorithms.CMAC
@@ -87,8 +82,8 @@ Competitive Networks
 ~~~~~~~~~~~~~~~~~~~~
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
     neupy.algorithms.ART1
     neupy.algorithms.GrowingNeuralGas
@@ -102,8 +97,8 @@ Associative
 ~~~~~~~~~~~
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
     neupy.algorithms.Oja
     neupy.algorithms.Kohonen
@@ -114,8 +109,8 @@ Boltzmann Machine
 ~~~~~~~~~~~~~~~~~
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
     neupy.algorithms.RBM
 
@@ -131,8 +126,8 @@ Layers with activation function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
     neupy.layers.Linear
     neupy.layers.Sigmoid
@@ -149,8 +144,8 @@ Convolutional layers
 ~~~~~~~~~~~~~~~~~~~~
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
     neupy.layers.Convolution
     neupy.layers.Deconvolution
@@ -160,8 +155,8 @@ Recurrent layers
 ~~~~~~~~~~~~~~~~
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
     neupy.layers.LSTM
     neupy.layers.GRU
@@ -170,8 +165,8 @@ Pooling layers
 ~~~~~~~~~~~~~~
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
     neupy.layers.MaxPooling
     neupy.layers.AveragePooling
@@ -182,8 +177,8 @@ Normalization layers
 ~~~~~~~~~~~~~~~~~~~~
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
     neupy.layers.BatchNorm
     neupy.layers.LocalResponseNorm
@@ -192,8 +187,8 @@ Stochastic layers
 ~~~~~~~~~~~~~~~~~
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
     neupy.layers.Dropout
     neupy.layers.GaussianNoise
@@ -202,8 +197,8 @@ Merge layers
 ~~~~~~~~~~~~
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
     neupy.layers.Elementwise
     neupy.layers.Concatenate
@@ -213,8 +208,8 @@ Other layers
 ~~~~~~~~~~~~
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
     neupy.layers.Input
     neupy.layers.Reshape
@@ -232,8 +227,8 @@ Architectures
     (224, 224, 3) -> [... 187 layers ...] -> 1000
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/function.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/function.rst
    :nosignatures:
 
     neupy.architectures.vgg16
@@ -264,8 +259,8 @@ Parameter initialization
     <br>
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/class.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/class.rst
 
     neupy.init.Constant
     neupy.init.Normal
@@ -280,8 +275,8 @@ Datasets
 ********
 
 .. autosummary::
-   :toctree: ../modules/generated/
-   :template: autosummary/function.rst
+    :toctree: ../modules/generated/
+    :template: autosummary/function.rst
    :nosignatures:
 
     neupy.datasets.load_digits
