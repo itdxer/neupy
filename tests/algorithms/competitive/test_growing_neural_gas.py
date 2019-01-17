@@ -117,7 +117,7 @@ class GrowingNeuralGasTestCase(BaseTestCase):
         gng = algorithms.GrowingNeuralGas(
             n_inputs=2,
             step=0.2,
-            verbose=True,
+            verbose=False,
         )
         gng.train(self.data, epochs=10)
         self.assertEqual(
