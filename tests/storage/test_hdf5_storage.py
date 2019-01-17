@@ -47,7 +47,7 @@ class HDF5StorageTestCase(BaseTestCase):
                 random_output_1, random_output_2_2)
 
     def test_hdf5_storage_broken_attributes(self):
-        network = layers.Input(1) > layers.Relu(2, name='relu')
+        network = layers.Input(1) >> layers.Relu(2, name='relu')
         json_loads = json.loads
 
         def break_json(value):

@@ -1,7 +1,6 @@
 import math
 
 import numpy as np
-import tensorflow as tf
 
 from neupy.utils import asfloat
 from neupy.exceptions import LayerConnectionError
@@ -195,16 +194,13 @@ class PReluTestCase(BaseTestCase):
             layers.PRelu(10, alpha_axes=0)
 
     def test_prelu_alpha_init_random_params(self):
-        x = tf.placeholder(shape=(3, 10), dtype=tf.float32)
         prelu_layer = layers.PRelu(10, alpha=init.XavierNormal())
-
         prelu_layer.create_variables((None, 5))
 
         alpha = self.eval(prelu_layer.alpha)
         self.assertEqual(10, np.unique(alpha).size)
 
     def test_prelu_alpha_init_constant_value(self):
-        x = tf.placeholder(shape=(3, 10), dtype=tf.float32)
         prelu_layer = layers.PRelu(10, alpha=0.25)
         prelu_layer.create_variables((None, 5))
 

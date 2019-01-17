@@ -1,6 +1,5 @@
 import tensorflow as tf
 
-from neupy.core.properties import NumberProperty
 from .base import GradientDescent
 
 

@@ -329,7 +329,7 @@ class LSTM(BaseRNNLayer):
 
     def output(self, input, **kwargs):
         # Because scan iterates over the first dimension we
-        # dimshuffle to (n_time_steps, n_batch, n_features)
+        # dimshuffle to (n_time_steps, n_samples, n_features)
         input = tf.transpose(input, [1, 0, 2])
 
         def one_lstm_step(states, input_n):
@@ -371,9 +371,10 @@ class LSTM(BaseRNNLayer):
                 hid = outgate * tf.tanh(cell)
                 return [cell, hid]
 
-        n_batch = input.shape[1]
-        cell_init = tf.tile(self.cell_init, (n_batch, 1))
-        hidden_init = tf.tile(self.hidden_init, (n_batch, 1))
+        input_shape = tf.shape(input)
+        n_samples = input_shape[1]  # batch dim has been moved
+        cell_init = tf.tile(self.cell_init, (n_samples, 1))
+        hidden_init = tf.tile(self.hidden_init, (n_samples, 1))
         sequence = input
 
         if self.backwards:
@@ -389,7 +390,7 @@ class LSTM(BaseRNNLayer):
         else:
             _, hid_out = tf.scan(
                 fn=one_lstm_step,
-                elems=input,
+                elems=sequence,
                 initializer=[cell_init, hidden_init],
                 name='lstm-scan',
             )
@@ -403,7 +404,7 @@ class LSTM(BaseRNNLayer):
         if self.backwards:
             hid_out = tf.reverse(hid_out, axis=[0])
 
-        # dimshuffle back to (n_batch, n_time_steps, n_features))
+        # dimshuffle back to (n_samples, n_time_steps, n_features))
         hid_out = tf.transpose(hid_out, [1, 0, 2])
 
         return hid_out
@@ -512,9 +513,11 @@ class GRU(BaseRNNLayer):
     def __init__(self, n_units, only_return_final=True,
                  # Trainable parameters
                  input_weights=init.HeNormal(),
-                 hidden_weights=init.HeNormal(), biases=0,
+                 hidden_weights=init.HeNormal(),
+                 biases=0,
                  # Activation functions
-                 resetgate=tf.nn.sigmoid, updategate=tf.nn.sigmoid,
+                 resetgate=tf.nn.sigmoid,
+                 updategate=tf.nn.sigmoid,
                  hidden_update=tf.tanh,
                  # Cell states
                  hidden_init=0, learn_init=False,
@@ -567,7 +570,7 @@ class GRU(BaseRNNLayer):
 
     def output(self, input, **kwargs):
         # Because scan iterates over the first dimension we
-        # dimshuffle to (n_time_steps, n_batch, n_features)
+        # dimshuffle to (n_time_steps, n_samples, n_features)
         input = tf.transpose(input, [1, 0, 2])
 
         # Create single recurrent computation step function
@@ -610,8 +613,10 @@ class GRU(BaseRNNLayer):
                     hid_previous - updategate * (hid_previous - hidden_update)
                 ]
 
-        n_batch = input.shape[1]  # batch dim has been moved
-        hidden_init = tf.tile(self.hidden_init, (n_batch, 1))
+
+        input_shape = tf.shape(input)
+        n_samples = input_shape[1]  # batch dim has been moved
+        hidden_init = tf.tile(self.hidden_init, (n_samples, 1))
         sequence = input
 
         if self.backwards:
@@ -627,7 +632,7 @@ class GRU(BaseRNNLayer):
         else:
             hid_out, = tf.scan(
                 fn=one_gru_step,
-                elems=input,
+                elems=sequence,
                 initializer=[hidden_init],
                 name='gru-scan',
             )
@@ -641,6 +646,6 @@ class GRU(BaseRNNLayer):
         if self.backwards:
             hid_out = tf.reverse(hid_out, axis=[0])
 
-        # dimshuffle back to (n_batch, n_time_steps, n_features))
+        # dimshuffle back to (n_samples, n_time_steps, n_features))
         hid_out = tf.transpose(hid_out, [1, 0, 2])
         return hid_out

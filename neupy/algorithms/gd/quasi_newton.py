@@ -1,4 +1,3 @@
-import numpy as np
 import tensorflow as tf
 
 from neupy.core.config import Configurable
