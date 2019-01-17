@@ -8,7 +8,10 @@ from neupy.core.properties import (
     IntProperty,
 )
 from neupy.utils import asfloat
-from neupy.exceptions import LayerConnectionError
+from neupy.exceptions import (
+    LayerConnectionError,
+    WeightInitializationError,
+)
 from .base import Identity
 
 
@@ -21,10 +24,10 @@ class BatchNorm(Identity):
 
     Parameters
     ----------
-    axes : int, tuple with int or None
-        The axis or axes along which normalization is applied.
-        ``None`` means that normalization will be applied over
-        all axes except the first one. In case of 4D tensor it will
+    axes : tuple with ints or None
+        Axes along which normalization will be applied. The ``None``
+        value means that normalization will be applied over all axes
+        except the first one. In case of 4D tensor it will
         be equal to ``(0, 1, 2)``. Defaults to ``None``.
 
     epsilon : float
@@ -97,35 +100,43 @@ class BatchNorm(Identity):
         self.running_mean = running_mean
         self.running_inv_std = running_inv_std
 
-        if axes is not None and 0 in axes:
+        if axes is not None and len(set(axes)) != len(axes):
             raise ValueError(
-                "Cannot specify axes for batch dimension (0-axis)")
+                "Specified axes have to contain only unique values")
 
     def create_variables(self, input_shape):
-        ndim = len(input_shape)
+        input_shape = tf.TensorShape(input_shape)
+
+        if input_shape.ndims is None:
+            raise WeightInitializationError(
+                "Cannot initialize variables for the batch normalization "
+                "layer, because input shape is undefined. Layer: {}"
+                "".format(self))
 
         if self.axes is None:
-            # If ndim == 4 then axes = (0, 1, 2)
-            # If ndim == 2 then axes = (0,)
-            self.axes = tuple(range(ndim - 1))
+            # If ndims == 4 then axes = (0, 1, 2)
+            # If ndims == 2 then axes = (0,)
+            self.axes = tuple(range(input_shape.ndims - 1))
 
-        if any(axis >= ndim for axis in self.axes):
-            raise ValueError(
-                "Cannot apply batch normalization "
-                "on the axis that doesn't exist.")
+        if any(axis >= input_shape.ndims for axis in self.axes):
+            raise LayerConnectionError(
+                "Batch normalization cannot be applied over one of "
+                "the axis, because input has only {} dimensions. Layer: {}"
+                "".format(input_shape.ndims, self))
 
         parameter_shape = tuple([
             input_shape[axis].value if axis not in self.axes else 1
-            for axis in range(ndim)
+            for axis in range(input_shape.ndims)
         ])
 
         if any(parameter is None for parameter in parameter_shape):
             unknown_dim_index = parameter_shape.index(None)
-            raise ValueError(
-                "Cannot apply batch normalization on the axis with unknown "
-                "size over the dimnsion #{} (0-based indeces). Input "
-                "shape: {}, Layer name: {}".format(
-                    unknown_dim_index, input_shape, self.name))
+
+            raise WeightInitializationError(
+                "Cannot create variables for batch normalization, because "
+                "input has unknown dimension #{} (0-based indeces). "
+                "Input shape: {}, Layer: {}".format(
+                    unknown_dim_index, input_shape, self))
 
         self.input_shape = input_shape
         self.running_mean = self.variable(

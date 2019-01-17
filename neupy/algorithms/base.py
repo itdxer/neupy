@@ -2,7 +2,6 @@
 from __future__ import division, absolute_import, unicode_literals
 
 import time
-import types
 import inspect
 from abc import abstractmethod
 from collections import defaultdict
@@ -172,8 +171,11 @@ class BaseNetwork(BaseSkeleton):
         ))
 
         for i, signal in enumerate(signals):
-            if isinstance(signal, (types.FunctionType, types.LambdaType)):
+            if inspect.isfunction(signal):
                 signals[i] = base_signals.EpochEndSignal(signal)
+
+            elif inspect.isclass(signal):
+                signals[i] = signal()
 
         self.events = Events(network=self, signals=signals)
 

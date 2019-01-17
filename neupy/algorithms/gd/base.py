@@ -135,7 +135,7 @@ class BaseOptimizer(BaseNetwork):
         if target is not None and isinstance(target, (list, tuple)):
             options['target'] = tf.placeholder(tf.float32, shape=target)
 
-        self.target = self.network.targets[0]
+        self.target = self.network.targets
         super(BaseOptimizer, self).__init__(**options)
 
         start_init_time = time.time()
@@ -180,7 +180,7 @@ class BaseOptimizer(BaseNetwork):
 
         self.functions.update(
             predict=tf_utils.function(
-                inputs=self.network.inputs,
+                inputs=as_tuple(self.network.inputs),
                 outputs=self.network.outputs,
                 name='optimizer/predict'
             ),

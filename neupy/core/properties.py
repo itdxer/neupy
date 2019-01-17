@@ -1,5 +1,5 @@
-import types
 import numbers
+import inspect
 
 import numpy as np
 import tensorflow as tf
@@ -13,7 +13,7 @@ __all__ = (
     'BaseProperty', 'Property', 'ArrayProperty', 'BoundedProperty',
     'ProperFractionProperty', 'NumberProperty', 'IntProperty',
     'TypedListProperty', 'ChoiceProperty', 'WithdrawProperty',
-    'ParameterProperty', 'CallableProperty', 'FunctionWithOptionsProperty',
+    'ParameterProperty', 'FunctionWithOptionsProperty',
 )
 
 
@@ -338,21 +338,6 @@ class ParameterProperty(ArrayProperty):
         super(ParameterProperty, self).__set__(instance, value)
 
 
-class CallableProperty(Property):
-    """
-    Property for callable objects.
-
-    Parameters
-    ----------
-    {Property.Parameters}
-    """
-    def validate(self, value):
-        if not callable(value):
-            raise ValueError("The `{}` property expected to be "
-                             "callable object.".format(self.name))
-        super(CallableProperty, self).validate(value)
-
-
 class FunctionWithOptionsProperty(ChoiceProperty):
     """
     Property that helps select error function from
@@ -363,7 +348,7 @@ class FunctionWithOptionsProperty(ChoiceProperty):
     {ChoiceProperty.Parameters}
     """
     def __set__(self, instance, value):
-        if isinstance(value, types.FunctionType):
+        if inspect.isfunction(value):
             return super(ChoiceProperty, self).__set__(instance, value)
 
         return super(FunctionWithOptionsProperty, self).__set__(
@@ -372,7 +357,7 @@ class FunctionWithOptionsProperty(ChoiceProperty):
     def __get__(self, instance, value):
         founded_value = super(ChoiceProperty, self).__get__(instance, value)
 
-        if isinstance(founded_value, types.FunctionType):
+        if inspect.isfunction(founded_value):
             return founded_value
 
         return super(FunctionWithOptionsProperty, self).__get__(

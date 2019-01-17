@@ -126,3 +126,20 @@ class ConcatenateTestCase(BaseTestCase):
         actual_output = self.eval(network.output(x_tensor4))
 
         self.assertEqual((5, 24, 24, 11), actual_output.shape)
+
+    def test_concat_with_late_inputs(self):
+        network = layers.join(
+            layers.parallel(
+                layers.Relu(),
+                layers.Relu(),
+            ),
+            layers.Concatenate(),
+        )
+
+        self.assertShapesEqual(network.input_shape, [None, None])
+        self.assertShapesEqual(network.output_shape, None)
+
+        network = layers.Input((10, 10, 3)) >> network
+
+        self.assertShapesEqual(network.input_shape, (None, 10, 10, 3))
+        self.assertShapesEqual(network.output_shape, (None, 10, 10, 6))

@@ -15,6 +15,19 @@ from base import BaseTestCase
 class DictStorageTestCase(BaseTestCase):
     maxDiff = 10000
 
+    def test_storage_invalid_input_type(self):
+        network = [
+            layers.Input(10),
+            layers.Relu(5),
+            layers.Relu(2),
+        ]
+        message = (
+            "Invalid input type. Input should be "
+            "network or optimizer with network"
+        )
+        with self.assertRaisesRegexp(TypeError, message):
+            storage.save_dict(network)
+
     def test_storage_save_dict(self):
         network = layers.join(
             layers.parallel([

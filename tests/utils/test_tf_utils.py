@@ -3,6 +3,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.errors import FailedPreconditionError
 
+from neupy import init
 from neupy.utils import tf_utils, asfloat
 
 from base import BaseTestCase
@@ -159,3 +160,30 @@ class TFUtilsTestCase(BaseTestCase):
 
         with self.assertRaisesRegexp(FailedPreconditionError, "value dx"):
             sess.run(c + d)
+
+    def test_variable_creation(self):
+        weight = np.ones((3, 3))
+        var1 = tf_utils.create_variable(weight, name='var1', shape=(3, 3))
+        self.assertShapesEqual(var1.shape, (3, 3))
+
+        var2 = tf_utils.create_variable(5, name='var2', shape=(4, 3))
+        self.assertShapesEqual(var2.shape, (4, 3))
+        np.testing.assert_array_almost_equal(
+            self.eval(var2), 5 * np.ones((4, 3)))
+
+        initializer = init.Normal()
+        var3 = tf_utils.create_variable(initializer, name='var3', shape=(4, 7))
+        self.assertShapesEqual(var3.shape, (4, 7))
+
+        weight = tf.Variable(np.ones((3, 3)), dtype=tf.float32)
+        var4 = tf_utils.create_variable(weight, name='var4', shape=(3, 3))
+        self.assertShapesEqual(var4.shape, (3, 3))
+        self.assertIs(var4, weight)
+
+        weight = np.ones((3, 4))
+        with self.assertRaisesRegexp(ValueError, "Cannot create variable"):
+            tf_utils.create_variable(weight, name='var5', shape=(3, 3))
+
+        weight = tf.Variable(np.ones((4, 3)), dtype=tf.float32)
+        with self.assertRaisesRegexp(ValueError, "Cannot create variable"):
+            tf_utils.create_variable(weight, name='var6', shape=(3, 3))

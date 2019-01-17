@@ -128,7 +128,7 @@ class PoolingLayersTestCase(BaseTestCase):
         actual_output = self.eval(network.output(X))
         np.testing.assert_array_almost_equal(actual_output, expected_output)
 
-    def test_upscale_late_shape_init(self):
+    def test_pooling_late_shape_init(self):
         network = layers.join(
             layers.AveragePooling((2, 2)),
             layers.Softmax(),
@@ -137,6 +137,19 @@ class PoolingLayersTestCase(BaseTestCase):
 
         network = layers.join(layers.Input((10, 10, 1)), network)
         self.assertShapesEqual(network.output_shape, (None, 5, 5, 1))
+
+    def test_failed_pooling_connection(self):
+        network = layers.join(
+            layers.Relu(),
+            layers.AveragePooling((2, 2)),
+            layers.Reshape(),
+        )
+        error_message = (
+            "Pooling layer expects an input with 4 "
+            "dimensions, got 2 with shape \(\?, 10\)"
+        )
+        with self.assertRaisesRegexp(LayerConnectionError, error_message):
+            layers.join(layers.Input(10), network)
 
 
 class UpscaleLayersTestCase(BaseTestCase):

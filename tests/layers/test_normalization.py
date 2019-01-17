@@ -1,4 +1,3 @@
-import unittest
 import tempfile
 
 import numpy as np
@@ -7,7 +6,10 @@ from scipy import stats
 
 from neupy import layers, algorithms, storage
 from neupy.utils import asfloat
-from neupy.exceptions import LayerConnectionError
+from neupy.exceptions import (
+    LayerConnectionError,
+    WeightInitializationError,
+)
 
 from base import BaseTestCase
 from helpers import simple_classification
@@ -111,7 +113,6 @@ class BatchNormTestCase(BaseTestCase):
             output_value,
             decimal=4)
 
-    @unittest.skip("Storage tests are broken")
     def test_batch_norm_storage(self):
         x_train, x_test, y_train, y_test = simple_classification()
 
@@ -145,7 +146,50 @@ class BatchNormTestCase(BaseTestCase):
                 mean_before_save, mean_after_load)
 
             np.testing.assert_array_almost_equal(
-                variance_before_save, variance_after_load)
+                variance_before_save,
+                variance_after_load)
+
+    def test_batchnorm_wrong_axes(self):
+        message = "Specified axes have to contain only unique values"
+        with self.assertRaisesRegexp(ValueError, message):
+            layers.BatchNorm(axes=(0, 1, 1))
+
+    def test_batchnorm_wrong_axes_values(self):
+        network = layers.join(
+            layers.Relu(),
+            layers.BatchNorm(),
+        )
+        message = (
+            "Cannot initialize variables for the batch normalization "
+            "layer, because input shape is undefined"
+        )
+        with self.assertRaisesRegexp(WeightInitializationError, message):
+            network.create_variables()
+
+    def test_batchnorm_unsuitable_axes_values(self):
+        network = layers.join(
+            layers.Input((10, 3)),
+            layers.BatchNorm(axes=(0, 2, 3)),
+        )
+        message = (
+            "Batch normalization cannot be applied over one of "
+            "the axis, because input has only 3 dimensions"
+        )
+        with self.assertRaisesRegexp(LayerConnectionError, message):
+            network.create_variables()
+
+    def test_batchnorm_unknown_dimension(self):
+        network = layers.join(
+            layers.Input((10, 10, None)),
+            layers.BatchNorm(),
+        )
+        message = (
+            "Cannot create variables for batch normalization, because "
+            "input has unknown dimension #3 \(0-based indeces\). "
+            "Input shape: \(\?, 10, 10, \?\)"
+        )
+        with self.assertRaisesRegexp(WeightInitializationError, message):
+            network.create_variables()
 
 
 class LocalResponseNormTestCase(BaseTestCase):

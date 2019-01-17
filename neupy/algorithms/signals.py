@@ -68,7 +68,7 @@ class ProgressbarSignal(object):
         self.index = 0
         self.bar = progressbar.NullBar()
 
-        if network.logs.enable and self.n_batches >= 2:
+        if network.verbose and self.n_batches >= 2:
             self.bar = iters.make_progressbar(self.n_batches, show_output=True)
             self.bar.update(0)
 
