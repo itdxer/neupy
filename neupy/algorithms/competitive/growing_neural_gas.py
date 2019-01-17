@@ -98,7 +98,7 @@ class NeuralGasGraph(object):
         raise ValueError("Edge between specified nodes doesn't exist")
 
     def __repr__(self):
-        return "{}(n_nodes={}, n_edges={})".format(
+        return "<{} n_nodes={}, n_edges={}>".format(
             self.__class__.__name__,
             self.n_nodes, self.n_edges)
 
@@ -120,7 +120,7 @@ class NeuronNode(object):
         self.error = 0
 
     def __repr__(self):
-        return "{}(error={})".format(
+        return "<{} error={}>".format(
             self.__class__.__name__,
             round(float(self.error), 6))
 

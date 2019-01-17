@@ -122,7 +122,7 @@ class GrowingNeuralGasTestCase(BaseTestCase):
         gng.train(self.data, epochs=10)
         self.assertEqual(
             str(gng.graph),
-            "NeuralGasGraph(n_nodes=12, n_edges=19)",
+            "<NeuralGasGraph n_nodes=12, n_edges=19>",
         )
 
 
@@ -170,10 +170,10 @@ class NeuralGasGraphTestCase(BaseTestCase):
 
     def test_node_repr(self):
         node_a = NeuronNode(1)
-        self.assertEqual(str(node_a), "NeuronNode(error=0.0)")
+        self.assertEqual(str(node_a), "<NeuronNode error=0.0>")
 
         node_a.error = 1
-        self.assertEqual(str(node_a), "NeuronNode(error=1.0)")
+        self.assertEqual(str(node_a), "<NeuronNode error=1.0>")
 
         node_a.error = 3.141592654
-        self.assertEqual(str(node_a), "NeuronNode(error=3.141593)")
+        self.assertEqual(str(node_a), "<NeuronNode error=3.141593>")
