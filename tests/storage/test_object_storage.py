@@ -69,7 +69,6 @@ class BasicStorageTestCase(BaseTestCase):
             restored_bpnet_error = restored_bpnet_2.score(data, target)
             self.assertEqual(real_bpnet_error, restored_bpnet_error)
 
-    @unittest.skipIf(six.PY2, "doesn't work for python 2")
     def test_non_initialized_graph_storage(self):
         network = layers.Relu(10) >> layers.Relu(2)  # no input layer
 
