@@ -212,8 +212,8 @@ class BaseOptimizer(BaseNetwork):
             formatted_input = format_data(input, is_feature1d=is_feature1d)
 
             if (formatted_input.ndim + 1) == input_shape.ndims:
-                # We assume that when one dimension user wants
-                # to propagate single sample through the network
+                # We assume that when one dimension was missed than user
+                # wants to propagate single sample through the network
                 formatted_input = np.expand_dims(formatted_input, axis=0)
 
             X_formatted.append(formatted_input)
@@ -226,8 +226,8 @@ class BaseOptimizer(BaseNetwork):
         formatted_target = format_data(y, is_feature1d=is_feature1d)
 
         if (formatted_target.ndim + 1) == len(output_shape):
-            # We assume that when one dimension user wants
-            # to propagate single sample through the network
+            # We assume that when one dimension was missed than user
+            # wants to propagate single sample through the network
             formatted_target = np.expand_dims(formatted_target, axis=0)
 
         return formatted_target

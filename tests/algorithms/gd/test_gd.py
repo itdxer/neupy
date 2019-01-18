@@ -1,5 +1,6 @@
 import pickle
 
+import numpy as np
 import tensorflow as tf
 
 from neupy import algorithms, layers
@@ -81,6 +82,72 @@ class GradientDescentTestCase(BaseTestCase):
 
         self.assertAlmostEqual(self.eval(recovered_optimizer.step), 0.2)
         self.assertEqual(recovered_optimizer.shuffle_data, True)
+
+    def test_optimizer_with_bad_input_shape_passed(self):
+        optimizer = algorithms.GradientDescent(
+            [
+                layers.Input((10, 10, 3)),
+                layers.Convolution((3, 3, 7)),
+                layers.Reshape(),
+                layers.Sigmoid(1),
+            ],
+            batch_size=None,
+            verbose=False,
+            loss='mse',
+        )
+
+        image = np.random.random((10, 10, 3))
+        optimizer.train(image, [1], epochs=1)
+
+        retrieved_score = optimizer.score(image, [1])
+        self.assertLessEqual(0, retrieved_score)
+        self.assertGreaterEqual(1, retrieved_score)
+
+        prediction = optimizer.predict(image)
+        self.assertEqual(prediction.ndim, 2)
+
+    def test_optimizer_with_bad_input_shape_passed(self):
+        optimizer = algorithms.GradientDescent(
+            [
+                layers.Input((10, 10, 3)),
+                layers.Convolution((3, 3, 3), padding='same'),
+            ],
+            batch_size=None,
+            verbose=False,
+            loss='mse',
+        )
+
+        image = np.random.random((10, 10, 3))
+        optimizer.train(image, image, epochs=1)
+
+        retrieved_score = optimizer.score(image, image)
+        self.assertLessEqual(0, retrieved_score)
+        self.assertGreaterEqual(1, retrieved_score)
+
+    def test_invalid_number_of_inputs(self):
+        optimizer = algorithms.GradientDescent(
+            [
+                layers.parallel(
+                    layers.Input((10, 10, 3)),
+                    layers.Input((10, 10, 3)),
+                ),
+                layers.Concatenate(),
+                layers.Convolution((3, 3, 3), padding='same'),
+            ],
+            batch_size=None,
+            verbose=False,
+            loss='mse',
+        )
+
+        image = np.random.random((10, 10, 3))
+        optimizer.train([image, image], image, epochs=1)
+
+        message = (
+            "Number of inputs doesn't match number "
+            "of input layers in the network."
+        )
+        with self.assertRaisesRegexp(ValueError, message):
+            optimizer.train(image, image, epochs=1)
 
     def test_gd_custom_target(self):
         def custom_loss(actual, predicted):
