@@ -470,7 +470,7 @@ class LayerGraph(BaseGraph):
                 )
             )
 
-            if hasattr(sys, 'last_traceback'):
+            if hasattr(sys, 'last_traceback') and six.PY3:
                 modified_exception = modified_exception.with_traceback(
                     sys.last_traceback)
 
