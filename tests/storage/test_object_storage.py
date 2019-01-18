@@ -1,7 +1,5 @@
-import unittest
 import tempfile
 
-import six
 import dill
 import numpy as np
 from sklearn import datasets, preprocessing
