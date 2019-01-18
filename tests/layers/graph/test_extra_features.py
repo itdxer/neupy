@@ -23,3 +23,32 @@ class GraphExtraFeaturesTestCase(BaseTestCase):
 
         output_layer = network.output_layers[0]
         self.assertEqual(output_layer.name, 'output')
+
+    def test_check_if_network_sequential(self):
+        network = layers.join(
+            layers.Input(10),
+            layers.Relu(5),
+            layers.Relu(3),
+        )
+        self.assertTrue(network.is_sequential())
+
+        network = layers.join(
+            layers.Input(10),
+            layers.parallel(
+                layers.Relu(5),
+                layers.Relu(3),
+            ),
+            layers.Concatenate(),
+        )
+        self.assertFalse(network.is_sequential())
+
+        network = layers.parallel(
+            layers.Relu(5),
+            layers.Relu(3),
+        )
+        self.assertFalse(network.is_sequential())
+
+    def test_empty_graph(self):
+        graph = layers.LayerGraph()
+        self.assertEqual(len(graph), 0)
+        self.assertEqual(str(graph), "[empty graph]")

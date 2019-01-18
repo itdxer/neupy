@@ -71,6 +71,11 @@ class UsageTestCase(BaseTestCase):
         out3 = self.eval(network.output({'input': x_matrix}))
         np.testing.assert_array_almost_equal(out2, out3)
 
+        unknown_layer = layers.Input(5, name='unk')
+        message = "The `unk` layer doesn't appear in the network"
+        with self.assertRaisesRegexp(ValueError, message):
+            network.output({unknown_layer: x_matrix})
+
     def test_not_an_input_layer_exception(self):
         network = layers.join(
             layers.Input(10),
@@ -81,3 +86,31 @@ class UsageTestCase(BaseTestCase):
 
         with self.assertRaisesRegexp(ValueError, "is not an input layer"):
             network.output({'sigmoid-2': x_test})
+
+    def test_if_layer_in_the_graph(self):
+        network = layers.join(
+            layers.Input(10),
+            layers.Relu(2),
+        )
+        final_layer = layers.Sigmoid(1)
+        self.assertNotIn(final_layer, network)
+
+        network_2 = layers.join(network, final_layer)
+        self.assertIn(final_layer, network_2)
+
+    def test_graph_length(self):
+        network = layers.join(
+            layers.Input(10),
+            layers.Relu(3),
+        )
+        self.assertEqual(2, len(network))
+
+        network_2 = layers.join(
+            network,
+            layers.parallel(
+                layers.Relu(1),
+                layers.Relu(2),
+            ),
+        )
+        self.assertEqual(2, len(network))
+        self.assertEqual(4, len(network_2))

@@ -40,7 +40,9 @@ class BaseTestCase(unittest.TestCase):
             logging.disable(logging.CRITICAL)
 
         # Clean identifiers map for each test
-        generate_layer_name.counters = defaultdict(int)
+        if hasattr(generate_layer_name, 'counters'):
+            generate_layer_name.counters = defaultdict(int)
+
         utils.reproducible(seed=self.random_seed)
 
     def tearDown(self):
