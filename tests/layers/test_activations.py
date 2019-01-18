@@ -70,7 +70,7 @@ class ActivationLayerMainTestCase(BaseTestCase):
             expected_message = "2 positional arguments but 3 were given."
         else:
             expected_message = (
-                "get_output_shape() takes exactly 2 arguments (3 given)."
+                "get_output_shape\(\) takes exactly 2 arguments \(3 given\)"
             )
         with self.assertRaisesRegexp(TypeError, expected_message):
             layers.join(inputs, layers.Relu(3, name='relu'))
