@@ -197,6 +197,41 @@ class BaseOptimizer(BaseNetwork):
             )
         )
 
+    def format_input(self, X):
+        X = as_tuple(X)
+        X_formatted = []
+
+        if len(X) != len(self.network.input_layers):
+            raise ValueError(
+                "Number of inputs doesn't match number "
+                "of input layers in the network.")
+
+        for input, input_layer in zip(X, self.network.input_layers):
+            input_shape = tf.TensorShape(input_layer.input_shape)
+            is_feature1d = (input_shape.ndims == 2 and input_shape[1] == 1)
+            formatted_input = format_data(input, is_feature1d=is_feature1d)
+
+            if (formatted_input.ndim + 1) == input_shape.ndims:
+                # We assume that when one dimension user wants
+                # to propagate single sample through the network
+                formatted_input = np.expand_dims(formatted_input, axis=0)
+
+            X_formatted.append(formatted_input)
+
+        return X_formatted
+
+    def format_target(self, y):
+        output_shape = tf.TensorShape(self.network.output_shape)
+        is_feature1d = (output_shape.ndims == 2 and output_shape[1] == 1)
+        formatted_target = format_data(y, is_feature1d=is_feature1d)
+
+        if (formatted_target.ndim + 1) == len(output_shape):
+            # We assume that when one dimension user wants
+            # to propagate single sample through the network
+            formatted_target = np.expand_dims(formatted_target, axis=0)
+
+        return formatted_target
+
     def score(self, X, y):
         """
         Calculate prediction accuracy for input data.
@@ -211,10 +246,11 @@ class BaseOptimizer(BaseNetwork):
         float
             Prediction error.
         """
-        X_and_y = [format_data(x) for x in as_tuple(X, y)]
-        return self.functions.score(*X_and_y)
+        X = self.format_input(X)
+        y = self.format_target(y)
+        return self.functions.score(*as_tuple(X, y))
 
-    def predict(self, X):
+    def predict(self, *X):
         """
         Return prediction results for the input data.
 
@@ -226,7 +262,7 @@ class BaseOptimizer(BaseNetwork):
         -------
         array-like
         """
-        X = [format_data(x) for x in as_tuple(X)]
+        X = self.format_input(X)
         return self.network.predict(*X)
 
     def train(self, X_train, y_train, X_test=None, y_test=None,
@@ -242,12 +278,12 @@ class BaseOptimizer(BaseNetwork):
                 "Input or target test samples are missed. They "
                 "must be defined together or none of them.")
 
-        X_train = [format_data(x) for x in as_tuple(X_train)]
-        y_train = format_data(y_train)
+        X_train = self.format_input(X_train)
+        y_train = self.format_target(y_train)
 
         if X_test is not None:
-            X_test = [format_data(x) for x in as_tuple(X_test)]
-            y_test = format_data(y_test)
+            X_test = self.format_input(X_test)
+            y_test = self.format_target(y_test)
 
         return super(BaseOptimizer, self).train(
             X_train=X_train, y_train=y_train,
@@ -360,8 +396,8 @@ class GradientDescent(BaseOptimizer):
         float
             Prediction error.
         """
-        X = [format_data(x) for x in as_tuple(X)]
-        y = format_data(y)
+        X = self.format_input(X)
+        y = self.format_target(y)
 
         return iters.apply_batches(
             function=self.functions.score,
@@ -386,7 +422,7 @@ class GradientDescent(BaseOptimizer):
         """
         outputs = iters.apply_batches(
             function=self.functions.predict,
-            inputs=[format_data(x) for x in as_tuple(X)],
+            inputs=self.format_input(X),
             batch_size=self.batch_size,
             show_progressbar=self.logs.enable,
         )

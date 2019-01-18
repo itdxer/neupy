@@ -141,8 +141,9 @@ if __name__ == '__main__':
 
     if args.use_pretrained:
         if not os.path.exists(CARTPOLE_WEIGHTS):
-            raise OSError("Cannot find file with pretrained weights "
-                          "(File name: {})".format(CARTPOLE_WEIGHTS))
+            raise OSError(
+                "Cannot find file with pretrained weights "
+                "(File name: {})".format(CARTPOLE_WEIGHTS))
 
         print("Loading pretrained weights")
         storage.load(network, CARTPOLE_WEIGHTS)
