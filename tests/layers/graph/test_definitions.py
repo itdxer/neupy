@@ -140,6 +140,15 @@ class InlineDefinitionsTestCase(BaseTestCase):
         self.assertShapesEqual(network.input_shape, (None, 1))
         self.assertShapesEqual(network.output_shape, (None, 3))
 
+    def test_inplace_parallel(self):
+        network = layers.Input(10)
+        network |= layers.Input(10)
+        network >>= layers.Concatenate()
+
+        self.assertEqual(len(network), 3)
+        self.assertShapesEqual(network.input_shape, [(None, 10), (None, 10)])
+        self.assertShapesEqual(network.output_shape, (None, 20))
+
 
 class DefinitionsTestCase(BaseTestCase):
     def test_one_to_many_parallel_network_output(self):

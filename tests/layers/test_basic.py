@@ -115,3 +115,46 @@ class LayerNameTestCase(BaseTestCase):
 
         layer_3 = abcDef()
         self.assertEqual(layer_3.name, 'abc-def-1')
+
+
+class CustomLayerTestCase(BaseTestCase):
+    def test_custom_layer(self):
+        class NewLayer(layers.BaseLayer):
+            def __init__(self, *args, **kwargs):
+                super(NewLayer, self).__init__(*args, **kwargs)
+                self._input_shape = tf.TensorShape((None, None, None))
+
+            def create_variables(self, input_shape):
+                self.input_shape = input_shape
+
+            def output(self, input):
+                return input
+
+        new_layer = NewLayer()
+        network = layers.join(layers.Input((10, 5)), new_layer)
+        self.assertShapesEqual(network.output_shape, None)
+        self.assertShapesEqual(new_layer.input_shape, (None, None, None))
+
+        network.create_variables()
+        self.assertShapesEqual(network.output_shape, None)
+        self.assertShapesEqual(new_layer.input_shape, (None, 10, 5))
+
+    def test_custom_layer_incompatible_shape_assign(self):
+        class NewLayer(layers.BaseLayer):
+            def __init__(self, *args, **kwargs):
+                super(NewLayer, self).__init__(*args, **kwargs)
+                self._input_shape = tf.TensorShape((None, None, None))
+
+            def create_variables(self, input_shape):
+                self.input_shape = (None, None)
+
+            def output(self, input):
+                return input
+
+        network = layers.join(layers.Input((10, 5)), NewLayer())
+        message = (
+            "Cannot update input shape of the layer, because it's "
+            "incompatible with current input shape"
+        )
+        with self.assertRaisesRegexp(ValueError, message):
+            network.create_variables()

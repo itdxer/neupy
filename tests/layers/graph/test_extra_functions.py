@@ -62,6 +62,10 @@ class ExtraFunctionsTestCase(BaseTestCase):
         sorted_nodes = topological_sort(self.graph)
         self.assertSequenceEqual(sorted_nodes, [5, 7, 6, 4, 2, 1, 3])
 
+        message = "Cannot apply topological sort to the graphs with cycles"
+        with self.assertRaisesRegexp(RuntimeError, message):
+            topological_sort({1: [2], 2: [3], 3: [1]})
+
     def test_find_outputs_in_graph(self):
         outputs = find_outputs_in_graph(self.graph)
         self.assertSequenceEqual(outputs, [5, 7])

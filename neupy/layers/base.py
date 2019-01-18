@@ -146,23 +146,21 @@ def topological_sort(graph):
     list
         List of nodes sorted in topological order.
     """
+    if not graph:
+        return []
+
+    if is_cyclic(graph):
+        raise RuntimeError(
+            "Cannot apply topological sort to the graphs with cycles")
+
     sorted_nodes = []
     graph_unsorted = graph.copy()
 
-    if not graph_unsorted:
-        return sorted_nodes
-
     while graph_unsorted:
-        acyclic = False
-
         for node, edges in list(graph_unsorted.items()):
             if all(edge not in graph_unsorted for edge in edges):
-                acyclic = True
                 del graph_unsorted[node]
                 sorted_nodes.append(node)
-
-    if not acyclic:
-        raise RuntimeError("A cyclic dependency occurred")
 
     return sorted_nodes
 
@@ -286,12 +284,6 @@ class BaseGraph(ConfigurableABC, DumpableObject):
     def __ior__(self, other):
         return self.__or__(other)
 
-    def __contains__(self, entity):
-        return entity in self.forward_graph
-
-    def __len__(self):
-        return len(self.forward_graph)
-
     @abstractmethod
     def output(self, inputs):
         raise NotImplementedError()
@@ -326,9 +318,13 @@ class LayerGraph(BaseGraph):
 
     def slice(self, directed_graph, layers):
         layers = self.clean_layer_references(layers)
+        forward_graph = self.forward_graph
 
-        if all(layer not in self.forward_graph for layer in layers):
-            return self.__class__()
+        if all(layer not in forward_graph for layer in layers):
+            unused_layer = next(l for l in layers if l not in forward_graph)
+            raise ValueError(
+                "Layer `{}` is not used in the graph. Graph: {}, "
+                "Layer: {}".format(unused_layer.name, self, unused_layer))
 
         observed_layers = []
         layers = copy.copy(layers)
@@ -341,7 +337,7 @@ class LayerGraph(BaseGraph):
                 if next_layer not in observed_layers:
                     layers.append(next_layer)
 
-        forward_subgraph = filter_graph(self.forward_graph, observed_layers)
+        forward_subgraph = filter_graph(forward_graph, observed_layers)
         return self.__class__(forward_subgraph)
 
     def end(self, *output_layers):
@@ -372,8 +368,9 @@ class LayerGraph(BaseGraph):
 
         if len(layers) >= 2:
             raise NameError(
-                "Ambiguous layer name. Network has {} layers with the same "
-                "name. Layers: {}".format(layer_name, len(layers), layers))
+                "Ambiguous layer name `{}`. Network has {} "
+                "layers with the same name. Layers: {}".format(
+                    layer_name, len(layers), layers))
 
         return layers[0]
 
@@ -525,6 +522,9 @@ class LayerGraph(BaseGraph):
         return session.run(self.outputs, feed_dict=feed_dict)
 
     def is_sequential(self):
+        if len(self.input_layers) > 1 or len(self.output_layers) > 1:
+            return False
+
         forward_graph_layers = self.forward_graph.values()
         backward_graph_layers = self.backward_graph.values()
 
@@ -579,6 +579,12 @@ class LayerGraph(BaseGraph):
 
     def get_params(self):
         return {'forward_graph': self.forward_graph}
+
+    def __contains__(self, entity):
+        return entity in self.forward_graph
+
+    def __len__(self):
+        return len(self.forward_graph)
 
     def __iter__(self):
         for layer in topological_sort(self.backward_graph):
@@ -819,11 +825,16 @@ class BaseLayer(BaseGraph):
             return repr(value)
 
         formatted_args = [str(arg) for arg in args]
-        init_args = inspect.getargspec(self.__class__.__init__).args
+        argspec = inspect.getargspec(self.__class__.__init__)
+
+        def kwargs_priority(value):
+            if value in argspec.args:
+                return argspec.args.index(value)
+            return float('inf')
 
         # Kwargs will have destroyed order of the arguments, and order in
         # the __init__ method allows to use proper order and validate names
-        for name in sorted(kwargs.keys(), key=init_args.index):
+        for name in sorted(kwargs.keys(), key=kwargs_priority):
             value = format_value(kwargs[name])
             formatted_args.append('{}={}'.format(name, value))
 

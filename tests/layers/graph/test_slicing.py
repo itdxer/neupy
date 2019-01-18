@@ -225,5 +225,35 @@ class SliceLayerConnectionsTestCase(BaseTestCase):
         reul1 = network.layer('relu-1')
         self.assertShapesEqual(reul1.output_shape, (None, 5))
 
-        with self.assertRaises(NameError):
+        message = "Cannot find layer with name 'some-layer-name'"
+        with self.assertRaisesRegexp(NameError, message):
             network.layer('some-layer-name')
+
+        message = "Layer name expected to be a string"
+        with self.assertRaisesRegexp(ValueError, message):
+            network.layer(object)
+
+    def test_ambigous_layer_names_search(self):
+        network = layers.join(
+            layers.Input(10, name='input'),
+            layers.Relu(8, name='relu'),
+            layers.Relu(5, name='relu'),
+        )
+
+        message = (
+            "Ambiguous layer name `relu`. Network "
+            "has 2 layers with the same name"
+        )
+        with self.assertRaisesRegexp(NameError, message):
+            network.layer('relu')
+
+    def test_start_slice_unknown_layer(self):
+        network = layers.join(
+            layers.Input(10),
+            layers.Relu(8),
+        )
+        final_layer = layers.Relu(5, name='final-relu')
+
+        message = "Layer `final-relu` is not used in the graph"
+        with self.assertRaisesRegexp(ValueError, message):
+            network.start(final_layer)

@@ -61,3 +61,16 @@ class InputTestCase(BaseTestCase):
             str(layers.Input(None)),
             "Input(None, name='input-4')",
         )
+
+    def test_input_with_tensor_shape(self):
+        network = layers.join(
+            layers.Input(10),
+            layers.Relu(5),
+        )
+        network_2 = layers.join(
+            layers.Input(network.output_shape[1:]),
+            layers.Relu(3),
+        )
+        self.assertEqual(network_2.layers[0].shape, (5,))
+        self.assertShapesEqual(network_2.input_shape, (None, 5))
+        self.assertShapesEqual(network_2.output_shape, (None, 3))
