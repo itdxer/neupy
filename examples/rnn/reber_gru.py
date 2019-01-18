@@ -1,11 +1,8 @@
 import numpy as np
 
 from sklearn.model_selection import train_test_split
-from neupy import algorithms, layers, utils
+from neupy import algorithms, layers
 from neupy.datasets import reber
-
-
-utils.reproducible()
 
 
 def add_padding(data):

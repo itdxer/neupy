@@ -1,5 +1,6 @@
 import math
 
+import six
 import numpy as np
 import tensorflow as tf
 
@@ -65,7 +66,12 @@ class ActivationLayerMainTestCase(BaseTestCase):
             layers.Input(1),
             layers.Input(2),
         )
-        expected_message = "2 positional arguments but 3 were given."
+        if six.PY3:
+            expected_message = "2 positional arguments but 3 were given."
+        else:
+            expected_message = (
+                "get_output_shape() takes exactly 2 arguments (3 given)."
+            )
         with self.assertRaisesRegexp(TypeError, expected_message):
             layers.join(inputs, layers.Relu(3, name='relu'))
 
