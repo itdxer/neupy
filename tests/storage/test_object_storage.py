@@ -14,10 +14,13 @@ from helpers import catch_stdout
 
 
 class BasicStorageTestCase(BaseTestCase):
-    @unittest.skip("broken for now. cannot pickle Variable step")
     def test_simple_dill_storage(self):
         bpnet = algorithms.GradientDescent(
-            layers.Input(2) > layers.Sigmoid(3) > layers.Sigmoid(1),
+            [
+                layers.Input(2),
+                layers.Sigmoid(3),
+                layers.Sigmoid(1),
+            ],
             step=0.25,
             batch_size=None,
         )
@@ -28,40 +31,42 @@ class BasicStorageTestCase(BaseTestCase):
         target = target_scaler.fit_transform(target.reshape(-1, 1))
 
         with tempfile.NamedTemporaryFile() as temp:
-            test_layer_weights = self.eval(bpnet.layers[1].weight)
+            original_layers = bpnet.network.layers
+            test_layer_weights = self.eval(original_layers[1].weight)
+
             dill.dump(bpnet, temp)
             temp.file.seek(0)
 
             restored_bpnet = dill.load(temp)
             temp.file.seek(0)
-            layers_sizes = [layer.size for layer in restored_bpnet.layers]
+
+            restored_layers = restored_bpnet.network.layers
 
             self.assertEqual(0.25, self.eval(restored_bpnet.step))
-            self.assertEqual([2, 3, 1], layers_sizes)
+            self.assertEqual(3, len(restored_layers))
             np.testing.assert_array_equal(
                 test_layer_weights,
-                self.eval(restored_bpnet.layers[1].weight)
+                self.eval(restored_layers[1].weight)
             )
 
+            # Check if it's possible to recover training state
             bpnet.train(data, target, epochs=5)
             real_bpnet_error = bpnet.score(data, target)
-            updated_input_weight = self.eval(bpnet.layers[1].weight)
+            updated_input_weight = self.eval(original_layers[1].weight)
 
             dill.dump(bpnet, temp)
             temp.file.seek(0)
 
-            restored_bpnet2 = dill.load(temp)
+            restored_bpnet_2 = dill.load(temp)
             temp.file.seek(0)
-            restored_bpnet_error = restored_bpnet2.score(
-                data, target
-            )
 
+            restored_layers_2 = restored_bpnet_2.network.layers
             np.testing.assert_array_equal(
                 updated_input_weight,
-                self.eval(restored_bpnet2.layers[1].weight)
+                self.eval(restored_layers_2[1].weight)
             )
 
-            # Error must be big, because we didn't normalize data
+            restored_bpnet_error = restored_bpnet_2.score(data, target)
             self.assertEqual(real_bpnet_error, restored_bpnet_error)
 
     @unittest.skipIf(six.PY2, "doesn't work for python 2")
