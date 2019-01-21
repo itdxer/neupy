@@ -4,7 +4,6 @@ from __future__ import division, absolute_import, unicode_literals
 import time
 import inspect
 from abc import abstractmethod
-from collections import defaultdict
 
 import numpy as np
 
@@ -99,13 +98,13 @@ class BaseSkeleton(ConfigurableABC, Verbose):
 
 class Events(object):
     def __init__(self, network, signals):
-        self.data = defaultdict(list)
         self.network = network
         self.signals = signals
+        self.logs = []
 
-    def trigger(self, name, **data):
-        if data:
-            self.data[name].append(data)
+    def trigger(self, name, store_data=False, **data):
+        if store_data and data:
+            self.logs.append(dict(data, name=name))
 
         for signal in self.signals:
             if hasattr(signal, name):
@@ -145,10 +144,6 @@ class BaseNetwork(BaseSkeleton):
     training_errors : list
         List of the training errors.
 
-    validation_errors : list
-        Contains list of validation errors. Validation error will be equal
-        to ``None`` when validation wasn't done during this epoch.
-
     last_epoch : int
         Value equals to the last trained epoch. After initialization
         it is equal to ``0``.
@@ -163,10 +158,12 @@ class BaseNetwork(BaseSkeleton):
 
         self.last_epoch = 0
         self.n_updates_made = 0
+        self.errors = base_signals.ErrorCollectorSignal()
 
         signals = list(as_tuple(
             base_signals.ProgressbarSignal(),
             base_signals.PrintLastErrorSignal(),
+            self.errors,
             self.signals,
         ))
 
@@ -193,16 +190,6 @@ class BaseNetwork(BaseSkeleton):
 
     def score(self, X_test, y_test):
         raise NotImplementedError()
-
-    @property
-    def training_errors(self):
-        errors = self.events.data.get('train_error', [])
-        return [error['value'] for error in errors]
-
-    @property
-    def validation_errors(self):
-        errors = self.events.data.get('valid_error', [])
-        return [error['value'] for error in errors]
 
     def train(self, X_train, y_train=None, X_test=None, y_test=None,
               epochs=100, batch_size=None):
@@ -234,7 +221,8 @@ class BaseNetwork(BaseSkeleton):
             X_train=X_train,
             y_train=y_train,
             epochs=epochs,
-            batch_size=batch_size
+            batch_size=batch_size,
+            store_data=False,
         )
 
         try:
@@ -261,6 +249,7 @@ class BaseNetwork(BaseSkeleton):
                         eta=time.time() - update_start_time,
                         epoch=epoch,
                         n_updates=self.n_updates_made,
+                        store_data=True,
                     )
                     self.events.trigger('update_end')
 
@@ -273,6 +262,7 @@ class BaseNetwork(BaseSkeleton):
                         eta=time.time() - test_start_time,
                         epoch=epoch,
                         n_updates=self.n_updates_made,
+                        store_data=True,
                     )
 
                 self.events.trigger('epoch_end')

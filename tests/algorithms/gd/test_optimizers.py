@@ -25,8 +25,8 @@ class OptimizersTestCase(BaseTestCase):
             epsilon=1e-5,
         )
         optimizer.train(x_train, y_train, x_test, y_test, epochs=100)
-        self.assertGreater(0.05, optimizer.training_errors[-1])
-        self.assertGreater(0.15, optimizer.validation_errors[-1])
+        self.assertGreater(0.05, optimizer.errors.train[-1])
+        self.assertGreater(0.15, optimizer.errors.valid[-1])
 
     def test_adagrad(self):
         x_train, x_test, y_train, y_test = simple_classification()
@@ -37,7 +37,7 @@ class OptimizersTestCase(BaseTestCase):
             verbose=False,
         )
         optimizer.train(x_train, y_train, x_test, y_test, epochs=150)
-        self.assertGreater(0.15, optimizer.validation_errors[-1])
+        self.assertGreater(0.15, optimizer.errors.valid[-1])
 
     def test_adam(self):
         x_train, x_test, y_train, y_test = simple_classification()
@@ -50,7 +50,7 @@ class OptimizersTestCase(BaseTestCase):
             beta2=0.99,
         )
         optimizer.train(x_train, y_train, x_test, y_test, epochs=200)
-        self.assertGreater(0.2, optimizer.validation_errors[-1])
+        self.assertGreater(0.2, optimizer.errors.valid[-1])
 
     def test_rmsprop(self):
         x_train, x_test, y_train, y_test = simple_classification()
@@ -63,7 +63,7 @@ class OptimizersTestCase(BaseTestCase):
             decay=0.9,
         )
         optimizer.train(x_train, y_train, x_test, y_test, epochs=150)
-        self.assertGreater(0.15, optimizer.validation_errors[-1])
+        self.assertGreater(0.15, optimizer.errors.valid[-1])
 
     def test_momentum(self):
         x_train, x_test, y_train, y_test = simple_classification()
@@ -77,7 +77,7 @@ class OptimizersTestCase(BaseTestCase):
         )
 
         optimizer.train(x_train, y_train, x_test, y_test, epochs=30)
-        self.assertGreater(0.15, optimizer.validation_errors[-1])
+        self.assertGreater(0.15, optimizer.errors.valid[-1])
 
     def test_adamax(self):
         x_train, x_test, y_train, y_test = simple_classification()
@@ -91,7 +91,7 @@ class OptimizersTestCase(BaseTestCase):
             beta2=0.999,
         )
         mnet.train(x_train, y_train, x_test, y_test, epochs=50)
-        self.assertGreater(0.15, mnet.training_errors[-1])
+        self.assertGreater(0.15, mnet.errors.train[-1])
 
     def test_adamax_overfit(self):
         self.assertCanNetworkOverfit(
