@@ -10,6 +10,7 @@ mock==2.0.0
 pytest==3.7.2
 pytest-cov==2.5.1
 pytest-xdist==1.22.5
+pytest-mpl==0.10
 
 # Storage module
 dill==0.2.3
