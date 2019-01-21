@@ -5,54 +5,49 @@ from scipy.ndimage.filters import gaussian_filter
 
 from neupy.utils import tensorflow_session, as_tuple
 from neupy.exceptions import InvalidConnection
+from neupy.algorithms.gd.base import BaseOptimizer
 
 
 __all__ = ('saliency_map', 'saliency_map_graph')
 
 
-def saliency_map_graph(connection):
+def saliency_map_graph(network):
     """
     Returns tensorflow variables for saliency map.
 
     Parameters
     ----------
-    connection : connection
+    network : network
     image : ndarray
     """
     session = tensorflow_session()
 
+    if not hasattr(saliency_map_graph, 'cache'):
+        saliency_map_graph.cache = {}
+
     if session in saliency_map_graph.cache:
         return saliency_map_graph.cache[session]
 
-    x = tf.placeholder(
-        shape=as_tuple(None, connection.input_shape),
-        name='saliency-map/input',
-        dtype=tf.float32,
-    )
-
-    with connection.disable_training_state():
-        prediction = connection.output(x)
+    inputs = network.inputs
+    prediction = network.outputs
 
     output_class = tf.argmax(prediction[0])
-    saliency, = tf.gradients(tf.reduce_max(prediction), x)
+    saliency, = tf.gradients(tf.reduce_max(prediction), inputs)
 
-    # Caching will ensure that we won't build tensorflow graph every time
-    # we generate
-    saliency_map_graph.cache[session] = x, saliency, output_class
-    return x, saliency, output_class
-
-
-saliency_map_graph.cache = {}
+    # Caching will ensure that we won't build
+    # tensorflow graph every time we generate
+    saliency_map_graph.cache[session] = inputs, saliency, output_class
+    return inputs, saliency, output_class
 
 
-def saliency_map(connection, image, mode='heatmap', sigma=8,
+def saliency_map(network, image, mode='heatmap', sigma=8,
                  ax=None, show=True, **kwargs):
     """
     Saliency Map plot.
 
     Parameters
     ----------
-    connection : network, connection
+    network : network
         Network based on which will be computed saliency map.
 
     image : 3D array-like tensor
@@ -108,35 +103,38 @@ def saliency_map(connection, image, mode='heatmap', sigma=8,
         image = np.expand_dims(image, axis=0)
 
     if image.ndim != 4:
-        raise ValueError("Invalid image shape. Image expected to be 3D, "
-                         "got {}D image".format(image.ndim))
+        raise ValueError(
+            "Invalid image shape. Image expected to be 3D, "
+            "got {}D image".format(image.ndim))
 
     valid_modes = ('raw', 'heatmap')
     if mode not in valid_modes:
-        raise ValueError("{!r} is invalid value for mode argument. Valid "
-                         "mode values are: {!r}".format(mode, valid_modes))
+        raise ValueError(
+            "{!r} is invalid value for mode argument. Valid "
+            "mode values are: {!r}".format(mode, valid_modes))
 
-    if len(connection.output_layers) != 1:
+    if isinstance(network, BaseOptimizer):
+        network = network.network
+
+    if len(network.output_layers) != 1:
         raise InvalidConnection(
-            "Cannot build saliency map for connection that has more than "
-            "one output layer. Output layer can be specified explicitly. "
-            "For instance, use network.end('layer-name') with specified "
-            "output layer name.")
+            "Cannot build saliency map for the network that "
+            "has more than one output layer.")
 
-    if len(connection.input_layers) != 1:
+    if len(network.input_layers) != 1:
         raise InvalidConnection(
-            "Cannot build saliency map for connection that has more than "
-            "one input layer. Output layer can be specified explicitly. "
-            "For instance, use network.start('layer-name') with specified "
-            "output layer name.")
+            "Cannot build saliency map for the network that "
+            "has more than one input layer.")
 
-    if len(connection.input_shape) != 3:
-        raise InvalidConnection("Input layer has invalid input shape")
+    if len(network.input_shape) != 4:
+        raise InvalidConnection(
+            "Input layer has to be 4 dimensions, but network expects "
+            "{} dimensional input".format(len(network.input_shape)))
 
     if ax is None:
         ax = plt.gca()
 
-    x, saliency, output_class = saliency_map_graph(connection)
+    x, saliency, output_class = saliency_map_graph(network)
 
     session = tensorflow_session()
     saliency, output = session.run(

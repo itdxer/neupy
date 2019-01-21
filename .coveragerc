@@ -1,7 +1,3 @@
-[run]
-omit =
-    ./neupy/plots/*.py
-
 [report]
 show_missing = True
 exclude_lines =
