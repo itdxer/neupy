@@ -91,21 +91,30 @@ class SaliencyMapTestCase(BaseTestCase):
             events.append('gca')
             return original_gca()
 
-        with mock.patch('matplotlib.axes.Axes.imshow', side_effect=mocked_imshow):
-            plots.saliency_map(self.network, self.image, mode='heatmap', show=False)
+        imshow_path = 'matplotlib.axes.Axes.imshow'
+        with mock.patch(imshow_path, side_effect=mocked_imshow):
+            plots.saliency_map(
+                self.network, self.image,
+                mode='heatmap', show=False,
+            )
             self.assertSequenceEqual(events, ['imshow'])
 
-            plots.saliency_map(self.network, self.image, mode='raw', show=False)
+            plots.saliency_map(
+                self.network, self.image,
+                mode='raw', show=False,
+            )
             self.assertSequenceEqual(events, ['imshow', 'imshow'])
 
             with mock.patch('matplotlib.pyplot.show', side_effect=mocked_show):
                 plots.saliency_map(self.network, self.image, show=True)
-                self.assertSequenceEqual(events, ['imshow', 'imshow', 'imshow', 'show'])
+                self.assertSequenceEqual(
+                    events, ['imshow', 'imshow', 'imshow', 'show'])
 
             with mock.patch('matplotlib.pyplot.gca', side_effect=mocked_gca):
                 plots.saliency_map(self.network, self.image, show=False)
                 self.assertSequenceEqual(
-                    events, ['imshow', 'imshow', 'imshow', 'show', 'gca', 'imshow'])
+                    events,
+                    ['imshow', 'imshow', 'imshow', 'show', 'gca', 'imshow'])
 
             optimizer = algorithms.GradientDescent(self.network)
             plots.saliency_map(optimizer, self.image, show=False)

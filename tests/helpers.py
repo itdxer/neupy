@@ -1,7 +1,4 @@
-import os
 import sys
-import unittest
-import tempfile
 from contextlib import contextmanager
 
 import six
@@ -10,7 +7,6 @@ import pandas as pd
 from sklearn import datasets
 from sklearn.model_selection import StratifiedShuffleSplit
 from matplotlib import pyplot as plt
-from matplotlib.testing.compare import compare_images
 
 from neupy import algorithms, layers, utils, init
 from neupy.storage import save_dict, load_dict

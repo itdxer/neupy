@@ -83,7 +83,7 @@ class GradientDescentTestCase(BaseTestCase):
         self.assertAlmostEqual(self.eval(recovered_optimizer.step), 0.2)
         self.assertEqual(recovered_optimizer.shuffle_data, True)
 
-    def test_optimizer_with_bad_input_shape_passed(self):
+    def test_optimizer_with_bad_shape_input_passed(self):
         optimizer = algorithms.GradientDescent(
             [
                 layers.Input((10, 10, 3)),
@@ -106,7 +106,7 @@ class GradientDescentTestCase(BaseTestCase):
         prediction = optimizer.predict(image)
         self.assertEqual(prediction.ndim, 2)
 
-    def test_optimizer_with_bad_input_shape_passed(self):
+    def test_optimizer_with_bad_shape_target_passed(self):
         optimizer = algorithms.GradientDescent(
             [
                 layers.Input((10, 10, 3)),

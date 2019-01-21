@@ -3,7 +3,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from scipy.ndimage.filters import gaussian_filter
 
-from neupy.utils import tensorflow_session, as_tuple
+from neupy.utils import tensorflow_session
 from neupy.exceptions import InvalidConnection
 from neupy.algorithms.gd.base import BaseOptimizer
 
