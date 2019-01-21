@@ -1,5 +1,3 @@
-import os
-
 import pytest
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,9 +5,6 @@ import matplotlib.pyplot as plt
 from neupy import plots
 
 from base import BaseTestCase
-
-
-IMGDIR = os.path.join("plots", "images", "hinton")
 
 
 class HintonDiagramTestCase(BaseTestCase):

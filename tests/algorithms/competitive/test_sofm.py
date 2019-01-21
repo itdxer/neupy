@@ -438,10 +438,10 @@ class SOFMTestCase(BaseTestCase):
         data = np.concatenate([X, X], axis=1)
 
         sofm.train(data, epochs=1)
-        error_after_first_epoch = sofm.training_errors[-1]
+        error_after_first_epoch = sofm.errors.train[-1]
 
         sofm.train(data, epochs=9)
-        self.assertLess(sofm.training_errors[-1], error_after_first_epoch)
+        self.assertLess(sofm.errors.train[-1], error_after_first_epoch)
 
     def test_sofm_angle_distance(self):
         sn = algorithms.SOFM(

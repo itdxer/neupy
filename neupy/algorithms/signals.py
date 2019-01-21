@@ -8,7 +8,8 @@ import progressbar
 from neupy.utils import iters
 
 
-__all__ = ('ProgressbarSignal', 'PrintLastErrorSignal', 'EpochEndSignal')
+__all__ = ('ProgressbarSignal', 'PrintLastErrorSignal', 'EpochEndSignal',
+           'ErrorCollectorSignal')
 
 
 def format_time(time):
@@ -66,6 +67,7 @@ class ProgressbarSignal(object):
 
     def epoch_start(self, network):
         self.index = 0
+        self.last_train_error = None
         self.bar = progressbar.NullBar()
 
         if network.verbose and self.n_batches >= 2:
@@ -73,11 +75,11 @@ class ProgressbarSignal(object):
             self.bar.update(0)
 
     def train_error(self, network, **data):
-        self.last_error = data['value']
+        self.last_train_error = data['value']
 
     def update_end(self, network):
         self.index += 1
-        self.bar.update(self.index, loss=self.last_error)
+        self.bar.update(self.index, loss=self.last_train_error)
 
     def epoch_end(self, network):
         self.bar.finish(end='\r')
@@ -89,21 +91,16 @@ class ProgressbarSignal(object):
 
 class PrintLastErrorSignal(object):
     def print_last_error(self, network):
-        train_errors = network.events.data.get('train_error', [])
-        validation_errors = network.events.data.get('valid_error', [])
-
         messages = []
         base_message = "#{} : [{}] ".format(
             network.last_epoch,
             format_time(self.last_epoch_time))
 
-        if train_errors:
-            train_error = train_errors[-1]['value']
-            messages.append("train: {:.6f}".format(train_error))
+        if self.last_train_error is not None:
+            messages.append("train: {:.6f}".format(self.last_train_error))
 
-        if validation_errors:
-            validation_error = validation_errors[-1]['value']
-            messages.append("valid: {:.6f}".format(validation_error))
+        if self.last_valid_error is not None:
+            messages.append("valid: {:.6f}".format(self.last_valid_error))
 
         network.logs.write(base_message + ', '.join(messages))
 
@@ -113,6 +110,14 @@ class PrintLastErrorSignal(object):
 
     def epoch_start(self, network):
         self.epoch_start_time = time.time()
+        self.last_train_error = None
+        self.last_valid_error = None
+
+    def train_error(self, network, value, **kwargs):
+        self.last_train_error = value
+
+    def valid_error(self, network, value, **kwargs):
+        self.last_valid_error = value
 
     def epoch_end(self, network):
         epoch = network.last_epoch
@@ -125,3 +130,22 @@ class PrintLastErrorSignal(object):
     def train_end(self, network):
         if network.last_epoch != self.last_epoch_shown:
             self.print_last_error(network)
+
+
+class ErrorCollectorSignal(object):
+    def __init__(self):
+        self.storage = {'train': [], 'valid': []}
+
+    @property
+    def train(self):
+        return self.storage['train']
+
+    @property
+    def valid(self):
+        return self.storage['valid']
+
+    def train_error(self, network, value, **kwargs):
+        self.storage['train'].append(value)
+
+    def valid_error(self, network, value, **kwargs):
+        self.storage['valid'].append(value)

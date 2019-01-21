@@ -167,8 +167,8 @@ class LevenbergMarquardt(BaseOptimizer):
         return updates
 
     def one_training_update(self, X_train, y_train):
-        if self.training_errors:
-            last_error = self.training_errors[-1]
+        if self.errors.train:
+            last_error = self.errors.train[-1]
             self.variables.last_error.load(last_error, tensorflow_session())
 
         return super(LevenbergMarquardt, self).one_training_update(

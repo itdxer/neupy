@@ -241,8 +241,8 @@ class IRPROPPlus(RPROP):
         super(IRPROPPlus, self).init_functions()
 
     def one_training_update(self, X_train, y_train):
-        if len(self.training_errors) >= 2:
-            previous_error, last_error = self.training_errors[-2:]
+        if len(self.errors.train) >= 2:
+            previous_error, last_error = self.errors.train[-2:]
             session = tensorflow_session()
 
             self.variables.last_error.load(last_error, session)

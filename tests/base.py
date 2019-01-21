@@ -121,7 +121,7 @@ class BaseTestCase(unittest.TestCase):
         ])
 
         optimizer.train(x_train, y_train, epochs=epochs)
-        self.assertLess(optimizer.training_errors[-1], min_accepted_loss)
+        self.assertLess(optimizer.errors.train[-1], min_accepted_loss)
 
     def assertShapesEqual(self, shape1, shape2, *args, **kwargs):
         shape1 = shape_to_tuple(shape1)
