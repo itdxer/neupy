@@ -133,56 +133,9 @@ def compare_networks(default_class, tested_class, data, **kwargs):
         plt.show()
 
     if network_default_error <= network_tested_error:
-        raise AssertionError("First network has smaller error ({}) that the "
-                             "second one ({}).".format(network_default_error,
-                                                       network_tested_error))
-
-
-def format_image_name(name):
-    """
-    Add to image name prefix that identify Python versions.
-    """
-    name_prefix = 'test_py3_' if six.PY3 else 'test_py2_'
-    return name_prefix + name
-
-
-@contextmanager
-def image_comparison(original_image_path, figsize=(10, 10), tol=1e-3):
-    """
-    Context manager that initialize figure that should contain figure
-    that should be compared with expected one.
-
-    Parameters
-    ----------
-    original_image_path : str
-        Path to original image that will use for comparison.
-
-    figsize : tuple
-        Figure size. Defaults to ``(10, 10)``.
-
-    tol : float
-        Comparison tolerance. Defaults to ``1e-3``.
-
-    Raises
-    ------
-    AssertionError
-        Exception would be trigger in case when generated images and
-        original one are different.
-    """
-    currentdir = os.path.abspath(os.path.dirname(__file__))
-    original_image_path = os.path.join(currentdir, original_image_path)
-
-    with tempfile.NamedTemporaryFile(suffix='.png') as f:
-        figure = plt.figure(figsize=figsize)
-
-        yield figure
-
-        figure.savefig(f.name)
-        error = compare_images(f.name, original_image_path, tol=tol)
-
-        if error:
-            raise AssertionError("Image comparison failed. \n"
-                                 "Information: {}".format(error))
+        raise AssertionError(
+            "First network has smaller error ({}) that the second one ({})."
+            "".format(network_default_error, network_tested_error))
 
 
 def reproducible_network_train(seed=0, epochs=500, **additional_params):
@@ -266,27 +219,3 @@ def vectors_for_testing(vector, is_feature1d=True):
         pd.DataFrame(vector.reshape(shape2d))])
 
     return vectors_list
-
-
-def skip_image_comparison_if_specified(func):
-    """
-    Decorator identifies tests that involve image comparison.
-    Before run test function check if environemnt variable
-    `SKIP_PLOT_TEST` exists and has non-empty value. If it exists,
-    step will be skipped.
-
-    Parameters
-    ----------
-    func : function
-        Any function that you need to override.
-
-    Returns
-    -------
-    function
-        Overrided function.
-    """
-    decorator = unittest.skipIf(
-        os.environ.get('SKIP_PLOT_TEST', None),
-        "skip tests that involve image comparison"
-    )
-    return decorator(func)

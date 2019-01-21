@@ -43,6 +43,7 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
     >>> plt.style.use('ggplot')
     >>> plt.title("Hinton diagram")
     >>> plt.figure(figsize=(16, 12))
+    >>>
     >>> plots.hinton(weight)
     >>> plt.show()
 

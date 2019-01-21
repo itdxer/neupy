@@ -91,7 +91,7 @@ def saliency_map(network, image, mode='heatmap', sigma=8,
     >>>
     >>> network = layers.join(
     ...     layers.Input((3, 28, 28)),
-    ...     layers.Convolution((32, 3, 3)) > layers.Relu(),
+    ...     layers.Convolution((32, 3, 3)) >> layers.Relu(),
     ...     layers.Reshape(),
     ...     layers.Softmax(10),
     ... )
