@@ -1,6 +1,8 @@
+import mock
 import numpy as np
+import matplotlib.pyplot as plt
 
-from neupy import plots, layers
+from neupy import plots, layers, algorithms
 from neupy.exceptions import InvalidConnection
 
 from base import BaseTestCase
@@ -73,3 +75,37 @@ class SaliencyMapTestCase(BaseTestCase):
         )
         with self.assertRaisesRegexp(ValueError, message):
             plots.saliency_map(self.network, np.ones((28, 28)))
+
+    def test_saliency_maps(self):
+        events = []
+        original_gca = plt.gca
+
+        def mocked_imshow(array, *args, **kwargs):
+            events.append('imshow')
+            self.assertEqual(array.shape, (28, 28))
+
+        def mocked_show(*args, **kwargs):
+            events.append('show')
+
+        def mocked_gca(*args, **kwargs):
+            events.append('gca')
+            return original_gca()
+
+        with mock.patch('matplotlib.axes.Axes.imshow', side_effect=mocked_imshow):
+            plots.saliency_map(self.network, self.image, mode='heatmap', show=False)
+            self.assertSequenceEqual(events, ['imshow'])
+
+            plots.saliency_map(self.network, self.image, mode='raw', show=False)
+            self.assertSequenceEqual(events, ['imshow', 'imshow'])
+
+            with mock.patch('matplotlib.pyplot.show', side_effect=mocked_show):
+                plots.saliency_map(self.network, self.image, show=True)
+                self.assertSequenceEqual(events, ['imshow', 'imshow', 'imshow', 'show'])
+
+            with mock.patch('matplotlib.pyplot.gca', side_effect=mocked_gca):
+                plots.saliency_map(self.network, self.image, show=False)
+                self.assertSequenceEqual(
+                    events, ['imshow', 'imshow', 'imshow', 'show', 'gca', 'imshow'])
+
+            optimizer = algorithms.GradientDescent(self.network)
+            plots.saliency_map(optimizer, self.image, show=False)
