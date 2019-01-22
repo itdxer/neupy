@@ -8,7 +8,10 @@ import progressbar
 from neupy.utils.misc import as_tuple
 
 
-__all__ = ('apply_batches', 'minibatches')
+__all__ = (
+    'apply_batches', 'minibatches',
+    'count_minibatches', 'count_samples',
+)
 
 
 def count_samples(inputs):
