@@ -12,6 +12,7 @@ from neupy.core.logs import Verbose
 from neupy.core.config import ConfigurableABC
 from neupy.core.properties import Property, NumberProperty, IntProperty
 from neupy.algorithms import signals as base_signals
+from neupy.algorithms.plots import plot_optimizer_errors
 from neupy.utils import iters, as_tuple
 
 
@@ -195,6 +196,14 @@ class BaseNetwork(BaseSkeleton):
 
     def score(self, X_test, y_test):
         raise NotImplementedError()
+
+    def plot_errors(self, logx=False, show=True, **figkwargs):
+        plot_optimizer_errors(
+            optimizer=self,
+            logx=logx,
+            show=show,
+            **figkwargs,
+        )
 
     def train(self, X_train, y_train=None, X_test=None, y_test=None,
               epochs=100, batch_size=None):

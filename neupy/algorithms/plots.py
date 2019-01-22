@@ -2,7 +2,6 @@ import pkgutil
 import warnings
 import importlib
 
-import pandas as pd
 import matplotlib.pyplot as plt
 
 
@@ -18,8 +17,8 @@ def load_pandas_module():
 def plot(x_train, y_train, x_valid, y_valid, ax, logx=False):
     plot_function = ax.semilogx if logx else ax.plot
 
-    # With large number of samples there will be to many points
-    # in the plot and it will be hard to read the plot
+    # With large number of samples there will be to many
+    # points in the plot and it will be hard to read it
     style = '-' if len(x_train) > 50 or len(x_valid) > 50 else 'o-'
     line_train, = plot_function(x_train, y_train, style, label='train')
 

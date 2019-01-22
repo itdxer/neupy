@@ -127,12 +127,14 @@ class PNN(BaseSkeleton):
         self.y_train = y_train
 
         if X_train.shape[0] != y_train.shape[0]:
-            raise ValueError("Number of samples in the input and target "
-                             "datasets are different")
+            raise ValueError(
+                "Number of samples in the input and "
+                "target datasets are different")
 
         if y_train.shape[1] != 1:
-            raise ValueError("Target value should be a vector or a "
-                             "matrix with one column")
+            raise ValueError(
+                "Target value should be vector or "
+                "matrix with only one column")
 
         classes = self.classes = np.unique(y_train)
         n_classes = classes.size
