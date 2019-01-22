@@ -159,9 +159,18 @@ class BaseStepAssociative(BaseAssociative):
         predict = self.predict
         weight_delta = self.weight_delta
 
+        error = 0
+
         for x_row in X_train:
             x_row = np.expand_dims(x_row, axis=0)
             layer_output = predict(x_row)
-            weight[n_unconditioned:, :] += weight_delta(x_row, layer_output)
 
-        return np.linalg.norm(weight)
+            delta = weight_delta(x_row, layer_output)
+            weight[n_unconditioned:, :] += delta
+
+            # This error can tell us whether network has converged
+            # to some value of weihts. Low errors will mean that weights
+            # hasn't been updated much during the training epoch.
+            error += np.linalg.norm(delta)
+
+        return error

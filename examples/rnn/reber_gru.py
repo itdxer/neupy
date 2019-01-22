@@ -45,7 +45,7 @@ x_train, x_test, y_train, y_test = train_test_split(
 n_categories = len(reber.avaliable_letters) + 1  # +1 for zero paddings
 n_time_steps = x_train.shape[1]
 
-network = algorithms.RMSProp(
+optimizer = algorithms.RMSProp(
     [
         layers.Input(n_time_steps),
         # shape: (n_samples, n_time_steps)
@@ -65,8 +65,8 @@ network = algorithms.RMSProp(
     batch_size=64,
     loss='binary_crossentropy',
 )
-network.train(x_train, y_train, x_test, y_test, epochs=20)
+optimizer.train(x_train, y_train, x_test, y_test, epochs=20)
 
-y_predicted = network.predict(x_test).round()
+y_predicted = optimizer.predict(x_test).round()
 accuracy = (y_predicted.T == y_test).mean()
 print("Test accuracy: {:.2%}".format(accuracy))
