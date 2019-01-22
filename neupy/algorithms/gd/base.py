@@ -18,6 +18,7 @@ from neupy.utils import (
 from neupy.algorithms.gd import objectives
 from neupy.exceptions import InvalidConnection
 from neupy.algorithms.base import BaseNetwork
+from neupy.algorithms.gd.plots import plot_optimizer_errors
 
 
 __all__ = ('BaseOptimizer', 'GradientDescent')
@@ -293,6 +294,14 @@ class BaseOptimizer(BaseNetwork):
     def one_training_update(self, X_train, y_train):
         return self.functions.one_training_update(
             *as_tuple(X_train, y_train))
+
+    def plot_errors(self, logx=False, show=True,  **figkwargs):
+        plot_optimizer_errors(
+            optimizer=self,
+            logx=logx,
+            show=show,
+            **figkwargs,
+        )
 
     def get_params(self, deep=False, with_network=True):
         params = super(BaseOptimizer, self).get_params()

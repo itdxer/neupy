@@ -141,12 +141,17 @@ class BaseNetwork(BaseSkeleton):
 
     Attributes
     ----------
-    training_errors : list
-        List of the training errors.
+    errors : list
+        Information about errors. It has two main attributes, namely
+        ``train`` and ``valid``. These attributes provide access to
+        the training and validation errors respectively.
 
     last_epoch : int
         Value equals to the last trained epoch. After initialization
         it is equal to ``0``.
+
+    n_updates_made : int
+        Number of training updates applied to the network.
     """
     step = NumberProperty(default=0.1, minval=0)
     show_epoch = IntProperty(minval=1, default=1)
@@ -158,7 +163,7 @@ class BaseNetwork(BaseSkeleton):
 
         self.last_epoch = 0
         self.n_updates_made = 0
-        self.errors = base_signals.ErrorCollectorSignal()
+        self.errors = base_signals.ErrorCollector()
 
         signals = list(as_tuple(
             base_signals.ProgressbarSignal(),
@@ -249,6 +254,7 @@ class BaseNetwork(BaseSkeleton):
                         eta=time.time() - update_start_time,
                         epoch=epoch,
                         n_updates=self.n_updates_made,
+                        n_samples=iters.count_samples(X_batch),
                         store_data=True,
                     )
                     self.events.trigger('update_end')
@@ -262,6 +268,7 @@ class BaseNetwork(BaseSkeleton):
                         eta=time.time() - test_start_time,
                         epoch=epoch,
                         n_updates=self.n_updates_made,
+                        n_samples=iters.count_samples(X_test),
                         store_data=True,
                     )
 

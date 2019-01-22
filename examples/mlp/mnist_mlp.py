@@ -18,7 +18,7 @@ def load_data():
         test_size=(1 / 7.))
 
 
-network = algorithms.Momentum(
+optimizer = algorithms.Momentum(
     [
         layers.Input(784),
         layers.Relu(500),
@@ -49,9 +49,9 @@ print("Preparing data...")
 x_train, x_test, y_train, y_test = load_data()
 
 print("Training...")
-network.train(x_train, y_train, x_test, y_test, epochs=20)
+optimizer.train(x_train, y_train, x_test, y_test, epochs=20)
 
-y_predicted = network.predict(x_test).argmax(axis=1)
+y_predicted = optimizer.predict(x_test).argmax(axis=1)
 y_test = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))
 
 print(metrics.classification_report(y_test, y_predicted))

@@ -9,7 +9,7 @@ from neupy.utils import iters
 
 
 __all__ = ('ProgressbarSignal', 'PrintLastErrorSignal', 'EpochEndSignal',
-           'ErrorCollectorSignal')
+           'ErrorCollector')
 
 
 def format_time(time):
@@ -132,20 +132,13 @@ class PrintLastErrorSignal(object):
             self.print_last_error(network)
 
 
-class ErrorCollectorSignal(object):
+class ErrorCollector(object):
     def __init__(self):
-        self.storage = {'train': [], 'valid': []}
-
-    @property
-    def train(self):
-        return self.storage['train']
-
-    @property
-    def valid(self):
-        return self.storage['valid']
+        self.valid = []
+        self.train = []
 
     def train_error(self, network, value, **kwargs):
-        self.storage['train'].append(value)
+        self.train.append(value)
 
     def valid_error(self, network, value, **kwargs):
-        self.storage['valid'].append(value)
+        self.valid.append(value)
