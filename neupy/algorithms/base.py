@@ -140,6 +140,19 @@ class BaseNetwork(BaseSkeleton):
 
     {Verbose.Parameters}
 
+    Methods
+    -------
+    {BaseSkeleton.fit}
+
+    predict(X)
+        Propagetes input ``X`` through the network and
+        returns produced output.
+
+    plot_errors(logx=False, show=True, **figkwargs)
+        Using errors collected during the training this method
+        generates plot that can give additional insight into the
+        performance reached during the training.
+
     Attributes
     ----------
     errors : list
