@@ -9,7 +9,7 @@ from six.moves import cPickle as pickle
 
 import neupy
 from neupy.core.docs import shared_docs
-from neupy.layers.base import LayerGraph
+from neupy.layers.graph import LayerGraph
 from neupy.algorithms.base import BaseNetwork
 from neupy.utils import asfloat, tf_utils
 
