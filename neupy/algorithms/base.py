@@ -215,7 +215,7 @@ class BaseNetwork(BaseSkeleton):
             optimizer=self,
             logx=logx,
             show=show,
-            **figkwargs,
+            **figkwargs
         )
 
     def train(self, X_train, y_train=None, X_test=None, y_test=None,
