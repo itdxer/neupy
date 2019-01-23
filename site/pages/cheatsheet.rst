@@ -147,7 +147,7 @@ Layers
 .. code-block:: python
 
     from neupy.layers import *
-    network = Input(32) > Relu(16) > Softmax(10)
+    network = Input(32) >> Relu(16) >> Softmax(10)
 
 Layers with activation function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -208,6 +208,7 @@ Normalization layers
     :template: autosummary/class.rst
 
     neupy.layers.BatchNorm
+    neupy.layers.GroupNorm
     neupy.layers.LocalResponseNorm
 
 Stochastic layers

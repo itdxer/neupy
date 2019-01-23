@@ -9,13 +9,14 @@ from neupy.core.properties import (
 )
 from neupy.utils import asfloat
 from neupy.exceptions import (
-    LayerConnectionError,
     WeightInitializationError,
+    LayerConnectionError,
+    PropagationError,
 )
 from .base import Identity
 
 
-__all__ = ('BatchNorm', 'LocalResponseNorm')
+__all__ = ('BatchNorm', 'LocalResponseNorm', 'GroupNorm')
 
 
 class BatchNorm(Identity):
@@ -27,7 +28,7 @@ class BatchNorm(Identity):
     axes : tuple with ints or None
         Axes along which normalization will be applied. The ``None``
         value means that normalization will be applied over all axes
-        except the first one. In case of 4D tensor it will
+        except the last one. In case of 4D tensor it will
         be equal to ``(0, 1, 2)``. Defaults to ``None``.
 
     epsilon : float
@@ -43,12 +44,12 @@ class BatchNorm(Identity):
         Defaults to ``0.1``.
 
     gamma : array-like, Tensorfow variable, scalar or Initializer
-        Default initialization methods you can
+        Scale. Default initialization methods you can
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=1)``.
 
     beta : array-like, Tensorfow variable, scalar or Initializer
-        Default initialization methods you can
+        Offset. Default initialization methods you can
         find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=0)``.
 
@@ -71,6 +72,12 @@ class BatchNorm(Identity):
     Attributes
     ----------
     {Identity.Attributes}
+
+    Examples
+    --------
+
+    >>> from neupy.layers import *
+    >>> network = Input((10, 10, 12)) >> BatchNorm()
 
     References
     ----------
@@ -210,16 +217,17 @@ class LocalResponseNorm(Identity):
     Parameters
     ----------
     alpha : float
-        Coefficient, see equation above
+        Coefficient, see equation above. Defaults to ``1e-4``.
 
     beta : float
-        Offset, see equation above
+        Offset, see equation above. Defaults to ``0.75``.
 
     k : float
-        Exponent, see equation above
+        Exponent, see equation above. Defaults to ``2``.
 
     depth_radius : int
         Number of adjacent channels to normalize over, must be odd.
+        Defaults to ``5``.
 
     {Identity.name}
 
@@ -230,6 +238,12 @@ class LocalResponseNorm(Identity):
     Attributes
     ----------
     {Identity.Attributes}
+
+    Examples
+    --------
+
+    >>> from neupy.layers import *
+    >>> network = Input((10, 10, 12)) >> LocalResponseNorm()
     """
     alpha = NumberProperty()
     beta = NumberProperty()
@@ -262,3 +276,123 @@ class LocalResponseNorm(Identity):
             bias=self.k,
             alpha=self.alpha,
             beta=self.beta)
+
+
+class GroupNorm(Identity):
+    """
+    Group Normalization layer. THis layer is a simple alternative to the
+    Batch Normalization layer for cases when batch size is small.
+
+    Parameters
+    ----------
+    n_groups : int
+        During normalization all the channels will be break down into
+        separate groups and mean and variance will be estimated per group.
+        This parameter controls number of groups.
+
+    gamma : array-like, Tensorfow variable, scalar or Initializer
+        Scale. Default initialization methods you can
+        find :ref:`here <init-methods>`.
+        Defaults to ``Constant(value=1)``.
+
+    beta : array-like, Tensorfow variable, scalar or Initializer
+        Offset. Default initialization methods you can
+        find :ref:`here <init-methods>`.
+        Defaults to ``Constant(value=0)``.
+
+    epsilon : float
+        Epsilon ensures that input rescaling procedure that uses estimated
+        variance will never cause division by zero. Defaults to ``1e-5``.
+
+    {Identity.name}
+
+    Methods
+    -------
+    {Identity.Methods}
+
+    Attributes
+    ----------
+    {Identity.Attributes}
+
+    Examples
+    --------
+
+    >>> from neupy.layers import *
+    >>> network = Input((10, 10, 12)) >> GroupNorm(4)
+
+    References
+    ----------
+    .. [1] Group Normalization, Yuxin Wu, Kaiming He,
+           https://arxiv.org/pdf/1803.08494.pdf
+    """
+    n_groups = IntProperty(minval=1)
+    beta = ParameterProperty()
+    gamma = ParameterProperty()
+    epsilon = NumberProperty(minval=0)
+
+    def __init__(self, n_groups, beta=0, gamma=1, epsilon=1e-5, name=None):
+        super(GroupNorm, self).__init__(name=name)
+
+        self.n_groups = n_groups
+        self.beta = beta
+        self.gamma = gamma
+        self.epsilon = epsilon
+
+    def create_variables(self, input_shape):
+        n_channels = input_shape[3]
+
+        if n_channels.value is None:
+            raise WeightInitializationError(
+                "Cannot initialize variables when number of "
+                "channels is unknown. Input shape: {}, Layer: {}"
+                "".format(input_shape, self))
+
+        parameter_shape = (1, 1, 1, n_channels)
+
+        self.gamma = self.variable(
+            value=self.gamma, name='gamma',
+            shape=parameter_shape)
+
+        self.beta = self.variable(
+            value=self.beta, name='beta',
+            shape=parameter_shape)
+
+    def get_output_shape(self, input_shape):
+        input_shape = tf.TensorShape(input_shape)
+
+        if input_shape and input_shape.ndims != 4:
+            raise LayerConnectionError(
+                "Group normalization layer expects 4 dimensional input, "
+                "got {} instead. Input shape: {}, Layer: {}"
+                "".format(input_shape.ndims, input_shape, self))
+
+        n_channels = input_shape[3]
+
+        if n_channels.value and n_channels % self.n_groups != 0:
+            raise LayerConnectionError(
+                "Cannot divide {} input channels into {} groups. "
+                "Input shape: {}, Layer: {}".format(
+                    n_channels, self.n_groups, input_shape, self))
+
+        return super(GroupNorm, self).get_output_shape(input_shape)
+
+    def output(self, input):
+        input = tf.convert_to_tensor(input, dtype=tf.float32)
+        input_shape = tf.shape(input)
+        n_groups = self.n_groups
+
+        # We access dimensional information in form of tensors in case
+        # if some of the dimensions are undefined. In this way we make
+        # sure that reshape will work even if part of the input shape
+        # is undefined.
+        dims = [input_shape[i] for i in range(4)]
+        n_samples, height, width, n_channels = dims
+
+        input = tf.reshape(input, [
+            n_samples, height, width, n_groups, n_channels // n_groups])
+
+        mean, variance = tf.nn.moments(input, [1, 2, 4], keep_dims=True)
+        input = (input - mean) / tf.sqrt(variance + self.epsilon)
+        input = tf.reshape(input, input_shape)
+
+        return input * self.gamma + self.beta

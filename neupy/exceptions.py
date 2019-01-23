@@ -1,5 +1,7 @@
-__all__ = ('LayerConnectionError', 'InvalidConnection', 'NotTrained',
-           'StopTraining', 'WeightInitializationError')
+__all__ = (
+    'LayerConnectionError', 'InvalidConnection', 'NotTrained',
+    'StopTraining', 'WeightInitializationError', 'PropagationError',
+)
 
 
 class LayerConnectionError(Exception):
@@ -30,4 +32,11 @@ class StopTraining(Exception):
 class WeightInitializationError(Exception):
     """
     In case if there is some problem with weight initialization
+    """
+
+
+class PropagationError(Exception):
+    """
+    Error propagation triggers when input cannot be propagated
+    through the layer.
     """
