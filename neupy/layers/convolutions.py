@@ -20,13 +20,6 @@ __all__ = ('Convolution', 'Deconvolution')
 
 
 class Spatial2DProperty(TypedListProperty):
-    """
-    Stride property.
-
-    Parameters
-    ----------
-    {BaseProperty.Parameters}
-    """
     expected_type = (list, tuple, int)
 
     def __init__(self, *args, **kwargs):
@@ -173,13 +166,6 @@ def conv_output_shape(dimension_size, filter_size, padding, stride,
 
 
 class PaddingProperty(Property):
-    """
-    Border mode property identifies border for the
-    convolution operation.
-    Parameters
-    ----------
-    {Property.Parameters}
-    """
     expected_type = (six.string_types, int, tuple)
     valid_string_choices = ('VALID', 'SAME', 'same', 'valid')
 
@@ -287,13 +273,15 @@ class Convolution(BaseLayer):
 
     1D Convolution
 
-    >>> from neupy import layers
-    >>>
-    >>> layers.join(
-    ...     layers.Input((30, 10)),
-    ...     layers.Reshape((30, 1, 10)),
-    ...     layers.Convolution((3, 1, 16)),
+    >>> from neupy.layers import *
+    >>> network = join(
+    ...     Input((30, 10)),
+    ...     Reshape((30, 1, 10)),  # convert 3D to 4D
+    ...     Convolution((3, 1, 16)),
+    ...     Reshape((-1, 16))  # convert 4D back to 3D
     ... )
+    >>> network
+    (?, 30, 10) -> [... 4 layers ...] -> (?, 28, 16)
 
     Methods
     -------
@@ -433,6 +421,7 @@ class Deconvolution(Convolution):
     """
     Deconvolution layer. It's commonly called like this in the literature,
     but it's just gradient of the convolution and not actual deconvolution.
+    Also known as Transposed Convolution.
 
     Parameters
     ----------
@@ -459,19 +448,20 @@ class Deconvolution(Convolution):
     -------
     {Convolution.Methods}
 
-    Examples
-    --------
-    >>> from neupy import layers
-    >>>
-    >>> layers.join(
-    ...     layers.Input((28, 28, 3)),
-    ...     layers.Convolution((3, 3, 16)),
-    ...     layers.Deconvolution((3, 3, 1)),
-    ... )
-
     Attributes
     ----------
     {Convolution.Attributes}
+
+    Examples
+    --------
+    >>> from neupy.layers import *
+    >>> network = join(
+    ...     Input((28, 28, 3)),
+    ...     Convolution((3, 3, 16)),
+    ...     Deconvolution((3, 3, 1)),
+    ... )
+    >>> network
+    (?, 28, 28, 3) -> [... 3 layers ...] -> (?, 28, 28, 1)
     """
     def __init__(self, size, padding='valid', stride=1,
                  weight=init.HeNormal(gain=2), bias=0, name=None):
