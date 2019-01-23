@@ -31,7 +31,8 @@ class Adagrad(GradientDescent):
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> optimizer = algorithms.Adagrad(Input(2) > Sigmoid(3) > Sigmoid(1))
+    >>> network = Input(2) >> Sigmoid(3) >> Sigmoid(1)
+    >>> optimizer = algorithms.Adagrad(network)
     >>> optimizer.train(x_train, y_train)
 
     References
