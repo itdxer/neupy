@@ -24,10 +24,11 @@ def vgg16():
     >>> from neupy import architectures
     >>> vgg16 = architectures.vgg16()
     >>> vgg16
-    (224, 224, 3) -> [... 38 layers ...] -> 1000
+    (?, 224, 224, 3) -> [... 41 layers ...] -> (?, 1000)
+
     >>>
     >>> from neupy import algorithms
-    >>> network = algorithms.Momentum(vgg16, verbose=True)
+    >>> optimizer = algorithms.Momentum(vgg16, verbose=True)
 
     See Also
     --------

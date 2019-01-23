@@ -45,7 +45,7 @@ Regularization methods
     from neupy.layers import *
 
     optimizer = algorithms.Momentum(
-        Input(5) > Relu(10) > Sigmoid(1),
+        Input(5) >> Relu(10) >> Sigmoid(1),
         step=algorithms.l2(decay_rate=0.1)
     )
 
@@ -67,7 +67,7 @@ Learning rate update rules
     from neupy.layers import *
 
     optimizer = algorithms.Momentum(
-        Input(5) > Relu(10) > Sigmoid(1),
+        Input(5) >> Relu(10) >> Sigmoid(1),
         step=algorithms.step_decay(
             initial_value=0.1,
             reduction_freq=100,
@@ -92,7 +92,6 @@ Neural Networks with Radial Basis Functions (RBFN)
 
     neupy.algorithms.GRNN
     neupy.algorithms.PNN
-    neupy.algorithms.RBFKMeans
 
 Autoasociative Memory
 ~~~~~~~~~~~~~~~~~~~~~
@@ -252,7 +251,7 @@ Architectures
     >>> from neupy import architectures
     >>> resnet = architectures.resnet50()
     >>> resnet
-    (224, 224, 3) -> [... 187 layers ...] -> 1000
+    (?, 224, 224, 3) -> [... 187 layers ...] -> (?, 1000)
 
 .. autosummary::
     :toctree: ../modules/generated/

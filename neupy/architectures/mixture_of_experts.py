@@ -98,29 +98,30 @@ def mixture_of_experts(networks, gating_layer=None):
 
     Examples
     --------
-    >>> from neupy import layers, algorithms, architectures
+    >>> from neupy import algorithms, architectures
+    >>> from neupy.layers import *
     >>>
     >>> network = architectures.mixture_of_experts([
-    ...     layers.join(
-    ...         layers.Input(10),
-    ...         layers.Relu(5),
+    ...     join(
+    ...         Input(10),
+    ...         Relu(5),
     ...     ),
-    ...     layers.join(
-    ...         layers.Input(10),
-    ...         layers.Relu(33),
-    ...         layers.Relu(5),
+    ...     join(
+    ...         Input(10),
+    ...         Relu(33),
+    ...         Relu(5),
     ...     ),
-    ...     layers.join(
-    ...         layers.Input(10),
-    ...         layers.Relu(12),
-    ...         layers.Relu(25),
-    ...         layers.Relu(5),
+    ...     join(
+    ...         Input(10),
+    ...         Relu(12),
+    ...         Relu(25),
+    ...         Relu(5),
     ...     ),
     ... ])
     >>> network
-    10 -> [... 12 layers ...] -> 5
+    (?, 10) -> [... 12 layers ...] -> (?, 5)
     >>>
-    >>> gdnet = algorithms.Momentum(network, step=0.1)
+    >>> optimizer = algorithms.Momentum(network, step=0.1)
     """
     if not isinstance(networks, (list, tuple)):
         raise ValueError("Networks should be specified as a list")

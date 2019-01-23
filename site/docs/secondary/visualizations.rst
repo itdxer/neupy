@@ -28,23 +28,7 @@ More information about the Hinton diagram you can find in :plot:`documentation <
 Error plot
 ----------
 
-The plot shows the basic information about network's training progress.
-
-.. code-block:: python
-
-    from neupy import algorithms, plots
-
-    gdnet = algorithms.GradientDescent((2, 3, 1))
-    gdnet.train(x_train, y_train, x_test, y_test, epochs=100)
-
-    plots.error_plot(gdnet)
-
-More information related to this plot function you can in the :plot:`error_plot` documentation.
-
-.. image:: images/bpnet-train-errors-plot.png
-    :width: 70%
-    :align: center
-    :alt: GradientDescent epoch errors plot
+TODO: Add documentation
 
 
 Network structure

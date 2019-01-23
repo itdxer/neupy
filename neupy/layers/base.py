@@ -56,7 +56,8 @@ class BaseLayer(BaseGraph):
     Attributes
     ----------
     variables : dict
-        Variable names and their values.
+        Variable names and their values. Dictionary can be empty in case
+        if variables hasn't been created yet.
     """
     name = Property(expected_type=six.string_types)
 

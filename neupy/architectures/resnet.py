@@ -115,33 +115,34 @@ def resnet50(input_shape=(224, 224, 3), include_global_pool=True,
     --------
     ResNet-50 for ImageNet classification
 
-    >>> from neupy import architectures
-    >>> resnet50 = architectures.resnet50()
-    >>> resnet50
-    (224, 224, 3) -> [... 187 layers ...] -> 1000
+    >>> from neupy import architectures, algorithms
     >>>
-    >>> from neupy import algorithms
-    >>> network = algorithms.Momentum(resnet50)
+    >>> resnet = architectures.resnet50()
+    >>> resnet
+    (?, 224, 224, 3) -> [... 187 layers ...] -> (?, 1000)
+    >>>
+    >>> optimizer = algorithms.Momentum(resnet50)
 
     ResNet-50 for custom classification task
 
     >>> from neupy import architectures
-    >>> resnet50 = architectures.resnet50(include_global_pool=False)
-    >>> resnet50
-    (224, 224, 3) -> [... 185 layers ...] -> (7, 7, 2048)
+    >>> resnet = architectures.resnet50(include_global_pool=False)
+    >>> resnet
+    (?, 224, 224, 3) -> [... 185 layers ...] -> (?, 7, 7, 2048)
     >>>
     >>> from neupy.layers import *
-    >>> resnet50 = resnet50 > GlobalPooling('avg') > Softmax(21)
+    >>> resnet = resnet >> GlobalPooling('avg') >> Softmax(21)
+    (?, 224, 224, 3) -> [... 187 layers ...] -> (?, 21)
 
     ResNet-50 for image segmentation
 
     >>> from neupy import architectures
-    >>> resnet50 = architectures.resnet50(
+    >>> resnet = architectures.resnet50(
     ...     include_global_pool=False,
     ...     in_out_ratio=8,
     ... )
-    >>> resnet50
-    (224, 224, 3) -> [... 185 layers ...] -> (28, 28, 2048)
+    >>> resnet
+    (?, 224, 224, 3) -> [... 185 layers ...] -> (?, 28, 28, 2048)
 
     See Also
     --------
