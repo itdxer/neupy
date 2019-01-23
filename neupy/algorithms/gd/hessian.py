@@ -106,7 +106,8 @@ class Hessian(BaseOptimizer):
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> optimizer = algorithms.Hessian(Input(2) > Sigmoid(3) > Sigmoid(1))
+    >>> network = Input(2) >> Sigmoid(3) >> Sigmoid(1)
+    >>> optimizer = algorithms.Hessian(network)
     >>> optimizer.train(x_train, y_train)
 
     See Also

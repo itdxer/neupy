@@ -65,7 +65,8 @@ class Adamax(GradientDescent):
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> mnet = algorithms.Adamax(Input(2) > Sigmoid(3) > Sigmoid(1))
+    >>> network = Input(2) >> Sigmoid(3) >> Sigmoid(1)
+    >>> mnet = algorithms.Adamax(network)
     >>> mnet.train(x_train, y_train)
 
     References

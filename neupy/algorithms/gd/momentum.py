@@ -39,7 +39,8 @@ class Momentum(GradientDescent):
     >>> x_train = np.array([[1, 2], [3, 4]])
     >>> y_train = np.array([[1], [0]])
     >>>
-    >>> optimizer = algorithms.Momentum(Input(2) >> Sigmoid(3) >> Sigmoid(1))
+    >>> network = Input(2) >> Sigmoid(3) >> Sigmoid(1)
+    >>> optimizer = algorithms.Momentum(network)
     >>> optimizer.train(x_train, y_train)
 
     See Also
