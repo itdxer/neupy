@@ -47,10 +47,10 @@ def squeezenet():
     >>> from neupy import architectures
     >>> squeezenet = architectures.squeezenet()
     >>> squeezenet
-    (227, 227, 3) -> [... 67 layers ...] -> 1000
+    (?, 227, 227, 3) -> [... 67 layers ...] -> (?, 1000)
     >>>
     >>> from neupy import algorithms
-    >>> network = algorithms.Momentum(squeezenet)
+    >>> optimizer = algorithms.Momentum(squeezenet)
 
     See Also
     --------

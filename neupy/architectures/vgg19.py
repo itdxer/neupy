@@ -24,10 +24,10 @@ def vgg19():
     >>> from neupy import architectures
     >>> vgg19 = architectures.vgg19()
     >>> vgg19
-    (224, 224, 3) -> [... 44 layers ...] -> 1000
+    (?, 224, 224, 3) -> [... 47 layers ...] -> (?, 1000)
     >>>
     >>> from neupy import algorithms
-    >>> network = algorithms.Momentum(vgg19)
+    >>> optimizer = algorithms.Momentum(vgg19)
 
     See Also
     --------

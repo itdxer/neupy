@@ -419,9 +419,7 @@ class Convolution(BaseLayer):
 
 class Deconvolution(Convolution):
     """
-    Deconvolution layer. It's commonly called like this in the literature,
-    but it's just gradient of the convolution and not actual deconvolution.
-    Also known as Transposed Convolution.
+    Deconvolution layer (also known as Transposed Convolution.).
 
     Parameters
     ----------
