@@ -12,15 +12,14 @@ __all__ = ('Reshape', 'Transpose')
 
 class Reshape(BaseLayer):
     """
-    Reshapes input tensor.
+    Layer reshapes input tensor.
 
     Parameters
     ----------
-    shape : tuple or list
-        New feature shape. The ``-1`` value means that this value
-        will be computed from the total size that remains. If you need
-        to get the output feature with more that 2 dimensions then you can
-        set up new feature shape using tuples or list. Defaults to ``-1``.
+    shape : tuple
+        New feature shape. If one dimension specified with the ``-1`` value
+        that this dimension will be computed from the total size that remains.
+        Defaults to ``-1``.
 
     {BaseLayer.name}
 
@@ -38,20 +37,14 @@ class Reshape(BaseLayer):
     Covert 4D input to 2D
 
     >>> from neupy.layers import *
-    >>> conn = Input((2, 5, 5)) >> Reshape()
-    >>> conn.input_shape
-    (2, 5, 5)
-    >>> conn.output_shape
-    (50,)
+    >>> network = Input((2, 5, 5)) >> Reshape()
+    (?, 2, 5, 5) -> [... 2 layers ...] -> (?, 50)
 
     Convert 3D to 4D
 
     >>> from neupy.layers import *
-    >>> conn = Input((5, 4)) >> Reshape((5, 2, 2))
-    >>> conn.input_shape
-    (5, 4)
-    >>> conn.output_shape
-    (5, 2, 2)
+    >>> network = Input((5, 4)) >> Reshape((5, 2, 2))
+    (?, 5, 4) -> [... 2 layers ...] -> (?, 5, 2, 2)
     """
     shape = TypedListProperty()
 
@@ -119,14 +112,13 @@ class Reshape(BaseLayer):
 
 class Transpose(BaseLayer):
     """
-    Transposes input. Permutes the dimensions according to ``perm``.
+    Layer transposes input tensor. Permutes the dimensions according
+    to the ``perm`` parameter.
 
     Parameters
     ----------
     perm : tuple or list
-        A permutation of the dimensions of the input tensor. Layer cannot
-        transpose batch dimension and using ``0`` in the list of
-        permuted dimensions is not allowed.
+        A permutation of the dimensions of the input tensor.
 
     {BaseLayer.name}
 
@@ -141,11 +133,8 @@ class Transpose(BaseLayer):
     Examples
     --------
     >>> from neupy.layers import *
-    >>> conn = Input((7, 11)) >> Transpose((0, 2, 1))
-    >>> conn.input_shape
-    (None, 7, 11)
-    >>> conn.output_shape
-    (None, 11, 7)
+    >>> network = Input((7, 11)) >> Transpose((0, 2, 1))
+    (?, 7, 11) -> [... 2 layers ...] -> (?, 11, 7)
     """
     perm = TypedListProperty()
 

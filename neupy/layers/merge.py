@@ -14,15 +14,15 @@ __all__ = ('Elementwise', 'Concatenate', 'GatedAverage')
 
 class Elementwise(BaseLayer):
     """
-    Merge multiple input layers elementwise function and generate
-    single output. Each input to this layer should have exactly the
-    same shape.
+    Layer merges multiple input with elementwise function and generate
+    single output. Each input to this layer should have exactly the same
+    shape, otherwise it won't be possible to apply elementwise operation.
 
     Parameters
     ----------
     merge_function : callable or {{``add``, ``multiply``}}
-        Callable object that accepts multiple arguments and
-        combine them in one with elementwise operation.
+        Callable object that accepts two inputs and
+        combines them in value using elementwise operation.
 
         - ``add`` - Sum all the inputs. Alias to ``tf.add``.
 
@@ -51,11 +51,7 @@ class Elementwise(BaseLayer):
     --------
     >>> from neupy import layers
     >>> network = (Input(10) | Input(10)) >> Elementwise('add')
-    >>>
-    >>> network.input_shape
-    [(10,), (10,)]
-    >>> network.output_shape
-    (10,)
+    [(?, 10), (?, 10)] -> [... 3 layers ...] -> (?, 10)
     """
     merge_function = FunctionWithOptionsProperty(choices={
         'add': tf.add,
@@ -99,13 +95,13 @@ class Elementwise(BaseLayer):
 
 class Concatenate(BaseLayer):
     """
-    Concatenate multiple input layers in one based on the
-    specified axes.
+    Concatenate multiple inputs into one. Inputs will be concatenated over
+    the specified axis (controlled with parameter ``axis``).
 
     Parameters
     ----------
     axis : int
-        The axis along which the inputs will be joined.
+        The axis along which the inputs will be concatenated.
         Default is ``-1``.
 
     {BaseLayer.name}
@@ -121,12 +117,8 @@ class Concatenate(BaseLayer):
     Examples
     --------
     >>> from neupy.layers import *
-    >>>
     >>> network = (Input(10) | Input(20)) >> Concatenate()
-    >>> network.input_shape
-    [(10,), (20,)]
-    >>> network.output_shape
-    (30,)
+    [(?, 10), (?, 20)] -> [... 3 layers ...] -> (?, 30)
     """
     axis = IntProperty()
 
@@ -200,15 +192,20 @@ def exclude_index(array, index):
 
 class GatedAverage(BaseLayer):
     """
-    Using output from the gated layer weights outputs from the
-    other layers and sum them.
+    Layer uses applies weighted elementwise addition to multiple outputs.
+    Weight can be control using separate input known as **gate**. Number
+    of outputs from the gate has to be equal to the number of networks,
+    since each value from the weight will be a weight per each network.
+
+    Layer expects gate as a first input, but it can be controlled with
+    the ``gate_index`` parameter.
 
     Parameters
     ----------
     gate_index : int
         Input layers passed as a list and current variable specifies
-        index in which it can find gating network. Defaults to `0`,
-        which means that it expects to see gating layer in zeros position.
+        index in which it can find gating network. Defaults to ``0``,
+        which means that it expects to see gating layer in first position.
 
     {BaseLayer.Parameters}
 
@@ -224,9 +221,9 @@ class GatedAverage(BaseLayer):
     --------
     >>> from neupy.layers import *
     >>>
-    >>> gate = Input(10) > Softmax(2)
-    >>> net1 = Input(20) > Relu(10)
-    >>> net2 = Input(20) > Relu(20) > Relu(10)
+    >>> gate = Input(10) >> Softmax(2)
+    >>> net1 = Input(20) >> Relu(10)
+    >>> net2 = Input(20) >> Relu(20) >> Relu(10)
     >>>
     >>> network = (gate | net1 | net2) >> GatedAverage()
     >>> network

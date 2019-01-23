@@ -9,3 +9,13 @@ from .merge import *
 from .reshape import *
 from .embedding import *
 from .recurrent import *
+
+
+# Extra aliases for the popular layers
+MaxPool = MaxPooling
+AvgPool = AveragePooling
+GlobalPool = GlobalPooling
+
+Conv = Convolution
+BN = BatchNorm
+GN = GroupNorm

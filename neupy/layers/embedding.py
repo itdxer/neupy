@@ -13,8 +13,8 @@ class Embedding(BaseLayer):
     """
     Embedding layer accepts indeces as an input and returns
     rows from the weight matrix associated with these indeces.
-    Useful in case of categorical features or for the word
-    embedding tasks.
+    It's useful when inputs are categorical features or for the
+    word embedding tasks.
 
     Parameters
     ----------

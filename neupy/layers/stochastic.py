@@ -9,7 +9,16 @@ __all__ = ('Dropout', 'GaussianNoise')
 
 class Dropout(Identity):
     """
-    Dropout layer
+    Dropout layer. It randomly switches of (multiplies by zero)
+    input values, where probability to be switched per each value
+    can be controlled with the ``proba`` parameter. For example,
+    ``proba=0.2`` will mean that only 20% of the input values will
+    be multiplied by 0 and 80% of the will be unchanged.
+
+    It's important to note that output from the dropout is controled by
+    the ``training`` parameter in the ``output`` method. Droput
+    will be applied only in cases when ``training=True`` propagated
+    through the network, otherwise it will act as an identity.
 
     Parameters
     ----------
@@ -26,6 +35,18 @@ class Dropout(Identity):
     Attributes
     ----------
     {Identity.Attributes}
+
+    Examples
+    --------
+    >>> from neupy.layers import *
+    >>> network = join(
+    ...     Input(10),
+    ...     Relu(5) >> Dropout(0.5),
+    ...     Relu(5) >> Dropout(0.5),
+    ...     Sigmoid(1),
+    ... )
+    >>> network
+    (?, 10) -> [... 6 layers ...] -> (?, 1)
     """
     proba = ProperFractionProperty()
 
@@ -41,8 +62,13 @@ class Dropout(Identity):
 
 class GaussianNoise(Identity):
     """
-    Add gaussian noise to the input value. Mean and standard
-    deviation are layer's parameters.
+    Add gaussian noise to the input value. Mean and standard deviation
+    of the noise can be controlled from the layers parameters.
+
+    It's important to note that output from the layer is controled by
+    the ``training`` parameter in the ``output`` method. Layer
+    will be applied only in cases when ``training=True`` propagated
+    through the network, otherwise it will act as an identity.
 
     Parameters
     ----------
@@ -62,6 +88,18 @@ class GaussianNoise(Identity):
     Attributes
     ----------
     {Identity.Attributes}
+
+    Examples
+    --------
+    >>> from neupy.layers import *
+    >>> network = join(
+    ...     Input(10),
+    ...     Relu(5) >> GaussianNoise(std=0.1),
+    ...     Relu(5) >> GaussianNoise(std=0.1),
+    ...     Sigmoid(1),
+    ... )
+    >>> network
+    (?, 10) -> [... 6 layers ...] -> (?, 1)
     """
     mean = NumberProperty()
     std = NumberProperty(minval=0)

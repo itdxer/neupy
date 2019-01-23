@@ -204,25 +204,22 @@ class LSTM(BaseRNNLayer):
 
     Examples
     --------
-
     Sequence classification
 
-    .. code-block:: python
-
-        from neupy import layers, algorithms
-
-        n_time_steps = 40
-        n_categories = 20
-        embedded_size = 10
-
-        network = algorithms.RMSProp(
-            [
-                layers.Input(n_time_steps),
-                layers.Embedding(n_categories, embedded_size),
-                layers.LSTM(20),
-                layers.Sigmoid(1),
-            ]
-        )
+    >>> from neupy.layers import *
+    >>>
+    >>> n_time_steps = 40
+    >>> n_categories = 20
+    >>> embedded_size = 10
+    >>>
+    >>> network = join(
+    ...     Input(n_time_steps),
+    ...     Embedding(n_categories, embedded_size),
+    ...     LSTM(20),
+    ...     Sigmoid(1),
+    ... )
+    >>> network
+    (?, 40) -> [... 4 layers ...] -> (?, 1)
     """
     input_weights = ParameterProperty()
     hidden_weights = ParameterProperty()
@@ -475,25 +472,22 @@ class GRU(BaseRNNLayer):
 
     Examples
     --------
-
     Sequence classification
 
-    .. code-block:: python
-
-        from neupy import layers, algorithms
-
-        n_time_steps = 40
-        n_categories = 20
-        embedded_size = 10
-
-        network = algorithms.RMSProp(
-            [
-                layers.Input(n_time_steps),
-                layers.Embedding(n_categories, embedded_size),
-                layers.GRU(20),
-                layers.Sigmoid(1),
-            ]
-        )
+    >>> from neupy.layers import *
+    >>>
+    >>> n_time_steps = 40
+    >>> n_categories = 20
+    >>> embedded_size = 10
+    >>>
+    >>> network = join(
+    ...     Input(n_time_steps),
+    ...     Embedding(n_categories, embedded_size),
+    ...     GRU(20),
+    ...     Sigmoid(1),
+    ... )
+    >>> network
+    (?, 40) -> [... 4 layers ...] -> (?, 1)
     """
     input_weights = ParameterProperty()
     hidden_weights = ParameterProperty()

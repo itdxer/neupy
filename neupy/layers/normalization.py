@@ -20,7 +20,7 @@ __all__ = ('BatchNorm', 'LocalResponseNorm', 'GroupNorm')
 
 class BatchNorm(Identity):
     """
-    Batch-normalization layer.
+    Batch normalization layer.
 
     Parameters
     ----------
@@ -75,8 +75,38 @@ class BatchNorm(Identity):
     Examples
     --------
 
+    Feedforward Neural Networks (FNN) with batch normalization after
+    activation function was applied.
+
     >>> from neupy.layers import *
-    >>> network = Input((10, 10, 12)) >> BatchNorm()
+    >>> network = join(
+    ...     Input(10),
+    ...     Relu(5) >> BatchNorm(),
+    ...     Relu(5) >> BatchNorm(),
+    ...     Sigmoid(1),
+    ... )
+
+    Feedforward Neural Networks (FNN) with batch normalization before
+    activation function was applied.
+
+    >>> from neupy.layers import *
+    >>> network = join(
+    ...     Input(10),
+    ...     Linear(5) >> BatchNorm() >> Relu(),
+    ...     Linear(5) >> BatchNorm() >> Relu(),
+    ...     Sigmoid(1),
+    ... )
+
+    Convolutional Neural Networks (CNN)
+
+    >>> from neupy.layers import *
+    >>> network = join(
+    ...     Input((28, 28, 1)),
+    ...     Convolution((3, 3, 16)) >> BatchNorm() >> Relu(),
+    ...     Convolution((3, 3, 16)) >> BatchNorm() >> Relu(),
+    ...     Reshape(),
+    ...     Softmax(10),
+    ... )
 
     References
     ----------
@@ -240,7 +270,6 @@ class LocalResponseNorm(Identity):
 
     Examples
     --------
-
     >>> from neupy.layers import *
     >>> network = Input((10, 10, 12)) >> LocalResponseNorm()
     """
@@ -279,7 +308,7 @@ class LocalResponseNorm(Identity):
 
 class GroupNorm(Identity):
     """
-    Group Normalization layer. THis layer is a simple alternative to the
+    Group Normalization layer. This layer is a simple alternative to the
     Batch Normalization layer for cases when batch size is small.
 
     Parameters
@@ -315,9 +344,16 @@ class GroupNorm(Identity):
 
     Examples
     --------
+    Convolutional Neural Networks (CNN)
 
     >>> from neupy.layers import *
-    >>> network = Input((10, 10, 12)) >> GroupNorm(4)
+    >>> network = join(
+    ...     Input((28, 28, 1)),
+    ...     Convolution((3, 3, 16)) >> GroupNorm(4) >> Relu(),
+    ...     Convolution((3, 3, 16)) >> GroupNorm(4) >> Relu(),
+    ...     Reshape(),
+    ...     Softmax(10),
+    ... )
 
     References
     ----------

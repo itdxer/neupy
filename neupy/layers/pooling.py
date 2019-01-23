@@ -166,26 +166,25 @@ class MaxPooling(BasePooling):
     --------
     2D pooling
 
-    >>> from neupy import layers
-    >>>
-    >>> network = layers.join(
-    ...     layers.Input((10, 10, 3)),
-    ...     layers.MaxPooling((2, 2)),
+    >>> from neupy.layers import *
+    >>> network = join(
+    ...     Input((10, 10, 3)),
+    ...     MaxPooling((2, 2)),
     ... )
-    >>> network.output_shape
-    (3, 5, 5)
+    >>> network
+    (?, 10, 10, 3) -> [... 2 layers ...] -> (?, 5, 5, 3)
 
     1D pooling
 
-    >>> from neupy import layers
-    >>>
-    >>> network = layers.join(
-    ...     layers.Input((30, 10)),
-    ...     layers.Reshape((10, 1, 30)),
-    ...     layers.MaxPooling((2, 1)),
+    >>> from neupy.layers import *
+    >>> network = join(
+    ...     Input((30, 10)),
+    ...     Reshape((30, 1, 10)),
+    ...     MaxPooling((2, 1)),
+    ...     Reshape((-1, 10))
     ... )
-    >>> network.output_shape
-    (10, 15, 1)
+    >>> network
+    (?, 30, 10) -> [... 4 layers ...] -> (?, 15, 10)
     """
     pooling_type = 'MAX'
 
@@ -210,26 +209,25 @@ class AveragePooling(BasePooling):
     --------
     2D pooling
 
-    >>> from neupy import layers
-    >>>
-    >>> network = layers.join(
-    ...     layers.Input((10, 10, 3)),
-    ...     layers.AveragePooling((2, 2)),
+    >>> from neupy.layers import *
+    >>> network = join(
+    ...     Input((10, 10, 3)),
+    ...     AveragePooling((2, 2)),
     ... )
-    >>> network.output_shape
-    (3, 5, 5)
+    >>> network
+    (?, 10, 10, 3) -> [... 2 layers ...] -> (?, 5, 5, 3)
 
     1D pooling
 
-    >>> from neupy import layers
-    >>>
-    >>> network = layers.join(
-    ...     layers.Input((30, 10)),
-    ...     layers.Reshape((10, 1, 30)),
-    ...     layers.AveragePooling((2, 1)),
+    >>> from neupy.layers import *
+    >>> network = join(
+    ...     Input((30, 10)),
+    ...     Reshape((30, 1, 10)),
+    ...     AveragePooling((2, 1)),
+    ...     Reshape((-1, 10))
     ... )
-    >>> network.output_shape
-    (10, 15, 1)
+    >>> network
+    (?, 30, 10) -> [... 4 layers ...] -> (?, 15, 10)
     """
     pooling_type = 'AVG'
 
@@ -259,8 +257,7 @@ class Upscale(BaseLayer):
     --------
     >>> from neupy.layers import *
     >>> network = Input((10, 10, 3)) >> Upscale((2, 2))
-    >>> network.output_shape
-    (20, 20, 3)
+    (?, 10, 10, 3) -> [... 2 layers ...] -> (?, 20, 20, 3)
     """
     scale = TypedListProperty(n_elements=2)
 
@@ -353,8 +350,7 @@ class GlobalPooling(BaseLayer):
     --------
     >>> from neupy.layers import *
     >>> network = Input((4, 4, 16)) >> GlobalPooling('avg')
-    >>> network.output_shape
-    (None, 16)
+    (?, 4, 4, 16) -> [... 2 layers ...] -> (?, 16)
     """
     function = FunctionWithOptionsProperty(choices={
         'avg': tf.reduce_mean,
