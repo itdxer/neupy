@@ -20,7 +20,9 @@ __all__ = (
 
 class Linear(BaseLayer):
     """
-    The layer with the linear activation function.
+    Layer with linear activation function. It applies linear transformation
+    when the ``n_units`` parameter specified and acts as an identity
+    when it's not specified.
 
     Parameters
     ----------
@@ -144,7 +146,10 @@ class Linear(BaseLayer):
 
 class Sigmoid(Linear):
     """
-    The layer with the sigmoid activation function.
+    Layer with the sigmoid used as an activation function. It applies
+    linear transformation when the ``n_units`` parameter specified and
+    sigmoid function after the transformation. When ``n_units`` is not
+    specified, only sigmoid function will be applied to the input.
 
     Parameters
     ----------
@@ -169,6 +174,17 @@ class Sigmoid(Linear):
 
     >>> from neupy.layers import *
     >>> network = Input(10) >> Sigmoid(5) >> Sigmoid(1)
+
+    Convolutional Neural Networks (CNN) for Semantic Segmentation
+
+    Sigmoid layer can be used in order to normalize probabilities
+    per pixel in semantic classification task with two classes.
+    In the example below, we have as input 32x32 image that predicts
+    one of the two classes. Sigmoid normalizes raw predictions per pixel
+    to the valid probabilities.
+
+    >>> from neupy.layers import *
+    >>> network = Input((32, 32, 1)) >> Sigmoid()
     """
     def activation_function(self, input_value):
         return tf.nn.sigmoid(input_value)
@@ -176,7 +192,10 @@ class Sigmoid(Linear):
 
 class HardSigmoid(Linear):
     """
-    The layer with the hard sigmoid activation function.
+    Layer with the hard sigmoid used as an activation function. It applies
+    linear transformation when the ``n_units`` parameter specified and
+    hard sigmoid function after the transformation. When ``n_units`` is
+    not specified, only hard sigmoid function will be applied to the input.
 
     Parameters
     ----------
@@ -204,7 +223,11 @@ class HardSigmoid(Linear):
 
 class Tanh(Linear):
     """
-    The layer with the `tanh` activation function.
+    Layer with the hyperbolic tangent used as an activation function.
+    It applies linear transformation when the ``n_units`` parameter
+    specified and ``tanh`` function after the transformation. When
+    ``n_units`` is not specified, only ``tanh`` function will be applied
+    to the input.
 
     Parameters
     ----------
@@ -231,7 +254,11 @@ class Tanh(Linear):
 
 class Relu(Linear):
     """
-    The layer with the rectifier (ReLu) activation function.
+    Layer with the rectifier (ReLu) used as an activation function.
+    It applies linear transformation when the ``n_units`` parameter
+    specified and ``relu`` function after the transformation. When
+    ``n_units`` is not specified, only ``relu`` function will be applied
+    to the input.
 
     Parameters
     ----------
@@ -307,8 +334,11 @@ class Relu(Linear):
 
 class LeakyRelu(Linear):
     """
-    The layer with the leaky rectifier (Leaky ReLu)
-    activation function.
+    Layer with the leaky rectifier (Leaky ReLu) used as an activation
+    function. It applies linear transformation when the ``n_units``
+    parameter specified and leaky relu function after the transformation.
+    When ``n_units`` is not specified, only leaky relu function will be
+    applied to the input.
 
     Parameters
     ----------
@@ -339,7 +369,10 @@ class LeakyRelu(Linear):
 
 class Softplus(Linear):
     """
-    The layer with the softplus activation function.
+    Layer with the softplus used as an activation function. It applies linear
+    transformation when the ``n_units`` parameter specified and softplus
+    function after the transformation. When ``n_units`` is not specified,
+    only softplus function will be applied to the input.
 
     Parameters
     ----------
@@ -366,7 +399,10 @@ class Softplus(Linear):
 
 class Softmax(Linear):
     """
-    The layer with the softmax activation function.
+    Layer with the softmax activation function. It applies linear
+    transformation when the ``n_units`` parameter specified and softmax
+    function after the transformation. When ``n_units`` is not specified,
+    only softmax function will be applied to the input.
 
     Parameters
     ----------
@@ -390,8 +426,8 @@ class Softmax(Linear):
     Convolutional Neural Networks (CNN) for Semantic Segmentation
 
     Softmax layer can be used in order to normalize probabilities
-    per pixel. In the example below, we have input 32x32 input image
-    with raw prediction  per each pixel for 10 different classes.
+    per pixel. In the example below, we have as input 32x32 image
+    with raw prediction per each pixel for 10 different classes.
     Softmax normalizes raw predictions per pixel to the probability
     distribution.
 
@@ -404,8 +440,11 @@ class Softmax(Linear):
 
 class Elu(Linear):
     """
-    The layer with the exponensial linear unit (ELU)
-    activation function.
+    Layer with the exponensial linear unit (ELU) used as an activation
+    function. It applies linear transformation when the ``n_units``
+    arameter specified and elu function after the transformation.
+    When ``n_units`` is not specified, only elu function will be
+    applied to the input.
 
     Parameters
     ----------
@@ -436,8 +475,13 @@ class Elu(Linear):
 
 class PRelu(Linear):
     """
-    The layer with the parametrized ReLu activation
-    function.
+    Layer with the parametrized ReLu used as an activation function.
+    Layer learns additional parameter ``alpha`` during the training.
+
+    It applies linear transformation when the ``n_units`` parameter
+    specified and parametrized relu function after the transformation.
+    When ``n_units`` is not specified, only parametrized relu function
+    will be applied to the input.
 
     Parameters
     ----------
@@ -447,11 +491,10 @@ class PRelu(Linear):
         Defaults to ``-1``.
 
     alpha : array-like, Tensorfow variable, scalar or Initializer
-        Alpha parameter per each non-shared axis for the ReLu.
+        Separate alpha parameter per each non-shared axis for the ReLu.
         Scalar value means that each element in the tensor will be
-        equal to the specified value.
-        Default initialization methods you can find
-        :ref:`here <init-methods>`.
+        equal to the specified value. Default initialization methods you
+        can find :ref:`here <init-methods>`.
         Defaults to ``Constant(value=0.25)``.
 
     {Linear.Parameters}
@@ -484,7 +527,9 @@ class PRelu(Linear):
 
     References
     ----------
-    .. [1] https://arxiv.org/pdf/1502.01852v1.pdf
+    .. [1] Delving Deep into Rectifiers: Surpassing Human-Level
+           Performance on ImageNet Classification.
+           https://arxiv.org/pdf/1502.01852v1.pdf
     """
     alpha_axes = TypedListProperty()
     alpha = ParameterProperty()
@@ -507,7 +552,7 @@ class PRelu(Linear):
         if input_shape and max(self.alpha_axes) >= input_shape.ndims:
             max_axis_index = input_shape.ndims - 1
 
-            raise ValueError(
+            raise LayerConnectionError(
                 "Cannot specify alpha for the axis #{}. Maximum "
                 "available axis is {} (0-based indeces)."
                 "".format(max(self.alpha_axes), max_axis_index))
@@ -537,8 +582,7 @@ class PRelu(Linear):
             return self._repr_arguments(
                 name=self.name,
                 alpha_axes=self.alpha_axes,
-                alpha=self.alpha,
-            )
+                alpha=self.alpha)
 
         return self._repr_arguments(
             self.n_units,
@@ -546,5 +590,4 @@ class PRelu(Linear):
             alpha_axes=self.alpha_axes,
             alpha=self.alpha,
             weight=self.weight,
-            bias=self.bias,
-        )
+            bias=self.bias)

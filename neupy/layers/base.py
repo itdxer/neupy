@@ -727,7 +727,7 @@ class BaseLayer(BaseGraph):
     Parameters
     ----------
     name : str or None
-        Layer name. Can be used as a reference to specific layer. When
+        Layer's name. Can be used as a reference to specific layer. When
         value specified as ``None`` than name will be generated from
         the class name. Defaults to ``None``
 
@@ -740,14 +740,13 @@ class BaseLayer(BaseGraph):
         Computes expected output shape from the layer based on the
         specified input shape.
 
-    output(inputs)
-        Propagetes input through the layer.
+    output(*inputs, **kwargs)
+        Propagetes input through the layer. The ``kwargs``  variable
+        might contain additional information that propages through the
+        network.
 
     Attributes
     ----------
-    variable_names : list
-        Name of the variables used in the layer.
-
     variables : dict
         Variable names and their values.
     """
@@ -895,6 +894,33 @@ class Input(BaseLayer):
     Attributes
     ----------
     {BaseLayer.Attributes}
+
+    Examples
+    --------
+    Feedforward Neural Network (FNN)
+
+    In the example, input layer defines network that expects
+    2D inputs (matrices). In other words, input to the network
+    should be set of samples combined into matrix where each sample
+    has 10 dimensional vector associated with it.
+
+    >>> from neupy.layers import *
+    >>> network = Input(10) >> Relu(5) >> Softmax(3)
+
+    Convolutional Neural Network (CNN)
+
+    In the example, input layer specified that we expect multiple
+    28x28 image as an input and each image should have single
+    channel (images with no color).
+
+    >>> from neupy.layers import *
+    >>> network = join(
+    ...     Input((28, 28, 1)),
+    ...     Convolution((3, 3, 16)) >> Relu(),
+    ...     Convolution((3, 3, 16)) >> Relu(),
+    ...     Reshape()
+    ...     Softmax(10),
+    ... )
     """
     shape = TypedListProperty(element_type=(int, type(None)))
 
