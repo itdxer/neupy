@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-from neupy.layers.base import (
+from neupy.layers.graph import (
     find_outputs_in_graph,
     topological_sort,
     filter_graph,
