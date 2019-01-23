@@ -141,10 +141,6 @@ class ActivationLayersTestCase(BaseTestCase):
         actual_output = self.eval(layer.output(X))
         np.testing.assert_array_equal(actual_output, expected_output)
 
-    def test_sigmoid_layer(self):
-        layer1 = layers.Sigmoid(1)
-        self.assertGreater(1, self.eval(layer1.activation_function(1.)))
-
     def test_hard_sigmoid_layer(self):
         layer = layers.HardSigmoid(6)
 
@@ -177,15 +173,6 @@ class ActivationLayersTestCase(BaseTestCase):
             math.log(2),
             self.eval(layer.activation_function(0.)))
 
-    def test_softmax_layer(self):
-        test_input = asfloat(np.array([[0.5, 0.5, 0.1]]))
-
-        softmax_layer = layers.Softmax(3)
-        correct_result = np.array([[0.37448695, 0.37448695, 0.25102611]])
-        np.testing.assert_array_almost_equal(
-            correct_result,
-            self.eval(softmax_layer.activation_function(test_input)))
-
     def test_elu_layer(self):
         test_input = asfloat(np.array([[10, 1, 0.1, 0, -1]]).T)
         expected_output = np.array([
@@ -196,6 +183,47 @@ class ActivationLayersTestCase(BaseTestCase):
 
         np.testing.assert_array_almost_equal(
             expected_output, actual_output)
+
+
+class SigmoidTestCase(BaseTestCase):
+    def test_sigmoid_layer(self):
+        layer1 = layers.Sigmoid(1)
+        self.assertGreater(1, self.eval(layer1.activation_function(1.)))
+
+    def test_sigmoid_semantic_segmentation(self):
+        network = layers.join(
+            layers.Input((10, 10, 1)),
+            layers.Sigmoid(),
+        )
+
+        input = 10 * np.random.random((2, 10, 10, 1)) - 5
+        actual_output = self.eval(network.output(input))
+
+        self.assertTrue(np.all(actual_output >= 0))
+        self.assertTrue(np.all(actual_output <= 1))
+
+
+class SoftmaxTestCase(BaseTestCase):
+    def test_softmax_layer(self):
+        test_input = asfloat(np.array([[0.5, 0.5, 0.1]]))
+        softmax_layer = layers.Softmax(3)
+        correct_result = np.array([[0.37448695, 0.37448695, 0.25102611]])
+        np.testing.assert_array_almost_equal(
+            correct_result,
+            self.eval(softmax_layer.activation_function(test_input)))
+
+    def test_softmax_semantic_segmentation(self):
+        network = layers.join(
+            layers.Input((10, 10, 6)),
+            layers.Softmax(),
+        )
+
+        input = np.random.random((2, 10, 10, 6))
+        actual_output = self.eval(network.output(input))
+
+        np.testing.assert_array_almost_equal(
+            actual_output.sum(axis=-1),
+            np.ones((2, 10, 10)))
 
 
 class ReluTestCase(BaseTestCase):
@@ -238,7 +266,7 @@ class PReluTestCase(BaseTestCase):
             layers.PRelu(10, alpha_axes=2),
             layers.Relu(),
         )
-        with self.assertRaises(ValueError):
+        with self.assertRaises(LayerConnectionError):
             # cannot specify 2-axis, because we only
             # have 0 and 1 axes (2D input)
             layers.join(layers.Input(10), network)

@@ -211,7 +211,7 @@ class BaseNetwork(BaseSkeleton):
         raise NotImplementedError()
 
     def plot_errors(self, logx=False, show=True, **figkwargs):
-        plot_optimizer_errors(
+        return plot_optimizer_errors(
             optimizer=self,
             logx=logx,
             show=show,

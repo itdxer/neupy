@@ -11,7 +11,6 @@ from neupy.utils import asfloat
 from neupy.exceptions import (
     WeightInitializationError,
     LayerConnectionError,
-    PropagationError,
 )
 from .base import Identity
 
