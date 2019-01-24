@@ -114,3 +114,17 @@ class UsageTestCase(BaseTestCase):
         )
         self.assertEqual(2, len(network))
         self.assertEqual(4, len(network_2))
+
+    def test_graph_predictions(self):
+        network = layers.join(
+            layers.Input(10),
+            layers.Relu(5),
+            layers.Relu(3),
+        )
+
+        input = np.random.random((100, 10))
+        output = network.predict(input, verbose=False)
+        self.assertEqual(output.shape, (100, 3))
+
+        output = network.predict(input, batch_size=10, verbose=False)
+        self.assertEqual(output.shape, (100, 3))

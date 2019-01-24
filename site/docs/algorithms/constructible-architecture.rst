@@ -96,7 +96,7 @@ NeuPy allows to train networks with multiple inputs.
     network.train([x_train_cat, x_train_num], y_train,
                   [x_test_cat, x_test_num], y_test,
                   epochs=180)
-    y_predicted = network.predict([x_test_cat, x_test_num])
+    y_predicted = network.predict(x_test_cat, x_test_num)
 
 From the example above, you can see that we specified first layer as a list of lists. Each list has small sequence of layers specified and each sequence starts with the ``Input`` layer. This list of lists is just simple syntax sugar around the ``parallel`` function. Exactly the same architecture can be rewritten in the following way.
 
@@ -126,7 +126,7 @@ The training and prediction looks slightly different as well.
     network.train([x_train_cat, x_train_num], y_train,
                   [x_test_cat, x_test_num], y_test,
                   epochs=180)
-    y_predicted = network.predict([x_test_cat, x_test_num])
+    y_predicted = network.predict(x_test_cat, x_test_num)
 
 Input we specified as a list where number of values equal to the number of input layers in the network. The order in the list is also important. We defined first input layer for categorical variables and therefore we need to pass it as the first element to the input list. The same is true for the ``predict`` method.
 

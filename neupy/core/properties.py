@@ -365,13 +365,4 @@ class FunctionWithOptionsProperty(ChoiceProperty):
 
 
 class ScalarVariableProperty(BaseProperty):
-    expected_type = (tf.Variable,)
-
-    def __set__(self, instance, value):
-        if isinstance(value, number_type):
-            value = tf.Variable(
-                asfloat(value),
-                dtype=tf.float32,
-                name=self.name,
-            )
-        super(ScalarVariableProperty, self).__set__(instance, value)
+    expected_type = as_tuple(tf.Variable, number_type)
