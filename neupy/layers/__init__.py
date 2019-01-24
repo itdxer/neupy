@@ -11,7 +11,7 @@ from .embedding import *
 from .recurrent import *
 
 
-# Extra aliases for the popular layers
+# Extra aliases for the layers
 MaxPool = MaxPooling
 AvgPool = AveragePooling
 GlobalPool = GlobalPooling
