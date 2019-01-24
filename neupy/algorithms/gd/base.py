@@ -263,7 +263,7 @@ class BaseOptimizer(BaseNetwork):
         array-like
         """
         X = self.format_input(X)
-        return self.network.predict(*X)
+        return self.network.predict(*X, verbose=self.verbose)
 
     def train(self, X_train, y_train, X_test=None, y_test=None,
               *args, **kwargs):
@@ -408,7 +408,7 @@ class GradientDescent(BaseOptimizer):
             average_outputs=True,
         )
 
-    def predict(self, X):
+    def predict(self, *X, batch_size=None):
         """
         Makes a raw prediction.
 
@@ -420,10 +420,9 @@ class GradientDescent(BaseOptimizer):
         -------
         array-like
         """
-        outputs = iters.apply_batches(
-            function=self.functions.predict,
-            inputs=self.format_input(X),
-            batch_size=self.batch_size,
-            show_progressbar=self.logs.enable,
+        batch_size = batch_size or self.batch_size
+        return self.network.predict(
+            *self.format_input(X),
+            batch_size=batch_size,
+            verbose=self.verbose,
         )
-        return np.concatenate(outputs, axis=0)

@@ -45,15 +45,13 @@ if __name__ == '__main__':
             Convolution((3, 3, 32)) >> Relu(),
             Convolution((3, 3, 32)) >> Relu(),
             MaxPooling((2, 2)),
-            Dropout(0.2),
 
             Convolution((3, 3, 64)) >> Relu(),
             Convolution((3, 3, 64)) >> Relu(),
             MaxPooling((2, 2)),
-            Dropout(0.2),
 
             Reshape(),
-            Relu(512) >> Dropout(0.5),
+            Relu(256) >> Dropout(0.5),
             Softmax(10),
         ],
 
@@ -65,7 +63,7 @@ if __name__ == '__main__':
             # data we have 500 mini-batches.
             reduction_freq=5 * 500,
         ),
-        regularizer=algorithms.l2(0.0001),
+        regularizer=algorithms.l2(0.01),
 
         loss='categorical_crossentropy',
         batch_size=100,

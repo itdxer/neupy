@@ -105,6 +105,6 @@ optimizer.train([x_train_cat, x_train_num], y_train,
                 [x_test_cat, x_test_num], y_test,
                 epochs=50)
 
-y_predicted = optimizer.predict([x_test_cat, x_test_num])
+y_predicted = optimizer.predict(x_test_cat, x_test_num)
 accuracy = accuracy_score(y_test, y_predicted.round())
 print("Accuracy: {:.2%}".format(accuracy))

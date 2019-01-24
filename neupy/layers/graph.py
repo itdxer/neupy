@@ -8,11 +8,12 @@ from collections import OrderedDict
 
 import six
 import graphviz
+import numpy as np
 import tensorflow as tf
 
 from neupy.core.config import ConfigurableABC, DumpableObject
 from neupy.exceptions import LayerConnectionError
-from neupy.utils import as_tuple, tf_utils
+from neupy.utils import as_tuple, tf_utils, iters
 
 
 __all__ = (
@@ -510,10 +511,20 @@ class LayerGraph(BaseGraph):
 
         return n_parameters
 
-    def predict(self, *inputs):
+    def predict(self, *inputs, batch_size=None, verbose=True):
         session = tf_utils.tensorflow_session()
-        feed_dict = dict(zip(as_tuple(self.inputs), inputs))
-        return session.run(self.outputs, feed_dict=feed_dict)
+
+        def single_batch_predict(*inputs):
+            feed_dict = dict(zip(as_tuple(self.inputs), inputs))
+            return session.run(self.outputs, feed_dict=feed_dict)
+
+        outputs = iters.apply_batches(
+            function=single_batch_predict,
+            inputs=inputs,
+            batch_size=batch_size,
+            show_progressbar=verbose,
+        )
+        return np.concatenate(outputs, axis=0)
 
     def is_sequential(self):
         if len(self.input_layers) > 1 or len(self.output_layers) > 1:
