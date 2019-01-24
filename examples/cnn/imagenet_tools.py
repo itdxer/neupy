@@ -5,8 +5,9 @@ import os
 import requests
 from tqdm import tqdm
 import numpy as np
-from scipy.misc import imread
+from imageio import imread
 from skimage import transform
+
 from neupy.utils import asfloat
 
 
@@ -34,7 +35,7 @@ def download_file(url, filepath, description=''):
 
 
 def read_image(image_name, image_size=None, crop_size=None):
-    image = imread(image_name, mode='RGB')
+    image = imread(image_name, pilmode='RGB')
 
     if image_size is not None:
         height, width, _ = image.shape
