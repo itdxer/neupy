@@ -80,7 +80,7 @@ class GradientDescentTestCase(BaseTestCase):
         )
         recovered_optimizer = pickle.loads(pickle.dumps(optimizer))
 
-        self.assertAlmostEqual(self.eval(recovered_optimizer.step), 0.2)
+        self.assertAlmostEqual(recovered_optimizer.step, 0.2)
         self.assertEqual(recovered_optimizer.shuffle_data, True)
 
     def test_optimizer_with_bad_shape_input_passed(self):
@@ -173,3 +173,12 @@ class GradientDescentTestCase(BaseTestCase):
             optimizer.train(x_train, y_train, epochs=1)
 
         optimizer.train(x_train, y_train.reshape(-1, 1, 1), epochs=1)
+
+    def test_gd_predict_wrong_arguments(self):
+        optimizer = algorithms.GradientDescent(
+            layers.Input(10) >> layers.Sigmoid(1),
+            verbose=False,
+        )
+        input = np.random.random((7, 10))
+        with self.assertRaisesRegexp(TypeError, "Unknown arguments"):
+            optimizer.predict(input, batchsize=10)

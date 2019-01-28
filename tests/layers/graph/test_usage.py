@@ -128,3 +128,6 @@ class UsageTestCase(BaseTestCase):
 
         output = network.predict(input, batch_size=10, verbose=False)
         self.assertEqual(output.shape, (100, 3))
+
+        with self.assertRaisesRegexp(TypeError, "Unknown arguments"):
+            network.predict(input, batchsize=10)

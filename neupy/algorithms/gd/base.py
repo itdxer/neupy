@@ -408,7 +408,7 @@ class GradientDescent(BaseOptimizer):
             average_outputs=True,
         )
 
-    def predict(self, *X, batch_size=None):
+    def predict(self, *X, **kwargs):
         """
         Makes a raw prediction.
 
@@ -420,9 +420,12 @@ class GradientDescent(BaseOptimizer):
         -------
         array-like
         """
-        batch_size = batch_size or self.batch_size
-        return self.network.predict(
-            *self.format_input(X),
-            batch_size=batch_size,
+        predict_kwargs = dict(
+            batch_size=kwargs.pop('batch_size', self.batch_size),
             verbose=self.verbose,
         )
+
+        if kwargs:
+            raise TypeError("Unknown arguments: {}".format(kwargs))
+
+        return self.network.predict(*self.format_input(X), **predict_kwargs)
