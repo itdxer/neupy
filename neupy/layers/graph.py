@@ -511,8 +511,14 @@ class LayerGraph(BaseGraph):
 
         return n_parameters
 
-    def predict(self, *inputs, batch_size=None, verbose=True):
+    def predict(self, *inputs, **kwargs):
         session = tf_utils.tensorflow_session()
+
+        batch_size = kwargs.pop('batch_size', None)
+        verbose = kwargs.pop('verbose', True)
+
+        if kwargs:
+            raise TypeError("Unknown arguments: {}".format(kwargs))
 
         def single_batch_predict(*inputs):
             feed_dict = dict(zip(as_tuple(self.inputs), inputs))

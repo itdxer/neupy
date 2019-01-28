@@ -40,7 +40,7 @@ class BasicStorageTestCase(BaseTestCase):
 
             restored_layers = restored_bpnet.network.layers
 
-            self.assertEqual(0.25, self.eval(restored_bpnet.step))
+            self.assertEqual(0.25, restored_bpnet.step)
             self.assertEqual(3, len(restored_layers))
             np.testing.assert_array_equal(
                 test_layer_weights,

@@ -44,7 +44,7 @@ class SklearnCompatibilityTestCase(BaseTestCase):
             target_scaler.inverse_transform(y_predict).round()
         )
         error = self.eval(error)
-        self.assertAlmostEqual(0.48, error, places=2)
+        self.assertGreater(0.5, error)
 
     def test_grid_search(self):
         def scorer(network, X, y):
