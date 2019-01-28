@@ -517,6 +517,7 @@ class LayerGraph(BaseGraph):
         batch_size = kwargs.pop('batch_size', None)
         verbose = kwargs.pop('verbose', True)
 
+        # We require do to this check for python 2 compatibility
         if kwargs:
             raise TypeError("Unknown arguments: {}".format(kwargs))
 
@@ -728,8 +729,8 @@ def parallel(*networks):
     *networks
         Layers or networks. Each network can be specified as a list or
         tuple. In this case, this input will be passed to the ``join``
-         function in order to create full network from the specified
-         list of the connections.
+        function in order to create full network from the specified
+        list of the connections.
 
     Examples
     --------

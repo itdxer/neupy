@@ -30,20 +30,15 @@ In contrast, network with constructible architectures require two basic steps. F
 
 .. code-block:: python
 
-    from neupy import layers
-
-    network = layers.join(
-        layers.Input(10),
-        layers.Relu(5),
-        layers.Softmax(4),
-    )
+    from neupy.layers import *
+    network = Input(10) >> Relu(5) >> Softmax(4)
 
 When architecture defined we need to specify training algorithm. The initialization looks exactly the same as the one that we've seen for networks with fixed architectures. The only difference is that we have to specify our network structure as the first argument.
 
 .. code-block:: python
 
     from neupy import algorithms
-    momentum = algorithms.Momentum(connection, alpha=0.1, nesterov=True)
+    optimizer = algorithms.Momentum(network, step=0.1, nesterov=True)
 
 These two steps can be combined into one for simplicity.
 
@@ -51,13 +46,13 @@ These two steps can be combined into one for simplicity.
 
     from neupy import layers, algorithms
 
-    momentum = algorithms.Momentum(
+    optimizer = algorithms.Momentum(
         [
             layers.Input(10),
             layers.Relu(5),
             layers.Softmax(4),
         ],
-        alpha=0.1,
+        step=0.1,
         nesterov=True,
     )
 
@@ -70,20 +65,20 @@ To train neural network we need to use the ``train`` method (or ``fit`` which wa
 
 .. code-block:: python
 
-    network.train(x_train, y_train, epochs=1000)
+    optimizer.train(x_train, y_train, epochs=1000)
 
 If we need to validate our training results with validation dataset we can pass it as an additional argument (that option available for most of the algorithms, but not all of them).
 
 .. code-block:: python
 
-    network.train(x_train, y_train, x_test, y_test, epochs=1000)
+    optimizer.train(x_train, y_train, x_test, y_test, epochs=1000)
 
 To be able to see the output after each epoch we can set up ``verbose=True`` during network's initialization.
 
 .. code-block:: python
 
     from neupy import algorithms
-    nnet = algorithms.Momentum(connection, verbose=True)
+    optimizer = algorithms.Momentum(network, verbose=True)
 
 Or we can switch on ``verbose`` parameter after the initialization.
 
@@ -91,24 +86,23 @@ Or we can switch on ``verbose`` parameter after the initialization.
 
     from neupy import algorithms
 
-    nnet = algorithms.Momentum(connection, verbose=False)
-
-    nnet.verbose = True
-    nnet.train(x_train, y_train, x_test, y_test, epochs=1000)
-
-If you want to run training in loop you have to change the way neupy outputs its training summary. It can be changed with the ``summary`` argument.
-
-
-.. code-block:: python
-
-    for _ in range(1000):
-        nnet.train(x_train, y_train, epochs=1)
+    optimizer = algorithms.Momentum(network, verbose=False)
+    optimizer.verbose = True
+    optimizer.train(x_train, y_train, x_test, y_test, epochs=1000)
 
 Prediction
 ----------
 
-To make a prediction we need to pass networks input to the ``predict`` method.
+To make a prediction we need to pass networks input to the ``predict`` method. This method can be called from the optimizer or network directly.
 
 .. code-block:: python
 
-    y_predicted = nnet.predict(x_test)
+    y_predicted = network.predict(x_test)
+    y_predicted = optimizer.predict(x_test)
+
+When inputs are to big it's possible to specify size of the batch of samples that will be propagated throught the network at once. At the end outputs will be combined into single array.
+
+.. code-block:: python
+
+    y_predicted = network.predict(x_test, batch_size=16)
+    y_predicted = optimizer.predict(x_test, batch_size=16)

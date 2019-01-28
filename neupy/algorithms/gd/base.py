@@ -250,9 +250,9 @@ class BaseOptimizer(BaseNetwork):
         y = self.format_target(y)
         return self.functions.score(*as_tuple(X, y))
 
-    def predict(self, *X):
+    def predict(self, *X, **kwargs):
         """
-        Return prediction results for the input data.
+        Makes a raw prediction.
 
         Parameters
         ----------
@@ -262,8 +262,17 @@ class BaseOptimizer(BaseNetwork):
         -------
         array-like
         """
-        X = self.format_input(X)
-        return self.network.predict(*X, verbose=self.verbose)
+        default_batch_size = getattr(self, 'batch_size', None)
+        predict_kwargs = dict(
+            batch_size=kwargs.pop('batch_size', default_batch_size),
+            verbose=self.verbose,
+        )
+
+        # We require do to this check for python 2 compatibility
+        if kwargs:
+            raise TypeError("Unknown arguments: {}".format(kwargs))
+
+        return self.network.predict(*self.format_input(X), **predict_kwargs)
 
     def train(self, X_train, y_train, X_test=None, y_test=None,
               *args, **kwargs):
@@ -407,25 +416,3 @@ class GradientDescent(BaseOptimizer):
             show_progressbar=self.logs.enable,
             average_outputs=True,
         )
-
-    def predict(self, *X, **kwargs):
-        """
-        Makes a raw prediction.
-
-        Parameters
-        ----------
-        X : array-like
-
-        Returns
-        -------
-        array-like
-        """
-        predict_kwargs = dict(
-            batch_size=kwargs.pop('batch_size', self.batch_size),
-            verbose=self.verbose,
-        )
-
-        if kwargs:
-            raise TypeError("Unknown arguments: {}".format(kwargs))
-
-        return self.network.predict(*self.format_input(X), **predict_kwargs)
