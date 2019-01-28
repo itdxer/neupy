@@ -43,7 +43,7 @@ class PlotsTestCase(BaseTestCase):
         x_train, x_test, y_train, y_test = simple_classification()
 
         optimizer = algorithms.Adadelta(self.network, batch_size=None)
-        optimizer.train(x_train, y_train, x_test, y_test, epochs=100)
+        optimizer.train(x_train, y_train, x_test, y_test, epochs=10)
         optimizer.plot_errors(show=False)
 
         return plt.gcf()
